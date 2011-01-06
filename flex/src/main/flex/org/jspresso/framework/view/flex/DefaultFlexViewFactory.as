@@ -2172,6 +2172,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function sizeMaxComponentWidth(component:UIComponent, remoteComponent:RComponent, expectedCharCount:int=FIELD_MAX_CHAR_COUNT, maxCharCount:int=FIELD_MAX_CHAR_COUNT):void {
+      var w:int;
       applyComponentStyle(component, remoteComponent);
       component.regenerateStyleCache(false);
       var charCount:int = maxCharCount;
@@ -2179,7 +2180,10 @@ package org.jspresso.framework.view.flex {
         charCount = expectedCharCount;
       }
       charCount += 2;
-      var w:int = component.measureText(TEMPLATE_CHAR).width * charCount;
+      w = component.measureText(TEMPLATE_CHAR).width * charCount;
+      if(remoteComponent.preferredSize && remoteComponent.preferredSize.width > w) {
+        w = remoteComponent.preferredSize.width;
+      }
       component.maxWidth = w;
     }
     

@@ -2277,6 +2277,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return void
      */
     _sizeMaxComponentWidth : function(component, remoteComponent, expectedCharCount, maxCharCount) {
+      var w;
       this._applyComponentStyle(component, remoteComponent);
       if(expectedCharCount == null) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
@@ -2295,7 +2296,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
       var charWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
                                                compFont.getStyles()).width;
-      var w = charWidth * charCount;
+      w = charWidth * charCount;
+      if(remoteComponent.getPreferredSize() && remoteComponent.getPreferredSize().getWidth() > w) {
+        w = remoteComponent.getPreferredSize().getWidth();
+      }
       component.setMaxWidth(w);
       component.setWidth(w)
     },
