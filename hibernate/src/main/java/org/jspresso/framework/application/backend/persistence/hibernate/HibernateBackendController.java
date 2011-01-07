@@ -62,8 +62,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class HibernateBackendController extends AbstractBackendController {
 
   private HibernateTemplate hibernateTemplate;
-  private boolean           pendingOperationsExecuting = false;
-  private Set<IEntity>      pendingUpdatingEntities;
+  private Set<IEntity>      processedEntities;
   private boolean           traversedPendingOperations = false;
 
   /**
@@ -154,12 +153,22 @@ public class HibernateBackendController extends AbstractBackendController {
     });
     return uowEntities;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void beginUnitOfWork() {
+    processedEntities = new HashSet<IEntity>();
+    super.beginUnitOfWork();
+  }
 
   /**
    * {@inheritDoc}
    */
   @Override
   public void commitUnitOfWork() {
+    processedEntities = null;
     if (traversedPendingOperations) {
       // We must get rid of the pending operations only in the case of a
       // successful commit.
@@ -291,58 +300,57 @@ public class HibernateBackendController extends AbstractBackendController {
          * {@inheritDoc}
          */
         public Object doInHibernate(Session session) {
-          try {
-            pendingOperationsExecuting = true;
-            pendingUpdatingEntities = new HashSet<IEntity>();
-            boolean flushIsNecessary = false;
-            Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
-            Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-            List<IEntity> entitiesToClone = new ArrayList<IEntity>();
-            if (entitiesToUpdate != null) {
-              entitiesToClone.addAll(entitiesToUpdate);
-            }
-            if (entitiesToDelete != null) {
-              entitiesToClone.addAll(entitiesToDelete);
-            }
-            List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
-            Map<IEntity, IEntity> entityMap = new HashMap<IEntity, IEntity>();
-            for (int i = 0; i < entitiesToClone.size(); i++) {
-              entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
-            }
-            if (entitiesToUpdate != null) {
-              for (IEntity entityToUpdate : entitiesToUpdate) {
-                IEntity sessionEntity = entityMap.get(entityToUpdate);
-                if (sessionEntity == null) {
-                  sessionEntity = entityToUpdate;
-                }
+          boolean flushIsNecessary = false;
+          Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+          Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+          List<IEntity> entitiesToClone = new ArrayList<IEntity>();
+          if (entitiesToUpdate != null) {
+            entitiesToClone.addAll(entitiesToUpdate);
+          }
+          if (entitiesToDelete != null) {
+            entitiesToClone.addAll(entitiesToDelete);
+          }
+          List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
+          Map<IEntity, IEntity> entityMap = new HashMap<IEntity, IEntity>();
+          for (int i = 0; i < entitiesToClone.size(); i++) {
+            entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
+          }
+          if (entitiesToUpdate != null) {
+            for (IEntity entityToUpdate : entitiesToUpdate) {
+              IEntity sessionEntity = entityMap.get(entityToUpdate);
+              if (sessionEntity == null) {
+                sessionEntity = entityToUpdate;
+              }
+              if (!processedEntities.contains(sessionEntity)) {
+                processedEntities.add(sessionEntity);
                 session.saveOrUpdate(sessionEntity);
                 flushIsNecessary = true;
               }
             }
-            if (flushIsNecessary) {
-              session.flush();
-            }
-            flushIsNecessary = false;
-            // there might have been new entities to delete
-            entitiesToDelete = getEntitiesRegisteredForDeletion();
-            if (entitiesToDelete != null) {
-              for (IEntity entityToDelete : entitiesToDelete) {
-                IEntity sessionEntity = entityMap.get(entityToDelete);
-                if (sessionEntity == null) {
-                  sessionEntity = entityToDelete;
-                }
+          }
+          if (flushIsNecessary) {
+            session.flush();
+          }
+          flushIsNecessary = false;
+          // there might have been new entities to delete
+          entitiesToDelete = getEntitiesRegisteredForDeletion();
+          if (entitiesToDelete != null) {
+            for (IEntity entityToDelete : entitiesToDelete) {
+              IEntity sessionEntity = entityMap.get(entityToDelete);
+              if (sessionEntity == null) {
+                sessionEntity = entityToDelete;
+              }
+              if (!processedEntities.contains(sessionEntity)) {
+                processedEntities.add(sessionEntity);
                 session.delete(sessionEntity);
                 flushIsNecessary = true;
               }
             }
-            if (flushIsNecessary) {
-              session.flush();
-            }
-            return null;
-          } finally {
-            pendingOperationsExecuting = false;
-            pendingUpdatingEntities = null;
           }
+          if (flushIsNecessary) {
+            session.flush();
+          }
+          return null;
         }
       });
     }
@@ -354,9 +362,10 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void registerForDeletion(IEntity entity) {
     if (isUnitOfWorkActive()) {
-      IEntity uowEntity = cloneInUnitOfWork(entity);
-      super.registerForDeletion(uowEntity);
-      getHibernateTemplate().delete(uowEntity);
+      if (!processedEntities.contains(entity)) {
+        processedEntities.add(entity);
+        getHibernateTemplate().delete(entity);
+      }
     } else {
       super.registerForDeletion(entity);
     }
@@ -367,15 +376,11 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void registerForUpdate(IEntity entity) {
-    if (pendingOperationsExecuting) {
-      if (!pendingUpdatingEntities.contains(entity)) {
-        pendingUpdatingEntities.add(entity);
+    if (isUnitOfWorkActive()) {
+      if (!processedEntities.contains(entity)) {
+        processedEntities.add(entity);
         getHibernateTemplate().saveOrUpdate(entity);
       }
-    } else if (isUnitOfWorkActive()) {
-      IEntity uowEntity = cloneInUnitOfWork(entity);
-      super.registerForUpdate(uowEntity);
-      getHibernateTemplate().saveOrUpdate(uowEntity);
     } else {
       super.registerForUpdate(entity);
     }
@@ -386,6 +391,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void rollbackUnitOfWork() {
+    processedEntities = null;
     try {
       super.rollbackUnitOfWork();
     } finally {
