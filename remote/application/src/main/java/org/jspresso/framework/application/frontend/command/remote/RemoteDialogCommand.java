@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2011 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
