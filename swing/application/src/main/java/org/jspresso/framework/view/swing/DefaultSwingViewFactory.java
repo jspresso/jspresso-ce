@@ -1380,7 +1380,8 @@ public class DefaultSwingViewFactory extends
               .getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
-    viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory()));
+    viewComponent
+        .setCellRenderer(new EvenOddListCellRenderer(getIconFactory()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector,
@@ -2185,7 +2186,8 @@ public class DefaultSwingViewFactory extends
       } else if (actionMap.getRenderingOptions() != null) {
         renderingOptions = actionMap.getRenderingOptions();
       }
-      if (nextActionList.isCollapsable()) {
+      if (nextActionList.isCollapsable()
+          && nextActionList.getActions().size() > 1) {
         JButton actionButton = null;
         for (Iterator<IDisplayableAction> ite = nextActionList.getActions()
             .iterator(); ite.hasNext();) {

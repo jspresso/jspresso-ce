@@ -136,8 +136,9 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void displayModalDialog(final JComponent mainView, final List<Action> actions,
-      final String title, final JComponent sourceComponent, final Map<String, Object> context,
+  public void displayModalDialog(final JComponent mainView,
+      final List<Action> actions, final String title,
+      final JComponent sourceComponent, final Map<String, Object> context,
       final Dimension dimension, final boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {
@@ -182,8 +183,8 @@ public class DefaultSwingController extends
         actionPanel.add(buttonBox, BorderLayout.EAST);
 
         if (dimension != null) {
-          mainView.setPreferredSize(new java.awt.Dimension(dimension.getWidth(),
-              dimension.getHeight()));
+          mainView.setPreferredSize(new java.awt.Dimension(
+              dimension.getWidth(), dimension.getHeight()));
         }
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -637,7 +638,7 @@ public class DefaultSwingController extends
 
   private void completeApplicationToolBar(JToolBar applicationToolBar,
       ActionList actionList) {
-    if (actionList.isCollapsable()) {
+    if (actionList.isCollapsable() && actionList.getActions().size() > 1) {
       applicationToolBar.add(createComboButton(actionList));
     } else {
       for (IDisplayableAction da : actionList.getActions()) {

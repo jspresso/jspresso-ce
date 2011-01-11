@@ -1023,22 +1023,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
             if (childCardConnector != null) {
               // To handle polymorphism, especially for modules, we refine
               // the model descriptor.
-              if (cardView
-                  .getConnector()
-                  .getModelConnector()
-                  .getModelDescriptor()
-                  .getModelType()
-                  .isAssignableFrom(
-                      childCardView.getDescriptor().getModelDescriptor()
-                          .getModelType())) {
-                cardView
-                    .getConnector()
-                    .getModelConnector()
-                    .setModelDescriptor(
-                        childCardView.getDescriptor().getModelDescriptor());
-              }
               IValueConnector modelConnector = cardView.getConnector()
                   .getModelConnector();
+              if (modelConnector != null
+                  && modelConnector
+                      .getModelDescriptor()
+                      .getModelType()
+                      .isAssignableFrom(
+                          childCardView.getDescriptor().getModelDescriptor()
+                              .getModelType())) {
+                modelConnector.setModelDescriptor(childCardView.getDescriptor()
+                    .getModelDescriptor());
+              }
               getMvcBinder().bind(childCardConnector, modelConnector);
             }
           } else {
