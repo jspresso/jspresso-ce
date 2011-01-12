@@ -955,9 +955,10 @@ public abstract class AbstractComponentInvocationHandler implements
   private void removeFromProperty(Object proxy,
       ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
     String propertyName = propertyDescriptor.getName();
-    if (!isInitialized(straightGetProperty(proxy, propertyName))) {
-      return;
-    }
+    // The following optim breaks bidi N-N relationship persistence
+    // if (!isInitialized(straightGetProperty(proxy, propertyName))) {
+    // return;
+    // }
     Collection<?> collectionProperty = null;
     try {
       collectionProperty = (Collection<?>) accessorFactory
