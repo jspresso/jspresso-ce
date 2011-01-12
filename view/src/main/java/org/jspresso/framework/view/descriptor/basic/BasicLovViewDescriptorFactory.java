@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -48,7 +48,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * {@inheritDoc}
    */
   public IViewDescriptor createLovViewDescriptor(
-      IReferencePropertyDescriptor<IEntity> entityRefDescriptor,
+      IComponentDescriptorProvider<IEntity> entityRefDescriptor,
       IDisplayableAction okAction) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
@@ -63,8 +63,8 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
           .setSortingAction(sortingAction);
     }
     resultViewDescriptor.setRowAction(okAction);
-    if (entityRefDescriptor.getReferencedDescriptor().getPageSize() != null
-        && entityRefDescriptor.getReferencedDescriptor().getPageSize()
+    if (entityRefDescriptor.getComponentDescriptor().getPageSize() != null
+        && entityRefDescriptor.getComponentDescriptor().getPageSize()
             .intValue() >= 0) {
       if (paginationViewDescriptor != null) {
         resultViewDescriptor
