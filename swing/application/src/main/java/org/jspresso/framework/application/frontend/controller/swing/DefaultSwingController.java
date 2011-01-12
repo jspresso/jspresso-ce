@@ -638,7 +638,7 @@ public class DefaultSwingController extends
 
   private void completeApplicationToolBar(JToolBar applicationToolBar,
       ActionList actionList) {
-    if (actionList.isCollapsable() && actionList.getActions().size() > 1) {
+    if (actionList.isCollapsable()) {
       applicationToolBar.add(createComboButton(actionList));
     } else {
       for (IDisplayableAction da : actionList.getActions()) {
@@ -787,17 +787,27 @@ public class DefaultSwingController extends
 
   private JButton createComboButton(ActionList actionList) {
     JButton button;
-    if (actionList.getActions().size() == 1) {
-      button = new JButton();
-    } else {
+    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      if (isAccessGranted(action)) {
+        actions.add(action);
+      }
+    }
+
+    if (actions.isEmpty()) {
+      return null;
+    }
+    if (actions.size() > 1) {
       button = new JComboButton(true);
+    } else {
+      button = new JButton();
     }
     Action action = getViewFactory().getActionFactory().createAction(
         actionList.getActions().get(0), this, null, getLocale());
     button.setAction(action);
-    if (actionList.getActions().size() > 1) {
+    if (actions.size() > 1) {
       JPopupMenu popupMenu = new JPopupMenu();
-      for (IDisplayableAction menuAction : actionList.getActions()) {
+      for (IDisplayableAction menuAction : actions) {
         popupMenu.add(createMenuItem(menuAction));
       }
       ((JComboButton) button).setArrowPopupMenu(popupMenu);
