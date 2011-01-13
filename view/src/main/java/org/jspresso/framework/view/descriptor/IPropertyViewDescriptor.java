@@ -60,6 +60,13 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
   List<String> getRenderedChildProperties();
 
   /**
+   * Gets the default child properties to display in case of a complex property.
+   * 
+   * @return The list of displayed properties in the case of a complex property.
+   */
+  List<String> getDefaultRenderedChildProperties();
+
+  /**
    * When used in a component descriptor, gets the number of columns a property
    * spans when displayed.
    * 
@@ -75,8 +82,7 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    *         clicked.
    */
   IAction getAction();
-  
-  
+
   /**
    * Returns the horizontal alignment used for displaying the property.
    * 

@@ -358,9 +358,7 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
   }
 
@@ -1254,16 +1252,7 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
         .getModelDescriptor();
-    List<String> renderedProperties = propertyViewDescriptor
-        .getRenderedChildProperties();
-    String renderedProperty;
-    if (renderedProperties != null && !renderedProperties.isEmpty()) {
-      // it's a custom rendered property.
-      renderedProperty = renderedProperties.get(0);
-    } else {
-      renderedProperty = propertyDescriptor.getComponentDescriptor()
-          .getToStringProperty();
-    }
+    String renderedProperty = computeRenderedProperty(propertyViewDescriptor);
     IValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(propertyDescriptor.getName(),
             renderedProperty);
@@ -1288,10 +1277,8 @@ public class DefaultRemoteViewFactory extends
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(getTranslationProvider().getTranslation(
           "lov.element.description",
-          new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(
-                getTranslationProvider(), locale)
-          }, locale));
+          new Object[] {propertyDescriptor.getReferencedDescriptor()
+              .getI18nName(getTranslationProvider(), locale)}, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1299,12 +1286,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
     }
     return view;
   }

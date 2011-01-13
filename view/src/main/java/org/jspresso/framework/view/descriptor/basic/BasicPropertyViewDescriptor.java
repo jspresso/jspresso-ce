@@ -90,12 +90,13 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * {@inheritDoc}
    */
   public List<String> getRenderedChildProperties() {
-    if (renderedChildProperties != null) {
-      return renderedChildProperties;
-    }
-    // IPropertyDescriptor childPropertyDescriptor =
-    // ((IComponentDescriptorProvider<?>) getModelDescriptor())
-    // .getComponentDescriptor().getPropertyDescriptor(getName());
+    return renderedChildProperties;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getDefaultRenderedChildProperties() {
     IModelDescriptor propertyDescriptor = getModelDescriptor();
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
       return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) propertyDescriptor)

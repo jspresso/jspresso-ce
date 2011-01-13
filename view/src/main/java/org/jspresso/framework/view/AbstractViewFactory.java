@@ -212,9 +212,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -1090,24 +1088,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IPropertyViewDescriptor columnViewDescriptor,
       IComponentDescriptor<?> descriptor, IActionHandler actionHandler) {
     String columnId = columnViewDescriptor.getModelDescriptor().getName();
-    IPropertyDescriptor propertyDescriptor = descriptor
-        .getPropertyDescriptor(columnId);
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) columnViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor == null) {
       throw new ViewException("No property " + columnId + " defined for "
           + descriptor.getComponentContract());
     }
     IValueConnector columnConnector;
     if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-      List<String> renderedProperties = columnViewDescriptor
-          .getRenderedChildProperties();
-      String renderedProperty;
-      if (renderedProperties != null && !renderedProperties.isEmpty()) {
-        // it's a custom rendered property.
-        renderedProperty = renderedProperties.get(0);
-      } else {
-        renderedProperty = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getToStringProperty();
-      }
+      String renderedProperty = computeRenderedProperty(columnViewDescriptor);
       columnConnector = getConnectorFactory().createCompositeValueConnector(
           columnId, renderedProperty);
     } else {
@@ -1142,6 +1131,59 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     columnConnector.setSubject(actionHandler.getSubject());
     return columnConnector;
+  }
+
+  /**
+   * Compute the rendered nested property of a reference property view
+   * descriptor.
+   * 
+   * @param propertyViewDescriptor
+   * @return the rendered property.
+   */
+  protected String computeRenderedProperty(
+      IPropertyViewDescriptor propertyViewDescriptor) {
+    String renderedProperty = null;
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+      List<String> renderedProperties = propertyViewDescriptor
+          .getRenderedChildProperties();
+      if (renderedProperties != null && !renderedProperties.isEmpty()) {
+        // it's a custom rendered property.
+        renderedProperty = renderedProperties.get(0);
+      } else {
+        IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor();
+        IPropertyDescriptor toStringPropertyDescriptor = referencedDescriptor
+            .getPropertyDescriptor(referencedDescriptor.getToStringProperty());
+        if (toStringPropertyDescriptor != null
+            && toStringPropertyDescriptor.isModifiable()) {
+          renderedProperty = toStringPropertyDescriptor.getName();
+        } else {
+          List<String> defaultRenderedProperties = propertyViewDescriptor
+              .getDefaultRenderedChildProperties();
+          if (defaultRenderedProperties != null
+              && !defaultRenderedProperties.isEmpty()) {
+            for (String rp : defaultRenderedProperties) {
+              IPropertyDescriptor rpd = referencedDescriptor
+                  .getPropertyDescriptor(rp);
+              if (rpd instanceof IStringPropertyDescriptor
+                  && rpd.isModifiable()) {
+                renderedProperty = rp;
+                break;
+              }
+            }
+            if (renderedProperty == null) {
+              renderedProperty = defaultRenderedProperties.get(0);
+            }
+          } else {
+            renderedProperty = referencedDescriptor.getPropertyDescriptors()
+                .iterator().next().getName();
+          }
+        }
+      }
+    }
+    return renderedProperty;
   }
 
   /**
@@ -2512,6 +2554,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
         .getModelDescriptor();
     List<String> renderedChildProperties = propertyViewDescriptor
         .getRenderedChildProperties();
+    if (renderedChildProperties == null) {
+      renderedChildProperties = propertyViewDescriptor
+          .getDefaultRenderedChildProperties();
+    }
     if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
       BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
       viewDescriptor.setModelDescriptor(propertyDescriptor);

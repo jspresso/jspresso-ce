@@ -457,14 +457,14 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (toStringProperty == null) {
       List<String> rp = getRenderedProperties();
       if (rp != null && !rp.isEmpty()) {
-        for (String renderedProperty : getRenderedProperties()) {
+        for (String renderedProperty : rp) {
           if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
             toStringProperty = renderedProperty;
             break;
           }
         }
         if (toStringProperty == null) {
-          toStringProperty = getRenderedProperties().get(0);
+          toStringProperty = rp.get(0);
         }
       } else if (getPropertyDescriptor("id") != null) {
         return "id";

@@ -1078,16 +1078,7 @@ public class DefaultWingsViewFactory extends
     SActionField viewComponent = createSActionField(true);
     SReferenceFieldConnector connector = new SReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-    List<String> renderedProperties = propertyViewDescriptor
-        .getRenderedChildProperties();
-    String renderedProperty;
-    if (renderedProperties != null && !renderedProperties.isEmpty()) {
-      // it's a custom rendered property.
-      renderedProperty = renderedProperties.get(0);
-    } else {
-      renderedProperty = propertyDescriptor.getComponentDescriptor()
-          .getToStringProperty();
-    }
+    String renderedProperty = computeRenderedProperty(propertyViewDescriptor);
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
     IView<SComponent> propertyView = constructView(viewComponent,
@@ -1101,10 +1092,8 @@ public class DefaultWingsViewFactory extends
         Action.SHORT_DESCRIPTION,
         getTranslationProvider().getTranslation(
             "lov.element.description",
-            new Object[] {
-              propertyDescriptor.getReferencedDescriptor().getI18nName(
-                  getTranslationProvider(), locale)
-            }, locale)
+            new Object[] {propertyDescriptor.getReferencedDescriptor()
+                .getI18nName(getTranslationProvider(), locale)}, locale)
             + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(

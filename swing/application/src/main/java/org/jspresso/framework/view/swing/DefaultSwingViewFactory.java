@@ -1510,16 +1510,7 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    List<String> renderedProperties = propertyViewDescriptor
-        .getRenderedChildProperties();
-    String renderedProperty;
-    if (renderedProperties != null && !renderedProperties.isEmpty()) {
-      // it's a custom rendered property.
-      renderedProperty = renderedProperties.get(0);
-    } else {
-      renderedProperty = propertyDescriptor.getComponentDescriptor()
-          .getToStringProperty();
-    }
+    String renderedProperty = computeRenderedProperty(propertyViewDescriptor);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink();
@@ -1549,10 +1540,8 @@ public class DefaultSwingViewFactory extends
           Action.SHORT_DESCRIPTION,
           getTranslationProvider().getTranslation(
               "lov.element.description",
-              new Object[] {
-                propertyDescriptor.getReferencedDescriptor().getI18nName(
-                    getTranslationProvider(), locale)
-              }, locale)
+              new Object[] {propertyDescriptor.getReferencedDescriptor()
+                  .getI18nName(getTranslationProvider(), locale)}, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -2253,10 +2242,13 @@ public class DefaultSwingViewFactory extends
                     .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                     .put(ks, swingAction.getValue(Action.NAME));
                 String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                    .getModifiers()) + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-                actionItem.setToolTipText("<HTML>" + actionItem.getToolTipText()
-                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                    + "</FONT></HTML>");
+                    .getModifiers())
+                    + "-"
+                    + KeyEvent.getKeyText(ks.getKeyCode());
+                actionItem.setToolTipText("<HTML>"
+                    + actionItem.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
               }
               popupMenu.add(actionItem);
             }
