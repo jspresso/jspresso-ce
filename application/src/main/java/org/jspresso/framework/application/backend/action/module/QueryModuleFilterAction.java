@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.application.backend.action.module;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
@@ -26,6 +30,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.std.PageOffsetAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.util.bean.BeanComparator;
 import org.jspresso.framework.util.collection.ESort;
 
 /**
@@ -46,6 +51,7 @@ import org.jspresso.framework.util.collection.ESort;
 public class QueryModuleFilterAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private IAction queryAction;
+  private boolean sortOnly = false;
 
   /**
    * {@inheritDoc}
@@ -62,32 +68,47 @@ public class QueryModuleFilterAction<E, F, G> extends FrontendAction<E, F, G> {
         queryComponent.setOrderingProperties((Map<String, ESort>) context
             .get(IQueryComponent.ORDERING_PROPERTIES));
       }
-      Integer pageOffset = (Integer) context.get(PageOffsetAction.PAGE_OFFSET);
-      if (pageOffset == null || pageOffset.intValue() == 0) {
-        // This is a plain first query.
-        queryComponent.setPage(null);
-        queryComponent.setRecordCount(null);
+      if (isSortOnly() && module.getPageCount() != null
+          && module.getPageCount().intValue() == 1) {
+        List<?> moduleObjects = module.getModuleObjects();
+        if (moduleObjects != null && !moduleObjects.isEmpty()) {
+          List<Object> sortedList = new ArrayList<Object>(moduleObjects);
+          Comparator<Object> beanComparator = new BeanComparator(
+              queryComponent.getOrderingProperties(), getBackendController(
+                  context).getAccessorFactory(), module
+                  .getElementComponentDescriptor().getComponentContract());
+          Collections.sort(sortedList, beanComparator);
+          module.setModuleObjects(sortedList);
+        }
       } else {
-        if (queryComponent.getRecordCount() == null
-            || queryComponent.getPageSize() == null) {
-          // do not navigate into pages unless a 1st query has been done or
-          // pagination is disabled.
-          return false;
-        }
-        if (queryComponent.getPage() != null
-            && queryComponent.getPage().intValue() + pageOffset.intValue() >= 0
-            && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
-                .getPageCount().intValue()) {
-          queryComponent.setPage(new Integer(queryComponent.getPage()
-              .intValue() + pageOffset.intValue()));
+        Integer pageOffset = (Integer) context
+            .get(PageOffsetAction.PAGE_OFFSET);
+        if (pageOffset == null || pageOffset.intValue() == 0) {
+          // This is a plain first query.
+          queryComponent.setPage(null);
+          queryComponent.setRecordCount(null);
         } else {
-          // We are of limits
-          return false;
+          if (queryComponent.getRecordCount() == null
+              || queryComponent.getPageSize() == null) {
+            // do not navigate into pages unless a 1st query has been done or
+            // pagination is disabled.
+            return false;
+          }
+          if (queryComponent.getPage() != null
+              && queryComponent.getPage().intValue() + pageOffset.intValue() >= 0
+              && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
+                  .getPageCount().intValue()) {
+            queryComponent.setPage(new Integer(queryComponent.getPage()
+                .intValue() + pageOffset.intValue()));
+          } else {
+            // We are of limits
+            return false;
+          }
         }
-      }
-      if (actionHandler.execute(getQueryAction(), context)) {
-        module.setModuleObjects(queryComponent.getQueriedComponents());
-        queryComponent.setQueriedComponents(null);
+        if (actionHandler.execute(getQueryAction(), context)) {
+          module.setModuleObjects(queryComponent.getQueriedComponents());
+          queryComponent.setQueriedComponents(null);
+        }
       }
     }
     return super.execute(actionHandler, context);
@@ -124,4 +145,22 @@ public class QueryModuleFilterAction<E, F, G> extends FrontendAction<E, F, G> {
     this.queryAction = queryAction;
   }
 
+  /**
+   * Gets the sortOnly.
+   * 
+   * @return the sortOnly.
+   */
+  protected boolean isSortOnly() {
+    return sortOnly;
+  }
+
+  /**
+   * Sets the sortOnly.
+   * 
+   * @param sortOnly
+   *          the sortOnly to set.
+   */
+  public void setSortOnly(boolean sortOnly) {
+    this.sortOnly = sortOnly;
+  }
 }

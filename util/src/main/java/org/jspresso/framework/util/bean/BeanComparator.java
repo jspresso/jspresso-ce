@@ -19,10 +19,13 @@
 package org.jspresso.framework.util.bean;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.collection.ESort;
 
 /**
@@ -50,6 +53,30 @@ public class BeanComparator implements Comparator<Object> {
       List<ESort> orderingDirections) {
     this.orderingAccessors = orderingAccessors;
     this.orderingDirections = orderingDirections;
+  }
+
+  /**
+   * Constructs a new <code>BeanComparator</code> instance.
+   * 
+   * @param orderingProperties
+   *          a map of (propertyName,direction) to define the sort.
+   * @param accessorFactory
+   *          the accessor factory to access the bean instances properties.
+   * @param beanClass
+   *          the bean type.
+   */
+  public BeanComparator(Map<String, ESort> orderingProperties,
+      IAccessorFactory accessorFactory, Class<?> beanClass) {
+    orderingAccessors = new ArrayList<IAccessor>();
+    orderingDirections = new ArrayList<ESort>();
+    if (orderingProperties != null) {
+      for (Map.Entry<String, ESort> orderingProperty : orderingProperties
+          .entrySet()) {
+        orderingAccessors.add(accessorFactory.createPropertyAccessor(
+            orderingProperty.getKey(), beanClass));
+        orderingDirections.add(orderingProperty.getValue());
+      }
+    }
   }
 
   /**
