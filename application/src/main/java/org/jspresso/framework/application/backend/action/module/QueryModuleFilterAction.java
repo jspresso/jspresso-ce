@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.std.PageOffsetAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -36,8 +36,14 @@ import org.jspresso.framework.util.collection.ESort;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class QueryModuleFilterAction extends BackendAction {
+public class QueryModuleFilterAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private IAction queryAction;
 
@@ -48,10 +54,10 @@ public class QueryModuleFilterAction extends BackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    if (queryAction != null) {
+    if (getQueryAction() != null) {
       FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
-      context.put(IQueryComponent.QUERY_COMPONENT, module.getFilter());
-      IQueryComponent queryComponent = module.getFilter();
+      IQueryComponent queryComponent = getQueryComponent(context);
+      context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
       if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
         queryComponent.setOrderingProperties((Map<String, ESort>) context
             .get(IQueryComponent.ORDERING_PROPERTIES));
@@ -73,14 +79,13 @@ public class QueryModuleFilterAction extends BackendAction {
             && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
                 .getPageCount().intValue()) {
           queryComponent.setPage(new Integer(queryComponent.getPage()
-              .intValue()
-              + pageOffset.intValue()));
+              .intValue() + pageOffset.intValue()));
         } else {
           // We are of limits
           return false;
         }
       }
-      if (actionHandler.execute(queryAction, context)) {
+      if (actionHandler.execute(getQueryAction(), context)) {
         module.setModuleObjects(queryComponent.getQueriedComponents());
         queryComponent.setQueriedComponents(null);
       }
@@ -89,11 +94,23 @@ public class QueryModuleFilterAction extends BackendAction {
   }
 
   /**
+   * Retrieves the query component out of the context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the query component.
+   */
+  protected IQueryComponent getQueryComponent(Map<String, Object> context) {
+    FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
+    return module.getFilter();
+  }
+
+  /**
    * Gets the queryAction.
    * 
    * @return the queryAction.
    */
-  public IAction getQueryAction() {
+  protected IAction getQueryAction() {
     return queryAction;
   }
 

@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
@@ -45,6 +46,8 @@ import org.jspresso.framework.util.collection.ESort;
  */
 public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  private IAction queryAction;
+
   /**
    * {@inheritDoc}
    */
@@ -52,21 +55,8 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
-    if (queryEntityConnector == null) {
-      queryEntityConnector = getViewConnector(context).getModelConnector();
-      while (queryEntityConnector != null
-          && !(queryEntityConnector.getConnectorValue() instanceof IQueryComponent)) {
-        // climb the connector hierarchy to retrieve the IQueryComponent
-        // connector.
-        queryEntityConnector = queryEntityConnector.getParentConnector();
-      }
-    }
-    if (queryEntityConnector != null
-        && queryEntityConnector.getConnectorValue() != null) {
-      IQueryComponent queryComponent = ((IQueryComponent) queryEntityConnector
-          .getConnectorValue());
+    IQueryComponent queryComponent = getQueryComponent(context);
+    if (queryComponent != null) {
       context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
       if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
         queryComponent.setOrderingProperties((Map<String, ESort>) context
@@ -89,14 +79,61 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
             && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
                 .getPageCount().intValue()) {
           queryComponent.setPage(new Integer(queryComponent.getPage()
-              .intValue()
-              + pageOffset.intValue()));
+              .intValue() + pageOffset.intValue()));
         } else {
           // We are off limits
           return false;
         }
       }
     }
+    actionHandler.execute(getQueryAction(), context);
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Retrieves the query component out of the context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the query component.
+   */
+  protected IQueryComponent getQueryComponent(Map<String, Object> context) {
+    IValueConnector queryEntityConnector = (IValueConnector) context
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
+    if (queryEntityConnector == null) {
+      queryEntityConnector = getViewConnector(context).getModelConnector();
+      while (queryEntityConnector != null
+          && !(queryEntityConnector.getConnectorValue() instanceof IQueryComponent)) {
+        // climb the connector hierarchy to retrieve the IQueryComponent
+        // connector.
+        queryEntityConnector = queryEntityConnector.getParentConnector();
+      }
+    }
+    IQueryComponent queryComponent = null;
+    if (queryEntityConnector != null
+        && queryEntityConnector.getConnectorValue() != null) {
+      queryComponent = ((IQueryComponent) queryEntityConnector
+          .getConnectorValue());
+    }
+    return queryComponent;
+  }
+
+  /**
+   * Gets the queryAction.
+   * 
+   * @return the queryAction.
+   */
+  protected IAction getQueryAction() {
+    return queryAction;
+  }
+
+  /**
+   * Configures the query action used to actually perform the entity query.
+   * 
+   * @param queryAction
+   *          the queryAction to set.
+   */
+  public void setQueryAction(IAction queryAction) {
+    this.queryAction = queryAction;
   }
 }

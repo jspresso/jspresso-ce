@@ -117,7 +117,7 @@
   <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.std.FindAction">
     <property name="name" value="find.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
-    <property name="wrappedAction" ref="lovFindBackAction"/>
+    <property name="queryAction" ref="lovFindBackAction"/>
   </bean>
 
   <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction">
@@ -295,12 +295,10 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
   </bean>
 
-  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
-    <property name="wrappedAction">
-      <bean class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
-        <property name="queryAction" ref="queryEntitiesBackAction" />
-      </bean>
-    </property>
+  <bean id="queryModuleFilterBackAction" parent="queryEntitiesBackAction"/>
+  
+  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
+    <property name="queryAction" ref="queryModuleFilterBackAction" />
     <property name="name" value="query.filter.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
     <property name="nextAction" ref="checkModuleDirtyStateFrontAction"/>
