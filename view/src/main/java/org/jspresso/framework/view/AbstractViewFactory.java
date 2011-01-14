@@ -1154,33 +1154,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       } else {
         IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor();
-        IPropertyDescriptor toStringPropertyDescriptor = referencedDescriptor
-            .getPropertyDescriptor(referencedDescriptor.getToStringProperty());
-        if (toStringPropertyDescriptor != null
-            && toStringPropertyDescriptor.isModifiable()) {
-          renderedProperty = toStringPropertyDescriptor.getName();
-        } else {
-          List<String> defaultRenderedProperties = propertyViewDescriptor
-              .getDefaultRenderedChildProperties();
-          if (defaultRenderedProperties != null
-              && !defaultRenderedProperties.isEmpty()) {
-            for (String rp : defaultRenderedProperties) {
-              IPropertyDescriptor rpd = referencedDescriptor
-                  .getPropertyDescriptor(rp);
-              if (rpd instanceof IStringPropertyDescriptor
-                  && rpd.isModifiable()) {
-                renderedProperty = rp;
-                break;
-              }
-            }
-            if (renderedProperty == null) {
-              renderedProperty = defaultRenderedProperties.get(0);
-            }
-          } else {
-            renderedProperty = referencedDescriptor.getPropertyDescriptors()
-                .iterator().next().getName();
-          }
-        }
+        renderedProperty = referencedDescriptor.getToStringProperty();
       }
     }
     return renderedProperty;

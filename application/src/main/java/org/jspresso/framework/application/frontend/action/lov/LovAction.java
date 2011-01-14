@@ -28,7 +28,6 @@ import org.jspresso.framework.application.backend.action.CreateQueryComponentAct
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
-import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -101,29 +100,19 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
         erqDescriptor);
 
-    IValueConnector viewConnector = getViewConnector(context);
     String queryPropertyValue = getActionCommand(context);
-    if (viewConnector instanceof IRenderableCompositeValueConnector
-        && ((IRenderableCompositeValueConnector) viewConnector)
-            .getRenderingConnector() != null) {
-      if (getModel(context) instanceof IQueryComponent) {
-        if (nonLovTriggeringChars != null) {
-          for (int i = 0; i < nonLovTriggeringChars.length(); i++) {
-            if (queryPropertyValue != null
-                && queryPropertyValue.indexOf(nonLovTriggeringChars.charAt(i)) >= 0) {
-              viewConnector.setConnectorValue(null);
-              ((IRenderableCompositeValueConnector) viewConnector)
-                  .getRenderingConnector()
-                  .setConnectorValue(queryPropertyValue);
-              return true;
-            }
-          }
+
+    actionHandler.execute(createQueryComponentAction, context);
+
+    if (getModel(context) instanceof IQueryComponent
+        && nonLovTriggeringChars != null) {
+      for (int i = 0; i < nonLovTriggeringChars.length(); i++) {
+        if (queryPropertyValue != null
+            && queryPropertyValue.indexOf(nonLovTriggeringChars.charAt(i)) >= 0) {
+          return true;
         }
       }
-      setActionParameter(((IRenderableCompositeValueConnector) viewConnector)
-          .getRenderingConnector().getId(), context);
     }
-    actionHandler.execute(createQueryComponentAction, context);
 
     if (autoquery) {
       actionHandler.execute(findAction, context);
@@ -137,7 +126,6 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           selectedItem = getController(context).getBackendController().merge(
               (IEntity) selectedItem, EMergeMode.MERGE_CLEAN_LAZY);
         }
-        // viewConnector.setConnectorValue(selectedItem);
         context.put(LOV_PRESELECTED_ITEM, selectedItem);
         actionHandler.execute(okAction, context);
         return true;
@@ -174,9 +162,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -192,9 +179,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }

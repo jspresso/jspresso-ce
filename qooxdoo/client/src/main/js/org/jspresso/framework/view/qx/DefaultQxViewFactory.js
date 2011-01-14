@@ -1074,15 +1074,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
             converter : this._readOnlyFieldConverter
           }
         );
-        textField.addListener("changeValue", function(e) {
-          /**@type String*/
-          var content = e.getData(); 
-          if(content && content.length > 0) {
+        var triggerAction = function(e) {
+          var content = textField.getValue();
+          if(content && content.length > 0 && content != state.getValue()) {
+            textField.setValue(state.getValue());
             this.__actionHandler.execute(mainAction, content);
           } else {
             state.setValue(null);
           }
-        }, this);
+        };
+        textField.addListener("blur", triggerAction, this);
+        //textField.addListener("changeValue", triggerAction, this);
+        
         modelController.addTarget(textField, "value", "value", false,
           {
             converter : this._modelToViewFieldConverter

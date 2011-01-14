@@ -99,15 +99,9 @@ public class CreateQueryComponentAction extends BackendAction {
     String queryPropertyValue = getActionCommand(context);
     if (queryPropertyValue != null && !queryPropertyValue.equals("*")
         && queryPropertyValue.length() > 0) {
-      String propertyName = (String) getActionParameter(context);
-      if (propertyName != null) {
-        modelConnector.getChildConnector(propertyName).setConnectorValue(
-            queryPropertyValue);
-      } else {
-        modelConnector.getChildConnector(
-            erqDescriptor.getComponentDescriptor().getToStringProperty())
-            .setConnectorValue(queryPropertyValue);
-      }
+      modelConnector.getChildConnector(
+          erqDescriptor.getComponentDescriptor().getAutoCompleteProperty())
+          .setConnectorValue(queryPropertyValue);
     }
     context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
     return super.execute(actionHandler, context);

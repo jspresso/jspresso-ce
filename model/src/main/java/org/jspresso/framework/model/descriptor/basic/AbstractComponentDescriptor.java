@@ -110,6 +110,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<IPropertyDescriptor>                       tempPropertyBuffer;
 
   private String                                          toStringProperty;
+  private String                                          autoCompleteProperty;
 
   private Collection<String>                              unclonedProperties;
 
@@ -453,7 +454,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @return the toStringProperty.
    */
-  public String getToStringProperty() {
+  public synchronized String getToStringProperty() {
     if (toStringProperty == null) {
       List<String> rp = getRenderedProperties();
       if (rp != null && !rp.isEmpty()) {
@@ -467,12 +468,43 @@ public abstract class AbstractComponentDescriptor<E> extends
           toStringProperty = rp.get(0);
         }
       } else if (getPropertyDescriptor("id") != null) {
-        return "id";
+        toStringProperty = "id";
       } else {
         toStringProperty = getPropertyDescriptors().iterator().next().getName();
       }
     }
     return toStringProperty;
+  }
+
+  /**
+   * Gets the autocomplete property.
+   * <p>
+   * {@inheritDoc}
+   */
+  public synchronized String getAutoCompleteProperty() {
+    if (autoCompleteProperty == null) {
+      IPropertyDescriptor lpd = getPropertyDescriptor(getToStringProperty());
+      if (lpd != null && !lpd.isComputed()) {
+        autoCompleteProperty = lpd.getName();
+      } else {
+        List<String> rp = getRenderedProperties();
+        if (rp != null && !rp.isEmpty()) {
+          for (String renderedProperty : rp) {
+            if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+              autoCompleteProperty = renderedProperty;
+              break;
+            }
+          }
+          if (autoCompleteProperty == null) {
+            autoCompleteProperty = rp.get(0);
+          }
+        } else {
+          autoCompleteProperty = getPropertyDescriptors().iterator().next()
+              .getName();
+        }
+      }
+    }
+    return autoCompleteProperty;
   }
 
   /**
@@ -846,6 +878,28 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setToStringProperty(String toStringProperty) {
     this.toStringProperty = toStringProperty;
+  }
+
+  /**
+   * Allows to customize the property used to autocomplete reference fields on
+   * this component.
+   * <p>
+   * Whenever this property is <code>null</code>, the following rule apply to
+   * determine the <i>lovProperty</i> :
+   * <ol>
+   * <li>the toString property if not a computed one</li>
+   * <li>the first string property from the rendered property</li>
+   * <li>the first rendered property if no string property is found among them</li>
+   * </ol>
+   * Note that this property is not inherited by children descriptors, i.e. even
+   * if an ancestor defines an explicit <i>lovProperty</i>, its children ignore
+   * this setting.
+   * 
+   * @param autoCompleteProperty
+   *          the autoCompleteProperty to set.
+   */
+  public void setAutoCompleteProperty(String autoCompleteProperty) {
+    this.autoCompleteProperty = autoCompleteProperty;
   }
 
   /**
