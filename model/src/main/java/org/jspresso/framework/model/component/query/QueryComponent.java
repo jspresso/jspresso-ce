@@ -238,7 +238,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   public boolean isInlineComponent() {
     return !IEntity.class.isAssignableFrom(componentDescriptor
-        .getComponentContract())
+        .getQueryComponentContract())
         && !componentDescriptor.isPurelyAbstract();
   }
 

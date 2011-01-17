@@ -105,6 +105,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     String queryPropertyValue = getActionCommand(context);
 
     actionHandler.execute(createQueryComponentAction, context);
+    IQueryComponent queryComponent = (IQueryComponent) context
+    .get(IQueryComponent.QUERY_COMPONENT);
 
     if (viewConnector instanceof IRenderableCompositeValueConnector
         && ((IRenderableCompositeValueConnector) viewConnector)
@@ -116,7 +118,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
                 && queryPropertyValue.indexOf(nonLovTriggeringChars.charAt(i)) >= 0) {
               // This is important since the typed in value (queryPropertyValue) is only passed as
               // action parameter. We want to preserve it in the UI.
-              viewConnector.setConnectorValue(null);
+              
+              viewConnector.setConnectorValue(queryComponent);
               ((IRenderableCompositeValueConnector) viewConnector)
                   .getRenderingConnector()
                   .setConnectorValue(queryPropertyValue);
@@ -129,8 +132,6 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
     if (autoquery) {
       actionHandler.execute(findAction, context);
-      IQueryComponent queryComponent = (IQueryComponent) context
-          .get(IQueryComponent.QUERY_COMPONENT);
       if (queryPropertyValue != null && !queryPropertyValue.equals("*")
           && queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
