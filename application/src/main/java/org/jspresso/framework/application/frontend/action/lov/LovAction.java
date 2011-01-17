@@ -28,6 +28,7 @@ import org.jspresso.framework.application.backend.action.CreateQueryComponentAct
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -100,16 +101,28 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
         erqDescriptor);
 
+    IValueConnector viewConnector = getViewConnector(context);
     String queryPropertyValue = getActionCommand(context);
 
     actionHandler.execute(createQueryComponentAction, context);
 
-    if (getModel(context) instanceof IQueryComponent
-        && nonLovTriggeringChars != null) {
-      for (int i = 0; i < nonLovTriggeringChars.length(); i++) {
-        if (queryPropertyValue != null
-            && queryPropertyValue.indexOf(nonLovTriggeringChars.charAt(i)) >= 0) {
-          return true;
+    if (viewConnector instanceof IRenderableCompositeValueConnector
+        && ((IRenderableCompositeValueConnector) viewConnector)
+            .getRenderingConnector() != null) {
+      if (getModel(context) instanceof IQueryComponent) {
+        if (nonLovTriggeringChars != null) {
+          for (int i = 0; i < nonLovTriggeringChars.length(); i++) {
+            if (queryPropertyValue != null
+                && queryPropertyValue.indexOf(nonLovTriggeringChars.charAt(i)) >= 0) {
+              // This is important since the typed in value (queryPropertyValue) is only passed as
+              // action parameter. We want to preserve it in the UI.
+              viewConnector.setConnectorValue(null);
+              ((IRenderableCompositeValueConnector) viewConnector)
+                  .getRenderingConnector()
+                  .setConnectorValue(queryPropertyValue);
+              return true;
+            }
+          }
         }
       }
     }
