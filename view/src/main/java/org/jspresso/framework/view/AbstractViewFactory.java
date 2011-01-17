@@ -212,7 +212,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -610,9 +612,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ICompositeViewDescriptor viewDescriptor = view.getDescriptor();
       if (viewDescriptor.isCascadingModels()) {
         IView<E> masterView = view.getChildren().get(0);
-        while (masterView instanceof ICompositeView<?>) {
-          masterView = ((ICompositeView<E>) masterView).getChildren().get(0);
-        }
         IValueConnector viewConnector;
         if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
           IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
@@ -650,6 +649,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
             detailConnector = wrapper;
           } else {
             detailConnector = detailView.getConnector();
+          }
+          
+          // We must dig into the composite structure to find the 1st non composite vew
+          // to cascade the model
+          while (masterView instanceof ICompositeView<?>) {
+            masterView = ((ICompositeView<E>) masterView).getChildren().get(0);
           }
           getModelCascadingBinder().bind(masterView.getConnector(),
               detailConnector);
