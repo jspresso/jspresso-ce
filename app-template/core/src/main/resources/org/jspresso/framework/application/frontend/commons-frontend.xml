@@ -3,22 +3,22 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
-  <!--
-    View factories
-  -->
+  <!-- View factories -->
   <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="sortingAction">
       <bean parent="lovFindFrontAction">
-        <property name="sortOnly" value="true"/>
+        <property name="wrappedAction">
+          <bean parent="lovFindBackAction">
+            <property name="sortOnly" value="true" />
+          </bean>
+        </property>
       </bean>
     </property>
     <property name="paginationViewDescriptor" ref="lovNavigationView" />
   </bean>
 
-  <!--
-    Standard views
-  -->
+  <!-- Standard views -->
   <bean id="pageableStatusModel" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
@@ -46,19 +46,19 @@
       </list>
     </property>
   </bean>
-  
+
   <bean id="lovNavigationView" class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
-    <property name="borderType" value="SIMPLE"/>
+    <property name="borderType" value="SIMPLE" />
     <property name="modelDescriptor" ref="pageableStatusModel" />
-    <property name="centerViewDescriptor" ref="pageableStatusView"/>
+    <property name="centerViewDescriptor" ref="pageableStatusView" />
     <property name="westViewDescriptor">
       <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-        <property name="action" ref="previousLovPageFrontAction"/>
+        <property name="action" ref="previousLovPageFrontAction" />
       </bean>
     </property>
     <property name="eastViewDescriptor">
       <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-        <property name="action" ref="nextLovPageFrontAction"/>
+        <property name="action" ref="nextLovPageFrontAction" />
       </bean>
     </property>
   </bean>
@@ -66,30 +66,24 @@
   <bean id="filterModuleNavigationView" parent="lovNavigationView">
     <property name="westViewDescriptor">
       <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-        <property name="action" ref="previousModuleFilterPageAction"/>
+        <property name="action" ref="previousModuleFilterPageAction" />
       </bean>
     </property>
     <property name="eastViewDescriptor">
       <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-        <property name="action" ref="nextModuleFilterPageAction"/>
+        <property name="action" ref="nextModuleFilterPageAction" />
       </bean>
     </property>
   </bean>
 
-  <!--
-    Report descriptors
-  -->
+  <!-- Report descriptors -->
   <bean id="abstractReportDescriptor" abstract="true"
     class="org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor">
     <constructor-arg index="0"
       value="org.jspresso.framework.application.printing.model.descriptor.basic.IReportDescriptor" />
   </bean>
-  <!--
-    Root action beans.
-  -->
-  <!--
-    Action beans.
-  -->
+  <!-- Root action beans. -->
+  <!-- Action beans. -->
 
   <bean id="okDialogFrontAction" parent="closeDialogAction">
     <property name="name" value="ok" />
@@ -113,15 +107,21 @@
     <property name="findAction" ref="lovFindFrontAction" />
     <property name="nextAction" ref="modalDialogAction" />
   </bean>
-  
-  <bean id="lovFindBackAction" parent="queryEntitiesBackAction">
-    <property name="mergeMode"><null/></property>
+
+  <bean id="lovFindBackAction" class="org.jspresso.framework.application.backend.action.FindAction">
+    <property name="queryAction">
+      <bean parent="queryEntitiesBackAction">
+        <property name="mergeMode">
+          <null />
+        </property>
+      </bean>
+    </property>
   </bean>
 
-  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.std.FindAction">
+  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="name" value="find.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
-    <property name="queryAction" ref="lovFindBackAction"/>
+    <property name="wrappedAction" ref="lovFindBackAction" />
   </bean>
 
   <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction">
@@ -167,12 +167,12 @@
     </property>
     <property name="nextAction" ref="executeActionAction" />
   </bean>
-  
+
   <bean id="exitFrontAction" class="org.jspresso.framework.application.frontend.action.workspace.ExitAction">
-    <property name="name" value="quit.name"/>
-    <property name="description" value="quit.description"/>
-    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/cancel-48x48.png"/>
-    <property name="checkCurrentModuleDirtyStateAction" ref="checkModuleDirtyStateFrontAction"/>
+    <property name="name" value="quit.name" />
+    <property name="description" value="quit.description" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
+    <property name="checkCurrentModuleDirtyStateAction" ref="checkModuleDirtyStateFrontAction" />
   </bean>
 
   <bean id="chooseComponentAction" class="org.jspresso.framework.application.frontend.action.lov.ChooseComponentAction">
@@ -249,7 +249,7 @@
 
   <bean id="editSelectedComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditSelectedComponentAction">
     <property name="nextAction" ref="modalDialogAction" />
-    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png"/>
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png" />
   </bean>
 
   <bean id="editComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
@@ -299,13 +299,15 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
   </bean>
 
-  <bean id="queryModuleFilterBackAction" parent="queryEntitiesBackAction"/>
-  
-  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
-    <property name="queryAction" ref="queryModuleFilterBackAction" />
+  <bean id="queryModuleFilterBackAction" class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
+    <property name="queryAction" ref="queryEntitiesBackAction" />
+  </bean>
+
+  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="name" value="query.filter.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
-    <property name="nextAction" ref="checkModuleDirtyStateFrontAction"/>
+    <property name="wrappedAction" ref="queryModuleFilterBackAction" />
+    <property name="nextAction" ref="checkModuleDirtyStateFrontAction" />
   </bean>
 
   <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction">
@@ -343,9 +345,7 @@
 
   <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_add-48x48.png" />
-    <!--
-      <property name="mnemonicAsString" value="alt pressed A" />
-    -->
+    <!-- <property name="mnemonicAsString" value="alt pressed A" /> -->
     <property name="acceleratorAsString" value="alt A" />
   </bean>
 
@@ -362,7 +362,7 @@
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneComponentCollectionAction">
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
@@ -376,7 +376,7 @@
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
@@ -388,7 +388,7 @@
     <property name="name" value="copy.name" />
     <property name="description" value="copy.description" />
     <property name="acceleratorAsString" value="ctrl C" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="COPY" />
@@ -401,7 +401,7 @@
     <property name="name" value="cut.name" />
     <property name="description" value="cut.description" />
     <property name="acceleratorAsString" value="ctrl X" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="MOVE" />
@@ -427,7 +427,7 @@
     <property name="name" value="remove.name" />
     <property name="description" value="remove.description" />
     <property name="acceleratorAsString" value="alt D" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="messageCode" value="remove.selected.message" />
     <property name="yesAction" ref="removeCollectionFromMasterBackAction" />
   </bean>
@@ -451,7 +451,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png" />
     <property name="name" value="installInTree.name" />
     <property name="description" value="installInTree.description" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
     </property>
@@ -468,7 +468,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
     <property name="name" value="moveUp.name" />
     <property name="description" value="moveUp.description" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property name="offset" value="-1" />
@@ -481,7 +481,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/down-48x48.png" />
     <property name="name" value="moveDown.name" />
     <property name="description" value="moveDown.description" />
-    <property name="collectionBased" value="true"/>
+    <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property name="offset" value="1" />
@@ -499,9 +499,7 @@
     </property>
   </bean>
 
-  <!--
-    Module history navigation action beans.
-  -->
+  <!-- Module history navigation action beans. -->
   <bean id="nextPinnedModuleAction" class="org.jspresso.framework.application.frontend.action.module.DisplayNextPinnedModuleAction">
     <property name="name" value="module.next" />
     <property name="description" value="module.next.description" />
@@ -527,17 +525,15 @@
   <bean id="moduleHistoryNavigationActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <ref bean="moduleHistoryNavigationActionList"/>
+        <ref bean="moduleHistoryNavigationActionList" />
       </list>
     </property>
   </bean>
 
-  <!--
-    Persistence action beans.
-  -->
-  <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction"/>
+  <!-- Persistence action beans. -->
+  <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
   <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
-  
+
   <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/save-48x48.png" />
     <property name="name" value="save.name" />
@@ -572,7 +568,7 @@
     <property name="name" value="reload.name" />
     <property name="description" value="reload.description" />
     <property name="wrappedAction" ref="reloadModuleObjectBackAction" />
-    <property name="nextAction" ref="checkAllModulesDirtyStateFrontAction"/>
+    <property name="nextAction" ref="checkAllModulesDirtyStateFrontAction" />
   </bean>
 
   <bean abstract="true" id="abstractChartAction" class="org.jspresso.framework.application.charting.frontend.action.AbstractChartAction">
@@ -587,9 +583,7 @@
     </property>
   </bean>
 
-  <!--
-    Action maps.
-  -->
+  <!-- Action maps. -->
   <bean id="masterDetailActionList" class="org.jspresso.framework.view.action.ActionList">
     <property name="name" value="ACTION" />
     <property name="actions">
@@ -603,7 +597,7 @@
 
   <bean id="clipboardActionList" class="org.jspresso.framework.view.action.ActionList">
     <property name="name" value="EDIT" />
-    <property name="collapsable" value="true"/>
+    <property name="collapsable" value="true" />
     <property name="actions">
       <list>
         <ref local="copyCollectionFrontAction" />
@@ -616,8 +610,8 @@
   <bean id="masterDetailActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <ref bean="masterDetailActionList"/>
-        <ref bean="clipboardActionList"/>
+        <ref bean="masterDetailActionList" />
+        <ref bean="clipboardActionList" />
       </list>
     </property>
   </bean>
@@ -645,8 +639,8 @@
   <bean id="readonlyBeanCollectionModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <ref bean="persistenceBeanCollectionModuleActionList"/>
-        <ref bean="detailBeanCollectionModuleActionList"/>
+        <ref bean="persistenceBeanCollectionModuleActionList" />
+        <ref bean="detailBeanCollectionModuleActionList" />
       </list>
     </property>
   </bean>
@@ -668,7 +662,7 @@
     </property>
     <property name="actionLists">
       <list>
-        <ref bean="queryBeanCollectionModuleActionList"/>
+        <ref bean="queryBeanCollectionModuleActionList" />
       </list>
     </property>
   </bean>
@@ -692,7 +686,7 @@
     </property>
     <property name="actionLists">
       <list>
-        <ref bean="moduleMasterDetailActionList"/>
+        <ref bean="moduleMasterDetailActionList" />
       </list>
     </property>
   </bean>
@@ -704,7 +698,7 @@
       </list>
     </property>
     <property name="actionLists">
-      <ref bean="queryBeanCollectionModuleActionList"/>
+      <ref bean="queryBeanCollectionModuleActionList" />
     </property>
   </bean>
 
@@ -722,14 +716,14 @@
   <bean id="beanModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <ref bean="persistenceBeanModuleActionList"/>
+        <ref bean="persistenceBeanModuleActionList" />
       </list>
     </property>
   </bean>
 
   <bean id="binaryPropertyActionList" class="org.jspresso.framework.view.action.ActionList">
     <property name="name" value="FILE" />
-    <property name="collapsable" value="true"/>
+    <property name="collapsable" value="true" />
     <property name="actions">
       <list>
         <ref bean="openFileAsBinaryPropertyAction" />
@@ -743,7 +737,7 @@
   <bean id="binaryPropertyActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <ref bean="binaryPropertyActionList"/>
+        <ref bean="binaryPropertyActionList" />
       </list>
     </property>
   </bean>
@@ -762,18 +756,16 @@
   <bean id="mapMasterDetailActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <ref bean="mapMasterDetailActionList"/>
+        <ref bean="mapMasterDetailActionList" />
       </list>
     </property>
   </bean>
 
-  <!--
-    Login utils 
-   -->
+  <!-- Login utils -->
   <bean id="loginViewDescriptor" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="name" value="login.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/password-48x48.png" />
-    <property name="columnCount" value="1"/>
+    <property name="columnCount" value="1" />
     <property name="modelDescriptor">
       <bean class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
         <constructor-arg value="org.jspresso.framework.security.UsernamePasswordHandler" />
@@ -796,9 +788,7 @@
     </property>
   </bean>
 
-  <!--
-    Standard ready to use modules
-  -->
+  <!-- Standard ready to use modules -->
 
   <bean abstract="true" id="abstractSimpleModule" class="org.jspresso.framework.application.model.Module">
   </bean>
@@ -819,7 +809,11 @@
     class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor" scope="prototype">
     <property name="sortingAction">
       <bean parent="queryModuleFilterAction">
-        <property name="sortOnly" value="true"/>
+        <property name="wrappedAction">
+          <bean parent="queryModuleFilterBackAction">
+            <property name="sortOnly" value="true" />
+          </bean>
+        </property>
       </bean>
     </property>
     <property name="actionMap" ref="filterableBeanCollectionModuleActionMap" />
@@ -832,9 +826,7 @@
     <property name="startupAction" ref="initModuleFilterAction" />
   </bean>
 
-  <!--
-    Workspaces
-  -->
+  <!-- Workspaces -->
   <bean id="defaultModuleIconImageURLProvider" class="org.jspresso.framework.application.model.WorkspaceIconImageURLProvider">
     <property name="delegateProvider" ref="defaultDomainImageUrlProvider" />
   </bean>

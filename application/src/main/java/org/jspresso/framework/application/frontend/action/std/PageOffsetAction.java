@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.action.std;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
@@ -39,12 +40,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  */
 public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  /**
-   * Page offset action constant.
-   */
-  public static final String PAGE_OFFSET = "PAGE_OFFSET";
-
-  private Integer            pageOffset;
+  private Integer pageOffset;
 
   /**
    * {@inheritDoc}
@@ -52,7 +48,7 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(PAGE_OFFSET, pageOffset);
+    context.put(AbstractQbeAction.PAGE_OFFSET, pageOffset);
     return super.execute(actionHandler, context);
   }
 
