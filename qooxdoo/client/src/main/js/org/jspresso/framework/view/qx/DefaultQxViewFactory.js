@@ -248,7 +248,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           if(actionList.getActions() != null) {
             var part = new qx.ui.toolbar.Part();
             if(actionList.isCollapsable()) {
-              part.add(this.createSplitButton(actionList));
+              var splitButton = this.createSplitButton(actionList);
+              if(splitButton) {
+                part.add(splitButton);
+              }
             } else {
               for(var j = 0; j < actionList.getActions().length; j++) {
                 part.add(this.createAction(actionList.getActions()[j]));
@@ -2099,6 +2102,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      */
     createSplitButton : function(actionList) {
       var actions = actionList.getActions();
+      if(actions == null || actions.length == 0) {
+        return null;
+      }
       if(actions.length == 1) {
         return this.createAction(actions[0], true);
       }

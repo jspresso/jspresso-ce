@@ -882,9 +882,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       getViewFactory().installActionLists(controlBar, navigationActions);
       getViewFactory().addSeparator(controlBar);
       var i:int;
+      var popupButton:Button;
       if(actions != null) {
         for(i = 0; i < actions.length; i++) {
-          controlBar.addChild(getViewFactory().createPopupButton(actions[i] as RActionList));
+          popupButton = getViewFactory().createPopupButton(actions[i] as RActionList);
+          if(popupButton != null) {
+            controlBar.addChild(popupButton);
+          }
         }
       }
       getViewFactory().addSeparator(controlBar);
@@ -893,7 +897,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       controlBar.addChild(glue);
       if(helpActions != null) {
         for(i = 0; i < helpActions.length; i++) {
-          controlBar.addChild(getViewFactory().createPopupButton(helpActions[i] as RActionList));
+          popupButton = getViewFactory().createPopupButton(helpActions[i] as RActionList);
+          if(popupButton != null) {
+            controlBar.addChild(popupButton);
+          }
         }
       }
       getViewFactory().addSeparator(controlBar);

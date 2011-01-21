@@ -607,14 +607,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__viewFactory.installActionLists(toolBar, navigationActions);
       if(actions) {
         for(var i = 0; i < actions.length; i++) {
-          toolBar.add(this.__viewFactory.createSplitButton(actions[i]));
+          var splitButton = this.__viewFactory.createSplitButton(actions[i])
+          if(splitButton) {
+            toolBar.add(splitButton);
+          }
         }
       }
       //this.__viewFactory.installActionLists(toolBar, actions);
       toolBar.addSpacer();
       if(helpActions) {
         for(var i = 0; i < helpActions.length; i++) {
-          toolBar.add(this.__viewFactory.createSplitButton(helpActions[i]));
+          var splitButton = this.__viewFactory.createSplitButton(helpActions[i])
+          if(splitButton) {
+            toolBar.add(splitButton);
+          }
         }
       }
       //this.__viewFactory.installActionLists(toolBar, helpActions);

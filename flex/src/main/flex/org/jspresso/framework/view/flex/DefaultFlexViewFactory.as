@@ -345,7 +345,10 @@ package org.jspresso.framework.view.flex {
         for(var i:int = 0; i < actionLists.length; i++) {
           var actionList:RActionList = actionLists[i] as RActionList;
           if(actionList.collapsable) {
-            toolBar.addChild(createPopupButton(actionList));
+            var popupButton:Button = createPopupButton(actionList);
+            if(popupButton != null) {
+              toolBar.addChild(popupButton);
+            }
           } else {
             if(actionList.actions != null) {
               for(var j:int = 0; j < actionList.actions.length; j++) {
@@ -2221,6 +2224,9 @@ package org.jspresso.framework.view.flex {
     }
 
     public function createPopupButton(actionList:RActionList):Button {
+      if(actionList.actions == null || actionList.actions.length == 0) {
+        return null;
+      }
       if(actionList.actions.length == 1) {
         return createAction(actionList.actions[0]);
       }
