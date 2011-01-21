@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<jnlp spec="1.5" codebase="$$context/webstart" href="application.jnlp">
+
+  <information>
+    <title>${applicationName}</title>
+    <vendor>${companyName}</vendor>
+    <description>${applicationDescription}</description>
+    <homepage href="${companyUrl}"/>
+    <icon href="$$context/webstart/logo.jpg" width="192" height="96"/>
+    <icon kind="splash" href="$$context/webstart/logo.jpg" width="192" height="96"/>
+  </information>
+
+  <update check="always" policy="always"/>
+
+  <resources>
+    <java version="1.5+" href="http://java.sun.com/products/autodl/j2se"/>
+    <j2se version="1.5+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="../lib/jspresso-app-launch-ulc.jar" main="true"/>
+    <jar href="../lib/jspresso-app-launch-core.jar"/>
+    <jar href="../lib/jspresso-swing-components.jar"/>
+    <jar href="../lib/ulc-base-client.jar"/>
+    <jar href="../lib/ulc-base-trusted.jar"/>
+    <jar href="../lib/ulc-jnlp-client.jar"/>
+    <jar href="../lib/nachocalendar.jar"/>
+    <jar href="../lib/substance.jar"/>
+    <jar href="../lib/jspresso-ulc-components-client.jar"/>
+    <jar href="../lib/jspresso-ulc-components-shared.jar"/>
+    <jar href="../lib/jspresso-util.jar"/>
+    <jar href="../lib/ulc-servlet-client.jar"/>
+    <jar href="../lib/jedit-syntax.jar"/>
+    <jar href="../lib/joda-time.jar"/>
+    <property name="swing.defaultlaf" value="org.jvnet.substance.SubstanceLookAndFeel"/>
+    <property name="sun.awt.noerasebackground" value="true"/>
+  </resources>
+
+  <security>
+    <all-permissions/>
+  </security>
+
+  <application-desc main-class="org.jspresso.framework.application.launch.ulc.jnlp.UlcJnlpLauncher">
+    <argument>-splash</argument>
+    <argument>$$context/webstart/logo.jpg</argument>
+    <argument>$$context/${parentArtifactId}-ulc</argument>
+    <argument>60</argument>
+    <argument>WARNING</argument>
+  </application-desc>
+
+</jnlp>
