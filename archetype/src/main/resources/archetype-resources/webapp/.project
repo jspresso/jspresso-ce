@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>${artifactId}</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/main/webapp/flex</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/webapp/target/${rootArtifactId}-webapp/flex</locationURI>
+		</link>
+		<link>
+			<name>src/main/webapp/qooxdoo</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/webapp/target/${rootArtifactId}-webapp/qooxdoo</locationURI>
+		</link>
+		<link>
+			<name>src/main/webapp/WEB-INF/flex</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/startup/flex/config/src/main/resources</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

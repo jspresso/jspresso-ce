@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -59,7 +60,7 @@
               <name>${rootArtifactId}-with-testdata</name>
             </program>
           </programs>
-          <assembleDirectory>${project.build.directory}/dist</assembleDirectory>
+          <assembleDirectory>${symbol_dollar}{project.build.directory}/dist</assembleDirectory>
           <repositoryLayout>flat</repositoryLayout>
           <repositoryName>lib</repositoryName>
           <showConsoleWindow>true</showConsoleWindow>
@@ -86,7 +87,7 @@
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <extraJvmArguments>-Djava.security.auth.login.config="$BASEDIR"/conf/jaas.config -Dswing.defaultlaf=org.jvnet.substance.SubstanceLookAndFeel -Dsubstancelaf.watermark.tobleed</extraJvmArguments>
+              <extraJvmArguments>-Djava.security.auth.login.config="${symbol_dollar}BASEDIR"/conf/jaas.config -Dswing.defaultlaf=org.jvnet.substance.SubstanceLookAndFeel -Dsubstancelaf.watermark.tobleed</extraJvmArguments>
               <platforms>
                 <platform>unix</platform>
               </platforms>
@@ -102,7 +103,7 @@
             <phase>package</phase>
             <configuration>
               <tasks>
-                <copy todir="${project.build.directory}/dist/conf" file="${basedir}/../../conf/jaas.config"/>
+                <copy todir="${symbol_dollar}{project.build.directory}/dist/conf" file="${symbol_dollar}{basedir}/../../conf/jaas.config"/>
               </tasks>
             </configuration>
             <goals>

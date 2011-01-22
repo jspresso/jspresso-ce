@@ -50,20 +50,6 @@
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
-      <directory></directory>
-      <includes>
-        <include>.project</include>
-        <include>.classpath</include>
-        <include>.springBeans</include>
-      </includes>
-    </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
-      <directory>.settings</directory>
-      <includes>
-        <include>*</include>
-      </includes>
-    </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
       <directory>launches</directory>
       <includes>
         <include>*.launch</include>
@@ -73,6 +59,14 @@
   <modules>
     <module id="${rootArtifactId}-core" dir="core" name="${rootArtifactId}-core">
       <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory></directory>
+          <includes>
+            <include>.project</include>
+            <include>.classpath</include>
+            <include>.springBeans</include>
+          </includes>
+        </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
@@ -134,47 +128,15 @@
       </fileSets>
     </module>
     <module id="${rootArtifactId}-startup" dir="startup" name="${rootArtifactId}-startup">
-      <fileSets>
-        <fileSet filtered="true" packaged="true" encoding="UTF-8">
-          <directory>ulc/src/main/java</directory>
-          <includes>
-            <include>**/*.java</include>
-          </includes>
-        </fileSet>
-        <fileSet filtered="true" packaged="true" encoding="UTF-8">
-          <directory>ulc/src/main/resources</directory>
-          <includes>
-            <include>**/*.xml</include>
-            <include>**/*.properties</include>
-          </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-          <directory>ulc</directory>
-          <includes>
-            <include>pom.xml</include>
-          </includes>
-        </fileSet>
-      </fileSets>
       <modules>
         <module id="${rootArtifactId}-startup-swing" dir="swing" name="${rootArtifactId}-startup-swing">
           <fileSets>
-            <fileSet filtered="true" packaged="true" encoding="UTF-8">
-              <directory>src/main/java</directory>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory></directory>
               <includes>
-                <include>**/*.java</include>
+                <include>.springBeans</include>
               </includes>
             </fileSet>
-            <fileSet filtered="true" packaged="true" encoding="UTF-8">
-              <directory>src/main/resources</directory>
-              <includes>
-                <include>**/*.xml</include>
-                <include>**/*.properties</include>
-              </includes>
-            </fileSet>
-          </fileSets>
-        </module>
-        <module id="${rootArtifactId}-startup-wings" dir="wings" name="${rootArtifactId}-startup-wings">
-          <fileSets>
             <fileSet filtered="true" packaged="true" encoding="UTF-8">
               <directory>src/main/java</directory>
               <includes>
@@ -192,6 +154,12 @@
         </module>
         <module id="${rootArtifactId}-startup-remote" dir="remote" name="${rootArtifactId}-startup-remote">
           <fileSets>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory></directory>
+              <includes>
+                <include>.springBeans</include>
+              </includes>
+            </fileSet>
             <fileSet filtered="true" packaged="true" encoding="UTF-8">
               <directory>src/main/java</directory>
               <includes>
@@ -340,6 +308,12 @@
     </module>
     <module id="${rootArtifactId}-webapp" dir="webapp" name="${rootArtifactId}-webapp">
       <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory></directory>
+          <includes>
+            <include>.project</include>
+          </includes>
+        </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
@@ -366,7 +340,6 @@
           <directory>src/main/webapp</directory>
           <includes>
             <include>**/*.xml</include>
-            <include>**/*.jnlp</include>
           </includes>
         </fileSet>
         <fileSet encoding="UTF-8">
@@ -377,12 +350,6 @@
             <include>**/*.html</include>
             <include>**/*.css</include>
             <include>**/*.js</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>conf</directory>
-          <includes>
-            <include>**/*.jks</include>
           </includes>
         </fileSet>
       </fileSets>

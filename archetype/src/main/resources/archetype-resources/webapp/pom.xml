@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -10,10 +11,6 @@
   <packaging>war</packaging>
   <name>${applicationName} - Webapp</name>
   <dependencies>
-    <dependency>
-      <groupId>${groupId}</groupId>
-      <artifactId>${rootArtifactId}-startup-wings</artifactId>
-    </dependency>
     <dependency>
       <groupId>${groupId}</groupId>
       <artifactId>${rootArtifactId}-startup-remote</artifactId>
@@ -90,11 +87,6 @@
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.jvnet.substance</groupId>
-      <artifactId>substance</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -108,7 +100,7 @@
             </goals>
             <phase>prepare-package</phase>
             <configuration>
-              <outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/flex</outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/WEB-INF/flex</outputDirectory>
               <includeArtifactIds>${rootArtifactId}-startup-flex-config</includeArtifactIds>
               <includeClassifiers>resources</includeClassifiers>
               <excludeTransitive>true</excludeTransitive>
@@ -121,7 +113,7 @@
             </goals>
             <phase>prepare-package</phase>
             <configuration>
-              <outputDirectory>${project.build.directory}/${project.artifactId}/qooxdoo</outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/qooxdoo</outputDirectory>
               <includeArtifactIds>${rootArtifactId}-startup-qooxdoo-client</includeArtifactIds>
               <includeClassifiers>web-resources</includeClassifiers>
               <excludeTransitive>true</excludeTransitive>
@@ -133,10 +125,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
-          <warName>${project.artifactId}</warName>
-          <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
-          <webXml>${basedir}/src/main/webapp/WEB-INF/noulc-web.xml</webXml>
-          <warSourceExcludes>**/webstart/**,**/*-web.xml</warSourceExcludes>
+          <warName>${symbol_dollar}{project.artifactId}</warName>
+          <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}</webappDirectory>
         </configuration>
       </plugin>
       <plugin>
@@ -151,7 +141,7 @@
             <phase>prepare-package</phase>
             <configuration>
               <wrapperArtifact>
-                <groupId>${project.groupId}</groupId>
+                <groupId>${symbol_dollar}{project.groupId}</groupId>
                 <artifactId>${rootArtifactId}-startup-flex-client</artifactId>
               </wrapperArtifact>
               <templateInclusions>
@@ -162,33 +152,8 @@
               </templateExclusions>
               
               <stripVersion>true</stripVersion>
-              <webappDirectory>${project.build.directory}/${project.artifactId}/flex</webappDirectory>
+              <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/flex</webappDirectory>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>build-eclipse-WEB-INF-lib-directory</id>
-            <phase>package</phase>
-            <configuration>
-              <tasks>
-                <copy
-                  todir="target/eclipse-war-lib">
-                  <fileset
-                    dir="target/${artifactId}/WEB-INF/lib">
-                    <exclude
-                      name="**/${rootArtifactId}-*.*" />
-                  </fileset>
-                </copy>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
@@ -196,7 +161,7 @@
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
         <configuration>
-          <webApp>${project.build.directory}/${project.artifactId}</webApp>
+          <webApp>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}</webApp>
           <systemProperties>
             <systemProperty>
               <name>java.security.auth.login.config</name>
@@ -207,83 +172,4 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>ulc</id>
-      <dependencies>
-        <dependency>
-          <groupId>${groupId}</groupId>
-          <artifactId>${rootArtifactId}-startup-ulc</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.jspresso.framework</groupId>
-          <artifactId>jspresso-ulc-components-client</artifactId>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>ulc</groupId>
-          <artifactId>ulc-deployment-key</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.jvnet.substance</groupId>
-          <artifactId>substance</artifactId>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-war-plugin</artifactId>
-            <configuration>
-              <warName>${project.artifactId}</warName>
-              <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
-              <webXml>${basedir}/src/main/webapp/WEB-INF/ulc-web.xml</webXml>
-              <warSourceExcludes>**/*-web.xml</warSourceExcludes>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-dependencies</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>copy-dependencies</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/${project.artifactId}/lib</outputDirectory>
-                  <includeArtifactIds>ulc-base-trusted,ulc-base-client,ulc-jnlp-client,ulc-servlet-client,nachocalendar,jedit-syntax,jspresso-util,jspresso-ulc-components-shared,jspresso-ulc-components-client,jspresso-swing-components,jspresso-app-launch-core,jspresso-app-launch-ulc,joda-time,substance</includeArtifactIds>
-                  <stripVersion>true</stripVersion>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-dependencies</id>
-                <phase>prepare-package</phase>
-                <configuration>
-                  <tasks>
-                    <signjar alias="key-alias" keystore="conf/keystore.jks" storepass="keystore-password" keypass="key-password">
-                      <fileset dir="${project.build.directory}/${project.artifactId}">
-                        <include name="lib/*.jar" />
-                      </fileset>
-                    </signjar>
-                  </tasks>
-                </configuration>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <project
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -24,7 +25,7 @@
       <type>swc</type>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>${symbol_dollar}{project.groupId}</groupId>
       <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
       <classifier>resources</classifier>
       <type>zip</type>
@@ -33,14 +34,14 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
+    <sourceDirectory>${symbol_dollar}{basedir}/src/main/flex</sourceDirectory>
+    <testSourceDirectory>${symbol_dollar}{basedir}/src/test/flex</testSourceDirectory>
     <resources>
       <resource>
-        <directory>${basedir}/src/main/resources</directory>
+        <directory>${symbol_dollar}{basedir}/src/main/resources</directory>
       </resource>
       <resource>
-        <directory>${project.build.directory}/generated-resources</directory>
+        <directory>${symbol_dollar}{project.build.directory}/generated-resources</directory>
         <filtering>true</filtering>
       </resource>
     </resources>
@@ -56,7 +57,7 @@
             </goals>
             <phase>prepare-package</phase>
             <configuration>
-              <outputDirectory>${project.build.directory}/generated-resources</outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/generated-resources</outputDirectory>
               <includeArtifactIds>${rootArtifactId}-startup-flex-config</includeArtifactIds>
               <excludeTransitive>true</excludeTransitive>
             </configuration>
@@ -90,7 +91,7 @@
           <mergeResourceBundle>true</mergeResourceBundle>
           <contextRoot>${rootArtifactId}-webapp</contextRoot>
           <parameters>
-            <swf>${project.artifactId}</swf>
+            <swf>${symbol_dollar}{project.artifactId}</swf>
           </parameters>
         </configuration>
       </plugin>

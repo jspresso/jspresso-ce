@@ -1,14 +1,15 @@
+#set( $symbol_dollar = '$' )
 {
   "name"    : "${applicationName}",
 
   "include" :
   [
     {
-      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+      "path" : "${symbol_dollar}{QOOXDOO_PATH}/tool/data/config/application.json"
     }
     ,
     {
-      "path" : "${TARGET}/jspresso-qooxdoo/py/library.json",
+      "path" : "${symbol_dollar}{TARGET}/jspresso-qooxdoo/py/library.json",
       "as"   : "jspresso-qooxdoo"
     }
   ],
@@ -42,7 +43,7 @@
     "API_EXCLUDE"  : ["qx.legacy.*","qx.test.*"],
     "LOCALES"      : ["en","fr"],
     "ROOT"         : "..",
-    "BUILD_PATH"   : "${TARGET}/web"
+    "BUILD_PATH"   : "${symbol_dollar}{TARGET}/web"
   },
 
   // You only need to edit the remainder of this file, if you want to customize
@@ -54,8 +55,8 @@
     {
       "cache" :
       {
-        "compile"     : "${TARGET}/cache",
-        "downloads"   : "${TARGET}/cache/downloads"
+        "compile"     : "${symbol_dollar}{TARGET}/cache",
+        "downloads"   : "${symbol_dollar}{TARGET}/cache/downloads"
       }
     },
     "libraries" : 
@@ -65,7 +66,7 @@
       "library" :
       [
         {
-          "manifest" : "${TARGET}/jspresso-qooxdoo/Manifest.json"
+          "manifest" : "${symbol_dollar}{TARGET}/jspresso-qooxdoo/Manifest.json"
         }
       ]
     },
@@ -73,7 +74,7 @@
     {
       "copy-files" :
       {
-        "source" : "${ROOT}/html"
+        "source" : "${symbol_dollar}{ROOT}/html"
       }
     },
     "source-script" :

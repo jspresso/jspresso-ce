@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -37,7 +38,7 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/jspresso-qooxdoo</outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/jspresso-qooxdoo</outputDirectory>
               <includeArtifactIds>jspresso-qooxdoo-client</includeArtifactIds>
             </configuration>
           </execution>
@@ -49,7 +50,7 @@
             </goals>
             <configuration>
               <includeArtifactIds>qooxdoo-sdk</includeArtifactIds>
-              <outputDirectory>${project.build.directory}/qooxdoo-sdk</outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/qooxdoo-sdk</outputDirectory>
             </configuration>
           </execution>
           <execution>
@@ -59,7 +60,7 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}</outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}</outputDirectory>
               <includeGroupIds>org.qooxdoo</includeGroupIds>
               <excludeArtifactIds>qooxdoo-sdk</excludeArtifactIds>
               <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
@@ -84,7 +85,7 @@
           <executable>python</executable>
           <workingDirectory>src/main/py</workingDirectory>
           <arguments>
-            <argument>${project.build.directory}/qooxdoo-sdk/tool/bin/generator.py</argument>
+            <argument>${symbol_dollar}{project.build.directory}/qooxdoo-sdk/tool/bin/generator.py</argument>
             <argument>source-all,build</argument>
           </arguments>
         </configuration>
@@ -101,31 +102,31 @@
             <phase>prepare-package</phase>
             <configuration>
               <tasks>
-                <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
-                <property name="js.source.dir" value="${basedir}/src/main/source" />
-                <property name="html.source.dir" value="${basedir}/src/main/html" />
+                <property name="web-debug.dir" value="${symbol_dollar}{project.build.directory}/web-debug" />
+                <property name="js.source.dir" value="${symbol_dollar}{basedir}/src/main/source" />
+                <property name="html.source.dir" value="${symbol_dollar}{basedir}/src/main/html" />
                 <mkdir dir="" />
-                <copy todir="${web-debug.dir}">
-                  <fileset dir="${js.source.dir}">
+                <copy todir="${symbol_dollar}{web-debug.dir}">
+                  <fileset dir="${symbol_dollar}{js.source.dir}">
                     <include name="**/*.js" />
                   </fileset>
-                  <fileset dir="${html.source.dir}">
+                  <fileset dir="${symbol_dollar}{html.source.dir}">
                     <include name="**/*.html" />
                   </fileset>
                 </copy>
-                <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../../target" value="file:///${symbol_dollar}{project.build.directory}">
                   <include name="**/*.js"/>
                 </replace>
-                <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../" value="file:///${symbol_dollar}{basedir}/src/main/">
                   <include name="**/*.js"/>
                 </replace>
-                <replace dir="${web-debug.dir}" token="\" value="/">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="\" value="/">
                   <include name="**/*.js"/>
                 </replace>
-                <replace dir="${web-debug.dir}" token="//(" value="\/(">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="//(" value="\/(">
                   <include name="**/*.js"/>
                 </replace>
-                <delete dir="${js.source.dir}" />
+                <delete dir="${symbol_dollar}{js.source.dir}" />
               </tasks>
             </configuration>
           </execution>
@@ -143,7 +144,7 @@
             <phase>prepare-package</phase>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/web-resources.xml</descriptor>
+                <descriptor>${symbol_dollar}{basedir}/src/main/assembly/web-resources.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
@@ -155,7 +156,7 @@
             <phase>prepare-package</phase>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/sources.xml</descriptor>
+                <descriptor>${symbol_dollar}{basedir}/src/main/assembly/sources.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>

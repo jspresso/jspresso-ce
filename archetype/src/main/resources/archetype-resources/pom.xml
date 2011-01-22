@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -43,50 +44,50 @@
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-core</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-swing</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-ulc</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-wings</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-remote</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
         <classifier>resources</classifier>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-flex-client</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
         <type>swf</type>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-qooxdoo-server</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
-        <version>${project.version}</version>
+        <version>${symbol_dollar}{project.version}</version>
         <classifier>web-resources</classifier>
         <type>zip</type>
       </dependency>
@@ -107,22 +108,22 @@
                 <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
                 <taskdef resource="net/sf/antcontrib/antlib.xml" />
                 <if>
-                  <equals arg1="${project.artifactId}" arg2="${artifactId}" />
+                  <equals arg1="${symbol_dollar}{project.artifactId}" arg2="${artifactId}" />
                   <then>
-                    <mkdir dir="${project.reporting.outputDirectory}/beandocs" />
-                    <mkdir dir="${project.reporting.outputDirectory}/beandocs/tmp" />
-                    <copy todir="${project.reporting.outputDirectory}/beandocs/tmp" flatten="true">
-                      <fileset dir="${basedir}/core/src/main/resources">
+                    <mkdir dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs" />
+                    <mkdir dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" />
+                    <copy todir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" flatten="true">
+                      <fileset dir="${symbol_dollar}{basedir}/core/src/main/resources">
                         <include name="**/${packageInPathFormat}/**/*.xml" />
                         <exclude name="**/${packageInPathFormat}/**/*.hbm.xml" />
                       </fileset>
                     </copy>
-                    <beandoc outputDir="${project.reporting.outputDirectory}/beandocs" beandocProps="${basedir}/conf/beandoc.properties">
-                      <fileset dir="${project.reporting.outputDirectory}/beandocs/tmp">
+                    <beandoc outputDir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs" beandocProps="${symbol_dollar}{basedir}/conf/beandoc.properties">
+                      <fileset dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp">
                         <include name="**/*.xml" />
                       </fileset>
                     </beandoc>
-                    <delete dir="${project.reporting.outputDirectory}/beandocs/tmp" />
+                    <delete dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" />
                   </then>
                 </if>
               </tasks>
@@ -138,8 +139,8 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptors>
-            <descriptor>${basedir}/src/main/assembly/dist-bin.xml</descriptor>
-            <descriptor>${basedir}/src/main/assembly/dist-src.xml</descriptor>
+            <descriptor>${symbol_dollar}{basedir}/src/main/assembly/dist-bin.xml</descriptor>
+            <descriptor>${symbol_dollar}{basedir}/src/main/assembly/dist-src.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>

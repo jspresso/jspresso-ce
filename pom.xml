@@ -167,6 +167,7 @@
     <module>app-launch</module>
     <module>app-template</module>
     <module>archetype</module>
+    <module>archetype-full</module>
     <module>documentation</module>
   </modules>
   <profiles>

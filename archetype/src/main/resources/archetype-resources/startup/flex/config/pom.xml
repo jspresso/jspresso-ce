@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 <project
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,7 +27,7 @@
             <phase>generate-resources</phase>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/resources.xml</descriptor>
+                <descriptor>${symbol_dollar}{basedir}/src/main/assembly/resources.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
