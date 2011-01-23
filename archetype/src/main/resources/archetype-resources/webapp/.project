@@ -14,6 +14,11 @@
 			<type>2</type>
 			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/webapp/target/${rootArtifactId}-webapp/flex</locationURI>
 		</link>
+    <link>
+      <name>src/main/webapp/flex-debug</name>
+      <type>2</type>
+      <locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/startup/flex/client/target/flex</locationURI>
+    </link>
 		<link>
 			<name>src/main/webapp/qooxdoo</name>
 			<type>2</type>
