@@ -1094,6 +1094,7 @@ public abstract class AbstractBackendController extends AbstractController
                   registeredCollection = collectionFactory
                       .createComponentCollection(List.class);
                 }
+                initializePropertyIfNeeded(entity, property.getKey());
                 for (IComponent collectionElement : (Collection<IComponent>) property
                     .getValue()) {
                   if (collectionElement instanceof IEntity) {
