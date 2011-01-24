@@ -19,12 +19,9 @@
 package org.jspresso.framework.application.startup.development;
 
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 
+import org.jspresso.framework.application.startup.AbstractBeanFactoryAwareContextListener;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.access.BeanFactoryLocator;
-import org.springframework.beans.factory.access.BeanFactoryReference;
-import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 
 /**
  * A simple listener to hook in webapp startup and persist sample data.
@@ -32,54 +29,18 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractTestDataContextListener implements
-    ServletContextListener {
+public abstract class AbstractTestDataContextListener extends
+    AbstractBeanFactoryAwareContextListener {
 
   /**
    * {@inheritDoc}
    */
-  public void contextDestroyed(
+  @Override
+  public void contextInitialized(BeanFactory beanFactory,
       @SuppressWarnings("unused") ServletContextEvent event) {
-    // No-op
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void contextInitialized(ServletContextEvent event) {
-    String beanFactorySelector = getBeanFactorySelector(event);
-    String applicationContextKey = getApplicationContextKey(event);
-    BeanFactoryLocator bfl = SingletonBeanFactoryLocator
-        .getInstance(beanFactorySelector);
-    BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
-    BeanFactory beanFactory = bf.getFactory();
     if (beanFactory != null) {
       persistTestData(beanFactory);
     }
-  }
-
-  /**
-   * Retrieves the spring bean factory selector to use.
-   * 
-   * @param event
-   *          the servlet context event from which the servlet context can be
-   *          retrieved and used.
-   * @return the spring bean factory selector to use.
-   */
-  protected String getBeanFactorySelector(ServletContextEvent event) {
-    return event.getServletContext().getInitParameter("beanFactorySelector");
-  }
-
-  /**
-   * Retrieves the spring application context key to use.
-   * 
-   * @param event
-   *          the servlet context event from which the servlet context can be
-   *          retrieved and used.
-   * @return the spring application context key to use.
-   */
-  protected String getApplicationContextKey(ServletContextEvent event) {
-    return event.getServletContext().getInitParameter("appContextKey");
   }
 
   /**
