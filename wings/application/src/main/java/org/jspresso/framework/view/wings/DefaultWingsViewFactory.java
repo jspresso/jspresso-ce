@@ -1909,8 +1909,8 @@ public class DefaultWingsViewFactory extends
     ActionMap actionMap = viewDescriptor.getActionMap();
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       SToolBar toolBar = createSToolBar();
-      for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
-          .hasNext();) {
+      for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
+          .iterator(); iter.hasNext();) {
         ActionList nextActionList = iter.next();
         if (actionHandler.isAccessGranted(nextActionList)) {
           ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();

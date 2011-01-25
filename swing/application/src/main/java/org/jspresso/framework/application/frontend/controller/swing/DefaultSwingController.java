@@ -602,18 +602,18 @@ public class DefaultSwingController extends
     applicationToolBar.addSeparator();
     if (getNavigationActions() != null
         && isAccessGranted(getNavigationActions())) {
-      for (ActionList actionList : getNavigationActions().getActionLists()) {
+      for (ActionList actionList : getNavigationActions().getActionLists(this)) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
     if (getActionMap() != null && isAccessGranted(getActionMap())) {
-      for (ActionList actionList : getActionMap().getActionLists()) {
+      for (ActionList actionList : getActionMap().getActionLists(this)) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
     applicationToolBar.add(Box.createHorizontalGlue());
     if (getHelpActions() != null && isAccessGranted(getHelpActions())) {
-      for (ActionList actionList : getHelpActions().getActionLists()) {
+      for (ActionList actionList : getHelpActions().getActionLists(this)) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
@@ -630,7 +630,7 @@ public class DefaultSwingController extends
     applicationToolBar.setFloatable(false);
 
     if (getSecondaryActionMap() != null) {
-      for (ActionList actionList : getSecondaryActionMap().getActionLists()) {
+      for (ActionList actionList : getSecondaryActionMap().getActionLists(this)) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
@@ -833,7 +833,7 @@ public class DefaultSwingController extends
     List<JMenu> menus = new ArrayList<JMenu>();
     if (actionMap != null && isAccessGranted(actionMap)) {
       JMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists()) {
+      for (ActionList actionList : actionMap.getActionLists(this)) {
         if (isAccessGranted(actionList)) {
           if (!useSeparator || menus.isEmpty()) {
             menu = createMenu(actionList);

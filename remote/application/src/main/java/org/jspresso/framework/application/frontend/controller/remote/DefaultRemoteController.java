@@ -803,7 +803,7 @@ public class DefaultRemoteController extends
   private RActionList[] createRActionLists(ActionMap actionMap) {
     List<RActionList> actionLists = new ArrayList<RActionList>();
     if (actionMap != null && isAccessGranted(actionMap)) {
-      for (ActionList actionList : actionMap.getActionLists()) {
+      for (ActionList actionList : actionMap.getActionLists(this)) {
         if (isAccessGranted(actionList)) {
           actionLists.add(createRActionList(actionList));
         }

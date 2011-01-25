@@ -540,7 +540,7 @@ public class DefaultWingsController extends
     List<SMenu> menus = new ArrayList<SMenu>();
     if (actionMap != null && isAccessGranted(actionMap)) {
       SMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists()) {
+      for (ActionList actionList : actionMap.getActionLists(this)) {
         if (isAccessGranted(actionList)) {
           if (!useSeparator || menus.isEmpty()) {
             menu = createMenu(actionList);

@@ -2166,8 +2166,8 @@ public class DefaultSwingViewFactory extends
   protected JToolBar createViewToolBar(ActionMap actionMap,
       IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
     JToolBar toolBar = createJToolBar();
-    for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
-        .hasNext();) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
+        .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
         ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
@@ -2494,8 +2494,8 @@ public class DefaultSwingViewFactory extends
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     popupMenu.add(titleLabel);
     popupMenu.addSeparator();
-    for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
-        .hasNext();) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
+        .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
         for (IDisplayableAction action : nextActionList.getActions()) {

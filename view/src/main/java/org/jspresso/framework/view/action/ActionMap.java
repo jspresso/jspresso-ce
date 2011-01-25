@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
@@ -51,7 +52,8 @@ public class ActionMap implements ISecurable {
   private ERenderingOptions  renderingOptions;
 
   private static void completeActionMap(
-      Map<String, ActionList> bufferActionMap, List<ActionList> actionLists) {
+      Map<String, ActionList> bufferActionMap, List<ActionList> actionLists,
+      IActionHandler actionHandler) {
     if (actionLists != null) {
       Map<String, ActionList> mapOfActionLists = new LinkedHashMap<String, ActionList>();
       for (ActionList al : actionLists) {
@@ -59,20 +61,22 @@ public class ActionMap implements ISecurable {
       }
       for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists
           .entrySet()) {
-        ActionList bufferActionList = bufferActionMap.get(actionListEntry
-            .getKey());
-        if (bufferActionList == null) {
-          bufferActionList = actionListEntry.getValue().clone();
-          bufferActionMap.put(actionListEntry.getKey(), bufferActionList);
-        } else {
-          for (IDisplayableAction localAction : actionListEntry.getValue()
-              .getActions()) {
-            int existingIndex = bufferActionList.getActions().indexOf(
-                localAction);
-            if (existingIndex >= 0) {
-              bufferActionList.getActions().set(existingIndex, localAction);
-            } else {
-              bufferActionList.getActions().add(localAction);
+        if (actionHandler.isAccessGranted(actionListEntry.getValue())) {
+          ActionList bufferActionList = bufferActionMap.get(actionListEntry
+              .getKey());
+          if (bufferActionList == null) {
+            bufferActionList = actionListEntry.getValue().clone();
+            bufferActionMap.put(actionListEntry.getKey(), bufferActionList);
+          } else {
+            for (IDisplayableAction localAction : actionListEntry.getValue()
+                .getActions()) {
+              int existingIndex = bufferActionList.getActions().indexOf(
+                  localAction);
+              if (existingIndex >= 0) {
+                bufferActionList.getActions().set(existingIndex, localAction);
+              } else {
+                bufferActionList.getActions().add(localAction);
+              }
             }
           }
         }
@@ -84,17 +88,22 @@ public class ActionMap implements ISecurable {
    * Gets the list of action sets composing the parent action maps with the
    * local one.
    * 
+   * @param actionHandler
+   *          the action handler used to handle role based security.
    * @return the actions list.
    */
-  public List<ActionList> getActionLists() {
+  public List<ActionList> getActionLists(IActionHandler actionHandler) {
     Map<String, ActionList> buffer = new LinkedHashMap<String, ActionList>();
     if (parentActionMaps != null) {
       for (ActionMap parentActionMap : parentActionMaps) {
-        completeActionMap(buffer, parentActionMap.getActionLists());
+        if (actionHandler.isAccessGranted(parentActionMap)) {
+          completeActionMap(buffer,
+              parentActionMap.getActionLists(actionHandler), actionHandler);
+        }
       }
     }
     if (actionLists != null) {
-      completeActionMap(buffer, actionLists);
+      completeActionMap(buffer, actionLists, actionHandler);
     }
     return new ArrayList<ActionList>(buffer.values());
   }

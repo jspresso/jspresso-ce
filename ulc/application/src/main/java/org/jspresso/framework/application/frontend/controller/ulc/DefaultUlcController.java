@@ -534,7 +534,7 @@ public class DefaultUlcController extends
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
     if (actionMap != null && isAccessGranted(actionMap)) {
       ULCMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists()) {
+      for (ActionList actionList : actionMap.getActionLists(this)) {
         if (isAccessGranted(actionList)) {
           if (!useSeparator || menus.isEmpty()) {
             menu = createMenu(actionList);

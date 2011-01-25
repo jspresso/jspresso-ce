@@ -1874,8 +1874,8 @@ public class DefaultRemoteViewFactory extends
   protected List<RActionList> createViewToolBar(ActionMap actionMap,
       IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
     List<RActionList> viewActionLists = new ArrayList<RActionList>();
-    for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
-        .hasNext();) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
+        .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
         ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
