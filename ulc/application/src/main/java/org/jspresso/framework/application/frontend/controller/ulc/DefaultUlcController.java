@@ -535,13 +535,15 @@ public class DefaultUlcController extends
     if (actionMap != null) {
       ULCMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
-        if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList);
-          menus.add(menu);
-        } else {
-          menu.addSeparator();
-          for (ULCMenuItem menuItem : createMenuItems(actionList)) {
-            menu.add(menuItem);
+        if (isAccessGranted(actionList)) {
+          if (!useSeparator || menus.isEmpty()) {
+            menu = createMenu(actionList);
+            menus.add(menu);
+          } else {
+            menu.addSeparator();
+            for (ULCMenuItem menuItem : createMenuItems(actionList)) {
+              menu.add(menuItem);
+            }
           }
         }
       }

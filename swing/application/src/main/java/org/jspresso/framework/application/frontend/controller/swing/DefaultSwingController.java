@@ -638,17 +638,19 @@ public class DefaultSwingController extends
 
   private void completeApplicationToolBar(JToolBar applicationToolBar,
       ActionList actionList) {
-    if (actionList.isCollapsable()) {
-      applicationToolBar.add(createComboButton(actionList));
-    } else {
-      for (IDisplayableAction da : actionList.getActions()) {
-        JButton b = new JButton();
-        b.setAction(getViewFactory().getActionFactory().createAction(da, this,
-            null, getLocale()));
-        applicationToolBar.add(b);
+    if (isAccessGranted(actionList)) {
+      if (actionList.isCollapsable()) {
+        applicationToolBar.add(createComboButton(actionList));
+      } else {
+        for (IDisplayableAction da : actionList.getActions()) {
+          JButton b = new JButton();
+          b.setAction(getViewFactory().getActionFactory().createAction(da,
+              this, null, getLocale()));
+          applicationToolBar.add(b);
+        }
       }
+      applicationToolBar.addSeparator();
     }
-    applicationToolBar.addSeparator();
   }
 
   @SuppressWarnings("unused")
@@ -831,13 +833,15 @@ public class DefaultSwingController extends
     if (actionMap != null) {
       JMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
-        if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList);
-          menus.add(menu);
-        } else {
-          menu.addSeparator();
-          for (JMenuItem menuItem : createMenuItems(actionList)) {
-            menu.add(menuItem);
+        if (isAccessGranted(actionList)) {
+          if (!useSeparator || menus.isEmpty()) {
+            menu = createMenu(actionList);
+            menus.add(menu);
+          } else {
+            menu.addSeparator();
+            for (JMenuItem menuItem : createMenuItems(actionList)) {
+              menu.add(menuItem);
+            }
           }
         }
       }

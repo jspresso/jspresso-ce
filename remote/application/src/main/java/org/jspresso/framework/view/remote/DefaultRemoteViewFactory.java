@@ -1877,41 +1877,43 @@ public class DefaultRemoteViewFactory extends
     for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
         .hasNext();) {
       ActionList nextActionList = iter.next();
-      ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
-      if (nextActionList.getRenderingOptions() != null) {
-        renderingOptions = nextActionList.getRenderingOptions();
-      } else if (actionMap.getRenderingOptions() != null) {
-        renderingOptions = actionMap.getRenderingOptions();
-      }
-      RActionList actionList = new RActionList(getGuidGenerator()
-          .generateGUID());
-      actionList.setCollapsable(nextActionList.isCollapsable());
-      actionList.setName(nextActionList.getName());
-      actionList.setDescription(nextActionList.getDescription());
-      actionList
-          .setIcon(getIconFactory().getIcon(nextActionList.getIconImageURL(),
-              getIconFactory().getTinyIconSize()));
-      viewActionLists.add(actionList);
-      List<RAction> actions = new ArrayList<RAction>();
-      for (IDisplayableAction action : nextActionList.getActions()) {
-        if (actionHandler.isAccessGranted(action)) {
-          RAction rAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          rAction.setAcceleratorAsString(action.getAcceleratorAsString());
-          actions.add(rAction);
-          switch (renderingOptions) {
-            case ICON:
-              rAction.setName(null);
-              break;
-            case LABEL:
-              rAction.setIcon(null);
-              break;
-            default:
-              break;
+      if (actionHandler.isAccessGranted(nextActionList)) {
+        ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
+        if (nextActionList.getRenderingOptions() != null) {
+          renderingOptions = nextActionList.getRenderingOptions();
+        } else if (actionMap.getRenderingOptions() != null) {
+          renderingOptions = actionMap.getRenderingOptions();
+        }
+        RActionList actionList = new RActionList(getGuidGenerator()
+            .generateGUID());
+        actionList.setCollapsable(nextActionList.isCollapsable());
+        actionList.setName(nextActionList.getName());
+        actionList.setDescription(nextActionList.getDescription());
+        actionList.setIcon(getIconFactory().getIcon(
+            nextActionList.getIconImageURL(),
+            getIconFactory().getTinyIconSize()));
+        viewActionLists.add(actionList);
+        List<RAction> actions = new ArrayList<RAction>();
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          if (actionHandler.isAccessGranted(action)) {
+            RAction rAction = getActionFactory().createAction(action,
+                actionHandler, view, locale);
+            rAction.setAcceleratorAsString(action.getAcceleratorAsString());
+            actions.add(rAction);
+            switch (renderingOptions) {
+              case ICON:
+                rAction.setName(null);
+                break;
+              case LABEL:
+                rAction.setIcon(null);
+                break;
+              default:
+                break;
+            }
           }
         }
+        actionList.setActions(actions.toArray(new RAction[0]));
       }
-      actionList.setActions(actions.toArray(new RAction[0]));
     }
     return viewActionLists;
   }

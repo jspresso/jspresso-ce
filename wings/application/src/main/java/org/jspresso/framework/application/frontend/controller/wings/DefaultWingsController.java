@@ -541,17 +541,19 @@ public class DefaultWingsController extends
     if (actionMap != null) {
       SMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
-        if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList);
-          menus.add(menu);
-        } else {
-          menu.addSeparator();
-          // SMenuItem separator = new SMenuItem("---------");
-          // separator.setBorder(new SLineBorder(1));
-          // menu.add(separator);
+        if (isAccessGranted(actionList)) {
+          if (!useSeparator || menus.isEmpty()) {
+            menu = createMenu(actionList);
+            menus.add(menu);
+          } else {
+            menu.addSeparator();
+            // SMenuItem separator = new SMenuItem("---------");
+            // separator.setBorder(new SLineBorder(1));
+            // menu.add(separator);
 
-          for (SMenuItem menuItem : createMenuItems(actionList)) {
-            menu.add(menuItem);
+            for (SMenuItem menuItem : createMenuItems(actionList)) {
+              menu.add(menuItem);
+            }
           }
         }
       }

@@ -1978,48 +1978,50 @@ public class DefaultUlcViewFactory extends
       for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
           .hasNext();) {
         ActionList nextActionList = iter.next();
-        ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
-        if (nextActionList.getRenderingOptions() != null) {
-          renderingOptions = nextActionList.getRenderingOptions();
-        } else if (actionMap.getRenderingOptions() != null) {
-          renderingOptions = actionMap.getRenderingOptions();
-        }
-        for (IDisplayableAction action : nextActionList.getActions()) {
-          if (actionHandler.isAccessGranted(action)) {
-            IAction ulcAction = getActionFactory().createAction(action,
-                actionHandler, view, locale);
-            ULCButton actionButton = createULCButton();
-            actionButton.setAction(ulcAction);
-
-            if (action.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(action
-                  .getAcceleratorAsString());
-              view.getPeer().registerKeyboardAction(ulcAction, ks,
-                  ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-              String acceleratorString = java.awt.event.KeyEvent
-                  .getKeyModifiersText(ks.getModifiers())
-                  + "-"
-                  + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
-            }
-            switch (renderingOptions) {
-              case ICON:
-                actionButton.setText("");
-                break;
-              case LABEL:
-                actionButton.setIcon(null);
-                break;
-              default:
-                break;
-            }
-            toolBar.add(actionButton);
+        if (actionHandler.isAccessGranted(nextActionList)) {
+          ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
+          if (nextActionList.getRenderingOptions() != null) {
+            renderingOptions = nextActionList.getRenderingOptions();
+          } else if (actionMap.getRenderingOptions() != null) {
+            renderingOptions = actionMap.getRenderingOptions();
           }
-        }
-        if (iter.hasNext()) {
-          toolBar.addSeparator();
+          for (IDisplayableAction action : nextActionList.getActions()) {
+            if (actionHandler.isAccessGranted(action)) {
+              IAction ulcAction = getActionFactory().createAction(action,
+                  actionHandler, view, locale);
+              ULCButton actionButton = createULCButton();
+              actionButton.setAction(ulcAction);
+
+              if (action.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(action
+                    .getAcceleratorAsString());
+                view.getPeer().registerKeyboardAction(ulcAction, ks,
+                    ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                String acceleratorString = java.awt.event.KeyEvent
+                    .getKeyModifiersText(ks.getModifiers())
+                    + "-"
+                    + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
+                actionButton.setToolTipText("<HTML>"
+                    + actionButton.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
+              }
+              switch (renderingOptions) {
+                case ICON:
+                  actionButton.setText("");
+                  break;
+                case LABEL:
+                  actionButton.setIcon(null);
+                  break;
+                default:
+                  break;
+              }
+              toolBar.add(actionButton);
+            }
+          }
+          if (iter.hasNext()) {
+            toolBar.addSeparator();
+          }
         }
       }
 
@@ -2360,17 +2362,19 @@ public class DefaultUlcViewFactory extends
     for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
         .hasNext();) {
       ActionList nextActionList = iter.next();
-      for (IDisplayableAction action : nextActionList.getActions()) {
-        if (actionHandler.isAccessGranted(action)) {
-          IAction ulcAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          ULCMenuItem actionItem = createULCMenuItem();
-          actionItem.setAction(ulcAction);
-          popupMenu.add(actionItem);
+      if (actionHandler.isAccessGranted(nextActionList)) {
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          if (actionHandler.isAccessGranted(action)) {
+            IAction ulcAction = getActionFactory().createAction(action,
+                actionHandler, view, locale);
+            ULCMenuItem actionItem = createULCMenuItem();
+            actionItem.setAction(ulcAction);
+            popupMenu.add(actionItem);
+          }
         }
-      }
-      if (iter.hasNext()) {
-        popupMenu.addSeparator();
+        if (iter.hasNext()) {
+          popupMenu.addSeparator();
+        }
       }
     }
     return popupMenu;

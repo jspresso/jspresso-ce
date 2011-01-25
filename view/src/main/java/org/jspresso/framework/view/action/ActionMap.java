@@ -19,10 +19,12 @@
 package org.jspresso.framework.view.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
 /**
@@ -40,12 +42,13 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ActionMap {
+public class ActionMap implements ISecurable {
 
-  private List<ActionList>  actionLists;
-  private List<ActionMap>   parentActionMaps;
+  private List<ActionList>   actionLists;
+  private List<ActionMap>    parentActionMaps;
+  private Collection<String> grantedRoles;
 
-  private ERenderingOptions renderingOptions;
+  private ERenderingOptions  renderingOptions;
 
   private static void completeActionMap(
       Map<String, ActionList> bufferActionMap, List<ActionList> actionLists) {
@@ -151,5 +154,29 @@ public class ActionMap {
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Assigns the roles that are authorized to use this action map. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the action map is simply not displayed at
+   * runtime. Setting the collection of granted roles to <code>null</code>
+   * (default value) disables role based authorization, then access is granted
+   * to anyone.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 }

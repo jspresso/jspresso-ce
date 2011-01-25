@@ -804,7 +804,9 @@ public class DefaultRemoteController extends
     List<RActionList> actionLists = new ArrayList<RActionList>();
     if (actionMap != null) {
       for (ActionList actionList : actionMap.getActionLists()) {
-        actionLists.add(createRActionList(actionList));
+        if (isAccessGranted(actionList)) {
+          actionLists.add(createRActionList(actionList));
+        }
       }
     }
     return actionLists.toArray(new RActionList[0]);

@@ -4,8 +4,10 @@
 package org.jspresso.framework.view.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
@@ -21,11 +23,12 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ActionList extends DefaultIconDescriptor {
+public class ActionList extends DefaultIconDescriptor implements ISecurable {
 
   private List<IDisplayableAction> actions;
   private ERenderingOptions        renderingOptions;
   private boolean                  collapsable;
+  private Collection<String>       grantedRoles;
 
   /**
    * Constructs a new <code>ActionList</code> instance.
@@ -114,6 +117,30 @@ public class ActionList extends DefaultIconDescriptor {
    */
   public void setCollapsable(boolean collapsable) {
     this.collapsable = collapsable;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Assigns the roles that are authorized to use this action list. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the action list is simply not displayed at
+   * runtime. Setting the collection of granted roles to <code>null</code>
+   * (default value) disables role based authorization, then access is granted
+   * to anyone.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
 }
