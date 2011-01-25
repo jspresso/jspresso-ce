@@ -538,7 +538,7 @@ public class DefaultWingsController extends
   @SuppressWarnings("null")
   private List<SMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<SMenu> menus = new ArrayList<SMenu>();
-    if (actionMap != null) {
+    if (actionMap != null && isAccessGranted(actionMap)) {
       SMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
         if (isAccessGranted(actionList)) {

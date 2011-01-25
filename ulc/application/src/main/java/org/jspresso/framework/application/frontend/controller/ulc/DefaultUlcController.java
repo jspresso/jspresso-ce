@@ -532,7 +532,7 @@ public class DefaultUlcController extends
   @SuppressWarnings("null")
   private List<ULCMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
-    if (actionMap != null) {
+    if (actionMap != null && isAccessGranted(actionMap)) {
       ULCMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
         if (isAccessGranted(actionList)) {

@@ -1973,7 +1973,7 @@ public class DefaultUlcViewFactory extends
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<ULCComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
-    if (actionMap != null) {
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       ULCToolBar toolBar = createULCToolBar();
       for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
           .hasNext();) {
@@ -2387,11 +2387,10 @@ public class DefaultUlcViewFactory extends
     ActionMap actionMap = ((ICollectionViewDescriptor) tableView
         .getDescriptor()).getActionMap();
 
-    if (actionMap == null) {
-      return null;
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
+      return createULCPopupMenu(tableView, actionMap, actionHandler, locale);
     }
-
-    return createULCPopupMenu(tableView, actionMap, actionHandler, locale);
+    return null;
   }
 
   private ULCPopupMenu createULCTreePopupMenu(ULCTree tree,
@@ -2434,14 +2433,13 @@ public class DefaultUlcViewFactory extends
     }
     actionMap = viewDescriptor.getActionMap();
 
-    if (actionMap == null) {
-      return null;
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
+      BasicView<ULCComponent> treeLevelView = new BasicView<ULCComponent>(tree);
+      treeLevelView.setConnector(viewConnector);
+      treeLevelView.setDescriptor(viewDescriptor);
+      return createULCPopupMenu(treeLevelView, actionMap, actionHandler, locale);
     }
-
-    BasicView<ULCComponent> treeLevelView = new BasicView<ULCComponent>(tree);
-    treeLevelView.setConnector(viewConnector);
-    treeLevelView.setDescriptor(viewDescriptor);
-    return createULCPopupMenu(treeLevelView, actionMap, actionHandler, locale);
+    return null;
   }
 
   private void decorateWithTitle(IView<ULCComponent> view, Locale locale) {

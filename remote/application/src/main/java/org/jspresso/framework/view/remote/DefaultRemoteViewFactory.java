@@ -1844,7 +1844,7 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale, IView<RComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
-    if (actionMap != null) {
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       List<RActionList> viewActionLists = createViewToolBar(actionMap, view,
           actionHandler, locale);
       view.getPeer()

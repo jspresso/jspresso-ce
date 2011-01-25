@@ -1907,7 +1907,7 @@ public class DefaultWingsViewFactory extends
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<SComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
-    if (actionMap != null) {
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       SToolBar toolBar = createSToolBar();
       for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
           .hasNext();) {

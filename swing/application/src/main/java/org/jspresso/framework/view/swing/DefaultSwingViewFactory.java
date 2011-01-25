@@ -2135,7 +2135,7 @@ public class DefaultSwingViewFactory extends
       viewPanel.setLayout(new BorderLayout());
       viewPanel.add(view.getPeer(), BorderLayout.CENTER);
 
-      if (actionMap != null) {
+      if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
         JToolBar toolBar = createViewToolBar(actionMap, view, actionHandler,
             locale);
         viewPanel.add(toolBar, BorderLayout.NORTH);
@@ -2696,13 +2696,11 @@ public class DefaultSwingViewFactory extends
     ActionMap actionMap = ((ICollectionViewDescriptor) tableView
         .getDescriptor()).getActionMap();
 
-    if (actionMap == null) {
-      return;
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
+      JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap,
+          actionHandler, locale);
+      popupMenu.show(table, evt.getX(), evt.getY());
     }
-
-    JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap,
-        actionHandler, locale);
-    popupMenu.show(table, evt.getX(), evt.getY());
   }
 
   private void showJTreePopupMenu(JTree tree, IView<JComponent> treeView,
@@ -2744,16 +2742,14 @@ public class DefaultSwingViewFactory extends
     }
     actionMap = viewDescriptor.getActionMap();
 
-    if (actionMap == null) {
-      return;
+    if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
+      BasicView<JComponent> treeLevelView = new BasicView<JComponent>(tree);
+      treeLevelView.setConnector(viewConnector);
+      treeLevelView.setDescriptor(viewDescriptor);
+      JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap,
+          actionHandler, locale);
+      popupMenu.show(tree, evt.getX(), evt.getY());
     }
-
-    BasicView<JComponent> treeLevelView = new BasicView<JComponent>(tree);
-    treeLevelView.setConnector(viewConnector);
-    treeLevelView.setDescriptor(viewDescriptor);
-    JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap,
-        actionHandler, locale);
-    popupMenu.show(tree, evt.getX(), evt.getY());
   }
 
   private void showPopupMenu(JComponent sourceComponent,

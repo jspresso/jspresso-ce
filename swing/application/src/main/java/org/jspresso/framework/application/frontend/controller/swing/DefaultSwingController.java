@@ -600,18 +600,19 @@ public class DefaultSwingController extends
       applicationToolBar.add(createComboButton(createWorkspaceActionList()));
     }
     applicationToolBar.addSeparator();
-    if (getNavigationActions() != null) {
+    if (getNavigationActions() != null
+        && isAccessGranted(getNavigationActions())) {
       for (ActionList actionList : getNavigationActions().getActionLists()) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
-    if (getActionMap() != null) {
+    if (getActionMap() != null && isAccessGranted(getActionMap())) {
       for (ActionList actionList : getActionMap().getActionLists()) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
     applicationToolBar.add(Box.createHorizontalGlue());
-    if (getHelpActions() != null) {
+    if (getHelpActions() != null && isAccessGranted(getHelpActions())) {
       for (ActionList actionList : getHelpActions().getActionLists()) {
         completeApplicationToolBar(applicationToolBar, actionList);
       }
@@ -830,7 +831,7 @@ public class DefaultSwingController extends
   @SuppressWarnings("null")
   private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<JMenu> menus = new ArrayList<JMenu>();
-    if (actionMap != null) {
+    if (actionMap != null && isAccessGranted(actionMap)) {
       JMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
         if (isAccessGranted(actionList)) {
@@ -919,7 +920,8 @@ public class DefaultSwingController extends
     // controllerFrame.setJMenuBar(createApplicationMenuBar());
     controllerFrame.getContentPane().add(createApplicationToolBar(),
         BorderLayout.NORTH);
-    if (getSecondaryActionMap() != null) {
+    if (getSecondaryActionMap() != null
+        && isAccessGranted(getSecondaryActionMap())) {
       controllerFrame.getContentPane().add(createSecondaryApplicationToolBar(),
           BorderLayout.SOUTH);
     }
