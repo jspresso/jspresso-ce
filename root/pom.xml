@@ -80,10 +80,10 @@
     <!-- Plugins versions -->
     <compiler-plugin.version>2.0.2</compiler-plugin.version>
     <surefire-plugin.version>2.4.3</surefire-plugin.version>
-    <assembly-plugin.version>2.2-beta-3</assembly-plugin.version>
+    <assembly-plugin.version>2.2</assembly-plugin.version>
     <javadoc-plugin.version>2.7</javadoc-plugin.version>
     <site-plugin.version>2.0</site-plugin.version>
-    <archetype-plugin.version>2.0-alpha-4</archetype-plugin.version>
+    <archetype-plugin.version>2.0</archetype-plugin.version>
     <source-plugin.version>2.1.1</source-plugin.version>
     <docbkx-plugin.version>2.0.8</docbkx-plugin.version>
     <xdoclet2-plugin.version>2.0.7.1</xdoclet2-plugin.version>
