@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.controller.ulc;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,7 @@ import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCSplitPane;
 import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.border.ULCEmptyBorder;
+import com.ulcjava.base.application.border.ULCEtchedBorder;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -96,14 +98,13 @@ public class DefaultUlcController extends
     AbstractFrontendController<ULCComponent, ULCIcon, IAction> {
 
   private static final String                   CANCEL_OPTION = "cancel";
-
   private static final String                   NO_OPTION     = "no";
-
   private static final String                   OK_OPTION     = "ok";
-
   private static final String                   YES_OPTION    = "yes";
 
   private ULCFrame                              controllerFrame;
+  private ULCDesktopPane                        desktopPane;
+  private ULCLabel                              statusBar;
 
   private Map<String, ULCExtendedInternalFrame> workspaceInternalFrames;
 
@@ -264,7 +265,7 @@ public class DefaultUlcController extends
               .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
                   workspaceName));
           workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-          controllerFrame.getContentPane().add(workspaceInternalFrame);
+          desktopPane.add(workspaceInternalFrame);
           getMvcBinder().bind(workspaceNavigator.getConnector(),
               workspaceConnector);
           workspaceInternalFrame.pack();
@@ -469,7 +470,15 @@ public class DefaultUlcController extends
 
   private void createControllerFrame() {
     controllerFrame = new ULCFrame();
-    controllerFrame.setContentPane(new ULCDesktopPane());
+    
+    desktopPane = new ULCDesktopPane();
+    controllerFrame.getContentPane().add(desktopPane, ULCBorderLayoutPane.CENTER);
+    
+    statusBar = new ULCLabel();
+    statusBar.setBorder(new ULCEtchedBorder(ULCEtchedBorder.LOWERED));
+    statusBar.setVisible(false);
+    controllerFrame.getContentPane().add(statusBar, BorderLayout.SOUTH);
+    
     controllerFrame
         .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
     controllerFrame.addWindowListener(new IWindowListener() {
@@ -824,6 +833,18 @@ public class DefaultUlcController extends
       Cookie cookie = new Cookie(prefKey, "");
       cookie.setMaxAge(0);
       HttpRequestHolder.getServletResponse().addCookie(cookie);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setStatusInfo(String statusInfo) {
+    if (statusInfo != null && statusInfo.length() > 0) {
+      statusBar.setText(statusInfo);
+      statusBar.setVisible(true);
+    } else {
+      statusBar.setVisible(false);
     }
   }
 }

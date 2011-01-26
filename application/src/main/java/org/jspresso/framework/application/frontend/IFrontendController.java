@@ -331,4 +331,11 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return the action used to exit the application.
    */
   IDisplayableAction getExitAction();
+  
+  /**
+   * Updates the status information that is displayed in the main application frame.
+   * 
+   * @param statusInfo the status info that is displayed in the application frame.
+   */
+  void setStatusInfo(String statusInfo);
 }

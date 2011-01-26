@@ -21,6 +21,7 @@ package org.jspresso.framework.application.view.descriptor.basic;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 
 /**
@@ -39,8 +40,12 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
   public String getCardNameForModel(Object model,
       @SuppressWarnings("unused") Subject subject) {
     if (model instanceof Module) {
-      return Integer.toString(((Module) model).getProjectedViewDescriptor()
-          .hashCode());
+      IViewDescriptor pvd = ((Module) model).getProjectedViewDescriptor();
+      if (pvd != null) {
+        return Integer.toString(((Module) model).getProjectedViewDescriptor()
+            .hashCode());
+      }
+      return null;
     }
     return null;
   }

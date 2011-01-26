@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -62,6 +63,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
@@ -111,6 +113,7 @@ public class DefaultSwingController extends
 
   private JFrame                      controllerFrame;
   private JDesktopPane                desktopPane;
+  private JLabel                      statusBar;
   private WaitCursorTimer             waitTimer;
 
   private Map<String, JInternalFrame> workspaceInternalFrames;
@@ -689,6 +692,12 @@ public class DefaultSwingController extends
     controllerFrame = new JFrame();
     desktopPane = new JDesktopPane();
     controllerFrame.getContentPane().add(desktopPane, BorderLayout.CENTER);
+
+    statusBar = new JLabel();
+    statusBar.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    statusBar.setVisible(false);
+    controllerFrame.getContentPane().add(statusBar, BorderLayout.SOUTH);
+
     controllerFrame
         .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     controllerFrame.setGlassPane(createHermeticGlassPane());
@@ -1054,5 +1063,17 @@ public class DefaultSwingController extends
     Preferences prefs = Preferences.userNodeForPackage(getClass());
     prefs = prefs.node(getName());
     prefs.remove(prefKey);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setStatusInfo(String statusInfo) {
+    if (statusInfo != null && statusInfo.length() > 0) {
+      statusBar.setText(statusInfo);
+      statusBar.setVisible(true);
+    } else {
+      statusBar.setVisible(false);
+    }
   }
 }

@@ -66,6 +66,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __commandsBacklog : null,
     /**@type qx.ui.form.RadioGroup*/
     __workspaceAccordionGroup : null,
+    /**@type qx.ui.basic.Label*/
+    __statusBar : null,
     /**@type qx.ui.container.Stack*/
     __workspaceStack : null,
     /**@type Object*/
@@ -314,6 +316,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                          command.getWorkspaceView());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
         window.open(command.getUrlSpec(), "_blank"); 
+      } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand) {
+        var status  = command.getStatus();
+        if(status != null && status.length > 0) {
+          this.__statusBar.setValue(status);
+          this.__statusBar.setVisibility("visible");
+        } else {
+          this.__statusBar.setVisibility("excluded");
+        }
       } else {
         var targetPeerGuid = command.getTargetPeerGuid();
         var targetPeer = this.getRegistered(targetPeerGuid);
@@ -552,6 +562,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
       
+      this.__statusBar = new qx.ui.basic.Label();
+      this.__statusBar.setVisibility("excluded");
       this._decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
       
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
@@ -615,6 +627,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
       //this.__viewFactory.installActionLists(toolBar, actions);
       toolBar.addSpacer();
+      toolBar.add(this._getStatusBar());
+      //toolBar.addSpacer();
       if(helpActions) {
         for(var i = 0; i < helpActions.length; i++) {
           var splitButton = this.__viewFactory.createSplitButton(helpActions[i])
@@ -626,6 +640,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //this.__viewFactory.installActionLists(toolBar, helpActions);
       toolBar.add(this.__viewFactory.createAction(exitAction));
       applicationFrame.add(toolBar);
+    },
+
+    /**
+     * 
+     * @return qx.ui.basic.Label
+     * 
+     */
+    _getStatusBar : function() {
+      return this.__statusBar;
     },
     
     /**

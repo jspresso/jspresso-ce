@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.events.DataEvent;
   import flash.events.Event;
   import flash.events.MouseEvent;
+  import flash.events.StatusEvent;
   import flash.external.ExternalInterface;
   import flash.net.FileFilter;
   import flash.net.FileReference;
@@ -32,13 +33,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
-  import mx.containers.Accordion;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
-  import mx.containers.HDividedBox;
   import mx.containers.Panel;
-  import mx.containers.TabNavigator;
   import mx.containers.VBox;
   import mx.containers.ViewStack;
   import mx.controls.Alert;
@@ -50,7 +48,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.Label;
   import mx.controls.Menu;
   import mx.controls.MenuBar;
-  import mx.controls.PopUpButton;
   import mx.controls.SWFLoader;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
@@ -64,11 +61,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.mx_internal;
   import mx.events.CloseEvent;
   import mx.events.FlexEvent;
-  import mx.events.FocusRequestDirection;
   import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
-  import mx.managers.IFocusManagerComponent;
-  import mx.managers.IFocusManagerContainer;
   import mx.managers.PopUpManager;
   import mx.resources.Locale;
   import mx.resources.ResourceManager;
@@ -101,6 +95,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
@@ -168,6 +163,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _commandsQueue:IList;
     private var _workspaceAccordion:CollapsibleAccordion;
     private var _workspaceViewStack:ViewStack;
+    private var _statusBar:Label;
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
     private var _userLanguage:String;
@@ -395,6 +391,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else if(command is RemoteOpenUrlCommand) {
         var urlRequest:URLRequest = new URLRequest((command as RemoteOpenUrlCommand).urlSpec);
         navigateToURL(urlRequest, "_blank");
+      } else if(command is RemoteUpdateStatusCommand) {
+        var status:String = (command as RemoteUpdateStatusCommand).status;
+        if(status != null && status.length > 0) {
+          _statusBar.text = status;
+          _statusBar.visible = true;
+        } else {
+          _statusBar.visible = false;
+        }
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
@@ -844,15 +848,22 @@ package org.jspresso.framework.application.frontend.controller.flex {
       
       _workspaceViewStack = createWorkspaceViewStack();
       
+      _statusBar = new Label();
+      _statusBar.visible = false;
+      
       var appContent:UIComponent = assembleApplicationContent(_workspaceAccordion, _workspaceViewStack,
         exitAction,
         navigationActions,
         actions,
         secondaryActions,
         helpActions);
-
+      
       var applicationFrame:Application = Application.application as Application;
       applicationFrame.addChild(appContent);
+    }
+    
+    protected function getStatusBar():Label {
+      return _statusBar;
     }
     
     protected function assembleApplicationContent(navigationAccordion:CollapsibleAccordion,
@@ -892,9 +903,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       }
       getViewFactory().addSeparator(controlBar);
-      var glue:HBox = new HBox();
+      var glue:HBox = new HBox();      
       glue.percentWidth = 100.0;
       controlBar.addChild(glue);
+      var sb:Label = getStatusBar();
+      controlBar.addChild(sb);
       if(helpActions != null) {
         for(i = 0; i < helpActions.length; i++) {
           popupButton = getViewFactory().createPopupButton(helpActions[i] as RActionList);
@@ -1160,6 +1173,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand",RemoteChildrenCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand",RemoteEnablementCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand",RemoteSelectionCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand",RemoteUpdateStatusCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand",RemoteCleanupCommand);

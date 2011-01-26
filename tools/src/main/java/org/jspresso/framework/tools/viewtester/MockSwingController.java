@@ -350,4 +350,12 @@ public class MockSwingController extends
   protected void deletePref(String prefKey) {
     // NO-OP
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public void setStatusInfo(String statusInfo) {
+    // NO-OP
+  }
 }

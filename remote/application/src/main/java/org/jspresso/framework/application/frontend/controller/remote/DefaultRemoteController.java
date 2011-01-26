@@ -52,6 +52,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteRestartC
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
@@ -903,5 +904,14 @@ public class DefaultRemoteController extends
     Cookie cookie = new Cookie(prefKey, "");
     cookie.setMaxAge(0);
     HttpRequestHolder.getServletResponse().addCookie(cookie);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void setStatusInfo(String statusInfo) {
+    RemoteUpdateStatusCommand updateStatusCommand = new RemoteUpdateStatusCommand();
+    updateStatusCommand.setStatus(statusInfo);
+    registerCommand(updateStatusCommand);
   }
 }

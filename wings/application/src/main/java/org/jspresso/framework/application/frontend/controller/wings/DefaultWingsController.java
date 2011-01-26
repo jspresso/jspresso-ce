@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.controller.wings;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -95,6 +96,7 @@ public class DefaultWingsController extends
 
   private SPanel                  cardPanel;
   private SFrame                  controllerFrame;
+  private SLabel                  statusBar;
 
   private Set<String>             workspaceViews;
 
@@ -500,6 +502,12 @@ public class DefaultWingsController extends
     cardPanel = new SPanel(new SCardLayout());
     cardPanel.setPreferredSize(SDimension.FULLAREA);
     controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    
+    statusBar = new SLabel();
+    statusBar.setBorder(new SLineBorder(1));
+    statusBar.setVisible(false);
+    controllerFrame.getContentPane().add(statusBar, BorderLayout.SOUTH);
+
     updateFrameTitle();
     controllerFrame.setVisible(true);
   }
@@ -676,5 +684,17 @@ public class DefaultWingsController extends
     Cookie cookie = new Cookie(prefKey, "");
     cookie.setMaxAge(0);
     HttpRequestHolder.getServletResponse().addCookie(cookie);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setStatusInfo(String statusInfo) {
+    if (statusInfo != null && statusInfo.length() > 0) {
+      statusBar.setText(statusInfo);
+      statusBar.setVisible(true);
+    } else {
+      statusBar.setVisible(false);
+    }
   }
 }
