@@ -56,6 +56,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.dataGridClasses.DataGridColumn;
   import mx.core.ClassFactory;
   import mx.core.Container;
+  import mx.core.IFlexDisplayObject;
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
   import mx.events.CollectionEvent;
@@ -72,6 +73,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBase;
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
+  import mx.graphics.SolidColor;
   import mx.styles.CSSStyleDeclaration;
   
   import org.jspresso.framework.action.IActionHandler;
@@ -253,9 +255,13 @@ package org.jspresso.framework.view.flex {
     protected function applyComponentStyle(component:*, remoteComponent:RComponent):void {
       if(remoteComponent.foreground) {
         component.setStyle("color", remoteComponent.foreground);
+        if(component is IFlexDisplayObject) {
+          (component as IFlexDisplayObject).alpha = getAlphaFromArgb(remoteComponent.foreground);
+        }
       }
       if(remoteComponent.background) {
         component.setStyle("backgroundColor", remoteComponent.background);
+        component.setStyle("backgroundAlpha", getAlphaFromArgb(remoteComponent.background));
       }
       if(remoteComponent.font) {
         if(remoteComponent.font.name) {
@@ -271,6 +277,19 @@ package org.jspresso.framework.view.flex {
           component.setStyle("fontWeight", "bold");
         }
       }
+    }
+    
+    protected function getColorFromArgb(argb:String):SolidColor {
+      var color:uint = parseInt(argb.substr(argb.length - 6, 6));
+      return new SolidColor(color, getAlphaFromArgb(argb));
+    }
+
+    protected function getAlphaFromArgb(argb:String):Number {
+      if(argb && argb.length == 10) {
+        var alpha:Number = parseInt(argb.substr(2,2), 16);
+        return alpha / 255; 
+      }
+      return 1.0;
     }
     
     protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
