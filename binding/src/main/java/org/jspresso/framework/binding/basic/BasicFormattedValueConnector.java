@@ -20,9 +20,10 @@ package org.jspresso.framework.binding.basic;
 
 import java.text.ParseException;
 
-import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.binding.IFormattedValueConnector;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
+import org.jspresso.framework.util.format.ParsingException;
 
 /**
  * This is a basic implementation of a formatted value connector built with a
@@ -85,9 +86,13 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
    */
   public void setConnectorValueAsString(String valueAsString) {
     try {
-      setConnectorValue(getFormatter().parse(valueAsString));
+      Object parsedValue = getFormatter().parse(valueAsString);
+      setConnectorValue(parsedValue);
     } catch (ParseException ex) {
-      throw new ConnectorBindingException(ex);
+      //To force resetting the view
+      fireValueChange(new ValueChangeEvent(this, new Object(), getConnecteeValue()));
+      Object[] i18nParams = {valueAsString};
+      handleException(new ParsingException(valueAsString + " cannot be parsed.", "error.parsing", i18nParams));
     }
   }
 

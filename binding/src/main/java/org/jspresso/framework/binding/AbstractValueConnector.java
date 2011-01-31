@@ -31,7 +31,6 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
@@ -441,7 +440,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public void setConnectorValue(Object aValue) {
     if (aValue instanceof Number) {
       if (getModelDescriptor() != null) {
-        Class<?> expectedType = ((INumberPropertyDescriptor) getModelDescriptor())
+        Class<?> expectedType = ((IPropertyDescriptor) getModelDescriptor())
             .getModelType();
         if (expectedType.equals(aValue.getClass())) {
           setConnecteeValue(aValue);
@@ -484,6 +483,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public void setExceptionHandler(IExceptionHandler exceptionHandler) {
     this.exceptionHandler = exceptionHandler;
+  }
+
+  /**
+   * Gets the exception handler.
+   * 
+   * @return the exception handler.
+   */
+  protected IExceptionHandler getExceptionHandler() {
+    return exceptionHandler;
   }
 
   /**
@@ -680,29 +688,48 @@ public abstract class AbstractValueConnector extends AbstractConnector
   protected void fireConnectorValueChange() {
     boolean propagatedCorrectly = true;
     try {
-      valueChangeSupport.fireValueChange(createChangeEvent(
-          oldConnectorValue, getConnecteeValue()));
+      fireValueChange(createChangeEvent(oldConnectorValue, getConnecteeValue()));
     } catch (RuntimeException ex) {
       propagatedCorrectly = false;
       try {
         Object badValue = getConnectorValue();
         setConnecteeValue(oldConnectorValue);
         // propagate the reverse change...
-        valueChangeSupport.fireValueChange(createChangeEvent(badValue,
-            getConnecteeValue()));
+        fireValueChange(createChangeEvent(badValue, getConnecteeValue()));
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.
       }
-      if (exceptionHandler != null) {
-        exceptionHandler.handleException(ex, null);
-      } else {
-        throw ex;
-      }
+      handleException(ex);
     }
     if (propagatedCorrectly) {
       // the change propagated correctly. Save the value propagated as the old
       // value of the connector.
       oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
+    }
+  }
+
+  /**
+   * Fires a value change, delegating to the value change support.
+   * 
+   * @param changeEvent
+   *          the change event to propagate.
+   */
+  protected void fireValueChange(ValueChangeEvent changeEvent) {
+    valueChangeSupport.fireValueChange(changeEvent);
+  }
+
+  /**
+   * Handles a runtime exception, trying to delegeta it to the exception handler
+   * if any.
+   * 
+   * @param ex
+   *          the runtime exception.
+   */
+  protected void handleException(RuntimeException ex) {
+    if (getExceptionHandler() != null) {
+      getExceptionHandler().handleException(ex, null);
+    } else {
+      throw ex;
     }
   }
 

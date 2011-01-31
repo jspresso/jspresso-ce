@@ -49,6 +49,7 @@
     parent="viewFactoryBase" />
 
   <bean id="viewFactory" parent="remoteViewFactory" scope="prototype">
+    <property name="durationServerParse" value="true"/>
     <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
