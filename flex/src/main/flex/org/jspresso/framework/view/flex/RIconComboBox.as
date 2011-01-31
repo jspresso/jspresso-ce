@@ -66,8 +66,13 @@ package org.jspresso.framework.view.flex {
     
     override public function set selectedItem(sItem:Object):void {
       super.selectedItem = sItem;
-      if(dataProvider != null && sItem != null) {
-        var index:int = (dataProvider as ArrayCollection).getItemIndex(sItem);
+      if(dataProvider != null) {
+        var index:int = 0;
+        if(sItem != null) {
+          index = (dataProvider as ArrayCollection).getItemIndex(sItem);
+        } else {
+          index = (dataProvider as ArrayCollection).getItemIndex("");
+        }
         updateTextAndIcon(index);
       }
     }
