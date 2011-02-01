@@ -118,7 +118,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private String                                loginContextName;
   private IViewDescriptor                       loginViewDescriptor;
-  private Map<String, IValueConnector>          moduleAreaViewConnectors;
+  private Map<String, IMapView<E>>              workspaceViews;
   private boolean                               moduleAutoPinEnabled;
 
   private IMvcBinder                            mvcBinder;
@@ -151,7 +151,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     selectedModules = new HashMap<String, Module>();
     dialogContextStack = new ArrayList<Map<String, Object>>();
     workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
-    moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
+    workspaceViews = new HashMap<String, IMapView<E>>();
     backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     moduleAutoPinEnabled = true;
@@ -180,13 +180,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       execute(getOnModuleExitAction(), createEmptyContext());
     }
     displayWorkspace(workspaceName);
-    IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
-        .get(workspaceName);
-    if (moduleAreaViewConnector != null) {
+    IView<E> moduleAreaView = workspaceViews.get(workspaceName);
+    if (moduleAreaView != null) {
 
       // The following does not seem necessary anymore.
       // This was done to cope with connectors mis-refreshing.
-      
+
       // IValueConnector oldModuleModelConnector = moduleAreaViewConnector
       // .getModelConnector();
       // if (oldModuleModelConnector != null) {
@@ -195,7 +194,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
       IValueConnector moduleModelConnector = getBackendController()
           .getModuleConnector(module);
-      mvcBinder.bind(moduleAreaViewConnector, moduleModelConnector);
+      mvcBinder.bind(moduleAreaView.getConnector(), moduleModelConnector);
     }
     selectedModules.put(workspaceName, module);
     if (module != null) {
@@ -781,7 +780,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public boolean stop() {
     selectedModules = new HashMap<String, Module>();
     workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
-    moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
+    workspaceViews = new HashMap<String, IMapView<E>>();
     backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     selectedWorkspaceName = null;
@@ -862,7 +861,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected IView<E> createModuleAreaView(String workspaceName) {
     IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(
         new WorkspaceCardViewDescriptor(), this, getLocale());
-    moduleAreaViewConnectors.put(workspaceName, moduleAreaView.getConnector());
+    workspaceViews.put(workspaceName, moduleAreaView);
     return moduleAreaView;
   }
 
@@ -1399,5 +1398,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     return userPass;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IView<E> getCurrentModuleView() {
+    IMapView<E> workspaceView = workspaceViews.get(getSelectedWorkspaceName());
+    if (workspaceView != null) {
+      return workspaceView.getCurrentView();
+    }
+    return null;
   }
 }

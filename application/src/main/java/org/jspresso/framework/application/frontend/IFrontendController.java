@@ -30,6 +30,7 @@ import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
@@ -338,4 +339,11 @@ public interface IFrontendController<E, F, G> extends IController,
    * @param statusInfo the status info that is displayed in the application frame.
    */
   void setStatusInfo(String statusInfo);
+  
+  /**
+   * Retrieves the currently displayed module view.
+   * 
+   * @return the currently displayed module view or null.
+   */
+  IView<E> getCurrentModuleView();
 }
