@@ -280,7 +280,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function getColorFromArgb(argb:String):SolidColor {
-      var color:uint = parseInt(argb.substr(argb.length - 6, 6));
+      var color:uint = parseInt(argb.substr(argb.length - 6, 6), 16);
       return new SolidColor(color, getAlphaFromArgb(argb));
     }
 
