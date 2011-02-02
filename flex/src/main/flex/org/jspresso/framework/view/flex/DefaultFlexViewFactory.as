@@ -2136,7 +2136,7 @@ package org.jspresso.framework.view.flex {
         if(remoteState.value != null) {
           currentAlpha = (remoteState.value as String).substr(2,2);
         } else {
-          currentAlpha = "00";
+          currentAlpha = "FF";
         }
         remoteState.value = "0x" + currentAlpha
                             + (event.currentTarget as ColorPicker).selectedColor.toString(16);

@@ -1058,7 +1058,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
-      propertyLabel.setForeground("0x00FF0000");
+      propertyLabel.setForeground("0xFFFF0000");
     }
     propertyLabel.setLabel(labelText.toString());
     if (propertyViewDescriptor.getLabelFont() != null) {
