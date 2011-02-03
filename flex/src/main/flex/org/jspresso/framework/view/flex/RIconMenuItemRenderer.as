@@ -13,39 +13,61 @@
  */
 
 package org.jspresso.framework.view.flex {
+  import mx.binding.utils.BindingUtils;
+  import mx.binding.utils.ChangeWatcher;
   import mx.controls.Image;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
   import mx.controls.menuClasses.MenuItemRenderer;
   
+  import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RIcon;
 
   public class RIconMenuItemRenderer extends MenuItemRenderer {
 
 		private var _image:Image;
+    private var _cw:ChangeWatcher;
 
 		public function RIconMenuItemRenderer() {
 		  _image = new Image();
 			addChild(_image);
 		}
 
-  	override public function set data(value:Object):void {
-  	  if(value) {
-  	    var rIcon:RIcon = value["rIcon"];
-  	    if(rIcon) {
-  	      _image.source = rIcon.imageUrlSpec;
-  	    }
+    private function updateState(enabled:Boolean):void {
+      syncView(data);
+      invalidateDisplayList();
+    };
+
+    override public function set data(value:Object):void {
+      if(value && value["data"] is RAction) {
+        if(_cw == null) {
+          _cw = BindingUtils.bindSetter(updateState, value["data"], "enabled", true);
+        } else {
+          _cw.reset(value["data"]);
+        }
+      }
+      syncView(value);
+      super.data = value;
+  	}
+    
+    private function syncView(value:Object):void {
+      if(value) {
+        var rIcon:RIcon = value["rIcon"];
+        if(rIcon) {
+          _image.source = rIcon.imageUrlSpec;
+        }
         if(value["enabled"]) {
           _image.alpha = 1.0;
+          label.enabled = true;
         } else {
           _image.alpha = 0.4;
+          label.enabled = false;
         }
-  	  }
-      if(!value["label"]) {
-        value["label"] = "";
+        if(!value["label"]) {
+          value["label"] = "";
+        }
       }
-  	  super.data = value;
-  	}
+    }
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
