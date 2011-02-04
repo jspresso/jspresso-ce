@@ -838,20 +838,6 @@ public abstract class AbstractBackendController extends AbstractController
     return transientCollection;
   }
 
-  /**
-   * Changes the owner of an uninitialized persistent collection.
-   * 
-   * @param persistentCollection
-   *          the persistent collection to change the owner for.
-   * @param newOwner
-   *          the new collecton owner that will be used when the collection gets
-   *          initialized.
-   */
-  protected void changeCollectionOwner(
-      Collection<IComponent> persistentCollection, Object newOwner) {
-    // NO-OP
-  }
-
   private void cleanDirtyProperties(IEntity entity) {
     dirtRecorder.resetChangedProperties(entity, null);
   }
@@ -868,7 +854,7 @@ public abstract class AbstractBackendController extends AbstractController
               cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
         } else {
           uowComponent.straightSetProperty(property.getKey(),
-              property.getValue());
+              cloneUninitializedProperty(uowComponent, property.getValue()));
         }
       } else if (property.getValue() instanceof IComponent) {
         uowComponent.straightSetProperty(
@@ -913,7 +899,8 @@ public abstract class AbstractBackendController extends AbstractController
           uowEntity.straightSetProperty(property.getKey(),
               cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
         } else {
-          uowEntity.straightSetProperty(property.getKey(), property.getValue());
+          uowEntity.straightSetProperty(property.getKey(),
+              cloneUninitializedProperty(uowEntity, property.getValue()));
         }
       } else if (property.getValue() instanceof Collection<?>) {
         if (isInitialized(property.getValue())) {
@@ -950,9 +937,8 @@ public abstract class AbstractBackendController extends AbstractController
           }
           uowEntity.straightSetProperty(property.getKey(), uowCollection);
         } else {
-          changeCollectionOwner((Collection<IComponent>) property.getValue(),
-              uowEntity);
-          uowEntity.straightSetProperty(property.getKey(), property.getValue());
+          uowEntity.straightSetProperty(property.getKey(),
+              cloneUninitializedProperty(uowEntity, property.getValue()));
         }
       } else if (property.getValue() instanceof IEntity[]) {
         IEntity[] uowArray = new IEntity[((IEntity[]) property.getValue()).length];
@@ -1360,4 +1346,16 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected abstract IComponent unwrapProxy(IComponent componentOrProxy);
 
+  /**
+   * Clones an uninitialized (proxied) property.
+   * 
+   * @param owner
+   *          the property owner.
+   * @param propertyValue
+   *          the propertyValue.
+   * @return the property clone.
+   */
+  protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
+    return propertyValue;
+  }
 }

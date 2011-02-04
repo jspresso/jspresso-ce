@@ -153,7 +153,7 @@ public class HibernateBackendController extends AbstractBackendController {
     });
     return uowEntities;
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -511,18 +511,6 @@ public class HibernateBackendController extends AbstractBackendController {
         varSnapshotCollection, role);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void changeCollectionOwner(
-      Collection<IComponent> persistentCollection, Object newOwner) {
-    if (persistentCollection instanceof PersistentCollection) {
-      ((PersistentCollection) persistentCollection).setOwner(newOwner);
-    }
-    super.changeCollectionOwner(persistentCollection, newOwner);
-  }
-
   private void linkHibernateArtifacts() {
     if (getHibernateTemplate() != null && getTransactionTemplate() != null
         && getEntityFactory() != null) {
@@ -715,5 +703,41 @@ public class HibernateBackendController extends AbstractBackendController {
           (IEntity) ht.load(entity.getComponentContract().getName(),
               entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
     }
+  }
+
+  private void changeCollectionOwner(Collection<?> persistentCollection,
+      Object newOwner) {
+    if (persistentCollection instanceof PersistentCollection) {
+      ((PersistentCollection) persistentCollection).setOwner(newOwner);
+    }
+  }
+
+  /**
+   * Hibernate related cloning.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
+    Object clonedPropertyValue = propertyValue;
+    if (propertyValue instanceof PersistentCollection) {
+      if (propertyValue instanceof PersistentSet) {
+        clonedPropertyValue = new PersistentSet(
+            ((PersistentSet) propertyValue).getSession());
+      } else if (propertyValue instanceof PersistentList) {
+        clonedPropertyValue = new PersistentList(
+            ((PersistentList) propertyValue).getSession());
+      }
+      changeCollectionOwner((Collection<?>) clonedPropertyValue, owner);
+      ((PersistentCollection) clonedPropertyValue).setSnapshot(
+          ((PersistentCollection) propertyValue).getKey(),
+          ((PersistentCollection) propertyValue).getRole(), null);
+    } else {
+      if (propertyValue instanceof HibernateProxy) {
+        // Unfortunately there is actually no mean of performing a shallow copy
+        // of it.
+      }
+    }
+    return clonedPropertyValue;
   }
 }
