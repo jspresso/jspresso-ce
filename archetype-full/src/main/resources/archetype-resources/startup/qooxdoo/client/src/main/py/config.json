@@ -8,7 +8,7 @@
     }
     ,
     {
-      "path" : "${TARGET}/jspresso-qooxdoo/py/library.json",
+      "path" : "${TARGET}/jspresso-qooxdoo-client-zip/py/library.json",
       "as"   : "jspresso-qooxdoo"
     }
   ],
@@ -65,7 +65,7 @@
       "library" :
       [
         {
-          "manifest" : "${TARGET}/jspresso-qooxdoo/Manifest.json"
+          "manifest" : "${TARGET}/jspresso-qooxdoo-client-zip/Manifest.json"
         }
       ]
     },

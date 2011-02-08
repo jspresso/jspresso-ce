@@ -31,17 +31,6 @@
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>unpack-jspresso-qooxdoo</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jspresso-qooxdoo</outputDirectory>
-              <includeArtifactIds>jspresso-qooxdoo-client</includeArtifactIds>
-            </configuration>
-          </execution>
-          <execution>
             <id>unpack-qooxdoo-sdk</id>
             <phase>prepare-package</phase>
             <goals>
@@ -50,6 +39,19 @@
             <configuration>
               <includeArtifactIds>qooxdoo-sdk</includeArtifactIds>
               <outputDirectory>${project.build.directory}/qooxdoo-sdk</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-jspresso-qooxdoo</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <includeGroupIds>org.jspresso.framework</includeGroupIds>
+              <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
           <execution>
