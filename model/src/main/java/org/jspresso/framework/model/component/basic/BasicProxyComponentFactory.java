@@ -31,8 +31,9 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.security.UserPrincipal;
 
@@ -48,6 +49,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   private IComponentCollectionFactory<IComponent> componentCollectionFactory;
   private IComponentDescriptorRegistry            componentDescriptorRegistry;
   private IComponentExtensionFactory              componentExtensionFactory;
+  private IQueryComponentDescriptorFactory        queryComponentDescriptorFactory;
 
   /**
    * {@inheritDoc}
@@ -90,8 +92,9 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   public IQueryComponent createQueryComponentInstance(
       Class<? extends IComponent> componentContract) {
     return new QueryComponent(
-        new BasicQueryComponentDescriptor(
-            (IComponentDescriptor<IEntity>) getComponentDescriptor(componentContract)));
+        getQueryComponentDescriptorFactory()
+            .createQueryComponentDescriptor(
+                (IComponentDescriptor<IEntity>) getComponentDescriptor(componentContract)));
   }
 
   /**
@@ -218,5 +221,28 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
     return new BasicDelegatingComponentInvocationHandler(delegate, this,
         componentDescriptor, componentCollectionFactory, getAccessorFactory(),
         componentExtensionFactory);
+  }
+
+  /**
+   * Gets the queryComponentDescriptorFactory.
+   * 
+   * @return the queryComponentDescriptorFactory.
+   */
+  protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
+    if (queryComponentDescriptorFactory == null) {
+      queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
+    }
+    return queryComponentDescriptorFactory;
+  }
+
+  /**
+   * Sets the queryComponentDescriptorFactory.
+   * 
+   * @param queryComponentDescriptorFactory
+   *          the queryComponentDescriptorFactory to set.
+   */
+  public void setQueryComponentDescriptorFactory(
+      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+    this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }

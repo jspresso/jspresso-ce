@@ -32,8 +32,9 @@ import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -53,17 +54,19 @@ public class CreateQueryComponentAction extends BackendAction {
   /**
    * A parametrized entity reference descriptor.
    */
-  public static final String COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
+  public static final String               COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
 
   /**
    * The master component key from wich the LOV has been trigerred.
    */
-  public static final String MASTER_COMPONENT         = "MASTER_COMPONENT";
+  public static final String               MASTER_COMPONENT         = "MASTER_COMPONENT";
 
   /**
    * The connector of the query model.
    */
-  public static final String QUERY_MODEL_CONNECTOR    = "QUERY_MODEL_CONNECTOR";
+  public static final String               QUERY_MODEL_CONNECTOR    = "QUERY_MODEL_CONNECTOR";
+
+  private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
 
   /**
    * Creates a query component using the model descriptor passed in the context.
@@ -92,8 +95,8 @@ public class CreateQueryComponentAction extends BackendAction {
     ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) getController(
         context).createModelConnector(
         ACTION_MODEL_NAME,
-        new BasicQueryComponentDescriptor(erqDescriptor
-            .getReferencedDescriptor()));
+        getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
+            erqDescriptor.getReferencedDescriptor()));
     context.put(QUERY_MODEL_CONNECTOR, modelConnector);
     modelConnector.setConnectorValue(queryComponent);
     String queryPropertyValue = getActionCommand(context);
@@ -188,5 +191,28 @@ public class CreateQueryComponentAction extends BackendAction {
         }
       }
     }
+  }
+
+  /**
+   * Gets the queryComponentDescriptorFactory.
+   * 
+   * @return the queryComponentDescriptorFactory.
+   */
+  protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
+    if (queryComponentDescriptorFactory == null) {
+      queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
+    }
+    return queryComponentDescriptorFactory;
+  }
+
+  /**
+   * Sets the queryComponentDescriptorFactory.
+   * 
+   * @param queryComponentDescriptorFactory
+   *          the queryComponentDescriptorFactory to set.
+   */
+  public void setQueryComponentDescriptorFactory(
+      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+    this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }

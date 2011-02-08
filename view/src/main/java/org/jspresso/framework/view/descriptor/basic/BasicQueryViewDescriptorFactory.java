@@ -21,8 +21,10 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
+import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
@@ -35,9 +37,10 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class BasicQueryViewDescriptorFactory implements
-    IQueryViewDescriptorFactory {
+    IQueryViewDescriptorFactory, IQueryComponentDescriptorFactory {
 
-  private boolean horizontallyResizable;
+  private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
+  private boolean                          horizontallyResizable;
 
   /**
    * Constructs a new <code>BasicQueryViewDescriptorFactory</code> instance.
@@ -50,12 +53,12 @@ public class BasicQueryViewDescriptorFactory implements
    * {@inheritDoc}
    */
   public IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptor<IEntity> queryComponentDescriptor) {
-    BasicQueryComponentDescriptor actualModelDescriptor = new BasicQueryComponentDescriptor(
-        queryComponentDescriptor);
+      IComponentDescriptor<IEntity> componentDescriptor) {
+    IComponentDescriptor<IQueryComponent> actualModelDescriptor = getQueryComponentDescriptorFactory()
+        .createQueryComponentDescriptor(componentDescriptor);
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
-    for (String queriableProperty : queryComponentDescriptor
+    for (String queriableProperty : componentDescriptor
         .getQueryableProperties()) {
       // To preserve col spans for query structures.
       propertyWidths.put(queriableProperty, new Integer(3));
@@ -88,5 +91,39 @@ public class BasicQueryViewDescriptorFactory implements
    */
   public void setHorizontallyResizable(boolean horizontallyResizable) {
     this.horizontallyResizable = horizontallyResizable;
+  }
+
+  /**
+   * Delegates to the configured query componentDescriptorFactory.
+   * <p>
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
+      IComponentDescriptor<IEntity> componentDescriptor) {
+    return getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
+        componentDescriptor);
+  }
+
+  /**
+   * Gets the queryComponentDescriptorFactory.
+   * 
+   * @return the queryComponentDescriptorFactory.
+   */
+  public IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
+    if (queryComponentDescriptorFactory == null) {
+      queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
+    }
+    return queryComponentDescriptorFactory;
+  }
+
+  /**
+   * Sets the queryComponentDescriptorFactory.
+   * 
+   * @param queryComponentDescriptorFactory
+   *          the queryComponentDescriptorFactory to set.
+   */
+  public void setQueryComponentDescriptorFactory(
+      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+    this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }

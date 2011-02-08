@@ -16,26 +16,31 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.model.descriptor.basic;
 
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.entity.IEntity;
 
+
 /**
- * Factory for query component view descriptor.
+ * Basic implementation. Creates basic query component descriptors.
  * 
- * @version $LastChangedRevision: 959 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IQueryViewDescriptorFactory {
+public class BasicQueryComponentDescriptorFactory implements
+    IQueryComponentDescriptorFactory {
 
   /**
-   * Creates a new query component view descriptor.
-   * 
-   * @param componentDescriptor
-   *          the component to create query descriptor for.
-   * @return the created view descriptor.
+   * Creates basic query component descriptors.
+   * <p>
+   * {@inheritDoc}
    */
-  IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptor<IEntity> componentDescriptor);
+  public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
+      IComponentDescriptor<IEntity> componentDescriptor) {
+    return new BasicQueryComponentDescriptor(componentDescriptor);
+  }
+
 }

@@ -26,6 +26,8 @@ import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleD
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
+import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
@@ -280,7 +282,22 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   @Override
   protected BeanCollectionModuleDescriptor getDescriptor() {
     return new FilterableBeanCollectionModuleDescriptor(
-        getElementComponentDescriptor(), getFilterComponentDescriptor());
+        getElementComponentDescriptor(), getQueryComponentDescriptorFactory()
+            .createQueryComponentDescriptor(getFilterComponentDescriptor()));
+  }
+
+  /**
+   * Gets the query component descriptor factory used to create the filter model
+   * descriptor.
+   * 
+   * @return the query component descriptor factory used to create the filter
+   *         model descriptor.
+   */
+  protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
+    if (queryViewDescriptorFactory instanceof IQueryComponentDescriptorFactory) {
+      return (IQueryComponentDescriptorFactory) queryViewDescriptorFactory;
+    }
+    return new BasicQueryComponentDescriptorFactory();
   }
 
   private class FilterComponentTracker implements PropertyChangeListener {
