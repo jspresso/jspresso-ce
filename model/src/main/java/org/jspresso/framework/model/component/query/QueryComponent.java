@@ -105,25 +105,22 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         if (!(value instanceof IQueryComponent)) {
           Object actualValue = /* super. */get(key);
           String tsProp = referencedDescriptor.getToStringProperty();
-          String reProp = null;
-          if (referencedDescriptor.getRenderedProperties() != null
-              && !referencedDescriptor.getRenderedProperties().isEmpty()) {
-            reProp = referencedDescriptor.getRenderedProperties().get(0);
-          }
+          String acProp = referencedDescriptor
+              .getAutoCompleteProperty();
           if (value != null) {
-            ((IQueryComponent) actualValue).put(IEntity.ID, ((IEntity) value)
-                .getId());
-            ((IQueryComponent) actualValue).put(tsProp, ((IEntity) value)
-                .toString());
-            if (reProp != null) {
-              ((IQueryComponent) actualValue).put(reProp, ((IEntity) value)
-                  .straightGetProperty(reProp));
+            ((IQueryComponent) actualValue).put(IEntity.ID,
+                ((IEntity) value).getId());
+            ((IQueryComponent) actualValue).put(tsProp,
+                ((IEntity) value).toString());
+            if (acProp != null) {
+              ((IQueryComponent) actualValue).put(acProp,
+                  ((IEntity) value).straightGetProperty(acProp));
             }
           } else {
             ((IQueryComponent) actualValue).remove(IEntity.ID);
             ((IQueryComponent) actualValue).remove(tsProp);
-            if (reProp != null) {
-              ((IQueryComponent) actualValue).remove(reProp);
+            if (acProp != null) {
+              ((IQueryComponent) actualValue).remove(acProp);
             }
           }
           return actualValue;
@@ -350,8 +347,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
      */
     public void propertyChange(PropertyChangeEvent evt) {
       firePropertyChange(componentName, null, evt.getSource());
-      firePropertyChange(componentName + "." + evt.getPropertyName(), evt
-          .getOldValue(), evt.getNewValue());
+      firePropertyChange(componentName + "." + evt.getPropertyName(),
+          evt.getOldValue(), evt.getNewValue());
     }
   }
 }
