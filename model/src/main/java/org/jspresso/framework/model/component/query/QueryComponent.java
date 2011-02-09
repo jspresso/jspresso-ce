@@ -20,10 +20,12 @@ package org.jspresso.framework.model.component.query;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -32,6 +34,7 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * The default implementation of a query component.
@@ -45,6 +48,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private static final long       serialVersionUID = 4271673164192796253L;
 
   private IComponentDescriptor<?> componentDescriptor;
+  private IComponentFactory       componentFactory;
   private Map<String, ESort>      defaultOrderingProperties;
   private Map<String, ESort>      orderingProperties;
   private Integer                 page;
@@ -56,16 +60,29 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * 
    * @param componentDescriptor
    *          the query componentDescriptor.
+   * @param componentFactory
+   *          the component factory.
    */
-  public QueryComponent(IComponentDescriptor<?> componentDescriptor) {
+  public QueryComponent(IComponentDescriptor<?> componentDescriptor,
+      IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
+    this.componentFactory = componentFactory;
   }
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Object get(Object key) {
+    int firstDotIndex = ((String) key).indexOf('.');
+    if (firstDotIndex > 0) {
+      Object nested = get(((String) key).substring(0, firstDotIndex));
+      if (nested instanceof Map<?, ?>) {
+        return ((Map<String, Object>) nested).get(
+            ((String) key).substring(firstDotIndex + 1));
+      }
+    }
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor((String) key);
     Object actualValue = super.get(key);
@@ -74,7 +91,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       QueryComponent referencedQueryComponent = new QueryComponent(
-          referencedDescriptor);
+          referencedDescriptor, getComponentFactory());
       if (ComparableQueryStructure.class
           .isAssignableFrom(referencedQueryComponent.getQueryContract())) {
         referencedQueryComponent.put(
@@ -93,8 +110,17 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Object put(String key, Object value) {
+    int firstDotIndex = key.indexOf('.');
+    if (firstDotIndex > 0) {
+      Object nested = get(key.substring(0, firstDotIndex));
+      if (nested instanceof Map<?, ?>) {
+        return ((Map<String, Object>) nested).put(
+            key.substring(firstDotIndex + 1), value);
+      }
+    }
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(key);
     if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
@@ -105,16 +131,31 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         if (!(value instanceof IQueryComponent)) {
           Object actualValue = /* super. */get(key);
           String tsProp = referencedDescriptor.getToStringProperty();
-          String acProp = referencedDescriptor
-              .getAutoCompleteProperty();
+          String acProp = referencedDescriptor.getAutoCompleteProperty();
           if (value != null) {
             ((IQueryComponent) actualValue).put(IEntity.ID,
                 ((IEntity) value).getId());
             ((IQueryComponent) actualValue).put(tsProp,
                 ((IEntity) value).toString());
             if (acProp != null) {
-              ((IQueryComponent) actualValue).put(acProp,
-                  ((IEntity) value).straightGetProperty(acProp));
+              Object acPropVaue;
+              try {
+                acPropVaue = getComponentFactory()
+                    .getAccessorFactory()
+                    .createPropertyAccessor(acProp,
+                        ((IEntity) value).getComponentContract())
+                    .getValue(value);
+              } catch (IllegalAccessException ex) {
+                throw new NestedRuntimeException(ex, "Invalid property: "
+                    + acProp);
+              } catch (InvocationTargetException ex) {
+                throw new NestedRuntimeException(ex.getTargetException(),
+                    "Invalid property: " + acProp);
+              } catch (NoSuchMethodException ex) {
+                throw new NestedRuntimeException(ex, "Invalid property: "
+                    + acProp);
+              }
+              ((IQueryComponent) actualValue).put(acProp, acPropVaue);
             }
           } else {
             ((IQueryComponent) actualValue).remove(IEntity.ID);
@@ -128,6 +169,23 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       }
     }
     return super.put(key, value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public Object remove(Object key) {
+    int firstDotIndex = ((String) key).indexOf('.');
+    if (firstDotIndex > 0) {
+      Object nested = get(((String) key).substring(0, firstDotIndex));
+      if (nested instanceof Map<?, ?>) {
+        return ((Map<String, Object>) nested).remove(
+            ((String) key).substring(firstDotIndex + 1));
+      }
+    }
+    return super.remove(key);
   }
 
   /**
@@ -350,5 +408,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       firePropertyChange(componentName + "." + evt.getPropertyName(),
           evt.getOldValue(), evt.getNewValue());
     }
+  }
+
+  /**
+   * Gets the componentFactory.
+   * 
+   * @return the componentFactory.
+   */
+  protected IComponentFactory getComponentFactory() {
+    return componentFactory;
   }
 }

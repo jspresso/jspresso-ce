@@ -677,7 +677,7 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
-   * Directly get a property value out of the property store without any other
+   * Directly set a property value to the property store without any other
    * operation.
    * 
    * @param proxy

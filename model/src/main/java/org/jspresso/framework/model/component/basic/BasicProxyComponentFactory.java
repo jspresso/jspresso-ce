@@ -94,7 +94,8 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
     return new QueryComponent(
         getQueryComponentDescriptorFactory()
             .createQueryComponentDescriptor(
-                (IComponentDescriptor<IEntity>) getComponentDescriptor(componentContract)));
+                (IComponentDescriptor<IEntity>) getComponentDescriptor(componentContract)),
+        this);
   }
 
   /**
