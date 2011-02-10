@@ -89,7 +89,9 @@
 
   <bean
     id="criteriaFactory"
-    class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory"/>
+    class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
+    <property name="triStateBooleanSupported" ref="triStateBooleanSupported"/>
+  </bean>
   
   <bean
     id="queryEntitiesBackAction"

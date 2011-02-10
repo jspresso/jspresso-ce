@@ -44,10 +44,8 @@
   </bean>
   
   <!-- QBE customization since swing view supports 3-state checkboxes -->
-  <bean
-    id="criteriaFactory"
-    class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
-    <property name="triStateBooleanSupported" value="true"/>
+  <bean id="triStateBooleanSupported" class="java.lang.Boolean">
+    <constructor-arg value="true"/>
   </bean>
 
   <!-- The controllers. -->
