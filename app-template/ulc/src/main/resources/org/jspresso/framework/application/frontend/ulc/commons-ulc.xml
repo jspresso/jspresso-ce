@@ -45,6 +45,11 @@
     <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
   </bean>
 
+  <!-- QBE customization since wings view doesn't support 3-state checkboxes -->
+  <bean id="triStateBooleanSupported" class="java.lang.Boolean">
+    <constructor-arg value="false"/>
+  </bean>
+
   <!-- The controllers. -->
   <bean id="ulcFrontController" abstract="true" parent="abstractFrontController"
     class="org.jspresso.framework.application.frontend.controller.ulc.DefaultUlcController" />

@@ -13,6 +13,11 @@
 
   <bean id="applicationMessageSource" parent="abstractApplicationMessageSource" />
 
+  <bean id="triStateBooleanSupported" class="java.lang.Boolean">
+    <constructor-arg value="false"/>
+  </bean>
+
   <bean id="changePasswordBackAction"
     class="org.jspresso.framework.application.backend.action.security.LdapChangePasswordAction" />
+
 </beans>
