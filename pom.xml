@@ -202,6 +202,7 @@
           <execution>
             <id>beandoc</id>
             <phase>pre-site</phase>
+            <inherited>false</inherited>
             <configuration>
               <tasks>
                 <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
@@ -260,10 +261,11 @@
         <executions>
           <execution>
             <id>unpack-documentation</id>
+            <phase>pre-site</phase>
+            <inherited>false</inherited>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
-            <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${project.reporting.outputDirectory}/docs/reference</outputDirectory>
               <includeArtifactIds>jspresso-documentation</includeArtifactIds>
@@ -273,10 +275,11 @@
           </execution>
           <execution>
             <id>unpack-sjs-documentation</id>
+            <phase>pre-site</phase>
+            <inherited>false</inherited>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
-            <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${project.reporting.outputDirectory}/docs/sjs-reference</outputDirectory>
               <includeArtifactIds>jspresso-sjs-documentation</includeArtifactIds>
@@ -308,7 +311,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <inherited>false</inherited>
         <executions>
           <execution>
             <goals>
