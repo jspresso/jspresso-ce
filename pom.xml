@@ -198,11 +198,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
+        <inherited>false</inherited>
         <executions>
           <execution>
             <id>beandoc</id>
             <phase>pre-site</phase>
-            <inherited>false</inherited>
             <configuration>
               <tasks>
                 <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
@@ -257,12 +257,13 @@
         </dependencies>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <inherited>false</inherited>
         <executions>
           <execution>
             <id>unpack-documentation</id>
             <phase>pre-site</phase>
-            <inherited>false</inherited>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -276,7 +277,6 @@
           <execution>
             <id>unpack-sjs-documentation</id>
             <phase>pre-site</phase>
-            <inherited>false</inherited>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
