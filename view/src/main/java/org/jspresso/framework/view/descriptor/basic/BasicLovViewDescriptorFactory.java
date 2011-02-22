@@ -52,7 +52,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
       IDisplayableAction okAction) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
-        .createQueryViewDescriptor(entityRefDescriptor.getComponentDescriptor());
+        .createQueryViewDescriptor(entityRefDescriptor);
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());

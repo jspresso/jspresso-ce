@@ -18,12 +18,16 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.EBorderType;
@@ -53,10 +57,29 @@ public class BasicQueryViewDescriptorFactory implements
    * {@inheritDoc}
    */
   public IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptor<IEntity> componentDescriptor) {
+      IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
+    IComponentDescriptor<IEntity> componentDescriptor = componentDescriptorProvider
+        .getComponentDescriptor();
     IComponentDescriptor<IQueryComponent> actualModelDescriptor = getQueryComponentDescriptorFactory()
         .createQueryComponentDescriptor(componentDescriptor);
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
+    if (componentDescriptorProvider instanceof IReferencePropertyDescriptor) {
+      Map<String, Object> initializationMapping = ((IReferencePropertyDescriptor<?>) componentDescriptorProvider)
+          .getInitializationMapping();
+      if (initializationMapping != null && initializationMapping.size() > 0) {
+        // we must refine the rendered properties of the filter view to get rid
+        // of pre-initialized properties.
+        List<String> filterableProperties = new ArrayList<String>();
+        for (String renderedProperty : actualModelDescriptor
+            .getRenderedProperties()) {
+          if (!initializationMapping.containsKey(renderedProperty)) {
+            filterableProperties.add(renderedProperty);
+          }
+        }
+        queryComponentViewDescriptor
+            .setRenderedProperties(filterableProperties);
+      }
+    }
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
     for (String queriableProperty : componentDescriptor
         .getQueryableProperties()) {
