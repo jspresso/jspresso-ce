@@ -1639,7 +1639,6 @@ public class DefaultRemoteViewFactory extends
             column.getPeer().setLabel("*");
           }
         }
-        configureComponent(columnViewDescriptor, locale, column.getPeer());
         columns.add(column.getPeer());
         columnIds.add(computeColumnIdentifier(rowDescriptor, columnConnector));
         if (column.getPeer() instanceof RLink) {

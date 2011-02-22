@@ -1142,6 +1142,8 @@ package org.jspresso.framework.view.flex {
       var labelsRow:GridRow;
       var componentsRow:GridRow;
       
+      form.styleName = "contentPane";
+      
       componentsRow = new GridRow();
       componentsRow.percentWidth = 100.0;
       if(remoteForm.labelsPosition == "ABOVE") {
