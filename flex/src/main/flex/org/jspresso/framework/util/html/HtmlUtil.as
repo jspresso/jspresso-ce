@@ -105,9 +105,11 @@ package org.jspresso.framework.util.html {
     
     public static function convertHtmlEntities(source:String):String {
       var buf:String = source;
-      while(buf.indexOf('&') != -1 ){     // if it finds other occurences of the & symbol
-        for(var entity:String in HTML_ENTITIES){
-          buf =  buf.replace(entity, HTML_ENTITIES[entity]);
+      var finished:Boolean = false;
+      for(var entity:String in HTML_ENTITIES){
+        if(!finished) {     // if it finds other occurences of the & symbol
+          buf = buf.replace(new RegExp(entity, "g"), HTML_ENTITIES[entity]);
+          finished = finished || buf.indexOf('&') < 0; 
         }
       }
       return buf;
