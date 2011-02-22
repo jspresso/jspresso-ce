@@ -39,10 +39,17 @@ public final class ColorHelper {
    */
   public static int[] fromHexString(String hexString) {
     int[] rgba = new int[4];
-    rgba[3] = Integer.parseInt(hexString.substring(2, 4), 16);
-    rgba[0] = Integer.parseInt(hexString.substring(4, 6), 16);
-    rgba[1] = Integer.parseInt(hexString.substring(6, 8), 16);
-    rgba[2] = Integer.parseInt(hexString.substring(8, 10), 16);
+    int offset = 0;
+    if (hexString.length() == 10) {
+      rgba[3] = Integer.parseInt(hexString.substring(2, 4), 16);
+      offset = 2;
+    } else {
+      // to support unexisting alpha
+      rgba[3] = Integer.parseInt("FF", 16);
+    }
+    rgba[0] = Integer.parseInt(hexString.substring(2 + offset, 4 + offset), 16);
+    rgba[1] = Integer.parseInt(hexString.substring(4 + offset, 6 + offset), 16);
+    rgba[2] = Integer.parseInt(hexString.substring(6 + offset, 8 + offset), 16);
     return rgba;
   }
 
