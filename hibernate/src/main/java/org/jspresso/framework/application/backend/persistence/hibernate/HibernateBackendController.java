@@ -541,7 +541,6 @@ public class HibernateBackendController extends AbstractBackendController {
     } catch (Exception ex) {
       IComponent sessionEntity = (IComponent) hibernateSession.get(
           entity.getComponentContract(), entity.getId());
-      // hibernateSession.evict(sessionEntity);
       evictFromHibernateInDepth(sessionEntity, hibernateSession,
           new HashSet<IEntity>());
       hibernateSession.lock(entity, LockMode.NONE);
@@ -553,8 +552,13 @@ public class HibernateBackendController extends AbstractBackendController {
       Session hibernateSession, Set<IEntity> alreadyLocked) {
     boolean isEntity = component instanceof IEntity;
     if (!isEntity || alreadyLocked.add((IEntity) component)) {
-      if (isEntity && ((IEntity) component).isPersistent()) {
-        lockInHibernate((IEntity) component, hibernateSession);
+      if (isEntity) {
+        if (((IEntity) component).isPersistent()) {
+          lockInHibernate((IEntity) component, hibernateSession);
+        } else {
+          // Cannot simply re-attach the transient entity, so we have to saveOrUpdate it.
+          registerForUpdate((IEntity) component);
+        }
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
       for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
