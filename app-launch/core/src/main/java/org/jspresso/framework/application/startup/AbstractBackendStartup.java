@@ -18,7 +18,16 @@
  */
 package org.jspresso.framework.application.startup;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Abstract class for application startup including only the backend layer. This
@@ -58,4 +67,55 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
     backendController = null;
     getBackendController().start(getStartupLocale());
   }
+
+  /**
+   * Creates a user subject.
+   * 
+   * @param userName
+   *          the user name.
+   * @return a user subject.
+   */
+  protected Subject createSubject(String userName) {
+    Subject s = new Subject();
+    UserPrincipal p = new UserPrincipal(userName);
+    s.getPrincipals().add(p);
+    return s;
+  }
+
+  /**
+   * Configures session on the backend controller.
+   * 
+   * @param subject
+   *          the JAAS subject containing the user principal.
+   * @param locale
+   *          the locale to use.
+   */
+  protected void configureApplicationSession(Subject subject, Locale locale) {
+    IApplicationSession session = getBackendController()
+        .getApplicationSession();
+    session.setSubject(subject);
+    session.setLocale(locale);
+  }
+
+  /**
+   * Executes a backend action.
+   * 
+   * @param action the backend action to execute.
+   * @param initialContext the initial action context.
+   * @param subject the JAAS subject to execute the action for.
+   * @param locale the locale used to execute the action.
+   * @return true if the action execution was succesful.
+   */
+  protected boolean executeAction(BackendAction action,
+      Map<String, Object> initialContext, Subject subject, Locale locale) {
+    configureApplicationSession(subject, locale);
+    Map<String, Object> startupActionContext = new HashMap<String, Object>();
+    startupActionContext.putAll(getBackendController()
+        .getInitialActionContext());
+    startupActionContext.putAll(initialContext);
+    boolean success = getBackendController().execute(action,
+        startupActionContext);
+    return success;
+  }
+
 }

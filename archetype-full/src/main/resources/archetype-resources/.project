@@ -55,31 +55,10 @@
       <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/webapp/target/${artifactId}-webapp/lib
       </location>
     </link>
-    <!--
-    <link>
-      <name>webapp/src/main/webapp/flex</name>
-      <type>2</type>
-      <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/webapp/target/${artifactId}-webapp/flex
-      </location>
-    </link>
-    -->
-    <!--
-    <link>
-      <name>html-template</name>
-      <type>2</type>
-      <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/webapp/src/main/flex-template</location>
-    </link>
-    -->
     <link>
       <name>webapp/src/main/webapp/WEB-INF/flex</name>
       <type>2</type>
       <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/startup/flex/config/src/main/resources
-      </location>
-    </link>
-    <link>
-      <name>webapp/src/main/webapp/WEB-INF/web.xml</name>
-      <type>1</type>
-      <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/webapp/target/${artifactId}-webapp/WEB-INF/web.xml
       </location>
     </link>
     <link>

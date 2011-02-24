@@ -136,8 +136,6 @@
         <configuration>
           <warName>${project.artifactId}</warName>
           <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
-          <webXml>${basedir}/src/main/webapp/WEB-INF/noulc-web.xml</webXml>
-          <warSourceExcludes>**/webstart/**,**/*-web.xml</warSourceExcludes>
         </configuration>
       </plugin>
       <plugin>
@@ -233,16 +231,6 @@
       </dependencies>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-war-plugin</artifactId>
-            <configuration>
-              <warName>${project.artifactId}</warName>
-              <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
-              <webXml>${basedir}/src/main/webapp/WEB-INF/ulc-web.xml</webXml>
-              <warSourceExcludes>**/*-web.xml</warSourceExcludes>
-            </configuration>
-          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>

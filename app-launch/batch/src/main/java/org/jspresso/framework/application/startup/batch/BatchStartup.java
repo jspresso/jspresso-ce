@@ -108,6 +108,6 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
     setApplicationContextKey(cmd.getOptionValue(APP_CONTEXT));
     setStartupLocale(new Locale(cmd.getOptionValue(LOCALE, "en")));
     setActionBeanId(cmd.getOptionValue(ACTION_ID));
-    setBatchUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));
+    setUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));
   }
 }

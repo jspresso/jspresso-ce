@@ -25,8 +25,6 @@ import java.util.Map;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.application.backend.action.BackendAction;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
-import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * A backend startup implementation whose implementation is a backend action.
@@ -39,7 +37,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
   private String              actionBeanId;
   private Map<String, Object> actionContext;
   private String              applicationContextKey;
-  private String              batchUserName;
+  private String              userName;
   private Locale              startupLocale;
 
   /**
@@ -77,9 +75,21 @@ public class BackendActionStartup extends AbstractBackendStartup {
    * 
    * @param batchUserName
    *          the batchUserName to set.
+   * @deprecated use setUserName instead.
    */
+  @Deprecated
   public void setBatchUserName(String batchUserName) {
-    this.batchUserName = batchUserName;
+    setUserName(batchUserName);
+  }
+
+  /**
+   * Sets the userName.
+   * 
+   * @param userName
+   *          the userName to set.
+   */
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
   /**
@@ -101,15 +111,12 @@ public class BackendActionStartup extends AbstractBackendStartup {
   }
 
   /**
-   * Creates a default batch user subject.
+   * Creates a user subject.
    * 
-   * @return a default batch user subject.
+   * @return a user subject.
    */
   protected Subject createSubject() {
-    Subject s = new Subject();
-    UserPrincipal p = new UserPrincipal(getBatchUserName());
-    s.getPrincipals().add(p);
-    return s;
+    return createSubject(getUserName());
   }
 
   /**
@@ -118,18 +125,8 @@ public class BackendActionStartup extends AbstractBackendStartup {
    * @return the action execution status.
    */
   protected boolean executeAction() {
-    IApplicationSession batchSession = getBackendController()
-        .getApplicationSession();
-    batchSession.setLocale(getStartupLocale());
-    batchSession.setSubject(createSubject());
-    BackendAction backendAction = getAction();
-    Map<String, Object> startupActionContext = new HashMap<String, Object>();
-    startupActionContext.putAll(getBackendController()
-        .getInitialActionContext());
-    startupActionContext.putAll(getActionContext());
-    boolean success = getBackendController().execute(backendAction,
-        startupActionContext);
-    return success;
+    return executeAction(getAction(), getActionContext(),
+        createSubject(getUserName()), getStartupLocale());
   }
 
   /**
@@ -174,9 +171,20 @@ public class BackendActionStartup extends AbstractBackendStartup {
    * Gets the batchUserName.
    * 
    * @return the batchUserName.
+   * @deprecated use getUserName instead
    */
+  @Deprecated
   protected String getBatchUserName() {
-    return batchUserName;
+    return userName;
+  }
+
+  /**
+   * Gets the userName.
+   * 
+   * @return the userName.
+   */
+  protected String getUserName() {
+    return userName;
   }
 
   /**
