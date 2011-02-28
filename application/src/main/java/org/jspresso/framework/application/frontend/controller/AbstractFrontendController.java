@@ -836,6 +836,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected void putClientPreference(String key, String value) {
     if (getClientPreferenceStore() != null) {
       getClientPreferenceStore().putPreference(key, value);
+      clientPreferenceStore.write();
     }
   }
 
@@ -848,6 +849,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected void removeClientPreference(String key) {
     if (getClientPreferenceStore() != null) {
       getClientPreferenceStore().removePreference(key);
+      clientPreferenceStore.write();
     }
   }
 
@@ -1436,6 +1438,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferenceStore() {
     if (clientPreferenceStore == null) {
       clientPreferenceStore = createClientPreferenceStore();
+      clientPreferenceStore.read();
     }
     return clientPreferenceStore;
   }
