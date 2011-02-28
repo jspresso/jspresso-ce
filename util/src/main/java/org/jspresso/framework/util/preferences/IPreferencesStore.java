@@ -55,14 +55,4 @@ public interface IPreferencesStore {
    *          the key of the preference.
    */
   void removePreference(String key);
-
-  /**
-   * Writes the preferences into the preference store.
-   */
-  void write();
-
-  /**
-   * Reads the preferences from the preference store.
-   */
-  void read();
 }

@@ -35,6 +35,11 @@
 			<artifactId>spring-context</artifactId>
 			<optional>true</optional>
 		</dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <optional>true</optional>
+    </dependency>
 		<dependency>
 			<groupId>bsf</groupId>
 			<artifactId>bsf</artifactId>

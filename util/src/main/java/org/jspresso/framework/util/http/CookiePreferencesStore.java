@@ -71,20 +71,4 @@ public class CookiePreferencesStore implements IPreferencesStore {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void write() {
-    // No need to perform any special save operation since cookies are
-    // automatically persisted on client side.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void read() {
-    // No need to initialize anything from any store since cookies are
-    // immediately available from the HTTP request.
-  }
-
 }

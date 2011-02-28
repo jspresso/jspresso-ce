@@ -66,20 +66,4 @@ public class JavaPreferencesStore implements IPreferencesStore {
     preferences.remove(key);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void write() {
-    // No need to perform any special save operation since Java preferences are
-    // automatically persisted.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void read() {
-    // No need to initialize anything from any store since Java preferences are
-    // immediately available from the JVM.
-  }
-
 }
