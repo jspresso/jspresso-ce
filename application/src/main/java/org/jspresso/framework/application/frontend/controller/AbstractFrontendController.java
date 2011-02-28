@@ -59,6 +59,7 @@ import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -142,6 +143,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private static final String                   UP_KEY            = "UP_KEY";
   private static final String                   UP_SEP            = "!";
+
+  private IPreferencesStore                     clientPreferenceStore;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -794,7 +797,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected CallbackHandler createLoginCallbackHandler() {
     UsernamePasswordHandler uph = new UsernamePasswordHandler();
-    String[] savedUserPass = decodeUserPass(readPref(UP_KEY));
+    String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
     if (savedUserPass != null && savedUserPass.length == 2
         && savedUserPass[0] != null) {
       uph.setUsername(savedUserPass[0]);
@@ -809,31 +812,44 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Reads a user preference.
+   * Reads a client preference.
    * 
-   * @param prefKey
+   * @param key
    *          the key under which the preference as been stored.
    * @return the stored preference or null.
    */
-  protected abstract String readPref(String prefKey);
+  protected String getClientPreference(String key) {
+    if (getClientPreferenceStore() != null) {
+      return getClientPreferenceStore().getPreference(key);
+    }
+    return null;
+  }
 
   /**
-   * Stores a user preference.
+   * Stores a client preference.
    * 
-   * @param prefKey
+   * @param key
    *          the key under which the preference as to be stored.
-   * @param prefValue
+   * @param value
    *          the value of the preference to be stored.
    */
-  protected abstract void storePref(String prefKey, String prefValue);
+  protected void putClientPreference(String key, String value) {
+    if (getClientPreferenceStore() != null) {
+      getClientPreferenceStore().putPreference(key, value);
+    }
+  }
 
   /**
-   * Deletes a user preference.
+   * Deletes a client preference.
    * 
-   * @param prefKey
+   * @param key
    *          the key under which the preference is stored.
    */
-  protected abstract void deletePref(String prefKey);
+  protected void removeClientPreference(String key) {
+    if (getClientPreferenceStore() != null) {
+      getClientPreferenceStore().removePreference(key);
+    }
+  }
 
   /**
    * Creates and binds the login view.
@@ -1116,9 +1132,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (getLoginCallbackHandler() instanceof UsernamePasswordHandler) {
       UsernamePasswordHandler uph = (UsernamePasswordHandler) getLoginCallbackHandler();
       if (uph.isRememberMe()) {
-        storePref(UP_KEY, encodeUserPass(uph.getUsername(), uph.getPassword()));
+        putClientPreference(UP_KEY,
+            encodeUserPass(uph.getUsername(), uph.getPassword()));
       } else {
-        deletePref(UP_KEY);
+        removeClientPreference(UP_KEY);
       }
       uph.clear();
     }
@@ -1410,4 +1427,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     return null;
   }
+
+  /**
+   * Gets the client preferences store.
+   * 
+   * @return the client preferences store.
+   */
+  protected synchronized IPreferencesStore getClientPreferenceStore() {
+    if (clientPreferenceStore == null) {
+      clientPreferenceStore = createClientPreferenceStore();
+    }
+    return clientPreferenceStore;
+  }
+
+  /**
+   * Creates the clientPreferenceStore.
+   * 
+   * @return the clientPreferenceStore.
+   */
+  protected abstract IPreferencesStore createClientPreferenceStore();
 }

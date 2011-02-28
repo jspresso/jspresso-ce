@@ -43,8 +43,10 @@ import org.jspresso.framework.gui.wings.components.SErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.http.CookiePreferencesStore;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.IActionFactory;
@@ -645,48 +647,6 @@ public class DefaultWingsController extends
   }
 
   /**
-   * Reads the preference from a cookie.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected String readPref(String prefKey) {
-    Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
-    if (cookies != null) {
-      for (int i = 0; i < cookies.length; i++) {
-        if (prefKey.equals(cookies[i].getName())) {
-          return cookies[i].getValue();
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Stores the preference in a cookie.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void storePref(String prefKey, String prefValue) {
-    Cookie cookie = new Cookie(prefKey, prefValue);
-    cookie.setMaxAge(Integer.MAX_VALUE);
-    HttpRequestHolder.getServletResponse().addCookie(cookie);
-  }
-
-  /**
-   * Deletes the cookie storing the preference.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void deletePref(String prefKey) {
-    Cookie cookie = new Cookie(prefKey, "");
-    cookie.setMaxAge(0);
-    HttpRequestHolder.getServletResponse().addCookie(cookie);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void setStatusInfo(String statusInfo) {
@@ -696,5 +656,15 @@ public class DefaultWingsController extends
     } else {
       statusBar.setVisible(false);
     }
+  }
+
+  /**
+   * Returns a preference store based pon Java preferences API.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IPreferencesStore createClientPreferenceStore() {
+    return new CookiePreferencesStore();
   }
 }

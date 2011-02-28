@@ -47,6 +47,7 @@ import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -327,35 +328,18 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  @Override
-  @SuppressWarnings("unused")
-  protected String readPref(String prefKey) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("unused")
-  protected void storePref(String prefKey, String prefValue) {
-    // NO-OP
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("unused")
-  protected void deletePref(String prefKey) {
-    // NO-OP
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
   @SuppressWarnings("unused")
   public void setStatusInfo(String statusInfo) {
     // NO-OP
+  }
+
+  /**
+   * Returns null.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IPreferencesStore createClientPreferenceStore() {
+    return null;
   }
 }

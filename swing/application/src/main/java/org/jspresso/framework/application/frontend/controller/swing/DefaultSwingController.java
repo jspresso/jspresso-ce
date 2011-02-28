@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -79,6 +78,8 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.preferences.IPreferencesStore;
+import org.jspresso.framework.util.preferences.JavaPreferencesStore;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
@@ -1032,40 +1033,6 @@ public class DefaultSwingController extends
   }
 
   /**
-   * Uses the java preferences to read the preference.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected String readPref(String prefKey) {
-    Preferences prefs = Preferences.userNodeForPackage(getClass());
-    prefs = prefs.node(getName());
-    return prefs.get(prefKey, null);
-  }
-
-  /**
-   * Uses the java preferences to store the preference.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void storePref(String prefKey, String prefValue) {
-    Preferences prefs = Preferences.userNodeForPackage(getClass());
-    prefs = prefs.node(getName());
-    prefs.put(prefKey, prefValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void deletePref(String prefKey) {
-    Preferences prefs = Preferences.userNodeForPackage(getClass());
-    prefs = prefs.node(getName());
-    prefs.remove(prefKey);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void setStatusInfo(String statusInfo) {
@@ -1075,5 +1042,17 @@ public class DefaultSwingController extends
     } else {
       statusBar.setVisible(false);
     }
+  }
+
+  /**
+   * Returns a preference store based pon Java preferences API.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IPreferencesStore createClientPreferenceStore() {
+    return new JavaPreferencesStore(getClass(), new String[] {
+      getName()
+    });
   }
 }

@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
@@ -40,9 +38,10 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
-import org.jspresso.framework.util.http.HttpRequestHolder;
+import org.jspresso.framework.util.http.CookiePreferencesStore;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
@@ -470,15 +469,16 @@ public class DefaultUlcController extends
 
   private void createControllerFrame() {
     controllerFrame = new ULCFrame();
-    
+
     desktopPane = new ULCDesktopPane();
-    controllerFrame.getContentPane().add(desktopPane, ULCBorderLayoutPane.CENTER);
-    
+    controllerFrame.getContentPane().add(desktopPane,
+        ULCBorderLayoutPane.CENTER);
+
     statusBar = new ULCLabel();
     statusBar.setBorder(new ULCEtchedBorder(ULCEtchedBorder.LOWERED));
     statusBar.setVisible(false);
     controllerFrame.getContentPane().add(statusBar, BorderLayout.SOUTH);
-    
+
     controllerFrame
         .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
     controllerFrame.addWindowListener(new IWindowListener() {
@@ -795,50 +795,6 @@ public class DefaultUlcController extends
   /**
    * {@inheritDoc}
    */
-  @Override
-  protected String readPref(String prefKey) {
-    if (HttpRequestHolder.getServletRequest() != null) {
-      Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
-      if (cookies != null) {
-        for (int i = 0; i < cookies.length; i++) {
-          if (prefKey.equals(cookies[i].getName())) {
-            return cookies[i].getValue();
-          }
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void storePref(String prefKey, String prefValue) {
-    if (HttpRequestHolder.getServletResponse() != null) {
-      Cookie cookie = new Cookie(prefKey, prefValue);
-      cookie.setMaxAge(Integer.MAX_VALUE);
-      HttpRequestHolder.getServletResponse().addCookie(cookie);
-    }
-  }
-
-  /**
-   * Deletes the cookie storing the preference.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void deletePref(String prefKey) {
-    if (HttpRequestHolder.getServletResponse() != null) {
-      Cookie cookie = new Cookie(prefKey, "");
-      cookie.setMaxAge(0);
-      HttpRequestHolder.getServletResponse().addCookie(cookie);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void setStatusInfo(String statusInfo) {
     if (statusInfo != null && statusInfo.length() > 0) {
       statusBar.setText(statusInfo);
@@ -846,5 +802,15 @@ public class DefaultUlcController extends
     } else {
       statusBar.setVisible(false);
     }
+  }
+
+  /**
+   * Returns a preference store based pon Java preferences API.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IPreferencesStore createClientPreferenceStore() {
+    return new CookiePreferencesStore();
   }
 }
