@@ -69,6 +69,8 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -678,6 +680,18 @@ public class DefaultRemoteController extends
           ((IValueConnector) targetPeer)
               .setConnectorValue(((RemoteValueCommand) command).getValue());
         }
+        if (targetPeer instanceof IRemoteStateOwner) {
+          ((IRemoteStateOwner) targetPeer).synchRemoteState();
+          RemoteValueState state = ((IRemoteStateOwner) targetPeer).getState();
+          if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(),
+              state.getValue())) {
+
+            RemoteValueCommand reverseCommand = new RemoteValueCommand();
+            reverseCommand.setTargetPeerGuid(state.getGuid());
+            reverseCommand.setValue(state.getValue());
+            registerCommand(reverseCommand);
+          }
+        }
       } else if (command instanceof RemoteSelectionCommand) {
         if (targetPeer instanceof RTabContainer) {
           ((RTabContainer) targetPeer)
@@ -862,7 +876,7 @@ public class DefaultRemoteController extends
   public void remotePeerRemoved(String peerGuid) {
     removedPeersGuids.add(peerGuid);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -871,7 +885,6 @@ public class DefaultRemoteController extends
     updateStatusCommand.setStatus(statusInfo);
     registerCommand(updateStatusCommand);
   }
-
 
   /**
    * Returns a preference store based pon Java preferences API.
