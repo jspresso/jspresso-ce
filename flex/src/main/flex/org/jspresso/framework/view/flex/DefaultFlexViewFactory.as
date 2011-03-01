@@ -80,6 +80,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionComponent;
   import org.jspresso.framework.gui.remote.RActionField;
@@ -666,6 +667,11 @@ package org.jspresso.framework.view.flex {
           var inputText:String = tf.text;
           if(!inputText || inputText.length == 0) {
             remoteState.value = null;
+//            var command:RemoteValueCommand = new RemoteValueCommand();
+//            command.targetPeerGuid = remoteState.guid;
+//            command.automationId = remoteState.automationId;
+//            command.value = remoteState.value;
+//            _commandHandler.registerCommand(command);
           } else if(inputText != remoteState.value) {
             if(remoteState.value == null) {
               tf.text = null;

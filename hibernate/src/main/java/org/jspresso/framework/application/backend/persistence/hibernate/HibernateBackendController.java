@@ -556,8 +556,15 @@ public class HibernateBackendController extends AbstractBackendController {
         if (((IEntity) component).isPersistent()) {
           lockInHibernate((IEntity) component, hibernateSession);
         } else {
-          // Cannot simply re-attach the transient entity, so we have to saveOrUpdate it.
-          registerForUpdate((IEntity) component);
+          // Cannot simply re-attach the transient entity, so we have to
+          // saveOrUpdate it.
+
+          // This is a bad evolution since we don't know if we want to actually
+          // create the new entity. If we want to delete it, all checks will be
+          // trigerred.
+          // if (!isEntityRegisteredForDeletion((IEntity) component)) {
+          // registerForUpdate((IEntity) component);
+          // }
         }
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
