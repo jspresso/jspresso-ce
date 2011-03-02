@@ -31,6 +31,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.security.auth.Subject;
+
 import org.apache.commons.collections.map.LRUMap;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -61,8 +63,10 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
+import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -109,6 +113,8 @@ public abstract class AbstractBackendController extends AbstractController
 
   private Map<String, IValueConnector>                     workspaceConnectors;
   private Map<Module, IValueConnector>                     moduleConnectors;
+
+  private IPreferencesStore                                userPreferenceStore;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -1358,5 +1364,83 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
     return propertyValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void loggedIn(Subject subject) {
+    getApplicationSession().setSubject(subject);
+
+    String userPreferredLanguageCode = (String) getApplicationSession()
+        .getPrincipal().getCustomProperty(UserPrincipal.LANGUAGE_PROPERTY);
+    if (userPreferredLanguageCode != null) {
+      getApplicationSession().setLocale(new Locale(userPreferredLanguageCode));
+    }
+    if (getUserPreferenceStore() != null) {
+      getUserPreferenceStore().setStorePath(new String[] {
+          /*getName(),*/ getApplicationSession().getPrincipal().getName()
+      });
+    }
+
+  }
+
+  /**
+   * Reads a user preference.
+   * 
+   * @param key
+   *          the key under which the preference as been stored.
+   * @return the stored preference or null.
+   */
+  public String getUserPreference(String key) {
+    if (getUserPreferenceStore() != null) {
+      return getUserPreferenceStore().getPreference(key);
+    }
+    return null;
+  }
+
+  /**
+   * Stores a user preference.
+   * 
+   * @param key
+   *          the key under which the preference as to be stored.
+   * @param value
+   *          the value of the preference to be stored.
+   */
+  public void putUserPreference(String key, String value) {
+    if (getUserPreferenceStore() != null) {
+      getUserPreferenceStore().putPreference(key, value);
+    }
+  }
+
+  /**
+   * Deletes a user preference.
+   * 
+   * @param key
+   *          the key under which the preference is stored.
+   */
+  public void removeUserPreference(String key) {
+    if (getUserPreferenceStore() != null) {
+      getUserPreferenceStore().removePreference(key);
+    }
+  }
+
+  /**
+   * Gets the user preferences store.
+   * 
+   * @return the user preferences store.
+   */
+  protected IPreferencesStore getUserPreferenceStore() {
+    return userPreferenceStore;
+  }
+
+  /**
+   * Sets the user preference store.
+   * 
+   * @param userPreferenceStore
+   *          the userPreferenceStore to set.
+   */
+  public void setUserPreferenceStore(IPreferencesStore userPreferenceStore) {
+    this.userPreferenceStore = userPreferenceStore;
   }
 }

@@ -374,30 +374,4 @@ public interface IFrontendController<E, F, G> extends IController,
    */
   void removeClientPreference(String key);
 
-  /**
-   * Reads a user preference.
-   * 
-   * @param key
-   *          the key under which the preference as been stored.
-   * @return the stored preference or null.
-   */
-  String getUserPreference(String key);
-
-  /**
-   * Stores a user preference.
-   * 
-   * @param key
-   *          the key under which the preference as to be stored.
-   * @param value
-   *          the value of the preference to be stored.
-   */
-  void putUserPreference(String key, String value);
-
-  /**
-   * Deletes a user preference.
-   * 
-   * @param key
-   *          the key under which the preference is stored.
-   */
-  void removeUserPreference(String key);
 }

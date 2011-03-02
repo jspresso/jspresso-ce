@@ -136,5 +136,4 @@ public abstract class AbstractController implements IController {
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
   }
-
 }

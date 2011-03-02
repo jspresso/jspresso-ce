@@ -20,6 +20,8 @@ package org.jspresso.framework.application;
 
 import java.util.Locale;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -36,6 +38,14 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public interface IController extends IActionHandler {
 
   /**
+   * This method gets executed when a user succesfully logs in.
+   * 
+   * @param subject
+   *          the authenticated user subject.
+   */
+  void loggedIn(Subject subject);
+
+    /**
    * Gets the applicationSession for this backend controller.
    * 
    * @return the current controller application session.
