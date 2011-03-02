@@ -446,11 +446,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
           setConnecteeValue(aValue);
         } else {
           try {
-            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
-              String.class
-            }).newInstance(new Object[] {
-              aValue.toString()
-            });
+            Object adaptedValue = expectedType.getConstructor(
+                new Class<?>[] {String.class}).newInstance(
+                new Object[] {aValue.toString()});
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorBindingException(ex);
@@ -692,10 +690,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     } catch (RuntimeException ex) {
       propagatedCorrectly = false;
       try {
-        Object badValue = getConnectorValue();
-        setConnecteeValue(oldConnectorValue);
-        // propagate the reverse change...
-        fireValueChange(createChangeEvent(badValue, getConnecteeValue()));
+        propagateRollback();
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.
       }
@@ -706,6 +701,17 @@ public abstract class AbstractValueConnector extends AbstractConnector
       // value of the connector.
       oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
     }
+  }
+
+  /**
+   * Whenever an exception occurs when setting a connector value, some
+   * notifications have to be fired to notify listeneres.
+   */
+  protected void propagateRollback() {
+    Object badValue = getConnectorValue();
+    setConnecteeValue(oldConnectorValue);
+    // propagate the reverse change...
+    fireValueChange(createChangeEvent(badValue, getConnecteeValue()));
   }
 
   /**

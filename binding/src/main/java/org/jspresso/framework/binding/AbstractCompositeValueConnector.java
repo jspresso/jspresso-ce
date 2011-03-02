@@ -26,6 +26,7 @@ import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.ItemSelectionSupport;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 /**
@@ -379,6 +380,23 @@ public abstract class AbstractCompositeValueConnector extends
         .remove(connector.getId());
     if (removedConnector != null) {
       removedConnector.setParentConnector(null);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void propagateRollback() {
+    Object badValue = getConnectorValue();
+    super.propagateRollback();
+    if (badValue == null) {
+      IValueConnector renderingConnector = getRenderingConnector();
+      if (renderingConnector instanceof AbstractValueConnector) {
+        ((AbstractValueConnector) renderingConnector)
+            .fireValueChange(new ValueChangeEvent(renderingConnector, badValue,
+                renderingConnector.getConnectorValue()));
+      }
     }
   }
 }
