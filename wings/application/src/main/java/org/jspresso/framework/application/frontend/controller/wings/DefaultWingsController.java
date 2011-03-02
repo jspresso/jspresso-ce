@@ -31,7 +31,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
@@ -44,7 +43,6 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
-import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.security.LoginUtils;
@@ -504,7 +502,7 @@ public class DefaultWingsController extends
     cardPanel = new SPanel(new SCardLayout());
     cardPanel.setPreferredSize(SDimension.FULLAREA);
     controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
-    
+
     statusBar = new SLabel();
     statusBar.setBorder(new SLineBorder(1));
     statusBar.setVisible(false);
