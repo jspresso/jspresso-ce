@@ -16,6 +16,10 @@ eclipse projects, i.e. in .classpath, add :
 - The file save/open callback API has been improved by adding the file name in the method
 signature.
 
+- Hibernate "list" index column mapping has been modified to avoid duplicates. For instance,
+given a Parent-Child 1-N relationship named children, the previously generated column was
+CHILDREN_SEQ and it is now PARENT_CHILDREN_SEQ. Schemas must be updated accordingly.
+
 
 3.5.0
 =====
