@@ -1051,8 +1051,6 @@ public class DefaultSwingController extends
    */
   @Override
   protected IPreferencesStore createClientPreferenceStore() {
-    return new JavaPreferencesStore(getClass(), new String[] {
-      getName()
-    });
+    return new JavaPreferencesStore();
   }
 }

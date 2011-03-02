@@ -138,8 +138,8 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
-    final List<IEntity> uowEntities = super.cloneInUnitOfWork(entities);
+  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
+    final List<E> uowEntities = super.cloneInUnitOfWork(entities);
     hibernateTemplate.execute(new HibernateCallback() {
 
       public Object doInHibernate(Session session) {
@@ -627,15 +627,14 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the first found entity or null;
    */
-  @SuppressWarnings("unchecked")
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
       EMergeMode mergeMode, Class<? extends T> clazz) {
     List<T> ret = findByCriteria(criteria, null, clazz);
     if (ret != null && !ret.isEmpty()) {
       if (isUnitOfWorkActive()) {
-        return (T) cloneInUnitOfWork(ret.get(0));
+        return cloneInUnitOfWork(ret.get(0));
       } else if (mergeMode != null) {
-        return (T) merge(ret.get(0), mergeMode);
+        return merge(ret.get(0), mergeMode);
       }
       return ret.get(0);
     }

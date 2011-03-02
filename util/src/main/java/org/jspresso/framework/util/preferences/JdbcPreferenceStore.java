@@ -37,14 +37,42 @@ import org.springframework.jdbc.core.RowCallbackHandler;
  */
 public class JdbcPreferenceStore implements IPreferencesStore {
 
+  private String              storePath;
+  private Map<String, String> preferences;
+  private JdbcTemplate        jdbcTemplate;
+
   private String              tableName;
   private String              keyColumnName;
   private String              valueColumnName;
+  private String              pathColumnName;
   private Map<String, String> defaultRestrictions;
-  private JdbcTemplate        jdbcTemplate;
 
-  private Map<String, String> preferences;
+  /**
+   * Constructs a new <code>JdbcPreferenceStore</code> instance.
+   * 
+   */
+  public JdbcPreferenceStore() {
+    this.storePath = "";
+  }
 
+  /**
+   * Sets the path of this store.
+   * 
+    * @param storePath
+    *          the preferences store path.
+   */
+  public void setStorePath(String[] storePath) {
+    if (storePath != null && storePath.length > 0) {
+      StringBuffer buff = new StringBuffer();
+      for (int i = 0; i < storePath.length; i++) {
+        buff.append(storePath[i]).append('.');
+      }
+      this.storePath = buff.toString();
+    } else {
+      this.storePath = "";
+    }
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -66,12 +94,64 @@ public class JdbcPreferenceStore implements IPreferencesStore {
     initIfNecessary();
     String existing = preferences.put(key, value);
     StringBuffer sql = new StringBuffer();
+    String[] restrictionsColumns;
+    String[] restrictionsValues;
+    int[] restrictionsTypes;
+    if (defaultRestrictions != null && defaultRestrictions.size() > 0) {
+      restrictionsColumns = new String[defaultRestrictions.size() + 3];
+      restrictionsValues = new String[defaultRestrictions.size() + 3];
+      restrictionsTypes = new int[defaultRestrictions.size() + 3];
+      int i = 3;
+      for (Map.Entry<String, String> restriction : defaultRestrictions
+          .entrySet()) {
+        restrictionsColumns[i] = restriction.getKey();
+        restrictionsValues[i] = restriction.getValue();
+        restrictionsTypes[i] = Types.VARCHAR;
+        i++;
+      }
+    } else {
+      restrictionsColumns = new String[3];
+      restrictionsValues = new String[3];
+      restrictionsTypes = new int[3];
+    }
+
+    restrictionsColumns[0] = getValueColumnName();
+    restrictionsValues[0] = value;
+    restrictionsTypes[0] = Types.VARCHAR;
+    restrictionsColumns[1] = getKeyColumnName();
+    restrictionsValues[1] = key;
+    restrictionsTypes[1] = Types.VARCHAR;
+    restrictionsColumns[2] = getPathColumnName();
+    restrictionsValues[2] = storePath;
+    restrictionsTypes[2] = Types.VARCHAR;
+
     if (existing != null) {
       sql.append("UPDATE ").append(getTableName()).append(" SET ")
           .append(getValueColumnName()).append(" = ? WHERE ");
+      for (int i = 1; i < restrictionsColumns.length; i++) {
+        if (i > 1) {
+          sql.append(" AND ");
+        }
+        sql.append(restrictionsColumns[i]).append(" = ?");
+      }
     } else {
-      sql.append("INSERT INTO ").append(getTableName());
+      sql.append("INSERT INTO ").append(getTableName()).append(" (");
+      for (int i = 0; i < restrictionsColumns.length; i++) {
+        if (i > 0) {
+          sql.append(", ");
+        }
+        sql.append(restrictionsColumns[i]);
+      }
+      sql.append(") VALUES (");
+      for (int i = 0; i < restrictionsColumns.length; i++) {
+        if (i > 0) {
+          sql.append(", ");
+        }
+        sql.append("?");
+      }
+      sql.append(")");
     }
+    jdbcTemplate.update(sql.toString(), restrictionsValues, restrictionsTypes);
   }
 
   /**
@@ -86,12 +166,14 @@ public class JdbcPreferenceStore implements IPreferencesStore {
     if (existing != null) {
       StringBuffer sql = new StringBuffer("DELETE FROM ")
           .append(getTableName()).append(" WHERE ").append(getKeyColumnName())
-          .append(" = ").append(" ?");
+          .append(" = ? AND ").append(getPathColumnName())
+          .append(" = ?");
+
       String[] restrictionsValues;
       int[] restrictionsTypes;
       if (defaultRestrictions != null && defaultRestrictions.size() > 0) {
-        restrictionsValues = new String[defaultRestrictions.size() + 1];
-        restrictionsTypes = new int[defaultRestrictions.size() + 1];
+        restrictionsValues = new String[defaultRestrictions.size() + 2];
+        restrictionsTypes = new int[defaultRestrictions.size() + 2];
         int i = 1;
         for (Map.Entry<String, String> restriction : defaultRestrictions
             .entrySet()) {
@@ -101,11 +183,13 @@ public class JdbcPreferenceStore implements IPreferencesStore {
           i++;
         }
       } else {
-        restrictionsValues = new String[1];
-        restrictionsTypes = new int[1];
+        restrictionsValues = new String[2];
+        restrictionsTypes = new int[2];
       }
       restrictionsValues[0] = key;
       restrictionsTypes[0] = Types.VARCHAR;
+      restrictionsValues[1] = storePath;
+      restrictionsTypes[1] = Types.VARCHAR;
       jdbcTemplate
           .update(sql.toString(), restrictionsValues, restrictionsTypes);
     }
@@ -115,16 +199,16 @@ public class JdbcPreferenceStore implements IPreferencesStore {
     if (preferences == null) {
       preferences = new HashMap<String, String>();
 
-      StringBuffer sql = new StringBuffer("SELECT ").append(getTableName())
-          .append(".").append(getKeyColumnName()).append(", ")
-          .append(getValueColumnName()).append(" FROM ").append(getTableName());
+      StringBuffer sql = new StringBuffer("SELECT ").append(getKeyColumnName())
+          .append(", ").append(getValueColumnName()).append(" FROM ")
+          .append(getTableName()).append(" WHERE ").append(getPathColumnName())
+          .append(" = ?");
       String[] restrictionsValues;
       int[] restrictionsTypes;
       if (defaultRestrictions != null && defaultRestrictions.size() > 0) {
-        sql.append(" WHERE ");
-        restrictionsValues = new String[defaultRestrictions.size()];
-        restrictionsTypes = new int[defaultRestrictions.size()];
-        int i = 0;
+        restrictionsValues = new String[defaultRestrictions.size() + 1];
+        restrictionsTypes = new int[defaultRestrictions.size() + 1];
+        int i = 1;
         for (Map.Entry<String, String> restriction : defaultRestrictions
             .entrySet()) {
           restrictionsValues[i] = restriction.getValue();
@@ -136,9 +220,11 @@ public class JdbcPreferenceStore implements IPreferencesStore {
           i++;
         }
       } else {
-        restrictionsValues = new String[0];
-        restrictionsTypes = new int[0];
+        restrictionsValues = new String[1];
+        restrictionsTypes = new int[1];
       }
+      restrictionsValues[0] = storePath;
+      restrictionsTypes[0] = Types.VARCHAR;
       jdbcTemplate.query(sql.toString(), restrictionsValues, restrictionsTypes,
           new RowCallbackHandler() {
 
@@ -165,8 +251,8 @@ public class JdbcPreferenceStore implements IPreferencesStore {
    * @return the tableName.
    */
   public String getTableName() {
-    if (keyColumnName == null) {
-      keyColumnName = "PREFERENCES";
+    if (tableName == null) {
+      tableName = "PREFERENCES";
     }
     return tableName;
   }
@@ -216,11 +302,11 @@ public class JdbcPreferenceStore implements IPreferencesStore {
   /**
    * Sets the prefKeyColumnName.
    * 
-   * @param prefKeyColumnName
+   * @param keyColumnName
    *          the prefKeyColumnName to set.
    */
-  public void setKeyColumnName(String prefKeyColumnName) {
-    this.keyColumnName = prefKeyColumnName;
+  public void setKeyColumnName(String keyColumnName) {
+    this.keyColumnName = keyColumnName;
   }
 
   /**
@@ -229,8 +315,8 @@ public class JdbcPreferenceStore implements IPreferencesStore {
    * @return the prefValueColumnName.
    */
   protected String getValueColumnName() {
-    if (keyColumnName == null) {
-      keyColumnName = "PREFERENCE_VALUE";
+    if (valueColumnName == null) {
+      valueColumnName = "PREFERENCE_VALUE";
     }
     return valueColumnName;
   }
@@ -238,11 +324,33 @@ public class JdbcPreferenceStore implements IPreferencesStore {
   /**
    * Sets the prefValueColumnName.
    * 
-   * @param prefValueColumnName
+   * @param valueColumnName
    *          the prefValueColumnName to set.
    */
-  public void setValueColumnName(String prefValueColumnName) {
-    this.valueColumnName = prefValueColumnName;
+  public void setValueColumnName(String valueColumnName) {
+    this.valueColumnName = valueColumnName;
+  }
+
+  /**
+   * Sets the pathColumnName.
+   * 
+   * @param pathColumnName
+   *          the pathColumnName to set.
+   */
+  public void setPathColumnName(String pathColumnName) {
+    this.pathColumnName = pathColumnName;
+  }
+
+  /**
+   * Gets the pathColumnName.
+   * 
+   * @return the pathColumnName.
+   */
+  protected String getPathColumnName() {
+    if (pathColumnName == null) {
+      pathColumnName = "PREFERENCE_PATH";
+    }
+    return pathColumnName;
   }
 
 }

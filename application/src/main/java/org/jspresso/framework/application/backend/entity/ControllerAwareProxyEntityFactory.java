@@ -44,12 +44,11 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T newEntity = super.createEntityInstance(entityContract);
     if (getBackendController().isUnitOfWorkActive()) {
-      newEntity = (T) getBackendController().cloneInUnitOfWork(newEntity);
+      newEntity = getBackendController().cloneInUnitOfWork(newEntity);
     }
     getBackendController().registerEntity(newEntity, true);
     return newEntity;

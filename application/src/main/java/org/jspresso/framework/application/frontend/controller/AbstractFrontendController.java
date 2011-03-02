@@ -145,6 +145,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private static final String                   UP_SEP            = "!";
 
   private IPreferencesStore                     clientPreferenceStore;
+  private IPreferencesStore                     userPreferenceStore;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -818,7 +819,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the key under which the preference as been stored.
    * @return the stored preference or null.
    */
-  protected String getClientPreference(String key) {
+  public String getClientPreference(String key) {
     if (getClientPreferenceStore() != null) {
       return getClientPreferenceStore().getPreference(key);
     }
@@ -833,7 +834,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param value
    *          the value of the preference to be stored.
    */
-  protected void putClientPreference(String key, String value) {
+  public void putClientPreference(String key, String value) {
     if (getClientPreferenceStore() != null) {
       getClientPreferenceStore().putPreference(key, value);
     }
@@ -845,9 +846,49 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param key
    *          the key under which the preference is stored.
    */
-  protected void removeClientPreference(String key) {
+  public void removeClientPreference(String key) {
     if (getClientPreferenceStore() != null) {
       getClientPreferenceStore().removePreference(key);
+    }
+  }
+
+  /**
+   * Reads a user preference.
+   * 
+   * @param key
+   *          the key under which the preference as been stored.
+   * @return the stored preference or null.
+   */
+  public String getUserPreference(String key) {
+    if (getUserPreferenceStore() != null) {
+      return getUserPreferenceStore().getPreference(key);
+    }
+    return null;
+  }
+
+  /**
+   * Stores a user preference.
+   * 
+   * @param key
+   *          the key under which the preference as to be stored.
+   * @param value
+   *          the value of the preference to be stored.
+   */
+  public void putUserPreference(String key, String value) {
+    if (getUserPreferenceStore() != null) {
+      getUserPreferenceStore().putPreference(key, value);
+    }
+  }
+
+  /**
+   * Deletes a user preference.
+   * 
+   * @param key
+   *          the key under which the preference is stored.
+   */
+  public void removeUserPreference(String key) {
+    if (getUserPreferenceStore() != null) {
+      getUserPreferenceStore().removePreference(key);
     }
   }
 
@@ -1140,6 +1181,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
       uph.clear();
     }
     getBackendController().getApplicationSession().setSubject(subject);
+    if (getUserPreferenceStore() != null) {
+      getUserPreferenceStore().setStorePath(
+          new String[] {
+              getName(),
+              getBackendController().getApplicationSession().getPrincipal()
+                  .getName()
+          });
+    }
+
     String userPreferredLanguageCode = (String) getBackendController()
         .getApplicationSession().getPrincipal()
         .getCustomProperty(UserPrincipal.LANGUAGE_PROPERTY);
@@ -1436,6 +1486,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferenceStore() {
     if (clientPreferenceStore == null) {
       clientPreferenceStore = createClientPreferenceStore();
+      clientPreferenceStore.setStorePath(new String[] {
+        getName()
+      });
     }
     return clientPreferenceStore;
   }
@@ -1446,4 +1499,33 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the clientPreferenceStore.
    */
   protected abstract IPreferencesStore createClientPreferenceStore();
+
+  /**
+   * Sets the clientPreferenceStore.
+   * 
+   * @param clientPreferenceStore
+   *          the clientPreferenceStore to set.
+   */
+  public void setClientPreferenceStore(IPreferencesStore clientPreferenceStore) {
+    this.clientPreferenceStore = clientPreferenceStore;
+  }
+
+  /**
+   * Gets the user preferences store.
+   * 
+   * @return the user preferences store.
+   */
+  protected synchronized IPreferencesStore getUserPreferenceStore() {
+    return userPreferenceStore;
+  }
+
+  /**
+   * Sets the user preference store.
+   * 
+   * @param userPreferenceStore
+   *          the userPreferenceStore to set.
+   */
+  public void setUserPreferenceStore(IPreferencesStore userPreferenceStore) {
+    this.userPreferenceStore = userPreferenceStore;
+  }
 }

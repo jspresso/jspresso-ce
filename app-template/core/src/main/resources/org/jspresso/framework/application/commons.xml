@@ -141,7 +141,7 @@
   <!-- The controllers. -->
 
   <!-- The controllers. Controllers are not singleton since they can hold some session state. -->
-  <bean abstract="true" id="abstractFrontController" class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
+  <bean abstract="true" id="abstractFrontControllerBase" class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
     <property name="mvcBinder" ref="mvcBinder" />
     <property name="translationProvider" ref="translationProvider" />
     <property name="viewFactory" ref="viewFactory" />
@@ -151,6 +151,8 @@
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
     <property name="exitAction" ref="exitFrontAction" />
   </bean>
+
+  <bean abstract="true" id="abstractFrontController" parent="abstractFrontControllerBase"/>
 
   <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">
     <property name="okYesIconImageURL" value="classpath:org/jspresso/framework/application/images/ok-48x48.png" />

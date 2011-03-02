@@ -440,7 +440,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     </#if>
     <#if hibernateCollectionType="list">
    * @hibernate.list-index
-   *           column = "${propSqlName}_SEQ"
+   *           column = "${compSqlName}_${propSqlName}_SEQ"
     </#if>
   </#if>
    * @return the ${propertyName}.
@@ -529,6 +529,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
+   *           not-null = "true"
           </#if>
         <#else>
           <#if composition>

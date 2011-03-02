@@ -152,7 +152,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IEntity cloneInUnitOfWork(IEntity entity) {
+  public <E extends IEntity> E cloneInUnitOfWork(E entity) {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
           "Cannot use a unit of work that has not begun.");
@@ -163,17 +163,17 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
+  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
-    List<IEntity> uowEntities = new ArrayList<IEntity>();
+    List<E> uowEntities = new ArrayList<E>();
     // Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = new
     // HashMap<Class<?>, Map<Serializable, IEntity>>();
     Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = unitOfWork
         .getRegisteredEntities();
-    for (IEntity entity : entities) {
+    for (E entity : entities) {
       uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
     }
     return uowEntities;
@@ -465,17 +465,18 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IEntity merge(IEntity entity, EMergeMode mergeMode) {
+  public <E extends IEntity> E merge(E entity, EMergeMode mergeMode) {
     return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<IEntity> merge(List<IEntity> entities, EMergeMode mergeMode) {
+  public <E extends IEntity> List<E> merge(List<E> entities,
+      EMergeMode mergeMode) {
     Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-    List<IEntity> mergedList = new ArrayList<IEntity>();
-    for (IEntity entity : entities) {
+    List<E> mergedList = new ArrayList<E>();
+    for (E entity : entities) {
       mergedList.add(merge(entity, mergeMode, alreadyMerged));
     }
     return mergedList;
@@ -867,18 +868,18 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   @SuppressWarnings("unchecked")
-  private IEntity cloneInUnitOfWork(IEntity entity,
+  private <E extends IEntity> E cloneInUnitOfWork(E entity,
       Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
     Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
         .getComponentContract());
     IComponentDescriptor<?> entityDescriptor = getEntityFactory()
         .getComponentDescriptor(entity.getComponentContract());
-    IEntity uowEntity = null;
+    E uowEntity = null;
     if (contractBuffer == null) {
       contractBuffer = new HashMap<Serializable, IEntity>();
       alreadyCloned.put(entity.getComponentContract(), contractBuffer);
     } else {
-      uowEntity = contractBuffer.get(entity.getId());
+      uowEntity = (E) contractBuffer.get(entity.getId());
       if (uowEntity != null) {
         return uowEntity;
       }
@@ -998,20 +999,20 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   @SuppressWarnings("unchecked")
-  private IEntity merge(IEntity entity, final EMergeMode mergeMode,
+  private <E extends IEntity> E merge(E entity, final EMergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
     if (entity == null) {
       return null;
     }
     if (alreadyMerged.containsKey(entity)) {
-      return alreadyMerged.get(entity);
+      return (E) alreadyMerged.get(entity);
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       if (mergeMode != EMergeMode.MERGE_EAGER) {
         dirtRecorder.setEnabled(false);
       }
-      IEntity registeredEntity = getRegisteredEntity(
+      E registeredEntity = (E) getRegisteredEntity(
           entity.getComponentContract(), entity.getId());
       boolean newlyRegistered = false;
       if (registeredEntity == null) {

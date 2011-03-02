@@ -66,23 +66,27 @@ public interface IBackendController extends IController,
    * Registers an entity (actually a clone of it) and all its graph as taking
    * part in the unit of work.
    * 
+   * @param <E>
+   *          the actual entity type.
    * @param entity
    *          the entity to make part of the unit of work.
    * @return the entity (clone of the original one) actually registered in the
    *         unit of work.
    */
-  IEntity cloneInUnitOfWork(IEntity entity);
+  <E extends IEntity> E cloneInUnitOfWork(E entity);
 
   /**
    * Registers an list of entities (actually a clone of it) and all their graphs
    * as taking part in the unit of work.
    * 
+   * @param <E>
+   *          the actual entity type.
    * @param entities
    *          the entities to make part of the unit of work.
    * @return the entity (clone of the original one) actually registered in the
    *         unit of work.
    */
-  List<IEntity> cloneInUnitOfWork(List<IEntity> entities);
+  <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities);
 
   /**
    * Commits the current unit of work.
@@ -151,12 +155,12 @@ public interface IBackendController extends IController,
   /**
    * Lazily creates a module connector.
    * 
-   * @param module the module to create (or get) the connector for.
+   * @param module
+   *          the module to create (or get) the connector for.
    * @return the module connector.
    */
   IValueConnector getModuleConnector(Module module);
-  
-  
+
   /**
    * Whenever a property might not be fully initialized, this method performs
    * all necessary complementary initializations..
@@ -256,13 +260,15 @@ public interface IBackendController extends IController,
    * session. The entity passed as parameter is considered not dirty so the
    * application dirty states are updated accordingly.
    * 
+   * @param <E>
+   *          the actual entity subclass.
    * @param entity
    *          the entity to merge.
    * @param mergeMode
    *          the merge mmode to be used.
    * @return the entity registered in the application session.
    */
-  IEntity merge(IEntity entity, EMergeMode mergeMode);
+  <E extends IEntity> E merge(E entity, EMergeMode mergeMode);
 
   /**
    * Merges a list of entities in this application session. If the application
@@ -272,13 +278,15 @@ public interface IBackendController extends IController,
    * application session. The entity passed as parameter is considered not dirty
    * so the application dirty states are updated accordingly.
    * 
+   * @param <E>
+   *          the actual entity subclass.
    * @param entities
    *          the list of entities to merge.
    * @param mergeMode
    *          the merge mmode to be used.
    * @return the merged entity list.
    */
-  List<IEntity> merge(List<IEntity> entities, EMergeMode mergeMode);
+  <E extends IEntity> List<E> merge(List<E> entities, EMergeMode mergeMode);
 
   /**
    * Gives a chance to the session to perform any pending operation.

@@ -30,15 +30,43 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
  */
 public class CookiePreferencesStore implements IPreferencesStore {
 
+  private String storePath;
+
+  /**
+   * Constructs a new <code>CookiePreferencesStore</code> instance.
+   */
+  public CookiePreferencesStore() {
+    this.storePath = "";
+  }
+
+  /**
+   * Sets the path of this store.
+   * 
+   * @param storePath
+   *          the preferences store path.
+   */
+  public void setStorePath(String[] storePath) {
+    if (storePath != null && storePath.length > 0) {
+      StringBuffer buff = new StringBuffer();
+      for (int i = 0; i < storePath.length; i++) {
+        buff.append(storePath[i]).append('.');
+      }
+      this.storePath = buff.toString();
+    } else {
+      this.storePath = "";
+    }
+  }
+
   /**
    * {@inheritDoc}
    */
   public String getPreference(String key) {
+    String completeKey = storePath + key;
     if (HttpRequestHolder.getServletRequest() != null) {
       Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
       if (cookies != null) {
         for (int i = 0; i < cookies.length; i++) {
-          if (key.equals(cookies[i].getName())) {
+          if (completeKey.equals(cookies[i].getName())) {
             return cookies[i].getValue();
           }
         }
@@ -51,8 +79,9 @@ public class CookiePreferencesStore implements IPreferencesStore {
    * {@inheritDoc}
    */
   public void putPreference(String key, String value) {
+    String completeKey = storePath + key;
     if (HttpRequestHolder.getServletResponse() != null) {
-      Cookie cookie = new Cookie(key, value);
+      Cookie cookie = new Cookie(completeKey, value);
       cookie.setMaxAge(Integer.MAX_VALUE);
       HttpRequestHolder.getServletResponse().addCookie(cookie);
     }

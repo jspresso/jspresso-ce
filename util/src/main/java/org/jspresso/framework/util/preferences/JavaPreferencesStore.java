@@ -32,16 +32,21 @@ public class JavaPreferencesStore implements IPreferencesStore {
 
   /**
    * Constructs a new <code>JavaPreferencesStore</code> instance.
-   * 
-   * @param root
-   *          the root class from which the Java preferences entry is retrieved.
-   * @param nodePath
-   *          the preferences node path.
    */
-  public JavaPreferencesStore(Class<?> root, String[] nodePath) {
-    preferences = Preferences.userNodeForPackage(root);
-    for (int i = 0; i < nodePath.length; i++) {
-      preferences = preferences.node(nodePath[i]);
+  public JavaPreferencesStore() {
+    preferences = Preferences.userNodeForPackage(getClass());
+  }
+
+  /**
+   * Sets the path of this store.
+   * 
+   * @param storePath
+   *          the preferences store path.
+   */
+  public void setStorePath(String[] storePath) {
+    preferences = Preferences.userNodeForPackage(getClass());
+    for (int i = 0; i < storePath.length; i++) {
+      preferences = preferences.node(storePath[i]);
     }
   }
 
