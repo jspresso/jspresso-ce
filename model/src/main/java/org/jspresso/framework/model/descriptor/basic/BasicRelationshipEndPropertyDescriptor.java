@@ -155,13 +155,17 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    */
   public void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd) {
+    // We only ant to actually update reverse relation end if it is an 'actual'
+    // property descriptor, e.g. not a compound one used only for the view.
     if (this.reverseRelationEnd != reverseRelationEnd) {
-      if (this.reverseRelationEnd != null) {
+      if (getName() != null && getName().indexOf(".") < 0
+          && this.reverseRelationEnd != null) {
         this.reverseRelationEnd.setReverseRelationEnd(null);
       }
       this.reverseRelationEnd = reverseRelationEnd;
-      if (reverseRelationEnd != null) {
-        reverseRelationEnd.setReverseRelationEnd(this);
+      if (getName() != null && getName().indexOf(".") < 0
+          && this.reverseRelationEnd != null) {
+        this.reverseRelationEnd.setReverseRelationEnd(this);
       }
     }
   }
