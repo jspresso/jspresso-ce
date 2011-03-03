@@ -41,6 +41,8 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   private String                             fkName;
   private IRelationshipEndPropertyDescriptor reverseRelationEnd;
 
+  private IRelationshipEndPropertyDescriptor tempReverseRelationEnd;
+
   /**
    * {@inheritDoc}
    */
@@ -155,18 +157,35 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    */
   public void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd) {
+    if (getName() == null) {
+      // store it until we have a name available.
+      tempReverseRelationEnd = reverseRelationEnd;
+      return;
+    }
     // We only ant to actually update reverse relation end if it is an 'actual'
     // property descriptor, e.g. not a compound one used only for the view.
     if (this.reverseRelationEnd != reverseRelationEnd) {
-      if (getName() != null && getName().indexOf(".") < 0
-          && this.reverseRelationEnd != null) {
+      if (getName().indexOf(".") < 0 && this.reverseRelationEnd != null) {
         this.reverseRelationEnd.setReverseRelationEnd(null);
       }
       this.reverseRelationEnd = reverseRelationEnd;
-      if (getName() != null && getName().indexOf(".") < 0
-          && this.reverseRelationEnd != null) {
+      if (getName().indexOf(".") < 0 && this.reverseRelationEnd != null) {
         this.reverseRelationEnd.setReverseRelationEnd(this);
       }
+    }
+  }
+
+  /**
+   * Assign reverse temp relation end if set.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setName(String name) {
+    super.setName(name);
+    if (tempReverseRelationEnd != null) {
+      setReverseRelationEnd(tempReverseRelationEnd);
+      tempReverseRelationEnd = null;
     }
   }
 
