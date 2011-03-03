@@ -442,9 +442,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (getModelDescriptor() != null) {
         Class<?> expectedType = ((IPropertyDescriptor) getModelDescriptor())
             .getModelType();
-        if (expectedType.equals(aValue.getClass())) {
+        if (expectedType.isAssignableFrom(aValue.getClass())) {
           setConnecteeValue(aValue);
         } else {
+          if (Boolean.TYPE.equals(expectedType)) {
+            expectedType = Boolean.class;
+          }
           try {
             Object adaptedValue = expectedType.getConstructor(
                 new Class<?>[] {String.class}).newInstance(

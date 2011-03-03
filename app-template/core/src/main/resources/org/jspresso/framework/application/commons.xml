@@ -173,7 +173,7 @@
 
 
 
-  <bean abstract="true" id="abstractBackController" class="org.jspresso.framework.application.backend.AbstractBackendController">
+  <bean abstract="true" id="abstractBackControllerBase" class="org.jspresso.framework.application.backend.AbstractBackendController">
     <property name="entityFactory" ref="sessionAwareEntityFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="translationProvider" ref="translationProvider" />
@@ -190,6 +190,8 @@
     </property>
     <property name="transactionTemplate" ref="transactionTemplate" />
   </bean>
+
+  <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase"/>
 
   <!-- Utility beans for model. -->
   <bean id="BasicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">

@@ -32,6 +32,7 @@ import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
@@ -39,6 +40,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * Creates a query component to be used in filters or list of values. The
@@ -176,6 +178,40 @@ public class CreateQueryComponentAction extends BackendAction {
               }
             } else {
               initValue = initializedAttribute.getValue();
+            }
+            if (initValue != null) {
+              IPropertyDescriptor initializedPropertyDescriptor = queryComponent
+                  .getComponentDescriptor().getPropertyDescriptor(
+                      initializedAttribute.getKey());
+
+              if (initializedPropertyDescriptor != null) {
+                Class<?> expectedType = initializedPropertyDescriptor
+                    .getModelType();
+                if (!expectedType.isAssignableFrom(initValue.getClass())) {
+                  if (Boolean.TYPE.equals(expectedType)) {
+                    expectedType = Boolean.class;
+                  }
+                  try {
+                    initValue = expectedType.getConstructor(new Class<?>[] {
+                      String.class
+                    }).newInstance(new Object[] {
+                      initValue.toString()
+                    });
+                  } catch (IllegalArgumentException ex) {
+                    throw new NestedRuntimeException(ex,
+                        "Invalid initialization mapping for property "
+                            + initializedAttribute.getKey());
+                  } catch (SecurityException ex) {
+                    throw new NestedRuntimeException(ex,
+                        "Invalid initialization mapping for property "
+                            + initializedAttribute.getKey());
+                  } catch (InstantiationException ex) {
+                    throw new NestedRuntimeException(ex,
+                        "Invalid initialization mapping for property "
+                            + initializedAttribute.getKey());
+                  }
+                }
+              }
             }
             qCompAccessor.setValue(queryComponent, initValue);
           } catch (IllegalAccessException ex) {
