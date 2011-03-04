@@ -27,7 +27,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IAutomationSource;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -38,9 +38,9 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * @author Vincent Vandenschrick
  */
 public class RemoteCompositeConnector extends BasicCompositeConnector implements
-    IRemotePeer, IRemoteStateOwner, IAutomationSource {
+    IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
-  private String                    automationSeed;
+  private String                    permIdSeed;
   private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private RemoteCompositeValueState state;
@@ -93,13 +93,13 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   }
 
   /**
-   * Gets the automationSeed.
+   * Gets the permIdSeed.
    * 
-   * @return the automationSeed.
+   * @return the permIdSeed.
    */
-  public String getAutomationSeed() {
-    if (automationSeed != null) {
-      return automationSeed;
+  public String getPermIdSeed() {
+    if (permIdSeed != null) {
+      return permIdSeed;
     }
     return getId();
   }
@@ -133,13 +133,13 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   }
 
   /**
-   * Sets the automationSeed.
+   * Sets the permIdSeed.
    * 
-   * @param automationSeed
-   *          the automationSeed to set.
+   * @param permIdSeed
+   *          the permIdSeed to set.
    */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
+  public void setPermIdSeed(String permIdSeed) {
+    this.permIdSeed = permIdSeed;
   }
 
   /**
@@ -163,7 +163,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    */
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
-        .createRemoteCompositeValueState(getGuid(), getAutomationSeed());
+        .createRemoteCompositeValueState(getGuid(), getPermIdSeed());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (String connectorKey : getChildConnectorKeys()) {
       IValueConnector childConnector = getChildConnector(connectorKey);

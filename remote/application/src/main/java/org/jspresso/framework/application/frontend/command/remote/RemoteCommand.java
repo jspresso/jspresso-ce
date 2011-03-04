@@ -30,16 +30,16 @@ public abstract class RemoteCommand implements Serializable {
 
   private static final long serialVersionUID = 4102568065040838006L;
 
-  private String            automationId;
+  private String            permId;
   private String            targetPeerGuid;
 
   /**
-   * Gets the automationId.
+   * Gets the permId.
    * 
-   * @return the automationId.
+   * @return the permId.
    */
-  public String getAutomationId() {
-    return automationId;
+  public String getPermId() {
+    return permId;
   }
 
   /**
@@ -52,13 +52,13 @@ public abstract class RemoteCommand implements Serializable {
   }
 
   /**
-   * Sets the automationId.
+   * Sets the permId.
    * 
-   * @param automationId
-   *          the automationId to set.
+   * @param permId
+   *          the permId to set.
    */
-  public void setAutomationId(String automationId) {
-    this.automationId = automationId;
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
   /**

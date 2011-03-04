@@ -31,34 +31,34 @@ public interface IRemoteValueStateFactory {
    * 
    * @param guid
    *          the state guid.
-   * @param automationSeed
+   * @param permIdSeed
    *          the seed to generate automation ids.
    * @return the created <code>RemoteValueState</code>.
    */
   RemoteCompositeValueState createRemoteCompositeValueState(String guid,
-      String automationSeed);
+      String permIdSeed);
 
   /**
    * Creates a new <code>RemoteValueState</code> instance.
    * 
    * @param guid
    *          the state guid.
-   * @param automationSeed
+   * @param permIdSeed
    *          the seed to generate automation ids.
    * @return the created <code>RemoteValueState</code>.
    */
-  RemoteValueState createRemoteValueState(String guid, String automationSeed);
+  RemoteValueState createRemoteValueState(String guid, String permIdSeed);
 
   /**
    * Creates a new <code>RemoteFormttedValueState</code> instance.
    * 
    * @param guid
    *          the state guid.
-   * @param automationSeed
+   * @param permIdSeed
    *          the seed to generate automation ids.
    * @return the created <code>RemoteFormattedValueState</code>.
    */
   RemoteFormattedValueState createRemoteFormattedValueState(String guid,
-      String automationSeed);
+      String permIdSeed);
 
 }

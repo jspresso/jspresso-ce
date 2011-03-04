@@ -19,27 +19,26 @@
 package org.jspresso.framework.util.automation;
 
 /**
- * Source of automation ids used for record / playback.
+ * Components implementing this interface can provide a permanent id for cross
+ * application run retrieval.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IAutomationSource {
+public interface IPermIdentifiable {
 
   /**
-   * Gets a seed to generate fixed ids to mark the generated component. This id
-   * can serve to record/replay command sequences.
+   * Gets the permId.
    * 
-   * @return a fixed id to mark the generated component.
+   * @return the permId.
    */
-  String getAutomationSeed();
+  String getPermId();
 
   /**
-   * Sets a seed to generate fixed ids to mark the generated component. This id
-   * can serve to record/replay command sequences.
+   * Sets the permId.
    * 
-   * @param automationSeed
-   *          a fixed id to mark the generated component.
+   * @param permId
+   *          the permId.
    */
-  void setAutomationSeed(String automationSeed);
+  void setPermId(String permId);
 }

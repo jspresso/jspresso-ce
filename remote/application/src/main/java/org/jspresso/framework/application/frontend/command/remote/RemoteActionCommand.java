@@ -29,7 +29,7 @@ public class RemoteActionCommand extends RemoteCommand {
   private static final long serialVersionUID = -3055572538206728529L;
 
   private String            parameter;
-  private String            viewStateAutomationId;
+  private String            viewStatePermId;
   private String            viewStateGuid;
 
   /**
@@ -42,12 +42,12 @@ public class RemoteActionCommand extends RemoteCommand {
   }
 
   /**
-   * Gets the viewStateAutomationId.
+   * Gets the viewStatePermId.
    * 
-   * @return the viewStateAutomationId.
+   * @return the viewStatePermId.
    */
-  public String getViewStateAutomationId() {
-    return viewStateAutomationId;
+  public String getViewStatePermId() {
+    return viewStatePermId;
   }
 
   /**
@@ -70,13 +70,13 @@ public class RemoteActionCommand extends RemoteCommand {
   }
 
   /**
-   * Sets the viewStateAutomationId.
+   * Sets the viewStatePermId.
    * 
-   * @param viewStateAutomationId
-   *          the viewStateAutomationId to set.
+   * @param viewStatePermId
+   *          the viewStatePermId to set.
    */
-  public void setViewStateAutomationId(String viewStateAutomationId) {
-    this.viewStateAutomationId = viewStateAutomationId;
+  public void setViewStatePermId(String viewStatePermId) {
+    this.viewStatePermId = viewStatePermId;
   }
 
   /**

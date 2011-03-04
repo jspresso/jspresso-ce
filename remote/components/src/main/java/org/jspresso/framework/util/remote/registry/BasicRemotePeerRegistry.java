@@ -29,7 +29,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.ReferenceMap;
-import org.jspresso.framework.util.automation.IAutomatable;
+import org.jspresso.framework.util.automation.IPermIdentifiable;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -81,9 +81,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
-  public IRemotePeer getRegisteredForAutomationId(String automationId) {
-    if (automationId != null) {
-      return getRegistered(automationBackingStore.get(automationId));
+  public IRemotePeer getRegisteredForPermId(String permId) {
+    if (permId != null) {
+      return getRegistered(automationBackingStore.get(permId));
     }
     return null;
   }
@@ -102,10 +102,10 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     if (!backingStore.containsKey(remotePeer.getGuid())) {
       backingStore.put(remotePeer.getGuid(), remotePeer);
     }
-    if (remotePeer instanceof IAutomatable) {
-      String automationId = ((IAutomatable) remotePeer).getAutomationId();
-      if (automationId != null) {
-        automationBackingStore.put(automationId, remotePeer.getGuid());
+    if (remotePeer instanceof IPermIdentifiable) {
+      String permId = ((IPermIdentifiable) remotePeer).getPermId();
+      if (permId != null) {
+        automationBackingStore.put(permId, remotePeer.getGuid());
       }
     }
     fireRemotePeerAdded(remotePeer);
@@ -114,15 +114,15 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
-  public String registerAutomationId(String automationsSeed, String guid) {
+  public String registerPermId(String automationsSeed, String guid) {
     if (automationEnabled) {
       String seed = automationsSeed;
       if (seed == null) {
         seed = "generic";
       }
-      String automationId = computeNextAutomationId(seed);
-      automationBackingStore.put(automationId, guid);
-      return automationId;
+      String permId = computeNextPermId(seed);
+      automationBackingStore.put(permId, guid);
+      return permId;
     }
     return null;
   }
@@ -132,16 +132,16 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    */
   public void unregister(String guid) {
     IRemotePeer remotePeer = backingStore.remove(guid);
-    if (remotePeer instanceof IAutomatable) {
-      String automationId = ((IAutomatable) remotePeer).getAutomationId();
-      if (automationId != null) {
-        automationBackingStore.remove(automationId);
+    if (remotePeer instanceof IPermIdentifiable) {
+      String permId = ((IPermIdentifiable) remotePeer).getPermId();
+      if (permId != null) {
+        automationBackingStore.remove(permId);
       }
     }
     fireRemotePeerRemoved(guid);
   }
 
-  private synchronized String computeNextAutomationId(String seed) {
+  private synchronized String computeNextPermId(String seed) {
     if (seed == null) {
       return null;
     }

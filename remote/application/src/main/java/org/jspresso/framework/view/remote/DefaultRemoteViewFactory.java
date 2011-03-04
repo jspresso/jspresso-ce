@@ -104,7 +104,7 @@ import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IAutomationSource;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
@@ -1156,7 +1156,7 @@ public class DefaultRemoteViewFactory extends
         .generateGUID());
     cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
         .createRemoteValueState(getGuidGenerator().generateGUID(),
-            viewDescriptor.getAutomationSeed()));
+            viewDescriptor.getPermIdSeed()));
     return cardContainer;
   }
 
@@ -2049,12 +2049,12 @@ public class DefaultRemoteViewFactory extends
       IViewDescriptor descriptor, IValueConnector connector) {
     IView<RComponent> view = super.constructView(viewComponent, descriptor,
         connector);
-    if (connector instanceof IAutomationSource) {
-      String automationSeed = descriptor.getAutomationSeed();
-      if (automationSeed == null) {
-        automationSeed = descriptor.getName();
+    if (connector instanceof IPermIdSource) {
+      String permIdSeed = descriptor.getPermIdSeed();
+      if (permIdSeed == null) {
+        permIdSeed = descriptor.getName();
       }
-      ((IAutomationSource) connector).setAutomationSeed(automationSeed);
+      ((IPermIdSource) connector).setPermIdSeed(permIdSeed);
     }
     if (viewComponent.getState() == null) {
       viewComponent.setState(((IRemoteStateOwner) connector).getState());

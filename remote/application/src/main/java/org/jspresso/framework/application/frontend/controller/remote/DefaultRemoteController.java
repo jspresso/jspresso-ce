@@ -218,8 +218,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public IRemotePeer getRegisteredForAutomationId(String automationId) {
-    return remotePeerRegistry.getRegisteredForAutomationId(automationId);
+  public IRemotePeer getRegisteredForPermId(String permId) {
+    return remotePeerRegistry.getRegisteredForPermId(permId);
   }
 
   /**
@@ -430,8 +430,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public String registerAutomationId(String automationsSeed, String guid) {
-    return remotePeerRegistry.registerAutomationId(automationsSeed, guid);
+  public String registerPermId(String automationsSeed, String guid) {
+    return remotePeerRegistry.registerPermId(automationsSeed, guid);
   }
 
   /**
@@ -660,8 +660,8 @@ public class DefaultRemoteController extends
           ((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
     } else {
       IRemotePeer targetPeer = null;
-      if (command.getAutomationId() != null) {
-        targetPeer = getRegisteredForAutomationId(command.getAutomationId());
+      if (command.getPermId() != null) {
+        targetPeer = getRegisteredForPermId(command.getPermId());
       }
       if (targetPeer == null) {
         targetPeer = getRegistered(command.getTargetPeerGuid());
@@ -714,10 +714,10 @@ public class DefaultRemoteController extends
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
         String viewStateGuid = null;
-        String viewStateAutomationId = ((RemoteActionCommand) command)
-            .getViewStateAutomationId();
-        if (viewStateAutomationId != null) {
-          IRemotePeer viewPeer = getRegisteredForAutomationId(viewStateAutomationId);
+        String viewStatePermId = ((RemoteActionCommand) command)
+            .getViewStatePermId();
+        if (viewStatePermId != null) {
+          IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
           if (viewPeer != null) {
             viewStateGuid = viewPeer.getGuid();
           }
@@ -743,10 +743,10 @@ public class DefaultRemoteController extends
         context.put(IQueryComponent.ORDERING_PROPERTIES,
             typedOrderingProperties);
         String viewStateGuid = null;
-        String viewStateAutomationId = ((RemoteSortCommand) command)
-            .getViewStateAutomationId();
-        if (viewStateAutomationId != null) {
-          IRemotePeer viewPeer = getRegisteredForAutomationId(viewStateAutomationId);
+        String viewStatePermId = ((RemoteSortCommand) command)
+            .getViewStatePermId();
+        if (viewStatePermId != null) {
+          IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
           if (viewPeer != null) {
             viewStateGuid = viewPeer.getGuid();
           }

@@ -140,13 +140,13 @@ public class RemoteActionFactory extends
     }
     ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
         actionHandler, view);
-    String automationSeed = action.getAutomationSeed();
-    if (automationSeed == null && action instanceof IDisplayableAction) {
-      automationSeed = ((IDisplayableAction) action).getName();
+    String permIdSeed = action.getPermIdSeed();
+    if (permIdSeed == null && action instanceof IDisplayableAction) {
+      permIdSeed = ((IDisplayableAction) action).getName();
     }
-    String automationId = remotePeerRegistry.registerAutomationId(
-        automationSeed, remoteAction.getGuid());
-    remoteAction.setAutomationId(automationId);
+    String permId = remotePeerRegistry.registerPermId(
+        permIdSeed, remoteAction.getGuid());
+    remoteAction.setPermId(permId);
     hardReferences.add(remoteActionAdapter);
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;

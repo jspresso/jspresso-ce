@@ -20,7 +20,7 @@ package org.jspresso.framework.util.remote;
 
 import java.io.Serializable;
 
-import org.jspresso.framework.util.automation.IAutomatable;
+import org.jspresso.framework.util.automation.IPermIdentifiable;
 
 /**
  * An object remote server peer.
@@ -28,12 +28,12 @@ import org.jspresso.framework.util.automation.IAutomatable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemotePeer implements IRemotePeer, IAutomatable,
+public abstract class RemotePeer implements IRemotePeer, IPermIdentifiable,
     Serializable {
 
   private static final long serialVersionUID = 2174357777581427148L;
 
-  private String            automationId;
+  private String            permId;
   private String            guid;
 
   /**
@@ -55,12 +55,12 @@ public abstract class RemotePeer implements IRemotePeer, IAutomatable,
   }
 
   /**
-   * Gets the automationId.
+   * Gets the permId.
    * 
-   * @return the automationId.
+   * @return the permId.
    */
-  public String getAutomationId() {
-    return automationId;
+  public String getPermId() {
+    return permId;
   }
 
   /**
@@ -71,13 +71,13 @@ public abstract class RemotePeer implements IRemotePeer, IAutomatable,
   }
 
   /**
-   * Sets the automationId.
+   * Sets the permId.
    * 
-   * @param automationId
-   *          the automationId to set.
+   * @param permId
+   *          the permId to set.
    */
-  public void setAutomationId(String automationId) {
-    this.automationId = automationId;
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
   /**

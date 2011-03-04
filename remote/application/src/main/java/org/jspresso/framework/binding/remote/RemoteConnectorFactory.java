@@ -362,9 +362,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   public RemoteCompositeValueState createRemoteCompositeValueState(String guid,
-      String automationSeed) {
+      String permIdSeed) {
     RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
-    state.setAutomationId(registerAutomationId(automationSeed, guid));
+    state.setPermId(registerPermId(permIdSeed, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -374,9 +374,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   public RemoteValueState createRemoteValueState(String guid,
-      String automationSeed) {
+      String permIdSeed) {
     RemoteValueState state = new RemoteValueState(guid);
-    state.setAutomationId(registerAutomationId(automationSeed, guid));
+    state.setPermId(registerPermId(permIdSeed, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -386,9 +386,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   public RemoteFormattedValueState createRemoteFormattedValueState(String guid,
-      String automationSeed) {
+      String permIdSeed) {
     RemoteFormattedValueState state = new RemoteFormattedValueState(guid);
-    state.setAutomationId(registerAutomationId(automationSeed, guid));
+    state.setPermId(registerPermId(permIdSeed, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -413,8 +413,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public IRemotePeer getRegisteredForAutomationId(String automationId) {
-    return remotePeerRegistry.getRegisteredForAutomationId(automationId);
+  public IRemotePeer getRegisteredForPermId(String permId) {
+    return remotePeerRegistry.getRegisteredForPermId(permId);
   }
 
   /**
@@ -434,8 +434,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public String registerAutomationId(String automationSeed, String guid) {
-    return remotePeerRegistry.registerAutomationId(automationSeed, guid);
+  public String registerPermId(String permIdSeed, String guid) {
+    return remotePeerRegistry.registerPermId(permIdSeed, guid);
   }
 
   /**

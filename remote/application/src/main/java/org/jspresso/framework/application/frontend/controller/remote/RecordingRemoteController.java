@@ -92,8 +92,8 @@ public class RecordingRemoteController extends DefaultRemoteController {
   @Override
   protected void handleCommand(RemoteCommand command) {
     if (command.getTargetPeerGuid() != null) {
-      IRemotePeer rPeer = getRegisteredForAutomationId(command
-          .getAutomationId());
+      IRemotePeer rPeer = getRegisteredForPermId(command
+          .getPermId());
       if (rPeer == null || !command.getTargetPeerGuid().equals(rPeer.getGuid())) {
         System.err.println();
         System.err.println("####################################");

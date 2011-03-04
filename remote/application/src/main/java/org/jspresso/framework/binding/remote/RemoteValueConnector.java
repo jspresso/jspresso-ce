@@ -22,7 +22,7 @@ import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IAutomationSource;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -32,9 +32,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements
-    IRemotePeer, IRemoteStateOwner, IAutomationSource {
+    IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
-  private String                  automationSeed;
+  private String                  permIdSeed;
   private RemoteConnectorFactory  connectorFactory;
   private String                  guid;
   private IRemoteStateValueMapper remoteStateValueMapper;
@@ -87,13 +87,13 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * Gets the automationSeed.
+   * Gets the permIdSeed.
    * 
-   * @return the automationSeed.
+   * @return the permIdSeed.
    */
-  public String getAutomationSeed() {
-    if (automationSeed != null) {
-      return automationSeed;
+  public String getPermIdSeed() {
+    if (permIdSeed != null) {
+      return permIdSeed;
     }
     return getId();
   }
@@ -127,13 +127,13 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * Sets the automationSeed.
+   * Sets the permIdSeed.
    * 
-   * @param automationSeed
-   *          the automationSeed to set.
+   * @param permIdSeed
+   *          the permIdSeed to set.
    */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
+  public void setPermIdSeed(String permIdSeed) {
+    this.permIdSeed = permIdSeed;
   }
 
   /**
@@ -164,7 +164,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    */
   protected RemoteValueState createState() {
     RemoteValueState createdState = connectorFactory.createRemoteValueState(
-        getGuid(), getAutomationSeed());
+        getGuid(), getPermIdSeed());
     return createdState;
   }
 

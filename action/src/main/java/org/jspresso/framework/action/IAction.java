@@ -21,7 +21,7 @@ package org.jspresso.framework.action;
 import java.util.Map;
 
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.util.automation.IAutomationSource;
+import org.jspresso.framework.util.automation.IPermIdSource;
 
 /**
  * This interface establishes the contract of any action in the application.
@@ -29,7 +29,7 @@ import org.jspresso.framework.util.automation.IAutomationSource;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IAction extends ISecurable, IAutomationSource {
+public interface IAction extends ISecurable, IPermIdSource {
 
   /**
    * Executes the action. During execution, the action should access its

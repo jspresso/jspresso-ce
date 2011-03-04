@@ -22,7 +22,7 @@ import org.jspresso.framework.binding.basic.BasicFormattedValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteFormattedValueState;
-import org.jspresso.framework.util.automation.IAutomationSource;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
@@ -34,9 +34,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
-    implements IRemotePeer, IRemoteStateOwner, IAutomationSource {
+    implements IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
-  private String                    automationSeed;
+  private String                    permIdSeed;
   private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private IRemoteStateValueMapper   remoteStateValueMapper;
@@ -92,13 +92,13 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   }
 
   /**
-   * Gets the automationSeed.
+   * Gets the permIdSeed.
    * 
-   * @return the automationSeed.
+   * @return the permIdSeed.
    */
-  public String getAutomationSeed() {
-    if (automationSeed != null) {
-      return automationSeed;
+  public String getPermIdSeed() {
+    if (permIdSeed != null) {
+      return permIdSeed;
     }
     return getId();
   }
@@ -132,13 +132,13 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   }
 
   /**
-   * Sets the automationSeed.
+   * Sets the permIdSeed.
    * 
-   * @param automationSeed
-   *          the automationSeed to set.
+   * @param permIdSeed
+   *          the permIdSeed to set.
    */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
+  public void setPermIdSeed(String permIdSeed) {
+    this.permIdSeed = permIdSeed;
   }
 
   /**
@@ -196,7 +196,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    */
   protected RemoteFormattedValueState createState() {
     RemoteFormattedValueState createdState = connectorFactory
-        .createRemoteFormattedValueState(getGuid(), getAutomationSeed());
+        .createRemoteFormattedValueState(getGuid(), getPermIdSeed());
     return createdState;
   }
 }
