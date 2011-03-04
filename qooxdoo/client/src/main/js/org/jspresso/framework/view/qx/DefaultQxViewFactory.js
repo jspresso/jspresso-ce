@@ -657,6 +657,24 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           this.__actionHandler.execute(remoteTable.getRowAction());
         }, this);
       }
+      if(remoteTable.getPermId()) {
+        var notifyTableChanged = function(event) {
+          var notificationCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand();
+          notificationCommand.setTableId(remoteTable.getPermId());
+          var columnIds = new Array();
+          var columnWidths = new Array();
+          for(var ci = 0; ci < table.getTableColumnModel().getOverallColumnCount(); ci++) {
+            columnIds.push(table.getTableModel().getColumnId(table.getTableColumnModel().getOverallColumnAtX(ci)));
+            columnWidths.push(table.getTableColumnModel().getColumnWidth(table.getTableColumnModel().getOverallColumnAtX(ci)));
+          }
+          notificationCommand.setColumnIds(columnIds);
+          notificationCommand.setColumnWidths(columnWidths);
+          this.__commandHandler.registerCommand(notificationCommand);
+        };
+        
+        table.getTableColumnModel().addListener("widthChanged", notifyTableChanged, this); 
+        table.getTableColumnModel().addListener("orderChanged", notifyTableChanged, this); 
+      }
       return table;
     },
 

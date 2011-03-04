@@ -2782,7 +2782,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param actionHandler
    *          the action handler.
    */
-  protected void storeTablePreferences(String tableId, Object[][] columnPrefs,
+  public void storeTablePreferences(String tableId, Object[][] columnPrefs,
       IActionHandler actionHandler) {
     StringBuffer buff = new StringBuffer();
     for (int i = 0; i < columnPrefs.length; i++) {

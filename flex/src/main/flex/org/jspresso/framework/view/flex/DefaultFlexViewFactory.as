@@ -65,6 +65,7 @@ package org.jspresso.framework.view.flex {
   import mx.events.DataGridEvent;
   import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
+  import mx.events.IndexChangedEvent;
   import mx.events.ListEvent;
   import mx.events.MenuEvent;
   import mx.events.PropertyChangeEvent;
@@ -80,6 +81,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionComponent;
   import org.jspresso.framework.gui.remote.RActionField;
@@ -1795,6 +1797,24 @@ package org.jspresso.framework.view.flex {
         table.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
           _actionHandler.execute(remoteTable.rowAction);
         });
+      }
+      if(remoteTable.permId) {
+        var notifyTableChanged:Function = function(e:Event):void {
+          var notificationCommand:RemoteTableChangedCommand = new RemoteTableChangedCommand();
+          notificationCommand.tableId = remoteTable.permId;
+          var columnIds:Array = new Array();
+          var columnWidths:Array = new Array();
+          for each (var dgColumn:DataGridColumn in table.columns) {
+            columnIds.push(remoteTable.columnIds[((dgColumn.itemRenderer as ClassFactory).properties["index"] as int) - 1]);
+            columnWidths.push(dgColumn.width);
+          }
+          notificationCommand.columnIds = columnIds;
+          notificationCommand.columnWidths = columnWidths;
+          _commandHandler.registerCommand(notificationCommand);
+        };
+        
+        table.addEventListener(DataGridEvent.COLUMN_STRETCH, notifyTableChanged); 
+        table.addEventListener(IndexChangedEvent.HEADER_SHIFT, notifyTableChanged); 
       }
       return table;
     }

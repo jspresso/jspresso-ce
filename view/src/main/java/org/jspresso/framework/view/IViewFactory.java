@@ -24,18 +24,17 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * Factory for views.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public interface IViewFactory<E, F, G> {
 
@@ -48,13 +47,13 @@ public interface IViewFactory<E, F, G> {
    * Creates a new view from a view descriptor.
    * 
    * @param viewDescriptor
-   *            the view descriptor being the root of the view hierarchy to be
-   *            constructed.
+   *          the view descriptor being the root of the view hierarchy to be
+   *          constructed.
    * @param actionHandler
-   *            the object responsible for executing the view actions (generally
-   *            the frontend controller itself).
+   *          the object responsible for executing the view actions (generally
+   *          the frontend controller itself).
    * @param locale
-   *            the locale the view must use for i18n.
+   *          the locale the view must use for i18n.
    * @return the created view.
    */
   IView<E> createView(IViewDescriptor viewDescriptor,
@@ -81,4 +80,16 @@ public interface IViewFactory<E, F, G> {
    */
   IIconFactory<F> getIconFactory();
 
+  /**
+   * Stores user table preferences.
+   * 
+   * @param tableId
+   *          the table id ised as preference key in the user store.
+   * @param columnPrefs
+   *          the array of {columnId,columnSize} for the table
+   * @param actionHandler
+   *          the action handler.
+   */
+  void storeTablePreferences(String tableId, Object[][] columnPrefs,
+      IActionHandler actionHandler);
 }

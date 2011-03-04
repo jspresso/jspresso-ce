@@ -1656,7 +1656,41 @@ public class DefaultRemoteViewFactory extends
           viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
     attachDefaultCollectionListener(connector);
+    if (viewDescriptor.getPermIdSeed() != null) {
+      applyUserPreferences(viewDescriptor.getPermIdSeed(), viewComponent,
+          actionHandler);
+    }
     return view;
+  }
+
+  private void applyUserPreferences(String tableId, RTable table,
+      IActionHandler actionHandler) {
+    Object[][] columnPrefs = getTablePreferences(tableId, actionHandler);
+    if (columnPrefs != null) {
+      int columnOffset = 0;
+      for (int i = 0; i < columnPrefs.length; i++) {
+        int sourceColumn = -1;
+        for (int j = 0; j < table.getColumnIds().length && sourceColumn < 0; j++) {
+          if (columnPrefs[i][0].equals(table.getColumnIds()[j])) {
+            sourceColumn = j;
+          }
+        }
+        if (sourceColumn >= 0) {
+          String targetColumnId = table.getColumnIds()[columnOffset];
+          RComponent targetColumn = table.getColumns()[columnOffset];
+
+          table.getColumnIds()[columnOffset] = table.getColumnIds()[sourceColumn];
+          table.getColumnIds()[sourceColumn] = targetColumnId;
+
+          table.getColumns()[columnOffset] = table.getColumns()[sourceColumn];
+          table.getColumns()[sourceColumn] = targetColumn;
+
+          table.getColumns()[columnOffset].setPreferredSize(new Dimension(
+              ((Integer) columnPrefs[i][1]).intValue(), -1));
+          columnOffset++;
+        }
+      }
+    }
   }
 
   /**
@@ -1975,6 +2009,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       viewPeer.setIcon(null);
     }
+    viewPeer.setPermId(viewDescriptor.getPermIdSeed());
   }
 
   /**
@@ -2050,11 +2085,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = super.constructView(viewComponent, descriptor,
         connector);
     if (connector instanceof IPermIdSource) {
-      String permIdSeed = descriptor.getPermIdSeed();
-      if (permIdSeed == null) {
-        permIdSeed = descriptor.getName();
-      }
-      ((IPermIdSource) connector).setPermIdSeed(permIdSeed);
+      ((IPermIdSource) connector).setPermIdSeed(descriptor.getPermIdSeed());
     }
     if (viewComponent.getState() == null) {
       viewComponent.setState(((IRemoteStateOwner) connector).getState());

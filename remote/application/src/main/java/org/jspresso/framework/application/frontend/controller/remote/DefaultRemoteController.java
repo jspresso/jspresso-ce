@@ -50,6 +50,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteRestartC
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
@@ -658,6 +659,18 @@ public class DefaultRemoteController extends
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
       displayWorkspace(
           ((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
+    } else if (command instanceof RemoteTableChangedCommand) {
+      Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command)
+          .getColumnIds().length][2];
+      for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
+        columnPrefs[i] = new Object[] {
+            ((RemoteTableChangedCommand) command).getColumnIds()[i],
+            ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
+      }
+      getViewFactory()
+          .storeTablePreferences(
+              ((RemoteTableChangedCommand) command).getTableId(), columnPrefs,
+              this);
     } else {
       IRemotePeer targetPeer = null;
       if (command.getPermId() != null) {
