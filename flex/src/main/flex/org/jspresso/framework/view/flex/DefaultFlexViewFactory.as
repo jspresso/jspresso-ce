@@ -1808,7 +1808,7 @@ package org.jspresso.framework.view.flex {
             event.preventDefault();
             var column:DataGridColumn = table.columns[event.columnIndex];
             var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
-            if(!property || property.length == 0) {
+            if(!property || property.length == 0 || property.charAt(0) == "#") {
               // do not sort
               return;
             }

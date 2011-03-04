@@ -372,7 +372,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   protected boolean isSortable(ULCTableColumn column) {
     return column.getIdentifier() != null
-        && column.getIdentifier().toString().length() > 0;
+        && column.getIdentifier().toString().length() > 0
+        && !column.getIdentifier().toString().startsWith("#");
   }
 
   /**
@@ -477,8 +478,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
         if (status != 0) {
           ITableCellRenderer headerRenderer = viewColumn.getHeaderRenderer();
           if (!(headerRenderer instanceof SortableHeaderRenderer)) {
-            headerRenderer = new SortableHeaderRenderer(viewColumn
-                .getModelIndex());
+            headerRenderer = new SortableHeaderRenderer(
+                viewColumn.getModelIndex());
           }
           // used to refresh the client side :(
           viewColumn.setHeaderRenderer(headerRenderer);

@@ -137,7 +137,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     		return;
     	}
     	var property = this.getColumnId(columnIndex);
-    	if(!property || property.length == 0) {
+    	if(!property || property.length == 0 || property.charAt(0) == "#") {
     		return;
     	}
       this.__sortColumnIndex = columnIndex;

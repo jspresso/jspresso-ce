@@ -340,7 +340,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   protected boolean isSortable(STableColumn column) {
     return column.getIdentifier() != null
-        && column.getIdentifier().toString().length() > 0;
+        && column.getIdentifier().toString().length() > 0
+        && !column.getIdentifier().toString().startsWith("#");
   }
 
   /**

@@ -212,9 +212,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -650,8 +648,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           } else {
             detailConnector = detailView.getConnector();
           }
-          
-          // We must dig into the composite structure to find the 1st non composite vew
+
+          // We must dig into the composite structure to find the 1st non
+          // composite vew
           // to cascade the model
           while (masterView instanceof ICompositeView<?>) {
             masterView = ((ICompositeView<E>) masterView).getChildren().get(0);
@@ -709,7 +708,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       // }
     }
     if (!sortable) {
-      return "";
+      return "#" + identifier;
     }
     return identifier;
   }
