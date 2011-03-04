@@ -2771,4 +2771,50 @@ public abstract class AbstractViewFactory<E, F, G> implements
       actionHandler.execute(actionDelegate, context);
     }
   }
+
+  /**
+   * Stores user table preferences.
+   * 
+   * @param tableId
+   *          the table id ised as preference key in the user store.
+   * @param columnPrefs
+   *          the array of {columnId,columnSize} for the table
+   * @param actionHandler
+   *          the action handler.
+   */
+  protected void storeTablePreferences(String tableId, Object[][] columnPrefs,
+      IActionHandler actionHandler) {
+    StringBuffer buff = new StringBuffer();
+    for (int i = 0; i < columnPrefs.length; i++) {
+      if (i > 0) {
+        buff.append("!");
+      }
+      buff.append(columnPrefs[i][0] + "," + columnPrefs[i][1]);
+    }
+    actionHandler.putUserPreference(tableId, buff.toString());
+  }
+
+  /**
+   * Gets user table preferences.
+   * 
+   * @param tableId
+   *          the table id is used as preference key in the user store.
+   * @param actionHandler
+   *          the action handler.
+   * @return the array of {columnId,columnSize} for the table
+   */
+  protected Object[][] getTablePreferences(String tableId,
+      IActionHandler actionHandler) {
+    String prefs = actionHandler.getUserPreference(tableId);
+    Object[][] columnPrefs = null;
+    if (prefs != null) {
+      String[] columns = prefs.split("!");
+      columnPrefs = new Object[columns.length][2];
+      for (int i = 0; i < columns.length; i++) {
+        String[] column = columns[i].split(",");
+        columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+      }
+    }
+    return columnPrefs;
+  }
 }

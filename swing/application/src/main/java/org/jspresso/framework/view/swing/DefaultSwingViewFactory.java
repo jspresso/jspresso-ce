@@ -75,12 +75,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
@@ -1723,7 +1727,7 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createTableView(
-      ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      ITableViewDescriptor viewDescriptor, final IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
@@ -1898,8 +1902,108 @@ public class DefaultSwingViewFactory extends
         }
       });
     }
+    if (viewDescriptor.getPermIdSeed() != null) {
+      viewComponent.getColumnModel().addColumnModelListener(
+          new ColumnPreferencesListener(viewComponent, viewDescriptor
+              .getPermIdSeed(), actionHandler));
+    }
     attachDefaultCollectionListener(connector);
+    if (viewDescriptor.getPermIdSeed() != null) {
+      applyUserPreferences(viewDescriptor.getPermIdSeed(), viewComponent,
+          actionHandler);
+    }
     return view;
+  }
+
+  private void applyUserPreferences(String tableId, JTable table,
+      IActionHandler actionHandler) {
+    Object[][] columnPrefs = getTablePreferences(tableId, actionHandler);
+    if (columnPrefs != null) {
+      int columnOffset = 0;
+      for (int i = 0; i < columnPrefs.length; i++) {
+        int sourceColumn = -1;
+        for (int j = 0; j < table.getColumnCount() && sourceColumn < 0; j++) {
+          if (columnPrefs[i][0].equals(table.getColumnModel().getColumn(j)
+              .getIdentifier())) {
+            sourceColumn = j;
+          }
+        }
+        if (sourceColumn >= 0) {
+          table.moveColumn(sourceColumn, columnOffset);
+          table.getColumnModel().getColumn(columnOffset)
+              .setPreferredWidth(((Integer) columnPrefs[i][1]).intValue());
+          columnOffset++;
+        }
+      }
+    }
+  }
+
+  private class ColumnPreferencesListener implements TableColumnModelListener {
+
+    private TableColumnModel columnModel;
+    private String           tableId;
+    private IActionHandler   actionHandler;
+    private boolean          columnsChanged;
+
+    /**
+     * Constructs a new <code>ColumnPreferencesListener</code> instance.
+     * 
+     * @param table
+     * @param tableId
+     * @param actionHandler
+     */
+    public ColumnPreferencesListener(JTable table, String tableId,
+        IActionHandler actionHandler) {
+      this.columnModel = table.getColumnModel();
+      this.tableId = tableId;
+      this.actionHandler = actionHandler;
+      this.columnsChanged = false;
+
+      table.getTableHeader().addMouseListener(new MouseAdapter() {
+
+        @SuppressWarnings("unused")
+        @Override
+        public void mouseReleased(MouseEvent e) {
+          saveColumns();
+        }
+      });
+    }
+
+    @SuppressWarnings("unused")
+    public void columnSelectionChanged(ListSelectionEvent e) {
+      // NO-OP.
+    }
+
+    public void columnRemoved(
+        @SuppressWarnings("unused") TableColumnModelEvent e) {
+      // NO-OP.
+    }
+
+    public void columnMoved(@SuppressWarnings("unused") TableColumnModelEvent e) {
+      columnsChanged = true;
+    }
+
+    public void columnMarginChanged(@SuppressWarnings("unused") ChangeEvent e) {
+      columnsChanged = true;
+    }
+
+    public void columnAdded(@SuppressWarnings("unused") TableColumnModelEvent e) {
+      // NO-OP.
+    }
+
+    private void saveColumns() {
+      if (columnsChanged) {
+        columnsChanged = false;
+        Object[][] columnPrefs = new Object[columnModel.getColumnCount()][2];
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+          Object[] columnPref = new Object[] {
+              columnModel.getColumn(i).getIdentifier(),
+              new Integer(columnModel.getColumn(i).getWidth())};
+          columnPrefs[i] = columnPref;
+        }
+        storeTablePreferences(tableId, columnPrefs, actionHandler);
+      }
+    }
   }
 
   private void setupTableModel(ITableViewDescriptor viewDescriptor,
@@ -2513,15 +2617,6 @@ public class DefaultSwingViewFactory extends
     return popupMenu;
   }
 
-  /**
-   * TODO Comment needed.
-   * 
-   * @param action
-   * @param view
-   * @param actionHandler
-   * @param locale
-   * @return
-   */
   private JMenuItem createMenuItem(IDisplayableAction action,
       IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
     Action swingAction = getActionFactory().createAction(action, actionHandler,
