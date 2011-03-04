@@ -30,7 +30,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     {
       check : "String"
     },
-    viewStateAutomationId :
+    viewStatePermId :
     {
       check : "String",
       nullable : true

@@ -164,7 +164,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //this.debug(">>> Selected indices update <<< " + remoteCompositeValueState.getSelectedIndices() + " on " + remoteCompositeValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
         command.setTargetPeerGuid(remoteCompositeValueState.getGuid());
-        command.setAutomationId(remoteCompositeValueState.getAutomationId());
+        command.setPermId(remoteCompositeValueState.getPermId());
         command.setSelectedIndices(remoteCompositeValueState.getSelectedIndices());
         command.setLeadingIndex(remoteCompositeValueState.getLeadingIndex());
         this.registerCommand(command);
@@ -182,7 +182,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //this.debug(">>> Value update <<< " + remoteValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand();
         command.setTargetPeerGuid(remoteValueState.getGuid());
-        command.setAutomationId(remoteValueState.getAutomationId());
+        command.setPermId(remoteValueState.getPermId());
         command.setValue(remoteValueState.getValue());
         this.registerCommand(command);
       }
@@ -200,10 +200,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
         command.setTargetPeerGuid(action.getGuid());
-        command.setAutomationId(action.getAutomationId());
+        command.setPermId(action.getPermId());
         command.setParameter(param);
         command.setViewStateGuid(this.__dialogStack[this.__dialogStack.length -1][1]);
-        command.setViewStateAutomationId(this.__dialogStack[this.__dialogStack.length -1][2]);
+        command.setViewStatePermId(this.__dialogStack[this.__dialogStack.length -1][2]);
         this.registerCommand(command);
       }
     },
@@ -846,11 +846,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * 
      * @param {String} viewStateGuid
-     * @param {String} viewStateAutomationId
+     * @param {String} viewStatePermId
      */
-    setCurrentViewStateGuid : function(viewStateGuid, viewStateAutomationId) {
+    setCurrentViewStateGuid : function(viewStateGuid, viewStatePermId) {
       this.__dialogStack[this.__dialogStack.length -1][1] = viewStateGuid;
-      this.__dialogStack[this.__dialogStack.length -1][2] = viewStateAutomationId;
+      this.__dialogStack[this.__dialogStack.length -1][2] = viewStatePermId;
     },
 
     _handleError : function(message) {

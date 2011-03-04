@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteCommand {
 
         private var _targetPeerGuid:String;
-        private var _automationId:String;
+        private var _permId:String;
         
         public function RemoteCommand() {
           //default constructor.
@@ -33,11 +33,11 @@ package org.jspresso.framework.application.frontend.command.remote {
             return _targetPeerGuid;
         }
 
-        public function set automationId(value:String):void {
-            _automationId = value;
+        public function set permId(value:String):void {
+            _permId = value;
         }
-        public function get automationId():String {
-            return _automationId;
+        public function get permId():String {
+            return _permId;
         }
     }
 }

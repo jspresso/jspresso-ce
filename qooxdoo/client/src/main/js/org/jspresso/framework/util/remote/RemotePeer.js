@@ -28,7 +28,7 @@ qx.Class.define("org.jspresso.framework.util.remote.RemotePeer",
     {
       check : "String"
     },
-    automationId :
+    permId :
     {
       check : "String",
       nullable : true

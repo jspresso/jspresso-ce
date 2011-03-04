@@ -149,9 +149,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
 	        var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
 	        sortCommand.setOrderingProperties(orderingProperties);
           sortCommand.setViewStateGuid(this.__state.getGuid());
-          sortCommand.setViewStateAutomationId(this.__state.getAutomationId());
+          sortCommand.setViewStatePermId(this.__state.getPermId());
           sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
-          sortCommand.setAutomationId(this.__sortingAction.getAutomationId());
+          sortCommand.setPermId(this.__sortingAction.getPermId());
 	        this.__commandHandler.registerCommand(sortCommand);
       	}
       } else {

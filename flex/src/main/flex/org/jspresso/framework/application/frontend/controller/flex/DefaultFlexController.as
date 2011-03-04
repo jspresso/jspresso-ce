@@ -244,7 +244,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //trace(">>> Value update <<< " + remoteValueState.value);
         var command:RemoteValueCommand = new RemoteValueCommand();
         command.targetPeerGuid = remoteValueState.guid;
-        command.automationId = remoteValueState.automationId;
+        command.permId = remoteValueState.permId;
         command.value = remoteValueState.value;
         registerCommand(command);
       }
@@ -255,7 +255,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
         var command:RemoteSelectionCommand = new RemoteSelectionCommand();
         command.targetPeerGuid = remoteCompositeValueState.guid;
-        command.automationId = remoteCompositeValueState.automationId;
+        command.permId = remoteCompositeValueState.permId;
         command.selectedIndices = remoteCompositeValueState.selectedIndices;
         command.leadingIndex = remoteCompositeValueState.leadingIndex;
         registerCommand(command);
@@ -267,10 +267,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       if(action && action.enabled) {
         var command:RemoteActionCommand = new RemoteActionCommand();
         command.targetPeerGuid = action.guid;
-        command.automationId = action.automationId;
+        command.permId = action.permId;
         command.parameter = param;
         command.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
-        command.viewStateAutomationId = (_dialogStack[_dialogStack.length -1] as Array)[2];
+        command.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
         registerCommand(command);
       }
     }
@@ -473,8 +473,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     protected function pushFakeDialog():void {
       var viewStateGuid:String = (_dialogStack[_dialogStack.length -1] as Array)[1];
-      var viewStateAutomationId:String = (_dialogStack[_dialogStack.length -1] as Array)[2];
-      _dialogStack.push([_fakeDialog,viewStateGuid,viewStateAutomationId]);
+      var viewStatePermId:String = (_dialogStack[_dialogStack.length -1] as Array)[2];
+      _dialogStack.push([_fakeDialog,viewStateGuid,viewStatePermId]);
     }
     
     protected function popFakeDialog():void {
@@ -1144,7 +1144,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return null;
     }
     
-    public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStateAutomationId:String):void {
+    public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void {
       if(_dialogStack.length > 1) {
         // at least a dialog is open
         for(var i:int = _dialogStack.length -1; i > 0 ; i--) {
@@ -1152,13 +1152,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
           var dialog:Array = _dialogStack[_dialogStack.length -i] as Array; 
           if((dialog[0] as Panel).contains(component)) {
             dialog[1] = viewStateGuid;
-            dialog[2] = viewStateAutomationId;
+            dialog[2] = viewStatePermId;
             return;
           }
         }
       }
       (_dialogStack[0] as Array)[1] = viewStateGuid;
-      (_dialogStack[0] as Array)[2] = viewStateAutomationId;
+      (_dialogStack[0] as Array)[2] = viewStatePermId;
     }
     
     protected function getViewFactory():DefaultFlexViewFactory {

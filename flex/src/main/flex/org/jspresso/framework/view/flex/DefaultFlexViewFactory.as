@@ -1820,9 +1820,9 @@ package org.jspresso.framework.view.flex {
               var sortCommand:RemoteSortCommand = new RemoteSortCommand();
               sortCommand.orderingProperties = orderingProperties;
               sortCommand.viewStateGuid = remoteTable.state.guid;
-              sortCommand.viewStateAutomationId = remoteTable.state.automationId;
+              sortCommand.viewStatePermId = remoteTable.state.permId;
               sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
-              sortCommand.automationId = remoteTable.sortingAction.automationId;
+              sortCommand.permId = remoteTable.sortingAction.permId;
               _commandHandler.registerCommand(sortCommand);
             }
           });
@@ -1914,7 +1914,7 @@ package org.jspresso.framework.view.flex {
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
             .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.automationId);
+        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
