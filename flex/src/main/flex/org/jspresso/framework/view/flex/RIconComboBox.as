@@ -52,11 +52,11 @@ package org.jspresso.framework.view.flex {
     public function set rIcon(_icon:RIcon):void {
       if(_icon != _rIcon) {
         if(_icon != null) {
-          _rIcon = _icon;
           iconImage.source = _icon.imageUrlSpec;
         } else {
           iconImage.source = null;
         }
+        _rIcon = _icon;
       }
     }
     
@@ -83,12 +83,15 @@ package org.jspresso.framework.view.flex {
     }
     
     private function updateTextAndIcon(index:int):void {
-        if(index != -1 && _icons != null) {
-          rIcon = _icons[index];
-          if(text != _labels[index]) {
-            text = _labels[index];
-          }
+      if(index != -1 && _icons != null) {
+        rIcon = _icons[index];
+        if(text != _labels[index]) {
+          text = _labels[index];
         }
+      } else {
+        rIcon = null;
+        text = "";
+      }
     }
   }
 }

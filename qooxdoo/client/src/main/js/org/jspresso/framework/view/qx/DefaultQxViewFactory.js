@@ -967,6 +967,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         var iconDim;
         var width = 0;
         for(var i = 0; i < remoteComboBox.getValues().length; i++) {
+          if(i == 0 && remoteComboBox.getValues()[i].length > 0) {
+            // Qx combos do not support null values
+            var fallbackLi = new qx.ui.form.ListItem(" ");
+            fallbackLi.setModel("");
+            this.setIcon(fallbackLi, null);
+            comboBox.add(fallbackLi);
+          }
           var tr = remoteComboBox.getTranslations()[i];
           var li = new qx.ui.form.ListItem(tr/*,
                                            null*/);
