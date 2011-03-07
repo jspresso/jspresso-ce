@@ -28,12 +28,15 @@ import org.jspresso.framework.application.backend.action.CreateQueryComponentAct
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
+import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -103,6 +106,26 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
     IValueConnector viewConnector = getViewConnector(context);
     String queryPropertyValue = getActionCommand(context);
+
+    Object masterComponent = null;
+    if (getModelDescriptor(context) instanceof IPropertyDescriptor
+        && viewConnector.getParentConnector() != null) {
+      // The following relies on a workaround used to determine the bean
+      // model whenever the lov component is used inside a jtable.
+      IValueConnector parentModelConnector = viewConnector.getParentConnector()
+          .getModelConnector();
+      if (parentModelConnector instanceof IModelProvider) {
+        masterComponent = ((IModelProvider) parentModelConnector).getModel();
+      } else if (parentModelConnector instanceof ICollectionConnector) {
+        int collectionIndex = ((ICollectionConnector) viewConnector
+            .getParentConnector()).getSelectedIndices()[0];
+        masterComponent = ((ICollectionConnector) parentModelConnector)
+            .getChildConnector(collectionIndex).getConnectorValue();
+      }
+    } else {
+      masterComponent = getSelectedModel(context);
+    }
+    context.put(CreateQueryComponentAction.MASTER_COMPONENT, masterComponent);
 
     actionHandler.execute(createQueryComponentAction, context);
     IQueryComponent queryComponent = (IQueryComponent) context
@@ -181,8 +204,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -198,8 +222,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }

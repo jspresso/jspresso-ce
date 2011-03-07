@@ -21,14 +21,9 @@ package org.jspresso.framework.application.backend.action;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.IConnector;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
-import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -127,25 +122,11 @@ public class CreateQueryComponentAction extends BackendAction {
    */
   protected void completeQueryComponent(IQueryComponent queryComponent,
       IReferencePropertyDescriptor<?> erqDescriptor, Map<String, Object> context) {
-    Object masterComponent = null;
-    // The following relies on a workaround used to determine the bean
-    // model whenever the lov component is used inside a jtable.
-    IConnector parentModelConnector = ((IValueConnector) context
-        .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
-        .getModelConnector();
-    if (parentModelConnector instanceof IModelProvider) {
-      masterComponent = ((IModelProvider) parentModelConnector).getModel();
-    } else if (parentModelConnector instanceof ICollectionConnector) {
-      int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
-          .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
-          .getSelectedIndices()[0];
-      masterComponent = ((ICollectionConnector) parentModelConnector)
-          .getChildConnector(collectionIndex).getConnectorValue();
-    }
+    Object masterComponent = context.get(MASTER_COMPONENT);
+
     Map<String, Object> initializationMapping = erqDescriptor
         .getInitializationMapping();
     if (masterComponent != null) {
-      context.put(MASTER_COMPONENT, masterComponent);
       if (initializationMapping != null) {
         IAccessorFactory accessorFactory = getAccessorFactory(context);
         for (Map.Entry<String, Object> initializedAttribute : initializationMapping
