@@ -80,10 +80,19 @@ public class HibernateBackendController extends AbstractBackendController {
       // re-attach a "dirty" detached collection.
       for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
           .straightGetProperties().entrySet()) {
-        if (registeredPropertyEntry.getValue() instanceof PersistentCollection
-            && Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
-          ((PersistentCollection) registeredPropertyEntry.getValue())
-              .clearDirty();
+        if (registeredPropertyEntry.getValue() instanceof PersistentCollection) {
+          if (Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
+            ((PersistentCollection) registeredPropertyEntry.getValue())
+                .clearDirty();
+          }
+          try {
+            // The folowing is to avoid to avoid Hibernate exceptions due to reassociating a
+            // collection that is already associated with the session.
+            ((PersistentCollection) registeredPropertyEntry.getValue())
+                .setCurrentSession(null);
+          } catch (Exception ignored) {
+            // ignored
+          }
         }
       }
     }
@@ -228,7 +237,7 @@ public class HibernateBackendController extends AbstractBackendController {
              * {@inheritDoc}
              */
             public Object doInHibernate(Session session) {
-              cleanPersistentCollectionDirtyState(componentOrEntity);
+              // cleanPersistentCollectionDirtyState(componentOrEntity);
               if (componentOrEntity instanceof IEntity) {
                 if (((IEntity) componentOrEntity).isPersistent()) {
                   lockInHibernate((IEntity) componentOrEntity, session);
@@ -537,6 +546,7 @@ public class HibernateBackendController extends AbstractBackendController {
     // Do not use get before trying to lock.
     // Get performs a DB query.
     try {
+      cleanPersistentCollectionDirtyState(entity);
       hibernateSession.lock(entity, LockMode.NONE);
     } catch (Exception ex) {
       IComponent sessionEntity = (IComponent) hibernateSession.get(
