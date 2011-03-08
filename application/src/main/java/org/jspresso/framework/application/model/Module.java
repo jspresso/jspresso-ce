@@ -23,13 +23,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.security.auth.Subject;
-
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISubjectAware;
-import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -57,7 +54,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable implements
-    ISecurable, IViewDescriptorProvider, ISubjectAware {
+    ISecurable, IViewDescriptorProvider {
 
   /**
    * <code>DESCRIPTION</code> is "description".
@@ -104,7 +101,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   private boolean            started;
   private IAction            startupAction;
 
-  private Subject            subject;
+  private ISecurityHandler   securityHandler;
 
   private List<Module>       subModules;
 
@@ -278,10 +275,10 @@ public class Module extends AbstractPropertyChangeCapable implements
     if (subModules == null) {
       return null;
     }
-    Subject subj = getSubject();
-    if (subj != null) {
+    ISecurityHandler sh = getSecurityHandler();
+    if (sh != null) {
       for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
-        if (!SecurityHelper.isSubjectGranted(subj, ite.next())) {
+        if (!sh.isAccessGranted(ite.next())) {
           ite.remove();
         }
       }
@@ -580,12 +577,13 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * {@inheritDoc}
-   * 
+   * Configures the security handler used to secure this module.
+   * @param securityHandler
+   *          the security handler.
    * @internal
    */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
+  public void setSecurityHandler(ISecurityHandler securityHandler) {
+    this.securityHandler = securityHandler;
   }
 
   /**
@@ -647,12 +645,12 @@ public class Module extends AbstractPropertyChangeCapable implements
     firePropertyChange(SUB_MODULES, oldChildren, newChildren);
   }
 
-  private Subject getSubject() {
-    if (subject != null) {
-      return subject;
+  private ISecurityHandler getSecurityHandler() {
+    if (securityHandler != null) {
+      return securityHandler;
     }
     if (getParent() != null) {
-      return getParent().getSubject();
+      return getParent().getSecurityHandler();
     }
     return null;
   }

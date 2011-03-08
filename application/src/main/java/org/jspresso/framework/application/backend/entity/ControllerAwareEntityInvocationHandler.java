@@ -102,7 +102,7 @@ public class ControllerAwareEntityInvocationHandler extends
     super.configureExtension(extension);
     if (extension instanceof ISubjectAware && getBackendController() != null) {
       ((ISubjectAware) extension).setSubject(getBackendController()
-          .getSubject());
+          .getApplicationSession().getSubject());
     }
   }
 

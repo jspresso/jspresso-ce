@@ -1544,8 +1544,10 @@ public class DefaultSwingViewFactory extends
           Action.SHORT_DESCRIPTION,
           getTranslationProvider().getTranslation(
               "lov.element.description",
-              new Object[] {propertyDescriptor.getReferencedDescriptor()
-                  .getI18nName(getTranslationProvider(), locale)}, locale)
+              new Object[] {
+                propertyDescriptor.getReferencedDescriptor().getI18nName(
+                    getTranslationProvider(), locale)
+              }, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1998,7 +2000,8 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())};
+              new Integer(columnModel.getColumn(i).getWidth())
+          };
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);
@@ -2679,8 +2682,7 @@ public class DefaultSwingViewFactory extends
     SwingViewCellEditorAdapter editor;
     if (editorView.getPeer() instanceof JActionField) {
       editor = new SwingViewCellEditorAdapter(editorView,
-          getModelConnectorFactory(), getMvcBinder(),
-          actionHandler.getSubject()) {
+          getModelConnectorFactory(), getMvcBinder(), actionHandler) {
 
         private static final long serialVersionUID = -1551909997448473681L;
 
@@ -2697,8 +2699,7 @@ public class DefaultSwingViewFactory extends
       };
     } else {
       editor = new SwingViewCellEditorAdapter(editorView,
-          getModelConnectorFactory(), getMvcBinder(),
-          actionHandler.getSubject());
+          getModelConnectorFactory(), getMvcBinder(), actionHandler);
     }
     return editor;
   }

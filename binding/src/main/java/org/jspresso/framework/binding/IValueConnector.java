@@ -20,7 +20,7 @@ package org.jspresso.framework.binding;
 
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.IValueChangeSource;
 import org.jspresso.framework.util.exception.IExceptionHandler;
@@ -37,7 +37,7 @@ import org.jspresso.framework.util.gate.IGate;
  * @author Vincent Vandenschrick
  */
 public interface IValueConnector extends IConnector, IValueChangeListener,
-    Comparable<IValueConnector>, ISubjectAware, IValueChangeSource {
+    Comparable<IValueConnector>, IValueChangeSource, ISecurityHandlerAware {
 
   /**
    * <code>READABLE_PROPERTY</code>.

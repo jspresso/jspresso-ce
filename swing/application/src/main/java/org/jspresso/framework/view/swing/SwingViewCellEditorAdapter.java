@@ -25,7 +25,6 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.Subject;
 import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
@@ -44,6 +43,7 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JDateField;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.view.IView;
@@ -72,12 +72,12 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    *          the model connector factory.
    * @param mvcBinder
    *          the mvc binder.
-   * @param subject
-   *          the JAAS subject.
+   * @param securityHandler
+   *          the security handler.
    */
   public SwingViewCellEditorAdapter(IView<JComponent> editorView,
       IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder,
-      Subject subject) {
+      ISecurityHandler securityHandler) {
     this.editorView = editorView;
     if (editorView.getPeer() instanceof AbstractButton) {
       ((AbstractButton) editorView.getPeer())
@@ -101,7 +101,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       modelConnector = modelConnectorFactory.createModelConnector(editorView
           .getConnector().getId(),
           ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
-              .getModelDescriptor()).getComponentDescriptor(), subject);
+              .getModelDescriptor()).getComponentDescriptor(), securityHandler);
     } else {
       modelConnector = new BasicValueConnector(editorView.getConnector()
           .getId());

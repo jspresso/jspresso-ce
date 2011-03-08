@@ -18,11 +18,10 @@
  */
 package org.jspresso.framework.binding.model;
 
-import javax.security.auth.Subject;
-
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -41,12 +40,12 @@ public interface IModelConnectorFactory {
    *          the connector identifier.
    * @param componentContract
    *          the model type to create the connector for.
-   * @param subject
-   *          the JAAS subject of the session the created connector lives in.
+   * @param securityHandler
+   *          the jspresso security handler used to manage security.
    * @return the created model connector.
    */
   IValueConnector createModelConnector(String id, Class<?> componentContract,
-      Subject subject);
+      ISecurityHandler securityHandler);
 
   /**
    * Creates a model connector based on a model descriptor.
@@ -55,12 +54,12 @@ public interface IModelConnectorFactory {
    *          the connector identifier.
    * @param modelDescriptor
    *          the model descriptor to create the connector for.
-   * @param subject
-   *          the JAAS subject of the session the created connector lives in.
+   * @param securityHandler
+   *          the jspresso security handler used to manage security.
    * @return the created model connector.
    */
   IValueConnector createModelConnector(String id,
-      IModelDescriptor modelDescriptor, Subject subject);
+      IModelDescriptor modelDescriptor, ISecurityHandler securityHandler);
 
   /**
    * Gets the <code>IAccessorFactory</code> used.

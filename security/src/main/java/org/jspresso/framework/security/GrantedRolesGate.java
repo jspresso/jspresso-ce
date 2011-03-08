@@ -20,8 +20,6 @@ package org.jspresso.framework.security;
 
 import java.util.Collection;
 
-import javax.security.auth.Subject;
-
 import org.jspresso.framework.util.gate.AbstractGate;
 
 /**
@@ -34,7 +32,8 @@ import org.jspresso.framework.util.gate.AbstractGate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
+public class GrantedRolesGate extends AbstractGate implements
+    ISecurityHandlerAware {
 
   private Collection<String> grantedRoles;
   private boolean            open;
@@ -62,9 +61,9 @@ public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
    * 
    * @internal
    */
-  public void setSubject(Subject subject) {
+  public void setSecurityHandler(ISecurityHandler securityHandler) {
     boolean oldOpen = isOpen();
-    this.open = SecurityHelper.isSubjectGranted(subject, new ISecurable() {
+    this.open = securityHandler.isAccessGranted(new ISecurable() {
 
       public Collection<String> getGrantedRoles() {
         return GrantedRolesGate.this.getGrantedRoles();

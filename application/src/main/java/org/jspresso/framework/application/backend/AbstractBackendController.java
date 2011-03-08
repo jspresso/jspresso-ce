@@ -209,8 +209,8 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
-    return modelConnectorFactory.createModelConnector(id, modelDescriptor,
-        getApplicationSession().getSubject());
+    return modelConnectorFactory
+        .createModelConnector(id, modelDescriptor, this);
   }
 
   /**
@@ -396,8 +396,7 @@ public abstract class AbstractBackendController extends AbstractController
         IModelDescriptor workspaceDescriptor;
         workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
         IValueConnector nextWorkspaceConnector = modelConnectorFactory
-            .createModelConnector(workspaceName, workspaceDescriptor,
-                getApplicationSession().getSubject());
+            .createModelConnector(workspaceName, workspaceDescriptor, this);
         nextWorkspaceConnector.setConnectorValue(workspace);
         workspaceConnectors.put(workspaceName, nextWorkspaceConnector);
       }
@@ -1377,7 +1376,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferenceStore() != null) {
       getUserPreferenceStore().setStorePath(new String[] {
-          /*getName(),*/ getApplicationSession().getPrincipal().getName()
+        /* getName(), */getApplicationSession().getPrincipal().getName()
       });
     }
 

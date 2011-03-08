@@ -1137,7 +1137,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     getBackendController().loggedIn(subject);
     if (workspaces != null) {
       for (Workspace workspace : workspaces.values()) {
-        workspace.setSubject(getSubject());
+        workspace.setSecurityHandler(this);
         translateWorkspace(workspace);
       }
       getBackendController().installWorkspaces(workspaces);

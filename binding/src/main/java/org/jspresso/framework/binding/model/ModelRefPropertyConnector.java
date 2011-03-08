@@ -178,7 +178,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       if (componentDescriptor != null) {
         connector = modelConnectorFactory.createModelConnector(connectorKey,
             componentDescriptor.getPropertyDescriptor(connectorKey),
-            getSubject());
+            getSecurityHandler());
         connector.setParentConnector(this);
         childConnectors.put(connectorKey, connector);
       }

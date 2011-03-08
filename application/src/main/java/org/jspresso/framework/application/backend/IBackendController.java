@@ -347,5 +347,4 @@ public interface IBackendController extends IController,
    */
   void storeComponents(
       ComponentTransferStructure<? extends IComponent> components);
-
 }

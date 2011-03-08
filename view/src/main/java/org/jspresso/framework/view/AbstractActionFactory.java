@@ -41,7 +41,7 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
@@ -179,8 +179,9 @@ public abstract class AbstractActionFactory<E, F, G> implements
         if (!(gate instanceof ISecurable)
             || actionHandler.isAccessGranted((ISecurable) gate)) {
           final IGate clonedGate = gate.clone();
-          if (clonedGate instanceof ISubjectAware) {
-            ((ISubjectAware) clonedGate).setSubject(actionHandler.getSubject());
+          if (clonedGate instanceof ISecurityHandlerAware) {
+            ((ISecurityHandlerAware) clonedGate)
+                .setSecurityHandler(actionHandler);
           }
           if (clonedGate instanceof IActionHandlerAware) {
             ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);

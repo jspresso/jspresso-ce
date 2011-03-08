@@ -22,15 +22,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.security.auth.Subject;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISubjectAware;
-import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -54,7 +51,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Workspace implements ISecurable, ISubjectAware {
+public class Workspace implements ISecurable {
 
   /**
    * <code>DESCRIPTION</code> is "description".
@@ -95,7 +92,7 @@ public class Workspace implements ISecurable, ISubjectAware {
   private boolean               started;
 
   private IAction               startupAction;
-  private Subject               subject;
+  private ISecurityHandler      securityHandler;
 
   private IViewDescriptor       viewDescriptor;
 
@@ -194,10 +191,10 @@ public class Workspace implements ISecurable, ISubjectAware {
     if (modules == null) {
       return null;
     }
-    Subject subj = getSubject();
-    if (subj != null) {
+    ISecurityHandler sh = getSecurityHandler();
+    if (sh != null) {
       for (Iterator<Module> ite = modules.iterator(); ite.hasNext();) {
-        if (!SecurityHelper.isSubjectGranted(subj, ite.next())) {
+        if (!sh.isAccessGranted(ite.next())) {
           ite.remove();
         }
       }
@@ -375,7 +372,7 @@ public class Workspace implements ISecurable, ISubjectAware {
     this.modules = modules;
     if (this.modules != null) {
       for (Module module : this.modules) {
-        module.setSubject(getSubject());
+        module.setSecurityHandler(getSecurityHandler());
       }
     }
   }
@@ -417,15 +414,17 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * {@inheritDoc}
+   * Configures the security handler used to secure this module.
    * 
+   * @param securityHandler
+   *          the security handler.
    * @internal
    */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
+  public void setSecurityHandler(ISecurityHandler securityHandler) {
+    this.securityHandler = securityHandler;
     if (this.modules != null) {
       for (Module module : this.modules) {
-        module.setSubject(getSubject());
+        module.setSecurityHandler(getSecurityHandler());
       }
     }
   }
@@ -443,7 +442,12 @@ public class Workspace implements ISecurable, ISubjectAware {
     return "";
   }
 
-  private Subject getSubject() {
-    return subject;
+  /**
+   * Gets the securityHandler.
+   * 
+   * @return the securityHandler.
+   */
+  private ISecurityHandler getSecurityHandler() {
+    return securityHandler;
   }
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
-import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 
 /**
@@ -33,16 +33,7 @@ import org.jspresso.framework.util.exception.IExceptionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IActionHandler extends IExceptionHandler {
-
-  /**
-   * Checks authorization for secured access. It shoud throw a SecurityException
-   * whenever access should not be granted.
-   * 
-   * @param securable
-   *          the id of the secured access to check.
-   */
-  void checkAccess(ISecurable securable);
+public interface IActionHandler extends IExceptionHandler, ISecurityHandler {
 
   /**
    * Creates an empty action context.
@@ -81,15 +72,6 @@ public interface IActionHandler extends IExceptionHandler {
    * @return the JAAS subject attached to this action handler.
    */
   Subject getSubject();
-
-  /**
-   * Checks authorization for secured access.
-   * 
-   * @param securable
-   *          the id of the secured access to check.
-   * @return true if access is granted.
-   */
-  boolean isAccessGranted(ISecurable securable);
 
   /**
    * Reads a user preference.

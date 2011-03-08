@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.binding.model;
 
-import javax.security.auth.Subject;
-
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -31,7 +29,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
@@ -51,16 +49,16 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * {@inheritDoc}
    */
   public IValueConnector createModelConnector(String id,
-      Class<?> componentContract, Subject subject) {
+      Class<?> componentContract, ISecurityHandler securityHandler) {
     return createModelConnector(id, getDescriptorRegistry()
-        .getComponentDescriptor(componentContract), subject);
+        .getComponentDescriptor(componentContract), securityHandler);
   }
 
   /**
    * {@inheritDoc}
    */
   public IValueConnector createModelConnector(String id,
-      IModelDescriptor modelDescriptor, Subject subject) {
+      IModelDescriptor modelDescriptor, ISecurityHandler securityHandler) {
     IValueConnector modelConnector = null;
     if (modelDescriptor instanceof IComponentDescriptor<?>) {
       modelConnector = new ModelConnector(id,
@@ -86,7 +84,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
       }
     }
     if (modelConnector != null) {
-      modelConnector.setSubject(subject);
+      modelConnector.setSecurityHandler(securityHandler);
       if (modelDescriptor instanceof IGateAccessible) {
         modelConnector.setLocallyWritable(!((IGateAccessible) modelDescriptor)
             .isReadOnly());
@@ -94,7 +92,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
           for (IGate gate : ((IGateAccessible) modelDescriptor)
               .getReadabilityGates()) {
             if (!(gate instanceof ISecurable)
-                || SecurityHelper.isSubjectGranted(subject, (ISecurable) gate)) {
+                || securityHandler.isAccessGranted((ISecurable) gate)) {
               modelConnector.addReadabilityGate(gate.clone());
             }
           }
@@ -103,7 +101,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
           for (IGate gate : ((IGateAccessible) modelDescriptor)
               .getWritabilityGates()) {
             if (!(gate instanceof ISecurable)
-                || SecurityHelper.isSubjectGranted(subject, (ISecurable) gate)) {
+                || securityHandler.isAccessGranted((ISecurable) gate)) {
               modelConnector.addWritabilityGate(gate.clone());
             }
           }

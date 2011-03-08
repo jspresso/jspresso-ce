@@ -26,7 +26,6 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * This interface is implemented by the controllers of the application.
  * Controllers implement the interface since their main role is to execute
@@ -45,7 +44,7 @@ public interface IController extends IActionHandler {
    */
   void loggedIn(Subject subject);
 
-    /**
+  /**
    * Gets the applicationSession for this backend controller.
    * 
    * @return the current controller application session.

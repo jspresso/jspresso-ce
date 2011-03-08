@@ -27,12 +27,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.security.auth.Subject;
-
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.security.ISecurityHandler;
+import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.event.ValueChangeSupport;
@@ -75,7 +74,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private Collection<IGate>        readabilityGates;
   private PropertyChangeListener   readabilityGatesListener;
 
-  private Subject                  subject;
+  private ISecurityHandler         securityHandler;
 
   private ValueChangeSupport       valueChangeSupport;
   private Collection<IGate>        writabilityGates;
@@ -103,8 +102,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void addReadabilityGate(IGate gate) {
-    if (gate instanceof ISubjectAware) {
-      ((ISubjectAware) gate).setSubject(getSubject());
+    if (gate instanceof ISecurityHandlerAware) {
+      ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (readabilityGates == null) {
       readabilityGates = new HashSet<IGate>(4);
@@ -136,8 +135,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void addWritabilityGate(IGate gate) {
-    if (gate instanceof ISubjectAware) {
-      ((ISubjectAware) gate).setSubject(getSubject());
+    if (gate instanceof ISecurityHandlerAware) {
+      ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (writabilityGates == null) {
       writabilityGates = new HashSet<IGate>(4);
@@ -397,8 +396,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void removeReadabilityGate(IGate gate) {
-    if (gate instanceof ISubjectAware) {
-      ((ISubjectAware) gate).setSubject(null);
+    if (gate instanceof ISecurityHandlerAware) {
+      ((ISecurityHandlerAware) gate).setSecurityHandler(null);
     }
     if (readabilityGates == null) {
       return;
@@ -422,8 +421,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void removeWritabilityGate(IGate gate) {
-    if (gate instanceof ISubjectAware) {
-      ((ISubjectAware) gate).setSubject(null);
+    if (gate instanceof ISecurityHandlerAware) {
+      ((ISecurityHandlerAware) gate).setSecurityHandler(null);
     }
     if (writabilityGates == null) {
       return;
@@ -449,9 +448,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
             expectedType = Boolean.class;
           }
           try {
-            Object adaptedValue = expectedType.getConstructor(
-                new Class<?>[] {String.class}).newInstance(
-                new Object[] {aValue.toString()});
+            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
+              String.class
+            }).newInstance(new Object[] {
+              aValue.toString()
+            });
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorBindingException(ex);
@@ -589,23 +590,24 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Configures accessibility gates with the subject.
-   * <p>
-   * {@inheritDoc}
+   * Configures accessibility gates with the security handler.
+   * 
+   * @param securityHandler
+   *          the security handler responsible for managing authorizations.
    */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
+  public void setSecurityHandler(ISecurityHandler securityHandler) {
+    this.securityHandler = securityHandler;
     if (getReadabilityGates() != null) {
       for (IGate gate : getReadabilityGates()) {
-        if (gate instanceof ISubjectAware) {
-          ((ISubjectAware) gate).setSubject(subject);
+        if (gate instanceof ISecurityHandlerAware) {
+          ((ISecurityHandlerAware) gate).setSecurityHandler(securityHandler);
         }
       }
     }
     if (getWritabilityGates() != null) {
       for (IGate gate : getWritabilityGates()) {
-        if (gate instanceof ISubjectAware) {
-          ((ISubjectAware) gate).setSubject(subject);
+        if (gate instanceof ISecurityHandlerAware) {
+          ((ISecurityHandlerAware) gate).setSecurityHandler(securityHandler);
         }
       }
     }
@@ -766,15 +768,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Gets the subject.
-   * 
-   * @return the subject.
-   */
-  protected Subject getSubject() {
-    return subject;
-  }
-
-  /**
    * Gets the writabilityGates.
    * 
    * @return the writabilityGates.
@@ -904,5 +897,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
       gate.setModel(evt.getNewValue());
     }
 
+  }
+
+  /**
+   * Gets the securityHandler.
+   * 
+   * @return the securityHandler.
+   */
+  protected ISecurityHandler getSecurityHandler() {
+    return securityHandler;
   }
 }

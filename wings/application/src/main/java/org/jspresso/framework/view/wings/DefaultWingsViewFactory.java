@@ -2236,7 +2236,7 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler) {
     WingsViewCellEditorAdapter editor;
     editor = new WingsViewCellEditorAdapter(editorView,
-        getModelConnectorFactory(), getMvcBinder(), actionHandler.getSubject());
+        getModelConnectorFactory(), getMvcBinder(), actionHandler);
     return editor;
   }
 

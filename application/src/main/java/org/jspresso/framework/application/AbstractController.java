@@ -82,7 +82,7 @@ public abstract class AbstractController implements IController {
   public Subject getSubject() {
     return getApplicationSession().getSubject();
   }
-
+ 
   /**
    * Gets the translationProvider.
    * 
