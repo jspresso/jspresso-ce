@@ -20,7 +20,7 @@ package org.jspresso.framework.util.remote;
 
 import java.io.Serializable;
 
-import org.jspresso.framework.util.automation.IPermIdentifiable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 
 /**
  * An object remote server peer.
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.automation.IPermIdentifiable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemotePeer implements IRemotePeer, IPermIdentifiable,
+public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
     Serializable {
 
   private static final long serialVersionUID = 2174357777581427148L;

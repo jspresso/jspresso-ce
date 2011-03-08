@@ -22,7 +22,7 @@ import org.jspresso.framework.binding.basic.BasicFormattedValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteFormattedValueState;
-import org.jspresso.framework.util.automation.IPermIdentifiable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
@@ -34,7 +34,7 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
-    implements IRemotePeer, IRemoteStateOwner, IPermIdentifiable {
+    implements IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
   private String                    permId;
   private RemoteConnectorFactory    connectorFactory;

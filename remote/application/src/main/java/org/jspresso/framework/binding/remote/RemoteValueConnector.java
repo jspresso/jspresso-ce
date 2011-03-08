@@ -22,7 +22,7 @@ import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IPermIdentifiable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -32,7 +32,7 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements
-    IRemotePeer, IRemoteStateOwner, IPermIdentifiable {
+    IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
   private String                  permId;
   private RemoteConnectorFactory  connectorFactory;

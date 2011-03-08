@@ -71,12 +71,12 @@ public interface IRemotePeerRegistry {
   void register(IRemotePeer remotePeer);
 
   /**
-   * Generates and registers an  permanent Id.
+   * Generates and registers a permanent Id.
    * 
    * @param permId
    *          the  permanent seed to use.
    * @param guid
-   *          the guid to associate the generated  permanent idto.
+   *          the guid to associate the generated  permanent id to.
    * @return the generated  permanent id.
    */
   String registerPermId(String permId, String guid);

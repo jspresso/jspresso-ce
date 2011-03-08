@@ -25,7 +25,7 @@ package org.jspresso.framework.util.automation;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IPermIdentifiable {
+public interface IPermIdSource {
 
   /**
    * Gets the permId.

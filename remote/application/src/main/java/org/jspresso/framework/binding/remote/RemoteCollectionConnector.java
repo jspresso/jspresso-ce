@@ -29,7 +29,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IPermIdentifiable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -40,7 +40,7 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionConnector extends BasicCollectionConnector
-    implements IRemotePeer, IRemoteStateOwner, IPermIdentifiable {
+    implements IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
   private String                    permId;
   private RemoteConnectorFactory    connectorFactory;

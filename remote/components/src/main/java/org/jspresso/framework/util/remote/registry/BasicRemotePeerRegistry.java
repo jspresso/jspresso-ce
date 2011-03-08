@@ -29,7 +29,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.ReferenceMap;
-import org.jspresso.framework.util.automation.IPermIdentifiable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -102,8 +102,8 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     if (!backingStore.containsKey(remotePeer.getGuid())) {
       backingStore.put(remotePeer.getGuid(), remotePeer);
     }
-    if (remotePeer instanceof IPermIdentifiable) {
-      String permId = ((IPermIdentifiable) remotePeer).getPermId();
+    if (remotePeer instanceof IPermIdSource) {
+      String permId = ((IPermIdSource) remotePeer).getPermId();
       if (permId != null) {
         automationBackingStore.put(permId, remotePeer.getGuid());
       }
@@ -132,8 +132,8 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    */
   public void unregister(String guid) {
     IRemotePeer remotePeer = backingStore.remove(guid);
-    if (remotePeer instanceof IPermIdentifiable) {
-      String permId = ((IPermIdentifiable) remotePeer).getPermId();
+    if (remotePeer instanceof IPermIdSource) {
+      String permId = ((IPermIdSource) remotePeer).getPermId();
       if (permId != null) {
         automationBackingStore.remove(permId);
       }
