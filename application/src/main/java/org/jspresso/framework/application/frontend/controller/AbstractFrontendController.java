@@ -338,8 +338,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     actionContext.putAll(context);
     context.putAll(actionContext);
     try {
-      SecurityHelper.checkAccess(getBackendController().getApplicationSession()
-          .getSubject(), action, getTranslationProvider(), getLocale());
+      checkAccess(action);
       if (action.isBackend()) {
         return executeBackend(action, context);
       }

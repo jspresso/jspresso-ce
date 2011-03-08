@@ -62,7 +62,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
-import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
@@ -229,8 +228,7 @@ public abstract class AbstractBackendController extends AbstractController
           "The backend controller is executing a frontend action. Please check the action chaining : "
               + action.toString());
     }
-    SecurityHelper.checkAccess(getApplicationSession().getSubject(), action,
-        getTranslationProvider(), getLocale());
+    checkAccess(action);
     Map<String, Object> actionContext = getInitialActionContext();
     if (context != null) {
       context.putAll(actionContext);

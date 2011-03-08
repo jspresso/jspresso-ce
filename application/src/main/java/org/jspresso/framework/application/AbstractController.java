@@ -25,6 +25,7 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
@@ -51,8 +52,19 @@ public abstract class AbstractController implements IController {
    * {@inheritDoc}
    */
   public void checkAccess(ISecurable securable) {
-    SecurityHelper.checkAccess(getApplicationSession().getSubject(), securable,
-        getTranslationProvider(), getLocale());
+    if (isAccessGranted(securable)) {
+      return;
+    }
+    if (securable instanceof IDescriptor) {
+      throw new SecurityException(getTranslationProvider().getTranslation(
+          "access.denied.object",
+          new Object[] {
+            ((IDescriptor) securable).getI18nName(getTranslationProvider(),
+                getLocale())
+          }, getLocale()));
+    }
+    throw new SecurityException(getTranslationProvider().getTranslation(
+        "access.denied", getLocale()));
   }
 
   /**

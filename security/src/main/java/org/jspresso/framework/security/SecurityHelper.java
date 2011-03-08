@@ -22,13 +22,10 @@ import java.security.Principal;
 import java.security.acl.Group;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Locale;
 
 import javax.security.auth.Subject;
 
 import org.jboss.security.SimplePrincipal;
-import org.jspresso.framework.util.descriptor.IDescriptor;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * Helper class for security management.
@@ -50,33 +47,6 @@ public final class SecurityHelper {
 
   private SecurityHelper() {
     // private constructor for helper class
-  }
-
-  /**
-   * Check access to a secured resource. Whenever acces might not be granted, a
-   * Security exception is thrown.
-   * 
-   * @param subject
-   *          the subject to check access for.
-   * @param securable
-   *          the secured resource to check access to.
-   * @param translationProvider
-   *          the translation provider to translate the potential error message.
-   * @param locale
-   *          the locale to translate the potential error message.
-   */
-  public static void checkAccess(Subject subject, ISecurable securable,
-      ITranslationProvider translationProvider, Locale locale) {
-    if (isSubjectGranted(subject, securable)) {
-      return;
-    }
-    if (securable instanceof IDescriptor) {
-      throw new SecurityException(translationProvider.getTranslation(
-          "access.denied.object", new Object[] {((IDescriptor) securable)
-              .getI18nName(translationProvider, locale)}, locale));
-    }
-    throw new SecurityException(translationProvider.getTranslation(
-        "access.denied", locale));
   }
 
   /**
