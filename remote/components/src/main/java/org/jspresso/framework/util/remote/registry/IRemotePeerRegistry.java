@@ -44,7 +44,7 @@ public interface IRemotePeerRegistry {
   IRemotePeer getRegistered(String guid);
 
   /**
-   * Retrieves a registered remote peer using its automation id.
+   * Retrieves a registered remote peer using its permanent id.
    * 
    * @param permId
    *          the remote peer permId.
@@ -71,13 +71,13 @@ public interface IRemotePeerRegistry {
   void register(IRemotePeer remotePeer);
 
   /**
-   * Generates and registers an automation Id.
+   * Generates and registers an  permanent Id.
    * 
    * @param permIdSeed
-   *          the automation seed to use.
+   *          the  permanent seed to use.
    * @param guid
-   *          the guid to associate the generated automation idto.
-   * @return the generated automation id.
+   *          the guid to associate the generated  permanent idto.
+   * @return the generated  permanent id.
    */
   String registerPermId(String permIdSeed, String guid);
 
