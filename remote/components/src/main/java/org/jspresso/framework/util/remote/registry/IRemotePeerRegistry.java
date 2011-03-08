@@ -73,13 +73,13 @@ public interface IRemotePeerRegistry {
   /**
    * Generates and registers an  permanent Id.
    * 
-   * @param permIdSeed
+   * @param permId
    *          the  permanent seed to use.
    * @param guid
    *          the guid to associate the generated  permanent idto.
    * @return the generated  permanent id.
    */
-  String registerPermId(String permIdSeed, String guid);
+  String registerPermId(String permId, String guid);
 
   /**
    * Unregisters a remote peer.

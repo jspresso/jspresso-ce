@@ -1902,14 +1902,14 @@ public class DefaultSwingViewFactory extends
         }
       });
     }
-    if (viewDescriptor.getPermIdSeed() != null) {
+    if (viewDescriptor.getPermId() != null) {
       viewComponent.getColumnModel().addColumnModelListener(
           new ColumnPreferencesListener(viewComponent, viewDescriptor
-              .getPermIdSeed(), actionHandler));
+              .getPermId(), actionHandler));
     }
     attachDefaultCollectionListener(connector);
-    if (viewDescriptor.getPermIdSeed() != null) {
-      applyUserPreferences(viewDescriptor.getPermIdSeed(), viewComponent,
+    if (viewDescriptor.getPermId() != null) {
+      applyUserPreferences(viewDescriptor.getPermId(), viewComponent,
           actionHandler);
     }
     return view;

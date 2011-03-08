@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.automation.IPermIdentifiable;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Dimension;
@@ -33,7 +33,7 @@ import org.jspresso.framework.view.action.IActionable;
  * @author Vincent Vandenschrick
  */
 public interface IViewDescriptor extends IIconDescriptor, ISecurable,
-    IActionable, IGateAccessible, IPermIdSource {
+    IActionable, IGateAccessible, IPermIdentifiable {
 
   /**
    * Gets the background color of this view as hex string representation argb

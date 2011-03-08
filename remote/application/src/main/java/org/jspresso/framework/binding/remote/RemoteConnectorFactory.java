@@ -362,9 +362,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   public RemoteCompositeValueState createRemoteCompositeValueState(String guid,
-      String permIdSeed) {
+      String permId) {
     RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
-    state.setPermId(registerPermId(permIdSeed, guid));
+    state.setPermId(registerPermId(permId, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -374,9 +374,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   public RemoteValueState createRemoteValueState(String guid,
-      String permIdSeed) {
+      String permId) {
     RemoteValueState state = new RemoteValueState(guid);
-    state.setPermId(registerPermId(permIdSeed, guid));
+    state.setPermId(registerPermId(permId, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -386,9 +386,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   public RemoteFormattedValueState createRemoteFormattedValueState(String guid,
-      String permIdSeed) {
+      String permId) {
     RemoteFormattedValueState state = new RemoteFormattedValueState(guid);
-    state.setPermId(registerPermId(permIdSeed, guid));
+    state.setPermId(registerPermId(permId, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -434,8 +434,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public String registerPermId(String permIdSeed, String guid) {
-    return remotePeerRegistry.registerPermId(permIdSeed, guid);
+  public String registerPermId(String permId, String guid) {
+    return remotePeerRegistry.registerPermId(permId, guid);
   }
 
   /**

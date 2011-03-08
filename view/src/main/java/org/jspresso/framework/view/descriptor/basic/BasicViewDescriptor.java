@@ -46,7 +46,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   private ActionMap          actionMap;
   private ActionMap          secondaryActionMap;
-  private String             permIdSeed;
+  private String             permId;
   private String             background;
   private EBorderType        borderType = EBorderType.NONE;
   private String             font;
@@ -71,11 +71,11 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  public String getPermIdSeed() {
-    if (permIdSeed == null) {
+  public String getPermId() {
+    if (permId == null) {
       return getName();
     }
-    return permIdSeed;
+    return permId;
   }
 
   /**
@@ -272,11 +272,11 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * component connector). This id can serve for the sake of recording/replaying
    * UI command sequences.
    * 
-   * @param permIdSeed
+   * @param permId
    *          fixed id to mark the generated UI component.
    */
-  public void setPermIdSeed(String permIdSeed) {
-    this.permIdSeed = permIdSeed;
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
   /**

@@ -27,7 +27,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.automation.IPermIdentifiable;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -39,9 +39,9 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  */
 public class RemoteCollectionConnectorListProvider extends
     BasicCollectionConnectorListProvider implements IRemotePeer,
-    IRemoteStateOwner, IPermIdSource {
+    IRemoteStateOwner, IPermIdentifiable {
 
-  private String                    permIdSeed;
+  private String                    permId;
   private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private RemoteCompositeValueState state;
@@ -95,13 +95,13 @@ public class RemoteCollectionConnectorListProvider extends
   }
 
   /**
-   * Gets the permIdSeed.
+   * Gets the permId.
    * 
-   * @return the permIdSeed.
+   * @return the permId.
    */
-  public String getPermIdSeed() {
-    if (permIdSeed != null) {
-      return permIdSeed;
+  public String getPermId() {
+    if (permId != null) {
+      return permId;
     }
     return getId();
   }
@@ -127,13 +127,13 @@ public class RemoteCollectionConnectorListProvider extends
   }
 
   /**
-   * Sets the permIdSeed.
+   * Sets the permId.
    * 
-   * @param permIdSeed
-   *          the permIdSeed to set.
+   * @param permId
+   *          the permId to set.
    */
-  public void setPermIdSeed(String permIdSeed) {
-    this.permIdSeed = permIdSeed;
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
   /**
@@ -157,7 +157,7 @@ public class RemoteCollectionConnectorListProvider extends
    */
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
-        .createRemoteCompositeValueState(getGuid(), getPermIdSeed());
+        .createRemoteCompositeValueState(getGuid(), getPermId());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (ICollectionConnector childConnector : getCollectionConnectors()) {
       if (childConnector instanceof IRemoteStateOwner) {

@@ -97,7 +97,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * <code>ACTION_MODEL_NAME</code>.
    */
   protected static final String ACTION_MODEL_NAME = "ActionModel";
-  private String                permIdSeed;
+  private String                permId;
 
   private Collection<String>    grantedRoles;
   private IAction               nextAction;
@@ -116,12 +116,12 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * Gets the permIdSeed.
+   * Gets the permId.
    * 
-   * @return the permIdSeed.
+   * @return the permId.
    */
-  public String getPermIdSeed() {
-    return permIdSeed;
+  public String getPermId() {
+    return permId;
   }
 
   /**
@@ -132,13 +132,13 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * Sets the permIdSeed.
+   * Sets the permId.
    * 
-   * @param permIdSeed
-   *          the permIdSeed to set.
+   * @param permId
+   *          the permId to set.
    */
-  public void setPermIdSeed(String permIdSeed) {
-    this.permIdSeed = permIdSeed;
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
   /**

@@ -22,7 +22,7 @@ import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.automation.IPermIdentifiable;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -32,9 +32,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements
-    IRemotePeer, IRemoteStateOwner, IPermIdSource {
+    IRemotePeer, IRemoteStateOwner, IPermIdentifiable {
 
-  private String                  permIdSeed;
+  private String                  permId;
   private RemoteConnectorFactory  connectorFactory;
   private String                  guid;
   private IRemoteStateValueMapper remoteStateValueMapper;
@@ -87,13 +87,13 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * Gets the permIdSeed.
+   * Gets the permId.
    * 
-   * @return the permIdSeed.
+   * @return the permId.
    */
-  public String getPermIdSeed() {
-    if (permIdSeed != null) {
-      return permIdSeed;
+  public String getPermId() {
+    if (permId != null) {
+      return permId;
     }
     return getId();
   }
@@ -127,13 +127,13 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * Sets the permIdSeed.
+   * Sets the permId.
    * 
-   * @param permIdSeed
-   *          the permIdSeed to set.
+   * @param permId
+   *          the permId to set.
    */
-  public void setPermIdSeed(String permIdSeed) {
-    this.permIdSeed = permIdSeed;
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
   /**
@@ -164,7 +164,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    */
   protected RemoteValueState createState() {
     RemoteValueState createdState = connectorFactory.createRemoteValueState(
-        getGuid(), getPermIdSeed());
+        getGuid(), getPermId());
     return createdState;
   }
 
