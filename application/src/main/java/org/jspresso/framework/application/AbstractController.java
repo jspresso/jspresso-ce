@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.exception.IExceptionHandler;
@@ -46,12 +47,17 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class AbstractController implements IController {
 
   private IExceptionHandler    customExceptionHandler;
+  private ISecurityHandler     customSecurityHandler;
   private ITranslationProvider translationProvider;
 
   /**
-   * {@inheritDoc}
+   * Checks authorization for secured access. It shoud throw a SecurityException
+   * whenever access should not be granted.
+   * 
+   * @param securable
+   *          the id of the secured access to check.
    */
-  public void checkAccess(ISecurable securable) {
+  protected void checkAccess(ISecurable securable) {
     if (isAccessGranted(securable)) {
       return;
     }
@@ -82,7 +88,7 @@ public abstract class AbstractController implements IController {
   public Subject getSubject() {
     return getApplicationSession().getSubject();
   }
- 
+
   /**
    * Gets the translationProvider.
    * 
@@ -110,8 +116,14 @@ public abstract class AbstractController implements IController {
    * {@inheritDoc}
    */
   public boolean isAccessGranted(ISecurable securable) {
-    return SecurityHelper.isSubjectGranted(
-        getApplicationSession().getSubject(), securable);
+    if (SecurityHelper.isSubjectGranted(getApplicationSession().getSubject(),
+        securable)) {
+      if (customSecurityHandler != null) {
+        return customSecurityHandler.isAccessGranted(securable);
+      }
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -136,6 +148,19 @@ public abstract class AbstractController implements IController {
    */
   public void setCustomExceptionHandler(IExceptionHandler customExceptionHandler) {
     this.customExceptionHandler = customExceptionHandler;
+  }
+
+  /**
+   * Configures a custom security handler on the controller. The controller
+   * itself is a security handler and is used as such across most of the
+   * application layers. Before delegating to the custom security handler, the
+   * controller will apply role-based security rules that cannot be disabled.
+   * 
+   * @param customSecurityHandler
+   *          the customESecurityHandler to set.
+   */
+  public void setCustomSecurityHandler(ISecurityHandler customSecurityHandler) {
+    this.customSecurityHandler = customSecurityHandler;
   }
 
   /**

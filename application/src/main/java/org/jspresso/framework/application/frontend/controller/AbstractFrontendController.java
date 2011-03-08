@@ -295,7 +295,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public void displayWorkspace(String workspaceName) {
     if (workspaceName != null) {
       Workspace workspace = getWorkspace(workspaceName);
-      checkAccess(workspace);
       if (!workspace.isStarted()) {
         if (workspace.getStartupAction() != null) {
           Map<String, Object> actionContext = getInitialActionContext();

@@ -28,15 +28,6 @@ package org.jspresso.framework.security;
 public interface ISecurityHandler {
 
   /**
-   * Checks authorization for secured access. It shoud throw a SecurityException
-   * whenever access should not be granted.
-   * 
-   * @param securable
-   *          the id of the secured access to check.
-   */
-  void checkAccess(ISecurable securable);
-
-  /**
    * Checks authorization for secured access.
    * 
    * @param securable
