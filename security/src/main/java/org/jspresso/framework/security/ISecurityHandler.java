@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.security;
 
+import java.util.Map;
 
 /**
  * This interface is implemented by Jspresso security handlers.
@@ -26,6 +27,61 @@ package org.jspresso.framework.security;
  * @author Vincent Vandenschrick
  */
 public interface ISecurityHandler {
+
+  /**
+   * <code>MODEL</code>.
+   */
+  String MODEL              = "MODEL";
+
+  /**
+   * <code>PROPERTY</code>.
+   */
+  String PROPERTY           = "PROPERTY";
+
+  /**
+   * <code>WORKSPACE</code>.
+   */
+  String WORKSPACE          = "WORKSPACE";
+
+  /**
+   * <code>MODULE</code>.
+   */
+  String MODULE             = "MODULE";
+
+  /**
+   * <code>VIEW</code>.
+   */
+  String VIEW               = "VIEW";
+
+  /**
+   * <code>ACTION</code>.
+   */
+  String ACTION             = "ACTION";
+
+  /**
+   * <code>AUTHORIZATION</code>.
+   */
+  String AUTHORIZATION      = "AUTHORIZATION";
+
+  /**
+   * <code>AUTH_VISIBLE</code>.
+   */
+  String AUTH_VISIBLE       = "AUTH_VISIBLE";
+
+  /**
+   * <code>AUTH_ENABLE</code>.
+   */
+  String AUTH_ENABLE        = "AUTH_ENABLE";
+
+  /**
+   * <code>SUBJECT</code>.
+   */
+  String SESSION_SUBJECT    = "SESSION_SUBJECT";
+
+  /**
+   * <code>SESSION_PROPERTIES</code>.
+   */
+  String SESSION_PROPERTIES = "SESSION_PROPERTIES";
 
   /**
    * Checks authorization for secured access.
