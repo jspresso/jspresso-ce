@@ -43,6 +43,7 @@ import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.application.security.SecurityContextBuilder;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
@@ -50,6 +51,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
@@ -178,8 +180,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     if (currentModule != null) {
       pinModule(getSelectedWorkspaceName(), currentModule);
-      execute(currentModule.getExitAction(), createEmptyContext());
-      execute(getOnModuleExitAction(), createEmptyContext());
+      execute(currentModule.getExitAction(), new HashMap<String, Object>());
+      execute(getOnModuleExitAction(), new HashMap<String, Object>());
     }
     displayWorkspace(workspaceName);
     IView<E> moduleAreaView = workspaceViews.get(workspaceName);
@@ -201,12 +203,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
     selectedModules.put(workspaceName, module);
     if (module != null) {
       if (!module.isStarted() && module.getStartupAction() != null) {
-        execute(module.getStartupAction(), createEmptyContext());
+        execute(module.getStartupAction(), new HashMap<String, Object>());
       }
       module.setStarted(true);
       pinModule(getSelectedWorkspaceName(), module);
-      execute(module.getEntryAction(), createEmptyContext());
-      execute(getOnModuleEnterAction(), createEmptyContext());
+      execute(module.getEntryAction(), new HashMap<String, Object>());
+      execute(getOnModuleEnterAction(), new HashMap<String, Object>());
     }
     boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
     try {
@@ -337,7 +339,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     actionContext.putAll(context);
     context.putAll(actionContext);
     try {
-      checkAccess(action);
+      // Should be handled before getting there.
+      // checkAccess(action);
       if (action.isBackend()) {
         return executeBackend(action, context);
       }
@@ -426,6 +429,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    initialActionContext.putAll(getBackendController()
+        .getInitialActionContext());
     if (dialogContextStack != null) {
       for (int i = dialogContextStack.size() - 1; i >= 0; i--) {
         initialActionContext.putAll(dialogContextStack.get(i));
@@ -435,6 +440,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
     initialActionContext.put(ActionContextConstants.MODULE,
         selectedModules.get(getSelectedWorkspaceName()));
     return initialActionContext;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getInitialSecurityContext() {
+    Map<String, Object> initialSecurityContext = new HashMap<String, Object>();
+    initialSecurityContext.putAll(getBackendController()
+        .getInitialSecurityContext());
+    ISecurityContextBuilder initialSecurityContextBuilder = new SecurityContextBuilder();
+    initialSecurityContextBuilder.appendToSecurityContext(
+        getWorkspace(getSelectedWorkspaceName())).appendToSecurityContext(
+        getSelectedModule(getSelectedWorkspaceName()));
+    initialSecurityContext.putAll(initialSecurityContextBuilder
+        .getSecurityContext());
+    return initialSecurityContext;
   }
 
   /**
@@ -515,7 +536,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (workspaces != null) {
       List<String> workspaceNames = new ArrayList<String>();
       for (Map.Entry<String, Workspace> wsEntry : workspaces.entrySet()) {
-        if (isAccessGranted(wsEntry.getValue())) {
+        Workspace workspace = wsEntry.getValue();
+        if (isAccessGranted(workspace)) {
           workspaceNames.add(wsEntry.getKey());
         }
       }
@@ -1135,11 +1157,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     getBackendController().loggedIn(subject);
     if (workspaces != null) {
-      for (Workspace workspace : workspaces.values()) {
-        workspace.setSecurityHandler(this);
-        translateWorkspace(workspace);
+      Map<String, Workspace> filteredWorkspaces = new HashMap<String, Workspace>();
+      for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
+        Workspace workspace = workspaceEntry.getValue();
+        if (isAccessGranted(workspace)) {
+          workspace.setSecurityHandler(this);
+          translateWorkspace(workspace);
+          filteredWorkspaces.put(workspaceEntry.getKey(),
+              workspaceEntry.getValue());
+        }
       }
-      getBackendController().installWorkspaces(workspaces);
+      getBackendController().installWorkspaces(filteredWorkspaces);
     }
   }
 

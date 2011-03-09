@@ -648,10 +648,12 @@ public class DefaultSwingController extends
         applicationToolBar.add(createComboButton(actionList));
       } else {
         for (IDisplayableAction da : actionList.getActions()) {
-          JButton b = new JButton();
-          b.setAction(getViewFactory().getActionFactory().createAction(da,
-              this, null, getLocale()));
-          applicationToolBar.add(b);
+          if (isAccessGranted(da)) {
+            JButton b = new JButton();
+            b.setAction(getViewFactory().getActionFactory().createAction(da,
+                this, null, getLocale()));
+            applicationToolBar.add(b);
+          }
         }
       }
       applicationToolBar.addSeparator();
@@ -709,7 +711,7 @@ public class DefaultSwingController extends
        */
       @Override
       public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
-        execute(getExitAction(), createEmptyContext());
+        execute(getExitAction(), new HashMap<String, Object>());
       }
     });
     controllerFrame.pack();

@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -99,7 +100,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
   public Map<String, Object> createActionContext(IActionHandler actionHandler,
       IView<F> view, IValueConnector viewConnector, String actionCommand,
       F actionWidget) {
-    Map<String, Object> actionContext = actionHandler.createEmptyContext();
+    Map<String, Object> actionContext = new HashMap<String, Object>();
 
     IModelDescriptor modelDescriptor = null;
     F sourceComponent = null;

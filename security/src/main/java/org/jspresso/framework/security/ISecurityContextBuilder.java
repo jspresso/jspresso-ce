@@ -18,21 +18,31 @@
  */
 package org.jspresso.framework.security;
 
+import java.util.Map;
 
 /**
- * This interface is implemented by Jspresso security handlers.
+ * This interface is implemented by Jspresso security context builders.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISecurityHandler extends ISecurityContextBuilder {
+public interface ISecurityContextBuilder {
 
   /**
-   * Checks authorization for secured access.
+   * Returns the current security context this builder works on.
    * 
-   * @param securable
-   *          the id of the secured access to check.
-   * @return true if access is granted.
+   * @return the current security context this builder works on.
    */
-  boolean isAccessGranted(ISecurable securable);
+  Map<String, Object> getSecurityContext();
+
+  /**
+   * Completes the security context by registering an application element. The
+   * way the context is actually amended depends on internal rules based on the
+   * type of element.
+   * 
+   * @param contextElement
+   *          the element to complement the context with.
+   * @return itself.
+   */
+  ISecurityContextBuilder appendToSecurityContext(Object contextElement);
 }

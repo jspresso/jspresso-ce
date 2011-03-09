@@ -90,7 +90,8 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
    * @return the customProperties.
    */
   public Map<String, Object> getCustomProperties() {
-    return customProperties;
+    // return a defensive copy
+    return new HashMap<String, Object>(customProperties);
   }
 
   /**

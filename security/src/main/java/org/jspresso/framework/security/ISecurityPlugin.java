@@ -18,21 +18,25 @@
  */
 package org.jspresso.framework.security;
 
+import java.util.Map;
 
 /**
- * This interface is implemented by Jspresso security handlers.
+ * A delegate plugin used to implement dynamic security algorithm.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISecurityHandler extends ISecurityContextBuilder {
+public interface ISecurityPlugin {
 
   /**
    * Checks authorization for secured access.
    * 
    * @param securable
    *          the id of the secured access to check.
+   * @param context
+   *          the security context of the authorization.
    * @return true if access is granted.
    */
-  boolean isAccessGranted(ISecurable securable);
+  boolean isAccessGranted(ISecurable securable, Map<String, Object> context);
+
 }

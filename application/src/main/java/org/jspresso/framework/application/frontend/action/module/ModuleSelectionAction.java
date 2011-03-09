@@ -57,13 +57,15 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
     String moName = getModuleName(context);
 
     Workspace ws = getController(context).getWorkspace(wsName);
-    if (getController(context).isAccessGranted(ws)) {
-      for (Module m : ws.getModules()) {
-        if (moName.equals(m.getName())) {
-          if (getController(context).isAccessGranted(m)) {
-            getController(context).displayModule(wsName, m);
+    if (ws != null) {
+      if (getController(context).isAccessGranted(ws)) {
+        for (Module m : ws.getModules()) {
+          if (moName.equals(m.getName())) {
+            if (getController(context).isAccessGranted(m)) {
+              getController(context).displayModule(wsName, m);
+            }
+            break;
           }
-          break;
         }
       }
     }

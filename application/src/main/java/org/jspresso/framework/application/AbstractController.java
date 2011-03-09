@@ -23,10 +23,11 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.application.security.SecurityContextBuilder;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISecurityHandler;
+import org.jspresso.framework.security.ISecurityContextBuilder;
+import org.jspresso.framework.security.ISecurityPlugin;
 import org.jspresso.framework.security.SecurityHelper;
-import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
@@ -46,39 +47,41 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractController implements IController {
 
-  private IExceptionHandler    customExceptionHandler;
-  private ISecurityHandler     customSecurityHandler;
-  private ITranslationProvider translationProvider;
+  private IExceptionHandler       customExceptionHandler;
+  private ISecurityPlugin         customSecurityPlugin;
+  private ITranslationProvider    translationProvider;
+  private ISecurityContextBuilder securityContextBuilder;
 
   /**
-   * Checks authorization for secured access. It shoud throw a SecurityException
-   * whenever access should not be granted.
-   * 
-   * @param securable
-   *          the id of the secured access to check.
+   * Constructs a new <code>AbstractController</code> instance.
    */
-  protected void checkAccess(ISecurable securable) {
-    if (isAccessGranted(securable)) {
-      return;
-    }
-    if (securable instanceof IDescriptor) {
-      throw new SecurityException(getTranslationProvider().getTranslation(
-          "access.denied.object",
-          new Object[] {
-            ((IDescriptor) securable).getI18nName(getTranslationProvider(),
-                getLocale())
-          }, getLocale()));
-    }
-    throw new SecurityException(getTranslationProvider().getTranslation(
-        "access.denied", getLocale()));
+  public AbstractController() {
+    securityContextBuilder = new SecurityContextBuilder();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Map<String, Object> createEmptyContext() {
-    return new HashMap<String, Object>();
-  }
+  // /**
+  // * Checks authorization for secured access. It shoud throw a
+  // SecurityException
+  // * whenever access should not be granted.
+  // *
+  // * @param securable
+  // * the id of the secured access to check.
+  // */
+  // protected void checkAccess(ISecurable securable) {
+  // if (isAccessGranted(securable)) {
+  // return;
+  // }
+  // if (securable instanceof IDescriptor) {
+  // throw new SecurityException(getTranslationProvider().getTranslation(
+  // "access.denied.object",
+  // new Object[] {
+  // ((IDescriptor) securable).getI18nName(getTranslationProvider(),
+  // getLocale())
+  // }, getLocale()));
+  // }
+  // throw new SecurityException(getTranslationProvider().getTranslation(
+  // "access.denied", getLocale()));
+  // }
 
   /**
    * Gets the subject out of the application session.
@@ -118,8 +121,11 @@ public abstract class AbstractController implements IController {
   public boolean isAccessGranted(ISecurable securable) {
     if (SecurityHelper.isSubjectGranted(getApplicationSession().getSubject(),
         securable)) {
-      if (customSecurityHandler != null) {
-        return customSecurityHandler.isAccessGranted(securable);
+      if (customSecurityPlugin != null) {
+        Map<String, Object> securityContext = new HashMap<String, Object>();
+        securityContext.putAll(getInitialSecurityContext());
+        securityContext.putAll(getSecurityContext());
+        return customSecurityPlugin.isAccessGranted(securable, securityContext);
       }
       return true;
     }
@@ -151,16 +157,16 @@ public abstract class AbstractController implements IController {
   }
 
   /**
-   * Configures a custom security handler on the controller. The controller
+   * Configures a custom security plugin on the controller. The controller
    * itself is a security handler and is used as such across most of the
    * application layers. Before delegating to the custom security handler, the
    * controller will apply role-based security rules that cannot be disabled.
    * 
-   * @param customSecurityHandler
+   * @param customSecurityPlugin
    *          the customESecurityHandler to set.
    */
-  public void setCustomSecurityHandler(ISecurityHandler customSecurityHandler) {
-    this.customSecurityHandler = customSecurityHandler;
+  public void setCustomSecurityPlugin(ISecurityPlugin customSecurityPlugin) {
+    this.customSecurityPlugin = customSecurityPlugin;
   }
 
   /**
@@ -172,5 +178,20 @@ public abstract class AbstractController implements IController {
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getSecurityContext() {
+    return securityContextBuilder.getSecurityContext();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISecurityContextBuilder appendToSecurityContext(Object contextElement) {
+    securityContextBuilder.appendToSecurityContext(contextElement);
+    return this;
   }
 }

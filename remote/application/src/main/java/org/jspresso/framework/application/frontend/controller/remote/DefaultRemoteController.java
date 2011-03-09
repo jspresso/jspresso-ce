@@ -665,7 +665,8 @@ public class DefaultRemoteController extends
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
         columnPrefs[i] = new Object[] {
             ((RemoteTableChangedCommand) command).getColumnIds()[i],
-            ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
+            ((RemoteTableChangedCommand) command).getColumnWidths()[i]
+        };
       }
       getViewFactory()
           .storeTablePreferences(
@@ -829,10 +830,12 @@ public class DefaultRemoteController extends
 
   private RActionList[] createRActionLists(ActionMap actionMap) {
     List<RActionList> actionLists = new ArrayList<RActionList>();
-    if (actionMap != null && isAccessGranted(actionMap)) {
-      for (ActionList actionList : actionMap.getActionLists(this)) {
-        if (isAccessGranted(actionList)) {
-          actionLists.add(createRActionList(actionList));
+    if (actionMap != null) {
+      if (isAccessGranted(actionMap)) {
+        for (ActionList actionList : actionMap.getActionLists(this)) {
+          if (isAccessGranted(actionList)) {
+            actionLists.add(createRActionList(actionList));
+          }
         }
       }
     }

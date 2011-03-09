@@ -19,6 +19,7 @@
 package org.jspresso.framework.application;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.security.auth.Subject;
 
@@ -71,4 +72,21 @@ public interface IController extends IActionHandler {
    * @return true if the stop was successful.
    */
   boolean stop();
+
+  /**
+   * Retrieves the initial action context from the controller. This context is
+   * passed to the action chain and contains application-wide context key-value
+   * pairs.
+   * 
+   * @return the map representing the initial context provided by this
+   *         controller.
+   */
+  Map<String, Object> getInitialActionContext();
+
+  /**
+   * Gets a default initial security context.
+   * 
+   * @return a default initial security context.
+   */
+  Map<String, Object> getInitialSecurityContext();
 }

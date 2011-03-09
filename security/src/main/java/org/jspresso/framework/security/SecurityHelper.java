@@ -20,8 +20,11 @@ package org.jspresso.framework.security;
 
 import java.security.Principal;
 import java.security.acl.Group;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.security.auth.Subject;
 
@@ -93,12 +96,7 @@ public final class SecurityHelper {
       }
     }
 
-    Group subjectRoles = null;
-    for (Principal p : subject.getPrincipals()) {
-      if (p instanceof Group && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
-        subjectRoles = (Group) p;
-      }
-    }
+    Group subjectRoles = getRolesGroup(subject);
     if (subjectRoles != null) {
       boolean granted = false;
       if (!grantedRoles.isEmpty()) {
@@ -121,5 +119,33 @@ public final class SecurityHelper {
       return granted;
     }
     return false;
+  }
+
+  private static Group getRolesGroup(Subject subject) {
+    Group subjectRoles = null;
+    for (Principal p : subject.getPrincipals()) {
+      if (p instanceof Group && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
+        subjectRoles = (Group) p;
+      }
+    }
+    return subjectRoles;
+  }
+
+  /**
+   * Extracts the role names contained in this JAAS subject.
+   * 
+   * @param subject the subject to extract the roles for.
+   * @return the roles list.
+   */
+  public static List<String> getRoles(Subject subject) {
+    List<String> roles = new ArrayList<String>();
+    Group subjectRoles = getRolesGroup(subject);
+    if (subjectRoles != null) {
+      for (Enumeration<? extends Principal> rolesEnum = subjectRoles.members(); rolesEnum
+          .hasMoreElements();) {
+        roles.add(rolesEnum.nextElement().getName());
+      }
+    }
+    return roles;
   }
 }

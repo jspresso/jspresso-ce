@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.remote;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -183,7 +184,7 @@ public class RemoteActionFactory extends
           sourceComponent = view.getPeer();
           viewConnector = view.getConnector();
         }
-        Map<String, Object> actionContext = actionHandler.createEmptyContext();
+        Map<String, Object> actionContext = new HashMap<String, Object>();
         if (context != null) {
           actionContext.putAll(context);
         }

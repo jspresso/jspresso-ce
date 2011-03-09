@@ -36,13 +36,6 @@ import org.jspresso.framework.util.exception.IExceptionHandler;
 public interface IActionHandler extends IExceptionHandler, ISecurityHandler {
 
   /**
-   * Creates an empty action context.
-   * 
-   * @return an empty action context.
-   */
-  Map<String, Object> createEmptyContext();
-
-  /**
    * Executes an action. Implementors should delegate the execution to the
    * action itself but are free to set the context of the execution (action
    * context, synchronous or not, transactionality, ...).
@@ -55,16 +48,6 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler {
    * @see IAction#execute(IActionHandler, Map)
    */
   boolean execute(IAction action, Map<String, Object> context);
-
-  /**
-   * Retrieves the initial action context from the controller. This context is
-   * passed to the action chain and contains application-wide context key-value
-   * pairs.
-   * 
-   * @return the map representing the initial context provided by this
-   *         controller.
-   */
-  Map<String, Object> getInitialActionContext();
 
   /**
    * Returns the JAAS subject attached to this action handler.

@@ -47,6 +47,7 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.WorkspaceDescriptor;
+import org.jspresso.framework.application.security.SecurityContextConstants;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.component.IComponent;
@@ -62,6 +63,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
@@ -228,7 +230,8 @@ public abstract class AbstractBackendController extends AbstractController
           "The backend controller is executing a frontend action. Please check the action chaining : "
               + action.toString());
     }
-    checkAccess(action);
+    // Should be handled before getting there.
+    // checkAccess(action);
     Map<String, Object> actionContext = getInitialActionContext();
     if (context != null) {
       context.putAll(actionContext);
@@ -299,7 +302,7 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Contains the current application session.
+   * Contains the current backend controller.
    * <p>
    * {@inheritDoc}
    */
@@ -307,6 +310,20 @@ public abstract class AbstractBackendController extends AbstractController
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
     return initialActionContext;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getInitialSecurityContext() {
+    Map<String, Object> initialSecurityContext = new HashMap<String, Object>();
+    initialSecurityContext.put(SecurityContextConstants.USER_ROLES,
+        SecurityHelper.getRoles(getSubject()));
+    initialSecurityContext.put(SecurityContextConstants.USER_ID,
+        getApplicationSession().getPrincipal().getName());
+    initialSecurityContext.put(SecurityContextConstants.SESSION_PROPERTIES,
+        getApplicationSession().getPrincipal().getCustomProperties());
+    return initialSecurityContext;
   }
 
   /**
@@ -392,14 +409,12 @@ public abstract class AbstractBackendController extends AbstractController
     for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
       String workspaceName = workspaceEntry.getKey();
       Workspace workspace = workspaceEntry.getValue();
-      if (isAccessGranted(workspace)) {
-        IModelDescriptor workspaceDescriptor;
-        workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
-        IValueConnector nextWorkspaceConnector = modelConnectorFactory
-            .createModelConnector(workspaceName, workspaceDescriptor, this);
-        nextWorkspaceConnector.setConnectorValue(workspace);
-        workspaceConnectors.put(workspaceName, nextWorkspaceConnector);
-      }
+      IModelDescriptor workspaceDescriptor;
+      workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
+      IValueConnector nextWorkspaceConnector = modelConnectorFactory
+          .createModelConnector(workspaceName, workspaceDescriptor, this);
+      nextWorkspaceConnector.setConnectorValue(workspace);
+      workspaceConnectors.put(workspaceName, nextWorkspaceConnector);
     }
   }
 

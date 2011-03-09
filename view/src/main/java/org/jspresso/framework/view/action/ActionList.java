@@ -164,5 +164,4 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
   public void setPermId(String permId) {
     this.permId = permId;
   }
-
 }
