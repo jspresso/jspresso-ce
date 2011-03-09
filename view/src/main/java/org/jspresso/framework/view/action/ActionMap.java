@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
 /**
@@ -43,13 +44,15 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ActionMap implements ISecurable {
+public class ActionMap implements ISecurable, IPermIdSource {
 
   private List<ActionList>   actionLists;
   private List<ActionMap>    parentActionMaps;
   private Collection<String> grantedRoles;
 
   private ERenderingOptions  renderingOptions;
+
+  private String             permId;
 
   private static void completeActionMap(
       Map<String, ActionList> bufferActionMap, List<ActionList> actionLists,
@@ -187,5 +190,24 @@ public class ActionMap implements ISecurable {
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
+  }
+
+  /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  public String getPermId() {
+    return permId;
+  }
+
+  /**
+   * Sets the permId.
+   * 
+   * @param permId
+   *          the permId to set.
+   */
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 }

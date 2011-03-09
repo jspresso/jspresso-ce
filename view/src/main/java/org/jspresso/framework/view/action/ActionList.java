@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
@@ -23,12 +24,14 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ActionList extends DefaultIconDescriptor implements ISecurable {
+public class ActionList extends DefaultIconDescriptor implements ISecurable,
+    IPermIdSource {
 
   private List<IDisplayableAction> actions;
   private ERenderingOptions        renderingOptions;
   private boolean                  collapsable;
   private Collection<String>       grantedRoles;
+  private String                   permId;
 
   /**
    * Constructs a new <code>ActionList</code> instance.
@@ -141,6 +144,25 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable {
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
+  }
+
+  /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  public String getPermId() {
+    return permId;
+  }
+
+  /**
+   * Sets the permId.
+   * 
+   * @param permId
+   *          the permId to set.
+   */
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 
 }

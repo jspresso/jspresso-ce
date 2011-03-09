@@ -27,6 +27,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -54,7 +55,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable implements
-    ISecurable, IViewDescriptorProvider {
+    IViewDescriptorProvider, ISecurable, IPermIdSource {
 
   /**
    * <code>DESCRIPTION</code> is "description".
@@ -104,6 +105,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   private ISecurityHandler   securityHandler;
 
   private List<Module>       subModules;
+
+  private String             permId;
 
   /**
    * Constructs a new <code>Module</code> instance.
@@ -578,6 +581,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Configures the security handler used to secure this module.
+   * 
    * @param securityHandler
    *          the security handler.
    * @internal
@@ -653,5 +657,24 @@ public class Module extends AbstractPropertyChangeCapable implements
       return getParent().getSecurityHandler();
     }
     return null;
+  }
+
+  /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  public String getPermId() {
+    return permId;
+  }
+
+  /**
+   * Sets the permId.
+   * 
+   * @param permId
+   *          the permId to set.
+   */
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 }

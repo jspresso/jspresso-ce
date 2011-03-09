@@ -51,6 +51,7 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
 
   private Collection<String>  grantedRoles;
   private IListViewDescriptor nodeGroupDescriptor;
+  private String              permId;
 
   /**
    * Gets the grantedRoles.
@@ -123,5 +124,24 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    */
   public void setNodeGroupDescriptor(IListViewDescriptor nodeGroupDescriptor) {
     this.nodeGroupDescriptor = nodeGroupDescriptor;
+  }
+
+  /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  public String getPermId() {
+    return permId;
+  }
+
+  /**
+   * Sets the permId.
+   * 
+   * @param permId
+   *          the permId to set.
+   */
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 }

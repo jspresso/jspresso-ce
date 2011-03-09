@@ -111,6 +111,9 @@
   <build>
     <resources>
       <resource>
+        <directory>${symbol_dollar}{basedir}/src/main/dsl</directory>
+      </resource>
+      <resource>
         <directory>${symbol_dollar}{basedir}/src/main/resources</directory>
       </resource>
       <resource>

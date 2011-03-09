@@ -28,6 +28,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -51,7 +52,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Workspace implements ISecurable {
+public class Workspace implements ISecurable, IPermIdSource {
 
   /**
    * <code>DESCRIPTION</code> is "description".
@@ -95,6 +96,8 @@ public class Workspace implements ISecurable {
   private ISecurityHandler      securityHandler;
 
   private IViewDescriptor       viewDescriptor;
+
+  private String                permId;
 
   /**
    * Constructs a new <code>Workspace</code> instance.
@@ -449,5 +452,24 @@ public class Workspace implements ISecurable {
    */
   private ISecurityHandler getSecurityHandler() {
     return securityHandler;
+  }
+
+  /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  public String getPermId() {
+    return permId;
+  }
+
+  /**
+   * Sets the permId.
+   * 
+   * @param permId
+   *          the permId to set.
+   */
+  public void setPermId(String permId) {
+    this.permId = permId;
   }
 }
