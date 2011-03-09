@@ -190,8 +190,16 @@ public abstract class AbstractController implements IController {
   /**
    * {@inheritDoc}
    */
-  public ISecurityContextBuilder appendToSecurityContext(Object contextElement) {
-    securityContextBuilder.appendToSecurityContext(contextElement);
+  public ISecurityContextBuilder pushToSecurityContext(Object contextElement) {
+    securityContextBuilder.pushToSecurityContext(contextElement);
+    return this;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
+    securityContextBuilder.restoreLastSecurityContextSnapshot();
     return this;
   }
 }

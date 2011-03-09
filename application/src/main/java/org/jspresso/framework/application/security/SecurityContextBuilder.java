@@ -28,8 +28,11 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.security.ISecurityContextBuilder;
+import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
+import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * Security context builder that helps building a security context.
@@ -39,13 +42,17 @@ import org.jspresso.framework.view.action.ActionMap;
  */
 public class SecurityContextBuilder implements ISecurityContextBuilder {
 
-  private Map<String, Object> currentSecurityContext;
+  private Map<String, Object>       currentSecurityContext;
+  private List<Map<String, Object>> snapshots;
 
   /**
    * Constructs a new <code>SecurityContextBuilder</code> instance.
    */
   public SecurityContextBuilder() {
     currentSecurityContext = new HashMap<String, Object>();
+    currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
+        SecurityContextConstants.AUTH_VISIBLE);
+    snapshots = new ArrayList<Map<String, Object>>();
   }
 
   /**
@@ -59,15 +66,10 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   }
 
   /**
-   * Completes the security context by registering an application element. The
-   * way the context is actually amended depends on internal rules based on the
-   * type of element.
-   * 
-   * @param contextElement
-   *          the element to complement the context with.
-   * @return itself.
+   * {@inheritDoc}
    */
-  public SecurityContextBuilder appendToSecurityContext(Object contextElement) {
+  public SecurityContextBuilder pushToSecurityContext(Object contextElement) {
+    snapshots.add(getSecurityContext());
     if (contextElement instanceof Workspace) {
       return append((Workspace) contextElement);
     } else if (contextElement instanceof Module) {
@@ -78,18 +80,42 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       return append((ActionList) contextElement);
     } else if (contextElement instanceof IAction) {
       return append((IAction) contextElement);
+    } else if (contextElement instanceof IGate) {
+      return append((IGate) contextElement);
+    } else if (contextElement instanceof ITreeLevelDescriptor) {
+      return append((ITreeLevelDescriptor) contextElement);
+    } else if (contextElement instanceof IViewDescriptor) {
+      return append((IViewDescriptor) contextElement);
     }
     return this;
   }
 
   /**
-   * Completes the security context to be passed to the dynamic security
-   * algorithm.
-   * 
-   * @param module
-   *          module.
-   * @return itself.
+   * {@inheritDoc}
    */
+  public SecurityContextBuilder restoreLastSecurityContextSnapshot() {
+    if (snapshots.size() > 0) {
+      currentSecurityContext = snapshots.remove(snapshots.size() - 1);
+    }
+    return this;
+  }
+
+  private SecurityContextBuilder append(@SuppressWarnings("unused") IGate gate) {
+    currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
+        SecurityContextConstants.AUTH_ENABLE);
+    return this;
+  }
+
+  private SecurityContextBuilder append(
+      @SuppressWarnings("unused") ITreeLevelDescriptor treeLevelDescriptor) {
+    return this;
+  }
+
+  private SecurityContextBuilder append(
+      @SuppressWarnings("unused") IViewDescriptor viewDescriptor) {
+    return this;
+  }
+
   private SecurityContextBuilder append(Module module) {
     if (module != null) {
       Module currentModule = module;
@@ -103,80 +129,38 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       Collections.reverse(moduleChain);
       currentSecurityContext.put(SecurityContextConstants.MODULE_CHAIN,
           moduleChain);
-    } else {
-      currentSecurityContext.remove(SecurityContextConstants.MODULE_CHAIN);
     }
     return this;
   }
 
-  /**
-   * Completes the security context to be passed to the dynamic security
-   * algorithm.
-   * 
-   * @param workspace
-   *          workspace.
-   * @return itself.
-   */
   private SecurityContextBuilder append(Workspace workspace) {
     if (workspace != null) {
       currentSecurityContext.put(SecurityContextConstants.WORKSPACE,
           workspace.getPermId());
-    } else {
-      currentSecurityContext.remove(SecurityContextConstants.WORKSPACE);
     }
     return this;
   }
 
-  /**
-   * Completes the security context to be passed to the dynamic security
-   * algorithm.
-   * 
-   * @param actionList
-   *          actionList.
-   * @return itself.
-   */
   private SecurityContextBuilder append(ActionList actionList) {
     if (actionList != null) {
       currentSecurityContext.put(SecurityContextConstants.ACTION_LIST,
           actionList.getPermId());
-    } else {
-      currentSecurityContext.remove(SecurityContextConstants.ACTION_LIST);
     }
     return this;
   }
 
-  /**
-   * Completes the security context to be passed to the dynamic security
-   * algorithm.
-   * 
-   * @param actionMap
-   *          actionMap.
-   * @return itself.
-   */
   private SecurityContextBuilder append(ActionMap actionMap) {
     if (actionMap != null) {
       currentSecurityContext.put(SecurityContextConstants.ACTION_MAP,
           actionMap.getPermId());
-    } else {
-      currentSecurityContext.remove(SecurityContextConstants.ACTION_MAP);
     }
     return this;
   }
 
-  /**
-   * Completes the security context to be passed to the dynamic security
-   * algorithm.
-   * 
-   * @param action
-   *          action.
-   * @return itself.
-   */
   private SecurityContextBuilder append(IAction action) {
     if (action != null) {
       currentSecurityContext.put(SecurityContextConstants.ACTION,
           action.getPermId());
-    } else {
-      currentSecurityContext.remove(SecurityContextConstants.ACTION);
     }
     return this;
   }

@@ -281,8 +281,14 @@ public class Module extends AbstractPropertyChangeCapable implements
     ISecurityHandler sh = getSecurityHandler();
     if (sh != null) {
       for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
-        if (!sh.isAccessGranted(ite.next())) {
-          ite.remove();
+        Module nextModule = ite.next();
+        if (!sh.isAccessGranted(nextModule)) {
+          try {
+            sh.pushToSecurityContext(nextModule);
+            ite.remove();
+          } finally {
+            sh.restoreLastSecurityContextSnapshot();
+          }
         }
       }
     }

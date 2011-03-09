@@ -38,11 +38,19 @@ public interface ISecurityContextBuilder {
   /**
    * Completes the security context by registering an application element. The
    * way the context is actually amended depends on internal rules based on the
-   * type of element.
+   * type of element. The original security context should be stacked so that it
+   * can be restored later by a call to <code>restoreLastSnapshot()</code>.
    * 
    * @param contextElement
    *          the element to complement the context with.
    * @return itself.
    */
-  ISecurityContextBuilder appendToSecurityContext(Object contextElement);
+  ISecurityContextBuilder pushToSecurityContext(Object contextElement);
+
+  /**
+   * Restores the last recorded snapshot.
+   * 
+   * @return itself.
+   */
+  ISecurityContextBuilder restoreLastSecurityContextSnapshot();
 }

@@ -1764,23 +1764,28 @@ public class DefaultSwingViewFactory extends
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
-        IValueConnector columnConnector = createColumnConnector(
-            columnViewDescriptor, rowDescriptor, actionHandler);
-        rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
-            .getModelType());
-        // already handled in createColumnConnector
-        // if (columnViewDescriptor.getReadabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        // columnConnector.addReadabilityGate(gate.clone());
-        // }
-        // }
-        // if (columnViewDescriptor.getWritabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        // columnConnector.addWritabilityGate(gate.clone());
-        // }
-        // }
-        // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+        try {
+          actionHandler.pushToSecurityContext(columnViewDescriptor);
+          IValueConnector columnConnector = createColumnConnector(
+              columnViewDescriptor, rowDescriptor, actionHandler);
+          rowConnectorPrototype.addChildConnector(columnConnector);
+          columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
+              .getModelType());
+          // already handled in createColumnConnector
+          // if (columnViewDescriptor.getReadabilityGates() != null) {
+          // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+          // columnConnector.addReadabilityGate(gate.clone());
+          // }
+          // }
+          // if (columnViewDescriptor.getWritabilityGates() != null) {
+          // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+          // columnConnector.addWritabilityGate(gate.clone());
+          // }
+          // }
+          // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
+        }
       } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
@@ -2243,14 +2248,25 @@ public class DefaultSwingViewFactory extends
       viewPanel.add(view.getPeer(), BorderLayout.CENTER);
 
       if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
-        JToolBar toolBar = createViewToolBar(actionMap, view, actionHandler,
-            locale);
-        viewPanel.add(toolBar, BorderLayout.NORTH);
+        try {
+          actionHandler.pushToSecurityContext(actionMap);
+          JToolBar toolBar = createViewToolBar(actionMap, view, actionHandler,
+              locale);
+          viewPanel.add(toolBar, BorderLayout.NORTH);
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
+        }
       }
-      if (secondaryActionMap != null) {
-        JToolBar toolBar = createViewToolBar(secondaryActionMap, view,
-            actionHandler, locale);
-        viewPanel.add(toolBar, BorderLayout.SOUTH);
+      if (secondaryActionMap != null
+          && actionHandler.isAccessGranted(secondaryActionMap)) {
+        try {
+          actionHandler.pushToSecurityContext(secondaryActionMap);
+          JToolBar toolBar = createViewToolBar(secondaryActionMap, view,
+              actionHandler, locale);
+          viewPanel.add(toolBar, BorderLayout.SOUTH);
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
+        }
       }
 
       view.setPeer(viewPanel);
@@ -2277,103 +2293,44 @@ public class DefaultSwingViewFactory extends
         .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
-        ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
-        if (nextActionList.getRenderingOptions() != null) {
-          renderingOptions = nextActionList.getRenderingOptions();
-        } else if (actionMap.getRenderingOptions() != null) {
-          renderingOptions = actionMap.getRenderingOptions();
-        }
-        if (nextActionList.isCollapsable()) {
-          JButton actionButton = null;
-          List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
-          for (IDisplayableAction action : nextActionList.getActions()) {
-            if (actionHandler.isAccessGranted(action)) {
-              actions.add(action);
-            }
+        try {
+          actionHandler.pushToSecurityContext(nextActionList);
+          ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
+          if (nextActionList.getRenderingOptions() != null) {
+            renderingOptions = nextActionList.getRenderingOptions();
+          } else if (actionMap.getRenderingOptions() != null) {
+            renderingOptions = actionMap.getRenderingOptions();
           }
-          if (!actions.isEmpty()) {
-            if (actions.size() > 1) {
-              actionButton = createJComboButton();
-            } else {
-              actionButton = createJButton();
-            }
-            IDisplayableAction mainAction = actions.get(0);
-            Action swingAction = getActionFactory().createAction(mainAction,
-                actionHandler, view, locale);
-            actionButton.setAction(swingAction);
-            switch (renderingOptions) {
-              case ICON:
-                actionButton.setText("");
-                break;
-              case LABEL:
-                actionButton.setIcon(null);
-                break;
-              default:
-                break;
-            }
-            if (mainAction.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(mainAction
-                  .getAcceleratorAsString());
-              view.getPeer().getActionMap()
-                  .put(swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer()
-                  .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-                  .put(ks, swingAction.getValue(Action.NAME));
-              String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers()) + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
-            }
-            if (actions.size() > 1) {
-              JPopupMenu popupMenu = new JPopupMenu();
-              for (IDisplayableAction menuAction : actions) {
-                JMenuItem actionItem = createMenuItem(menuAction, view,
-                    actionHandler, locale);
-                switch (renderingOptions) {
-                  case ICON:
-                    actionItem.setText("");
-                    break;
-                  case LABEL:
-                    actionItem.setIcon(null);
-                    break;
-                  default:
-                    break;
-                }
-                if (mainAction.getAcceleratorAsString() != null) {
-                  KeyStroke ks = KeyStroke.getKeyStroke(mainAction
-                      .getAcceleratorAsString());
-                  view.getPeer().getActionMap()
-                      .put(swingAction.getValue(Action.NAME), swingAction);
-                  view.getPeer()
-                      .getInputMap(
-                          JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-                      .put(ks, swingAction.getValue(Action.NAME));
-                  String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                      .getModifiers())
-                      + "-"
-                      + KeyEvent.getKeyText(ks.getKeyCode());
-                  actionItem.setToolTipText("<HTML>"
-                      + actionItem.getToolTipText()
-                      + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                      + acceleratorString + "</FONT></HTML>");
-                }
-                popupMenu.add(actionItem);
+          if (nextActionList.isCollapsable()) {
+            JButton actionButton = null;
+            List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+            for (IDisplayableAction action : nextActionList.getActions()) {
+              if (actionHandler.isAccessGranted(action)) {
+                actions.add(action);
               }
-              ((JComboButton) actionButton).setArrowPopupMenu(popupMenu);
             }
-            toolBar.add(actionButton);
-          }
-        } else {
-          for (IDisplayableAction action : nextActionList.getActions()) {
-            if (actionHandler.isAccessGranted(action)) {
-              Action swingAction = getActionFactory().createAction(action,
+            if (!actions.isEmpty()) {
+              if (actions.size() > 1) {
+                actionButton = createJComboButton();
+              } else {
+                actionButton = createJButton();
+              }
+              IDisplayableAction mainAction = actions.get(0);
+              Action swingAction = getActionFactory().createAction(mainAction,
                   actionHandler, view, locale);
-              JButton actionButton = createJButton();
               actionButton.setAction(swingAction);
-              if (action.getAcceleratorAsString() != null) {
-                KeyStroke ks = KeyStroke.getKeyStroke(action
+              switch (renderingOptions) {
+                case ICON:
+                  actionButton.setText("");
+                  break;
+                case LABEL:
+                  actionButton.setIcon(null);
+                  break;
+                default:
+                  break;
+              }
+              if (mainAction.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(mainAction
                     .getAcceleratorAsString());
                 view.getPeer().getActionMap()
                     .put(swingAction.getValue(Action.NAME), swingAction);
@@ -2389,22 +2346,89 @@ public class DefaultSwingViewFactory extends
                     + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
                     + acceleratorString + "</FONT></HTML>");
               }
-              switch (renderingOptions) {
-                case ICON:
-                  actionButton.setText("");
-                  break;
-                case LABEL:
-                  actionButton.setIcon(null);
-                  break;
-                default:
-                  break;
+              if (actions.size() > 1) {
+                JPopupMenu popupMenu = new JPopupMenu();
+                for (IDisplayableAction menuAction : actions) {
+                  JMenuItem actionItem = createMenuItem(menuAction, view,
+                      actionHandler, locale);
+                  switch (renderingOptions) {
+                    case ICON:
+                      actionItem.setText("");
+                      break;
+                    case LABEL:
+                      actionItem.setIcon(null);
+                      break;
+                    default:
+                      break;
+                  }
+                  if (mainAction.getAcceleratorAsString() != null) {
+                    KeyStroke ks = KeyStroke.getKeyStroke(mainAction
+                        .getAcceleratorAsString());
+                    view.getPeer().getActionMap()
+                        .put(swingAction.getValue(Action.NAME), swingAction);
+                    view.getPeer()
+                        .getInputMap(
+                            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                        .put(ks, swingAction.getValue(Action.NAME));
+                    String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                        .getModifiers())
+                        + "-"
+                        + KeyEvent.getKeyText(ks.getKeyCode());
+                    actionItem.setToolTipText("<HTML>"
+                        + actionItem.getToolTipText()
+                        + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                        + acceleratorString + "</FONT></HTML>");
+                  }
+                  popupMenu.add(actionItem);
+                }
+                ((JComboButton) actionButton).setArrowPopupMenu(popupMenu);
               }
               toolBar.add(actionButton);
             }
+          } else {
+            for (IDisplayableAction action : nextActionList.getActions()) {
+              if (actionHandler.isAccessGranted(action)) {
+                Action swingAction = getActionFactory().createAction(action,
+                    actionHandler, view, locale);
+                JButton actionButton = createJButton();
+                actionButton.setAction(swingAction);
+                if (action.getAcceleratorAsString() != null) {
+                  KeyStroke ks = KeyStroke.getKeyStroke(action
+                      .getAcceleratorAsString());
+                  view.getPeer().getActionMap()
+                      .put(swingAction.getValue(Action.NAME), swingAction);
+                  view.getPeer()
+                      .getInputMap(
+                          JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                      .put(ks, swingAction.getValue(Action.NAME));
+                  String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                      .getModifiers())
+                      + "-"
+                      + KeyEvent.getKeyText(ks.getKeyCode());
+                  actionButton.setToolTipText("<HTML>"
+                      + actionButton.getToolTipText()
+                      + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                      + acceleratorString + "</FONT></HTML>");
+                }
+                switch (renderingOptions) {
+                  case ICON:
+                    actionButton.setText("");
+                    break;
+                  case LABEL:
+                    actionButton.setIcon(null);
+                    break;
+                  default:
+                    break;
+                }
+                toolBar.add(actionButton);
+              }
+            }
           }
-        }
-        if (iter.hasNext()) {
-          toolBar.addSeparator();
+          if (iter.hasNext()) {
+            toolBar.addSeparator();
+          }
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
         }
       }
     }
@@ -2605,15 +2629,25 @@ public class DefaultSwingViewFactory extends
         .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
-        for (IDisplayableAction action : nextActionList.getActions()) {
-          if (actionHandler.isAccessGranted(action)) {
-            JMenuItem actionItem = createMenuItem(action, view, actionHandler,
-                locale);
-            popupMenu.add(actionItem);
+        try {
+          actionHandler.pushToSecurityContext(nextActionList);
+          for (IDisplayableAction action : nextActionList.getActions()) {
+            if (actionHandler.isAccessGranted(action)) {
+              try {
+                actionHandler.pushToSecurityContext(action);
+                JMenuItem actionItem = createMenuItem(action, view,
+                    actionHandler, locale);
+                popupMenu.add(actionItem);
+              } finally {
+                actionHandler.restoreLastSecurityContextSnapshot();
+              }
+            }
           }
-        }
-        if (iter.hasNext()) {
-          popupMenu.addSeparator();
+          if (iter.hasNext()) {
+            popupMenu.addSeparator();
+          }
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
         }
       }
     }
@@ -2793,9 +2827,14 @@ public class DefaultSwingViewFactory extends
         .getDescriptor()).getActionMap();
 
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
-      JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap,
-          actionHandler, locale);
-      popupMenu.show(table, evt.getX(), evt.getY());
+      try {
+        actionHandler.pushToSecurityContext(actionMap);
+        JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap,
+            actionHandler, locale);
+        popupMenu.show(table, evt.getX(), evt.getY());
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
+      }
     }
   }
 
@@ -2839,12 +2878,17 @@ public class DefaultSwingViewFactory extends
     actionMap = viewDescriptor.getActionMap();
 
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
-      BasicView<JComponent> treeLevelView = new BasicView<JComponent>(tree);
-      treeLevelView.setConnector(viewConnector);
-      treeLevelView.setDescriptor(viewDescriptor);
-      JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap,
-          actionHandler, locale);
-      popupMenu.show(tree, evt.getX(), evt.getY());
+      try {
+        actionHandler.pushToSecurityContext(actionMap);
+        BasicView<JComponent> treeLevelView = new BasicView<JComponent>(tree);
+        treeLevelView.setConnector(viewConnector);
+        treeLevelView.setDescriptor(viewDescriptor);
+        JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap,
+            actionHandler, locale);
+        popupMenu.show(tree, evt.getX(), evt.getY());
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
+      }
     }
   }
 

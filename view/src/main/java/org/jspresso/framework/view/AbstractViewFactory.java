@@ -225,82 +225,87 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public IView<E> createView(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IView<E> view = createCustomView(viewDescriptor, actionHandler, locale);
-    if (view == null) {
-      if (viewDescriptor instanceof IComponentViewDescriptor) {
-        view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof IImageViewDescriptor) {
-        view = createImageView((IImageViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof IActionViewDescriptor) {
-        view = createActionView((IActionViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-        view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-        view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof ICardViewDescriptor) {
-        view = createCardView((ICardViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-        view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-        if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
-          ((IItemSelectable) view.getConnector())
-              .addItemSelectionListener(new ItemSelectionAdapter(
-                  ((ITreeViewDescriptor) viewDescriptor)
-                      .getItemSelectionAction(), actionHandler, view));
+    try {
+      actionHandler.pushToSecurityContext(viewDescriptor);
+      IView<E> view = createCustomView(viewDescriptor, actionHandler, locale);
+      if (view == null) {
+        if (viewDescriptor instanceof IComponentViewDescriptor) {
+          view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+              actionHandler, locale);
+        } else if (viewDescriptor instanceof IImageViewDescriptor) {
+          view = createImageView((IImageViewDescriptor) viewDescriptor,
+              actionHandler, locale);
+        } else if (viewDescriptor instanceof IActionViewDescriptor) {
+          view = createActionView((IActionViewDescriptor) viewDescriptor,
+              actionHandler, locale);
+        } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+          view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
+              actionHandler, locale);
+        } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
+          view = createCollectionView(
+              (ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
+        } else if (viewDescriptor instanceof ICardViewDescriptor) {
+          view = createCardView((ICardViewDescriptor) viewDescriptor,
+              actionHandler, locale);
+        } else if (viewDescriptor instanceof ITreeViewDescriptor) {
+          view = createTreeView((ITreeViewDescriptor) viewDescriptor,
+              actionHandler, locale);
+          if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
+            ((IItemSelectable) view.getConnector())
+                .addItemSelectionListener(new ItemSelectionAdapter(
+                    ((ITreeViewDescriptor) viewDescriptor)
+                        .getItemSelectionAction(), actionHandler, view));
+          }
+        } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+          view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+              actionHandler, locale);
         }
-      } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-        view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-            actionHandler, locale);
       }
-    }
-    if (view != null) {
-      view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
-      if (viewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getReadabilityGates()) {
-          if (!(gate instanceof ISecurable)
-              || actionHandler.isAccessGranted((ISecurable) gate)) {
-            IGate clonedGate = gate.clone();
-            if (clonedGate instanceof IActionHandlerAware) {
-              ((IActionHandlerAware) clonedGate)
-                  .setActionHandler(actionHandler);
+      if (view != null) {
+        view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
+        if (viewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : viewDescriptor.getReadabilityGates()) {
+            if (!(gate instanceof ISecurable)
+                || actionHandler.isAccessGranted((ISecurable) gate)) {
+              IGate clonedGate = gate.clone();
+              if (clonedGate instanceof IActionHandlerAware) {
+                ((IActionHandlerAware) clonedGate)
+                    .setActionHandler(actionHandler);
+              }
+              view.getConnector().addReadabilityGate(clonedGate);
             }
-            view.getConnector().addReadabilityGate(clonedGate);
           }
         }
-      }
-      if (viewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getWritabilityGates()) {
-          if (!(gate instanceof ISecurable)
-              || actionHandler.isAccessGranted((ISecurable) gate)) {
-            IGate clonedGate = gate.clone();
-            if (clonedGate instanceof IActionHandlerAware) {
-              ((IActionHandlerAware) clonedGate)
-                  .setActionHandler(actionHandler);
+        if (viewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : viewDescriptor.getWritabilityGates()) {
+            if (!(gate instanceof ISecurable)
+                || actionHandler.isAccessGranted((ISecurable) gate)) {
+              IGate clonedGate = gate.clone();
+              if (clonedGate instanceof IActionHandlerAware) {
+                ((IActionHandlerAware) clonedGate)
+                    .setActionHandler(actionHandler);
+              }
+              view.getConnector().addWritabilityGate(clonedGate);
             }
-            view.getConnector().addWritabilityGate(clonedGate);
           }
         }
+        view.getConnector().setSecurityHandler(actionHandler);
+        finishComponentConfiguration(viewDescriptor, locale, view);
+        decorateWithActions(viewDescriptor, actionHandler, locale, view);
+        decorateWithBorder(view, locale);
+        view.getConnector().setModelDescriptor(
+            viewDescriptor.getModelDescriptor());
+        if (!actionHandler.isAccessGranted(viewDescriptor)) {
+          view.setPeer(createSecurityComponent());
+        }
+        applyPreferredSize(view.getPeer(), viewDescriptor.getPreferredSize());
+      } else {
+        view = createEmptyView(viewDescriptor, actionHandler, locale);
       }
-      view.getConnector().setSecurityHandler(actionHandler);
-      finishComponentConfiguration(viewDescriptor, locale, view);
-      decorateWithActions(viewDescriptor, actionHandler, locale, view);
-      decorateWithBorder(view, locale);
-      view.getConnector().setModelDescriptor(
-          viewDescriptor.getModelDescriptor());
-      if (!actionHandler.isAccessGranted(viewDescriptor)) {
-        view.setPeer(createSecurityComponent());
-      }
-      applyPreferredSize(view.getPeer(), viewDescriptor.getPreferredSize());
-    } else {
-      view = createEmptyView(viewDescriptor, actionHandler, locale);
+      return view;
+    } finally {
+      actionHandler.restoreLastSecurityContextSnapshot();
     }
-    return view;
   }
 
   /**
@@ -2077,10 +2082,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
         for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
             .getChildrenDescriptors()) {
           if (actionHandler.isAccessGranted(subtreeViewDescriptor)) {
-            ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-                viewDescriptor, actionHandler, locale, subtreeViewDescriptor, 1);
-            compositeConnector.addChildConnector(subtreeConnector);
-            subtreeConnectors.add(subtreeConnector);
+            try {
+              actionHandler.pushToSecurityContext(subtreeViewDescriptor);
+              ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
+                  viewDescriptor, actionHandler, locale, subtreeViewDescriptor,
+                  1);
+              compositeConnector.addChildConnector(subtreeConnector);
+              subtreeConnectors.add(subtreeConnector);
+            } finally {
+              actionHandler.restoreLastSecurityContextSnapshot();
+            }
           }
         }
       }
@@ -2096,10 +2107,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .getChildDescriptor();
       if (childDescriptor != null) {
         if (actionHandler.isAccessGranted(childDescriptor)) {
-          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-              viewDescriptor, actionHandler, locale, childDescriptor, 1);
-          simpleConnector.addChildConnector(subtreeConnector);
-          simpleConnector.setCollectionConnectorProvider(subtreeConnector);
+          try {
+            actionHandler.pushToSecurityContext(childDescriptor);
+            ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
+                viewDescriptor, actionHandler, locale, childDescriptor, 1);
+            simpleConnector.addChildConnector(subtreeConnector);
+            simpleConnector.setCollectionConnectorProvider(subtreeConnector);
+          } finally {
+            actionHandler.restoreLastSecurityContextSnapshot();
+          }
         }
       }
       connector = simpleConnector;
@@ -2632,10 +2648,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
       for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
           .getChildrenDescriptors()) {
         if (actionHandler.isAccessGranted(childDescriptor)) {
-          ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-              viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
-          nodeGroupPrototypeConnector.addChildConnector(childConnector);
-          subtreeConnectors.add(childConnector);
+          try {
+            actionHandler.pushToSecurityContext(childDescriptor);
+            ICollectionConnectorProvider childConnector = createNodeGroupConnector(
+                viewDescriptor, actionHandler, locale, childDescriptor,
+                depth + 1);
+            nodeGroupPrototypeConnector.addChildConnector(childConnector);
+            subtreeConnectors.add(childConnector);
+          } finally {
+            actionHandler.restoreLastSecurityContextSnapshot();
+          }
         }
       }
     }
@@ -2725,11 +2747,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
         .getChildDescriptor();
     if (childDescriptor != null && depth < viewDescriptor.getMaxDepth()
         && actionHandler.isAccessGranted(childDescriptor)) {
-      ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-          viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
-      nodeGroupPrototypeConnector.addChildConnector(childConnector);
-      nodeGroupPrototypeConnector
-          .setCollectionConnectorProvider(childConnector);
+      try {
+        actionHandler.pushToSecurityContext(childDescriptor);
+        ICollectionConnectorProvider childConnector = createNodeGroupConnector(
+            viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
+        nodeGroupPrototypeConnector.addChildConnector(childConnector);
+        nodeGroupPrototypeConnector
+            .setCollectionConnectorProvider(childConnector);
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
+      }
     }
     if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)

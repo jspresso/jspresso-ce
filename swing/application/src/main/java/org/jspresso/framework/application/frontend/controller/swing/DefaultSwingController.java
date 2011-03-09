@@ -606,19 +606,35 @@ public class DefaultSwingController extends
     applicationToolBar.addSeparator();
     if (getNavigationActions() != null
         && isAccessGranted(getNavigationActions())) {
-      for (ActionList actionList : getNavigationActions().getActionLists(this)) {
-        completeApplicationToolBar(applicationToolBar, actionList);
+      try {
+        pushToSecurityContext(getNavigationActions());
+        for (ActionList actionList : getNavigationActions()
+            .getActionLists(this)) {
+          completeApplicationToolBar(applicationToolBar, actionList);
+        }
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
     if (getActionMap() != null && isAccessGranted(getActionMap())) {
-      for (ActionList actionList : getActionMap().getActionLists(this)) {
-        completeApplicationToolBar(applicationToolBar, actionList);
+      try {
+        pushToSecurityContext(getActionMap());
+        for (ActionList actionList : getActionMap().getActionLists(this)) {
+          completeApplicationToolBar(applicationToolBar, actionList);
+        }
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
     applicationToolBar.add(Box.createHorizontalGlue());
     if (getHelpActions() != null && isAccessGranted(getHelpActions())) {
-      for (ActionList actionList : getHelpActions().getActionLists(this)) {
-        completeApplicationToolBar(applicationToolBar, actionList);
+      try {
+        pushToSecurityContext(getHelpActions());
+        for (ActionList actionList : getHelpActions().getActionLists(this)) {
+          completeApplicationToolBar(applicationToolBar, actionList);
+        }
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
     JButton exitButton = new JButton();
@@ -644,19 +660,24 @@ public class DefaultSwingController extends
   private void completeApplicationToolBar(JToolBar applicationToolBar,
       ActionList actionList) {
     if (isAccessGranted(actionList)) {
-      if (actionList.isCollapsable()) {
-        applicationToolBar.add(createComboButton(actionList));
-      } else {
-        for (IDisplayableAction da : actionList.getActions()) {
-          if (isAccessGranted(da)) {
-            JButton b = new JButton();
-            b.setAction(getViewFactory().getActionFactory().createAction(da,
-                this, null, getLocale()));
-            applicationToolBar.add(b);
+      try {
+        pushToSecurityContext(actionList);
+        if (actionList.isCollapsable()) {
+          applicationToolBar.add(createComboButton(actionList));
+        } else {
+          for (IDisplayableAction da : actionList.getActions()) {
+            if (isAccessGranted(da)) {
+              JButton b = new JButton();
+              b.setAction(getViewFactory().getActionFactory().createAction(da,
+                  this, null, getLocale()));
+              applicationToolBar.add(b);
+            }
           }
         }
+        applicationToolBar.addSeparator();
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
-      applicationToolBar.addSeparator();
     }
   }
 
@@ -805,7 +826,12 @@ public class DefaultSwingController extends
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        actions.add(action);
+        try {
+          pushToSecurityContext(action);
+          actions.add(action);
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
     }
 
@@ -834,7 +860,12 @@ public class DefaultSwingController extends
     List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(action));
+        try {
+          pushToSecurityContext(action);
+          menuItems.add(createMenuItem(action));
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
     }
     return menuItems;
@@ -844,19 +875,24 @@ public class DefaultSwingController extends
   private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<JMenu> menus = new ArrayList<JMenu>();
     if (actionMap != null && isAccessGranted(actionMap)) {
-      JMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists(this)) {
-        if (isAccessGranted(actionList)) {
-          if (!useSeparator || menus.isEmpty()) {
-            menu = createMenu(actionList);
-            menus.add(menu);
-          } else {
-            menu.addSeparator();
-            for (JMenuItem menuItem : createMenuItems(actionList)) {
-              menu.add(menuItem);
+      try {
+        pushToSecurityContext(actionMap);
+        JMenu menu = null;
+        for (ActionList actionList : actionMap.getActionLists(this)) {
+          if (isAccessGranted(actionList)) {
+            if (!useSeparator || menus.isEmpty()) {
+              menu = createMenu(actionList);
+              menus.add(menu);
+            } else {
+              menu.addSeparator();
+              for (JMenuItem menuItem : createMenuItems(actionList)) {
+                menu.add(menuItem);
+              }
             }
           }
         }
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
     return menus;
@@ -934,8 +970,13 @@ public class DefaultSwingController extends
         BorderLayout.NORTH);
     if (getSecondaryActionMap() != null
         && isAccessGranted(getSecondaryActionMap())) {
-      controllerFrame.getContentPane().add(createSecondaryApplicationToolBar(),
-          BorderLayout.SOUTH);
+      try {
+        pushToSecurityContext(getSecondaryActionMap());
+        controllerFrame.getContentPane().add(
+            createSecondaryApplicationToolBar(), BorderLayout.SOUTH);
+      } finally {
+        restoreLastSecurityContextSnapshot();
+      }
     }
     controllerFrame.invalidate();
     controllerFrame.validate();

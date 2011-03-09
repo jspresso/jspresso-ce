@@ -879,11 +879,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
-    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
-        .getName())) {
-      // Important to check for not null values.
-      checkIntegrity(proxy);
-    } else if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
+    if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
         .getName())) {
       onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
           (IEntityLifecycleHandler) args[2]);
@@ -948,6 +944,11 @@ public abstract class AbstractComponentInvocationHandler implements
           }
         }
       }
+    }
+    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
+        .getName())) {
+      // Important to check for not null values.
+      checkIntegrity(proxy);
     }
     return interceptorResults;
   }

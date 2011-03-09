@@ -450,8 +450,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     initialSecurityContext.putAll(getBackendController()
         .getInitialSecurityContext());
     ISecurityContextBuilder initialSecurityContextBuilder = new SecurityContextBuilder();
-    initialSecurityContextBuilder.appendToSecurityContext(
-        getWorkspace(getSelectedWorkspaceName())).appendToSecurityContext(
+    initialSecurityContextBuilder.pushToSecurityContext(
+        getWorkspace(getSelectedWorkspaceName())).pushToSecurityContext(
         getSelectedModule(getSelectedWorkspaceName()));
     initialSecurityContext.putAll(initialSecurityContextBuilder
         .getSecurityContext());
@@ -538,7 +538,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       for (Map.Entry<String, Workspace> wsEntry : workspaces.entrySet()) {
         Workspace workspace = wsEntry.getValue();
         if (isAccessGranted(workspace)) {
-          workspaceNames.add(wsEntry.getKey());
+          try {
+            pushToSecurityContext(workspace);
+            workspaceNames.add(wsEntry.getKey());
+          } finally {
+            restoreLastSecurityContextSnapshot();
+          }
         }
       }
       return workspaceNames;
@@ -914,16 +919,21 @@ public abstract class AbstractFrontendController<E, F, G> extends
     for (String workspaceName : getWorkspaceNames()) {
       Workspace workspace = getWorkspace(workspaceName);
       if (isAccessGranted(workspace)) {
-        WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        workspaceSelectionAction.setWorkspaceName(workspaceName);
-        workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
-        workspaceSelectionAction.setDescription(workspaceViewDescriptor
-            .getDescription());
-        workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
-            .getIconImageURL());
-        workspaceSelectionActions.add(workspaceSelectionAction);
+        try {
+          pushToSecurityContext(workspace);
+          WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
+          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+              .getViewDescriptor();
+          workspaceSelectionAction.setWorkspaceName(workspaceName);
+          workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
+          workspaceSelectionAction.setDescription(workspaceViewDescriptor
+              .getDescription());
+          workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
+              .getIconImageURL());
+          workspaceSelectionActions.add(workspaceSelectionAction);
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
     }
     workspaceSelectionActionList.setActions(workspaceSelectionActions);
@@ -1161,10 +1171,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
       for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
         Workspace workspace = workspaceEntry.getValue();
         if (isAccessGranted(workspace)) {
-          workspace.setSecurityHandler(this);
-          translateWorkspace(workspace);
-          filteredWorkspaces.put(workspaceEntry.getKey(),
-              workspaceEntry.getValue());
+          try {
+            pushToSecurityContext(workspace);
+            workspace.setSecurityHandler(this);
+            translateWorkspace(workspace);
+            filteredWorkspaces.put(workspaceEntry.getKey(),
+                workspaceEntry.getValue());
+          } finally {
+            restoreLastSecurityContextSnapshot();
+          }
         }
       }
       getBackendController().installWorkspaces(filteredWorkspaces);
@@ -1496,5 +1511,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void removeUserPreference(String key) {
     getBackendController().removeUserPreference(key);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> getSecurityContext() {
+    Map<String, Object> securityContext = new HashMap<String, Object>();
+    securityContext.putAll(getBackendController().getSecurityContext());
+    securityContext.putAll(super.getSecurityContext());
+    return securityContext;
   }
 }

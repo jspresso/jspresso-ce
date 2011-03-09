@@ -1092,8 +1092,10 @@ public class DefaultWingsViewFactory extends
         Action.SHORT_DESCRIPTION,
         getTranslationProvider().getTranslation(
             "lov.element.description",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(getTranslationProvider(), locale)}, locale)
+            new Object[] {
+              propertyDescriptor.getReferencedDescriptor().getI18nName(
+                  getTranslationProvider(), locale)
+            }, locale)
             + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(
@@ -1569,11 +1571,16 @@ public class DefaultWingsViewFactory extends
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
-        IValueConnector columnConnector = createColumnConnector(
-            columnViewDescriptor, rowDescriptor, actionHandler);
-        rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
-            .getModelType());
+        try {
+          actionHandler.pushToSecurityContext(columnViewDescriptor);
+          IValueConnector columnConnector = createColumnConnector(
+              columnViewDescriptor, rowDescriptor, actionHandler);
+          rowConnectorPrototype.addChildConnector(columnConnector);
+          columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
+              .getModelType());
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
+        }
       } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
@@ -1908,65 +1915,75 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale, IView<SComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
-      SToolBar toolBar = createSToolBar();
-      for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
-          .iterator(); iter.hasNext();) {
-        ActionList nextActionList = iter.next();
-        if (actionHandler.isAccessGranted(nextActionList)) {
-          ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
-          if (nextActionList.getRenderingOptions() != null) {
-            renderingOptions = nextActionList.getRenderingOptions();
-          } else if (actionMap.getRenderingOptions() != null) {
-            renderingOptions = actionMap.getRenderingOptions();
-          }
-          for (IDisplayableAction action : nextActionList.getActions()) {
-            if (actionHandler.isAccessGranted(action)) {
-              Action wingsAction = getActionFactory().createAction(action,
-                  actionHandler, view, locale);
-              SButton actionButton = createSButton();
-              actionButton.setShowAsFormComponent(false);
-              actionButton.setAction(wingsAction);
-              actionButton.setDisabledIcon(actionButton.getIcon());
-              if (action.getAcceleratorAsString() != null) {
-                KeyStroke ks = KeyStroke.getKeyStroke(action
-                    .getAcceleratorAsString());
-                view.getPeer().getActionMap()
-                    .put(wingsAction.getValue(Action.NAME), wingsAction);
-                view.getPeer()
-                    .getInputMap(
-                        SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
-                    .put(ks, wingsAction.getValue(Action.NAME));
-                String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                    .getModifiers())
-                    + "-"
-                    + KeyEvent.getKeyText(ks.getKeyCode());
-                actionButton.setToolTipText("<HTML>"
-                    + actionButton.getToolTipText()
-                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                    + acceleratorString + "</FONT></HTML>");
+      try {
+        actionHandler.pushToSecurityContext(actionMap);
+        SToolBar toolBar = createSToolBar();
+        for (Iterator<ActionList> iter = actionMap
+            .getActionLists(actionHandler).iterator(); iter.hasNext();) {
+          ActionList nextActionList = iter.next();
+          if (actionHandler.isAccessGranted(nextActionList)) {
+            try {
+              actionHandler.pushToSecurityContext(nextActionList);
+              ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
+              if (nextActionList.getRenderingOptions() != null) {
+                renderingOptions = nextActionList.getRenderingOptions();
+              } else if (actionMap.getRenderingOptions() != null) {
+                renderingOptions = actionMap.getRenderingOptions();
               }
-              switch (renderingOptions) {
-                case ICON:
-                  actionButton.setText("");
-                  break;
-                case LABEL:
-                  actionButton.setIcon(null);
-                  break;
-                default:
-                  break;
+              for (IDisplayableAction action : nextActionList.getActions()) {
+                if (actionHandler.isAccessGranted(action)) {
+                  Action wingsAction = getActionFactory().createAction(action,
+                      actionHandler, view, locale);
+                  SButton actionButton = createSButton();
+                  actionButton.setShowAsFormComponent(false);
+                  actionButton.setAction(wingsAction);
+                  actionButton.setDisabledIcon(actionButton.getIcon());
+                  if (action.getAcceleratorAsString() != null) {
+                    KeyStroke ks = KeyStroke.getKeyStroke(action
+                        .getAcceleratorAsString());
+                    view.getPeer().getActionMap()
+                        .put(wingsAction.getValue(Action.NAME), wingsAction);
+                    view.getPeer()
+                        .getInputMap(
+                            SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
+                        .put(ks, wingsAction.getValue(Action.NAME));
+                    String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                        .getModifiers())
+                        + "-"
+                        + KeyEvent.getKeyText(ks.getKeyCode());
+                    actionButton.setToolTipText("<HTML>"
+                        + actionButton.getToolTipText()
+                        + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                        + acceleratorString + "</FONT></HTML>");
+                  }
+                  switch (renderingOptions) {
+                    case ICON:
+                      actionButton.setText("");
+                      break;
+                    case LABEL:
+                      actionButton.setIcon(null);
+                      break;
+                    default:
+                      break;
+                  }
+                  toolBar.add(actionButton);
+                }
               }
-              toolBar.add(actionButton);
+              if (iter.hasNext()) {
+                toolBar.add(new SSpacer(10, 0));
+              }
+            } finally {
+              actionHandler.restoreLastSecurityContextSnapshot();
             }
           }
-          if (iter.hasNext()) {
-            toolBar.add(new SSpacer(10, 0));
-          }
         }
+        SPanel viewPanel = createSPanel(new SBorderLayout());
+        viewPanel.add(toolBar, SBorderLayout.NORTH);
+        viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
+        view.setPeer(viewPanel);
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
       }
-      SPanel viewPanel = createSPanel(new SBorderLayout());
-      viewPanel.add(toolBar, SBorderLayout.NORTH);
-      viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
-      view.setPeer(viewPanel);
     }
   }
 

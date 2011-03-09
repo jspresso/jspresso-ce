@@ -819,8 +819,13 @@ public class DefaultRemoteController extends
     List<RAction> actions = new ArrayList<RAction>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        actions.add(getViewFactory().getActionFactory().createAction(action,
-            this, null, getLocale()));
+        try {
+          pushToSecurityContext(action);
+          actions.add(getViewFactory().getActionFactory().createAction(action,
+              this, null, getLocale()));
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
     }
     rActionList.setActions(actions.toArray(new RAction[0]));
@@ -832,10 +837,20 @@ public class DefaultRemoteController extends
     List<RActionList> actionLists = new ArrayList<RActionList>();
     if (actionMap != null) {
       if (isAccessGranted(actionMap)) {
-        for (ActionList actionList : actionMap.getActionLists(this)) {
-          if (isAccessGranted(actionList)) {
-            actionLists.add(createRActionList(actionList));
+        try {
+          pushToSecurityContext(actionMap);
+          for (ActionList actionList : actionMap.getActionLists(this)) {
+            if (isAccessGranted(actionList)) {
+              try {
+                pushToSecurityContext(actionList);
+                actionLists.add(createRActionList(actionList));
+              } finally {
+                restoreLastSecurityContextSnapshot();
+              }
+            }
           }
+        } finally {
+          restoreLastSecurityContextSnapshot();
         }
       }
     }

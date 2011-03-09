@@ -537,7 +537,12 @@ public class DefaultWingsController extends
     List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(action));
+        try {
+          pushToSecurityContext(action);
+          menuItems.add(createMenuItem(action));
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
     }
     return menuItems;
@@ -547,23 +552,33 @@ public class DefaultWingsController extends
   private List<SMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<SMenu> menus = new ArrayList<SMenu>();
     if (actionMap != null && isAccessGranted(actionMap)) {
-      SMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists(this)) {
-        if (isAccessGranted(actionList)) {
-          if (!useSeparator || menus.isEmpty()) {
-            menu = createMenu(actionList);
-            menus.add(menu);
-          } else {
-            menu.addSeparator();
-            // SMenuItem separator = new SMenuItem("---------");
-            // separator.setBorder(new SLineBorder(1));
-            // menu.add(separator);
+      try {
+        pushToSecurityContext(actionMap);
+        SMenu menu = null;
+        for (ActionList actionList : actionMap.getActionLists(this)) {
+          if (isAccessGranted(actionList)) {
+            try {
+              pushToSecurityContext(actionList);
+              if (!useSeparator || menus.isEmpty()) {
+                menu = createMenu(actionList);
+                menus.add(menu);
+              } else {
+                menu.addSeparator();
+                // SMenuItem separator = new SMenuItem("---------");
+                // separator.setBorder(new SLineBorder(1));
+                // menu.add(separator);
 
-            for (SMenuItem menuItem : createMenuItems(actionList)) {
-              menu.add(menuItem);
+                for (SMenuItem menuItem : createMenuItems(actionList)) {
+                  menu.add(menuItem);
+                }
+              }
+            } finally {
+              restoreLastSecurityContextSnapshot();
             }
           }
         }
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
     return menus;

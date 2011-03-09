@@ -532,7 +532,12 @@ public class DefaultUlcController extends
     List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(action));
+        try {
+          pushToSecurityContext(action);
+          menuItems.add(createMenuItem(action));
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
     }
     return menuItems;
@@ -542,19 +547,24 @@ public class DefaultUlcController extends
   private List<ULCMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
     if (actionMap != null && isAccessGranted(actionMap)) {
-      ULCMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists(this)) {
-        if (isAccessGranted(actionList)) {
-          if (!useSeparator || menus.isEmpty()) {
-            menu = createMenu(actionList);
-            menus.add(menu);
-          } else {
-            menu.addSeparator();
-            for (ULCMenuItem menuItem : createMenuItems(actionList)) {
-              menu.add(menuItem);
+      try {
+        pushToSecurityContext(actionMap);
+        ULCMenu menu = null;
+        for (ActionList actionList : actionMap.getActionLists(this)) {
+          if (isAccessGranted(actionList)) {
+            if (!useSeparator || menus.isEmpty()) {
+              menu = createMenu(actionList);
+              menus.add(menu);
+            } else {
+              menu.addSeparator();
+              for (ULCMenuItem menuItem : createMenuItems(actionList)) {
+                menu.add(menuItem);
+              }
             }
           }
         }
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
     return menus;

@@ -197,8 +197,14 @@ public class Workspace implements ISecurable, IPermIdSource {
     ISecurityHandler sh = getSecurityHandler();
     if (sh != null) {
       for (Iterator<Module> ite = modules.iterator(); ite.hasNext();) {
-        if (!sh.isAccessGranted(ite.next())) {
-          ite.remove();
+        Module nextModule = ite.next();
+        if (!sh.isAccessGranted(nextModule)) {
+          try {
+            sh.pushToSecurityContext(nextModule);
+            ite.remove();
+          } finally {
+            sh.restoreLastSecurityContextSnapshot();
+          }
         }
       }
     }

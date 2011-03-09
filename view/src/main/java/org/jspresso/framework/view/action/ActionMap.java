@@ -65,22 +65,27 @@ public class ActionMap implements ISecurable, IPermIdSource {
       for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists
           .entrySet()) {
         if (actionHandler.isAccessGranted(actionListEntry.getValue())) {
-          ActionList bufferActionList = bufferActionMap.get(actionListEntry
-              .getKey());
-          if (bufferActionList == null) {
-            bufferActionList = actionListEntry.getValue().clone();
-            bufferActionMap.put(actionListEntry.getKey(), bufferActionList);
-          } else {
-            for (IDisplayableAction localAction : actionListEntry.getValue()
-                .getActions()) {
-              int existingIndex = bufferActionList.getActions().indexOf(
-                  localAction);
-              if (existingIndex >= 0) {
-                bufferActionList.getActions().set(existingIndex, localAction);
-              } else {
-                bufferActionList.getActions().add(localAction);
+          try {
+            actionHandler.pushToSecurityContext(actionListEntry.getValue());
+            ActionList bufferActionList = bufferActionMap.get(actionListEntry
+                .getKey());
+            if (bufferActionList == null) {
+              bufferActionList = actionListEntry.getValue().clone();
+              bufferActionMap.put(actionListEntry.getKey(), bufferActionList);
+            } else {
+              for (IDisplayableAction localAction : actionListEntry.getValue()
+                  .getActions()) {
+                int existingIndex = bufferActionList.getActions().indexOf(
+                    localAction);
+                if (existingIndex >= 0) {
+                  bufferActionList.getActions().set(existingIndex, localAction);
+                } else {
+                  bufferActionList.getActions().add(localAction);
+                }
               }
             }
+          } finally {
+            actionHandler.restoreLastSecurityContextSnapshot();
           }
         }
       }
@@ -100,8 +105,13 @@ public class ActionMap implements ISecurable, IPermIdSource {
     if (parentActionMaps != null) {
       for (ActionMap parentActionMap : parentActionMaps) {
         if (actionHandler.isAccessGranted(parentActionMap)) {
-          completeActionMap(buffer,
-              parentActionMap.getActionLists(actionHandler), actionHandler);
+          try {
+            actionHandler.pushToSecurityContext(parentActionMap);
+            completeActionMap(buffer,
+                parentActionMap.getActionLists(actionHandler), actionHandler);
+          } finally {
+            actionHandler.restoreLastSecurityContextSnapshot();
+          }
         }
       }
     }
