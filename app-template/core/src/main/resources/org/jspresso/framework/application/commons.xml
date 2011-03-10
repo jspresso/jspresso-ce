@@ -138,6 +138,15 @@
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
   </bean>
 
+  <!-- Custom exception handler -->
+  <bean id="customExceptionHandler" class="org.jspresso.framework.util.exception.MockExceptionHandler"/>
+
+  <!-- Security plugin -->
+  <bean id="customSecurityPlugin" class="org.jspresso.framework.security.MockSecurityPlugin"/>
+  
+  <!-- User preference store -->
+  <bean id="userPreferenceStore" class="org.jspresso.framework.util.preferences.MockPreferenceStore"/>
+
   <!-- The controllers. -->
 
   <!-- The controllers. Controllers are not singleton since they can hold some session state. -->
@@ -150,6 +159,8 @@
     <property name="navigationActionMap" ref="moduleHistoryNavigationActionMap" />
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
     <property name="exitAction" ref="exitFrontAction" />
+    <property name="customSecurityPlugin" ref="customSecurityPlugin"/>
+    <property name="customExceptionHandler" ref="customExceptionHandler"/>
   </bean>
 
   <bean abstract="true" id="abstractFrontController" parent="abstractFrontControllerBase"/>
@@ -189,6 +200,9 @@
       <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
     </property>
     <property name="transactionTemplate" ref="transactionTemplate" />
+    <property name="customSecurityPlugin" ref="customSecurityPlugin"/>
+    <property name="customExceptionHandler" ref="customExceptionHandler"/>
+    <property name="userPreferenceStore" ref="userPreferenceStore"/>
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase"/>
@@ -221,4 +235,5 @@
   </bean>
 
   <bean id="abstractBackendAction" abstract="true" class="org.jspresso.framework.application.backend.action.BackendAction" />
+    
 </beans>

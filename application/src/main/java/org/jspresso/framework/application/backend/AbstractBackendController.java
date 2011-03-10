@@ -317,12 +317,15 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Map<String, Object> getInitialSecurityContext() {
     Map<String, Object> initialSecurityContext = new HashMap<String, Object>();
-    initialSecurityContext.put(SecurityContextConstants.USER_ROLES,
-        SecurityHelper.getRoles(getSubject()));
-    initialSecurityContext.put(SecurityContextConstants.USER_ID,
-        getApplicationSession().getPrincipal().getName());
-    initialSecurityContext.put(SecurityContextConstants.SESSION_PROPERTIES,
-        getApplicationSession().getPrincipal().getCustomProperties());
+    if (getApplicationSession() != null
+        && getApplicationSession().getPrincipal() != null) {
+      initialSecurityContext.put(SecurityContextConstants.USER_ROLES,
+          SecurityHelper.getRoles(getApplicationSession().getSubject()));
+      initialSecurityContext.put(SecurityContextConstants.USER_ID,
+          getApplicationSession().getPrincipal().getName());
+      initialSecurityContext.put(SecurityContextConstants.SESSION_PROPERTIES,
+          getApplicationSession().getPrincipal().getCustomProperties());
+    }
     return initialSecurityContext;
   }
 
@@ -1391,8 +1394,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferenceStore() != null) {
       getUserPreferenceStore().setStorePath(new String[] {
-        /* getName(), */getApplicationSession().getPrincipal().getName()
-      });
+      /* getName(), */getApplicationSession().getPrincipal().getName()});
     }
 
   }

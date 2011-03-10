@@ -257,6 +257,10 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the projectedViewDescriptor.
    */
   public IViewDescriptor getProjectedViewDescriptor() {
+    if (projectedViewDescriptor != null
+        && projectedViewDescriptor.getPermId() == null) {
+      projectedViewDescriptor.setPermId(getPermId() + ".projectedView");
+    }
     return projectedViewDescriptor;
   }
 

@@ -123,9 +123,12 @@ public final class SecurityHelper {
 
   private static Group getRolesGroup(Subject subject) {
     Group subjectRoles = null;
-    for (Principal p : subject.getPrincipals()) {
-      if (p instanceof Group && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
-        subjectRoles = (Group) p;
+    if (subject != null) {
+      for (Principal p : subject.getPrincipals()) {
+        if (p instanceof Group
+            && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
+          subjectRoles = (Group) p;
+        }
       }
     }
     return subjectRoles;
@@ -134,7 +137,8 @@ public final class SecurityHelper {
   /**
    * Extracts the role names contained in this JAAS subject.
    * 
-   * @param subject the subject to extract the roles for.
+   * @param subject
+   *          the subject to extract the roles for.
    * @return the roles list.
    */
   public static List<String> getRoles(Subject subject) {
