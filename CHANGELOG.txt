@@ -31,6 +31,7 @@ New features
            Computed columns can now be sorted using a SQL formula
 3032663    horizontal alignment
            tri state check boxes for filters
+           Pluggable dynamic security
 
 3.5.0
 =====
