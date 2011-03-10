@@ -671,6 +671,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the permId.
    */
   public String getPermId() {
+    if (permId == null) {
+      return getName();
+    }
     return permId;
   }
 
