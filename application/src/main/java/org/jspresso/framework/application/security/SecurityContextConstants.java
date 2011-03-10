@@ -27,74 +27,78 @@ package org.jspresso.framework.application.security;
 public final class SecurityContextConstants {
 
   /**
-   * <code>MODEL</code>.
+   * <code>MODEL</code>. References the Entity/Component fully qualified name.
    */
-  public static final String  MODEL              = "MODEL";
+  public static final String MODEL              = "MODEL";
 
   /**
-   * <code>PROPERTY</code>.
+   * <code>PROPERTY</code>. References the Entity/Component property name.
    */
-  public static final String  PROPERTY           = "PROPERTY";
+  public static final String PROPERTY           = "PROPERTY";
 
   /**
-   * <code>WORKSPACE</code>.
+   * <code>WORKSPACE</code>. References the workspace permanent Id.
    */
-  public static final String  WORKSPACE          = "WORKSPACE";
+  public static final String WORKSPACE          = "WORKSPACE";
 
   /**
-   * <code>MODULE</code>.
+   * <code>MODULE</code>. References the list of modules permanent Ids followed
+   * to reach the current module.
    */
-  public static final String  MODULE_CHAIN       = "MODULE_CHAIN";
+  public static final String MODULE_CHAIN       = "MODULE_CHAIN";
 
   /**
-   * <code>VIEW_CHAIN</code>.
+   * <code>VIEW_CHAIN</code>. References the list of view permanent Ids followed
+   * to reach the current view.
    */
-  public static final String  VIEW_CHAIN         = "VIEW_CHAIN";
+  public static final String VIEW_CHAIN         = "VIEW_CHAIN";
 
   /**
-   * <code>ACTION_MAP</code>.
+   * <code>ACTION_MAP</code>. References the action map permanent Id.
    */
-  public static final String  ACTION_MAP         = "ACTION_MAP";
+  public static final String ACTION_MAP         = "ACTION_MAP";
 
   /**
-   * <code>ACTION_LIST</code>.
+   * <code>ACTION_LIST</code>. References the action list permanent Id.
    */
-  public static final String  ACTION_LIST        = "ACTION_LIST";
+  public static final String ACTION_LIST        = "ACTION_LIST";
 
   /**
-   * <code>ACTION</code>.
+   * <code>ACTION</code>. References the action permanent Id.
    */
-  public static final String  ACTION             = "ACTION";
+  public static final String ACTION             = "ACTION";
 
   /**
-   * <code>AUTH_TYPE</code>.
+   * <code>AUTH_TYPE</code>. References the type of authorization asked for.
    */
-  public static final String  AUTH_TYPE          = "AUTH_TYPE";
+  public static final String AUTH_TYPE          = "AUTH_TYPE";
 
   /**
-   * <code>AUTH_VISIBLE</code>.
+   * <code>AUTH_VISIBLE</code>. Visibility authorization (used as value in the
+   * security context).
    */
-  public static final String  AUTH_VISIBLE       = "AUTH_VISIBLE";
+  public static final String AUTH_VISIBLE       = "AUTH_VISIBLE";
 
   /**
-   * <code>AUTH_ENABLE</code>.
+   * <code>AUTH_ENABLE</code>. Enablement authorization (used as value in the
+   * security context).
    */
-  public static final String  AUTH_ENABLE        = "AUTH_ENABLE";
+  public static final String AUTH_ENABLE        = "AUTH_ENABLE";
 
   /**
    * <code>USER_ID</code>.
    */
-  public static final String  USER_ID            = "USER_ID";
+  public static final String USER_ID            = "USER_ID";
 
   /**
    * <code>USER_ROLES</code>.
    */
-  public static final String  USER_ROLES         = "USER_ROLES";
+  public static final String USER_ROLES         = "USER_ROLES";
 
   /**
    * <code>SESSION_PROPERTIES</code>.
    */
-  public static final String  SESSION_PROPERTIES = "SESSION_PROPERTIES";
+  public static final String SESSION_PROPERTIES = "SESSION_PROPERTIES";
 
   private SecurityContextConstants() {
     // to prevent this class from being instanciated.
