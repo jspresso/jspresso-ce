@@ -26,6 +26,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
@@ -35,7 +36,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * Creates a query component to be used in filters or list of values. The
@@ -168,28 +168,30 @@ public class CreateQueryComponentAction extends BackendAction {
               if (initializedPropertyDescriptor != null) {
                 Class<?> expectedType = initializedPropertyDescriptor
                     .getModelType();
-                if (!expectedType.isAssignableFrom(initValue.getClass())) {
+                Class<?> initValueType = initValue.getClass();
+                if (!QueryComponent.class.isAssignableFrom(initValueType)
+                    && !expectedType.isAssignableFrom(initValueType)) {
                   if (Boolean.TYPE.equals(expectedType)) {
                     expectedType = Boolean.class;
                   }
                   try {
-                    initValue = expectedType.getConstructor(new Class<?>[] {
-                      String.class
-                    }).newInstance(new Object[] {
-                      initValue.toString()
-                    });
+                    initValue = expectedType.getConstructor(
+                        new Class<?>[] {String.class}).newInstance(
+                        new Object[] {initValue.toString()});
+                    // Whenever an exception occurs, just try to set it normally
+                    // though.
                   } catch (IllegalArgumentException ex) {
-                    throw new NestedRuntimeException(ex,
-                        "Invalid initialization mapping for property "
-                            + initializedAttribute.getKey());
+                    // throw new NestedRuntimeException(ex,
+                    // "Invalid initialization mapping for property "
+                    // + initializedAttribute.getKey());
                   } catch (SecurityException ex) {
-                    throw new NestedRuntimeException(ex,
-                        "Invalid initialization mapping for property "
-                            + initializedAttribute.getKey());
+                    // throw new NestedRuntimeException(ex,
+                    // "Invalid initialization mapping for property "
+                    // + initializedAttribute.getKey());
                   } catch (InstantiationException ex) {
-                    throw new NestedRuntimeException(ex,
-                        "Invalid initialization mapping for property "
-                            + initializedAttribute.getKey());
+                    // throw new NestedRuntimeException(ex,
+                    // "Invalid initialization mapping for property "
+                    // + initializedAttribute.getKey());
                   }
                 }
               }
