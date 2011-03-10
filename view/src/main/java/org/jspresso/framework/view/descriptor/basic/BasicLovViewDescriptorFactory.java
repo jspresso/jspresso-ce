@@ -132,6 +132,8 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
     resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
+
+    resultViewDescriptor.setPermId("Lov." + entityDescriptor.getName());
     return resultViewDescriptor;
   }
 

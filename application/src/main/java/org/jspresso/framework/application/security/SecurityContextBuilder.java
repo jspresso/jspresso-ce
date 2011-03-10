@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.security;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,10 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.action.ActionList;
@@ -100,20 +103,65 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
     return this;
   }
 
-  private SecurityContextBuilder append(@SuppressWarnings("unused") IGate gate) {
-    currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
-        SecurityContextConstants.AUTH_ENABLE);
+  private SecurityContextBuilder append(IGate gate) {
+    if (gate != null) {
+      currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
+          SecurityContextConstants.AUTH_ENABLE);
+    }
     return this;
   }
 
-  private SecurityContextBuilder append(
-      @SuppressWarnings("unused") ITreeLevelDescriptor treeLevelDescriptor) {
+  private SecurityContextBuilder append(ITreeLevelDescriptor treeLevelDescriptor) {
+    if (treeLevelDescriptor != null) {
+      String permId = treeLevelDescriptor.getPermId();
+      if (permId == null) {
+        permId = treeLevelDescriptor.getNodeGroupDescriptor().getPermId();
+      }
+      IModelDescriptor modelDescriptor = treeLevelDescriptor
+          .getNodeGroupDescriptor().getModelDescriptor();
+      appendToViewChain(permId, modelDescriptor);
+    }
     return this;
   }
 
-  private SecurityContextBuilder append(
-      @SuppressWarnings("unused") IViewDescriptor viewDescriptor) {
+  private SecurityContextBuilder append(IViewDescriptor viewDescriptor) {
+    if (viewDescriptor != null) {
+      IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+      appendToViewChain(viewDescriptor.getPermId(), modelDescriptor);
+    }
     return this;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void appendToViewChain(String permId, IModelDescriptor modelDescriptor) {
+    if (permId != null) {
+      List<String> viewChain = (List<String>) currentSecurityContext
+          .get(SecurityContextConstants.VIEW_CHAIN);
+      if (viewChain == null) {
+        viewChain = new ArrayList<String>();
+      } else {
+        // copy to preserve snapshot.
+        viewChain = new ArrayList<String>(viewChain);
+      }
+      viewChain.add(permId);
+      currentSecurityContext
+          .put(SecurityContextConstants.VIEW_CHAIN, viewChain);
+    }
+    if (modelDescriptor != null) {
+      if (modelDescriptor instanceof IPropertyDescriptor) {
+        currentSecurityContext.put(SecurityContextConstants.PROPERTY,
+            modelDescriptor.getName());
+      }
+      if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
+        currentSecurityContext.put(SecurityContextConstants.MODEL,
+            ((IComponentDescriptorProvider<?>) modelDescriptor)
+                .getComponentDescriptor().getName());
+      } else if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
+        currentSecurityContext.put(SecurityContextConstants.MODEL,
+            ((ICollectionDescriptorProvider<?>) modelDescriptor)
+                .getCollectionDescriptor().getElementDescriptor().getName());
+      }
+    }
   }
 
   private SecurityContextBuilder append(Module module) {
@@ -126,7 +174,6 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
         }
         currentModule = currentModule.getParent();
       }
-      Collections.reverse(moduleChain);
       currentSecurityContext.put(SecurityContextConstants.MODULE_CHAIN,
           moduleChain);
     }

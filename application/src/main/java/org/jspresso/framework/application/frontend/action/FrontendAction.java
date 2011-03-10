@@ -459,16 +459,4 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
       actionabilityGates.add(ModelTrackingGate.INSTANCE);
     }
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getPermId() {
-    String superPermId = super.getPermId();
-    if (superPermId == null) {
-      return getName();
-    }
-    return superPermId;
-  }
 }
