@@ -63,18 +63,22 @@ public class GrantedRolesGate extends AbstractGate implements
    */
   public void setSecurityHandler(ISecurityHandler securityHandler) {
     boolean oldOpen = isOpen();
-    try {
-      // this will configure the security context for enable/disable
-      // authorization type.
-      securityHandler.pushToSecurityContext(this);
-      this.open = securityHandler.isAccessGranted(new ISecurable() {
+    if (securityHandler != null) {
+      try {
+        // this will configure the security context for enable/disable
+        // authorization type.
+        securityHandler.pushToSecurityContext(this);
+        this.open = securityHandler.isAccessGranted(new ISecurable() {
 
-        public Collection<String> getGrantedRoles() {
-          return GrantedRolesGate.this.getGrantedRoles();
-        }
-      });
-    } finally {
-      securityHandler.restoreLastSecurityContextSnapshot();
+          public Collection<String> getGrantedRoles() {
+            return GrantedRolesGate.this.getGrantedRoles();
+          }
+        });
+      } finally {
+        securityHandler.restoreLastSecurityContextSnapshot();
+      }
+    } else {
+      this.open = false;
     }
     firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }

@@ -212,9 +212,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -262,6 +260,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         }
       }
       if (view != null) {
+        view.getConnector().setSecurityHandler(actionHandler);
         view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
@@ -289,7 +288,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
             }
           }
         }
-        view.getConnector().setSecurityHandler(actionHandler);
         finishComponentConfiguration(viewDescriptor, locale, view);
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
         decorateWithBorder(view, locale);
@@ -1115,6 +1113,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           propertyDescriptor.getName());
     }
 
+    columnConnector.setSecurityHandler(actionHandler);
     columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
     if (columnViewDescriptor.getReadabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
@@ -1140,7 +1139,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
         }
       }
     }
-    columnConnector.setSecurityHandler(actionHandler);
     return columnConnector;
   }
 
@@ -2841,9 +2839,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       columnPrefs = new Object[columns.length][2];
       for (int i = 0; i < columns.length; i++) {
         String[] column = columns[i].split(",");
-        columnPrefs[i] = new Object[] {
-            column[0], new Integer(column[1])
-        };
+        columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
       }
     }
     return columnPrefs;
