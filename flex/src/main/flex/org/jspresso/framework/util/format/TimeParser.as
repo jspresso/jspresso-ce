@@ -13,16 +13,11 @@
  */
 
 package org.jspresso.framework.util.format {
-  import mx.formatters.NumberBase;
-  import mx.formatters.NumberFormatter;
+  import flexlib.scheduling.util.DateUtil;
   
+  public class TimeParser extends Parser {
 
-  public class NumberParser extends Parser {
-
-    private var _parser:NumberBase;
-    private var _precision:uint;
-
-    public function NumberParser() {
+    public function TimeParser() {
       //default constructor.
     }
 
@@ -30,17 +25,14 @@ package org.jspresso.framework.util.format {
       if(value == null || value.length == 0) {
         return null;
       }
-	    var parsedNumber:Number = new Number(_parser.parseNumberString(value));
-	    parsedNumber.toFixed(_precision);
-	    return parsedNumber;
+      var parsedDate:Date = DateUtils.parseTime(value);
+      if(parsedDate == null) {
+        return existingValue;
+      } else if(existingValue != null) {
+        var dt:Date = existingValue as Date;
+        parsedDate.setFullYear(dt.fullYear, dt.month, dt.date);
+      }
+      return parsedDate;
     }
-    
-  	public function set numberBase(value:NumberBase):void	{
-  	  _parser = value;
-  	}
-
-  	public function set precision(value:uint):void	{
-  	  _precision = value;
-  	}
   }
 }

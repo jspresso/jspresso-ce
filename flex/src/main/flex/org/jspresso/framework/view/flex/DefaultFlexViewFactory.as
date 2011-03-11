@@ -14,7 +14,6 @@
 
 package org.jspresso.framework.view.flex {
   import actionscriptdatetimelibrary.DateTimeField;
-  import actionscriptdatetimelibrary.TimeStepper;
   
   import flash.display.DisplayObject;
   import flash.events.Event;
@@ -76,6 +75,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberFormatter;
   import mx.graphics.SolidColor;
   import mx.styles.CSSStyleDeclaration;
+  import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -123,11 +123,13 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.state.remote.RemoteFormattedValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.array.ArrayUtil;
+  import org.jspresso.framework.util.format.DateUtils;
   import org.jspresso.framework.util.format.NumberParser;
   import org.jspresso.framework.util.format.Parser;
   import org.jspresso.framework.util.format.PasswordFormatter;
   import org.jspresso.framework.util.format.PercentFormatter;
   import org.jspresso.framework.util.format.PercentParser;
+  import org.jspresso.framework.util.format.TimeParser;
   import org.jspresso.framework.util.gui.CellConstraints;
   import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -1407,6 +1409,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
+      dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
       sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT);
       bindDateField(dateField, remoteDateField.state);
@@ -1421,18 +1424,33 @@ package org.jspresso.framework.view.flex {
           dateField.selectedDate = null;
           remoteState.value = null;
         } else {
+          var processEvent:Boolean = true;
           if(event is FocusEvent) {
             var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
             var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
             
-            if(currentTarget == dateField
-              && !dateField.contains(relatedObject)
-              && !dateField.dropdown.contains(relatedObject)) {
+            if(currentTarget != dateField
+              || dateField.contains(relatedObject)
+              || dateField.dropdown.contains(relatedObject)) {
               // do not listen to inner focus events.
-              remoteState.value = dateField.selectedDate;
+              processEvent = false;
             }
-          } else {
-            remoteState.value = dateField.selectedDate;
+          }
+          if(processEvent) {
+            var parsedDate:Date = DateUtils.parseDate(dateField.text, dateField.formatString);
+            var selectedDate:Date = dateField.selectedDate;
+            if(ObjectUtil.compare(parsedDate,selectedDate) == 0) {
+              remoteState.value = dateField.selectedDate;
+            } else {
+              // rollback text update
+              var ti:TextInput = (dateField.getChildAt(2) as TextInput);
+              if(ti) {
+                ti.text = DateField.dateToString(remoteState.value as Date, dateField.formatString);
+              }
+              //dateField.selectedDate = remoteState.value as Date;
+              // the following is a hack to workaround the datefield not resetting on a bad input.
+              //dateField.formatString = dateField.formatString;
+            }
           }
         }
       };
@@ -1479,28 +1497,11 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
-      var timeStepper:TimeStepper = new TimeStepper();
-      sizeMaxComponentWidth(timeStepper, remoteTimeField, TIME_CHAR_COUNT);
-      bindTimeStepper(timeStepper, remoteTimeField.state);
-      return timeStepper;
-    }
-    
-    protected function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value", true);
-      BindingUtils.bindProperty(timeStepper, "enabled", remoteState, "writable");
-      var updateModel:Function = function(event:Event):void {
-        if(event is FocusEvent) {
-          var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
-          var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
-          
-          if(currentTarget == timeStepper && !timeStepper.contains(relatedObject)) {
-            remoteState.value = timeStepper.timeValue;
-          }
-        }
-      };
-      timeStepper.addEventListener(FlexEvent.ENTER,updateModel);
-      timeStepper.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
-      timeStepper.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
+      var timeField:TextInput = new TextInput();
+      sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
+      bindTextInput(timeField, remoteTimeField.state,
+        createFormatter(remoteTimeField), createParser(remoteTimeField));
+      return timeField;
     }
 
     protected function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
@@ -2134,12 +2135,13 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
       var updateModel:Function = function (event:Event):void {
-        var inputText:String = (event.currentTarget as TextInput).text;
+        var inputText:String = textInput.text;
         if(inputText == null || inputText.length == 0) {
           remoteState.value = null;
         } else {
           if(parser != null) {
-            remoteState.value = parser.parse(inputText);
+            remoteState.value = parser.parse(inputText, remoteState.value);
+            textInput.text = formatter.format(remoteState.value);
           } else {
             remoteState.value = inputText;
           }
@@ -2219,6 +2221,9 @@ package org.jspresso.framework.view.flex {
         numberParser.numberBase = numberBase;
         numberParser.precision = formatter.precision as uint;
         return numberParser;
+      } else if(remoteComponent is RTimeField) {
+        var timeParser:TimeParser = new TimeParser();
+        return timeParser;
       }
       return null;
     }

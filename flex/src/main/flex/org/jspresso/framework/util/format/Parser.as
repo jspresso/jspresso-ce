@@ -16,7 +16,7 @@ package org.jspresso.framework.util.format {
 
   public class Parser {
 
-    public function parse(value:String):Object	{
+    public function parse(value:String, existingValue:Object = null):Object	{
 	    return null;
     }
   }

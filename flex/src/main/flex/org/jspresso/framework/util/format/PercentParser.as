@@ -18,7 +18,7 @@ package org.jspresso.framework.util.format {
 
   public class PercentParser extends NumberParser {
 
-    override public function parse(value:String):Object	{
+    override public function parse(value:String, existingValue:Object = null):Object	{
       if(value == null || value.length == 0) {
         return null;
       }
