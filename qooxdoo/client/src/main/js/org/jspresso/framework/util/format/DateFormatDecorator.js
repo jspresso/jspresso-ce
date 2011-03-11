@@ -20,6 +20,10 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
         formatDelegates : {
           check : "Array",
           nullable : false
+        },
+        remoteComponent : {
+          check : "org.jspresso.framework.gui.remote.RComponent",
+          nullable : false
         }
       },
 
@@ -46,15 +50,44 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
           if(str == null || str.length == 0) {
             return null;
           }
-          for (var i = 0; i < this.getFormatDelegates().length; i++) {
+          var existingDate = this.getRemoteComponent().getState().getValue();
+          var parsedDate;
+          for (var i = 0; i < this.getFormatDelegates().length && !parsedDate; i++) {
             try {
-              return this.getFormatDelegates()[i].parse(str);
+              parsedDate = this.getFormatDelegates()[i].parse(str);
             } catch (err) {
-              if (i == this.getFormatDelegates().length -1) {
-                throw new Error("No delegate could parse the string "
-                    + str);
-              }
+              //if (i == this.getFormatDelegates().length -1) {
+              //  throw new Error("No delegate could parse the string "
+              //      + str);
+              //}
             }
+          }
+          if(parsedDate == null) {
+            return existingDate;
+          }
+          if(existingDate == null) {
+            return parsedDate;
+          } else {
+            if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField) {
+              parsedDate = new Date(
+                parsedDate.getFullYear(),
+                parsedDate.getMonth(),
+                parsedDate.getDate(),
+                existingDate.getHours(),
+                existingDate.getMinutes(),
+                existingDate.getSeconds(),
+                existingDate.getMilliseconds());
+            } else if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField) {
+              parsedDate = new Date(
+                existingDate.getFullYear(),
+                existingDate.getMonth(),
+                existingDate.getDate(),
+                parsedDate.getHours(),
+                parsedDate.getMinutes(),
+                parsedDate.getSeconds(),
+                parsedDate.getMilliseconds());
+            }
+            return parsedDate;
           }
         }
       }
