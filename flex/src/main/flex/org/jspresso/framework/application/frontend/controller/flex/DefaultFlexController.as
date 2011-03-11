@@ -13,14 +13,10 @@
  */
 
 package org.jspresso.framework.application.frontend.controller.flex {
-  import actionscriptdatetimelibrary.DateTimeField;
-  import actionscriptdatetimelibrary.TimeStepper;
-  
   import flash.display.DisplayObject;
   import flash.events.DataEvent;
   import flash.events.Event;
   import flash.events.MouseEvent;
-  import flash.events.StatusEvent;
   import flash.external.ExternalInterface;
   import flash.net.FileFilter;
   import flash.net.FileReference;
@@ -1123,9 +1119,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         || root is CheckBox
         || root is ComboBox
         || root is TextArea
-        || root is DateField
-        || root is DateTimeField
-        || root is TimeStepper) {
+        || root is DateField) {
         if(root.enabled) {
           return root;
         }

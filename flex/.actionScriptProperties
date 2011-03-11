@@ -16,7 +16,6 @@
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/sephiroth/checkbox3state/1.0/checkbox3state-1.0.swc" sourcepath="/Applications/envdev/flex3libs/checkbox3state/sources" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flexunit/flexunit/0.90/flexunit-0.90.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/resizecontainers/resizecontainers/1.0/resizecontainers-1.0.swc" useDefaultLinkType="false"/>
     </libraryPath>
