@@ -12,7 +12,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.format.FormatDecorator", {
+qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
       extend : qx.util.format.DateFormat,
       implement : qx.util.format.IFormat,
 

@@ -2556,18 +2556,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 			var format;
 			if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
 				if (remoteComponent.getType() == "DATE_TIME") {
-          var dateTimeFormat = new org.jspresso.framework.util.format.FormatDecorator();
+          var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
           dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
           return dateTimeFormat;
 				} else {
-					var dateFormat = new org.jspresso.framework.util.format.FormatDecorator();
+					var dateFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
           dateFormat.setFormatDelegates(this.__dateFormats);
 					return dateFormat;
 				}
 			} else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
 				return new org.jspresso.framework.util.format.PasswordFormat();
 			} else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
-				var timeFormat = new org.jspresso.framework.util.format.FormatDecorator();
+				var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
         timeFormat.setFormatDelegates(this.__timeFormats);
 				return timeFormat;
 			} else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
