@@ -65,6 +65,26 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
           if(parsedDate == null) {
             return existingDate;
           }
+          
+          var parsedYear = parsedDate.getFullYear();
+          var parsedMonth = parsedDate.getMonth();
+          var parsedDay = parsedDate.getDate();
+          var today = new Date();
+          if(parsedDate.getTime() < 365*24*3600000) {
+            parsedYear = today.getFullYear();
+          }
+          if(parsedDate.getTime() < 31*24*3600000) {
+            parsedMonth = today.getMonth();
+          }
+          parsedDate = new Date(
+            parsedYear,
+            parsedMonth,
+            parsedDay,
+            parsedDate.getHours(),
+            parsedDate.getMinutes(),
+            parsedDate.getSeconds(),
+            parsedDate.getMilliseconds()
+          );
           if(existingDate == null) {
             return parsedDate;
           } else {
@@ -76,7 +96,8 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
                 existingDate.getHours(),
                 existingDate.getMinutes(),
                 existingDate.getSeconds(),
-                existingDate.getMilliseconds());
+                existingDate.getMilliseconds()
+              );
             } else if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField) {
               parsedDate = new Date(
                 existingDate.getFullYear(),
@@ -85,7 +106,8 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
                 parsedDate.getHours(),
                 parsedDate.getMinutes(),
                 parsedDate.getSeconds(),
-                parsedDate.getMilliseconds());
+                parsedDate.getMilliseconds()
+              );
             }
             return parsedDate;
           }
