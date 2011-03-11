@@ -24,7 +24,6 @@
     -->
 
     <blazeds.version>3.2.0.3978</blazeds.version>
-    <datetimelibrary.version>1.0.2</datetimelibrary.version>
     <flexlib.version>2.5</flexlib.version>
     <resizecontainers.version>1.0</resizecontainers.version>
     <checkbox3state.version>1.0</checkbox3state.version>
@@ -729,12 +728,6 @@
         <groupId>com.adobe.blazeds</groupId>
         <artifactId>blazeds-opt</artifactId>
         <version>${blazeds.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>datetimelibrary</groupId>
-        <artifactId>datetimelibrary</artifactId>
-        <version>${datetimelibrary.version}</version>
-        <type>swc</type>
       </dependency>
       <dependency>
         <groupId>flexlib</groupId>
