@@ -1440,7 +1440,12 @@ package org.jspresso.framework.view.flex {
             var parsedDate:Date = DateUtils.parseDate(dateField.text, dateField.formatString);
             var selectedDate:Date = dateField.selectedDate;
             if(ObjectUtil.compare(parsedDate,selectedDate) == 0) {
-              remoteState.value = dateField.selectedDate;
+              if(remoteState.value) {
+                var currentDate:Date = remoteState.value as Date;
+                // copy the existing time portion
+                selectedDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), currentDate.getMilliseconds());
+              }
+              remoteState.value = selectedDate;
             } else {
               // rollback text update
               var ti:TextInput = (dateField.getChildAt(2) as TextInput);
