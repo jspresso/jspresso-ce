@@ -13,8 +13,7 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import actionscriptdatetimelibrary.DateTimeField;
-  
+
   import flash.display.DisplayObject;
   import flash.events.Event;
   import flash.events.FocusEvent;
@@ -1452,9 +1451,6 @@ package org.jspresso.framework.view.flex {
               if(ti) {
                 ti.text = DateField.dateToString(remoteState.value as Date, dateField.formatString);
               }
-              //dateField.selectedDate = remoteState.value as Date;
-              // the following is a hack to workaround the datefield not resetting on a bad input.
-              //dateField.formatString = dateField.formatString;
             }
           }
         }
@@ -1465,40 +1461,19 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createDateTimeField(remoteDateField:RDateField):UIComponent {
-      var dateTimeField:DateTimeField = new DateTimeField();
-      dateTimeField.editable = true;
-      dateTimeField.showTime = true;
-      sizeMaxComponentWidth(dateTimeField, remoteDateField, DATE_CHAR_COUNT + TIME_CHAR_COUNT +1);
-      bindDateTimeField(dateTimeField, remoteDateField.state);
+      var dateTimeField:HBox = new HBox();
+      dateTimeField.addChild(createDateField(remoteDateField));
+      
+      var remoteTimeField:RTimeField = new RTimeField();
+      remoteTimeField.background = remoteDateField.background;
+      remoteTimeField.borderType = remoteDateField.borderType;
+      remoteTimeField.font = remoteDateField.font;
+      remoteTimeField.foreground = remoteDateField.foreground;
+      remoteTimeField.guid = remoteDateField.guid;
+      remoteTimeField.state = remoteDateField.state;
+      remoteTimeField.tooltip = remoteDateField.tooltip;
+      dateTimeField.addChild(createComponent(remoteTimeField, false));
       return dateTimeField;
-    }
-
-    protected function bindDateTimeField(dateTimeField:DateTimeField, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value", true);
-      BindingUtils.bindProperty(dateTimeField, "enabled", remoteState, "writable");
-      BindingUtils.bindProperty(remoteState, "value", dateTimeField, "selectedDateTime", true);
-      var updateModel:Function = function (event:Event):void {
-        if(dateTimeField.text == "") {
-          dateTimeField.selectedDateTime = null;
-          remoteState.value = null;
-        } else {
-          if(event is FocusEvent) {
-            var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
-            var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
-            
-            if(currentTarget == dateTimeField
-              && !dateTimeField.contains(relatedObject)
-              && !dateTimeField.dropdownDateTime.contains(relatedObject)) {
-              remoteState.value = dateTimeField.selectedDateTime;
-            }
-          } else {
-            remoteState.value = dateTimeField.selectedDateTime;
-          }
-        }
-      };
-      dateTimeField.addEventListener(FlexEvent.ENTER,updateModel);
-      dateTimeField.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
-      dateTimeField.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
