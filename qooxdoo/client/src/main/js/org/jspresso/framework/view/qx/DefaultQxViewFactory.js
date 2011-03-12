@@ -59,9 +59,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     this.__remotePeerRegistry = remotePeerRegistry;
     this.__actionHandler = actionHandler;
     this.__commandHandler = commandHandler;
-    this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
-    this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
-    this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
   },
 
   members : {
@@ -2582,11 +2579,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
+          if(!this.__dateTimeFormats) {
+            this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
+          }
           dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
           dateTimeFormat.setRemoteComponent(remoteComponent);
           return dateTimeFormat;
         } else {
           var dateFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
+          if(!this.__dateFormats) {
+            this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
+          }
           dateFormat.setFormatDelegates(this.__dateFormats);
           dateFormat.setRemoteComponent(remoteComponent);
           return dateFormat;
@@ -2595,6 +2598,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         return new org.jspresso.framework.util.format.PasswordFormat();
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
+        if(!this.__timeFormats) {
+          this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
+        }
         timeFormat.setFormatDelegates(this.__timeFormats);
         timeFormat.setRemoteComponent(remoteComponent);
         return timeFormat;
