@@ -32,7 +32,8 @@ public interface IEntityFactory extends IComponentFactory {
 
   /**
    * Creates a new entity instance based on the entity descriptor. The entity
-   * will be initialized with any necessary starting state.
+   * will be initialized with any necessary starting state. Lifecycle
+   * interceptor are also created.
    * 
    * @param <T>
    *          the concrete class of the created entity.
@@ -43,7 +44,8 @@ public interface IEntityFactory extends IComponentFactory {
   <T extends IEntity> T createEntityInstance(Class<T> entityContract);
 
   /**
-   * Creates a new entity instance based on the entity descriptor.
+   * Instanciates an entity using a given ID. No lifecycle interceptor nor
+   * registration of any kind is performed.
    * 
    * @param <T>
    *          the concrete class of the created entity.

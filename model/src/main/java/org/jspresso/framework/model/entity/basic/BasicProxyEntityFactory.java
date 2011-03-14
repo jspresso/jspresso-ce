@@ -80,10 +80,25 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T createdEntity = createEntityInstance(entityContract,
         entityGUIDGenerator.generateGUID());
-    for (IPropertyDescriptor propertyDescriptor : inlineComponentFactory
-        .getComponentDescriptor(entityContract).getPropertyDescriptors()) {
+    return initializeEntity(createdEntity);
+  }
+
+  /**
+   * Performs necessary post instanciation initialization.
+   * 
+   * @param <T>
+   *          the entity type.
+   * @param entity
+   *          the instanciated entity.
+   * @return the entity instance ready to be used.
+   */
+  protected <T extends IEntity> T initializeEntity(T entity) {
+    IComponentDescriptor<?> entityDescriptor = getComponentDescriptor(entity
+        .getComponentContract());
+    for (IPropertyDescriptor propertyDescriptor : entityDescriptor
+        .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-        createdEntity
+        entity
             .straightSetProperty(
                 propertyDescriptor.getName(),
                 entityCollectionFactory
@@ -91,12 +106,12 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
                         .getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
           && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
-        createdEntity.straightSetProperty(propertyDescriptor.getName(),
+        entity.straightSetProperty(propertyDescriptor.getName(),
             ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
       }
     }
-    createdEntity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());
-    return createdEntity;
+    entity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+    return entity;
   }
 
   /**
@@ -110,11 +125,11 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getOldValue() == null && evt.getNewValue() != null) {
-              createdEntity.firePropertyChange(IEntity.PERSISTENT,
-                  new Boolean(false), new Boolean(true));
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
+                  false), new Boolean(true));
             } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(true),
-                  new Boolean(false));
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
+                  true), new Boolean(false));
             }
           }
         });
@@ -272,5 +287,14 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
         .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
+  }
+
+  /**
+   * Gets the entityGUIDGenerator.
+   * 
+   * @return the entityGUIDGenerator.
+   */
+  protected IGUIDGenerator getEntityGUIDGenerator() {
+    return entityGUIDGenerator;
   }
 }
