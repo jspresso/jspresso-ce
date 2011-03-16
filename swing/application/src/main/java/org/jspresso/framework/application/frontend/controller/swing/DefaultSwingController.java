@@ -1093,7 +1093,7 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected IPreferencesStore createClientPreferenceStore() {
+  protected IPreferencesStore createClientPreferencesStore() {
     return new JavaPreferencesStore();
   }
 }

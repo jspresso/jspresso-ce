@@ -339,7 +339,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected IPreferencesStore createClientPreferenceStore() {
+  protected IPreferencesStore createClientPreferencesStore() {
     return null;
   }
 }

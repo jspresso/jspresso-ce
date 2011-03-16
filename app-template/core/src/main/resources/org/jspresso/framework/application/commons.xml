@@ -145,7 +145,7 @@
   <bean id="customSecurityPlugin" class="org.jspresso.framework.security.MockSecurityPlugin"/>
   
   <!-- User preference store -->
-  <bean id="userPreferenceStore" class="org.jspresso.framework.util.preferences.MockPreferenceStore"/>
+  <bean id="userPreferencesStore" class="org.jspresso.framework.util.preferences.MockPreferencesStore"/>
 
   <!-- The controllers. -->
 
@@ -202,7 +202,7 @@
     <property name="transactionTemplate" ref="transactionTemplate" />
     <property name="customSecurityPlugin" ref="customSecurityPlugin"/>
     <property name="customExceptionHandler" ref="customExceptionHandler"/>
-    <property name="userPreferenceStore" ref="userPreferenceStore"/>
+    <property name="userPreferencesStore" ref="userPreferencesStore"/>
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase"/>

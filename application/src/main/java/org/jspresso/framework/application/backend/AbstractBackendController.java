@@ -115,7 +115,7 @@ public abstract class AbstractBackendController extends AbstractController
   private Map<String, IValueConnector>                     workspaceConnectors;
   private Map<Module, IValueConnector>                     moduleConnectors;
 
-  private IPreferencesStore                                userPreferenceStore;
+  private IPreferencesStore                                userPreferencesStore;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -1392,8 +1392,8 @@ public abstract class AbstractBackendController extends AbstractController
     if (userPreferredLanguageCode != null) {
       getApplicationSession().setLocale(new Locale(userPreferredLanguageCode));
     }
-    if (getUserPreferenceStore() != null) {
-      getUserPreferenceStore().setStorePath(new String[] {
+    if (getUserPreferencesStore() != null) {
+      getUserPreferencesStore().setStorePath(new String[] {
       /* getName(), */getApplicationSession().getPrincipal().getName()});
     }
 
@@ -1407,8 +1407,8 @@ public abstract class AbstractBackendController extends AbstractController
    * @return the stored preference or null.
    */
   public String getUserPreference(String key) {
-    if (getUserPreferenceStore() != null) {
-      return getUserPreferenceStore().getPreference(key);
+    if (getUserPreferencesStore() != null) {
+      return getUserPreferencesStore().getPreference(key);
     }
     return null;
   }
@@ -1422,8 +1422,8 @@ public abstract class AbstractBackendController extends AbstractController
    *          the value of the preference to be stored.
    */
   public void putUserPreference(String key, String value) {
-    if (getUserPreferenceStore() != null) {
-      getUserPreferenceStore().putPreference(key, value);
+    if (getUserPreferencesStore() != null) {
+      getUserPreferencesStore().putPreference(key, value);
     }
   }
 
@@ -1434,8 +1434,8 @@ public abstract class AbstractBackendController extends AbstractController
    *          the key under which the preference is stored.
    */
   public void removeUserPreference(String key) {
-    if (getUserPreferenceStore() != null) {
-      getUserPreferenceStore().removePreference(key);
+    if (getUserPreferencesStore() != null) {
+      getUserPreferencesStore().removePreference(key);
     }
   }
 
@@ -1444,17 +1444,17 @@ public abstract class AbstractBackendController extends AbstractController
    * 
    * @return the user preferences store.
    */
-  protected IPreferencesStore getUserPreferenceStore() {
-    return userPreferenceStore;
+  protected IPreferencesStore getUserPreferencesStore() {
+    return userPreferencesStore;
   }
 
   /**
    * Sets the user preference store.
    * 
-   * @param userPreferenceStore
+   * @param userPreferencesStore
    *          the userPreferenceStore to set.
    */
-  public void setUserPreferenceStore(IPreferencesStore userPreferenceStore) {
-    this.userPreferenceStore = userPreferenceStore;
+  public void setUserPreferencesStore(IPreferencesStore userPreferencesStore) {
+    this.userPreferencesStore = userPreferencesStore;
   }
 }

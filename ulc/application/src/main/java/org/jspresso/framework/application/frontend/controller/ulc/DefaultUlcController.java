@@ -820,7 +820,7 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  protected IPreferencesStore createClientPreferenceStore() {
+  protected IPreferencesStore createClientPreferencesStore() {
     return new CookiePreferencesStore();
   }
 }

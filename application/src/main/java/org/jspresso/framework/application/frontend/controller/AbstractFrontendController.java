@@ -145,7 +145,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private static final String                   UP_KEY            = "UP_KEY";
   private static final String                   UP_SEP            = "!";
 
-  private IPreferencesStore                     clientPreferenceStore;
+  private IPreferencesStore                     clientPreferencesStore;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -843,8 +843,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the stored preference or null.
    */
   public String getClientPreference(String key) {
-    if (getClientPreferenceStore() != null) {
-      return getClientPreferenceStore().getPreference(key);
+    if (getClientPreferencesStore() != null) {
+      return getClientPreferencesStore().getPreference(key);
     }
     return null;
   }
@@ -858,8 +858,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the value of the preference to be stored.
    */
   public void putClientPreference(String key, String value) {
-    if (getClientPreferenceStore() != null) {
-      getClientPreferenceStore().putPreference(key, value);
+    if (getClientPreferencesStore() != null) {
+      getClientPreferencesStore().putPreference(key, value);
     }
   }
 
@@ -870,8 +870,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the key under which the preference is stored.
    */
   public void removeClientPreference(String key) {
-    if (getClientPreferenceStore() != null) {
-      getClientPreferenceStore().removePreference(key);
+    if (getClientPreferencesStore() != null) {
+      getClientPreferencesStore().removePreference(key);
     }
   }
 
@@ -1463,14 +1463,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the client preferences store.
    */
-  protected synchronized IPreferencesStore getClientPreferenceStore() {
-    if (clientPreferenceStore == null) {
-      clientPreferenceStore = createClientPreferenceStore();
-      clientPreferenceStore.setStorePath(new String[] {
+  protected synchronized IPreferencesStore getClientPreferencesStore() {
+    if (clientPreferencesStore == null) {
+      clientPreferencesStore = createClientPreferencesStore();
+      clientPreferencesStore.setStorePath(new String[] {
         getName()
       });
     }
-    return clientPreferenceStore;
+    return clientPreferencesStore;
   }
 
   /**
@@ -1478,16 +1478,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the clientPreferenceStore.
    */
-  protected abstract IPreferencesStore createClientPreferenceStore();
+  protected abstract IPreferencesStore createClientPreferencesStore();
 
   /**
    * Sets the clientPreferenceStore.
    * 
-   * @param clientPreferenceStore
+   * @param clientPreferencesStore
    *          the clientPreferenceStore to set.
    */
-  public void setClientPreferenceStore(IPreferencesStore clientPreferenceStore) {
-    this.clientPreferenceStore = clientPreferenceStore;
+  public void setClientPreferencesStore(IPreferencesStore clientPreferencesStore) {
+    this.clientPreferencesStore = clientPreferencesStore;
   }
 
   /**

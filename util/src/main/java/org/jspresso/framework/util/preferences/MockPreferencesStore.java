@@ -24,7 +24,7 @@ package org.jspresso.framework.util.preferences;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MockPreferenceStore implements IPreferencesStore {
+public class MockPreferencesStore implements IPreferencesStore {
 
   /**
    * {@inheritDoc}

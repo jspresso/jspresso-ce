@@ -35,7 +35,7 @@ import org.springframework.jdbc.core.RowCallbackHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class JdbcPreferenceStore implements IPreferencesStore {
+public class JdbcPreferencesStore implements IPreferencesStore {
 
   private String              storePath;
   private Map<String, String> preferences;
@@ -51,7 +51,7 @@ public class JdbcPreferenceStore implements IPreferencesStore {
    * Constructs a new <code>JdbcPreferenceStore</code> instance.
    * 
    */
-  public JdbcPreferenceStore() {
+  public JdbcPreferencesStore() {
     this.storePath = "";
   }
 

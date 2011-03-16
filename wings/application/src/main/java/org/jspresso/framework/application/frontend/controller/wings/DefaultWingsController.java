@@ -677,7 +677,7 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  protected IPreferencesStore createClientPreferenceStore() {
+  protected IPreferencesStore createClientPreferencesStore() {
     return new CookiePreferencesStore();
   }
 }
