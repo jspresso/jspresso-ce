@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
@@ -202,9 +203,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             } else {
               prefixedProperty = property.getKey();
             }
-            if ("null".equals(property.getValue())) {
-              currentCriteria.add(Restrictions.isNull(prefixedProperty));
-            } else if (property.getValue() instanceof IEntity) {
+            if (property.getValue() instanceof IEntity) {
               if (!((IEntity) property.getValue()).isPersistent()) {
                 abort = true;
               } else {
@@ -225,8 +224,22 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                 for (int i = 0; i < propValues.length; i++) {
                   String val = propValues[i];
                   if (val.length() > 0) {
-                    disjunction.add(Restrictions.like(prefixedProperty, val,
-                        MatchMode.START).ignoreCase());
+                    Criterion crit;
+                    boolean negate = false;
+                    if (val.startsWith(IQueryComponent.NOT_VAL)) {
+                      val = val.substring(1);
+                      negate = true;
+                    }
+                    if (IQueryComponent.NULL_VAL.equals(val)) {
+                      crit = Restrictions.isNull(prefixedProperty);
+                    } else {
+                      crit = Restrictions.like(prefixedProperty, val,
+                          MatchMode.START).ignoreCase();
+                    }
+                    if (negate) {
+                      crit = Restrictions.not(crit);
+                    }
+                    disjunction.add(crit);
                   }
                 }
               }

@@ -53,6 +53,16 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   String QUERY_COMPONENT     = "QUERY_COMPONENT";
 
   /**
+   * Null value.
+   */
+  String NULL_VAL     = "#";
+
+  /**
+   * Not value.
+   */
+  String NOT_VAL     = "!";
+
+  /**
    * Gets the descriptor of the queried components.
    * 
    * @return the descriptor of the queried components.

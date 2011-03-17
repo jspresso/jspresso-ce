@@ -161,7 +161,9 @@ public class CreateQueryComponentAction extends BackendAction {
               initValue = initializedAttribute.getValue();
             }
             if (initValue != null) {
-              if (!"null".equals(initValue)) {
+              if ("null".equals(initValue)) {
+                initValue = IQueryComponent.NULL_VAL;
+              } else {
                 IPropertyDescriptor initializedPropertyDescriptor = queryComponent
                     .getComponentDescriptor().getPropertyDescriptor(
                         initializedAttribute.getKey());
