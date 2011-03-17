@@ -86,7 +86,8 @@ public class HibernateBackendController extends AbstractBackendController {
                 .clearDirty();
           }
           try {
-            // The folowing is to avoid to avoid Hibernate exceptions due to reassociating a
+            // The folowing is to avoid to avoid Hibernate exceptions due to
+            // reassociating a
             // collection that is already associated with the session.
             ((PersistentCollection) registeredPropertyEntry.getValue())
                 .setCurrentSession(null);
@@ -639,7 +640,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
       EMergeMode mergeMode, Class<? extends T> clazz) {
-    List<T> ret = findByCriteria(criteria, null, clazz);
+    List<T> ret = findByCriteria(criteria);
     if (ret != null && !ret.isEmpty()) {
       if (isUnitOfWorkActive()) {
         return cloneInUnitOfWork(ret.get(0));
@@ -652,7 +653,7 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Search hibernate using criteria. The result is then merged into session.
+   * Search Hibernate using criteria. The result is then merged into session.
    * 
    * @param <T>
    *          the entity type to return
@@ -661,15 +662,26 @@ public class HibernateBackendController extends AbstractBackendController {
    * @param mergeMode
    *          the merge mode to use when merging back retrieved entities or null
    *          if no merge is requested.
-   * @param clazz
-   *          the type of the entity.
    * @return the first found entity or null;
    */
-  @SuppressWarnings("unchecked")
   public <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, EMergeMode mergeMode,
-      Class<? extends T> clazz) {
-    List<IEntity> res = (List<IEntity>) getTransactionTemplate().execute(
+      final DetachedCriteria criteria, EMergeMode mergeMode) {
+    List<T> res = findByCriteria(criteria);
+    if (res != null) {
+      if (isUnitOfWorkActive()) {
+        return cloneInUnitOfWork(res);
+      } else if (mergeMode != null) {
+        return merge(res, mergeMode);
+      }
+      return res;
+    }
+    return null;
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T extends IEntity> List<T> findByCriteria(
+      final DetachedCriteria criteria) {
+    List<T> res = (List<T>) getTransactionTemplate().execute(
         new TransactionCallback() {
 
           public Object doInTransaction(
@@ -677,15 +689,7 @@ public class HibernateBackendController extends AbstractBackendController {
             return getHibernateTemplate().findByCriteria(criteria);
           }
         });
-    if (res != null) {
-      if (isUnitOfWorkActive()) {
-        return (List<T>) cloneInUnitOfWork(res);
-      } else if (mergeMode != null) {
-        return (List<T>) merge(res, mergeMode);
-      }
-      return (List<T>) res;
-    }
-    return null;
+    return res;
   }
 
   /**

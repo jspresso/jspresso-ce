@@ -37,6 +37,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandlerAware;
 import org.jspresso.framework.model.entity.basic.BasicEntityInvocationHandler;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.security.UserPrincipal;
@@ -93,7 +94,8 @@ public class ControllerAwareEntityInvocationHandler extends
   }
 
   /**
-   * Sets the JAAS subject to subject aware extensions.
+   * Sets the JAAS subject to subject aware extensions. Sets the backend
+   * controller to entity lifecycle handler aware extensions.
    * <p>
    * {@inheritDoc}
    */
@@ -103,6 +105,10 @@ public class ControllerAwareEntityInvocationHandler extends
     if (extension instanceof ISubjectAware && getBackendController() != null) {
       ((ISubjectAware) extension).setSubject(getBackendController()
           .getApplicationSession().getSubject());
+    }
+    if (extension instanceof IEntityLifecycleHandlerAware) {
+      ((IEntityLifecycleHandlerAware) extension)
+          .setEntityLifecycleHandler(getBackendController());
     }
   }
 
