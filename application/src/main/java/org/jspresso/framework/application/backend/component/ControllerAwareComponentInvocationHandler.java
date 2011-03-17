@@ -30,6 +30,7 @@ import org.jspresso.framework.model.component.basic.BasicComponentInvocationHand
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
@@ -90,6 +91,10 @@ public class ControllerAwareComponentInvocationHandler extends
     if (extension instanceof ISubjectAware && getBackendController() != null) {
       ((ISubjectAware) extension).setSubject(getBackendController()
           .getApplicationSession().getSubject());
+    }
+    if (extension instanceof IEntityLifecycleHandlerAware) {
+      ((IEntityLifecycleHandlerAware) extension)
+          .setEntityLifecycleHandler(getBackendController());
     }
   }
 
