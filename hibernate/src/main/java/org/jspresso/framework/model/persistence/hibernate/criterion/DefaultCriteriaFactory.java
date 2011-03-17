@@ -202,7 +202,9 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             } else {
               prefixedProperty = property.getKey();
             }
-            if (property.getValue() instanceof IEntity) {
+            if ("null".equals(property.getValue())) {
+              currentCriteria.add(Restrictions.isNull(prefixedProperty));
+            } else if (property.getValue() instanceof IEntity) {
               if (!((IEntity) property.getValue()).isPersistent()) {
                 abort = true;
               } else {

@@ -161,37 +161,42 @@ public class CreateQueryComponentAction extends BackendAction {
               initValue = initializedAttribute.getValue();
             }
             if (initValue != null) {
-              IPropertyDescriptor initializedPropertyDescriptor = queryComponent
-                  .getComponentDescriptor().getPropertyDescriptor(
-                      initializedAttribute.getKey());
+              if (!"null".equals(initValue)) {
+                IPropertyDescriptor initializedPropertyDescriptor = queryComponent
+                    .getComponentDescriptor().getPropertyDescriptor(
+                        initializedAttribute.getKey());
 
-              if (initializedPropertyDescriptor != null) {
-                Class<?> expectedType = initializedPropertyDescriptor
-                    .getModelType();
-                Class<?> initValueType = initValue.getClass();
-                if (!QueryComponent.class.isAssignableFrom(initValueType)
-                    && !expectedType.isAssignableFrom(initValueType)) {
-                  if (Boolean.TYPE.equals(expectedType)) {
-                    expectedType = Boolean.class;
-                  }
-                  try {
-                    initValue = expectedType.getConstructor(
-                        new Class<?>[] {String.class}).newInstance(
-                        new Object[] {initValue.toString()});
-                    // Whenever an exception occurs, just try to set it normally
-                    // though.
-                  } catch (IllegalArgumentException ex) {
-                    // throw new NestedRuntimeException(ex,
-                    // "Invalid initialization mapping for property "
-                    // + initializedAttribute.getKey());
-                  } catch (SecurityException ex) {
-                    // throw new NestedRuntimeException(ex,
-                    // "Invalid initialization mapping for property "
-                    // + initializedAttribute.getKey());
-                  } catch (InstantiationException ex) {
-                    // throw new NestedRuntimeException(ex,
-                    // "Invalid initialization mapping for property "
-                    // + initializedAttribute.getKey());
+                if (initializedPropertyDescriptor != null) {
+                  Class<?> expectedType = initializedPropertyDescriptor
+                      .getModelType();
+                  Class<?> initValueType = initValue.getClass();
+                  if (!QueryComponent.class.isAssignableFrom(initValueType)
+                      && !expectedType.isAssignableFrom(initValueType)) {
+                    if (Boolean.TYPE.equals(expectedType)) {
+                      expectedType = Boolean.class;
+                    }
+                    try {
+                      initValue = expectedType.getConstructor(new Class<?>[] {
+                        String.class
+                      }).newInstance(new Object[] {
+                        initValue.toString()
+                      });
+                      // Whenever an exception occurs, just try to set it
+                      // normally
+                      // though.
+                    } catch (IllegalArgumentException ex) {
+                      // throw new NestedRuntimeException(ex,
+                      // "Invalid initialization mapping for property "
+                      // + initializedAttribute.getKey());
+                    } catch (SecurityException ex) {
+                      // throw new NestedRuntimeException(ex,
+                      // "Invalid initialization mapping for property "
+                      // + initializedAttribute.getKey());
+                    } catch (InstantiationException ex) {
+                      // throw new NestedRuntimeException(ex,
+                      // "Invalid initialization mapping for property "
+                      // + initializedAttribute.getKey());
+                    }
                   }
                 }
               }
