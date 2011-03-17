@@ -390,7 +390,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else if(command is RemoteUpdateStatusCommand) {
         var status:String = (command as RemoteUpdateStatusCommand).status;
         if(status != null && status.length > 0) {
-          _statusBar.text = status;
+          if(HtmlUtil.isHtml(status)) {
+            _statusBar.text = null;
+            _statusBar.htmlText = HtmlUtil.convertHtmlEntities(status);
+          } else {
+            _statusBar.htmlText = null;
+            _statusBar.text = status;
+          }
           _statusBar.visible = true;
         } else {
           _statusBar.visible = false;

@@ -662,10 +662,12 @@ public class HibernateBackendController extends AbstractBackendController {
    * @param mergeMode
    *          the merge mode to use when merging back retrieved entities or null
    *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
    * @return the first found entity or null;
    */
   public <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, EMergeMode mergeMode) {
+      final DetachedCriteria criteria, EMergeMode mergeMode, Class<? extends T> clazz) {
     List<T> res = findByCriteria(criteria);
     if (res != null) {
       if (isUnitOfWorkActive()) {
