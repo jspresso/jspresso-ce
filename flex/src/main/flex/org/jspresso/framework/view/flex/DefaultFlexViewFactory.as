@@ -1473,6 +1473,7 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.state = remoteDateField.state;
       remoteTimeField.tooltip = remoteDateField.tooltip;
       dateTimeField.addChild(createComponent(remoteTimeField, false));
+      sizeMaxComponentWidth(dateTimeField, remoteDateField, DATE_CHAR_COUNT + TIME_CHAR_COUNT + 4);
       return dateTimeField;
     }
 

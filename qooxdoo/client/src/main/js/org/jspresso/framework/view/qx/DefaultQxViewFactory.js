@@ -1176,6 +1176,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setTooltip(remoteDateField.getTooltip());
       dateTimeField.add(this.createComponent(remoteTimeField, false));
+      this
+          ._sizeMaxComponentWidth(
+              dateTimeField,
+              remoteDateField,
+              org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
+              + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT + 4);
       return dateTimeField;
     },
     
