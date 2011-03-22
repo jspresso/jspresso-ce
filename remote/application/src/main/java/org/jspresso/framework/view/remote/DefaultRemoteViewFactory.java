@@ -2041,7 +2041,6 @@ public class DefaultRemoteViewFactory extends
     } else {
       viewPeer.setIcon(null);
     }
-    viewPeer.setPermId(viewDescriptor.getPermId());
   }
 
   /**
@@ -2122,6 +2121,7 @@ public class DefaultRemoteViewFactory extends
     if (viewComponent.getState() == null) {
       viewComponent.setState(((IRemoteStateOwner) connector).getState());
     }
+    viewComponent.setPermId(descriptor.getPermId());
     return view;
   }
 

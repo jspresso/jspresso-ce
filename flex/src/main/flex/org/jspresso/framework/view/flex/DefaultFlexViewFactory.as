@@ -1787,8 +1787,12 @@ package org.jspresso.framework.view.flex {
           var columnIds:Array = new Array();
           var columnWidths:Array = new Array();
           for each (var dgColumn:DataGridColumn in table.columns) {
-            columnIds.push(remoteTable.columnIds[((dgColumn.itemRenderer as ClassFactory).properties["index"] as int) - 1]);
-            columnWidths.push(dgColumn.width);
+            var columnRenderer:ClassFactory = dgColumn.itemRenderer as ClassFactory;
+            // watch out checkbox selection column...
+            if(columnRenderer.properties && columnRenderer.properties["index"]) {
+              columnIds.push(remoteTable.columnIds[(columnRenderer.properties["index"] as int) - 1]);
+              columnWidths.push(dgColumn.width);
+            }
           }
           notificationCommand.columnIds = columnIds;
           notificationCommand.columnWidths = columnWidths;
