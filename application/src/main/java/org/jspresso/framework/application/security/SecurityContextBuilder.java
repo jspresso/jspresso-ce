@@ -54,7 +54,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   public SecurityContextBuilder() {
     currentSecurityContext = new HashMap<String, Object>();
     currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
-        EAuthorization.ENABLED);
+        EAuthorization.VISIBLE);
     snapshots = new ArrayList<Map<String, Object>>();
   }
 
