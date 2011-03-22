@@ -67,7 +67,7 @@ public class GrantedRolesGate extends AbstractGate implements
       try {
         // this will configure the security context for enable/disable
         // authorization type.
-        securityHandler.pushToSecurityContext(this);
+        securityHandler.pushToSecurityContext(EAuthorization.ENABLED);
         this.open = securityHandler.isAccessGranted(new ISecurable() {
 
           public Collection<String> getGrantedRoles() {

@@ -98,6 +98,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
+import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
@@ -358,9 +359,7 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
   }
 
@@ -1279,10 +1278,8 @@ public class DefaultRemoteViewFactory extends
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(getTranslationProvider().getTranslation(
           "lov.element.description",
-          new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(
-                getTranslationProvider(), locale)
-          }, locale));
+          new Object[] {propertyDescriptor.getReferencedDescriptor()
+              .getI18nName(getTranslationProvider(), locale)}, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1290,12 +1287,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
     }
     return view;
   }
@@ -1637,7 +1630,17 @@ public class DefaultRemoteViewFactory extends
         rowConnectorPrototype.addChildConnector(columnConnector);
         String propertyName = columnViewDescriptor.getModelDescriptor()
             .getName();
-        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+        boolean locallyWritable = !columnViewDescriptor.isReadOnly();
+        if (locallyWritable) {
+          try {
+            actionHandler.pushToSecurityContext(EAuthorization.ENABLED);
+            locallyWritable = actionHandler
+                .isAccessGranted(columnViewDescriptor);
+          } finally {
+            actionHandler.restoreLastSecurityContextSnapshot();
+          }
+        }
+        columnConnector.setLocallyWritable(locallyWritable);
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         if (propertyDescriptor.isMandatory()) {

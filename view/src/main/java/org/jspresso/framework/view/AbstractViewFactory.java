@@ -77,6 +77,7 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
+import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
@@ -261,7 +262,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
       if (view != null) {
         view.getConnector().setSecurityHandler(actionHandler);
-        view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
+        boolean locallyWritable = !viewDescriptor.isReadOnly();
+        if (locallyWritable) {
+          try {
+            actionHandler.pushToSecurityContext(EAuthorization.ENABLED);
+            locallyWritable = actionHandler.isAccessGranted(viewDescriptor);
+          } finally {
+            actionHandler.restoreLastSecurityContextSnapshot();
+          }
+        }
+        view.getConnector().setLocallyWritable(locallyWritable);
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
             if (!(gate instanceof ISecurable)
@@ -1114,7 +1124,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
 
     columnConnector.setSecurityHandler(actionHandler);
-    columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+    boolean locallyWritable = !columnViewDescriptor.isReadOnly();
+    if (locallyWritable) {
+      try {
+        actionHandler.pushToSecurityContext(EAuthorization.ENABLED);
+        locallyWritable = actionHandler.isAccessGranted(columnViewDescriptor);
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
+      }
+    }
+    columnConnector.setLocallyWritable(locallyWritable);
     if (columnViewDescriptor.getReadabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
         if (!(gate instanceof ISecurable)

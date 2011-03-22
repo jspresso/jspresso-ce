@@ -30,8 +30,8 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurityContextBuilder;
-import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
@@ -54,7 +54,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   public SecurityContextBuilder() {
     currentSecurityContext = new HashMap<String, Object>();
     currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
-        SecurityContextConstants.AUTH_VISIBLE);
+        EAuthorization.ENABLED);
     snapshots = new ArrayList<Map<String, Object>>();
   }
 
@@ -83,8 +83,8 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       return append((ActionList) contextElement);
     } else if (contextElement instanceof IAction) {
       return append((IAction) contextElement);
-    } else if (contextElement instanceof IGate) {
-      return append((IGate) contextElement);
+    } else if (contextElement instanceof EAuthorization) {
+      return append((EAuthorization) contextElement);
     } else if (contextElement instanceof ITreeLevelDescriptor) {
       return append((ITreeLevelDescriptor) contextElement);
     } else if (contextElement instanceof IViewDescriptor) {
@@ -103,10 +103,9 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
     return this;
   }
 
-  private SecurityContextBuilder append(IGate gate) {
-    if (gate != null) {
-      currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
-          SecurityContextConstants.AUTH_ENABLE);
+  private SecurityContextBuilder append(EAuthorization auth) {
+    if (auth != null) {
+      currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE, auth);
     }
     return this;
   }

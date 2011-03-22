@@ -28,6 +28,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
+import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -86,8 +87,18 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
     if (modelConnector != null) {
       modelConnector.setSecurityHandler(securityHandler);
       if (modelDescriptor instanceof IGateAccessible) {
-        modelConnector.setLocallyWritable(!((IGateAccessible) modelDescriptor)
-            .isReadOnly());
+        boolean locallyWritable = !((IGateAccessible) modelDescriptor)
+            .isReadOnly();
+        if (locallyWritable && modelDescriptor instanceof ISecurable) {
+          try {
+            securityHandler.pushToSecurityContext(EAuthorization.ENABLED);
+            locallyWritable = securityHandler
+                .isAccessGranted((ISecurable) modelDescriptor);
+          } finally {
+            securityHandler.restoreLastSecurityContextSnapshot();
+          }
+        }
+        modelConnector.setLocallyWritable(locallyWritable);
         if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
           for (IGate gate : ((IGateAccessible) modelDescriptor)
               .getReadabilityGates()) {

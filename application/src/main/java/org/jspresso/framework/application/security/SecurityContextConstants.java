@@ -74,18 +74,6 @@ public final class SecurityContextConstants {
   public static final String AUTH_TYPE          = "AUTH_TYPE";
 
   /**
-   * <code>AUTH_VISIBLE</code>. Visibility authorization (used as value in the
-   * security context).
-   */
-  public static final String AUTH_VISIBLE       = "AUTH_VISIBLE";
-
-  /**
-   * <code>AUTH_ENABLE</code>. Enablement authorization (used as value in the
-   * security context).
-   */
-  public static final String AUTH_ENABLE        = "AUTH_ENABLE";
-
-  /**
    * <code>USER_ID</code>.
    */
   public static final String USER_ID            = "USER_ID";
