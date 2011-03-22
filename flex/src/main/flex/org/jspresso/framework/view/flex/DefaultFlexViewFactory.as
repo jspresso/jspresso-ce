@@ -1813,7 +1813,12 @@ package org.jspresso.framework.view.flex {
           table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
             event.preventDefault();
             var column:DataGridColumn = table.columns[event.columnIndex];
-            var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
+            var property:String;
+            var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
+            // watch out checkbox selection column...
+            if(columnRenderer.properties && columnRenderer.properties["index"]) {
+              property = remoteTable.columnIds[(columnRenderer.properties["index"] as int) - 1];
+            }
             if(!property || property.length == 0 || property.charAt(0) == "#") {
               // do not sort
               return;
@@ -1907,20 +1912,30 @@ package org.jspresso.framework.view.flex {
         if(!rowValueState.writable) {
           event.preventDefault();
         } else {
-          var cellValueState:RemoteValueState = rowValueState
-              .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-          if(!cellValueState.writable) {
-      	    event.preventDefault();
-      	  }
+          var cellValueState:RemoteValueState;
+          var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
+          // watch out checkbox selection column...
+          if(columnRenderer.properties && columnRenderer.properties["index"]) {
+            cellValueState = rowValueState
+              .children[columnRenderer.properties["index"] as int] as RemoteValueState;
+            if(!cellValueState.writable) {
+        	    event.preventDefault();
+        	  }
+          }
         }
     	});
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
         var dg:DataGrid = event.currentTarget as DataGrid;
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
-        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
-            .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
+        var cellValueState:RemoteValueState;
+        var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
+        // watch out checkbox selection column...
+        if(columnRenderer.properties && columnRenderer.properties["index"]) {
+          cellValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
+            .children[columnRenderer.properties["index"] as int] as RemoteValueState;
+          _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
+        }
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
