@@ -122,10 +122,16 @@ public abstract class AbstractController implements IController {
     if (SecurityHelper.isSubjectGranted(getApplicationSession().getSubject(),
         securable)) {
       if (customSecurityPlugin != null) {
-        Map<String, Object> securityContext = new HashMap<String, Object>();
-        securityContext.putAll(getInitialSecurityContext());
-        securityContext.putAll(getSecurityContext());
-        return customSecurityPlugin.isAccessGranted(securable, securityContext);
+        try {
+          pushToSecurityContext(securable);
+          Map<String, Object> securityContext = new HashMap<String, Object>();
+          securityContext.putAll(getInitialSecurityContext());
+          securityContext.putAll(getSecurityContext());
+          return customSecurityPlugin.isAccessGranted(securable,
+              securityContext);
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
       }
       return true;
     }
@@ -194,7 +200,7 @@ public abstract class AbstractController implements IController {
     securityContextBuilder.pushToSecurityContext(contextElement);
     return this;
   }
-  
+
   /**
    * {@inheritDoc}
    */
