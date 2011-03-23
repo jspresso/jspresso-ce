@@ -1465,9 +1465,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         nbCols = remoteEvenGridContainer.getDrivingDimensionCellCount();
       } else {
         nbRows = remoteEvenGridContainer.getDrivingDimensionCellCount();
-        nbCols = remoteEvenGridContainer.getCells().length
-            / remoteEvenGridContainer
-                .getDrivingDimensionCellCount();
+        nbCols = remoteEvenGridContainer.getCells().length / remoteEvenGridContainer.getDrivingDimensionCellCount();
         if (remoteEvenGridContainer.getCells().length
             % remoteEvenGridContainer
                 .getDrivingDimensionCellCount() > 0) {
