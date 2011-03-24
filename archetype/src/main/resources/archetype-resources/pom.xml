@@ -54,16 +54,6 @@
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
-        <artifactId>${rootArtifactId}-startup-ulc</artifactId>
-        <version>${symbol_dollar}{project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${groupId}</groupId>
-        <artifactId>${rootArtifactId}-startup-wings</artifactId>
-        <version>${symbol_dollar}{project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-remote</artifactId>
         <version>${symbol_dollar}{project.version}</version>
       </dependency>
