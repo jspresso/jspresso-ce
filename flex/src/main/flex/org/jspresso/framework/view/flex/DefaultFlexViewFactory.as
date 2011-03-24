@@ -1462,6 +1462,9 @@ package org.jspresso.framework.view.flex {
 
     protected function createDateTimeField(remoteDateField:RDateField):UIComponent {
       var dateTimeField:HBox = new HBox();
+      dateTimeField.horizontalScrollPolicy = ScrollPolicy.OFF;
+      dateTimeField.verticalScrollPolicy = ScrollPolicy.OFF;
+
       dateTimeField.addChild(createDateField(remoteDateField));
       
       var remoteTimeField:RTimeField = new RTimeField();
