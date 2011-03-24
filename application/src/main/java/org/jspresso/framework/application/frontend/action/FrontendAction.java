@@ -459,4 +459,18 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
       actionabilityGates.add(ModelTrackingGate.INSTANCE);
     }
   }
+
+  /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  @Override
+  public String getPermId() {
+    String permId = super.getPermId();
+    if (permId == null) {
+      return getName();
+    }
+    return permId;
+  }
 }

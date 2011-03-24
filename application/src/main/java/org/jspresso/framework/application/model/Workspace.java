@@ -466,10 +466,10 @@ public class Workspace implements ISecurable, IPermIdSource {
    * @return the permId.
    */
   public String getPermId() {
-    if (permId == null) {
-      return getName();
+    if (permId != null) {
+      return permId;
     }
-    return permId;
+    return getName();
   }
 
   /**

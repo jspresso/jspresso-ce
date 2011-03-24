@@ -24,8 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
@@ -56,7 +56,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
 
   private static void completeActionMap(
       Map<String, ActionList> bufferActionMap, List<ActionList> actionLists,
-      IActionHandler actionHandler) {
+      ISecurityHandler securityHandler) {
     if (actionLists != null) {
       Map<String, ActionList> mapOfActionLists = new LinkedHashMap<String, ActionList>();
       for (ActionList al : actionLists) {
@@ -64,9 +64,9 @@ public class ActionMap implements ISecurable, IPermIdSource {
       }
       for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists
           .entrySet()) {
-        if (actionHandler.isAccessGranted(actionListEntry.getValue())) {
+        if (securityHandler.isAccessGranted(actionListEntry.getValue())) {
           try {
-            actionHandler.pushToSecurityContext(actionListEntry.getValue());
+            securityHandler.pushToSecurityContext(actionListEntry.getValue());
             ActionList bufferActionList = bufferActionMap.get(actionListEntry
                 .getKey());
             if (bufferActionList == null) {
@@ -85,7 +85,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
               }
             }
           } finally {
-            actionHandler.restoreLastSecurityContextSnapshot();
+            securityHandler.restoreLastSecurityContextSnapshot();
           }
         }
       }
@@ -96,27 +96,28 @@ public class ActionMap implements ISecurable, IPermIdSource {
    * Gets the list of action sets composing the parent action maps with the
    * local one.
    * 
-   * @param actionHandler
+   * @param securityHandler
    *          the action handler used to handle role based security.
    * @return the actions list.
    */
-  public List<ActionList> getActionLists(IActionHandler actionHandler) {
+  public List<ActionList> getActionLists(ISecurityHandler securityHandler) {
     Map<String, ActionList> buffer = new LinkedHashMap<String, ActionList>();
     if (parentActionMaps != null) {
       for (ActionMap parentActionMap : parentActionMaps) {
-        if (actionHandler.isAccessGranted(parentActionMap)) {
+        if (securityHandler.isAccessGranted(parentActionMap)) {
           try {
-            actionHandler.pushToSecurityContext(parentActionMap);
+            securityHandler.pushToSecurityContext(parentActionMap);
             completeActionMap(buffer,
-                parentActionMap.getActionLists(actionHandler), actionHandler);
+                parentActionMap.getActionLists(securityHandler),
+                securityHandler);
           } finally {
-            actionHandler.restoreLastSecurityContextSnapshot();
+            securityHandler.restoreLastSecurityContextSnapshot();
           }
         }
       }
     }
     if (actionLists != null) {
-      completeActionMap(buffer, actionLists, actionHandler);
+      completeActionMap(buffer, actionLists, securityHandler);
     }
     return new ArrayList<ActionList>(buffer.values());
   }

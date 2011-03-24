@@ -72,7 +72,10 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   public String getPermId() {
-    return permId;
+    if (permId != null) {
+      return permId;
+    }
+    return getName();
   }
 
   /**

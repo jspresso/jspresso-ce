@@ -21,6 +21,7 @@ package org.jspresso.framework.model.descriptor;
 import java.util.List;
 
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.gate.IGateAccessible;
 
@@ -32,7 +33,7 @@ import org.jspresso.framework.util.gate.IGateAccessible;
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */
 public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
-    ISecurable, IGateAccessible {
+    ISecurable, IGateAccessible, IPermIdSource {
 
   /**
    * Clones this descriptor.

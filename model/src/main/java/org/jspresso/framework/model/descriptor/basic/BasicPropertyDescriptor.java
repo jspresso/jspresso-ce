@@ -708,4 +708,22 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   public String getPersistenceFormula() {
     return getSqlName();
   }
+
+  /**
+   * Returns the property name.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getPermId() {
+    return getName();
+  }
+
+  /**
+   * Throws an unsupported operation exception.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void setPermId(@SuppressWarnings("unused") String permId) {
+    throw new UnsupportedOperationException();
+  }
 }

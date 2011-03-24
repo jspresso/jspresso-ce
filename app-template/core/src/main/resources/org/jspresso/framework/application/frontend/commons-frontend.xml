@@ -224,7 +224,7 @@
     </property>
   </bean>
 
-  <bean id="abstractReportAction" class="org.jspresso.framework.application.printing.frontend.action.AbstractReportAction">
+  <bean id="abstractReportAction" abstract="true" class="org.jspresso.framework.application.printing.frontend.action.AbstractReportAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/report-48x48.png" />
     <property name="name" value="report.name" />
     <property name="description" value="report.description" />
@@ -273,6 +273,9 @@
       </bean>
     </property>
   </bean>
+
+  <bean id="changePasswordBackAction"
+    class="org.jspresso.framework.application.backend.action.BackendAction" />
 
   <bean id="modalDialogAction" class="org.jspresso.framework.application.frontend.action.ModalDialogAction" />
 

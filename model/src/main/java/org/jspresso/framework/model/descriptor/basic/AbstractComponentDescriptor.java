@@ -1065,4 +1065,22 @@ public abstract class AbstractComponentDescriptor<E> extends
       serviceDelegates.put(serviceMethod, service);
     }
   }
+
+  /**
+   * Returns the component contract class name.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getPermId() {
+    return getName();
+  }
+
+  /**
+   * Throws an unsupported operation exception.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void setPermId(@SuppressWarnings("unused") String permId) {
+    throw new UnsupportedOperationException();
+  }
 }
