@@ -1,8 +1,9 @@
 package org.jspresso.framework.view.flex {
+  import mx.controls.Label;
   
-  import mx.controls.dataGridClasses.DataGridItemRenderer;
+  
 
-  public class DgHeaderItemRenderer extends DataGridItemRenderer implements IColumnIndexProvider {
+  public class DgHeaderItemRenderer extends Label implements IColumnIndexProvider {
     
     private var _index:int;
 

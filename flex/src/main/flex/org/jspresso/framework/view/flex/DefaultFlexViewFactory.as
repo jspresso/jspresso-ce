@@ -1613,6 +1613,8 @@ package org.jspresso.framework.view.flex {
 
     protected function createTable(remoteTable:RTable):UIComponent {
       var table:EnhancedDataGrid = new EnhancedDataGrid();
+      table.showDataTips = true;
+      
       var columns:Array = new Array();
       
       table.regenerateStyleCache(false);
@@ -1642,6 +1644,8 @@ package org.jspresso.framework.view.flex {
         if(rColumn.state == null) {
           rColumn.state = new RemoteValueState();
         }
+        var editorComponent:UIComponent = createComponent(rColumn, false);
+
         var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
         applyComponentStyle(column, rColumn);
@@ -1689,17 +1693,17 @@ package org.jspresso.framework.view.flex {
         }
         column.itemRenderer = itemRenderer
         
-        var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
-        headerRenderer.properties = {index:i+1};
-        column.headerRenderer = headerRenderer;
-        
         var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
         rColumn.state.writable = true;
-        var editorComponent:UIComponent = createComponent(rColumn, false);
         itemEditor.properties = {editor:editorComponent,
-                                 state:rColumn.state,
-                                 index:i+1};
+          state:rColumn.state,
+            index:i+1};
         column.itemEditor = itemEditor;
+
+        var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
+        headerRenderer.properties = {index:i+1, toolTip:editorComponent.toolTip};
+        column.headerRenderer = headerRenderer;
+        
         if(rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {
           column.width = rColumn.preferredSize.width;
         } else {

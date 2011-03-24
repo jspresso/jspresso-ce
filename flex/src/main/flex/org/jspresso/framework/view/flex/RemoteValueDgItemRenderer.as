@@ -149,6 +149,11 @@ package org.jspresso.framework.view.flex {
           label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
         }
       }
+      if(toolTip) {
+        label.toolTip = label.text;
+      } else {
+        label.toolTip = null;
+      }
   	}
 
     public function set action(value:RAction):void {
