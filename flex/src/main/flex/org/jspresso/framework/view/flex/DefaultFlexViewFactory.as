@@ -1464,8 +1464,15 @@ package org.jspresso.framework.view.flex {
       var dateTimeField:HBox = new HBox();
       dateTimeField.horizontalScrollPolicy = ScrollPolicy.OFF;
       dateTimeField.verticalScrollPolicy = ScrollPolicy.OFF;
+      dateTimeField.setStyle("horizontalGap",2);
+      dateTimeField.setStyle("verticalGap",0);
+      dateTimeField.setStyle("paddingTop",2);
+      dateTimeField.setStyle("paddingBottom",2);
+      dateTimeField.setStyle("paddingLeft",2);
+      dateTimeField.setStyle("paddingRight",2);
 
-      dateTimeField.addChild(createDateField(remoteDateField));
+      var dateField:UIComponent = createDateField(remoteDateField)
+      dateField.percentWidth = 100.0;
       
       var remoteTimeField:RTimeField = new RTimeField();
       remoteTimeField.background = remoteDateField.background;
@@ -1475,8 +1482,15 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.guid = remoteDateField.guid;
       remoteTimeField.state = remoteDateField.state;
       remoteTimeField.tooltip = remoteDateField.tooltip;
-      dateTimeField.addChild(createComponent(remoteTimeField, false));
-      sizeMaxComponentWidth(dateTimeField, remoteDateField, DATE_CHAR_COUNT + TIME_CHAR_COUNT + 4);
+      
+      var timeField:UIComponent = createComponent(remoteTimeField, false);
+      timeField.percentWidth = 100.0;
+      
+      dateTimeField.addChild(dateField);
+      dateTimeField.addChild(timeField);
+
+      dateTimeField.maxWidth = dateField.maxWidth + timeField.maxWidth;
+      
       return dateTimeField;
     }
 
