@@ -279,11 +279,16 @@ public class HibernateBackendController extends AbstractBackendController {
   private void relinkAfterInitialization(Collection<IEntity> entities,
       Object owner) {
     for (IEntity entity : entities) {
-      for (Map.Entry<String, Object> property : entity.straightGetProperties()
-          .entrySet()) {
-        if (property.getValue() instanceof IEntity) {
-          if (owner.equals(property.getValue()) && owner != property.getValue()) {
-            entity.straightSetProperty(property.getKey(), owner);
+      // Should always be the case but there might be problems with lists
+      // containing holes.
+      if (entity != null) {
+        for (Map.Entry<String, Object> property : entity
+            .straightGetProperties().entrySet()) {
+          if (property.getValue() instanceof IEntity) {
+            if (owner.equals(property.getValue())
+                && owner != property.getValue()) {
+              entity.straightSetProperty(property.getKey(), owner);
+            }
           }
         }
       }
@@ -667,7 +672,8 @@ public class HibernateBackendController extends AbstractBackendController {
    * @return the first found entity or null;
    */
   public <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, EMergeMode mergeMode, Class<? extends T> clazz) {
+      final DetachedCriteria criteria, EMergeMode mergeMode,
+      Class<? extends T> clazz) {
     List<T> res = findByCriteria(criteria);
     if (res != null) {
       if (isUnitOfWorkActive()) {
