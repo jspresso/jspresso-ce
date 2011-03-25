@@ -1544,10 +1544,8 @@ public class DefaultSwingViewFactory extends
           Action.SHORT_DESCRIPTION,
           getTranslationProvider().getTranslation(
               "lov.element.description",
-              new Object[] {
-                propertyDescriptor.getReferencedDescriptor().getI18nName(
-                    getTranslationProvider(), locale)
-              }, locale)
+              new Object[] {propertyDescriptor.getReferencedDescriptor()
+                  .getI18nName(getTranslationProvider(), locale)}, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1760,8 +1758,12 @@ public class DefaultSwingViewFactory extends
 
     List<Class<?>> columnClasses = new ArrayList<Class<?>>();
     Set<String> forbiddenColumns = new HashSet<String>();
-    for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
-        .getColumnViewDescriptors()) {
+    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
+        viewDescriptor, actionHandler);
+    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
+        .entrySet()) {
+      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry
+          .getKey();
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         try {
@@ -1804,14 +1806,16 @@ public class DefaultSwingViewFactory extends
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
     int columnIndex = 0;
-    for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
-        .getColumnViewDescriptors()) {
+    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
+        .entrySet()) {
+      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry
+          .getKey();
       String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
         TableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex);
         column.setIdentifier(computeColumnIdentifier(rowDescriptor,
-            rowConnectorPrototype.getChildConnector(propertyName)));
+            columnViewDescriptor));
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(
@@ -1915,34 +1919,7 @@ public class DefaultSwingViewFactory extends
               .getPermId(), actionHandler));
     }
     attachDefaultCollectionListener(connector);
-    if (viewDescriptor.getPermId() != null) {
-      applyUserPreferences(viewDescriptor.getPermId(), viewComponent,
-          actionHandler);
-    }
     return view;
-  }
-
-  private void applyUserPreferences(String tableId, JTable table,
-      IActionHandler actionHandler) {
-    Object[][] columnPrefs = getTablePreferences(tableId, actionHandler);
-    if (columnPrefs != null) {
-      int columnOffset = 0;
-      for (int i = 0; i < columnPrefs.length; i++) {
-        int sourceColumn = -1;
-        for (int j = 0; j < table.getColumnCount() && sourceColumn < 0; j++) {
-          if (columnPrefs[i][0].equals(table.getColumnModel().getColumn(j)
-              .getIdentifier())) {
-            sourceColumn = j;
-          }
-        }
-        if (sourceColumn >= 0) {
-          table.moveColumn(sourceColumn, columnOffset);
-          table.getColumnModel().getColumn(columnOffset)
-              .setPreferredWidth(((Integer) columnPrefs[i][1]).intValue());
-          columnOffset++;
-        }
-      }
-    }
   }
 
   private class ColumnPreferencesListener implements TableColumnModelListener {
@@ -2005,8 +1982,7 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())
-          };
+              new Integer(columnModel.getColumn(i).getWidth())};
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);

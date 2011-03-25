@@ -1076,7 +1076,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Throws an unsupported operation exception.
+   * A component permanent id is forced to be its fully-qualified class name.
+   * Trying to set it to another value will raise an exception.
    * <p>
    * {@inheritDoc}
    */

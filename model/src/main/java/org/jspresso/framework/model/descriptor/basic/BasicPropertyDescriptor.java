@@ -334,10 +334,9 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.mandatory", new Object[] {
-                  getI18nName(translationProvider, locale), component
-              }, locale);
+          return translationProvider
+              .getTranslation("integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
         }
 
       };
@@ -719,7 +718,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * Throws an unsupported operation exception.
+   * A property permanent id is forced to be its name. Trying to set it to
+   * another value will raise an exception.
    * <p>
    * {@inheritDoc}
    */

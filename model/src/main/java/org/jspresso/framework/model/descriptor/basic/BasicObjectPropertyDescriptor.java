@@ -23,7 +23,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 
 /**
- * Default implementation of an arbitrary object property descriptor.
+ * This descriptore is used to describe an arbitrary object property for which
+ * the type can be explicitely declared.
  * 
  * @internal
  * @version $LastChangedRevision$
@@ -80,7 +81,7 @@ public class BasicObjectPropertyDescriptor extends
   }
 
   /**
-   * Sets the modelTypeClassName.
+   * Configures the actual property type through its fully qualified name.
    * 
    * @param modelTypeClassName
    *          the modelTypeClassName to set.

@@ -1138,10 +1138,8 @@ public class DefaultUlcViewFactory extends
         IAction.SHORT_DESCRIPTION,
         getTranslationProvider().getTranslation(
             "lov.element.description",
-            new Object[] {
-              propertyDescriptor.getReferencedDescriptor().getI18nName(
-                  getTranslationProvider(), locale)
-            }, locale)
+            new Object[] {propertyDescriptor.getReferencedDescriptor()
+                .getI18nName(getTranslationProvider(), locale)}, locale)
             + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(
@@ -1405,7 +1403,7 @@ public class DefaultUlcViewFactory extends
             columnIndex++);
         column.setHeaderRenderer(null);
         column.setIdentifier(computeColumnIdentifier(rowDescriptor,
-            rowConnectorPrototype.getChildConnector(propertyName)));
+            columnViewDescriptor));
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(

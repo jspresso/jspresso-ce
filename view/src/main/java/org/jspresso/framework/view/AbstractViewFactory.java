@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,7 +48,6 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvid
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IMvcBinder;
-import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
@@ -696,21 +696,19 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param rowDescriptor
    *          the row component descriptor.
-   * @param columnConnector
-   *          the column connector behind the column.
+   * @param columnDescriptor
+   *          the column descriptor behind the column.
    * @return the column identifier.
    */
   protected String computeColumnIdentifier(
-      IComponentDescriptor<?> rowDescriptor, IValueConnector columnConnector) {
-    String propertyName = columnConnector.getId();
+      IComponentDescriptor<?> rowDescriptor,
+      IPropertyViewDescriptor columnDescriptor) {
+    String propertyName = columnDescriptor.getName();
     String identifier = propertyName;
-    if (columnConnector instanceof IRenderableCompositeValueConnector) {
-      String renderingProperty = ((IRenderableCompositeValueConnector) columnConnector)
-          .getRenderingConnector().getId();
-      if (renderingProperty != null) {
-        // for ref sorting to occur properly.
-        identifier = identifier + "." + renderingProperty;
-      }
+    String renderedProperty = computeRenderedProperty(columnDescriptor);
+    if (renderedProperty != null) {
+      // for ref sorting to occur properly.
+      identifier = identifier + "." + renderedProperty;
     }
     boolean sortable = true;
     if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
@@ -2841,26 +2839,61 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Gets user table preferences.
+   * Reworks column view descriptors to align with user preferences.
    * 
-   * @param tableId
-   *          the table id is used as preference key in the user store.
+   * @param viewDescriptor
+   *          the table view descriptor.
    * @param actionHandler
-   *          the action handler.
-   * @return the array of {columnId,columnSize} for the table
+   *          the action handler to load the user preferences from.
+   * @return an ordered map of column view descriptors and widths.
    */
-  protected Object[][] getTablePreferences(String tableId,
-      IActionHandler actionHandler) {
-    String prefs = actionHandler.getUserPreference(tableId);
+  protected Map<IPropertyViewDescriptor, Integer> getUserColumnViewDescriptors(
+      ITableViewDescriptor viewDescriptor, IActionHandler actionHandler) {
+
     Object[][] columnPrefs = null;
-    if (prefs != null) {
-      String[] columns = prefs.split("!");
-      columnPrefs = new Object[columns.length][2];
-      for (int i = 0; i < columns.length; i++) {
-        String[] column = columns[i].split(",");
-        columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+    if (viewDescriptor.getPermId() != null) {
+      String prefs = actionHandler
+          .getUserPreference(viewDescriptor.getPermId());
+      if (prefs != null) {
+        String[] columns = prefs.split("!");
+        columnPrefs = new Object[columns.length][2];
+        for (int i = 0; i < columns.length; i++) {
+          String[] column = columns[i].split(",");
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+        }
       }
     }
-    return columnPrefs;
+    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = new LinkedHashMap<IPropertyViewDescriptor, Integer>();
+    if (columnPrefs == null) {
+      for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
+          .getColumnViewDescriptors()) {
+        userColumnViewDescriptors.put(columnViewDescriptor, null);
+      }
+    } else {
+      Map<String, IPropertyViewDescriptor> columnsDirectory = new LinkedHashMap<String, IPropertyViewDescriptor>();
+      ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+          .getModelDescriptor());
+      IComponentDescriptor<?> rowDescriptor = modelDescriptor
+          .getCollectionDescriptor().getElementDescriptor();
+      for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
+          .getColumnViewDescriptors()) {
+        columnsDirectory.put(
+            computeColumnIdentifier(rowDescriptor, columnViewDescriptor),
+            columnViewDescriptor);
+      }
+      for (int i = 0; i < columnPrefs.length; i++) {
+        IPropertyViewDescriptor userColumn = columnsDirectory
+            .remove(columnPrefs[i][0]);
+        if (userColumn != null) {
+          userColumnViewDescriptors
+              .put(userColumn, (Integer) columnPrefs[i][1]);
+        }
+      }
+      // Add remaining new columns
+      for (IPropertyViewDescriptor extraColumn : columnsDirectory.values()) {
+        userColumnViewDescriptors.put(extraColumn, null);
+      }
+    }
+    return userColumnViewDescriptors;
   }
 }

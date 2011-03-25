@@ -1617,8 +1617,12 @@ public class DefaultRemoteViewFactory extends
         .isHorizontallyScrollable());
     List<RComponent> columns = new ArrayList<RComponent>();
     List<String> columnIds = new ArrayList<String>();
-    for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
-        .getColumnViewDescriptors()) {
+    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
+        viewDescriptor, actionHandler);
+    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
+        .entrySet()) {
+      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry
+          .getKey();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IView<RComponent> column = createView(columnViewDescriptor,
             actionHandler, locale);
@@ -1651,10 +1655,17 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columns.add(column.getPeer());
-        columnIds.add(computeColumnIdentifier(rowDescriptor, columnConnector));
+        columnIds.add(computeColumnIdentifier(rowDescriptor,
+            columnViewDescriptor));
         if (column.getPeer() instanceof RLink) {
           ((RLink) column.getPeer()).setAction(getActionFactory().createAction(
               columnViewDescriptor.getAction(), actionHandler, view, locale));
+        }
+        if (columnViewDescriptorEntry.getValue() != null) {
+          column.getPeer()
+              .setPreferredSize(
+                  new Dimension(
+                      columnViewDescriptorEntry.getValue().intValue(), -1));
         }
       }
     }
@@ -1667,41 +1678,7 @@ public class DefaultRemoteViewFactory extends
           viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
     attachDefaultCollectionListener(connector);
-    if (viewDescriptor.getPermId() != null) {
-      applyUserPreferences(viewDescriptor.getPermId(), viewComponent,
-          actionHandler);
-    }
     return view;
-  }
-
-  private void applyUserPreferences(String tableId, RTable table,
-      IActionHandler actionHandler) {
-    Object[][] columnPrefs = getTablePreferences(tableId, actionHandler);
-    if (columnPrefs != null) {
-      int columnOffset = 0;
-      for (int i = 0; i < columnPrefs.length; i++) {
-        int sourceColumn = -1;
-        for (int j = 0; j < table.getColumnIds().length && sourceColumn < 0; j++) {
-          if (columnPrefs[i][0].equals(table.getColumnIds()[j])) {
-            sourceColumn = j;
-          }
-        }
-        if (sourceColumn >= 0) {
-          String targetColumnId = table.getColumnIds()[columnOffset];
-          RComponent targetColumn = table.getColumns()[columnOffset];
-
-          table.getColumnIds()[columnOffset] = table.getColumnIds()[sourceColumn];
-          table.getColumnIds()[sourceColumn] = targetColumnId;
-
-          table.getColumns()[columnOffset] = table.getColumns()[sourceColumn];
-          table.getColumns()[sourceColumn] = targetColumn;
-
-          table.getColumns()[columnOffset].setPreferredSize(new Dimension(
-              ((Integer) columnPrefs[i][1]).intValue(), -1));
-          columnOffset++;
-        }
-      }
-    }
   }
 
   /**
