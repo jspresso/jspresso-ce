@@ -3,18 +3,30 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
-  <!--
-    Mock configuration.
-  -->
-  <!-- class="org.apache.commons.dbcp.BasicDataSource"  -->
-  <bean id="dataSource" class="java.lang.Object"/>
+  <!-- Mock configuration. -->
+  <!-- class="org.apache.commons.dbcp.BasicDataSource" -->
+  <bean id="dataSource" class="java.lang.Object" />
 
   <bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory" />
 
   <bean id="applicationMessageSource" parent="abstractApplicationMessageSource" />
 
+  <bean id="actionFactory" parent="actionFactoryBase" />
+
+  <bean id="connectorFactory" class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
+
+  <bean id="displayReportAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+
+  <bean id="iconFactory" parent="iconFactoryBase" />
+
+  <bean id="viewFactory" parent="viewFactoryBase" />
+
+  <bean id="openFileAsBinaryPropertyAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+
+  <bean id="saveBinaryPropertyAsFileAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
-    <constructor-arg value="false"/>
+    <constructor-arg value="false" />
   </bean>
 
 </beans>

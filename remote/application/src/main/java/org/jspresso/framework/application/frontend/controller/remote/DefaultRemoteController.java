@@ -263,15 +263,15 @@ public class DefaultRemoteController extends
       messageCommand.setMessage(ex.getMessage());
     } else if (ex instanceof BusinessException) {
       messageCommand.setMessage(((BusinessException) ex).getI18nMessage(
-          getTranslationProvider(), getLocale()));
+          this, getLocale()));
     } else if (ex instanceof DataIntegrityViolationException) {
       messageCommand
-          .setMessage(getTranslationProvider()
+          .setMessage(this
               .getTranslation(
                   refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
                   getLocale()));
     } else if (ex instanceof ConcurrencyFailureException) {
-      messageCommand.setMessage(getTranslationProvider().getTranslation(
+      messageCommand.setMessage(getTranslation(
           "concurrency.error.description", getLocale()));
     } else {
       ex.printStackTrace();
@@ -620,10 +620,10 @@ public class DefaultRemoteController extends
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
         initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(
-            getTranslationProvider(), getLocale()));
-        initLoginCommand.setMessage(getTranslationProvider().getTranslation(
+            this, getLocale()));
+        initLoginCommand.setMessage(getTranslation(
             LoginUtils.CRED_MESSAGE, getLocale()));
-        initLoginCommand.setOkLabel(getTranslationProvider().getTranslation(
+        initLoginCommand.setOkLabel(getTranslation(
             "ok", getLocale()));
         initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
             getIconFactory().getSmallIconSize()));
@@ -652,7 +652,7 @@ public class DefaultRemoteController extends
         execute(getStartupAction(), getInitialActionContext());
       } else {
         RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
-        errorMessageCommand.setMessage(getTranslationProvider().getTranslation(
+        errorMessageCommand.setMessage(getTranslation(
             LoginUtils.LOGIN_FAILED, getLocale()));
         registerCommand(errorMessageCommand);
       }
@@ -790,7 +790,7 @@ public class DefaultRemoteController extends
 
   private RemoteMessageCommand createErrorMessageCommand() {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
-    messageCommand.setTitle(getTranslationProvider().getTranslation("error",
+    messageCommand.setTitle(getTranslation("error",
         getLocale()));
     messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
         getIconFactory().getTinyIconSize()));
@@ -809,10 +809,10 @@ public class DefaultRemoteController extends
 
   private RActionList createRActionList(ActionList actionList) {
     RActionList rActionList = new RActionList(guidGenerator.generateGUID());
-    rActionList.setName(actionList.getI18nName(getTranslationProvider(),
+    rActionList.setName(actionList.getI18nName(this,
         getLocale()));
     rActionList.setDescription(actionList.getI18nDescription(
-        getTranslationProvider(), getLocale()));
+        this, getLocale()));
     rActionList.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getTinyIconSize()));
 

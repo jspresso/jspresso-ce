@@ -246,8 +246,7 @@ public class DefaultSwingController extends
           workspaceView.add(moduleAreaView.getPeer());
           workspaceInternalFrame = createJInternalFrame(
               workspaceView,
-              workspaceNavigatorViewDescriptor.getI18nName(
-                  getTranslationProvider(), getLocale()),
+              workspaceNavigatorViewDescriptor.getI18nName(this, getLocale()),
               getIconFactory().getIcon(
                   workspaceNavigatorViewDescriptor.getIconImageURL(),
                   getIconFactory().getSmallIconSize()));
@@ -344,47 +343,41 @@ public class DefaultSwingController extends
     if (ex instanceof SecurityException) {
       JOptionPane.showMessageDialog(sourceComponent,
           HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
-              .getMessage()))),
-          getTranslationProvider().getTranslation("error", getLocale()),
+              .getMessage()))), getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(((BusinessException) ex).getI18nMessage(
-                  getTranslationProvider(), getLocale())))),
-          getTranslationProvider().getTranslation("error", getLocale()),
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(this,
+                  getLocale())))), getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof DataIntegrityViolationException) {
       JOptionPane
           .showMessageDialog(
               sourceComponent,
-              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-                  .escapeForHTML(getTranslationProvider()
-                      .getTranslation(
-                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                          getLocale())))), getTranslationProvider()
+              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
+                  .getTranslation(
+                      refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                      getLocale())))), this
                   .getTranslation("error", getLocale()),
               JOptionPane.ERROR_MESSAGE,
               getIconFactory()
                   .getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(getTranslationProvider().getTranslation(
-                  "concurrency.error.description", getLocale())))),
-          getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE,
+          .toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
+              .getTranslation("concurrency.error.description", getLocale())))),
+          getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
       ex.printStackTrace();
-      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
-          getTranslationProvider(), getLocale());
+      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent, this,
+          getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           getIconFactory().getMediumIconSize()));
-      dialog.setTitle(getTranslationProvider().getTranslation("error",
-          getLocale()));
+      dialog.setTitle(getTranslation("error", getLocale()));
       dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
           .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
@@ -801,11 +794,9 @@ public class DefaultSwingController extends
   // }
 
   private JMenu createMenu(ActionList actionList) {
-    JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
-        getLocale()));
+    JMenu menu = new JMenu(actionList.getI18nName(this, getLocale()));
     if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          getTranslationProvider(), getLocale())
+      menu.setToolTipText(actionList.getI18nDescription(this, getLocale())
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
@@ -911,16 +902,14 @@ public class DefaultSwingController extends
 
     // Login dialog
     final JDialog dialog = new JDialog(controllerFrame,
-        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
-            getLocale()), true);
+        getLoginViewDescriptor().getI18nName(this, getLocale()), true);
     dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
     JPanel buttonBox = new JPanel();
     buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
     buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
-    JButton loginButton = new JButton(getTranslationProvider().getTranslation(
-        "ok", getLocale()));
+    JButton loginButton = new JButton(getTranslation("ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
         getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
@@ -931,10 +920,9 @@ public class DefaultSwingController extends
           updateControllerFrame();
           execute(getStartupAction(), getInitialActionContext());
         } else {
-          JOptionPane.showMessageDialog(dialog, getTranslationProvider()
-              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
-              getTranslationProvider().getTranslation("error", getLocale()),
-              JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(dialog,
+              getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE);
         }
       }
     });
@@ -953,8 +941,8 @@ public class DefaultSwingController extends
 
     JPanel mainPanel = new JPanel(new BorderLayout());
     mainPanel.add(
-        new JLabel(getTranslationProvider().getTranslation(
-            LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
+        new JLabel(getTranslation(LoginUtils.CRED_MESSAGE, getLocale())),
+        BorderLayout.NORTH);
     mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
     mainPanel.add(actionPanel, BorderLayout.SOUTH);
     dialog.add(mainPanel);
@@ -987,12 +975,11 @@ public class DefaultSwingController extends
     String workspaceName = getSelectedWorkspaceName();
     if (workspaceName != null) {
       controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
-          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
-              getLocale())
-          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+          .getViewDescriptor().getI18nDescription(this, getLocale())
+          + " - "
+          + getI18nName(this, getLocale()));
     } else {
-      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
-          getLocale()));
+      controllerFrame.setTitle(getI18nName(this, getLocale()));
     }
   }
 

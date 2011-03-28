@@ -1315,10 +1315,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   private void translateModule(Module module) {
-    module.setI18nName(getTranslationProvider().getTranslation(
-        module.getName(), getLocale()));
-    module.setI18nDescription(getTranslationProvider().getTranslation(
-        module.getDescription(), getLocale()));
+    module.setI18nName(getTranslation(module.getName(), getLocale()));
+    module.setI18nDescription(getTranslation(module.getDescription(),
+        getLocale()));
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {
         translateModule(subModule);
@@ -1327,10 +1326,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   private void translateWorkspace(Workspace workspace) {
-    workspace.setI18nName(getTranslationProvider().getTranslation(
-        workspace.getName(), getLocale()));
-    workspace.setI18nDescription(getTranslationProvider().getTranslation(
-        workspace.getDescription(), getLocale()));
+    workspace.setI18nName(getTranslation(workspace.getName(), getLocale()));
+    workspace.setI18nDescription(getTranslation(workspace.getDescription(),
+        getLocale()));
     if (workspace.getModules() != null) {
       for (Module module : workspace.getModules()) {
         translateModule(module);
@@ -1522,5 +1520,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
     securityContext.putAll(getBackendController().getSecurityContext());
     securityContext.putAll(super.getSecurityContext());
     return securityContext;
+  }
+
+  /**
+   * Delegates to the backend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getTranslation(String key, Locale locale) {
+    return getBackendController().getTranslation(key, locale);
+  }
+
+  /**
+   * Delegates to the backend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getTranslation(String key, Object[] args, Locale locale) {
+    return getBackendController().getTranslation(key, args, locale);
   }
 }

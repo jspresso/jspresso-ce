@@ -35,7 +35,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IController extends IActionHandler {
+public interface IController extends IActionHandler, ITranslationProvider {
 
   /**
    * This method gets executed when a user succesfully logs in.
@@ -63,7 +63,9 @@ public interface IController extends IActionHandler {
    * Gets the translation provider used by this controller.
    * 
    * @return the translation provider used by this controller.
+   * @deprecated the controller is now a translation provider by itself.
    */
+  @Deprecated
   ITranslationProvider getTranslationProvider();
 
   /**

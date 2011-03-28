@@ -67,6 +67,7 @@ import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -116,6 +117,7 @@ public abstract class AbstractBackendController extends AbstractController
   private Map<Module, IValueConnector>                     moduleConnectors;
 
   private IPreferencesStore                                userPreferencesStore;
+  private ITranslationProvider                             translationProvider;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -1394,7 +1396,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-      /* getName(), */getApplicationSession().getPrincipal().getName()});
+        /* getName(), */getApplicationSession().getPrincipal().getName()
+      });
     }
 
   }
@@ -1456,5 +1459,34 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setUserPreferencesStore(IPreferencesStore userPreferencesStore) {
     this.userPreferencesStore = userPreferencesStore;
+  }
+
+  /**
+   * Configures the translation provider used to compute internationalized
+   * messages and labels.
+   * 
+   * @param translationProvider
+   *          the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  /**
+   * Delegates to the translation provider.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getTranslation(String key, Locale locale) {
+    return translationProvider.getTranslation(key, locale);
+  }
+
+  /**
+   * Delegates to the translation provider.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getTranslation(String key, Object[] args, Locale locale) {
+    return translationProvider.getTranslation(key, args, locale);
   }
 }

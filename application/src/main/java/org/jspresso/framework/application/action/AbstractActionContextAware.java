@@ -283,7 +283,7 @@ public abstract class AbstractActionContextAware {
    */
   protected ITranslationProvider getTranslationProvider(
       Map<String, Object> context) {
-    return getBackendController(context).getTranslationProvider();
+    return getBackendController(context);
   }
 
   /**

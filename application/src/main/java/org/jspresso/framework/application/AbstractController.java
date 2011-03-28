@@ -49,7 +49,6 @@ public abstract class AbstractController implements IController {
 
   private IExceptionHandler       customExceptionHandler;
   private ISecurityPlugin         customSecurityPlugin;
-  private ITranslationProvider    translationProvider;
   private ISecurityContextBuilder securityContextBuilder;
 
   /**
@@ -96,9 +95,11 @@ public abstract class AbstractController implements IController {
    * Gets the translationProvider.
    * 
    * @return the translationProvider.
+   * @deprecated the controller is itself a translation provider. will return this.
    */
+  @Deprecated
   public ITranslationProvider getTranslationProvider() {
-    return translationProvider;
+    return this;
   }
 
   /**
@@ -173,17 +174,6 @@ public abstract class AbstractController implements IController {
    */
   public void setCustomSecurityPlugin(ISecurityPlugin customSecurityPlugin) {
     this.customSecurityPlugin = customSecurityPlugin;
-  }
-
-  /**
-   * Configures the translation provider used to compute internationalized
-   * messages and labels.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   /**

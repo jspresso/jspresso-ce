@@ -188,15 +188,15 @@ public class MockSwingController extends
       JOptionPane.showMessageDialog(sourceComponent,
           HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
               .getMessage()))),
-          getTranslationProvider().getTranslation("error", getLocale()),
+          getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
               .escapeForHTML(((BusinessException) ex).getI18nMessage(
-                  getTranslationProvider(), getLocale())))),
-          getTranslationProvider().getTranslation("error", getLocale()),
+                  this, getLocale())))),
+          getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof DataIntegrityViolationException) {
@@ -204,10 +204,10 @@ public class MockSwingController extends
           .showMessageDialog(
               sourceComponent,
               HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-                  .escapeForHTML(getTranslationProvider()
+                  .escapeForHTML(this
                       .getTranslation(
                           refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                          getLocale())))), getTranslationProvider()
+                          getLocale())))), this
                   .getTranslation("error", getLocale()),
               JOptionPane.ERROR_MESSAGE,
               getIconFactory()
@@ -215,9 +215,9 @@ public class MockSwingController extends
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(getTranslationProvider().getTranslation(
+              .escapeForHTML(getTranslation(
                   "concurrency.error.description", getLocale())))),
-          getTranslationProvider().getTranslation("error", getLocale()),
+          getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
