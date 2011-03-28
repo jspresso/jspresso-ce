@@ -16,9 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.security;
+package org.jspresso.framework.application.security;
 
 import java.util.Map;
+
+import org.jspresso.framework.security.ISecurable;
 
 /**
  * A very permissive security plugin.

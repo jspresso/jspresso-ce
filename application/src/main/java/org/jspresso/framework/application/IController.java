@@ -84,11 +84,4 @@ public interface IController extends IActionHandler {
    *         controller.
    */
   Map<String, Object> getInitialActionContext();
-
-  /**
-   * Gets a default initial security context.
-   * 
-   * @return a default initial security context.
-   */
-  Map<String, Object> getInitialSecurityContext();
 }

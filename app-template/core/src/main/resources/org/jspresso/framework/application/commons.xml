@@ -110,7 +110,6 @@
     <property name="connectorFactory" ref="connectorFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="mvcBinder" ref="mvcBinder" />
-    <property name="translationProvider" ref="translationProvider" />
     <property name="modelCascadingBinder" ref="modelCascadingBinder" />
     <property name="iconFactory" ref="iconFactory" />
     <property name="actionFactory" ref="actionFactory" />
@@ -124,7 +123,6 @@
   <bean id="viewFactoryBase" parent="abstractViewFactory" abstract="true" />
 
   <bean id="abstractActionFactory" abstract="true" class="org.jspresso.framework.view.AbstractActionFactory">
-    <property name="translationProvider" ref="translationProvider" />
     <property name="iconFactory" ref="iconFactory" />
   </bean>
 
@@ -139,13 +137,16 @@
   </bean>
 
   <!-- Custom exception handler -->
-  <bean id="customExceptionHandler" class="org.jspresso.framework.util.exception.MockExceptionHandler"/>
+  <bean id="customExceptionHandler" class="org.jspresso.framework.util.exception.MockExceptionHandler" />
 
   <!-- Security plugin -->
-  <bean id="customSecurityPlugin" class="org.jspresso.framework.security.MockSecurityPlugin"/>
-  
+  <bean id="customSecurityPlugin" class="org.jspresso.framework.application.security.MockSecurityPlugin" />
+
+  <!-- Translation plugin -->
+  <bean id="customTranslationPlugin" class="org.jspresso.framework.application.i18n.MockTranslationPlugin" />
+
   <!-- User preference store -->
-  <bean id="userPreferencesStore" class="org.jspresso.framework.util.preferences.MockPreferencesStore"/>
+  <bean id="userPreferencesStore" class="org.jspresso.framework.util.preferences.MockPreferencesStore" />
 
   <!-- The controllers. -->
 
@@ -158,11 +159,10 @@
     <property name="navigationActionMap" ref="moduleHistoryNavigationActionMap" />
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
     <property name="exitAction" ref="exitFrontAction" />
-    <property name="customSecurityPlugin" ref="customSecurityPlugin"/>
-    <property name="customExceptionHandler" ref="customExceptionHandler"/>
+    <property name="customExceptionHandler" ref="customExceptionHandler" />
   </bean>
 
-  <bean abstract="true" id="abstractFrontController" parent="abstractFrontControllerBase"/>
+  <bean abstract="true" id="abstractFrontController" parent="abstractFrontControllerBase" />
 
   <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">
     <property name="okYesIconImageURL" value="classpath:org/jspresso/framework/application/images/ok-48x48.png" />
@@ -199,12 +199,13 @@
       <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
     </property>
     <property name="transactionTemplate" ref="transactionTemplate" />
-    <property name="customSecurityPlugin" ref="customSecurityPlugin"/>
-    <property name="customExceptionHandler" ref="customExceptionHandler"/>
-    <property name="userPreferencesStore" ref="userPreferencesStore"/>
+    <property name="customSecurityPlugin" ref="customSecurityPlugin" />
+    <property name="customTranslationPlugin" ref="customTranslationPlugin" />
+    <property name="customExceptionHandler" ref="customExceptionHandler" />
+    <property name="userPreferencesStore" ref="userPreferencesStore" />
   </bean>
 
-  <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase"/>
+  <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
 
   <!-- Utility beans for model. -->
   <bean id="BasicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
@@ -234,5 +235,5 @@
   </bean>
 
   <bean id="abstractBackendAction" abstract="true" class="org.jspresso.framework.application.backend.action.BackendAction" />
-    
+
 </beans>

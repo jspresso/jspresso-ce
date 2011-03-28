@@ -43,10 +43,13 @@ import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEnt
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
+import org.jspresso.framework.application.i18n.ITranslationPlugin;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.WorkspaceDescriptor;
+import org.jspresso.framework.application.security.ISecurityPlugin;
+import org.jspresso.framework.application.security.SecurityContextBuilder;
 import org.jspresso.framework.application.security.SecurityContextConstants;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
@@ -63,6 +66,8 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -119,6 +124,11 @@ public abstract class AbstractBackendController extends AbstractController
   private IPreferencesStore                                userPreferencesStore;
   private ITranslationProvider                             translationProvider;
 
+  private ISecurityPlugin                                  customSecurityPlugin;
+  private ISecurityContextBuilder                          securityContextBuilder;
+
+  private ITranslationPlugin                               customTranslationPlugin;
+
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
    */
@@ -127,6 +137,7 @@ public abstract class AbstractBackendController extends AbstractController
     dirtRecorder = new BeanPropertyChangeRecorder();
     // moduleConnectors = new HashMap<Module, IValueConnector>();
     moduleConnectors = new LRUMap(20);
+    securityContextBuilder = new SecurityContextBuilder();
   }
 
   /**
@@ -312,23 +323,6 @@ public abstract class AbstractBackendController extends AbstractController
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
     return initialActionContext;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Map<String, Object> getInitialSecurityContext() {
-    Map<String, Object> initialSecurityContext = new HashMap<String, Object>();
-    if (getApplicationSession() != null
-        && getApplicationSession().getPrincipal() != null) {
-      initialSecurityContext.put(SecurityContextConstants.USER_ROLES,
-          SecurityHelper.getRoles(getApplicationSession().getSubject()));
-      initialSecurityContext.put(SecurityContextConstants.USER_ID,
-          getApplicationSession().getPrincipal().getName());
-      initialSecurityContext.put(SecurityContextConstants.SESSION_PROPERTIES,
-          getApplicationSession().getPrincipal().getCustomProperties());
-    }
-    return initialSecurityContext;
   }
 
   /**
@@ -1478,6 +1472,13 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   public String getTranslation(String key, Locale locale) {
+    if (customTranslationPlugin != null) {
+      String translation = customTranslationPlugin.getTranslation(key, locale,
+          getApplicationSession());
+      if (translation != null) {
+        return translation;
+      }
+    }
     return translationProvider.getTranslation(key, locale);
   }
 
@@ -1487,6 +1488,98 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   public String getTranslation(String key, Object[] args, Locale locale) {
+    if (customTranslationPlugin != null) {
+      String translation = customTranslationPlugin.getTranslation(key, args,
+          locale, getApplicationSession());
+      if (translation != null) {
+        return translation;
+      }
+    }
     return translationProvider.getTranslation(key, args, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isAccessGranted(ISecurable securable) {
+    if (SecurityHelper.isSubjectGranted(getApplicationSession().getSubject(),
+        securable)) {
+      if (customSecurityPlugin != null) {
+        try {
+          pushToSecurityContext(securable);
+          Map<String, Object> securityContext = new HashMap<String, Object>();
+          if (getApplicationSession() != null
+              && getApplicationSession().getPrincipal() != null) {
+            securityContext.put(SecurityContextConstants.USER_ROLES,
+                SecurityHelper.getRoles(getApplicationSession().getSubject()));
+            securityContext.put(SecurityContextConstants.USER_ID,
+                getApplicationSession().getPrincipal().getName());
+            Map<String, Object> sessionProperties = getApplicationSession()
+                .getCustomValues();
+            sessionProperties.putAll(getApplicationSession().getPrincipal()
+                .getCustomProperties());
+            securityContext.put(SecurityContextConstants.SESSION_PROPERTIES,
+                sessionProperties);
+          }
+          securityContext.putAll(getSecurityContext());
+          return customSecurityPlugin.isAccessGranted(securable,
+              securityContext);
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Configures a custom security plugin on the controller. The controller
+   * itself is a security handler and is used as such across most of the
+   * application layers. Before delegating to the custom security handler, the
+   * controller will apply role-based security rules that cannot be disabled.
+   * 
+   * @param customSecurityPlugin
+   *          the customESecurityHandler to set.
+   */
+  public void setCustomSecurityPlugin(ISecurityPlugin customSecurityPlugin) {
+    this.customSecurityPlugin = customSecurityPlugin;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getSecurityContext() {
+    return securityContextBuilder.getSecurityContext();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISecurityContextBuilder pushToSecurityContext(Object contextElement) {
+    securityContextBuilder.pushToSecurityContext(contextElement);
+    return this;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
+    securityContextBuilder.restoreLastSecurityContextSnapshot();
+    return this;
+  }
+
+  /**
+   * Configures a custom translation plugin on the controller. The controller
+   * itself is a translation provider and is used as such across most of the
+   * application layers. The custom security plugin is used to override the
+   * default static, bundle-based, i18n scheme.
+   * 
+   * @param customTranslationPlugin
+   *          the customTranslationPlugin to set.
+   */
+  public void setCustomTranslationPlugin(
+      ITranslationPlugin customTranslationPlugin) {
+    this.customTranslationPlugin = customTranslationPlugin;
   }
 }

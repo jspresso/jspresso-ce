@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.session;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.security.auth.Subject;
 
@@ -41,6 +42,13 @@ public interface IApplicationSession {
    * @return the value previously stored into the session or null if none.
    */
   Object getCustomValue(String key);
+
+  /**
+   * Lists the custom values from the application session.
+   * 
+   * @return the session custom values map.
+   */
+  Map<String, Object> getCustomValues();
 
   /**
    * Gets the session locale.

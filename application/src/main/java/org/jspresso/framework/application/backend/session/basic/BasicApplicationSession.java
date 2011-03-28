@@ -40,12 +40,16 @@ public class BasicApplicationSession implements IApplicationSession {
   private Subject             subject;
 
   /**
+   * Constructs a new <code>BasicApplicationSession</code> instance.
+   */
+  public BasicApplicationSession() {
+    customValues = new HashMap<String, Object>();
+  }
+
+  /**
    * {@inheritDoc}
    */
   public Object getCustomValue(String key) {
-    if (customValues == null) {
-      return null;
-    }
     return customValues.get(key);
   }
 
@@ -81,9 +85,6 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public void putCustomValue(String key, Object value) {
-    if (customValues == null) {
-      customValues = new HashMap<String, Object>();
-    }
     customValues.put(key, value);
   }
 
@@ -105,5 +106,15 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public void setSubject(Subject subject) {
     this.subject = subject;
+  }
+
+  /**
+   * Gets the customValues.
+   * 
+   * @return the customValues.
+   */
+  public Map<String, Object> getCustomValues() {
+    // return a defensive copy
+    return new HashMap<String, Object>(customValues);
   }
 }

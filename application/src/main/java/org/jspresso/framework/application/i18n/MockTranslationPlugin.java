@@ -16,27 +16,40 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.security;
+package org.jspresso.framework.application.i18n;
 
-import java.util.Map;
+import java.util.Locale;
+
+import org.jspresso.framework.application.backend.session.IApplicationSession;
 
 /**
- * A delegate plugin used to implement dynamic security algorithm.
+ * A NO-OP translation plugin.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISecurityPlugin {
+public class MockTranslationPlugin implements ITranslationPlugin {
 
   /**
-   * Checks authorization for secured access.
-   * 
-   * @param securable
-   *          the id of the secured access to check.
-   * @param context
-   *          the security context of the authorization.
-   * @return true if access is granted.
+   * Always return null.
+   * <p>
+   * {@inheritDoc}
    */
-  boolean isAccessGranted(ISecurable securable, Map<String, Object> context);
+  @SuppressWarnings("unused")
+  public String getTranslation(String key, Locale locale,
+      IApplicationSession session) {
+    return null;
+  }
+
+  /**
+   * Always return null.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public String getTranslation(String key, Object[] args, Locale locale,
+      IApplicationSession session) {
+    return null;
+  }
 
 }

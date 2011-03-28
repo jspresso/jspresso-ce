@@ -43,7 +43,7 @@ import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.security.SecurityContextBuilder;
+import org.jspresso.framework.application.security.SecurityContextConstants;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
@@ -51,6 +51,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UsernamePasswordHandler;
@@ -440,22 +441,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
     initialActionContext.put(ActionContextConstants.MODULE,
         selectedModules.get(getSelectedWorkspaceName()));
     return initialActionContext;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Map<String, Object> getInitialSecurityContext() {
-    Map<String, Object> initialSecurityContext = new HashMap<String, Object>();
-    initialSecurityContext.putAll(getBackendController()
-        .getInitialSecurityContext());
-    ISecurityContextBuilder initialSecurityContextBuilder = new SecurityContextBuilder();
-    initialSecurityContextBuilder.pushToSecurityContext(
-        getWorkspace(getSelectedWorkspaceName())).pushToSecurityContext(
-        getSelectedModule(getSelectedWorkspaceName()));
-    initialSecurityContext.putAll(initialSecurityContextBuilder
-        .getSecurityContext());
-    return initialSecurityContext;
   }
 
   /**
@@ -1512,17 +1497,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Map<String, Object> getSecurityContext() {
-    Map<String, Object> securityContext = new HashMap<String, Object>();
-    securityContext.putAll(getBackendController().getSecurityContext());
-    securityContext.putAll(super.getSecurityContext());
-    return securityContext;
-  }
-
-  /**
    * Delegates to the backend controller.
    * <p>
    * {@inheritDoc}
@@ -1539,4 +1513,53 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public String getTranslation(String key, Object[] args, Locale locale) {
     return getBackendController().getTranslation(key, args, locale);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isAccessGranted(ISecurable securable) {
+    Map<String, Object> currentSecurityContext = getSecurityContext();
+    int snapshotsToRestore = 0;
+    try {
+      if (!currentSecurityContext
+          .containsKey(SecurityContextConstants.WORKSPACE)) {
+        pushToSecurityContext(getWorkspace(getSelectedWorkspaceName()));
+        snapshotsToRestore++;
+      }
+      if (!currentSecurityContext
+          .containsKey(SecurityContextConstants.MODULE_CHAIN)) {
+        pushToSecurityContext(getSelectedModule(getSelectedWorkspaceName()));
+        snapshotsToRestore++;
+      }
+      return getBackendController().isAccessGranted(securable);
+    } finally {
+      for (int i = 0; i < snapshotsToRestore; i++) {
+        restoreLastSecurityContextSnapshot();
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getSecurityContext() {
+    return getBackendController().getSecurityContext();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISecurityContextBuilder pushToSecurityContext(Object contextElement) {
+    getBackendController().pushToSecurityContext(contextElement);
+    return this;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
+    getBackendController().restoreLastSecurityContextSnapshot();
+    return this;
+  }
+
 }
