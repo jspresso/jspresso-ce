@@ -35,7 +35,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IController extends IActionHandler, ITranslationProvider {
+public interface IController extends IActionHandler {
 
   /**
    * This method gets executed when a user succesfully logs in.

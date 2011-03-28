@@ -126,9 +126,9 @@ public class RemoteActionFactory extends
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
     if (action instanceof IDisplayableAction) {
       remoteAction.setName(((IDisplayableAction) action).getI18nName(
-          getTranslationProvider(), locale));
+          actionHandler, locale));
       String i18nDescription = ((IDisplayableAction) action)
-          .getI18nDescription(getTranslationProvider(), locale);
+          .getI18nDescription(actionHandler, locale);
       if (i18nDescription != null) {
         remoteAction.setDescription(i18nDescription);
       }

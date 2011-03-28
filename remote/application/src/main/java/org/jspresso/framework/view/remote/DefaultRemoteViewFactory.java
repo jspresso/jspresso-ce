@@ -115,6 +115,7 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
@@ -359,7 +360,9 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {actionList});
+    viewComponent.setActionLists(new RActionList[] {
+      actionList
+    });
     return propertyView;
   }
 
@@ -523,7 +526,7 @@ public class DefaultRemoteViewFactory extends
       }
       elements.add(propertyView.getPeer());
       elementLabels.add(createPropertyLabel(propertyViewDescriptor,
-          propertyView.getPeer(), locale));
+          propertyView.getPeer(), actionHandler, locale));
       elementWidths.add(propertyViewDescriptor.getWidth());
       connector.addChildConnector(propertyView.getConnector());
       // already handled in createView.
@@ -756,7 +759,7 @@ public class DefaultRemoteViewFactory extends
         if ("".equals(value)) {
           translations.add(" ");
         } else {
-          translations.add(getTranslationProvider().getTranslation(
+          translations.add(actionHandler.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         }
@@ -1044,18 +1047,21 @@ public class DefaultRemoteViewFactory extends
    *          the property view descriptor.
    * @param propertyComponent
    *          the property component.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the created property label.
    */
   protected RLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
-      RComponent propertyComponent, Locale locale) {
+      RComponent propertyComponent, ITranslationProvider translationProvider,
+      Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     RLabel propertyLabel = createRLabel(null, false);
     StringBuffer labelText = new StringBuffer(
-        propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
+        propertyViewDescriptor.getI18nName(translationProvider, locale));
     if (propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
@@ -1090,7 +1096,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyView != null) {
       if (propertyDescriptor.getName() != null) {
         propertyView.getPeer().setLabel(
-            propertyDescriptor.getI18nName(getTranslationProvider(), locale));
+            propertyDescriptor.getI18nName(actionHandler, locale));
       }
       if (propertyView.getPeer() instanceof RLabel) {
         configureAlignment((RLabel) propertyView.getPeer(),
@@ -1276,10 +1282,12 @@ public class DefaultRemoteViewFactory extends
       // "lov.element.name",
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
-      lovAction.setDescription(getTranslationProvider().getTranslation(
+      lovAction.setDescription(actionHandler.getTranslation(
           "lov.element.description",
-          new Object[] {propertyDescriptor.getReferencedDescriptor()
-              .getI18nName(getTranslationProvider(), locale)}, locale));
+          new Object[] {
+            propertyDescriptor.getReferencedDescriptor().getI18nName(
+                actionHandler, locale)
+          }, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1287,8 +1295,12 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {lovAction});
-      viewComponent.setActionLists(new RActionList[] {actionList});
+      actionList.setActions(new RAction[] {
+        lovAction
+      });
+      viewComponent.setActionLists(new RActionList[] {
+        actionList
+      });
     }
     return view;
   }
@@ -1965,6 +1977,7 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void decorateWithBorder(IView<RComponent> view,
+      @SuppressWarnings("unused") ITranslationProvider translationProvider,
       @SuppressWarnings("unused") Locale locale) {
     view.getPeer().setBorderType(
         view.getDescriptor().getBorderType().toString());
@@ -1975,12 +1988,12 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale,
       IView<RComponent> view) {
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setTooltip(
-          propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale));
+          propertyDescriptor.getI18nDescription(translationProvider, locale));
     }
   }
 
@@ -1989,18 +2002,19 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
-      Locale locale, IView<RComponent> view) {
+      ITranslationProvider translationProvider, Locale locale,
+      IView<RComponent> view) {
     RComponent viewPeer = view.getPeer();
-    configureComponent(viewDescriptor, locale, viewPeer);
+    configureComponent(viewDescriptor, translationProvider, locale, viewPeer);
   }
 
   private void configureComponent(IViewDescriptor viewDescriptor,
-      Locale locale, RComponent viewPeer) {
-    viewPeer.setLabel(viewDescriptor.getI18nName(getTranslationProvider(),
-        locale));
+      ITranslationProvider translationProvider, Locale locale,
+      RComponent viewPeer) {
+    viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
     if (viewDescriptor.getDescription() != null) {
       viewPeer.setTooltip(viewDescriptor.getI18nDescription(
-          getTranslationProvider(), locale));
+          translationProvider, locale));
     } else {
       viewPeer.setTooltip(null);
     }

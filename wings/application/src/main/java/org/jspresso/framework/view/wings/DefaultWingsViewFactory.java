@@ -105,6 +105,7 @@ import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -500,7 +501,7 @@ public class DefaultWingsViewFactory extends
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
       SLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
-          propertyView.getPeer(), locale);
+          propertyView.getPeer(), actionHandler, locale);
       if (forbidden) {
         propertyLabel.setText(" ");
       }
@@ -765,7 +766,7 @@ public class DefaultWingsViewFactory extends
     final SComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
       IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
-          locale);
+          actionHandler, locale);
       viewComponent = createSLabel(true);
       connector = new SLabelConnector(propertyDescriptor.getName(),
           (SLabel) viewComponent);
@@ -788,9 +789,13 @@ public class DefaultWingsViewFactory extends
       }
       ((SComboBox) viewComponent)
           .setRenderer(new TranslatedEnumerationListCellRenderer(
-              propertyDescriptor, locale));
-      adjustSizes(propertyViewDescriptor, viewComponent, null,
-          getEnumerationTemplateValue(propertyDescriptor, locale), 48);
+              propertyDescriptor, actionHandler, locale));
+      adjustSizes(
+          propertyViewDescriptor,
+          viewComponent,
+          null,
+          getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale),
+          48);
       connector = new SComboBoxConnector(propertyDescriptor.getName(),
           ((SComboBox) viewComponent));
     }
@@ -1033,18 +1038,21 @@ public class DefaultWingsViewFactory extends
    *          the property view descriptor.
    * @param propertyComponent
    *          the property component.
+   * @param translationProvider
+   *          the translation provider to use to translate the messages.
    * @param locale
    *          the locale.
    * @return the created property label.
    */
   protected SLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
-      SComponent propertyComponent, Locale locale) {
+      SComponent propertyComponent, ITranslationProvider translationProvider,
+      Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     SLabel propertyLabel = createSLabel(false);
     StringBuffer labelText = new StringBuffer(
-        propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
+        propertyViewDescriptor.getI18nName(translationProvider, locale));
     if (propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
@@ -1084,16 +1092,18 @@ public class DefaultWingsViewFactory extends
     IView<SComponent> propertyView = constructView(viewComponent,
         propertyViewDescriptor, connector);
     Action lovAction = createLovAction(propertyView, actionHandler, locale);
-    // lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
+    // lovAction.putValue(Action.NAME, actionHandler.getTranslation(
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-    // getTranslationProvider(), locale)}, locale));
+    // actionHandler, locale)}, locale));
     lovAction.putValue(
         Action.SHORT_DESCRIPTION,
-        getTranslationProvider().getTranslation(
+        actionHandler.getTranslation(
             "lov.element.description",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(getTranslationProvider(), locale)}, locale)
+            new Object[] {
+              propertyDescriptor.getReferencedDescriptor().getI18nName(
+                  actionHandler, locale)
+            }, locale)
             + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(
@@ -1490,12 +1500,14 @@ public class DefaultWingsViewFactory extends
    * 
    * @param propertyDescriptor
    *          the property descriptor to create the renderer for.
+   * @param translationProvider the translation provider.
    * @param locale
    *          the locale.
    * @return the created table cell renderer.
    */
   protected STableCellRenderer createTableCellRenderer(
-      IPropertyDescriptor propertyDescriptor, Locale locale) {
+      IPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     STableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       cellRenderer = createBooleanTableCellRenderer(
@@ -1511,7 +1523,8 @@ public class DefaultWingsViewFactory extends
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       cellRenderer = createEnumerationTableCellRenderer(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, locale);
+          (IEnumerationPropertyDescriptor) propertyDescriptor,
+          translationProvider, locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(
           (INumberPropertyDescriptor) propertyDescriptor, locale);
@@ -1610,7 +1623,7 @@ public class DefaultWingsViewFactory extends
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(
-            columnViewDescriptor.getI18nName(getTranslationProvider(), locale));
+            columnViewDescriptor.getI18nName(actionHandler, locale));
         if (propertyDescriptor.isMandatory()) {
           columnName.append("*");
         }
@@ -1628,7 +1641,7 @@ public class DefaultWingsViewFactory extends
               .setCellEditor(createTableCellEditor(editorView, actionHandler));
         }
         STableCellRenderer cellRenderer = createTableCellRenderer(
-            propertyDescriptor, locale);
+            propertyDescriptor, actionHandler, locale);
         if (cellRenderer != null) {
           column.setCellRenderer(cellRenderer);
         } else {
@@ -1639,7 +1652,7 @@ public class DefaultWingsViewFactory extends
               columnViewDescriptor.getHorizontalAlignment());
         }
         if (cellRenderer instanceof SComponent) {
-          configureComponent(columnViewDescriptor, locale,
+          configureComponent(columnViewDescriptor, actionHandler, locale,
               (SComponent) cellRenderer);
         }
         int columnWidth;
@@ -1659,7 +1672,7 @@ public class DefaultWingsViewFactory extends
                     viewComponent,
                     getEnumerationTemplateValue(
                         (IEnumerationPropertyDescriptor) propertyDescriptor,
-                        locale).length() + 4), minHeaderWidth);
+                        actionHandler, locale).length() + 4), minHeaderWidth);
           } else {
             columnWidth = Math.max(Math.min(
                 computePixelWidth(
@@ -1765,8 +1778,7 @@ public class DefaultWingsViewFactory extends
         SIcon childIcon = getIconFactory().getIcon(
             childViewDescriptor.getIconImageURL(),
             getIconFactory().getSmallIconSize());
-        String tabText = childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale);
+        String tabText = childViewDescriptor.getI18nName(actionHandler, locale);
         switch (viewDescriptor.getRenderingOptions()) {
           case ICON:
             tabText = null;
@@ -1779,12 +1791,9 @@ public class DefaultWingsViewFactory extends
         }
         SComponent tabView = childView.getPeer();
         if (childViewDescriptor.getDescription() != null) {
-          viewComponent.addTab(
-              tabText,
-              childIcon,
-              tabView,
-              childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                  locale) + TOOLTIP_ELLIPSIS);
+          viewComponent.addTab(tabText, childIcon, tabView,
+              childViewDescriptor.getI18nDescription(actionHandler, locale)
+                  + TOOLTIP_ELLIPSIS);
         } else {
           viewComponent.addTab(tabText, childIcon, tabView);
         }
@@ -1989,13 +1998,13 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithBorder(IView<SComponent> view, Locale locale) {
+  protected void decorateWithBorder(IView<SComponent> view, ITranslationProvider translationProvider, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
         view.getPeer().setBorder(new SEtchedBorder());
         break;
       case TITLED:
-        decorateWithTitle(view, locale);
+        decorateWithTitle(view, translationProvider, locale);
         break;
       default:
         break;
@@ -2007,12 +2016,13 @@ public class DefaultWingsViewFactory extends
    */
   @Override
   protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale,
       IView<SComponent> view) {
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
-          propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale) + TOOLTIP_ELLIPSIS);
+          propertyDescriptor.getI18nDescription(translationProvider, locale)
+              + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2021,13 +2031,15 @@ public class DefaultWingsViewFactory extends
    */
   @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
-      Locale locale, IView<SComponent> view) {
+      ITranslationProvider translationProvider, Locale locale,
+      IView<SComponent> view) {
     SComponent viewPeer = view.getPeer();
-    configureComponent(viewDescriptor, locale, viewPeer);
+    configureComponent(viewDescriptor, translationProvider, locale, viewPeer);
   }
 
   private void configureComponent(IViewDescriptor viewDescriptor,
-      Locale locale, SComponent viewPeer) {
+      ITranslationProvider translationProvider, Locale locale,
+      SComponent viewPeer) {
     if (viewDescriptor.getForeground() != null) {
       viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -2040,7 +2052,7 @@ public class DefaultWingsViewFactory extends
     }
     if (viewDescriptor.getDescription() != null) {
       viewPeer.setToolTipText(viewDescriptor.getI18nDescription(
-          getTranslationProvider(), locale) + TOOLTIP_ELLIPSIS);
+          translationProvider, locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2134,9 +2146,10 @@ public class DefaultWingsViewFactory extends
   // }
 
   private STableCellRenderer createEnumerationTableCellRenderer(
-      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
-        locale);
+        translationProvider, locale);
   }
 
   private SFont createFont(String fontString, SFont defaultFont) {
@@ -2261,10 +2274,11 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private void decorateWithTitle(IView<SComponent> view, Locale locale) {
+  private void decorateWithTitle(IView<SComponent> view,
+      ITranslationProvider translationProvider, Locale locale) {
     // SInternalFrame iFrame = createSInternalFrame();
     // iFrame.setTitle(view.getDescriptor().getI18nName(
-    // getTranslationProvider(), locale));
+    // actionHandler, locale));
     // iFrame.setMaximizable(false);
     // iFrame.setClosable(false);
     // iFrame.setIconifyable(true);
@@ -2278,15 +2292,15 @@ public class DefaultWingsViewFactory extends
 
     // view.getPeer().setBorder(new
     // STitledBorder(view.getDescriptor().getI18nName(
-    // getTranslationProvider(), locale)));
+    // actionHandler, locale)));
 
     SPanel titledPanel = createSPanel(new SBorderLayout());
     SLabel titleLabel = createSLabel(true);
     titleLabel.setIcon(getIconFactory().getIcon(
         view.getDescriptor().getIconImageURL(),
         getIconFactory().getTinyIconSize()));
-    titleLabel.setText(view.getDescriptor().getI18nName(
-        getTranslationProvider(), locale));
+    titleLabel.setText(view.getDescriptor().getI18nName(translationProvider,
+        locale));
     titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
     titledPanel.add(titleLabel, SBorderLayout.NORTH);
@@ -2440,6 +2454,7 @@ public class DefaultWingsViewFactory extends
       SDefaultListCellRenderer {
 
     private static final long              serialVersionUID = -5694559709701757582L;
+    private ITranslationProvider           translationProvider;
     private Locale                         locale;
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
@@ -2450,12 +2465,15 @@ public class DefaultWingsViewFactory extends
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param translationProvider the translation provider.
      * @param locale
      *          the locale to lookup the translation.
      */
     public TranslatedEnumerationListCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+        IEnumerationPropertyDescriptor propertyDescriptor,
+        ITranslationProvider translationProvider, Locale locale) {
       this.propertyDescriptor = propertyDescriptor;
+      this.translationProvider = translationProvider;
       this.locale = locale;
     }
 
@@ -2471,7 +2489,7 @@ public class DefaultWingsViewFactory extends
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
           getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
-        setText(getTranslationProvider().getTranslation(
+        setText(translationProvider.getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
       } else {
@@ -2485,6 +2503,7 @@ public class DefaultWingsViewFactory extends
       EvenOddTableCellRenderer {
 
     private static final long              serialVersionUID = -4500472602998482756L;
+    private ITranslationProvider           translationProvider;
     private Locale                         locale;
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
@@ -2496,13 +2515,17 @@ public class DefaultWingsViewFactory extends
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param translationProvider
+     *          the translation provider.
      * @param locale
      *          the locale to lookup the translation.
      */
     public TranslatedEnumerationTableCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+        IEnumerationPropertyDescriptor propertyDescriptor,
+        ITranslationProvider translationProvider, Locale locale) {
       super();
       this.propertyDescriptor = propertyDescriptor;
+      this.translationProvider = translationProvider;
       this.locale = locale;
     }
 
@@ -2520,7 +2543,7 @@ public class DefaultWingsViewFactory extends
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          renderer.setText(getTranslationProvider().getTranslation(
+          renderer.setText(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
@@ -2528,7 +2551,7 @@ public class DefaultWingsViewFactory extends
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
-          renderer.setText(getTranslationProvider().getTranslation(
+          renderer.setText(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {

@@ -24,6 +24,7 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.exception.IExceptionHandler;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * This interface establishes the general contract of an object able to axacute
@@ -33,7 +34,7 @@ import org.jspresso.framework.util.exception.IExceptionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IActionHandler extends IExceptionHandler, ISecurityHandler {
+public interface IActionHandler extends IExceptionHandler, ISecurityHandler, ITranslationProvider {
 
   /**
    * Executes an action. Implementors should delegate the execution to the

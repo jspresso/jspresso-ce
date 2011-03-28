@@ -152,7 +152,6 @@
   <!-- The controllers. Controllers are not singleton since they can hold some session state. -->
   <bean abstract="true" id="abstractFrontControllerBase" class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
     <property name="mvcBinder" ref="mvcBinder" />
-    <property name="translationProvider" ref="translationProvider" />
     <property name="viewFactory" ref="viewFactory" />
     <property name="workspacesMenuIconImageUrl" value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
     <property name="loginViewDescriptor" ref="loginViewDescriptor" />

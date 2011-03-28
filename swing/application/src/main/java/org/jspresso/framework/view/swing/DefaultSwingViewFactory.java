@@ -160,6 +160,7 @@ import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -543,7 +544,7 @@ public class DefaultSwingViewFactory extends
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
       JLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
-          propertyView.getPeer(), locale);
+          propertyView.getPeer(), actionHandler, locale);
       if (forbidden) {
         propertyLabel.setText(" ");
       }
@@ -828,7 +829,7 @@ public class DefaultSwingViewFactory extends
     final JComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
       IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
-          locale);
+          actionHandler, locale);
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink();
       } else {
@@ -855,10 +856,13 @@ public class DefaultSwingViewFactory extends
       }
       ((JComboBox) viewComponent)
           .setRenderer(new TranslatedEnumerationListCellRenderer(
-              propertyDescriptor, locale));
-      adjustSizes(propertyViewDescriptor, viewComponent, null,
-          getEnumerationTemplateValue(propertyDescriptor, locale), Toolkit
-              .getDefaultToolkit().getScreenResolution() * 2 / 6);
+              propertyDescriptor, actionHandler, locale));
+      adjustSizes(
+          propertyViewDescriptor,
+          viewComponent,
+          null,
+          getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale),
+          Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
       connector = new JComboBoxConnector(propertyDescriptor.getName(),
           ((JComboBox) viewComponent));
     }
@@ -1469,18 +1473,21 @@ public class DefaultSwingViewFactory extends
    *          the property view descriptor.
    * @param propertyComponent
    *          the property component.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the created property label.
    */
   protected JLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
-      JComponent propertyComponent, Locale locale) {
+      JComponent propertyComponent, ITranslationProvider translationProvider,
+      Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JLabel propertyLabel = createJLabel(false);
     StringBuffer labelText = new StringBuffer(
-        propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
+        propertyViewDescriptor.getI18nName(translationProvider, locale));
     if (propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
@@ -1536,16 +1543,18 @@ public class DefaultSwingViewFactory extends
     if (viewComponent instanceof JActionField) {
       Action lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.putValue(Action.NAME,
-      // getTranslationProvider().getTranslation(
+      // actionHandler.getTranslation(
       // "lov.element.name",
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-      // getTranslationProvider(), locale)}, locale));
+      // actionHandler, locale)}, locale));
       lovAction.putValue(
           Action.SHORT_DESCRIPTION,
-          getTranslationProvider().getTranslation(
+          actionHandler.getTranslation(
               "lov.element.description",
-              new Object[] {propertyDescriptor.getReferencedDescriptor()
-                  .getI18nName(getTranslationProvider(), locale)}, locale)
+              new Object[] {
+                propertyDescriptor.getReferencedDescriptor().getI18nName(
+                    actionHandler, locale)
+              }, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1672,12 +1681,15 @@ public class DefaultSwingViewFactory extends
    * 
    * @param propertyDescriptor
    *          the property descriptor to create the renderer for.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the created table cell renderer.
    */
   protected TableCellRenderer createTableCellRenderer(
-      IPropertyDescriptor propertyDescriptor, Locale locale) {
+      IPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       cellRenderer = createBooleanTableCellRenderer(
@@ -1693,7 +1705,8 @@ public class DefaultSwingViewFactory extends
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       cellRenderer = createEnumerationTableCellRenderer(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, locale);
+          (IEnumerationPropertyDescriptor) propertyDescriptor,
+          translationProvider, locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(
           (INumberPropertyDescriptor) propertyDescriptor, locale);
@@ -1819,7 +1832,7 @@ public class DefaultSwingViewFactory extends
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(
-            columnViewDescriptor.getI18nName(getTranslationProvider(), locale));
+            columnViewDescriptor.getI18nName(actionHandler, locale));
         if (propertyDescriptor.isMandatory()) {
           columnName.append("*");
         }
@@ -1834,7 +1847,7 @@ public class DefaultSwingViewFactory extends
         }
         column.setCellEditor(createTableCellEditor(editorView, actionHandler));
         TableCellRenderer cellRenderer = createTableCellRenderer(
-            propertyDescriptor, locale);
+            propertyDescriptor, actionHandler, locale);
         if (cellRenderer == null) {
           cellRenderer = new EvenOddTableCellRenderer();
         }
@@ -1843,7 +1856,7 @@ public class DefaultSwingViewFactory extends
               columnViewDescriptor.getHorizontalAlignment());
         }
         if (cellRenderer instanceof JComponent) {
-          configureComponent(columnViewDescriptor, locale,
+          configureComponent(columnViewDescriptor, actionHandler, locale,
               (JComponent) cellRenderer);
         }
         if (columnViewDescriptor.getAction() != null) {
@@ -1871,7 +1884,7 @@ public class DefaultSwingViewFactory extends
                     viewComponent,
                     getEnumerationTemplateValue(
                         (IEnumerationPropertyDescriptor) propertyDescriptor,
-                        locale).length() + 4), minHeaderWidth));
+                        actionHandler, locale).length() + 4), minHeaderWidth));
           } else {
             column.setPreferredWidth(Math.max(Math.min(
                 computePixelWidth(
@@ -1982,7 +1995,8 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())};
+              new Integer(columnModel.getColumn(i).getWidth())
+          };
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);
@@ -2047,8 +2061,7 @@ public class DefaultSwingViewFactory extends
         Icon childIcon = getIconFactory().getIcon(
             childViewDescriptor.getIconImageURL(),
             getIconFactory().getSmallIconSize());
-        String tabText = childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale);
+        String tabText = childViewDescriptor.getI18nName(actionHandler, locale);
         switch (viewDescriptor.getRenderingOptions()) {
           case ICON:
             tabText = null;
@@ -2060,12 +2073,9 @@ public class DefaultSwingViewFactory extends
             break;
         }
         if (childViewDescriptor.getDescription() != null) {
-          viewComponent.addTab(
-              tabText,
-              childIcon,
-              childView.getPeer(),
-              childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                  locale) + TOOLTIP_ELLIPSIS);
+          viewComponent.addTab(tabText, childIcon, childView.getPeer(),
+              childViewDescriptor.getI18nDescription(actionHandler, locale)
+                  + TOOLTIP_ELLIPSIS);
         } else {
           viewComponent.addTab(tabText, childIcon, childView.getPeer());
         }
@@ -2420,13 +2430,14 @@ public class DefaultSwingViewFactory extends
    *          the locale to use.
    */
   @Override
-  protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
+  protected void decorateWithBorder(IView<JComponent> view,
+      ITranslationProvider translationProvider, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
       case TITLED:
-        decorateWithTitle(view, locale);
+        decorateWithTitle(view, translationProvider, locale);
         break;
       default:
         break;
@@ -2438,12 +2449,13 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale,
       IView<JComponent> view) {
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
-          propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale) + TOOLTIP_ELLIPSIS);
+          propertyDescriptor.getI18nDescription(translationProvider, locale)
+              + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2452,13 +2464,15 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
-      Locale locale, IView<JComponent> view) {
+      ITranslationProvider translationProvider, Locale locale,
+      IView<JComponent> view) {
     JComponent viewPeer = view.getPeer();
-    configureComponent(viewDescriptor, locale, viewPeer);
+    configureComponent(viewDescriptor, translationProvider, locale, viewPeer);
   }
 
   private void configureComponent(IViewDescriptor viewDescriptor,
-      Locale locale, JComponent viewPeer) {
+      ITranslationProvider translationProvider, Locale locale,
+      JComponent viewPeer) {
     if (viewDescriptor.getForeground() != null) {
       viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -2471,7 +2485,7 @@ public class DefaultSwingViewFactory extends
     }
     if (viewDescriptor.getDescription() != null) {
       viewPeer.setToolTipText(viewDescriptor.getI18nDescription(
-          getTranslationProvider(), locale) + TOOLTIP_ELLIPSIS);
+          translationProvider, locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2529,9 +2543,10 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createEnumerationTableCellRenderer(
-      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
-        locale);
+        translationProvider, locale);
   }
 
   private Font createFont(String fontString, Font defaultFont) {
@@ -2593,8 +2608,7 @@ public class DefaultSwingViewFactory extends
     IViewDescriptor viewDescriptor = view.getDescriptor();
     JPopupMenu popupMenu = createJPopupMenu();
     JLabel titleLabel = createJLabel(false);
-    titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
-        locale));
+    titleLabel.setText(viewDescriptor.getI18nName(actionHandler, locale));
     titleLabel.setIcon(getIconFactory().getIcon(
         viewDescriptor.getIconImageURL(), getIconFactory().getTinyIconSize()));
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -2720,14 +2734,13 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private void decorateWithTitle(IView<JComponent> view, Locale locale) {
-    view.getPeer()
-        .setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
+  private void decorateWithTitle(IView<JComponent> view,
+      ITranslationProvider translationProvider, Locale locale) {
+    view.getPeer().setBorder(
+        BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+            view.getDescriptor().getI18nName(translationProvider, locale)));
     // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
-    // .getI18nName(getTranslationProvider(), locale), false, false,
+    // .getI18nName(actionHandler, locale), false, false,
     // false, false);
     // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
     // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
@@ -2987,6 +3000,7 @@ public class DefaultSwingViewFactory extends
       DefaultListCellRenderer {
 
     private static final long              serialVersionUID = -5694559709701757582L;
+    private ITranslationProvider           translationProvider;
     private Locale                         locale;
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
@@ -2997,12 +3011,16 @@ public class DefaultSwingViewFactory extends
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param translationProvider
+     *          the translation provider.
      * @param locale
      *          the locale to lookup the translation.
      */
     public TranslatedEnumerationListCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+        IEnumerationPropertyDescriptor propertyDescriptor,
+        ITranslationProvider translationProvider, Locale locale) {
       this.propertyDescriptor = propertyDescriptor;
+      this.translationProvider = translationProvider;
       this.locale = locale;
     }
 
@@ -3018,7 +3036,7 @@ public class DefaultSwingViewFactory extends
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
           getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
-        label.setText(getTranslationProvider().getTranslation(
+        label.setText(translationProvider.getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
       } else {
@@ -3036,6 +3054,7 @@ public class DefaultSwingViewFactory extends
       EvenOddTableCellRenderer {
 
     private static final long              serialVersionUID = -4500472602998482756L;
+    private ITranslationProvider           translationProvider;
     private Locale                         locale;
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
@@ -3047,13 +3066,17 @@ public class DefaultSwingViewFactory extends
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param translationProvider
+     *          the translation provider.
      * @param locale
      *          the locale to lookup the translation.
      */
     public TranslatedEnumerationTableCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+        IEnumerationPropertyDescriptor propertyDescriptor,
+        ITranslationProvider translationProvider, Locale locale) {
       super();
       this.propertyDescriptor = propertyDescriptor;
+      this.translationProvider = translationProvider;
       this.locale = locale;
     }
 
@@ -3078,7 +3101,7 @@ public class DefaultSwingViewFactory extends
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          super.setValue(getTranslationProvider().getTranslation(
+          super.setValue(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
@@ -3090,7 +3113,7 @@ public class DefaultSwingViewFactory extends
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
-          super.setValue(getTranslationProvider().getTranslation(
+          super.setValue(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {

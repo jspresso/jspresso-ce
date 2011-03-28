@@ -201,8 +201,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            resetPropertyAction;
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
 
-  private ITranslationProvider          translationProvider;
-
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
    */
@@ -213,7 +211,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -298,9 +298,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
             }
           }
         }
-        finishComponentConfiguration(viewDescriptor, locale, view);
+        finishComponentConfiguration(viewDescriptor, actionHandler, locale,
+            view);
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
-        decorateWithBorder(view, locale);
+        decorateWithBorder(view, actionHandler, locale);
         view.getConnector().setModelDescriptor(
             viewDescriptor.getModelDescriptor());
         if (!actionHandler.isAccessGranted(viewDescriptor)) {
@@ -519,16 +520,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   public void setSaveBinaryPropertyAsFileAction(
       IDisplayableAction saveBinaryPropertyAsFileAction) {
     this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   /**
@@ -1310,21 +1301,23 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the enumeration property descriptor
+   * @param translationProvider
+   *          the translation provider to use to translate the enumeration
+   *          values.
    * @param locale
    *          the locale to create the formatter for.
    * @return the fomrmatter.
    */
   protected IFormatter createEnumerationFormatter(
-      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     Map<Object, String> translations = null;
     if (propertyDescriptor.isTranslated()) {
       translations = new HashMap<Object, String>();
       for (String value : propertyDescriptor.getEnumerationValues()) {
-        translations.put(
-            value,
-            getTranslationProvider().getTranslation(
-                computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                    value), locale));
+        translations.put(value, translationProvider.getTranslation(
+            computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                value), locale));
       }
     }
     IFormatter formatter = new EnumerationFormatter(translations);
@@ -1831,7 +1824,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createColorPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    decorateWithDescription(propertyDescriptor, locale, view);
+    decorateWithDescription(propertyDescriptor, actionHandler, locale, view);
     return view;
   }
 
@@ -2138,11 +2131,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
     if (connector instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(viewDescriptor.getI18nName(translationProvider,
-              locale));
+          .setDisplayValue(viewDescriptor.getI18nName(actionHandler, locale));
       ((AbstractCompositeValueConnector) connector)
           .setDisplayDescription(viewDescriptor.getI18nDescription(
-              translationProvider, locale));
+              actionHandler, locale));
       ((AbstractCompositeValueConnector) connector)
           .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
       ((AbstractCompositeValueConnector) connector)
@@ -2176,36 +2168,45 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param view
    *          the view to decorate.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale to be used for a titled border.
    */
-  protected abstract void decorateWithBorder(IView<E> view, Locale locale);
+  protected abstract void decorateWithBorder(IView<E> view,
+      ITranslationProvider translationProvider, Locale locale);
 
   /**
    * Decorates a property view with its description.
    * 
    * @param propertyDescriptor
    *          the property descriptor.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @param view
    *          the property view.
    */
   protected abstract void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor, Locale locale, IView<E> view);
+      IPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale, IView<E> view);
 
   /**
    * Applies the font and color configuration to a view.
    * 
    * @param viewDescriptor
    *          the view descriptor.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @param view
    *          the raw view.
    */
   protected abstract void finishComponentConfiguration(
-      IViewDescriptor viewDescriptor, Locale locale, IView<E> view);
+      IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
+      Locale locale, IView<E> view);
 
   /**
    * Computes the connector id for component view.
@@ -2298,16 +2299,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the property descriptor.
+   * @param translationProvider
+   *          the translation provider to use to translate the enumeration
+   *          values.
    * @param locale
    *          the locale.
    * @return the enumeration template value.
    */
   protected String getEnumerationTemplateValue(
-      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     int maxTranslationLength = -1;
-    if (getTranslationProvider() != null && propertyDescriptor.isTranslated()) {
+    if (translationProvider != null && propertyDescriptor.isTranslated()) {
       for (Object enumerationValue : propertyDescriptor.getEnumerationValues()) {
-        String translation = getTranslationProvider().getTranslation(
+        String translation = translationProvider.getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 enumerationValue), locale);
         if (translation.length() > maxTranslationLength) {
@@ -2518,15 +2523,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-
-  /**
    * Gets wether a property view is considered to fill all the available height
    * space.
    * 
@@ -2681,10 +2677,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
+              .getI18nName(actionHandler, locale));
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
+              .getI18nDescription(actionHandler, locale));
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setDisplayIconImageUrl(subtreeViewDescriptor
               .getNodeGroupDescriptor().getIconImageURL());
@@ -2735,10 +2731,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (connector instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) connector)
           .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
+              .getI18nName(actionHandler, locale));
       ((AbstractCompositeValueConnector) connector)
           .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
+              .getI18nDescription(actionHandler, locale));
       ((AbstractCompositeValueConnector) connector)
           .setDisplayIconImageUrl(subtreeViewDescriptor
               .getNodeGroupDescriptor().getIconImageURL());
@@ -2776,10 +2772,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
+              .getI18nName(actionHandler, locale));
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
+              .getI18nDescription(actionHandler, locale));
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setDisplayIconImageUrl(subtreeViewDescriptor
               .getNodeGroupDescriptor().getIconImageURL());
@@ -2859,7 +2855,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+          columnPrefs[i] = new Object[] {
+              column[0], new Integer(column[1])
+          };
         }
       }
     }

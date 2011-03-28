@@ -100,18 +100,21 @@ public class SwingActionFactory extends
       this.actionHandler = actionHandler;
       this.view = view;
       if (action instanceof IDisplayableAction) {
-        putValue(Action.NAME, ((IDisplayableAction) action).getI18nName(
-            getTranslationProvider(), locale));
+        putValue(Action.NAME,
+            ((IDisplayableAction) action).getI18nName(actionHandler, locale));
         putValue(Action.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
-            .getI18nDescription(getTranslationProvider(), locale);
+            .getI18nDescription(actionHandler, locale);
         if (i18nDescription != null) {
           putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
         }
-        putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-            ((IDisplayableAction) action).getIconImageURL(), dimension));
+        putValue(
+            Action.SMALL_ICON,
+            getIconFactory().getIcon(
+                ((IDisplayableAction) action).getIconImageURL(), dimension));
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
-          putValue(Action.MNEMONIC_KEY,
+          putValue(
+              Action.MNEMONIC_KEY,
               new Integer(KeyStroke.getKeyStroke(
                   ((IDisplayableAction) action).getMnemonicAsString())
                   .getKeyCode()));
@@ -129,8 +132,8 @@ public class SwingActionFactory extends
           viewConnector = view.getConnector();
         }
         Map<String, Object> actionContext = createActionContext(actionHandler,
-            view, viewConnector, e.getActionCommand(), (JComponent) e
-                .getSource());
+            view, viewConnector, e.getActionCommand(),
+            (JComponent) e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }

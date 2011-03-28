@@ -101,19 +101,22 @@ public class UlcActionFactory extends
       this.actionHandler = actionHandler;
       this.view = view;
       if (action instanceof IDisplayableAction) {
-        putValue(IAction.NAME, ((IDisplayableAction) action).getI18nName(
-            getTranslationProvider(), locale));
+        putValue(IAction.NAME,
+            ((IDisplayableAction) action).getI18nName(actionHandler, locale));
         putValue(IAction.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
-            .getI18nDescription(getTranslationProvider(), locale);
+            .getI18nDescription(actionHandler, locale);
         if (i18nDescription != null) {
           putValue(IAction.SHORT_DESCRIPTION, i18nDescription
               + TOOLTIP_ELLIPSIS);
         }
-        putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
-            ((IDisplayableAction) action).getIconImageURL(), dimension));
+        putValue(
+            IAction.SMALL_ICON,
+            getIconFactory().getIcon(
+                ((IDisplayableAction) action).getIconImageURL(), dimension));
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
-          putValue(IAction.MNEMONIC_KEY,
+          putValue(
+              IAction.MNEMONIC_KEY,
               new Integer(KeyStroke.getKeyStroke(
                   ((IDisplayableAction) action).getMnemonicAsString())
                   .getKeyCode()));
@@ -131,8 +134,8 @@ public class UlcActionFactory extends
           viewConnector = view.getConnector();
         }
         Map<String, Object> actionContext = createActionContext(actionHandler,
-            view, viewConnector, e.getActionCommand(), (ULCComponent) e
-                .getSource());
+            view, viewConnector, e.getActionCommand(),
+            (ULCComponent) e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }

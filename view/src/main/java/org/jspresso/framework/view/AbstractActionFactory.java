@@ -53,7 +53,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IModelGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -71,8 +70,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 public abstract class AbstractActionFactory<E, F, G> implements
     IActionFactory<E, F> {
 
-  private IIconFactory<G>      iconFactory;
-  private ITranslationProvider translationProvider;
+  private IIconFactory<G> iconFactory;
 
   /**
    * {@inheritDoc}
@@ -140,16 +138,6 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   public void setIconFactory(IIconFactory<G> iconFactory) {
     this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   /**
@@ -337,15 +325,6 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   protected IIconFactory<G> getIconFactory() {
     return iconFactory;
-  }
-
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
   }
 
   private final class GatesListener implements PropertyChangeListener {
