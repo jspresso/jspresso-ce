@@ -93,7 +93,7 @@ public class CreateQueryComponentAction extends BackendAction {
         context).createModelConnector(
         ACTION_MODEL_NAME,
         getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
-            erqDescriptor.getReferencedDescriptor()));
+            erqDescriptor));
     context.put(QUERY_MODEL_CONNECTOR, modelConnector);
     modelConnector.setConnectorValue(queryComponent);
     String queryPropertyValue = getActionCommand(context);

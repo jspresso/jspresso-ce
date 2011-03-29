@@ -30,17 +30,17 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 
 /**
- * Helper class for property descriptors.
+ * Helper class for property view descriptors.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public final class PropertyDescriptorHelper {
+public final class PropertyViewDescriptorHelper {
 
   /**
    * Constructs a new <code>PropertyDescriptorHelper</code> instance.
    */
-  private PropertyDescriptorHelper() {
+  private PropertyViewDescriptorHelper() {
     // Helper class constructor
   }
 

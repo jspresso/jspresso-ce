@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor;
 
+import java.util.List;
+
 import org.jspresso.framework.security.ISecurable;
 
 /**
@@ -37,4 +39,18 @@ public interface IComponentDescriptorProvider<E> extends IModelDescriptor,
    * @return the referenced component descriptor.
    */
   IComponentDescriptor<E> getComponentDescriptor();
+
+  /**
+   * Get the default queryable properties of this component.
+   * 
+   * @return the default queryable properties of this component.
+   */
+  List<String> getQueryableProperties();
+
+  /**
+   * Get the default rendered properties of this component.
+   * 
+   * @return the default rendered properties of this component.
+   */
+  List<String> getRenderedProperties();
 }

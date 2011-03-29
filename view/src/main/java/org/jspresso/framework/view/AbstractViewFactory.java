@@ -120,7 +120,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
+import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
 
 /**
  * Abstract base class factory for views.
@@ -702,7 +702,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       identifier = identifier + "." + renderedProperty;
     }
     boolean sortable = true;
-    if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
+    if (PropertyViewDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
       // if (propertyName.indexOf('.') < 0) {
       // // not a nested property.
       sortable = rowDescriptor.getPropertyDescriptor(propertyName)

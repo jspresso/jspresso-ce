@@ -97,9 +97,9 @@ public abstract class AbstractComponentDescriptor<E> extends
   private Map<String, IPropertyDescriptor>                propertyDescriptorsMap;
 
   private List<String>                                    queryableProperties;
+  private List<String>                                    renderedProperties;
   private IComponentDescriptor<E>                         queryDescriptor;
   private Collection<IGate>                               readabilityGates;
-  private List<String>                                    renderedProperties;
 
   private Set<Class<?>>                                   serviceContracts;
   private Map<String, String>                             serviceDelegateBeanNames;
@@ -346,7 +346,7 @@ public abstract class AbstractComponentDescriptor<E> extends
         }
       }
     }
-    return explodeComponentReferences(queryableProperties);
+    return explodeComponentReferences(this, queryableProperties);
   }
 
   /**
@@ -387,7 +387,7 @@ public abstract class AbstractComponentDescriptor<E> extends
         }
       }
     }
-    return explodeComponentReferences(renderedProperties);
+    return explodeComponentReferences(this, renderedProperties);
   }
 
   /**
@@ -942,10 +942,12 @@ public abstract class AbstractComponentDescriptor<E> extends
     this.writabilityGates = writabilityGates;
   }
 
-  private List<String> explodeComponentReferences(List<String> propertyNames) {
+  static List<String> explodeComponentReferences(
+      IComponentDescriptor<?> componentDescriptor, List<String> propertyNames) {
     List<String> explodedProperties = new ArrayList<String>();
     for (String propertyName : propertyNames) {
-      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(propertyName);
+      IPropertyDescriptor propertyDescriptor = componentDescriptor
+          .getPropertyDescriptor(propertyName);
       if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
           .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
               .getReferencedDescriptor().getComponentContract()))) {
@@ -954,7 +956,8 @@ public abstract class AbstractComponentDescriptor<E> extends
             .getReferencedDescriptor().getRenderedProperties()) {
           nestedProperties.add(propertyName + "." + nestedRenderedProperty);
         }
-        explodedProperties.addAll(explodeComponentReferences(nestedProperties));
+        explodedProperties.addAll(explodeComponentReferences(
+            componentDescriptor, nestedProperties));
       } else {
         explodedProperties.add(propertyName);
       }

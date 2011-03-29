@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.List;
+
 import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
@@ -52,6 +54,24 @@ public class BasicObjectPropertyDescriptor extends
    * {@inheritDoc}
    */
   public IComponentDescriptor<Object> getComponentDescriptor() {
+    return null;
+  }
+
+  /**
+   * Returns null.
+   * <p>
+   * {@inheritDoc}
+   */
+  public List<String> getQueryableProperties() {
+    return null;
+  }
+
+  /**
+   * Returns null.
+   * <p>
+   * {@inheritDoc}
+   */
+  public List<String> getRenderedProperties() {
     return null;
   }
 

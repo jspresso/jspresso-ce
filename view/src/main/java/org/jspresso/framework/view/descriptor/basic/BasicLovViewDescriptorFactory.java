@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
@@ -56,8 +55,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());
-    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor
-        .getComponentDescriptor());
+    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor);
     if (resultViewDescriptor instanceof BasicTableViewDescriptor) {
       ((BasicTableViewDescriptor) resultViewDescriptor)
           .setSortingAction(sortingAction);
@@ -113,16 +111,17 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   /**
    * Creates a result collection view.
    * 
-   * @param entityDescriptor
-   *          the entity descriptor to create the result view for.
+   * @param entityRefDescriptor
+   *          the entity reference descriptor.
    * @return a result collection view.
    */
   protected BasicCollectionViewDescriptor createResultViewDescriptor(
-      IComponentDescriptor<IEntity> entityDescriptor) {
+      IComponentDescriptorProvider<IEntity> entityRefDescriptor) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicListDescriptor<IEntity> queriedEntitiesListDescriptor = new BasicListDescriptor<IEntity>();
-    queriedEntitiesListDescriptor.setElementDescriptor(entityDescriptor);
+    queriedEntitiesListDescriptor.setElementDescriptor(entityRefDescriptor
+        .getComponentDescriptor());
 
     BasicCollectionPropertyDescriptor<IEntity> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
     queriedEntitiesDescriptor
@@ -131,9 +130,11 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
+    resultViewDescriptor.setRenderedProperties(entityRefDescriptor
+        .getRenderedProperties());
     resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
 
-    resultViewDescriptor.setPermId("Lov." + entityDescriptor.getName());
+    resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
     return resultViewDescriptor;
   }
 

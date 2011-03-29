@@ -58,10 +58,8 @@ public class BasicQueryViewDescriptorFactory implements
    */
   public IViewDescriptor createQueryViewDescriptor(
       IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
-    IComponentDescriptor<IEntity> componentDescriptor = componentDescriptorProvider
-        .getComponentDescriptor();
     IComponentDescriptor<IQueryComponent> actualModelDescriptor = getQueryComponentDescriptorFactory()
-        .createQueryComponentDescriptor(componentDescriptor);
+        .createQueryComponentDescriptor(componentDescriptorProvider);
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     if (componentDescriptorProvider instanceof IReferencePropertyDescriptor) {
       Map<String, Object> initializationMapping = ((IReferencePropertyDescriptor<?>) componentDescriptorProvider)
@@ -81,7 +79,7 @@ public class BasicQueryViewDescriptorFactory implements
       }
     }
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
-    for (String queriableProperty : componentDescriptor
+    for (String queriableProperty : componentDescriptorProvider
         .getQueryableProperties()) {
       // To preserve col spans for query structures.
       propertyWidths.put(queriableProperty, new Integer(3));
@@ -122,9 +120,9 @@ public class BasicQueryViewDescriptorFactory implements
    * {@inheritDoc}
    */
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
-      IComponentDescriptor<IEntity> componentDescriptor) {
+      IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
     return getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
-        componentDescriptor);
+        componentDescriptorProvider);
   }
 
   /**

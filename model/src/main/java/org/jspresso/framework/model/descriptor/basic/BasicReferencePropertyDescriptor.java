@@ -18,10 +18,12 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.util.lang.StringUtils;
 
 /**
  * Default implementation of a reference descriptor.
@@ -40,6 +42,8 @@ public class BasicReferencePropertyDescriptor<E> extends
   private Boolean                 oneToOne;
   private Integer                 pageSize;
   private IComponentDescriptor<E> referencedDescriptor;
+  private List<String>            queryableProperties;
+  private List<String>            renderedProperties;
 
   /**
    * {@inheritDoc}
@@ -143,8 +147,9 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * This property allows to finely tune fetching strategy of the ORM on this relationship end. This is either a value of the
-   * <code>EFetchType</code> enum or its equivalent string representation :
+   * This property allows to finely tune fetching strategy of the ORM on this
+   * relationship end. This is either a value of the <code>EFetchType</code>
+   * enum or its equivalent string representation :
    * <ul>
    * <li><code>SELECT</code> for default 2nd select strategy (lazy)</li>
    * <li><code>JOIN</code> for a join select strategy (not lazy)</li>
@@ -152,7 +157,8 @@ public class BasicReferencePropertyDescriptor<E> extends
    * <p>
    * Default value is <code>EFetchType.JOIN</code>, i.e. 2nd select strategy.
    * 
-   * @param fetchType the fetchType to set.
+   * @param fetchType
+   *          the fetchType to set.
    */
   public void setFetchType(EFetchType fetchType) {
     this.fetchType = fetchType;
@@ -215,7 +221,6 @@ public class BasicReferencePropertyDescriptor<E> extends
     this.pageSize = pageSize;
   }
 
-  
   /**
    * Qualifies the type of element this property refers to. It may point to any
    * type of component descriptor, i.e. entity, interface or component
@@ -229,7 +234,6 @@ public class BasicReferencePropertyDescriptor<E> extends
     this.referencedDescriptor = referencedDescriptor;
   }
 
-  
   /**
    * return false.
    * <p>
@@ -242,5 +246,63 @@ public class BasicReferencePropertyDescriptor<E> extends
     // return true;
     // }
     return false;
+  }
+
+  /**
+   * This property allows to define which of the component properties are to be
+   * rendered by default when displaying a list of value on this component
+   * family. For instance, a table will render 1 column per rendered property of
+   * the component. Any type of property can be used except collection
+   * properties. Since this is a <code>List</code> queriable properties are
+   * rendered in the same order.
+   * <p>
+   * Whenever this property is <code>null</code> (default value) Jspresso
+   * determines the default set of properties to render based on the referenced
+   * component descriptor.
+   * 
+   * @param renderedProperties
+   *          the renderedProperties to set.
+   */
+  public void setRenderedProperties(List<String> renderedProperties) {
+    this.renderedProperties = StringUtils.ensureSpaceFree(renderedProperties);
+  }
+
+  /**
+   * This property allows to define which of the component properties are to be
+   * used in the list of value filter that are based on this component family.
+   * Since this is a <code>List</code> queriable properties are rendered in the
+   * same order.
+   * <p>
+   * Whenever this this property is <code>null</code> (default value), Jspresso
+   * chooses the default set of queryable properties based on the referenced
+   * component descriptor.
+   * 
+   * @param queryableProperties
+   *          the queryableProperties to set.
+   */
+  public void setQueryableProperties(List<String> queryableProperties) {
+    this.queryableProperties = StringUtils.ensureSpaceFree(queryableProperties);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getQueryableProperties() {
+    if (queryableProperties == null) {
+      return getReferencedDescriptor().getQueryableProperties();
+    }
+    return AbstractComponentDescriptor.explodeComponentReferences(
+        getReferencedDescriptor(), queryableProperties);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getRenderedProperties() {
+    if (renderedProperties == null) {
+      return getReferencedDescriptor().getRenderedProperties();
+    }
+    return AbstractComponentDescriptor.explodeComponentReferences(
+        getReferencedDescriptor(), renderedProperties);
   }
 }

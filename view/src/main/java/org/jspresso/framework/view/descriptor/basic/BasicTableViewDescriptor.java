@@ -103,7 +103,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
       // Collection properties are not supported as columns
       if (!(rowModelDescriptor.getPropertyDescriptor(propertyViewDescriptor
           .getName()) instanceof ICollectionPropertyDescriptor<?>)) {
-        actualPropertyViewDescriptors.addAll(PropertyDescriptorHelper
+        actualPropertyViewDescriptors.addAll(PropertyViewDescriptorHelper
             .explodeComponentReferences(propertyViewDescriptor,
                 rowModelDescriptor));
       }

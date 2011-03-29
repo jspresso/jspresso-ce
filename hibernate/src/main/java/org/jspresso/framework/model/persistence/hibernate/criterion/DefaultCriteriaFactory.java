@@ -38,7 +38,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
-import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
+import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
 
 /**
  * Default implementation of a criteria factory.
@@ -195,7 +195,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           .getComponentDescriptor();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
         if (componentDescriptor.getPropertyDescriptor(property.getKey()) != null) {
-          if (!PropertyDescriptorHelper.isComputed(componentDescriptor,
+          if (!PropertyViewDescriptorHelper.isComputed(componentDescriptor,
               property.getKey())) {
             String prefixedProperty;
             if (path != null) {

@@ -65,4 +65,5 @@ public interface IReferencePropertyDescriptor<E> extends
    * @return true if this reference property descriptor is a one-to-one end.
    */
   boolean isOneToOne();
+  
 }

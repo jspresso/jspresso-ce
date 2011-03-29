@@ -112,7 +112,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
-      List<IPropertyViewDescriptor> exploded = PropertyDescriptorHelper
+      List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
           .explodeComponentReferences(propertyViewDescriptor,
               (IComponentDescriptorProvider<?>) getModelDescriptor());
       if (propertyViewDescriptor.getWidth() != null

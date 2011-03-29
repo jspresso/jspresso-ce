@@ -32,9 +32,10 @@ public interface IQueryComponentDescriptorFactory {
   /**
    * Creates a query component descriptor.
    * 
-   * @param componentDescriptor the source component descriptor.
+   * @param componentDescriptorProvider
+   *          the source for the component descriptor.
    * @return the created query component descriptor.
    */
   IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
-      IComponentDescriptor<IEntity> componentDescriptor);
+      IComponentDescriptorProvider<IEntity> componentDescriptorProvider);
 }

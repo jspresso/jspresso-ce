@@ -110,25 +110,11 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   Collection<IPropertyDescriptor> getPropertyDescriptors();
 
   /**
-   * Get the default queryable properties of this component.
-   * 
-   * @return the default queryable properties of this component.
-   */
-  List<String> getQueryableProperties();
-
-  /**
    * Gets the query contract of this component descriptor.
    * 
    * @return the query contract of this component descriptor.
    */
   Class<?> getQueryComponentContract();
-
-  /**
-   * Get the default rendered properties of this component.
-   * 
-   * @return the default rendered properties of this component.
-   */
-  List<String> getRenderedProperties();
 
   /**
    * Retrieves list of service contract class names implemented by this

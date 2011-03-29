@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
@@ -49,13 +50,15 @@ public class BasicQueryComponentDescriptor extends
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
    * 
-   * @param componentDescriptor
-   *          the delegate entity descriptor.
+   * @param componentDescriptorProvider
+   *          the provider for delegate entity descriptor.
    */
   public BasicQueryComponentDescriptor(
-      IComponentDescriptor<IEntity> componentDescriptor) {
-    super(componentDescriptor.getComponentContract().getName());
-    this.componentDescriptor = componentDescriptor;
+      IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
+    super(componentDescriptorProvider.getComponentDescriptor()
+        .getComponentContract().getName());
+    this.componentDescriptor = componentDescriptorProvider
+        .getComponentDescriptor();
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
@@ -110,12 +113,12 @@ public class BasicQueryComponentDescriptor extends
     setDescription(componentDescriptor.getDescription());
     setIconImageURL(componentDescriptor.getIconImageURL());
     List<String> qProperties = new ArrayList<String>();
-    for (String queryableProperty : componentDescriptor
+    for (String queryableProperty : componentDescriptorProvider
         .getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
       if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
         for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getRenderedProperties()) {
+            .getRenderedProperties()) {
           qProperties.add(propertyDescriptor.getName() + "."
               + nestedRenderedProperty);
         }
