@@ -983,6 +983,7 @@ public abstract class AbstractBackendController extends AbstractController
     unitOfWork
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     uowEntity.onLoad();
+    uowEntity.onClone(entity);
     return uowEntity;
   }
 
@@ -1144,6 +1145,7 @@ public abstract class AbstractBackendController extends AbstractController
         cleanDirtyProperties(registeredEntity);
       }
       registeredEntity.onLoad();
+      registeredEntity.onClone(entity);
       return registeredEntity;
     } finally {
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);

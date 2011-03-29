@@ -46,6 +46,11 @@ public interface ILifecycleCapable {
   String ON_LOAD_METHOD_NAME    = "onLoad";
 
   /**
+   * <code>ON_CLONE_METHOD_NAME</code>.
+   */
+  String ON_CLONE_METHOD_NAME    = "onClone";
+
+  /**
    * <code>ON_PERSIST_METHOD_NAME</code>.
    */
   String ON_PERSIST_METHOD_NAME = "onPersist";
@@ -92,6 +97,19 @@ public interface ILifecycleCapable {
    * technical initializations like registering some listeners.
    */
   void onLoad();
+
+  /**
+   * Called whenever an entity is cloned to the unit of work. The component
+   * state is fully initialized when this method is called. The onClone callback
+   * may be used to perform some extra technical initializations like
+   * registering some listeners or initializing some non persistent properties.
+   * 
+   * @param <E>
+   *          tha actual component type.
+   * @param sourceComponent
+   *          the component that is the source of the cloning.
+   */
+  <E extends IComponent> void onClone(E sourceComponent);
 
   /**
    * Called just before an component is persisted (insert).

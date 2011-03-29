@@ -27,6 +27,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
@@ -66,11 +67,22 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     } else {
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
-    Collection<IEntity> entityClones = new ArrayList<IEntity>();
+    Collection<IComponent> entityClones = new ArrayList<IComponent>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      entityClones.add(entityCloneFactory.cloneEntity(
-          ((IEntity) collectionConnector.getChildConnector(selectedIndices[i])
-              .getConnectorValue()), getEntityFactory(context)));
+      Object component = collectionConnector.getChildConnector(
+          selectedIndices[i]).getConnectorValue();
+      if (component instanceof IComponent) {
+        IComponent clone;
+        if (component instanceof IEntity) {
+          clone = entityCloneFactory.cloneEntity((IEntity) component,
+              getEntityFactory(context));
+        } else {
+          clone = entityCloneFactory.cloneComponent((IComponent) component,
+              getEntityFactory(context));
+        }
+        clone.onClone((IComponent) component);
+        entityClones.add(clone);
+      }
     }
     projectedCollection.addAll(entityClones);
     module.setModuleObjects(projectedCollection);

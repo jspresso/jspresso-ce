@@ -87,12 +87,17 @@ public class PasteCollectionToMasterAction extends
       if (transferStructure.getTransferMode() == ETransferMode.COPY) {
         for (int i = 0; i < componentsToTransfer.size(); i++) {
           Object component = componentsToTransfer.get(i);
-          if (component instanceof IEntity) {
-            componentsToTransfer.set(i, entityCloneFactory.cloneEntity(
-                (IEntity) component, getEntityFactory(context)));
-          } else if (component instanceof IComponent) {
-            componentsToTransfer.set(i, entityCloneFactory.cloneComponent(
-                (IComponent) component, getEntityFactory(context)));
+          if (component instanceof IComponent) {
+            IComponent clone;
+            if (component instanceof IEntity) {
+              clone = entityCloneFactory.cloneEntity((IEntity) component,
+                  getEntityFactory(context));
+            } else {
+              clone = entityCloneFactory.cloneComponent((IComponent) component,
+                  getEntityFactory(context));
+            }
+            clone.onClone((IComponent) component);
+            componentsToTransfer.set(i, clone);
           }
         }
       }

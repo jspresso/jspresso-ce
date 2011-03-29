@@ -20,6 +20,7 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
@@ -54,12 +55,20 @@ public class CloneComponentCollectionAction extends
    */
   @Override
   protected Object cloneElement(Object element, Map<String, Object> context) {
-    if (element instanceof IEntity) {
-      return entityCloneFactory.cloneEntity((IEntity) element,
-          getEntityFactory(context));
+    if (element instanceof IComponent) {
+      IComponent clone;
+      if (element instanceof IEntity) {
+        clone = entityCloneFactory.cloneEntity((IEntity) element,
+            getEntityFactory(context));
+      } else {
+        clone = entityCloneFactory.cloneComponent((IComponent) element,
+            getEntityFactory(context));
+      }
+      clone.onClone((IComponent) element);
+      return clone;
     }
-    return entityCloneFactory.cloneComponent((IComponent) element,
-        getEntityFactory(context));
+    throw new ActionException(
+        "Only components are supported by default clone action.");
   }
 
 }
