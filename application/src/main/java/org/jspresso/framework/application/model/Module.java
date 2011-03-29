@@ -490,9 +490,12 @@ public class Module extends AbstractPropertyChangeCapable implements
     String oldValue = getI18nName();
     this.i18nName = i18nName;
     firePropertyChange(I18N_NAME, oldValue, getI18nName());
-    if (this.name == null) {
-      setName(i18nName);
-    }
+    // Having a static name prevents changing the i18nName mased on module
+    // object for bean modules.
+    // So never assign it programmatically.
+    // if (this.name == null) {
+    // setName(i18nName);
+    // }
   }
 
   /**
