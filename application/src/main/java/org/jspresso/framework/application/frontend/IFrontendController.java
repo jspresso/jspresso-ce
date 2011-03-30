@@ -182,7 +182,16 @@ public interface IFrontendController<E, F, G> extends IController,
   String getSelectedWorkspaceName();
 
   /**
-   * Gets the action which is executed when the controller is started.
+   * Gets the action that is executed just after the login process has ended but
+   * before the UI is actually constructed.
+   * 
+   * @return the action which is executed when the controller is started.
+   */
+  IAction getLoginAction();
+
+  /**
+   * Gets the action that is executed when the controller is started, after the
+   * UI initialization is fnihed based on the logged-in user.
    * 
    * @return the action which is executed when the controller is started.
    */
@@ -332,14 +341,16 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return the action used to exit the application.
    */
   IDisplayableAction getExitAction();
-  
+
   /**
-   * Updates the status information that is displayed in the main application frame.
+   * Updates the status information that is displayed in the main application
+   * frame.
    * 
-   * @param statusInfo the status info that is displayed in the application frame.
+   * @param statusInfo
+   *          the status info that is displayed in the application frame.
    */
   void setStatusInfo(String statusInfo);
-  
+
   /**
    * Retrieves the currently displayed module view.
    * 

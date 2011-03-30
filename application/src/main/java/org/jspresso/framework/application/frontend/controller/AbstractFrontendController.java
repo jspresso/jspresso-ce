@@ -132,6 +132,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Map<String, Module>                   selectedModules;
 
   private String                                selectedWorkspaceName;
+  private IAction                               loginAction;
   private IAction                               startupAction;
 
   private boolean                               tracksWorkspaceNavigator;
@@ -484,6 +485,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  public IAction getLoginAction() {
+    return loginAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IAction getStartupAction() {
     return startupAction;
   }
@@ -715,10 +723,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Configures an action to be executed just after the user has succesfully
+   * logged-in but before any UI initialization has begun. An example of such an
+   * action would be constructing a map of dynamic user right based on some
+   * arbitrary datastore so that the UI construction can actually depend on
+   * these extracted values.
+   * 
+   * @param loginAction
+   *          the loginAction to set.
+   */
+  public void setLoginAction(IAction loginAction) {
+    this.loginAction = loginAction;
+  }
+
+  /**
    * Configures an action to be executed on an empty UI context when the
-   * application starts. An example of such an action would be a default
-   * workspace/module opening and selection, a &quot;tip of the day&quot; like
-   * action, ...
+   * application starts. The action executes once the user has logged-in and the
+   * main UI has been constructed based on its access rights.An example of such
+   * an action would be a default workspace/module opening and selection, a
+   * &quot;tip of the day&quot; like action, ...
    * 
    * @param startupAction
    *          the startupAction to set.
@@ -1200,7 +1223,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } else {
       loggedIn(getAnonymousSubject());
     }
-    return true;
+    return execute(getLoginAction(), getInitialActionContext());
   }
 
   /**
