@@ -196,9 +196,12 @@ public abstract class AbstractActionFactory<E, F, G> implements
                                   && newSelection.length > 0) {
                                 selectedModels = new HashSet<Object>();
                                 for (int i = 0; i < newSelection.length; i++) {
-                                  selectedModels.add(collConnector
-                                      .getChildConnector(newSelection[i])
-                                      .getConnectorValue());
+                                  IValueConnector childConnector = collConnector
+                                      .getChildConnector(newSelection[i]);
+                                  if (childConnector != null) {
+                                    selectedModels.add(childConnector
+                                        .getConnectorValue());
+                                  }
                                 }
                               }
                               ((IModelGate) clonedGate)
@@ -220,9 +223,12 @@ public abstract class AbstractActionFactory<E, F, G> implements
                                   && newSelection.length > 0) {
                                 selectedModels = new HashSet<Object>();
                                 for (int i = 0; i < newSelection.length; i++) {
-                                  selectedModels.add(collConnector
-                                      .getChildConnector(newSelection[i])
-                                      .getConnectorValue());
+                                  IValueConnector childConnector = collConnector
+                                      .getChildConnector(newSelection[i]);
+                                  if (childConnector != null) {
+                                    selectedModels.add(childConnector
+                                        .getConnectorValue());
+                                  }
                                 }
                               }
                               ((IModelGate) clonedGate)
