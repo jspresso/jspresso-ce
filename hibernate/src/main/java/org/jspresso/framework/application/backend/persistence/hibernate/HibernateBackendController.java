@@ -694,7 +694,14 @@ public class HibernateBackendController extends AbstractBackendController {
 
           public Object doInTransaction(
               @SuppressWarnings("unused") TransactionStatus status) {
-            return getHibernateTemplate().findByCriteria(criteria);
+            int oldFlushMode = getHibernateTemplate().getFlushMode();
+            try {
+              getHibernateTemplate()
+                  .setFlushMode(HibernateAccessor.FLUSH_NEVER);
+              return getHibernateTemplate().findByCriteria(criteria);
+            } finally {
+              getHibernateTemplate().setFlushMode(oldFlushMode);
+            }
           }
         });
     return res;
