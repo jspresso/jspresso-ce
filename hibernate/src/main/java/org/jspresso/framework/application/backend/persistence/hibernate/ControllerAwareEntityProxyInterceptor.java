@@ -29,11 +29,11 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
-import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
+import org.springframework.orm.hibernate3.HibernateAccessor;
 
 /**
  * Hibernate session interceptor aware of a backend controller to deal with
@@ -45,9 +45,9 @@ import org.jspresso.framework.security.UserPrincipal;
 public class ControllerAwareEntityProxyInterceptor extends
     EntityProxyInterceptor {
 
-  private static final long  serialVersionUID = -6834992000307471098L;
+  private static final long          serialVersionUID = -6834992000307471098L;
 
-  private IBackendController backendController;
+  private HibernateBackendController backendController;
 
   // Not usefull anymore since the new transaction template takes care of that
   // in every situation including JTA, when this interceptor is not called.
@@ -241,7 +241,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * @param backendController
    *          the backendController to set.
    */
-  public void setBackendController(IBackendController backendController) {
+  public void setBackendController(HibernateBackendController backendController) {
     this.backendController = backendController;
   }
 
@@ -261,5 +261,21 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   protected UserPrincipal getPrincipal() {
     return backendController.getApplicationSession().getPrincipal();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onSave(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    int oldFlushMode = backendController.getHibernateTemplate().getFlushMode();
+    try {
+      backendController.getHibernateTemplate().setFlushMode(
+          HibernateAccessor.FLUSH_NEVER);
+      return super.onSave(entity, id, state, propertyNames, types);
+    } finally {
+      backendController.getHibernateTemplate().setFlushMode(oldFlushMode);
+    }
   }
 }
