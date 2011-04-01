@@ -1,4 +1,4 @@
-3.5.1
+4.0.0
 =====
 - The new hyperlink management requires some extra library (dj-swingsuite + dependencies).
 They are included in the new archetype but you have to update your existing applications
@@ -20,7 +20,23 @@ signature.
 given a Parent-Child 1-N relationship named children, the previously generated column was
 CHILDREN_SEQ and it is now PARENT_CHILDREN_SEQ. Schemas must be updated accordingly.
 
+- Controllers now implement themselves the ITranslationProvider interface. Thus, the
+getTranslationProvider() method has been deprecated. the migrationn is simply to remove 
+these method calls and use the controller as translation providers when needed.
 
+- A new onClone(IEntity) lifecycle method has been added to the entity lifecycle.
+The EmptyLifecycleInterceptor implements it, but if you directly implement
+ILifecycleInterceptor interface, you will have to add the new method.
+
+- For those of you who have derived the BasicLovViewDescriptorFactory to override the
+createResultViewDescriptor method in order to customize the table result view of the list of value dialog,
+the signature has changed from :
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptor<IEntity>)
+  to
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IEntity>)
+  
+  
+  
 3.5.0
 =====
 - nesting view descriptors (BasicNestingViewDescriptor) have been removed.
