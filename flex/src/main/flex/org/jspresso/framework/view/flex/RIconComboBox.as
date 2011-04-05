@@ -25,6 +25,7 @@ package org.jspresso.framework.view.flex {
 		private var _labels:Array;
 		private var _icons:Array;
     private var _rIcon:RIcon;
+    private var _showIcon:Boolean;
     
     public function RIconComboBox() {
       iconImage = new Image();
@@ -39,18 +40,24 @@ package org.jspresso.framework.view.flex {
       _icons = value;
     }
 
+    public function set showIcon(value:Boolean):void {
+      _showIcon = value;
+    }
+    
     override protected function updateDisplayList(unscaledWidth:Number,
                                                   unscaledHeight:Number):void {
       super.updateDisplayList(unscaledWidth, unscaledHeight);
-      iconImage.width = textInput.height - getStyle("cornerRadius");
-      iconImage.height = iconImage.width;
-      iconImage.x = getStyle("cornerRadius");
-      iconImage.y = (height - iconImage.height)/2;
-      textInput.x = iconImage.width + getStyle("cornerRadius");
+      if(_showIcon) {
+        iconImage.width = textInput.height - getStyle("cornerRadius");
+        iconImage.height = iconImage.width;
+        iconImage.x = getStyle("cornerRadius");
+        iconImage.y = (height - iconImage.height)/2;
+        textInput.x = iconImage.width + getStyle("cornerRadius");
+      }
     }
     
     public function set rIcon(_icon:RIcon):void {
-      if(_icon != _rIcon) {
+      if(_showIcon && _icon != _rIcon) {
         if(_icon != null) {
           iconImage.source = _icon.imageUrlSpec;
         } else {
@@ -61,7 +68,11 @@ package org.jspresso.framework.view.flex {
     }
     
     override public function set measuredWidth(value:Number):void {
-      super.measuredWidth = value + (iconImage.width + getStyle("cornerRadius"));
+      if(_showIcon) {
+        super.measuredWidth = value + (iconImage.width + getStyle("cornerRadius"));
+      } else {
+        super.measuredWidth = value;
+      }
     }
     
     override public function set selectedItem(sItem:Object):void {
@@ -83,9 +94,11 @@ package org.jspresso.framework.view.flex {
     }
     
     private function updateTextAndIcon(index:int):void {
-      if(index != -1 && _icons != null) {
-        rIcon = _icons[index];
-        if(text != _labels[index]) {
+      if(index != -1) {
+        if(_icons) {
+          rIcon = _icons[index];
+        }
+        if(_labels && text != _labels[index]) {
           text = _labels[index];
         }
       } else {

@@ -772,10 +772,18 @@ package org.jspresso.framework.view.flex {
         comboBox.dataProvider = remoteComboBox.values;
         comboBox.labels = remoteComboBox.translations;
         comboBox.icons = remoteComboBox.icons;
+        var hasIcon:Boolean = false;
+        for each(var icon:RIcon in remoteComboBox.icons) {
+          if(icon) {
+            hasIcon = true;
+            break;
+          }
+        }
+        comboBox.showIcon = hasIcon;
         bindComboBox(comboBox, remoteComboBox);
   
         var itemRenderer:ClassFactory = new ClassFactory(RIconListItemRenderer);
-        itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
+        itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate, showIcon:hasIcon};
         comboBox.itemRenderer = itemRenderer;
         
         var width:int = 0;
@@ -785,7 +793,11 @@ package org.jspresso.framework.view.flex {
           }
         }
         sizeMaxComponentWidth(comboBox, remoteComboBox, width);
-        comboBox.maxWidth += 45;
+        if(hasIcon) {
+          comboBox.maxWidth += 45;
+        } else {
+          comboBox.maxWidth += 25;
+        }
         return comboBox;
       }
     }

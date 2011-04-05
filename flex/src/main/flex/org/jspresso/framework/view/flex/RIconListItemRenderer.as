@@ -29,6 +29,7 @@ package org.jspresso.framework.view.flex {
 		private var _icons:Array;
 		private var _iconTemplate:Class;
 		private var _index:int;
+    private var _showIcon:Boolean;
 
 		public function RIconListItemRenderer() {
 		  _image = new Image();
@@ -47,28 +48,40 @@ package org.jspresso.framework.view.flex {
       _iconTemplate = value;
     }
 
+    public function set showIcon(value:Boolean):void {
+      _showIcon = value;
+    }
+
     override public function set data(value:Object):void {
    	  //cannot rely on listData.rowIndex.
   	  _index = ((owner as List).dataProvider as ArrayCollection).getItemIndex(value);
       //trace(">>> List index <<< " + _index);
       listData.label = _labels[_index];
-      if(!(listData as ListData).icon) {
-        (listData as ListData).icon = _iconTemplate;
+      if(_showIcon) {
+        if(!(listData as ListData).icon) {
+          (listData as ListData).icon = _iconTemplate;
+        }
+  			var _selectedIcon:RIcon = _icons[_index] as RIcon;
+  			if(_selectedIcon != null) {
+  			  _image.source = _selectedIcon.imageUrlSpec;
+  			}
       }
-			var _selectedIcon:RIcon = _icons[_index] as RIcon;
-			if(_selectedIcon != null) {
-			  _image.source = _selectedIcon.imageUrlSpec;
-			}
       super.data = value;
     }
     
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			_image.x = icon.x;
-			_image.y = icon.y;
-			_image.width = icon.width;
-			_image.height = icon.height;
-			icon.visible = false;
+      if(_showIcon) {
+  			_image.x = icon.x;
+  			_image.y = icon.y;
+  			_image.width = icon.width;
+  			_image.height = icon.height;
+      } else {
+        _image.visible = false;
+      }
+      if(icon) {
+        icon.visible = false;
+      }
 		}
   }
 }
