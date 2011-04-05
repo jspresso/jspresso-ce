@@ -320,17 +320,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *
   <#if !propertyDescriptor.computed>
    * @hibernate.${hibernateCollectionType}
+   *           cascade = "persist,merge,save-update"
     <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
-    </#if>
-    <#if manyToMany && inverse>
-   *           cascade = "none"
-    <#else>
-      <#if propertyDescriptor.composition>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate,delete"
-      <#else>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
-      </#if>
     </#if>
     <#if manyToMany>
       <#if inverse>
@@ -508,7 +500,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if isReferenceEntity>
       <#if reverseOneToOne>
    * @hibernate.one-to-one
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "persist,merge,save-update"
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
@@ -518,24 +510,17 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         </#if>
       <#else>
    * @hibernate.many-to-one
+   *           cascade = "persist,merge,save-update"
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
         </#if>
         <#if oneToOne>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
    *           unique = "true"
         <#elseif bidirectional>
-   *           cascade = "persist,merge,save-update"
           <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
    *           not-null = "true"
-          </#if>
-        <#else>
-          <#if composition>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
-          <#else>
-   *           cascade = "none"
           </#if>
         </#if>
         <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
