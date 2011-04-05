@@ -65,6 +65,8 @@ public class CreateQueryComponentAction extends BackendAction {
 
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
 
+  private IQueryComponentRefiner           queryComponentRefiner;
+
   /**
    * Creates a query component using the model descriptor passed in the context.
    * The action result contains the model connector holding the created query
@@ -217,6 +219,9 @@ public class CreateQueryComponentAction extends BackendAction {
         }
       }
     }
+    if (queryComponentRefiner != null) {
+      queryComponentRefiner.refineQueryComponent(queryComponent, context);
+    }
   }
 
   /**
@@ -240,5 +245,16 @@ public class CreateQueryComponentAction extends BackendAction {
   public void setQueryComponentDescriptorFactory(
       IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
     this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
+  }
+
+  /**
+   * Sets the queryComponentRefiner.
+   * 
+   * @param queryComponentRefiner
+   *          the queryComponentRefiner to set.
+   */
+  public void setQueryComponentRefiner(
+      IQueryComponentRefiner queryComponentRefiner) {
+    this.queryComponentRefiner = queryComponentRefiner;
   }
 }

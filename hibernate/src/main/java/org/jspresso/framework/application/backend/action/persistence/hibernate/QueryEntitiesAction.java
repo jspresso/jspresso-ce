@@ -28,6 +28,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
