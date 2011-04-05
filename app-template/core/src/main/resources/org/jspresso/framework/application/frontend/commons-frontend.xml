@@ -99,7 +99,7 @@
     <property name="nextAction" ref="viewConnectorSetAction" />
   </bean>
 
-  <bean id="lovAction" class="org.jspresso.framework.application.frontend.action.lov.LovAction">
+  <bean id="lovActionBase" class="org.jspresso.framework.application.frontend.action.lov.LovAction">
     <property name="lovViewDescriptorFactory" ref="lovViewDescriptorFactory" />
     <property name="createQueryComponentAction" ref="createQueryComponentAction" />
     <property name="okAction" ref="lovOkFrontAction" />
@@ -107,6 +107,8 @@
     <property name="findAction" ref="lovFindFrontAction" />
     <property name="nextAction" ref="modalDialogAction" />
   </bean>
+
+  <bean id="lovAction" parent="lovActionBase" />
 
   <bean id="lovFindBackAction" class="org.jspresso.framework.application.backend.action.FindAction">
     <property name="queryAction">
@@ -224,7 +226,8 @@
     </property>
   </bean>
 
-  <bean id="abstractReportAction" abstract="true" class="org.jspresso.framework.application.printing.frontend.action.AbstractReportAction">
+  <bean id="abstractReportAction" abstract="true"
+    class="org.jspresso.framework.application.printing.frontend.action.AbstractReportAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/report-48x48.png" />
     <property name="name" value="report.name" />
     <property name="description" value="report.description" />
@@ -274,8 +277,7 @@
     </property>
   </bean>
 
-  <bean id="changePasswordBackAction"
-    class="org.jspresso.framework.application.backend.action.BackendAction" />
+  <bean id="changePasswordBackAction" class="org.jspresso.framework.application.backend.action.BackendAction" />
 
   <bean id="modalDialogAction" class="org.jspresso.framework.application.frontend.action.ModalDialogAction" />
 

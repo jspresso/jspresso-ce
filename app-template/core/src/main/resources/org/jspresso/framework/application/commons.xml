@@ -98,9 +98,14 @@
   </bean>
   <!-- Root action beans. -->
 
-  <bean id="createQueryComponentAction" class="org.jspresso.framework.application.backend.action.CreateQueryComponentAction">
+  <bean id="applicationQueryComponentRefiner" class="org.jspresso.framework.application.backend.action.MockQueryComponentRefiner" />
+
+  <bean id="createQueryComponentActionBase" class="org.jspresso.framework.application.backend.action.CreateQueryComponentAction">
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
+    <property name="queryComponentRefiner" ref="applicationQueryComponentRefiner" />
   </bean>
+
+  <bean id="createQueryComponentAction" parent="createQueryComponentActionBase" />
 
   <bean id="initModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction" />
 
