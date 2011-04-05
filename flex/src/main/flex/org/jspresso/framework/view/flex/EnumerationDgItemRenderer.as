@@ -26,6 +26,7 @@ package org.jspresso.framework.view.flex {
 		private var _labels:Array;
 		private var _icons:Array;
 		private var _iconTemplate:Class;
+    private var _showIcon:Boolean;
 
 		public function EnumerationDgItemRenderer() {
 		  _image = new Image();
@@ -48,16 +49,24 @@ package org.jspresso.framework.view.flex {
       _iconTemplate = value;
     }
 
+    public function set showIcon(value:Boolean):void {
+      _showIcon = value;
+    }
+
   	override public function set listData(value:BaseListData):void {
   	  value.label = _labels[value.rowIndex];
   	  super.listData = value;
-  	  listDataIcon = _iconTemplate;
-  	  computeIcon(value.rowIndex);
+      if(_showIcon) {
+    	  listDataIcon = _iconTemplate;
+    	  computeIcon(value.rowIndex);
+      }
   	}
 
   	override protected function computeLabel(cellValue:Object):String {
   	  var valIndex:int = _values.indexOf(cellValue);
-  	  computeIcon(valIndex);
+      if(_showIcon) {
+  	    computeIcon(valIndex);
+      }
 	    if(cellValue != null) {
   	    return _labels[valIndex];
   	  } else {
@@ -66,21 +75,29 @@ package org.jspresso.framework.view.flex {
   	}
   	
   	private function computeIcon(iconIndex:int):void {
-			var _selectedIcon:RIcon = _icons[iconIndex] as RIcon;
-			if(_selectedIcon != null) {
-			  _image.source = _selectedIcon.imageUrlSpec;
-			} else {
-			  _image.source = null;
-			}
+      if(_showIcon) {
+  			var _selectedIcon:RIcon = _icons[iconIndex] as RIcon;
+  			if(_selectedIcon != null) {
+  			  _image.source = _selectedIcon.imageUrlSpec;
+  			} else {
+  			  _image.source = null;
+  			}
+      }
   	}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			_image.x = icon.x;
-			_image.y = icon.y;
-			_image.width = icon.width;
-			_image.height = icon.height;
-			icon.visible = false;
+      if(_showIcon) {
+  			_image.x = icon.x;
+  			_image.y = icon.y;
+  			_image.width = icon.width;
+  			_image.height = icon.height;
+      } else {
+        _image.visible = false;
+      }
+      if(icon) {
+			  icon.visible = false;
+      }
 		}
 
   	override protected function refresh(cellLabel:Object):void {

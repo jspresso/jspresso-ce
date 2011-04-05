@@ -26,8 +26,8 @@ package org.jspresso.framework.view.flex {
     private var _label:Label;
     private var _iconImage:Image;
     private var _labels:Object;
-		private var _icons:Object;
-    
+    private var _icons:Object;
+    private var _showIcon:Boolean;
     private var _value:String;
     
     public function RIconLabel() {
@@ -42,6 +42,15 @@ package org.jspresso.framework.view.flex {
     public function set labels(value:Object):void {
       _labels = value;
     }
+    
+    public function set showIcon(value:Boolean):void {
+      _showIcon = value;
+      if(_showIcon) {
+        setStyle("horizontalGap",2);
+      } else {
+        setStyle("horizontalGap",0);
+      }
+    }
 
     public function set icons(value:Object):void {
       _icons = value;
@@ -54,7 +63,7 @@ package org.jspresso.framework.view.flex {
     public function set value(value:String):void {
       _value = value;
       if(value) {
-        if(_icons) {
+        if(_showIcon && _icons) {
           var icon:RIcon = _icons[value] as RIcon;
           if(icon) {
             if(icon.dimension) {
@@ -65,6 +74,8 @@ package org.jspresso.framework.view.flex {
           } else {
             _iconImage.source = null;
           }
+        } else {
+          _iconImage.visible = false;
         }
         if(_labels) {
           var text:String = _labels[value] as String;

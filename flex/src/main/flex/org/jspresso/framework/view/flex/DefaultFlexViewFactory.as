@@ -752,6 +752,13 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createComboBox(remoteComboBox:RComboBox):UIComponent {
+      var hasIcon:Boolean = false;
+      for each(var icon:RIcon in remoteComboBox.icons) {
+        if(icon) {
+          hasIcon = true;
+          break;
+        }
+      }
       if(remoteComboBox.readOnly) {
         var label:RIconLabel = new RIconLabel();
         var labels:Object = new Object();
@@ -761,9 +768,9 @@ package org.jspresso.framework.view.flex {
           labels[remoteComboBox.values[i] as String] = remoteComboBox.translations[i];
           icons[remoteComboBox.values[i] as String] = remoteComboBox.icons[i];
         }
-        
         label.labels = labels;
         label.icons = icons;
+        label.showIcon = hasIcon;
         
         BindingUtils.bindProperty(label, "value", remoteComboBox.state, "value", true);
         return label;
@@ -772,13 +779,6 @@ package org.jspresso.framework.view.flex {
         comboBox.dataProvider = remoteComboBox.values;
         comboBox.labels = remoteComboBox.translations;
         comboBox.icons = remoteComboBox.icons;
-        var hasIcon:Boolean = false;
-        for each(var icon:RIcon in remoteComboBox.icons) {
-          if(icon) {
-            hasIcon = true;
-            break;
-          }
-        }
         comboBox.showIcon = hasIcon;
         bindComboBox(comboBox, remoteComboBox);
   
@@ -1682,6 +1682,7 @@ package org.jspresso.framework.view.flex {
                                      labels:(rColumn as RComboBox).translations,
                                      icons :(rColumn as RComboBox).icons,
                                      iconTemplate:_iconTemplate,
+                                     showIcon:(editorComponent as RIconComboBox).showIcon,
                                      index:i+1};
         } else if( rColumn is RCheckBox
                || (rColumn is RActionField && !(rColumn as RActionField).showTextField)) {

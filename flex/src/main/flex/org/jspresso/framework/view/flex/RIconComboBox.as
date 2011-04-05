@@ -44,6 +44,10 @@ package org.jspresso.framework.view.flex {
       _showIcon = value;
     }
     
+    public function get showIcon():Boolean {
+      return _showIcon;
+    }
+    
     override protected function updateDisplayList(unscaledWidth:Number,
                                                   unscaledHeight:Number):void {
       super.updateDisplayList(unscaledWidth, unscaledHeight);
