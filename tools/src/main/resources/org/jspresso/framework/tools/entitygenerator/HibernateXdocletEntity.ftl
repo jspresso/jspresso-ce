@@ -46,7 +46,7 @@ package ${package};
   <#if isEntity>
  * @hibernate.mapping
  *           default-access = "org.jspresso.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
-<#-- *           package = "${package}"-->
+ *           default-cascade="persist,merge,save-update"
     <#if superEntity?exists>
  * @hibernate.joined-subclass
     <#else>
@@ -320,7 +320,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *
   <#if !propertyDescriptor.computed>
    * @hibernate.${hibernateCollectionType}
-   *           cascade = "persist,merge,save-update"
     <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
     </#if>
@@ -500,7 +499,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if isReferenceEntity>
       <#if reverseOneToOne>
    * @hibernate.one-to-one
-   *           cascade = "persist,merge,save-update"
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
@@ -510,7 +508,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         </#if>
       <#else>
    * @hibernate.many-to-one
-   *           cascade = "persist,merge,save-update"
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
         </#if>
