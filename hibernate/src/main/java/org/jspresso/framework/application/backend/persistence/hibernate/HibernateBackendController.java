@@ -62,7 +62,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class HibernateBackendController extends AbstractBackendController {
 
   private HibernateTemplate hibernateTemplate;
-  private Set<IEntity>      processedEntities;
+  private Set<IEntity>      updatedEntities;
+  private Set<IEntity>      deletedEntities;
   private boolean           traversedPendingOperations = false;
 
   /**
@@ -169,7 +170,8 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void beginUnitOfWork() {
-    processedEntities = new HashSet<IEntity>();
+    updatedEntities = new HashSet<IEntity>();
+    deletedEntities = new HashSet<IEntity>();
     super.beginUnitOfWork();
   }
 
@@ -178,7 +180,8 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void commitUnitOfWork() {
-    processedEntities = null;
+    updatedEntities = null;
+    deletedEntities = null;
     if (traversedPendingOperations) {
       // We must get rid of the pending operations only in the case of a
       // successful commit.
@@ -303,6 +306,11 @@ public class HibernateBackendController extends AbstractBackendController {
     return Hibernate.isInitialized(objectOrProxy);
   }
 
+  private boolean hasBeenProcessed(IEntity entity) {
+    return updatedEntities != null && updatedEntities.contains(entity)
+        || deletedEntities != null && deletedEntities.contains(entity);
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -336,8 +344,8 @@ public class HibernateBackendController extends AbstractBackendController {
               if (sessionEntity == null) {
                 sessionEntity = entityToUpdate;
               }
-              if (!processedEntities.contains(sessionEntity)) {
-                processedEntities.add(sessionEntity);
+              if (!hasBeenProcessed(sessionEntity)) {
+                updatedEntities.add(sessionEntity);
                 session.saveOrUpdate(sessionEntity);
                 flushIsNecessary = true;
               }
@@ -355,8 +363,8 @@ public class HibernateBackendController extends AbstractBackendController {
               if (sessionEntity == null) {
                 sessionEntity = entityToDelete;
               }
-              if (!processedEntities.contains(sessionEntity)) {
-                processedEntities.add(sessionEntity);
+              if (!hasBeenProcessed(sessionEntity)) {
+                deletedEntities.add(sessionEntity);
                 session.delete(sessionEntity);
                 flushIsNecessary = true;
               }
@@ -377,8 +385,8 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void registerForDeletion(IEntity entity) {
     if (isUnitOfWorkActive()) {
-      if (!processedEntities.contains(entity)) {
-        processedEntities.add(entity);
+      if (!hasBeenProcessed(entity)) {
+        deletedEntities.add(entity);
         getHibernateTemplate().delete(entity);
       }
     } else {
@@ -390,10 +398,19 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
+  public boolean isEntityRegisteredForDeletion(IEntity entity) {
+    return deletedEntities != null && deletedEntities.contains(entity)
+        || super.isEntityRegisteredForDeletion(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void registerForUpdate(IEntity entity) {
     if (isUnitOfWorkActive()) {
-      if (!processedEntities.contains(entity)) {
-        processedEntities.add(entity);
+      if (!hasBeenProcessed(entity)) {
+        updatedEntities.add(entity);
         getHibernateTemplate().saveOrUpdate(entity);
       }
     } else {
@@ -405,8 +422,18 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
+  public boolean isEntityRegisteredForUpdate(IEntity entity) {
+    return updatedEntities != null && updatedEntities.contains(entity)
+        || super.isEntityRegisteredForUpdate(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void rollbackUnitOfWork() {
-    processedEntities = null;
+    updatedEntities = null;
+    deletedEntities = null;
     try {
       super.rollbackUnitOfWork();
     } finally {
