@@ -1232,12 +1232,24 @@ public abstract class AbstractBackendController extends AbstractController
   public void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    cleanRelationshipsOnDeletion(component, dryRun, new HashSet<IComponent>());
+    Set<IComponent> clearedEntities = new HashSet<IComponent>();
+    Map<IComponent, RuntimeException> integrityViolations = new HashMap<IComponent, RuntimeException>();
+    cleanRelationshipsOnDeletion(component, dryRun, clearedEntities,
+        integrityViolations);
+    // Throw exceptions for entities that have not been cleared during the
+    // process.
+    for (Map.Entry<IComponent, RuntimeException> integrityViolation : integrityViolations
+        .entrySet()) {
+      if (!(clearedEntities.contains(integrityViolation.getKey()))) {
+        throw integrityViolation.getValue();
+      }
+    }
   }
 
   @SuppressWarnings("unchecked")
   private void cleanRelationshipsOnDeletion(IComponent componentOrProxy,
-      boolean dryRun, Set<IComponent> clearedEntities)
+      boolean dryRun, Set<IComponent> clearedEntities,
+      Map<IComponent, RuntimeException> integrityViolations)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
     if (componentOrProxy == null) {
@@ -1274,47 +1286,59 @@ public abstract class AbstractBackendController extends AbstractController
               if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
                   .isComposition()) {
                 cleanRelationshipsOnDeletion((IEntity) propertyValue, dryRun,
-                    clearedEntities);
+                    clearedEntities, integrityViolations);
               } else {
-                if (dryRun) {
-                  // manually trigger reverse relations preprocessors.
-                  if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-                      .getReverseRelationEnd() != null) {
-                    IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                        .getReverseRelationEnd();
-                    if (!clearedEntities.contains(propertyValue)) {
+                if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                    .getReverseRelationEnd() != null) {
+                  IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                      .getReverseRelationEnd();
+                  if (!clearedEntities.contains(propertyValue)) {
+                    try {
                       if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-                        reversePropertyDescriptor.preprocessSetter(
-                            propertyValue, null);
+                        if (dryRun) {
+                          // manually trigger reverse relations preprocessors.
+                          reversePropertyDescriptor.preprocessSetter(
+                              propertyValue, null);
+                        } else {
+                          getAccessorFactory().createPropertyAccessor(
+                              reversePropertyDescriptor.getName(),
+                              ((IComponent) propertyValue)
+                                  .getComponentContract()).setValue(
+                              propertyValue, null);
+                          // Technically reset to original value to avoid
+                          // Hibernate not-null checks
+                          component.straightSetProperty(propertyName,
+                              propertyValue);
+                        }
                       } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                        Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
-                            .createPropertyAccessor(
-                                reversePropertyDescriptor.getName(),
-                                ((IComponent) propertyValue)
-                                    .getComponentContract()).getValue(
-                                propertyValue);
-                        ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                            .preprocessRemover(propertyValue,
-                                reverseCollection, component);
+                        if (dryRun) {
+                          // manually trigger reverse relations preprocessors.
+                          Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                              .createPropertyAccessor(
+                                  reversePropertyDescriptor.getName(),
+                                  ((IComponent) propertyValue)
+                                      .getComponentContract()).getValue(
+                                  propertyValue);
+                          ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                              .preprocessRemover(propertyValue,
+                                  reverseCollection, component);
+                        } else {
+                          getAccessorFactory()
+                              .createCollectionPropertyAccessor(
+                                  reversePropertyDescriptor.getName(),
+                                  ((IComponent) propertyValue)
+                                      .getComponentContract(),
+                                  component.getComponentContract())
+                              .removeFromValue(propertyValue, component);
+                          // but technically reset to original value to avoid
+                          // Hibernate not-null checks
+                          component.straightSetProperty(propertyName,
+                              propertyValue);
+                        }
                       }
+                    } catch (RuntimeException ex) {
+                      integrityViolations.put((IComponent) propertyValue, ex);
                     }
-                  }
-                } else {
-                  // test to see if we already traversed the reverse
-                  // relationship that is a composition.
-                  if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-                      .getReverseRelationEnd() == null
-                      || !(((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-                          .getReverseRelationEnd().isComposition() && clearedEntities
-                          .contains(propertyValue))) {
-                    // set to null to clean reverse relation ends
-                    getAccessorFactory().createPropertyAccessor(propertyName,
-                        component.getComponentContract()).setValue(component,
-                        null);
-                    // but technically reset to original value to avoid
-                    // Hibernate
-                    // not-null checks
-                    component.straightSetProperty(propertyName, propertyValue);
                   }
                 }
               }
@@ -1324,40 +1348,54 @@ public abstract class AbstractBackendController extends AbstractController
                 for (IComponent composedEntity : new ArrayList<IComponent>(
                     (Collection<IComponent>) propertyValue)) {
                   cleanRelationshipsOnDeletion(composedEntity, dryRun,
-                      clearedEntities);
+                      clearedEntities, integrityViolations);
                 }
               } else if (propertyDescriptor.isModifiable()
                   && !((Collection<?>) propertyValue).isEmpty()) {
-                if (dryRun) {
-                  // manually trigger reverse relations preprocessors.
-                  if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                      .getReverseRelationEnd() != null) {
-                    IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                        .getReverseRelationEnd();
-                    for (Object collectionElement : (Collection<?>) property
-                        .getValue()) {
-                      if (!clearedEntities.contains(collectionElement)) {
+                if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .getReverseRelationEnd() != null) {
+                  IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                      .getReverseRelationEnd();
+                  for (IComponent collectionElement : new ArrayList<IComponent>(
+                      (Collection<IComponent>) property.getValue())) {
+                    if (!clearedEntities.contains(collectionElement)) {
+                      try {
                         if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-                          reversePropertyDescriptor.preprocessSetter(
-                              collectionElement, null);
+                          if (dryRun) {
+                            // manually trigger reverse relations preprocessors.
+                            reversePropertyDescriptor.preprocessSetter(
+                                collectionElement, null);
+                          } else {
+                            getAccessorFactory().createPropertyAccessor(
+                                reversePropertyDescriptor.getName(),
+                                collectionElement.getComponentContract())
+                                .setValue(collectionElement, null);
+                          }
                         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                          Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
-                              .createPropertyAccessor(
-                                  reversePropertyDescriptor.getName(),
-                                  ((IComponent) collectionElement)
-                                      .getComponentContract()).getValue(
-                                  collectionElement);
-                          ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                              .preprocessRemover(collectionElement,
-                                  reverseCollection, component);
+                          if (dryRun) {
+                            // manually trigger reverse relations preprocessors.
+                            Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                                .createPropertyAccessor(
+                                    reversePropertyDescriptor.getName(),
+                                    collectionElement.getComponentContract())
+                                .getValue(collectionElement);
+                            ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                                .preprocessRemover(collectionElement,
+                                    reverseCollection, component);
+                          } else {
+                            getAccessorFactory()
+                                .createCollectionPropertyAccessor(
+                                    reversePropertyDescriptor.getName(),
+                                    collectionElement.getComponentContract(),
+                                    component.getComponentContract())
+                                .removeFromValue(collectionElement, component);
+                          }
                         }
+                      } catch (RuntimeException ex) {
+                        integrityViolations.put(collectionElement, ex);
                       }
                     }
                   }
-                } else {
-                  getAccessorFactory().createPropertyAccessor(propertyName,
-                      component.getComponentContract()).setValue(component,
-                      null);
                 }
               }
             }
