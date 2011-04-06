@@ -1282,19 +1282,21 @@ public abstract class AbstractBackendController extends AbstractController
                       .getReverseRelationEnd() != null) {
                     IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                         .getReverseRelationEnd();
-                    if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-                      reversePropertyDescriptor.preprocessSetter(propertyValue,
-                          null);
-                    } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                      Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
-                          .createPropertyAccessor(
-                              reversePropertyDescriptor.getName(),
-                              ((IComponent) propertyValue)
-                                  .getComponentContract()).getValue(
-                              propertyValue);
-                      ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                          .preprocessRemover(propertyValue, reverseCollection,
-                              component);
+                    if (!clearedEntities.contains(propertyValue)) {
+                      if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                        reversePropertyDescriptor.preprocessSetter(
+                            propertyValue, null);
+                      } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                        Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                            .createPropertyAccessor(
+                                reversePropertyDescriptor.getName(),
+                                ((IComponent) propertyValue)
+                                    .getComponentContract()).getValue(
+                                propertyValue);
+                        ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                            .preprocessRemover(propertyValue,
+                                reverseCollection, component);
+                      }
                     }
                   }
                 } else {
@@ -1334,19 +1336,21 @@ public abstract class AbstractBackendController extends AbstractController
                         .getReverseRelationEnd();
                     for (Object collectionElement : (Collection<?>) property
                         .getValue()) {
-                      if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-                        reversePropertyDescriptor.preprocessSetter(
-                            collectionElement, null);
-                      } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                        Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
-                            .createPropertyAccessor(
-                                reversePropertyDescriptor.getName(),
-                                ((IComponent) collectionElement)
-                                    .getComponentContract()).getValue(
-                                collectionElement);
-                        ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                            .preprocessRemover(collectionElement,
-                                reverseCollection, component);
+                      if (!clearedEntities.contains(collectionElement)) {
+                        if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                          reversePropertyDescriptor.preprocessSetter(
+                              collectionElement, null);
+                        } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                          Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                              .createPropertyAccessor(
+                                  reversePropertyDescriptor.getName(),
+                                  ((IComponent) collectionElement)
+                                      .getComponentContract()).getValue(
+                                  collectionElement);
+                          ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                              .preprocessRemover(collectionElement,
+                                  reverseCollection, component);
+                        }
                       }
                     }
                   }
