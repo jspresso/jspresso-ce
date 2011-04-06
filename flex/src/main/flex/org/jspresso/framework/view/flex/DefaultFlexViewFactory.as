@@ -1677,12 +1677,19 @@ package org.jspresso.framework.view.flex {
         applyComponentStyle(column, rColumn);
         var itemRenderer:ClassFactory;
         if(rColumn is RComboBox) {
+          var hasIcon:Boolean = false;
+          for each(var icon:RIcon in (rColumn as RComboBox).icons) {
+            if(icon) {
+              hasIcon = true;
+              break;
+            }
+          }
           itemRenderer = new ClassFactory(EnumerationDgItemRenderer);
           itemRenderer.properties = {values:(rColumn as RComboBox).values,
                                      labels:(rColumn as RComboBox).translations,
                                      icons :(rColumn as RComboBox).icons,
                                      iconTemplate:_iconTemplate,
-                                     showIcon:(editorComponent as RIconComboBox).showIcon,
+                                     showIcon:hasIcon,
                                      index:i+1};
         } else if( rColumn is RCheckBox
                || (rColumn is RActionField && !(rColumn as RActionField).showTextField)) {
