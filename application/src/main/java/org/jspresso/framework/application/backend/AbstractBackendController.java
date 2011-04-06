@@ -1279,9 +1279,7 @@ public abstract class AbstractBackendController extends AbstractController
                 if (dryRun) {
                   // manually trigger reverse relations preprocessors.
                   if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-                      .getReverseRelationEnd() != null
-                      && !((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-                          .isComposition()) {
+                      .getReverseRelationEnd() != null) {
                     IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                         .getReverseRelationEnd();
                     if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -1334,12 +1332,12 @@ public abstract class AbstractBackendController extends AbstractController
                       .getReverseRelationEnd() != null) {
                     IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                         .getReverseRelationEnd();
-                    if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-                      reversePropertyDescriptor.preprocessSetter(propertyValue,
-                          null);
-                    } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                      for (Object collectionElement : (Collection<?>) property
-                          .getValue()) {
+                    for (Object collectionElement : (Collection<?>) property
+                        .getValue()) {
+                      if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                        reversePropertyDescriptor.preprocessSetter(
+                            collectionElement, null);
+                      } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                         Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
                             .createPropertyAccessor(
                                 reversePropertyDescriptor.getName(),
