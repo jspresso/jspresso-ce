@@ -323,6 +323,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
     </#if>
+    <#if propertyDescriptor.composition>
+   *           cascade = "persist,merge,save-update,delete"
+    </#if>
     <#if manyToMany>
       <#if inverse>
         <#local joinTableName=eltSqlName+"_"+revSqlName/>
@@ -406,10 +409,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#if bidirectional>
           <#if fkName?exists>
    *           foreign-key = "${fkName}"
-<#--
-          <#else>
-   *           foreign-key = "${eltSqlName}_${revSqlName}_FK"
--->
           </#if>
         <#else>
           <#if fkName?exists>
@@ -499,6 +498,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if isReferenceEntity>
       <#if reverseOneToOne>
    * @hibernate.one-to-one
+        <#if composition>
+   *           cascade = "persist,merge,save-update,delete"
+        </#if>
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
@@ -512,12 +514,22 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           optimistic-lock = "false"
         </#if>
         <#if oneToOne>
+          <#if composition>
+   *           cascade = "persist,merge,save-update,delete"
+          </#if>
    *           unique = "true"
         <#elseif bidirectional>
           <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
    *           not-null = "true"
+          </#if>
+        <#else>
+          <#if composition>
+   *           cascade = "persist,merge,save-update,delete"
+          <#else>
+               <#-- Referential relationship -->
+   *           cascade = "none"
           </#if>
         </#if>
         <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
@@ -529,14 +541,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           <#else>
    *           foreign-key = "${tableName}_${propSqlName}_FK"
           </#if>
-        <#else>
-<#--
-          <#if fkName?exists>
-   *           foreign-key = "${fkName}"
-          <#else>
-   *           foreign-key = "${propSqlName}_FK"
-          </#if>
--->
         </#if>
    * @hibernate.column
    *           name = "${propSqlName}_ID"
