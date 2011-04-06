@@ -107,7 +107,11 @@
 
   <bean id="createQueryComponentAction" parent="createQueryComponentActionBase" />
 
-  <bean id="initModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction" />
+  <bean id="initModuleFilterActionBase" class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction">
+    <property name="createQueryComponentAction" ref="createQueryComponentAction" />
+  </bean>
+
+  <bean id="initModuleFilterAction" parent="initModuleFilterActionBase" />
 
   <!-- The implementation used as view factory. View factory is not defined as singleton since it can implement some cache 
     a the session level. -->

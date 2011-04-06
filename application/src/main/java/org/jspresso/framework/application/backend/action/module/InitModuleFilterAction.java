@@ -22,8 +22,11 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
-import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
+import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
 /**
  * Initialize a module filter with a brand new query component and resets the
@@ -34,22 +37,39 @@ import org.jspresso.framework.model.component.IComponent;
  */
 public class InitModuleFilterAction extends BackendAction {
 
+  private CreateQueryComponentAction createQueryComponentAction;
+
   /**
    * Initializes the module filter and resets the bean collection.
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     FilterableBeanCollectionModule beanCollectionModule = (FilterableBeanCollectionModule) getModule(context);
-    beanCollectionModule.setFilter(getEntityFactory(context)
-        .createQueryComponentInstance(
-            (Class<? extends IComponent>) beanCollectionModule
-                .getElementComponentDescriptor().getComponentContract()));
+    context
+        .put(
+            CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
+            ((IComponentDescriptor<?>) beanCollectionModule.getViewDescriptor()
+                .getModelDescriptor())
+                .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+    actionHandler.execute(createQueryComponentAction, context);
+    IQueryComponent queryComponent = (IQueryComponent) context
+        .get(IQueryComponent.QUERY_COMPONENT);
+    beanCollectionModule.setFilter(queryComponent);
     beanCollectionModule.setModuleObjects(null);
     return super.execute(actionHandler, context);
   }
 
+  /**
+   * Sets the createQueryComponentAction.
+   * 
+   * @param createQueryComponentAction
+   *          the createQueryComponentAction to set.
+   */
+  public void setCreateQueryComponentAction(
+      CreateQueryComponentAction createQueryComponentAction) {
+    this.createQueryComponentAction = createQueryComponentAction;
+  }
 }
