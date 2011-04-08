@@ -23,8 +23,10 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
+import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
@@ -38,12 +40,14 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 public class InitModuleFilterAction extends BackendAction {
 
   private CreateQueryComponentAction createQueryComponentAction;
+  private IQueryComponentRefiner     queryComponentRefiner;
 
   /**
    * Initializes the module filter and resets the bean collection.
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -54,9 +58,19 @@ public class InitModuleFilterAction extends BackendAction {
             ((IComponentDescriptor<?>) beanCollectionModule.getViewDescriptor()
                 .getModelDescriptor())
                 .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
-    actionHandler.execute(createQueryComponentAction, context);
-    IQueryComponent queryComponent = (IQueryComponent) context
-        .get(IQueryComponent.QUERY_COMPONENT);
+    IQueryComponent queryComponent;
+    if (createQueryComponentAction != null) {
+      actionHandler.execute(createQueryComponentAction, context);
+      queryComponent = (IQueryComponent) context
+          .get(IQueryComponent.QUERY_COMPONENT);
+    } else {
+      queryComponent = getEntityFactory(context).createQueryComponentInstance(
+          (Class<? extends IComponent>) beanCollectionModule
+              .getElementComponentDescriptor().getComponentContract());
+    }
+    if (queryComponentRefiner != null) {
+      queryComponentRefiner.refineQueryComponent(queryComponent, context);
+    }
     beanCollectionModule.setFilter(queryComponent);
     beanCollectionModule.setModuleObjects(null);
     return super.execute(actionHandler, context);
@@ -71,5 +85,16 @@ public class InitModuleFilterAction extends BackendAction {
   public void setCreateQueryComponentAction(
       CreateQueryComponentAction createQueryComponentAction) {
     this.createQueryComponentAction = createQueryComponentAction;
+  }
+
+  /**
+   * Sets the queryComponentRefiner.
+   * 
+   * @param queryComponentRefiner
+   *          the queryComponentRefiner to set.
+   */
+  public void setQueryComponentRefiner(
+      IQueryComponentRefiner queryComponentRefiner) {
+    this.queryComponentRefiner = queryComponentRefiner;
   }
 }
