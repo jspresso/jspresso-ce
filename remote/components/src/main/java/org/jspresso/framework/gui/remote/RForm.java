@@ -46,11 +46,11 @@ public class RForm extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RForm</code> instance. Only used for GWT
+   * Constructs a new <code>RForm</code> instance. Only used for
    * serialization support.
    */
-  protected RForm() {
-    // For GWT support
+  public RForm() {
+    // For serialization support
   }
 
   /**

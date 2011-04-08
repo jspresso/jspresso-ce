@@ -41,6 +41,14 @@ public abstract class RDecimalComponent extends RNumericComponent {
   }
 
   /**
+   * Constructs a new <code>RDecimalComponent</code> instance. Only used for
+   * serialization support.
+   */
+  public RDecimalComponent() {
+    // For serialization support
+  }
+
+  /**
    * Gets the maxFractionDigit.
    * 
    * @return the maxFractionDigit.

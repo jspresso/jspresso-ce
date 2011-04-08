@@ -45,11 +45,11 @@ public class RBorderContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RBorderContainer</code> instance. Only used for GWT
+   * Constructs a new <code>RBorderContainer</code> instance. Only used for
    * serialization support.
    */
-  protected RBorderContainer() {
-    // For GWT support
+  public RBorderContainer() {
+    // For serialization support
   }
 
   /**

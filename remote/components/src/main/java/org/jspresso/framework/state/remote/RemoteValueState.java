@@ -48,11 +48,11 @@ public class RemoteValueState extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RemoteValueState</code> instance. Only used for GWT
+   * Constructs a new <code>RemoteValueState</code> instance. Only used for
    * serialization support.
    */
-  protected RemoteValueState() {
-    // For GWT support
+  public RemoteValueState() {
+    // For serialization support
   }
 
   /**

@@ -39,10 +39,10 @@ public class RTextArea extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RTextArea</code> instance. Only used for GWT
+   * Constructs a new <code>RTextArea</code> instance. Only used for
    * serialization support.
    */
-  protected RTextArea() {
-    // For GWT support
+  public RTextArea() {
+    // For serialization support
   }
 }

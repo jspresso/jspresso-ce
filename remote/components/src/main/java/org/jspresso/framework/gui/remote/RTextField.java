@@ -40,11 +40,11 @@ public class RTextField extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RTextField</code> instance. Only used for GWT
+   * Constructs a new <code>RTextField</code> instance. Only used for
    * serialization support.
    */
-  protected RTextField() {
-    // For GWT support
+  public RTextField() {
+    // For serialization support
   }
 
   /**

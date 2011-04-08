@@ -37,11 +37,11 @@ public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
   private String            guid;
 
   /**
-   * Constructs a new <code>RemotePeer</code> instance. Only used for GWT
+   * Constructs a new <code>RemotePeer</code> instance. Only used for
    * serialization support.
    */
-  protected RemotePeer() {
-    // For GWT support
+  public RemotePeer() {
+    // For serialization support
   }
 
   /**

@@ -43,11 +43,11 @@ public abstract class RNumericComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RNumericComponent</code> instance. Only used for GWT
+   * Constructs a new <code>RNumericComponent</code> instance. Only used for
    * serialization support.
    */
-  protected RNumericComponent() {
-    // For GWT support
+  public RNumericComponent() {
+    // For serialization support
   }
 
   /**

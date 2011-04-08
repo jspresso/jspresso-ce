@@ -40,11 +40,11 @@ public class RCheckBox extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RCheckBox</code> instance. Only used for GWT
+   * Constructs a new <code>RCheckBox</code> instance. Only used for
    * serialization support.
    */
-  protected RCheckBox() {
-    // For GWT support
+  public RCheckBox() {
+    // For serialization support
   }
 
   

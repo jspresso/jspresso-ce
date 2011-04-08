@@ -47,8 +47,8 @@ public class RConstrainedGridContainer extends RContainer {
    * Constructs a new <code>RConstrainedGridContainer</code> instance. Only used
    * for GWT serialization support.
    */
-  protected RConstrainedGridContainer() {
-    // For GWT support
+  public RConstrainedGridContainer() {
+    // For serialization support
   }
 
   /**

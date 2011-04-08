@@ -42,11 +42,11 @@ public class RActionField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RActionField</code> instance. Only used for GWT
+   * Constructs a new <code>RActionField</code> instance. Only used for
    * serialization support.
    */
-  protected RActionField() {
-    // For GWT support
+  public RActionField() {
+    // For serialization support
   }
 
   /**

@@ -42,11 +42,11 @@ public class RCardContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RCardContainer</code> instance. Only used for GWT
+   * Constructs a new <code>RCardContainer</code> instance. Only used for
    * serialization support.
    */
-  protected RCardContainer() {
-    // For GWT support
+  public RCardContainer() {
+    // For serialization support
   }
 
   /**

@@ -47,11 +47,11 @@ public class RActionList extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RActionList</code> instance. Only used for GWT
+   * Constructs a new <code>RActionList</code> instance. Only used for
    * serialization support.
    */
-  protected RActionList() {
-    // For GWT support
+  public RActionList() {
+    // For serialization support
   }
 
   /**

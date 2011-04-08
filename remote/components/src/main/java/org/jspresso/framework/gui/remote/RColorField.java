@@ -41,11 +41,11 @@ public class RColorField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RColorField</code> instance. Only used for GWT
+   * Constructs a new <code>RColorField</code> instance. Only used for
    * serialization support.
    */
-  protected RColorField() {
-    // For GWT support
+  public RColorField() {
+    // For serialization support
   }
 
   /**

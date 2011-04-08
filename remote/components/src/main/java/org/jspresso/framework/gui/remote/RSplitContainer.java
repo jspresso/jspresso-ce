@@ -43,11 +43,11 @@ public class RSplitContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RSplitContainer</code> instance. Only used for GWT
+   * Constructs a new <code>RSplitContainer</code> instance. Only used for
    * serialization support.
    */
-  protected RSplitContainer() {
-    // For GWT support
+  public RSplitContainer() {
+    // For serialization support
   }
 
   /**

@@ -42,11 +42,11 @@ public class RTree extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTree</code> instance. Only used for GWT
+   * Constructs a new <code>RTree</code> instance. Only used for
    * serialization support.
    */
-  protected RTree() {
-    // For GWT support
+  public RTree() {
+    // For serialization support
   }
 
   /**

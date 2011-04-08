@@ -41,11 +41,11 @@ public abstract class RTextComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTextComponent</code> instance. Only used for GWT
+   * Constructs a new <code>RTextComponent</code> instance. Only used for
    * serialization support.
    */
-  protected RTextComponent() {
-    // For GWT support
+  public RTextComponent() {
+    // For serialization support
   }
 
   /**

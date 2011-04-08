@@ -41,11 +41,11 @@ public class RHtmlArea extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RHtmlArea</code> instance. Only used for GWT
+   * Constructs a new <code>RHtmlArea</code> instance. Only used for
    * serialization support.
    */
-  protected RHtmlArea() {
-    // For GWT support
+  public RHtmlArea() {
+    // For serialization support
   }
 
   /**

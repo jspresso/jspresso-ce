@@ -41,11 +41,11 @@ public class RImageComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RImageComponent</code> instance. Only used for GWT
+   * Constructs a new <code>RImageComponent</code> instance. Only used for
    * serialization support.
    */
-  protected RImageComponent() {
-    // For GWT support
+  public RImageComponent() {
+    // For serialization support
   }
 
   /**

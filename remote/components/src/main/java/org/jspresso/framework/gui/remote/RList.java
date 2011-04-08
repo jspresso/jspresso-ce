@@ -39,10 +39,10 @@ public class RList extends RCollectionComponent {
   }
 
   /**
-   * Constructs a new <code>RList</code> instance. Only used for GWT
+   * Constructs a new <code>RList</code> instance. Only used for
    * serialization support.
    */
-  protected RList() {
-    // For GWT support
+  public RList() {
+    // For serialization support
   }
 }

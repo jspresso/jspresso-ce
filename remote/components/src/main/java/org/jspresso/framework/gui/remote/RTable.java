@@ -45,11 +45,11 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
-   * Constructs a new <code>RTable</code> instance. Only used for GWT
+   * Constructs a new <code>RTable</code> instance. Only used for
    * serialization support.
    */
-  protected RTable() {
-    // For GWT support
+  public RTable() {
+    // For serialization support
   }
 
   /**

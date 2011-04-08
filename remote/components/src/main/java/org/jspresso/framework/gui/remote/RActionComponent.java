@@ -41,11 +41,11 @@ public class RActionComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RActionComponent</code> instance. Only used for GWT
+   * Constructs a new <code>RActionComponent</code> instance. Only used for
    * serialization support.
    */
-  protected RActionComponent() {
-    // For GWT support
+  public RActionComponent() {
+    // For serialization support
   }
 
   /**

@@ -40,11 +40,11 @@ public class RLabel extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RLabel</code> instance. Only used for GWT
+   * Constructs a new <code>RLabel</code> instance. Only used for
    * serialization support.
    */
-  protected RLabel() {
-    // For GWT support
+  public RLabel() {
+    // For serialization support
   }
 
   /**

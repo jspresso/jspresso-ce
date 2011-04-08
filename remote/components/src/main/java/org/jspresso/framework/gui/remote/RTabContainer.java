@@ -48,11 +48,11 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RTabContainer</code> instance. Only used for GWT
+   * Constructs a new <code>RTabContainer</code> instance. Only used for
    * serialization support.
    */
-  protected RTabContainer() {
-    // For GWT support
+  public RTabContainer() {
+    // For serialization support
   }
 
   /**

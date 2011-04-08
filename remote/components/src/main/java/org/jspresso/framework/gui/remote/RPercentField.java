@@ -37,4 +37,12 @@ public class RPercentField extends RDecimalComponent {
   public RPercentField(String guid) {
     super(guid);
   }
+
+  /**
+   * Constructs a new <code>RPercentField</code> instance. Only used for
+   * serialization support.
+   */
+  public RPercentField() {
+    // For serialization support
+  }
 }

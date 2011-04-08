@@ -51,11 +51,11 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RAction</code> instance. Only used for GWT
+   * Constructs a new <code>RAction</code> instance. Only used for
    * serialization support.
    */
-  protected RAction() {
-    // For GWT support
+  public RAction() {
+    // For serialization support
   }
 
   /**

@@ -42,7 +42,7 @@ public class RSecurityComponent extends RComponent {
    * Constructs a new <code>RSecurityComponent</code> instance. Only used for
    * GWT serialization support.
    */
-  protected RSecurityComponent() {
-    // For GWT support
+  public RSecurityComponent() {
+    // For serialization support
   }
 }

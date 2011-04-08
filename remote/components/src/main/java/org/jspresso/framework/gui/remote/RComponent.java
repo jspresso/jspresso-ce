@@ -58,11 +58,11 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Constructs a new <code>RComponent</code> instance. Only used for GWT
+   * Constructs a new <code>RComponent</code> instance. Only used for
    * serialization support.
    */
-  protected RComponent() {
-    // For GWT support
+  public RComponent() {
+    // For serialization support
   }
 
   /**

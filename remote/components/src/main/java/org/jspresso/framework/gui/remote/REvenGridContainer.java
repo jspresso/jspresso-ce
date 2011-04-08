@@ -46,8 +46,8 @@ public class REvenGridContainer extends RContainer {
    * Constructs a new <code>REvenGridContainer</code> instance. Only used for
    * GWT serialization support.
    */
-  protected REvenGridContainer() {
-    // For GWT support
+  public REvenGridContainer() {
+    // For serialization support
   }
 
   /**

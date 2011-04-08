@@ -45,8 +45,8 @@ public class RCollectionComponent extends RComponent {
    * Constructs a new <code>RCollectionComponent</code> instance. Only used for
    * GWT serialization support.
    */
-  protected RCollectionComponent() {
-    // For GWT support
+  public RCollectionComponent() {
+    // For serialization support
   }
 
   /**

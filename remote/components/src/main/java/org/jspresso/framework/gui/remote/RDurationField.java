@@ -41,11 +41,11 @@ public class RDurationField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RDurationField</code> instance. Only used for GWT
+   * Constructs a new <code>RDurationField</code> instance. Only used for
    * serialization support.
    */
-  protected RDurationField() {
-    // For GWT support
+  public RDurationField() {
+    // For serialization support
   }
 
   /**

@@ -44,11 +44,11 @@ public class RComboBox extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RComboBox</code> instance. Only used for GWT
+   * Constructs a new <code>RComboBox</code> instance. Only used for
    * serialization support.
    */
-  protected RComboBox() {
-    // For GWT support
+  public RComboBox() {
+    // For serialization support
   }
 
   /**

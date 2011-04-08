@@ -39,10 +39,10 @@ public class RTimeField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTimeField</code> instance. Only used for GWT
+   * Constructs a new <code>RTimeField</code> instance. Only used for
    * serialization support.
    */
-  protected RTimeField() {
-    // For GWT support
+  public RTimeField() {
+    // For serialization support
   }
 }

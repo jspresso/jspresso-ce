@@ -39,10 +39,10 @@ public class RPasswordField extends RTextField {
   }
 
   /**
-   * Constructs a new <code>RPasswordField</code> instance. Only used for GWT
+   * Constructs a new <code>RPasswordField</code> instance. Only used for
    * serialization support.
    */
-  protected RPasswordField() {
-    // For GWT support
+  public RPasswordField() {
+    // For serialization support
   }
 }

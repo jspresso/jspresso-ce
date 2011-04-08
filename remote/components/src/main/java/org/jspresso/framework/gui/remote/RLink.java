@@ -41,11 +41,11 @@ public class RLink extends RLabel {
   }
 
   /**
-   * Constructs a new <code>RLink</code> instance. Only used for GWT
+   * Constructs a new <code>RLink</code> instance. Only used for
    * serialization support.
    */
-  protected RLink() {
-    // For GWT support
+  public RLink() {
+    // For serialization support
   }
 
   /**

@@ -47,8 +47,8 @@ public class RemoteFormattedValueState extends RemoteValueState {
    * Constructs a new <code>RemoteFormattedValueState</code> instance. Only used
    * for GWT serialization support.
    */
-  protected RemoteFormattedValueState() {
-    // For GWT support
+  public RemoteFormattedValueState() {
+    // For serialization support
   }
 
   /**

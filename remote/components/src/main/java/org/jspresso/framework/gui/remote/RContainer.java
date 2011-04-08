@@ -39,11 +39,11 @@ public abstract class RContainer extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RContainer</code> instance. Only used for GWT
+   * Constructs a new <code>RContainer</code> instance. Only used for
    * serialization support.
    */
-  protected RContainer() {
-    // For GWT support
+  public RContainer() {
+    // For serialization support
   }
 
 }

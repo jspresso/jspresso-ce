@@ -41,11 +41,11 @@ public class RDateField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RDateField</code> instance. Only used for GWT
+   * Constructs a new <code>RDateField</code> instance. Only used for
    * serialization support.
    */
-  protected RDateField() {
-    // For GWT support
+  public RDateField() {
+    // For serialization support
   }
 
   /**

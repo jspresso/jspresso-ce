@@ -51,8 +51,8 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Constructs a new <code>RemoteCompositeValueState</code> instance. Only used
    * for GWT serialization support.
    */
-  protected RemoteCompositeValueState() {
-    // For GWT support
+  public RemoteCompositeValueState() {
+    // For serialization support
   }
 
   /**

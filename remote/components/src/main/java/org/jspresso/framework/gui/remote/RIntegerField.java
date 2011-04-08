@@ -37,4 +37,12 @@ public class RIntegerField extends RNumericComponent {
   public RIntegerField(String guid) {
     super(guid);
   }
+
+  /**
+   * Constructs a new <code>RIntegerField</code> instance. Only used for
+   * serialization support.
+   */
+  public RIntegerField() {
+    // For serialization support
+  }
 }

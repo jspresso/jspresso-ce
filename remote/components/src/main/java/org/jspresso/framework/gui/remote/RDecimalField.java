@@ -37,4 +37,12 @@ public class RDecimalField extends RDecimalComponent {
   public RDecimalField(String guid) {
     super(guid);
   }
+
+  /**
+   * Constructs a new <code>RDecimalField</code> instance. Only used for
+   * serialization support.
+   */
+  public RDecimalField() {
+    // For serialization support
+  }
 }
