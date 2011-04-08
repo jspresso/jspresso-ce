@@ -1707,7 +1707,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var index = tabContainer.indexOf(event.getData()[0]);
         remoteTabContainer.setSelectedIndex(index);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
-        command.setTargetPeerGuid(remoteTabContainer.getGuid());
+        command.setTargetPeerGuid(remoteTabContainer.getState().getGuid());
+        command.setPermId(remoteTabContainer.getState().getPermId());
         command.setLeadingIndex(index);
         this.__commandHandler.registerCommand(command);
       }, this);
