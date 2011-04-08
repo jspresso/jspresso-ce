@@ -1401,8 +1401,8 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(function(index:int):void {
         remoteTabContainer.selectedIndex = index;
         var command:RemoteSelectionCommand = new RemoteSelectionCommand();
-        command.targetPeerGuid = remoteTabContainer.state.guid;
-        command.permId = remoteTabContainer.state.permId;
+        command.targetPeerGuid = remoteTabContainer.guid;
+        command.permId = remoteTabContainer.permId;
         command.leadingIndex = index;
         _commandHandler.registerCommand(command);
       }, tabContainer, "selectedIndex",true);

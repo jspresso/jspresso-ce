@@ -151,7 +151,10 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
       idIndex = currentIndex.intValue() + 1;
     }
     automationIndices.put(seed, new Integer(idIndex));
-    return new StringBuffer(seed).append("#").append(idIndex).toString();
+    if (idIndex > 0) {
+      return new StringBuffer(seed).append("#").append(idIndex).toString();
+    }
+    return seed;
   }
 
   private class RemotePeerReferenceMap extends ReferenceMap {

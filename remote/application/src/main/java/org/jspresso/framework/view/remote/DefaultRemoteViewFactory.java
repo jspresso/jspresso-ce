@@ -360,9 +360,7 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
   }
 
@@ -1283,11 +1281,9 @@ public class DefaultRemoteViewFactory extends
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation(
-          "lov.element.description",
-          new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(
-                actionHandler, locale)
-          }, locale));
+          "lov.element.description", new Object[] {propertyDescriptor
+              .getReferencedDescriptor().getI18nName(actionHandler, locale)},
+          locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1295,12 +1291,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
     }
     return view;
   }
@@ -1701,8 +1693,6 @@ public class DefaultRemoteViewFactory extends
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     final RTabContainer viewComponent = createRTabContainer();
-    getRemotePeerRegistry().register(viewComponent);
-
     final BasicIndexedView<RComponent> view = constructIndexedView(
         viewComponent, viewDescriptor);
 
@@ -2114,6 +2104,20 @@ public class DefaultRemoteViewFactory extends
     }
     viewComponent.setPermId(descriptor.getPermId());
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected BasicIndexedView<RComponent> constructIndexedView(
+      RComponent viewComponent, ITabViewDescriptor descriptor) {
+    BasicIndexedView<RComponent> indexedView = super.constructIndexedView(
+        viewComponent, descriptor);
+    getRemotePeerRegistry().register(viewComponent);
+    viewComponent.setPermId(getRemotePeerRegistry().registerPermId(
+        descriptor.getPermId(), viewComponent.getGuid()));
+    return indexedView;
   }
 
   /**
