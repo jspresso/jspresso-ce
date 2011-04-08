@@ -11,12 +11,9 @@
   </bean>
 
   <!-- Remote peer registry -->
-  <bean id="remotePeerRegistry" class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" scope="prototype" />
+  <bean id="remotePeerRegistryBase" abstract="true" class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry"/>
 
-  <!-- Automation enabled remote peer registry -->
-  <bean id="automatableRemotePeerRegistry" class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" scope="prototype">
-    <property name="automationEnabled" value="true"/>
-  </bean>
+  <bean id="remotePeerRegistry" parent="remotePeerRegistryBase"/>
 
   <!-- Action beans -->
   <bean id="chartAction" abstract="true" parent="abstractChartAction"
