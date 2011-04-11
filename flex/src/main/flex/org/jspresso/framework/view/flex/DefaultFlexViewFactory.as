@@ -551,9 +551,11 @@ package org.jspresso.framework.view.flex {
                 selectedIndices.concat(parentNode.selectedIndices);
               }
               var childIndex:int = parentNode.children.getItemIndex(node);
-              selectedIndices.push(childIndex);
-              parentNode.leadingIndex = childIndex;
-              parentNode.selectedIndices = selectedIndices;
+              if(childIndex >= 0) {
+                selectedIndices.push(childIndex);
+                parentNode.leadingIndex = childIndex;
+                parentNode.selectedIndices = selectedIndices;
+              }
             }
           }
         } finally {
