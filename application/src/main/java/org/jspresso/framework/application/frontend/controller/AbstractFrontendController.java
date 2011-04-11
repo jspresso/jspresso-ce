@@ -182,8 +182,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     if (currentModule != null) {
       pinModule(getSelectedWorkspaceName(), currentModule);
-      execute(currentModule.getExitAction(), new HashMap<String, Object>());
-      execute(getOnModuleExitAction(), new HashMap<String, Object>());
+      Map<String, Object> navigationContext = new HashMap<String, Object>();
+      navigationContext.put(ActionContextConstants.TO_MODULE, module);
+      execute(currentModule.getExitAction(), navigationContext);
+      execute(getOnModuleExitAction(), navigationContext);
     }
     displayWorkspace(workspaceName);
     IView<E> moduleAreaView = workspaceViews.get(workspaceName);
@@ -209,6 +211,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
       module.setStarted(true);
       pinModule(getSelectedWorkspaceName(), module);
+      Map<String, Object> navigationContext = new HashMap<String, Object>();
+      navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       execute(module.getEntryAction(), new HashMap<String, Object>());
       execute(getOnModuleEnterAction(), new HashMap<String, Object>());
     }
