@@ -19,6 +19,8 @@
 package org.jspresso.framework.state.remote;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.jspresso.framework.util.remote.RemotePeer;
@@ -99,15 +101,32 @@ public class RemoteValueState extends RemotePeer {
    *          the value to set.
    */
   public void setValue(Object value) {
-    if (value instanceof Date || value instanceof String
-        || value instanceof Boolean || value instanceof Number) {
+    this.value = tranformValue(value);
+  }
+
+  /**
+   * tansform object value before using it as value state.
+   * 
+   * @param incomingValue
+   *          the original value.
+   * @return the transformed value.
+   */
+  protected Serializable tranformValue(Object incomingValue) {
+    Serializable transformedValue = null;
+    if (incomingValue instanceof Timestamp) {
+      transformedValue = new Date(((Timestamp) incomingValue).getTime());
+    } else if (incomingValue instanceof java.sql.Date) {
+      transformedValue = new Date(((java.sql.Date) incomingValue).getTime());
+    } else if (incomingValue instanceof BigDecimal) {
+      transformedValue = new Double(((BigDecimal) incomingValue).doubleValue());
+    } else if (incomingValue instanceof Date || incomingValue instanceof String
+        || incomingValue instanceof Boolean || incomingValue instanceof Number) {
       // if (value instanceof Serializable) {
-      this.value = (Serializable) value;
-    } else if (value != null) {
-      this.value = value.toString();
-    } else {
-      this.value = null;
+      transformedValue = (Serializable) incomingValue;
+    } else if (incomingValue != null) {
+      transformedValue = incomingValue.toString();
     }
+    return transformedValue;
   }
 
   /**

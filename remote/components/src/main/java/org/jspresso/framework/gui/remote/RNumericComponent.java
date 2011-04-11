@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import java.math.BigDecimal;
+
 /**
  * A remote number field component.
  * 
@@ -75,7 +77,11 @@ public abstract class RNumericComponent extends RComponent {
    *          the maxValue to set.
    */
   public void setMaxValue(Number maxValue) {
-    this.maxValue = maxValue;
+    if (maxValue instanceof BigDecimal) {
+      this.maxValue = new Double(maxValue.doubleValue());
+    } else {
+      this.maxValue = maxValue;
+    }
   }
 
   /**
@@ -85,13 +91,18 @@ public abstract class RNumericComponent extends RComponent {
    *          the minValue to set.
    */
   public void setMinValue(Number minValue) {
-    this.minValue = minValue;
+    if (minValue instanceof BigDecimal) {
+      this.minValue = new Double(minValue.doubleValue());
+    } else {
+      this.minValue = minValue;
+    }
   }
 
   /**
    * Sets the horizontalAlignment.
    * 
-   * @param horizontalAlignment the horizontalAlignment to set.
+   * @param horizontalAlignment
+   *          the horizontalAlignment to set.
    */
   public void setHorizontalAlignment(String horizontalAlignment) {
     this.horizontalAlignment = horizontalAlignment;

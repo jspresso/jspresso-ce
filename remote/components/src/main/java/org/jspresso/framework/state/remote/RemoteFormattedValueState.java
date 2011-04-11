@@ -19,7 +19,6 @@
 package org.jspresso.framework.state.remote;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * The state of a remote formatted value.
@@ -67,15 +66,7 @@ public class RemoteFormattedValueState extends RemoteValueState {
    *          the valueAsObject to set.
    */
   public void setValueAsObject(Object valueAsObject) {
-    if (valueAsObject instanceof Date || valueAsObject instanceof String
-        || valueAsObject instanceof Boolean || valueAsObject instanceof Number) {
-      // if (value instanceof Serializable) {
-      this.valueAsObject = (Serializable) valueAsObject;
-    } else if (valueAsObject != null) {
-      this.valueAsObject = valueAsObject.toString();
-    } else {
-      this.valueAsObject = null;
-    }
+    this.valueAsObject = tranformValue(valueAsObject);
   }
 
 }
