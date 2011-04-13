@@ -208,46 +208,60 @@ public abstract class AbstractComponentInvocationHandler implements
           IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
               extensionClass, (IComponent) proxy);
           return invokeExtensionMethod(extensionDelegate, method, args);
-        }
-        if (accessorInfo.isModifier()) {
-          if (modifierMonitors != null && modifierMonitors.contains(methodName)) {
-            return null;
-          }
-          if (modifierMonitors == null) {
-            modifierMonitors = new HashSet<String>();
-          }
-          modifierMonitors.add(methodName);
-        }
-        try {
-          switch (accessorType) {
-            case GETTER:
-              return getProperty(proxy, propertyDescriptor);
-            case SETTER:
-              setProperty(proxy, propertyDescriptor, args[0]);
+        } else if (!propertyDescriptor.isComputed()) {
+          if (accessorInfo.isModifier()) {
+            if (modifierMonitors != null
+                && modifierMonitors.contains(methodName)) {
               return null;
-            case ADDER:
-              if (args.length == 2) {
-                addToProperty(proxy,
-                    (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                    ((Integer) args[0]).intValue(), args[1]);
-              } else {
-                addToProperty(proxy,
+            }
+            if (modifierMonitors == null) {
+              modifierMonitors = new HashSet<String>();
+            }
+            modifierMonitors.add(methodName);
+          }
+          try {
+            switch (accessorType) {
+              case GETTER:
+                return getProperty(proxy, propertyDescriptor);
+              case SETTER:
+                setProperty(proxy, propertyDescriptor, args[0]);
+                return null;
+              case ADDER:
+                if (args.length == 2) {
+                  addToProperty(proxy,
+                      (ICollectionPropertyDescriptor<?>) propertyDescriptor,
+                      ((Integer) args[0]).intValue(), args[1]);
+                } else {
+                  addToProperty(proxy,
+                      (ICollectionPropertyDescriptor<?>) propertyDescriptor,
+                      args[0]);
+                }
+                return null;
+              case REMOVER:
+                removeFromProperty(proxy,
                     (ICollectionPropertyDescriptor<?>) propertyDescriptor,
                     args[0]);
-              }
-              return null;
-            case REMOVER:
-              removeFromProperty(proxy,
-                  (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                  args[0]);
-              return null;
-            default:
-              break;
+                return null;
+              default:
+                break;
+            }
+          } finally {
+            if (modifierMonitors != null && accessorInfo.isModifier()) {
+              modifierMonitors.remove(methodName);
+            }
           }
-        } finally {
-          if (modifierMonitors != null && accessorInfo.isModifier()) {
-            modifierMonitors.remove(methodName);
+        } else {
+          try {
+            return invokeServiceMethod(proxy, method, args);
+          } catch (NoSuchMethodException ignored) {
+            // it will fall back in the general case.
           }
+          throw new ComponentException(
+              "The '"
+                  + propertyDescriptor.getName()
+                  + "' property is described as computed but we couldn't determine a way to compute it,"
+                  + " either through an extension or a service delegate on the following component : \n"
+                  + componentDescriptor.getComponentContract().getName());
         }
       } else {
         try {
@@ -259,7 +273,7 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     throw new ComponentException(method.toString()
         + " is not supported on the component "
-        + componentDescriptor.getComponentContract());
+        + componentDescriptor.getComponentContract().getName());
   }
 
   /**
@@ -709,14 +723,13 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(
-            Thread.currentThread().getContextClassLoader(),
-            new Class[] {
-              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                  .getReferencedDescriptor().getCollectionInterface()
-            },
-            new NeverEqualsInvocationHandler(CollectionHelper
-                .cloneCollection((Collection<?>) currentPropertyValue)));
+        currentPropertyValue = Proxy
+            .newProxyInstance(
+                Thread.currentThread().getContextClassLoader(),
+                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .getReferencedDescriptor().getCollectionInterface()},
+                new NeverEqualsInvocationHandler(CollectionHelper
+                    .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);

@@ -104,7 +104,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private Set<Class<?>>                                   serviceContracts;
   private Map<String, String>                             serviceDelegateBeanNames;
   private Map<String, String>                             serviceDelegateClassNames;
-  private Map<Method, IComponentService>                  serviceDelegates;
+  private Map<String, IComponentService>                  serviceDelegates;
 
   private String                                          sqlName;
   private List<IPropertyDescriptor>                       tempPropertyBuffer;
@@ -428,7 +428,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     registerDelegateServicesIfNecessary();
     IComponentService service = null;
     if (serviceDelegates != null) {
-      service = serviceDelegates.get(targetMethod);
+      service = serviceDelegates.get(targetMethod.getName());
     }
     if (service == null && getAncestorDescriptors() != null) {
       for (Iterator<IComponentDescriptor<?>> ite = getAncestorDescriptors()
@@ -1059,13 +1059,13 @@ public abstract class AbstractComponentDescriptor<E> extends
   private synchronized void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
-      serviceDelegates = new HashMap<Method, IComponentService>();
+      serviceDelegates = new HashMap<String, IComponentService>();
       serviceContracts = new HashSet<Class<?>>();
     }
     serviceContracts.add(serviceContract);
     Method[] contractServices = serviceContract.getMethods();
     for (Method serviceMethod : contractServices) {
-      serviceDelegates.put(serviceMethod, service);
+      serviceDelegates.put(serviceMethod.getName(), service);
     }
   }
 

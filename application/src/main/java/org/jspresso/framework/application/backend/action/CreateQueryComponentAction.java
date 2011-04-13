@@ -140,127 +140,124 @@ public class CreateQueryComponentAction extends BackendAction {
 
     Map<String, Object> initializationMapping = erqDescriptor
         .getInitializationMapping();
-    if (masterComponent != null) {
-      if (initializationMapping != null) {
+    if (initializationMapping != null) {
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("initializationMapping : " + initializationMapping);
+      }
+      IAccessorFactory accessorFactory = getAccessorFactory(context);
+      for (Map.Entry<String, Object> initializedAttribute : initializationMapping
+          .entrySet()) {
         if (LOG.isDebugEnabled()) {
-          LOG.debug("initializationMapping : " + initializationMapping);
+          LOG.debug("initializing property : " + initializedAttribute.getKey()
+              + " from " + initializedAttribute.getKey());
         }
-        IAccessorFactory accessorFactory = getAccessorFactory(context);
-        for (Map.Entry<String, Object> initializedAttribute : initializationMapping
-            .entrySet()) {
-          if (LOG.isDebugEnabled()) {
-            LOG.debug("initializing property : "
-                + initializedAttribute.getKey() + " from "
-                + initializedAttribute.getKey());
-          }
-          IAccessor qCompAccessor = accessorFactory.createPropertyAccessor(
-              initializedAttribute.getKey(), queryComponent.getQueryContract());
-          try {
-            Object initValue;
-            if (initializedAttribute.getValue() instanceof String) {
-              Class<?> masterComponentContract;
-              if (masterComponent instanceof IComponent) {
-                masterComponentContract = ((IComponent) masterComponent)
-                    .getComponentContract();
-              } else if (masterComponent instanceof IQueryComponent) {
-                masterComponentContract = ((IQueryComponent) masterComponent)
-                    .getQueryContract();
-              } else {
-                masterComponentContract = masterComponent.getClass();
-              }
-              try {
-                IAccessor masterAccessor = accessorFactory
-                    .createPropertyAccessor(
-                        (String) initializedAttribute.getValue(),
-                        masterComponentContract);
-                initValue = masterAccessor.getValue(masterComponent);
-                if (LOG.isDebugEnabled()) {
-                  LOG.debug("Master component contract : "
-                      + masterComponentContract.getName());
-                  LOG.debug("Init value computed from master component : "
-                      + initValue);
-                }
-              } catch (MissingPropertyException ex) {
-                // the value in the initialization mapping is not a property.
-                // Handle it as a constant value.
-                initValue = initializedAttribute.getValue();
-                if (LOG.isDebugEnabled()) {
-                  LOG.debug("Init value computed from static value : "
-                      + initValue);
-                }
-              }
+        IAccessor qCompAccessor = accessorFactory.createPropertyAccessor(
+            initializedAttribute.getKey(), queryComponent.getQueryContract());
+        try {
+          Object initValue;
+          if (masterComponent != null
+              && initializedAttribute.getValue() instanceof String) {
+            Class<?> masterComponentContract = null;
+            if (masterComponent instanceof IComponent) {
+              masterComponentContract = ((IComponent) masterComponent)
+                  .getComponentContract();
+            } else if (masterComponent instanceof IQueryComponent) {
+              masterComponentContract = ((IQueryComponent) masterComponent)
+                  .getQueryContract();
             } else {
+              masterComponentContract = masterComponent.getClass();
+            }
+            try {
+              IAccessor masterAccessor = accessorFactory
+                  .createPropertyAccessor(
+                      (String) initializedAttribute.getValue(),
+                      masterComponentContract);
+              initValue = masterAccessor.getValue(masterComponent);
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Master component contract : "
+                    + masterComponentContract.getName());
+                LOG.debug("Init value computed from master component : "
+                    + initValue);
+              }
+            } catch (MissingPropertyException ex) {
+              // the value in the initialization mapping is not a property.
+              // Handle it as a constant value.
               initValue = initializedAttribute.getValue();
               if (LOG.isDebugEnabled()) {
-                LOG.debug("Init value computed from static non-string value : "
+                LOG.debug("Init value computed from static value : "
                     + initValue);
               }
             }
-            if (initValue != null) {
-              if ("null".equals(initValue)) {
-                initValue = IQueryComponent.NULL_VAL;
-                if (LOG.isDebugEnabled()) {
-                  LOG.debug("Init value set to null");
-                }
-              } else {
-                IPropertyDescriptor initializedPropertyDescriptor = queryComponent
-                    .getComponentDescriptor().getPropertyDescriptor(
-                        initializedAttribute.getKey());
+          } else {
+            initValue = initializedAttribute.getValue();
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Init value computed from static value : " + initValue);
+            }
+          }
+          if (initValue != null) {
+            if ("null".equals(initValue)) {
+              initValue = IQueryComponent.NULL_VAL;
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Init value set to null");
+              }
+            } else {
+              IPropertyDescriptor initializedPropertyDescriptor = queryComponent
+                  .getComponentDescriptor().getPropertyDescriptor(
+                      initializedAttribute.getKey());
 
-                if (initializedPropertyDescriptor != null) {
-                  Class<?> expectedType = initializedPropertyDescriptor
-                      .getModelType();
-                  Class<?> initValueType = initValue.getClass();
-                  if (!QueryComponent.class.isAssignableFrom(initValueType)
-                      && !expectedType.isAssignableFrom(initValueType)) {
-                    if (Boolean.TYPE.equals(expectedType)) {
-                      expectedType = Boolean.class;
-                    }
+              if (initializedPropertyDescriptor != null) {
+                Class<?> expectedType = initializedPropertyDescriptor
+                    .getModelType();
+                Class<?> initValueType = initValue.getClass();
+                if (!QueryComponent.class.isAssignableFrom(initValueType)
+                    && !expectedType.isAssignableFrom(initValueType)) {
+                  if (Boolean.TYPE.equals(expectedType)) {
+                    expectedType = Boolean.class;
+                  }
+                  if (LOG.isDebugEnabled()) {
+                    LOG.debug("Init value needs to be refined to match expected type : "
+                        + expectedType.getName());
+                  }
+                  try {
+                    initValue = expectedType.getConstructor(
+                        new Class<?>[] {String.class}).newInstance(
+                        new Object[] {initValue.toString()});
+                    // Whenever an exception occurs, just try to set it
+                    // normally
+                    // though.
                     if (LOG.isDebugEnabled()) {
-                      LOG.debug("Init value needs to be refined to match expected type : "
-                          + expectedType.getName());
+                      LOG.debug("Refined init value : " + initValue);
                     }
-                    try {
-                      initValue = expectedType.getConstructor(
-                          new Class<?>[] {String.class}).newInstance(
-                          new Object[] {initValue.toString()});
-                      // Whenever an exception occurs, just try to set it
-                      // normally
-                      // though.
-                      if (LOG.isDebugEnabled()) {
-                        LOG.debug("Refined init value : " + initValue);
-                      }
-                    } catch (IllegalArgumentException ex) {
-                      // throw new NestedRuntimeException(ex,
-                      // "Invalid initialization mapping for property "
-                      // + initializedAttribute.getKey());
-                    } catch (SecurityException ex) {
-                      // throw new NestedRuntimeException(ex,
-                      // "Invalid initialization mapping for property "
-                      // + initializedAttribute.getKey());
-                    } catch (InstantiationException ex) {
-                      // throw new NestedRuntimeException(ex,
-                      // "Invalid initialization mapping for property "
-                      // + initializedAttribute.getKey());
-                    }
+                  } catch (IllegalArgumentException ex) {
+                    // throw new NestedRuntimeException(ex,
+                    // "Invalid initialization mapping for property "
+                    // + initializedAttribute.getKey());
+                  } catch (SecurityException ex) {
+                    // throw new NestedRuntimeException(ex,
+                    // "Invalid initialization mapping for property "
+                    // + initializedAttribute.getKey());
+                  } catch (InstantiationException ex) {
+                    // throw new NestedRuntimeException(ex,
+                    // "Invalid initialization mapping for property "
+                    // + initializedAttribute.getKey());
                   }
                 }
               }
             }
-            qCompAccessor.setValue(queryComponent, initValue);
-            if (LOG.isDebugEnabled()) {
-              LOG.debug("Init value assigned.");
-            }
-          } catch (IllegalAccessException ex) {
-            throw new ActionException(ex);
-          } catch (InvocationTargetException ex) {
-            if (ex.getCause() instanceof RuntimeException) {
-              throw (RuntimeException) ex.getCause();
-            }
-            throw new ActionException(ex.getCause());
-          } catch (NoSuchMethodException ex) {
-            throw new ActionException(ex);
           }
+          qCompAccessor.setValue(queryComponent, initValue);
+          if (LOG.isDebugEnabled()) {
+            LOG.debug("Init value assigned.");
+          }
+        } catch (IllegalAccessException ex) {
+          throw new ActionException(ex);
+        } catch (InvocationTargetException ex) {
+          if (ex.getCause() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getCause();
+          }
+          throw new ActionException(ex.getCause());
+        } catch (NoSuchMethodException ex) {
+          throw new ActionException(ex);
         }
       }
     }
