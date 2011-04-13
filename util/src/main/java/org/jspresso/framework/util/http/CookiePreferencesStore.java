@@ -93,8 +93,9 @@ public class CookiePreferencesStore implements IPreferencesStore {
    * {@inheritDoc}
    */
   public void removePreference(String key) {
+    String completeKey = storePath + key;
     if (HttpRequestHolder.getServletResponse() != null) {
-      Cookie cookie = new Cookie(key, "");
+      Cookie cookie = new Cookie(completeKey, "");
       cookie.setMaxAge(0);
       HttpRequestHolder.getServletResponse().addCookie(cookie);
     }
