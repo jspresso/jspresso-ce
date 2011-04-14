@@ -44,8 +44,8 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jspresso.version>3.5.2</jspresso.version>
-    <sjs.version>1.0.2</sjs.version>
+    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
+    <sjs.version>1.0-SNAPSHOT</sjs.version>
   </properties>
   <pluginRepositories>
     <pluginRepository>
