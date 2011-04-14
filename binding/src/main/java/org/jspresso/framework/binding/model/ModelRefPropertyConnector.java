@@ -176,9 +176,14 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       IComponentDescriptor<?> componentDescriptor = getModelDescriptor()
           .getComponentDescriptor();
       if (componentDescriptor != null) {
-        connector = modelConnectorFactory.createModelConnector(connectorKey,
-            componentDescriptor.getPropertyDescriptor(connectorKey),
-            getSecurityHandler());
+        try {
+          getSecurityHandler().pushToSecurityContext(componentDescriptor);
+          connector = modelConnectorFactory.createModelConnector(connectorKey,
+              componentDescriptor.getPropertyDescriptor(connectorKey),
+              getSecurityHandler());
+        } finally {
+          getSecurityHandler().restoreLastSecurityContextSnapshot();
+        }
         connector.setParentConnector(this);
         childConnectors.put(connectorKey, connector);
       }

@@ -89,6 +89,8 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       return append((ITreeLevelDescriptor) contextElement);
     } else if (contextElement instanceof IViewDescriptor) {
       return append((IViewDescriptor) contextElement);
+    } else if (contextElement instanceof IModelDescriptor) {
+      return append((IModelDescriptor) contextElement);
     }
     return this;
   }
@@ -116,23 +118,22 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       if (permId == null) {
         permId = treeLevelDescriptor.getNodeGroupDescriptor().getPermId();
       }
-      IModelDescriptor modelDescriptor = treeLevelDescriptor
-          .getNodeGroupDescriptor().getModelDescriptor();
-      appendToViewChain(permId, modelDescriptor);
+      append(treeLevelDescriptor.getNodeGroupDescriptor().getModelDescriptor());
+      appendToViewChain(permId);
     }
     return this;
   }
 
   private SecurityContextBuilder append(IViewDescriptor viewDescriptor) {
     if (viewDescriptor != null) {
-      IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
-      appendToViewChain(viewDescriptor.getPermId(), modelDescriptor);
+      append(viewDescriptor.getModelDescriptor());
+      appendToViewChain(viewDescriptor.getPermId());
     }
     return this;
   }
 
   @SuppressWarnings("unchecked")
-  private void appendToViewChain(String permId, IModelDescriptor modelDescriptor) {
+  private void appendToViewChain(String permId) {
     if (permId != null) {
       List<String> viewChain = (List<String>) currentSecurityContext
           .get(SecurityContextConstants.VIEW_CHAIN);
@@ -146,6 +147,9 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       currentSecurityContext
           .put(SecurityContextConstants.VIEW_CHAIN, viewChain);
     }
+  }
+
+  private SecurityContextBuilder append(IModelDescriptor modelDescriptor) {
     if (modelDescriptor != null) {
       if (modelDescriptor instanceof IPropertyDescriptor) {
         currentSecurityContext.put(SecurityContextConstants.PROPERTY,
@@ -161,6 +165,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
                 .getCollectionDescriptor().getElementDescriptor().getPermId());
       }
     }
+    return this;
   }
 
   private SecurityContextBuilder append(Module module) {
