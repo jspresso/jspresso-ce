@@ -1,5 +1,6 @@
 import org.jspresso.contrib.sjs.domain.Domain;
 import org.jspresso.contrib.sjs.front.Front;
+import org.jspresso.contrib.sjs.common.ManageModule;
 
 def domainBuilder = new Domain()
 
