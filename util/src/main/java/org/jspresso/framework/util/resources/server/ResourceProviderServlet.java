@@ -351,7 +351,7 @@ public class ResourceProviderServlet extends HttpServlet {
 
   private void completeFileName(HttpServletResponse response, String fileName) {
     String actualFileName = fileName;
-    if (fileName.length() > 0) {
+    if (fileName != null && fileName.length() > 0) {
       int pathIndex = fileName.lastIndexOf("/");
       if (pathIndex > 0) {
         actualFileName = fileName.substring(pathIndex + 1);
