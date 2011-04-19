@@ -1178,6 +1178,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       uph.clear();
     }
     getBackendController().loggedIn(subject);
+    execute(getLoginAction(), getInitialActionContext());
     if (workspaces != null) {
       Map<String, Workspace> filteredWorkspaces = new HashMap<String, Workspace>();
       for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
@@ -1227,7 +1228,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } else {
       loggedIn(getAnonymousSubject());
     }
-    return execute(getLoginAction(), getInitialActionContext());
+    return true;
   }
 
   /**
