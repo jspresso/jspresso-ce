@@ -481,9 +481,8 @@ public class DefaultWingsViewFactory extends
       }
       IView<SComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
-      boolean forbidden = false;
-      if (!actionHandler.isAccessGranted(propertyViewDescriptor)) {
-        forbidden = true;
+      boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+      if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
       }
       connector.addChildConnector(propertyView.getConnector());

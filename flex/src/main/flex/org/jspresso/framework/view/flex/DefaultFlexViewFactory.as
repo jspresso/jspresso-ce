@@ -1181,6 +1181,10 @@ package org.jspresso.framework.view.flex {
         var componentLabel:UIComponent;
         var labelCell:GridItem;
         
+        if(rComponent is RSecurityComponent) {
+          sizeMaxComponentWidth(component, rComponent);
+        }
+        
         if(remoteForm.labelsPosition != "NONE") {
           componentLabel = createComponent(rComponentLabel, false);
           componentLabel.maxWidth = NaN;

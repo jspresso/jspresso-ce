@@ -360,7 +360,9 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {actionList});
+    viewComponent.setActionLists(new RActionList[] {
+      actionList
+    });
     return propertyView;
   }
 
@@ -519,12 +521,20 @@ public class DefaultRemoteViewFactory extends
       }
       IView<RComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
-      if (!actionHandler.isAccessGranted(propertyViewDescriptor)) {
-        propertyView.setPeer(createSecurityComponent());
+      boolean forbidden = !actionHandler
+          .isAccessGranted(propertyViewDescriptor);
+      if (forbidden) {
+        RComponent securityComponent = createSecurityComponent();
+        securityComponent.setPreferredSize(new Dimension(1, 1));
+        propertyView.setPeer(securityComponent);
       }
       elements.add(propertyView.getPeer());
-      elementLabels.add(createPropertyLabel(propertyViewDescriptor,
-          propertyView.getPeer(), actionHandler, locale));
+      RLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
+          propertyView.getPeer(), actionHandler, locale);
+      if (forbidden) {
+        propertyLabel.setLabel(" ");
+      }
+      elementLabels.add(propertyLabel);
       elementWidths.add(propertyViewDescriptor.getWidth());
       connector.addChildConnector(propertyView.getConnector());
       // already handled in createView.
@@ -1281,9 +1291,11 @@ public class DefaultRemoteViewFactory extends
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation(
-          "lov.element.description", new Object[] {propertyDescriptor
-              .getReferencedDescriptor().getI18nName(actionHandler, locale)},
-          locale));
+          "lov.element.description",
+          new Object[] {
+            propertyDescriptor.getReferencedDescriptor().getI18nName(
+                actionHandler, locale)
+          }, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1291,8 +1303,12 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {lovAction});
-      viewComponent.setActionLists(new RActionList[] {actionList});
+      actionList.setActions(new RAction[] {
+        lovAction
+      });
+      viewComponent.setActionLists(new RActionList[] {
+        actionList
+      });
     }
     return view;
   }
