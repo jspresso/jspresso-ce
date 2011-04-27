@@ -178,4 +178,12 @@ public class BasicQueryComponentDescriptor extends
         || propertyDescriptor instanceof ITimePropertyDescriptor
         || propertyDescriptor instanceof IDurationPropertyDescriptor;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getPermId() {
+    return super.getPermId() + ".filter";
+  }
 }
