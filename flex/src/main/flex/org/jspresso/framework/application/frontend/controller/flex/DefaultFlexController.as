@@ -14,6 +14,7 @@
 
 package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.DisplayObject;
+  import flash.display.Sprite;
   import flash.events.DataEvent;
   import flash.events.Event;
   import flash.events.MouseEvent;
@@ -598,6 +599,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
             alertForm.removeChildAt(childIndex);
           }
         }
+        alertForm.mx_internal::buttons = [];
+        //Force re-initialization of alert form.
+        alertForm.initialized = false;
         alert.addChild(alertForm);
       }
   
@@ -606,6 +610,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         alert.titleIcon = titleIcon;
       }
       fixAlertSize(alert);
+      PopUpManager.centerPopUp(alert as IFlexDisplayObject);
     }
     
     protected function fixAlertSize(alert:Alert):void {
@@ -614,9 +619,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
         h += alert.getStyle("paddingTop");
       }
       if(alert.getStyle("paddingBottom") > 0) {
-        h += alert.getStyle("paddingBottom");
+        h += (alert.getStyle("paddingBottom"))*2;
       }
-      alert.height = h;
+      alert.height = h + 25;
     }
     
     protected function createAlert(messageCommand:RemoteMessageCommand):Alert {
@@ -632,6 +637,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       	message = message.replace(/<br.*?>/g, "/n");
       	message = message.replace(/<.*?>/g, "");
       }
+      var alertParent:Sprite;
+      //fails to center in parent if the second dialog is bigger than the first one. 
+      //        if(_dialogStack && _dialogStack.length > 1) {
+      //          dialogParent = _dialogStack[_dialogStack.length -1][0];
+      //        } else {
+      alertParent = Application.application as Sprite;
+      //        }
       if(messageCommand is RemoteOkCancelCommand) {
         alertCloseHandler = function(event:CloseEvent):void {
           switch(event.detail) {
@@ -645,7 +657,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         alert = Alert.show(message,
                    messageCommand.title,
                    Alert.OK|Alert.CANCEL,
-                   null,
+                   alertParent,
                    alertCloseHandler,
                    null,
                    Alert.CANCEL);
@@ -665,7 +677,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         alert = Alert.show(message,
                    messageCommand.title,
                    Alert.YES|Alert.NO|Alert.CANCEL,
-                   null,
+                   alertParent,
                    alertCloseHandler,
                    null,
                    Alert.CANCEL);
@@ -682,7 +694,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         alert = Alert.show(message,
                    messageCommand.title,
                    Alert.YES|Alert.NO,
-                   null,
+                   alertParent,
                    alertCloseHandler,
                    null,
                    Alert.NO);
@@ -690,7 +702,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         alert = Alert.show(message,
                    messageCommand.title,
                    Alert.OK,
-                   null,
+                   alertParent,
                    null,
                    null,
                    Alert.OK);
