@@ -25,4 +25,17 @@ public interface IFileFilterable {
    */
   Map<String, List<String>> getFileFilter();
 
+  /**
+   * Returns the default file name to use when saving the content as a file.
+   * 
+   * @return the default file name to use when saving the content as a file.
+   */
+  String getFileName();
+
+  /**
+   * Returns the default content type to use when saving the content as a file.
+   * 
+   * @return the default content type to use when saving the content as a file.
+   */
+  String getContentType();
 }

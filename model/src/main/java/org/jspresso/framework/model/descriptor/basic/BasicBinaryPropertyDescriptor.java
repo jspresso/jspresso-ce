@@ -38,6 +38,8 @@ public class BasicBinaryPropertyDescriptor extends
 
   private Map<String, List<String>> fileFilter;
   private Integer                   maxLength;
+  private String                    fileName;
+  private String                    contentType;
 
   /**
    * {@inheritDoc}
@@ -149,5 +151,45 @@ public class BasicBinaryPropertyDescriptor extends
       };
       throw ie;
     }
+  }
+
+  
+  /**
+   * Gets the fileName.
+   * 
+   * @return the fileName.
+   */
+  public String getFileName() {
+    return fileName;
+  }
+
+  
+  /**
+   * Configures the default file name to use when downloading the property content as a file.
+   * 
+   * @param fileName the fileName to set.
+   */
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  
+  /**
+   * Gets the contentType.
+   * 
+   * @return the contentType.
+   */
+  public String getContentType() {
+    return contentType;
+  }
+
+  
+  /**
+   * Configures the default content type to use when downloading the property content as a file.
+   * 
+   * @param contentType the contentType to set.
+   */
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
   }
 }

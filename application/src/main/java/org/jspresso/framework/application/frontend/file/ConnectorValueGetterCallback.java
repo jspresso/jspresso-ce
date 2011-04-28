@@ -23,9 +23,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.model.descriptor.IFileFilterable;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 
 /**
  * Default handler implementation to deal with getting binary properties storing
@@ -34,7 +35,8 @@ import org.jspresso.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ConnectorValueGetterCallback implements IFileSaveCallback {
+public class ConnectorValueGetterCallback extends AbstractActionContextAware
+    implements IFileSaveCallback {
 
   /**
    * {@inheritDoc}
@@ -52,8 +54,7 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
       @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) throws IOException {
     OutputStream os = new BufferedOutputStream(out);
-    Object connectorValue = ((IValueConnector) context
-        .get(ActionContextConstants.VIEW_CONNECTOR)).getConnectorValue();
+    Object connectorValue = getSelectedModel(context);
     byte[] content;
     if (connectorValue instanceof String) {
       content = ((String) connectorValue).getBytes();
@@ -69,8 +70,11 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
   /**
    * {@inheritDoc}
    */
-  public String getFileName(
-      @SuppressWarnings("unused") Map<String, Object> context) {
+  public String getFileName(Map<String, Object> context) {
+    IModelDescriptor modelDescriptor = getModelDescriptor(context);
+    if (modelDescriptor instanceof IFileFilterable) {
+      return ((IFileFilterable) modelDescriptor).getFileName();
+    }
     return null;
   }
 }
