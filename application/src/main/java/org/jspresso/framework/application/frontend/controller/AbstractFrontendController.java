@@ -1292,8 +1292,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
           && selectedConnector.getConnectorValue() instanceof Module) {
         Module selectedModule = (Module) selectedConnector.getConnectorValue();
         displayModule(workspaceName, selectedModule);
-      } else {
-        displayModule(workspaceName, null);
+        // We do not reset displayed module on navigator selection anymore.
+        // This is because when a node is selected in the tree at different level,
+        // the module connector selection is a 2-step process :
+        //   1. deselection
+        //   2. selection
+        // The problem is that you never have from and to modules simultaneaously,
+        // thus preventing complex algorithms in onEnter/onLeave actions.
+        // } else {
+        // displayModule(workspaceName, null);
       }
     }
   }
