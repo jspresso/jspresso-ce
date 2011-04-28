@@ -183,6 +183,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (currentModule != null) {
       pinModule(getSelectedWorkspaceName(), currentModule);
       Map<String, Object> navigationContext = new HashMap<String, Object>();
+      navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       navigationContext.put(ActionContextConstants.TO_MODULE, module);
       execute(currentModule.getExitAction(), navigationContext);
       execute(getOnModuleExitAction(), navigationContext);
@@ -213,6 +214,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       pinModule(getSelectedWorkspaceName(), module);
       Map<String, Object> navigationContext = new HashMap<String, Object>();
       navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
+      navigationContext.put(ActionContextConstants.TO_MODULE, module);
       execute(module.getEntryAction(), new HashMap<String, Object>());
       execute(getOnModuleEnterAction(), new HashMap<String, Object>());
     }

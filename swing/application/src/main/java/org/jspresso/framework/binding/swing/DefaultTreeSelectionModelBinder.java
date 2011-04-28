@@ -175,15 +175,15 @@ public class DefaultTreeSelectionModelBinder implements
         }
       }
       // 1st pass to clear
-      for (Map.Entry<ICollectionConnector, int[]> connectorIndicesPair : connectorSelection
-          .entrySet()) {
-        if (connectorIndicesPair.getValue() == null
-            || connectorIndicesPair.getValue().length == 0) {
-          ICollectionConnector connector = connectorIndicesPair.getKey();
-          int[] indices = connectorIndicesPair.getValue();
-          connector.setSelectedIndices(indices);
-        }
-      }
+//      for (Map.Entry<ICollectionConnector, int[]> connectorIndicesPair : connectorSelection
+//          .entrySet()) {
+//        if (connectorIndicesPair.getValue() == null
+//            || connectorIndicesPair.getValue().length == 0) {
+//          ICollectionConnector connector = connectorIndicesPair.getKey();
+//          int[] indices = connectorIndicesPair.getValue();
+//          connector.setSelectedIndices(indices);
+//        }
+//      }
       // 2nd pass to set
       boolean atLeastOneSelected = false;
       for (Map.Entry<ICollectionConnector, int[]> connectorIndicesPair : connectorSelection
