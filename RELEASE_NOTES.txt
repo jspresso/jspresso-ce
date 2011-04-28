@@ -35,7 +35,11 @@ the signature has changed from :
   to
   protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IEntity>)
   
-  
+- Due to a change of the groupId of the GMaven plugin used to perform the SJS compilation, all existing projects
+must perform a general search and replace in all pom.xml :
+  <groupId>org.codehaus.groovy.maven</groupId>
+  change to
+  <groupId>org.codehaus.gmaven</groupId>
   
 3.5.0
 =====
