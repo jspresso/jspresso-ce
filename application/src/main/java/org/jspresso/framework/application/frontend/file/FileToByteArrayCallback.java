@@ -27,6 +27,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.action.AbstractActionContextAware;
 
 /**
  * Default handler implementation to fully read the file inputstream into a byte
@@ -35,7 +36,8 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class FileToByteArrayCallback implements IFileOpenCallback {
+public class FileToByteArrayCallback extends AbstractActionContextAware
+    implements IFileOpenCallback {
 
   /**
    * {@inheritDoc}
@@ -60,7 +62,7 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
       }
       baos.flush();
       byte[] fileContent = baos.toByteArray();
-      context.put(ActionContextConstants.ACTION_PARAM, fileContent);
+      setActionParameter(fileContent, context);
     } catch (IOException ex) {
       throw new ActionException(ex);
     } finally {

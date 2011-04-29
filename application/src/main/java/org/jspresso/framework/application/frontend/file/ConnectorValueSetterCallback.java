@@ -44,9 +44,8 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
       IActionHandler actionHandler, Map<String, Object> context) {
     super.fileChosen(name, in, actionHandler, context);
     if (context.containsKey(ActionContextConstants.ACTION_PARAM)) {
-      Object valueToSet = context.get(ActionContextConstants.ACTION_PARAM);
-      IModelDescriptor modelDescriptor = (IModelDescriptor) context
-          .get(ActionContextConstants.MODEL_DESCRIPTOR);
+      Object valueToSet = getActionParameter(context);
+      IModelDescriptor modelDescriptor = getModelDescriptor(context);
       if (modelDescriptor instanceof IStringPropertyDescriptor) {
         valueToSet = new String((byte[]) valueToSet);
       }
