@@ -19,6 +19,7 @@ package org.jspresso.framework.view.flex {
   import flash.events.FocusEvent;
   import flash.events.MouseEvent;
   import flash.events.TextEvent;
+  import flash.text.TextField;
   
   import flexlib.containers.ButtonScrollingCanvas;
   import flexlib.controls.sliderClasses.ExtendedSlider;
@@ -47,6 +48,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.List;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
+  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -2059,7 +2061,12 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
-      var label:Label = new Label();
+      var label:Label;
+      if(remoteLabel.state) {
+        label = new Text();
+      } else {
+        label = new Label();
+      }
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
