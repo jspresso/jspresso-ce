@@ -444,9 +444,17 @@
     </property>
   </bean>
 
-  <bean id="removeFromModuleObjectFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
+  <bean id="removeModuleObjectFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
+    <property name="yesAction" ref="removeModuleObjectAction" />
+    <property name="collectionBased" value="false"/>
+    <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction"/>
+  </bean>
+
+  <bean id="removeFromModuleObjectsFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
     <property name="yesAction" ref="removeFromModuleObjectsAction" />
   </bean>
+
+  <alias alias="removeFromModuleObjectFrontAction" name="removeFromModuleObjectsFrontAction"/>
 
   <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction" />
 
@@ -678,7 +686,7 @@
       <list>
         <ref bean="addToMasterFrontAction" />
         <ref bean="cloneEntityCollectionFrontAction" />
-        <ref local="removeFromModuleObjectFrontAction" />
+        <ref local="removeFromModuleObjectsFrontAction" />
       </list>
     </property>
   </bean>
@@ -712,6 +720,7 @@
     <property name="actions">
       <list>
         <ref local="saveModuleObjectFrontAction" />
+        <ref local="removeModuleObjectFrontAction" />
         <ref local="reloadModuleObjectFrontAction" />
         <ref local="parentModuleConnectorSelectionFrontAction" />
       </list>
