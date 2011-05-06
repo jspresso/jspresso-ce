@@ -48,6 +48,8 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   private Map<String, Object>       currentSecurityContext;
   private List<Map<String, Object>> snapshots;
 
+  private static final String       LAST_PUSHED_VIEW = "LAST_PUSHED_VIEW";
+
   /**
    * Constructs a new <code>SecurityContextBuilder</code> instance.
    */
@@ -126,8 +128,12 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
 
   private SecurityContextBuilder append(IViewDescriptor viewDescriptor) {
     if (viewDescriptor != null) {
-      append(viewDescriptor.getModelDescriptor());
-      appendToViewChain(viewDescriptor.getPermId());
+      // prevents double-push of same view descriptor
+      if (!viewDescriptor.equals(currentSecurityContext.get(LAST_PUSHED_VIEW))) {
+        currentSecurityContext.put(LAST_PUSHED_VIEW, viewDescriptor);
+        append(viewDescriptor.getModelDescriptor());
+        appendToViewChain(viewDescriptor.getPermId());
+      }
     }
     return this;
   }
