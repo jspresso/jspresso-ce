@@ -150,10 +150,11 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void valueChange(ValueChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
         ((IRemoteStateOwner) connector).synchRemoteState();
-        RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+        RemoteFormattedValueState state = (RemoteFormattedValueState) ((IRemoteStateOwner) connector).getState();
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());
+        command.setValueAsObject(state.getValueAsObject());
         remoteCommandHandler.registerCommand(command);
       }
     };

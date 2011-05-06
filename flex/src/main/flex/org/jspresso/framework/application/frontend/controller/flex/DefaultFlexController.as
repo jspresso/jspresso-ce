@@ -414,7 +414,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
         if(command is RemoteValueCommand) {
           (targetPeer as RemoteValueState).value =
             (command as RemoteValueCommand).value;
-          if(targetPeer is RemoteCompositeValueState) {
+          if(targetPeer is RemoteFormattedValueState) {
+            (targetPeer as RemoteFormattedValueState).valueAsObject =
+              (command as RemoteValueCommand).valueAsObject;
+          } else if(targetPeer is RemoteCompositeValueState) {
            (targetPeer as RemoteCompositeValueState).description =
              (command as RemoteValueCommand).description;
            (targetPeer as RemoteCompositeValueState).iconImageUrl =

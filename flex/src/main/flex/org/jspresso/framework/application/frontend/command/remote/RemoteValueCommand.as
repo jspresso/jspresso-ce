@@ -22,6 +22,7 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _description:String;
         private var _iconImageUrl:String;
         private var _value:Object;
+        private var _valueAsObject:Object;
 
         public function RemoteValueCommand() {
           //default constructor.
@@ -46,6 +47,13 @@ package org.jspresso.framework.application.frontend.command.remote {
         }
         public function get value():Object {
             return _value;
+        }
+
+        public function set valueAsObject(value:Object):void {
+          _valueAsObject = value;
+        }
+        public function get valueAsObject():Object {
+          return _valueAsObject;
         }
     }
 }

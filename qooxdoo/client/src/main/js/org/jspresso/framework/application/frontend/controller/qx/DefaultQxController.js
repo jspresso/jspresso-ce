@@ -338,7 +338,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }
         if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand) {
           targetPeer.setValue(command.getValue());
-          if(targetPeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+          if(targetPeer instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
+           targetPeer.setValueAsObject(command.getValueAsObject());
+          } else if(targetPeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
            targetPeer.setDescription(command.getDescription());
            targetPeer.setIconImageUrl(command.getIconImageUrl());
           }

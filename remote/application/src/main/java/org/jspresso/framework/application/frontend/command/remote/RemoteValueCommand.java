@@ -33,6 +33,7 @@ public class RemoteValueCommand extends RemoteCommand {
   private String            description;
   private String            iconImageUrl;
   private Serializable      value;
+  private Serializable      valueAsObject;
 
   /**
    * Gets the description.
@@ -89,6 +90,26 @@ public class RemoteValueCommand extends RemoteCommand {
    */
   public void setValue(Object value) {
     this.value = (Serializable) value;
+  }
+
+  
+  /**
+   * Gets the valueAsObject.
+   * 
+   * @return the valueAsObject.
+   */
+  public Object getValueAsObject() {
+    return valueAsObject;
+  }
+
+  
+  /**
+   * Sets the valueAsObject.
+   * 
+   * @param valueAsObject the valueAsObject to set.
+   */
+  public void setValueAsObject(Object valueAsObject) {
+    this.valueAsObject = (Serializable) valueAsObject;
   }
 
 }

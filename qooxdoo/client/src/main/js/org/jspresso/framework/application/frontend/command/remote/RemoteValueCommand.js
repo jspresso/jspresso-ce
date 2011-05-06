@@ -35,6 +35,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     value :
     {
       nullable : true
+    },
+    valueAsObject :
+    {
+      nullable : true
     }
   }
 });
