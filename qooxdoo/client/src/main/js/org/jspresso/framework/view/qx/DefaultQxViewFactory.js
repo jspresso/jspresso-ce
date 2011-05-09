@@ -1236,6 +1236,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         for (var j = 0; j < actionList.getActions().length; j++) {
           var actionComponent = this.createAction(actionList
               .getActions()[j])
+          actionComponent.setFocusable(false);
           actionField.add(actionComponent);
           if (!mainAction) {
             mainAction = actionList.getActions()[j];
@@ -1255,6 +1256,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (content && content.length > 0) {
             if (content != state.getValue()) {
               textField.setValue(state.getValue());
+              if(e instanceof qx.event.type.Focus) {
+                if(e.getRelatedTarget() && e.getRelatedTarget() == actionField) {
+                  return;
+                }
+              }
               this.__actionHandler.execute(mainAction, content);
             }
           } else {
