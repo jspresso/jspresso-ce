@@ -261,7 +261,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * components will assigned without being merged at all. In that case, the
    * merging has to be performed later on in the action chain. Forgetting to do
    * so will lead to unexpected results. Default value is
-   * <code>EMergeMode.CLEAN_LAZY</code>.
+   * <code>EMergeMode.MERGE_CLEAN_LAZY</code>.
    * 
    * @param mergeMode
    *          the mergeMode to set.
