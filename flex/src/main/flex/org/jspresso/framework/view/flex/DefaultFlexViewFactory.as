@@ -634,7 +634,7 @@ package org.jspresso.framework.view.flex {
           actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             actionComponent.width = actionComponent.height;
           });
-
+          actionComponent.focusEnabled = false;
           actionField.addChild(actionComponent);
           actionComponents.push(actionComponent);
         }
@@ -678,6 +678,11 @@ package org.jspresso.framework.view.flex {
               tf.text = null;
             } else {
               tf.text = remoteState.value.toString();
+            }
+            if(event is FocusEvent
+              && (event as FocusEvent).relatedObject
+              && (event as FocusEvent).relatedObject.parent == actionField) {
+              return;
             }
             _actionHandler.execute(action, inputText);
           }
