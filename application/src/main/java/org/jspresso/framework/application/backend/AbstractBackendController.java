@@ -1051,11 +1051,12 @@ public abstract class AbstractBackendController extends AbstractController
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
-      if (newlyRegistered || mergeMode != EMergeMode.MERGE_CLEAN_LAZY
+      if (newlyRegistered || (mergeMode != EMergeMode.MERGE_CLEAN_LAZY && mergeMode != EMergeMode.MERGE_LAZY)
           || registeredEntity.getVersion() == null
           || !registeredEntity.getVersion().equals(entity.getVersion())) {
         if (mergeMode == EMergeMode.MERGE_CLEAN_EAGER
-            || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
+            || mergeMode == EMergeMode.MERGE_CLEAN_LAZY
+            || mergeMode == EMergeMode.MERGE_LAZY) {
           cleanDirtyProperties(registeredEntity);
         }
         Map<String, Object> entityProperties = entity.straightGetProperties();

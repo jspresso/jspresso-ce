@@ -85,7 +85,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * Constructs a new <code>QueryEntitiesAction</code> instance.
    */
   public QueryEntitiesAction() {
-    mergeMode = EMergeMode.MERGE_CLEAN_LAZY;
+    mergeMode = EMergeMode.MERGE_LAZY;
   }
 
   /**

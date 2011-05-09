@@ -169,7 +169,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         IComponent selectedItem = queryComponent.getQueriedComponents().get(0);
         if (selectedItem instanceof IEntity) {
           selectedItem = getController(context).getBackendController().merge(
-              (IEntity) selectedItem, EMergeMode.MERGE_CLEAN_LAZY);
+              (IEntity) selectedItem, EMergeMode.MERGE_LAZY);
         }
         context.put(LOV_PRESELECTED_ITEM, selectedItem);
         actionHandler.execute(okAction, context);

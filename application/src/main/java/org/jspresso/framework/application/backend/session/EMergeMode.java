@@ -55,6 +55,16 @@ public enum EMergeMode {
   MERGE_EAGER,
 
   /**
+   * <code>MERGE_LAZY</code> merge mode should be used to override the state of
+   * the target object graph for nodes whose version is obsolete. The graph
+   * traversal is stopped whenever a clean node in same version is met. Each
+   * traversed graph node dirty state is cleaned if and only if its version is
+   * newer. This merge mode is typically used when reading from database in a
+   * QBE query.
+   */
+  MERGE_LAZY,
+
+  /**
    * <code>MERGE_KEEP</code> merge mode is used to only register non-existing
    * graph object nodes. Existing nodes will simply be returned independently of
    * their state (even if they are obsolete).

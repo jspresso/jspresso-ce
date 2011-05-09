@@ -276,7 +276,12 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#local reverseFkName=propertyDescriptor.reverseRelationEnd.fkName/>
     </#if>
     <#if manyToMany>
-      <#local inverse=(compareStrings(elementName, componentName) > 0)/>
+      <#if (compareStrings(elementName, componentName) != 0)>
+        <#local inverse=(compareStrings(elementName, componentName) > 0)/>
+      <#else>
+        <#-- Reflexive many to many -->
+        <#local inverse=(compareStrings(propertyName, reversePropertyName) > 0)/>
+      </#if>
     <#else>
       <#if hibernateCollectionType="list">
         <#local inverse=false/>
@@ -470,10 +475,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local composition=propertyDescriptor.composition/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true/>
+    <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name/>
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
       <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
       <#local elementName=propertyType[propertyType?last_index_of(".")+1..]/>
-      <#local reverseOneToOne=(compareStrings(elementName, componentName) < 0)/>
+      <#if (compareStrings(elementName, componentName) != 0)>
+        <#local reverseOneToOne=(compareStrings(elementName, componentName) > 0)/>
+      <#else>
+        <#-- Reflexive one to one -->
+        <#local reverseOneToOne=(compareStrings(propertyName, reversePropertyName) > 0)/>
+      </#if>
     <#else>
       <#local reverseOneToOne=false/>
       <#if propertyDescriptor.reverseRelationEnd.modelType.name="java.util.List">

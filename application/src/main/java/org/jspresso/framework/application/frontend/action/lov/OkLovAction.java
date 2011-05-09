@@ -69,7 +69,7 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
               resultSelectedIndices[0]).getConnectorValue();
           if (selectedElement instanceof IEntity) {
             selectedElement = getController(context).getBackendController()
-                .merge((IEntity) selectedElement, EMergeMode.MERGE_CLEAN_LAZY);
+                .merge((IEntity) selectedElement, EMergeMode.MERGE_LAZY);
           }
           setActionParameter(selectedElement, context);
         } else {
