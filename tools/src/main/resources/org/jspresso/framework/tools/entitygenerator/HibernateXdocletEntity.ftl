@@ -480,10 +480,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
       <#local elementName=propertyType[propertyType?last_index_of(".")+1..]/>
       <#if (compareStrings(elementName, componentName) != 0)>
-        <#local reverseOneToOne=(compareStrings(elementName, componentName) > 0)/>
+        <#local reverseOneToOne=(compareStrings(elementName, componentName) < 0)/>
       <#else>
         <#-- Reflexive one to one -->
-        <#local reverseOneToOne=(compareStrings(propertyName, reversePropertyName) > 0)/>
+        <#local reverseOneToOne=(compareStrings(propertyName, reversePropertyName) < 0)/>
       </#if>
     <#else>
       <#local reverseOneToOne=false/>
