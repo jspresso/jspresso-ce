@@ -19,15 +19,15 @@ public class QooxdooApplicationStartup extends RemoteApplicationStartup
    * 
    * @param startupLanguage
    *          the client language.
-   * @param timezoneOffset
-   *          the client timezone offset in milliseconds.
+   * @param timeZoneOffset
+   *          the client timeZone offset in milliseconds.
    * @return the commands to be executed by the client peer on startup.
    * @throws RemoteException
    *           whenever an exception occurs.
    */
-  public List<RemoteCommand> startQx(String startupLanguage, int timezoneOffset)
+  public List<RemoteCommand> startQx(String startupLanguage, int timeZoneOffset)
       throws RemoteException {
-    return super.start(startupLanguage, timezoneOffset);
+    return super.start(startupLanguage, timeZoneOffset);
   }
 
   /**

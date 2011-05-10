@@ -38,7 +38,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   private Map<String, Object> customValues;
   private Locale              locale;
-  private TimeZone            timezone;
+  private TimeZone            timeZone;
   private Subject             subject;
 
   /**
@@ -122,21 +122,21 @@ public class BasicApplicationSession implements IApplicationSession {
 
   
   /**
-   * Gets the timezone.
+   * Gets the timeZone.
    * 
-   * @return the timezone.
+   * @return the timeZone.
    */
-  public TimeZone getTimezone() {
-    return timezone;
+  public TimeZone getTimeZone() {
+    return timeZone;
   }
 
   
   /**
-   * Sets the timezone.
+   * Sets the timeZone.
    * 
-   * @param timezone the timezone to set.
+   * @param timeZone the timeZone to set.
    */
-  public void setTimezone(TimeZone timezone) {
-    this.timezone = timezone;
+  public void setTimeZone(TimeZone timeZone) {
+    this.timeZone = timeZone;
   }
 }

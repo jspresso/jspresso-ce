@@ -325,12 +325,12 @@ public interface IFrontendController<E, F, G> extends IController,
    * @param clientLocale
    *          the locale this controller should use to initiate the login
    *          session while not knowing yet the user locale.
-   * @param clientTimezone
-   *          the timezone the client runs in.
+   * @param clientTimeZone
+   *          the timeZone the client runs in.
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale clientLocale,
-      TimeZone clientTimezone);
+      TimeZone clientTimeZone);
 
   /**
    * Gets the application navigation action map.
@@ -389,4 +389,10 @@ public interface IFrontendController<E, F, G> extends IController,
    */
   void removeClientPreference(String key);
 
+  /**
+   * Gets client timezone.
+   * 
+   * @return the client timezone.
+   */
+  TimeZone getClientTimeZone();
 }

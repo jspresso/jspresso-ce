@@ -55,7 +55,7 @@ public final class DateFieldConstants {
   /**
    * <code>TIMEZONE_KEY</code>.
    */
-  public static final String TIMEZONE_KEY         = "timezone";
+  public static final String TIMEZONE_KEY         = "timeZone";
 
   // anything key constants
   /**

@@ -20,7 +20,6 @@ package org.jspresso.framework.application.backend.session;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -59,13 +58,6 @@ public interface IApplicationSession {
   Locale getLocale();
 
   /**
-   * Gets the session timezone.
-   * 
-   * @return the session timezone.
-   */
-  TimeZone getTimezone();
-
-  /**
    * Gets the session principal as a JAAS principal.
    * 
    * @return the session owner.
@@ -96,14 +88,6 @@ public interface IApplicationSession {
    *          the session locale.
    */
   void setLocale(Locale locale);
-
-  /**
-   * Sets the session timezone.
-   * 
-   * @param timezone
-   *          the session timezone.
-   */
-  void setTimezone(TimeZone timezone);
 
   /**
    * Sets the session owner as a JAAS subject.

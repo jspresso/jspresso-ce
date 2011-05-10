@@ -107,19 +107,19 @@ public abstract class RemoteStartup extends
    * 
    * @param startupLanguage
    *          the client language.
-   * @param timezoneOffset
-   *          the client timezone offset in milliseconds.
+   * @param timeZoneOffset
+   *          the client timeZone offset in milliseconds.
    * @return the commands to be executed by the client peer on startup.
    */
-  public List<RemoteCommand> start(String startupLanguage, int timezoneOffset) {
+  public List<RemoteCommand> start(String startupLanguage, int timeZoneOffset) {
     setStartupLocale(new Locale(startupLanguage));
     TimeZone serverTimeZone = TimeZone.getDefault();
     int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
     TimeZone clientTz;
-    if (currentOffset == timezoneOffset) {
+    if (currentOffset == timeZoneOffset) {
       clientTz = serverTimeZone;
     } else {
-      String[] availableIds = TimeZone.getAvailableIDs(timezoneOffset);
+      String[] availableIds = TimeZone.getAvailableIDs(timeZoneOffset);
       if (availableIds != null && availableIds.length > 0) {
         clientTz = TimeZone.getTimeZone(availableIds[0]);
       } else {
@@ -177,7 +177,7 @@ public abstract class RemoteStartup extends
    * @return the clientTimeZone.
    */
   @Override
-  protected TimeZone getClientTimeZone() {
+  public TimeZone getClientTimeZone() {
     return clientTimeZone;
   }
 

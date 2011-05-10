@@ -21,7 +21,6 @@ package org.jspresso.framework.application.startup;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -40,7 +39,6 @@ import org.jspresso.framework.security.UserPrincipal;
 public abstract class AbstractBackendStartup extends AbstractStartup {
 
   private IBackendController backendController;
-  private TimeZone           clientTimeZone;
   private Locale             startupLocale;
 
   /**
@@ -68,7 +66,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   protected void startController() {
     // start on brand new instances.
     backendController = null;
-    getBackendController().start(getStartupLocale(), getClientTimeZone());
+    getBackendController().start(getStartupLocale());
   }
 
   /**
@@ -144,29 +142,6 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
       return Locale.getDefault();
     }
     return startupLocale;
-  }
-
-  /**
-   * Gets the clientTimeZone.
-   * 
-   * @return the clientTimeZone.
-   */
-  @Override
-  protected TimeZone getClientTimeZone() {
-    if (clientTimeZone == null) {
-      return TimeZone.getDefault();
-    }
-    return clientTimeZone;
-  }
-
-  /**
-   * Sets the clientTimeZone.
-   * 
-   * @param clientTimeZone
-   *          the clientTimeZone to set.
-   */
-  public void setClientTimeZone(TimeZone clientTimeZone) {
-    this.clientTimeZone = clientTimeZone;
   }
 
   /**

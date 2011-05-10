@@ -554,8 +554,8 @@ public class DefaultSwingController extends
    */
   @Override
   public boolean start(IBackendController backendController,
-      Locale clientLocale, TimeZone clientTimezone) {
-    if (super.start(backendController, clientLocale, clientTimezone)) {
+      Locale clientLocale, TimeZone clientTimeZone) {
+    if (super.start(backendController, clientLocale, clientTimeZone)) {
       waitTimer = new WaitCursorTimer(500);
       waitTimer.setDaemon(true);
       waitTimer.start();

@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.startup;
 
+import java.util.TimeZone;
+
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 
@@ -91,4 +93,11 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
       throw ex;
     }
   }
+
+  /**
+   * Gets the client timezone.
+   * 
+   * @return the client timezone.
+   */
+  protected abstract TimeZone getClientTimeZone();
 }

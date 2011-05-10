@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -333,16 +332,6 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Locale getLocale() {
     return applicationSession.getLocale();
-  }
-
-  /**
-   * Gets the timezone used by this controller. The timezone is actually held by
-   * the session.
-   * 
-   * @return locale used by this controller.
-   */
-  public TimeZone getTimezone() {
-    return applicationSession.getTimezone();
   }
 
   /**
@@ -723,9 +712,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean start(Locale startingLocale, TimeZone clientTimezone) {
+  public boolean start(Locale startingLocale) {
     applicationSession.setLocale(startingLocale);
-    applicationSession.setTimezone(clientTimezone);
     return true;
   }
 

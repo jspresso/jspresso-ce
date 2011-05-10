@@ -413,8 +413,8 @@ public class DefaultUlcController extends
    */
   @Override
   public boolean start(IBackendController backendController,
-      Locale clientLocale, TimeZone clientTimezone) {
-    if (super.start(backendController, clientLocale, clientTimezone)) {
+      Locale clientLocale, TimeZone clientTimeZone) {
+    if (super.start(backendController, clientLocale, clientTimeZone)) {
       initLoginProcess();
       return true;
     }
