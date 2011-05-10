@@ -27,12 +27,19 @@ package org.jspresso.framework.model.descriptor;
 public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
-   * Gets the date type. Values are among :
-   * <li> <code>DATE</code>
-   * <li> <code>DATE_TIME</code>
+   * Gets the date type. Values are among : <li> <code>DATE</code> <li>
+   * <code>DATE_TIME</code>
    * 
    * @return the type of this date descriptor.
    */
   EDateType getType();
+
+  /**
+   * Wether the date display should vary depending on the client timezone.
+   * 
+   * @return wether the date display should vary depending on the client
+   *         timezone.
+   */
+  boolean isTimeZoneAware();
 
 }

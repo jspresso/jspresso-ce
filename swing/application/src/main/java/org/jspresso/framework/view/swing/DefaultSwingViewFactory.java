@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -524,7 +525,8 @@ public class DefaultSwingViewFactory extends
       }
       IView<JComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
-      boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+      boolean forbidden = !actionHandler
+          .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
       }
@@ -708,7 +710,8 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    DateFormat format = createDateFormat(propertyDescriptor, locale);
+    DateFormat format = createDateFormat(propertyDescriptor,
+        actionHandler.getClientTimeZone(), locale);
     IFormatter formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
@@ -1680,22 +1683,23 @@ public class DefaultSwingViewFactory extends
    * 
    * @param propertyDescriptor
    *          the property descriptor to create the renderer for.
-   * @param translationProvider
-   *          the translation provider.
+   * @param actionHandler
+   *          the action handler.
    * @param locale
    *          the locale.
    * @return the created table cell renderer.
    */
   protected TableCellRenderer createTableCellRenderer(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale) {
+      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       cellRenderer = createBooleanTableCellRenderer(
           (IBooleanPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       cellRenderer = createDateTableCellRenderer(
-          (IDatePropertyDescriptor) propertyDescriptor, locale);
+          (IDatePropertyDescriptor) propertyDescriptor,
+          actionHandler.getClientTimeZone(), locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       cellRenderer = createTimeTableCellRenderer(
           (ITimePropertyDescriptor) propertyDescriptor, locale);
@@ -1704,8 +1708,8 @@ public class DefaultSwingViewFactory extends
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       cellRenderer = createEnumerationTableCellRenderer(
-          (IEnumerationPropertyDescriptor) propertyDescriptor,
-          translationProvider, locale);
+          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(
           (INumberPropertyDescriptor) propertyDescriptor, locale);
@@ -1889,9 +1893,9 @@ public class DefaultSwingViewFactory extends
                 computePixelWidth(
                     viewComponent,
                     getFormatLength(
-                        createFormatter(propertyDescriptor, locale),
-                        getTemplateValue(propertyDescriptor))), maxColumnSize),
-                minHeaderWidth));
+                        createFormatter(propertyDescriptor, actionHandler,
+                            locale), getTemplateValue(propertyDescriptor))),
+                maxColumnSize), minHeaderWidth));
           }
         }
         columnIndex++;
@@ -2520,9 +2524,10 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createDateTableCellRenderer(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+      Locale locale) {
     return new FormattedTableCellRenderer(createDateFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, timeZone, locale));
   }
 
   private TableCellRenderer createDecimalTableCellRenderer(

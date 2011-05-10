@@ -168,4 +168,11 @@ public class RemoteCollectionConnectorProvider extends
     }
     return createdState;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setValueFromState(Object stateValue) {
+    setConnectorValue(stateValue);
+  }
 }

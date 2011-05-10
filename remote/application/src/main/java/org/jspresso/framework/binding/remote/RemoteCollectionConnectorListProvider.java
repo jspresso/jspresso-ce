@@ -171,4 +171,11 @@ public class RemoteCollectionConnectorListProvider extends
     createdState.setChildren(children);
     return createdState;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setValueFromState(Object stateValue) {
+    setConnectorValue(stateValue);
+  }
 }

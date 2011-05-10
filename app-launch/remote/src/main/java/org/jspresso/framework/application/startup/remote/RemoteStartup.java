@@ -115,13 +115,21 @@ public abstract class RemoteStartup extends
     setStartupLocale(new Locale(startupLanguage));
     TimeZone serverTimeZone = TimeZone.getDefault();
     int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
-    TimeZone clientTz;
+    TimeZone clientTz = null;
     if (currentOffset == timeZoneOffset) {
       clientTz = serverTimeZone;
     } else {
       String[] availableIds = TimeZone.getAvailableIDs(timeZoneOffset);
       if (availableIds != null && availableIds.length > 0) {
-        clientTz = TimeZone.getTimeZone(availableIds[0]);
+        for (int i = 0; i < availableIds.length && clientTz == null; i++) {
+          TimeZone tz = TimeZone.getTimeZone(availableIds[i]);
+          if (tz.useDaylightTime() == serverTimeZone.useDaylightTime()) {
+            clientTz = tz;
+          }
+        }
+        if (clientTz == null) {
+          clientTz = TimeZone.getTimeZone(availableIds[0]);
+        }
       } else {
         clientTz = TimeZone.getDefault();
       }

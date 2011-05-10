@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
@@ -523,7 +524,8 @@ public class DefaultUlcViewFactory extends
       }
       IView<ULCComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
-      boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+      boolean forbidden = !actionHandler
+          .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
       }
@@ -700,7 +702,8 @@ public class DefaultUlcViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     ULCComponent viewComponent;
-    SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
+    SimpleDateFormat format = createDateFormat(propertyDescriptor,
+        actionHandler.getClientTimeZone(), locale);
     IFormatter formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       viewComponent = createULCLabel(true);
@@ -1265,20 +1268,23 @@ public class DefaultUlcViewFactory extends
    *          the table column index.
    * @param propertyDescriptor
    *          the property descriptor to create the renderer for.
-   * @param translationProvider the translation provider.
+   * @param actionHandler
+   *          the action handler.
    * @param locale
    *          the locale.
    * @return the created table cell renderer.
    */
   protected ITableCellRenderer createTableCellRenderer(int column,
-      IPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     ITableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       cellRenderer = createBooleanTableCellRenderer(
           (IBooleanPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       cellRenderer = createDateTableCellRenderer(column,
-          (IDatePropertyDescriptor) propertyDescriptor, locale);
+          (IDatePropertyDescriptor) propertyDescriptor,
+          actionHandler.getClientTimeZone(), locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       cellRenderer = createTimeTableCellRenderer(column,
           (ITimePropertyDescriptor) propertyDescriptor, locale);
@@ -1287,7 +1293,8 @@ public class DefaultUlcViewFactory extends
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       cellRenderer = createEnumerationTableCellRenderer(column,
-          (IEnumerationPropertyDescriptor) propertyDescriptor, translationProvider, locale);
+          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(column,
           (INumberPropertyDescriptor) propertyDescriptor, locale);
@@ -1376,7 +1383,7 @@ public class DefaultUlcViewFactory extends
                     .isUsingBigDecimal()) {
               columnClasses.add(String.class);
               columnFormatters.add(createFormatter(columnModelDescriptor,
-                  locale));
+                  actionHandler, locale));
             } else {
               columnClasses.add(columnModelDescriptor.getModelType());
               columnFormatters.add(null);
@@ -1479,9 +1486,9 @@ public class DefaultUlcViewFactory extends
                 computePixelWidth(
                     viewComponent,
                     getFormatLength(
-                        createFormatter(propertyDescriptor, locale),
-                        getTemplateValue(propertyDescriptor))), maxColumnSize),
-                minHeaderWidth));
+                        createFormatter(propertyDescriptor, actionHandler,
+                            locale), getTemplateValue(propertyDescriptor))),
+                maxColumnSize), minHeaderWidth));
           }
         }
       }
@@ -2166,10 +2173,11 @@ public class DefaultUlcViewFactory extends
   }
 
   private ITableCellRenderer createDateTableCellRenderer(int column,
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+      Locale locale) {
     return new FormattedTableCellRenderer(column, createDateDataType(
         propertyDescriptor, locale,
-        createDateFormat(propertyDescriptor, locale)));
+        createDateFormat(propertyDescriptor, timeZone, locale)));
   }
 
   private ULCNumberDataType createDecimalDataType(
@@ -2213,7 +2221,8 @@ public class DefaultUlcViewFactory extends
   }
 
   private ITableCellRenderer createEnumerationTableCellRenderer(int column,
-      IEnumerationPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     return new TranslatedEnumerationTableCellRenderer(column,
         propertyDescriptor, translationProvider, locale);
   }
@@ -2376,8 +2385,7 @@ public class DefaultUlcViewFactory extends
     IViewDescriptor viewDescriptor = view.getDescriptor();
     ULCPopupMenu popupMenu = createULCPopupMenu();
     ULCLabel titleLabel = createULCLabel(false);
-    titleLabel.setText(viewDescriptor.getI18nName(actionHandler,
-        locale));
+    titleLabel.setText(viewDescriptor.getI18nName(actionHandler, locale));
     titleLabel.setIcon(getIconFactory().getIcon(
         viewDescriptor.getIconImageURL(), getIconFactory().getTinyIconSize()));
     titleLabel.setHorizontalAlignment(IDefaults.CENTER);

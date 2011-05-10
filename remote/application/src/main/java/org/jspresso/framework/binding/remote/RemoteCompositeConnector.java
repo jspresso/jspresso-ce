@@ -178,4 +178,11 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     createdState.setChildren(children);
     return createdState;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setValueFromState(Object stateValue) {
+    setConnectorValue(stateValue);
+  }
 }

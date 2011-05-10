@@ -178,4 +178,11 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     createdState.setChildren(children);
     return createdState;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void setValueFromState(Object stateValue) {
+    setConnectorValue(stateValue);
+  }
 }

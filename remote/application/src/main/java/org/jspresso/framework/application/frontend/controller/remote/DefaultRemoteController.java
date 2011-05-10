@@ -70,6 +70,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -262,8 +263,8 @@ public class DefaultRemoteController extends
     if (ex instanceof SecurityException) {
       messageCommand.setMessage(ex.getMessage());
     } else if (ex instanceof BusinessException) {
-      messageCommand.setMessage(((BusinessException) ex).getI18nMessage(
-          this, getLocale()));
+      messageCommand.setMessage(((BusinessException) ex).getI18nMessage(this,
+          getLocale()));
     } else if (ex instanceof DataIntegrityViolationException) {
       messageCommand
           .setMessage(this
@@ -271,8 +272,8 @@ public class DefaultRemoteController extends
                   refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
                   getLocale()));
     } else if (ex instanceof ConcurrencyFailureException) {
-      messageCommand.setMessage(getTranslation(
-          "concurrency.error.description", getLocale()));
+      messageCommand.setMessage(getTranslation("concurrency.error.description",
+          getLocale()));
     } else {
       ex.printStackTrace();
       messageCommand.setMessage(ex.getLocalizedMessage());
@@ -619,12 +620,11 @@ public class DefaultRemoteController extends
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
-        initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(
-            this, getLocale()));
-        initLoginCommand.setMessage(getTranslation(
-            LoginUtils.CRED_MESSAGE, getLocale()));
-        initLoginCommand.setOkLabel(getTranslation(
-            "ok", getLocale()));
+        initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(this,
+            getLocale()));
+        initLoginCommand.setMessage(getTranslation(LoginUtils.CRED_MESSAGE,
+            getLocale()));
+        initLoginCommand.setOkLabel(getTranslation("ok", getLocale()));
         initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
             getIconFactory().getSmallIconSize()));
         registerCommand(initLoginCommand);
@@ -652,8 +652,8 @@ public class DefaultRemoteController extends
         execute(getStartupAction(), getInitialActionContext());
       } else {
         RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
-        errorMessageCommand.setMessage(getTranslation(
-            LoginUtils.LOGIN_FAILED, getLocale()));
+        errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED,
+            getLocale()));
         registerCommand(errorMessageCommand);
       }
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
@@ -688,10 +688,17 @@ public class DefaultRemoteController extends
           ((IFormattedValueConnector) targetPeer)
               .setConnectorValueAsString((String) ((RemoteValueCommand) command)
                   .getValue());
-        } else {
+        } else if (targetPeer instanceof IRemoteStateOwner) {
+          ((IRemoteStateOwner) targetPeer)
+              .setValueFromState(((RemoteValueCommand) command).getValue());
+        } else if (targetPeer instanceof IValueConnector) {
           ((IValueConnector) targetPeer)
               .setConnectorValue(((RemoteValueCommand) command).getValue());
+        } else {
+          throw new CommandException("Target peer type cannot be handled : "
+              + targetPeer.getClass().getName());
         }
+
         // The following code has been handled at a lower level,
         // see AbstractCompositeValueConnector.propagateRollback
         // if (targetPeer instanceof IRemoteStateOwner) {
@@ -790,8 +797,7 @@ public class DefaultRemoteController extends
 
   private RemoteMessageCommand createErrorMessageCommand() {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
-    messageCommand.setTitle(getTranslation("error",
-        getLocale()));
+    messageCommand.setTitle(getTranslation("error", getLocale()));
     messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
         getIconFactory().getTinyIconSize()));
     messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
@@ -809,10 +815,9 @@ public class DefaultRemoteController extends
 
   private RActionList createRActionList(ActionList actionList) {
     RActionList rActionList = new RActionList(guidGenerator.generateGUID());
-    rActionList.setName(actionList.getI18nName(this,
-        getLocale()));
-    rActionList.setDescription(actionList.getI18nDescription(
-        this, getLocale()));
+    rActionList.setName(actionList.getI18nName(this, getLocale()));
+    rActionList
+        .setDescription(actionList.getI18nDescription(this, getLocale()));
     rActionList.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getTinyIconSize()));
 

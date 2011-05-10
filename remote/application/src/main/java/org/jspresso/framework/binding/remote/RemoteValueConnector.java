@@ -197,4 +197,25 @@ public class RemoteValueConnector extends BasicValueConnector implements
     }
     return valueForState;
   }
+
+  /**
+   * Sets the value that has to be set from the remote state when updating it.
+   * It defaults to the incoming value but the developper is given a chance here
+   * to mutate the actual object that comes in. This allows for changing the
+   * type of objects actually exchanged with the remote frontend peer.
+   * 
+   * @param stateValue
+   *          the incoming value.
+   */
+
+  public void setValueFromState(Object stateValue) {
+    Object valueFromState;
+    if (getRemoteStateValueMapper() != null) {
+      valueFromState = getRemoteStateValueMapper()
+          .getValueFromState(stateValue);
+    } else {
+      valueFromState = stateValue;
+    }
+    setConnectorValue(valueFromState);
+  }
 }

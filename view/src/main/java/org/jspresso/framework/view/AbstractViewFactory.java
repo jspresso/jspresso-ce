@@ -34,6 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
@@ -1263,12 +1264,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the date property descriptor.
+   * @param timeZone
+   *          the timezone.
    * @param locale
    *          the locale.
    * @return the date format.
    */
   protected SimpleDateFormat createDateFormat(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+      Locale locale) {
     SimpleDateFormat format;
     if (propertyDescriptor.getType() == EDateType.DATE) {
       format = new NullableSimpleDateFormat(
@@ -1279,6 +1283,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           ((SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT,
               DateFormat.SHORT, locale)).toPattern(), locale);
     }
+    if (propertyDescriptor.isTimeZoneAware()) {
+      format.setTimeZone(timeZone);
+    }
     return format;
   }
 
@@ -1287,13 +1294,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the date property descriptor.
+   * @param timeZone
+   *          the timezone.
    * @param locale
    *          the locale.
    * @return the date formatter.
    */
   protected IFormatter createDateFormatter(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createDateFormat(propertyDescriptor, locale));
+      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+      Locale locale) {
+    return createFormatter(createDateFormat(propertyDescriptor, timeZone,
+        locale));
   }
 
   /**
@@ -1476,15 +1487,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
    * @param locale
    *          the locale.
    * @return the formatter.
    */
   protected IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
-      Locale locale) {
+      IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
-          locale);
+          actionHandler.getClientTimeZone(), locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
           locale);

@@ -270,6 +270,13 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void setValueFromState(@SuppressWarnings("unused") Object stateValue) {
+    // Empty implementation.
+  }
+
+  /**
    * Gets the secondaryActionLists.
    * 
    * @return the secondaryActionLists.

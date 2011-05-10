@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
@@ -481,7 +482,8 @@ public class DefaultWingsViewFactory extends
       }
       IView<SComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
-      boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+      boolean forbidden = !actionHandler
+          .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
       }
@@ -665,7 +667,8 @@ public class DefaultWingsViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     SComponent viewComponent;
-    DateFormat format = createDateFormat(propertyDescriptor, locale);
+    DateFormat format = createDateFormat(propertyDescriptor,
+        actionHandler.getClientTimeZone(), locale);
     IFormatter formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       viewComponent = createSLabel(true);
@@ -1499,21 +1502,23 @@ public class DefaultWingsViewFactory extends
    * 
    * @param propertyDescriptor
    *          the property descriptor to create the renderer for.
-   * @param translationProvider the translation provider.
+   * @param actionHandler
+   *          the action handler.
    * @param locale
    *          the locale.
    * @return the created table cell renderer.
    */
   protected STableCellRenderer createTableCellRenderer(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale) {
+      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     STableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       cellRenderer = createBooleanTableCellRenderer(
           (IBooleanPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       cellRenderer = createDateTableCellRenderer(
-          (IDatePropertyDescriptor) propertyDescriptor, locale);
+          (IDatePropertyDescriptor) propertyDescriptor,
+          actionHandler.getClientTimeZone(), locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       cellRenderer = createTimeTableCellRenderer(
           (ITimePropertyDescriptor) propertyDescriptor, locale);
@@ -1522,8 +1527,8 @@ public class DefaultWingsViewFactory extends
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       cellRenderer = createEnumerationTableCellRenderer(
-          (IEnumerationPropertyDescriptor) propertyDescriptor,
-          translationProvider, locale);
+          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(
           (INumberPropertyDescriptor) propertyDescriptor, locale);
@@ -1677,9 +1682,9 @@ public class DefaultWingsViewFactory extends
                 computePixelWidth(
                     viewComponent,
                     getFormatLength(
-                        createFormatter(propertyDescriptor, locale),
-                        getTemplateValue(propertyDescriptor))), maxColumnSize),
-                minHeaderWidth);
+                        createFormatter(propertyDescriptor, actionHandler,
+                            locale), getTemplateValue(propertyDescriptor))),
+                maxColumnSize), minHeaderWidth);
           }
         }
         column.setWidth(columnWidth + "px");
@@ -1997,7 +2002,8 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithBorder(IView<SComponent> view, ITranslationProvider translationProvider, Locale locale) {
+  protected void decorateWithBorder(IView<SComponent> view,
+      ITranslationProvider translationProvider, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
         view.getPeer().setBorder(new SEtchedBorder());
@@ -2088,9 +2094,10 @@ public class DefaultWingsViewFactory extends
   }
 
   private STableCellRenderer createDateTableCellRenderer(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+      Locale locale) {
     return new FormattedTableCellRenderer(createDateFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, timeZone, locale));
   }
 
   private STableCellRenderer createDecimalTableCellRenderer(
@@ -2464,7 +2471,8 @@ public class DefaultWingsViewFactory extends
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param translationProvider the translation provider.
+     * @param translationProvider
+     *          the translation provider.
      * @param locale
      *          the locale to lookup the translation.
      */

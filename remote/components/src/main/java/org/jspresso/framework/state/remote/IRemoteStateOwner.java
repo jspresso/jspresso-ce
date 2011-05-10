@@ -45,4 +45,13 @@ public interface IRemoteStateOwner {
    * Triggers synchronization of the remote state.
    */
   void synchRemoteState();
+
+  /**
+   * Sets the actual owner value from state value, allowing for a transformation
+   * if necessary.
+   * 
+   * @param stateValue
+   *          the incoming state value.
+   */
+  void setValueFromState(Object stateValue);
 }

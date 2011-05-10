@@ -23,10 +23,13 @@ import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -350,6 +353,10 @@ public class DefaultRemoteViewFactory extends
           }
           return originalValue;
         }
+
+        public Object getValueFromState(Object originalValue) {
+          return originalValue;
+        }
       });
     }
     connector.setExceptionHandler(actionHandler);
@@ -603,7 +610,8 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createDateFormatter(propertyDescriptor, locale);
+    IFormatter formatter = createDateFormatter(propertyDescriptor,
+        actionHandler.getClientTimeZone(), locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -616,10 +624,64 @@ public class DefaultRemoteViewFactory extends
       if (isDateServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
             propertyDescriptor.getName(),
-            createDateFormatter(propertyDescriptor, locale));
+            createDateFormatter(propertyDescriptor,
+                actionHandler.getClientTimeZone(), locale));
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
+        if (!propertyDescriptor.isTimeZoneAware()) {
+          // In that case, we have to translate the incoming dates from the
+          // client timezone preserving the text representation.
+          final TimeZone serverTz = TimeZone.getDefault();
+          final TimeZone clientTz = actionHandler.getClientTimeZone();
+          if (!serverTz.equals(clientTz)) {
+            ((RemoteValueConnector) connector)
+                .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+
+                  public Object getValueFromState(Object originalValue) {
+                    if (originalValue instanceof Date) {
+                      Date stateDate = (Date) originalValue;
+                      Calendar serverCalendar = Calendar.getInstance(serverTz);
+                      Calendar clientCalendar = Calendar.getInstance(clientTz);
+
+                      clientCalendar.setTime(stateDate);
+                      serverCalendar.set(clientCalendar.get(Calendar.YEAR),
+                          clientCalendar.get(Calendar.MONTH),
+                          clientCalendar.get(Calendar.DATE),
+                          clientCalendar.get(Calendar.HOUR_OF_DAY),
+                          clientCalendar.get(Calendar.MINUTE),
+                          clientCalendar.get(Calendar.SECOND));
+                      serverCalendar.set(Calendar.MILLISECOND,
+                          clientCalendar.get(Calendar.MILLISECOND));
+                      Date connectorDate = serverCalendar.getTime();
+                      return connectorDate;
+                    }
+                    return originalValue;
+                  }
+
+                  public Object getValueForState(Object originalValue) {
+                    if (originalValue instanceof Date) {
+                      Date connectorDate = (Date) originalValue;
+                      Calendar serverCalendar = Calendar.getInstance(serverTz);
+                      Calendar clientCalendar = Calendar.getInstance(clientTz);
+
+                      serverCalendar.setTime(connectorDate);
+                      clientCalendar.set(serverCalendar.get(Calendar.YEAR),
+                          serverCalendar.get(Calendar.MONTH),
+                          serverCalendar.get(Calendar.DATE),
+                          serverCalendar.get(Calendar.HOUR_OF_DAY),
+                          serverCalendar.get(Calendar.MINUTE),
+                          serverCalendar.get(Calendar.SECOND));
+                      clientCalendar.set(Calendar.MILLISECOND,
+                          serverCalendar.get(Calendar.MILLISECOND));
+                      Date stateDate = clientCalendar.getTime();
+                      return stateDate;
+                    }
+                    return originalValue;
+                  }
+                });
+          }
+        }
       }
       viewComponent = createRDateField(connector);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType()
@@ -865,6 +927,10 @@ public class DefaultRemoteViewFactory extends
           }
           return originalValue;
         }
+
+        public Object getValueFromState(Object originalValue) {
+          return originalValue;
+        }
       });
     }
     RImageComponent viewComponent = createRImageComponent(connector);
@@ -979,6 +1045,10 @@ public class DefaultRemoteViewFactory extends
           } else if (originalValue instanceof BigInteger) {
             return new Long(((BigInteger) originalValue).longValue());
           }
+          return originalValue;
+        }
+
+        public Object getValueFromState(Object originalValue) {
           return originalValue;
         }
       });
@@ -1831,6 +1901,55 @@ public class DefaultRemoteViewFactory extends
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
+        final TimeZone serverTz = TimeZone.getDefault();
+        final TimeZone clientTz = actionHandler.getClientTimeZone();
+        if (!serverTz.equals(clientTz)) {
+          ((RemoteValueConnector) connector)
+              .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+
+                public Object getValueFromState(Object originalValue) {
+                  if (originalValue instanceof Date) {
+                    Date stateDate = (Date) originalValue;
+                    Calendar serverCalendar = Calendar.getInstance(serverTz);
+                    Calendar clientCalendar = Calendar.getInstance(clientTz);
+
+                    clientCalendar.setTime(stateDate);
+                    serverCalendar.set(clientCalendar.get(Calendar.YEAR),
+                        clientCalendar.get(Calendar.MONTH),
+                        clientCalendar.get(Calendar.DATE),
+                        clientCalendar.get(Calendar.HOUR_OF_DAY),
+                        clientCalendar.get(Calendar.MINUTE),
+                        clientCalendar.get(Calendar.SECOND));
+                    serverCalendar.set(Calendar.MILLISECOND,
+                        clientCalendar.get(Calendar.MILLISECOND));
+                    Date connectorDate = serverCalendar.getTime();
+                    return connectorDate;
+                  }
+                  return originalValue;
+                }
+
+                public Object getValueForState(Object originalValue) {
+                  if (originalValue instanceof Date) {
+                    Date connectorDate = (Date) originalValue;
+                    Calendar serverCalendar = Calendar.getInstance(serverTz);
+                    Calendar clientCalendar = Calendar.getInstance(clientTz);
+
+                    serverCalendar.setTime(connectorDate);
+                    clientCalendar.set(serverCalendar.get(Calendar.YEAR),
+                        serverCalendar.get(Calendar.MONTH),
+                        serverCalendar.get(Calendar.DATE),
+                        serverCalendar.get(Calendar.HOUR_OF_DAY),
+                        serverCalendar.get(Calendar.MINUTE),
+                        serverCalendar.get(Calendar.SECOND));
+                    clientCalendar.set(Calendar.MILLISECOND,
+                        serverCalendar.get(Calendar.MILLISECOND));
+                    Date stateDate = clientCalendar.getTime();
+                    return stateDate;
+                  }
+                  return originalValue;
+                }
+              });
+        }
       }
       viewComponent = createRTimeField(connector);
     }

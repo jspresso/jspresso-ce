@@ -34,12 +34,14 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
     implements IDatePropertyDescriptor {
 
   private EDateType type;
+  private boolean   timeZoneAware;
 
   /**
    * Constructs a new <code>BasicDatePropertyDescriptor</code> instance.
    */
   public BasicDatePropertyDescriptor() {
     type = EDateType.DATE;
+    timeZoneAware = false;
   }
 
   /**
@@ -83,5 +85,28 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   public void setType(EDateType type) {
     this.type = type;
+  }
+
+  /**
+   * Sets wether this date property should have its string representation vary
+   * depending on the client timezone.
+   * <p>
+   * Default value is <code>false</code>, meaning that the date is considered as
+   * a string. It is in fact expressed in the server timezone.
+   * 
+   * @param timeZoneAware
+   *          the timeZoneAware to set.
+   */
+  public void setTimeZoneAware(boolean timeZoneAware) {
+    this.timeZoneAware = timeZoneAware;
+  }
+
+  /**
+   * Gets the timeZoneAware.
+   * 
+   * @return the timeZoneAware.
+   */
+  public boolean isTimeZoneAware() {
+    return timeZoneAware;
   }
 }
