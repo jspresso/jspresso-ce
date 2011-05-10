@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.frontend.command.remote;
 
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * The interface for remote command handlers.
@@ -45,11 +44,4 @@ public interface IRemoteCommandHandler {
    *          the command to register.
    */
   void registerCommand(RemoteCommand command);
-
-  /**
-   * Gets the client timeZone.
-   * 
-   * @return the client timeZone.
-   */
-  TimeZone getClientTimeZone();
 }
