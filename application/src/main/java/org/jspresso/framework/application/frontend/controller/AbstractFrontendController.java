@@ -107,7 +107,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private List<ModuleHistoryEntry>              backwardHistoryEntries;
   private Locale                                clientLocale;
-  private TimeZone                              clientTimeZone;
   private DefaultIconDescriptor                 controllerDescriptor;
   private List<Map<String, Object>>             dialogContextStack;
   private IDisplayableAction                    exitAction;
@@ -469,7 +468,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public TimeZone getClientTimeZone() {
-    return clientTimeZone;
+    if (getBackendController() != null) {
+      return getBackendController().getClientTimeZone();
+    }
+    return TimeZone.getDefault();
   }
 
   /**
@@ -817,13 +819,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public boolean start(IBackendController peerController,
       Locale theClientLocale, TimeZone theClientTimeZone) {
     this.clientLocale = theClientLocale;
-    this.clientTimeZone = theClientTimeZone;
     setBackendController(peerController);
     Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
       initialLocale = new Locale(forcedStartingLocale);
     }
-    return peerController.start(initialLocale);
+    return peerController.start(initialLocale, theClientTimeZone);
   }
 
   /**

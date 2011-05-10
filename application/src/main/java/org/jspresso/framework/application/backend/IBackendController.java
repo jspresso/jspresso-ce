@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
@@ -334,9 +335,11 @@ public interface IBackendController extends IController,
    * 
    * @param startingLocale
    *          the locale this backend controller should start with.
+   * @param clientTimeZone
+   *          the client timezone.
    * @return true if the controller successfully started.
    */
-  boolean start(Locale startingLocale);
+  boolean start(Locale startingLocale, TimeZone clientTimeZone);
 
   /**
    * Acts as a clipboard for storing component references along with their

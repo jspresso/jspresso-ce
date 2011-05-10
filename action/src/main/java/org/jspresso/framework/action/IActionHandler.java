@@ -19,6 +19,7 @@
 package org.jspresso.framework.action;
 
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -83,4 +84,11 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler, ITr
    *          the key under which the preference is stored.
    */
   void removeUserPreference(String key);
+
+  /**
+   * Gets the client timeZone.
+   * 
+   * @return the client timeZone.
+   */
+  TimeZone getClientTimeZone();
 }

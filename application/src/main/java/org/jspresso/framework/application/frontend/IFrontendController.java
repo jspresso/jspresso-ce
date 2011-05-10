@@ -388,11 +388,4 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the key under which the preference is stored.
    */
   void removeClientPreference(String key);
-
-  /**
-   * Gets client timezone.
-   * 
-   * @return the client timezone.
-   */
-  TimeZone getClientTimeZone();
 }

@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -128,6 +129,8 @@ public abstract class AbstractBackendController extends AbstractController
   private ISecurityContextBuilder                          securityContextBuilder;
 
   private ITranslationPlugin                               customTranslationPlugin;
+
+  private TimeZone                                         clientTimeZone;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -712,8 +715,9 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean start(Locale startingLocale) {
+  public boolean start(Locale startingLocale, TimeZone theClientTimeZone) {
     applicationSession.setLocale(startingLocale);
+    this.clientTimeZone = theClientTimeZone;
     return true;
   }
 
@@ -1635,5 +1639,17 @@ public abstract class AbstractBackendController extends AbstractController
   public void setCustomTranslationPlugin(
       ITranslationPlugin customTranslationPlugin) {
     this.customTranslationPlugin = customTranslationPlugin;
+  }
+
+  /**
+   * Gets the clientTimezone.
+   * 
+   * @return the clientTimezone.
+   */
+  public TimeZone getClientTimeZone() {
+    if (clientTimeZone != null) {
+      return clientTimeZone;
+    }
+    return TimeZone.getDefault();
   }
 }
