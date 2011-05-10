@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -106,6 +107,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private List<ModuleHistoryEntry>              backwardHistoryEntries;
   private Locale                                clientLocale;
+  private TimeZone                              clientTimezone;
   private DefaultIconDescriptor                 controllerDescriptor;
   private List<Map<String, Object>>             dialogContextStack;
   private IDisplayableAction                    exitAction;
@@ -464,6 +466,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public TimeZone getTimezone() {
+    if (getBackendController() != null) {
+      return getBackendController().getApplicationSession().getTimezone();
+    }
+    return clientTimezone;
+  }
+
+  /**
    * Gets the mvcBinder.
    * 
    * @return the mvcBinder.
@@ -805,14 +817,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
-  public boolean start(IBackendController peerController, Locale theClientLocale) {
+  public boolean start(IBackendController peerController,
+      Locale theClientLocale, TimeZone theClientTimezone) {
     this.clientLocale = theClientLocale;
+    this.clientTimezone = theClientTimezone;
     setBackendController(peerController);
     Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
       initialLocale = new Locale(forcedStartingLocale);
     }
-    return peerController.start(initialLocale);
+    return peerController.start(initialLocale, clientTimezone);
   }
 
   /**
@@ -1293,11 +1307,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
         Module selectedModule = (Module) selectedConnector.getConnectorValue();
         displayModule(workspaceName, selectedModule);
         // We do not reset displayed module on navigator selection anymore.
-        // This is because when a node is selected in the tree at different level,
+        // This is because when a node is selected in the tree at different
+        // level,
         // the module connector selection is a 2-step process :
-        //   1. deselection
-        //   2. selection
-        // The problem is that you never have from and to modules simultaneaously,
+        // 1. deselection
+        // 2. selection
+        // The problem is that you never have from and to modules
+        // simultaneaously,
         // thus preventing complex algorithms in onEnter/onLeave actions.
         // } else {
         // displayModule(workspaceName, null);

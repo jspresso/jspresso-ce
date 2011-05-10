@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.session.basic;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -37,6 +38,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   private Map<String, Object> customValues;
   private Locale              locale;
+  private TimeZone            timezone;
   private Subject             subject;
 
   /**
@@ -116,5 +118,25 @@ public class BasicApplicationSession implements IApplicationSession {
   public Map<String, Object> getCustomValues() {
     // return a defensive copy
     return new HashMap<String, Object>(customValues);
+  }
+
+  
+  /**
+   * Gets the timezone.
+   * 
+   * @return the timezone.
+   */
+  public TimeZone getTimezone() {
+    return timezone;
+  }
+
+  
+  /**
+   * Sets the timezone.
+   * 
+   * @param timezone the timezone to set.
+   */
+  public void setTimezone(TimeZone timezone) {
+    this.timezone = timezone;
   }
 }

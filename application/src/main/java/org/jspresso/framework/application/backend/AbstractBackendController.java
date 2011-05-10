@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -332,6 +333,16 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Locale getLocale() {
     return applicationSession.getLocale();
+  }
+
+  /**
+   * Gets the timezone used by this controller. The timezone is actually held by
+   * the session.
+   * 
+   * @return locale used by this controller.
+   */
+  public TimeZone getTimezone() {
+    return applicationSession.getTimezone();
   }
 
   /**
@@ -712,8 +723,9 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean start(Locale startingLocale) {
+  public boolean start(Locale startingLocale, TimeZone clientTimezone) {
     applicationSession.setLocale(startingLocale);
+    applicationSession.setTimezone(clientTimezone);
     return true;
   }
 
@@ -1051,7 +1063,8 @@ public abstract class AbstractBackendController extends AbstractController
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
-      if (newlyRegistered || (mergeMode != EMergeMode.MERGE_CLEAN_LAZY && mergeMode != EMergeMode.MERGE_LAZY)
+      if (newlyRegistered
+          || (mergeMode != EMergeMode.MERGE_CLEAN_LAZY && mergeMode != EMergeMode.MERGE_LAZY)
           || registeredEntity.getVersion() == null
           || !registeredEntity.getVersion().equals(entity.getVersion())) {
         if (mergeMode == EMergeMode.MERGE_CLEAN_EAGER
@@ -1443,7 +1456,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-      /* getName(), */getApplicationSession().getPrincipal().getName()});
+        /* getName(), */getApplicationSession().getPrincipal().getName()
+      });
     }
 
   }

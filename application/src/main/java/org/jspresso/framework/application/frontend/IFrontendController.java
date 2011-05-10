@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
@@ -324,9 +325,12 @@ public interface IFrontendController<E, F, G> extends IController,
    * @param clientLocale
    *          the locale this controller should use to initiate the login
    *          session while not knowing yet the user locale.
+   * @param clientTimezone
+   *          the timezone the client runs in.
    * @return true if the controller succesfully started.
    */
-  boolean start(IBackendController backendController, Locale clientLocale);
+  boolean start(IBackendController backendController, Locale clientLocale,
+      TimeZone clientTimezone);
 
   /**
    * Gets the application navigation action map.

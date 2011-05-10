@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
@@ -255,8 +256,7 @@ public class DefaultUlcController extends
           workspaceView.add(moduleAreaView.getPeer());
           workspaceInternalFrame = createULCExtendedInternalFrame(
               workspaceView,
-              workspaceNavigatorViewDescriptor.getI18nName(
-                  this, getLocale()),
+              workspaceNavigatorViewDescriptor.getI18nName(this, getLocale()),
               getIconFactory().getIcon(
                   workspaceNavigatorViewDescriptor.getIconImageURL(),
                   getIconFactory().getSmallIconSize()));
@@ -308,41 +308,37 @@ public class DefaultUlcController extends
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           this.getTranslation("error", getLocale()),
           HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
-              .getMessage()))), this.getTranslation("ok",
-              getLocale()), null, null, getIconFactory().getErrorIcon(
+              .getMessage()))), this.getTranslation("ok", getLocale()), null,
+          null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof BusinessException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           this.getTranslation("error", getLocale()),
           HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(((BusinessException) ex).getI18nMessage(
-                  this, getLocale())))),
-          this.getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(this,
+                  getLocale())))), this.getTranslation("ok", getLocale()),
+          null, null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof DataIntegrityViolationException) {
       ULCAlert alert = new ULCAlert(
           UlcUtil.getVisibleWindow(sourceComponent),
           this.getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(this
-                  .getTranslation(
-                      refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                      getLocale())))), this.getTranslation(
-              "ok", getLocale()), null, null, getIconFactory().getErrorIcon(
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
+              .getTranslation(
+                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                  getLocale())))), this.getTranslation("ok", getLocale()),
+          null, null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof ConcurrencyFailureException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           this.getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(this.getTranslation(
-                  "concurrency.error.description", getLocale())))),
-          this.getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
+              .getTranslation("concurrency.error.description", getLocale())))),
+          this.getTranslation("ok", getLocale()), null, null, getIconFactory()
+              .getErrorIcon(getIconFactory().getLargeIconSize()));
       alert.show();
     } else {
       ex.printStackTrace();
@@ -350,8 +346,7 @@ public class DefaultUlcController extends
           this, getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           getIconFactory().getMediumIconSize()));
-      dialog.setTitle(this.getTranslation("error",
-          getLocale()));
+      dialog.setTitle(this.getTranslation("error", getLocale()));
       dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
           .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
@@ -417,8 +412,9 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController backendController, Locale clientLocale) {
-    if (super.start(backendController, clientLocale)) {
+  public boolean start(IBackendController backendController,
+      Locale clientLocale, TimeZone clientTimezone) {
+    if (super.start(backendController, clientLocale, clientTimezone)) {
       initLoginProcess();
       return true;
     }
@@ -508,11 +504,9 @@ public class DefaultUlcController extends
   }
 
   private ULCMenu createMenu(ActionList actionList) {
-    ULCMenu menu = new ULCMenu(actionList.getI18nName(this,
-        getLocale()));
+    ULCMenu menu = new ULCMenu(actionList.getI18nName(this, getLocale()));
     if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          this, getLocale())
+      menu.setToolTipText(actionList.getI18nDescription(this, getLocale())
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
@@ -651,16 +645,15 @@ public class DefaultUlcController extends
 
     // Login dialog
     final ULCDialog dialog = new ULCDialog(controllerFrame,
-        getLoginViewDescriptor().getI18nName(this,
-            getLocale()), true);
+        getLoginViewDescriptor().getI18nName(this, getLocale()), true);
     dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
 
     ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
         ULCBoxLayoutPane.LINE_AXIS);
     buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
 
-    ULCButton loginButton = new ULCButton(this
-        .getTranslation("ok", getLocale()));
+    ULCButton loginButton = new ULCButton(
+        this.getTranslation("ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
         getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new IActionListener() {
@@ -673,12 +666,11 @@ public class DefaultUlcController extends
           updateControllerFrame();
           execute(getStartupAction(), getInitialActionContext());
         } else {
-          ULCAlert alert = new ULCAlert(dialog, 
-              getTranslation("error", getLocale()),
+          ULCAlert alert = new ULCAlert(dialog, getTranslation("error",
+              getLocale()),
               getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
-              getTranslation("ok", getLocale()), null,
-              null, getIconFactory().getErrorIcon(
-                  getIconFactory().getLargeIconSize()));
+              getTranslation("ok", getLocale()), null, null, getIconFactory()
+                  .getErrorIcon(getIconFactory().getLargeIconSize()));
           alert.show();
         }
       }
@@ -697,9 +689,10 @@ public class DefaultUlcController extends
     actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
 
     ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
-    mainPanel.add(
-        new ULCLabel(this.getTranslation(
-            LoginUtils.CRED_MESSAGE, getLocale())), ULCBorderLayoutPane.NORTH);
+    mainPanel
+        .add(
+            new ULCLabel(this.getTranslation(LoginUtils.CRED_MESSAGE,
+                getLocale())), ULCBorderLayoutPane.NORTH);
     mainPanel.add(loginView.getPeer(), ULCBorderLayoutPane.CENTER);
     mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
     dialog.add(mainPanel);
@@ -721,12 +714,11 @@ public class DefaultUlcController extends
     String workspaceName = getSelectedWorkspaceName();
     if (workspaceName != null) {
       controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
-          .getViewDescriptor().getI18nDescription(this,
-              getLocale())
-          + " - " + getI18nName(this, getLocale()));
+          .getViewDescriptor().getI18nDescription(this, getLocale())
+          + " - "
+          + getI18nName(this, getLocale()));
     } else {
-      controllerFrame.setTitle(getI18nName(this,
-          getLocale()));
+      controllerFrame.setTitle(getI18nName(this, getLocale()));
     }
   }
 

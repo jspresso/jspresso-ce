@@ -40,6 +40,21 @@ must perform a general search and replace in all pom.xml :
   <groupId>org.codehaus.groovy.maven</groupId>
   change to
   <groupId>org.codehaus.gmaven</groupId>
+
+- Due to the introduction of client timezone management, the following change must be applied on the
+existing projects that use the Qooxdoo frontend :
+Edit the source file QooxdooApplicationStartup.java and replace
+  public List<RemoteCommand> startQx(String startupLanguage)
+      throws RemoteException {
+    return super.start(startupLanguage);
+  }
+by
+  public List<RemoteCommand> startQx(String startupLanguage, int timezoneOffset)
+      throws RemoteException {
+    return super.start(startupLanguage, timezoneOffset);
+  }
+
+
   
 3.5.0
 =====

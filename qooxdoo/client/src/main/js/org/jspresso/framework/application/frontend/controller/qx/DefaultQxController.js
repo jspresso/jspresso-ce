@@ -735,7 +735,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__application.getRoot().setGlobalCursor("wait");
       this.__remoteController.callAsyncListeners(true,
                                                  org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__START_METHOD,
-                                                 this.__userLanguage);
+                                                 this.__userLanguage, new Date().getTimezoneOffset() * (-60000));
     },
 
     /**

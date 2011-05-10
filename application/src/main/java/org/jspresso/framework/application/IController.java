@@ -20,6 +20,7 @@ package org.jspresso.framework.application;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -58,6 +59,13 @@ public interface IController extends IActionHandler {
    * @return the current controller locale.
    */
   Locale getLocale();
+
+  /**
+   * Gets the current controller timezone.
+   * 
+   * @return the current controller timezone.
+   */
+  TimeZone getTimezone();
 
   /**
    * Gets the translation provider used by this controller.

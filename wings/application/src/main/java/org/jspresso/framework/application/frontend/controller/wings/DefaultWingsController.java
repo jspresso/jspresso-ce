@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.JOptionPane;
@@ -296,46 +297,39 @@ public class DefaultWingsController extends
     if (ex instanceof SecurityException) {
       SOptionPane.showMessageDialog(sourceComponent,
           HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
-              .getMessage()))),
-          getTranslation("error", getLocale()),
+              .getMessage()))), getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof BusinessException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(((BusinessException) ex).getI18nMessage(
-                  this, getLocale())))),
-          getTranslation("error", getLocale()),
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(this,
+                  getLocale())))), getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof DataIntegrityViolationException) {
       SOptionPane
           .showMessageDialog(
               sourceComponent,
-              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-                  .escapeForHTML(this
-                      .getTranslation(
-                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                          getLocale())))), this
+              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
+                  .getTranslation(
+                      refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                      getLocale())))), this
                   .getTranslation("error", getLocale()),
               SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(getTranslation(
-                  "concurrency.error.description", getLocale())))),
-          getTranslation("error", getLocale()),
-          SOptionPane.ERROR_MESSAGE);
+          .toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(getTranslation(
+              "concurrency.error.description", getLocale())))),
+          getTranslation("error", getLocale()), SOptionPane.ERROR_MESSAGE);
     } else {
       ex.printStackTrace();
-      SOptionPane.showMessageDialog(sourceComponent, String.valueOf(ex
-          .getMessage()),
-          getTranslation("error", getLocale()),
-          SOptionPane.ERROR_MESSAGE);
-      SErrorDialog dialog = SErrorDialog.createInstance(sourceComponent,
-          this, getLocale());
+      SOptionPane.showMessageDialog(sourceComponent,
+          String.valueOf(ex.getMessage()),
+          getTranslation("error", getLocale()), SOptionPane.ERROR_MESSAGE);
+      SErrorDialog dialog = SErrorDialog.createInstance(sourceComponent, this,
+          getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           getIconFactory().getMediumIconSize()));
-      dialog.setTitle(getTranslation("error",
-          getLocale()));
+      dialog.setTitle(getTranslation("error", getLocale()));
       dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
           .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
@@ -436,8 +430,9 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController backendController, Locale clientLocale) {
-    if (super.start(backendController, clientLocale)) {
+  public boolean start(IBackendController backendController,
+      Locale clientLocale, TimeZone clientTimezone) {
+    if (super.start(backendController, clientLocale, clientTimezone)) {
       initLoginProcess();
       return true;
     }
@@ -513,11 +508,9 @@ public class DefaultWingsController extends
   }
 
   private SMenu createMenu(ActionList actionList) {
-    SMenu menu = new SMenu(actionList.getI18nName(this,
-        getLocale()));
+    SMenu menu = new SMenu(actionList.getI18nName(this, getLocale()));
     if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          this, getLocale())
+      menu.setToolTipText(actionList.getI18nDescription(this, getLocale())
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
@@ -597,15 +590,13 @@ public class DefaultWingsController extends
 
     // Login dialog
     final SDialog dialog = new SDialog(controllerFrame,
-        getLoginViewDescriptor().getI18nName(this,
-            getLocale()), true);
+        getLoginViewDescriptor().getI18nName(this, getLocale()), true);
     dialog.setDraggable(true);
 
     SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
     buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
 
-    SButton loginButton = new SButton(getTranslation(
-        "ok", getLocale()));
+    SButton loginButton = new SButton(getTranslation("ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
         getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
@@ -616,9 +607,9 @@ public class DefaultWingsController extends
           updateControllerFrame();
           execute(getStartupAction(), getInitialActionContext());
         } else {
-          SOptionPane.showMessageDialog(dialog, getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
-              getTranslation("error", getLocale()),
-              SOptionPane.ERROR_MESSAGE);
+          SOptionPane.showMessageDialog(dialog,
+              getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslation("error", getLocale()), SOptionPane.ERROR_MESSAGE);
         }
       }
     });
@@ -630,8 +621,8 @@ public class DefaultWingsController extends
 
     SPanel mainPanel = new SPanel(new SBorderLayout());
     mainPanel.add(
-        new SLabel(getTranslation(
-            LoginUtils.CRED_MESSAGE, getLocale())), SBorderLayout.NORTH);
+        new SLabel(getTranslation(LoginUtils.CRED_MESSAGE, getLocale())),
+        SBorderLayout.NORTH);
     mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     dialog.add(mainPanel);
@@ -649,12 +640,11 @@ public class DefaultWingsController extends
     String workspaceName = getSelectedWorkspaceName();
     if (workspaceName != null) {
       controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
-          .getViewDescriptor().getI18nDescription(this,
-              getLocale())
-          + " - " + getI18nName(this, getLocale()));
+          .getViewDescriptor().getI18nDescription(this, getLocale())
+          + " - "
+          + getI18nName(this, getLocale()));
     } else {
-      controllerFrame.setTitle(getI18nName(this,
-          getLocale()));
+      controllerFrame.setTitle(getI18nName(this, getLocale()));
     }
   }
 

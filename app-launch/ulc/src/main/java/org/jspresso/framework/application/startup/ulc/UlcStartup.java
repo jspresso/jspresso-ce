@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.startup.ulc;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 
@@ -74,5 +75,13 @@ public abstract class UlcStartup extends
   @Override
   protected Locale getStartupLocale() {
     return ClientContext.getLocale();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected TimeZone getClientTimeZone() {
+    return ClientContext.getTimeZone();
   }
 }

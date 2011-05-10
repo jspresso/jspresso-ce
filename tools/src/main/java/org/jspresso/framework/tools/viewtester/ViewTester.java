@@ -20,6 +20,7 @@ package org.jspresso.framework.tools.viewtester;
 
 import java.awt.BorderLayout;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -134,7 +135,7 @@ public class ViewTester {
     IBackendController mockBackController = (IBackendController) appContext
         .getBean("applicationBackController");
 
-    mockFrontController.start(mockBackController, locale);
+    mockFrontController.start(mockBackController, locale, TimeZone.getDefault());
 
     IView<JComponent> view = mockFrontController.getViewFactory().createView(
         viewDescriptor, mockFrontController, locale);

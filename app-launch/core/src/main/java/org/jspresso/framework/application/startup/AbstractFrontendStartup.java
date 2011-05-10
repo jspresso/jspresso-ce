@@ -48,7 +48,8 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     // start on brand new instances.
     frontendController = null;
     backendController = null;
-    getFrontendController().start(getBackendController(), getStartupLocale());
+    getFrontendController().start(getBackendController(), getStartupLocale(),
+        getClientTimeZone());
   }
 
   /**

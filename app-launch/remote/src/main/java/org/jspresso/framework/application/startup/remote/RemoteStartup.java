@@ -21,6 +21,7 @@ package org.jspresso.framework.application.startup.remote;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 
@@ -43,9 +44,10 @@ public abstract class RemoteStartup extends
     AbstractFrontendStartup<RComponent, RIcon, Action> implements
     IRemoteCommandHandler {
 
-  private boolean started;
-  private boolean restarting;
-  private Locale  startupLocale;
+  private boolean  started;
+  private boolean  restarting;
+  private Locale   startupLocale;
+  private TimeZone clientTimeZone;
 
   /**
    * Constructs a new <code>RemoteStartup</code> instance.
@@ -96,8 +98,8 @@ public abstract class RemoteStartup extends
   @Override
   public void start() {
     super.start();
-    HttpRequestHolder.getServletRequest().getSession().setAttribute(
-        "PeerRegistry", getFrontendController());
+    HttpRequestHolder.getServletRequest().getSession()
+        .setAttribute("PeerRegistry", getFrontendController());
   }
 
   /**
@@ -105,10 +107,26 @@ public abstract class RemoteStartup extends
    * 
    * @param startupLanguage
    *          the client language.
+   * @param timezoneOffset
+   *          the client timezone offset in milliseconds.
    * @return the commands to be executed by the client peer on startup.
    */
-  public List<RemoteCommand> start(String startupLanguage) {
+  public List<RemoteCommand> start(String startupLanguage, int timezoneOffset) {
     setStartupLocale(new Locale(startupLanguage));
+    TimeZone serverTimeZone = TimeZone.getDefault();
+    int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
+    TimeZone clientTz;
+    if (currentOffset == timezoneOffset) {
+      clientTz = serverTimeZone;
+    } else {
+      String[] availableIds = TimeZone.getAvailableIDs(timezoneOffset);
+      if (availableIds != null && availableIds.length > 0) {
+        clientTz = TimeZone.getTimeZone(availableIds[0]);
+      } else {
+        clientTz = TimeZone.getDefault();
+      }
+    }
+    setClientTimeZone(clientTz);
     start();
     started = true;
     restarting = false;
@@ -141,6 +159,26 @@ public abstract class RemoteStartup extends
    */
   protected void setStartupLocale(Locale startupLocale) {
     this.startupLocale = startupLocale;
+  }
+
+  /**
+   * Sets the clientTimeZone.
+   * 
+   * @param clientTimeZone
+   *          the clientTimeZone to set.
+   */
+  protected void setClientTimeZone(TimeZone clientTimeZone) {
+    this.clientTimeZone = clientTimeZone;
+  }
+
+  /**
+   * Gets the clientTimeZone.
+   * 
+   * @return the clientTimeZone.
+   */
+  @Override
+  protected TimeZone getClientTimeZone() {
+    return clientTimeZone;
   }
 
 }

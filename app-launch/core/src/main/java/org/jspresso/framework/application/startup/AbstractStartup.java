@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.startup;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -100,4 +101,11 @@ public abstract class AbstractStartup implements IStartup {
    * @return the startup locale.
    */
   protected abstract Locale getStartupLocale();
+
+  /**
+   * Gets the client timezone.
+   * 
+   * @return the client timezone.
+   */
+  protected abstract TimeZone getClientTimeZone();
 }

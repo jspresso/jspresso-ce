@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.startup;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.security.auth.Subject;
@@ -38,7 +37,6 @@ public class BackendActionStartup extends AbstractBackendStartup {
   private Map<String, Object> actionContext;
   private String              applicationContextKey;
   private String              userName;
-  private Locale              startupLocale;
 
   /**
    * Sets the actionBeanId.
@@ -93,20 +91,11 @@ public class BackendActionStartup extends AbstractBackendStartup {
   }
 
   /**
-   * Sets the startupLocale.
-   * 
-   * @param startupLocale
-   *          the startupLocale to set.
-   */
-  public void setStartupLocale(Locale startupLocale) {
-    this.startupLocale = startupLocale;
-  }
-
-  /**
    * {@inheritDoc}
    */
+  @Override
   public void start() {
-    startController();
+    super.start();
     executeAction();
   }
 
@@ -185,13 +174,5 @@ public class BackendActionStartup extends AbstractBackendStartup {
    */
   protected String getUserName() {
     return userName;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Locale getStartupLocale() {
-    return startupLocale;
   }
 }

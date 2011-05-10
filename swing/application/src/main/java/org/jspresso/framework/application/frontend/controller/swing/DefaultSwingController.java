@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -552,8 +553,9 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController backendController, Locale clientLocale) {
-    if (super.start(backendController, clientLocale)) {
+  public boolean start(IBackendController backendController,
+      Locale clientLocale, TimeZone clientTimezone) {
+    if (super.start(backendController, clientLocale, clientTimezone)) {
       waitTimer = new WaitCursorTimer(500);
       waitTimer.setDaemon(true);
       waitTimer.start();

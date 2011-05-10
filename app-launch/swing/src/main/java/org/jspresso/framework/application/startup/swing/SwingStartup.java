@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.startup.swing;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -43,6 +44,14 @@ public abstract class SwingStartup extends
   @Override
   protected Locale getStartupLocale() {
     return Locale.getDefault();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected TimeZone getClientTimeZone() {
+    return TimeZone.getDefault();
   }
 
 }

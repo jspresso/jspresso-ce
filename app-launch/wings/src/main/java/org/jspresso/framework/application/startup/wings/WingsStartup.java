@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.startup.wings;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.swing.Action;
 
@@ -53,4 +54,11 @@ public abstract class WingsStartup extends
     return SessionManager.getSession().getLocale();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected TimeZone getClientTimeZone() {
+    return TimeZone.getDefault();
+  }
 }

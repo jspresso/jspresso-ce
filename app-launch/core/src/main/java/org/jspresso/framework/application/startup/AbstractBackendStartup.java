@@ -21,6 +21,7 @@ package org.jspresso.framework.application.startup;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
@@ -39,6 +40,8 @@ import org.jspresso.framework.security.UserPrincipal;
 public abstract class AbstractBackendStartup extends AbstractStartup {
 
   private IBackendController backendController;
+  private TimeZone           clientTimeZone;
+  private Locale             startupLocale;
 
   /**
    * Gets the application backend controller.
@@ -65,7 +68,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   protected void startController() {
     // start on brand new instances.
     backendController = null;
-    getBackendController().start(getStartupLocale());
+    getBackendController().start(getStartupLocale(), getClientTimeZone());
   }
 
   /**
@@ -100,10 +103,14 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   /**
    * Executes a backend action.
    * 
-   * @param action the backend action to execute.
-   * @param initialContext the initial action context.
-   * @param subject the JAAS subject to execute the action for.
-   * @param locale the locale used to execute the action.
+   * @param action
+   *          the backend action to execute.
+   * @param initialContext
+   *          the initial action context.
+   * @param subject
+   *          the JAAS subject to execute the action for.
+   * @param locale
+   *          the locale used to execute the action.
    * @return true if the action execution was succesful.
    */
   protected boolean executeAction(BackendAction action,
@@ -118,4 +125,54 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
     return success;
   }
 
+  /**
+   * Sets the startupLocale.
+   * 
+   * @param startupLocale
+   *          the startupLocale to set.
+   */
+  public void setStartupLocale(Locale startupLocale) {
+    this.startupLocale = startupLocale;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Locale getStartupLocale() {
+    if (startupLocale == null) {
+      return Locale.getDefault();
+    }
+    return startupLocale;
+  }
+
+  /**
+   * Gets the clientTimeZone.
+   * 
+   * @return the clientTimeZone.
+   */
+  @Override
+  protected TimeZone getClientTimeZone() {
+    if (clientTimeZone == null) {
+      return TimeZone.getDefault();
+    }
+    return clientTimeZone;
+  }
+
+  /**
+   * Sets the clientTimeZone.
+   * 
+   * @param clientTimeZone
+   *          the clientTimeZone to set.
+   */
+  public void setClientTimeZone(TimeZone clientTimeZone) {
+    this.clientTimeZone = clientTimeZone;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void start() {
+    startController();
+  }
 }

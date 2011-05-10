@@ -983,7 +983,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function start():void {
       var operation:Operation = _remoteController.operations[START_METHOD] as Operation;
-      operation.send(_userLanguage);
+      operation.send(_userLanguage, new Date().timezoneOffset * (-60000));
     }
     
     protected function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
