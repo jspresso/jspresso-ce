@@ -62,7 +62,7 @@
     <substance.version>4.3</substance.version>
     <freemarker.version>2.3.9</freemarker.version>
     <fusioncharts.version>2.2</fusioncharts.version>
-    <qx-collapsable-panel.version>0.5</qx-collapsable-panel.version>
+    <qx-collapsable-panel.version>0.6</qx-collapsable-panel.version>
     <qx-upload-widget.version>0.5</qx-upload-widget.version>
     <qx-dark-theme.version>0.6</qx-dark-theme.version>
     <qx-java-rpc.version>0.6</qx-java-rpc.version>
