@@ -27,7 +27,7 @@ qx.Class.define("${package}.startup.qooxdoo.Application",
   {
     start : function() {
       var remoteController;
-      if (qx.core.Environment.get("qx.debug") == "on") {
+      if (qx.core.Environment.get("qx.debug")) {
         remoteController = new qx.io.remote.Rpc(
             "http://localhost:8080/${rootArtifactId}-webapp/.qxrpc",
             "${package}.startup.qooxdoo.QooxdooApplicationStartup"
