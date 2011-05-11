@@ -97,7 +97,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
       qx.util.Json.CONVERT_DATES = true;
 
       // Enable logging in debug variant
-      if (qx.core.Variant.isSet("qx.debug", "on"))
+      if (qx.core.Environment.get("qx.debug") == "on")
       {
         // support native logging capabilities, e.g. Firebug for Firefox
         qx.log.appender.Native;

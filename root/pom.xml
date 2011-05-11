@@ -32,7 +32,7 @@
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>3.3.2.GA</hibernate.version>
     <jboss.version>4.2.2.GA</jboss.version>
-    <qooxdoo.version>1.3</qooxdoo.version>
+    <qooxdoo.version>1.4</qooxdoo.version>
     <jasper.version>3.7.1</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <itext.version>2.1.5</itext.version>
@@ -64,7 +64,7 @@
     <fusioncharts.version>2.2</fusioncharts.version>
     <qx-collapsable-panel.version>0.5</qx-collapsable-panel.version>
     <qx-upload-widget.version>0.5</qx-upload-widget.version>
-    <qx-dark-theme.version>0.5</qx-dark-theme.version>
+    <qx-dark-theme.version>0.6</qx-dark-theme.version>
     <qx-java-rpc.version>0.6</qx-java-rpc.version>
     <hsql.version>1.8.0.1</hsql.version>
     <jnlp-servlet.version>1.1</jnlp-servlet.version>
@@ -78,7 +78,7 @@
     <compiler-plugin.version>2.0.2</compiler-plugin.version>
     <surefire-plugin.version>2.4.3</surefire-plugin.version>
     <assembly-plugin.version>2.2</assembly-plugin.version>
-    <javadoc-plugin.version>2.7</javadoc-plugin.version>
+    <javadoc-plugin.version>2.8</javadoc-plugin.version>
     <site-plugin.version>2.0</site-plugin.version>
     <archetype-plugin.version>2.0</archetype-plugin.version>
     <source-plugin.version>2.1.1</source-plugin.version>
