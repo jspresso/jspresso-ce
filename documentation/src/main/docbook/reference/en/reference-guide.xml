@@ -125,8 +125,8 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="30%"
-                       fileref="../images/Jspresso-modules.jpg" scalefit="1"
+            <imagedata align="center" contentdepth="50%"
+                       fileref="../images/Jspresso-modules.png" scalefit="1"
                        width="100%" />
           </imageobject>
         </mediaobject>
@@ -275,8 +275,8 @@
         principle, views are generated at runtime through built-in factories
         depending on the chosen deployment strategy. Developing views is
         achieved by composing technology agnostic java beans view descriptors;
-        this means absolutely no Swing, Flex, ULC, javascript, HTML or
-        whatever specific GUI coding. Jspresso offers an extensive range of
+        this means absolutely no Swing, Flex, javascript, HTML or whatever
+        specific GUI coding. Jspresso offers an extensive range of
         ready-to-use, highly configurable, view descriptors including :</para>
 
         <itemizedlist>
@@ -614,15 +614,6 @@
         <itemizedlist>
           <listitem>
             <para>Swing</para>
-          </listitem>
-
-          <listitem>
-            <para>ULC (lightweight distributed swing, commercial development
-            licence needed)</para>
-          </listitem>
-
-          <listitem>
-            <para>WingS (Ajax)</para>
           </listitem>
 
           <listitem>

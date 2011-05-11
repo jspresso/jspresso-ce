@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
@@ -24,8 +25,8 @@
     <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
   </scm>
   <issueManagement>
-  	<system>Sourceforge Tracker</system>
-  	<url>http://sourceforge.net/tracker/?group_id=231671</url>
+    <system>Sourceforge Tracker</system>
+    <url>http://sourceforge.net/tracker/?group_id=231671</url>
   </issueManagement>
   <mailingLists>
     <mailingList>
@@ -49,11 +50,11 @@
   </properties>
   <pluginRepositories>
     <pluginRepository>
-    	<id>sonatype-repository</id>
-    	<url>http://repository.sonatype.org/content/groups/flexgroup</url>
-    	<snapshots>
-    		<enabled>false</enabled>
-    	</snapshots>
+      <id>sonatype-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </pluginRepository>
   </pluginRepositories>
   <distributionManagement>
@@ -148,7 +149,6 @@
   </dependencies>
   <modules>
     <module>root</module>
-    <module>dependencies</module>
     <module>application</module>
     <module>binding</module>
     <module>action</module>
@@ -159,7 +159,6 @@
     <module>view</module>
     <module>hibernate</module>
     <module>swing</module>
-    <module>wings</module>
     <module>remote</module>
     <module>flex</module>
     <module>qooxdoo</module>
@@ -168,17 +167,8 @@
     <module>app-launch</module>
     <module>app-template</module>
     <module>archetype</module>
-    <module>archetype-full</module>
     <module>documentation</module>
   </modules>
-  <profiles>
-    <profile>
-      <id>ulc</id>
-      <modules>
-        <module>ulc</module>
-      </modules>
-    </profile>
-  </profiles>
   <build>
     <pluginManagement>
       <plugins>
@@ -333,7 +323,7 @@
         <configuration>
           <!-- Speeds-up dependency report -->
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-        </configuration> 
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

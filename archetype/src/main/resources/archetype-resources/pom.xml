@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jspresso.framework</groupId>
-    <artifactId>jspresso-dependencies</artifactId>
+    <artifactId>jspresso-root</artifactId>
     <version>${jspressoVersion}</version>
   </parent>
   <groupId>${groupId}</groupId>

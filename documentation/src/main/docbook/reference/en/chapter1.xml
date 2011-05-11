@@ -5588,9 +5588,9 @@ tree('Company.tree',
               since we imported the <filename>commons-swing.xml</filename>
               standard configuration file for swing, our controller will be a
               swing controller. Switching to another presentation technology
-              (ULC or AJAX as of this writing) will then just be a matter of
-              changing the imported configuration file
-              (<filename>commons-ulc.xml</filename> for instance) in the
+              (Flex or AJAX) will then just be a matter of changing the
+              imported configuration file
+              (<filename>commons-remote.xml</filename> for instance) in the
               <filename>beanRefFactory.xml</filename> file.</para>
             </callout>
 
@@ -5925,8 +5925,8 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
     autonomous part of the application that can be registered in workspaces
     which in turn are registered in the frontend controller to make them
     available to the end-user. As of this writing, the built-in frontend
-    controllers (Swing, ULC, Wings and Flex) create a main application frame
-    and give access to the registered workspaces through a menu. Whenever a
+    controllers (Swing, qooxdoo and Flex) create a main application frame and
+    give access to the registered workspaces through a menu. Whenever a
     workspace is opened, the workspace modules structure is displayed.</para>
 
     <para>Since we talk about module structure, let's explore it. A module is
@@ -7690,10 +7690,8 @@ hrsample {
     <para>Last but not least, we need to package and deploy the final
     application. Choosing the target environment highly depends on the
     requirements. Jspresso supports as of now 5 different deployment scenarios
-    : Swing, AJAX (<ulink url="http://wingsframework.org">Wings</ulink>,
-    <ulink url="http://qooxdoo.org">qooxdoo</ulink>), Flash (<ulink
-    url="http://flex.org/">Flex</ulink>) and <ulink
-    url="http://www.canoo.com/ulc/">ULC</ulink>.</para>
+    : Swing, AJAX (<ulink url="http://qooxdoo.org">qooxdoo</ulink>) and Flash
+    (<ulink url="http://flex.org/">Flex</ulink>).</para>
 
     <section>
       <title>A quick overview of options</title>
@@ -7713,7 +7711,7 @@ hrsample {
       underestimated especially when dealing with small-scale
       deployments.</para>
 
-      <para>Ajax, Flex and ULC deployments require a servlet 2.5 compatible
+      <para>Qooxdoo and Flex deployments require a servlet 2.5 compatible
       application server (<ulink url="http://tomcat.apache.org/">Apache
       tomcat</ulink> is one of them, free and production-robust). This means
       that you can just package your application as a WAR archive and drop it
@@ -7737,34 +7735,6 @@ hrsample {
         this side regarding the huge and excellent support Hibernate has on
         almost each and every common database vendors.</para>
       </note>
-
-      <para>Although the Wings library is a LGPL opensource library, ULC is
-      not. As of this writing, ULC requires at least a developer licence that
-      comes with an unlimited deployment licence. Jspresso is strongly
-      attached to the opensource and free software philosophy, but licensing
-      ULC is really worth the money you will spend due to the really high
-      quality, performance and support of the library. ULC is developed and
-      supported by <ulink url="http://www.canoo.com/">Canoo</ulink>.</para>
-
-      <note>
-        <para>The preferred way to deploy the ULC client is to use Java Web
-        Start.</para>
-      </note>
-
-      <para>On the Wings side, the architecture is basically the same as ULC,
-      but the frontend is an Ajax enabled web application. This makes the
-      deployment of the client really smooth (no plugin), but the look and
-      feel has many differences compared to the Swing, Flex and ULC frontends.
-      Although Jspresso tends to limit those differences to their minimum,
-      some of them (like table cells mouseless navigation) cannot be bypassed
-      due to the underlying limitations. Improving the look of a Wings
-      application might also require some web design and CSS skills that are
-      beyond the scope of this document but they are extensively covered by
-      the Wings reference documentation. Just have a look to the real-life
-      applications that the Wings web site reffers, and you will get a good
-      idea of what can be achieved with some styling capabilities. Having said
-      that, Wings is certainly one of the best available library to seamlessly
-      bridge the AJAX world and the java world.</para>
 
       <para>Jspresso introduced with the 3.0 release a native support for
       Adobe's Flex. As for the other deployment options, there is absolutely
@@ -7817,58 +7787,6 @@ hrsample {
       The generated Jspresso project is also ready to to be used in Eclipse
       WTP. Just add it to the Eclipse managed Tomcat you've created when
       setting-up the development environment and start the server.</para>
-
-      <para>Regarding ULC deployment, you have to explicitely instruct the
-      Maven build that you want it since ULC is a commercial library. First,
-      install the ULC libraries in your local maven repository :</para>
-
-      <blockquote>
-        <para><code>mvn validate -Dulc.home=</code><filename>[the absolute
-        location of your ULC 6.0.5 installation, e.g.
-        "/ulc-6.0.5"]</filename></para>
-      </blockquote>
-
-      <para>Then, perform the packaging with the ulc profile :</para>
-
-      <blockquote>
-        <para><code>mvn package -Pulc</code></para>
-      </blockquote>
-
-      <para>Jspresso will take care of packaging the JNLP descriptor,
-      packaging the client libraries and signing the requiried jar
-      archives.</para>
-
-      <para><note>
-          <para>The archetype project comes with a sample keystore used to
-          sign the jars :
-          <filename>/hrsample/webapp/conf/keystore.jks</filename>. Obviously,
-          it shouldn't be used for production. Whenever you want to use your
-          own keystore, just update the <quote>signjar</quote> portion of the
-          <filename>/hrsample/webapp/pom.xml</filename> with sensible values
-          :</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>alias=[the alias of the key you want to use]</para>
-            </listitem>
-
-            <listitem>
-              <para>keystore=[the path to the key store you want to
-              use]</para>
-            </listitem>
-
-            <listitem>
-              <para>storepass=[your keystore password]</para>
-            </listitem>
-
-            <listitem>
-              <para>keypass=[your key password]</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Obviously, some of the values above are sensible values;
-          beware not to deploy your pom in a Maven public repository !</para>
-        </note></para>
     </section>
 
     <section>
@@ -7903,83 +7821,6 @@ hrsample {
       </blockquote>
 
       <para>We can now see the result of the deployment.</para>
-
-      <section>
-        <title>The first ULC launch</title>
-
-        <para>Point your browser to the <filename>application.jnlp</filename>
-        file deployed :</para>
-
-        <blockquote>
-          <para><code>http://[machine]:[port]/hrsample-webapp/webstart/application.jnlp</code></para>
-        </blockquote>
-
-        <para>You shoul see the following happening (this is on a french
-        workstation) :</para>
-
-        <para><figure>
-            <title>Java Web Start downloads the application ULC client</title>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/JWS_download.jpg"
-                           scalefit="1" width="100%" />
-              </imageobject>
-            </mediaobject>
-          </figure><figure>
-            <title>Java Web Start asks the user to approve the certificate you
-            used for signing</title>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/JWS_certificate.jpg"
-                           scalefit="1" width="100%" />
-              </imageobject>
-            </mediaobject>
-          </figure>Once you choose to execute the application, the splash
-        screen appears and the ULC application starts. No screenshot is needed
-        for the running application since they are strictly identical to the
-        ones we saw during swing development time.</para>
-      </section>
-
-      <section>
-        <title>The first Wings launch</title>
-
-        <para>Point your browser to the <code>wings</code> context :</para>
-
-        <blockquote>
-          <para><code>http://[machine]:[port]/hrsample-webapp/wings/</code></para>
-        </blockquote>
-
-        <para>The browser shows you the WingS login dialog.</para>
-
-        <para><figure>
-            <title>The browser displays the WingS login dialog</title>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/Wings_login.jpg"
-                           scalefit="1" width="100%" />
-              </imageobject>
-            </mediaobject>
-          </figure>And you can play with the same application but in AJAX
-        !</para>
-
-        <para><figure>
-            <title>You query the companies in AJAX !</title>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/Wings_application.jpg"
-                           scalefit="1" width="100%" />
-              </imageobject>
-            </mediaobject>
-          </figure></para>
-      </section>
 
       <section>
         <title>The first Flex launch</title>

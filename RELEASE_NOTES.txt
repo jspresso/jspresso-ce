@@ -53,6 +53,52 @@ by
       throws RemoteException {
     return super.start(startupLanguage, timezoneOffset);
   }
+  
+- Wings and ULC frontends have been removed. There are almost nobody using them now and it
+is useless maintaining them. It is strongly recommended to re-generate existing project using
+the up-to-date archetype. If you want to manually update your projects poms, here are the steps
+to perform :
+
+1/ make the root pom inherit from jspresso-root instead of jspresso-dependencies:
+  <parent>
+    <groupId>org.jspresso.framework</groupId>
+    <artifactId>jspresso-root</artifactId>
+    <version>3.5-SNAPSHOT</version>
+  </parent>
+2/ edit startup/pom.xml and delete the following lines :
+  <module>wings</module>
+and
+  <profiles>
+    <profile>
+      <id>ulc</id>
+      <modules>
+        <module>ulc</module>
+      </modules>
+    </profile>
+  </profiles>
+3/ delete the startup/wings and startup/ulc folders
+4/ edit the webapp/pom.xml and delete the following lines :
+    <dependency>
+      <groupId>org.jspresso.hrsample</groupId>
+      <artifactId>${myproject}-startup-wings</artifactId>
+    </dependency>
+and
+  <profiles>
+    ...
+  </profiles>
+5/ edit webapp/src/main/web.xml and delete the sections :
+  <!-- ULC deployment section -->
+    ...
+  <!-- End ULC deployment section -->
+and
+  <!-- WingS deployment section -->
+    ...
+  <!-- End WingS deployment section -->
+6/ delete the following folders :
+  webapp/src/main/webapp/webstart
+and
+  webapp/src/main/webapp/wings
+
 
 
   

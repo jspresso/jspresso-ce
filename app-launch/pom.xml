@@ -13,15 +13,6 @@
     <module>core</module>
     <module>batch</module>
     <module>swing</module>
-    <module>wings</module>
     <module>remote</module>
   </modules>
-  <profiles>
-    <profile>
-      <id>ulc</id>
-      <modules>
-        <module>ulc</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>

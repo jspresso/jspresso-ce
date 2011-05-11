@@ -1,5 +1,0 @@
-<!--
-    Context configuration file for the web application
--->
-
-<Context antiResourceLocking="true" antiJARLocking="true" processTlds="false"/>

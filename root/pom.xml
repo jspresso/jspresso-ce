@@ -31,7 +31,6 @@
     <spring-ldap.version>1.3.0.RELEASE</spring-ldap.version>
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>3.3.2.GA</hibernate.version>
-    <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
     <qooxdoo.version>1.3</qooxdoo.version>
     <jasper.version>3.7.1</jasper.version>
@@ -63,7 +62,6 @@
     <substance.version>4.3</substance.version>
     <freemarker.version>2.3.9</freemarker.version>
     <fusioncharts.version>2.2</fusioncharts.version>
-    <wings.version>3.2.1</wings.version>
     <qx-collapsable-panel.version>0.5</qx-collapsable-panel.version>
     <qx-upload-widget.version>0.5</qx-upload-widget.version>
     <qx-dark-theme.version>0.5</qx-dark-theme.version>
@@ -249,51 +247,6 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-ulc</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-ulc-application</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-ulc-components</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-ulc-components-server</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-ulc-components-shared</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-ulc-components-client</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-wings</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-wings-application</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-wings-components</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-remote</artifactId>
         <version>${jspresso.version}</version>
       </dependency>
@@ -336,16 +289,6 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-app-template-ulc</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-app-template-wings</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-template-remote</artifactId>
         <version>${jspresso.version}</version>
       </dependency>
@@ -366,16 +309,6 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-jasper-ulc</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-jasper-wings</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-remote</artifactId>
         <version>${jspresso.version}</version>
       </dependency>
@@ -392,16 +325,6 @@
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-swing</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-app-launch-ulc</artifactId>
-        <version>${jspresso.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-app-launch-wings</artifactId>
         <version>${jspresso.version}</version>
       </dependency>
       <dependency>
@@ -611,46 +534,6 @@
         <version>${jboss.version}</version>
       </dependency>
       <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-development</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-client</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-server</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-jnlp-client</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-servlet-server</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-servlet-client</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-trusted</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-deployment-key</artifactId>
-        <version>${ulc.version}</version>
-      </dependency>
-      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
@@ -679,21 +562,6 @@
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
         <version>${servlet.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.wings</groupId>
-        <artifactId>wings</artifactId>
-        <version>${wings.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.wings</groupId>
-        <artifactId>wingx</artifactId>
-        <version>${wings.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.wings</groupId>
-        <artifactId>wings-experimental</artifactId>
-        <version>${wings.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jvnet.substance</groupId>
