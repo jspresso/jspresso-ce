@@ -57,6 +57,7 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
   protected void bindJComponent() {
     getConnectedJComponent().addChangeListener(new ChangeListener() {
 
+      @Override
       public void stateChanged(@SuppressWarnings("unused")
       ChangeEvent e) {
         fireConnectorValueChange();

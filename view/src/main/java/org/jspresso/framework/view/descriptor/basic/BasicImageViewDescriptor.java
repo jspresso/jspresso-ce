@@ -51,6 +51,7 @@ public class BasicImageViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the scrollable.
    */
+  @Override
   public boolean isScrollable() {
     return scrollable;
   }

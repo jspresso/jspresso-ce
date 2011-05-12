@@ -39,6 +39,7 @@ public class BasicQueryComponentDescriptorFactory implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
       IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
     return new BasicQueryComponentDescriptor(componentDescriptorProvider);

@@ -45,6 +45,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
    * @param storePath
    *          the preferences store path.
    */
+  @Override
   public void setStorePath(String[] storePath) {
     if (storePath != null && storePath.length > 0) {
       StringBuffer buff = new StringBuffer();
@@ -60,6 +61,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getPreference(String key) {
     String completeKey = storePath + key;
     if (HttpRequestHolder.getServletRequest() != null) {
@@ -78,6 +80,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void putPreference(String key, String value) {
     String completeKey = storePath + key;
     if (HttpRequestHolder.getServletResponse() != null) {
@@ -92,6 +95,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void removePreference(String key) {
     String completeKey = storePath + key;
     if (HttpRequestHolder.getServletResponse() != null) {

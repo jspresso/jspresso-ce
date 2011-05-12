@@ -57,6 +57,7 @@ public class RemoteActionFactory extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public RAction createAction(IAction action, Dimension dimension,
       IActionHandler actionHandler, IView<RComponent> view, Locale locale) {
     Dimension d = dimension;
@@ -74,6 +75,7 @@ public class RemoteActionFactory extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setActionEnabled(RAction action, boolean enabled) {
     action.setEnabled(enabled);
 
@@ -86,6 +88,7 @@ public class RemoteActionFactory extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setActionName(RAction action, String name) {
     action.setName(name);
   }

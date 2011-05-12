@@ -51,6 +51,7 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getCustomValue(String key) {
     return customValues.get(key);
   }
@@ -60,6 +61,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * 
    * @return the locale.
    */
+  @Override
   public Locale getLocale() {
     return locale;
   }
@@ -67,6 +69,7 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  @Override
   public UserPrincipal getPrincipal() {
     if (subject != null && !subject.getPrincipals().isEmpty()) {
       return (UserPrincipal) subject.getPrincipals().iterator().next();
@@ -79,6 +82,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * 
    * @return the owner.
    */
+  @Override
   public Subject getSubject() {
     return subject;
   }
@@ -86,6 +90,7 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void putCustomValue(String key, Object value) {
     customValues.put(key, value);
   }
@@ -96,6 +101,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * @param locale
    *          the locale to set.
    */
+  @Override
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
@@ -106,6 +112,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * @param subject
    *          the owner to set.
    */
+  @Override
   public void setSubject(Subject subject) {
     this.subject = subject;
   }
@@ -115,6 +122,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * 
    * @return the customValues.
    */
+  @Override
   public Map<String, Object> getCustomValues() {
     // return a defensive copy
     return new HashMap<String, Object>(customValues);

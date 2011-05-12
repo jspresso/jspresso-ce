@@ -65,6 +65,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
    * 
    * @return the collectionBased.
    */
+  @Override
   public boolean isCollectionBased() {
     return collectionBased;
   }
@@ -86,6 +87,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
    *          the model to set.
    * @internal
    */
+  @Override
   public void setModel(Object model) {
     this.model = model;
   }

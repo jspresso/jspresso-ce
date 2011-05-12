@@ -43,6 +43,7 @@ public class BasicComponentDescriptorRegistry implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<?> componentContract) {
     if (contractNameToComponentDescriptorMap == null) {
@@ -54,6 +55,7 @@ public class BasicComponentDescriptorRegistry implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
     if (contractNameToComponentDescriptorMap == null) {
       buildContractNameIdMap();
@@ -69,6 +71,7 @@ public class BasicComponentDescriptorRegistry implements
    *            the application context holding the component descriptor bean
    *            definitions.
    */
+  @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
     this.componentApplicationContext = applicationContext;
   }

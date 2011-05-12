@@ -121,6 +121,7 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isEntity() {
     return true;
   }
@@ -130,6 +131,7 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
    * 
    * @return wether this entity is purely abstract.
    */
+  @Override
   public boolean isPurelyAbstract() {
     return purelyAbstract;
   }

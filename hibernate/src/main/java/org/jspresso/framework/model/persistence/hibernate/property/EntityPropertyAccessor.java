@@ -50,6 +50,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Getter getGetter(@SuppressWarnings("rawtypes") Class theClass,
       String propertyName) {
     return new EntityPropertyGetter(theClass, propertyName);
@@ -58,6 +59,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public Setter getSetter(@SuppressWarnings("rawtypes") Class theClass,
       String propertyName) {
@@ -94,6 +96,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object get(Object target) {
       return ((IComponent) target).straightGetProperty(propertyName);
     }
@@ -101,6 +104,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unused")
     public Object getForInsert(Object target,
         @SuppressWarnings("rawtypes") Map mergeMap, SessionImplementor session) {
@@ -112,6 +116,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public Method getMethod() {
       return null;
     }
@@ -121,6 +126,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public String getMethodName() {
       return null;
     }
@@ -128,6 +134,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<?> getReturnType() {
       return propertyClass;
     }
@@ -161,6 +168,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public Method getMethod() {
       return null;
     }
@@ -170,6 +178,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public String getMethodName() {
       return null;
     }
@@ -177,6 +186,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unused")
     public void set(Object target, Object value,
         SessionFactoryImplementor factory) {

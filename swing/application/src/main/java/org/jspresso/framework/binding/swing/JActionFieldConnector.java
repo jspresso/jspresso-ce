@@ -49,6 +49,7 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
     if (!getConnectedJComponent().isShowingTextField()) {
       addValueChangeListener(new IValueChangeListener() {
 
+        @Override
         public void valueChange(ValueChangeEvent evt) {
           if (evt.getNewValue() instanceof byte[]) {
             getConnectedJComponent().setDecorated(

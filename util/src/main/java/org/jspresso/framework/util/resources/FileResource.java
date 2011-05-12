@@ -49,6 +49,7 @@ public class FileResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public InputStream getContent() throws IOException {
     return new FileInputStream(resourceFile);
   }
@@ -56,6 +57,7 @@ public class FileResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     return resourceFile.getName();
   }
@@ -63,6 +65,7 @@ public class FileResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public long getSize() {
     return resourceFile.length();
   }

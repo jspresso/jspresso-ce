@@ -111,6 +111,7 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
    * 
    * @return the entity.
    */
+  @Override
   public boolean isEntity() {
     return false;
   }
@@ -118,6 +119,7 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isPurelyAbstract() {
     return false;
   }

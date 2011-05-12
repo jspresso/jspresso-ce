@@ -37,6 +37,7 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getCardNameForModel(Object model,
       @SuppressWarnings("unused") Subject subject) {
     if (model instanceof Module) {

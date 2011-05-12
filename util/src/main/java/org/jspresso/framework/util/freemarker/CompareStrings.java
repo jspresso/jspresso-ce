@@ -52,6 +52,7 @@ public class CompareStrings implements TemplateMethodModelEx {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
       throws TemplateModelException {
     try {

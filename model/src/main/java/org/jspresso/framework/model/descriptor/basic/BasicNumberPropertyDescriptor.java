@@ -63,6 +63,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public BigDecimal getMaxValue() {
     return maxValue;
   }
@@ -70,6 +71,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public BigDecimal getMinValue() {
     return minValue;
   }

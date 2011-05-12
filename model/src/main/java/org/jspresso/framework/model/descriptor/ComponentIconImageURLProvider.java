@@ -50,6 +50,7 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURLForObject(Object userObject) {
     if (userObject == null) {
       return null;

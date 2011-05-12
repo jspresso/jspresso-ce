@@ -182,6 +182,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
     String oldI18nName = getI18nName();
     setI18nName(String.valueOf(this.moduleObject));

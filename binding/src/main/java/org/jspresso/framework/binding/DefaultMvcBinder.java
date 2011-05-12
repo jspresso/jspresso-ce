@@ -34,6 +34,7 @@ public class DefaultMvcBinder implements IMvcBinder {
    * @param modelConnector
    *          The connector for the model
    */
+  @Override
   public void bind(IValueConnector viewConnector, IValueConnector modelConnector) {
     if (viewConnector.getModelConnector() == modelConnector) {
       return;

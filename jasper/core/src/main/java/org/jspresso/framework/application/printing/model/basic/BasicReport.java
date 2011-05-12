@@ -47,6 +47,7 @@ public class BasicReport extends DefaultDescriptor implements IReport {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getContext() {
     return context;
   }
@@ -54,6 +55,7 @@ public class BasicReport extends DefaultDescriptor implements IReport {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IReportDescriptor getReportDescriptor() {
     return reportDescriptor;
   }

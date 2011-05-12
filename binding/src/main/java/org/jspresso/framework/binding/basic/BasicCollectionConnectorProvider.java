@@ -53,6 +53,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addItemSelectionListener(IItemSelectionListener listener) {
     implAddConnectorSelectionListener(listener);
   }
@@ -93,6 +94,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void fireSelectedItemChange(ItemSelectionEvent evt) {
     implFireSelectedItemChange(evt);
   }
@@ -100,6 +102,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public ICollectionConnector getCollectionConnector() {
     if (collectionConnectorProvider != null) {
       return collectionConnectorProvider.getCollectionConnector();
@@ -112,6 +115,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public List<ICollectionConnector> getCollectionConnectors() {
     if (collectionConnectorProvider != null) {
       return Collections.singletonList(collectionConnectorProvider
@@ -123,6 +127,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getSelectedItem() {
     return implGetSelectedItem();
   }
@@ -130,6 +135,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeItemSelectionListener(IItemSelectionListener listener) {
     implRemoveConnectorSelectionListener(listener);
   }
@@ -137,6 +143,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setCollectionConnectorProvider(
       ICollectionConnectorProvider collectionConnectorProvider) {
     this.collectionConnectorProvider = collectionConnectorProvider;
@@ -145,6 +152,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
     implSetTracksChildrenSelection(tracksChildrenSelection);
   }

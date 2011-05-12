@@ -69,6 +69,7 @@ public abstract class AbstractCompositeValueConnector extends
    * @param connector
    *          the connector to be added as composite.
    */
+  @Override
   public void addChildConnector(IValueConnector connector) {
     addChildConnector(connector.getId(), connector);
   }
@@ -76,6 +77,7 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenReadable() {
     return isReadable();
   }
@@ -107,6 +109,7 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getChildConnector(String connectorKey) {
     return childConnectors.get(connectorKey);
   }
@@ -114,6 +117,7 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getChildConnectorCount() {
     return getChildConnectorKeys().size();
   }
@@ -121,6 +125,7 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getChildConnectorKeys() {
     return childConnectors.keySet();
   }
@@ -130,6 +135,7 @@ public abstract class AbstractCompositeValueConnector extends
    * 
    * @return the displayDescription.
    */
+  @Override
   public String getDisplayDescription() {
     return displayDescription;
   }
@@ -140,6 +146,7 @@ public abstract class AbstractCompositeValueConnector extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getDisplayIconImageUrl() {
     String iconImageUrl = null;
     if (iconImageURLProvider != null) {
@@ -157,6 +164,7 @@ public abstract class AbstractCompositeValueConnector extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getDisplayValue() {
     IValueConnector renderingConnector = getRenderingConnector();
     if (renderingConnector != null) {
@@ -178,6 +186,7 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getRenderingConnector() {
     if (renderingChildConnectorId != null) {
       return getChildConnector(renderingChildConnectorId);
@@ -375,6 +384,7 @@ public abstract class AbstractCompositeValueConnector extends
    * @param connector
    *          the connector to be removed.
    */
+  @Override
   public void removeChildConnector(IValueConnector connector) {
     IValueConnector removedConnector = childConnectors
         .remove(connector.getId());

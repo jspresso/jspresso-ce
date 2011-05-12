@@ -79,6 +79,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the iconImageURLProvider.
    */
+  @Override
   public IIconImageURLProvider getIconImageURLProvider() {
     return iconImageURLProvider;
   }
@@ -86,6 +87,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAction getItemSelectionAction() {
     return itemSelectionAction;
   }
@@ -93,6 +95,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getMaxDepth() {
     return maxDepth;
   }
@@ -100,6 +103,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public ITreeLevelDescriptor getRootSubtreeDescriptor() {
     if (rootSubtreeDescriptor == null) {
@@ -131,6 +135,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAction getRowAction() {
     return rowAction;
   }
@@ -140,6 +145,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the expanded.
    */
+  @Override
   public boolean isExpanded() {
     return expanded;
   }

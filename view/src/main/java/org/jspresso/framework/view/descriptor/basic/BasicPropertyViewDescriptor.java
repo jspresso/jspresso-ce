@@ -64,6 +64,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the labelBackground.
    */
+  @Override
   public String getLabelBackground() {
     return labelBackground;
   }
@@ -73,6 +74,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the labelFont.
    */
+  @Override
   public String getLabelFont() {
     return labelFont;
   }
@@ -82,6 +84,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the labelForeground.
    */
+  @Override
   public String getLabelForeground() {
     return labelForeground;
   }
@@ -89,6 +92,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getRenderedChildProperties() {
     return renderedChildProperties;
   }
@@ -96,6 +100,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getDefaultRenderedChildProperties() {
     IModelDescriptor propertyDescriptor = getModelDescriptor();
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
@@ -114,6 +119,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the width.
    */
+  @Override
   public Integer getWidth() {
     if (width != null) {
       return width;
@@ -220,6 +226,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the action.
    */
+  @Override
   public IAction getAction() {
     return action;
   }
@@ -278,6 +285,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public EHorizontalAlignment getHorizontalAlignment() {
     if (horizontalAlignment != null) {
       return horizontalAlignment;

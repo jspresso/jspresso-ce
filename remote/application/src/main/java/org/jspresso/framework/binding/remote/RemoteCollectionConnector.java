@@ -73,6 +73,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object actualValue() {
     return getConnectorValue();
   }
@@ -104,6 +105,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -116,6 +118,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * 
    * @return the guid.
    */
+  @Override
   public String getGuid() {
     return guid;
   }
@@ -123,6 +126,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = createState();
@@ -141,6 +145,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }
@@ -148,6 +153,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void synchRemoteState() {
     RemoteCompositeValueState currentState = getState();
     currentState.setValue(getDisplayValue());
@@ -182,6 +188,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setValueFromState(Object stateValue) {
     setConnectorValue(stateValue);
   }

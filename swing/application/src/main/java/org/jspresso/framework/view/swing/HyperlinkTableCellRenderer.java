@@ -83,6 +83,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
     return delegateRendererComponent;
   }
 
+  @Override
   public void mouseMoved(MouseEvent e) {
     JTable table = (JTable) e.getSource();
     Point pt = e.getPoint();
@@ -95,6 +96,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
     table.repaint();
   }
 
+  @Override
   public void mouseExited(MouseEvent e) {
     JTable table = (JTable) e.getSource();
     currentRow = -1;
@@ -102,6 +104,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
     table.repaint();
   }
 
+  @Override
   public void mouseClicked(MouseEvent e) {
     JTable table = (JTable) e.getSource();
     Point pt = e.getPoint();
@@ -116,6 +119,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void mouseDragged(@SuppressWarnings("unused") MouseEvent e) {
     // NO-OP
   }
@@ -123,6 +127,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void mouseEntered(@SuppressWarnings("unused") MouseEvent e) {
     // NO-OP
   }
@@ -130,6 +135,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void mousePressed(@SuppressWarnings("unused") MouseEvent e) {
     // NO-OP
   }
@@ -137,6 +143,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void mouseReleased(@SuppressWarnings("unused") MouseEvent e) {
     // NO-OP
   }

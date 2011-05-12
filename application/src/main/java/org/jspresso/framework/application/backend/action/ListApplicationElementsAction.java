@@ -30,6 +30,7 @@ public class ListApplicationElementsAction extends BackendAction implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }

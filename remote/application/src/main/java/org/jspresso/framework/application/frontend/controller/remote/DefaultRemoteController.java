@@ -135,6 +135,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void clear() {
     remotePeerRegistry.clear();
     removedPeersGuids.clear();
@@ -143,6 +144,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<RAction> actions, String title,
       @SuppressWarnings("unused") RComponent sourceComponent,
@@ -168,6 +170,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
       String title, @SuppressWarnings("unused") RComponent sourceComponent,
       Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
@@ -184,6 +187,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayUrl(String urlSpec) {
     RemoteOpenUrlCommand openUrlCommand = new RemoteOpenUrlCommand();
     openUrlCommand.setUrlSpec(urlSpec);
@@ -213,6 +217,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IRemotePeer getRegistered(String guid) {
     return remotePeerRegistry.getRegistered(guid);
   }
@@ -220,6 +225,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IRemotePeer getRegisteredForPermId(String permId) {
     return remotePeerRegistry.getRegisteredForPermId(permId);
   }
@@ -227,6 +233,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized List<RemoteCommand> handleCommands(
       List<RemoteCommand> commands) {
     try {
@@ -285,6 +292,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isRegistered(String guid) {
     return remotePeerRegistry.isRegistered(guid);
   }
@@ -292,6 +300,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
       String title, String iconImageUrl, String message) {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
@@ -312,6 +321,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupOkCancel(
       @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction okAction,
@@ -341,6 +351,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupYesNo(
       @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
@@ -370,6 +381,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupYesNoCancel(
       @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
@@ -402,6 +414,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void register(IRemotePeer remotePeer) {
     remotePeerRegistry.register(remotePeer);
     if (remotePeer instanceof ICompositeValueConnector) {
@@ -417,6 +430,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
     remotePeerRegistry.addRemotePeerRegistryListener(listener);
   }
@@ -424,6 +438,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeRemotePeerRegistryListener(
       IRemotePeerRegistryListener listener) {
     remotePeerRegistry.removeRemotePeerRegistryListener(listener);
@@ -432,6 +447,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String registerPermId(String automationsSeed, String guid) {
     return remotePeerRegistry.registerPermId(automationsSeed, guid);
   }
@@ -439,6 +455,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
       if (command instanceof RemoteChildrenCommand) {
@@ -528,6 +545,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void unregister(String guid) {
     IRemotePeer remotePeer = getRegistered(guid);
     remotePeerRegistry.unregister(guid);
@@ -902,6 +920,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
     // No-op
   }
@@ -909,6 +928,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void remotePeerRemoved(String peerGuid) {
     removedPeersGuids.add(peerGuid);
   }
@@ -916,6 +936,7 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setStatusInfo(String statusInfo) {
     RemoteUpdateStatusCommand updateStatusCommand = new RemoteUpdateStatusCommand();
     updateStatusCommand.setStatus(statusInfo);

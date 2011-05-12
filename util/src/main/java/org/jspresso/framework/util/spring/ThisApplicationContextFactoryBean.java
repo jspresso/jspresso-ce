@@ -39,6 +39,7 @@ public class ThisApplicationContextFactoryBean implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object getObject() throws Exception {
     return applicationContext;
   }
@@ -48,6 +49,7 @@ public class ThisApplicationContextFactoryBean implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getObjectType() {
     return ApplicationContext.class;
   }
@@ -57,6 +59,7 @@ public class ThisApplicationContextFactoryBean implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isSingleton() {
     return true;
   }
@@ -64,6 +67,7 @@ public class ThisApplicationContextFactoryBean implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }

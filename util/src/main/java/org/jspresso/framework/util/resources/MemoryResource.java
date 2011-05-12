@@ -51,6 +51,7 @@ public class MemoryResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public InputStream getContent() {
     return new ByteArrayInputStream(resourceBytes);
   }
@@ -60,6 +61,7 @@ public class MemoryResource extends AbstractResource {
    * 
    * @return the name.
    */
+  @Override
   public String getName() {
     return name;
   }
@@ -67,6 +69,7 @@ public class MemoryResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public long getSize() {
     return resourceBytes.length;
   }

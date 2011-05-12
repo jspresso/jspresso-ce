@@ -76,6 +76,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<E> getComponentDescriptor() {
     return getReferencedDescriptor();
   }
@@ -92,6 +93,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getInitializationMapping() {
     return initializationMapping;
   }
@@ -99,6 +101,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return getReferencedDescriptor().getComponentContract();
   }
@@ -108,6 +111,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * 
    * @return the pageSize.
    */
+  @Override
   public Integer getPageSize() {
     if (pageSize == null) {
       return getComponentDescriptor().getPageSize();
@@ -118,6 +122,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<E> getReferencedDescriptor() {
     return referencedDescriptor;
   }
@@ -127,6 +132,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * 
    * @return the oneToOne.
    */
+  @Override
   public boolean isOneToOne() {
     if (getReverseRelationEnd() != null) {
       // priory ty is given to the reverse relation end.
@@ -287,6 +293,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getQueryableProperties() {
     if (queryableProperties == null) {
       return getReferencedDescriptor().getQueryableProperties();
@@ -298,6 +305,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getRenderedProperties() {
     if (renderedProperties == null) {
       return getReferencedDescriptor().getRenderedProperties();

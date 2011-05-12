@@ -52,6 +52,7 @@ public class RangeEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getEnumerationValues() {
     if (enumerationValues == null) {
       int min = 0;
@@ -77,6 +78,7 @@ public class RangeEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURL(@SuppressWarnings("unused") String value) {
     return null;
   }
@@ -111,6 +113,7 @@ public class RangeEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isTranslated() {
     return false;
   }

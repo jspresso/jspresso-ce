@@ -54,6 +54,7 @@ public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> 
    * 
    * @return the entity.
    */
+  @Override
   public boolean isEntity() {
     return false;
   }
@@ -61,6 +62,7 @@ public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> 
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isPurelyAbstract() {
     return true;
   }

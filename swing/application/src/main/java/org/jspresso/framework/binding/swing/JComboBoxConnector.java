@@ -53,6 +53,7 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
       /**
        * {@inheritDoc}
        */
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
         fireConnectorValueChange();

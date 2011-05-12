@@ -46,6 +46,7 @@ public class JVMGUIDGenerator implements IGUIDGenerator {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public synchronized String generateGUID() {
     return instanceId + Long.toHexString(index++);
   }

@@ -34,6 +34,7 @@ public interface ICollectionConnectorListProvider extends
    * 
    * @return the connector's clone.
    */
+  @Override
   ICollectionConnectorListProvider clone();
 
   /**
@@ -43,6 +44,7 @@ public interface ICollectionConnectorListProvider extends
    *          the identifier of the clone connector
    * @return the connector's clone.
    */
+  @Override
   ICollectionConnectorListProvider clone(String newConnectorId);
 
   /**

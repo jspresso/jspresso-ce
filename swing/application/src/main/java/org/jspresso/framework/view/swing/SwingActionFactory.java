@@ -48,6 +48,7 @@ public class SwingActionFactory extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Action createAction(IAction action, Dimension dimension,
       IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
     Dimension d = dimension;
@@ -66,6 +67,7 @@ public class SwingActionFactory extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setActionEnabled(Action action, boolean enabled) {
     action.setEnabled(enabled);
   }
@@ -73,6 +75,7 @@ public class SwingActionFactory extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setActionName(Action action, String name) {
     action.putValue(Action.NAME, name);
   }
@@ -125,6 +128,7 @@ public class SwingActionFactory extends
     /**
      * {@inheritDoc}
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
         IValueConnector viewConnector = null;

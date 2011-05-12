@@ -95,6 +95,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public int getColumnCount() {
     return columnConnectorKeys.size();
   }
@@ -104,6 +105,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public int getRowCount() {
     return collectionConnector.getChildConnectorCount();
   }
@@ -114,6 +116,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object getValueAt(int rowIndex, int columnIndex) {
     IValueConnector cellConnector = getConnectorAt(rowIndex, columnIndex);
     if (cellConnector instanceof ICompositeValueConnector) {
@@ -248,6 +251,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void propertyChange(
         @SuppressWarnings("unused") final PropertyChangeEvent evt) {
       updateCell();
@@ -256,6 +260,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(
         @SuppressWarnings("unused") final ValueChangeEvent evt) {
       updateCell();
@@ -264,6 +269,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     private void updateCell() {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           if (cell.getX() < getRowCount()) {
             fireTableCellUpdated(cell.getX(), cell.getY());
@@ -285,10 +291,12 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(
         @SuppressWarnings("unused") final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           if (row < getRowCount()) {
             fireTableRowsUpdated(row, row);
@@ -309,9 +317,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           Collection<?> oldCollection = null;
           if (evt.getOldValue() instanceof Collection<?>) {

@@ -42,6 +42,7 @@ public class FileToByteArrayCallback extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public void cancel(@SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) {
     context.remove(ActionContextConstants.ACTION_PARAM);
@@ -50,6 +51,7 @@ public class FileToByteArrayCallback extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public void fileChosen(@SuppressWarnings("unused") String name,
       InputStream in, @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) {

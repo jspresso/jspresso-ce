@@ -129,6 +129,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getColumnCount() {
     if (tableModel == null) {
       return 0;
@@ -147,6 +148,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getRowCount() {
     if (tableModel == null) {
       return 0;
@@ -186,6 +188,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getValueAt(int row, int column) {
     return tableModel.getValueAt(modelIndex(row), column);
   }
@@ -493,6 +496,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
         boolean isSelected, boolean hasFocus, int row, int column) {
       Component c = tableCellRenderer.getTableCellRendererComponent(table,

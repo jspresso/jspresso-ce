@@ -73,6 +73,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -80,6 +81,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isOpen() {
     return open;
   }
@@ -87,6 +89,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void propertyChange(PropertyChangeEvent evt) {
     try {

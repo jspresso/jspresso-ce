@@ -44,6 +44,7 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getCardNameForModel(Object model,
       @SuppressWarnings("unused") Subject subject) {
     if (model != null) {

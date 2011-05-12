@@ -35,6 +35,7 @@ public interface ICollectionConnector extends ISelectable,
    * 
    * @return the connector's clone.
    */
+  @Override
   ICollectionConnector clone();
 
   /**
@@ -44,6 +45,7 @@ public interface ICollectionConnector extends ISelectable,
    *          the identifier of the clone connector
    * @return the connector's clone.
    */
+  @Override
   ICollectionConnector clone(String newConnectorId);
 
   /**

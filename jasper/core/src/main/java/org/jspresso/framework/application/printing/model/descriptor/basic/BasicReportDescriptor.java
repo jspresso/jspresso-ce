@@ -83,6 +83,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    * 
    * @return the beforeAction.
    */
+  @Override
   public IAction getBeforeAction() {
     return beforeAction;
   }
@@ -102,6 +103,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    * 
    * @return the reportDesignUrl.
    */
+  @Override
   public String getReportDesignUrl() {
     return reportDesignUrl;
   }

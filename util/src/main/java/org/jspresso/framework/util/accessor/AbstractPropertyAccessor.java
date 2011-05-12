@@ -58,6 +58,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    *           whenever an exception occurs.
    * @return the property value.
    */
+  @Override
   public Object getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
     Object finalTarget = getLastNestedTarget(target, getProperty());
@@ -93,6 +94,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    * @throws NoSuchMethodException
    *           whenever an exception occurs.
    */
+  @Override
   public void setValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {

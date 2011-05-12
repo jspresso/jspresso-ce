@@ -53,6 +53,7 @@ public class SaveAction extends AbstractHibernateAction {
 
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
+      @Override
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
         getController(context).performPendingOperations();

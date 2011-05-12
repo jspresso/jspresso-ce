@@ -65,6 +65,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void clear() {
     backingStore.clear();
     automationBackingStore.clear();
@@ -74,6 +75,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IRemotePeer getRegistered(String guid) {
     return backingStore.get(guid);
   }
@@ -81,6 +83,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IRemotePeer getRegisteredForPermId(String permId) {
     if (permId != null) {
       return getRegistered(automationBackingStore.get(permId));
@@ -91,6 +94,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isRegistered(String guid) {
     return backingStore.containsKey(guid);
   }
@@ -98,6 +102,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void register(IRemotePeer remotePeer) {
     if (!backingStore.containsKey(remotePeer.getGuid())) {
       backingStore.put(remotePeer.getGuid(), remotePeer);
@@ -114,6 +119,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String registerPermId(String automationsSeed, String guid) {
     if (automationEnabled) {
       String seed = automationsSeed;
@@ -130,6 +136,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void unregister(String guid) {
     IRemotePeer remotePeer = backingStore.remove(guid);
     if (remotePeer instanceof IPermIdSource) {
@@ -245,6 +252,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
       return hash;
     }
 
+    @Override
     public String getGuid() {
       return guid;
     }
@@ -274,6 +282,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
       return hash;
     }
 
+    @Override
     public String getGuid() {
       return guid;
     }
@@ -288,6 +297,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
     if (rprListeners == null && listener != null) {
       rprListeners = new LinkedHashSet<IRemotePeerRegistryListener>();
@@ -298,6 +308,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeRemotePeerRegistryListener(
       IRemotePeerRegistryListener listener) {
     if (rprListeners == null || listener == null) {

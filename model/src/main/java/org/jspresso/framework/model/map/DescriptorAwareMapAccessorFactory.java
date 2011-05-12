@@ -22,6 +22,7 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       @SuppressWarnings("unused")
       Class<?> beanClass, @SuppressWarnings("unused")
@@ -35,6 +36,7 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IAccessor createPropertyAccessor(String property,
       @SuppressWarnings("unused")
       Class<?> beanClass) {

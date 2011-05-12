@@ -55,6 +55,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, List<String>> getFileFilter() {
     return fileFilter;
   }
@@ -62,6 +63,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Integer getMaxLength() {
     return maxLength;
   }
@@ -69,6 +71,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return byte[].class;
   }
@@ -159,6 +162,7 @@ public class BasicBinaryPropertyDescriptor extends
    * 
    * @return the fileName.
    */
+  @Override
   public String getFileName() {
     return fileName;
   }
@@ -179,6 +183,7 @@ public class BasicBinaryPropertyDescriptor extends
    * 
    * @return the contentType.
    */
+  @Override
   public String getContentType() {
     return contentType;
   }

@@ -40,6 +40,7 @@ public class BeanAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       Class<?> beanClass, Class<?> elementClass) {
     if (List.class.isAssignableFrom(PropertyHelper.getPropertyType(beanClass,
@@ -54,6 +55,7 @@ public class BeanAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
     return new BeanPropertyAccessor(property, beanClass);
   }

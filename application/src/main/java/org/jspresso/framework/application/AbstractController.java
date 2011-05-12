@@ -48,6 +48,7 @@ public abstract class AbstractController implements IController {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Subject getSubject() {
     return getApplicationSession().getSubject();
   }
@@ -58,6 +59,7 @@ public abstract class AbstractController implements IController {
    * @return the translationProvider.
    * @deprecated the controller is itself a translation provider. will return this.
    */
+  @Override
   @Deprecated
   public ITranslationProvider getTranslationProvider() {
     return this;
@@ -70,6 +72,7 @@ public abstract class AbstractController implements IController {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean handleException(Throwable ex, Map<String, Object> context) {
     if (customExceptionHandler != null) {
       return customExceptionHandler.handleException(ex, context);

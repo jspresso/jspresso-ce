@@ -43,6 +43,7 @@ public class GenerateSqlName implements TemplateMethodModel {
   static {
     DEFAULT_FORMATTER = new Formatter() {
 
+      @Override
       public String run(String name) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < name.length(); i++) {
@@ -58,6 +59,7 @@ public class GenerateSqlName implements TemplateMethodModel {
 
     DEFAULT_KEY_WORD_PROVIDER = new KeyWordProvider() {
 
+      @Override
       public List<String> run() {
         return Arrays.asList(new String[] {
       "BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
@@ -83,6 +85,7 @@ public class GenerateSqlName implements TemplateMethodModel {
    * parser to separate words with "_" - check for sql reserved key words
    * {@inheritDoc}
    */
+  @Override
   public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
       throws TemplateModelException {
 

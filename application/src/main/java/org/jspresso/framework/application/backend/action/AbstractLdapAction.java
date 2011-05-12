@@ -23,6 +23,7 @@ public abstract class AbstractLdapAction extends BackendAction implements
    * @param ldapTemplate
    *          the ldapTemplate to set.
    */
+  @Override
   public void setLdapTemplate(LdapTemplate ldapTemplate) {
     this.ldapTemplate = ldapTemplate;
   }

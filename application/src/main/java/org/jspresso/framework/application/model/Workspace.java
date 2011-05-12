@@ -137,6 +137,7 @@ public class Workspace implements ISecurable, IPermIdSource {
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -465,6 +466,7 @@ public class Workspace implements ISecurable, IPermIdSource {
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -482,6 +484,7 @@ public class Workspace implements ISecurable, IPermIdSource {
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

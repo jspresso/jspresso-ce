@@ -48,6 +48,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IEntity get(Class<? extends IEntity> entityContract, Object id) {
     IEntity registeredEntity = null;
     Map<Object, IEntity> contractStore = backingStore.get(entityContract);
@@ -80,6 +81,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void register(IEntity entity) {
     IEntity existingRegisteredEntity = get(entity.getComponentContract(),

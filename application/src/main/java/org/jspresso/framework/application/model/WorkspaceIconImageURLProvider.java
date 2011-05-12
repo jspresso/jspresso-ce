@@ -34,6 +34,7 @@ public class WorkspaceIconImageURLProvider implements IIconImageURLProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURLForObject(Object userObject) {
     if (delegateProvider != null && userObject instanceof BeanModule
         && ((BeanModule) userObject).getModuleObject() != null

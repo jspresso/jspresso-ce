@@ -123,6 +123,7 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<Action> actions, String title,
       JComponent sourceComponent, Map<String, Object> context,
@@ -141,6 +142,7 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayModalDialog(final JComponent mainView,
       final List<Action> actions, final String title,
       final JComponent sourceComponent, final Map<String, Object> context,
@@ -148,6 +150,7 @@ public class DefaultSwingController extends
     super.displayModalDialog(context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         JDialog dialog;
         Window window;
@@ -212,6 +215,7 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayUrl(String urlSpec) {
     try {
       BrowserControl.displayURL(urlSpec);
@@ -394,11 +398,13 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupInfo(final JComponent sourceComponent, final String title,
       final String iconImageUrl, final String message) {
     // To have the same threading model than the other UI channels
     SwingUtilities.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         JOptionPane.showMessageDialog(
             SwingUtil.getWindowOrInternalFrame(sourceComponent),
@@ -452,6 +458,7 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupOkCancel(final JComponent sourceComponent,
       final String title, final String iconImageUrl, final String message,
       final IAction okAction, final IAction cancelAction,
@@ -459,6 +466,7 @@ public class DefaultSwingController extends
     // To have the same threading model than the other UI channels
     SwingUtilities.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         int selectedOption = JOptionPane.showConfirmDialog(
             SwingUtil.getWindowOrInternalFrame(sourceComponent),
@@ -484,12 +492,14 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupYesNo(final JComponent sourceComponent, final String title,
       final String iconImageUrl, final String message, final IAction yesAction,
       final IAction noAction, final Map<String, Object> context) {
     // To have the same threading model than the other UI channels
     SwingUtilities.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         int selectedOption = JOptionPane.showConfirmDialog(
             SwingUtil.getWindowOrInternalFrame(sourceComponent),
@@ -515,6 +525,7 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupYesNoCancel(final JComponent sourceComponent,
       final String title, final String iconImageUrl, final String message,
       final IAction yesAction, final IAction noAction,
@@ -522,6 +533,7 @@ public class DefaultSwingController extends
     // To have the same threading model than the other UI channels
     SwingUtilities.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         int selectedOption = JOptionPane.showConfirmDialog(
             SwingUtil.getWindowOrInternalFrame(sourceComponent),
@@ -565,6 +577,7 @@ public class DefaultSwingController extends
       NativeInterface.open();
       SwingUtilities.invokeLater(new Runnable() {
 
+        @Override
         public void run() {
           initLoginProcess();
         }
@@ -916,6 +929,7 @@ public class DefaultSwingController extends
         getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
 
+      @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (performLogin()) {
           dialog.dispose();
@@ -1067,6 +1081,7 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setStatusInfo(String statusInfo) {
     if (statusInfo != null && statusInfo.length() > 0) {
       statusBar.setText(statusInfo);

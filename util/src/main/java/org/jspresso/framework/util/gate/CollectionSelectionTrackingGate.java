@@ -49,6 +49,7 @@ public class CollectionSelectionTrackingGate extends AbstractModelGate {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isOpen() {
     if (getModel() instanceof Collection<?>) {
       return !((Collection<?>) getModel()).isEmpty();

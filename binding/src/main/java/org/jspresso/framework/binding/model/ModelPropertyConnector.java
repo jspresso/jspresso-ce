@@ -121,6 +121,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void modelChange(ModelChangeEvent evt) {
 
     if (!(getParentConnector() instanceof ICollectionConnector)) {
@@ -162,6 +163,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
     fireConnectorValueChange();
   }

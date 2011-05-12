@@ -61,6 +61,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public ICollectionDescriptor<E> getCollectionDescriptor() {
     return getReferencedDescriptor();
   }
@@ -68,6 +69,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return getReferencedDescriptor().getCollectionInterface();
   }
@@ -75,6 +77,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, ESort> getOrderingProperties() {
     if (orderingProperties != null) {
       return orderingProperties;
@@ -90,6 +93,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * 
    * @return the referencedDescriptor.
    */
+  @Override
   public ICollectionDescriptor<E> getReferencedDescriptor() {
     return referencedDescriptor;
   }
@@ -99,6 +103,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * 
    * @return the manyToMany.
    */
+  @Override
   public boolean isManyToMany() {
     if (getReverseRelationEnd() != null) {
       // priory ty is given to the reverse relation end.
@@ -113,6 +118,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void postprocessAdder(Object component, Collection<?> collection,
       Object addedValue) {
@@ -130,6 +136,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void postprocessRemover(Object component, Collection<?> collection,
       Object removedValue) {
@@ -147,6 +154,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void preprocessAdder(Object component, Collection<?> collection,
       Object addedValue) {
@@ -164,6 +172,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void preprocessRemover(Object component, Collection<?> collection,
       Object removedValue) {

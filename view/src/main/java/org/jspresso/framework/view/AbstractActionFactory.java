@@ -75,6 +75,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public E createAction(IAction action, IActionHandler actionHandler,
       IView<F> view, Locale locale) {
     return createAction(action, null, actionHandler, view, locale);
@@ -95,6 +96,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    *          the widget this action was triggered from.
    * @return the initial action context.
    */
+  @Override
   public Map<String, Object> createActionContext(IActionHandler actionHandler,
       IView<F> view, IValueConnector viewConnector, String actionCommand,
       F actionWidget) {
@@ -187,6 +189,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                       .getCollectionConnector().addSelectionChangeListener(
                           new ISelectionChangeListener() {
 
+                            @Override
                             public void selectionChange(SelectionChangeEvent evt) {
                               ICollectionConnector collConnector = (ICollectionConnector) evt
                                   .getSource();
@@ -213,6 +216,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                       .getCollectionConnector().addValueChangeListener(
                           new IValueChangeListener() {
 
+                            @Override
                             public void valueChange(ValueChangeEvent evt) {
                               ICollectionConnector collConnector = (ICollectionConnector) evt
                                   .getSource();
@@ -244,6 +248,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                   }
                   final IModelChangeListener modelChangeListener = new IModelChangeListener() {
 
+                    @Override
                     public void modelChange(ModelChangeEvent evt) {
                       ((IModelGate) clonedGate).setModel(evt.getNewValue());
                     }
@@ -251,6 +256,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                   viewConnector.addPropertyChangeListener("modelConnector",
                       new PropertyChangeListener() {
 
+                        @Override
                         public void propertyChange(PropertyChangeEvent evt) {
                           IValueConnector oldModelConnector = (IValueConnector) evt
                               .getOldValue();
@@ -278,6 +284,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                 ((IItemSelectable) viewConnector)
                     .addItemSelectionListener(new IItemSelectionListener() {
 
+                      @Override
                       public void selectedItemChange(ItemSelectionEvent event) {
                         Object selectedItem = event.getSelectedItem();
                         if (selectedItem == event.getSource()) {
@@ -308,6 +315,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                 viewConnector
                     .addValueChangeListener(new IValueChangeListener() {
 
+                      @Override
                       public void valueChange(ValueChangeEvent evt) {
                         ((IModelGate) clonedGate).setModel(evt.getNewValue());
                       }
@@ -358,6 +366,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void propertyChange(
         @SuppressWarnings("unused") PropertyChangeEvent evt) {
       setActionEnabled(action, GateHelper.areGatesOpen(gates));

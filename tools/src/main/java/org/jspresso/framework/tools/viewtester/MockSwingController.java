@@ -69,6 +69,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<Action> actions, String title,
       JComponent sourceComponent, Map<String, Object> context,
@@ -86,6 +87,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
@@ -146,6 +148,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayUrl(String urlSpec) {
     try {
       BrowserControl.displayURL(urlSpec);
@@ -229,6 +232,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupInfo(JComponent sourceComponent, String title,
       String iconImageUrl, String message) {
     JOptionPane.showMessageDialog(
@@ -243,6 +247,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupOkCancel(JComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction okAction,
       IAction cancelAction, Map<String, Object> context) {
@@ -268,6 +273,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupYesNo(JComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
@@ -293,6 +299,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void popupYesNoCancel(JComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
@@ -328,6 +335,7 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void setStatusInfo(String statusInfo) {
     // NO-OP

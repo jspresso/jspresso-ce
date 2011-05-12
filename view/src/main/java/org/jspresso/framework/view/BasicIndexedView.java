@@ -46,6 +46,7 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IView<E> getChildView(int index) {
     if (index < 0 || super.getChildren() == null) {
       return null;
@@ -56,6 +57,7 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getCurrentViewIndex() {
     return currentViewIndex;
   }
@@ -63,6 +65,7 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setCurrentViewIndex(int currentViewIndex) {
     this.currentViewIndex = currentViewIndex;
   }

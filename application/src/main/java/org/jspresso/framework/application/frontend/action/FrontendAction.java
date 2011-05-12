@@ -106,6 +106,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getAcceleratorAsString() {
     return acceleratorAsString;
   }
@@ -115,6 +116,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * 
    * @return the actionabilityGates.
    */
+  @Override
   public Collection<IGate> getActionabilityGates() {
     return actionabilityGates;
   }
@@ -122,6 +124,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDescription() {
     return actionDescriptor.getDescription();
   }
@@ -129,6 +132,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() != null) {
@@ -140,6 +144,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return translationProvider.getTranslation(getName(), locale);
@@ -148,6 +153,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURL() {
     return actionDescriptor.getIconImageURL();
   }
@@ -155,6 +161,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getMnemonicAsString() {
     return mnemonicAsString;
   }
@@ -162,6 +169,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     return actionDescriptor.getName();
   }
@@ -185,6 +193,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isBackend() {
     return false;
   }

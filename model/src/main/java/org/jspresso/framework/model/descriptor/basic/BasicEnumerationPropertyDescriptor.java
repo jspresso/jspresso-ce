@@ -50,6 +50,7 @@ public class BasicEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getEnumerationValues() {
     return new ArrayList<String>(valuesAndIconImageUrls.keySet());
   }
@@ -57,6 +58,7 @@ public class BasicEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURL(String value) {
     if (valuesAndIconImageUrls != null) {
       return valuesAndIconImageUrls.get(value);
@@ -67,6 +69,7 @@ public class BasicEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isTranslated() {
     return true;
   }

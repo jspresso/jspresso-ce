@@ -57,6 +57,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     if (cells != null) {
       IViewDescriptor previousViewDescriptor = null;
@@ -71,6 +72,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public EAxis getDrivingDimension() {
     return drivingDimension;
   }
@@ -78,6 +80,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getDrivingDimensionCellCount() {
     return drivingDimensionCellCount;
   }

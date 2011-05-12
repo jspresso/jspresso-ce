@@ -46,6 +46,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor createLovViewDescriptor(
       IComponentDescriptorProvider<IEntity> entityRefDescriptor,
       IDisplayableAction okAction) {

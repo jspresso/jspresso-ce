@@ -264,6 +264,7 @@ public final class JErrorDialog extends JDialog {
         "copy.name", locale));
     button.addActionListener(new ActionListener() {
 
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent ae) {
         detailsPane.copy();
@@ -282,6 +283,7 @@ public final class JErrorDialog extends JDialog {
 
     okButton.addActionListener(new ActionListener() {
 
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
         setVisible(false);
@@ -290,6 +292,7 @@ public final class JErrorDialog extends JDialog {
     });
     detailsButton.addActionListener(new ActionListener() {
 
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
         setDetailsVisible(!detailsPanel.isVisible());

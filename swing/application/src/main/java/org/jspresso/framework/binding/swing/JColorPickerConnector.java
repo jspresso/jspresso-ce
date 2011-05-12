@@ -58,6 +58,7 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
       /**
        * {@inheritDoc}
        */
+      @Override
       public void stateChanged(@SuppressWarnings("unused")
       ChangeEvent e) {
         fireConnectorValueChange();

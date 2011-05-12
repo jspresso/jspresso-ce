@@ -39,6 +39,7 @@ public class BasicReferencePropertyViewDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IDisplayableAction getLovAction() {
     return lovAction;
   }

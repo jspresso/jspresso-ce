@@ -36,6 +36,7 @@ public class MapAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       @SuppressWarnings("unused")
       Class<?> beanClass, @SuppressWarnings("unused")
@@ -48,6 +49,7 @@ public class MapAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IAccessor createPropertyAccessor(String property,
       @SuppressWarnings("unused")
       Class<?> beanClass) {

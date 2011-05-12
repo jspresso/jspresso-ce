@@ -184,6 +184,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -208,6 +209,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     return permId;
   }
@@ -222,6 +224,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

@@ -65,6 +65,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Integer getMaxLength() {
     return maxLength;
   }
@@ -72,6 +73,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return String.class;
   }
@@ -81,6 +83,7 @@ public class BasicStringPropertyDescriptor extends
    * 
    * @return the regexpPattern.
    */
+  @Override
   public String getRegexpPattern() {
     return regexpPattern;
   }
@@ -90,6 +93,7 @@ public class BasicStringPropertyDescriptor extends
    * 
    * @return the regexpPatternSample.
    */
+  @Override
   public String getRegexpPatternSample() {
     return regexpPatternSample;
   }
@@ -109,6 +113,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isUpperCase() {
     if (upperCase != null) {
       return upperCase.booleanValue();

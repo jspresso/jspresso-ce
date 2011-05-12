@@ -75,6 +75,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addChildConnector(
       @SuppressWarnings("unused") IValueConnector childConnector) {
     throw new UnsupportedOperationException();
@@ -83,6 +84,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeChildConnector(
       @SuppressWarnings("unused") IValueConnector childConnector) {
     throw new UnsupportedOperationException();
@@ -94,6 +96,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void addModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
       modelChangeSupport.addModelChangeListener(listener);
@@ -103,6 +106,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenReadable() {
     return isReadable();
   }
@@ -110,6 +114,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenWritable() {
     // if not set to true, computed reference properties cannot have their
     // nested properties editable unless they are made delegateWritable= true.
@@ -159,6 +164,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getChildConnector(String connectorKey) {
     if (THIS_PROPERTY.equals(connectorKey)) {
       return this;
@@ -194,6 +200,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getChildConnectorCount() {
     return getChildConnectorKeys().size();
   }
@@ -201,6 +208,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getChildConnectorKeys() {
     return childConnectors.keySet();
   }
@@ -210,6 +218,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object getModel() {
     return getConnecteeValue();
   }
@@ -282,6 +291,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * 
    * @see #addModelChangeListener(IModelChangeListener)
    */
+  @Override
   public void removeModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
       modelChangeSupport.removeModelChangeListener(listener);

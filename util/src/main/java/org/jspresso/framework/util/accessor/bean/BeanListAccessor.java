@@ -55,6 +55,7 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addToValue(Object target, int index, Object value)
       throws IllegalAccessException, InvocationTargetException {
     if (adderAtMethod == null) {

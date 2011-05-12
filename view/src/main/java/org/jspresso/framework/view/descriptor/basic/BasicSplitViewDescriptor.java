@@ -49,6 +49,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
     if (getLeftTopViewDescriptor() != null) {
@@ -63,6 +64,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getLeftTopViewDescriptor() {
     completeChildDescriptor(leftTopViewDescriptor, null);
     return leftTopViewDescriptor;
@@ -71,6 +73,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public EOrientation getOrientation() {
     return orientation;
   }
@@ -78,6 +81,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getRightBottomViewDescriptor() {
     completeChildDescriptor(rightBottomViewDescriptor,
         getLeftTopViewDescriptor());

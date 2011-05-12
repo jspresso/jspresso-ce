@@ -153,6 +153,7 @@ public class HibernateBackendController extends AbstractBackendController {
     final List<E> uowEntities = super.cloneInUnitOfWork(entities);
     hibernateTemplate.execute(new HibernateCallback() {
 
+      @Override
       public Object doInHibernate(Session session) {
         Set<IEntity> alreadyLocked = new HashSet<IEntity>();
         for (IEntity mergedEntity : uowEntities) {
@@ -240,6 +241,7 @@ public class HibernateBackendController extends AbstractBackendController {
             /**
              * {@inheritDoc}
              */
+            @Override
             public Object doInHibernate(Session session) {
               // cleanPersistentCollectionDirtyState(componentOrEntity);
               if (componentOrEntity instanceof IEntity) {
@@ -314,6 +316,7 @@ public class HibernateBackendController extends AbstractBackendController {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void performPendingOperations() {
     if (!traversedPendingOperations) {
       traversedPendingOperations = true;
@@ -322,6 +325,7 @@ public class HibernateBackendController extends AbstractBackendController {
         /**
          * {@inheritDoc}
          */
+        @Override
         public Object doInHibernate(Session session) {
           boolean flushIsNecessary = false;
           Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
@@ -719,6 +723,7 @@ public class HibernateBackendController extends AbstractBackendController {
     List<T> res = (List<T>) getTransactionTemplate().execute(
         new TransactionCallback() {
 
+          @Override
           public Object doInTransaction(
               @SuppressWarnings("unused") TransactionStatus status) {
             int oldFlushMode = getHibernateTemplate().getFlushMode();
@@ -762,6 +767,7 @@ public class HibernateBackendController extends AbstractBackendController {
    * @param entity
    *          the entity to reload.
    */
+  @Override
   public void reload(IEntity entity) {
     if (entity.isPersistent()) {
       HibernateTemplate ht = getHibernateTemplate();

@@ -84,6 +84,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
       /**
        * {@inheritDoc}
        */
+      @Override
       public void run() {
         protectedReadabilityChange();
       }
@@ -105,6 +106,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
       /**
        * {@inheritDoc}
        */
+      @Override
       public void run() {
         protectedWritabilityChange();
       }
@@ -210,6 +212,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
   protected final void setConnecteeValue(final Object aValue) {
     SwingUtil.updateSwingGui(new Runnable() {
 
+      @Override
       public void run() {
         protectedSetConnecteeValue(aValue);
       }

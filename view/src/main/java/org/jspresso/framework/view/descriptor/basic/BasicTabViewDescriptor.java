@@ -53,6 +53,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     if (tabs != null) {
       IViewDescriptor previousViewDescriptor = null;
@@ -69,6 +70,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    * 
    * @return the renderingOptions.
    */
+  @Override
   public ERenderingOptions getRenderingOptions() {
     return renderingOptions;
   }
@@ -121,6 +123,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    * 
    * @return the lazy.
    */
+  @Override
   public boolean isLazy() {
     return lazy && !isCascadingModels();
   }

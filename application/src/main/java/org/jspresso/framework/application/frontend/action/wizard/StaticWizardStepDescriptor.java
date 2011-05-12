@@ -42,6 +42,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean canFinish(Map<String, Object> context) {
     return getNextStepDescriptor(context) == null;
   }
@@ -49,6 +50,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDescription() {
     return descriptor.getDescription();
   }
@@ -56,6 +58,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() != null) {
@@ -67,6 +70,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return translationProvider.getTranslation(getName(), locale);
@@ -75,6 +79,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     return descriptor.getName();
   }
@@ -84,6 +89,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * 
    * @return the nextLabelKey.
    */
+  @Override
   public String getNextLabelKey() {
     return nextLabelKey;
   }
@@ -91,6 +97,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IWizardStepDescriptor getNextStepDescriptor(
       @SuppressWarnings("unused")
       Map<String, Object> context) {
@@ -102,6 +109,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * 
    * @return the onEnterAction.
    */
+  @Override
   public IAction getOnEnterAction() {
     return onEnterAction;
   }
@@ -111,6 +119,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * 
    * @return the onLeaveAction.
    */
+  @Override
   public IAction getOnLeaveAction() {
     return onLeaveAction;
   }
@@ -120,6 +129,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * 
    * @return the previousLabelKey.
    */
+  @Override
   public String getPreviousLabelKey() {
     return previousLabelKey;
   }
@@ -127,6 +137,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IWizardStepDescriptor getPreviousStepDescriptor(
       @SuppressWarnings("unused")
       Map<String, Object> context) {
@@ -136,6 +147,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getViewDescriptor() {
     return viewDescriptor;
   }

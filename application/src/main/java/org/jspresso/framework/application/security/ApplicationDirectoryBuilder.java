@@ -232,20 +232,24 @@ public class ApplicationDirectoryBuilder {
     for (ActionList actionList : actionMap
         .getActionLists(new ISecurityHandler() {
 
+          @Override
           public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
             return this;
           }
 
+          @Override
           @SuppressWarnings("unused")
           public ISecurityContextBuilder pushToSecurityContext(
               Object contextElement) {
             return this;
           }
 
+          @Override
           public Map<String, Object> getSecurityContext() {
             return null;
           }
 
+          @Override
           @SuppressWarnings("unused")
           public boolean isAccessGranted(ISecurable securable) {
             return true;

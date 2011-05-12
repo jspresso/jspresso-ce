@@ -39,6 +39,7 @@ public class BasicAccessorFactory implements IAccessorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       Class<?> beanClass, Class<?> elementClass) {
     return getAccessorDelegate(beanClass, property)
@@ -48,6 +49,7 @@ public class BasicAccessorFactory implements IAccessorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
     try {
       return getAccessorDelegate(beanClass, property).createPropertyAccessor(

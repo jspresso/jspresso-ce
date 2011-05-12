@@ -44,5 +44,6 @@ public interface ICompositeView<E> extends IView<E> {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   ICompositeViewDescriptor getDescriptor();
 }

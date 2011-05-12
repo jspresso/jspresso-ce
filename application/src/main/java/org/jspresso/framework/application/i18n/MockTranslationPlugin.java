@@ -35,6 +35,7 @@ public class MockTranslationPlugin implements ITranslationPlugin {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public String getTranslation(String key, Locale locale,
       IApplicationSession session) {
@@ -46,6 +47,7 @@ public class MockTranslationPlugin implements ITranslationPlugin {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public String getTranslation(String key, Object[] args, Locale locale,
       IApplicationSession session) {

@@ -31,6 +31,7 @@ public class PasswordFormatter implements IFormatter {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String format(Object value) {
     if (value == null) {
       return "";
@@ -41,6 +42,7 @@ public class PasswordFormatter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object parse(String source) {
     return source;
   }

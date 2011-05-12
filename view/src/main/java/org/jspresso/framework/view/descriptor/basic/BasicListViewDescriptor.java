@@ -50,6 +50,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * 
    * @return the iconImageURLProvider.
    */
+  @Override
   public IIconImageURLProvider getIconImageURLProvider() {
     return iconImageURLProvider;
   }
@@ -57,6 +58,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getRenderedProperty() {
     if (renderedProperty == null) {
       return ((ICollectionDescriptorProvider<?>) getModelDescriptor())

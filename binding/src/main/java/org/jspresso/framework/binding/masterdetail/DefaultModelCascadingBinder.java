@@ -38,6 +38,7 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void bind(IValueConnector masterConnector,
       IValueConnector detailConnector) {
     if (masterConnector instanceof IItemSelectable) {
@@ -78,6 +79,7 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void selectedItemChange(ItemSelectionEvent event) {
       if (event.getSelectedItem() != null) {
         mvcBinder.bind(detailConnector, ((IValueConnector) event

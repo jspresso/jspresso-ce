@@ -147,6 +147,7 @@ public final class SwingUtil {
 
     textField.addFocusListener(new FocusListener() {
 
+      @Override
       public void focusGained(FocusEvent fe) {
         if (fe.getOppositeComponent() != null) {
           FocusGainedTask task = new FocusGainedTask(textField);
@@ -158,6 +159,7 @@ public final class SwingUtil {
         }
       }
 
+      @Override
       public void focusLost(FocusEvent fe) {
         if (!fe.isTemporary()) {
           FocusLostTask task = new FocusLostTask(textField);
@@ -404,6 +406,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
       if (!isUsedAsEditor(textField)) {
         // textField.selectAll();
@@ -432,6 +435,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
       if (!isUsedAsEditor(textField)) {
         if (textField.getText().length() > 0) {
@@ -459,6 +463,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void changedUpdate(@SuppressWarnings("unused") DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
@@ -468,6 +473,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void insertUpdate(@SuppressWarnings("unused") DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
@@ -477,6 +483,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeUpdate(@SuppressWarnings("unused") DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));

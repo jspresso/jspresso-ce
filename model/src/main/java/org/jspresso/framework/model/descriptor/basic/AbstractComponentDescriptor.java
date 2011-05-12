@@ -140,6 +140,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public IComponentDescriptor<E> createQueryDescriptor() {
     if (queryDescriptor == null) {
@@ -171,6 +172,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
@@ -186,6 +188,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<E> getComponentDescriptor() {
     return this;
   }
@@ -193,6 +196,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
     processPropertiesBufferIfNecessary();
     if (propertyDescriptorsMap != null) {
@@ -206,6 +210,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -215,6 +220,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @return the lifecycleInterceptors.
    */
+  @Override
   public List<ILifecycleInterceptor<?>> getLifecycleInterceptors() {
     List<ILifecycleInterceptor<?>> allInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
     if (getAncestorDescriptors() != null) {
@@ -232,6 +238,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return getComponentContract();
   }
@@ -239,6 +246,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, ESort> getOrderingProperties() {
     // use a set to avoid duplicates.
     Map<String, ESort> properties = new LinkedHashMap<String, ESort>();
@@ -261,6 +269,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Integer getPageSize() {
     return pageSize;
   }
@@ -268,6 +277,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized IPropertyDescriptor getPropertyDescriptor(
       String propertyName) {
     if (propertyDescriptorsCache.containsKey(propertyName)) {
@@ -307,6 +317,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized Collection<IPropertyDescriptor> getPropertyDescriptors() {
     if (allPropertpropertyDescriptorsCache == null) {
       // A map is used instead of a set since a set does not replace an element
@@ -336,6 +347,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getQueryableProperties() {
     if (queryableProperties == null) {
       queryableProperties = new ArrayList<String>();
@@ -352,6 +364,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getQueryComponentContract() {
     return getComponentContract();
   }
@@ -361,6 +374,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @return the readabilityGates.
    */
+  @Override
   public Collection<IGate> getReadabilityGates() {
     Set<IGate> gates = new HashSet<IGate>();
     if (readabilityGates != null) {
@@ -377,6 +391,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<String> getRenderedProperties() {
     if (renderedProperties == null) {
       renderedProperties = new ArrayList<String>();
@@ -393,6 +408,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getServiceContractClassNames() {
     Set<String> serviceContractClassNames = new LinkedHashSet<String>();
     if (serviceContracts != null) {
@@ -413,6 +429,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<Class<?>> getServiceContracts() {
     registerDelegateServicesIfNecessary();
     if (serviceContracts != null) {
@@ -424,6 +441,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentService getServiceDelegate(Method targetMethod) {
     registerDelegateServicesIfNecessary();
     IComponentService service = null;
@@ -454,6 +472,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @return the toStringProperty.
    */
+  @Override
   public synchronized String getToStringProperty() {
     if (toStringProperty == null) {
       List<String> rp = getRenderedProperties();
@@ -481,6 +500,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public synchronized String getAutoCompleteProperty() {
     if (autoCompleteProperty == null) {
       IPropertyDescriptor lpd = getPropertyDescriptor(getToStringProperty());
@@ -512,6 +532,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getUnclonedProperties() {
     Set<String> properties = new HashSet<String>();
     if (unclonedProperties != null) {
@@ -530,6 +551,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @return the writabilityGates.
    */
+  @Override
   public Collection<IGate> getWritabilityGates() {
     Set<IGate> gates = new HashSet<IGate>();
     if (writabilityGates != null) {
@@ -546,6 +568,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isReadOnly() {
     return false;
   }
@@ -571,6 +594,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @internal
    */
+  @Override
   public void setBeanFactory(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
   }
@@ -1074,6 +1098,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getPermId() {
     return getName();
   }
@@ -1084,6 +1109,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void setPermId(@SuppressWarnings("unused") String permId) {
     throw new UnsupportedOperationException();
   }

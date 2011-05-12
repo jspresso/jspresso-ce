@@ -50,6 +50,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getEnumerationName() {
     return enumerationName;
   }
@@ -59,6 +60,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * 
    * @return the maxLength.
    */
+  @Override
   public Integer getMaxLength() {
     if (maxLength != null) {
       return maxLength;
@@ -75,6 +77,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return String.class;
   }

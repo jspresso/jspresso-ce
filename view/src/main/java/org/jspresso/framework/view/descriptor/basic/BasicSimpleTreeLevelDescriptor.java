@@ -52,6 +52,7 @@ public class BasicSimpleTreeLevelDescriptor extends BasicTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public ITreeLevelDescriptor getChildDescriptor() {
     return childDescriptor;
   }

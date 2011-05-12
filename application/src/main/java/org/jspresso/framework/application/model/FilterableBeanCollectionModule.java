@@ -117,6 +117,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * 
    * @return the pageSize.
    */
+  @Override
   public Integer getPageSize() {
     if (pageSize == null) {
       return getElementComponentDescriptor().getPageSize();
@@ -259,6 +260,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * @param pageSize
    *          the pageSize to set.
    */
+  @Override
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
   }
@@ -305,6 +307,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     /**
      * {@inheritDoc}
      */
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
       firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
           + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
@@ -335,6 +338,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public Integer getDisplayPageIndex() {
     if (filter != null) {
       return filter.getDisplayPageIndex();
@@ -345,6 +349,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public Integer getPage() {
     if (filter != null) {
       return filter.getPage();
@@ -355,6 +360,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public Integer getPageCount() {
     if (filter != null) {
       return filter.getPageCount();
@@ -365,6 +371,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public Integer getRecordCount() {
     if (filter != null) {
       return filter.getRecordCount();
@@ -375,6 +382,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public boolean isNextPageEnabled() {
     if (filter != null) {
       return filter.isNextPageEnabled();
@@ -385,6 +393,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public boolean isPreviousPageEnabled() {
     if (filter != null) {
       return filter.isPreviousPageEnabled();
@@ -395,6 +404,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public void setPage(Integer page) {
     if (filter != null) {
       filter.setPage(page);
@@ -404,6 +414,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Delegates to filter. {@inheritDoc}
    */
+  @Override
   public void setRecordCount(Integer recordCount) {
     if (filter != null) {
       filter.setRecordCount(recordCount);

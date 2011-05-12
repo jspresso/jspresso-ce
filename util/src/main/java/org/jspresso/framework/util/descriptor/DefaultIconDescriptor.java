@@ -43,6 +43,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
    * 
    * @return the iconImageURL.
    */
+  @Override
   public String getIconImageURL() {
     return iconImageURL;
   }

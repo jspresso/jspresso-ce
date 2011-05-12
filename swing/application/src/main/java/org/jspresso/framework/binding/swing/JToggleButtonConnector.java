@@ -53,6 +53,7 @@ public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
       /**
        * {@inheritDoc}
        */
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
         fireConnectorValueChange();

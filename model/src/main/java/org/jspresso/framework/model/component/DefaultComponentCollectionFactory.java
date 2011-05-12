@@ -40,6 +40,7 @@ public class DefaultComponentCollectionFactory<E> implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Collection<E> createComponentCollection(Class<?> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
       return new LinkedHashSet<E>();

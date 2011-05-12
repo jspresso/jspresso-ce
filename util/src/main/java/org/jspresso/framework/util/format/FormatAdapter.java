@@ -45,6 +45,7 @@ public class FormatAdapter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String format(Object value) {
     if (value != null) {
       return format.format(value);
@@ -64,6 +65,7 @@ public class FormatAdapter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object parse(String source) throws ParseException {
     if (source == null || source.length() == 0) {
       return null;

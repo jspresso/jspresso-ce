@@ -60,6 +60,7 @@ public class ModelTrackingGate extends AbstractModelGate {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isOpen() {
     return getModel() != null;
   }

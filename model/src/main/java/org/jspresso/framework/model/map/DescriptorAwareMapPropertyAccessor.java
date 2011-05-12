@@ -37,6 +37,7 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
   }

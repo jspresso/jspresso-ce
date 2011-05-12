@@ -152,6 +152,7 @@ public class BasicQueryComponentDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isEntity() {
     return false;
   }
@@ -159,6 +160,7 @@ public class BasicQueryComponentDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isPurelyAbstract() {
     return false;
   }

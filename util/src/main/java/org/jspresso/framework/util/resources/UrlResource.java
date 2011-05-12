@@ -50,6 +50,7 @@ public class UrlResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public InputStream getContent() throws IOException {
     return url.openStream();
   }
@@ -57,6 +58,7 @@ public class UrlResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     String path = url.getPath();
     if (path != null && path.indexOf("/") > 0) {
@@ -68,6 +70,7 @@ public class UrlResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public long getSize() {
     return -1; // unknown.
   }

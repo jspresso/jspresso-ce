@@ -41,6 +41,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public ICollectionConnector createCollectionConnector(String id,
       IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
     return new BasicCollectionConnector(id, binder, childConnectorPrototype);
@@ -49,6 +50,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IRenderableCompositeValueConnector createCompositeValueConnector(
       String id, String renderingConnectorId) {
     BasicCompositeConnector connector = new BasicCompositeConnector(id);
@@ -59,6 +61,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(
       String id, String renderingConnectorId) {
     BasicCollectionConnectorListProvider connector = new BasicCollectionConnectorListProvider(
@@ -70,6 +73,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
       String id, String renderingConnectorId) {
     BasicCollectionConnectorProvider connector = new BasicCollectionConnectorProvider(
@@ -81,6 +85,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IFormattedValueConnector createFormattedValueConnector(String id,
       IFormatter formatter) {
     return new BasicFormattedValueConnector(id, formatter);
@@ -89,6 +94,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector createValueConnector(String id) {
     return new BasicValueConnector(id);
   }

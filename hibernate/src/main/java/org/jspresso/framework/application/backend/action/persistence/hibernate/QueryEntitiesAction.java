@@ -111,6 +111,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
         context).execute(new TransactionCallback() {
 
+      @Override
       public Object doInTransaction(TransactionStatus status) {
         HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
         int oldFlushMode = hibernateTemplate.getFlushMode();

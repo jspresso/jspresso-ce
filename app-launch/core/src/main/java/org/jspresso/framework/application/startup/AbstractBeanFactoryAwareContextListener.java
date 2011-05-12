@@ -39,6 +39,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void contextDestroyed(
       @SuppressWarnings("unused") ServletContextEvent event) {
     // No-op
@@ -47,6 +48,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void contextInitialized(ServletContextEvent event) {
     String beanFactorySelector = getBeanFactorySelector(event);
     String applicationContextKey = getApplicationContextKey(event);

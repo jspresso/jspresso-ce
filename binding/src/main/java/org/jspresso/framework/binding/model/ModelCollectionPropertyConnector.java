@@ -75,6 +75,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * @param connector
    *          the connector to be added as composite.
    */
+  @Override
   public void addChildConnector(IValueConnector connector) {
     childConnectors.put(connector.getId(), connector);
     connector.setParentConnector(this);
@@ -83,6 +84,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addSelectionChangeListener(ISelectionChangeListener listener) {
     selectionChangeSupport.addSelectionChangeListener(listener);
   }
@@ -90,6 +92,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenReadable() {
     return true;
   }
@@ -97,6 +100,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenWritable() {
     return true;
   }
@@ -137,6 +141,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector createChildConnector(String connectorId) {
     IComponentDescriptor<?> componentDescriptor;
     componentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
@@ -150,6 +155,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getChildConnector(int index) {
     return getChildConnector(computeConnectorId(index));
   }
@@ -157,6 +163,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getChildConnector(String connectorKey) {
     return childConnectors.get(connectorKey);
   }
@@ -164,6 +171,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getChildConnectorCount() {
     return getChildConnectorKeys().size();
   }
@@ -171,6 +179,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getChildConnectorKeys() {
     return childConnectors.keySet();
   }
@@ -180,6 +189,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public ICollectionConnector getCollectionConnector() {
     return this;
   }
@@ -189,6 +199,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public List<ICollectionConnector> getCollectionConnectors() {
     return Collections.singletonList((ICollectionConnector) this);
   }
@@ -196,6 +207,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public int[] getSelectedIndices() {
     return selectionChangeSupport.getSelectedIndices();
   }
@@ -240,6 +252,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeSelectionChangeListener(ISelectionChangeListener listener) {
     selectionChangeSupport.removeSelectionChangeListener(listener);
   }
@@ -247,6 +260,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void selectionChange(SelectionChangeEvent evt) {
     if (evt.getSource() instanceof ISelectionChangeListener) {
       selectionChangeSupport
@@ -265,6 +279,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setSelectedIndices(int[] newSelectedIndices) {
     selectionChangeSupport.setSelectedIndices(newSelectedIndices);
   }
@@ -272,6 +287,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
   }
@@ -281,6 +297,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void setTracksChildrenSelection(
       @SuppressWarnings("unused") boolean tracksChildrenSelection) {
     throw new UnsupportedOperationException();
@@ -317,6 +334,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * @param connector
    *          the connector to be removed.
    */
+  @Override
   public void removeChildConnector(IValueConnector connector) {
     IValueConnector removedConnector = childConnectors
         .remove(connector.getId());

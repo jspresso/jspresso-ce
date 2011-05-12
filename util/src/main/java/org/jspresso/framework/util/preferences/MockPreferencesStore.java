@@ -29,6 +29,7 @@ public class MockPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void setStorePath(String[] storePath) {
     // NO-OP
@@ -37,6 +38,7 @@ public class MockPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public String getPreference(String key) {
     return null;
@@ -45,6 +47,7 @@ public class MockPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void putPreference(String key, String value) {
     // NO-OP
@@ -53,6 +56,7 @@ public class MockPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void removePreference(String key) {
     // NO-OP

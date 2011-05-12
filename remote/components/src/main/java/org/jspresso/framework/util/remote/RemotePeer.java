@@ -59,6 +59,7 @@ public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     return permId;
   }
@@ -66,6 +67,7 @@ public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getGuid() {
     return guid;
   }
@@ -80,6 +82,7 @@ public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

@@ -51,6 +51,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addToChildrenMap(String key, IView<E> childView) {
     if (childView != null) {
       childView.setParent(this);
@@ -61,6 +62,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IView<E> getChild(String key) {
     if (childrenMap == null) {
       return null;
@@ -71,6 +73,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IView<E>> getChildren() {
     if (childrenMap != null) {
       return new ArrayList<IView<E>>(childrenMap.values());
@@ -101,6 +104,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IView<E> getCurrentView() {
     return currentView;
   }
@@ -108,6 +112,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setCurrentView(IView<E> currentView) {
     this.currentView = currentView;
   }

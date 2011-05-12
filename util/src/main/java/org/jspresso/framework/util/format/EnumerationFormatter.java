@@ -46,6 +46,7 @@ public class EnumerationFormatter implements IFormatter {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String format(Object value) {
     if (value == null) {
       return "";
@@ -59,6 +60,7 @@ public class EnumerationFormatter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object parse(@SuppressWarnings("unused") String source) {
     throw new UnsupportedOperationException(
         "EnumFormatter is a 1-way formatter");

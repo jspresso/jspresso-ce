@@ -108,6 +108,7 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     return name;
   }

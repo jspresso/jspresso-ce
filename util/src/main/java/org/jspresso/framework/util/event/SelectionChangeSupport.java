@@ -73,6 +73,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized void addSelectionChangeListener(
       ISelectionChangeListener listener) {
     if (listener != null) {
@@ -125,6 +126,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public int[] getSelectedIndices() {
     return selectedIndices;
   }
@@ -146,6 +148,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized void removeSelectionChangeListener(
       ISelectionChangeListener listener) {
     if (listener != null && listeners != null) {
@@ -156,6 +159,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setSelectedIndices(int[] selectedIndices) {
     int leadingInd = -1;
     if (selectedIndices != null && selectedIndices.length > 0) {
@@ -167,6 +171,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setSelectedIndices(int[] selectedInds, int leadingInd) {
     this.oldSelectedIndices = this.selectedIndices;
     this.selectedIndices = selectedInds;

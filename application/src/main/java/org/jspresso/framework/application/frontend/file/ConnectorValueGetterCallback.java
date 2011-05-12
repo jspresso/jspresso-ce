@@ -41,6 +41,7 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public void cancel(@SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Map<String, Object> context) {
     // NO-OP
@@ -49,6 +50,7 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public void fileChosen(@SuppressWarnings("unused") String name,
       OutputStream out,
       @SuppressWarnings("unused") IActionHandler actionHandler,
@@ -70,6 +72,7 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getFileName(Map<String, Object> context) {
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (modelDescriptor instanceof IFileFilterable) {

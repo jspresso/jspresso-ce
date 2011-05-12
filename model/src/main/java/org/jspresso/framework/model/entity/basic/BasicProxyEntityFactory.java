@@ -60,6 +60,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract) {
     return inlineComponentFactory.createComponentInstance(componentContract);
@@ -68,6 +69,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate) {
     return inlineComponentFactory.createComponentInstance(componentContract,
@@ -77,6 +79,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T createdEntity = createEntityInstance(entityContract,
         entityGUIDGenerator.generateGUID());
@@ -117,12 +120,14 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id) {
     final T createdEntity = createEntityInstance(entityContract, id, null);
     createdEntity.addPropertyChangeListener(IEntity.VERSION,
         new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getOldValue() == null && evt.getNewValue() != null) {
               createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
@@ -139,6 +144,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IQueryComponent createQueryComponentInstance(
       Class<? extends IComponent> componentContract) {
     return inlineComponentFactory
@@ -148,6 +154,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<?> componentContract) {
     return inlineComponentFactory.getComponentDescriptor(componentContract);
@@ -156,6 +163,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
     return inlineComponentFactory.getComponentDescriptors();
   }

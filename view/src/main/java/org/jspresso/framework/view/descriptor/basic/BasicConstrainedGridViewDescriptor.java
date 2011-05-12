@@ -56,6 +56,7 @@ public class BasicConstrainedGridViewDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public CellConstraints getCellConstraints(IViewDescriptor viewDescriptor) {
     if (cells != null) {
       return cells.get(viewDescriptor);
@@ -66,6 +67,7 @@ public class BasicConstrainedGridViewDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> childViewDescriptors = new ArrayList<IViewDescriptor>();
     IViewDescriptor peviousChildViewDescriptor = null;

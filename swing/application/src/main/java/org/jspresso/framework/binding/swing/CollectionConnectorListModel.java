@@ -63,6 +63,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object getElementAt(int index) {
     return collectionConnector.getChildConnector(index)/* .getConnectorValue() */;
   }
@@ -72,6 +73,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public int getSize() {
     return collectionConnector.getChildConnectorCount();
   }
@@ -122,10 +124,12 @@ public class CollectionConnectorListModel extends AbstractListModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(
         @SuppressWarnings("unused") final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           fireContentsChanged(CollectionConnectorListModel.this, index, index);
         }
@@ -138,9 +142,11 @@ public class CollectionConnectorListModel extends AbstractListModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
           Collection<?> newCollection = (Collection<?>) evt.getNewValue();

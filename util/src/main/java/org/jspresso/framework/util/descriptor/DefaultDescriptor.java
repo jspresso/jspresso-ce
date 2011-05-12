@@ -53,6 +53,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    * 
    * @return the description.
    */
+  @Override
   public String getDescription() {
     return description;
   }
@@ -60,6 +61,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     return translationProvider.getTranslation(getDescription(), locale);
@@ -68,6 +70,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     if (i18nNameKey != null) {
@@ -81,6 +84,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    * 
    * @return the name.
    */
+  @Override
   public String getName() {
     return name;
   }

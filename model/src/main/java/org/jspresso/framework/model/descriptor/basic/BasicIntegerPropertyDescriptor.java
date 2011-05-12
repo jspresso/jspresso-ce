@@ -49,6 +49,7 @@ public class BasicIntegerPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isUsingLong() {
     if (usingLong != null) {
       return usingLong.booleanValue();
@@ -59,6 +60,7 @@ public class BasicIntegerPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     if (isUsingLong()) {
       return Long.class;

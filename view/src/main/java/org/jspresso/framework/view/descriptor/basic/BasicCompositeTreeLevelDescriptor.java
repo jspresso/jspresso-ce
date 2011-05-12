@@ -74,6 +74,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public ITreeLevelDescriptor getChildDescriptor(String name) {
     if (childrenDescriptorsMap != null) {
       return childrenDescriptorsMap.get(name);
@@ -84,6 +85,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<ITreeLevelDescriptor> getChildrenDescriptors() {
     if (childrenDescriptorsMap != null) {
       return new ArrayList<ITreeLevelDescriptor>(childrenDescriptorsMap

@@ -52,6 +52,7 @@ public abstract class BasicScalarPropertyDescriptor extends
    * 
    * @return the defaultValue.
    */
+  @Override
   public Object getDefaultValue() {
     return defaultValue;
   }

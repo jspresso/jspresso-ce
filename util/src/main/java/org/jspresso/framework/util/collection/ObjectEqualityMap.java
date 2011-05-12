@@ -77,6 +77,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
@@ -84,6 +85,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
@@ -170,6 +172,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(listener);
   }
@@ -177,6 +180,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removePropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(propertyName, listener);

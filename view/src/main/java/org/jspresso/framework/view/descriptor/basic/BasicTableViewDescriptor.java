@@ -75,6 +75,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IPropertyViewDescriptor> getColumnViewDescriptors() {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
     IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
@@ -116,6 +117,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * 
    * @return the sortingAction.
    */
+  @Override
   public IDisplayableAction getSortingAction() {
     return sortingAction;
   }
@@ -125,6 +127,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * 
    * @return the horizontallyScrollable.
    */
+  @Override
   public boolean isHorizontallyScrollable() {
     return horizontallyScrollable;
   }
@@ -134,6 +137,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * 
    * @return the sortable.
    */
+  @Override
   public boolean isSortable() {
     return sortable;
   }

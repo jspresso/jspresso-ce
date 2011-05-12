@@ -34,6 +34,7 @@ public class DescriptorAwareMapCollectionAccessor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void addToValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
@@ -65,6 +66,7 @@ public class DescriptorAwareMapCollectionAccessor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeFromValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {

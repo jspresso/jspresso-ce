@@ -91,6 +91,7 @@ public class RemoveFromModuleObjectsAction extends
     }
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
+      @Override
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
         List<IEntity> uowClones = getController(context).cloneInUnitOfWork(moduleObjectsToRemove);

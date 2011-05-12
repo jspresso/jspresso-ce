@@ -61,6 +61,7 @@ public class DefaultTreeSelectionModelBinder implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void bindSelectionModel(IValueConnector rootConnector, JTree tree) {
     tree.getSelectionModel().addTreeSelectionListener(
         genericSelectionModelListener);
@@ -91,9 +92,11 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void selectionChange(final SelectionChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           ICollectionConnector connector = (ICollectionConnector) evt
               .getSource();
@@ -138,6 +141,7 @@ public class DefaultTreeSelectionModelBinder implements
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void valueChanged(TreeSelectionEvent e) {
       TreePath[] treePaths = e.getPaths();
       Map<ICollectionConnector, int[]> connectorSelection = new LinkedHashMap<ICollectionConnector, int[]>();
@@ -230,6 +234,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent e) {
       // NO-OP as of now.
     }
@@ -237,6 +242,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void treeNodesInserted(TreeModelEvent e) {
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) e
           .getTreePath().getLastPathComponent());
@@ -245,6 +251,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent e) {
       // NO-OP as of now.
     }
@@ -252,6 +259,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void treeStructureChanged(TreeModelEvent e) {
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) e
           .getTreePath().getLastPathComponent());

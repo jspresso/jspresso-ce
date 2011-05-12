@@ -66,6 +66,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object actualValue() {
     return getConnectorValue();
   }
@@ -97,6 +98,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -109,6 +111,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    * 
    * @return the guid.
    */
+  @Override
   public String getGuid() {
     return guid;
   }
@@ -116,6 +119,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = createState();
@@ -142,6 +146,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }
@@ -149,6 +154,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void synchRemoteState() {
     RemoteCompositeValueState currentState = getState();
     currentState.setValue(getDisplayValue());
@@ -182,6 +188,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setValueFromState(Object stateValue) {
     setConnectorValue(stateValue);
   }

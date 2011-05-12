@@ -53,6 +53,7 @@ public class BasicObjectPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<Object> getComponentDescriptor() {
     return null;
   }
@@ -62,6 +63,7 @@ public class BasicObjectPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public List<String> getQueryableProperties() {
     return null;
   }
@@ -71,6 +73,7 @@ public class BasicObjectPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public List<String> getRenderedProperties() {
     return null;
   }
@@ -81,6 +84,7 @@ public class BasicObjectPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     if (modelTypeClassName != null) {
       try {

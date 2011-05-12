@@ -65,6 +65,7 @@ public class DurationFormatter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String format(Object value) {
     if (value == null) {
       return null;
@@ -79,6 +80,7 @@ public class DurationFormatter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object parse(String source) throws ParseException {
     if (source == null || source.length() == 0) {
       return null;

@@ -61,6 +61,7 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public synchronized Object invoke(@SuppressWarnings("unused")
   Object proxy, Method method, Object[] args) throws Throwable {
     if ("getComponentContract".equals(method.getName())) {

@@ -33,6 +33,7 @@ public interface IRenderableCompositeValueConnector extends
    * 
    * @return the connector's clone.
    */
+  @Override
   IRenderableCompositeValueConnector clone();
 
   /**
@@ -42,6 +43,7 @@ public interface IRenderableCompositeValueConnector extends
    *            the identifier of the clone connector
    * @return the connector's clone.
    */
+  @Override
   IRenderableCompositeValueConnector clone(String newConnectorId);
 
   /**

@@ -77,6 +77,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IRelationshipEndPropertyDescriptor getReverseRelationEnd() {
     return reverseRelationEnd;
   }
@@ -84,6 +85,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isComposition() {
     if (composition != null) {
       return composition.booleanValue();
@@ -155,6 +157,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * @param reverseRelationEnd
    *          the reverseRelationEnd to set.
    */
+  @Override
   public void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd) {
     if (getName() == null) {

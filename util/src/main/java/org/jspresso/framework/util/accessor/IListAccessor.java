@@ -55,6 +55,7 @@ public interface IListAccessor extends ICollectionAccessor {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   List<?> getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
 }

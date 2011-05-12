@@ -60,6 +60,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
       IQueryComponent queryComponent) {
     criteria.setProjection(null);
@@ -143,6 +144,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent) {
     EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria
         .forEntityName(queryComponent.getQueryContract().getName());

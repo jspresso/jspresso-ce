@@ -48,6 +48,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
    * 
    * @return the accessorFactory.
    */
+  @Override
   public IAccessorFactory getAccessorFactory() {
     return accessorFactory;
   }
@@ -65,6 +66,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void sortCollectionProperty(IComponent component, String propertyName) {
     Collection<Object> propertyValue = (Collection<Object>) component

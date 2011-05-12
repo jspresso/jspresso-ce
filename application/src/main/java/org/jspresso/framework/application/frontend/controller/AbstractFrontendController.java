@@ -168,6 +168,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayModule(Module module) {
     displayModule(getSelectedWorkspaceName(), module);
   }
@@ -175,6 +176,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayModule(String workspaceName, Module module) {
     Module currentModule = selectedModules.get(getSelectedWorkspaceName());
     if ((currentModule == null && module == null)
@@ -243,6 +245,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayNextPinnedModule() {
     boolean wasAutoPinEnabled = moduleAutoPinEnabled;
     try {
@@ -272,6 +275,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayPreviousPinnedModule() {
     boolean wasAutoPinEnabled = moduleAutoPinEnabled;
     try {
@@ -303,6 +307,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayWorkspace(String workspaceName) {
     if (workspaceName != null) {
       Workspace workspace = getWorkspace(workspaceName);
@@ -321,6 +326,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
       Map<String, Object> context) {
     Map<String, Object> savedContext = dialogContextStack.remove(0);
@@ -338,6 +344,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
       return true;
@@ -365,6 +372,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the actions.
    */
+  @Override
   public ActionMap getActionMap() {
     return actionMap;
   }
@@ -372,6 +380,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IApplicationSession getApplicationSession() {
     return getBackendController().getApplicationSession();
   }
@@ -379,6 +388,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IBackendController getBackendController() {
     return backendController;
   }
@@ -386,6 +396,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDescription() {
     return controllerDescriptor.getDescription();
   }
@@ -395,6 +406,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the help actions.
    */
+  @Override
   public ActionMap getHelpActions() {
     return helpActionMap;
   }
@@ -404,6 +416,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the navigation actions.
    */
+  @Override
   public ActionMap getNavigationActions() {
     return navigationActionMap;
   }
@@ -411,6 +424,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     return controllerDescriptor.getI18nDescription(translationProvider, locale);
@@ -419,6 +433,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return controllerDescriptor.getI18nName(translationProvider, locale);
@@ -427,6 +442,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURL() {
     return controllerDescriptor.getIconImageURL();
   }
@@ -436,6 +452,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.putAll(getBackendController()
@@ -454,6 +471,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Locale getLocale() {
     if (getBackendController() != null) {
       return getBackendController().getApplicationSession().getLocale();
@@ -467,6 +485,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public TimeZone getClientTimeZone() {
     if (getBackendController() != null) {
       return getBackendController().getClientTimeZone();
@@ -479,6 +498,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the mvcBinder.
    */
+  @Override
   public IMvcBinder getMvcBinder() {
     return mvcBinder;
   }
@@ -486,6 +506,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     return controllerDescriptor.getName();
   }
@@ -495,6 +516,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the selectedWorkspaceName.
    */
+  @Override
   public String getSelectedWorkspaceName() {
     return selectedWorkspaceName;
   }
@@ -502,6 +524,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAction getLoginAction() {
     return loginAction;
   }
@@ -509,6 +532,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAction getStartupAction() {
     return startupAction;
   }
@@ -518,6 +542,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the viewFactory.
    */
+  @Override
   public IViewFactory<E, F, G> getViewFactory() {
     return viewFactory;
   }
@@ -529,6 +554,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the name of the workspace.
    * @return the selected workspace.
    */
+  @Override
   public Workspace getWorkspace(String workspaceName) {
     if (workspaces != null) {
       return workspaces.get(workspaceName);
@@ -542,6 +568,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the list of workspace names.
    */
+  @Override
   public List<String> getWorkspaceNames() {
     if (workspaces != null) {
       List<String> workspaceNames = new ArrayList<String>();
@@ -564,6 +591,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void pinModule(Module module) {
     pinModule(getSelectedWorkspaceName(), module);
   }
@@ -816,6 +844,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean start(IBackendController peerController,
       Locale theClientLocale, TimeZone theClientTimeZone) {
     this.clientLocale = theClientLocale;
@@ -830,6 +859,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean stop() {
     selectedModules = new HashMap<String, Module>();
     workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
@@ -868,6 +898,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the key under which the preference as been stored.
    * @return the stored preference or null.
    */
+  @Override
   public String getClientPreference(String key) {
     if (getClientPreferencesStore() != null) {
       return getClientPreferencesStore().getPreference(key);
@@ -883,6 +914,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param value
    *          the value of the preference to be stored.
    */
+  @Override
   public void putClientPreference(String key, String value) {
     if (getClientPreferencesStore() != null) {
       getClientPreferencesStore().putPreference(key, value);
@@ -895,6 +927,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param key
    *          the key under which the preference is stored.
    */
+  @Override
   public void removeClientPreference(String key) {
     if (getClientPreferencesStore() != null) {
       getClientPreferencesStore().removePreference(key);
@@ -1014,6 +1047,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     workspaceNavigator.addItemSelectionListener(new IItemSelectionListener() {
 
+      @Override
       public void selectedItemChange(ItemSelectionEvent event) {
         navigatorSelectionChanged(workspaceName,
             (ICompositeValueConnector) event.getSelectedItem());
@@ -1079,6 +1113,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the exit action.
    */
+  @Override
   public IDisplayableAction getExitAction() {
     if (exitAction == null) {
       ExitAction<E, F, G> action = new ExitAction<E, F, G>();
@@ -1180,6 +1215,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void loggedIn(Subject subject) {
     if (getLoginCallbackHandler() instanceof UsernamePasswordHandler) {
       UsernamePasswordHandler uph = (UsernamePasswordHandler) getLoginCallbackHandler();
@@ -1417,6 +1453,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the secondaryActionMap.
    */
+  @Override
   public ActionMap getSecondaryActionMap() {
     return secondaryActionMap;
   }
@@ -1484,6 +1521,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IView<E> getCurrentModuleView() {
     IMapView<E> workspaceView = workspaceViews.get(getSelectedWorkspaceName());
     if (workspaceView != null) {
@@ -1529,6 +1567,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getUserPreference(String key) {
     return getBackendController().getUserPreference(key);
   }
@@ -1536,6 +1575,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void putUserPreference(String key, String value) {
     getBackendController().putUserPreference(key, value);
   }
@@ -1543,6 +1583,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeUserPreference(String key) {
     getBackendController().removeUserPreference(key);
   }
@@ -1552,6 +1593,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Locale locale) {
     return getBackendController().getTranslation(key, locale);
   }
@@ -1561,6 +1603,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Object[] args, Locale locale) {
     return getBackendController().getTranslation(key, args, locale);
   }
@@ -1568,6 +1611,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isAccessGranted(ISecurable securable) {
     Map<String, Object> currentSecurityContext = getSecurityContext();
     int snapshotsToRestore = 0;
@@ -1593,6 +1637,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getSecurityContext() {
     return getBackendController().getSecurityContext();
   }
@@ -1600,6 +1645,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public ISecurityContextBuilder pushToSecurityContext(Object contextElement) {
     getBackendController().pushToSecurityContext(contextElement);
     return this;
@@ -1608,6 +1654,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
     getBackendController().restoreLastSecurityContextSnapshot();
     return this;

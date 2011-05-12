@@ -50,6 +50,7 @@ public class BasicDecimalPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Integer getMaxFractionDigit() {
     return maxFractionDigit;
   }
@@ -57,6 +58,7 @@ public class BasicDecimalPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     if (isUsingBigDecimal()) {
       return BigDecimal.class;
@@ -69,6 +71,7 @@ public class BasicDecimalPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isUsingBigDecimal() {
     if (usingBigDecimal != null) {
       return usingBigDecimal.booleanValue();

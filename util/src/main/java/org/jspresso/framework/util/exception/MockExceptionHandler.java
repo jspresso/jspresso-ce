@@ -33,6 +33,7 @@ public class MockExceptionHandler implements IExceptionHandler {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public boolean handleException(Throwable ex, Map<String, Object> context) {
     return false;

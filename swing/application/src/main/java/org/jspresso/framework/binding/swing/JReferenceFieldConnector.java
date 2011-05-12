@@ -55,6 +55,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addChildConnector(
       @SuppressWarnings("unused") IValueConnector childConnector) {
     throw new UnsupportedOperationException(
@@ -64,6 +65,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeChildConnector(
       @SuppressWarnings("unused") IValueConnector childConnector) {
     throw new UnsupportedOperationException(
@@ -73,6 +75,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenReadable() {
     return isReadable();
   }
@@ -80,6 +83,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenWritable() {
     return isWritable();
   }
@@ -108,6 +112,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getChildConnector(String connectorKey) {
     if (connectorKey.equals(renderingConnector.getId())) {
       return renderingConnector;
@@ -118,6 +123,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getChildConnectorCount() {
     if (renderingConnector != null) {
       return 1;
@@ -128,6 +134,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getChildConnectorKeys() {
     if (renderingConnector != null) {
       return Collections.singleton(renderingConnector.getId());
@@ -138,6 +145,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDisplayDescription() {
     return null;
   }
@@ -145,6 +153,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDisplayIconImageUrl() {
     return null;
   }
@@ -152,6 +161,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDisplayValue() {
     if (getRenderingConnector() != null) {
       return (String) getRenderingConnector().getConnectorValue();
@@ -162,6 +172,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getRenderingConnector() {
     return renderingConnector;
   }
@@ -202,6 +213,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
       protectedSetConnecteeValue(getConnecteeValue());
     }

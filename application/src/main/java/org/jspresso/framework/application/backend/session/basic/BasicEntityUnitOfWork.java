@@ -52,6 +52,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addUpdatedEntity(IEntity entity) {
     if (updatedEntities == null) {
       updatedEntities = new LinkedHashSet<IEntity>();
@@ -62,6 +63,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void begin() {
     dirtRecorder = new BeanPropertyChangeRecorder();
   }
@@ -69,6 +71,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void clearDirtyState(IEntity flushedEntity) {
     dirtRecorder.resetChangedProperties(flushedEntity, null);
   }
@@ -78,6 +81,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void clearPendingOperations() {
     entitiesRegisteredForUpdate = null;
     entitiesRegisteredForDeletion = null;
@@ -86,6 +90,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void commit() {
     cleanup();
   }
@@ -93,6 +98,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getDirtyProperties(IEntity entity) {
     return dirtRecorder.getChangedProperties(entity);
   }
@@ -100,6 +106,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Set<IEntity> getEntitiesRegisteredForDeletion() {
     return entitiesRegisteredForDeletion;
   }
@@ -107,6 +114,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IEntity> getEntitiesRegisteredForUpdate() {
     return entitiesRegisteredForUpdate;
   }
@@ -114,6 +122,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities() {
     Map<Class<?>, Map<Serializable, IEntity>> registeredEntities = new HashMap<Class<?>, Map<Serializable, IEntity>>();
     for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
@@ -132,6 +141,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Set<IEntity> getUpdatedEntities() {
     return updatedEntities;
   }
@@ -139,6 +149,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isActive() {
     return dirtRecorder != null;
   }
@@ -146,6 +157,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
     return entitiesRegisteredForDeletion != null
         && entitiesRegisteredForDeletion.contains(entity);
@@ -154,6 +166,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isEntityRegisteredForUpdate(IEntity entity) {
     return entitiesRegisteredForUpdate != null
         && entitiesRegisteredForUpdate.contains(entity);
@@ -162,6 +175,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isUpdated(IEntity entity) {
     return updatedEntities != null && updatedEntities.contains(entity);
   }
@@ -169,6 +183,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void register(IEntity bean,
       Map<String, Object> initialChangedProperties) {
     dirtRecorder.register(bean, initialChangedProperties);
@@ -177,6 +192,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void registerForDeletion(IEntity entity) {
     if (entity.isPersistent()) {
       if (entitiesRegisteredForDeletion == null) {
@@ -194,6 +210,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void registerForUpdate(IEntity entity) {
     if (entitiesRegisteredForUpdate == null) {
       entitiesRegisteredForUpdate = new ArrayList<IEntity>();
@@ -204,6 +221,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void rollback() {
     cleanup();
   }
@@ -218,6 +236,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void cleanRelationshipsOnDeletion(
       @SuppressWarnings("unused") IComponent component,
       @SuppressWarnings("unused") boolean dryRun) {
@@ -230,6 +249,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void reload(@SuppressWarnings("unused") IEntity entity) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException(

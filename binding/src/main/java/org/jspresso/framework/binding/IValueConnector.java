@@ -98,6 +98,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * 
    * @return the connector's clone.
    */
+  @Override
   IValueConnector clone();
 
   /**
@@ -107,6 +108,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    *          the identifier of the clone connector
    * @return the connector's clone.
    */
+  @Override
   IValueConnector clone(String newConnectorId);
 
   /**

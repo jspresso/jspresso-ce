@@ -60,6 +60,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object actualValue() {
     return getConnectorValue();
   }
@@ -91,6 +92,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -103,6 +105,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * 
    * @return the guid.
    */
+  @Override
   public String getGuid() {
     return guid;
   }
@@ -110,6 +113,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public RemoteValueState getState() {
     if (state == null) {
       state = createState();
@@ -136,6 +140,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }
@@ -154,6 +159,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void synchRemoteState() {
     RemoteValueState currentState = getState();
     currentState.setValue(getValueForState());
@@ -208,6 +214,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    *          the incoming value.
    */
 
+  @Override
   public void setValueFromState(Object stateValue) {
     Object valueFromState;
     if (getRemoteStateValueMapper() != null) {

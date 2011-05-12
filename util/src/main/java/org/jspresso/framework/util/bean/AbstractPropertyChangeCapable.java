@@ -30,6 +30,7 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
@@ -37,6 +38,7 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
@@ -61,6 +63,7 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(listener);
   }
@@ -68,6 +71,7 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removePropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(propertyName, listener);

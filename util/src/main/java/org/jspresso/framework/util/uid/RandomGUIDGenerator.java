@@ -32,6 +32,7 @@ public class RandomGUIDGenerator implements IGUIDGenerator {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String generateGUID() {
     return new RandomGUID().toString();
   }

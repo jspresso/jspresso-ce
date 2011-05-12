@@ -41,6 +41,7 @@ public abstract class AbstractResourceBase implements IResourceBase {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getMimeType() {
     return mimeType;
   }

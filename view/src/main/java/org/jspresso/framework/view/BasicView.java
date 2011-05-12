@@ -51,6 +51,7 @@ public class BasicView<E> implements IView<E> {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getConnector() {
     return connector;
   }
@@ -60,6 +61,7 @@ public class BasicView<E> implements IView<E> {
    * 
    * @return the descriptor.
    */
+  @Override
   public IViewDescriptor getDescriptor() {
     return descriptor;
   }
@@ -69,6 +71,7 @@ public class BasicView<E> implements IView<E> {
    * 
    * @return the parent.
    */
+  @Override
   public ICompositeView<E> getParent() {
     return parent;
   }
@@ -78,6 +81,7 @@ public class BasicView<E> implements IView<E> {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public E getPeer() {
     return peer;
   }
@@ -87,6 +91,7 @@ public class BasicView<E> implements IView<E> {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IView<E> getView() {
     return this;
   }
@@ -97,6 +102,7 @@ public class BasicView<E> implements IView<E> {
    * @param connector
    *          the connector to set.
    */
+  @Override
   public void setConnector(IValueConnector connector) {
     this.connector = connector;
   }
@@ -117,6 +123,7 @@ public class BasicView<E> implements IView<E> {
    * @param parent
    *          the parent to set.
    */
+  @Override
   public void setParent(ICompositeView<E> parent) {
     this.parent = parent;
   }
@@ -127,6 +134,7 @@ public class BasicView<E> implements IView<E> {
    * @param peer
    *          the peer to set.
    */
+  @Override
   public void setPeer(E peer) {
     this.peer = peer;
   }

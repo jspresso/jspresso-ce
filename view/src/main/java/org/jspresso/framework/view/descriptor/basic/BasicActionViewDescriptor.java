@@ -41,6 +41,7 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IDisplayableAction getAction() {
     return action;
   }
@@ -48,6 +49,7 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public ERenderingOptions getRenderingOptions() {
     return renderingOptions;
   }

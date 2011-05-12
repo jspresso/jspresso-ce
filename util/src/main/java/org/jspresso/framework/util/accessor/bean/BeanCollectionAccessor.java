@@ -58,6 +58,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addToValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException {
     if (adderMethod == null) {
@@ -92,6 +93,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeFromValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException {
     if (removerMethod == null) {

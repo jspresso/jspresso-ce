@@ -40,6 +40,7 @@ public final class ClosedGate extends AbstractGate {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isOpen() {
     return false;
   }

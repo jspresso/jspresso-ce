@@ -74,6 +74,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
    * 
    * @return the connector value as a string representation.
    */
+  @Override
   public String getConnectorValueAsString() {
     return getFormatter().format(getConnectorValue());
   }
@@ -84,6 +85,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
    * @param valueAsString
    *          the connector value as a string representation.
    */
+  @Override
   public void setConnectorValueAsString(String valueAsString) {
     try {
       Object parsedValue = getFormatter().parse(valueAsString);

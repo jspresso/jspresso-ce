@@ -43,6 +43,7 @@ public class JavaPreferencesStore implements IPreferencesStore {
    * @param storePath
    *          the preferences store path.
    */
+  @Override
   public void setStorePath(String[] storePath) {
     preferences = Preferences.userNodeForPackage(getClass());
     for (int i = 0; i < storePath.length; i++) {
@@ -53,6 +54,7 @@ public class JavaPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getPreference(String key) {
     return preferences.get(key, null);
   }
@@ -60,6 +62,7 @@ public class JavaPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void putPreference(String key, String value) {
     preferences.put(key, value);
   }
@@ -67,6 +70,7 @@ public class JavaPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removePreference(String key) {
     preferences.remove(key);
   }

@@ -87,6 +87,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object instantiate() {
       return inlineComponentFactory.createComponentInstance(componentContract);
     }
@@ -94,6 +95,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object instantiate(@SuppressWarnings("unused")
     Serializable id) {
       throw new AssertionFailure(
@@ -103,6 +105,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isInstance(Object object) {
       return componentContract.isInstance(object);
     }

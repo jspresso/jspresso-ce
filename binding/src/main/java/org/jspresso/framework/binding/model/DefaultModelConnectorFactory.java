@@ -49,6 +49,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector createModelConnector(String id,
       Class<?> componentContract, ISecurityHandler securityHandler) {
     return createModelConnector(id, getDescriptorRegistry()
@@ -58,6 +59,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor, ISecurityHandler securityHandler) {
     IValueConnector modelConnector = null;
@@ -125,6 +127,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAccessorFactory getAccessorFactory() {
     return accessorFactory;
   }
@@ -134,6 +137,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * 
    * @return the descriptorRegistry.
    */
+  @Override
   public IComponentDescriptorRegistry getDescriptorRegistry() {
     return descriptorRegistry;
   }

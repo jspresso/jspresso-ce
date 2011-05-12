@@ -86,6 +86,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addItemSelectionListener(IItemSelectionListener listener) {
     implAddConnectorSelectionListener(listener);
   }
@@ -93,6 +94,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addSelectionChangeListener(ISelectionChangeListener listener) {
     selectionChangeSupport.addSelectionChangeListener(listener);
   }
@@ -108,6 +110,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenWritable() {
     return true;
   }
@@ -138,6 +141,7 @@ public abstract class AbstractCollectionConnector extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector createChildConnector(String newConnectorId) {
     return childConnectorPrototype.clone(newConnectorId);
   }
@@ -145,6 +149,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void fireSelectedItemChange(ItemSelectionEvent evt) {
     implFireSelectedItemChange(evt);
   }
@@ -152,6 +157,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getChildConnector(int index) {
     return getChildConnector(computeConnectorId(index));
   }
@@ -178,6 +184,7 @@ public abstract class AbstractCollectionConnector extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public ICollectionConnector getCollectionConnector() {
     return this;
   }
@@ -187,6 +194,7 @@ public abstract class AbstractCollectionConnector extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public List<ICollectionConnector> getCollectionConnectors() {
     return Collections.singletonList((ICollectionConnector) this);
   }
@@ -194,6 +202,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public int[] getSelectedIndices() {
     return selectionChangeSupport.getSelectedIndices();
   }
@@ -201,6 +210,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getSelectedItem() {
     return implGetSelectedItem();
   }
@@ -208,6 +218,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeItemSelectionListener(IItemSelectionListener listener) {
     implRemoveConnectorSelectionListener(listener);
   }
@@ -215,6 +226,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeSelectionChangeListener(ISelectionChangeListener listener) {
     selectionChangeSupport.removeSelectionChangeListener(listener);
   }
@@ -222,6 +234,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void selectionChange(SelectionChangeEvent evt) {
     if (evt.getSource() instanceof ISelectionChangeListener) {
       selectionChangeSupport
@@ -240,6 +253,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setSelectedIndices(int[] newSelectedIndices) {
     int leadingIndex = -1;
     if (newSelectedIndices != null && newSelectedIndices.length > 0) {
@@ -251,6 +265,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
     int[] oldSelectedIndices = getSelectedIndices();
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
@@ -270,6 +285,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
     implSetTracksChildrenSelection(tracksChildrenSelection);
   }

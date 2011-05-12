@@ -30,6 +30,7 @@ public class EmbeddedModelProvider implements IModelProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
       if (modelChangeSupport == null) {
@@ -44,6 +45,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object getModel() {
     return model;
   }
@@ -53,6 +55,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptorProvider<?> getModelDescriptor() {
     return modelDescriptor;
   }
@@ -60,6 +63,7 @@ public class EmbeddedModelProvider implements IModelProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeModelChangeListener(IModelChangeListener listener) {
     if (listener != null && modelChangeSupport != null) {
       modelChangeSupport.removeModelChangeListener(listener);

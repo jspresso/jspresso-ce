@@ -38,6 +38,7 @@ public class MockMessageSource implements MessageSource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getMessage(MessageSourceResolvable resolvable, Locale locale) {
     return getMessage(resolvable.getCodes()[0], resolvable.getArguments(),
         resolvable.getDefaultMessage(), locale);
@@ -46,6 +47,7 @@ public class MockMessageSource implements MessageSource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getMessage(String key, Object[] args, Locale locale) {
     return getMessage(key, args, null, locale);
   }
@@ -53,6 +55,7 @@ public class MockMessageSource implements MessageSource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getMessage(String key, Object[] args, String defaultMessage,
       Locale locale) {
     if (LOG.isWarnEnabled()) {

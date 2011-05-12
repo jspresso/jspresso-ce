@@ -29,6 +29,7 @@ public class NullIconImageURLProvider implements IIconImageURLProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURLForObject(
       @SuppressWarnings("unused") Object userObject) {
     return null;

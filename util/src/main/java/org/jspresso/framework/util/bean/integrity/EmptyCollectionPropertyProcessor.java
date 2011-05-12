@@ -39,6 +39,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void postprocessAdder(E target, F collection,
       Object addedValue) {
@@ -50,6 +51,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void postprocessRemover(E target, F collection,
       Object removedValue) {
@@ -61,6 +63,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void preprocessAdder(E target, F collection,
       Object addedValue) {
@@ -72,6 +75,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void preprocessRemover(E target, F collection,
       Object removedValue) {

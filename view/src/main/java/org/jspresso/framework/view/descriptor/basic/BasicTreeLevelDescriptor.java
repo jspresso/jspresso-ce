@@ -58,6 +58,7 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     Collection<String> gr = grantedRoles;
     if (gr == null && getNodeGroupDescriptor() != null) {
@@ -88,6 +89,7 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IListViewDescriptor getNodeGroupDescriptor() {
     return nodeGroupDescriptor;
   }
@@ -131,6 +133,7 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     return permId;
   }
@@ -145,6 +148,7 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

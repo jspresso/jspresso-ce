@@ -70,6 +70,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
@@ -159,6 +160,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   /**
    * {@inheritDoc}
    */
+  @Override
   public synchronized void removeValueChangeListener(
       IValueChangeListener listener) {
     if (listener != null && listeners != null) {

@@ -45,6 +45,7 @@ public class ScriptMixin implements IScript {
    * 
    * @return the language.
    */
+  @Override
   public String getLanguage() {
     return language;
   }
@@ -54,6 +55,7 @@ public class ScriptMixin implements IScript {
    * 
    * @return the script.
    */
+  @Override
   public String getScript() {
     return script;
   }
@@ -63,6 +65,7 @@ public class ScriptMixin implements IScript {
    * 
    * @return the scriptedObject.
    */
+  @Override
   public Object getScriptedObject() {
     return scriptedObject;
   }

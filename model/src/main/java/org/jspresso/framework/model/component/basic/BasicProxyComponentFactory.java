@@ -54,6 +54,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract) {
     return createComponentInstance(componentContract, null);
@@ -62,6 +63,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate) {
     T createdComponent = createComponentInstance(componentContract, delegate,
@@ -88,6 +90,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public IQueryComponent createQueryComponentInstance(
       Class<? extends IComponent> componentContract) {
@@ -101,6 +104,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<?> componentContract) {
     return componentDescriptorRegistry
@@ -110,6 +114,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
     return componentDescriptorRegistry.getComponentDescriptors();
   }

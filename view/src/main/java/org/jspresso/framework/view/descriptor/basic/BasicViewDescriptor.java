@@ -64,6 +64,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * 
    * @return the actionMap.
    */
+  @Override
   public ActionMap getActionMap() {
     return actionMap;
   }
@@ -71,6 +72,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -81,6 +83,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getBackground() {
     return background;
   }
@@ -88,6 +91,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public EBorderType getBorderType() {
     return borderType;
   }
@@ -95,6 +99,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getFont() {
     return font;
   }
@@ -102,6 +107,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getForeground() {
     return foreground;
   }
@@ -111,6 +117,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     if (grantedRoles == null && getModelDescriptor() != null) {
       if (getModelDescriptor() instanceof ISecurable) {
@@ -172,6 +179,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * 
    * @return the modelDescriptor.
    */
+  @Override
   public IModelDescriptor getModelDescriptor() {
     return modelDescriptor;
   }
@@ -179,6 +187,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public Dimension getPreferredSize() {
     Integer w = getPreferredWidth();
     Integer h = getPreferredHeight();
@@ -200,6 +209,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * 
    * @return the readabilityGates.
    */
+  @Override
   public Collection<IGate> getReadabilityGates() {
     // Gates are handled both on model connector and view connector. It is not
     // necessary to fetch the model gates here. Only component view descriptors
@@ -218,6 +228,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * 
    * @return the writabilityGates.
    */
+  @Override
   public Collection<IGate> getWritabilityGates() {
     // Gates are handled both on model connector and view connector. It is not
     // necessary to fetch the model gates here. Only component view descriptors
@@ -234,6 +245,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isReadOnly() {
     if (!readOnly && getModelDescriptor() != null) {
       if (getModelDescriptor() instanceof IGateAccessible) {
@@ -277,6 +289,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * @param permId
    *          fixed id to mark the generated UI component.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }
@@ -495,6 +508,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * 
    * @return the secondaryActionMap.
    */
+  @Override
   public ActionMap getSecondaryActionMap() {
     return secondaryActionMap;
   }

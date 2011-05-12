@@ -48,6 +48,7 @@ public class BasicCompositeView<E> extends BasicView<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IView<E>> getChildren() {
     return children;
   }

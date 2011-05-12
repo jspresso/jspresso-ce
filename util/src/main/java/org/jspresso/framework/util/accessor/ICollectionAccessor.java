@@ -53,6 +53,7 @@ public interface ICollectionAccessor extends IAccessor {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   Collection<?> getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
 

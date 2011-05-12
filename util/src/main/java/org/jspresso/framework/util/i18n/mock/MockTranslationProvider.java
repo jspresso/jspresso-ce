@@ -36,6 +36,7 @@ public class MockTranslationProvider implements ITranslationProvider {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Locale locale) {
     return "[" + locale.getISO3Language() + ":" + key + "]";
   }
@@ -43,6 +44,7 @@ public class MockTranslationProvider implements ITranslationProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Object[] args, Locale locale) {
     StringBuffer message = new StringBuffer(getTranslation(key, locale));
     if (args != null && args.length > 0) {

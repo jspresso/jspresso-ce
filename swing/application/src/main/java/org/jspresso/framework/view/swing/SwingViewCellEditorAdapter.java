@@ -88,6 +88,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       editorView.getConnector().addValueChangeListener(
           new IValueChangeListener() {
 
+            @Override
             public void valueChange(
                 @SuppressWarnings("unused") ValueChangeEvent evt) {
               stopCellEditing();
@@ -114,6 +115,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object getCellEditorValue() {
     Object cellEditorValue = editorView.getConnector().getConnectorValue();
     if (cellEditorValue == NULLMAP) {
@@ -127,6 +129,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public Component getTableCellEditorComponent(JTable table, Object value,
       boolean isSelected, int row, int column) {
@@ -159,6 +162,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public Component getTreeCellEditorComponent(JTree tree, Object value,
       boolean isSelected, boolean expanded, boolean leaf, int row) {

@@ -68,6 +68,7 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object actualValue() {
     return getState().getValue();
   }
@@ -149,6 +150,7 @@ public abstract class RComponent extends RemotePeer implements
    * 
    * @return the state.
    */
+  @Override
   public RemoteValueState getState() {
     return state;
   }
@@ -265,6 +267,7 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void synchRemoteState() {
     // Empty implementation
   }
@@ -272,6 +275,7 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setValueFromState(@SuppressWarnings("unused") Object stateValue) {
     // Empty implementation.
   }

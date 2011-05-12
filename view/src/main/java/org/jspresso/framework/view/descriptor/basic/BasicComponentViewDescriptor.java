@@ -64,6 +64,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getColumnCount() {
     return columnCount;
   }
@@ -85,6 +86,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public ELabelPosition getLabelsPosition() {
     return labelsPosition;
   }
@@ -92,6 +94,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
     IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
         .getComponentDescriptor();

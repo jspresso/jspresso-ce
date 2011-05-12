@@ -62,6 +62,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getDescription() {
     return descriptor.getDescription();
   }
@@ -69,6 +70,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     return descriptor.getI18nDescription(translationProvider, locale);
@@ -77,6 +79,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return descriptor.getI18nName(translationProvider, locale);
@@ -85,6 +88,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getIconImageURL() {
     return descriptor.getIconImageURL();
   }
@@ -92,6 +96,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getName() {
     return descriptor.getName();
   }

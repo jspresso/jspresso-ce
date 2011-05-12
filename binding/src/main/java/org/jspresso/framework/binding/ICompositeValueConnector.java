@@ -64,6 +64,7 @@ public interface ICompositeValueConnector extends IValueConnector {
    * 
    * @return the connector's clone.
    */
+  @Override
   ICompositeValueConnector clone();
 
   /**
@@ -73,6 +74,7 @@ public interface ICompositeValueConnector extends IValueConnector {
    *          the identifier of the clone connector
    * @return the connector's clone.
    */
+  @Override
   ICompositeValueConnector clone(String newConnectorId);
 
   /**

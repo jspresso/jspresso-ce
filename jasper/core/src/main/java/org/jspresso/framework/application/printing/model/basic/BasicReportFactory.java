@@ -37,6 +37,7 @@ public class BasicReportFactory implements IReportFactory {
   /**
    * {@inheritDoc}
    */
+  @Override
   public IReport createReportInstance(IReportDescriptor reportDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
     BasicReport report = new BasicReport();

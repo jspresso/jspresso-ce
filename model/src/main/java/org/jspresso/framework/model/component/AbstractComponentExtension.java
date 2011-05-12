@@ -54,6 +54,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   /**
    * {@inheritDoc}
    */
+  @Override
   public T getComponent() {
     return extendedComponent;
   }
@@ -64,6 +65,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    * @param componentFactory
    *          the componentFactory to set.
    */
+  @Override
   public void setComponentFactory(IComponentFactory componentFactory) {
     this.componentFactory = componentFactory;
   }
@@ -93,6 +95,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
     sourceBean.addPropertyChangeListener(sourceProperty,
         new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(
               @SuppressWarnings("unused") PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {

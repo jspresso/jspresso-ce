@@ -37,6 +37,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public boolean onCreate(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
@@ -46,6 +47,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public boolean onDelete(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
@@ -55,6 +57,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void onLoad(E component) {
     // Empty implementation.
@@ -63,6 +66,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void onClone(E component, E sourceComponent) {
     // Empty implementation.
@@ -71,6 +75,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public boolean onPersist(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
@@ -80,6 +85,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public boolean onUpdate(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {

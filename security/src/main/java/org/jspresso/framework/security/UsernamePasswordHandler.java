@@ -67,6 +67,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void handle(Callback[] callbacks) {
     for (int i = 0; i < callbacks.length; i++) {
       if (callbacks[i] instanceof NameCallback) {

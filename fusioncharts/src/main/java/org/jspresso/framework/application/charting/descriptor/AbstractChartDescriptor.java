@@ -36,6 +36,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public Dimension getDimension() {
     int w = 600;
     int h = 500;
@@ -56,6 +57,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
    * 
    * @return the title.
    */
+  @Override
   public String getTitle() {
     return title;
   }
@@ -65,6 +67,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
    * 
    * @return the chart Url.
    */
+  @Override
   public String getUrl() {
     return url;
   }

@@ -37,6 +37,7 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Locale locale) {
     if (key == null || key.length() == 0) {
       return "";
@@ -47,6 +48,7 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Object[] args, Locale locale) {
     if (key == null || key.length() == 0) {
       return "";

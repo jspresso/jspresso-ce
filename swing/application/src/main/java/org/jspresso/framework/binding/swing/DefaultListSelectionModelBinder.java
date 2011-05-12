@@ -62,6 +62,7 @@ public class DefaultListSelectionModelBinder implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void bindSelectionModel(ISelectable selectable,
       ListSelectionModel selectionModel, IIndexMapper rowMapper) {
     selectionModel.addListSelectionListener(new SelectionModelListener(
@@ -94,9 +95,11 @@ public class DefaultListSelectionModelBinder implements
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void selectionChange(final SelectionChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           if (evt.getNewSelection() == null
               || evt.getNewSelection().length == 0) {
@@ -174,6 +177,7 @@ public class DefaultListSelectionModelBinder implements
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void valueChanged(ListSelectionEvent e) {
       if (e.getValueIsAdjusting()) {
         return;

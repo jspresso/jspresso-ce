@@ -53,14 +53,17 @@ public class DisplayJasperReportAction extends AbstractRemoteAction {
 
     IActiveResource pdfProducer = new AbstractActiveResource("application/pdf") {
 
+      @Override
       public String getName() {
         return "Report.pdf";
       }
 
+      @Override
       public long getSize() {
         return -1;
       }
 
+      @Override
       public void writeToContent(OutputStream out) throws IOException {
         try {
           JasperExportManager.exportReportToPdfStream(report, out);

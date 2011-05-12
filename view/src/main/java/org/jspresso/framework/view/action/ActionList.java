@@ -127,6 +127,7 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -151,6 +152,7 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     return permId;
   }
@@ -165,6 +167,7 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

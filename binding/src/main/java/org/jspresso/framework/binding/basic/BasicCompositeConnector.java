@@ -68,6 +68,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean areChildrenWritable() {
     if (getParentConnector() != null
         && !getParentConnector().areChildrenWritable()) {

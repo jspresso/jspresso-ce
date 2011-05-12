@@ -60,6 +60,7 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
    * 
    * @return the writable.
    */
+  @Override
   public boolean isWritable() {
     return writable;
   }

@@ -82,6 +82,7 @@ public class HttpRequestHolder implements Filter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void destroy() {
     // Nothing to clear.
   }
@@ -89,6 +90,7 @@ public class HttpRequestHolder implements Filter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain chain) throws IOException, ServletException {
     if (request instanceof HttpServletRequest) {
@@ -102,6 +104,7 @@ public class HttpRequestHolder implements Filter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void init(@SuppressWarnings("unused") FilterConfig config) {
     // Nothing to init.
   }

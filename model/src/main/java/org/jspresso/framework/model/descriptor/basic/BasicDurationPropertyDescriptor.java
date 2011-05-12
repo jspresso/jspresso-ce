@@ -63,6 +63,7 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Long getMaxMillis() {
     return maxMillis;
   }
@@ -70,6 +71,7 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return Long.class;
   }

@@ -56,6 +56,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public ICollectionDescriptor<E> getCollectionDescriptor() {
     return this;
   }
@@ -63,6 +64,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getCollectionInterface() {
     if (Set.class.equals(collectionInterface)
         || List.class.equals(collectionInterface)) {
@@ -74,6 +76,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<E> getElementDescriptor() {
     return elementDescriptor;
   }
@@ -81,6 +84,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return getCollectionInterface();
   }
@@ -90,6 +94,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * 
    * @return the orderingProperties.
    */
+  @Override
   public Map<String, ESort> getOrderingProperties() {
     if (orderingProperties != null) {
       return orderingProperties;

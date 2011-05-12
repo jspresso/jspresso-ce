@@ -84,6 +84,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, List<String>> getFileFilter() {
     return fileFilter;
   }
@@ -121,6 +122,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * 
    * @return the fileName.
    */
+  @Override
   public String getFileName() {
     return fileName;
   }
@@ -141,6 +143,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * 
    * @return the contentType.
    */
+  @Override
   public String getContentType() {
     return contentType;
   }

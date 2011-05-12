@@ -56,6 +56,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
   /**
    * {@inheritDoc}
    */
+  @Override
   public AbstractConnector clone(String newConnectorId) {
     AbstractConnector clonedConnector = (AbstractConnector) super.clone();
     clonedConnector.id = newConnectorId;
@@ -65,6 +66,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getId() {
     return id;
   }
@@ -75,6 +77,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
    * @param id
    *            the connector identifier.
    */
+  @Override
   public void setId(String id) {
     this.id = id;
   }

@@ -52,6 +52,7 @@ public class SecurityContextFilter implements Filter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void destroy() {
     // NO-OP.
   }
@@ -60,6 +61,7 @@ public class SecurityContextFilter implements Filter {
    * If the session is not authenticated, redirects to the login page.
    * {@inheritDoc}
    */
+  @Override
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain chain) throws IOException, ServletException {
     if (((HttpServletRequest) request).getSession().getAttribute("SUBJECT") != null) {
@@ -74,6 +76,7 @@ public class SecurityContextFilter implements Filter {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void init(FilterConfig config) {
     loginRedirectUrl = config.getInitParameter(LOGIN_PARAM_NAME);
     if (loginRedirectUrl == null) {

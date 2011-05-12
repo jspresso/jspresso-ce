@@ -65,6 +65,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Object actualValue() {
     return getConnectorValue();
   }
@@ -96,6 +97,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -108,6 +110,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * 
    * @return the guid.
    */
+  @Override
   public String getGuid() {
     return guid;
   }
@@ -115,6 +118,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public RemoteFormattedValueState getState() {
     if (state == null) {
       state = createState();
@@ -141,6 +145,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }
@@ -148,6 +153,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void synchRemoteState() {
     RemoteFormattedValueState currentState = getState();
     currentState.setValue(getConnectorValueAsString());
@@ -203,6 +209,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    *          the incoming value.
    */
 
+  @Override
   public void setValueFromState(Object stateValue) {
     Object valueFromState;
     if (getRemoteStateValueMapper() != null) {

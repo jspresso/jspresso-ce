@@ -841,6 +841,7 @@ public class DefaultSwingViewFactory extends
           (JLabel) viewComponent);
       connector.addValueChangeListener(new IValueChangeListener() {
 
+        @Override
         public void valueChange(ValueChangeEvent evt) {
           ((JLabel) viewComponent).setIcon(getIconFactory().getIcon(
               propertyDescriptor.getIconImageURL(String.valueOf(evt
@@ -1148,6 +1149,7 @@ public class DefaultSwingViewFactory extends
     JLink<Action> actionLink = new JLink<Action>(" ", null, "");
     actionLink.addLinkListener(new LinkListener<Action>() {
 
+      @Override
       public boolean linkActivated(JLink<Action> link, Action target) {
         if (target != null) {
           if (target.isEnabled()) {
@@ -1969,24 +1971,29 @@ public class DefaultSwingViewFactory extends
       });
     }
 
+    @Override
     @SuppressWarnings("unused")
     public void columnSelectionChanged(ListSelectionEvent e) {
       // NO-OP.
     }
 
+    @Override
     public void columnRemoved(
         @SuppressWarnings("unused") TableColumnModelEvent e) {
       // NO-OP.
     }
 
+    @Override
     public void columnMoved(@SuppressWarnings("unused") TableColumnModelEvent e) {
       columnsChanged = true;
     }
 
+    @Override
     public void columnMarginChanged(@SuppressWarnings("unused") ChangeEvent e) {
       columnsChanged = true;
     }
 
+    @Override
     public void columnAdded(@SuppressWarnings("unused") TableColumnModelEvent e) {
       // NO-OP.
     }
@@ -2049,6 +2056,7 @@ public class DefaultSwingViewFactory extends
         viewComponent, viewDescriptor);
     viewComponent.addChangeListener(new ChangeListener() {
 
+      @Override
       public void stateChanged(ChangeEvent e) {
         JTabbedPane source = (JTabbedPane) e.getSource();
         view.setCurrentViewIndex(source.getSelectedIndex());
@@ -2178,20 +2186,24 @@ public class DefaultSwingViewFactory extends
     if (viewDescriptor.isExpanded()) {
       viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
 
+        @Override
         public void treeNodesChanged(
             @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
         }
 
+        @Override
         public void treeNodesInserted(TreeModelEvent e) {
           expandAll(viewComponent, e.getTreePath());
         }
 
+        @Override
         public void treeNodesRemoved(
             @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
         }
 
+        @Override
         public void treeStructureChanged(TreeModelEvent e) {
           expandAll(viewComponent, e.getTreePath());
         }
@@ -2756,6 +2768,7 @@ public class DefaultSwingViewFactory extends
   private void expandAll(final JTree tree, final TreePath tp) {
     SwingUtilities.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         if (tp == null) {
           return;

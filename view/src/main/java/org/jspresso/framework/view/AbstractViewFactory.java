@@ -208,6 +208,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected AbstractViewFactory() {
     firstRowSelector = new IValueChangeListener() {
 
+      @Override
       public void valueChange(ValueChangeEvent evt) {
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
@@ -223,6 +224,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IView<E> createView(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     try {
@@ -339,6 +341,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     (view.getConnector()).addPropertyChangeListener("modelConnector",
         new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getNewValue() != null) {
               getMvcBinder().bind(paginationView.getConnector(),
@@ -356,6 +359,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @return the actionFactory.
    */
+  @Override
   public IActionFactory<G, E> getActionFactory() {
     return actionFactory;
   }
@@ -365,6 +369,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @return the connectorFactory.
    */
+  @Override
   public IConfigurableConnectorFactory getConnectorFactory() {
     return connectorFactory;
   }
@@ -374,6 +379,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @return the iconFactory.
    */
+  @Override
   public IIconFactory<F> getIconFactory() {
     return iconFactory;
   }
@@ -988,6 +994,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
             getConnectorIdForBeanView(cardView.getDescriptor()));
     cardViewConnector.addValueChangeListener(new IValueChangeListener() {
 
+      @Override
       public void valueChange(ValueChangeEvent evt) {
         Object cardModel = evt.getNewValue();
         E cardsPeer = cardView.getPeer();
@@ -2817,6 +2824,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void selectedItemChange(ItemSelectionEvent event) {
       Map<String, Object> context = getActionFactory().createActionContext(
           actionHandler, view, view.getConnector(), null, view.getPeer());
@@ -2835,6 +2843,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param actionHandler
    *          the action handler.
    */
+  @Override
   public void storeTablePreferences(String tableId, Object[][] columnPrefs,
       IActionHandler actionHandler) {
     StringBuffer buff = new StringBuffer();

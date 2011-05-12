@@ -101,6 +101,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addReadabilityGate(IGate gate) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
@@ -117,6 +118,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void resetReadabilityGates() {
     readabilityGates = null;
     readabilityChange();
@@ -125,6 +127,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       valueChangeSupport.addValueChangeListener(listener);
@@ -134,6 +137,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addWritabilityGate(IGate gate) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
@@ -150,6 +154,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void resetWritabilityGates() {
     writabilityGates = null;
     writabilityChange();
@@ -160,6 +165,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void boundAsModel() {
     // Empty implementation
   }
@@ -169,6 +175,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void boundAsView() {
     bindModelGates(getWritabilityGates());
     bindModelGates(getReadabilityGates());
@@ -177,6 +184,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void cleanBindings() {
     for (IValueChangeListener listener : valueChangeSupport.getListeners()) {
       removeValueChangeListener(listener);
@@ -226,6 +234,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IValueConnector another) {
     if (getConnectorValue() != null) {
@@ -250,6 +259,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getConnectorPath() {
     List<String> connectorPath = new ArrayList<String>();
     IValueConnector c = this;
@@ -269,6 +279,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getConnectorValue() {
     return getConnecteeValue();
   }
@@ -278,6 +289,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * 
    * @return the modelConnector.
    */
+  @Override
   public IValueConnector getModelConnector() {
     return modelConnector;
   }
@@ -287,6 +299,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * 
    * @return the modelDescriptor.
    */
+  @Override
   public IModelDescriptor getModelDescriptor() {
     if (modelDescriptor != null) {
       return modelDescriptor;
@@ -299,6 +312,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public IModelProvider getModelProvider() {
     if (getModelConnector() != null) {
       return getModelConnector().getModelProvider();
@@ -311,6 +325,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * 
    * @return the parentConnector.
    */
+  @Override
   public ICompositeValueConnector getParentConnector() {
     return parentConnector;
   }
@@ -324,6 +339,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (readabilityGatesListener == null) {
       readabilityGatesListener = new PropertyChangeListener() {
 
+        @Override
         public void propertyChange(
             @SuppressWarnings("unused") PropertyChangeEvent evt) {
           readabilityChange();
@@ -342,6 +358,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (writabilityGatesListener == null) {
       writabilityGatesListener = new PropertyChangeListener() {
 
+        @Override
         public void propertyChange(
             @SuppressWarnings("unused") PropertyChangeEvent evt) {
           writabilityChange();
@@ -356,6 +373,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * 
    * @return the readable.
    */
+  @Override
   public boolean isReadable() {
     if (getParentConnector() != null
         && !getParentConnector().areChildrenReadable()) {
@@ -372,6 +390,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * 
    * @return the writable.
    */
+  @Override
   public boolean isWritable() {
     if (getParentConnector() != null
         && !getParentConnector().areChildrenWritable()) {
@@ -386,6 +405,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Called whenever readability may have changed.
    */
+  @Override
   public void readabilityChange() {
     boolean readable = isReadable();
     firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
@@ -395,6 +415,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeReadabilityGate(IGate gate) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(null);
@@ -411,6 +432,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       valueChangeSupport.removeValueChangeListener(listener);
@@ -420,6 +442,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeWritabilityGate(IGate gate) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(null);
@@ -436,6 +459,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setConnectorValue(Object aValue) {
     if (aValue instanceof Number) {
       if (getModelDescriptor() != null) {
@@ -483,6 +507,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setExceptionHandler(IExceptionHandler exceptionHandler) {
     this.exceptionHandler = exceptionHandler;
   }
@@ -499,6 +524,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setLocallyReadable(boolean locallyReadable) {
     this.locallyReadable = locallyReadable;
     readabilityChange();
@@ -507,6 +533,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setLocallyWritable(boolean locallyWritable) {
     this.locallyWritable = locallyWritable;
     writabilityChange();
@@ -518,6 +545,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @param modelConnector
    *          the modelConnector to set.
    */
+  @Override
   public void setModelConnector(IValueConnector modelConnector) {
     IValueConnector oldModelConnector = getModelConnector();
     if (oldModelConnector != null) {
@@ -542,6 +570,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (modelReadabilityListener == null) {
         modelReadabilityListener = new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(
               @SuppressWarnings("unused") PropertyChangeEvent evt) {
             readabilityChange();
@@ -551,6 +580,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (modelWritabilityListener == null) {
         modelWritabilityListener = new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(
               @SuppressWarnings("unused") PropertyChangeEvent evt) {
             writabilityChange();
@@ -575,6 +605,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @param modelDescriptor
    *          the modelDescriptor to set.
    */
+  @Override
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
   }
@@ -585,6 +616,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @param parentConnector
    *          the parentConnector to set.
    */
+  @Override
   public void setParentConnector(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
   }
@@ -595,6 +627,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @param securityHandler
    *          the security handler responsible for managing authorizations.
    */
+  @Override
   public void setSecurityHandler(ISecurityHandler securityHandler) {
     this.securityHandler = securityHandler;
     if (getReadabilityGates() != null) {
@@ -619,6 +652,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void valueChange(ValueChangeEvent evt) {
     // we must prevent the event to return back to the sender.
     valueChangeSupport.addInhibitedListener((IValueConnector) evt.getSource());
@@ -646,6 +680,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Called whenever writability may have changed.
    */
+  @Override
   public void writabilityChange() {
     boolean writable = isWritable();
     firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
@@ -893,6 +928,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(ValueChangeEvent evt) {
       gate.setModel(evt.getNewValue());
     }

@@ -64,6 +64,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAction getItemSelectionAction() {
     return itemSelectionAction;
   }
@@ -71,6 +72,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAction getRowAction() {
     return rowAction;
   }
@@ -80,6 +82,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * 
    * @return the selectionMode.
    */
+  @Override
   public ESelectionMode getSelectionMode() {
     return selectionMode;
   }
@@ -141,6 +144,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * 
    * @return the paginationViewDescriptor.
    */
+  @Override
   public IViewDescriptor getPaginationViewDescriptor() {
     return paginationViewDescriptor;
   }

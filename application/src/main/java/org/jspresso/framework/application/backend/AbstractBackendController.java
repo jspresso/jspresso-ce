@@ -146,6 +146,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void joinTransaction() {
     if (!unitOfWork.isActive()) {
       beginUnitOfWork();
@@ -155,6 +156,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void beginUnitOfWork() {
     if (unitOfWork.isActive()) {
       throw new BackendException(
@@ -168,6 +170,7 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void clearPendingOperations() {
     unitOfWork.clearPendingOperations();
   }
@@ -175,6 +178,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public <E extends IEntity> E cloneInUnitOfWork(E entity) {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
@@ -186,6 +190,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
@@ -205,6 +210,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void commitUnitOfWork() {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
@@ -225,6 +231,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
     return modelConnectorFactory
@@ -237,6 +244,7 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(final IAction action, final Map<String, Object> context) {
     if (action == null) {
       return true;
@@ -256,6 +264,7 @@ public abstract class AbstractBackendController extends AbstractController
       Boolean ret = (Boolean) getTransactionTemplate().execute(
           new TransactionCallback() {
 
+            @Override
             public Object doInTransaction(TransactionStatus status) {
               boolean executionStatus = action.execute(
                   AbstractBackendController.this, context);
@@ -273,6 +282,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IAccessorFactory getAccessorFactory() {
     return modelConnectorFactory.getAccessorFactory();
   }
@@ -280,6 +290,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IApplicationSession getApplicationSession() {
     return applicationSession;
   }
@@ -287,6 +298,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getDirtyProperties(IEntity entity) {
     Map<String, Object> dirtyProperties;
     if (unitOfWork.isActive()) {
@@ -312,6 +324,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IEntityFactory getEntityFactory() {
     return entityFactory;
   }
@@ -321,6 +334,7 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
@@ -333,6 +347,7 @@ public abstract class AbstractBackendController extends AbstractController
    * 
    * @return locale used by this controller.
    */
+  @Override
   public Locale getLocale() {
     return applicationSession.getLocale();
   }
@@ -340,6 +355,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
       Object entityId) {
     return entityRegistry.get(entityContract, entityId);
@@ -350,6 +366,7 @@ public abstract class AbstractBackendController extends AbstractController
    * 
    * @return the transactionTemplate.
    */
+  @Override
   public TransactionTemplate getTransactionTemplate() {
     return transactionTemplate;
   }
@@ -357,6 +374,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getWorkspaceConnector(String workspaceName) {
     return workspaceConnectors.get(workspaceName);
   }
@@ -364,6 +382,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public IValueConnector getModuleConnector(Module module) {
     if (module == null) {
       return null;
@@ -381,6 +400,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void initializePropertyIfNeeded(IComponent componentOrEntity,
       String propertyName) {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
@@ -405,6 +425,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          A map containing the workspaces indexed by a well-known key used
    *          to bind them with their views.
    */
+  @Override
   public void installWorkspaces(Map<String, Workspace> workspaces) {
     workspaceConnectors = new HashMap<String, IValueConnector>();
     for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
@@ -422,6 +443,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isAnyDirtyInDepth(Collection<?> elements) {
     Set<IEntity> alreadyTraversed = new HashSet<IEntity>();
     if (elements != null) {
@@ -439,6 +461,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isDirtyInDepth(IEntity entity) {
     return isAnyDirtyInDepth(Collections.singleton(entity));
   }
@@ -446,6 +469,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
     return unitOfWork.isEntityRegisteredForDeletion(entity);
   }
@@ -453,6 +477,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isEntityRegisteredForUpdate(IEntity entity) {
     return unitOfWork.isEntityRegisteredForUpdate(entity);
   }
@@ -460,6 +485,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
     return true;
   }
@@ -467,6 +493,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isUnitOfWorkActive() {
     return unitOfWork.isActive();
   }
@@ -474,6 +501,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
     if (!unitOfWork.isActive()) {
       throw new BackendException("Cannot access unit of work.");
@@ -484,6 +512,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public <E extends IEntity> E merge(E entity, EMergeMode mergeMode) {
     return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
   }
@@ -491,6 +520,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public <E extends IEntity> List<E> merge(List<E> entities,
       EMergeMode mergeMode) {
     Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
@@ -504,6 +534,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void recordAsSynchronized(IEntity flushedEntity) {
     if (unitOfWork.isActive()) {
       boolean isDirty = isDirty(flushedEntity);
@@ -517,6 +548,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void registerEntity(IEntity entity, boolean isEntityTransient) {
     if (!unitOfWork.isActive()) {
       entityRegistry.register(entity);
@@ -541,6 +573,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void registerForDeletion(IEntity entity) {
     unitOfWork.registerForDeletion(entity);
   }
@@ -548,6 +581,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void registerForUpdate(IEntity entity) {
     unitOfWork.registerForUpdate(entity);
   }
@@ -555,6 +589,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public ComponentTransferStructure<? extends IComponent> retrieveComponents() {
     return transferStructure;
   }
@@ -562,6 +597,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void rollbackUnitOfWork() {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
@@ -715,6 +751,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean start(Locale startingLocale, TimeZone theClientTimeZone) {
     applicationSession.setLocale(startingLocale);
     this.clientTimeZone = theClientTimeZone;
@@ -724,6 +761,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean stop() {
     return true;
   }
@@ -731,6 +769,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void storeComponents(
       ComponentTransferStructure<? extends IComponent> components) {
     this.transferStructure = components;
@@ -793,6 +832,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the entity to test.
    * @return true if the entity is dirty.
    */
+  @Override
   public boolean isDirty(IEntity entity) {
     if (entity == null) {
       return false;
@@ -825,6 +865,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the entity property to test.
    * @return true if the entity is dirty.
    */
+  @Override
   public boolean isDirty(IEntity entity, String propertyName) {
     if (entity == null) {
       return false;
@@ -1235,6 +1276,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @throws NoSuchMethodException
    *           whenever this kind of exception occurs.
    */
+  @Override
   public void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
@@ -1438,6 +1480,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public void loggedIn(Subject subject) {
     getApplicationSession().setSubject(subject);
 
@@ -1461,6 +1504,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the key under which the preference as been stored.
    * @return the stored preference or null.
    */
+  @Override
   public String getUserPreference(String key) {
     if (getUserPreferencesStore() != null) {
       return getUserPreferencesStore().getPreference(key);
@@ -1476,6 +1520,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @param value
    *          the value of the preference to be stored.
    */
+  @Override
   public void putUserPreference(String key, String value) {
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().putPreference(key, value);
@@ -1488,6 +1533,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @param key
    *          the key under which the preference is stored.
    */
+  @Override
   public void removeUserPreference(String key) {
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().removePreference(key);
@@ -1529,6 +1575,7 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Locale locale) {
     if (customTranslationPlugin != null) {
       String translation = customTranslationPlugin.getTranslation(key, locale,
@@ -1545,6 +1592,7 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getTranslation(String key, Object[] args, Locale locale) {
     if (customTranslationPlugin != null) {
       String translation = customTranslationPlugin.getTranslation(key, args,
@@ -1559,6 +1607,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isAccessGranted(ISecurable securable) {
     if (SecurityHelper.isSubjectGranted(getApplicationSession().getSubject(),
         securable)) {
@@ -1607,6 +1656,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public Map<String, Object> getSecurityContext() {
     return securityContextBuilder.getSecurityContext();
   }
@@ -1614,6 +1664,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public ISecurityContextBuilder pushToSecurityContext(Object contextElement) {
     securityContextBuilder.pushToSecurityContext(contextElement);
     return this;
@@ -1622,6 +1673,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @Override
   public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
     securityContextBuilder.restoreLastSecurityContextSnapshot();
     return this;
@@ -1646,6 +1698,7 @@ public abstract class AbstractBackendController extends AbstractController
    * 
    * @return the clientTimezone.
    */
+  @Override
   public TimeZone getClientTimeZone() {
     if (clientTimeZone != null) {
       return clientTimeZone;

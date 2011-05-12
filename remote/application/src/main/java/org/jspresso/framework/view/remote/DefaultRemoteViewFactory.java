@@ -338,6 +338,7 @@ public class DefaultRemoteViewFactory extends
       final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
       rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+        @Override
         public Object getValueForState(Object originalValue) {
           if (originalValue instanceof byte[]) {
             String valueForStateUrl = RemotePeerRegistryServlet
@@ -354,6 +355,7 @@ public class DefaultRemoteViewFactory extends
           return originalValue;
         }
 
+        @Override
         public Object getValueFromState(Object originalValue) {
           return originalValue;
         }
@@ -638,6 +640,7 @@ public class DefaultRemoteViewFactory extends
             ((RemoteValueConnector) connector)
                 .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+                  @Override
                   public Object getValueFromState(Object originalValue) {
                     if (originalValue instanceof Date) {
                       Date stateDate = (Date) originalValue;
@@ -659,6 +662,7 @@ public class DefaultRemoteViewFactory extends
                     return originalValue;
                   }
 
+                  @Override
                   public Object getValueForState(Object originalValue) {
                     if (originalValue instanceof Date) {
                       Date connectorDate = (Date) originalValue;
@@ -909,6 +913,7 @@ public class DefaultRemoteViewFactory extends
       final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
       rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+        @Override
         public Object getValueForState(Object originalValue) {
           if (originalValue instanceof byte[]) {
             String valueForStateUrl = RemotePeerRegistryServlet
@@ -928,6 +933,7 @@ public class DefaultRemoteViewFactory extends
           return originalValue;
         }
 
+        @Override
         public Object getValueFromState(Object originalValue) {
           return originalValue;
         }
@@ -1039,6 +1045,7 @@ public class DefaultRemoteViewFactory extends
           .getConnector();
       rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+        @Override
         public Object getValueForState(Object originalValue) {
           if (originalValue instanceof BigDecimal) {
             return new Double(((BigDecimal) originalValue).doubleValue());
@@ -1048,6 +1055,7 @@ public class DefaultRemoteViewFactory extends
           return originalValue;
         }
 
+        @Override
         public Object getValueFromState(Object originalValue) {
           return originalValue;
         }
@@ -1785,6 +1793,7 @@ public class DefaultRemoteViewFactory extends
     viewComponent.addPropertyChangeListener("selectedIndex",
         new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(PropertyChangeEvent evt) {
             RTabContainer source = (RTabContainer) evt.getSource();
             view.setCurrentViewIndex(source.getSelectedIndex());
@@ -1907,6 +1916,7 @@ public class DefaultRemoteViewFactory extends
           ((RemoteValueConnector) connector)
               .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+                @Override
                 public Object getValueFromState(Object originalValue) {
                   if (originalValue instanceof Date) {
                     Date stateDate = (Date) originalValue;
@@ -1928,6 +1938,7 @@ public class DefaultRemoteViewFactory extends
                   return originalValue;
                 }
 
+                @Override
                 public Object getValueForState(Object originalValue) {
                   if (originalValue instanceof Date) {
                     Date connectorDate = (Date) originalValue;
@@ -1982,6 +1993,7 @@ public class DefaultRemoteViewFactory extends
       ((IItemSelectable) connector)
           .addItemSelectionListener(new IItemSelectionListener() {
 
+            @Override
             public void selectedItemChange(ItemSelectionEvent event) {
               if (event.getSelectedItem() == null) {
                 // change selected item so that the root connector is considered

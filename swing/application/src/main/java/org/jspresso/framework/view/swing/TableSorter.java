@@ -80,7 +80,8 @@ public class TableSorter extends AbstractTableSorter {
    */
   public static final Comparator<Object> COMPARABLE_COMPARATOR = new Comparator<Object>() {
 
-                                                                 @SuppressWarnings("unchecked")
+                                                                 @Override
+                                                                @SuppressWarnings("unchecked")
                                                                  public int compare(
                                                                      Object o1,
                                                                      Object o2) {
@@ -94,7 +95,8 @@ public class TableSorter extends AbstractTableSorter {
    */
   public static final Comparator<Object> LEXICAL_COMPARATOR    = new Comparator<Object>() {
 
-                                                                 public int compare(
+                                                                 @Override
+                                                                public int compare(
                                                                      Object o1,
                                                                      Object o2) {
                                                                    return o1
@@ -130,6 +132,7 @@ public class TableSorter extends AbstractTableSorter {
    *          viewIndex.
    * @return modelIndex.
    */
+  @Override
   public int modelIndex(int viewIndex) {
     return getViewToModel()[viewIndex].modelIndex;
   }
@@ -158,6 +161,7 @@ public class TableSorter extends AbstractTableSorter {
    *          modelIndex
    * @return viewIndex
    */
+  @Override
   public int viewIndex(int modelIndex) {
     return getModelToView()[modelIndex];
   }
@@ -257,6 +261,7 @@ public class TableSorter extends AbstractTableSorter {
      * @param o
      * @return comparison.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Object o) {
       int row1 = modelIndex;
@@ -297,6 +302,7 @@ public class TableSorter extends AbstractTableSorter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableChanged(TableModelEvent e) {
       // If we're not sorting by anything, just pass the event along.
       if (!isSorting()) {

@@ -54,6 +54,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void addItemSelectionListener(IItemSelectionListener listener) {
     implAddConnectorSelectionListener(listener);
   }
@@ -98,6 +99,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void fireSelectedItemChange(ItemSelectionEvent evt) {
     implFireSelectedItemChange(evt);
   }
@@ -105,6 +107,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<ICollectionConnector> getCollectionConnectors() {
     List<ICollectionConnector> collectionConnectors = new ArrayList<ICollectionConnector>();
     if (collectionConnectorProviders != null) {
@@ -119,6 +122,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getSelectedItem() {
     return implGetSelectedItem();
   }
@@ -126,6 +130,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removeItemSelectionListener(IItemSelectionListener listener) {
     implRemoveConnectorSelectionListener(listener);
   }
@@ -133,6 +138,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setCollectionConnectorProviders(
       List<ICollectionConnectorProvider> collectionConnectorProviders) {
     this.collectionConnectorProviders = collectionConnectorProviders;
@@ -141,6 +147,7 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
     implSetTracksChildrenSelection(tracksChildrenSelection);
   }

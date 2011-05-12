@@ -61,6 +61,7 @@ public class JFormattedTextFieldConnector extends
       /**
        * {@inheritDoc}
        */
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
         fireConnectorValueChange();
@@ -69,6 +70,7 @@ public class JFormattedTextFieldConnector extends
     getConnectedJComponent().addPropertyChangeListener("value",
         new PropertyChangeListener() {
 
+          @Override
           public void propertyChange(@SuppressWarnings("unused")
           PropertyChangeEvent evt) {
             fireConnectorValueChange();

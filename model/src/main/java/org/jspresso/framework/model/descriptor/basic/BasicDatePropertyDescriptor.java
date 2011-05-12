@@ -58,6 +58,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getModelType() {
     return Date.class;
   }
@@ -65,6 +66,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public EDateType getType() {
     return type;
   }
@@ -106,6 +108,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * 
    * @return the timeZoneAware.
    */
+  @Override
   public boolean isTimeZoneAware() {
     return timeZoneAware;
   }

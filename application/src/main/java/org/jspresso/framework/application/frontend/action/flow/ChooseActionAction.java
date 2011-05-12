@@ -132,6 +132,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object invoke(@SuppressWarnings("unused") Object proxy,
         Method method, Object[] args) throws Throwable {
       if (method.getName().equals("getName")) {

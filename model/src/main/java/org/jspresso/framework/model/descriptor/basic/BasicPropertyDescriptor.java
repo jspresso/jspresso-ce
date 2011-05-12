@@ -100,6 +100,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public BasicPropertyDescriptor createQueryDescriptor() {
     BasicPropertyDescriptor queryPropertyDescriptor = clone();
     queryPropertyDescriptor.setMandatory(false);
@@ -126,6 +127,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public Class<?> getDelegateClass() {
     if (delegateClass == null) {
       String className = getDelegateClassName();
@@ -146,6 +148,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * @return The class name of the extension delegate used to compute this
    *         property.
    */
+  @Override
   public String getDelegateClassName() {
     return delegateClassName;
   }
@@ -163,6 +166,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -170,6 +174,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IPropertyProcessor<?, ?>> getIntegrityProcessors() {
     registerIntegrityProcessorsIfNecessary();
     return integrityProcessors;
@@ -180,6 +185,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * 
    * @return the preferredWidth.
    */
+  @Override
   public Integer getPreferredWidth() {
     return preferredWidth;
   }
@@ -189,6 +195,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * 
    * @return the readabilityGates.
    */
+  @Override
   public Collection<IGate> getReadabilityGates() {
     return readabilityGates;
   }
@@ -205,6 +212,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getUnicityScope() {
     return unicityScope;
   }
@@ -214,6 +222,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * 
    * @return the writabilityGates.
    */
+  @Override
   public Collection<IGate> getWritabilityGates() {
     return writabilityGates;
   }
@@ -229,6 +238,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public Object interceptSetter(Object component, Object newValue) {
     Object interceptedValue = newValue;
@@ -251,6 +261,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isComputed() {
     return getDelegateClassName() != null || computed;
   }
@@ -258,6 +269,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isMandatory() {
     if (mandatory != null) {
       return mandatory.booleanValue();
@@ -268,6 +280,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isModifiable() {
     if (getDelegateClassName() == null) {
       return true;
@@ -281,6 +294,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isQueryable() {
     return false;
   }
@@ -288,6 +302,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isReadOnly() {
     if (readOnly != null) {
       return readOnly.booleanValue();
@@ -307,6 +322,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void postprocessSetter(Object component, Object oldValue,
       Object newValue) {
@@ -323,6 +339,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void preprocessSetter(final Object component, Object newValue) {
     if (isMandatory() && newValue == null) {
@@ -359,6 +376,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    *          the beanFactory to set.
    * @internal
    */
+  @Override
   public void setBeanFactory(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
   }
@@ -704,6 +722,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getPersistenceFormula() {
     return getSqlName();
   }
@@ -713,6 +732,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getPermId() {
     return getName();
   }
@@ -723,6 +743,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void setPermId(@SuppressWarnings("unused") String permId) {
     throw new UnsupportedOperationException();
   }

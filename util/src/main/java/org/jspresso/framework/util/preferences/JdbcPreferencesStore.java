@@ -61,6 +61,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     * @param storePath
     *          the preferences store path.
    */
+  @Override
   public void setStorePath(String[] storePath) {
     if (storePath != null && storePath.length > 0) {
       StringBuffer buff = new StringBuffer();
@@ -76,6 +77,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String getPreference(String key) {
     if (jdbcTemplate == null) {
       return null;
@@ -87,6 +89,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void putPreference(String key, String value) {
     if (jdbcTemplate == null) {
       return;
@@ -157,6 +160,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void removePreference(String key) {
     if (jdbcTemplate == null) {
       return;
@@ -228,6 +232,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
       jdbcTemplate.query(sql.toString(), restrictionsValues, restrictionsTypes,
           new RowCallbackHandler() {
 
+            @Override
             public void processRow(ResultSet rs) throws SQLException {
               preferences.put(rs.getString(1), rs.getString(2));
             }

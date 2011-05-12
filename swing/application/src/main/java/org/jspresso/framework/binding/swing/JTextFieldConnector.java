@@ -54,6 +54,7 @@ public class JTextFieldConnector extends JTextComponentConnector<JTextField> {
       /**
        * {@inheritDoc}
        */
+      @Override
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
         fireConnectorValueChange();

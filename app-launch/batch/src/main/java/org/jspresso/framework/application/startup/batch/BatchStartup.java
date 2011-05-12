@@ -47,6 +47,7 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean parseCmdLine(String[] args) {
     Options options = createOptions();
     CommandLineParser parser = new BasicParser();

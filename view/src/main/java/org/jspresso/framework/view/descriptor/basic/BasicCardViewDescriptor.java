@@ -42,6 +42,7 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public String getCardNameForModel(Object model, Subject subject) {
     if (cardNameSelector != null) {
       return cardNameSelector.getCardNameForModel(model, subject);

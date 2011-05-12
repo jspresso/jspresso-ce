@@ -44,6 +44,7 @@ public class MapPropertyAccessor extends AbstractPropertyAccessor {
    * 
    * @return the writable.
    */
+  @Override
   public boolean isWritable() {
     return true;
   }

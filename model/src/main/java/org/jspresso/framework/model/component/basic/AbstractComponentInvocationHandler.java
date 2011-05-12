@@ -136,6 +136,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public synchronized Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable {
@@ -1278,6 +1279,7 @@ public abstract class AbstractComponentInvocationHandler implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (enabled) {
         boolean wasEnabled = enabled;
@@ -1315,6 +1317,7 @@ public abstract class AbstractComponentInvocationHandler implements
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public Object invoke(@SuppressWarnings("unused") Object proxy,
         Method method, Object[] args) throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {

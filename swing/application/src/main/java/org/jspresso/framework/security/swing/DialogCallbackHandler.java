@@ -83,11 +83,13 @@ public class DialogCallbackHandler implements CallbackHandler {
    *           PasswordCallback
    */
 
+  @Override
   public void handle(final Callback[] callbacks)
       throws UnsupportedCallbackException {
     try {
       SwingUtilities.invokeAndWait(new Runnable() {
 
+        @Override
         public void run() {
           try {
             Callback[] varCallbacks = callbacks;
@@ -282,6 +284,7 @@ public class DialogCallbackHandler implements CallbackHandler {
           .getSmallIconSize()));
       optionButton.addActionListener(new ActionListener() {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
           for (ActionListener proceedAction : proceedActions) {
             proceedAction.actionPerformed(e);
@@ -300,6 +303,7 @@ public class DialogCallbackHandler implements CallbackHandler {
       }
       optionButton.addActionListener(new ActionListener() {
 
+        @Override
         public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
           cc.setSelectedIndex(option);
           callbackDialog.dispose();
@@ -347,6 +351,7 @@ public class DialogCallbackHandler implements CallbackHandler {
         JButton optionButton = new JButton(cc.getOptions()[i]);
         optionButton.addActionListener(new ActionListener() {
 
+          @Override
           public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
             callbackDialog.dispose();
@@ -423,6 +428,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     proceedActions.add(new ActionListener() {
 
+      @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         nc.setName(nameTextField.getText());
       }
@@ -457,6 +463,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     proceedActions.add(new ActionListener() {
 
+      @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         pc.setPassword(passwordField.getPassword());
       }

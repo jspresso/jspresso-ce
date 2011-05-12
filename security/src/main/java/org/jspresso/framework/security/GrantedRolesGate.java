@@ -41,6 +41,7 @@ public class GrantedRolesGate extends AbstractGate implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isOpen() {
     return open;
   }
@@ -61,6 +62,7 @@ public class GrantedRolesGate extends AbstractGate implements
    * 
    * @internal
    */
+  @Override
   public void setSecurityHandler(ISecurityHandler securityHandler) {
     boolean oldOpen = isOpen();
     if (securityHandler != null) {
@@ -70,6 +72,7 @@ public class GrantedRolesGate extends AbstractGate implements
         securityHandler.pushToSecurityContext(EAuthorization.ENABLED);
         this.open = securityHandler.isAccessGranted(new ISecurable() {
 
+          @Override
           public Collection<String> getGrantedRoles() {
             return GrantedRolesGate.this.getGrantedRoles();
           }

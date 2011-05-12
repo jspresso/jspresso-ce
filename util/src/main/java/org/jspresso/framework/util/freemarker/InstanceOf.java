@@ -53,6 +53,7 @@ public class InstanceOf implements TemplateMethodModelEx {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
       throws TemplateModelException {
     try {

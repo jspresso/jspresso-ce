@@ -36,6 +36,7 @@ public class MockQueryComponentRefiner implements IQueryComponentRefiner {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unused")
   public void refineQueryComponent(IQueryComponent queryComponent,
       Map<String, Object> context) {

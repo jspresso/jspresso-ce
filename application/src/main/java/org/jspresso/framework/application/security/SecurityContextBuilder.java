@@ -65,6 +65,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
    * 
    * @return the current security context this builder works on.
    */
+  @Override
   public Map<String, Object> getSecurityContext() {
     // return a defensive copy.
     return new HashMap<String, Object>(currentSecurityContext);
@@ -73,6 +74,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   /**
    * {@inheritDoc}
    */
+  @Override
   public SecurityContextBuilder pushToSecurityContext(Object contextElement) {
     snapshots.add(getSecurityContext());
     if (contextElement instanceof Workspace) {
@@ -100,6 +102,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   /**
    * {@inheritDoc}
    */
+  @Override
   public SecurityContextBuilder restoreLastSecurityContextSnapshot() {
     if (snapshots.size() > 0) {
       currentSecurityContext = snapshots.remove(snapshots.size() - 1);

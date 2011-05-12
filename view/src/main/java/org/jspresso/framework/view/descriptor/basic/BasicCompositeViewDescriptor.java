@@ -71,6 +71,7 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isCascadingModels() {
     return cascadingModels;
   }

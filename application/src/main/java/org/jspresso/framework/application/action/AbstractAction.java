@@ -107,6 +107,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     if (actionHandler.execute(getWrappedAction(context), context)) {
@@ -120,6 +121,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     return permId;
   }
@@ -127,6 +129,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
@@ -141,6 +144,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

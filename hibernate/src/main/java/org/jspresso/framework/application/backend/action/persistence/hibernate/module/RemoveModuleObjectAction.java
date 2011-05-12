@@ -70,6 +70,7 @@ public class RemoveModuleObjectAction extends AbstractHibernateCollectionAction 
     final IEntity entityToRemove = (IEntity) module.getModuleObject();
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
+      @Override
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
         IEntity entityClone = getController(context).cloneInUnitOfWork(

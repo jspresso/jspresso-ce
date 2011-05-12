@@ -66,6 +66,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
     String chartData = (String) getJdbcTemplate().execute(
         new ConnectionCallback() {
 
+          @Override
           public Object doInConnection(Connection con) throws SQLException {
             return getChartDescriptor().getData(getChartModel(context), con,
                 getTranslationProvider(context), getLocale(context));

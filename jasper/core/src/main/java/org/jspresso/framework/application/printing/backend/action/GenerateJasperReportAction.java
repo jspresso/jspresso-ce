@@ -92,6 +92,7 @@ public class GenerateJasperReportAction extends BackendAction {
       JasperPrint jasperPrint = (JasperPrint) jdbcTemplate
           .execute(new ConnectionCallback() {
 
+            @Override
             public Object doInConnection(Connection con) {
               try {
                 return JasperFillManager.fillReport(jasperReport,

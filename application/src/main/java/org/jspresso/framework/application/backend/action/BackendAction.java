@@ -41,6 +41,7 @@ public class BackendAction extends AbstractAction {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isBackend() {
     return true;
   }

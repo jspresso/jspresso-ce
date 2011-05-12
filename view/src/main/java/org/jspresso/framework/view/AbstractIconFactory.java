@@ -67,6 +67,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getBackwardIcon(Dimension iconSize) {
     return getIcon(backwardIconImageURL, iconSize);
   }
@@ -76,6 +77,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the backwardIconImageURL.
    */
+  @Override
   public String getBackwardIconImageURL() {
     return backwardIconImageURL;
   }
@@ -83,6 +85,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getCancelIcon(Dimension iconSize) {
     return getIcon(cancelIconImageURL, iconSize);
   }
@@ -92,6 +95,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the cancelIconImageURL.
    */
+  @Override
   public String getCancelIconImageURL() {
     return cancelIconImageURL;
   }
@@ -99,6 +103,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getDownIcon(Dimension iconSize) {
     return getIcon(downIconImageURL, iconSize);
   }
@@ -108,6 +113,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the downIconImageURL.
    */
+  @Override
   public String getDownIconImageURL() {
     return downIconImageURL;
   }
@@ -115,6 +121,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getErrorIcon(Dimension iconSize) {
     return getIcon(errorIconImageURL, iconSize);
   }
@@ -124,6 +131,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the errorIconImageURL.
    */
+  @Override
   public String getErrorIconImageURL() {
     return errorIconImageURL;
   }
@@ -131,6 +139,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getForbiddenIcon(Dimension iconSize) {
     return getIcon(forbiddenIconImageURL, iconSize);
   }
@@ -140,6 +149,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the forbiddenIconImageURL.
    */
+  @Override
   public String getForbiddenIconImageURL() {
     return forbiddenIconImageURL;
   }
@@ -147,6 +157,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getForwardIcon(Dimension iconSize) {
     return getIcon(forwardIconImageURL, iconSize);
   }
@@ -156,6 +167,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the forwardIconImageURL.
    */
+  @Override
   public String getForwardIconImageURL() {
     return forwardIconImageURL;
   }
@@ -163,6 +175,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getIcon(String urlSpec, Dimension iconSize) {
     Map<Dimension, E> multiDimStore = iconStore.get(urlSpec);
     if (multiDimStore == null) {
@@ -180,6 +193,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getInfoIcon(Dimension iconSize) {
     return getIcon(infoIconImageURL, iconSize);
   }
@@ -189,6 +203,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the infoIconImageURL.
    */
+  @Override
   public String getInfoIconImageURL() {
     return infoIconImageURL;
   }
@@ -198,6 +213,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the largeIconSize.
    */
+  @Override
   public Dimension getLargeIconSize() {
     if (largeIconSize == null) {
       largeIconSize = new Dimension(48, 48);
@@ -210,6 +226,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the mediumIconSize.
    */
+  @Override
   public Dimension getMediumIconSize() {
     if (mediumIconSize == null) {
       mediumIconSize = new Dimension(32, 32);
@@ -220,6 +237,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getNoIcon(Dimension iconSize) {
     return getIcon(noIconImageURL, iconSize);
   }
@@ -229,6 +247,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the noIconImageURL.
    */
+  @Override
   public String getNoIconImageURL() {
     return noIconImageURL;
   }
@@ -236,6 +255,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getOkYesIcon(Dimension iconSize) {
     return getIcon(okYesIconImageURL, iconSize);
   }
@@ -245,6 +265,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the okYesIconImageURL.
    */
+  @Override
   public String getOkYesIconImageURL() {
     return okYesIconImageURL;
   }
@@ -252,6 +273,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getQuestionIcon(Dimension iconSize) {
     return getIcon(questionIconImageURL, iconSize);
   }
@@ -261,6 +283,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the questionIconImageURL.
    */
+  @Override
   public String getQuestionIconImageURL() {
     return questionIconImageURL;
   }
@@ -270,6 +293,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the smallIconSize.
    */
+  @Override
   public Dimension getSmallIconSize() {
     if (smallIconSize == null) {
       smallIconSize = new Dimension(24, 24);
@@ -282,6 +306,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the tinyIconSize.
    */
+  @Override
   public Dimension getTinyIconSize() {
     if (tinyIconSize == null) {
       tinyIconSize = new Dimension(16, 16);
@@ -292,6 +317,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getUpIcon(Dimension iconSize) {
     return getIcon(upIconImageURL, iconSize);
   }
@@ -301,6 +327,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the upIconImageURL.
    */
+  @Override
   public String getUpIconImageURL() {
     return upIconImageURL;
   }
@@ -308,6 +335,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  @Override
   public E getWarningIcon(Dimension iconSize) {
     return getIcon(warningIconImageURL, iconSize);
   }
@@ -317,6 +345,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * 
    * @return the warningIconImageURL.
    */
+  @Override
   public String getWarningIconImageURL() {
     return warningIconImageURL;
   }

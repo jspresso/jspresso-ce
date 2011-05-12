@@ -63,6 +63,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getChild(Object parent, int index) {
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
@@ -78,6 +79,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getChildCount(Object parent) {
     if (parent instanceof IValueConnector
         && ((IValueConnector) parent).getConnectorValue() == null) {
@@ -101,6 +103,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public int getIndexOfChild(Object parent, Object child) {
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
@@ -121,6 +124,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public Object getRoot() {
     return rootConnector;
   }
@@ -128,6 +132,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean isLeaf(Object node) {
     if (node == rootConnector) {
       return false;
@@ -138,6 +143,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent event) {
     // NO-OP as of now.
   }
@@ -145,6 +151,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void treeNodesInserted(TreeModelEvent event) {
     for (Object insertedConnector : event.getChildren()) {
       checkListenerRegistrationForConnector((IValueConnector) insertedConnector);
@@ -154,6 +161,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent event) {
     // NO-OP as of now.
   }
@@ -161,6 +169,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void treeStructureChanged(TreeModelEvent event) {
     ICollectionConnectorListProvider changedConnector = (ICollectionConnectorListProvider) event
         .getTreePath().getLastPathComponent();
@@ -170,6 +179,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void valueForPathChanged(@SuppressWarnings("unused") TreePath path,
       @SuppressWarnings("unused") Object newValue) {
     // NO-OP. Not used (yet!)
@@ -200,9 +210,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void valueChange(final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
+        @Override
         public void run() {
           IValueConnector connector = (IValueConnector) evt.getSource();
           if (connector == rootConnector) {

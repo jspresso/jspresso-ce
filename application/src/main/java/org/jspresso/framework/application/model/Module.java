@@ -189,6 +189,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * 
    * @return the grantedRoles.
    */
+  @Override
   public Collection<String> getGrantedRoles() {
     if (grantedRoles == null && projectedViewDescriptor != null) {
       return projectedViewDescriptor.getGrantedRoles();
@@ -304,6 +305,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getViewDescriptor() {
     return getProjectedViewDescriptor();
   }
@@ -677,6 +679,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * 
    * @return the permId.
    */
+  @Override
   public String getPermId() {
     if (permId != null) {
       return permId;
@@ -694,6 +697,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @param permId
    *          the permId to set.
    */
+  @Override
   public void setPermId(String permId) {
     this.permId = permId;
   }

@@ -56,6 +56,7 @@ public interface IEntity extends IComponent {
    *            the instance to compare to.
    * @return true if both instances are equal.
    */
+  @Override
   boolean equals(Object o);
 
   /**
@@ -63,6 +64,7 @@ public interface IEntity extends IComponent {
    * 
    * @return the entity contract.
    */
+  @Override
   Class<? extends IEntity> getComponentContract();
 
   /**
@@ -90,6 +92,7 @@ public interface IEntity extends IComponent {
    * 
    * @return the hashcode.
    */
+  @Override
   int hashCode();
 
   /**

@@ -55,6 +55,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getCenterViewDescriptor() {
     IViewDescriptor previousViewDescriptor = getWestViewDescriptor();
     if (previousViewDescriptor == null) {
@@ -67,6 +68,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
     if (getNorthViewDescriptor() != null) {
@@ -90,6 +92,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getEastViewDescriptor() {
     IViewDescriptor previousViewDescriptor = getCenterViewDescriptor();
     if (previousViewDescriptor == null) {
@@ -105,6 +108,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getNorthViewDescriptor() {
     completeChildDescriptor(northViewDescriptor, null);
     return northViewDescriptor;
@@ -113,6 +117,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getSouthViewDescriptor() {
     IViewDescriptor previousViewDescriptor = getEastViewDescriptor();
     if (previousViewDescriptor == null) {
@@ -131,6 +136,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor getWestViewDescriptor() {
     IViewDescriptor previousViewDescriptor = getNorthViewDescriptor();
     completeChildDescriptor(westViewDescriptor, previousViewDescriptor);

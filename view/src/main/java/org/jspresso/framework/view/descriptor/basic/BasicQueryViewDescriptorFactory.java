@@ -56,6 +56,7 @@ public class BasicQueryViewDescriptorFactory implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public IViewDescriptor createQueryViewDescriptor(
       IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
     IComponentDescriptor<IQueryComponent> actualModelDescriptor = getQueryComponentDescriptorFactory()
@@ -119,6 +120,7 @@ public class BasicQueryViewDescriptorFactory implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
       IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
     return getQueryComponentDescriptorFactory().createQueryComponentDescriptor(

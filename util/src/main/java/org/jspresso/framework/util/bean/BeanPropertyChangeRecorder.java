@@ -96,6 +96,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void propertyChange(PropertyChangeEvent evt) {
     // don't store nested property changes
     if (enabled && evt.getPropertyName().indexOf('.') < 0) {

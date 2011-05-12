@@ -78,6 +78,7 @@ public class DevelopmentLoginModule implements LoginModule {
    * @return false if this LoginModule's own login and/or commit attempts
    *         failed, and true otherwise.
    */
+  @Override
   public boolean abort() {
     if (!succeeded) {
       Callback[] callbacks = new Callback[1];
@@ -128,6 +129,7 @@ public class DevelopmentLoginModule implements LoginModule {
    * @return true if this LoginModule's own login and commit attempts succeeded,
    *         or false otherwise.
    */
+  @Override
   public boolean commit() {
     if (!succeeded) {
       return false;
@@ -184,6 +186,7 @@ public class DevelopmentLoginModule implements LoginModule {
    *          options specified in the login <code>Configuration</code> for this
    *          particular <code>LoginModule</code>.
    */
+  @Override
   public void initialize(Subject aSubject, CallbackHandler aCallbackHandler,
       Map<String, ?> aSharedState, Map<String, ?> aOptions) {
 
@@ -205,6 +208,7 @@ public class DevelopmentLoginModule implements LoginModule {
    *              if this <code>LoginModule</code> is unable to perform the
    *              authentication.
    */
+  @Override
   public boolean login() throws LoginException {
 
     // prompt for a user name and password
@@ -280,6 +284,7 @@ public class DevelopmentLoginModule implements LoginModule {
    * @return true in all cases since this <code>LoginModule</code> should not be
    *         ignored.
    */
+  @Override
   public boolean logout() {
     subject.getPrincipals().remove(userPrincipal);
     succeeded = false;

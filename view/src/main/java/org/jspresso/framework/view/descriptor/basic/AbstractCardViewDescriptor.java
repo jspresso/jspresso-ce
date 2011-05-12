@@ -59,6 +59,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
    * 
    * @return the childViewDescriptors.
    */
+  @Override
   public Map<String, IViewDescriptor> getCardViewDescriptors() {
     if (cardViewDescriptors == null) {
       cardViewDescriptors = new HashMap<String, IViewDescriptor>();
@@ -69,6 +70,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     if (cardViewDescriptors != null) {
       return new ArrayList<IViewDescriptor>(cardViewDescriptors.values());
@@ -81,6 +83,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean isCascadingModels() {
     return false;
   }
