@@ -78,51 +78,6 @@
   </bean>
 
   <bean
-    id="${parentArtifactId}-ulc-context"
-    class="org.springframework.context.support.ClassPathXmlApplicationContext"
-    lazy-init="true">
-    <constructor-arg>
-      <list>
-        <value>org/jspresso/framework/application/commons.xml</value>
-        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
-        <value>org/jspresso/framework/application/frontend/commons-frontend.xml</value>
-        <value>org/jspresso/framework/application/frontend/ulc/commons-ulc.xml</value>
-        <value>${packageInPathFormat}/model/dsl-model.xml</value>
-        <value>${packageInPathFormat}/model/model.xml</value>
-        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
-        <value>${packageInPathFormat}/backend/backend.xml</value>
-        <value>${packageInPathFormat}/view/dsl-view.xml</value>
-        <value>${packageInPathFormat}/view/view.xml</value>
-        <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
-        <value>${packageInPathFormat}/frontend/frontend.xml</value>
-        <value>${packageInPathFormat}/config.xml</value>
-      </list>
-    </constructor-arg>
-  </bean>
-
-  <bean
-    id="${parentArtifactId}-wings-context"
-    class="org.springframework.context.support.ClassPathXmlApplicationContext"
-    lazy-init="true">
-    <constructor-arg>
-      <list>
-        <value>org/jspresso/framework/application/commons.xml</value>
-        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
-        <value>org/jspresso/framework/application/frontend/commons-frontend.xml</value>
-        <value>org/jspresso/framework/application/frontend/wings/commons-wings.xml</value>
-        <value>${packageInPathFormat}/model/dsl-model.xml</value>
-        <value>${packageInPathFormat}/model/model.xml</value>
-        <value>${packageInPathFormat}/backend/backend.xml</value>
-        <value>${packageInPathFormat}/view/dsl-view.xml</value>
-        <value>${packageInPathFormat}/view/view.xml</value>
-        <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
-        <value>${packageInPathFormat}/frontend/frontend.xml</value>
-        <value>${packageInPathFormat}/config.xml</value>
-      </list>
-    </constructor-arg>
-  </bean>
-
-  <bean
     id="${parentArtifactId}-remote-context"
     class="org.springframework.context.support.ClassPathXmlApplicationContext"
     lazy-init="true">

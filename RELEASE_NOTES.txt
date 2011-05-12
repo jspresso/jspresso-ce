@@ -59,13 +59,24 @@ is useless maintaining them. It is strongly recommended to re-generate existing 
 the up-to-date archetype. If you want to manually update your projects poms, here are the steps
 to perform :
 
-1/ make the root pom inherit from jspresso-root instead of jspresso-dependencies:
+1/ make the root pom inherit from jspresso-root instead of jspresso-dependencies :
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
     <version>3.5-SNAPSHOT</version>
   </parent>
-2/ edit startup/pom.xml and delete the following lines :
+2/ edit the root pom and delete the following lines :
+  <dependency>
+    <groupId>org.jspresso.hrsample</groupId>
+    <artifactId>hrsample-startup-ulc</artifactId>
+    <version>${project.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.jspresso.hrsample</groupId>
+    <artifactId>hrsample-startup-wings</artifactId>
+    <version>${project.version}</version>
+  </dependency>
+3/ edit startup/pom.xml and delete the following lines :
   <module>wings</module>
 and
   <profiles>
@@ -76,8 +87,8 @@ and
       </modules>
     </profile>
   </profiles>
-3/ delete the startup/wings and startup/ulc folders
-4/ edit the webapp/pom.xml and delete the following lines :
+4/ delete the startup/wings and startup/ulc folders
+5/ edit the webapp/pom.xml and delete the following lines :
     <dependency>
       <groupId>org.jspresso.hrsample</groupId>
       <artifactId>${myproject}-startup-wings</artifactId>
@@ -86,7 +97,7 @@ and
   <profiles>
     ...
   </profiles>
-5/ edit webapp/src/main/web.xml and delete the sections :
+6/ edit webapp/src/main/web.xml and delete the sections :
   <!-- ULC deployment section -->
     ...
   <!-- End ULC deployment section -->
@@ -94,11 +105,12 @@ and
   <!-- WingS deployment section -->
     ...
   <!-- End WingS deployment section -->
-6/ delete the following folders :
+7/ delete the following folders :
   webapp/src/main/webapp/webstart
 and
   webapp/src/main/webapp/wings
-
+8/ edit core/src/main/resources/beanRefFactory.xml and delete both ulc and wings
+contexts sections.
 
 
   

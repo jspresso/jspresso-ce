@@ -140,7 +140,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <goals>deploy site-deploy assembly:assembly</goals>
+          <goals>deploy site-deploy assembly:single</goals>
         </configuration>
       </plugin>
     </plugins>
