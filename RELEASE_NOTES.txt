@@ -112,6 +112,8 @@ and
 8/ edit core/src/main/resources/beanRefFactory.xml and delete both ulc and wings
 contexts sections.
 
+- migrated to java 1.6 minimum
+
 
   
 3.5.0
