@@ -6,7 +6,6 @@
  */
 package org.jspresso.framework.util.format
 {
-  import mx.formatters.DateFormatter;
   import mx.utils.StringUtil;
   
   public class DateUtils

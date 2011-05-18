@@ -119,6 +119,7 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
@@ -632,64 +633,53 @@ public class DefaultRemoteViewFactory extends
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
         if (!propertyDescriptor.isTimeZoneAware()) {
-          // In that case, we have to translate the incoming dates from the
-          // client timezone preserving the text representation.
+          // In that case, we have to use a Date DTO to avoid any
+          // transformation by the network layer
           final TimeZone serverTz = TimeZone.getDefault();
-          final TimeZone clientTz = actionHandler.getClientTimeZone();
-          if (!serverTz.equals(clientTz)) {
-            ((RemoteValueConnector) connector)
-                .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+          ((RemoteValueConnector) connector)
+              .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
-                  @Override
-                  public Object getValueFromState(Object originalValue) {
-                    if (originalValue instanceof Date) {
-                      Date stateDate = (Date) originalValue;
-                      Calendar serverCalendar = Calendar.getInstance(serverTz);
-                      Calendar clientCalendar = Calendar.getInstance(clientTz);
-
-                      clientCalendar.setTime(stateDate);
-                      serverCalendar.set(clientCalendar.get(Calendar.YEAR),
-                          clientCalendar.get(Calendar.MONTH),
-                          clientCalendar.get(Calendar.DATE),
-                          clientCalendar.get(Calendar.HOUR_OF_DAY),
-                          clientCalendar.get(Calendar.MINUTE),
-                          clientCalendar.get(Calendar.SECOND));
-                      serverCalendar.set(Calendar.MILLISECOND,
-                          clientCalendar.get(Calendar.MILLISECOND));
-                      Date connectorDate = serverCalendar.getTime();
-                      return connectorDate;
-                    }
-                    return originalValue;
+                @Override
+                public Object getValueFromState(Object originalValue) {
+                  Calendar serverCalendar = Calendar.getInstance(serverTz);
+                  if (originalValue instanceof DateDto) {
+                    DateDto stateDate = (DateDto) originalValue;
+                    serverCalendar.set(stateDate.getYear(),
+                        stateDate.getMonth(), stateDate.getDate(),
+                        stateDate.getHour(), stateDate.getMinute(),
+                        stateDate.getSecond());
+                    Date connectorDate = serverCalendar.getTime();
+                    return connectorDate;
                   }
+                  return originalValue;
+                }
 
-                  @Override
-                  public Object getValueForState(Object originalValue) {
-                    if (originalValue instanceof Date) {
-                      Date connectorDate = (Date) originalValue;
-                      Calendar serverCalendar = Calendar.getInstance(serverTz);
-                      Calendar clientCalendar = Calendar.getInstance(clientTz);
+                @Override
+                public Object getValueForState(Object originalValue) {
+                  if (originalValue instanceof Date) {
+                    Date connectorDate = (Date) originalValue;
+                    Calendar serverCalendar = Calendar.getInstance(serverTz);
+                    serverCalendar.setTime(connectorDate);
 
-                      serverCalendar.setTime(connectorDate);
-                      clientCalendar.set(serverCalendar.get(Calendar.YEAR),
-                          serverCalendar.get(Calendar.MONTH),
-                          serverCalendar.get(Calendar.DATE),
-                          serverCalendar.get(Calendar.HOUR_OF_DAY),
-                          serverCalendar.get(Calendar.MINUTE),
-                          serverCalendar.get(Calendar.SECOND));
-                      clientCalendar.set(Calendar.MILLISECOND,
-                          serverCalendar.get(Calendar.MILLISECOND));
-                      Date stateDate = clientCalendar.getTime();
-                      return stateDate;
-                    }
-                    return originalValue;
+                    DateDto stateDate = new DateDto();
+                    stateDate.setYear(serverCalendar.get(Calendar.YEAR));
+                    stateDate.setMonth(serverCalendar.get(Calendar.MONTH));
+                    stateDate.setDate(serverCalendar.get(Calendar.DATE));
+                    stateDate.setHour(serverCalendar.get(Calendar.HOUR_OF_DAY));
+                    stateDate.setMinute(serverCalendar.get(Calendar.MINUTE));
+                    stateDate.setSecond(serverCalendar.get(Calendar.SECOND));
+                    return stateDate;
                   }
-                });
-          }
+                  return originalValue;
+                }
+              });
         }
       }
       viewComponent = createRDateField(connector);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType()
           .toString());
+      ((RDateField) viewComponent).setTimezoneAware(propertyDescriptor
+          .isTimeZoneAware());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -1911,56 +1901,42 @@ public class DefaultRemoteViewFactory extends
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
         final TimeZone serverTz = TimeZone.getDefault();
-        final TimeZone clientTz = actionHandler.getClientTimeZone();
-        if (!serverTz.equals(clientTz)) {
-          ((RemoteValueConnector) connector)
-              .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+        ((RemoteValueConnector) connector)
+            .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
-                @Override
-                public Object getValueFromState(Object originalValue) {
-                  if (originalValue instanceof Date) {
-                    Date stateDate = (Date) originalValue;
-                    Calendar serverCalendar = Calendar.getInstance(serverTz);
-                    Calendar clientCalendar = Calendar.getInstance(clientTz);
-
-                    clientCalendar.setTime(stateDate);
-                    serverCalendar.set(clientCalendar.get(Calendar.YEAR),
-                        clientCalendar.get(Calendar.MONTH),
-                        clientCalendar.get(Calendar.DATE),
-                        clientCalendar.get(Calendar.HOUR_OF_DAY),
-                        clientCalendar.get(Calendar.MINUTE),
-                        clientCalendar.get(Calendar.SECOND));
-                    serverCalendar.set(Calendar.MILLISECOND,
-                        clientCalendar.get(Calendar.MILLISECOND));
-                    Date connectorDate = serverCalendar.getTime();
-                    return connectorDate;
-                  }
-                  return originalValue;
+              @Override
+              public Object getValueFromState(Object originalValue) {
+                Calendar serverCalendar = Calendar.getInstance(serverTz);
+                if (originalValue instanceof DateDto) {
+                  DateDto stateDate = (DateDto) originalValue;
+                  serverCalendar.set(stateDate.getYear(), stateDate.getMonth(),
+                      stateDate.getDate(), stateDate.getHour(),
+                      stateDate.getMinute(), stateDate.getSecond());
+                  Date connectorDate = serverCalendar.getTime();
+                  return connectorDate;
                 }
+                return originalValue;
+              }
 
-                @Override
-                public Object getValueForState(Object originalValue) {
-                  if (originalValue instanceof Date) {
-                    Date connectorDate = (Date) originalValue;
-                    Calendar serverCalendar = Calendar.getInstance(serverTz);
-                    Calendar clientCalendar = Calendar.getInstance(clientTz);
+              @Override
+              public Object getValueForState(Object originalValue) {
+                if (originalValue instanceof Date) {
+                  Date connectorDate = (Date) originalValue;
+                  Calendar serverCalendar = Calendar.getInstance(serverTz);
+                  serverCalendar.setTime(connectorDate);
 
-                    serverCalendar.setTime(connectorDate);
-                    clientCalendar.set(serverCalendar.get(Calendar.YEAR),
-                        serverCalendar.get(Calendar.MONTH),
-                        serverCalendar.get(Calendar.DATE),
-                        serverCalendar.get(Calendar.HOUR_OF_DAY),
-                        serverCalendar.get(Calendar.MINUTE),
-                        serverCalendar.get(Calendar.SECOND));
-                    clientCalendar.set(Calendar.MILLISECOND,
-                        serverCalendar.get(Calendar.MILLISECOND));
-                    Date stateDate = clientCalendar.getTime();
-                    return stateDate;
-                  }
-                  return originalValue;
+                  DateDto stateDate = new DateDto();
+                  stateDate.setYear(serverCalendar.get(Calendar.YEAR));
+                  stateDate.setMonth(serverCalendar.get(Calendar.MONTH));
+                  stateDate.setDate(serverCalendar.get(Calendar.DATE));
+                  stateDate.setHour(serverCalendar.get(Calendar.HOUR_OF_DAY));
+                  stateDate.setMinute(serverCalendar.get(Calendar.MINUTE));
+                  stateDate.setSecond(serverCalendar.get(Calendar.SECOND));
+                  return stateDate;
                 }
-              });
-        }
+                return originalValue;
+              }
+            });
       }
       viewComponent = createRTimeField(connector);
     }

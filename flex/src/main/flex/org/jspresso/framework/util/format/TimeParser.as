@@ -15,6 +15,8 @@
 package org.jspresso.framework.util.format {
   import flexlib.scheduling.util.DateUtil;
   
+  import org.jspresso.framework.util.lang.DateDto;
+  
   public class TimeParser extends Parser {
 
     public function TimeParser() {
@@ -29,10 +31,26 @@ package org.jspresso.framework.util.format {
       if(parsedDate == null) {
         return existingValue;
       } else if(existingValue != null) {
-        var dt:Date = existingValue as Date;
-        parsedDate.setFullYear(dt.fullYear, dt.month, dt.date);
+        if(existingValue is Date) {
+          var existingDate:Date = existingValue as Date;
+          parsedDate.setFullYear(existingDate.fullYear, existingDate.month, existingDate.date);
+        } else if(existingValue is DateDto) {
+          var existingDateDto:DateDto = existingValue as DateDto;
+          parsedDate.setFullYear(existingDateDto.year, existingDateDto.month, existingDateDto.date);
+        }
       }
-      return parsedDate;
+      if(existingValue is Date) {
+        return parsedDate;
+      } else {
+        var parsedDateDto:DateDto = new DateDto();
+        parsedDateDto.year = parsedDate.fullYear;
+        parsedDateDto.month = parsedDate.month;
+        parsedDateDto.date = parsedDate.date;
+        parsedDateDto.hour = parsedDate.hours;
+        parsedDateDto.minute = parsedDate.minutes;
+        parsedDateDto.second = parsedDate.seconds;
+        return parsedDateDto;
+      }
     }
   }
 }

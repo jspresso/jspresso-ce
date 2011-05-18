@@ -69,7 +69,6 @@ package org.jspresso.framework.view.flex {
   import mx.events.ListEvent;
   import mx.events.MenuEvent;
   import mx.events.PropertyChangeEvent;
-  import mx.formatters.DateFormatter;
   import mx.formatters.Formatter;
   import mx.formatters.NumberBase;
   import mx.formatters.NumberBaseRoundType;
@@ -124,6 +123,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.state.remote.RemoteFormattedValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.array.ArrayUtil;
+  import org.jspresso.framework.util.format.DateFormatter;
   import org.jspresso.framework.util.format.DateUtils;
   import org.jspresso.framework.util.format.NumberParser;
   import org.jspresso.framework.util.format.Parser;
@@ -133,6 +133,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.format.TimeParser;
   import org.jspresso.framework.util.gui.CellConstraints;
   import org.jspresso.framework.util.html.HtmlUtil;
+  import org.jspresso.framework.util.lang.DateDto;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   import org.sepy.ui.CheckBoxExtended;
   
@@ -1437,12 +1438,31 @@ package org.jspresso.framework.view.flex {
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
       sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT);
-      bindDateField(dateField, remoteDateField.state);
+      bindDateField(dateField, remoteDateField);
       return dateField;
     }
 
-    protected function bindDateField(dateField:DateField, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value", true);
+    protected function bindDateField(dateField:DateField, remoteDateField:RDateField):void {
+      var remoteState:RemoteValueState = remoteDateField.state;
+      var updateView:Function = function (value:Object):void {
+        if(value == null) {
+          dateField.selectedDate = null;
+        } else {
+          if(value is DateDto) {
+            var valueAsDateDto:DateDto = value as DateDto;
+            dateField.selectedDate = new Date(valueAsDateDto.year,
+              valueAsDateDto.month,
+              valueAsDateDto.date,
+              valueAsDateDto.hour,
+              valueAsDateDto.minute,
+              valueAsDateDto.second
+            );
+          } else {
+            dateField.selectedDate = value as Date;
+          }
+        }
+      };
+      BindingUtils.bindSetter(updateView, remoteState, "value", true);
       BindingUtils.bindProperty(dateField, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         if(dateField.text == "") {
@@ -1466,16 +1486,52 @@ package org.jspresso.framework.view.flex {
             var selectedDate:Date = dateField.selectedDate;
             if(ObjectUtil.compare(parsedDate,selectedDate) == 0) {
               if(remoteState.value) {
-                var currentDate:Date = remoteState.value as Date;
+                var currentAsDate:Date;
+                if(remoteState.value is DateDto) {
+                  var currentAsDateDto:DateDto = remoteState.value as DateDto;
+                  currentAsDate = new Date(currentAsDateDto.year,
+                    currentAsDateDto.month,
+                    currentAsDateDto.date,
+                    currentAsDateDto.hour,
+                    currentAsDateDto.minute,
+                    currentAsDateDto.second
+                  );
+                } else {
+                  currentAsDate = remoteState.value as Date;
+                }
                 // copy the existing time portion
-                selectedDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), currentDate.getMilliseconds());
+                selectedDate.setHours(currentAsDate.getHours(), currentAsDate.getMinutes(), currentAsDate.getSeconds(), currentAsDate.getMilliseconds());
               }
-              remoteState.value = selectedDate;
+              if(remoteDateField.timezoneAware) {
+                remoteState.value = selectedDate;
+              } else {
+                var dateDto:DateDto = new DateDto();
+                dateDto.year = selectedDate.fullYear;
+                dateDto.month = selectedDate.month;
+                dateDto.date = selectedDate.date;
+                dateDto.hour = selectedDate.hours;
+                dateDto.minute = selectedDate.minutes;
+                dateDto.second = selectedDate.seconds;
+                remoteState.value = dateDto;
+              }
             } else {
               // rollback text update
               var ti:TextInput = (dateField.getChildAt(2) as TextInput);
               if(ti) {
-                ti.text = DateField.dateToString(remoteState.value as Date, dateField.formatString);
+                var valueAsDate:Date;
+                if(remoteState.value is DateDto) {
+                  var valueAsDateDto:DateDto = remoteState.value as DateDto;
+                  valueAsDate = new Date(valueAsDateDto.year,
+                    valueAsDateDto.month,
+                    valueAsDateDto.date,
+                    valueAsDateDto.hour,
+                    valueAsDateDto.minute,
+                    valueAsDateDto.second
+                  );
+                } else {
+                  valueAsDate = remoteState.value as Date;
+                }
+                ti.text = DateField.dateToString(valueAsDate, dateField.formatString);
               }
             }
           }

@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
@@ -119,6 +120,8 @@ public class RemoteValueState extends RemotePeer {
       transformedValue = new Date(((java.sql.Date) incomingValue).getTime());
     } else if (incomingValue instanceof BigDecimal) {
       transformedValue = new Double(((BigDecimal) incomingValue).doubleValue());
+    } else if (incomingValue instanceof DateDto) {
+      transformedValue = (DateDto) incomingValue;
     } else if (incomingValue instanceof Date || incomingValue instanceof String
         || incomingValue instanceof Boolean || incomingValue instanceof Number) {
       // if (value instanceof Serializable) {
