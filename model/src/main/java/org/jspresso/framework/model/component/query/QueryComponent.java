@@ -79,8 +79,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (firstDotIndex > 0) {
       Object nested = get(((String) key).substring(0, firstDotIndex));
       if (nested instanceof Map<?, ?>) {
-        return ((Map<String, Object>) nested).get(
-            ((String) key).substring(firstDotIndex + 1));
+        return ((Map<String, Object>) nested).get(((String) key)
+            .substring(firstDotIndex + 1));
       }
     }
     IPropertyDescriptor propertyDescriptor = componentDescriptor
@@ -181,8 +181,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (firstDotIndex > 0) {
       Object nested = get(((String) key).substring(0, firstDotIndex));
       if (nested instanceof Map<?, ?>) {
-        return ((Map<String, Object>) nested).remove(
-            ((String) key).substring(firstDotIndex + 1));
+        return ((Map<String, Object>) nested).remove(((String) key)
+            .substring(firstDotIndex + 1));
       }
     }
     return super.remove(key);
@@ -436,5 +436,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   protected IComponentFactory getComponentFactory() {
     return componentFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public QueryComponent clone() {
+    QueryComponent clone = (QueryComponent) super.clone();
+    return clone;
   }
 }

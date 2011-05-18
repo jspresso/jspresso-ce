@@ -420,4 +420,18 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
       filter.setRecordCount(recordCount);
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FilterableBeanCollectionModule clone() {
+    FilterableBeanCollectionModule clone = (FilterableBeanCollectionModule) super
+        .clone();
+    if (filter != null) {
+      clone.filter = filter.clone();
+    }
+    clone.filterComponentTracker = new FilterComponentTracker();
+    return clone;
+  }
 }

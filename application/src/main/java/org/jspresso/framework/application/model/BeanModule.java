@@ -242,4 +242,14 @@ public class BeanModule extends Module implements PropertyChangeListener {
   protected BeanModuleDescriptor getDescriptor() {
     return new BeanModuleDescriptor(getComponentDescriptor());
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BeanModule clone() {
+    BeanModule clone = (BeanModule) super.clone();
+    clone.moduleObject = null;
+    return clone;
+  }
 }

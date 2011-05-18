@@ -27,7 +27,7 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
     IPropertyChangeCapable {
 
-  private static final long               serialVersionUID = 8981204989863563244L;
+  private static final long                     serialVersionUID = 8981204989863563244L;
 
   private transient SinglePropertyChangeSupport propertyChangeSupport;
 
@@ -205,5 +205,16 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
       ClassNotFoundException {
     in.defaultReadObject();
     propertyChangeSupport = new SinglePropertyChangeSupport(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ObjectEqualityMap<K, V> clone() {
+    @SuppressWarnings("unchecked") ObjectEqualityMap<K, V> clone = (ObjectEqualityMap<K, V>) super
+        .clone();
+    clone.propertyChangeSupport = new SinglePropertyChangeSupport(this);
+    return clone;
   }
 }

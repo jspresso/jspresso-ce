@@ -269,4 +269,14 @@ public class BeanCollectionModule extends Module {
   protected BeanCollectionModuleDescriptor getDescriptor() {
     return new BeanCollectionModuleDescriptor(getElementComponentDescriptor());
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BeanCollectionModule clone() {
+    BeanCollectionModule clone = (BeanCollectionModule) super.clone();
+    clone.moduleObjects = null;
+    return clone;
+  }
 }

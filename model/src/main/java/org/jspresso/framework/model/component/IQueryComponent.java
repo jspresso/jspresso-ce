@@ -35,7 +35,7 @@ import org.jspresso.framework.util.collection.ISortable;
  * @author Vincent Vandenschrick
  */
 public interface IQueryComponent extends Map<String, Object>, IPageable,
-    ISortable {
+    ISortable, Cloneable {
 
   /**
    * Ordering properties action constant.
@@ -55,12 +55,12 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   /**
    * Null value.
    */
-  String NULL_VAL     = "#";
+  String NULL_VAL            = "#";
 
   /**
    * Not value.
    */
-  String NOT_VAL     = "!";
+  String NOT_VAL             = "!";
 
   /**
    * Gets the descriptor of the queried components.
@@ -106,4 +106,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    *          the list of components result of the query.
    */
   void setQueriedComponents(List<? extends IComponent> queriedComponents);
+
+  /**
+   * Clones the query component.
+   * 
+   * @return the query component clone.
+   */
+  IQueryComponent clone();
 }

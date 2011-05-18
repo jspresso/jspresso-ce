@@ -701,4 +701,23 @@ public class Module extends AbstractPropertyChangeCapable implements
   public void setPermId(String permId) {
     this.permId = permId;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Module clone() {
+    Module clone = (Module) super.clone();
+    clone.parent = null;
+    List<Module> subModulesClones = new ArrayList<Module>();
+    if (subModules != null) {
+      for (Module subModule : subModules) {
+        Module subModuleClone = subModule.clone();
+        subModuleClone.parent = clone;
+        subModulesClones.add(subModuleClone);
+      }
+    }
+    clone.subModules = subModulesClones;
+    return clone;
+  }
 }
