@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>3.5-SNAPSHOT</version>
+  <version>3.5.3</version>
   <name>Jspresso Application Framework</name>
   <description>Jspresso is an innovative framework for building high quality java rich internet applications. Jspresso dramatically reduces the development cycles needed to get your corporate application up and running.</description>
   <url>http://www.jspresso.org</url>
@@ -22,7 +21,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
+    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/tags/jspresso-framework-3.5.3</connection>
   </scm>
   <issueManagement>
     <system>Sourceforge Tracker</system>
@@ -45,7 +44,7 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
+    <jspresso.version>3.5.3</jspresso.version>
     <sjs.version>1.0.2</sjs.version>
     
     <ant-contrib.version>1.0b3</ant-contrib.version>
