@@ -36,7 +36,18 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
          * @return {String} the formatted object as a string.
          */
         format : function(obj) {
-          return this.getFormatDelegates()[0].format(obj);
+          var objAsDate;
+          if(obj instanceof org.jspresso.framework.util.lang.DateDto) {
+            objAsDate = new Date(obj.getYear(),
+              obj.getMonth(),
+              obj.getDate(),
+              obj.getHour(),
+              obj.getMinute(),
+              obj.getSecond());
+          } else {
+            objAsDate = obj;
+          }
+          return this.getFormatDelegates()[0].format(objAsDate);
         },
 
         /**
@@ -50,7 +61,30 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
           if(str == null || str.length == 0) {
             return null;
           }
-          var existingDate = this.getRemoteComponent().getState().getValue();
+          var existingValue = this.getRemoteComponent().getState().getValue();
+          var existingDateDto;
+          var existingDate;
+          if(existingValue) {
+            if(existingValue instanceof org.jspresso.framework.util.lang.DateDto) {
+              existingDateDto = existingValue;
+              existingDate = new Date(
+                existingDateDto.getYear(),
+                existingDateDto.getMonth(),
+                existingDateDto.getDate(),
+                existingDateDto.getHour(),
+                existingDateDto.getMinute(),
+                existingDateDto.getSecond());
+            } else {
+              existingDate = existingValue;
+              existingDateDto = new org.jspresso.framework.util.lang.DateDto();
+              existingDateDto.setYear(existingValue.getFullYear());
+              existingDateDto.setMonth(existingValue.getMonth());
+              existingDateDto.setDate(existingValue.getDate());
+              existingDateDto.setHour(existingValue.getHours());
+              existingDateDto.setMinute(existingValue.getMinutes());
+              existingDateDto.setSecond(existingValue.getSeconds());
+            }
+          }
           var parsedDate;
           for (var i = 0; i < this.getFormatDelegates().length && !parsedDate; i++) {
             try {
@@ -85,8 +119,18 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
             parsedDate.getSeconds(),
             parsedDate.getMilliseconds()
           );
-          if(existingDate == null) {
+          if(existingValue == null) {
             return parsedDate;
+            /*
+            var parsedDateDto = new org.jspresso.framework.util.lang.DateDto();
+            parsedDateDto.setYear(parsedDate.getFullYear());
+            parsedDateDto.setMonth(parsedDate.getMonth());
+            parsedDateDto.setDate(parsedDate.getDate());
+            parsedDateDto.setHour(parsedDate.getHours());
+            parsedDateDto.setMinute(parsedDate.getMinutes());
+            parsedDateDto.setSecond(parsedDate.getSeconds());
+            return parsedDateDto;
+            */
           } else {
             if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField) {
               parsedDate = new Date(

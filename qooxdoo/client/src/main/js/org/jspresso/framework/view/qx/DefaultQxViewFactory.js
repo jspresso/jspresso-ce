@@ -1145,7 +1145,46 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       dateField.setDateFormat(dateFormat);
       var state = remoteDateField.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(dateField, "value", "value", true);
+      modelController.addTarget(dateField, "value", "value", true,
+        {
+          converter : function(modelValue, model) {
+            if(modelValue instanceof org.jspresso.framework.util.lang.DateDto) {
+              return new Date(modelValue.getYear(),
+                modelValue.getMonth(),
+                modelValue.getDate(),
+                modelValue.getHour(),
+                modelValue.getMinute(),
+                modelValue.getSecond());
+            }
+            if(modelValue === undefined) {
+              modelValue = null;
+            }
+            if(!modelValue) {
+              dateField.resetValue();
+            }
+            return modelValue;
+          }
+        }, {
+          converter : function(viewValue, model) {
+            if (viewValue != null && !remoteDateField.isTimezoneAware()) {
+              var viewDateDto = new org.jspresso.framework.util.lang.DateDto();
+              viewDateDto.setYear(viewValue.getFullYear());
+              viewDateDto.setMonth(viewValue.getMonth());
+              viewDateDto.setDate(viewValue.getDate());
+              viewDateDto.setHour(viewValue.getHours());
+              viewDateDto.setMinute(viewValue.getMinutes());
+              viewDateDto.setSecond(viewValue.getSeconds());
+              return viewDateDto;
+            }
+            if(viewValue === undefined) {
+              viewValue = null;
+            }
+            if(!viewValue) {
+              dateField.resetValue();
+            }
+            return viewValue;
+          }
+        });
       modelController.addTarget(dateField, "enabled", "writable", false);
       this
           ._sizeMaxComponentWidth(
