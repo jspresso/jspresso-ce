@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
@@ -44,7 +45,7 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jspresso.version>3.5.3</jspresso.version>
+    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0.2</sjs.version>
     
     <ant-contrib.version>1.0b3</ant-contrib.version>
