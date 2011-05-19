@@ -197,8 +197,15 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           .getComponentDescriptor();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
         if (componentDescriptor.getPropertyDescriptor(property.getKey()) != null) {
+          boolean isEntityRef = false;
+          if (IEntity.class.isAssignableFrom(componentDescriptor
+              .getComponentContract())
+              && aQueryComponent.containsKey(IEntity.ID)) {
+            isEntityRef = true;
+          }
           if (!PropertyViewDescriptorHelper.isComputed(componentDescriptor,
-              property.getKey())) {
+              property.getKey())
+              && (!isEntityRef || IEntity.ID.equals(property.getKey()))) {
             String prefixedProperty;
             if (path != null) {
               prefixedProperty = path + "." + property.getKey();
