@@ -98,6 +98,7 @@ import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
@@ -561,9 +562,15 @@ public class DefaultRemoteViewFactory extends
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
       if (propertyView.getPeer() instanceof RLink) {
+        IView<RComponent> targetView;
+        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+          targetView = propertyView;
+        } else {
+          targetView = view;
+        }
         ((RLink) propertyView.getPeer()).setAction(getActionFactory()
             .createAction(propertyViewDescriptor.getAction(), actionHandler,
-                view, locale));
+                targetView, locale));
       }
     }
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));

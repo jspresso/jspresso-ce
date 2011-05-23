@@ -635,9 +635,15 @@ public class DefaultSwingViewFactory extends
       currentX += propertyWidth;
 
       if (propertyView.getPeer() instanceof JLink<?>) {
+        IView<JComponent> targetView;
+        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+          targetView = propertyView;
+        } else {
+          targetView = view;
+        }
         ((JLink<Action>) propertyView.getPeer()).setTarget(getActionFactory()
             .createAction(propertyViewDescriptor.getAction(), actionHandler,
-                view, locale));
+                targetView, locale));
       }
     }
     if (lastRowNeedsFilling) {

@@ -23,13 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -50,7 +51,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
+public class AddBeanAsSubModuleAction extends BackendAction {
 
   private IViewDescriptor childModuleProjectedViewDescriptor;
 
@@ -62,23 +63,24 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    int[] selectedIndices = getSelectedIndices(context);
-
-    if (selectedIndices == null || selectedIndices.length == 0) {
-      return false;
-    }
-    ICollectionConnector collectionConnector = getModelConnector(context);
+    List<?> selectedModels = getSelectedModels(context);
+    IModelDescriptor modelDescriptor = getModelDescriptor(context);
     Module parentModule = getModule(context);
     List<Module> childModules = parentModule.getSubModules();
     List<Module> newSubModules = new ArrayList<Module>();
 
-    IComponentDescriptor<?> childComponentDescriptor = ((ICollectionDescriptorProvider<?>) collectionConnector
-        .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor();
+    IComponentDescriptor<?> childComponentDescriptor;
+    if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
+      childComponentDescriptor = ((ICollectionDescriptorProvider<?>) modelDescriptor)
+          .getCollectionDescriptor().getElementDescriptor();
+    } else {
+      childComponentDescriptor = ((IComponentDescriptorProvider<?>) modelDescriptor)
+          .getComponentDescriptor();
+    }
 
-    int[] childSelectedIndices = new int[selectedIndices.length];
-    for (int i = 0; i < selectedIndices.length; i++) {
-      Object nextSelectedModuleObject = collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue();
+    int[] childSelectedIndices = new int[selectedModels.size()];
+    int i = 0;
+    for (Object nextSelectedModuleObject : selectedModels) {
       Module nextSubModule = createChildModule(parentModule,
           childComponentDescriptor, nextSelectedModuleObject, context);
       int nextSubModuleIndex = -1;
@@ -95,6 +97,7 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       } else {
         childSelectedIndices[i] = nextSubModuleIndex;
       }
+      i++;
     }
     parentModule.addSubModules(newSubModules);
     setSelectedIndices(childSelectedIndices, context);
