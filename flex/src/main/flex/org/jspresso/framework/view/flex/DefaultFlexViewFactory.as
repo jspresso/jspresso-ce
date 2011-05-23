@@ -19,10 +19,8 @@ package org.jspresso.framework.view.flex {
   import flash.events.FocusEvent;
   import flash.events.MouseEvent;
   import flash.events.TextEvent;
-  import flash.text.TextField;
   
   import flexlib.containers.ButtonScrollingCanvas;
-  import flexlib.controls.sliderClasses.ExtendedSlider;
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
@@ -74,7 +72,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
   import mx.graphics.SolidColor;
-  import mx.styles.CSSStyleDeclaration;
+  import mx.resources.ResourceManager;
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.action.IActionHandler;
@@ -1436,6 +1434,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
+      dateField.formatString = ResourceManager.getInstance().getString("Common_messages", "date_format");
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
       sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT);
@@ -2295,7 +2294,8 @@ package org.jspresso.framework.view.flex {
     
     protected function createFormatter(remoteComponent:RComponent):Formatter {
       if(remoteComponent is RDateField) {
-        var dateFormatter:DateFormatter = new DateFormatter();        
+        var dateFormatter:DateFormatter = new DateFormatter();
+        dateFormatter.formatString = ResourceManager.getInstance().getString("Common_messages", "date_format");
         if((remoteComponent as RDateField).type == "DATE_TIME") {
           dateFormatter.formatString = dateFormatter.formatString + " " + _timeFormatter.formatString; 
         }
