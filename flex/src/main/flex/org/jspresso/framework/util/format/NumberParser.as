@@ -30,7 +30,8 @@ package org.jspresso.framework.util.format {
       if(value == null || value.length == 0) {
         return null;
       }
-	    var parsedNumber:Number = new Number(_parser.parseNumberString(value));
+      var prepared:String = value.replace(_parser.decimalSeparatorTo, _parser.decimalSeparatorFrom);
+	    var parsedNumber:Number = new Number(_parser.parseNumberString(prepared));
 	    parsedNumber.toFixed(_precision);
 	    return parsedNumber;
     }

@@ -1590,7 +1590,7 @@ package org.jspresso.framework.view.flex {
       var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter;
       bindTextInput(decimalField, remoteDecimalField.state,
                     decimalFormatter, createParser(remoteDecimalField));
-      decimalField.restrict = "0-9" + decimalFormatter.decimalSeparatorTo;
+      decimalField.restrict = "0-9" + decimalFormatter.decimalSeparatorTo + decimalFormatter.decimalSeparatorFrom;
       return decimalField;
     }
 
@@ -1608,7 +1608,7 @@ package org.jspresso.framework.view.flex {
       var percentFormatter:NumberFormatter = createFormatter(remotePercentField) as NumberFormatter; 
       bindTextInput(percentField, remotePercentField.state,
                     percentFormatter, createParser(remotePercentField));
-      percentField.restrict = "0-9" + percentFormatter.decimalSeparatorTo + PercentFormatter.PERCENT_SUFFIX;
+      percentField.restrict = "0-9" + percentFormatter.decimalSeparatorTo  + percentFormatter.decimalSeparatorFrom + PercentFormatter.PERCENT_SUFFIX;
       return percentField;
     }
     
@@ -2311,6 +2311,7 @@ package org.jspresso.framework.view.flex {
         } else {
           numberFormatter = new NumberFormatter();
         }
+        numberFormatter.decimalSeparatorFrom = ".";
         numberFormatter.rounding = NumberBaseRoundType.NEAREST;
         if(remoteComponent is RDecimalComponent) {
           numberFormatter.precision = (remoteComponent as RDecimalComponent).maxFractionDigit;
@@ -2331,10 +2332,10 @@ package org.jspresso.framework.view.flex {
           numberParser = new NumberParser();
         }
         var formatter:NumberFormatter = createFormatter(remoteComponent) as NumberFormatter;
-        var numberBase:NumberBase = new NumberBase(formatter.decimalSeparatorTo,
-                                                   formatter.thousandsSeparatorTo,
-                                                   formatter.decimalSeparatorFrom,
-                                                   formatter.decimalSeparatorFrom);
+        var numberBase:NumberBase = new NumberBase(formatter.decimalSeparatorFrom,
+                                                   formatter.thousandsSeparatorFrom,
+                                                   formatter.decimalSeparatorTo,
+                                                   formatter.thousandsSeparatorTo);
         numberParser.numberBase = numberBase;
         numberParser.precision = formatter.precision as uint;
         return numberParser;

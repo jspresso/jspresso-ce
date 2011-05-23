@@ -154,6 +154,7 @@ package org.jspresso.framework.view.flex {
       } else {
         label.toolTip = null;
       }
+      label.selectable = true;
   	}
 
     public function set action(value:RAction):void {
