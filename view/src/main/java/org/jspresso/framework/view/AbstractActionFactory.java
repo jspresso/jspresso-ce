@@ -43,6 +43,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandlerAware;
+import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
@@ -179,6 +180,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
             if (clonedGate instanceof IActionHandlerAware) {
               ((IActionHandlerAware) clonedGate)
                   .setActionHandler(actionHandler);
+            }
+            if (clonedGate instanceof ISubjectAware) {
+              ((ISubjectAware) clonedGate)
+                  .setSubject(actionHandler.getSubject());
             }
             if (clonedGate instanceof IModelGate && viewConnector != null) {
               if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {

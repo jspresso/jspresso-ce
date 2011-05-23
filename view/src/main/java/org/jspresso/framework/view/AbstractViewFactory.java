@@ -80,6 +80,7 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
@@ -1138,6 +1139,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           IGate clonedGate = gate.clone();
           if (clonedGate instanceof IActionHandlerAware) {
             ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          }
+          if (clonedGate instanceof ISubjectAware) {
+            ((ISubjectAware) clonedGate).setSubject(actionHandler.getSubject());
           }
           columnConnector.addReadabilityGate(clonedGate);
         }
