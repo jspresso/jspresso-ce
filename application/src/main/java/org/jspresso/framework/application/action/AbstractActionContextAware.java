@@ -31,6 +31,7 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
@@ -137,7 +138,11 @@ public abstract class AbstractActionContextAware {
   protected Object getModel(Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(context);
     if (modelConnector != null) {
-      return modelConnector.getConnectorValue();
+      if (modelConnector instanceof ICompositeValueConnector) {
+        return modelConnector.getConnectorValue();
+      } else if (modelConnector.getModelProvider() != null) {
+        return modelConnector.getModelProvider().getModel();
+      }
     }
     return null;
   }

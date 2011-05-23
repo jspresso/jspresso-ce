@@ -54,7 +54,7 @@ public class CollectionSelectionTrackingGate extends AbstractModelGate {
     if (getModel() instanceof Collection<?>) {
       return !((Collection<?>) getModel()).isEmpty();
     }
-    return false;
+    return getModel() != null;
   }
 
   /**
