@@ -682,15 +682,16 @@ package org.jspresso.framework.view.flex {
             }
             if(event is FocusEvent
               && (event as FocusEvent).relatedObject
-              && (event as FocusEvent).relatedObject.parent == actionField) {
+              // Not a key focus event
+              && ((event as FocusEvent).relatedObject.parent == actionField && (event as FocusEvent).keyCode == 0)) {
               return;
             }
             _actionHandler.execute(action, inputText);
           }
         };
         textInput.addEventListener(FlexEvent.ENTER,triggerAction);
-        textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,triggerAction);
         textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,triggerAction);
+        textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,triggerAction);
       }
       for each (var actionComponent:UIComponent in actionComponents) {
         BindingUtils.bindProperty(actionComponent, "enabled", remoteState, "writable");
