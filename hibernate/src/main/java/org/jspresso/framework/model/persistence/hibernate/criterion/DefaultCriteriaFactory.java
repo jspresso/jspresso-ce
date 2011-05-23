@@ -167,31 +167,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           .get(ComparableQueryStructureDescriptor.INF_VALUE);
       Object supValue = aQueryComponent
           .get(ComparableQueryStructureDescriptor.SUP_VALUE);
-      if (infValue != null || supValue != null) {
-        Object compareValue = infValue;
-        if (compareValue == null) {
-          compareValue = supValue;
-        }
-        if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-          currentCriteria.add(Restrictions.eq(path, compareValue));
-        } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
-          currentCriteria.add(Restrictions.gt(path, compareValue));
-        } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
-          currentCriteria.add(Restrictions.ge(path, compareValue));
-        } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
-          currentCriteria.add(Restrictions.lt(path, compareValue));
-        } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
-          currentCriteria.add(Restrictions.le(path, compareValue));
-        } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
-          if (infValue != null && supValue != null) {
-            currentCriteria.add(Restrictions.between(path, infValue, supValue));
-          } else if (infValue != null) {
-            currentCriteria.add(Restrictions.ge(path, infValue));
-          } else {
-            currentCriteria.add(Restrictions.le(path, supValue));
-          }
-        }
-      }
+      completeWithComparableQueryStructure(currentCriteria, path, comparator,
+          infValue, supValue);
     } else {
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
           .getComponentDescriptor();
@@ -225,33 +202,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
-              String propValue = (String) property.getValue();
-              if (propValue.length() > 0) {
-                String[] propValues = propValue.split(";");
-                Junction disjunction = Restrictions.disjunction();
-                currentCriteria.add(disjunction);
-                for (int i = 0; i < propValues.length; i++) {
-                  String val = propValues[i];
-                  if (val.length() > 0) {
-                    Criterion crit;
-                    boolean negate = false;
-                    if (val.startsWith(IQueryComponent.NOT_VAL)) {
-                      val = val.substring(1);
-                      negate = true;
-                    }
-                    if (IQueryComponent.NULL_VAL.equals(val)) {
-                      crit = Restrictions.isNull(prefixedProperty);
-                    } else {
-                      crit = Restrictions.like(prefixedProperty, val,
-                          MatchMode.START).ignoreCase();
-                    }
-                    if (negate) {
-                      crit = Restrictions.not(crit);
-                    }
-                    disjunction.add(crit);
-                  }
-                }
-              }
+              createStringRestriction(currentCriteria,
+                  (String) property.getValue(), prefixedProperty);
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
@@ -287,7 +239,113 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
     return abort;
   }
 
-  private boolean isQueryComponentEmpty(IQueryComponent queryComponent) {
+  /**
+   * Creates a string based restriction.
+   * 
+   * @param currentCriteria
+   *          the current criteria being built.
+   * @param propertyValue
+   *          the string property value.
+   * @param prefixedProperty
+   *          the full path of the property.
+   */
+  protected void createStringRestriction(DetachedCriteria currentCriteria,
+      String propertyValue, String prefixedProperty) {
+    if (propertyValue.length() > 0) {
+      String[] propValues = propertyValue.split(";");
+      Junction disjunction = Restrictions.disjunction();
+      currentCriteria.add(disjunction);
+      for (int i = 0; i < propValues.length; i++) {
+        String val = propValues[i];
+        if (val.length() > 0) {
+          Criterion crit;
+          boolean negate = false;
+          if (val.startsWith(IQueryComponent.NOT_VAL)) {
+            val = val.substring(1);
+            negate = true;
+          }
+          if (IQueryComponent.NULL_VAL.equals(val)) {
+            crit = Restrictions.isNull(prefixedProperty);
+          } else {
+            crit = createLikeRestriction(prefixedProperty, val);
+          }
+          if (negate) {
+            crit = Restrictions.not(crit);
+          }
+          disjunction.add(crit);
+        }
+      }
+    }
+  }
+
+  /**
+   * Creates a like restriction.
+   * 
+   * @param prefixedProperty
+   *          the complete property path.
+   * @param val
+   *          the value to create the like restriction for
+   * @return the like criterion;
+   */
+  protected Criterion createLikeRestriction(String prefixedProperty, String val) {
+    return Restrictions.like(prefixedProperty, val, MatchMode.START)
+        .ignoreCase();
+  }
+
+  /**
+   * Complements a criteria by processing a comparable query structure.
+   * 
+   * @param currentCriteria
+   *          the current criteria that is being built.
+   * @param path
+   *          the path to the comparable property.
+   * @param comparator
+   *          the comparator value from ComparableQueryStructureDescriptor
+   *          constants.
+   * @param infValue
+   *          the inf value to compare to.
+   * @param supValue
+   *          the sup value to compare to.
+   */
+  protected void completeWithComparableQueryStructure(
+      DetachedCriteria currentCriteria, String path, String comparator,
+      Object infValue, Object supValue) {
+    if (infValue != null || supValue != null) {
+      Object compareValue = infValue;
+      if (compareValue == null) {
+        compareValue = supValue;
+      }
+      if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
+        currentCriteria.add(Restrictions.eq(path, compareValue));
+      } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
+        currentCriteria.add(Restrictions.gt(path, compareValue));
+      } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
+        currentCriteria.add(Restrictions.ge(path, compareValue));
+      } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
+        currentCriteria.add(Restrictions.lt(path, compareValue));
+      } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
+        currentCriteria.add(Restrictions.le(path, compareValue));
+      } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
+        if (infValue != null && supValue != null) {
+          currentCriteria.add(Restrictions.between(path, infValue, supValue));
+        } else if (infValue != null) {
+          currentCriteria.add(Restrictions.ge(path, infValue));
+        } else {
+          currentCriteria.add(Restrictions.le(path, supValue));
+        }
+      }
+    }
+  }
+
+  /**
+   * Wether a query component must be considered empty, thus not generating any
+   * restriction.
+   * 
+   * @param queryComponent
+   *          the query component to test.
+   * @return true, if the query component does not generate any restriction.
+   */
+  protected boolean isQueryComponentEmpty(IQueryComponent queryComponent) {
     if (queryComponent == null || queryComponent.isEmpty()) {
       return true;
     }
