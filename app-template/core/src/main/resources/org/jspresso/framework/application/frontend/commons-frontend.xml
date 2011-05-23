@@ -445,9 +445,13 @@
   </bean>
 
   <bean id="removeModuleObjectFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
-    <property name="yesAction" ref="removeModuleObjectAction" />
+    <property name="yesAction">
+      <bean class="org.jspresso.framework.application.frontend.action.FrontendAction">
+        <property name="wrappedAction" ref="removeModuleObjectAction"/>
+        <property name="nextAction" ref="previousPinnedModuleAction"/>
+      </bean>
+    </property>
     <property name="collectionBased" value="false"/>
-    <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction"/>
   </bean>
 
   <bean id="removeFromModuleObjectsFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
