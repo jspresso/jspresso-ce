@@ -17,6 +17,8 @@
 
   <bean id="displayReportAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
 
+  <bean id="chartAction" class="org.jspresso.framework.application.charting.frontend.action.AbstractChartAction" />
+
   <bean id="iconFactory" parent="iconFactoryBase" />
 
   <bean id="viewFactory" parent="viewFactoryBase" />
