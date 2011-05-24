@@ -39,7 +39,6 @@ import org.jspresso.framework.model.IModelChangeListener;
 import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandlerAware;
@@ -182,12 +181,12 @@ public abstract class AbstractActionFactory<E, F, G> implements
                   .setActionHandler(actionHandler);
             }
             if (clonedGate instanceof ISubjectAware) {
-              ((ISubjectAware) clonedGate)
-                  .setSubject(actionHandler.getSubject());
+              ((ISubjectAware) clonedGate).setSubject(actionHandler
+                  .getSubject());
             }
             if (clonedGate instanceof IModelGate && viewConnector != null) {
-              if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                if (((IModelGate) clonedGate).isCollectionBased()) {
+              if (((IModelGate) clonedGate).isCollectionBased()) {
+                if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                   ((IModelGate) clonedGate).setModel(null);
                   // tracks children connectors selection
                   ((ICollectionConnectorProvider) viewConnector)
@@ -244,87 +243,41 @@ public abstract class AbstractActionFactory<E, F, G> implements
                                   .setModel(selectedModels);
                             }
                           });
-                } else {
-                  if (viewConnector.getModelConnector() != null) {
-                    ((IModelGate) clonedGate).setModel(viewConnector
-                        .getModelConnector().getModelProvider().getModel());
-                  } else {
-                    ((IModelGate) clonedGate).setModel(null);
-                  }
-                  final IModelChangeListener modelChangeListener = new IModelChangeListener() {
-
-                    @Override
-                    public void modelChange(ModelChangeEvent evt) {
-                      ((IModelGate) clonedGate).setModel(evt.getNewValue());
-                    }
-                  };
-                  viewConnector.addPropertyChangeListener("modelConnector",
-                      new PropertyChangeListener() {
+                } else if (viewConnector instanceof IItemSelectable) {
+                  ((IModelGate) clonedGate).setModel(null);
+                  ((IItemSelectable) viewConnector)
+                      .addItemSelectionListener(new IItemSelectionListener() {
 
                         @Override
-                        public void propertyChange(PropertyChangeEvent evt) {
-                          IValueConnector oldModelConnector = (IValueConnector) evt
-                              .getOldValue();
-                          IValueConnector newModelConnector = (IValueConnector) evt
-                              .getNewValue();
-                          if (oldModelConnector != null) {
-                            oldModelConnector.getModelProvider()
-                                .removeModelChangeListener(modelChangeListener);
+                        public void selectedItemChange(ItemSelectionEvent event) {
+                          Object selectedItem = event.getSelectedItem();
+                          if (selectedItem == event.getSource()) {
+                            return;
                           }
-                          if (newModelConnector != null) {
-                            ((IModelGate) clonedGate)
-                                .setModel(newModelConnector.getModelProvider()
-                                    .getModel());
-                            newModelConnector.getModelProvider()
-                                .addModelChangeListener(modelChangeListener);
+                          if (selectedItem != null) {
+                            if (selectedItem instanceof IValueConnector) {
+                              Object connectorValue = ((IValueConnector) selectedItem)
+                                  .getConnectorValue();
+                              if (connectorValue != null) {
+                                ((IModelGate) clonedGate).setModel(Collections
+                                    .singleton(connectorValue));
+                              } else {
+                                ((IModelGate) clonedGate).setModel(null);
+                              }
+                            } else {
+                              ((IModelGate) clonedGate).setModel(Collections
+                                  .singleton(event.getSelectedItem()));
+                            }
                           } else {
                             ((IModelGate) clonedGate).setModel(null);
                           }
                         }
                       });
+                } else {
+                  bindSimpleGateModel(clonedGate, viewConnector);
                 }
-              } else if (((IModelGate) clonedGate).isCollectionBased()
-                  && viewConnector instanceof IItemSelectable) {
-                ((IModelGate) clonedGate).setModel(null);
-                ((IItemSelectable) viewConnector)
-                    .addItemSelectionListener(new IItemSelectionListener() {
-
-                      @Override
-                      public void selectedItemChange(ItemSelectionEvent event) {
-                        Object selectedItem = event.getSelectedItem();
-                        if (selectedItem == event.getSource()) {
-                          return;
-                        }
-                        if (selectedItem != null) {
-                          if (selectedItem instanceof IValueConnector) {
-                            Object connectorValue = ((IValueConnector) selectedItem)
-                                .getConnectorValue();
-                            if (connectorValue != null) {
-                              ((IModelGate) clonedGate).setModel(Collections
-                                  .singleton(connectorValue));
-                            } else {
-                              ((IModelGate) clonedGate).setModel(null);
-                            }
-                          } else {
-                            ((IModelGate) clonedGate).setModel(Collections
-                                .singleton(event.getSelectedItem()));
-                          }
-                        } else {
-                          ((IModelGate) clonedGate).setModel(null);
-                        }
-                      }
-                    });
-              } else if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
-                ((IModelGate) clonedGate).setModel(viewConnector
-                    .getConnectorValue());
-                viewConnector
-                    .addValueChangeListener(new IValueChangeListener() {
-
-                      @Override
-                      public void valueChange(ValueChangeEvent evt) {
-                        ((IModelGate) clonedGate).setModel(evt.getNewValue());
-                      }
-                    });
+              } else {
+                bindSimpleGateModel(clonedGate, viewConnector);
               }
             }
             clonedGates.add(clonedGate);
@@ -335,6 +288,47 @@ public abstract class AbstractActionFactory<E, F, G> implements
     } finally {
       actionHandler.restoreLastSecurityContextSnapshot();
     }
+  }
+
+  private void bindSimpleGateModel(final IGate gate,
+      IValueConnector viewConnector) {
+    if (viewConnector.getModelConnector() != null) {
+      ((IModelGate) gate).setModel(viewConnector
+          .getModelConnector().getModelProvider().getModel());
+    } else {
+      ((IModelGate) gate).setModel(null);
+    }
+    final IModelChangeListener modelChangeListener = new IModelChangeListener() {
+
+      @Override
+      public void modelChange(ModelChangeEvent evt) {
+        ((IModelGate) gate).setModel(evt.getNewValue());
+      }
+    };
+    viewConnector.addPropertyChangeListener("modelConnector",
+        new PropertyChangeListener() {
+
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            IValueConnector oldModelConnector = (IValueConnector) evt
+                .getOldValue();
+            IValueConnector newModelConnector = (IValueConnector) evt
+                .getNewValue();
+            if (oldModelConnector != null) {
+              oldModelConnector.getModelProvider()
+                  .removeModelChangeListener(modelChangeListener);
+            }
+            if (newModelConnector != null && newModelConnector
+                .getModelProvider() != null) {
+              ((IModelGate) gate).setModel(newModelConnector
+                  .getModelProvider().getModel());
+              newModelConnector.getModelProvider()
+                  .addModelChangeListener(modelChangeListener);
+            } else {
+              ((IModelGate) gate).setModel(null);
+            }
+          }
+        });
   }
 
   /**
