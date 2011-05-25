@@ -66,7 +66,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
    */
   public FilterableBeanCollectionModule() {
-    filterComponentTracker = new FilterComponentTracker();
+    filterComponentTracker = new FilterComponentTracker(this);
   }
 
   /**
@@ -302,14 +302,26 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     return new BasicQueryComponentDescriptorFactory();
   }
 
-  private class FilterComponentTracker implements PropertyChangeListener {
+  private static class FilterComponentTracker implements PropertyChangeListener {
+    
+    private FilterableBeanCollectionModule target;
 
+    
+    /**
+     * Constructs a new <code>FilterableBeanCollectionModule.FilterComponentTracker</code> instance.
+     * @param target the target filter module.
+     * 
+     */
+    public FilterComponentTracker(FilterableBeanCollectionModule target) {
+      this.target = target;
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
+      target.firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
           + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
       if (IPageable.DISPLAY_PAGE_INDEX.equals(evt.getPropertyName())
           || IPageable.NEXT_PAGE_ENABLED.equals(evt.getPropertyName())
@@ -318,7 +330,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
           || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
           || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.RECORD_COUNT.equals(evt.getPropertyName())) {
-        firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
+        target.firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
             evt.getNewValue());
       }
     }
@@ -428,10 +440,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public FilterableBeanCollectionModule clone() {
     FilterableBeanCollectionModule clone = (FilterableBeanCollectionModule) super
         .clone();
+    clone.filterComponentTracker = new FilterComponentTracker(clone);
     if (filter != null) {
-      clone.filter = filter.clone();
+      clone.setFilter(filter.clone());
     }
-    clone.filterComponentTracker = new FilterComponentTracker();
     return clone;
   }
 }
