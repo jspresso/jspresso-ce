@@ -292,9 +292,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   private void bindSimpleGateModel(final IGate gate,
       IValueConnector viewConnector) {
-    if (viewConnector.getModelConnector() != null) {
-      ((IModelGate) gate).setModel(viewConnector
-          .getModelConnector().getModelProvider().getModel());
+    if (viewConnector.getModelConnector() != null
+        && viewConnector.getModelConnector().getModelProvider() != null) {
+      ((IModelGate) gate).setModel(viewConnector.getModelConnector()
+          .getModelProvider().getModel());
     } else {
       ((IModelGate) gate).setModel(null);
     }
@@ -315,15 +316,15 @@ public abstract class AbstractActionFactory<E, F, G> implements
             IValueConnector newModelConnector = (IValueConnector) evt
                 .getNewValue();
             if (oldModelConnector != null) {
-              oldModelConnector.getModelProvider()
-                  .removeModelChangeListener(modelChangeListener);
+              oldModelConnector.getModelProvider().removeModelChangeListener(
+                  modelChangeListener);
             }
-            if (newModelConnector != null && newModelConnector
-                .getModelProvider() != null) {
-              ((IModelGate) gate).setModel(newModelConnector
-                  .getModelProvider().getModel());
-              newModelConnector.getModelProvider()
-                  .addModelChangeListener(modelChangeListener);
+            if (newModelConnector != null
+                && newModelConnector.getModelProvider() != null) {
+              ((IModelGate) gate).setModel(newModelConnector.getModelProvider()
+                  .getModel());
+              newModelConnector.getModelProvider().addModelChangeListener(
+                  modelChangeListener);
             } else {
               ((IModelGate) gate).setModel(null);
             }
