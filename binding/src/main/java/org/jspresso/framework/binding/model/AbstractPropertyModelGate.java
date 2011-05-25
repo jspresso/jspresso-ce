@@ -243,12 +243,17 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
       return /* !openOnTrue */false;
     }
     for (Object elt : (Collection<?>) model) {
-      IAccessor accessor = accessorFactory.createPropertyAccessor(propertyName,
-          elt.getClass());
-      E modelValue = (E) accessor.getValue(elt);
-      boolean eltOpen = shouldOpen(modelValue);
-      if (!openOnTrue) {
-        eltOpen = !eltOpen;
+      boolean eltOpen;
+      if (elt != null) {
+        IAccessor accessor = accessorFactory.createPropertyAccessor(
+            propertyName, elt.getClass());
+        E modelValue = (E) accessor.getValue(elt);
+        eltOpen = shouldOpen(modelValue);
+        if (!openOnTrue) {
+          eltOpen = !eltOpen;
+        }
+      } else {
+        eltOpen = false;
       }
       if (!eltOpen) {
         return false;
