@@ -18,7 +18,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 public abstract class AbstractPropertyChangeCapable implements
     IPropertyChangeCapable, Cloneable {
 
-  private SinglePropertyChangeSupport propertyChangeSupport;
+  private transient SinglePropertyChangeSupport propertyChangeSupport;
 
   private synchronized void initializePropertyChangeSupportIfNeeded() {
     if (propertyChangeSupport == null) {
