@@ -20,11 +20,10 @@ public abstract class AbstractPropertyChangeCapable implements
 
   private SinglePropertyChangeSupport propertyChangeSupport;
 
-  /**
-   * Constructs a new <code>AbstractPropertyChangeCapable</code> instance.
-   */
-  public AbstractPropertyChangeCapable() {
-    this.propertyChangeSupport = new SinglePropertyChangeSupport(this);
+  private synchronized void initializePropertyChangeSupportIfNeeded() {
+    if (propertyChangeSupport == null) {
+      this.propertyChangeSupport = new SinglePropertyChangeSupport(this);
+    }
   }
 
   /**
@@ -32,6 +31,7 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   @Override
   public void addPropertyChangeListener(PropertyChangeListener listener) {
+    initializePropertyChangeSupportIfNeeded();
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
 
@@ -41,6 +41,7 @@ public abstract class AbstractPropertyChangeCapable implements
   @Override
   public void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
+    initializePropertyChangeSupportIfNeeded();
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
@@ -52,8 +53,7 @@ public abstract class AbstractPropertyChangeCapable implements
     try {
       AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super
           .clone();
-      clonedBean.propertyChangeSupport = new SinglePropertyChangeSupport(
-          clonedBean);
+      clonedBean.propertyChangeSupport = null;
       return clonedBean;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);
@@ -65,7 +65,9 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   @Override
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport.removePropertyChangeListener(listener);
+    }
   }
 
   /**
@@ -74,7 +76,10 @@ public abstract class AbstractPropertyChangeCapable implements
   @Override
   public void removePropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport
+          .removePropertyChangeListener(propertyName, listener);
+    }
   }
 
   /**
@@ -83,7 +88,9 @@ public abstract class AbstractPropertyChangeCapable implements
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.beans.PropertyChangeEvent)
    */
   protected void firePropertyChange(PropertyChangeEvent evt) {
-    propertyChangeSupport.firePropertyChange(evt);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport.firePropertyChange(evt);
+    }
   }
 
   /**
@@ -98,7 +105,10 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, boolean oldValue,
       boolean newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport
+          .firePropertyChange(propertyName, oldValue, newValue);
+    }
   }
 
   /**
@@ -113,7 +123,10 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, int oldValue,
       int newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport
+          .firePropertyChange(propertyName, oldValue, newValue);
+    }
   }
 
   /**
@@ -128,8 +141,10 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, long oldValue,
       long newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, new Long(oldValue),
-        new Long(newValue));
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport.firePropertyChange(propertyName,
+          new Long(oldValue), new Long(newValue));
+    }
   }
 
   /**
@@ -144,7 +159,10 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport
+          .firePropertyChange(propertyName, oldValue, newValue);
+    }
   }
 
   /**
@@ -153,7 +171,10 @@ public abstract class AbstractPropertyChangeCapable implements
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
   protected PropertyChangeListener[] getPropertyChangeListeners() {
-    return propertyChangeSupport.getPropertyChangeListeners();
+    if (propertyChangeSupport != null) {
+      return propertyChangeSupport.getPropertyChangeListeners();
+    }
+    return new PropertyChangeListener[0];
   }
 
   /**
@@ -166,7 +187,10 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected PropertyChangeListener[] getPropertyChangeListeners(
       String propertyName) {
-    return propertyChangeSupport.getPropertyChangeListeners(propertyName);
+    if (propertyChangeSupport != null) {
+      return propertyChangeSupport.getPropertyChangeListeners(propertyName);
+    }
+    return new PropertyChangeListener[0];
   }
 
   /**
@@ -176,6 +200,9 @@ public abstract class AbstractPropertyChangeCapable implements
    * @see java.beans.PropertyChangeSupport#hasListeners(java.lang.String)
    */
   protected boolean hasListeners(String propertyName) {
-    return propertyChangeSupport.hasListeners(propertyName);
+    if (propertyChangeSupport != null) {
+      return propertyChangeSupport.hasListeners(propertyName);
+    }
+    return false;
   }
 }
