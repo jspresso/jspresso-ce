@@ -38,8 +38,8 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
 import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
@@ -186,7 +186,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
             }
             if (clonedGate instanceof IModelGate && viewConnector != null) {
               if (((IModelGate) clonedGate).isCollectionBased()) {
-                if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                if (/*
+                     * modelDescriptor instanceof
+                     * ICollectionPropertyDescriptor<?>
+                     */viewConnector instanceof ICollectionConnectorProvider) {
                   ((IModelGate) clonedGate).setModel(null);
                   // tracks children connectors selection
                   ((ICollectionConnectorProvider) viewConnector)
@@ -274,10 +277,11 @@ public abstract class AbstractActionFactory<E, F, G> implements
                         }
                       });
                 } else {
-                  bindSimpleGateModel(clonedGate, viewConnector);
+                  bindSimpleGateModel(clonedGate, viewConnector,
+                      modelDescriptor);
                 }
               } else {
-                bindSimpleGateModel(clonedGate, viewConnector);
+                bindSimpleGateModel(clonedGate, viewConnector, modelDescriptor);
               }
             }
             clonedGates.add(clonedGate);
@@ -291,45 +295,58 @@ public abstract class AbstractActionFactory<E, F, G> implements
   }
 
   private void bindSimpleGateModel(final IGate gate,
-      IValueConnector viewConnector) {
-    if (viewConnector.getModelConnector() != null
-        && viewConnector.getModelConnector().getModelProvider() != null) {
-      ((IModelGate) gate).setModel(viewConnector.getModelConnector()
-          .getModelProvider().getModel());
-    } else {
-      ((IModelGate) gate).setModel(null);
-    }
-    final IModelChangeListener modelChangeListener = new IModelChangeListener() {
-
-      @Override
-      public void modelChange(ModelChangeEvent evt) {
-        ((IModelGate) gate).setModel(evt.getNewValue());
+      IValueConnector viewConnector, IModelDescriptor modelDescriptor) {
+    if (modelDescriptor instanceof IPropertyDescriptor) {
+      // Binds to the model provider
+      if (viewConnector.getModelConnector() != null
+          && viewConnector.getModelConnector().getModelProvider() != null) {
+        ((IModelGate) gate).setModel(viewConnector.getModelConnector()
+            .getModelProvider().getModel());
+      } else {
+        ((IModelGate) gate).setModel(null);
       }
-    };
-    viewConnector.addPropertyChangeListener("modelConnector",
-        new PropertyChangeListener() {
+      final IModelChangeListener modelChangeListener = new IModelChangeListener() {
 
-          @Override
-          public void propertyChange(PropertyChangeEvent evt) {
-            IValueConnector oldModelConnector = (IValueConnector) evt
-                .getOldValue();
-            IValueConnector newModelConnector = (IValueConnector) evt
-                .getNewValue();
-            if (oldModelConnector != null) {
-              oldModelConnector.getModelProvider().removeModelChangeListener(
-                  modelChangeListener);
+        @Override
+        public void modelChange(ModelChangeEvent evt) {
+          ((IModelGate) gate).setModel(evt.getNewValue());
+        }
+      };
+      viewConnector.addPropertyChangeListener("modelConnector",
+          new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+              IValueConnector oldModelConnector = (IValueConnector) evt
+                  .getOldValue();
+              IValueConnector newModelConnector = (IValueConnector) evt
+                  .getNewValue();
+              if (oldModelConnector != null) {
+                oldModelConnector.getModelProvider().removeModelChangeListener(
+                    modelChangeListener);
+              }
+              if (newModelConnector != null
+                  && newModelConnector.getModelProvider() != null) {
+                ((IModelGate) gate).setModel(newModelConnector
+                    .getModelProvider().getModel());
+                newModelConnector.getModelProvider().addModelChangeListener(
+                    modelChangeListener);
+              } else {
+                ((IModelGate) gate).setModel(null);
+              }
             }
-            if (newModelConnector != null
-                && newModelConnector.getModelProvider() != null) {
-              ((IModelGate) gate).setModel(newModelConnector.getModelProvider()
-                  .getModel());
-              newModelConnector.getModelProvider().addModelChangeListener(
-                  modelChangeListener);
-            } else {
-              ((IModelGate) gate).setModel(null);
-            }
-          }
-        });
+          });
+    } else {
+      // simply binds to the value.
+      ((IModelGate) gate).setModel(viewConnector.getConnectorValue());
+      viewConnector.addValueChangeListener(new IValueChangeListener() {
+
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          ((IModelGate) gate).setModel(evt.getNewValue());
+        }
+      });
+    }
   }
 
   /**
