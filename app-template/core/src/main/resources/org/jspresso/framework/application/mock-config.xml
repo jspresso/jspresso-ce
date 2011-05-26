@@ -23,13 +23,13 @@
 
   <bean id="viewFactory" parent="viewFactoryBase" />
 
-  <bean id="openFileAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+  <bean id="openFileAction" class="org.jspresso.framework.mockups.OpenFileActionMock" />
 
-  <bean id="openFileAsBinaryPropertyAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+  <bean id="openFileAsBinaryPropertyAction" class="org.jspresso.framework.mockups.OpenFileActionMock" />
 
-  <bean id="saveFileAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+  <bean id="saveFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
 
-  <bean id="saveBinaryPropertyAsFileAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+  <bean id="saveBinaryPropertyAsFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
 
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
     <constructor-arg value="false" />
