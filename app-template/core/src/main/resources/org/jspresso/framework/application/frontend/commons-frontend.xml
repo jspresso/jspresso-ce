@@ -460,7 +460,9 @@
 
   <alias alias="removeFromModuleObjectFrontAction" name="removeFromModuleObjectsFrontAction"/>
 
-  <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction" />
+  <bean id="addToModuleObjectsFrontAction" parent="addToMasterFrontAction" />
+
+  <alias alias="addToModuleObjectFrontAction" name="addToModuleObjectsFrontAction"/>
 
   <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction" />
 

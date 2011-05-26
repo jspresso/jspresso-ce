@@ -51,13 +51,24 @@ public final class AppTemplateContextLister {
     String[] beanNames = applicationContext.getBeanDefinitionNames();
     Arrays.sort(beanNames, String.CASE_INSENSITIVE_ORDER);
     for (String beanName : beanNames) {
-      StringBuffer line = new StringBuffer(beanName);
       Class<?> beanType = applicationContext.getType(beanName);
 
-      if (beanType != null) {
-        line.append(":" + beanType.getName());
+      outputLine(beanName, beanType);
+
+      String[] aliases = applicationContext.getAliases(beanName);
+      if (aliases != null) {
+        for (String alias : aliases) {
+          outputLine(alias, beanType);
+        }
       }
-      System.out.println(line);
     }
+  }
+
+  private static void outputLine(String beanName, Class<?> beanType) {
+    StringBuffer line = new StringBuffer(beanName);
+    if (beanType != null) {
+      line.append(":" + beanType.getName());
+    }
+    System.out.println(line);
   }
 }
