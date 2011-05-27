@@ -73,6 +73,24 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
+    <pluginRepository>
+      <id>jspresso-repository</id>
+      <url>http://repository.jspresso.org/maven2</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>beandoc-repository</id>
+      <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jboss-repository</id>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
   </pluginRepositories>
   <distributionManagement>
     <repository>
@@ -93,13 +111,6 @@
     <repository>
       <id>jboss-repository</id>
       <url>http://repository.jboss.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>beandoc-repository</id>
-      <url>http://spring-beandoc.sourceforge.net/repo</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>

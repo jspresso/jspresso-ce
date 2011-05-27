@@ -128,18 +128,25 @@
       <id>jspresso-repository</id>
       <url>http://repository.jspresso.org/maven2</url>
     </pluginRepository>
-  </pluginRepositories>
-  <repositories>
-    <repository>
+    <pluginRepository>
+      <id>beandoc-repository</id>
+      <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
       <id>jboss-repository</id>
       <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
-    </repository>
+    </pluginRepository>
+  </pluginRepositories>
+  <repositories>
     <repository>
-      <id>beandoc-repository</id>
-      <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <id>jboss-repository</id>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
