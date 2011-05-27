@@ -312,13 +312,33 @@ public abstract class AbstractBackendController extends AbstractController
         Map.Entry<String, Object> property = ite.next();
         Object propertyValue = property.getValue();
         Object currentProperty = entity.straightGetProperty(property.getKey());
-        if ((currentProperty != null && currentProperty.equals(property
-            .getValue())) || (currentProperty == null && propertyValue == null)) {
+        if ((currentProperty != null
+            && !(currentProperty instanceof Collection) && currentProperty
+            .equals(property.getValue()))
+            || (currentProperty == null && propertyValue == null)) {
+          // Unfortunately, we cannot ignore collections that have been
+          // changed but reset to their original state. This prevents the entity
+          // to be merged back into the session while the session state might be
+          // wrong.
+          clearPropertyDirtyState(currentProperty);
           ite.remove(); // actually removes the mapping from the map.
         }
       }
     }
     return dirtyProperties;
+  }
+
+  /**
+   * Resets the property technical dirty state. Gives a chance to subclasses to
+   * reset technical dirty state. Useful in Hibernate for resetting collection
+   * dirty states when their state is identical to the original one after
+   * several modifications.
+   * 
+   * @param property
+   *          the property to reset the dirty state for.
+   */
+  protected void clearPropertyDirtyState(Object property) {
+    // NO-OP
   }
 
   /**
@@ -971,7 +991,8 @@ public abstract class AbstractBackendController extends AbstractController
           uowEntity.straightSetProperty(propertyName,
               cloneUninitializedProperty(uowEntity, propertyValue));
         }
-      } else if (propertyValue instanceof Collection<?>) {
+      } else if (propertyValue instanceof Collection<?>
+          && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
         if (isInitialized(propertyValue)) {
           Collection<IComponent> uowCollection = createTransientEntityCollection((Collection<IComponent>) property
               .getValue());
@@ -985,7 +1006,7 @@ public abstract class AbstractBackendController extends AbstractController
                   alreadyCloned));
             }
           }
-          if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
+          if (!propertyDescriptor.isComputed()) {
             Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
                 .get(propertyName);
             if (snapshotCollection != null) {
@@ -1105,6 +1126,8 @@ public abstract class AbstractBackendController extends AbstractController
             || mergeMode == EMergeMode.MERGE_LAZY) {
           cleanDirtyProperties(registeredEntity);
         }
+        IComponentDescriptor<?> entityDescriptor = getEntityFactory()
+            .getComponentDescriptor(entity.getComponentContract());
         Map<String, Object> entityProperties = entity.straightGetProperties();
         Map<String, Object> registeredEntityProperties = registeredEntity
             .straightGetProperties();
@@ -1112,6 +1135,8 @@ public abstract class AbstractBackendController extends AbstractController
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           String propertyName = property.getKey();
           Object propertyValue = property.getValue();
+          IPropertyDescriptor propertyDescriptor = entityDescriptor
+              .getPropertyDescriptor(propertyName);
           if (propertyValue instanceof IEntity) {
             if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
                 && mergeMode != EMergeMode.MERGE_EAGER
@@ -1131,7 +1156,9 @@ public abstract class AbstractBackendController extends AbstractController
                     merge((IEntity) propertyValue, mergeMode, alreadyMerged));
               }
             }
-          } else if (propertyValue instanceof Collection) {
+          } else if (propertyValue instanceof Collection
+          // to support collections stored as java serializable blob.
+              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
                 && mergeMode != EMergeMode.MERGE_EAGER
                 && !isInitialized(propertyValue)) {
@@ -1491,8 +1518,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-        /* getName(), */getApplicationSession().getPrincipal().getName()
-      });
+      /* getName(), */getApplicationSession().getPrincipal().getName()});
     }
 
   }

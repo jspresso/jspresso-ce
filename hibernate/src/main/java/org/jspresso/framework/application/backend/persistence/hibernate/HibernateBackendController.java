@@ -40,6 +40,9 @@ import org.hibernate.proxy.HibernateProxy;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
@@ -74,7 +77,7 @@ public class HibernateBackendController extends AbstractBackendController {
    * @param componentOrEntity
    *          the entity to clean the collections dirty state of.
    */
-  static void cleanPersistentCollectionDirtyState(IComponent componentOrEntity) {
+  static void clearPersistentCollectionDirtyState(IComponent componentOrEntity) {
     if (componentOrEntity != null) {
       // Whenever the entity has dirty persistent collection, make them
       // clean to workaround a "bug" with hibernate since hibernate cannot
@@ -272,9 +275,7 @@ public class HibernateBackendController extends AbstractBackendController {
           hibernateTemplate.setFlushMode(oldFlushMode);
         }
         super.initializePropertyIfNeeded(componentOrEntity, propertyName);
-        if (initializedProperty instanceof PersistentCollection) {
-          ((PersistentCollection) initializedProperty).clearDirty();
-        }
+        clearPropertyDirtyState(initializedProperty);
       }
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
@@ -583,7 +584,7 @@ public class HibernateBackendController extends AbstractBackendController {
     // Do not use get before trying to lock.
     // Get performs a DB query.
     try {
-      cleanPersistentCollectionDirtyState(entity);
+      clearPersistentCollectionDirtyState(entity);
       hibernateSession.lock(entity, LockMode.NONE);
     } catch (Exception ex) {
       IComponent sessionEntity = (IComponent) hibernateSession.get(
@@ -615,12 +616,19 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
+      IComponentDescriptor<?> componentDescriptor = getEntityFactory()
+          .getComponentDescriptor(component.getComponentContract());
       for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-        if (Hibernate.isInitialized(property.getValue())) {
-          if (property.getValue() instanceof IEntity) {
-            lockInHibernateInDepth((IEntity) property.getValue(),
-                hibernateSession, alreadyLocked);
-          } else if (property.getValue() instanceof Collection) {
+        String propertyName = property.getKey();
+        Object propertyValue = property.getValue();
+        IPropertyDescriptor propertyDescriptor = componentDescriptor
+            .getPropertyDescriptor(propertyName);
+        if (Hibernate.isInitialized(propertyValue)) {
+          if (propertyValue instanceof IEntity) {
+            lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
+                alreadyLocked);
+          } else if (propertyValue instanceof Collection
+              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             for (IComponent element : ((Collection<IComponent>) property
                 .getValue())) {
               lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
@@ -812,4 +820,17 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     return clonedPropertyValue;
   }
+
+  /**
+   * Clears dirty state of persistent collections.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void clearPropertyDirtyState(Object property) {
+    if (property instanceof PersistentCollection) {
+      ((PersistentCollection) property).clearDirty();
+    }
+  }
+
 }

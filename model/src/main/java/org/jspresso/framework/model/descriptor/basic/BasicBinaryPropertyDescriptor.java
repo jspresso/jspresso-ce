@@ -128,35 +128,36 @@ public class BasicBinaryPropertyDescriptor extends
   @Override
   public void preprocessSetter(final Object component, Object newValue) {
     super.preprocessSetter(component, newValue);
-    final byte[] propertyValueAsByteArray = (byte[]) newValue;
-    if (propertyValueAsByteArray != null && getMaxLength() != null
-        && propertyValueAsByteArray.length > getMaxLength().intValue()) {
-      IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValueAsByteArray + ") is too long on ["
-          + component + "].") {
+    if (newValue instanceof byte[]) {
+      // watch out for java serializable property
+      final byte[] propertyValueAsByteArray = (byte[]) newValue;
+      if (getMaxLength() != null
+          && propertyValueAsByteArray.length > getMaxLength().intValue()) {
+        IntegrityException ie = new IntegrityException("[" + getName()
+            + "] value (" + propertyValueAsByteArray + ") is too long on ["
+            + component + "].") {
 
-        private static final long serialVersionUID = 7459823123892198831L;
+          private static final long serialVersionUID = 7459823123892198831L;
 
-        @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
-          StringBuffer boundsSpec = new StringBuffer("l");
-          if (getMaxLength() != null) {
-            boundsSpec.append(" <= ").append(getMaxLength());
+          @Override
+          public String getI18nMessage(
+              ITranslationProvider translationProvider, Locale locale) {
+            StringBuffer boundsSpec = new StringBuffer("l");
+            if (getMaxLength() != null) {
+              boundsSpec.append(" <= ").append(getMaxLength());
+            }
+            return translationProvider.getTranslation(
+                "integrity.property.toolong",
+                new Object[] {getI18nName(translationProvider, locale),
+                    boundsSpec, component}, locale);
           }
-          return translationProvider.getTranslation(
-              "integrity.property.toolong", new Object[] {
-                  getI18nName(translationProvider, locale), boundsSpec,
-                  component
-              }, locale);
-        }
 
-      };
-      throw ie;
+        };
+        throw ie;
+      }
     }
   }
 
-  
   /**
    * Gets the fileName.
    * 
@@ -167,17 +168,17 @@ public class BasicBinaryPropertyDescriptor extends
     return fileName;
   }
 
-  
   /**
-   * Configures the default file name to use when downloading the property content as a file.
+   * Configures the default file name to use when downloading the property
+   * content as a file.
    * 
-   * @param fileName the fileName to set.
+   * @param fileName
+   *          the fileName to set.
    */
   public void setFileName(String fileName) {
     this.fileName = fileName;
   }
 
-  
   /**
    * Gets the contentType.
    * 
@@ -188,11 +189,12 @@ public class BasicBinaryPropertyDescriptor extends
     return contentType;
   }
 
-  
   /**
-   * Configures the default content type to use when downloading the property content as a file.
+   * Configures the default content type to use when downloading the property
+   * content as a file.
    * 
-   * @param contentType the contentType to set.
+   * @param contentType
+   *          the contentType to set.
    */
   public void setContentType(String contentType) {
     this.contentType = contentType;
