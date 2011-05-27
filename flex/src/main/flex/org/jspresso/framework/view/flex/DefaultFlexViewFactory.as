@@ -2017,6 +2017,12 @@ package org.jspresso.framework.view.flex {
           return;
         }
         var dg:DataGrid = event.currentTarget as DataGrid;
+        if(dg.editedItemPosition != null
+          && event.rowIndex == dg.editedItemPosition["rowIndex"]
+          && event.columnIndex == dg.editedItemPosition["columnIndex"]) {
+          event.preventDefault();
+          return;
+        }
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
         var rowValueState:RemoteCompositeValueState = rowCollection[event.rowIndex] as RemoteCompositeValueState;
