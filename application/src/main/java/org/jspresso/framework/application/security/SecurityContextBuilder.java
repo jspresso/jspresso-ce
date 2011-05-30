@@ -164,7 +164,9 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
         currentSecurityContext.put(SecurityContextConstants.PROPERTY,
             ((IPropertyDescriptor) modelDescriptor).getPermId());
       }
-      if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
+      if (modelDescriptor instanceof IComponentDescriptorProvider<?>
+          && ((IComponentDescriptorProvider<?>) modelDescriptor)
+              .getComponentDescriptor() != null) {
         currentSecurityContext.put(SecurityContextConstants.MODEL,
             ((IComponentDescriptorProvider<?>) modelDescriptor)
                 .getComponentDescriptor().getPermId());
