@@ -1474,9 +1474,13 @@ package org.jspresso.framework.view.flex {
             var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
             var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
             
-            if(currentTarget != dateField
-              || dateField.contains(relatedObject)
-              || dateField.dropdown.contains(relatedObject)) {
+            if(  currentTarget != dateField
+              || (relatedObject != null  
+                && (    dateField.contains(relatedObject)
+                     || dateField.dropdown.contains(relatedObject)
+                   )
+                 )
+              ) {
               // do not listen to inner focus events.
               processEvent = false;
             }

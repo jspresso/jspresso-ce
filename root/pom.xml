@@ -16,7 +16,7 @@
     <sjs.version>1.0-SNAPSHOT</sjs.version>
     <junit.version>3.8.1</junit.version>
 
-    <flex.version>3.4.0.9271</flex.version>
+    <flex.version>3.6.0.16995</flex.version>
     <flexunit.version>0.90</flexunit.version>
     <!--
     <flex.version>4.0.0.8811</flex.version>
