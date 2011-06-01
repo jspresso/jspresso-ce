@@ -42,6 +42,9 @@ package org.jspresso.framework.view.flex {
     
     public function RemoteValueDgItemRenderer() {
       _index = -1;
+      addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+        label.selectable = true;
+      });
     }
 
   	override public function set listData(value:BaseListData):void {
@@ -154,14 +157,13 @@ package org.jspresso.framework.view.flex {
       } else {
         label.toolTip = null;
       }
-      label.selectable = true;
   	}
 
     public function set action(value:RAction):void {
       _action = value;
       if(_action != null) {
         addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-          label.selectable = true;
+          //label.selectable = true;
           label.addEventListener("link", function(evt:TextEvent):void {
             // To ensure that the row is selected before the action gets executed.
             callLater(_actionHandler.execute, [_action]);

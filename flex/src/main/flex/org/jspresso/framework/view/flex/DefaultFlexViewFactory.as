@@ -46,7 +46,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.List;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
-  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -2132,11 +2131,9 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
-      var label:Label;
+      var label:Label = new Label();
       if(remoteLabel.state) {
-        label = new Text();
-      } else {
-        label = new Label();
+        label.selectable = true;
       }
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
