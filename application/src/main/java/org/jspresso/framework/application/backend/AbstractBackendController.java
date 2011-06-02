@@ -970,7 +970,7 @@ public abstract class AbstractBackendController extends AbstractController
         return uowEntity;
       }
     }
-    uowEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
+    uowEntity = performUowEntityCloning(entity);
     Map<String, Object> dirtyProperties = dirtRecorder
         .getChangedProperties(entity);
     if (dirtyProperties == null) {
@@ -1056,6 +1056,22 @@ public abstract class AbstractBackendController extends AbstractController
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     uowEntity.onLoad();
     uowEntity.onClone(entity);
+    return uowEntity;
+  }
+
+  /**
+   * Performs the actual entity cloning in unit of work. Gives a chance to
+   * subclasses to override and take a better decision than just a deep carbon
+   * copy.
+   * 
+   * @param <E>
+   *          the actusal entity type.
+   * @param entity
+   *          the source entity.
+   * @return the cloned entity.
+   */
+  protected <E extends IEntity> E performUowEntityCloning(E entity) {
+    E uowEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
     return uowEntity;
   }
 
@@ -1331,7 +1347,7 @@ public abstract class AbstractBackendController extends AbstractController
       return;
     }
     IComponent component;
-    component = unwrapProxy(componentOrProxy);
+    component = (IComponent) unwrapProxy(componentOrProxy);
     if (clearedEntities.contains(component)) {
       return;
     }
@@ -1489,7 +1505,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the component or proxy.
    * @return the proxy implementation if it's an ORM proxy.
    */
-  protected abstract IComponent unwrapProxy(IComponent componentOrProxy);
+  protected abstract Object unwrapProxy(Object componentOrProxy);
 
   /**
    * Clones an uninitialized (proxied) property.
@@ -1518,7 +1534,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-      /* getName(), */getApplicationSession().getPrincipal().getName()});
+        /* getName(), */getApplicationSession().getPrincipal().getName()
+      });
     }
 
   }

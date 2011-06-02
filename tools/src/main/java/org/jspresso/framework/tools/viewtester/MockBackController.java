@@ -4,7 +4,6 @@
 package org.jspresso.framework.tools.viewtester;
 
 import org.jspresso.framework.application.backend.AbstractBackendController;
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -33,7 +32,7 @@ public class MockBackController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  protected IComponent unwrapProxy(IComponent componentOrProxy) {
+  protected Object unwrapProxy(Object componentOrProxy) {
     return componentOrProxy;
   }
 

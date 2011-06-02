@@ -170,6 +170,37 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
+   * Look-ups the entity in the session 1st. If it is there, return it so that
+   * it avoids an unnecessary deep carbon copy.
+   * 
+   * @param <E>
+   *          the actual entity type.
+   * @param entity
+   *          the source entity.
+   * @return the cloned entity.
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected <E extends IEntity> E performUowEntityCloning(final E entity) {
+    E sessionEntity = (E) hibernateTemplate.execute(new HibernateCallback() {
+
+      @Override
+      public Object doInHibernate(Session session) {
+        if (session.contains(entity)) {
+          return entity;
+        }
+        return null;
+      }
+
+    });
+    if (sessionEntity != null) {
+      return sessionEntity;
+    }
+    // fall-back to default cloning.
+    return super.performUowEntityCloning(entity);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -581,17 +612,19 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the hibernate session.
    */
   private void lockInHibernate(IEntity entity, Session hibernateSession) {
-    // Do not use get before trying to lock.
-    // Get performs a DB query.
-    try {
-      clearPersistentCollectionDirtyState(entity);
-      hibernateSession.lock(entity, LockMode.NONE);
-    } catch (Exception ex) {
-      IComponent sessionEntity = (IComponent) hibernateSession.get(
-          entity.getComponentContract(), entity.getId());
-      evictFromHibernateInDepth(sessionEntity, hibernateSession,
-          new HashSet<IEntity>());
-      hibernateSession.lock(entity, LockMode.NONE);
+    if (!hibernateSession.contains(entity)) {
+      // Do not use get before trying to lock.
+      // Get performs a DB query.
+      try {
+        clearPersistentCollectionDirtyState(entity);
+        hibernateSession.lock(entity, LockMode.NONE);
+      } catch (Exception ex) {
+        IComponent sessionEntity = (IComponent) hibernateSession.get(
+            entity.getComponentContract(), entity.getId());
+        evictFromHibernateInDepth(sessionEntity, hibernateSession,
+            new HashSet<IEntity>());
+        hibernateSession.lock(entity, LockMode.NONE);
+      }
     }
   }
 
@@ -755,13 +788,13 @@ public class HibernateBackendController extends AbstractBackendController {
    * @return the proxy implementation if it's an hibernate proxy.
    */
   @Override
-  protected IComponent unwrapProxy(IComponent componentOrProxy) {
-    IComponent component;
+  protected Object unwrapProxy(Object componentOrProxy) {
+    Object component;
     if (componentOrProxy instanceof HibernateProxy) {
       // we must unwrap the proxy to avoid class cast exceptions.
       // see
       // http://forum.hibernate.org/viewtopic.php?p=2323464&sid=cb4ba3a4418276e5d2fbdd6c906ba734
-      component = (IComponent) ((HibernateProxy) componentOrProxy)
+      component = ((HibernateProxy) componentOrProxy)
           .getHibernateLazyInitializer().getImplementation();
     } else {
       component = componentOrProxy;
@@ -800,22 +833,27 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
     Object clonedPropertyValue = propertyValue;
-    if (propertyValue instanceof PersistentCollection) {
-      if (propertyValue instanceof PersistentSet) {
-        clonedPropertyValue = new PersistentSet(
-            ((PersistentSet) propertyValue).getSession());
-      } else if (propertyValue instanceof PersistentList) {
-        clonedPropertyValue = new PersistentList(
-            ((PersistentList) propertyValue).getSession());
-      }
-      changeCollectionOwner((Collection<?>) clonedPropertyValue, owner);
-      ((PersistentCollection) clonedPropertyValue).setSnapshot(
-          ((PersistentCollection) propertyValue).getKey(),
-          ((PersistentCollection) propertyValue).getRole(), null);
-    } else {
-      if (propertyValue instanceof HibernateProxy) {
-        // Unfortunately there is actually no mean of performing a shallow copy
-        // of it.
+    if (Hibernate.isInitialized(owner)) {
+      if (propertyValue instanceof PersistentCollection) {
+        if (unwrapProxy((((PersistentCollection) propertyValue).getOwner())) != unwrapProxy(owner)) {
+          if (propertyValue instanceof PersistentSet) {
+            clonedPropertyValue = new PersistentSet(
+                ((PersistentSet) propertyValue).getSession());
+          } else if (propertyValue instanceof PersistentList) {
+            clonedPropertyValue = new PersistentList(
+                ((PersistentList) propertyValue).getSession());
+          }
+          changeCollectionOwner((Collection<?>) clonedPropertyValue, owner);
+          ((PersistentCollection) clonedPropertyValue).setSnapshot(
+              ((PersistentCollection) propertyValue).getKey(),
+              ((PersistentCollection) propertyValue).getRole(), null);
+        }
+      } else {
+        if (propertyValue instanceof HibernateProxy) {
+          // Unfortunately there is actually no mean of performing a shallow
+          // copy
+          // of it.
+        }
       }
     }
     return clonedPropertyValue;
