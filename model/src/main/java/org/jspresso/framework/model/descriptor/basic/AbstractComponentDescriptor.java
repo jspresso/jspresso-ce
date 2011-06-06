@@ -128,12 +128,12 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public AbstractComponentDescriptor(String name) {
     setName(name);
+    propertyDescriptorsCache = new HashMap<String, IPropertyDescriptor>();
   }
 
   private static IComponentDescriptor<IComponent> createComponentDescriptor() {
     BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<IComponent>(
         IComponent.class.getName());
-
     return componentDescriptor;
   }
 
