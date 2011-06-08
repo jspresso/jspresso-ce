@@ -1592,7 +1592,10 @@ package org.jspresso.framework.view.flex {
       var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter;
       bindTextInput(decimalField, remoteDecimalField.state,
                     decimalFormatter, createParser(remoteDecimalField));
-      decimalField.restrict = "0-9\-" + decimalFormatter.decimalSeparatorTo + decimalFormatter.decimalSeparatorFrom;
+      decimalField.restrict = "0-9" + decimalFormatter.decimalSeparatorTo + decimalFormatter.decimalSeparatorFrom;
+      if(remoteDecimalField.minValue <= 0) {
+        decimalField.restrict += "\\-";
+      }
       return decimalField;
     }
 
@@ -1601,7 +1604,10 @@ package org.jspresso.framework.view.flex {
       var integerFormatter:NumberFormatter = createFormatter(remoteIntegerField) as NumberFormatter;
       bindTextInput(integerField, remoteIntegerField.state,
                     integerFormatter, createParser(remoteIntegerField));
-      integerField.restrict = "0-9\-";
+      integerField.restrict = "0-9";
+      if(remoteIntegerField.minValue <= 0) {
+        integerField.restrict += "\\-";
+      }
       return integerField;
     }
 
@@ -1610,7 +1616,10 @@ package org.jspresso.framework.view.flex {
       var percentFormatter:NumberFormatter = createFormatter(remotePercentField) as NumberFormatter; 
       bindTextInput(percentField, remotePercentField.state,
                     percentFormatter, createParser(remotePercentField));
-      percentField.restrict = "0-9\-" + percentFormatter.decimalSeparatorTo  + percentFormatter.decimalSeparatorFrom + PercentFormatter.PERCENT_SUFFIX;
+      percentField.restrict = "0-9" + percentFormatter.decimalSeparatorTo  + percentFormatter.decimalSeparatorFrom + PercentFormatter.PERCENT_SUFFIX;
+      if(remotePercentField.minValue <= 0) {
+        percentField.restrict += "\\-";
+      }
       return percentField;
     }
     
