@@ -30,6 +30,8 @@
   <bean id="saveFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
 
   <bean id="saveBinaryPropertyAsFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
+  
+  <bean id="frontController" class="org.jspresso.framework.mockups.MockFrontendController"/>
 
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
     <constructor-arg value="false" />
