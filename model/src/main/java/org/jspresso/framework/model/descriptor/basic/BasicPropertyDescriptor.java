@@ -351,9 +351,10 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider
-              .getTranslation("integrity.property.mandatory", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
+          return translationProvider.getTranslation(
+              "integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component
+              }, locale);
         }
 
       };
@@ -694,8 +695,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     if (integrityProcessorBeanNames != null && beanFactory != null) {
       // process creation of integrity processors.
       for (String integrityProcessorBeanName : integrityProcessorBeanNames) {
-        registerIntegrityProcessor((IPropertyProcessor<?, ?>) beanFactory
-            .getBean(integrityProcessorBeanName, IPropertyProcessor.class));
+        registerIntegrityProcessor(beanFactory.getBean(
+            integrityProcessorBeanName, IPropertyProcessor.class));
       }
       integrityProcessorClassNames = null;
     }

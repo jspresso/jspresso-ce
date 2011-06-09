@@ -42,7 +42,7 @@ public class ListApplicationElementsAction extends BackendAction implements
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ApplicationDirectoryBuilder directoryBuilder = new ApplicationDirectoryBuilder();
-    @SuppressWarnings("unchecked") Map<String, Workspace> workspaces = applicationContext
+    Map<String, Workspace> workspaces = applicationContext
         .getBeansOfType(Workspace.class);
     for (Workspace workspace : workspaces.values()) {
       directoryBuilder.process(workspace);

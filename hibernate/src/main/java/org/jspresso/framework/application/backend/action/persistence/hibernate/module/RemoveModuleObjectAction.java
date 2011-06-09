@@ -68,7 +68,7 @@ public class RemoveModuleObjectAction extends AbstractHibernateCollectionAction 
       final Map<String, Object> context) {
     BeanModule module = (BeanModule) getModule(context);
     final IEntity entityToRemove = (IEntity) module.getModuleObject();
-    getTransactionTemplate(context).execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
 
       @Override
       public Object doInTransaction(

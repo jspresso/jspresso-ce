@@ -51,7 +51,7 @@ public class SaveAction extends AbstractHibernateAction {
       }
     }
 
-    getTransactionTemplate(context).execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
 
       @Override
       public Object doInTransaction(

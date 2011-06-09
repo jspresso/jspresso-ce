@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContextAware;
  * @author Vincent Vandenschrick
  */
 public class ThisApplicationContextFactoryBean implements
-    ApplicationContextAware, FactoryBean {
+    ApplicationContextAware, FactoryBean<ApplicationContext> {
 
   private ApplicationContext applicationContext;
 
@@ -40,7 +40,7 @@ public class ThisApplicationContextFactoryBean implements
    * {@inheritDoc}
    */
   @Override
-  public Object getObject() throws Exception {
+  public ApplicationContext getObject() throws Exception {
     return applicationContext;
   }
 
@@ -50,7 +50,7 @@ public class ThisApplicationContextFactoryBean implements
    * {@inheritDoc}
    */
   @Override
-  public Class<?> getObjectType() {
+  public Class<ApplicationContext> getObjectType() {
     return ApplicationContext.class;
   }
 

@@ -33,6 +33,7 @@ import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.util.http.HttpRequestHolder;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 /**
  * Default remote startup class.
@@ -99,6 +100,10 @@ public abstract class RemoteStartup extends
    */
   @Override
   public void start() {
+    if (System.getProperty("java.security.auth.login.config") == null) {
+      System.setProperty("java.security.auth.login.config",
+          ResourceProviderServlet.computeStaticUrl("conf/jaas.config"));
+    }
     super.start();
     HttpRequestHolder.getServletRequest().getSession()
         .setAttribute("PeerRegistry", getFrontendController());

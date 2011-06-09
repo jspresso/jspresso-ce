@@ -1036,7 +1036,7 @@ public abstract class AbstractComponentDescriptor<E> extends
         try {
           registerService(Class.forName(ObjectUtils
               .extractRawClassName(nextPair.getKey())),
-              (IComponentService) beanFactory.getBean(nextPair.getValue(),
+              beanFactory.getBean(nextPair.getValue(),
                   IComponentService.class));
         } catch (ClassNotFoundException ex) {
           throw new DescriptorException(ex);
@@ -1073,7 +1073,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
       for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
-        registerLifecycleInterceptor((ILifecycleInterceptor<?>) beanFactory
+        registerLifecycleInterceptor(beanFactory
             .getBean(lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
       }
       lifecycleInterceptorBeanNames = null;

@@ -60,7 +60,7 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
    * {@inheritDoc}
    */
   @Override
-  public Object execute(TransactionCallback action) {
+  public <T> T execute(TransactionCallback<T> action) {
     controller.joinTransaction();
     return super.execute(action);
   }

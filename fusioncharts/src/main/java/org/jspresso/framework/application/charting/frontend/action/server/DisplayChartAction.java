@@ -63,11 +63,11 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
       final Map<String, Object> context) {
     String chartUrl = ResourceProviderServlet
         .computeLocalResourceDownloadUrl(getChartDescriptor().getUrl());
-    String chartData = (String) getJdbcTemplate().execute(
-        new ConnectionCallback() {
+    String chartData = getJdbcTemplate().execute(
+        new ConnectionCallback<String>() {
 
           @Override
-          public Object doInConnection(Connection con) throws SQLException {
+          public String doInConnection(Connection con) throws SQLException {
             return getChartDescriptor().getData(getChartModel(context), con,
                 getTranslationProvider(context), getLocale(context));
           }

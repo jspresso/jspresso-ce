@@ -6,6 +6,11 @@
   default-lazy-init="true">
 
   <!--
+    In order to support Cloudfoundry auto-reconfiguration when deployed to the cloud
+  -->
+  <import resource="classpath*:META-INF/cloud/cloudfoundry-auto-reconfiguration-context.xml"/>
+
+  <!--
     Application backend configuration.
   -->
   <bean

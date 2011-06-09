@@ -76,6 +76,11 @@ if (hasRequestedVersion) {  // if we've detected an acceptable version
 // -->
 </script>
 <script langugage='javascript' type="text/javascript">
+  function getRootURL()
+  {
+      return location.href.substring(0,location.href.indexOf("flex")); ;
+  }
+
   function stop()
   {
       // Here you'll need to provide the id of your Flex swf

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.property;
 
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -137,6 +138,14 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     @Override
     public Class<?> getReturnType() {
       return propertyClass;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Member getMember() {
+      return null;
     }
 
   }

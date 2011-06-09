@@ -25,13 +25,6 @@
       <artifactId>jspresso-flex</artifactId>
       <type>swc</type>
     </dependency>
-    <dependency>
-      <groupId>${symbol_dollar}{project.groupId}</groupId>
-      <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
-      <classifier>resources</classifier>
-      <type>zip</type>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -47,24 +40,6 @@
       </resource>
     </resources>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-flex-config</id>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <phase>prepare-package</phase>
-            <configuration>
-              <outputDirectory>${symbol_dollar}{project.build.directory}/generated-resources</outputDirectory>
-              <includeArtifactIds>${rootArtifactId}-startup-flex-config</includeArtifactIds>
-              <excludeTransitive>true</excludeTransitive>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
@@ -90,7 +65,6 @@
             <locale>fr_FR</locale>
           </locales>
           <mergeResourceBundle>true</mergeResourceBundle>
-          <contextRoot>${rootArtifactId}-webapp</contextRoot>
           <parameters>
             <swf>${symbol_dollar}{project.artifactId}</swf>
           </parameters>

@@ -76,12 +76,12 @@ public class BasicComponentDescriptorRegistry implements
     this.componentApplicationContext = applicationContext;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("rawtypes")
   private void buildContractNameIdMap() {
     contractNameToComponentDescriptorMap = new HashMap<String, IComponentDescriptor<?>>();
-    Map<String, IComponentDescriptor<?>> idToComponentDescriptors = componentApplicationContext
+    Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext
         .getBeansOfType(IComponentDescriptor.class);
-    for (Map.Entry<String, IComponentDescriptor<?>> descriptorEntry : idToComponentDescriptors
+    for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
       if (descriptorEntry.getValue().getComponentContract() != null) {
         contractNameToComponentDescriptorMap.put(descriptorEntry.getValue().getComponentContract()

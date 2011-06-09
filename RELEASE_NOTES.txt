@@ -1,46 +1,59 @@
-4.0.0
+3.5.5
 =====
-- The new hyperlink management requires some extra library (dj-swingsuite + dependencies).
-They are included in the new archetype but you have to update your existing applications
-eclipse projects, i.e. in .classpath, add :
-  <classpathentry
-    kind="var"
-    path="M2_REPO/chrriis/dj-swingsuite/0.9.1/dj-swingsuite-0.9.1.jar">
-    <attributes>
-      <attribute
-        name="org.eclipse.jst.component.nondependency"
-        value="" />
-    </attributes>
-  </classpathentry>
-  
-- The file save/open callback API has been improved by adding the file name in the method
-signature.
+- Framework logging changed from commons-logging to SLF4J
 
-- Hibernate "list" index column mapping has been modified to avoid duplicates. For instance,
-given a Parent-Child 1-N relationship named children, the previously generated column was
-CHILDREN_SEQ and it is now PARENT_CHILDREN_SEQ. Schemas must be updated accordingly.
+- Libraries versions updated :
+    blazeds =>4.0.0.14931
+    spring => 3.0.5.RELEASE
+    spring-ldap => 1.3.1.RELEASE
+    hibernate => 3.6.4.Final
+    qooxdoo => 1.4.1
+    commons-logging => 1.1.1
+    commons-lang => 2.6
+    commons-beanutils => 1.8.3
+    commons-io => 2.0.1
+    commons-fileupload => 1.2.2
+    commons-pool => 1.5.6
+    commons-dbcp => 1.4
+    commons-digester => 2.1
+    log4j => 1.2.16
+    javassist => 3.12.1.GA
+    slf4j => 1.6.1
+    joda-time => 1.6.2
+    bsf => 2.4.0
+    stax-api => 1.0.1
 
-- Controllers now implement themselves the ITranslationProvider interface. Thus, the
-getTranslationProvider() method has been deprecated. the migrationn is simply to remove 
-these method calls and use the controller as translation providers when needed.
+- Due to the migration to BlazeDS 4, you must comment the following section 
+in startup/flex/config/src/main/resources/services-config.xml :
 
-- A new onClone(IEntity) lifecycle method has been added to the entity lifecycle.
-The EmptyLifecycleInterceptor implements it, but if you directly implement
-ILifecycleInterceptor interface, you will have to add the new method.
+        <login-command class="flex.messaging.security.TomcatLoginCommand" server="Tomcat"/>
 
-- For those of you who have derived the BasicLovViewDescriptorFactory to override the
-createResultViewDescriptor method in order to customize the table result view of the list of value dialog,
-the signature has changed from :
-  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptor<IEntity>)
-  to
-  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IEntity>)
-  
-- Due to a change of the groupId of the GMaven plugin used to perform the SJS compilation, all existing projects
-must perform a general search and replace in all pom.xml :
-  <groupId>org.codehaus.groovy.maven</groupId>
-  change to
-  <groupId>org.codehaus.gmaven</groupId>
+- Due to the migration to BlazeDS 4, you must delete the following section 
+in webapp/pom.xml :
+    <dependency>
+      <groupId>com.adobe.blazeds</groupId>
+      <artifactId>blazeds-opt</artifactId>
+    </dependency>
 
+- servlet-api dependency was transitively added to tha webapp due to a bad dependency declaration in one
+of the used libraries. This is in violation of the servlet specification and resulted in a warning during the
+application startup. We have now excluded this bad servlet-api dependency, but it has to be declared now in the
+webapp pom.xml as "provided". So add the following dependency section in webapp/pom.xml :
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+ 
+
+3.5.4
+=====
+No change to manually perform
+
+
+
+3.5.3
+=====
 - Due to the introduction of client timezone management, the following change must be applied on the
 existing projects that use the Qooxdoo frontend :
 Edit the source file QooxdooApplicationStartup.java and replace
@@ -113,6 +126,55 @@ and
 contexts sections.
 
 - migrated to java 1.6 minimum
+
+
+
+3.5.2
+=====
+- Controllers now implement themselves the ITranslationProvider interface. Thus, the
+getTranslationProvider() method has been deprecated. the migrationn is simply to remove 
+these method calls and use the controller as translation providers when needed.
+
+- A new onClone(IEntity) lifecycle method has been added to the entity lifecycle.
+The EmptyLifecycleInterceptor implements it, but if you directly implement
+ILifecycleInterceptor interface, you will have to add the new method.
+
+- For those of you who have derived the BasicLovViewDescriptorFactory to override the
+createResultViewDescriptor method in order to customize the table result view of the list of value dialog,
+the signature has changed from :
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptor<IEntity>)
+  to
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IEntity>)
+  
+- Due to a change of the groupId of the GMaven plugin used to perform the SJS compilation, all existing projects
+must perform a general search and replace in all pom.xml :
+  <groupId>org.codehaus.groovy.maven</groupId>
+  change to
+  <groupId>org.codehaus.gmaven</groupId>
+
+
+
+3.5.1
+=====
+- The new hyperlink management requires some extra library (dj-swingsuite + dependencies).
+They are included in the new archetype but you have to update your existing applications
+eclipse projects, i.e. in .classpath, add :
+  <classpathentry
+    kind="var"
+    path="M2_REPO/chrriis/dj-swingsuite/0.9.1/dj-swingsuite-0.9.1.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  
+- The file save/open callback API has been improved by adding the file name in the method
+signature.
+
+- Hibernate "list" index column mapping has been modified to avoid duplicates. For instance,
+given a Parent-Child 1-N relationship named children, the previously generated column was
+CHILDREN_SEQ and it is now PARENT_CHILDREN_SEQ. Schemas must be updated accordingly.
 
 
   

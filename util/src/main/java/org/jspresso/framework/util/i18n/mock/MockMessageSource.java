@@ -20,8 +20,8 @@ package org.jspresso.framework.util.i18n.mock;
 
 import java.util.Locale;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 
@@ -33,7 +33,7 @@ import org.springframework.context.MessageSourceResolvable;
  */
 public class MockMessageSource implements MessageSource {
 
-  private static final Log LOG = LogFactory.getLog(MockMessageSource.class);
+  private static final Logger LOG = LoggerFactory.getLogger(MockMessageSource.class);
 
   /**
    * {@inheritDoc}

@@ -174,14 +174,14 @@ public class EntityGenerator {
   /**
    * Generates the component java source files.
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("rawtypes")
   public void generateComponents() {
     ListableBeanFactory appContext = getListableBeanFactory();
     Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
     if (componentIds == null) {
-      Map<String, IComponentDescriptor<?>> allComponents = appContext
+      Map<String, IComponentDescriptor> allComponents = appContext
           .getBeansOfType(IComponentDescriptor.class);
-      for (Map.Entry<String, IComponentDescriptor<?>> componentEntry : allComponents
+      for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
           .entrySet()) {
         String className = componentEntry.getValue().getName();
         if (className != null) {

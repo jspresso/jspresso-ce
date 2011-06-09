@@ -4,27 +4,37 @@
   initialize="init()"
   creationComplete="start()">
   
-	<mx:Script>
-		<![CDATA[
-		  import mx.resources.Locale;
-		  import org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController;
-		  
-		  private var flexController:DefaultFlexController;
-		  
-			private function init():void {
+  <mx:Script>
+    <![CDATA[
+      import mx.messaging.ChannelSet;
+      import mx.messaging.channels.AMFChannel;
+      import mx.resources.Locale;
+      
+      import org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController;
+      
+      private var flexController:DefaultFlexController;
+      
+      private function init():void {
+        var rootURL:String = ExternalInterface.call("getRootURL");
+        if(rootURL != null) {
+          var channelSet:ChannelSet = new ChannelSet();
+          var amfChannel:AMFChannel = new AMFChannel("my-amf", rootURL+"/messagebroker/amf");
+          channelSet.addChannel(amfChannel);
+          remoteController.channelSet = channelSet;
+        }
         flexController = new DefaultFlexController(remoteController,
-                                                   new Locale(resourceManager.localeChain[0]).language);
-			}
-			
-			private function start():void {
+          new Locale(resourceManager.localeChain[0]).language);
+      }
+      
+      private function start():void {
         flexController.start();
-			}
-		]]>
-	</mx:Script>
+      }
+    ]]>
+  </mx:Script>
 
-	<mx:RemoteObject id="remoteController" 
-				  destination="remoteController">
-	  <mx:method name="handleCommands"/>
-	  <mx:method name="start"/>
-	</mx:RemoteObject>
+  <mx:RemoteObject id="remoteController" 
+          destination="remoteController">
+    <mx:method name="handleCommands"/>
+    <mx:method name="start"/>
+  </mx:RemoteObject>
 </mx:Application>

@@ -21,8 +21,6 @@ package org.jspresso.framework.application.backend.action;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
@@ -38,6 +36,8 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates a query component to be used in filters or list of values. The
@@ -69,8 +69,8 @@ public class CreateQueryComponentAction extends BackendAction {
 
   private IQueryComponentRefiner           queryComponentRefiner;
 
-  private static final Log                 LOG                      = LogFactory
-                                                                        .getLog(CreateQueryComponentAction.class);
+  private static final Logger                 LOG                      = LoggerFactory
+                                                                        .getLogger(CreateQueryComponentAction.class);
 
   /**
    * Creates a query component using the model descriptor passed in the context.

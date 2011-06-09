@@ -108,11 +108,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       compRefiner.refineQueryComponent(queryComponent, context);
     }
 
-    List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
-        context).execute(new TransactionCallback() {
+    List<IEntity> queriedEntities = getTransactionTemplate(
+        context).execute(new TransactionCallback<List<IEntity>>() {
 
       @Override
-      public Object doInTransaction(TransactionStatus status) {
+      public List<IEntity> doInTransaction(TransactionStatus status) {
         HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
         int oldFlushMode = hibernateTemplate.getFlushMode();
         try {
@@ -150,8 +150,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               }
               if (queryComponent.getRecordCount() == null) {
                 criteria.setProjection(Projections.rowCount());
-                totalCount = (Integer) hibernateTemplate.findByCriteria(
-                    criteria).get(0);
+                totalCount = new Integer(((Number) hibernateTemplate.findByCriteria(
+                    criteria).get(0)).intValue());
               }
               critFactory
                   .completeCriteriaWithOrdering(criteria, queryComponent);

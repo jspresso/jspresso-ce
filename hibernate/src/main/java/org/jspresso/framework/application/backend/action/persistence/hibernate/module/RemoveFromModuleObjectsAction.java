@@ -89,7 +89,7 @@ public class RemoveFromModuleObjectsAction extends
       moduleObjectsToRemove.add((IEntity) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue());
     }
-    getTransactionTemplate(context).execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
 
       @Override
       public Object doInTransaction(

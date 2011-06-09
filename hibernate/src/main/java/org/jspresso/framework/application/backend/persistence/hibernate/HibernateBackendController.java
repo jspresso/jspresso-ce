@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.collection.PersistentCollection;
@@ -154,7 +154,7 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
     final List<E> uowEntities = super.cloneInUnitOfWork(entities);
-    hibernateTemplate.execute(new HibernateCallback() {
+    hibernateTemplate.execute(new HibernateCallback<Object>() {
 
       @Override
       public Object doInHibernate(Session session) {
@@ -179,13 +179,12 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the source entity.
    * @return the cloned entity.
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected <E extends IEntity> E performUowEntityCloning(final E entity) {
-    E sessionEntity = (E) hibernateTemplate.execute(new HibernateCallback() {
+    E sessionEntity = hibernateTemplate.execute(new HibernateCallback<E>() {
 
       @Override
-      public Object doInHibernate(Session session) {
+      public E doInHibernate(Session session) {
         if (session.contains(entity)) {
           return entity;
         }
@@ -270,7 +269,7 @@ public class HibernateBackendController extends AbstractBackendController {
         try {
           // Temporary switch to a read-only session.
           hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-          hibernateTemplate.execute(new HibernateCallback() {
+          hibernateTemplate.execute(new HibernateCallback<Object>() {
 
             /**
              * {@inheritDoc}
@@ -352,7 +351,7 @@ public class HibernateBackendController extends AbstractBackendController {
   public void performPendingOperations() {
     if (!traversedPendingOperations) {
       traversedPendingOperations = true;
-      hibernateTemplate.execute(new HibernateCallback() {
+      hibernateTemplate.execute(new HibernateCallback<Object>() {
 
         /**
          * {@inheritDoc}
@@ -617,13 +616,13 @@ public class HibernateBackendController extends AbstractBackendController {
       // Get performs a DB query.
       try {
         clearPersistentCollectionDirtyState(entity);
-        hibernateSession.lock(entity, LockMode.NONE);
+        hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
         IComponent sessionEntity = (IComponent) hibernateSession.get(
             entity.getComponentContract(), entity.getId());
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
             new HashSet<IEntity>());
-        hibernateSession.lock(entity, LockMode.NONE);
+        hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       }
     }
   }
@@ -761,11 +760,11 @@ public class HibernateBackendController extends AbstractBackendController {
   @SuppressWarnings("unchecked")
   private <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria) {
-    List<T> res = (List<T>) getTransactionTemplate().execute(
-        new TransactionCallback() {
+    List<T> res = getTransactionTemplate().execute(
+        new TransactionCallback<List<T>>() {
 
           @Override
-          public Object doInTransaction(
+          public List<T> doInTransaction(
               @SuppressWarnings("unused") TransactionStatus status) {
             int oldFlushMode = getHibernateTemplate().getFlushMode();
             try {

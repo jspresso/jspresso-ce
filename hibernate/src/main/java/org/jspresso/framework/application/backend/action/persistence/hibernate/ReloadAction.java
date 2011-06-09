@@ -49,7 +49,7 @@ public class ReloadAction extends AbstractHibernateAction {
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
     getController(context).clearPendingOperations();
-    getTransactionTemplate(context).execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
 
       @Override
       public Object doInTransaction(TransactionStatus status) {

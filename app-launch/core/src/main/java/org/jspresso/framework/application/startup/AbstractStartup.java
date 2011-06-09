@@ -21,8 +21,8 @@ package org.jspresso.framework.application.startup;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
@@ -41,7 +41,7 @@ public abstract class AbstractStartup implements IStartup {
   /**
    * Logger, available to subclasses.
    */
-  private final Log   logger = LogFactory.getLog(getClass());
+  private final Logger   logger = LoggerFactory.getLogger(getClass());
 
   /**
    * Gets the applicationContext.
@@ -91,7 +91,7 @@ public abstract class AbstractStartup implements IStartup {
    * 
    * @return the logger.
    */
-  protected Log getLogger() {
+  protected Logger getLogger() {
     return logger;
   }
 

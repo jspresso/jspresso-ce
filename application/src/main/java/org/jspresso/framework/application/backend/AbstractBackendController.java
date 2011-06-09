@@ -261,11 +261,11 @@ public abstract class AbstractBackendController extends AbstractController
       context.putAll(actionContext);
     }
     if (action.getClass().isAnnotationPresent(Transactional.class)) {
-      Boolean ret = (Boolean) getTransactionTemplate().execute(
-          new TransactionCallback() {
+      Boolean ret = getTransactionTemplate().execute(
+          new TransactionCallback<Boolean>() {
 
             @Override
-            public Object doInTransaction(TransactionStatus status) {
+            public Boolean doInTransaction(TransactionStatus status) {
               boolean executionStatus = action.execute(
                   AbstractBackendController.this, context);
               if (!executionStatus) {
