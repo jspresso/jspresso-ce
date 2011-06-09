@@ -35,7 +35,7 @@ in webapp/pom.xml :
       <artifactId>blazeds-opt</artifactId>
     </dependency>
 
-- servlet-api dependency was transitively added to tha webapp due to a bad dependency declaration in one
+- servlet-api dependency was transitively added to the webapp due to a bad dependency declaration in one
 of the used libraries. This is in violation of the servlet specification and resulted in a warning during the
 application startup. We have now excluded this bad servlet-api dependency, but it has to be declared now in the
 webapp pom.xml as "provided". So add the following dependency section in webapp/pom.xml :
