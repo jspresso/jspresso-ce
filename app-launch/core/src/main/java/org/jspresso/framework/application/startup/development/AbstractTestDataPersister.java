@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.application.startup.development;
 
+import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -94,5 +97,27 @@ public abstract class AbstractTestDataPersister {
    */
   protected void saveOrUpdate(IEntity entity) {
     hibernateTemplate.saveOrUpdate(entity);
+  }
+
+  /**
+   * Query entities.
+   * 
+   * @param queryString
+   *            the HSQL query string.
+   * @return the entity list.
+   */
+  protected List<?> find(String queryString) {
+    return hibernateTemplate.find(queryString);
+  }
+
+  /**
+   * Query entities by criteria.
+   * 
+   * @param criteria
+   *            the Hibernate detached criteria.
+   * @return the entity list.
+   */
+  protected List<?> findByCriteria(DetachedCriteria criteria) {
+    return hibernateTemplate.findByCriteria(criteria);
   }
 }
