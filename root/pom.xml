@@ -96,11 +96,11 @@
     <build-helper-plugin.version>1.4</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
     <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
-    <flexmojos-plugin.version>3.6</flexmojos-plugin.version>
+    <flexmojos-plugin.version>3.8</flexmojos-plugin.version>
     <exec-plugin.version>1.1.1</exec-plugin.version>
     <gmaven-plugin.version>1.3</gmaven-plugin.version>
     <groovy.version>1.7.10</groovy.version>
-    <jetty-plugin.version>6.1.10</jetty-plugin.version>
+    <jetty-plugin.version>7.4.2.v20110526</jetty-plugin.version>
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
   </properties>
   <distributionManagement>
@@ -925,7 +925,7 @@
         </plugin>
         <plugin>
           <groupId>org.mortbay.jetty</groupId>
-          <artifactId>maven-jetty-plugin</artifactId>
+          <artifactId>jetty-maven-plugin</artifactId>
           <version>${jetty-plugin.version}</version>
         </plugin>
         <plugin>

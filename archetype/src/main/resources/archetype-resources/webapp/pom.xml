@@ -159,19 +159,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <configuration>
-          <webApp>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}</webApp>
-          <systemProperties>
-            <systemProperty>
-              <name>java.security.auth.login.config</name>
-              <value>../conf/jaas.config</value>
-            </systemProperty>
-          </systemProperties>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 </project>

@@ -143,6 +143,22 @@
           <goals>deploy site-deploy assembly:assembly</goals>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <configuration>
+          <webApp>${basedir}/webapp/target/${rootArtifactId}-webapp</webApp>
+          <webAppConfig>
+            <contextPath>/${rootArtifactId}-webapp</contextPath>
+          </webAppConfig>
+          <systemProperties>
+            <systemProperty>
+              <name>java.security.auth.login.config</name>
+              <value>conf/jaas.config</value>
+            </systemProperty>
+          </systemProperties>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <reporting>
