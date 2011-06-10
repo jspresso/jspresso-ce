@@ -147,7 +147,7 @@
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <configuration>
-          <webApp>${basedir}/webapp/target/${rootArtifactId}-webapp</webApp>
+          <webApp>${symbol_dollar}{basedir}/webapp/target/${rootArtifactId}-webapp</webApp>
           <webAppConfig>
             <contextPath>/${rootArtifactId}-webapp</contextPath>
           </webAppConfig>
