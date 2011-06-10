@@ -12,22 +12,22 @@
 		<link>
 			<name>src/main/webapp/flex</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/webapp/target/${rootArtifactId}-webapp/flex</locationURI>
+			<locationURI>PROJECT_LOC/target/${rootArtifactId}-webapp/flex</locationURI>
 		</link>
     <link>
       <name>src/main/webapp/flex-debug</name>
       <type>2</type>
-      <locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/startup/flex/client/target/flex</locationURI>
+      <locationURI>PARENT-1-PROJECT_LOC/startup/flex/client/target/flex</locationURI>
     </link>
 		<link>
 			<name>src/main/webapp/qooxdoo</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/webapp/target/${rootArtifactId}-webapp/qooxdoo</locationURI>
+			<locationURI>PROJECT_LOC/target/${rootArtifactId}-webapp/qooxdoo</locationURI>
 		</link>
 		<link>
 			<name>src/main/webapp/WEB-INF/flex</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_ABSOLUTE_PATH/${rootArtifactId}/startup/flex/config/src/main/resources</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/startup/flex/config/src/main/resources</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
