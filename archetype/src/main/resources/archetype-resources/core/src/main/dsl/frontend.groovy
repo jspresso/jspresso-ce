@@ -6,8 +6,16 @@
 
 // Describe your workspaces and modules here.
 
+
+bean 'viewFactoryBase', parent:'abstractViewFactory',
+    custom: [
+      defaultActionMapRenderingOptions:'LABEL_ICON'
+    ]
+
 controller '${parentArtifactId}.name',
-  icon:'icon.png',
-  context:'${parentArtifactId}',
-  language:'en',
-  workspaces:[/*Reference your workspaces here.*/]
+    icon:'icon.png',
+    context:'${parentArtifactId}',
+    language:'en',
+    workspaces:[
+      /*Reference your workspaces here.*/
+    ]
