@@ -202,8 +202,13 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
-              createStringRestriction(currentCriteria,
-                  (String) property.getValue(), prefixedProperty);
+              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
+                currentCriteria.add(Restrictions.eq(prefixedProperty,
+                    property.getValue()));
+              } else {
+                createStringRestriction(currentCriteria,
+                    (String) property.getValue(), prefixedProperty);
+              }
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
