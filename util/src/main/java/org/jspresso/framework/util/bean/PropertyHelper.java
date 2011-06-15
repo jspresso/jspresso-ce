@@ -20,8 +20,10 @@ package org.jspresso.framework.util.bean;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jspresso.framework.util.accessor.IAccessor;
@@ -56,8 +58,9 @@ public final class PropertyHelper {
     if (nestedDotIndex > 0) {
       PropertyDescriptor rootDescriptor = getPropertyDescriptor(beanClass,
           property.substring(0, nestedDotIndex));
-      descriptorToReturn = getPropertyDescriptor(rootDescriptor
-          .getPropertyType(), property.substring(nestedDotIndex + 1));
+      descriptorToReturn = getPropertyDescriptor(
+          rootDescriptor.getPropertyType(),
+          property.substring(nestedDotIndex + 1));
     } else {
       PropertyDescriptor[] descriptors = PropertyUtils
           .getPropertyDescriptors(beanClass);
@@ -77,25 +80,31 @@ public final class PropertyHelper {
       // or the found descriptor is read-only.
       // If beanClass is indeed an interface, we must also deal with all its
       // super-interfaces.
-      if (beanClass.isInterface()) {
-        for (Class<?> superInterface : beanClass.getInterfaces()) {
-          PropertyDescriptor descriptor = null;
-          try {
-            descriptor = getPropertyDescriptor(superInterface, property);
-          } catch (MissingPropertyException ex) {
-            // This exception must be ignored until we traverse all the super
-            // interfaces.
-          }
-          if (descriptor != null) {
-            if (descriptorToReturn != null) {
-              try {
-                descriptorToReturn.setWriteMethod(descriptor.getWriteMethod());
-              } catch (IntrospectionException ex) {
-                throw new MissingPropertyException(ex.getMessage());
-              }
-            } else {
-              descriptorToReturn = descriptor;
+      List<Class<?>> superTypes = new ArrayList<Class<?>>();
+      if (beanClass.getSuperclass() != null
+          && beanClass.getSuperclass() != Object.class) {
+        superTypes.add(beanClass.getSuperclass());
+      }
+      for (Class<?> superInterface : beanClass.getInterfaces()) {
+        superTypes.add(superInterface);
+      }
+      for (Class<?> superType : superTypes) {
+        PropertyDescriptor descriptor = null;
+        try {
+          descriptor = getPropertyDescriptor(superType, property);
+        } catch (MissingPropertyException ex) {
+          // This exception must be ignored until we traverse all the super
+          // interfaces.
+        }
+        if (descriptor != null) {
+          if (descriptorToReturn != null) {
+            try {
+              descriptorToReturn.setWriteMethod(descriptor.getWriteMethod());
+            } catch (IntrospectionException ex) {
+              throw new MissingPropertyException(ex.getMessage());
             }
+          } else {
+            descriptorToReturn = descriptor;
           }
         }
       }
