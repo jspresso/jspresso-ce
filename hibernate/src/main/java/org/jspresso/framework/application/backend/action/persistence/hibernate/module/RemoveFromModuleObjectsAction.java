@@ -101,7 +101,7 @@ public class RemoveFromModuleObjectsAction extends
             for (Object moduleObjectToRemove : moduleObjectsToRemove) {
               if (moduleObjectToRemove instanceof IEntity) {
                 uowClones.add(controller
-                    .cloneInUnitOfWork((IEntity) moduleObjectsToRemove));
+                    .cloneInUnitOfWork((IEntity) moduleObjectToRemove));
               } else {
                 uowClones.add(moduleObjectToRemove);
               }
