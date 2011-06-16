@@ -30,7 +30,7 @@ import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 /**
  * This action, which is to be used on bean modules, <b>deletes the module
@@ -68,34 +68,34 @@ public class RemoveModuleObjectAction extends AbstractHibernateCollectionAction 
       final Map<String, Object> context) {
     BeanModule module = (BeanModule) getModule(context);
     final IEntity entityToRemove = (IEntity) module.getModuleObject();
-    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
+    getTransactionTemplate(context).execute(
+        new TransactionCallbackWithoutResult() {
 
-      @Override
-      public Object doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
-        IEntity entityClone = getController(context).cloneInUnitOfWork(
-            entityToRemove);
-        try {
-          deleteEntity(entityClone, context);
-        } catch (IllegalAccessException ex) {
-          throw new ActionException(ex);
-        } catch (InvocationTargetException ex) {
-          if (ex.getCause() instanceof RuntimeException) {
-            throw (RuntimeException) ex.getCause();
+          @Override
+          protected void doInTransactionWithoutResult(
+              @SuppressWarnings("unused") TransactionStatus status) {
+            IEntity entityClone = getController(context).cloneInUnitOfWork(
+                entityToRemove);
+            try {
+              deleteEntity(entityClone, context);
+            } catch (IllegalAccessException ex) {
+              throw new ActionException(ex);
+            } catch (InvocationTargetException ex) {
+              if (ex.getCause() instanceof RuntimeException) {
+                throw (RuntimeException) ex.getCause();
+              }
+              throw new ActionException(ex.getCause());
+            } catch (NoSuchMethodException ex) {
+              throw new ActionException(ex);
+            }
+            try {
+              getController(context).performPendingOperations();
+            } catch (RuntimeException ex) {
+              getController(context).clearPendingOperations();
+              throw ex;
+            }
           }
-          throw new ActionException(ex.getCause());
-        } catch (NoSuchMethodException ex) {
-          throw new ActionException(ex);
-        }
-        try {
-          getController(context).performPendingOperations();
-        } catch (RuntimeException ex) {
-          getController(context).clearPendingOperations();
-          throw ex;
-        }
-        return null;
-      }
-    });
+        });
     removeFromSubModules(module.getParent(), entityToRemove);
     setActionParameter(entityToRemove, context);
     return super.execute(actionHandler, context);

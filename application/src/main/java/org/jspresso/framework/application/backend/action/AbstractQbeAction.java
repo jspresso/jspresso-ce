@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.bean.BeanComparator;
 import org.jspresso.framework.util.collection.ESort;
@@ -64,11 +63,10 @@ public abstract class AbstractQbeAction extends BackendAction {
         }
         if (isSortOnly() && queryComponent.getPageCount() != null
             && queryComponent.getPageCount().intValue() == 1) {
-          List<? extends IComponent> existingResultList = getExistingResultList(
-              queryComponent, context);
+          List<?> existingResultList = getExistingResultList(queryComponent,
+              context);
           if (existingResultList != null && !existingResultList.isEmpty()) {
-            List<IComponent> sortedList = new ArrayList<IComponent>(
-                existingResultList);
+            List<Object> sortedList = new ArrayList<Object>(existingResultList);
             Comparator<Object> beanComparator = new BeanComparator(
                 queryComponent.getOrderingProperties(), getBackendController(
                     context).getAccessorFactory(),
@@ -130,7 +128,7 @@ public abstract class AbstractQbeAction extends BackendAction {
    *          the action context.
    * @return the existing result list if any.
    */
-  protected abstract List<? extends IComponent> getExistingResultList(
+  protected abstract List<?> getExistingResultList(
       IQueryComponent queryComponent, Map<String, Object> context);
 
   /**

@@ -24,7 +24,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 /**
  * Saves the entities provided by the context <code>ActionParameter</code>. All
@@ -51,15 +51,15 @@ public class SaveAction extends AbstractHibernateAction {
       }
     }
 
-    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
+    getTransactionTemplate(context).execute(
+        new TransactionCallbackWithoutResult() {
 
-      @Override
-      public Object doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
-        getController(context).performPendingOperations();
-        return null;
-      }
-    });
+          @Override
+          protected void doInTransactionWithoutResult(
+              @SuppressWarnings("unused") TransactionStatus status) {
+            getController(context).performPendingOperations();
+          }
+        });
     return super.execute(actionHandler, context);
   }
 

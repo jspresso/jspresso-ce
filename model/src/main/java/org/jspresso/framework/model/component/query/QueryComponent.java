@@ -379,7 +379,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * {@inheritDoc}
    */
   @Override
-  public void setQueriedComponents(List<? extends IComponent> queriedComponents) {
+  public void setQueriedComponents(List<?> queriedComponents) {
     put(QUERIED_COMPONENTS, queriedComponents);
   }
 

@@ -32,7 +32,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelProvider;
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -166,7 +165,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           && !queryPropertyValue.equals("*")
           && queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
-        IComponent selectedItem = queryComponent.getQueriedComponents().get(0);
+        Object selectedItem = queryComponent.getQueriedComponents().get(0);
         if (selectedItem instanceof IEntity) {
           selectedItem = getController(context).getBackendController().merge(
               (IEntity) selectedItem, EMergeMode.MERGE_LAZY);
@@ -207,9 +206,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -225,9 +223,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }

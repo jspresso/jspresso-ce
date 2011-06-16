@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
@@ -70,8 +69,7 @@ public class FindAction extends AbstractQbeAction {
    * {@inheritDoc}
    */
   @Override
-  protected List<? extends IComponent> getExistingResultList(
-      IQueryComponent queryComponent,
+  protected List<?> getExistingResultList(IQueryComponent queryComponent,
       @SuppressWarnings("unused") Map<String, Object> context) {
     return queryComponent.getQueriedComponents();
   }

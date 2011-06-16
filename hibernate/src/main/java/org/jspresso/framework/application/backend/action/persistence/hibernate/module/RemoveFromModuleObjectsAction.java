@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
@@ -32,7 +33,7 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 /**
  * This action, which is to be used on bean collection modules, removes the
@@ -84,43 +85,54 @@ public class RemoveFromModuleObjectsAction extends
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
 
-    final List<IEntity> moduleObjectsToRemove = new ArrayList<IEntity>();
+    final List<Object> moduleObjectsToRemove = new ArrayList<Object>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      moduleObjectsToRemove.add((IEntity) collectionConnector
-          .getChildConnector(selectedIndices[i]).getConnectorValue());
+      moduleObjectsToRemove.add(collectionConnector.getChildConnector(
+          selectedIndices[i]).getConnectorValue());
     }
-    getTransactionTemplate(context).execute(new TransactionCallback<Object>() {
+    getTransactionTemplate(context).execute(
+        new TransactionCallbackWithoutResult() {
 
-      @Override
-      public Object doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
-        List<IEntity> uowClones = getController(context).cloneInUnitOfWork(moduleObjectsToRemove);
-        for (IEntity entityToRemove : uowClones) {
-          try {
-            deleteEntity(entityToRemove, context);
-          } catch (IllegalAccessException ex) {
-            throw new ActionException(ex);
-          } catch (InvocationTargetException ex) {
-            if (ex.getCause() instanceof RuntimeException) {
-              throw (RuntimeException) ex.getCause();
+          @Override
+          protected void doInTransactionWithoutResult(
+              @SuppressWarnings("unused") TransactionStatus status) {
+            List<Object> uowClones = new ArrayList<Object>();
+            IBackendController controller = getController(context);
+            for (Object moduleObjectToRemove : moduleObjectsToRemove) {
+              if (moduleObjectToRemove instanceof IEntity) {
+                uowClones.add(controller
+                    .cloneInUnitOfWork((IEntity) moduleObjectsToRemove));
+              } else {
+                uowClones.add(moduleObjectToRemove);
+              }
             }
-            throw new ActionException(ex.getCause());
-          } catch (NoSuchMethodException ex) {
-            throw new ActionException(ex);
+            for (Object moduleObjectToRemove : uowClones) {
+              if (moduleObjectToRemove instanceof IEntity) {
+                try {
+                  deleteEntity((IEntity) moduleObjectToRemove, context);
+                } catch (IllegalAccessException ex) {
+                  throw new ActionException(ex);
+                } catch (InvocationTargetException ex) {
+                  if (ex.getCause() instanceof RuntimeException) {
+                    throw (RuntimeException) ex.getCause();
+                  }
+                  throw new ActionException(ex.getCause());
+                } catch (NoSuchMethodException ex) {
+                  throw new ActionException(ex);
+                }
+              }
+            }
+            try {
+              getController(context).performPendingOperations();
+            } catch (RuntimeException ex) {
+              getController(context).clearPendingOperations();
+              throw ex;
+            }
           }
-        }
-        try {
-          getController(context).performPendingOperations();
-        } catch (RuntimeException ex) {
-          getController(context).clearPendingOperations();
-          throw ex;
-        }
-        return null;
-      }
-    });
-    for (IEntity entityToRemove : moduleObjectsToRemove) {
-      projectedCollection.remove(entityToRemove);
-      removeFromSubModules(module, entityToRemove);
+        });
+    for (Object moduleObjectToRemove : moduleObjectsToRemove) {
+      projectedCollection.remove(moduleObjectToRemove);
+      removeFromSubModules(module, moduleObjectToRemove);
     }
     module.setModuleObjects(projectedCollection);
     collectionConnector.setConnectorValue(projectedCollection);

@@ -55,11 +55,17 @@ public class SaveModuleObjectAction extends SaveAction {
       List<IEntity> entitiesToSave) {
     if (module instanceof BeanCollectionModule
         && ((BeanCollectionModule) module).getModuleObjects() != null) {
-      for (Object entity : ((BeanCollectionModule) module).getModuleObjects()) {
-        entitiesToSave.add((IEntity) entity);
+      for (Object moduleObject : ((BeanCollectionModule) module)
+          .getModuleObjects()) {
+        if (moduleObject instanceof IEntity) {
+          entitiesToSave.add((IEntity) moduleObject);
+        }
       }
     } else if (module instanceof BeanModule) {
-      entitiesToSave.add((IEntity) ((BeanModule) module).getModuleObject());
+      Object moduleObject = ((BeanModule) module).getModuleObject();
+      if (moduleObject instanceof IEntity) {
+        entitiesToSave.add((IEntity) moduleObject);
+      }
     }
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {

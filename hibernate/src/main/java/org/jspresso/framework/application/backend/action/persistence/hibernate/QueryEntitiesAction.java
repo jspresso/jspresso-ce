@@ -19,16 +19,15 @@
 package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.Projections;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
@@ -92,7 +91,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
     final IQueryComponent queryComponent = getQueryComponent(context);
@@ -108,85 +106,109 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       compRefiner.refineQueryComponent(queryComponent, context);
     }
 
-    List<IEntity> queriedEntities = getTransactionTemplate(
-        context).execute(new TransactionCallback<List<IEntity>>() {
+    List<?> queriedComponents = performQuery(queryComponent, context);
+    List<Object> mergedComponents = new ArrayList<Object>();
 
-      @Override
-      public List<IEntity> doInTransaction(TransactionStatus status) {
-        HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
-        int oldFlushMode = hibernateTemplate.getFlushMode();
-        try {
-          // Temporary switch to a read-only session.
-          hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-          ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
-              .get(CRITERIA_FACTORY);
-          if (critFactory == null) {
-            queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
-            critFactory = getCriteriaFactory();
-          }
-          EnhancedDetachedCriteria criteria = critFactory
-              .createCriteria(queryComponent);
-          List<IEntity> entities;
-          if (criteria == null) {
-            entities = new ArrayList<IEntity>();
-            queryComponent.setRecordCount(new Integer(0));
-          } else {
-            ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
-                .get(CRITERIA_REFINER);
-            if (critRefiner == null && criteriaRefiner != null) {
-              queryComponent.put(CRITERIA_REFINER, criteriaRefiner);
-              critRefiner = criteriaRefiner;
-            }
-            if (critRefiner != null) {
-              critRefiner.refineCriteria(criteria, queryComponent, context);
-            }
-            Integer totalCount = null;
-            Integer pageSize = queryComponent.getPageSize();
-            Integer page = queryComponent.getPage();
-            if (pageSize != null) {
-              if (page == null) {
-                page = new Integer(0);
-                queryComponent.setPage(page);
-              }
-              if (queryComponent.getRecordCount() == null) {
-                criteria.setProjection(Projections.rowCount());
-                totalCount = new Integer(((Number) hibernateTemplate.findByCriteria(
-                    criteria).get(0)).intValue());
-              }
-              critFactory
-                  .completeCriteriaWithOrdering(criteria, queryComponent);
-              entities = hibernateTemplate.findByCriteria(criteria,
-                  page.intValue() * pageSize.intValue(), pageSize.intValue());
-            } else {
-              critFactory
-                  .completeCriteriaWithOrdering(criteria, queryComponent);
-              entities = hibernateTemplate.findByCriteria(criteria);
-              totalCount = new Integer(entities.size());
-            }
-            if (totalCount != null) {
-              queryComponent.setRecordCount(totalCount);
-            }
-          }
-          status.setRollbackOnly();
-          return entities;
-        } finally {
-          hibernateTemplate.setFlushMode(oldFlushMode);
-        }
-      }
-    });
     IBackendController controller = getController(context);
-    for (Iterator<IEntity> ite = queriedEntities.iterator(); ite.hasNext();) {
-      if (controller.isEntityRegisteredForDeletion(ite.next())) {
-        ite.remove();
+    for (int i = 0; i < queriedComponents.size(); i++) {
+      Object nextComponent = queriedComponents.get(i);
+      if (nextComponent instanceof IEntity) {
+        if (!controller.isEntityRegisteredForDeletion((IEntity) nextComponent)) {
+          if (getMergeMode() != null) {
+            mergedComponents.add(controller.merge((IEntity) nextComponent,
+                getMergeMode()));
+          } else {
+            mergedComponents.add(nextComponent);
+          }
+        }
+      } else {
+        mergedComponents.add(nextComponent);
       }
     }
-    if (mergeMode != null) {
-      queryComponent.setQueriedComponents(controller.merge(queriedEntities,
-          getMergeMode()));
-    } else {
-      queryComponent.setQueriedComponents(queriedEntities);
-    }
+    queryComponent.setQueriedComponents(mergedComponents);
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Performs actual Query. This method can be overriden by subclasses in order
+   * to deal with non-Hibernate searches.
+   * 
+   * @param queryComponent
+   *          the query component.
+   * @param context
+   *          the action context
+   * @return the liste of retrieved components.
+   */
+  protected List<?> performQuery(final IQueryComponent queryComponent,
+      final Map<String, Object> context) {
+    List<?> queriedEntities = getTransactionTemplate(context).execute(
+        new TransactionCallback<List<?>>() {
+
+          @Override
+          public List<?> doInTransaction(TransactionStatus status) {
+            HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
+            int oldFlushMode = hibernateTemplate.getFlushMode();
+            try {
+              // Temporary switch to a read-only session.
+              hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+              ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
+                  .get(CRITERIA_FACTORY);
+              if (critFactory == null) {
+                queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
+                critFactory = getCriteriaFactory();
+              }
+              EnhancedDetachedCriteria criteria = critFactory
+                  .createCriteria(queryComponent);
+              List<?> entities;
+              if (criteria == null) {
+                entities = new ArrayList<IEntity>();
+                queryComponent.setRecordCount(new Integer(0));
+              } else {
+                ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
+                    .get(CRITERIA_REFINER);
+                if (critRefiner == null && criteriaRefiner != null) {
+                  queryComponent.put(CRITERIA_REFINER, criteriaRefiner);
+                  critRefiner = criteriaRefiner;
+                }
+                if (critRefiner != null) {
+                  critRefiner.refineCriteria(criteria, queryComponent, context);
+                }
+                Integer totalCount = null;
+                Integer pageSize = queryComponent.getPageSize();
+                Integer page = queryComponent.getPage();
+                if (pageSize != null) {
+                  if (page == null) {
+                    page = new Integer(0);
+                    queryComponent.setPage(page);
+                  }
+                  if (queryComponent.getRecordCount() == null) {
+                    criteria.setProjection(Projections.rowCount());
+                    totalCount = new Integer(((Number) hibernateTemplate
+                        .findByCriteria(criteria).get(0)).intValue());
+                  }
+                  critFactory.completeCriteriaWithOrdering(criteria,
+                      queryComponent);
+                  entities = hibernateTemplate.findByCriteria(criteria,
+                      page.intValue() * pageSize.intValue(),
+                      pageSize.intValue());
+                } else {
+                  critFactory.completeCriteriaWithOrdering(criteria,
+                      queryComponent);
+                  entities = hibernateTemplate.findByCriteria(criteria);
+                  totalCount = new Integer(entities.size());
+                }
+                if (totalCount != null) {
+                  queryComponent.setRecordCount(totalCount);
+                }
+              }
+              status.setRollbackOnly();
+              return entities;
+            } finally {
+              hibernateTemplate.setFlushMode(oldFlushMode);
+            }
+          }
+        });
+    return queriedEntities;
   }
 
   /**

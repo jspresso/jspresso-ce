@@ -74,7 +74,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * 
    * @return the list of components result of the query.
    */
-  List<? extends IComponent> getQueriedComponents();
+  List<?> getQueriedComponents();
 
   /**
    * Gets the contract of the components to query.
@@ -105,7 +105,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * @param queriedComponents
    *          the list of components result of the query.
    */
-  void setQueriedComponents(List<? extends IComponent> queriedComponents);
+  void setQueriedComponents(List<?> queriedComponents);
 
   /**
    * Clones the query component.
