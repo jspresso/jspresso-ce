@@ -35,6 +35,7 @@ import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
@@ -173,7 +174,9 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
           .getComponentDescriptor();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        if (componentDescriptor.getPropertyDescriptor(property.getKey()) != null) {
+        IPropertyDescriptor propertyDescriptor = componentDescriptor
+            .getPropertyDescriptor(property.getKey());
+        if (propertyDescriptor != null) {
           boolean isEntityRef = false;
           if (IEntity.class.isAssignableFrom(componentDescriptor
               .getComponentContract())
@@ -206,7 +209,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                 currentCriteria.add(Restrictions.eq(prefixedProperty,
                     property.getValue()));
               } else {
-                createStringRestriction(currentCriteria,
+                createStringRestriction(propertyDescriptor, currentCriteria,
                     (String) property.getValue(), prefixedProperty);
               }
             } else if (property.getValue() instanceof Number
@@ -247,6 +250,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   /**
    * Creates a string based restriction.
    * 
+   * @param propertyDescriptor
+   *          the property descriptor.
    * @param currentCriteria
    *          the current criteria being built.
    * @param propertyValue
@@ -254,7 +259,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
    * @param prefixedProperty
    *          the full path of the property.
    */
-  protected void createStringRestriction(DetachedCriteria currentCriteria,
+  protected void createStringRestriction(
+      IPropertyDescriptor propertyDescriptor, DetachedCriteria currentCriteria,
       String propertyValue, String prefixedProperty) {
     if (propertyValue.length() > 0) {
       String[] propValues = propertyValue.split(";");
@@ -272,7 +278,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           if (IQueryComponent.NULL_VAL.equals(val)) {
             crit = Restrictions.isNull(prefixedProperty);
           } else {
-            crit = createLikeRestriction(prefixedProperty, val);
+            crit = createLikeRestriction(propertyDescriptor, prefixedProperty,
+                val);
           }
           if (negate) {
             crit = Restrictions.not(crit);
@@ -286,13 +293,23 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   /**
    * Creates a like restriction.
    * 
+   * @param propertyDescriptor
+   *          the property descriptor.
    * @param prefixedProperty
    *          the complete property path.
    * @param val
    *          the value to create the like restriction for
    * @return the like criterion;
    */
-  protected Criterion createLikeRestriction(String prefixedProperty, String val) {
+  protected Criterion createLikeRestriction(
+      IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+      String val) {
+    if (propertyDescriptor instanceof IStringPropertyDescriptor
+        && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
+      // don't use ignoreCase() to be able to leverage indices.
+      return Restrictions.like(prefixedProperty, val.toUpperCase(),
+          MatchMode.START);
+    }
     return Restrictions.like(prefixedProperty, val, MatchMode.START)
         .ignoreCase();
   }
