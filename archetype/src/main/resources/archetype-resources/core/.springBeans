@@ -13,13 +13,13 @@
     <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
 
     <config>target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
-    <config>src/main/resources/com/example/hello/model/model.xml</config>
-    <config>target/generated-resources/dsl/com/example/hello/backend/dsl-backend.xml</config>
-    <config>src/main/resources/com/example/hello/backend/backend.xml</config>
-    <config>target/generated-resources/dsl/com/example/hello/view/dsl-view.xml</config>
-    <config>src/main/resources/com/example/hello/view/view.xml</config>
-    <config>target/generated-resources/dsl/com/example/hello/frontend/dsl-frontend.xml</config>
-    <config>src/main/resources/com/example/hello/frontend/frontend.xml</config>
+    <config>src/main/resources/${packageInPathFormat}/model/model.xml</config>
+    <config>target/generated-resources/dsl/${packageInPathFormat}/backend/dsl-backend.xml</config>
+    <config>src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+    <config>target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
+    <config>src/main/resources/${packageInPathFormat}/view/view.xml</config>
+    <config>target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
+    <config>src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
   </configs>
   <configSets>
     <configSet>
