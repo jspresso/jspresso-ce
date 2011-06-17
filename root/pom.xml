@@ -1016,7 +1016,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.codehaus.xdoclet</groupId>
                     <artifactId>maven2-xdoclet2-plugin</artifactId>
-                    <versionRange>[2.0.7.1,)</versionRange>
+                    <versionRange>[2.0.7,)</versionRange>
                     <goals>
                       <goal>xdoclet</goal>
                     </goals>

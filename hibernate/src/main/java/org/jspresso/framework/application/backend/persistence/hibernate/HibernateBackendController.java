@@ -665,6 +665,23 @@ public class HibernateBackendController extends AbstractBackendController {
                 .getValue())) {
               lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
             }
+            if (propertyValue instanceof PersistentCollection) {
+              Collection<IComponent> snapshot = null;
+              Object storedSnapshot = ((PersistentCollection) propertyValue)
+                  .getStoredSnapshot();
+              if (storedSnapshot instanceof Map<?, ?>) {
+                snapshot = ((Map<IComponent, IComponent>) storedSnapshot)
+                    .keySet();
+              } else if (storedSnapshot instanceof Collection<?>) {
+                snapshot = (Collection<IComponent>) storedSnapshot;
+              }
+              if (snapshot != null) {
+                for (IComponent element : snapshot) {
+                  lockInHibernateInDepth(element, hibernateSession,
+                      alreadyLocked);
+                }
+              }
+            }
           }
         }
       }

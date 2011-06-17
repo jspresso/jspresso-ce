@@ -96,6 +96,12 @@ public class RemoveFromModuleObjectsAction extends
           @Override
           protected void doInTransactionWithoutResult(
               @SuppressWarnings("unused") TransactionStatus status) {
+            try {
+              getController(context).performPendingOperations();
+            } catch (RuntimeException ex) {
+              getController(context).clearPendingOperations();
+              throw ex;
+            }
             List<Object> uowClones = new ArrayList<Object>();
             IBackendController controller = getController(context);
             for (Object moduleObjectToRemove : moduleObjectsToRemove) {
@@ -121,12 +127,6 @@ public class RemoveFromModuleObjectsAction extends
                   throw new ActionException(ex);
                 }
               }
-            }
-            try {
-              getController(context).performPendingOperations();
-            } catch (RuntimeException ex) {
-              getController(context).clearPendingOperations();
-              throw ex;
             }
           }
         });
