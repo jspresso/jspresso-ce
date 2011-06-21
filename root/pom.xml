@@ -89,6 +89,7 @@
     <info-reports-plugin.version>2.1.2</info-reports-plugin.version>
     <war-plugin.version>2.1</war-plugin.version>
     <shade-plugin.version>1.4</shade-plugin.version>
+    <webdav-jackrabbit.version>1.0-beta-7</webdav-jackrabbit.version>
 
     <docbkx-plugin.version>2.0.8</docbkx-plugin.version>
     <xdoclet2-plugin.version>2.0.7.1</xdoclet2-plugin.version>
@@ -1146,6 +1147,13 @@
         </executions>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>${webdav-jackrabbit.version}</version>
+      </extension>
+    </extensions>
   </build>
 
   <reporting>
