@@ -219,7 +219,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             } else if (property.getValue() instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) property
                   .getValue());
-              if (!isQueryComponentEmpty(joinedComponent)) {
+              if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inlined component so we must use
                   // dot nested properties. Same applies if we are in a nested
@@ -365,23 +365,37 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
    * 
    * @param queryComponent
    *          the query component to test.
+   * @param holdingPropertyDescriptor
+   *          the holding property descriptor or null if none.
    * @return true, if the query component does not generate any restriction.
    */
-  protected boolean isQueryComponentEmpty(IQueryComponent queryComponent) {
+  protected boolean isQueryComponentEmpty(IQueryComponent queryComponent,
+      IPropertyDescriptor holdingPropertyDescriptor) {
     if (queryComponent == null || queryComponent.isEmpty()) {
       return true;
     }
     IComponentDescriptor<?> componentDescriptor = queryComponent
         .getComponentDescriptor();
     for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
-      if (componentDescriptor.getPropertyDescriptor(property.getKey()) != null) {
+      IPropertyDescriptor propertyDescriptor = componentDescriptor
+          .getPropertyDescriptor(property.getKey());
+      if (propertyDescriptor != null) {
         if (property.getValue() != null) {
           if (property.getValue() instanceof IQueryComponent) {
-            if (!isQueryComponentEmpty((IQueryComponent) property.getValue())) {
+            if (!isQueryComponentEmpty((IQueryComponent) property.getValue(),
+                propertyDescriptor)) {
               return false;
             }
           } else {
-            return false;
+            Map<String, Object> initializationMapping = null;
+            if (holdingPropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+              initializationMapping = ((IReferencePropertyDescriptor<?>) holdingPropertyDescriptor)
+                  .getInitializationMapping();
+            }
+            if (initializationMapping == null
+                || !initializationMapping.containsKey(property.getKey())) {
+              return false;
+            }
           }
         }
       }
