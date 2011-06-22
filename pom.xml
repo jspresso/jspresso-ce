@@ -56,7 +56,7 @@
     <surefire-plugin.version>2.4.3</surefire-plugin.version>
     <assembly-plugin.version>2.2.1</assembly-plugin.version>
     <javadoc-plugin.version>2.8</javadoc-plugin.version>
-    <site-plugin.version>2.2</site-plugin.version>
+    <site-plugin.version>3.0-beta3</site-plugin.version>
     <release-plugin.version>2.1</release-plugin.version>
     <clean-plugin.version>2.4.1</clean-plugin.version>
     <archetype-plugin.version>2.0</archetype-plugin.version>
@@ -374,6 +374,17 @@
         <configuration>
           <attach>false</attach>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <extensions>
