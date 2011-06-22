@@ -57,10 +57,12 @@ import org.springframework.context.ApplicationContext;
  */
 public class ViewTester {
 
+  private static final String BEAN_FACTORY_SELECTOR   = "beanFactorySelector";
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
   private static final String LANGUAGE                = "language";
   private static final String VIEW_ID                 = "viewId";
 
+  private String              beanFactorySelector;
   private String              applicationContextKey;
   private String              language;
   private String              viewId;
@@ -80,8 +82,15 @@ public class ViewTester {
             .isRequired()
             .hasArg()
             .withDescription(
-                "use given applicationContextKey as registered in the spring BeanFactoryLocator.")
+                "use given applicationContextKey as registered in the Spring BeanFactoryLocator.")
             .create(APPLICATION_CONTEXT_KEY));
+    options
+        .addOption(OptionBuilder
+            .withArgName(BEAN_FACTORY_SELECTOR)
+            .hasArg()
+            .withDescription(
+                "use given resource path to lookup the Spring BeanFactoryLocator. If not set, defaults to beanRefFactory.xml")
+            .create(BEAN_FACTORY_SELECTOR));
     options.addOption(OptionBuilder
         .withArgName(VIEW_ID)
         .isRequired()
@@ -107,6 +116,7 @@ public class ViewTester {
     }
 
     ViewTester tester = new ViewTester();
+    tester.setBeanFactorySelector(cmd.getOptionValue(BEAN_FACTORY_SELECTOR));
     tester
         .setApplicationContextKey(cmd.getOptionValue(APPLICATION_CONTEXT_KEY));
     tester.setViewId(cmd.getOptionValue(VIEW_ID));
@@ -135,7 +145,8 @@ public class ViewTester {
     IBackendController mockBackController = (IBackendController) appContext
         .getBean("applicationBackController");
 
-    mockFrontController.start(mockBackController, locale, TimeZone.getDefault());
+    mockFrontController
+        .start(mockBackController, locale, TimeZone.getDefault());
 
     IView<JComponent> view = mockFrontController.getViewFactory().createView(
         viewDescriptor, mockFrontController, locale);
@@ -163,6 +174,16 @@ public class ViewTester {
         TesterExceptionHandler.class.getName());
     SwingUtil.centerOnScreen(testFrame);
     testFrame.setVisible(true);
+  }
+
+  /**
+   * Sets the beanFactorySelector.
+   * 
+   * @param beanFactorySelector
+   *          the beanFactorySelector to set.
+   */
+  public void setBeanFactorySelector(String beanFactorySelector) {
+    this.beanFactorySelector = beanFactorySelector;
   }
 
   /**
@@ -196,7 +217,8 @@ public class ViewTester {
   }
 
   private ApplicationContext getApplicationContext() {
-    BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+    BeanFactoryLocator bfl = SingletonBeanFactoryLocator
+        .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     return (ApplicationContext) bf.getFactory();
   }
