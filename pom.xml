@@ -56,43 +56,16 @@
     <surefire-plugin.version>2.4.3</surefire-plugin.version>
     <assembly-plugin.version>2.2.1</assembly-plugin.version>
     <javadoc-plugin.version>2.8</javadoc-plugin.version>
-    <site-plugin.version>2.2</site-plugin.version>
+    <site-plugin.version>3.0-beta-3</site-plugin.version>
     <release-plugin.version>2.1</release-plugin.version>
     <clean-plugin.version>2.4.1</clean-plugin.version>
     <archetype-plugin.version>2.0</archetype-plugin.version>
     <source-plugin.version>2.1.1</source-plugin.version>
     <antrun-plugin.version>1.3</antrun-plugin.version>
-    <info-reports-plugin.version>2.1.2</info-reports-plugin.version>
+    <info-reports-plugin.version>2.4</info-reports-plugin.version>
     <webdav-jackrabbit.version>1.0-beta-7</webdav-jackrabbit.version>
 
   </properties>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>sonatype-repository</id>
-      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jspresso-repository</id>
-      <url>http://repository.jspresso.org/maven2</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>beandoc-repository</id>
-      <url>http://spring-beandoc.sourceforge.net/repo</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jboss-repository</id>
-      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
@@ -107,21 +80,59 @@
       <url>dav:http://www.jspresso.org/external/maven-site</url>
     </site>
   </distributionManagement>
-  <repositories>
-    <repository>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jspresso-repository</id>
+      <url>http://repository.jspresso.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jspresso-snapshots-repository</id>
+      <url>http://repository.jspresso.org/maven2-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>sonatype-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>beandoc-repository</id>
+      <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
       <id>jboss-repository</id>
-      <url>http://repository.jboss.org/maven2</url>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
-    </repository>
-    <repository>
-      <id>java.net-repository</id>
-      <url>http://download.java.net/maven/2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
+    </pluginRepository>
+  </pluginRepositories>
+  <repositories>
     <repository>
       <id>jspresso-repository</id>
       <url>http://repository.jspresso.org/maven2</url>
@@ -140,6 +151,56 @@
       </releases>
       <snapshots>
         <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jboss-repository</id>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>java.net-repository</id>
+      <url>http://download.java.net/maven/2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>sonatype-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jasperreports-repository</id>
+      <url>http://jasperreports.sourceforge.net/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>springframework-repository</id>
+      <url>http://maven.springframework.org/external</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
       </snapshots>
     </repository>
   </repositories>
@@ -374,6 +435,17 @@
         <configuration>
           <attach>false</attach>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <extensions>
