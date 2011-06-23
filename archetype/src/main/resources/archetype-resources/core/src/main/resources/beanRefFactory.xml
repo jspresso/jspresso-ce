@@ -90,7 +90,6 @@
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
         <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
-        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
         <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>

@@ -198,7 +198,7 @@
                       </params>
                     </component>
                   </components>
-                  <includes>**/model/**/*.java</includes>
+                  <includes>**/model/**.java</includes>
                 </config>
               </configs>
             </configuration>
