@@ -44,6 +44,14 @@
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
     </dependency>
+    
+    <!-- For View Tester -->
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-tools</artifactId>
+      <optional>true</optional>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
