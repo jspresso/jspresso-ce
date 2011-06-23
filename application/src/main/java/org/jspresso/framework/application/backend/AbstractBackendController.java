@@ -746,8 +746,10 @@ public abstract class AbstractBackendController extends AbstractController
       throw new IllegalArgumentException(
           "Spring transaction template can only be configured once.");
     }
-    this.transactionTemplate = new ControllerAwareTransactionTemplate(
-        transactionTemplate, this);
+    if (transactionTemplate != null) {
+      this.transactionTemplate = new ControllerAwareTransactionTemplate(
+          transactionTemplate, this);
+    }
   }
 
   /**
