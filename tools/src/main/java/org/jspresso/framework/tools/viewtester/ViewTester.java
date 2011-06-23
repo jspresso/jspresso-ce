@@ -151,17 +151,19 @@ public class ViewTester {
     IView<JComponent> view = mockFrontController.getViewFactory().createView(
         viewDescriptor, mockFrontController, locale);
 
-    IValueConnector modelConnector = mockBackController.createModelConnector(
-        "modelConnector", viewDescriptor.getModelDescriptor());
+    if (viewDescriptor.getModelDescriptor() != null) {
+      IValueConnector modelConnector = mockBackController.createModelConnector(
+          "modelConnector", viewDescriptor.getModelDescriptor());
 
-    IEntityFactory entityFactory = mockBackController.getEntityFactory();
+      IEntityFactory entityFactory = mockBackController.getEntityFactory();
 
-    modelConnector.setConnectorValue(entityFactory
-        .createEntityInstance(((IComponentDescriptor<IEntity>) viewDescriptor
-            .getModelDescriptor()).getComponentContract()));
+      modelConnector.setConnectorValue(entityFactory
+          .createEntityInstance(((IComponentDescriptor<IEntity>) viewDescriptor
+              .getModelDescriptor()).getComponentContract()));
 
-    mockFrontController.getMvcBinder()
-        .bind(view.getConnector(), modelConnector);
+      mockFrontController.getMvcBinder().bind(view.getConnector(),
+          modelConnector);
+    }
 
     JFrame testFrame = new JFrame("View tester");
     testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
