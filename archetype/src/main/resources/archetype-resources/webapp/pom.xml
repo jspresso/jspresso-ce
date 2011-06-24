@@ -137,7 +137,6 @@
         <executions>
           <execution>
             <goals>
-              <goal>wrapper</goal>
               <goal>copy-flex-resources</goal>
             </goals>
             <phase>prepare-package</phase>
@@ -146,13 +145,6 @@
                 <groupId>${symbol_dollar}{project.groupId}</groupId>
                 <artifactId>${rootArtifactId}-startup-flex-client</artifactId>
               </wrapperArtifact>
-              <templateInclusions>
-                <String>**/flex/*.html</String>
-              </templateInclusions>
-              <templateExclusions>
-                <String>**/flex/*.js</String>
-              </templateExclusions>
-              
               <stripVersion>true</stripVersion>
               <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/flex</webappDirectory>
             </configuration>
