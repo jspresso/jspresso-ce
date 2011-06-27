@@ -166,7 +166,7 @@ public abstract class AbstractComponentInvocationHandler implements
           (PropertyChangeListener) args[1]);
       return null;
     } else if ("firePropertyChange".equals(methodName)) {
-      firePropertyChange((String) args[0], args[1], args[2]);
+      firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
     } else if ("straightSetProperty".equals(methodName)) {
       straightSetProperty(proxy, (String) args[0], args[1]);
@@ -724,13 +724,14 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy
-            .newProxyInstance(
-                Thread.currentThread().getContextClassLoader(),
-                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                    .getReferencedDescriptor().getCollectionInterface()},
-                new NeverEqualsInvocationHandler(CollectionHelper
-                    .cloneCollection((Collection<?>) currentPropertyValue)));
+        currentPropertyValue = Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
+            new Class[] {
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .getReferencedDescriptor().getCollectionInterface()
+            },
+            new NeverEqualsInvocationHandler(CollectionHelper
+                .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
@@ -854,6 +855,37 @@ public abstract class AbstractComponentInvocationHandler implements
         if (!propertyDescriptor.isComputed()) {
           propertyDescriptor.preprocessSetter(proxy,
               straightGetProperty(proxy, propertyDescriptor.getName()));
+        }
+      }
+    }
+  }
+
+  private void firePropertyChange(Object proxy, String propertyName,
+      Object oldValue, Object newValue) {
+    firePropertyChange(propertyName, oldValue, newValue);
+    // This method supports firing nested property changes
+    if (propertyName != null) {
+      int lastIndexOfDelim = propertyName.lastIndexOf(IAccessor.NESTED_DELIM);
+      if (lastIndexOfDelim > 0) {
+        Object propertyHolder;
+        try {
+          propertyHolder = getAccessorFactory().createPropertyAccessor(
+              propertyName.substring(0, lastIndexOfDelim),
+              getComponentContract()).getValue(proxy);
+          if (propertyHolder != null && propertyHolder instanceof IComponent) {
+            ((IComponent) propertyHolder).firePropertyChange(
+                propertyName.substring(lastIndexOfDelim + 1), oldValue,
+                newValue);
+          }
+        } catch (IllegalAccessException ex) {
+          throw new ComponentException(ex);
+        } catch (InvocationTargetException ex) {
+          if (ex.getCause() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getCause();
+          }
+          throw new ComponentException(ex.getCause());
+        } catch (NoSuchMethodException ex) {
+          throw new ComponentException(ex);
         }
       }
     }
