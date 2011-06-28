@@ -1,37 +1,185 @@
+3.5.5
+=====
+Bugs fixed:
+-----------
+           ViewTester to support beanFactorySelector argument introduced in 3.5.1
+           Referenced query components holding only properties coming from initialization mapping should be considered empty
+           Criteria queries use overkilling case-insensitive search on upper-case fields
+           Criteria queries use overkilling case-insensitive search on ids
+           Allow for inputing negative sign in Flex numeric fields
+           Potential NPE in AbstractComponentDescriptor
+           Several mis-behaviors against Hibernate session management
+
+
+New Features:
+-------------
+           Improve DB Index usage nby limiting functions in queries
+
+
+
+3.5.4
+=====
+Bugs fixed:
+-----------
+           Flex NPE in datagrid date input under IE8
+           Potential NPE in SecurityContextBuilder for arbitrary java object property
+           Datagrid editing fails when pressing enter on the last row
+           Unchanged entities are incorrectly merged back into the session resulting in false concurrent access errors
+           Potential NPE in AbstractActionFactory
+           Potential NPE in PropertyModelGate
+           Completed mock-config.xml with missing references
+           CollectionSelectionTrackingGate should be open whenever installed on non collection views with not-null model
+           getModel(context) should always return either a collection or a "complex" model (never a scalar propety)
+           Several mis-behaviors against Hibernate session management
+           Flex date format is sometimes erroneous
+           Auto-complete does not work for certain TAB key navigations
+
+
+New Features:
+-------------
+           Prepare for Maven 3 : Plugin dependencies repos copied to pluginRepositories section
+           JavaSerializable properties should support serializable collections
+           Lazy initialize PropertyChangeSupport for sparing heap memory
+           Make number parser more permissive (i.e. accept different separators)
+           Make read-only values selectable in flex datagrids
+           Date categorization : technical (with TZ translation) and functional (w/o TZ translation)
+           Implement module clone() method
+
+
+
+3.5.3
+=====
+Bugs fixed:
+-----------
+           Fixed table sorting for formatted columns
+           Several mis-behaviors against Hibernate session management
+           Flex Alert does not display correctly when triggered from a popup button
+           Potential NPE in resource provider servlet
+
+
+New Features:
+-------------
+           Made actionfield buttons non-focusable
+           Introduce a new EMergeMode.MERGE_LAZY that only cleans obsolete entity instances dirty state
+           Binary and text property descriptor should provide a default filename and content-type
+           Make read-only fields selectable
+
+
+
+3.5.2
+=====
+Bugs fixed:
+-----------
+           Avoid unnecessary checks whe deleting entities
+           Several mis-behaviors against Hibernate session management
+           OnUpdate is wrongly triggered for UOW deleted entities
+           Potential NPE in action gates listeners
+           Bean modules should not use their module object toString when they have a static name
+           Potential NPE after initialization of a persistent List containing holes
+
+
+New Features:
+-------------
+           Their should be an application-wide default IQueryComponentRefiner
+           Add a loginAction hook on frontend controller
+           Implenment queryable and rendered properties refinement on reference property descriptors
+           Add onClone lifecycle method that iscalled every time an entity/component is cloned
+
+
+
 3.5.1
 =====
-Bugs fixed
-----------
-3019234    Icon in table row doesn't load
-           Query refiners are lost when sorting a table
-           Property rollback can produce stack-overflow on 1-1 relationships
-           selecting OK on an empty LOV dialog produces an exception
-3041251    writability gate on component has no effect
-           Collection model gates used as actionability gates
-             are not correctly notified of collection selection changes
+Bugs fixed:
+-----------
+           qooxdoo date formats do not respect user locale
+           InitializationMapping may break the filter modules
+           NPE on GrantedRolesGate
+           Several mis-behaviors against Hibernate session management
+           Flex and qooxdoo combobox binding fixed for mandatory uninitialized fields
+           RemoveFromModuleObjectsAction did not correctly clone objects in the UOW.
+           Mandatory columns are not correctly indicated in Flex/qooxdoo tables
+           Uninitialized collections are incorrectly cloned in unit of work
+           Popup button menu item mises enablement refresh
+           Flex comboboxes are not correctly synchronized with null values comming from the server
+           Fixed server parsing for server formatted value management (duration for instance)
+           Support EAGER merge mode outside of transaction
+           Popup buttons that are empty because of security constraints produce client exceptions
+           Filter criteria can be unexpectedely reset when using criteria LOVs
+           Cascading model is not correctly handled when 1st view is a composite view
+           Auto-completion should be disabled when filter contains special QBE chars (';','#',';')
+           ToStringProperty is incorrectly picked up by reference fields
+           No query should be executed when sorting on a single page result
+           ClassCastException in constructing menubuttons when actions are not authorized
+           Bidi N-N relationship updates are sometimes not correctly flushed
+           Potential NPE in card views binding
+           Potential StackoverflowError when deleting entities in transaction
+           Cascading model fixed when master view is a composite view
+           Reduce memory consumption for remote UIDs by using an alternative generation algorithm
+           Module navigation optimization
+           Remove persistent from rendererd properties
+           Keep original file names for local download urls
+           Use column label instead of column name in Database login module
+           Notify children connectors from model change before notifying view connectors
+           NPE in cleanRelationshipOnDeletion
+           Boolean gates are not handled correctly on reference properties
+           Prevent flex buttons double clicks
+           RemotePeerRegistry memory leak
+           Query sort order should always be completed with id ordering to preserve pagination
+           Reload action should not fail on removed objects
+           OpenOnTrue should not influence model gates initial state
+           Model gates should be closed when assigned a null model
            Writability gates do not work correctly on collection views
-3071381    clash with property names and SQL
-3088599    integer field too small
+           OnUpdate must only be triggered when entity is not registered for deletion.
+         JTA transactions are not correctly synchronized with "Unit of Work"
+           Selecting OK on an empty LOV dialog produces an exception
+           Query refiners are lost when sorting a table
+           Property rollback can produce a StackOverflow on 1-1
+3071381    Clash with property names and SQL
+3088599    Integer field too small
 
 
-New features
-------------
-           Toolbars are made scrollable when too big to be displayed
-           Various layouting improvements in Flex and qooxdoo
-           Removed menu bars in favor of an application toolbar
-           Made action lists collapsable (rendering as a popup button)
-           Made fw action lists top-level beans
-           Made property views actionable to turn them into hyperlinks
-           Introduced secondary action map for views and controller
-           Introduced a paginationViewDescriptor on collection views
-           Default pagination view is automatically sized to the collection view
+New Features:
+-------------
+           InitializationMapping should support null constant values (using 'null')
+           Allow the backend controller to be injected into extensions that implement IEntityLifecycleHandlerAware
+           Split date-time properties in 2 components to ease input
+           Make Flex time and date field more permissive to partial input
+           Support non-string initialization mapping (e.g. boolean)
+           Implement a modular user preference management
+           LOV filters should not display properties that are set with initializationMapping
+           Introduce a query component descriptor factory to allow for customization of QBE filters
+           Implement color alpha channel management
+           Make action maps securable and action maps security should be inherited from parents
+           Make action lists securable
+           Allow for defining an autoComplete property on entities that is used for auto-completion
+           Login dialog should gain focus on application startup
+           Implement tri-state checkboxes for QBE filters
+           Honnor property view colors in table cells
+3032663    Propertyview horizontal alignment implemented
+           LovAction autoQuery implemented
+           "Remember me" implementation
+           Better client garbage collection (Flex and qooxdoo)
+           Support max length for binary fields
+           Improve HTML entities handling in HTML properties
+           Tab navigation lazy binding to improve memory and net consumption
+           File open/save callback API improved to include the file name
+           Improved QBE syntax for string criteria (; is OR, ! is NOT, # is NULL) 
+           BeanRefFactory can be placed in an arbitrary namespace
+           Support sorting on nested properties on paginated tables
+           Computed columns can now be sorted using a SQL formula on paginated tables
+3041251    Support writability gates on inline components
+           Read-only enum property views are made icon labels
            Introduced the usingLong property for java.lang.Long mapped integers
-           Nested component views width management improved
-           Model auto-determination improved for cascading model views
-           Computed columns can now be sorted using a SQL formula
-3032663    horizontal alignment
-           tri state check boxes for filters
-           Pluggable dynamic security
+           Secondary action map for views and controller
+           Hyperlink implementation (actionable read-only properties)
+           Actionlists can be declared collapsable => Menubutton
+           Toolbars are made scrollable when overlapping
+           Flex And qooxdoo various UI improvements
+         Flex table selection notification (itemSelectionAction)
+3019234    Image management in tables
+         Menu item now support gates
+
+
 
 3.5.0
 =====

@@ -1,5 +1,19 @@
 3.5.5
 =====
+-Got rid of broken flexmojos wrapper plugin.
+Update webapp/src/main/webapp/flex/index.html with the following values :
+${bgcolor} => #869ca7
+${width} => 100%
+${height} => 100%
+${swf} => myproject-startup-flex-client
+${application} => myproject-startup-flex-client
+${version_major} => 9
+${version_minor} => 0
+${version_revision} => 0
+${title} => Wathever you want
+
+- Switch to Maven3
+
 - Framework logging changed from commons-logging to SLF4J
 
 - Libraries versions updated :
@@ -127,6 +141,11 @@ contexts sections.
 
 - migrated to java 1.6 minimum
 
+- Due to a change of the groupId of the GMaven plugin used to perform the SJS compilation, all existing projects
+must perform a general search and replace in all pom.xml :
+  <groupId>org.codehaus.groovy.maven</groupId>
+  change to
+  <groupId>org.codehaus.gmaven</groupId>
 
 
 3.5.2
@@ -145,12 +164,6 @@ the signature has changed from :
   protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptor<IEntity>)
   to
   protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IEntity>)
-  
-- Due to a change of the groupId of the GMaven plugin used to perform the SJS compilation, all existing projects
-must perform a general search and replace in all pom.xml :
-  <groupId>org.codehaus.groovy.maven</groupId>
-  change to
-  <groupId>org.codehaus.gmaven</groupId>
 
 
 
