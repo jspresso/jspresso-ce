@@ -140,7 +140,8 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <goals>deploy site-deploy assembly:assembly</goals>
+          <goals>deploy</goals>
+          <!-- <goals>deploy site-deploy assembly:assembly</goals> -->
         </configuration>
       </plugin>
       <plugin>
@@ -166,7 +167,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.5</version>
+        <version>${symbol_dollar}{javadoc-plugin.version}</version>
         <reportSets>
           <reportSet>
             <reports>
