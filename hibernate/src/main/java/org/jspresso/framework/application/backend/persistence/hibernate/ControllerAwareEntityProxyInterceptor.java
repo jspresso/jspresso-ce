@@ -97,11 +97,11 @@ public class ControllerAwareEntityProxyInterceptor extends
       }
       if (dirtyProperties.containsKey(IEntity.ID)) {
         // whenever an entity has just been saved, its state is in the dirty
-        // store.
-        // hibernate might ask to check dirtyness especially for collection
-        // members.
-        // Those just saved entities must not be considered dirty.
-        return new int[0];
+        // store. Hibernate might ask to check dirtyness especially for
+        // collection members. Those just saved entities must not be considered
+        // dirty but there might be some reference properties to update, so let
+        // Hibernate default dirty checking happen.
+        return null;
       }
       int[] indices = new int[propertyNames.length];
       int n = 0;
@@ -215,10 +215,9 @@ public class ControllerAwareEntityProxyInterceptor extends
           isClean = true;
         } else if (dirtyProperties.containsKey(IEntity.ID)) {
           // whenever an entity has just been saved, its state is in the dirty
-          // store.
-          // hibernate might ask to check dirtyness especially for collection
-          // members.
-          // Those just saved entities must not be considered dirty.
+          // store. Hibernate might ask to check dirtyness especially for
+          // collection members. Those just saved entities must not be
+          // considered dirty.
           isClean = true;
         } else {
           isClean = false;
