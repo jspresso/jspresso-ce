@@ -680,7 +680,17 @@ public interface ${componentName}
   public abstract ${propertyType} get${propertyName?cap_first}();
 </#macro>
 
+<#macro generatePropertyNameConstant propertyDescriptor>
+  <#local propertyName=propertyDescriptor.name/>
+  /**
+   * Constant value for ${propertyName}.
+   */
+  String ${generateSQLName(propertyName)} = "${propertyName}";
+</#macro>
+
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
+  <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+
   <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
   <#if propertyDescriptor.modifiable>
@@ -694,6 +704,8 @@ public interface ${componentName}
 </#macro>
 
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
+  <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+
   <@generateComponentRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
   <#if propertyDescriptor.modifiable>
@@ -703,6 +715,8 @@ public interface ${componentName}
 </#macro>
 
 <#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
+  <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+
   <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
   <#if propertyDescriptor.modifiable>

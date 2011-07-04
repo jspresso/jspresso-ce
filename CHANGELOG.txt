@@ -1,3 +1,16 @@
+3.5.6
+=====
+Bugs fixed:
+-----------
+           xxxxx
+
+
+New Features:
+-------------
+           Implement constants for property names in generated entities
+
+
+
 3.5.5
 =====
 Bugs fixed:
