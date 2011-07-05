@@ -421,8 +421,14 @@ public class HibernateBackendController extends AbstractBackendController {
   public void registerForDeletion(IEntity entity) {
     if (isUnitOfWorkActive()) {
       if (!hasBeenProcessed(entity)) {
-        deletedEntities.add(entity);
-        getHibernateTemplate().delete(entity);
+        try {
+          deletedEntities.add(entity);
+          getHibernateTemplate().delete(entity);
+        } catch (RuntimeException re) {
+          deletedEntities.remove(entity);
+          getHibernateTemplate().evict(entity);
+          throw re;
+        }
       }
     } else {
       super.registerForDeletion(entity);
@@ -445,8 +451,14 @@ public class HibernateBackendController extends AbstractBackendController {
   public void registerForUpdate(IEntity entity) {
     if (isUnitOfWorkActive()) {
       if (!hasBeenProcessed(entity)) {
-        updatedEntities.add(entity);
-        getHibernateTemplate().saveOrUpdate(entity);
+        try {
+          updatedEntities.add(entity);
+          getHibernateTemplate().saveOrUpdate(entity);
+        } catch (RuntimeException re) {
+          updatedEntities.remove(entity);
+          getHibernateTemplate().evict(entity);
+          throw re;
+        }
       }
     } else {
       super.registerForUpdate(entity);
