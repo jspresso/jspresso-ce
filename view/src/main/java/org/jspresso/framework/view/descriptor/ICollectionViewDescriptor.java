@@ -60,4 +60,11 @@ public interface ICollectionViewDescriptor extends IViewDescriptor {
    *         pagination.
    */
   IViewDescriptor getPaginationViewDescriptor();
+
+  /**
+   * Wether this collection view should autoselect 1st row.
+   * 
+   * @return true if this collection view should autoselect 1st row.
+   */
+  boolean isAutoSelectFirstRow();
 }

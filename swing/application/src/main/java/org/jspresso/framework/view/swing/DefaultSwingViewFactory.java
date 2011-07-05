@@ -1420,7 +1420,9 @@ public class DefaultSwingViewFactory extends
         }
       });
     }
-    attachDefaultCollectionListener(connector);
+    if (viewDescriptor.isAutoSelectFirstRow()) {
+      attachDefaultCollectionListener(connector);
+    }
     return view;
   }
 
@@ -1942,7 +1944,9 @@ public class DefaultSwingViewFactory extends
           new ColumnPreferencesListener(viewComponent, viewDescriptor
               .getPermId(), actionHandler));
     }
-    attachDefaultCollectionListener(connector);
+    if (viewDescriptor.isAutoSelectFirstRow()) {
+      attachDefaultCollectionListener(connector);
+    }
     return view;
   }
 

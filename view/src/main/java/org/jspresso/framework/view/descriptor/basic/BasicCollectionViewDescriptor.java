@@ -42,6 +42,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   private IAction         rowAction;
   private ESelectionMode  selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
   private IViewDescriptor paginationViewDescriptor;
+  private Boolean         autoSelectFirstRow;
 
   /**
    * {@inheritDoc}
@@ -161,6 +162,36 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   public void setPaginationViewDescriptor(
       IViewDescriptor paginationViewDescriptor) {
     this.paginationViewDescriptor = paginationViewDescriptor;
+  }
+
+  /**
+   * Gets the autoSelectFirstRow.
+   * 
+   * @return the autoSelectFirstRow.
+   */
+  @Override
+  public boolean isAutoSelectFirstRow() {
+    if (autoSelectFirstRow != null) {
+      return autoSelectFirstRow.booleanValue();
+    }
+    return getSelectionMode() != ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION
+        && getSelectionMode() != ESelectionMode.SINGLE_INTERVAL_CUMULATIVE_SELECTION;
+  }
+
+  /**
+   * Configures the default selection that gets applied when the content of the
+   * collection view changes. Whenever set to <code>true</code>, the 1st row
+   * will be automatically selected, whereas nothing happens whe set to false.
+   * <p>
+   * The default value depends on the selection mode of the collection view.
+   * When a cumulative selection mode is used, <code>autoSelectFirstRow</code>
+   * defaults to <code>false</code>. It defaults to <code>true</code> otherwise.
+   * 
+   * @param autoSelectFirstRow
+   *          the autoSelectFirstRow to set.
+   */
+  public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
+    this.autoSelectFirstRow = new Boolean(autoSelectFirstRow);
   }
 
 }
