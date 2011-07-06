@@ -47,6 +47,8 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -64,10 +66,13 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class HibernateBackendController extends AbstractBackendController {
 
-  private HibernateTemplate hibernateTemplate;
-  private Set<IEntity>      updatedEntities;
-  private Set<IEntity>      deletedEntities;
-  private boolean           traversedPendingOperations = false;
+  private HibernateTemplate   hibernateTemplate;
+  private Set<IEntity>        updatedEntities;
+  private Set<IEntity>        deletedEntities;
+  private boolean             traversedPendingOperations = false;
+
+  private static final Logger LOG                        = LoggerFactory
+                                                             .getLogger(HibernateBackendController.class);
 
   /**
    * Whenever the entity has dirty persistent collection, make them clean to
@@ -95,7 +100,7 @@ public class HibernateBackendController extends AbstractBackendController {
             // collection that is already associated with the session.
             ((PersistentCollection) registeredPropertyEntry.getValue())
                 .setCurrentSession(null);
-          } catch (Exception ignored) {
+          } catch (Exception ex) {
             // ignored
           }
         }
@@ -259,8 +264,8 @@ public class HibernateBackendController extends AbstractBackendController {
               }
               return;
             } catch (Exception ex) {
-              // ignore the exception since we are going to re-associate the
-              // entity.
+              LOG.error("An internal error occurred when forcing {} collection initialization.", propertyName);
+              LOG.error("Source exception", ex);
             }
           }
         }
