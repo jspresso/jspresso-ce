@@ -143,12 +143,12 @@ Bugs fixed:
            Model gates should be closed when assigned a null model
            Writability gates do not work correctly on collection views
            OnUpdate must only be triggered when entity is not registered for deletion.
-         JTA transactions are not correctly synchronized with "Unit of Work"
+           JTA transactions are not correctly synchronized with "Unit of Work"
            Selecting OK on an empty LOV dialog produces an exception
            Query refiners are lost when sorting a table
            Property rollback can produce a StackOverflow on 1-1
-3071381    Clash with property names and SQL
-3088599    Integer field too small
+           Clash with property names and SQL
+           Integer field too small
 
 
 New Features:
@@ -168,7 +168,7 @@ New Features:
            Login dialog should gain focus on application startup
            Implement tri-state checkboxes for QBE filters
            Honnor property view colors in table cells
-3032663    Propertyview horizontal alignment implemented
+           Propertyview horizontal alignment implemented
            LovAction autoQuery implemented
            "Remember me" implementation
            Better client garbage collection (Flex and qooxdoo)
@@ -180,7 +180,7 @@ New Features:
            BeanRefFactory can be placed in an arbitrary namespace
            Support sorting on nested properties on paginated tables
            Computed columns can now be sorted using a SQL formula on paginated tables
-3041251    Support writability gates on inline components
+           Support writability gates on inline components
            Read-only enum property views are made icon labels
            Introduced the usingLong property for java.lang.Long mapped integers
            Secondary action map for views and controller
@@ -188,9 +188,9 @@ New Features:
            Actionlists can be declared collapsable => Menubutton
            Toolbars are made scrollable when overlapping
            Flex And qooxdoo various UI improvements
-         Flex table selection notification (itemSelectionAction)
-3019234    Image management in tables
-         Menu item now support gates
+           Flex table selection notification (itemSelectionAction)
+           Image management in tables
+           Menu item now support gates
 
 
 
