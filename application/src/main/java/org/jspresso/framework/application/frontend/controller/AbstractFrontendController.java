@@ -876,7 +876,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return a new login callback handler
    */
   protected CallbackHandler createLoginCallbackHandler() {
-    UsernamePasswordHandler uph = new UsernamePasswordHandler();
+    UsernamePasswordHandler uph = createUsernamePasswordHandler();
     String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
     if (savedUserPass != null && savedUserPass.length == 2
         && savedUserPass[0] != null) {
@@ -888,6 +888,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
       uph.setPassword(null);
       uph.setRememberMe(false);
     }
+    return uph;
+  }
+
+  /**
+   * Creates a UsernamePassword handler instance.
+   * 
+   * @return a new UsernamePassword handler instance.
+   */
+  protected UsernamePasswordHandler createUsernamePasswordHandler() {
+    UsernamePasswordHandler uph = new UsernamePasswordHandler();
     return uph;
   }
 
