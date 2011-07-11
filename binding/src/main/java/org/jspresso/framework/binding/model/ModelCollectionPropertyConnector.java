@@ -106,6 +106,16 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    // A model property collection connector should never be made read-only,
+    // by its parent connector.
+    return isLocallyWritable();
+  }
+
+  /**
    * Updates its child connectors to reflect the collection.
    * <p>
    * {@inheritDoc}
