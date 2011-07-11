@@ -664,7 +664,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           }
 
           // We must dig into the composite structure to find the 1st non
-          // composite vew
+          // composite view
           // to cascade the model
           while (masterView instanceof ICompositeView<?>) {
             masterView = ((ICompositeView<E>) masterView).getChildren().get(0);
