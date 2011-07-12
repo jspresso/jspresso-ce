@@ -40,12 +40,12 @@ qx.Class.define("org.jspresso.framework.util.format.DateUtils",
     fromDate : function(source) {
       if(source) {
         var dateDto = new org.jspresso.framework.util.lang.DateDto();
-        dateDto.setYear(viewValue.getFullYear());
-        dateDto.setMonth(viewValue.getMonth());
-        dateDto.setDate(viewValue.getDate());
-        dateDto.setHour(viewValue.getHours());
-        dateDto.setMinute(viewValue.getMinutes());
-        dateDto.setSecond(viewValue.getSeconds());
+        dateDto.setYear(source.getFullYear());
+        dateDto.setMonth(source.getMonth());
+        dateDto.setDate(source.getDate());
+        dateDto.setHour(source.getHours());
+        dateDto.setMinute(source.getMinutes());
+        dateDto.setSecond(source.getSeconds());
         return dateDto;
       }
       return null;
