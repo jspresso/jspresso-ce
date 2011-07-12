@@ -38,7 +38,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
         format : function(obj) {
           var objAsDate;
           if(obj instanceof org.jspresso.framework.util.lang.DateDto) {
-            objAsDate = org.jspresso.framework.util.format.DateUtils.fromDate(obj);
+            objAsDate = org.jspresso.framework.util.format.DateUtils.fromDateDto(obj);
           } else {
             objAsDate = obj;
           }
@@ -65,7 +65,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
               existingDate = org.jspresso.framework.util.format.DateUtils.fromDateDto(existingDateDto);
             } else {
               existingDate = existingValue;
-              existingDateDto = org.jspresso.framework.util.format.DateUtils.fromDate(existingValue);
+              existingDateDto = org.jspresso.framework.util.format.DateUtils.fromDate(existingDate);
             }
           }
           var parsedDate;
