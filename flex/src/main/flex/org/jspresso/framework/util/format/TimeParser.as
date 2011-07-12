@@ -42,14 +42,7 @@ package org.jspresso.framework.util.format {
       if(existingValue is Date) {
         return parsedDate;
       } else {
-        var parsedDateDto:DateDto = new DateDto();
-        parsedDateDto.year = parsedDate.fullYear;
-        parsedDateDto.month = parsedDate.month;
-        parsedDateDto.date = parsedDate.date;
-        parsedDateDto.hour = parsedDate.hours;
-        parsedDateDto.minute = parsedDate.minutes;
-        parsedDateDto.second = parsedDate.seconds;
-        return parsedDateDto;
+        return DateUtils.fromDate(parsedDate);
       }
     }
   }

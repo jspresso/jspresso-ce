@@ -8,6 +8,8 @@ package org.jspresso.framework.util.format
 {
   import mx.utils.StringUtil;
   
+  import org.jspresso.framework.util.lang.DateDto;
+  
   public class DateUtils
   {
     private static var _df:DateFormatter = new DateFormatter;
@@ -249,6 +251,33 @@ package org.jspresso.framework.util.format
       dt.setHours(0,0,0,0);
       var firstDay:Date = new Date(dt.getFullYear(), 0, 1);
       return Math.floor((dt.getTime() - firstDay.getTime()) / DateUtils.MILISECONDS_IN_DAY) + 1;
+    }
+
+    public static function fromDateDto(source:DateDto):Date {
+      if(source) {
+        return new Date(source.year,
+          source.month,
+          source.date,
+          source.hour,
+          source.minute,
+          source.second
+        );
+      }
+      return null;
+    }
+    
+    public static function fromDate(source:Date):DateDto {
+      if(source) {
+        var dateDto:DateDto = new DateDto();
+        dateDto.year = source.fullYear;
+        dateDto.month = source.month;
+        dateDto.date = source.date;
+        dateDto.hour = source.hours;
+        dateDto.minute = source.minutes;
+        dateDto.second = source.seconds;
+        return dateDto;
+      }
+      return null;
     }
   }
 }

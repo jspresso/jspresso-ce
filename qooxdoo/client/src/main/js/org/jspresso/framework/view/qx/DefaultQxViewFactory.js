@@ -1149,12 +1149,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         {
           converter : function(modelValue, model) {
             if(modelValue instanceof org.jspresso.framework.util.lang.DateDto) {
-              return new Date(modelValue.getYear(),
-                modelValue.getMonth(),
-                modelValue.getDate(),
-                modelValue.getHour(),
-                modelValue.getMinute(),
-                modelValue.getSecond());
+              return org.jspresso.framework.util.format.DateUtils.fromDateDto(modelValue);
             }
             if(modelValue === undefined) {
               modelValue = null;
@@ -1167,14 +1162,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }, {
           converter : function(viewValue, model) {
             if (viewValue != null && !remoteDateField.isTimezoneAware()) {
-              var viewDateDto = new org.jspresso.framework.util.lang.DateDto();
-              viewDateDto.setYear(viewValue.getFullYear());
-              viewDateDto.setMonth(viewValue.getMonth());
-              viewDateDto.setDate(viewValue.getDate());
-              viewDateDto.setHour(viewValue.getHours());
-              viewDateDto.setMinute(viewValue.getMinutes());
-              viewDateDto.setSecond(viewValue.getSeconds());
-              return viewDateDto;
+              return org.jspresso.framework.util.format.DateUtils.fromDate(viewValue);
             }
             if(viewValue === undefined) {
               viewValue = null;

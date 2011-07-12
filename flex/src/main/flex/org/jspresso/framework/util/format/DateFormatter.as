@@ -22,14 +22,7 @@ package org.jspresso.framework.util.format {
     override public function format(value:Object):String {
       var valueAsDate:Date;
       if(value is DateDto) {
-        var valueAsDateDto:DateDto = value as DateDto;
-        valueAsDate = new Date(valueAsDateDto.year,
-          valueAsDateDto.month,
-          valueAsDateDto.date,
-          valueAsDateDto.hour,
-          valueAsDateDto.minute,
-          valueAsDateDto.second
-        );
+        valueAsDate = DateUtils.fromDateDto(value as DateDto);
       } else {
         valueAsDate = value as Date;
       }

@@ -38,12 +38,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
         format : function(obj) {
           var objAsDate;
           if(obj instanceof org.jspresso.framework.util.lang.DateDto) {
-            objAsDate = new Date(obj.getYear(),
-              obj.getMonth(),
-              obj.getDate(),
-              obj.getHour(),
-              obj.getMinute(),
-              obj.getSecond());
+            objAsDate = org.jspresso.framework.util.format.DateUtils.fromDate(obj);
           } else {
             objAsDate = obj;
           }
@@ -67,22 +62,10 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
           if(existingValue) {
             if(existingValue instanceof org.jspresso.framework.util.lang.DateDto) {
               existingDateDto = existingValue;
-              existingDate = new Date(
-                existingDateDto.getYear(),
-                existingDateDto.getMonth(),
-                existingDateDto.getDate(),
-                existingDateDto.getHour(),
-                existingDateDto.getMinute(),
-                existingDateDto.getSecond());
+              existingDate = org.jspresso.framework.util.format.DateUtils.fromDateDto(existingDateDto);
             } else {
               existingDate = existingValue;
-              existingDateDto = new org.jspresso.framework.util.lang.DateDto();
-              existingDateDto.setYear(existingValue.getFullYear());
-              existingDateDto.setMonth(existingValue.getMonth());
-              existingDateDto.setDate(existingValue.getDate());
-              existingDateDto.setHour(existingValue.getHours());
-              existingDateDto.setMinute(existingValue.getMinutes());
-              existingDateDto.setSecond(existingValue.getSeconds());
+              existingDateDto = org.jspresso.framework.util.format.DateUtils.fromDate(existingValue);
             }
           }
           var parsedDate;

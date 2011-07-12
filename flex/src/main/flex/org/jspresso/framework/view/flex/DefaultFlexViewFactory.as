@@ -1448,14 +1448,7 @@ package org.jspresso.framework.view.flex {
           dateField.selectedDate = null;
         } else {
           if(value is DateDto) {
-            var valueAsDateDto:DateDto = value as DateDto;
-            dateField.selectedDate = new Date(valueAsDateDto.year,
-              valueAsDateDto.month,
-              valueAsDateDto.date,
-              valueAsDateDto.hour,
-              valueAsDateDto.minute,
-              valueAsDateDto.second
-            );
+            dateField.selectedDate = DateUtils.fromDateDto(value as DateDto);
           } else {
             dateField.selectedDate = value as Date;
           }
@@ -1491,14 +1484,7 @@ package org.jspresso.framework.view.flex {
               if(remoteState.value) {
                 var currentAsDate:Date;
                 if(remoteState.value is DateDto) {
-                  var currentAsDateDto:DateDto = remoteState.value as DateDto;
-                  currentAsDate = new Date(currentAsDateDto.year,
-                    currentAsDateDto.month,
-                    currentAsDateDto.date,
-                    currentAsDateDto.hour,
-                    currentAsDateDto.minute,
-                    currentAsDateDto.second
-                  );
+                  currentAsDate = DateUtils.fromDateDto(remoteState.value as DateDto);
                 } else {
                   currentAsDate = remoteState.value as Date;
                 }
@@ -1508,14 +1494,7 @@ package org.jspresso.framework.view.flex {
               if(remoteDateField.timezoneAware) {
                 remoteState.value = selectedDate;
               } else {
-                var dateDto:DateDto = new DateDto();
-                dateDto.year = selectedDate.fullYear;
-                dateDto.month = selectedDate.month;
-                dateDto.date = selectedDate.date;
-                dateDto.hour = selectedDate.hours;
-                dateDto.minute = selectedDate.minutes;
-                dateDto.second = selectedDate.seconds;
-                remoteState.value = dateDto;
+                remoteState.value = DateUtils.fromDate(selectedDate);
               }
             } else {
               // rollback text update
@@ -1523,14 +1502,7 @@ package org.jspresso.framework.view.flex {
               if(ti) {
                 var valueAsDate:Date;
                 if(remoteState.value is DateDto) {
-                  var valueAsDateDto:DateDto = remoteState.value as DateDto;
-                  valueAsDate = new Date(valueAsDateDto.year,
-                    valueAsDateDto.month,
-                    valueAsDateDto.date,
-                    valueAsDateDto.hour,
-                    valueAsDateDto.minute,
-                    valueAsDateDto.second
-                  );
+                  valueAsDate = DateUtils.fromDateDto(remoteState.value as DateDto);
                 } else {
                   valueAsDate = remoteState.value as Date;
                 }

@@ -18,6 +18,8 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteFormattedValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.format.DateUtils;
+  import org.jspresso.framework.util.lang.DateDto;
   
   public class RemoteValueSorter {
     
@@ -71,12 +73,22 @@ package org.jspresso.framework.view.flex {
       var cell1:Date;
       var cell2:Date;
       if(obj1 != null) {
-        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
-                            .value as Date;
+        var cell1AsObject:Object = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value;
+        if(cell1AsObject is DateDto) {
+          cell1 = DateUtils.fromDateDto(cell1AsObject as DateDto);
+        } else {
+          cell1 = cell1AsObject as Date;
+        }
       }
       if(obj2 != null) {
-        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
-                            .value as Date;
+        var cell2AsObject:Object = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value;
+        if(cell2AsObject is DateDto) {
+          cell2 = DateUtils.fromDateDto(cell2AsObject as DateDto);
+        } else {
+          cell2 = cell2AsObject as Date;
+        }
       }
       return ObjectUtil.dateCompare(cell1, cell2);
     }
