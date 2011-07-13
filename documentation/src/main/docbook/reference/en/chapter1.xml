@@ -30,12 +30,12 @@
 
         <listitem>
           <para>The <ulink url="http://maven.apache.org/download.html">Apache
-          Maven</ulink> project management tool (2.2+).</para>
+          Maven</ulink> project management tool (3.0+).</para>
         </listitem>
 
         <listitem>
           <para>The <ulink url="http://www.eclipse.org/downloads/">Eclipse IDE
-          for Java EE Developers</ulink> (3.5+).</para>
+          for Java EE Developers</ulink> (3.6+).</para>
         </listitem>
 
         <listitem>
@@ -119,210 +119,9 @@
     <section>
       <title>Importing the project in Eclipse</title>
 
-      <para>There are several steps to perform to prepare your Eclipse
-      workspace. So launch Eclipse.</para>
-
-      <para>Define a path variable that points to your Eclipse workspace
-      :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><quote>Window</quote> -&gt; <quote>Preferences</quote> -&gt;
-          <quote>General</quote> -&gt; <quote>Workspace</quote> -&gt;
-          <quote>Link Resources</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>New...</quote></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Name</quote> :
-          <code>WORKSPACE_ABSOLUTE_PATH</code></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Location</quote> : <filename>[the absolute location of
-          your Eclipse workspace folder, e.g. "/workspace"]</filename></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Define a classpath variable that points to your Maven2 local
-      repository (usually <filename>${USER_HOME}/.m2/repository</filename>)
-      :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><quote>Window</quote> -&gt; <quote>Preferences</quote> -&gt;
-          <quote>Java</quote> -&gt; <quote>Build Path</quote> -&gt;
-          <quote>Classpath Variables</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>New...</quote></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Name</quote> : <code>M2_REPO</code></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Path</quote> : <filename>[the absolute location of your
-          Maven2 local repository, e.g. "~/.m2/repository"]</filename></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Configure the <quote>Apache Tomcat v6.0</quote> server runtime
-      environment :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><quote>Window</quote> -&gt; <quote>Preferences</quote> -&gt;
-          <quote>Server</quote> -&gt; <quote>Runtime
-          Environments</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Add...</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Select <quote>Apache</quote> -&gt; <quote>Tomcat
-          v6.0</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Next &gt;</quote></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Name</quote> : <code>Apache Tomcat v6.0</code></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Tomcat installation directory</quote> : <filename>[your
-          Tomcat 6 installation directory]</filename></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Finish</quote></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Open the "Java EE" perspective :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><quote>Window</quote> -&gt; <quote>Open Perspective</quote>
-          -&gt; <quote>Other...</quote> -&gt; <quote>Java EE</quote></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Create the Apache Tomcat launch configuration :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Select the <quote>Server</quote> view (you should have it
-          automatically in the Java EE eclipse perspective)</para>
-        </listitem>
-
-        <listitem>
-          <para>Right click</para>
-        </listitem>
-
-        <listitem>
-          <para>Select <quote>New</quote> -&gt; <quote>Server</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Select <quote>Tomcat v6.0 Server</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Finish</quote></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Configure the previous launch configuration to point to the JAAS
-      configuration of the Jspresso project :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Double-click on the server you have just created</para>
-        </listitem>
-
-        <listitem>
-          <para>Click on the <quote>Open launch configuration</quote>
-          hyperlink</para>
-        </listitem>
-
-        <listitem>
-          <para>Select the <quote>Arguments</quote> tab</para>
-        </listitem>
-
-        <listitem>
-          <para>Add the following system option - keep ${workspace_loc} as is,
-          it's a built-in variable - in the <quote>VM arguments</quote> text
-          area:</para>
-
-          <para><code>-Djava.security.auth.login.config=${workspace_loc}/hrsample/conf/jaas.config</code></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Now that our Eclipse workspace is ready, we can import the
-      generated project :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><quote>File</quote> -&gt; <quote>Import...</quote> -&gt;
-          <quote>General</quote> -&gt; <quote>Existing Projects into
-          Workspace</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Next &gt;</quote></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>Select root directory</quote> : <filename>[your project
-          root folder]</filename></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Finish</quote></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>And finally the launch configurations :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><quote>File</quote> -&gt; <quote>Import...</quote> -&gt;
-          <quote>Run/Debug</quote> -&gt; <quote>Launch
-          Configurations</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Next &gt;</quote></para>
-        </listitem>
-
-        <listitem>
-          <para><quote>From Directory</quote> : <filename>[your project root
-          folder]/launches</filename></para>
-        </listitem>
-
-        <listitem>
-          <para>Check <quote>launches</quote></para>
-        </listitem>
-
-        <listitem>
-          <para>Select all available launch configurations</para>
-        </listitem>
-
-        <listitem>
-          <para>Click <quote>Finish</quote></para>
-        </listitem>
-      </itemizedlist>
+      <para>Follow the <ulink url="???">installation steps</ulink> described
+      on the Jspresso site and then import the project skeleton you've
+      generated using the M2Eclipse project import wizard.</para>
 
       <para>The development environment is now set-up. We can begin the Human
       Resources sample application coding.</para>
@@ -764,130 +563,15 @@
     with the sample domain model description.</para>
 
     <section>
-      <title>Using the Spring dependency injection container</title>
+      <title>Using the "Sugar for Jspresso" DSL</title>
 
-      <para>Let's go back to the HR sample application. As for every layer
-      introduced above, describing the domain model will consist in assembling
-      Jspresso description java beans using the <ulink
-      url="http://www.springframework.org/">Spring framework Dependency
-      Injection Container</ulink>. To achieve this, you will have to complete
-      Spring configuration files that were generated by the archetype.
-      Hopefuly, the generated project comes pre-configured for <ulink
-      url="http://springide.org/project/wiki/SpringideInstall">Spring
-      IDE</ulink> that will bring a lot of productivity enhancements :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Code completion for the XML elements and attributes.</para>
-        </listitem>
-
-        <listitem>
-          <para>Code completion for the Jspresso descriptors.</para>
-        </listitem>
-
-        <listitem>
-          <para>Quick navigation between beans and from beans to java
-          sources.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Moreover, Spring IDE will validate your Spring configuration files
-      during the project compilation and report any error in the standard
-      Eclipse <quote>problems</quote> view.</para>
-
-      <para>We will use the root package <code>org.jspresso.hrsample</code>
-      for our application as defined during the archetype project generation.
-      The domain model description will logically go to the
-      <code>org.jspresso.hrsample.model</code> package. An empty one has been
-      created in the following folder (you can quickly navigate to it using
-      the Eclipse <quote>Open resource</quote> function) :</para>
-
-      <blockquote>
-        <para><filename>hrsample/core/src/main/resources/org/jspresso/hrsample/model/model.xml</filename></para>
-      </blockquote>
-
-      <para>Here is what it looks like :</para>
-
-      <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
-  default-lazy-init="true"&gt;
-
-  &lt;!--
-    The domain model
-  --&gt;
-  &lt;!-- Describe your application domain model here. --&gt;
-
-
-  &lt;!--
-   The application I18N resources. 
-  --&gt;
-  &lt;bean
-    id="applicationMessageSource"
-    parent="abstractApplicationMessageSource"&gt;
-    &lt;property
-      name="parentMessageSource"
-      ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
-    &lt;property name="basenames"&gt;
-      &lt;list&gt;
-        &lt;value&gt;org.jspresso.hrsample.i18n.Messages&lt;/value&gt; <co
-          id="basenames" />
-      &lt;/list&gt;
-    &lt;/property&gt;
-  &lt;/bean&gt;
-&lt;/beans&gt;</programlisting>
-
-      <calloutlist>
-        <callout arearefs="commonsMessageSource">
-          <para>We inherit the default Jspresso I18N resource bundles that
-          contain translated entries for generic terms.</para>
-        </callout>
-
-        <callout arearefs="basenames">
-          <para>We declare the list of I18N resource bundles we are going to
-          use to store the translations.</para>
-        </callout>
-      </calloutlist>
-
-      <para>Jspresso relies on the well-known java I18N mechanism through the
-      use of resource bundle property files. Translating the application is
-      then a matter of translating the entries contained in these property
-      files. Since Jspresso never use absolute positioning but instead heavily
-      relies on layouts, the translator won't have to care about translations
-      length.</para>
-
-      <para>As declared in the XML fragment above, we will use a
-      <code>org.jspresso.hrsample.i18n</code> package that will contain the
-      resource bundle property files. We will translate the application in
-      English and French; hopefuly, the archetype has already created both
-      property files for us. You should have the two files
-      <filename>Messages_en.properties</filename> and
-      <filename>Messages_fr.properties</filename> that will respectively
-      contain the English and French translations in the following folder
-      :</para>
-
-      <para><filename>/hrsample/core/src/main/resources/org/jspresso/hrsample/i18n</filename></para>
-
-      <para>Adding a new language will be just a mater of creating, in the
-      same package, a new property file with the 2 letter ISO code of the
-      language. Those 2 files are almost empty as of now but don't care about
-      that; Jspresso will graphically notify you that a translation is missing
-      for a given language.</para>
-    </section>
-
-    <section>
-      <title>Using the "Sugar for Jspresso" DSL (Jspresso 3.5+)</title>
-
-      <para>Starting from version 3.5.0, the preferred way of writing
-      applications is to use the new Jspresso Groovy based DSL (Domain
-      Specific Language) : "Sugar for Jspresso" - aka <emphasis
-      role="bold">SJS</emphasis>. The SJS DSL was thought from the very
-      begining to stay compatible with Spring XML. This means that during the
+      <para>The preferred way of writing applications is to use the new
+      Jspresso Groovy based DSL (Domain Specific Language) : "Sugar for
+      Jspresso" - aka <emphasis role="bold">SJS</emphasis>. The SJS DSL was
+      thought from the very begining to stay compatible with Spring XML which
+      was the legacy language used in Jspresso. This means that during the
       build, the SJS authored files are "compiled" to generate Spring XML
-      files that are loaded in the Spring context beside the usual ones. So
+      files that are loaded in the Spring context beside the legacy ones. So
       you can :</para>
 
       <itemizedlist>
@@ -905,19 +589,18 @@
         </listitem>
       </itemizedlist>
 
-      <para>As for the model part, instead of working directly into the
-      <filename>model.xml</filename> Spring context file, you can write your
-      domain description using SJS into the <filename>model.groovy</filename>
-      file located here :</para>
+      <para>For instance, describing your application model will be a matter
+      of writing SJS code into the <filename>model.groovy</filename> file
+      located here :</para>
 
       <blockquote>
         <para><filename>hrsample/core/src/main/dsl/model.groovy</filename></para>
       </blockquote>
 
-      <para>Since the SJS files are plain Groovy files, you can install the
-      <ulink url="http://groovy.codehaus.org/Eclipse+Plugin">Groovy Eclipse
-      plugin</ulink> to help authoring them until the SJS Eclipse plugin gets
-      released.</para>
+      <para>Authoring SJS code is greatly simplified when using <ulink
+      url="http://www.jspresso.org/page/jspresso-developer-studio">Jspresso
+      Developer Studio</ulink>, so make sure you've correctly installed
+      it.</para>
 
       <para>Here is what the default generated
       <filename>model.groovy</filename> looks like :</para>
@@ -949,171 +632,84 @@
       <para>The <code>Nameable</code> interface may be described as follow
       :</para>
 
-      <programlisting language="xml">&lt;bean <co id="n-bean" />
-  id="Nameable" <co id="n-id" />
-  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt; <co
-          id="n-class" />
-  &lt;constructor-arg
-    value="org.jspresso.hrsample.model.Nameable" /&gt; <co id="n-classname" />
-  &lt;property name="propertyDescriptors"&gt; <co id="n-props" />
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;<co
-          id="n-stringprop" />
-        &lt;property
-          name="name" <co id="n-name" />
-          value="name" /&gt;
-        &lt;property
-          name="maxLength" <co id="n-maxl" />
-          value="64" /&gt;
-        &lt;property
-          name="mandatory" <co id="n-mand" />
-          value="true" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting>
+      <para><programlisting language="java">Interface<co id="Nameable_1" /> ('Nameable'<co
+            id="Nameable_2" />) {
+  string_64<co id="Nameable_3" /> 'name'<co id="Nameable_4" />, mandatory:true<co
+            id="Nameable_5" />
+}</programlisting><calloutlist>
+          <callout arearefs="Nameable_1">
+            <para>Since we are describing a generic interface (which may or
+            may not turn to be an entity) we will use an
+            <code>Interface</code> keyword.</para>
+          </callout>
 
-      <calloutlist>
-        <callout arearefs="n-bean">
-          <para>This is a standard spring bean definition. We are creating a
-          descriptor bean.</para>
-        </callout>
+          <callout arearefs="Nameable_2">
+            <para>We name the interface
+            <code><classname>Nameable</classname></code>. By convention, since
+            we are in the <package>org.jspresso.hrsample</package> namespace,
+            this will turn into a
+            <classname>org.jspresso.hrsample.model.Nameable</classname>
+            interface class.</para>
+          </callout>
 
-        <callout arearefs="n-id">
-          <para>The identifier of this descriptor bean instance for later
-          reference.</para>
-        </callout>
+          <callout arearefs="Nameable_3">
+            <para>We declare a <classname>String</classname> property, with a
+            maximum length of 64 chars.</para>
+          </callout>
 
-        <callout arearefs="n-class">
-          <para>Since we are describing a generic interface (which may or may
-          not turn to be an entity) we will use a
-          <code>BasicInterfaceDescriptor</code> as opposed to a
-          <code>BasicEntityDescriptor</code> or
-          <code>BasicComponentDescriptor</code>.</para>
-        </callout>
+          <callout arearefs="Nameable_4">
+            <para>We name this property <code>name</code>, so that the
+            corresponding <code>getName()</code> and
+            <code>setName(String)</code> accessors will be generated.</para>
+          </callout>
 
-        <callout arearefs="n-classname">
-          <para>The (fully-qualified) name of this interface.</para>
-        </callout>
-
-        <callout arearefs="n-props">
-          <para>The property descriptors of this interface descriptor.</para>
-        </callout>
-
-        <callout arearefs="n-stringprop">
-          <para>The string property descriptor to hold the <code>name</code>
-          property description.</para>
-        </callout>
-
-        <callout arearefs="n-name">
-          <para>The name of the <code>name</code> property which is
-          "name".</para>
-        </callout>
-
-        <callout arearefs="n-maxl">
-          <para>The maximum length of the name property which is 64
-          characters.</para>
-        </callout>
-
-        <callout arearefs="n-mand">
-          <para>The fact that the <code>name</code> property is mandatory on a
-          <code>Nameable</code>.</para>
-        </callout>
-      </calloutlist>
-
-      <para>And the SJS way, that is way more compact :</para>
-
-      <para><programlisting language="java">Interface ('Nameable') {
-  string_64 'name', mandatory:true
-}</programlisting></para>
+          <callout arearefs="Nameable_5">
+            <para>We make this property mandatory. </para>
+          </callout>
+        </calloutlist></para>
 
       <para>As you can see above, we create an interface descriptor
-      (<code>org.jspresso.hrsample.backend.domain.Nameable</code>) with one
-      property (<code>name</code>) along with its constraints
-      (<code>maxLength</code> and <code>mandatory</code>). This is a fairly
-      simple interface since it has no intrinsic behaviour nor relationships
-      with other components.</para>
+      (<code>org.jspresso.hrsample.model.Nameable</code>) with one property
+      (<code>name</code>) along with its constraints (<code>maxLength</code>
+      and <code>mandatory</code>). This is a fairly simple interface since it
+      has no intrinsic behaviour nor relationships with other
+      components.</para>
 
       <para>So now, lets describe the <code>Traceable</code> interface as
       follow :</para>
 
-      <programlisting language="xml">&lt;bean
-  id="Traceable"
-  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Traceable" /&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt; <co
-          id="t-createTimestamp" />
-        &lt;property
-          name="name"
-          value="createTimestamp" /&gt;
-        &lt;property
-          name="type"
-          value="DATE_TIME" /&gt; <co id="t-DATE_TIME" />
-        &lt;property
-          name="readOnly"
-          value="true" /&gt; <co id="readOnly" />
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="lastUpdateTimestamp" /&gt;
-        &lt;property
-          name="type"
-          value="DATE_TIME" /&gt;
-        &lt;property
-          name="readOnly"
-          value="true" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="unclonedProperties"&gt; <co id="t-uncloned" />
-    &lt;list&gt;
-      &lt;value&gt;createTimestamp&lt;/value&gt;
-      &lt;value&gt;lastUpdateTimestamp&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting>
-
-      <calloutlist>
-        <callout arearefs="t-createTimestamp">
-          <para>The date property descriptor to hold the
-          <code>createTimestamp</code> property. Same applies for the
-          <code>lastUpdateTimestamp</code> property.</para>
-        </callout>
-
-        <callout arearefs="t-DATE_TIME">
-          <para>We want to preserve date and time information in this property
-          (<code>DATE_TIME</code> constant). The alternative would have been
-          to round the property and loose the time precision; in that case, we
-          would have used the <code>DATE</code> constant.</para>
-        </callout>
-
-        <callout arearefs="readOnly">
-          <para>We don't want this property to be updatable by the end user so
-          we make it read-only.</para>
-        </callout>
-
-        <callout arearefs="t-uncloned">
-          <para>Whenever a <code>Traceable</code> component is duplicated, we
-          want exclude the tracing values from the cloning process.</para>
-        </callout>
-      </calloutlist>
-
-      <para>And the SJS way :</para>
-
       <para><programlisting language="java">Interface('Traceable',
-          uncloned:['createTimestamp', 'lastUpdateTimestamp']) {
-  date_time 'createTimestamp', readOnly:true
-  date_time 'lastUpdateTimestamp', readOnly:true
-}</programlisting>The <code>Traceable</code> interface description is slightly
-      more complicated than the <code>Nameable</code> interface since not all
-      properties are eligible to cloning
-      (<code>unclonedProperties</code>).</para>
+          uncloned:['createTimestamp', 'lastUpdateTimestamp']<co
+            id="Traceable_1" />) {
+  date_time<co id="Traceable_2" /> 'createTimestamp', readOnly:true<co
+            id="Traceable_3" />, timeZoneAware:true<co id="Traceable_4" />
+  date_time 'lastUpdateTimestamp', readOnly:true, timeZoneAware:true
+}</programlisting><calloutlist>
+          <callout arearefs="Traceable_1">
+            <para>Whenever an entity implementing the
+            <classname>Traceable</classname> interface is cloned by Jspresso,
+            the cloning process will ignore both tracing properties.</para>
+          </callout>
+
+          <callout arearefs="Traceable_2">
+            <para>We declare a date property for which the time portion will
+            be preserved.</para>
+          </callout>
+
+          <callout arearefs="Traceable_3">
+            <para>The date property is made read-only, i.e. it will only be
+            updated programatically.</para>
+          </callout>
+
+          <callout arearefs="Traceable_4">
+            <para>The date property is a technical date, i.e. it is sensitive
+            to the client / server timezones difference. It will translate
+            differently depending on the client timezone.</para>
+          </callout>
+        </calloutlist>The <code>Traceable</code> interface description is
+      slightly more complicated than the <code>Nameable</code> interface since
+      not all properties are eligible to cloning
+      (<code>uncloned</code>).</para>
     </section>
 
     <section>
@@ -1320,30 +916,20 @@ public class TraceableLifecycleInterceptor extends
       <para>We can now link the life-cycle interceptor to our
       <code>Traceable</code> interface bean descriptor as below :</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="Traceable"
-  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
-  ...
-  &lt;property name="lifecycleInterceptorClassNames"&gt; <co
-            id="lcInterceptors" />
-    &lt;list&gt;
-      &lt;value&gt;org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="lcInterceptors">
-            <para>Defines an ordered list of life-cycle interceptors attached
-            to the component.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>And the SJS way :</para>
-
       <para><programlisting language="java">Interface('Traceable',
-    <emphasis role="bold">interceptors:'TraceableLifecycleInterceptor'</emphasis>,
+    <emphasis role="bold">interceptors:'TraceableLifecycleInterceptor'</emphasis><co
+            id="TraceableLifecycleInterceptor_1" />,
     uncloned:['createTimestamp', 'lastUpdateTimestamp']) {
   ...
-}</programlisting></para>
+}</programlisting><calloutlist>
+          <callout arearefs="TraceableLifecycleInterceptor_1">
+            <para>Defines an ordered list of life-cycle interceptors attached
+            to the component. Note that, by convention, we can ommit the
+            package of the
+            <classname>TraceableLifecycleInterceptor</classname> class, since
+            it will be inferred from the current namespace.</para>
+          </callout>
+        </calloutlist></para>
     </section>
 
     <section>
@@ -1355,49 +941,21 @@ public class TraceableLifecycleInterceptor extends
 
       <para>So let's describe the <code>City</code> entity as below :</para>
 
-      <programlisting language="xml">&lt;bean
-  id="City"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt; <co
-          id="BasicEntityDescriptor" />
-  &lt;constructor-arg value="org.jspresso.hrsample.model.City" /&gt;
-  &lt;property name="ancestorDescriptors"&gt; <co id="ancestorDescriptors" />
-    &lt;list&gt;
-      &lt;ref local="Nameable" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="zip" /&gt;
-        &lt;property
-          name="maxLength"
-          value="10" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting>
-
-      <calloutlist>
-        <callout arearefs="BasicEntityDescriptor">
-          <para>Since <code>City</code> is an entity, we use a
-          <code>BasicEntityDescriptor</code> which is a special kind of
-          component descriptor.</para>
-        </callout>
-
-        <callout arearefs="ancestorDescriptors">
-          <para>This descriptor inherits from our <code>Nameable</code>
-          interface as well as the standard <code>IEntity</code> descriptor
-          bean.</para>
-        </callout>
-      </calloutlist>
-
-      <para>And the SJS way :<programlisting language="java">Entity('City',
-       extend:'Nameable') {
+      <para><programlisting language="java">Entity<co id="City_1" />('City',
+       extend:'Nameable'<co id="City_2" />) {
   string_10 'zip'
-}</programlisting></para>
+}</programlisting><calloutlist>
+          <callout arearefs="City_1">
+            <para>We are now declaring a concrete entity, thus using the
+            <code>Entity</code> keyword.</para>
+          </callout>
+
+          <callout arearefs="City_2">
+            <para>We make the <code><classname>City</classname></code> entity
+            inherit from the <code><classname>Nameable</classname></code>
+            interface, so it will bring the name property.</para>
+          </callout>
+        </calloutlist></para>
 
       <para>the Jspresso Maven compilation will produce the following class
       (<filename>City.java</filename>) :</para>
@@ -1488,75 +1046,30 @@ public interface City extends
       <para>So let's describe the <code>ContactInfo</code> component as below
       :</para>
 
-      <programlisting language="xml">&lt;bean
-  id="ContactInfo"
-  class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
-          id="BasicComponentDescriptor" />
-  &lt;constructor-arg value="org.jspresso.hrsample.model.ContactInfo" /&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="address" /&gt;
-        &lt;property
-          name="maxLength"
-          value="256" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="phone" /&gt;
-        &lt;property
-          name="maxLength"
-          value="32" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="email" /&gt;
-        &lt;property
-          name="maxLength"
-          value="128" /&gt;
-        &lt;property
-          name="regexpPattern" <co id="regexpPattern" />
-          value="[\w\-\.]*@[\w\-\.]*" /&gt;
-        &lt;property
-          name="regexpPatternSample" <co id="regexpPatternSample" />
-          value="contact@acme.com" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting>
-
-      <calloutlist>
-        <callout arearefs="BasicComponentDescriptor">
-          <para>Since <code>ContactInfo</code> is an component, we use a
-          <code>BasicComponentDescriptor</code>.</para>
-        </callout>
-
-        <callout arearefs="regexpPattern">
-          <para>This is a special kind of string constraint enforcement
-          through a regular expression; we want an email to conform to contain
-          the @ sign, be without space and be only composed of literals plus
-          '.' and '-'.</para>
-        </callout>
-
-        <callout arearefs="regexpPatternSample">
-          <para>Whenever there is some kind of communication to initiate (an
-          invalid value for instance), this is an example of a correct
-          value.</para>
-        </callout>
-      </calloutlist>
-
-      <para>And the SJS way :<programlisting language="java">Component('ContactInfo') {
+      <para><programlisting language="java">Component<co id="ContactInfo_1" />('ContactInfo') {
   string_256 'address'
   string_32  'phone'
-  string_128 'email', regex:"[\\w\\-\\.]*@[\\w\\-\\.]*", regexSample:'contact@acme.com'
-}</programlisting></para>
+  string_128 'email', regex:"[\\w\\-\\.]*@[\\w\\-\\.]*"<co id="ContactInfo_2" />, regexSample:'contact@acme.com'<co
+            id="ContactInfo_3" />
+}</programlisting><calloutlist>
+          <callout arearefs="ContactInfo_1">
+            <para>Since <code>ContactInfo</code> is an component, we use a
+            <code>Component</code> keyword.</para>
+          </callout>
+
+          <callout arearefs="ContactInfo_2">
+            <para>This is a special kind of string constraint enforcement
+            through a regular expression; we want an email to conform to
+            contain the @ sign, be without space and be only composed of
+            literals plus '.' and '-'.</para>
+          </callout>
+
+          <callout arearefs="ContactInfo_3">
+            <para>Whenever there is some kind of communication to initiate (an
+            invalid value for instance), this is an example of a correct
+            value.</para>
+          </callout>
+        </calloutlist></para>
 
       <para>Relaunching the Jspresso generator will produce the following
       class (<filename>ContactInfo.java</filename>) :</para>
@@ -1659,50 +1172,25 @@ public interface ContactInfo extends
         define a <code>city</code> property in the <code>ContactInfo</code>
         component.</para>
 
-        <para>The following XML fragment will do the trick :</para>
+        <para>The following SJS fragment will do the trick :</para>
 
-        <programlisting language="xml">&lt;bean
-  id="ContactInfo"
-  class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.ContactInfo" /&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;bean
-        class=
-        "org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
-            id="BasicReferencePropertyDescriptor" />
-        &lt;property
-          name="name"
-          value="city" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="City" /&gt; <co id="referencedDescriptor" />
-      &lt;/bean&gt;
-      ...
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting>
-
-        <para><calloutlist>
-            <callout arearefs="BasicReferencePropertyDescriptor">
+        <para><programlisting language="java">Component('ContactInfo') {
+  ...
+  <emphasis role="bold">reference 'city'</emphasis><co id="ContactInfo_ref_1" /><emphasis
+              role="bold">, ref:'City'</emphasis><co id="ContactInfo_ref_2" />
+  ...
+}</programlisting><calloutlist>
+            <callout arearefs="ContactInfo_ref_1">
               <para><code>ContactInfo</code> has a reference to the
               <code>City</code> entity so we describe this using a
-              <code>BasicReferencePropertyDescriptor</code>.</para>
+              <code>reference</code> keyword.</para>
             </callout>
 
-            <callout arearefs="referencedDescriptor">
-              <para>We link the reference property descriptor to the
-              <code>City</code> entity descriptor we described above (note the
-              usage of the <code>ref</code> spring attribute).</para>
+            <callout arearefs="ContactInfo_ref_2">
+              <para>We link the reference property to the <code>City</code>
+              entity we described above.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Component('ContactInfo') {
-  ...
-  <emphasis role="bold">reference 'city', ref:'City'</emphasis>
-  ...
-}</programlisting></para>
 
         <para>Relaunching the Maven compilation will update the
         <filename>ContactInfo.java</filename> source file we generated above,
@@ -1735,48 +1223,34 @@ public interface ContactInfo extends
         <para>To end with the commons model part, let's define the Event
         entity :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Event"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Event" /&gt;
-  &lt;property name="ancestorDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref local="Traceable" /&gt; <co id="Traceable" />
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicHtmlPropertyDescriptor"&gt; <co
-              id="BasicTextPropertyDescriptor" />
-        &lt;property
-          name="name"
-          value="text" /&gt;
-        &lt;property
-          name="maxLength"
-          value="2048" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="Traceable">
+        <para><programlisting language="java">Entity('Event',extend:'Traceable'<co
+              id="Event_1" />){
+  html<co id="Event_2" /> 'text', maxLength:2048 , id:'Event-text'<co
+              id="Event_3" />
+}</programlisting><calloutlist>
+            <callout arearefs="Event_1">
               <para>An event is a <code>Traceable</code> entity.</para>
             </callout>
 
-            <callout arearefs="BasicTextPropertyDescriptor">
-              <para>We use a <code>BasicHtmlPropertyDescriptor</code> instead
-              of a <code>BasicStringPropertyDescriptor</code>. This is to
-              inform the framework the this property is used to store HTML
-              formatted data; although there is no direct impact on the model
-              layer, it might be useful in the view layer (e.g. : use a rich
-              text area instead of a text field to display and edit the
-              <code>Event</code> text property).</para>
+            <callout arearefs="Event_2">
+              <para>We use a <code>html</code> property instead of a
+              <code>string</code> one. This is to inform the framework that
+              this property is used to store HTML formatted data; although
+              there is no direct impact on the model layer (it is still stored
+              as a <code>String</code>), it might be useful in the view layer
+              (e.g. : use a rich text area instead of a text field to display
+              and edit the <code>Event</code> text property).</para>
+            </callout>
+
+            <callout arearefs="Event_3">
+              <para>We assign explicitely an id to the <code>text</code>
+              property. This is to be able to reference it individually from
+              another layer (e.g. the view layer). By default, only reference
+              and collection properties are implicitly assigned an id in the
+              form <code>Owner-property</code>. We kept this convention to
+              declare an id on the text property.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Entity('Event',extend:'Traceable'){
-  html 'text', maxLength:2048 , id:'Event-text'
-}</programlisting></para>
 
         <para>This first relationship is fairly simple since it is a n-1
         unidirectional association. Of course, the Jspresso can also
@@ -1793,221 +1267,91 @@ public interface ContactInfo extends
         <para>The <code>Employee</code> entity is fairly simple to describe
         giving what we already achieved.</para>
 
-        <para>Let's look at the XML fragment below :</para>
+        <para>Let's look at the SJS code below :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Employee" /&gt;
-  &lt;property name="ancestorDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref local="Nameable" /&gt;
-      &lt;ref local="Traceable" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="firstName" /&gt;
-        &lt;property
-          name="maxLength"
-          value="32" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="ssn" /&gt;
-        &lt;property
-          name="maxLength"
-          value="10" /&gt;
-        &lt;property
-          name="regexpPattern"
-          value="[\d]{10}" /&gt; <co id="ssn" />
-        &lt;property
-          name="regexpPatternSample"
-          value="0123456789" /&gt;
-        &lt;property
-          name="unicityScope"
-          value="empSsn" /&gt; <co id="unicityScope" />
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="birthDate" /&gt;
-        &lt;property
-          name="type"
-          value="DATE" /&gt; <co id="birthDate" />
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="hireDate" /&gt;
-        &lt;property
-          name="type"
-          value="DATE" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class=
-        "org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor"&gt; <co
-              id="BasicEnumerationPropertyDescriptor" />
-        &lt;property
-          name="name"
-          value="gender" /&gt;
-        &lt;property
-          name="enumerationName"
-          value="GENDER" /&gt;
-        &lt;property
-          name="mandatory"
-          value="true" /&gt;
-        &lt;property name="valuesAndIconImageUrls"&gt; <co
-              id="valuesAndIconImageUrls" />
-          &lt;map&gt;
-            &lt;entry
-              key="M"
-              value="classpath:org/jspresso/hrsample/images/male-48x48.png" /&gt;
-            &lt;entry
-              key="F"
-              value="classpath:org/jspresso/hrsample/images/female-48x48.png" /&gt;
-          &lt;/map&gt;
-        &lt;/property&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicColorPropertyDescriptor"&gt; <co
-              id="preferredColor" />
-        &lt;property name="name" value="preferredColor" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor"&gt; <co
-              id="married" />
-        &lt;property name="name" value="married" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicDecimalPropertyDescriptor"&gt; <co
-              id="salary" />
-        &lt;property name="name" value="salary" /&gt;
-        &lt;property name="minValue" value="0" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicBinaryPropertyDescriptor"&gt; <co
-              id="photo" />
-        &lt;property name="name" value="photo" /&gt;
-        &lt;property name="maxLength" value="1048576" /&gt;
-        &lt;property name="fileFilter"&gt;
-          &lt;map&gt;
-            &lt;entry key="images"&gt;
-              &lt;list&gt;
-                &lt;value&gt;.jpg&lt;/value&gt;
-                &lt;value&gt;.bmp&lt;/value&gt;
-              &lt;/list&gt;
-            &lt;/entry&gt;
-          &lt;/map&gt;
-        &lt;/property&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor"&gt; <co
-              id="passwordProp" />
-        &lt;property name="name" value="password" /&gt;
-        &lt;property name="maxLength" value="32" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class=
-        "org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
-              id="inlinedComp" />
-        &lt;property
-          name="name"
-          value="contact" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="ContactInfo" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="ssn">
+        <para><programlisting language="java">Entity ('Employee',
+        extend:['Nameable','Traceable']) {
+  string_32 'firstName', mandatory:true
+  string_10 'ssn', regex:'[\\d]{10}'<co id="Employee_1" />, regexSample:'0123456789', unicityScope:'empSsn'<co
+              id="Employee_2" />
+  date<co id="Employee_3" /> 'birthDate'
+  date 'hireDate'
+  enumeration<co id="Employee_4" /> 'gender', enumName:'GENDER', mandatory:true, valuesAndIcons<co
+              id="Employee_5" />:[
+              'M':'male-48x48.png',
+              'F':'female-48x48.png']
+  color<co id="Employee_6" /> 'preferredColor'
+  bool<co id="Employee_7" /> 'married'
+  decimal<co id="Employee_8" /> 'salary', minValue:0
+  binary<co id="Employee_9" /> 'photo', maxLength:1048576, id:'Employee-photo',
+         fileFilter:['images':['.jpg']],
+         fileName:'photo.jpg'
+  password<co id="Employee_10" /> 'password', maxLength:32
+  reference<co id="Employee_11" /> 'contact', ref:'ContactInfo', id:'contact'
+}</programlisting><calloutlist>
+            <callout arearefs="Employee_1">
               <para>We defined a regular expression control on the ssn
               property since it must be composed of 10 and only 10
               digits.</para>
             </callout>
 
-            <callout arearefs="unicityScope">
+            <callout arearefs="Employee_2">
               <para>We define a unicity domain for the <code>ssn</code>
               property. This will translate in a unique key definition in the
               persistent store.</para>
             </callout>
 
-            <callout arearefs="birthDate">
+            <callout arearefs="Employee_3">
               <para>We don't care about the time information of this date; so
-              we use a DATE type as opposed to the DATE_TIME type that we used
-              for the <code>Traceable</code> interface.</para>
+              we use a <code>date</code> keyword as opposed to the
+              <code>date_time</code> keyword that we used for the
+              <code>Traceable</code> interface.</para>
             </callout>
 
-            <callout arearefs="BasicEnumerationPropertyDescriptor">
-              <para>This is a new kind of property descriptor. This one
-              defines a finite choice of values for the property.</para>
+            <callout arearefs="Employee_4">
+              <para>This is a new type of property. This one defines a finite
+              choice of values.</para>
             </callout>
 
-            <callout arearefs="valuesAndIconImageUrls">
+            <callout arearefs="Employee_5">
               <para>We define each of the values composing the choice for the
               gender enumeration (either 'M' or 'F') along with icons if
               available.</para>
             </callout>
 
-            <callout arearefs="preferredColor">
+            <callout arearefs="Employee_6">
               <para>This defines a color property. Color properties are
               internally stored as their RGBA base 16 encoded value, but are
               visualized and edited using a color chooser un the UI.</para>
             </callout>
 
-            <callout arearefs="married">
+            <callout arearefs="Employee_7">
               <para>This defines a boolean property.</para>
             </callout>
 
-            <callout arearefs="salary">
+            <callout arearefs="Employee_8">
               <para>This defines a decimal property.</para>
             </callout>
 
-            <callout arearefs="photo">
+            <callout arearefs="Employee_9">
               <para>This defines a binary property. It comes with a file
               filter to set up the file extensions that are to be configured
               when the user chooses a file to upload in order to fill in this
-              property value.</para>
+              property value as well as a default filename that is used
+              whensaving the property content to a file.</para>
             </callout>
 
-            <callout arearefs="passwordProp">
+            <callout arearefs="Employee_10">
               <para>This defines a password property. It is stored internally
               as a string but is visually represented using a password
               field.</para>
             </callout>
 
-            <callout arearefs="inlinedComp">
+            <callout arearefs="Employee_11">
               <para>This is where we reference the <code>ContactInfo</code>
               component.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Entity ('Employee',
-        extend:['Nameable','Traceable']) {
-  string_32 'firstName', mandatory:true
-  string_10 'ssn', regex:"[\\d]{10}", regexSample:'0123456789', unicityScope:'empSsn'
-  date 'birthDate'
-  date 'hireDate'
-  enumeration 'gender', enumName:'GENDER', mandatory:true, valuesAndIcons:[
-              'M':'male-48x48.png',
-              'F':'female-48x48.png']
-  color 'preferredColor'
-  bool 'married'
-  decimal 'salary', minValue:0
-  binary 'photo', maxLength:1048576, id:'Employee-photo',
-         fileFilter:['images':['.jpg','.bmp']]
-  password 'password', maxLength:32
-  reference 'contact', ref:'ContactInfo', id:'contact'
-}</programlisting></para>
 
         <para>The employee description above shows that it is strictly
         equivalent - as far as description is concerned - to reference an
@@ -2022,88 +1366,8 @@ public interface ContactInfo extends
 
         <para>You have surely noticed that we did not describe the 1-N
         composition between <code>Employee</code> and <code>Event</code>. This
-        will be our first collection property and since this description will
-        be re-used in views (to view and edit the events of an employee), we
-        will put it in its own &lt;bean&gt; section so that we can assign it a
-        spring id and reference it later :</para>
-
-        <para><programlisting language="xml">&lt;bean
-  id="Employee-events"
-  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
-              id="BasicCollectionPropertyDescriptor" />
-  &lt;property
-    name="name"
-    value="events" /&gt;
-  &lt;property
-    name="composition"
-    value="true" /&gt; <co id="composition" />
-  &lt;property name="referencedDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicListDescriptor"&gt; <co
-              id="BasicCollectionDescriptor" />
-      &lt;property
-        name="elementDescriptor"
-        ref="Event" /&gt; <co id="elementDescriptor" />
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="BasicCollectionPropertyDescriptor">
-              <para>We are describing a collection relationship property. This
-              is done using a
-              <code>BasicCollectionPropertyDescriptor</code>.</para>
-            </callout>
-
-            <callout arearefs="composition">
-              <para>We make this relationship a composition to express the
-              fact that whenever an employee is deleted, the attached events
-              must also be deleted.</para>
-            </callout>
-
-            <callout arearefs="BasicCollectionDescriptor">
-              <para>A collection property descriptor always references a
-              collection descriptor (which may be reused across different
-              collection property descriptors). In our case, we need an
-              ordered list of events as specified in the analysis; so we use a
-              <code>BasicListDescriptor</code> to achieve that. We could have
-              used <code>BasicSetDescriptor</code> for a set semantic (no
-              duplicates and unordered).</para>
-            </callout>
-
-            <callout arearefs="elementDescriptor">
-              <para>Our collection property lists events; so we reference the
-              <code>Event</code> descriptor as being the element type of our
-              collection.</para>
-            </callout>
-          </calloutlist>Then we need to reference the
-        <code>Employee-events</code> collection property descriptor in the
-        Employee entity. This is done in a single line as shown below :</para>
-
-        <para><programlisting language="xml">&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Employee" /&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref local="Employee-events" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
-
-        <para>As a general rule, you have to remember that each and every bean
-        definition in spring can be factored and re-used by making it a
-        top-level bean and assigning it an id. This is what we have done for
-        the <code>Employee-events</code> descriptor (for later reference but
-        not for re-use). All the power of the Spring dependency injection
-        container comes into play. For instance, we could easily decide to
-        define short (32), medium (128) and long (512) parent string
-        descriptors and have all our application string descriptors inherit
-        from these. It would make the model more homogeneous and any change a
-        matter of an instant. Following this principles, we encourage you to
-        make re-usable descriptor bean libraries you can reference among your
-        applications. Your descriptor sources will be more concise and more
-        readable and maintainable.</para>
+        will be our first collection property and its description is actually
+        quite straightforward :</para>
 
         <para>And the SJS way (note that SJS will automatically generate a
         top-level bean for the collection property, with an id in the form of
@@ -2111,9 +1375,38 @@ public interface ContactInfo extends
         <emphasis>Employee-events</emphasis>) :<programlisting
         language="java">Entity ('Employee'...) {
   ...
-  list 'events', composition:true, ref:'Event'
+  list<co id="Employee-events_1" /> 'events', composition:true<co
+              id="Employee-events_2" />, ref:'Event'<co id="Employee-events_3" />
   ...
-}</programlisting></para>
+}</programlisting><calloutlist>
+            <callout arearefs="Employee-events_1">
+              <para>We are describing a collection relationship property.
+              Since we want an arbitrary, persistent, order using an index, we
+              declare it as a <code>list</code>. If we didn't want to actually
+              persist an arbitrary order (which is the vast majority of the
+              cases), we would have used a <code>set</code> semantic using the
+              <code>set</code> keyword.</para>
+            </callout>
+
+            <callout arearefs="Employee-events_2">
+              <para>We make this relationship a composition to express the
+              fact that whenever an employee is deleted, the attached events
+              must also be deleted.</para>
+            </callout>
+
+            <callout arearefs="Employee-events_3">
+              <para>Our collection property lists events; so we reference the
+              <code>Event</code> entity as being the element type of our
+              collection.</para>
+            </callout>
+          </calloutlist></para>
+
+        <note>
+          <para>SJS automatically generates an automatic id for collection
+          properties and for reference properties. The generated id has the
+          form of <emphasis>Owner-property</emphasis>, i.e.
+          <emphasis>Employee-events</emphasis></para>
+        </note>
 
         <para>Launching the Jspresso generator will generate the
         <filename>Employee.java</filename> source file :</para>
@@ -2418,128 +1711,37 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
       <para>The organization model part is the most complex of the example,
       since it involves entity inheritance (and polymorphism) and other kinds
       of relationships (1-1, bi-directional). So let's begin with the entity
-      inheritance graph and we will deal with their relationships next.</para>
+      inheritance graph and we will deal with their relationships next
+      :</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="Company"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Company" /&gt;
-  &lt;property name="ancestorDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref local="Nameable" /&gt;
-      &lt;ref local="Traceable" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="contact" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="ContactInfo" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="OrganizationalUnit"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.OrganizationalUnit" /&gt;
-  &lt;property name="purelyAbstract" value="true" /&gt; <co
-            id="purelyAbstract" />
-  &lt;property name="ancestorDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref local="Nameable" /&gt;
-      &lt;ref local="Traceable" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="ouId" /&gt;
-        &lt;property
-          name="regexpPattern"
-          value="[A-Z]{2}-[\d]{3}" /&gt;
-        &lt;property
-          name="regexpPatternSample"
-          value="AB-123" /&gt;
-        &lt;property
-          name="maxLength"
-          value="6" /&gt;
-        &lt;property
-          name="mandatory"
-          value="true" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="contact" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="ContactInfo" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Department"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Department" /&gt;
-  &lt;property name="ancestorDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref local="OrganizationalUnit" /&gt; <co id="OrganizationalUnit" />
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Team"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Team" /&gt;
-  &lt;property name="ancestorDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref local="OrganizationalUnit" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="purelyAbstract">
-            <para>An <code>OrganizationalUnit</code> will never be
-            instantiated as such; only sub-entities will. This is why we
-            define the entity as purely abstract.</para>
-          </callout>
-
-          <callout arearefs="OrganizationalUnit">
-            <para><code>Department</code> inherits from
-            <code>OrganizationalUnit</code> as do <code>Team</code>.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>And the SJS way :<programlisting language="java">Entity('Company',
+      <para><programlisting language="java">Entity('Company',
        extend:['Nameable', 'Traceable']) {
   reference 'contact', ref:'ContactInfo'
 }
 
 Entity('OrganizationalUnit',
        extend:['Nameable', 'Traceable'],
-       purelyAbstract:true) {
+       purelyAbstract:true<co id="OrganizationalUnit_1" />) {
   string_6 'ouId', regex:"[A-Z]{2}-[\\d]{3}", regexSample:'AB-123', mandatory:true
   reference 'contact', ref:'ContactInfo'
 }
 
 Entity('Department',
-       extend:'OrganizationalUnit')
+       extend:'OrganizationalUnit'<co id="OrganizationalUnit_2" />)
 
 Entity('Team',
-       extend:['OrganizationalUnit'])</programlisting></para>
+       extend:['OrganizationalUnit'])</programlisting><calloutlist>
+          <callout arearefs="OrganizationalUnit_1">
+            <para>An <code>OrganizationalUnit</code> will never be
+            instantiated as such; only sub-entities will. This is why we
+            define the entity as purely abstract.</para>
+          </callout>
+
+          <callout arearefs="OrganizationalUnit_2">
+            <para><code>Department</code> inherits from
+            <code>OrganizationalUnit</code> as do <code>Team</code>.</para>
+          </callout>
+        </calloutlist></para>
 
       <para>Pretty easy, no ? You describe entity inheritance exactly as you
       did previously for the interfaces. You don't have to care for anything
@@ -2549,93 +1751,42 @@ Entity('Team',
       <code>OrganizationalUnit</code>, and <code>Employee</code> have the same
       contact property as an inlined <code>ContactInfo</code> component. It is
       a perfect candidate for factoring. So we can make the contact property
-      descriptor a top level bean and reference it in the 3 entities above.
-      The result will be :</para>
+      descriptor a top level reference, name it contact and reference it in
+      the 3 entities above. The result will be :</para>
 
-      <para><programlisting language="xml">&lt;bean id="contact"
-  class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
-            id="contact" />
-  &lt;property
-    name="name"
-    value="contact" /&gt;
-  &lt;property
-    name="referencedDescriptor"
-    ref="ContactInfo" /&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+      <para><programlisting language="java">Entity('Employee'...) {
   ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref bean="contact" /&gt; <co id="contactrefEmployee" />
-      ...
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Company"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;ref bean="contact" /&gt; <co id="contactrefCompany" />
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="OrganizationalUnit"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref bean="contact" /&gt; <co id="contactrefOU" />
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="contact">
-            <para>We factor the contact property in a top level referenceable
-            bean.</para>
-          </callout>
-
-          <callout arearefs="contactrefEmployee">
-            <para>We reference the contact bean as a property of the
-            <code>Employee</code> entity.</para>
-          </callout>
-
-          <callout arearefs="contactrefCompany">
-            <para>We reference the contact bean as a property of the
-            <code>Company</code> entity.</para>
-          </callout>
-
-          <callout arearefs="contactrefOU">
-            <para>We reference the contact bean as a property of the
-            <code>OrganizationalUnit</code> entity.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>And the SJS way :<programlisting language="java">Entity('Employee'...) {
-  ...
-  reference 'contact', ref:'ContactInfo', <emphasis role="bold">id:'contact'</emphasis>
+  reference 'contact', ref:'ContactInfo', <emphasis role="bold">id:'contact'</emphasis><co
+            id="contact_1" />
   ...
 }
 
 Entity('Company'...) {
   ...
-  <emphasis role="bold">refId 'contact'</emphasis>
+  <emphasis role="bold">refId 'contact'</emphasis><co id="contact_2" />
   ...
 }
 
 Entity('OrganizationalUnit'...) {
   ...
-  <emphasis role="bold">refId 'contact'</emphasis>
+  <emphasis role="bold">refId 'contact'</emphasis><co id="contact_3" />
   ...
-}</programlisting></para>
+}</programlisting><calloutlist>
+          <callout arearefs="contact_1">
+            <para>We factor the contact property in a top level referenceable
+            element named "contact".</para>
+          </callout>
+
+          <callout arearefs="contact_2">
+            <para>We reference the contact bean as a property of the
+            <code>Company</code> entity</para>
+          </callout>
+
+          <callout arearefs="contact_3">
+            <para>We reference the contact bean as a property of the
+            <code>OrganizationalUnit</code> abstract entity.</para>
+          </callout>
+        </calloutlist></para>
 
       <para>Now that we have described our organization entities, let's link
       them together using relationships.</para>
@@ -2655,98 +1806,32 @@ Entity('OrganizationalUnit'...) {
         that, we will first describe the N side of this composition, making it
         a top-level, referenceable bean and then make this N side the reverse
         end of the 1 side of the composition. This is achieved using the
-        following XML fragment :</para>
+        following SJS fragment :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Company-departments"
-  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
-              id="Company-departments" />
-  &lt;property
-    name="name"
-    value="departments" /&gt;
-  &lt;property
-    name="composition"
-    value="true" /&gt;
-  &lt;property name="referencedDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
-      &lt;property
-        name="elementDescriptor"
-        ref="Department" /&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Company"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+        <para><programlisting language="java">Entity('Company'...) {
   ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref bean="Company-departments"/&gt; <co id="Company-departments-ref" />
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Department"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class=
-        "org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
-              id="company-ref" />
-        &lt;property
-          name="name"
-          value="company" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="Company" /&gt;
-        &lt;property
-          name="reverseRelationEnd"
-          ref="Company-departments" /&gt; <co id="reverseRelationEnd" />
-        &lt;property
-          name="mandatory"
-          value="true" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
-
-        <para><calloutlist>
-            <callout arearefs="Company-departments">
-              <para>Like we did before for the employee events, we describe
-              collection property descriptor for the company
-              departments.</para>
-            </callout>
-
-            <callout arearefs="Company-departments-ref">
-              <para>We reference the collection property descriptor in the
-              <code>Company</code> entity.</para>
-            </callout>
-
-            <callout arearefs="company-ref">
-              <para>We define a reference descriptor to the Company entity in
-              the Department entity.</para>
-            </callout>
-
-            <callout arearefs="reverseRelationEnd">
-              <para>We link both side of the <code>Company</code> &lt;-&gt;
-              <code>Department</code> relationship.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Entity('Company'...) {
-  ...
-  set 'departments', composition:true, ref:'Department'
+  set 'departments', composition:true, ref:'Department'<co
+              id="Company-departments_1" />
 }
 
 Entity('Department'...) {
-  reference 'company', ref:'Company', reverse:'Company-departments', mandatory:true
-}</programlisting></para>
+  ...
+  reference 'company', ref:'Company', <emphasis role="bold">reverse:'Company-departments'</emphasis><co
+              id="Company-departments_2" />, mandatory:true
+}</programlisting><calloutlist>
+            <callout arearefs="Company-departments_1">
+              <para>Like we did before for the employee <code>events</code>,
+              we describe collection property for the company
+              <code>departments</code>. This time, the collection property has
+              a set semantic.</para>
+            </callout>
+
+            <callout arearefs="Company-departments_2">
+              <para>We link both side of the <code>Company</code> &lt;-&gt;
+              <code>Department</code> relationship assigning 1 side reverse of
+              the other.</para>
+            </callout>
+          </calloutlist></para>
 
         <para>So making a relationship bi-directional is quite
         straightforward. We just have to reference one end of the relationship
@@ -2809,66 +1894,8 @@ Entity('Department'...) {
         will be updated consistently.</para>
 
         <para>We describe the <code>Department</code> &lt;-&gt;
-        <code>Team</code> relationship the same way :</para>
-
-        <para><programlisting language="xml">&lt;bean
-  id="Department-teams"
-  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
-  &lt;property
-    name="name"
-    value="teams" /&gt;
-  &lt;property
-    name="composition"
-    value="true" /&gt;
-  &lt;property name="referencedDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
-      &lt;property
-        name="elementDescriptor"
-        ref="Team" /&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Department"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="org.jspresso.hrsample.model.Department" /&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref bean="Department-teams" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Team"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="department" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="Department" /&gt;
-        &lt;property
-          name="reverseRelationEnd"
-          ref="Department-teams" /&gt;
-        &lt;property
-          name="mandatory"
-          value="true" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
-
-        <para>And the SJS way :<programlisting language="java">Entity('Department'...) {
+        <code>Team</code> relationship the same way :<programlisting
+        language="java">Entity('Department'...) {
   ...
   set 'teams', composition:true, ref:'Team'
 }
@@ -2878,64 +1905,9 @@ Entity('Team'...) {
 }</programlisting></para>
 
         <para>And, to be complete, the <code>Company</code> &lt;-&gt;
-        <code>Employees</code> relationship :<programlisting language="xml">&lt;bean
-  id="Company-employees"
-  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
-  &lt;property
-    name="name"
-    value="employees" /&gt;
-  &lt;property
-    name="composition"
-    value="true" /&gt;
-  &lt;property name="referencedDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
-      &lt;property
-        name="elementDescriptor"
-        ref="Employee" /&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="company" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="Company" /&gt;
-        &lt;property
-          name="reverseRelationEnd"
-          ref="Company-employees" /&gt;
-        &lt;property
-          name="mandatory"
-          value="true" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Company"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref bean="Company-employees" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
+        <code>Employees</code> relationship :</para>
 
-        <para>And the SJS way :<programlisting language="java">Entity('Company'...) {
+        <para><programlisting language="java">Entity('Company'...) {
   ...
   set 'employees', composition:true, ref:'Employee'
 }
@@ -2953,60 +1925,16 @@ Entity('Employee'...) {
         <code>Employee</code> manager association. And you have certainly
         already guessed that it is the exact same way to describe
         bi-directional 1-1 relationships than 1-N relationships except that
-        both ends are reference property descriptors :<programlisting
-        language="xml">&lt;bean
-  id="OrganizationalUnit-manager"
-  class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
-  &lt;property
-    name="name"
-    value="manager" /&gt;
-  &lt;property name="referencedDescriptor" ref="Employee"/&gt;
-  &lt;property name="mandatory" value="true" /&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="managedOu" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="OrganizationalUnit" /&gt;
-        &lt;property
-          name="reverseRelationEnd"
-          ref="OrganizationalUnit-manager" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="OrganizationalUnit"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref bean="OrganizationalUnit-manager"/&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
+        both ends are reference property descriptors :</para>
 
-        <para>And the SJS way :<programlisting language="java">Entity('Employee'...) {
+        <para><programlisting language="java">Entity('Employee'...) {
   ...
-  reference 'managedOu', ref:'OrganizationalUnit', reverse:'OrganizationalUnit-manager'
+  reference 'managedOu', ref:'OrganizationalUnit', <emphasis role="bold">reverse:'OrganizationalUnit-manager'</emphasis>
 }
 
 Entity('OrganizationalUnit'...) {
   ...
-  reference 'manager', id:'OrganizationalUnit-manager', ref:'Employee', mandatory:true
+  reference 'manager', ref:'Employee'
 }</programlisting></para>
 
         <para>Of course, setting one end of the 1-1 relationship will also
@@ -3021,96 +1949,18 @@ Entity('OrganizationalUnit'...) {
         business software development is the N-N relationship navigable at
         both ends. Here again, Jspresso handles all the complex plumbing for
         you. All you need to do is to declare both ends of the relationship as
-        being a collection property descriptor. The following XML fragment
+        being a collection property descriptor. The following SJS fragment
         illustrates this for the <code>Team</code> &lt;-&gt;
         <code>Employee</code> relationship :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Employee-teams"
-  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
-              id="Employee-teams" />
-  &lt;property
-    name="name"
-    value="teams" /&gt;
-  &lt;property name="referencedDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
-      &lt;property
-        name="elementDescriptor"
-        ref="Team" /&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Team-teamMembers"
-  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
-  &lt;property
-    name="name"
-    value="teamMembers" /&gt;
-  &lt;property name="referencedDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
-      &lt;property
-        name="elementDescriptor"
-        ref="Employee" /&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-  &lt;property
-    name="reverseRelationEnd"
-    ref="Employee-teams" /&gt; <co id="reverseRelationEnd-Employee-teams" />
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref local="Employee-teams" /&gt; <co id="Employee-teams-ref" />
-      ...
-    &lt;/list&gt;
-  &lt;/property&gt;
-  ...
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Team"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref local="Team-teamMembers" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  ...
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="Employee-teams">
-              <para>We declare both ends as collection property
-              descriptors.</para>
-            </callout>
-
-            <callout arearefs="reverseRelationEnd-Employee-teams">
-              <para>We reference one of the end as the reverse relation end of
-              the other.</para>
-            </callout>
-
-            <callout arearefs="Employee-teams-ref">
-              <para>We reference both relation ends in their respective entity
-              descriptor.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Entity('Employee'...) {
+        <para><programlisting language="java">Entity('Employee'...) {
   ...
   set 'teams', ref:'Team'
 }
 
 Entity('Team'...) {
   ...
-  set 'teamMembers', ref:'Employee', reverse:'Employee-teams'
+  set 'teamMembers', ref:'Employee', <emphasis role="bold">reverse:'Employee-teams'</emphasis>
 }</programlisting></para>
 
         <para>Of course, when re-generating the entities code,
@@ -3136,45 +1986,31 @@ Entity('Team'...) {
 
       <para>Let's see how we can attach this service :</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+      <para><programlisting language="java">Entity('Employee',
+       ...
+       services<co id="Employee-services_1" />:[EmployeeService<co
+            id="Employee-services_2" />:'EmployeeServiceDelegate<co
+            id="Employee-services_3" />']) {
   ...
-  &lt;property name="serviceDelegateClassNames"&gt; <co id="serviceDelegates" />
-    &lt;map&gt;
-      &lt;entry key="org.jspresso.hrsample.model.service.EmployeeService" <co
-            id="NameableService" />
-           value="org.jspresso.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
-            id="NameableServiceImpl" />
-    &lt;/map&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="serviceDelegates">
+}</programlisting><calloutlist>
+          <callout arearefs="Employee-services_1">
             <para>We declare the services and their implementations attached
-            to the <code>Employee</code> interface.</para>
+            to the <code>Employee</code> entity.</para>
           </callout>
 
-          <callout arearefs="NameableService">
-            <para>The <code>EmployeeService</code> interface.</para>
+          <callout arearefs="Employee-services_2">
+            <para>By convention, the interface <code>EmployeeService</code>
+            belongs to a package deduced from the namespace, i.e.
+            <classname>org.jspresso.hrsample.model.service.EmployeeService</classname>.</para>
           </callout>
 
-          <callout arearefs="NameableServiceImpl">
-            <para>And its implementation delegate
-            (<code>EmployeeService</code>Delegate).</para>
+          <callout arearefs="Employee-services_3">
+            <para>By convention, the implementation
+            <code>EmployeeServiceDelegate</code> belongs to a package deduced
+            from the namespace, i.e.
+            <classname>org.jspresso.hrsample.model.service.EmployeeServiceDelegate</classname>.</para>
           </callout>
         </calloutlist></para>
-
-      <para>And the SJS way :<programlisting language="java">Entity('Employee',
-       ...
-       services:[EmployeeService:'EmployeeServiceDelegate']) {
-  ...
-}</programlisting></para>
-
-      <para>Of course, we have to code both <code>EmployeeService</code> (the
-      service definition) and <code>EmployeeServiceDelegate</code> (the
-      service delegate implementation) in the
-      <code>org.jspresso.hrsample.model.service</code> package as described in
-      the previous XML fragment.</para>
 
       <para>Here is the <filename>EmployeeService.java</filename> source file
       :</para>
@@ -3282,53 +2118,32 @@ public interface Employee extends
 
       <para>Let's see how we can link it using Jspresso :</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="age" /&gt;
-        &lt;property
-          name="minValue"
-          value="0" /&gt;
-        &lt;property
-          name="maxValue"
-          value="150" /&gt;
-        &lt;property
-          name="delegateClassName"
-          value="org.jspresso.hrsample.model.extension.EmployeeExtension" /&gt; <co
-            id="delegateClassName" />
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="delegateClassName">
-            <para>We link the age property to a java class used to compute its
-            value.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>And the SJS way :<programlisting language="java">Entity('Employee',
+      <para><programlisting language="java">Entity('Employee',
        ...
-       extension :'EmployeeExtension') {
+       <emphasis role="bold">extension :'EmployeeExtension'</emphasis><co
+            id="EmployeeExtension_1" />) {
   ...
   integer 'age', minValue:0, maxValue:150, readOnly:true, <emphasis
-            role="bold">computed:true</emphasis>
-}</programlisting></para>
+            role="bold">computed:true</emphasis><co id="EmployeeExtension_2" />
+}</programlisting><calloutlist>
+          <callout arearefs="EmployeeExtension_1">
+            <para>We declare the <code>EmployeeExtension</code> delegate
+            class. The extension package is determined by convention from the
+            namespace, i.e.
+            <classname>org.jspresso.hrsample.model.extension.EmployeeExtension</classname>.</para>
+          </callout>
+
+          <callout arearefs="EmployeeExtension_2">
+            <para>We declare the <code>age</code> property as being computed
+            by the extension.</para>
+          </callout>
+        </calloutlist></para>
 
       <para>As you can see in the above fragment, the age property is almost
       described like any other standard entity property. What differs is the
       reference to the
       <code>org.jspresso.hrsample.model.extension.EmployeeExtension</code>
-      java class that will be used to compute it. So let's code it. As
-      declared in the descriptor, we will put it in the
-      <code>org.jspresso.hrsample.model.extension</code> package :</para>
+      java class that will be used to compute it. So let's code it :</para>
 
       <para><programlisting language="java">package org.jspresso.hrsample.model.extension;
 
@@ -3660,23 +2475,40 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 
       <para>And the SJS way :<programlisting language="java">Entity('Employee'
        ...
-       processor:'EmployeePropertyProcessors') {
+       <emphasis role="bold">processor:'EmployeePropertyProcessors'</emphasis><co
+            id="Employee-processors_1" />) {
   ...
-  string_32 'firstName', mandatory:true, <emphasis role="bold">processors:'FirstNameProcessor'</emphasis>
+  string_32 'firstName', mandatory:true, <emphasis role="bold">processors:'FirstNameProcessor'</emphasis><co
+            id="Employee-processors_2" />
   ...
-  date 'birthDate', <emphasis role="bold">processors:'BirthDateProcessor'</emphasis>
+  date 'birthDate', <emphasis role="bold">processors:'BirthDateProcessor'</emphasis><co
+            id="Employee-processors_3" />
   ...
-}</programlisting></para>
+}</programlisting><calloutlist>
+          <callout arearefs="Employee-processors_1">
+            <para>We declare a a class for holding all the property processors
+            of the Employee entity, i.e.
+            <code>EmployeePropertyProcessors</code>. By convention, the
+            processor package is determined from the namespace, i.e.
+            <classname>org.jspresso.hrsample.model.processor.EmployeePropertyProcessors</classname>.
+            Each property processor will be an internal static class of this
+            enclosing type.</para>
+          </callout>
 
-      <para>As described in the XML fragment, we are going to create an
+          <callout arearefs="Employee-processors_2">
+            <para>We declare <code>FirstNameProcessor</code> as being a
+            processor for the <code>firstName</code> property.</para>
+          </callout>
+
+          <callout arearefs="Employee-processors_3">
+            <para>We declare <code>BirthDateProcessor</code> as being a
+            processor for the <code>birthDate</code> property.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>As described in the SJS fragment, we are going to create an
       <code>EmployeePropertyProcessors</code> class in the new package
-      <code>org.jspresso.hrsample.model.processor</code>. As a best practice,
-      it is recommended (but not imposed) to create a containing class that
-      holds all the processors for a component; then each processor will be a
-      named static internal class of this container class and referenced as
-      such (using the $ sign) in the spring configuration file. This pattern
-      limits the number of processors source files in the project while
-      grouping all the processors related to a component together.</para>
+      <code>org.jspresso.hrsample.model.processor</code>.</para>
 
       <para>Let's see what those processors look like by looking at the
       <filename>EmployeePropertyProcessors.java</filename> source file
@@ -3988,14 +2820,14 @@ public class EmployeePropertyProcessors {
           <listitem>
             <para>The <code>name</code> label has been colored in red and has
             a star marker. It is to indicate that the name property is
-            mandatory as declared during the <link linkend="n-mand">domain
+            mandatory as declared during the <link linkend="Nameable_5">domain
             model design</link>.</para>
           </listitem>
 
           <listitem>
             <para>The <code>createTimestamp</code> and
             <code>lastUpdateTimestamp</code> property fields have been made
-            non-editable as <link linkend="readOnly">we declared
+            non-editable as <link linkend="Traceable_3">we declared
             them</link>.</para>
           </listitem>
 
@@ -4029,10 +2861,9 @@ public class EmployeePropertyProcessors {
             for the user to push the LOV button. This reference field
             behaviour is only the consequence of having declared the
             <code>ContactInfo</code> -&gt; <code>City</code> <link
-            linkend="BasicReferencePropertyDescriptor">relationship</link>. In
-            the view tester tool, the search button and the auto-completion
-            are not functional since we don't have any backend to rely
-            on.</para>
+            linkend="ContactInfo_ref_1">relationship</link>. In the view
+            tester tool, the search button and the auto-completion are not
+            functional since we don't have any backend to rely on.</para>
           </listitem>
 
           <listitem>
@@ -4049,7 +2880,7 @@ public class EmployeePropertyProcessors {
                 </mediaobject>
               </figure></para>
 
-            <para>This is due to the <link linkend="regexpPattern">constraint
+            <para>This is due to the <link linkend="ContactInfo_2">constraint
             we applied on the email property</link> in the
             <code>ContactInfo</code> inlined component.</para>
           </listitem>
@@ -4061,10 +2892,9 @@ public class EmployeePropertyProcessors {
             <emphasis>[language:translation key]</emphasis>. This strategy
             allows for easy and fast identification of missing translations.
             You will also notice that the name label has been correctly
-            translated. This is because "name" is part of the <link
-            linkend="commonsMessageSource">default translations</link>. Of
-            course, you may override this translation if you wish in the
-            application I18N property files.</para>
+            translated. This is because "name" is part of the default
+            translations. Of course, you may override this translation if you
+            wish in the application I18N property files.</para>
           </listitem>
         </itemizedlist>
       </section>
