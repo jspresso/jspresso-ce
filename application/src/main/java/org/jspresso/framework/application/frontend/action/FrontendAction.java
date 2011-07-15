@@ -175,6 +175,20 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
+   * Gets the permId.
+   * 
+   * @return the permId.
+   */
+  @Override
+  public String getPermId() {
+    String permId = super.getPermId();
+    if (permId == null) {
+      return getName();
+    }
+    return permId;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -331,6 +345,19 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
         .append("iconImageURL", getIconImageURL()).toString();
   }
 
+  private void completeActionabilityGates() {
+    if (actionabilityGates == null) {
+      actionabilityGates = new ArrayList<IGate>();
+    }
+    if (isCollectionBased()) {
+      actionabilityGates.remove(ModelTrackingGate.INSTANCE);
+      actionabilityGates.add(CollectionSelectionTrackingGate.INSTANCE);
+    } else {
+      actionabilityGates.remove(CollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates.add(ModelTrackingGate.INSTANCE);
+    }
+  }
+
   /**
    * Gets the actionFactory.
    * 
@@ -454,32 +481,5 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
-  }
-
-  private void completeActionabilityGates() {
-    if (actionabilityGates == null) {
-      actionabilityGates = new ArrayList<IGate>();
-    }
-    if (isCollectionBased()) {
-      actionabilityGates.remove(ModelTrackingGate.INSTANCE);
-      actionabilityGates.add(CollectionSelectionTrackingGate.INSTANCE);
-    } else {
-      actionabilityGates.remove(CollectionSelectionTrackingGate.INSTANCE);
-      actionabilityGates.add(ModelTrackingGate.INSTANCE);
-    }
-  }
-
-  /**
-   * Gets the permId.
-   * 
-   * @return the permId.
-   */
-  @Override
-  public String getPermId() {
-    String permId = super.getPermId();
-    if (permId == null) {
-      return getName();
-    }
-    return permId;
   }
 }
