@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.binding.masterdetail;
 
-import org.jspresso.framework.binding.ICompositeValueConnector;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.event.IItemSelectable;
@@ -40,14 +42,20 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
    */
   @Override
   public void bind(IValueConnector masterConnector,
-      IValueConnector detailConnector) {
+      final IValueConnector detailConnector) {
     if (masterConnector instanceof IItemSelectable) {
       ((IItemSelectable) masterConnector)
           .addItemSelectionListener(new BoundConnectorSelectionListener(
               detailConnector));
-    } else if (masterConnector instanceof ICompositeValueConnector) {
-      ((ICompositeValueConnector) masterConnector)
-          .addChildConnector(detailConnector);
+    } else {
+      // Do not simply add the detail connector since it will propagate
+      // writability of the master to the detail which is wrong. see bug#342.
+      // } else if (masterConnector instanceof ICompositeValueConnector) {
+      // ((ICompositeValueConnector) masterConnector)
+      // .addChildConnector(detailConnector);
+      mvcBinder.bind(detailConnector, masterConnector.getModelConnector());
+      masterConnector.addPropertyChangeListener("modelConnector",
+          new BoundConnectorModelListener(detailConnector));
     }
   }
 
@@ -82,11 +90,37 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
     @Override
     public void selectedItemChange(ItemSelectionEvent event) {
       if (event.getSelectedItem() != null) {
-        mvcBinder.bind(detailConnector, ((IValueConnector) event
-            .getSelectedItem()).getModelConnector());
+        mvcBinder.bind(detailConnector,
+            ((IValueConnector) event.getSelectedItem()).getModelConnector());
       } else {
         mvcBinder.bind(detailConnector, null);
       }
+    }
+  }
+
+  private final class BoundConnectorModelListener implements
+      PropertyChangeListener {
+
+    private IValueConnector detailConnector;
+
+    /**
+     * Constructs a new <code>BoundConnectorModelListener</code> instance.
+     * 
+     * @param detailConnector
+     *          The detail connector tracking master connector's model.
+     */
+    public BoundConnectorModelListener(IValueConnector detailConnector) {
+      this.detailConnector = detailConnector;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      IValueConnector newModelConnector = (IValueConnector) evt.getNewValue();
+      mvcBinder.bind(detailConnector, newModelConnector);
+      detailConnector.setModelConnector(newModelConnector);
     }
   }
 }
