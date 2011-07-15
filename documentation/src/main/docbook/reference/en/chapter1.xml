@@ -5556,9 +5556,8 @@ split_vertical('Departments.and.teams.view',
               </callout>
             </calloutlist></para>
 
-          <para>With approximately 50 new lines of spring configuration in a
-          single file and even less using SJS, you achieve things that would
-          normally require hundreds !</para>
+          <para>With approximately 30 new lines of SJS, you achieve things
+          that would normally require hundreds !</para>
 
           <para>The following screenshots shows the result :</para>
 
