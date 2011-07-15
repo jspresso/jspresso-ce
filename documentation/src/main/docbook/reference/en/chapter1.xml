@@ -664,7 +664,7 @@
           </callout>
 
           <callout arearefs="Nameable_5">
-            <para>We make this property mandatory. </para>
+            <para>We make this property mandatory.</para>
           </callout>
         </calloutlist></para>
 
@@ -2415,65 +2415,9 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         </listitem>
       </itemizedlist>
 
-      <para>The following XML fragment declares these processors :</para>
+      <para>The following SJS fragment declares these processors :</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="Employee"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="firstName" /&gt;
-        ...
-        &lt;property name="integrityProcessorClassNames"&gt; <co
-            id="integrityProcessors" />
-          &lt;list&gt;
-            &lt;value&gt;org.jspresso.hrsample.model.processor\
-                   .EmployeePropertyProcessors$FirstNameProcessor&lt;/value&gt; <co
-            id="FirstNameIntegrityProcessor" />
-          &lt;/list&gt;
-        &lt;/property&gt;
-      &lt;/bean&gt;
-      ...
-      &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="birthDate" /&gt;
-        ...
-        &lt;property name="integrityProcessorClassNames"&gt;
-          &lt;list&gt;
-            &lt;value&gt;org.jspresso.hrsample.model.processor\
-                   .EmployeePropertyProcessors$BirthDateProcessor&lt;/value&gt; <co
-            id="BirthDateIntegrityProcessor" />
-          &lt;/list&gt;
-        &lt;/property&gt;
-      &lt;/bean&gt;
-      ...
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="integrityProcessors">
-            <para>The property is completed by a list of property processors.
-            Each processor of this chain will be triggered
-            sequentially.</para>
-          </callout>
-
-          <callout arearefs="FirstNameIntegrityProcessor">
-            <para>We register the interceptor on the first name
-            property.</para>
-          </callout>
-
-          <callout arearefs="BirthDateIntegrityProcessor">
-            <para>We register the processor on the birth date property.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>And the SJS way :<programlisting language="java">Entity('Employee'
+      <para><programlisting language="java">Entity('Employee'
        ...
        <emphasis role="bold">processor:'EmployeePropertyProcessors'</emphasis><co
             id="Employee-processors_1" />) {
@@ -2750,7 +2694,7 @@ public class EmployeePropertyProcessors {
 
         <para>Although there are plenty of configurations that can be applied
         to view descriptions (font, color, properties subset, ...), the
-        previous XML fragment is fully enough to get our first view up and
+        previous SJS fragment is fully enough to get our first view up and
         running using the view tester.</para>
 
         <note>
@@ -4231,13 +4175,13 @@ hrsample { <co id="hrsample-app" />
             file <filename>beanRefFactory.xml</filename>. Again, this file was
             generated and doesn't need to be modified for standard usage. For
             large applications, you may want to split the generated
-            <filename>model.xml</filename>, <filename>view.xml</filename>,
-            <filename>frontend.xml</filename> and
-            <filename>backend.xml</filename> context files, or their
-            equivalent SJS source files, into smaller parts. In that case, you
-            need to reflect these modifications into the bootstrap
-            <filename>beanRefFactory.xml</filename> file so that your new
-            context files get loaded.</para>
+            <filename>model.groovy</filename>,
+            <filename>view.groovy</filename>,
+            <filename>frontend.groovy</filename> and
+            <filename>backend.groovy</filename> SJS source files into smaller
+            parts. In that case, you need to reflect those splits into the
+            bootstrap <filename>application.groovy</filename> file that
+            bootstraps the SJS compilation.</para>
           </note></para>
 
         <para>Even though you won't have to modify startup classes, take some
@@ -5009,12 +4953,12 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
         offer CRUD operations. For the sake of simplicity, this module will
         not be linked to a particular company and thus allows employees to be
         managed for any existing company in the database. Since it would be
-        too cumbersome to include all the XML declarations in this tutorial
-        and since there is hardly anything new, we will only take some
-        screenshots of the resulting GUI; but feel free to have a look to the
-        spring definition files and to modify them to get a deeper
-        understanding of how the workspace is built (don't be afraid, it's
-        only a matter of ~100 XML lines and even less in SJS).</para>
+        too cumbersome to include all the source code in this tutorial and
+        since there is hardly anything new, we will only take some screenshots
+        of the resulting GUI; but feel free to have a look to the spring
+        definition files and to modify them to get a deeper understanding of
+        how the workspace is built (don't be afraid, it's only a matter of
+        ~100 SJS lines).</para>
 
         <para>So let's navigate through the employees workspace :</para>
 
@@ -5221,56 +5165,39 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
           application.</para>
 
           <para>In the <filename>model.groovy</filename> SJS source file
-          :<programlisting language="xml">...
-&lt;bean
-  id="OrganizationalUnit-manager"
-  class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+          :</para>
+
+          <para><programlisting language="java">Entity('OrganizationalUnit',
+    ...
+    processor<co id="manager.processor_1" /> :'OrganizationalUnitPropertyProcessors',
+    extension<co id="company.computed_1" /> :'OrganizationalUnitExtension') {
   ...
-  &lt;property name="integrityProcessorClassNames"&gt; <co
-                id="manager.processor" />
-    &lt;list&gt;
-      &lt;value&gt;org.jspresso.hrsample.model.processor\
-             .OrganizationalUnitPropertyProcessors$ManagerProcessor"&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="initializationMapping"&gt; <co id="initializationMapping" />
-    &lt;map&gt;
-      &lt;entry
-        key="company"
-        value="company" /&gt;
-    &lt;/map&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="OrganizationalUnit"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property name="propertyDescriptors"&gt;
-    &lt;list&gt;
-      ...
-      &lt;bean
-        class=
-          "org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
-                id="company.computed" />
-        &lt;property
-          name="name"
-          value="company" /&gt;
-        &lt;property
-          name="referencedDescriptor"
-          ref="Company" /&gt;
-        &lt;property
-          name="delegateClassName"
-          value="org.jspresso.hrsample.model.extension.OrganizationalUnitExtension" /&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...</programlisting><calloutlist>
-              <callout arearefs="manager.processor">
+  reference 'manager', id:'OrganizationalUnit-manager', ref:'Employee', mandatory:true,
+           processors<co id="manager.processor_2" />:['ManagerProcessor'], initializationMapping<co
+                id="initializationMapping" />:['company':'company']
+  reference 'company', ref:'Company', computed<co id="company.computed_2" />:true
+}</programlisting><calloutlist>
+              <callout arearefs="manager.processor_1">
+                <para>We declare the class enclosing all the
+                <code>OrganizationalUnit</code> property processors. Its
+                package is determined by convention based on the current
+                namespace, i.e.
+                <classname>org.jspresso.hrsample.model.processor.OrganizationalUnitPropertyProcessors</classname>.</para>
+              </callout>
+
+              <callout arearefs="company.computed_1">
+                <para>We declare the class that is used to compute all derived
+                properties of the <code>OrganizationalUnit</code> entiity. Its
+                package is determined by convention based on the current
+                namespace, i.e.
+                <classname>org.jspresso.hrsample.model.extension.OrganizationalUnitExtension</classname>.</para>
+              </callout>
+
+              <callout arearefs="manager.processor_2">
                 <para>We register an integrity processor that will be
                 triggered when a change occurs on the organizational unit
-                manager.</para>
+                manager. By convention, it's an internal static class of
+                <classname>OrganizationalUnitPropertyProcessors</classname>.</para>
               </callout>
 
               <callout arearefs="initializationMapping">
@@ -5283,25 +5210,15 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 benefit from this customization.</para>
               </callout>
 
-              <callout arearefs="company.computed">
+              <callout arearefs="company.computed_2">
                 <para>We declare a new <code>company</code> computed property
                 on the organizational unit entity. The delegate will handle
-                the company computing in case of a department or a
-                team.</para>
+                the company computing in case of a department or a team. The
+                property is computed by the
+                <classname>OrganizationalUnitExtension</classname>
+                class.</para>
               </callout>
             </calloutlist></para>
-
-          <para>And the SJS way, in <filename>model.groovy</filename>
-          :<programlisting language="java">Entity('OrganizationalUnit',
-    ...
-    processor :'OrganizationalUnitPropertyProcessors',
-    <emphasis role="bold">extension :'OrganizationalUnitExtension'</emphasis>) {
-  ...
-  reference 'manager', id:'OrganizationalUnit-manager', ref:'Employee', mandatory:true,
-            <emphasis role="bold">processors:['ManagerProcessor']</emphasis>, <emphasis
-                role="bold">initializationMapping:['company':'company']</emphasis>
-  reference 'company', ref:'Company', <emphasis role="bold">computed:true</emphasis>
-}</programlisting></para>
 
           <para>Since we added a property to the
           <code>OrganizationalUnit</code> entity, we need to re-generate it so
@@ -5517,93 +5434,42 @@ public class OrganizationalUnitPropertyProcessors {
           behind the scene without any extra effort.</para>
 
           <para>So let's replace the teams view by a master detail view
-          presenting the team members in the <filename>view.xml</filename>
+          presenting the team members in the <filename>view.groovy</filename>
           :</para>
 
-          <para><programlisting language="xml">&lt;bean
-  id="Team-teamMembers.list" <co id="Team-teamMembers.table" />
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"&gt;
-  &lt;property
-    name="modelDescriptor"
-    ref="Team-teamMembers" /&gt; <co id="Team-teamMembers" />
-  &lt;property name="actionMap"&gt;
-    &lt;bean class="org.jspresso.framework.view.action.ActionMap"&gt; <co
-                id="teamMembers-actionMap" />
-      &lt;property name="actionLists"&gt;
-        &lt;list&gt;
-          &lt;bean class="org.jspresso.framework.view.action.ActionList"&gt; <co
-                id="teamMembers-actionList" />
-            &lt;property
-              name="name"
-              value="EDIT" /&gt;
-            &lt;property name="actions"&gt; <co id="teamMembers-actions" />
-              &lt;list&gt;
-                &lt;bean parent="lovAction"&gt; <co id="lovAction" />
-                  &lt;property
-                    name="autoquery"
-                    value="false" /&gt; <co id="autoquery" />
-                  &lt;property
-                    name="entityDescriptor"
-                    ref="Employee" /&gt; <co id="lovAction-entityDescriptor" />
-                  &lt;property name="initializationMapping"&gt;
-                    &lt;map&gt;
-                      &lt;entry
-                        key="company"
-                        value="company" /&gt; <co
-                id="lovAction-initializationMapping" />
-                    &lt;/map&gt;
-                  &lt;/property&gt;
-                  &lt;property name="okAction"&gt;
-                    &lt;bean parent="lovOkFrontAction"&gt; <co
-                id="lovOkFrontAction" />
-                      &lt;property name="nextAction"&gt;
-                        &lt;ref bean="addAnyToMasterFrontAction" /&gt; <co
+          <para><programlisting language="java">listView<co
+                id="Team-teamMembers.table" />('Team-teamMembers.list'<co
+                id="Team-teamMembers" />) {
+  actionMap<co id="teamMembers-actionMap" /> {
+    actionList<co id="teamMembers-actionList" />('EDIT'){<co
+                id="teamMembers-actions" />
+      action(parent:'lovAction'<co id="lovAction" />,
+        custom:[
+          autoquery:false<co id="autoquery" />,
+          entityDescriptor_ref:'Employee'<co id="lovAction-entityDescriptor" />,
+          initializationMapping:['company':'company']<co
+                id="lovAction-initializationMapping" />,
+          okAction_ref<co id="lovOkFrontAction" />:'addAnyToMasterFrontAction'<co
                 id="AddAnyCollectionToMasterAction" />
-                      &lt;/property&gt;
-                    &lt;/bean&gt;
-                  &lt;/property&gt;
-                &lt;/bean&gt;
-                &lt;ref bean="removeAnyCollectionFromMasterFrontAction" /&gt; <co
+        ]
+      )
+      action(ref:'removeAnyCollectionFromMasterFrontAction')<co
                 id="removeAnyCollectionFromMasterFrontAction" />
-              &lt;/list&gt;
-            &lt;/property&gt;
-          &lt;/bean&gt;
-        &lt;/list&gt;
-      &lt;/property&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
+    }
+  }
+}
 
-&lt;bean
-  id="Departments.and.teams.view"
-  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt;
-  &lt;property
-    name="leftTopViewDescriptor"
-    ref="Company-departments.table" /&gt;
-  &lt;property name="rightBottomViewDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
-                id="department-rightBottomViewDescriptor" />
-      &lt;property
-        name="orientation"
-        value="HORIZONTAL" /&gt;
-      &lt;property
-        name="leftTopViewDescriptor"
-        ref="Department-teams.table" /&gt;
-      &lt;property
-        name="rightBottomViewDescriptor"
-        ref="Team-teamMembers.table" /&gt; <co
-                id="team-rightBottomViewDescriptor" />
-      &lt;property
-        name="cascadingModels"
-        value="true" /&gt; <co id="teams-cascadingModels" />
-    &lt;/bean&gt;
-  &lt;/property&gt;
-  &lt;property
-    name="cascadingModels"
-    value="true" /&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
+split_vertical('Departments.and.teams.view',
+  cascadingModels:true,
+  top:'Company-departments.table') {
+  bottom {
+    split_horizontal<co id="department-rightBottomViewDescriptor" /> (
+      left<co id="team-rightBottomViewDescriptor" />:'Department-teams.table',
+      right:'Team-teamMembers.list',
+      cascadingModels:true<co id="teams-cascadingModels" />
+    )
+  }
+}</programlisting><calloutlist>
               <callout arearefs="Team-teamMembers.table">
                 <para>We declare a new list view to present the team members
                 of a team.</para>
@@ -5689,35 +5555,6 @@ public class OrganizationalUnitPropertyProcessors {
                 in the department teams view.</para>
               </callout>
             </calloutlist></para>
-
-          <para>And the SJS way, in <filename>model.groovy</filename>
-          :<programlisting language="java">listView('Team-teamMembers.list') {
-  actionMap {
-    actionList('EDIT'){
-      action(parent:'lovAction',
-        custom:[
-          autoquery:false,
-          entityDescriptor_ref:'Employee',
-          initializationMapping:['company':'company'],
-          okAction_ref:'addAnyToMasterFrontAction'
-        ]
-      )
-      action(ref:'removeAnyCollectionFromMasterFrontAction')
-    }
-  }
-}
-
-split_vertical('Departments.and.teams.view',
-  cascadingModels:true,
-  top:'Company-departments.table') {
-  bottom {
-    split_horizontal (
-      left:'Department-teams.table',
-      right:'Team-teamMembers.list',
-      cascadingModels:true
-    )
-  }
-}</programlisting></para>
 
           <para>With approximately 50 new lines of spring configuration in a
           single file and even less using SJS, you achieve things that would
@@ -5892,41 +5729,9 @@ split_vertical('Departments.and.teams.view',
         "administrator". We will secure the application workspaces accordingly
         :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Employees.workspace"
-  parent="abstractWorkspace"
-  scope="prototype"&gt;
+        <para><programlisting language="java">workspace('employees.workspace',
   ...
-  &lt;property name="grantedRoles"&gt; <co id="grantedRoles" />
-    &lt;list&gt;
-      &lt;value&gt;administrator&lt;/value&gt;
-      &lt;value&gt;staff-manager&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Organization.workspace"
-  parent="abstractWorkspace"
-  scope="prototype"&gt;
-  ...
-  &lt;property name="grantedRoles"&gt;
-    &lt;list&gt;
-      &lt;value&gt;administrator&lt;/value&gt;
-      &lt;value&gt;organization-manager&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="grantedRoles">
-              <para>We grant employees workspace access to the "administrator"
-              and "staff-manager" roles. Same applies for the organization
-              workspace below.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">workspace('employees.workspace',
-  ...
-  grantedRoles:['administrator','staff-manager']) {
+  grantedRoles<co id="grantedRoles" />:['administrator','staff-manager']) {
   ...
 }
 
@@ -5934,7 +5739,13 @@ workspace('organization.workspace',
   ...
   grantedRoles:['administrator','organization-manager']) {
   ...
-}</programlisting></para>
+}</programlisting><calloutlist>
+            <callout arearefs="grantedRoles">
+              <para>We grant employees workspace access to the "administrator"
+              and "staff-manager" roles. Same applies for the organization
+              workspace below.</para>
+            </callout>
+          </calloutlist></para>
 
         <para>Believe it or not, you don't have to write anything else! The
         exact same kind of declarations apply to all the securable components.
