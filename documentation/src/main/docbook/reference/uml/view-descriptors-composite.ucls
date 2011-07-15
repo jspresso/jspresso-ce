@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
     binary="false">    
     <position x="307" y="13" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -11,8 +11,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
+    name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
     binary="false">    
     <position x="307" y="165" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -21,8 +21,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java" 
     binary="false">    
     <position x="552" y="376" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -31,8 +31,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
     binary="false">    
     <position x="307" y="336" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -41,8 +41,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java" 
+    name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java" 
     binary="false">    
     <position x="157" y="499" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -51,8 +51,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
     binary="false">    
     <position x="441" y="507" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -61,8 +61,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java" 
     binary="false">    
     <position x="31" y="360" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -71,8 +71,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java" 
     binary="false">    
     <position x="23" y="254" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -81,8 +81,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
     binary="false">    
     <position x="576" y="253" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
     binary="false">    
     <position x="516" y="280" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -11,8 +11,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IModelDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IModelDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IModelDescriptor.java" 
     binary="false">    
     <position x="516" y="28" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -21,8 +21,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.ICollectionDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
     binary="false">    
     <position x="850" y="192" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -31,8 +31,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
     binary="false">    
     <position x="141" y="312" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -41,8 +41,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
     binary="false">    
     <position x="341" y="532" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -51,8 +51,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+    name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
     binary="false">    
     <position x="638" y="548" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

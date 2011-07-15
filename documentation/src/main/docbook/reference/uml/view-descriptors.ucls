@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
     binary="false">    
     <position x="308" y="-336" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -11,8 +11,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+    name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
     binary="false">    
     <position x="328" y="-37" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -21,8 +21,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
     binary="false">    
     <position x="606" y="111" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -31,8 +31,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
     binary="false">    
     <position x="25" y="127" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -41,8 +41,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IComponentViewDescriptor.java" 
+    name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IComponentViewDescriptor.java" 
     binary="false">    
     <position x="26" y="-37" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -51,8 +51,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java" 
     binary="false">    
     <position x="671" y="-214" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -61,8 +61,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
     binary="false">    
     <position x="632" y="-38" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -71,8 +71,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
     binary="false">    
     <position x="5" y="-173" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

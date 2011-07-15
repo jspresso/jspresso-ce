@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.Workspace" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
     binary="false">    
     <position x="149" y="229" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -11,8 +11,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.Module" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
     binary="false">    
     <position x="631" y="229" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -21,8 +21,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.BeanModule" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
     binary="false">    
     <position x="631" y="693" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -31,8 +31,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.BeanCollectionModule" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
     binary="false">    
     <position x="191" y="643" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -41,8 +41,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
+    name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
     binary="false">    
     <position x="190" y="976" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

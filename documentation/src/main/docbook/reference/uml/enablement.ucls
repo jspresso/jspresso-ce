@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.util.gate.IGateAccessible" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" binary="false">    
+    project="jspresso-util" 
+    file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" binary="false">    
     <position x="108" y="95" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -10,8 +10,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.util.gate.IGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false">    
+    project="jspresso-util" 
+    file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false">    
     <position x="359" y="95" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -19,8 +19,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.util.gate.IModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IModelGate.java" binary="false">    
+    project="jspresso-util" 
+    file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IModelGate.java" binary="false">    
     <position x="359" y="217" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -28,8 +28,8 @@
     </display>  
   </interface>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.util.gate.AbstractGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false">    
+    project="jspresso-util" 
+    file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false">    
     <position x="612" y="215" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -37,8 +37,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.GrantedRolesGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/GrantedRolesGate.java" 
+    project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/GrantedRolesGate.java" 
     binary="false">    
     <position x="612" y="369" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -47,8 +47,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
+    project="jspresso-binding" 
+    file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
     binary="false">    
     <position x="359" y="569" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -57,8 +57,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.binding.model.BooleanPropertyModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/BooleanPropertyModelGate.java" 
+    project="jspresso-binding" 
+    file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/BooleanPropertyModelGate.java" 
     binary="false">    
     <position x="612" y="762" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -67,8 +67,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.binding.model.EnumerationPropertyModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/EnumerationPropertyModelGate.java" 
+    project="jspresso-binding" 
+    file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/EnumerationPropertyModelGate.java" 
     binary="false">    
     <position x="359" y="754" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -77,8 +77,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.binding.model.RegexPropertyModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/RegexPropertyModelGate.java" 
+    project="jspresso-binding" 
+    file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/RegexPropertyModelGate.java" 
     binary="false">    
     <position x="125" y="754" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -87,8 +87,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.util.gate.AbstractModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" binary="false">    
+    project="jspresso-util" 
+    file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" binary="false">    
     <position x="359" y="353" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -96,8 +96,8 @@
     </display>  
   </class>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
     binary="false">    
     <position x="138" y="239" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -106,8 +106,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
     binary="false">    
     <position x="109" y="298" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -116,8 +116,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
     binary="false">    
     <position x="85" y="360" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -126,8 +126,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.action.IDisplayableAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
     binary="false">    
     <position x="612" y="96" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.action.IAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false">    
+    project="jspresso-action" 
+    file="/jspresso-action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false">    
     <position x="132" y="-54" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -10,8 +10,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.action.IDisplayableAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
     binary="false">    
     <position x="132" y="200" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -20,8 +20,8 @@
     </display>  
   </interface>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.backend.action.BackendAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
     binary="false">    
     <position x="516" y="696" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -30,8 +30,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.action.AbstractAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
     binary="false">    
     <position x="517" y="417" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -40,8 +40,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
     binary="false">    
     <position x="132" y="569" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -50,8 +50,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.jspresso.framework.application.action.AbstractActionContextAware" project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractActionContextAware.java" 
+    name="org.jspresso.framework.application.action.AbstractActionContextAware" project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/action/AbstractActionContextAware.java" 
     binary="false">    
     <position x="609" y="66" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

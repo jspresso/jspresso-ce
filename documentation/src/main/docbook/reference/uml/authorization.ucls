@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.ISecurable" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false">    
+    project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false">    
     <position x="201" y="1" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -10,8 +10,8 @@
     </display>  
   </interface>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.Module" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
     binary="false">    
     <position x="-21" y="165" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -20,8 +20,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.Workspace" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+    project="jspresso-application" 
+    file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
     binary="false">    
     <position x="-57" y="100" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -30,8 +30,8 @@
     </display>  
   </class>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.action.IAction" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false">    
+    project="jspresso-action" 
+    file="/jspresso-action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false">    
     <position x="487" y="100" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -39,8 +39,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
     binary="false">    
     <position x="458" y="165" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -49,8 +49,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
     binary="false">    
     <position x="32" y="220" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -59,8 +59,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
     binary="false">    
     <position x="382" y="220" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -69,8 +69,8 @@
     </display>  
   </interface>  
   <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITreeLevelDescriptor" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeLevelDescriptor.java" 
+    project="jspresso-view" 
+    file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ITreeLevelDescriptor.java" 
     binary="false">    
     <position x="66" y="303" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -79,8 +79,8 @@
     </display>  
   </interface>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
+    project="jspresso-binding" 
+    file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
     binary="false">    
     <position x="350" y="383" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

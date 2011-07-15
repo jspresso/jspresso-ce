@@ -10,8 +10,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
+    project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
     binary="false">    
     <position x="88" y="235" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -20,8 +20,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.auth.spi.DevelopmentLoginModule" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DevelopmentLoginModule.java" 
+    project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/DevelopmentLoginModule.java" 
     binary="false">    
     <position x="88" y="380" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -30,8 +30,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.auth.spi.DatabaseLoginModule" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
+    project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
     binary="false">    
     <position x="472" y="235" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
