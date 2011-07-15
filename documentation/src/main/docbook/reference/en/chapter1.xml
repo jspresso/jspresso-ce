@@ -5977,7 +5977,7 @@ hrsample {
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center" contentdepth="60%"
+                <imagedata align="center" contentdepth="40%"
                            fileref="../screenshots/Flex_application.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
@@ -6014,7 +6014,7 @@ hrsample {
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center" contentdepth="60%"
+                <imagedata align="center" contentdepth="40%"
                            fileref="../screenshots/Qooxdoo_application.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
