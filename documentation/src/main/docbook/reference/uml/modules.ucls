@@ -51,58 +51,58 @@
     </display>  
   </class>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.model.BeanCollectionModule" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
       binary="false"/>  
   </generalization>  
   <association>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false" navigable="false">      
       <attribute name="subModules"/>      
       <multiplicity minimum="0" maximum="2147483647">        
         <position x="880" y="514" width="18" height="17"/>      
       </multiplicity>    
     </source>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.BeanCollectionModule" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.BeanModule" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.model.BeanModule" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false"/>  
   </generalization>  
   <association>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.model.Workspace" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
       binary="false" navigable="false">      
       <attribute name="modules"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </source>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false" navigable="false">      
       <attribute name="parent">        
         <position x="835" y="583" width="39" height="15"/>      
@@ -111,8 +111,8 @@
         <position x="842" y="596" width="20" height="17"/>      
       </multiplicity>    
     </source>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  

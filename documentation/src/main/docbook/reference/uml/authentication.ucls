@@ -49,15 +49,15 @@
     </display>  
   </class>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.security.auth.spi.DatabaseLoginModule" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
+    <source project="jspresso-security" name="org.jspresso.framework.security.auth.spi.DatabaseLoginModule" 
+      file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jboss.security.auth.spi.DatabaseServerLoginModule" 
       file="C:/Users/vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
+    <source project="jspresso-security" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" 
+      file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jboss.security.auth.spi.LdapExtLoginModule" 
       file="C:/Users/vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true"/>  

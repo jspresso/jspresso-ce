@@ -41,29 +41,29 @@
     </display>  
   </interface>  
   <dependency>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ICollectionDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.ICollectionDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
       binary="false"/>  
   </dependency>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" 
+    <target project="jspresso-model" 
       name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" 
+    <target project="jspresso-model" 
       name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

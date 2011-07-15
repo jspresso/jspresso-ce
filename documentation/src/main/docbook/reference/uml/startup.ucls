@@ -71,8 +71,8 @@
     </display>  
   </class>  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.startup.batch.BatchStartup" 
-    project="jspresso-framework" 
-    file="/jspresso-framework/app-launch/batch/src/main/java/org/jspresso/framework/application/startup/batch/BatchStartup.java" 
+    project="jspresso-app-launch-batch" 
+    file="/jspresso-app-launch-batch/src/main/java/org/jspresso/framework/application/startup/batch/BatchStartup.java" 
     binary="false">    
     <position x="776" y="663" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -81,59 +81,59 @@
     </display>  
   </class>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.batch.BatchStartup" 
-      file="/jspresso-framework/app-launch/batch/src/main/java/org/jspresso/framework/application/startup/batch/BatchStartup.java" 
+    <source project="jspresso-app-launch-batch" name="org.jspresso.framework.application.startup.batch.BatchStartup" 
+      file="/jspresso-app-launch-batch/src/main/java/org/jspresso/framework/application/startup/batch/BatchStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.BackendActionStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.BackendActionStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.swing.SwingStartup" 
-      file="/jspresso-framework/app-launch/swing/src/main/java/org/jspresso/framework/application/startup/swing/SwingStartup.java" 
+    <source project="jspresso-app-launch-swing" name="org.jspresso.framework.application.startup.swing.SwingStartup" 
+      file="/jspresso-app-launch-swing/src/main/java/org/jspresso/framework/application/startup/swing/SwingStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
       binary="false"/>  
   </generalization>  
   <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
+    <source project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.IStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/IStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.IStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/IStartup.java" 
       binary="false"/>  
   </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
+    <source project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.remote.RemoteStartup" 
-      file="/jspresso-framework/app-launch/remote/src/main/java/org/jspresso/framework/application/startup/remote/RemoteStartup.java" 
+    <source project="jspresso-app-launch-remote" name="org.jspresso.framework.application.startup.remote.RemoteStartup" 
+      file="/jspresso-app-launch-remote/src/main/java/org/jspresso/framework/application/startup/remote/RemoteStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.BackendActionStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
+    <source project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.BackendActionStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+    <source project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
+    <target project="jspresso-app-launch-core" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-app-launch-core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

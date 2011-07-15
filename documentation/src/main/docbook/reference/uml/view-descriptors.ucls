@@ -82,59 +82,59 @@
   </interface>  
   <generalization>    
     <bendpoint x="217" y="-107"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IComponentViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IComponentViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-view" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

@@ -191,153 +191,153 @@
     </display>  
   </interface>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IIntegerPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IIntegerPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IEnumerationPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IEnumerationPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-model" 
       name="org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IJavaSerializablePropertyDescriptor.java" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IJavaSerializablePropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="155" y="45"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBooleanPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IBooleanPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="467" y="181"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDurationPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IDurationPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPasswordPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IPasswordPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITimePropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITimePropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ITimePropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ITimePropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPercentPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IPercentPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="99" y="362"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IHtmlPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IHtmlPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="486" y="128"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDatePropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDatePropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IDatePropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IDatePropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="483" y="84"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IColorPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IColorPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IColorPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IColorPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IObjectPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IObjectPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ISourceCodePropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ISourceCodePropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

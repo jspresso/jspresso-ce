@@ -106,101 +106,101 @@
     </display>  
   </class>  
   <realization>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-application" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.frontend.IFrontendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
       binary="false"/>  
   </realization>  
   <generalization>    
     <bendpoint x="170" y="843"/>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-remote-application" 
       name="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController" 
-      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
+      file="/jspresso-remote-application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" 
+    <target project="jspresso-application" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-application" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-swing-application" 
       name="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController" 
-      file="/jspresso-framework/swing/application/src/main/java/org/jspresso/framework/application/frontend/controller/swing/DefaultSwingController.java" 
+      file="/jspresso-swing-application/src/main/java/org/jspresso/framework/application/frontend/controller/swing/DefaultSwingController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" 
+    <target project="jspresso-application" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-hibernate" 
       name="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController" 
-      file="/jspresso-framework/hibernate/src/main/java/org/jspresso/framework/application/backend/persistence/hibernate/HibernateBackendController.java" 
+      file="/jspresso-hibernate/src/main/java/org/jspresso/framework/application/backend/persistence/hibernate/HibernateBackendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.backend.AbstractBackendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.IBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.backend.IBackendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.backend.IBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java" 
-      binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/IController.java" 
       binary="false"/>  
   </generalization>  
   <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.backend.AbstractBackendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.backend.IBackendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java" 
       binary="false"/>  
   </realization>  
   <generalization>    
-    <source project="jspresso-framework" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.frontend.IFrontendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
+      binary="false"/>    
+    <target project="jspresso-application" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/IController.java" 
+      binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-application" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
+      binary="false"/>    
+    <target project="jspresso-application" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/IController.java" 
+      binary="false"/>  
+  </realization>  
+  <generalization>    
+    <source project="jspresso-remote-application" 
       name="org.jspresso.framework.application.frontend.controller.remote.RecordingRemoteController" 
-      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/RecordingRemoteController.java" 
+      file="/jspresso-remote-application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/RecordingRemoteController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" 
+    <target project="jspresso-remote-application" 
       name="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController" 
-      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
+      file="/jspresso-remote-application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
+    <source project="jspresso-application" name="org.jspresso.framework.application.backend.AbstractBackendController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
+    <target project="jspresso-application" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="true" signature="true" visibility="true">    

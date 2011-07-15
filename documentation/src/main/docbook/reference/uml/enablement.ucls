@@ -136,111 +136,111 @@
     </display>  
   </interface>  
   <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.util.gate.AbstractModelGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" 
+    <source project="jspresso-util" name="org.jspresso.framework.util.gate.AbstractModelGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IModelGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IModelGate.java" binary="false"/>  
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IModelGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IModelGate.java" binary="false"/>  
   </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.binding.model.RegexPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/RegexPropertyModelGate.java" 
+    <source project="jspresso-binding" name="org.jspresso.framework.binding.model.RegexPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/RegexPropertyModelGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
+    <target project="jspresso-binding" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
       binary="false"/>  
   </generalization>  
   <dependency>    
-    <source project="jspresso-framework" name="org.jspresso.framework.util.gate.IGateAccessible" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
+    <source project="jspresso-util" name="org.jspresso.framework.util.gate.IGateAccessible" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
   </dependency>  
   <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.util.gate.AbstractGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
+    <source project="jspresso-util" name="org.jspresso.framework.util.gate.AbstractGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false"/>    
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
   </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.util.gate.AbstractModelGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" 
+    <source project="jspresso-util" name="org.jspresso.framework.util.gate.AbstractModelGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.AbstractGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false"/>  
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.AbstractGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="2" y="322"/>    
     <bendpoint x="2" y="174"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGateAccessible" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGateAccessible" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.binding.model.EnumerationPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/EnumerationPropertyModelGate.java" 
+    <source project="jspresso-binding" name="org.jspresso.framework.binding.model.EnumerationPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/EnumerationPropertyModelGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
+    <target project="jspresso-binding" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
       binary="false"/>  
   </generalization>  
   <dependency>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+    <source project="jspresso-view" name="org.jspresso.framework.view.action.IDisplayableAction" 
+      file="/jspresso-view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
   </dependency>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
+    <source project="jspresso-binding" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.AbstractModelGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" 
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.AbstractModelGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractModelGate.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.security.GrantedRolesGate" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/GrantedRolesGate.java" 
+    <source project="jspresso-security" name="org.jspresso.framework.security.GrantedRolesGate" 
+      file="/jspresso-security/src/main/java/org/jspresso/framework/security/GrantedRolesGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.AbstractGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false"/>  
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.AbstractGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/AbstractGate.java" binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.binding.model.BooleanPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/BooleanPropertyModelGate.java" 
+    <source project="jspresso-binding" name="org.jspresso.framework.binding.model.BooleanPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/BooleanPropertyModelGate.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
-      file="/jspresso-framework/binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
+    <target project="jspresso-binding" name="org.jspresso.framework.binding.model.AbstractPropertyModelGate" 
+      file="/jspresso-binding/src/main/java/org/jspresso/framework/binding/model/AbstractPropertyModelGate.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGateAccessible" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGateAccessible" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
     <bendpoint x="25" y="256"/>    
     <bendpoint x="25" y="190"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGateAccessible" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGateAccessible" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGateAccessible.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.util.gate.IModelGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IModelGate.java" binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.util.gate.IGate" 
-      file="/jspresso-framework/util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
+    <source project="jspresso-util" name="org.jspresso.framework.util.gate.IModelGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IModelGate.java" binary="false"/>    
+    <target project="jspresso-util" name="org.jspresso.framework.util.gate.IGate" 
+      file="/jspresso-util/src/main/java/org/jspresso/framework/util/gate/IGate.java" binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
     <attributes public="false" package="false" protected="false" private="false"/>    
