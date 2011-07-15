@@ -2664,32 +2664,15 @@ public class EmployeePropertyProcessors {
     applications and as such, fully supports internationalized GUIs.</para>
 
     <para>The views description will logically go to the
-    <code>org.jspresso.hrsample.view</code> package. An empty Spring
-    descriptor has been created in the following folder (you can quickly
-    navigate to it using the Eclipse <quote>Open resource</quote> function)
-    :</para>
+    <code>org.jspresso.hrsample.view</code> package. An empty SJS file has
+    been created in the following folder (you can quickly navigate to it using
+    the Eclipse <quote>Open resource</quote> function) :</para>
 
-    <para><filename>hrsample/core/src/main/resources/org/jspresso/hrsample/view/view.xml</filename></para>
+    <para><filename>hrsample/core/src/main/dsl/view.groovy</filename></para>
 
     <para>Here is what it looks like :</para>
 
-    <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
-  default-lazy-init="true"&gt;
-
-  &lt;!--
-    The views
-  --&gt;
-  &lt;!-- Describe your application views here. --&gt;
-&lt;/beans&gt;</programlisting></para>
-
-    <para>The SJS equivalent is
-    <filename>hrsample/core/src/main/dsl/view.groovy</filename>
-    :<programlisting language="java">// Implement your views here using the SJS DSL.
+    <para><programlisting language="java">// Implement your views here using the SJS DSL.
 </programlisting></para>
 
     <para>In order to ease the work of the GUI designer, Jspresso provides a
@@ -2729,54 +2712,41 @@ public class EmployeePropertyProcessors {
         <title>The first shot</title>
 
         <para>Let's describe our first component view on the company entity in
-        the <filename>view.xml</filename> file:</para>
+        the <filename>view.groovy</filename> file:</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Company.pane"
-  parent="decoratedView" <co id="decoratedView" />
-  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
-              id="BasicComponentViewDescriptor" />
-  &lt;property
-    name="labelsPosition"
-    value="ABOVE" /&gt; <co id="labelsPosition" />
-  &lt;property
-    name="columnCount"
-    value="3" /&gt; <co id="columnCount" />
-  &lt;property
-    name="modelDescriptor"
-    ref="Company" /&gt; <co id="modelDescriptor" />
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="decoratedView">
-              <para>We inherit from a Jspresso standard bean which surrounds
-              the view with a title.</para>
+        <para><programlisting language="java">form<co id="Company.pane_1" /> 'Company.pane'<co
+              id="Company.pane_2" />,
+  parent:'decoratedView'<co id="Company.pane_3" />,
+  labelsPosition:'ABOVE'<co id="Company.pane_4" />,
+  columnCount:3<co id="Company.pane_5" /></programlisting><calloutlist>
+            <callout arearefs="Company.pane_1">
+              <para>We declare a form-like component view.</para>
             </callout>
 
-            <callout arearefs="BasicComponentViewDescriptor">
-              <para>We want a form-like component view.</para>
+            <callout arearefs="Company.pane_2">
+              <para>By convention, the view infers its model from its name,
+              i.e. the <code>Company</code> entity in this case. Wenever you
+              don't want to follow this convention, you can still override the
+              model type using the <code>model</code> attribute.</para>
             </callout>
 
-            <callout arearefs="labelsPosition">
+            <callout arearefs="Company.pane_3">
+              <para>We make the view inherit from a Jspresso standard one
+              which surrounds the view with a title.</para>
+            </callout>
+
+            <callout arearefs="Company.pane_4">
               <para>We want each property label to be positioned above the
               property field. We could have used the <code>ASIDE</code>
               constant to indicate that we wanted the labels aside the
               fields.</para>
             </callout>
 
-            <callout arearefs="columnCount">
+            <callout arearefs="Company.pane_5">
               <para>We want the component view to be organized in 3
               columns.</para>
             </callout>
-
-            <callout arearefs="modelDescriptor">
-              <para>We refer to the company descriptor we described in the
-              previous section.</para>
-            </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">form 'Company.pane',
-  parent:'decoratedView',
-  labelsPosition:'ABOVE',
-  columnCount:3</programlisting></para>
 
         <para>Although there are plenty of configurations that can be applied
         to view descriptions (font, color, properties subset, ...), the
@@ -2790,14 +2760,11 @@ public class EmployeePropertyProcessors {
         </note>
 
         <para>The view tester launch configuration has been set-up to
-        instanciate and display a view whose descriptor id is
-        <quote>testView</quote>. As a result, we simply have to reference the
-        view to test in the <filename>view.xml</filename> file as follows
-        :</para>
+        instanciate and display a view whose id is <quote>testView</quote>. As
+        a result, we simply have to reference the view to test in the
+        <filename>view.</filename>groovy file as follows :</para>
 
-        <programlisting language="xml">&lt;bean id="testView" parent="Company.pane" /&gt;</programlisting>
-
-        <para>And the SJS way :<programlisting language="java">bean 'testView',
+        <para><programlisting language="java">bean 'testView',
   parent:'Company.pane'</programlisting></para>
 
         <para>Now, launching the tester will produce the following result
@@ -2999,55 +2966,26 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para>The following change to the view descriptor achieves that
         :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Company.pane"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+        <para><programlisting language="java">form 'Company.pane',
   ...
-  &lt;property
-    name="columnCount"
-    value="2" /&gt; <co id="columnCount_2" />
+  columnCount:2<co id="Company.pane.custo_1" />,
   ...
-  &lt;property name="renderedProperties"&gt; <co id="propertyViewDescriptors" />
-    &lt;list&gt;
-      &lt;value&gt;name&lt;/value&gt;
-      &lt;value&gt;contact.address&lt;/value&gt;
-      &lt;value&gt;contact.city&lt;/value&gt;
-      &lt;value&gt;contact.phone&lt;/value&gt;
-      &lt;value&gt;contact.email&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-  &lt;property name="propertyWidths"&gt; <co id="propertyWidths" />
-    &lt;map&gt;
-      &lt;entry
-        key="name"
-        value="2" /&gt;
-    &lt;/map&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
-
-        <para><calloutlist>
-            <callout arearefs="columnCount_2">
+  fields<co id="Company.pane.custo_2" />:['name','contact.address','contact.city','contact.phone','contact.email'],
+  widths<co id="Company.pane.custo_3" />:[name:2]</programlisting><calloutlist>
+            <callout arearefs="Company.pane.custo_1">
               <para>We reduce the number of columns to 2.</para>
             </callout>
 
-            <callout arearefs="propertyViewDescriptors">
-              <para>We declare an ordered list of sub-view descriptors that
-              contains the properties we want to display.</para>
+            <callout arearefs="Company.pane.custo_2">
+              <para>We explicitely declare the ordered list of properties we
+              want to display.</para>
             </callout>
 
-            <callout arearefs="propertyWidths">
-              <para>We assign width (columns span) to properties we don't want
-              to have the default value of 1.</para>
+            <callout arearefs="Company.pane.custo_3">
+              <para>We make the <code>name</code> property span 2
+              columns.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">form 'Company.pane',
-  ...
-  columnCount:2,
-  ...
-  fields:['name','contact.address','contact.city','contact.phone','contact.email'],
-  widths:[name:2]</programlisting></para>
 
         <note>
           <para>Jspresso supports the use of nested properties for all
@@ -3079,25 +3017,24 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para>There would have been another way to customize subset of
         displayed properties for the company entity. We could have set on the
-        <code>Company</code> entity descriptor the
-        <code>renderedProperties</code> attribute that allows to set an
-        ordered list of properties to be displayed by default when an company
-        instance is displayed in any view. This change would have impacted all
-        the application company views (including tables for instance) except
-        the ones declare their own property list.</para>
+        <code>Company</code> entity the <code>rendered</code> attribute that
+        allows to set an ordered list of properties to be displayed by default
+        when an company instance is displayed in any view. This change would
+        have impacted all the application company views (including tables for
+        instance) except the ones declare their own property list.</para>
 
         <para>To summarize, a component view will display (higher in the list
         has higher priority) :</para>
 
         <orderedlist>
           <listitem>
-            <para>If set on the view, the
-            <code>propertyViewDescriptors</code>.</para>
+            <para>If set on the view, the <code>fields</code>
+            properties.</para>
           </listitem>
 
           <listitem>
-            <para>If set on the model, the <code>renderedProperties</code> (or
-            <code>fields</code> in SJS).</para>
+            <para>If set on the model, the <code>rendered</code>
+            properties.</para>
           </listitem>
 
           <listitem>
@@ -3125,79 +3062,39 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para>Such a tab panel is called a composite view; its objective is to
         assemble sub-views into a more user-friendly graphical structure. In
-        the following XML fragment, we will describe the component view to
+        the following SJS fragment, we will describe the component view to
         display the tracing properties and assemble the company view and the
         tracing view into a tab composite view :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Traceable.pane"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
-              id="Traceable.pane" />
-  &lt;property
-    name="labelsPosition"
-    value="ABOVE" /&gt;
-  &lt;property
-    name="columnCount"
-    value="2" /&gt;
-  &lt;property
-    name="modelDescriptor"
-    ref="Traceable" /&gt; <co id="modelDescriptor-traceable" />
-  &lt;property name="renderedProperties"&gt;
-    &lt;list&gt;
-      &lt;value&gt;createTimestamp&lt;/value&gt;
-      &lt;value&gt;lastUpdateTimestamp&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Company.tab.pane"
-  class="org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt; <co
-              id="BasicTabViewDescriptor" />
-  &lt;property
-    name="modelDescriptor"
-    ref="Company" /&gt;
-  &lt;property name="tabs"&gt; <co id="viewDescriptors-tab" />
-    &lt;list&gt;
-      &lt;ref local="Company.pane" /&gt;
-      &lt;ref local="Traceable.pane" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="Traceable.pane">
-              <para>We describe a new component view descriptor for the
-              tracing properties.</para>
-            </callout>
-
-            <callout arearefs="modelDescriptor-traceable">
-              <para>You may notice that the model descriptor declared for this
-              new component view descriptor is <code>Traceable</code> and not
-              <code>Company</code>. The consequence is that this tracing view
-              will be usable for all traceable components and not only
-              companies; we leverage the polymorphic nature of the domain
-              components.</para>
-            </callout>
-
-            <callout arearefs="BasicTabViewDescriptor">
-              <para>We want a tab composite view.</para>
-            </callout>
-
-            <callout arearefs="viewDescriptors-tab">
-              <para>We give an ordered list of views to be displayed in the
-              tabs. Of course, these sub-views may be any type of view,
-              including other composite views.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">form 'Traceable.pane',
+        <para><programlisting language="java">form<co id="Traceable.pane_1" /> 'Traceable.pane'<co
+              id="Traceable.pane_2" />,
   model:'Traceable',
   labelsPosition:'ABOVE',
   columnCount:2,
   fields:['createTimestamp','lastUpdateTimestamp']
 
-tabs 'Company.tab.pane',
-  views:['Company.pane','Traceable.pane']</programlisting></para>
+tabs<co id="Traceable.pane_3" /> 'Company.tab.pane',
+  views<co id="Traceable.pane_4" />:['Company.pane','Traceable.pane']</programlisting><calloutlist>
+            <callout arearefs="Traceable.pane_1">
+              <para>We declare a new form view descriptor for the tracing
+              properties.</para>
+            </callout>
+
+            <callout arearefs="Traceable.pane_2">
+              <para>It's backed by any <code>Traceable</code> model.</para>
+            </callout>
+
+            <callout arearefs="Traceable.pane_3">
+              <para>We declare a tabbed composite view in order to assemble
+              our forms.</para>
+            </callout>
+
+            <callout arearefs="Traceable.pane_4">
+              <para>We assign an ordered list of views to be displayed in the
+              tabs. Of course, these sub-views may be any type of view,
+              including other composite views.</para>
+            </callout>
+          </calloutlist></para>
 
         <para>After having completed the I18N property files with the
         <code>org.jspresso.hrsample.model.Traceable</code> entry, we can
@@ -3241,38 +3138,13 @@ tabs 'Company.tab.pane',
           </listitem>
         </itemizedlist>
 
-        <para>The following XML fragment assigns an icon image to the
+        <para>The following SJS fragment assigns an icon image to the
         <code>Company</code> and the <code>Traceable</code> components
         :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Traceable"
-  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
-  ...
-  &lt;property
-    name="iconImageURL"
-    value="classpath:org/jspresso/hrsample/images/traceable-48x48.png" /&gt; <co
-              id="iconImageURL" />
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Company"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  ...
-  &lt;property
-    name="iconImageURL"
-    value="classpath:org/jspresso/hrsample/images/company-48x48.png" /&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="iconImageURL">
-              <para>We declare the URL used to reference the image to be used
-              to represent a traceable component. Same applies for the
-              company.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Interface('Traceable',
+        <para><programlisting language="java">Interface('Traceable',
           ...
-          icon:'traceable-48x48.png') {
+          icon<co id="Traceable-icon_1" />:'traceable-48x48.png') {
   ...
 }
 
@@ -3280,48 +3152,35 @@ Entity('Company',
           ...
           icon:'company-48x48.png') {
   ...
-}</programlisting></para>
+}</programlisting><calloutlist>
+            <callout arearefs="Traceable-icon_1">
+              <para>We declare the image used to reference the image to be
+              used to represent a <code>Traceable</code> component. Same
+              applies for the <code>Company</code> entity. The actual image
+              URL used is deduced by convention from the namespace. In that
+              case, the following pseudo URL is used :
+              <filename>classpath:org/jspresso/hrsample/images/traceable-48x48.png</filename>.</para>
+            </callout>
+          </calloutlist></para>
 
         <para>And we assign a more friendly description to both component
         views. As for every potentially displayed string, these descriptions
         are entries in the I18N property files that we will translate. The
-        following XML fragments achieves that :</para>
+        following SJS fragments achieves that :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Traceable.pane"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+        <para><programlisting language="java">form 'Traceable.pane',
   ...
-  &lt;property
-    name="description"
-    value="traceable.editing"&gt; <co id="traceable.editing" />
-  &lt;/property&gt;
-&lt;/bean&gt;
-...
-&lt;bean
-  id="Company.pane"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  description:'traceable.editing'<co id="traceable.editing" />
+
+form 'Company.pane',
   ...
-  &lt;property
-    name="description"
-    value="company.editing"&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
+  description:'company.editing'</programlisting><calloutlist>
             <callout arearefs="traceable.editing">
               <para>We declare an I18N entry to describe the traceable
               component view. Same applies for the company component
               view.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">form 'Traceable.pane',
-  ...
-  description:'traceable.editing'
-
-form 'Company.pane',
-  ...
-  description:'company.editing'</programlisting></para>
 
         <para>Re-launching the view tester displays the following window
         :</para>
@@ -3472,46 +3331,37 @@ form 'Company.pane',
         table view that displays 1 department per row and link this view to
         the company one.</para>
 
-        <para>Let's consider the following XML fragment :</para>
+        <para>Let's consider the following SJS fragment :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Company-departments.table"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt; <co
-              id="BasicTableViewDescriptor" />
-  &lt;property
-    name="modelDescriptor"
-    ref="Company-departments" /&gt; <co id="Company-departments-model" />
-&lt;/bean&gt;
+        <para><programlisting language="java">table<co
+              id="BasicTableViewDescriptor" /> 'Company-departments.table'<co
+              id="Company-departments-model" />,
+  parent:'decoratedView'
 
-&lt;bean
-  id="Company.organization.view"
-  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
-              id="BasicSplitViewDescriptor" />
-  &lt;property
-    name="modelDescriptor"
-    ref="Company" /&gt; <co id="Company-model" />
-  &lt;property
-    name="leftTopViewDescriptor"
-    ref="Company.tab.pane" /&gt; <co id="leftTopViewDescriptor" />
-  &lt;property
-    name="rightBottomViewDescriptor"
-    ref="Company-departments.table" /&gt; <co id="rightBottomViewDescriptor" />
-&lt;/bean&gt;</programlisting><calloutlist>
+split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<co
+              id="Company-model" />,
+  model:'Company',
+  top<co id="leftTopViewDescriptor" />:'Company.tab.pane',
+  bottom<co id="rightBottomViewDescriptor" />:'Company-departments.table'</programlisting><calloutlist>
             <callout arearefs="BasicTableViewDescriptor">
-              <para>We describe a table view.</para>
+              <para>We declare a table view.</para>
             </callout>
 
             <callout arearefs="Company-departments-model">
               <para>Unlike component views, collection views are backed by the
               N end of a 1-N relationship. Here, we reference the
               <code>Company</code> -&gt; <code>Department</code> relationship
-              we've previously declared in the domain model.</para>
+              we've previously declared in the domain model. This model is
+              inferred by the naming convention, i.e. the name begins with
+              <code>Company-department</code> which is the implicit identifier
+              of the <code>Company</code> -&gt; <code>Department</code>
+              relationship.</para>
             </callout>
 
             <callout arearefs="BasicSplitViewDescriptor">
               <para>We organize the departments table view and the company
-              view in a new type of composite view : a split view.</para>
+              view in a new type of composite view : a vertical split
+              view.</para>
             </callout>
 
             <callout arearefs="Company-model">
@@ -3529,14 +3379,6 @@ form 'Company.pane',
               view.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">table 'Company-departments.table',
-  parent:'decoratedView'
-
-split_vertical 'Company.organization.view',
-  model:'Company',
-  top:'Company.tab.pane',
-  bottom:'Company-departments.table'</programlisting></para>
 
         <para>After adding the necessary translations as usual, and linking a
         new icon to describe the department entities, re-launching the view
@@ -3573,26 +3415,16 @@ split_vertical 'Company.organization.view',
         and declare an action. Actually, Jspresso comes with a large set of
         pre-defined, ready-to-use general purpose actions (and even action
         maps) that are sufficient for most classic operations. Look at the
-        following XML fragment :</para>
+        following SJS fragment :</para>
 
-        <para><programlisting language="xml">  &lt;bean
-    id="Company-departments.table"
-    parent="decoratedView"
-    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
-    ...
-    &lt;property
-      name="actionMap"
-      ref="masterDetailActionMap" /&gt; <co id="masterDetailActionMap" />
-  &lt;/bean&gt;</programlisting><calloutlist>
+        <para><programlisting language="java">table 'Company-departments.table',
+  ...
+  actionMap<co id="masterDetailActionMap" />:'masterDetailActionMap'</programlisting><calloutlist>
             <callout arearefs="masterDetailActionMap">
               <para>We assign the predefined master-detail action map to the
               departments table view.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">table 'Company-departments.table',
-  ...
-  actionMap:'masterDetail'</programlisting></para>
 
         <para>These new lines bring us what we need to be able to operate
         efficiently the company departments relationship. Re-launching the
@@ -3633,32 +3465,16 @@ split_vertical 'Company.organization.view',
         global setting on the view descriptor itself. So let's go back to the
         department entity descriptor :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Department"
-  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+        <para><programlisting language="java">Entity('Department',
+    ...
+    rendered<co id="renderedProperties" />:['ouId','name','manager','contact']) {
   ...
-  &lt;property name="renderedProperties"&gt; <co id="renderedProperties" />
-    &lt;list&gt;
-      &lt;value&gt;ouId&lt;/value&gt;
-      &lt;value&gt;name&lt;/value&gt;
-      &lt;value&gt;manager&lt;/value&gt;
-      &lt;value&gt;contact&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
-
-        <para><calloutlist>
+}</programlisting><calloutlist>
             <callout arearefs="renderedProperties">
               <para>We set the ordered list of department default rendered
               properties.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">Entity('Department',
-    ...
-    rendered:['ouId','name','manager','contact']) {
-  ...
-}</programlisting></para>
 
         <para>And when we re-launch the view tester :</para>
 
@@ -3743,36 +3559,17 @@ split_vertical 'Company.organization.view',
         <para>Let's first describe the teams collection view; for the sake of
         the tutorial, we will refine the teams displayed columns on the view
         itself instead of globally configuring the rendered properties of the
-        team entity :<programlisting language="xml">&lt;bean
-  id="Department-teams.table"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
-  &lt;property
-    name="modelDescriptor"
-    ref="Department-teams" /&gt;
-  &lt;property
-    name="actionMap"
-    ref="masterDetailActionMap" /&gt;
-  &lt;property name="renderedProperties"&gt; <co id="columnViewDescriptors" />
-    &lt;list&gt;
-      &lt;value&gt;ouId&lt;/value&gt;
-      &lt;value&gt;name&lt;/value&gt;
-      &lt;value&gt;manager&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting></para>
+        team entity :</para>
 
-        <para><calloutlist>
+        <para><programlisting language="java">table 'Department-teams.table',
+  parent:'decoratedView',
+  actionMap:'masterDetailActionMap',
+  columns<co id="columnViewDescriptors" />:['ouId','name','manager']  </programlisting><calloutlist>
             <callout arearefs="columnViewDescriptors">
               <para>We setup the ordered list of columns we want to display on
               the teams table.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">table 'Department-teams.table',
-  parent:'decoratedView',
-  actionMap:'masterDetail',
-  columns:['ouId','name','manager']  </programlisting></para>
 
         <para>This table view definition is strictly identical to the previous
         department view. We now need to assemble the
@@ -3781,25 +3578,18 @@ split_vertical 'Company.organization.view',
         Jspresso to drive the teams table content with the departments table
         selection :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Departments.and.teams.view"
-  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
-              id="Departments.and.teams.view" />
-  &lt;property
-    name="modelDescriptor"
-    ref="Company" /&gt;
-  &lt;property
-    name="leftTopViewDescriptor"
-    ref="Company-departments.table" /&gt; <co id="Company-departments.table" />
-  &lt;property
-    name="rightBottomViewDescriptor"
-    ref="Department-teams.table" /&gt; <co id="Department-teams.table" />
-  &lt;property
-    name="cascadingModels"
-    value="true" /&gt; <co id="cascadingModels" />
-&lt;/bean&gt;</programlisting><calloutlist>
+        <para><programlisting language="java">split_vertical<co
+              id="Departments.and.teams.view" /> 'Departments.and.teams.view',
+  cascadingModels:true<co id="cascadingModels" />,
+  top<co id="Company-departments.table" />:'Company-departments.table',
+  bottom<co id="Department-teams.table" />:'Department-teams.table'</programlisting><calloutlist>
             <callout arearefs="Departments.and.teams.view">
               <para>We declare a new split view.</para>
+            </callout>
+
+            <callout arearefs="cascadingModels">
+              <para>We declare this composite view a master-detail view for
+              Jspresso to track the departments selection.</para>
             </callout>
 
             <callout arearefs="Company-departments.table">
@@ -3811,17 +3601,7 @@ split_vertical 'Company.organization.view',
               <para>We make the teams table view the top part of the
               view.</para>
             </callout>
-
-            <callout arearefs="cascadingModels">
-              <para>We declare this composite view a master-detail view for
-              Jspresso to track the departments selection.</para>
-            </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">split_vertical 'Departments.and.teams.view',
-  cascadingModels:true,
-  top:'Company-departments.table',
-  bottom:'Department-teams.table'</programlisting></para>
 
         <para>The crucial part of the previous definition is the use of the
         <code>cascadingModels</code> attribute. It tells the framework that
@@ -3840,30 +3620,16 @@ split_vertical 'Company.organization.view',
         departments table view by our new
         <code>Departments.and.teams.view</code> :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Company.organization.view"
-  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt;
-  &lt;property
-    name="modelDescriptor"
-    ref="Company" /&gt;
-  &lt;property
-    name="leftTopViewDescriptor"
-    ref="Company.tab.pane" /&gt;
-  &lt;property
-    name="rightBottomViewDescriptor"
-    ref="Departments.and.teams.view" /&gt; <co id="Bottom.reworked" />
-&lt;/bean&gt;</programlisting><calloutlist>
+        <para><programlisting language="java">split_vertical 'Company.organization.view',
+  model:'Company',
+  top:'Company.tab.pane',
+  bottom:'Departments.and.teams.view'<co id="Bottom.reworked" /></programlisting><calloutlist>
             <callout arearefs="Bottom.reworked">
               <para>We assign the departments and teams master-detail view as
               being now the bottom part of the company organization
               view.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">split_vertical 'Company.organization.view',
-  model:'Company',
-  top:'Company.tab.pane',
-  bottom:'Departments.and.teams.view'</programlisting></para>
 
         <para>After adding some new translations and icons for the team
         entity, we can relaunch the view tester and obtain the following
@@ -3926,86 +3692,41 @@ split_vertical 'Company.organization.view',
           </listitem>
         </itemizedlist>
 
-        <para>Look at the following XML fragment :</para>
+        <para>Look at the following SJS fragment :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Department-teams.subtree"
-  class="org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt; <co
-              id="BasicSimpleTreeLevelDescriptor" />
-  &lt;property name="nodeGroupDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"&gt; <co
-              id="nodeGroupDescriptor" />
-      &lt;property
-        name="modelDescriptor"
-        ref="Department-teams" /&gt; <co id="Department-teams" />
-      &lt;property
-        name="actionMap"
-        ref="masterDetailActionMap" /&gt; <co id="actionMap" />
-      &lt;property
-        name="renderedProperty"
-        value="ouId" /&gt; <co id="renderedProperty" />
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
+        <para><programlisting language="java">treeNode<co
+              id="BasicSimpleTreeLevelDescriptor" /> 'Department-teams.treeNode'<co
+              id="Department-teams" />,
+  rendered:'ouId'<co id="renderedProperty" />,
+  actionMap<co id="actionMap" />:'masterDetailActionMap'
+      
+treeNode 'Company-departments.treeNode',
+  rendered:'ouId',
+  actionMap:'masterDetailActionMap'
 
-&lt;bean
-  id="Company-departments.subtree"
-  class="org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt;
-  &lt;property name="nodeGroupDescriptor"&gt;
-    &lt;bean
-      class="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"&gt;
-      &lt;property
-        name="modelDescriptor"
-        ref="Company-departments" /&gt;
-      &lt;property
-        name="actionMap"
-        ref="masterDetailActionMap" /&gt;
-      &lt;property
-        name="renderedProperty"
-        value="ouId" /&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-  &lt;property name="childDescriptor"&gt;
-    &lt;ref local="Department-teams.subtree" /&gt; <co id="childDescriptor" />
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="Company.tree"
-  class="org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor"&gt; <co
-              id="BasicTreeViewDescriptor" />
-  &lt;property
-    name="modelDescriptor"
-    ref="Company" /&gt;
-  &lt;property
-    name="renderedProperty"
-    value="name" /&gt;
-  &lt;property
-    name="childDescriptor"
-    ref="Company-departments.subtree" /&gt; <co id="childDescriptor2" />
-  &lt;property
-    name="iconImageURL"
-    value="classpath:org/jspresso/hrsample/images/structure-48x48.png" /&gt; <co
-              id="Company.tree.icon" />
-&lt;/bean&gt;</programlisting><calloutlist>
+tree<co id="BasicTreeViewDescriptor" />('Company.tree',
+  rendered:'name',
+  icon<co id="Company.tree.icon" />:'structure-48x48.png') {
+  subTree<co id="childDescriptor2" />('Company-departments.treeNode') {
+    subTree<co id="childDescriptor" />('Department-teams.treeNode')
+  }
+}</programlisting><calloutlist>
             <callout arearefs="BasicSimpleTreeLevelDescriptor">
-              <para>We declare a simple tree level that may hold only one
-              child tree level; this one is a terminal level, so it doesn't
-              hold any.</para>
-            </callout>
-
-            <callout arearefs="nodeGroupDescriptor">
-              <para>Each simple tree level references a list view descriptor
-              (the same type of descriptor we may use for list views) that is
-              backed by the collection end of a relationship through the use
-              of its <code>nodeGroupDescriptor</code> property.</para>
+              <para>We declare a simple tree level.</para>
             </callout>
 
             <callout arearefs="Department-teams">
               <para>This simple tree level is backed by the
               <code>Department</code> -&gt; <code>Team</code> relationship
-              since it will display the teams of a department node.</para>
+              (inferred from the naming convention) since it will display the
+              teams of a department node.</para>
+            </callout>
+
+            <callout arearefs="renderedProperty">
+              <para>Each node of a simple tree level - here it's a team - must
+              be rendered by one of its property. When not set, the rendering
+              property is chosen by the backing component itself. We want the
+              <code>ouId</code> of a team to be displayed.</para>
             </callout>
 
             <callout arearefs="actionMap">
@@ -4016,29 +3737,9 @@ split_vertical 'Company.organization.view',
               action map as we used for the table views.</para>
             </callout>
 
-            <callout arearefs="renderedProperty">
-              <para>Each node of a simple tree level - here it's a team - must
-              be rendered by one of its property. When not set, the rendering
-              property is chosen by the backing component descriptor itself.
-              We want the <code>ouId</code> of a team to be displayed.</para>
-            </callout>
-
-            <callout arearefs="childDescriptor">
-              <para>This tree level descriptor, while still a simple tree
-              level descriptor, differs from the previous one by the fact that
-              is not a terminal level; so we assign its child descriptor as
-              being the <code>Department-teams.subtree</code>
-              descriptor.</para>
-            </callout>
-
             <callout arearefs="BasicTreeViewDescriptor">
-              <para>The tree view descriptor itself. It may be composed
-              anywhere in the GUI.</para>
-            </callout>
-
-            <callout arearefs="childDescriptor2">
-              <para>We set the <code>Company-departments.subtree</code> as
-              being the first child tree level of the tree.</para>
+              <para>The tree view itself. It may be composed anywhere in the
+              GUI.</para>
             </callout>
 
             <callout arearefs="Company.tree.icon">
@@ -4047,47 +3748,32 @@ split_vertical 'Company.organization.view',
               have a different icon once we install the view in the
               tab.</para>
             </callout>
+
+            <callout arearefs="childDescriptor">
+              <para>We compose the sub-trees as we want them to appear
+              hierarchically in the tree view. We set the
+              <code>Company-departments.treeNode</code> as being the first
+              child tree level of the tree.</para>
+            </callout>
+
+            <callout arearefs="childDescriptor2">
+              <para>We set the <code>Department-teams.treeNode</code> tree
+              level as being nested into the
+              <code>Company-departments.treeNode</code> tree level.</para>
+            </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">treeNode 'Department-teams.treeNode',
-  rendered:'ouId',
-  actionMap:'masterDetail'
-      
-treeNode 'Company-departments.treeNode',
-  rendered:'ouId',
-  actionMap:'masterDetail'
-
-tree('Company.tree',
-  rendered:'name',
-  icon:'structure-48x48.png') {
-  subTree('Company-departments.treeNode') {
-    subTree('Department-teams.treeNode')
-  }
-}</programlisting></para>
 
         <para>The final step to reach the objective is to install the company
         tree view in a new tab of the company tab view. We do this by
         modifying the <code>Company.tab.pane</code> view as below :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Company.tab.pane"
-  class="org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt;
-  ...
-  &lt;property name="tabs"&gt;
-    &lt;list&gt;
-      ...
-      &lt;ref local="Company.tree" /&gt; <co id="Company.tree" />
-      ...
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
+        <para><programlisting language="java">tabs 'Company.tab.pane',
+  views:['Company.pane'<emphasis role="bold">,'Company.tree'</emphasis><co
+              id="Company.tree" />,'Traceable.pane']</programlisting><calloutlist>
             <callout arearefs="Company.tree">
               <para>We declare another tab in the tab view.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">tabs 'Company.tab.pane',
-  views:['Company.pane'<emphasis role="bold">,'Company.tree'</emphasis>,'Traceable.pane']</programlisting></para>
 
         <para>We can now test the result.</para>
 
@@ -4225,23 +3911,11 @@ tree('Company.tree',
         templates). We will see later on how the spring hibernate stack is
         used when dealing with actions.</para>
 
-        <para>As for <filename>model.xml</filename> and
-        <filename>view.xml</filename>, the archetype has generated a ready to
-        use Spring configuration file for the backend named
-        <filename>backend.xml</filename>. Here is what it looks like :</para>
-
-        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
-  default-lazy-init="true"&gt;
-
-&lt;/beans&gt;</programlisting>
-
-        <para>The SJS equivalent, <filename>backend.groovy</filename>, is also
-        generated :</para>
+        <para>As for <filename>model.groovy</filename> and
+        <filename>view.groovy</filename>, the archetype has generated a ready
+        to use Spring configuration file for the backend named
+        <filename>backend.groovy</filename>. Here is what it looks like
+        :</para>
 
         <para><programlisting language="java">// Implement your application backend here using the SJS DSL.
 </programlisting>And the good news is that there is nothing to code here for a
@@ -4363,65 +4037,27 @@ tree('Company.tree',
         application final assembling is done in the frontend.</para>
 
         <para>The archetype generated a default
-        <filename>frontend.xml</filename> in the
+        <filename>frontend.groovy</filename> in the
         <code>org.jspresso.hrsample.frontend</code> package that contains a
         minimal frontend controller definition. Here is what it contains
         :</para>
 
-        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
-  default-lazy-init="true"&gt;
+        <para><programlisting language="java">// Implement your application frontend here using the SJS DSL.
 
-  &lt;!--
-    The workspaces and modules
-  --&gt;
-  &lt;!-- Describe your workspaces and modules here. --&gt;
+/*
+ * The workspaces and modules
+ */
 
-  &lt;!--
-    The controller
-  --&gt;
-  &lt;bean
-    id="applicationFrontController"
-    parent="frontController"
-    scope="prototype"&gt; <co id="applicationFrontController" />
-    &lt;property
-      name="name"
-      value="hrsample.name" /&gt; <co id="hrsample.name" />
-    &lt;property
-      name="description"
-      value="hrsample.description" /&gt;
-    &lt;property
-      name="iconImageURL"
-      value="classpath:org/jspresso/hrsample/images/icon.png" /&gt; <co
-              id="hrsample.iconImageURL" />
-    &lt;property
-      name="loginContextName"
-      value="hrsample" /&gt; <co id="hrsample.loginContextName" />
-    &lt;property
-      name="forcedStartingLocale"
-      value="fr" /&gt; <co id="hrsample.forcedStartingLocale" />
-    &lt;property
-      name="workspaces"&gt;
-      &lt;list&gt;
-        &lt;!-- Reference your workspaces here. --&gt;
-      &lt;/list&gt;
-    &lt;/property&gt;
-  &lt;/bean&gt;
-&lt;/beans&gt;</programlisting><calloutlist>
+// Describe your workspaces and modules here.
+
+controller<co id="applicationFrontController" /> 'hrsample.name'<co
+              id="hrsample.name" />,
+  icon:'icon.png'<co id="hrsample.iconImageURL" />,
+  context:'hrsample'<co id="hrsample.loginContextName" />,
+  language:'fr'<co id="hrsample.forcedStartingLocale" />,
+  workspaces:[/*Reference your workspaces here.*/]</programlisting><calloutlist>
             <callout arearefs="applicationFrontController">
-              <para>We declare our application frontend controller to inherit
-              from the standard concrete frontend controller. In our case,
-              since we imported the <filename>commons-swing.xml</filename>
-              standard configuration file for swing, our controller will be a
-              swing controller. Switching to another presentation technology
-              (Flex or AJAX) will then just be a matter of changing the
-              imported configuration file
-              (<filename>commons-remote.xml</filename> for instance) in the
-              <filename>beanRefFactory.xml</filename> file.</para>
+              <para>We declare our application frontend controller.</para>
             </callout>
 
             <callout arearefs="hrsample.name">
@@ -4454,27 +4090,7 @@ tree('Company.tree',
             </callout>
           </calloutlist></para>
 
-        <para>Starting from release 3.5.0, the default frontend controller
-        definition is generated in the <filename>frontend.groovy</filename>
-        SJS source file, that has been automatically generated
-        :<programlisting language="java">// Implement your application frontend here using the SJS DSL.
-
-/*
- * The workspaces and modules
- */
-
-// Describe your workspaces and modules here.
-
-controller 'hrsample.name',
-  icon:'icon.png',
-  context:'hrsample',
-  language:'fr'
-  workspaces:[/*Reference your workspaces here.*/]</programlisting></para>
-
-        <para>The project is configured for the frontend to be developped
-        using SJS. If you still want to code directly using Spring XML, you
-        just ave to un-comment the corresponding sectionin the
-        <filename>frontend.xml</filename> file.</para>
+        <para>The application is ready to be assembled.</para>
       </section>
 
       <section>
@@ -4808,89 +4424,44 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
         operations on the cities entities. Let's have a look to the workspace
         and module definition and registration.</para>
 
-        <para>Open the <filename>frontend.xml</filename> spring context file
+        <para>Open the <filename>frontend.groovy</filename> SJS source file
         and add the following :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Masterdata.workspace"
-  parent="abstractWorkspace" <co id="Workspace" />
-  scope="prototype"&gt;
-  &lt;property
-    name="name"
-    value="masterdata.workspace" /&gt;
-  &lt;property
-    name="description"
-    value="masterdata.workspace.description" /&gt;
-  &lt;property
-    name="iconImageURL"
-    value="classpath:org/jspresso/hrsample/images/masterdata-48x48.png" /&gt;
-  &lt;property name="modules"&gt; <co id="modules" />
-    &lt;list&gt;
-      &lt;bean parent="abstractFilterableBeanCollectionModule"&gt; <co
-              id="abstractFilterableBeanCollectionModule" />
-        &lt;property
-          name="name"
-          value="masterdata.cities.module" /&gt;
-        &lt;property
-          name="description"
-          value="masterdata.cities.module.description" /&gt;
-        &lt;property
-          name="elementComponentDescriptor"
-          ref="City" /&gt; <co id="elementComponentDescriptor" />
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="applicationFrontController"
-  parent="frontController"
-  scope="prototype"&gt;
-  ...
-  &lt;property name="workspaces"&gt; <co id="workspaces" />
-    &lt;list&gt;
-      &lt;ref bean="Masterdata.workspace" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="Workspace">
-              <para>We declare our new workspace inheriting from the Jspresso
-              standard built-in workspace component that may fit most of
-              standard usages.</para>
-            </callout>
-
-            <callout arearefs="modules">
-              <para>We assign the list of modules belonging to this new
-              workspace. The list contains one module which is the cities bean
-              collection module.</para>
-            </callout>
-
-            <callout arearefs="abstractFilterableBeanCollectionModule">
-              <para>We declare the cities module inheriting the Jspresso
-              standard built-in filterable bean collection module component
-              that may fit most of standard usages.</para>
-            </callout>
-
-            <callout arearefs="elementComponentDescriptor">
-              <para>We customize the module by referencing the city entity as
-              being the content element of this module.</para>
-            </callout>
-
-            <callout arearefs="workspaces">
-              <para>We register the master data management module in the
-              existing frontend controller.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">workspace('masterdata.workspace',
-  icon:'masterdata-48x48.png') {
-  filterModule('masterdata.cities.module',
-    component:'City')
+        <para><programlisting language="java">workspace<co id="Workspace" />('masterdata.workspace',
+  icon:'masterdata-48x48.png') {<co id="modules" />
+  filterModule<co id="abstractFilterableBeanCollectionModule" />('masterdata.cities.module',
+    component:'City'<co id="elementComponentDescriptor" />)
 }
 
 controller 'hrsample.name',
   ...
-  workspaces:['masterdata.workspace']</programlisting></para>
+  workspaces:['masterdata.workspace'<co id="workspaces" />]</programlisting><calloutlist>
+            <callout arearefs="Workspace">
+              <para>We declare our new master data management
+              workspace.</para>
+            </callout>
+
+            <callout arearefs="modules">
+              <para>We assign the list of modules belonging to this new
+              workspace. The list contains one module which is the cities
+              C.R.U.D. module.</para>
+            </callout>
+
+            <callout arearefs="abstractFilterableBeanCollectionModule">
+              <para>We declare the cities CRUD module.</para>
+            </callout>
+
+            <callout arearefs="elementComponentDescriptor">
+              <para>We configure the module by referencing the
+              <code>City</code> entity as being the content element of this
+              C.R.U.D. module.</para>
+            </callout>
+
+            <callout arearefs="workspaces">
+              <para>We register the master data management workspace in the
+              existing frontend controller.</para>
+            </callout>
+          </calloutlist></para>
 
         <para>You might notice in the fragment above that there are actually
         very few directives needed to get a fully functionning C.R.U.D. module
@@ -4906,9 +4477,9 @@ controller 'hrsample.name',
         available in the application frame workspaces menu. Don't hesitate to
         play with it, create some cities, save them, query them applying a
         filter, zoom on a selected one to edit it in a more convenient form,
-        reset the list, ... And if you turn on logging for the SQL issued, you
-        will see all your orders transmitted to the backend database. The
-        screenshots below captures some of the actions we have just talked
+        reset the list, ... And if you turn on logging for the executed SQL,
+        you will see all your statements transmitted to the backend database.
+        The screenshots below captures some of the actions we have just talked
         about.</para>
 
         <table>
@@ -4996,37 +4567,17 @@ controller 'hrsample.name',
         master data management in sub-categories like "geography", "finance",
         and so on... Of course, our cities management module should go in the
         geography category. This is quite straightforward to declare; look at
-        how we slightly modify the workspace description in the following XML
+        how we slightly modify the workspace description in the following SJS
         fragment :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Masterdata.workspace"
-  parent="abstractWorkspace"
-  scope="prototype"&gt;
-  ...
-  &lt;property name="modules"&gt;
-    &lt;list&gt;
-      &lt;bean parent="abstractSimpleModule"&gt; <co id="abstractSimpleModule" />
-        &lt;property
-          name="name"
-          value="masterdata.geography.module" /&gt;
-        &lt;property
-          name="description"
-          value="masterdata.geography.module.description" /&gt;
-        &lt;property
-          name="iconImageURL"
-          value="classpath:org/jspresso/hrsample/images/geography-48x48.png" /&gt;
-        &lt;property name="subModules"&gt; <co id="subModules" />
-          &lt;list&gt;
-            &lt;bean parent="abstractFilterableBeanCollectionModule"&gt;
-              ...
-            &lt;/bean&gt;
-          &lt;/list&gt;
-        &lt;/property&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
+        <para><programlisting language="java">workspace('masterdata.workspace',
+  icon:'masterdata-48x48.png') {
+  nodeModule<co id="abstractSimpleModule" />('masterdata.geography.module',
+    icon:'geography-48x48.png') {<co id="subModules" />
+    filterModule('masterdata.cities.module',
+      component:'City'
+  }
+}</programlisting><calloutlist>
             <callout arearefs="abstractSimpleModule">
               <para>We are inserting the category simple module. It is a
               viewless module, so the only thing we have to configure is its
@@ -5038,15 +4589,6 @@ controller 'hrsample.name',
               child (sub-module) of the above geography module.</para>
             </callout>
           </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">workspace('masterdata.workspace',
-  icon:'masterdata-48x48.png') {
-  nodeModule('masterdata.geography.module',
-    icon:'geography-48x48.png') {
-    filterModule('masterdata.cities.module',
-      component:'City'
-  }
-}</programlisting></para>
 
         <para>This type of taxonomy can be arbitrarily deep since you can in
         turn put categories modules as sub-modules of others.</para>
@@ -5091,39 +4633,18 @@ controller 'hrsample.name',
         and reload service on the single displayed city.</para>
 
         <para>Beforehand, we are going to declare the new city component view
-        in the <filename>view.xml</filename> :</para>
+        in the <filename>view.groovy</filename> :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="City.module.view"
-  parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
-  &lt;property
-    name="columnCount"
-    value="1" /&gt; <co id="cityColumnCount" />
-  &lt;property name="actionMap"&gt;
-    &lt;bean class="org.jspresso.framework.view.action.ActionMap"&gt; <co
-              id="cityActionMap" />
-      &lt;property name="actionLists"&gt;
-        &lt;list&gt;
-          &lt;bean class="org.jspresso.framework.view.action.ActionList"&gt; <co
-              id="ActionList" />
-            &lt;property
-              name="name"
-              value="FILE" /&gt;
-            &lt;property name="actions"&gt;
-              &lt;list&gt;
-                &lt;ref bean="saveModuleObjectFrontAction" /&gt; <co
-              id="saveModuleObjectFrontAction" />
-                &lt;ref bean="reloadModuleObjectFrontAction" /&gt; <co
-              id="reloadModuleObjectFrontAction" />
-              &lt;/list&gt;
-            &lt;/property&gt;
-          &lt;/bean&gt;
-        &lt;/list&gt;
-      &lt;/property&gt;
-    &lt;/bean&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
+        <para><programlisting language="java">form('City.module.view',
+  parent:'decoratedView'
+  columnCount:1<co id="cityColumnCount" />) {
+  actionMap<co id="cityActionMap" /> {
+    actionList<co id="ActionList" />('FILE'){
+      action<co id="saveModuleObjectFrontAction" />(ref:'saveModuleObjectFrontAction')
+      action<co id="reloadModuleObjectFrontAction" />(ref:'reloadModuleObjectFrontAction')
+    }
+  }
+}</programlisting><calloutlist>
             <callout arearefs="cityColumnCount">
               <para>For the sake of modifying the view layout, we organize the
               fields in 1 column.</para>
@@ -5149,59 +4670,24 @@ controller 'hrsample.name',
             </callout>
           </calloutlist></para>
 
-        <para>And the SJS way, in <filename>view.groovy</filename>
-        :<programlisting language="java">form('City.module.view',
-  parent:'decoratedView'
-  columnCount:1) {
-  actionMap {
-    actionList('FILE'){
-      action(ref:'saveModuleObjectFrontAction')
-      action(ref:'reloadModuleObjectFrontAction')
-    }
-  }
-}</programlisting></para>
-
         <para>Once the customized view is declared, we need to register it in
         the bean collection module as follows :</para>
 
-        <para><programlisting language="xml">&lt;bean
-  id="Masterdata.workspace"
-  parent="abstractWorkspace"
-  scope="prototype"&gt;
-  ...
-  &lt;property name="modules"&gt;
-    &lt;list&gt;
-      &lt;bean parent="abstractSimpleModule"&gt;
-        ...
-        &lt;property name="subModules"&gt;
-          &lt;list&gt;
-            &lt;bean parent="abstractFilterableBeanCollectionModule"&gt;
-              ...
-              &lt;property
-                name="elementViewDescriptor"
-                ref="City.module.view" /&gt; <co id="elementViewDescriptor" />
-            &lt;/bean&gt;
-          &lt;/list&gt;
-        &lt;/property&gt;
-      &lt;/bean&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="elementViewDescriptor">
-              <para>We register the new city view as being the view to use
-              when displaying a single city.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>And the SJS way :<programlisting language="java">workspace('masterdata.workspace',
+        <para><programlisting language="java">workspace('masterdata.workspace',
   icon:'masterdata-48x48.png') {
   nodeModule('masterdata.geography.module',
     icon:'geography-48x48.png') {
     filterModule('masterdata.cities.module',
       component:'City',
-      <emphasis role="bold">detailView:'City.module.view'</emphasis>)
+      <emphasis role="bold">detailView</emphasis><co
+              id="elementViewDescriptor" /><emphasis role="bold">:'City.module.view'</emphasis>)
   }
-}</programlisting></para>
+}</programlisting><calloutlist>
+            <callout arearefs="elementViewDescriptor">
+              <para>We register the new city view as being the view to use
+              when displaying a single city.</para>
+            </callout>
+          </calloutlist></para>
 
         <para>We are now ready to re-open the workspace, create a new city and
         display it individually :</para>
@@ -5734,7 +5220,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
           <para>Let's have a look to the changes made to the
           application.</para>
 
-          <para>In the <filename>model.xml</filename> spring definition file
+          <para>In the <filename>model.groovy</filename> SJS source file
           :<programlisting language="xml">...
 &lt;bean
   id="OrganizationalUnit-manager"
