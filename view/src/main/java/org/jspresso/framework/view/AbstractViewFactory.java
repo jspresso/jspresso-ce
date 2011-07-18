@@ -214,9 +214,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -1292,7 +1290,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else {
       format = new NullableSimpleDateFormat(
           ((SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT,
-              DateFormat.SHORT, locale)).toPattern(), locale);
+              DateFormat.MEDIUM, locale)).toPattern(), locale);
     }
     if (propertyDescriptor.isTimeZoneAware()) {
       format.setTimeZone(timeZone);
@@ -2037,7 +2035,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected SimpleDateFormat createTimeFormat(
       ITimePropertyDescriptor propertyDescriptor, Locale locale) {
     SimpleDateFormat format = (SimpleDateFormat) DateFormat.getTimeInstance(
-        DateFormat.SHORT, locale);
+        DateFormat.MEDIUM, locale);
     return format;
   }
 
@@ -2881,9 +2879,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
-          };
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
         }
       }
     }
