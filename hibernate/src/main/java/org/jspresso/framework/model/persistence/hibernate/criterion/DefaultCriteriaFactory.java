@@ -33,6 +33,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
@@ -206,6 +207,9 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
               if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
+                currentCriteria.add(Restrictions.eq(prefixedProperty,
+                    property.getValue()));
+              } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
                 currentCriteria.add(Restrictions.eq(prefixedProperty,
                     property.getValue()));
               } else {
