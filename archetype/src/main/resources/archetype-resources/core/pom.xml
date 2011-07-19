@@ -165,12 +165,7 @@
             <id>compile-groovy-classes</id>
             <phase>compile</phase>
             <goals>
-              <goal>generateStubs</goal>
               <goal>compile</goal>
-              <!--
-              <goal>generateTestStubs</goal>
-              <goal>testCompile</goal>
-              -->
             </goals>
           </execution>
         </executions>
@@ -287,19 +282,6 @@
               </tasks>
             </configuration>
           </execution>
-          <execution>
-            <id>groovy-path-fix</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <property name="groovy.generated.sources" value="${symbol_dollar}{project.build.directory}/generated-sources/groovy-stubs/main" />
-                <mkdir dir="${symbol_dollar}{groovy.generated.sources}" />
-              </tasks>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -315,6 +297,7 @@
             <configuration>
               <sources>
                 <source>${symbol_dollar}{project.build.directory}/generated-sources/entitygenerator</source>
+                <source>${basedir}/src/main/groovy</source>
               </sources>
             </configuration>
           </execution>
