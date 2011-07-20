@@ -86,18 +86,21 @@
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/jasperreports</directory>
           <includes>
+            <include>**/.readme</include>
             <include>**/*.jrxml</include>
           </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/java</directory>
           <includes>
+            <include>**/.readme</include>
             <include>**/*.java</include>
           </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/groovy</directory>
           <includes>
+            <include>**/.readme</include>
             <include>**/*.groovy</include>
           </includes>
         </fileSet>
