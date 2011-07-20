@@ -148,10 +148,6 @@
             </fileSet>
             <fileSet filtered="true" packaged="true" encoding="UTF-8">
               <directory>src/main/resources</directory>
-              <includes>
-                <include>**/*.xml</include>
-                <include>**/*.properties</include>
-              </includes>
             </fileSet>
           </fileSets>
         </module>
@@ -171,10 +167,6 @@
             </fileSet>
             <fileSet filtered="true" packaged="true" encoding="UTF-8">
               <directory>src/main/resources</directory>
-              <includes>
-                <include>**/*.xml</include>
-                <include>**/*.properties</include>
-              </includes>
             </fileSet>
           </fileSets>
         </module>
@@ -204,37 +196,17 @@
                     <include>**/*.mxml</include>
                   </includes>
                 </fileSet>
-                <fileSet filtered="true" packaged="true" encoding="UTF-8">
-                  <directory>src/test/flex</directory>
-                  <includes>
-                    <include>**/*.as</include>
-                  </includes>
-                </fileSet>
                 <fileSet filtered="true" packaged="false" encoding="UTF-8">
-                  <directory>src/main/locales/fr_FR</directory>
-                  <includes>
-                    <include>**/*.properties</include>
-                  </includes>
-                </fileSet>
-                <fileSet filtered="true" packaged="false" encoding="UTF-8">
-                  <directory>src/main/locales/en_US</directory>
-                  <includes>
-                    <include>**/*.properties</include>
-                  </includes>
+                  <directory>src/main/locales</directory>
                 </fileSet>
                 <fileSet filtered="true" packaged="true" encoding="UTF-8">
                   <directory>src/main/resources</directory>
-                  <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/test/flex</directory>
                 </fileSet>
                 <fileSet filtered="true" packaged="true" encoding="UTF-8">
                   <directory>src/test/resources</directory>
-                  <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                  </includes>
                 </fileSet>
               </fileSets>
             </module>
@@ -268,17 +240,11 @@
                     <include>**/*.json</include>
                   </includes>
                 </fileSet>
-                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
                   <directory>src/main/resources</directory>
-                  <includes>
-                    <include>**/*</include>
-                  </includes>
                 </fileSet>
                 <fileSet filtered="true" packaged="false" encoding="UTF-8">
                   <directory>src/main/translations</directory>
-                  <includes>
-                    <include>**/*</include>
-                  </includes>
                 </fileSet>
                 <fileSet filtered="true" packaged="false" encoding="UTF-8">
                   <directory>src/main</directory>
@@ -298,10 +264,6 @@
                 </fileSet>
                 <fileSet filtered="true" packaged="true" encoding="UTF-8">
                   <directory>src/main/resources</directory>
-                  <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                  </includes>
                 </fileSet>
               </fileSets>
             </module>
