@@ -19,27 +19,11 @@
 package org.jspresso.framework.model.descriptor;
 
 /**
- * This interface is implemented by descriptors of date properties.
+ * This interface is implemented by descriptors containing a time information.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
-public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor, ITimeAwarePropertyDescriptor {
-
-  /**
-   * Gets the date type. Values are among : <li> <code>DATE</code> <li>
-   * <code>DATE_TIME</code>
-   * 
-   * @return the type of this date descriptor.
-   */
-  EDateType getType();
-
-  /**
-   * Wether the date display should vary depending on the client timezone.
-   * 
-   * @return wether the date display should vary depending on the client
-   *         timezone.
-   */
-  boolean isTimeZoneAware();
-
+public interface ITimeAwarePropertyDescriptor {
+  // Empty as of now.
 }

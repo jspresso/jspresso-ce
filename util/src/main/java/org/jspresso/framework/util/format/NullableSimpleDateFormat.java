@@ -6,6 +6,7 @@ package org.jspresso.framework.util.format;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -31,7 +32,7 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
    * Constructs a new <code>NullableSimpleDateFormat</code> instance.
    * 
    * @param pattern
-   *            pattern.
+   *          pattern.
    */
   public NullableSimpleDateFormat(String pattern) {
     super(pattern);
@@ -41,9 +42,9 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
    * Constructs a new <code>NullableSimpleDateFormat</code> instance.
    * 
    * @param pattern
-   *            pattern.
+   *          pattern.
    * @param formatSymbols
-   *            formatSymbols.
+   *          formatSymbols.
    */
   public NullableSimpleDateFormat(String pattern,
       DateFormatSymbols formatSymbols) {
@@ -54,9 +55,9 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
    * Constructs a new <code>NullableSimpleDateFormat</code> instance.
    * 
    * @param pattern
-   *            pattern.
+   *          pattern.
    * @param locale
-   *            locale.
+   *          locale.
    */
   public NullableSimpleDateFormat(String pattern, Locale locale) {
     super(pattern, locale);
@@ -70,7 +71,34 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
     if (source == null || source.length() == 0) {
       return null;
     }
-    return super.parse(source);
+    try {
+      return super.parse(source);
+    } catch (ParseException pe) {
+      if (pe.getErrorOffset() == source.length()) {
+        try {
+          String originalPattern = toPattern();
+          String reducedPattern = originalPattern.substring(0,
+              pe.getErrorOffset());
+          Date incomplete = new SimpleDateFormat(reducedPattern).parse(source);
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(incomplete);
+          Calendar now = Calendar.getInstance();
+          if (originalPattern.contains("y") && !reducedPattern.contains("y")) {
+            cal.set(Calendar.YEAR, now.get(Calendar.YEAR));
+          }
+          if (originalPattern.contains("M") && !reducedPattern.contains("M")) {
+            cal.set(Calendar.MONTH, now.get(Calendar.MONTH));
+          }
+          if (originalPattern.contains("d") && !reducedPattern.contains("d")) {
+            cal.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+          }
+          return cal.getTime();
+        } catch (ParseException nestedPe) {
+          throw pe;
+        }
+      }
+      throw pe;
+    }
   }
 
   /**
@@ -78,10 +106,7 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
    */
   @Override
   public Object parseObject(String source) throws ParseException {
-    if (source == null || source.length() == 0) {
-      return null;
-    }
-    return super.parse(source);
+    return parse(source);
   }
 
 }

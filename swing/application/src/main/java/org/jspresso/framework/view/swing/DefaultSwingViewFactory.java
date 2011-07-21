@@ -717,7 +717,7 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     JComponent viewComponent;
     DateFormat format = createDateFormat(propertyDescriptor,
-        actionHandler.getClientTimeZone(), locale);
+        actionHandler.getClientTimeZone(), actionHandler, locale);
     IFormatter formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
@@ -1709,10 +1709,10 @@ public class DefaultSwingViewFactory extends
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       cellRenderer = createDateTableCellRenderer(
           (IDatePropertyDescriptor) propertyDescriptor,
-          actionHandler.getClientTimeZone(), locale);
+          actionHandler.getClientTimeZone(), actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       cellRenderer = createTimeTableCellRenderer(
-          (ITimePropertyDescriptor) propertyDescriptor, locale);
+          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       cellRenderer = createDurationTableCellRenderer(
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -2151,7 +2151,8 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
+    IFormatter formatter = createTimeFormatter(propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink();
@@ -2547,9 +2548,9 @@ public class DefaultSwingViewFactory extends
 
   private TableCellRenderer createDateTableCellRenderer(
       IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
-      Locale locale) {
+      ITranslationProvider translationProvider, Locale locale) {
     return new FormattedTableCellRenderer(createDateFormatter(
-        propertyDescriptor, timeZone, locale));
+        propertyDescriptor, timeZone, translationProvider, locale));
   }
 
   private TableCellRenderer createDecimalTableCellRenderer(
@@ -2755,9 +2756,10 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createTimeTableCellRenderer(
-      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+      ITimePropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     return new FormattedTableCellRenderer(createTimeFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, translationProvider, locale));
   }
 
   private void decorateWithTitle(IView<JComponent> view,

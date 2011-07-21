@@ -24,6 +24,7 @@ package org.jspresso.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ITimePropertyDescriptor extends IScalarPropertyDescriptor {
+public interface ITimePropertyDescriptor extends IScalarPropertyDescriptor,
+    ITimeAwarePropertyDescriptor {
   // Empty as of now.
 }

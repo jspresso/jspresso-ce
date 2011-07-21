@@ -20,7 +20,6 @@ package org.jspresso.framework.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -77,6 +76,7 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITimeAwarePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
@@ -214,7 +214,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -1275,27 +1277,63 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the date property descriptor.
    * @param timeZone
    *          the timezone.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the date format.
    */
   protected SimpleDateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
-      Locale locale) {
+      ITranslationProvider translationProvider, Locale locale) {
     SimpleDateFormat format;
     if (propertyDescriptor.getType() == EDateType.DATE) {
-      format = new NullableSimpleDateFormat(
-          ((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT,
-              locale)).toPattern(), locale);
+      format = new NullableSimpleDateFormat(getDatePattern(propertyDescriptor,
+          translationProvider, locale), locale);
     } else {
-      format = new NullableSimpleDateFormat(
-          ((SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT,
-              DateFormat.MEDIUM, locale)).toPattern(), locale);
+      format = new NullableSimpleDateFormat(getDatePattern(propertyDescriptor,
+          translationProvider, locale)
+          + " "
+          + getTimePattern(propertyDescriptor, translationProvider, locale),
+          locale);
     }
     if (propertyDescriptor.isTimeZoneAware()) {
       format.setTimeZone(timeZone);
     }
     return format;
+  }
+
+  /**
+   * Return the default date pattern expressed as a SimpleDateFormat pattern.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param translationProvider
+   *          the translation provider.
+   * @param locale
+   *          the locale.
+   * @return the default date pattern.
+   */
+  protected String getDatePattern(IDatePropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
+    return translationProvider.getTranslation("date_format", locale);
+  }
+
+  /**
+   * Return the default time pattern expressed as a SimpleDateFormat pattern.
+   * 
+   * @param propertyDescriptor
+   *          the time aware property descriptor.
+   * @param translationProvider
+   *          the translation provider.
+   * @param locale
+   *          the locale.
+   * @return the default date pattern.
+   */
+  protected String getTimePattern(
+      ITimeAwarePropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
+    return "HH:mm:ss";
   }
 
   /**
@@ -1305,15 +1343,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the date property descriptor.
    * @param timeZone
    *          the timezone.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the date formatter.
    */
   protected IFormatter createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
-      Locale locale) {
+      ITranslationProvider translationProvider, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, timeZone,
-        locale));
+        translationProvider, locale));
   }
 
   /**
@@ -1506,10 +1546,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
-          actionHandler.getClientTimeZone(), locale);
+          actionHandler.getClientTimeZone(), actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
-          locale);
+          actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return createDurationFormatter(
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -2028,14 +2068,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the time property descriptor.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the time format.
    */
   protected SimpleDateFormat createTimeFormat(
-      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
-    SimpleDateFormat format = (SimpleDateFormat) DateFormat.getTimeInstance(
-        DateFormat.MEDIUM, locale);
+      ITimePropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
+    SimpleDateFormat format = new NullableSimpleDateFormat(getTimePattern(
+        propertyDescriptor, translationProvider, locale), locale);
     return format;
   }
 
@@ -2044,13 +2087,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the time property descriptor.
+   * @param translationProvider
+   *          the translation provider.
    * @param locale
    *          the locale.
    * @return the time formatter.
    */
   protected IFormatter createTimeFormatter(
-      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createTimeFormat(propertyDescriptor, locale));
+      ITimePropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
+    return createFormatter(createTimeFormat(propertyDescriptor,
+        translationProvider, locale));
   }
 
   /**
@@ -2879,7 +2926,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+          columnPrefs[i] = new Object[] {
+              column[0], new Integer(column[1])
+          };
         }
       }
     }
