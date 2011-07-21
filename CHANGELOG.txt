@@ -1,394 +1,169 @@
-3.5.6
-=====
-Bugs fixed:
------------
-           xxxxx
+Jspresso CE - Change Log
 
+Jspresso CE - 3.5.6 (Released 2011-07-05) [ View Issues ]
+=========================================
+- 0000350: [Build & tools] Archetype does not create the complete directory structure, i.e. empty directories (vvandens) - closed.
+- 0000346: [Build & tools] Make archetype launch configurations independent from the root project folder (vvandens) - closed.
+- 0000347: [Build & tools] Create MAC archetype launch configurations (vvandens) - closed.
+- 0000348: [Build & tools] Make Groovy coding immediately available from archetype (vvandens) - closed.
+- 0000349: [Build & tools] Make launch configurations portable across environments (vvandens) - closed.
+- 0000344: [Frontend] Search page and combo box (enumeration) (vvandens) - closed.
+- 0000343: [View] Date-time seconds are not displayed when declared read-only (vvandens) - closed.
+- 0000339: [Model] A closed gate on a model should not make its collection properties read-only (vvandens) - closed.
+- 0000340: [View] Date column are not correctly sorted when the sort is performed on client side (vvandens) - closed.
+- 0000341: [Documentation] Review documentation (vvandens) - closed.
+- 0000342: [View] When a composite is declared cascadingModel:true, writability constraint may be wrongly extended to children. (vvandens) - closed.
+- 0000338: [Frontend] Improve login modularity (vvandens) - closed.
+- 0000336: [View] Date and datetime properties should be properly rounded when transferred to/from view (vvandens) - closed.
+- 0000003: [Persistence] Change Hibernate DTD reference from hibernate.sourceforge.net to wwww.hibernate.org (vvandens) - closed.
+- 0000002: [View] Allow for disabling 1st line automatic selection in collection views (vvandens) - closed.
+- 0000005: [View] Implement constants for property names in generated entities (vvandens) - closed.
+[16 issues]
 
-New Features:
--------------
-           Implement constants for property names in generated entities
+Jspresso CE - 3.5.5 (Released 2011-07-05) [ View Issues ]
+=========================================
+- 0000276: [Frontend] Referenced query components holding only properties coming from initialization mapping should be considered empty (vvandens) - closed.
+- 0000335: [Persistence] Improve DB Index usage nby limiting functions in queries (vvandens) - closed.
+- 0000275: [View] ViewTester to support beanFactorySelector argument introduced in 3.5.1 (vvandens) - closed.
+- 0000278: [Backend] Criteria queries use overkilling case-insensitive search on ids (vvandens) - closed.
+- 0000277: [Backend] Criteria queries use overkilling case-insensitive search on upper-case fields (vvandens) - closed.
+- 0000281: [Persistence] Several mis-behaviors against Hibernate session management (vvandens) - closed.
+- 0000280: [Model] Potential NPE in AbstractComponentDescriptor (vvandens) - closed.
+- 0000279: [View] Allow for inputing negative sign in Flex numeric fields (vvandens) - closed.
+[8 issues]
 
+Jspresso CE - 3.5.4 (Released 2011-07-05) [ View Issues ]
+=========================================
+- 0000264: [Backend] Potential NPE in SecurityContextBuilder for arbitrary java object property (vvandens) - closed.
+- 0000267: [Frontend] Potential NPE in AbstractActionFactory (vvandens) - closed.
+- 0000268: [Frontend] Potential NPE in PropertyModelGate (vvandens) - closed.
+- 0000263: [View] Flex NPE in datagrid date input under IE8 (vvandens) - closed.
+- 0000266: [Backend] Unchanged entities are incorrectly merged back into the session resulting in false concurrent access errors (vvandens) - closed.
+- 0000272: [Persistence] Several mis-behaviors against Hibernate session management (vvandens) - closed.
+- 0000329: [Model] JavaSerializable properties should support serializable collections (vvandens) - closed.
+- 0000330: [Model] Lazy initialize PropertyChangeSupport for sparing heap memory (vvandens) - closed.
+- 0000274: [View] Auto-complete does not work for certain TAB key navigations (vvandens) - closed.
+- 0000331: [View] Make number parser more permissive (i.e. accept different separators) (vvandens) - closed.
+- 0000333: [Model] Date categorization : technical (with TZ translation) and functional (w/o TZ translation) (vvandens) - closed.
+- 0000334: [Frontend] Implement module clone() method (vvandens) - closed.
+- 0000328: [Build & tools] Prepare for Maven 3 : Plugin dependencies repos copied to pluginRepositories section (vvandens) - closed.
+- 0000332: [View] Make read-only values selectable in flex datagrids (vvandens) - closed.
+- 0000273: [View] Flex date format is sometimes erroneous (vvandens) - closed.
+- 0000265: [View] Datagrid editing fails when pressing enter on the last row (vvandens) - closed.
+- 0000271: [Backend] getModel(context) should always return either a collection or a "complex" model (never a scalar propety) (vvandens) - closed.
+- 0000269: [Build & tools] Completed mock-config.xml with missing references (vvandens) - closed.
+- 0000270: [Frontend] CollectionSelectionTrackingGate should be open whenever installed on non collection views with not-null model (vvandens) - closed.
+[19 issues]
 
+Jspresso CE - 3.5.3 (Released 2011-07-05) [ View Issues ]
+=========================================
+- 0000262: [Backend] Potential NPE in resource provider servlet (vvandens) - closed.
+- 0000260: [Persistence] Several mis-behaviors against Hibernate session management (vvandens) - closed.
+- 0000325: [Backend] Introduce a new EMergeMode.MERGE_LAZY that only cleans obsolete entity instances dirty state (vvandens) - closed.
+- 0000327: [View] Make read-only fields selectable (vvandens) - closed.
+- 0000324: [View] Made actionfield buttons non-focusable (vvandens) - closed.
+- 0000326: [Model] Binary and text property descriptor should provide a default filename and content-type (vvandens) - closed.
+- 0000261: [View] Flex Alert does not display correctly when triggered from a popup button (vvandens) - closed.
+- 0000259: [View] Fixed table sorting for formatted columns (vvandens) - closed.
+[8 issues]
 
-3.5.5
-=====
-Bugs fixed:
------------
-           ViewTester to support beanFactorySelector argument introduced in 3.5.1
-           Referenced query components holding only properties coming from initialization mapping should be considered empty
-           Criteria queries use overkilling case-insensitive search on upper-case fields
-           Criteria queries use overkilling case-insensitive search on ids
-           Allow for inputing negative sign in Flex numeric fields
-           Potential NPE in AbstractComponentDescriptor
-           Several mis-behaviors against Hibernate session management
+Jspresso CE - 3.5.2 (Released 2011-07-05) [ View Issues ]
+=========================================
+- 0000258: [Persistence] Potential NPE after initialization of a persistent List containing holes (vvandens) - closed.
+- 0000256: [Frontend] Potential NPE in action gates listeners (vvandens) - closed.
+- 0000322: [Model] Implement queryable and rendered properties refinement on reference property descriptors (vvandens) - closed.
+- 0000323: [Model] Add onClone lifecycle method that iscalled every time an entity/component is cloned (vvandens) - closed.
+- 0000321: [Frontend] Add a loginAction hook on frontend controller (vvandens) - closed.
+- 0000320: [Frontend] Their should be an application-wide default IQueryComponentRefiner (vvandens) - closed.
+- 0000255: [Backend] OnUpdate is wrongly triggered for UOW deleted entities (vvandens) - closed.
+- 0000253: [Model] Avoid unnecessary checks whe deleting entities (vvandens) - closed.
+- 0000254: [Persistence] Several mis-behaviors against Hibernate session management (vvandens) - closed.
+- 0000257: [Frontend] Bean modules should not use their module object toString when they have a static name (vvandens) - closed.
+[10 issues]
 
-
-New Features:
--------------
-           Improve DB Index usage nby limiting functions in queries
-
-
-
-3.5.4
-=====
-Bugs fixed:
------------
-           Flex NPE in datagrid date input under IE8
-           Potential NPE in SecurityContextBuilder for arbitrary java object property
-           Datagrid editing fails when pressing enter on the last row
-           Unchanged entities are incorrectly merged back into the session resulting in false concurrent access errors
-           Potential NPE in AbstractActionFactory
-           Potential NPE in PropertyModelGate
-           Completed mock-config.xml with missing references
-           CollectionSelectionTrackingGate should be open whenever installed on non collection views with not-null model
-           getModel(context) should always return either a collection or a "complex" model (never a scalar propety)
-           Several mis-behaviors against Hibernate session management
-           Flex date format is sometimes erroneous
-           Auto-complete does not work for certain TAB key navigations
-
-
-New Features:
--------------
-           Prepare for Maven 3 : Plugin dependencies repos copied to pluginRepositories section
-           JavaSerializable properties should support serializable collections
-           Lazy initialize PropertyChangeSupport for sparing heap memory
-           Make number parser more permissive (i.e. accept different separators)
-           Make read-only values selectable in flex datagrids
-           Date categorization : technical (with TZ translation) and functional (w/o TZ translation)
-           Implement module clone() method
-
-
-
-3.5.3
-=====
-Bugs fixed:
------------
-           Fixed table sorting for formatted columns
-           Several mis-behaviors against Hibernate session management
-           Flex Alert does not display correctly when triggered from a popup button
-           Potential NPE in resource provider servlet
-
-
-New Features:
--------------
-           Made actionfield buttons non-focusable
-           Introduce a new EMergeMode.MERGE_LAZY that only cleans obsolete entity instances dirty state
-           Binary and text property descriptor should provide a default filename and content-type
-           Make read-only fields selectable
-
-
-
-3.5.2
-=====
-Bugs fixed:
------------
-           Avoid unnecessary checks whe deleting entities
-           Several mis-behaviors against Hibernate session management
-           OnUpdate is wrongly triggered for UOW deleted entities
-           Potential NPE in action gates listeners
-           Bean modules should not use their module object toString when they have a static name
-           Potential NPE after initialization of a persistent List containing holes
-
-
-New Features:
--------------
-           Their should be an application-wide default IQueryComponentRefiner
-           Add a loginAction hook on frontend controller
-           Implenment queryable and rendered properties refinement on reference property descriptors
-           Add onClone lifecycle method that iscalled every time an entity/component is cloned
-
-
-
-3.5.1
-=====
-Bugs fixed:
------------
-           qooxdoo date formats do not respect user locale
-           InitializationMapping may break the filter modules
-           NPE on GrantedRolesGate
-           Several mis-behaviors against Hibernate session management
-           Flex and qooxdoo combobox binding fixed for mandatory uninitialized fields
-           RemoveFromModuleObjectsAction did not correctly clone objects in the UOW.
-           Mandatory columns are not correctly indicated in Flex/qooxdoo tables
-           Uninitialized collections are incorrectly cloned in unit of work
-           Popup button menu item mises enablement refresh
-           Flex comboboxes are not correctly synchronized with null values comming from the server
-           Fixed server parsing for server formatted value management (duration for instance)
-           Support EAGER merge mode outside of transaction
-           Popup buttons that are empty because of security constraints produce client exceptions
-           Filter criteria can be unexpectedely reset when using criteria LOVs
-           Cascading model is not correctly handled when 1st view is a composite view
-           Auto-completion should be disabled when filter contains special QBE chars (';','#',';')
-           ToStringProperty is incorrectly picked up by reference fields
-           No query should be executed when sorting on a single page result
-           ClassCastException in constructing menubuttons when actions are not authorized
-           Bidi N-N relationship updates are sometimes not correctly flushed
-           Potential NPE in card views binding
-           Potential StackoverflowError when deleting entities in transaction
-           Cascading model fixed when master view is a composite view
-           Reduce memory consumption for remote UIDs by using an alternative generation algorithm
-           Module navigation optimization
-           Remove persistent from rendererd properties
-           Keep original file names for local download urls
-           Use column label instead of column name in Database login module
-           Notify children connectors from model change before notifying view connectors
-           NPE in cleanRelationshipOnDeletion
-           Boolean gates are not handled correctly on reference properties
-           Prevent flex buttons double clicks
-           RemotePeerRegistry memory leak
-           Query sort order should always be completed with id ordering to preserve pagination
-           Reload action should not fail on removed objects
-           OpenOnTrue should not influence model gates initial state
-           Model gates should be closed when assigned a null model
-           Writability gates do not work correctly on collection views
-           OnUpdate must only be triggered when entity is not registered for deletion.
-           JTA transactions are not correctly synchronized with "Unit of Work"
-           Selecting OK on an empty LOV dialog produces an exception
-           Query refiners are lost when sorting a table
-           Property rollback can produce a StackOverflow on 1-1
-           Clash with property names and SQL
-           Integer field too small
-
-
-New Features:
--------------
-           InitializationMapping should support null constant values (using 'null')
-           Allow the backend controller to be injected into extensions that implement IEntityLifecycleHandlerAware
-           Split date-time properties in 2 components to ease input
-           Make Flex time and date field more permissive to partial input
-           Support non-string initialization mapping (e.g. boolean)
-           Implement a modular user preference management
-           LOV filters should not display properties that are set with initializationMapping
-           Introduce a query component descriptor factory to allow for customization of QBE filters
-           Implement color alpha channel management
-           Make action maps securable and action maps security should be inherited from parents
-           Make action lists securable
-           Allow for defining an autoComplete property on entities that is used for auto-completion
-           Login dialog should gain focus on application startup
-           Implement tri-state checkboxes for QBE filters
-           Honnor property view colors in table cells
-           Propertyview horizontal alignment implemented
-           LovAction autoQuery implemented
-           "Remember me" implementation
-           Better client garbage collection (Flex and qooxdoo)
-           Support max length for binary fields
-           Improve HTML entities handling in HTML properties
-           Tab navigation lazy binding to improve memory and net consumption
-           File open/save callback API improved to include the file name
-           Improved QBE syntax for string criteria (; is OR, ! is NOT, # is NULL) 
-           BeanRefFactory can be placed in an arbitrary namespace
-           Support sorting on nested properties on paginated tables
-           Computed columns can now be sorted using a SQL formula on paginated tables
-           Support writability gates on inline components
-           Read-only enum property views are made icon labels
-           Introduced the usingLong property for java.lang.Long mapped integers
-           Secondary action map for views and controller
-           Hyperlink implementation (actionable read-only properties)
-           Actionlists can be declared collapsable => Menubutton
-           Toolbars are made scrollable when overlapping
-           Flex And qooxdoo various UI improvements
-           Flex table selection notification (itemSelectionAction)
-           Image management in tables
-           Menu item now support gates
-
-
-
-3.5.0
-=====
-Bugs fixed
-----------
-2769168  	 1-1 relationships with composition=true cloning
-2770973  	 NullPointer on actionability gates
-2772086  	 Nested accessors fail when accessing beans in maps
-2772366  	 Login dialog displays with null login context
-2777122  	 Fonts are not handled correctly when specified
-2777344  	 Flex forms do not respect labels customizations
-2777413  	 Flex date fields are not bound correctly
-2777597  	 Unset iconImageUrls generates erronous stackTraces in tomcat
-2777735  	 Current design doesn't allow for simple type customization
-2778525  	 Wings icons disappear on disabled buttons
-2786214  	 NullPointerException : empty workspace without iconImageUrl
-2787939  	 Leading selection index not correctly mapped on sorted tables
-2788370  	 ULC column headers not correctly rendered when column moved
-2788405  	 Flex table column reordering.
-2790268  	 NPE when component property is used as columnViewDescriptor
-2790281  	 getServiceContractClassNames returns null after 1st call
-2791539  	 model descriptor can be wrongly inferred for view descriptor
-2810895    Remote value connectors writability wrongly handled
-2813469    Wizard action does not work when triggered from a dialog
-2825811    Scalar properties default values are not correctly handled for components
-2826935    mandatory prevents delete in specific scenario
-2826955    horizontal scrollbar missing in 1-N search
-2827979    Flash player 10 security prevents file browsing
-2828440    Mandatory fields not visually distinguished
-2835647    Ordering properties are not always applied
-2835648    Flex table sorting only works with strings columns
-2839864    Nested reference properties do not fire change events in LOVs
-2850076    View model accessibility gates are not handled correctly
-2848679    Error while changing of Module/Entity in the workspace
-2856844    Nullable enumeration properties in Flex cannot be nulled
-2871793    Granted roles are not handled correctly on modules
-2890409    Combo box rendering in flex
-2901675    Session stucked with error message
-2903272    Component equals/hashcode
-2910710    Selection may be wrongly reflected in trees
-
-New features
-------------
-2769159  	 Subview model descriptor should override parent one
-2769161  	 Introduce startup action for workspaces
-2770273  	 Support html text in Flex alerts
-2770380  	 Support paging in collection views
-2772374  	 Suport HTML in read-only text properties
-2777176  	 Get rid of nesting view descriptor (see release notes)
-2777177  	 Get rid of sub view descriptors (see release notes)
-2777219  	 Child view descriptors should inherit enclosing view model
-2781767  	 Lazy load module GUIs
-2782610  	 Dialogs should allow for an explicit size
-2783043  	 Variabilized generator template using properties
-2783044  	 Bound the ddl generation to generate-ddl-scripts profile
-2787655  	 Handle sorting directions in ordering properties
-2790309  	 Allow for configuration of service delegates in components
-2790798  	 Make Wings tables sortable
-2790301  	 Generate allowed column names for reserved keywords
-2811349    Make icon sizes configurable through the iconfactory
-2811350    Allow for closing internal frames in MDI
-2811353    Allow for a row dble click action registration on coll views
-2813468    Allow for customizing the rendered property on LOV fields
-2813470    Double click on LOV should select row
-2805839  	 Extended backend action
-             introduced AbstractPolymorphicAction
-2824463    Migrate libraries
-             hibernate core : 3.3.1.GA -> 3.3.2.GA
-             joda-time : 1.4 -> 1.6
-             commons-lang : 2.1 -> 2.4
-             commons-collection : 3.1 -> 3.2.1
-             iText : 2.1.5
-             jfree : 1.0.13
-             jasper : 3.5.3
-2817947    Extend the scope of the defaultValue property
-2826436    Rename getContract() to getComponentContract()
-2827446    Simplify definition of enumeration props without icons
-2827982    HSQL, DBCP, Pool versions fixed in Jspresso root Pom
-2827395    Improve Translation mechanism to handle nested translation keys
-             (was "message not taken for component field")
-2827887    User readable error message for unicity constraint
-2835652    Default 1st row selection in Flex and Qooxdoo
-2835655    Default 1st row selection on list views
-2835657    Make default icon sizes bigger
-2836756    Add orderingProperties on bean collection modules
-2835679    No label for the whole of a view
-2835776    More possibilities in defining initializationmapping
-2838094    Rework root pom dependencies versions
-2838836    Allow for a custom LOV action for reference properties
-2841955    Allow for being able to refine filtered queries
-2843812    Better handle bounds in comparable query structures
-2843894    Catch a change of submodule
-2850082    Introduce a BasicCardViewDescriptor
-2850085    Allow for accessibility gates on components globally
-2850979    Trim whitespace and CR in class/bean names
-2851134    Create an HTML property descriptor
-2868616    Force Hibernate to use LinkedHashSet in every situation
-2868617    Don't add forbidden tab in tab view
-2874777    Introduce BasicSet|ListDescriptor to hide implementation details
-2880635    WritabilityGate based on enumerated type
-2883781    FusionCharts-free integration
-2883783    Easier JasperReports integration
-2885049    "childrenDescriptors" list of subtrees on BasicTreeViewDescriptor
-2885050    "expanded" property on BasicTreeViewDescriptor
-2889514    Improved dev login module to support mutiple users
-2890235    Flex visualisation of enumeration
-2891297    Refactor IApplicationSession and IBackendController
-2891302    Refactor IAction hierarchy
-2893235    Introduce @Transactional on BackendActions
-2902298    Entity beans annotations
-2905225    Create action view descriptor
-2905856    Fixed size for wizard action
-2906653    Allow to force oneToOne on reference property descriptors.
-2906877    Auto compute maxLength for enumerations
-2909947    Allow to specify preferredSize on view descriptors
-2977933    Further refinement for actionability gates
-2979892    Not static defaultFileName for SaveFileAction
-2978837    FilterModule form
-2984702    FilterModule and date query fields
-2990866    Multi selection by check boxes
-
-3.0.0
-=====
-Bugs fixed
-----------
-2319842    Bidi one to many associations with mandatory manyToOne
-2319846    Entity generator: bidi one to many associations with list
-2319847    Standard remove action: integrity violations
-2319849    Standard duplicate action: initialization exceptions
-2709153    Startup action is not trigerred for wings controller
-2709162    Accessibility connector chain triggers extra notifications
-2709168    Typo in ISubviewDescriptor name
-2709194    NachoCalendar does not show selected days with Substance L&F
-2709217    Interceptors definitions in spring introduce circular dependencies in build (see release notes)
-2709231    Service delegates definitions in spring introduce circular dependencies in build (see release notes)
-
-New features
-------------
-2172484    Implement the Flex GUI channel
-2172464    Remove all references to java.awt in view descriptors
-2709396    Password are now handled as strings instead of char[] to preserve interceptor consistency
-2709402    Get rid of action put/get initialContext since it really has a weird behaviour with dialog actions
-2709408    Introduce a context stack management for dialog actions
-2709411    Migrate library dependencies to Hibernate 3.3.1.GA, Spring 2.5.6, Spring LDAP 1.3.0.RELEASE
-2709414    Modularize Spring dependencies
-2444628    Allow selection mode on collection view descriptors
-2319851    Unit of Work and tx management refactoring
-2319923    Change static constants to typesafe enums
-2709425    Support for BigDecimal on decimal property descriptors
-2709433    Implement onLoad lifecycle hook
-2709435    Prepare support for component collection properties as soon as Hibernate gets fixed (see HHH-3275)
-2709439    Auto explode component references in view descriptors
-2709450    Get rid of external ant
-2711206    Get rid of Wings html login page
-2712170    Change group of jspresso framework artifacts to org.jspresso.framework
-2712174    Make archetype a module of the framework and keep versions aligned
-
-2.2.1
-=====
-Bugs fixed
-----------
-2157885    Entities registered for update are not correctly processed
-2181095    Build fails on linux for generated projects
-2201522    abstractFilterableBeanCollectionModule is broken
-
-New features
-------------
-Reference documentation has been updated to reflect the HR sample application new naming conventions.
-
-2.2
-===
-
-Bugs fixed
-----------
-2014954    Application fails to start
-2020304    Clicking an editable table cell in Wings does not select row
-2033594    Scroll panes do not appear correctly in Firefox3
-2033834    Date patterns are wrongly computed based on user locale
-
-New features
-------------
-2014966    Force startup locale
-2115852    Split artifacts dependent on all GUI technologies
-2025633    Set-up a maven2 repository
-2019540    Create maven2 archetypes to speed-up project setup
-2115852    Split artifacts dependent on all GUI technologies
-2015009    Make the build portable
-
-Migrate to jboss libraries 4.2.2.GA
-Migrate to log4j 1.2.14
-Migrate to substance 4.3
-Migrate to nachocalendar 0.23
-Fixed a version error for WingS libraries. 3.2 is in fact 3.2.1
-Removed jspresso-aop module and dependencies on aspectwerkz
-Removed jgoodies dependencies
-
-Known problems
---------------
-Firefox 3 introduced a major performance problem in nested html tables. This impacts directly wings applications performance.
+Jspresso CE - 3.5.1 (Released 2011-07-05) [ View Issues ]
+=========================================
+- 0000250: [Model] Property rollback can produce a StackOverflow on 1-1 (vvandens) - closed.
+- 0000227: [Persistence] Bidi N-N relationship updates are sometimes not correctly flushed (vvandens) - closed.
+- 0000229: [Backend] Potential StackoverflowError when deleting entities in transaction (vvandens) - closed.
+- 0000233: [Model] Remove 'persistent' from rendererd properties (vvandens) - closed.
+- 0000237: [Backend] NPE in cleanRelationshipOnDeletion (vvandens) - closed.
+- 0000217: [View] Flex comboboxes are not correctly synchronized with null values comming from the server (vvandens) - closed.
+- 0000216: [View] Popup button menu item mises enablement refresh (vvandens) - closed.
+- 0000215: [Backend] Uninitialized collections are incorrectly cloned in unit of work (vvandens) - closed.
+- 0000244: [Frontend] Model gates should be closed when assigned a null model (vvandens) - closed.
+- 0000212: [View] Flex and qooxdoo combobox binding fixed for mandatory uninitialized fields (vvandens) - closed.
+- 0000211: [Persistence] Several mis-behaviors against Hibernate session management (vvandens) - closed.
+- 0000210: [Frontend] NPE on GrantedRolesGate (vvandens) - closed.
+- 0000306: [Build & tools] BeanRefFactory can be placed in an arbitrary namespace (vvandens) - closed.
+- 0000226: [View] ClassCastException in constructing menubuttons when actions are not authorized (vvandens) - closed.
+- 0000228: [View] Potential NPE in card views binding (vvandens) - closed.
+- 0000290: [View] Implement color alpha channel management (vvandens) - closed.
+- 0000302: [View] Improve HTML entities handling in HTML properties (vvandens) - closed.
+- 0000303: [View] Tab navigation lazy binding to improve memory and net consumption (vvandens) - closed.
+- 0000305: [Frontend] Improved QBE syntax for string criteria (; is OR, ! is NOT, # is NULL) (vvandens) - closed.
+- 0000304: [Frontend] File open/save callback API improved to include the file name (vvandens) - closed.
+- 0000225: [Frontend] No query should be executed when sorting on a single page result (vvandens) - closed.
+- 0000224: [Model] ToStringProperty is incorrectly picked up by reference fields (vvandens) - closed.
+- 0000311: [Model] Introduced the usingLong property for java.lang.Long mapped integers (vvandens) - closed.
+- 0000301: [Model] Support max length for binary fields (vvandens) - closed.
+- 0000319: [Frontend] Menu item now support gates (vvandens) - closed.
+- 0000309: [Frontend] Support writability gates on inline components (vvandens) - closed.
+- 0000308: [Frontend] Computed columns can now be sorted using a SQL formula on paginated tables (vvandens) - closed.
+- 0000307: [Frontend] Support sorting on nested properties on paginated tables (vvandens) - closed.
+- 0000219: [Backend] Support EAGER merge mode outside of transaction (vvandens) - closed.
+- 0000221: [Frontend] Filter criteria can be unexpectedely reset when using criteria LOVs (vvandens) - closed.
+- 0000222: [Frontend] Cascading model is not correctly handled when 1st view is a composite view (vvandens) - closed.
+- 0000213: [Frontend] RemoveFromModuleObjectsAction did not correctly clone objects in the UOW. (vvandens) - closed.
+- 0000218: [Frontend] Fixed server parsing for server formatted value management (duration for instance) (vvandens) - closed.
+- 0000223: [Frontend] Auto-completion should be disabled when filter contains special QBE chars (";","#",";") (vvandens) - closed.
+- 0000288: [Frontend] LOV filters should not display properties that are set with initializationMapping (vvandens) - closed.
+- 0000291: [Frontend] Make action maps securable and action maps security should be inherited from parents (vvandens) - closed.
+- 0000292: [Frontend] Make action lists securable (vvandens) - closed.
+- 0000298: [Frontend] LovAction autoQuery implemented (vvandens) - closed.
+- 0000299: [Frontend] "Remember me" implementation (vvandens) - closed.
+- 0000310: [View] Read-only enum property views are made icon labels (vvandens) - closed.
+- 0000312: [View] Secondary action map for views and controller (vvandens) - closed.
+- 0000313: [View] Hyperlink implementation (actionable read-only properties) (vvandens) - closed.
+- 0000314: [View] Actionlists can be declared collapsable => Menubutton (vvandens) - closed.
+- 0000315: [View] Toolbars are made scrollable when overlapping (vvandens) - closed.
+- 0000318: [View] Image management in tables (vvandens) - closed.
+- 0000230: [Frontend] Cascading model fixed when master view is a composite view (vvandens) - closed.
+- 0000245: [Frontend] Writability gates do not work correctly on collection views (vvandens) - closed.
+- 0000234: [Frontend] Keep original file names for local download urls (vvandens) - closed.
+- 0000209: [Frontend] InitializationMapping may break the filter modules (vvandens) - closed.
+- 0000232: [Frontend] Module navigation optimization (vvandens) - closed.
+- 0000284: [View] Split date-time properties in 2 components to ease input (vvandens) - closed.
+- 0000296: [View] Honnor property view colors in table cells (vvandens) - closed.
+- 0000297: [View] Propertyview horizontal alignment implemented (vvandens) - closed.
+- 0000220: [View] Popup buttons that are empty because of security constraints produce client exceptions (vvandens) - closed.
+- 0000295: [View] Implement tri-state checkboxes for QBE filters (vvandens) - closed.
+- 0000231: [View] Reduce memory consumption for remote UIDs by using an alternative generation algorithm (vvandens) - closed.
+- 0000317: [View] Flex table selection notification (itemSelectionAction) (vvandens) - closed.
+- 0000300: [View] Better client garbage collection (Flex and qooxdoo) (vvandens) - closed.
+- 0000316: [View] Flex And qooxdoo various UI improvements (vvandens) - closed.
+- 0000214: [View] Mandatory columns are not correctly indicated in Flex/qooxdoo tables (vvandens) - closed.
+- 0000239: [View] Prevent flex buttons double clicks (vvandens) - closed.
+- 0000208: [View] qooxdoo date formats do not respect user locale (vvandens) - closed.
+- 0000294: [View] Login dialog should gain focus on application startup (vvandens) - closed.
+- 0000293: [Model] Allow for defining an autoComplete property on entities that is used for auto-completion (vvandens) - closed.
+- 0000289: [Backend] Introduce a query component descriptor factory to allow for customization of QBE filters (vvandens) - closed.
+- 0000235: [Backend] Use column label instead of column name in Database login module (vvandens) - closed.
+- 0000236: [Backend] Notify children connectors from model change before notifying view connectors (vvandens) - closed.
+- 0000238: [Frontend] Boolean gates are not handled correctly on reference properties (vvandens) - closed.
+- 0000287: [Frontend] Implement a modular user preference management (vvandens) - closed.
+- 0000240: [Frontend] RemotePeerRegistry memory leak (vvandens) - closed.
+- 0000286: [Model] Support non-string initialization mapping (e.g. boolean) (vvandens) - closed.
+- 0000285: [View] Make Flex time and date field more permissive to partial input (vvandens) - closed.
+- 0000246: [Backend] OnUpdate must only be triggered when entity is not registered for deletion. (vvandens) - closed.
+- 0000242: [Backend] Reload action should not fail on removed objects (vvandens) - closed.
+- 0000247: [Backend] JTA transactions are not correctly synchronized with "Unit of Work" (vvandens) - closed.
+- 0000282: [Backend] Allow the backend controller to be injected into extensions that implement IEntityLifecycleHandlerAware (vvandens) - closed.
+- 0000283: [Model] InitializationMapping should support null constant values (using 'null') (vvandens) - closed.
+- 0000251: [Persistence] Clash with property names and SQL (vvandens) - closed.
+- 0000252: [View] Integer field too small (vvandens) - closed.
+- 0000249: [Frontend] Query refiners are lost when sorting a table (vvandens) - closed.
+- 0000241: [Frontend] Query sort order should always be completed with id ordering to preserve pagination (vvandens) - closed.
+- 0000248: [Frontend] Selecting OK on an empty LOV dialog produces an exception (vvandens) - closed.
+- 0000243: [Frontend] OpenOnTrue should not influence model gates initial state (vvandens) - closed.
+[83 issues]
