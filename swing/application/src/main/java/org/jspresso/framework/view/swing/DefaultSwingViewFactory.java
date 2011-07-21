@@ -953,8 +953,8 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createImageView(
-      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected IView<JComponent> createImagePropertyView(
+      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     JLabel imageLabel = createJLabel(false);
     JImageConnector connector = new JImageConnector(viewDescriptor
@@ -965,7 +965,8 @@ public class DefaultSwingViewFactory extends
     viewComponent.setLayout(layout);
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    if (viewDescriptor.isScrollable()) {
+    if ((viewDescriptor instanceof IImageViewDescriptor)
+        && ((IImageViewDescriptor) viewDescriptor).isScrollable()) {
       imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
       imageLabel.setVerticalAlignment(SwingConstants.TOP);
       JScrollPane scrollPane = createJScrollPane();
@@ -1561,12 +1562,9 @@ public class DefaultSwingViewFactory extends
       // actionHandler, locale)}, locale));
       lovAction.putValue(
           Action.SHORT_DESCRIPTION,
-          actionHandler.getTranslation(
-              "lov.element.description",
-              new Object[] {
-                propertyDescriptor.getReferencedDescriptor().getI18nName(
-                    actionHandler, locale)
-              }, locale)
+          actionHandler.getTranslation("lov.element.description",
+              new Object[] {propertyDescriptor.getReferencedDescriptor()
+                  .getI18nName(actionHandler, locale)}, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -2015,8 +2013,7 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())
-          };
+              new Integer(columnModel.getColumn(i).getWidth())};
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);

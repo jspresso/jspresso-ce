@@ -65,6 +65,8 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
@@ -107,7 +109,6 @@ import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
@@ -214,9 +215,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -234,9 +233,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       if (view == null) {
         if (viewDescriptor instanceof IComponentViewDescriptor) {
           view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-              actionHandler, locale);
-        } else if (viewDescriptor instanceof IImageViewDescriptor) {
-          view = createImageView((IImageViewDescriptor) viewDescriptor,
               actionHandler, locale);
         } else if (viewDescriptor instanceof IActionViewDescriptor) {
           view = createActionView((IActionViewDescriptor) viewDescriptor,
@@ -1608,7 +1604,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IActionHandler actionHandler, Locale locale);
 
   /**
-   * Creates a image view.
+   * Creates a image property view.
    * 
    * @param viewDescriptor
    *          the view descriptor.
@@ -1618,8 +1614,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the created image view.
    */
-  protected abstract IView<E> createImageView(
-      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected abstract IView<E> createImagePropertyView(
+      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale);
 
   /**
@@ -1879,6 +1875,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       view = createTextualPropertyView(propertyViewDescriptor, actionHandler,
           locale);
+    } else if (propertyDescriptor instanceof IImageBinaryPropertyDescriptor) {
+      view = createImagePropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
       view = createBinaryPropertyView(propertyViewDescriptor, actionHandler,
           locale);
@@ -2057,6 +2056,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           locale);
     } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
       return createTextPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
+      return createImagePropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
     return createStringPropertyView(propertyViewDescriptor, actionHandler,
@@ -2926,9 +2928,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
-          };
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
         }
       }
     }
