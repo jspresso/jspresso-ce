@@ -209,9 +209,6 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
                 currentCriteria.add(Restrictions.eq(prefixedProperty,
                     property.getValue()));
-              } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-                currentCriteria.add(Restrictions.eq(prefixedProperty,
-                    property.getValue()));
               } else {
                 createStringRestriction(propertyDescriptor, currentCriteria,
                     (String) property.getValue(), prefixedProperty);
@@ -282,8 +279,12 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           if (IQueryComponent.NULL_VAL.equals(val)) {
             crit = Restrictions.isNull(prefixedProperty);
           } else {
-            crit = createLikeRestriction(propertyDescriptor, prefixedProperty,
-                val);
+            if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+              crit = Restrictions.eq(prefixedProperty, val);
+            } else {
+              crit = createLikeRestriction(propertyDescriptor,
+                  prefixedProperty, val);
+            }
           }
           if (negate) {
             crit = Restrictions.not(crit);
