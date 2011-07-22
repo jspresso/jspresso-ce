@@ -1746,7 +1746,8 @@ package org.jspresso.framework.view.flex {
                                      showIcon:hasIcon,
                                      index:i+1};
         } else if( rColumn is RCheckBox
-               || (rColumn is RActionField && !(rColumn as RActionField).showTextField)) {
+               || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
+               ||  rColumn is RImageComponent) {
           itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
           itemRenderer.properties = {viewFactory:this,
                                      remoteComponent:rColumn,
