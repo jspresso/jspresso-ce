@@ -14,10 +14,10 @@
   <bean id="commonsMessageSource" class="org.jspresso.framework.util.i18n.EnhancedResourceBundleMessageSource">
     <property name="parentMessageSource" ref="mockMessageSource" />
     <property name="basenames">
-      <array>
+      <list>
         <value>org.jspresso.framework.application.i18n.Formats</value>
         <value>org.jspresso.framework.application.i18n.Commons</value>
-      </array>
+      </list>
     </property>
     <property name="resolveNested" value="false" />
   </bean>
