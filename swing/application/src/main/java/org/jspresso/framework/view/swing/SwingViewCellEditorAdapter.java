@@ -33,7 +33,6 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellEditor;
-import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeCellEditor;
 
 import org.jspresso.framework.binding.IMvcBinder;
@@ -84,7 +83,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
           .setHorizontalAlignment(SwingConstants.CENTER);
     }
 
-    if (!(editorView.getPeer() instanceof JTextComponent)) {
+    if ((editorView.getPeer() instanceof AbstractButton)) {
       editorView.getConnector().addValueChangeListener(
           new IValueChangeListener() {
 
@@ -177,9 +176,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   @Override
   public boolean isCellEditable(EventObject anEvent) {
     if (anEvent instanceof MouseEvent) {
-      if (editorView.getPeer() instanceof AbstractButton
-          || (editorView.getPeer() instanceof JActionField && !((JActionField) editorView
-              .getPeer()).isShowingTextField())) {
+      if (editorView.getPeer() instanceof AbstractButton) {
         return ((MouseEvent) anEvent).getClickCount() >= 1;
       }
       return ((MouseEvent) anEvent).getClickCount() >= 2;

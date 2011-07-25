@@ -92,13 +92,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
           isSelected, row));
     }
-    if (value instanceof IValueConnector) {
-      Object connectorValue = ((IValueConnector) value).getConnectorValue();
-      setSelected((connectorValue != null && ((Boolean) connectorValue)
-          .booleanValue()));
-    } else {
-      setSelected((value != null && ((Boolean) value).booleanValue()));
-    }
+    setValue(value);
     if (hasFocus) {
       Border border = null;
       if (isSelected) {
@@ -123,6 +117,21 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       setBorder(NO_FOCUS_BORDER);
     }
     return this;
+  }
+
+  /**
+   * Sets the renderer value.
+   * 
+   * @param value the model value.
+   */
+  protected void setValue(Object value) {
+    if (value instanceof IValueConnector) {
+      Object connectorValue = ((IValueConnector) value).getConnectorValue();
+      setSelected((connectorValue != null && ((Boolean) connectorValue)
+          .booleanValue()));
+    } else {
+      setSelected((value != null && ((Boolean) value).booleanValue()));
+    }
   }
 
   /**

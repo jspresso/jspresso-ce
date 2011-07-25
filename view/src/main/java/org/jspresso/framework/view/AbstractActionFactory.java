@@ -302,8 +302,9 @@ public abstract class AbstractActionFactory<E, F, G> implements
           && viewConnector.getModelConnector().getModelProvider() != null) {
         ((IModelGate) gate).setModel(viewConnector.getModelConnector()
             .getModelProvider().getModel());
-      } else {
-        ((IModelGate) gate).setModel(null);
+        // the following disables table cell editors in swing.
+        // } else {
+        // ((IModelGate) gate).setModel(null);
       }
       final IModelChangeListener modelChangeListener = new IModelChangeListener() {
 
@@ -331,8 +332,9 @@ public abstract class AbstractActionFactory<E, F, G> implements
                     .getModelProvider().getModel());
                 newModelConnector.getModelProvider().addModelChangeListener(
                     modelChangeListener);
-              } else {
-                ((IModelGate) gate).setModel(null);
+                // the following disables table cell editors in swing.
+                // } else {
+                // ((IModelGate) gate).setModel(null);
               }
             }
           });

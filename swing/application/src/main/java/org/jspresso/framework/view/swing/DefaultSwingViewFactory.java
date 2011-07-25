@@ -49,6 +49,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -142,6 +143,8 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
@@ -163,6 +166,7 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
+import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
@@ -1562,9 +1566,12 @@ public class DefaultSwingViewFactory extends
       // actionHandler, locale)}, locale));
       lovAction.putValue(
           Action.SHORT_DESCRIPTION,
-          actionHandler.getTranslation("lov.element.description",
-              new Object[] {propertyDescriptor.getReferencedDescriptor()
-                  .getI18nName(actionHandler, locale)}, locale)
+          actionHandler.getTranslation(
+              "lov.element.description",
+              new Object[] {
+                propertyDescriptor.getReferencedDescriptor().getI18nName(
+                    actionHandler, locale)
+              }, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1724,6 +1731,8 @@ public class DefaultSwingViewFactory extends
     } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       cellRenderer = createRelationshipEndTableCellRenderer(
           (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+      cellRenderer = createBinaryTableCellRenderer((IBinaryPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       cellRenderer = createStringTableCellRenderer(
           (IStringPropertyDescriptor) propertyDescriptor, locale);
@@ -2013,7 +2022,8 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())};
+              new Integer(columnModel.getColumn(i).getWidth())
+          };
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);
@@ -2573,6 +2583,11 @@ public class DefaultSwingViewFactory extends
         translationProvider, locale);
   }
 
+  private TableCellRenderer createImageTableCellRenderer(
+      IPropertyDescriptor propertyDescriptor) {
+    return new ImageTableCellRenderer(propertyDescriptor);
+  }
+
   private Font createFont(String fontString, Font defaultFont) {
     org.jspresso.framework.util.gui.Font font = FontHelper
         .fromString(fontString);
@@ -2716,11 +2731,21 @@ public class DefaultSwingViewFactory extends
     return cellRenderer;
   }
 
+  private TableCellRenderer createBinaryTableCellRenderer(
+      IBinaryPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor instanceof IImageBinaryPropertyDescriptor) {
+      return createImageTableCellRenderer(propertyDescriptor);
+    }
+    return new BinaryTableCellRenderer(propertyDescriptor);
+  }
+
   private TableCellRenderer createStringTableCellRenderer(
       IStringPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
       return new FormattedTableCellRenderer(new PasswordFormatter());
+    } else if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
+      return createImageTableCellRenderer(propertyDescriptor);
     }
     return new FormattedTableCellRenderer(null);
   }
@@ -2728,7 +2753,8 @@ public class DefaultSwingViewFactory extends
   private TableCellEditor createTableCellEditor(IView<JComponent> editorView,
       IActionHandler actionHandler) {
     SwingViewCellEditorAdapter editor;
-    if (editorView.getPeer() instanceof JActionField) {
+    if (editorView.getPeer() instanceof JActionField
+        && ((JActionField) editorView.getPeer()).isShowingTextField()) {
       editor = new SwingViewCellEditorAdapter(editorView,
           getModelConnectorFactory(), getMvcBinder(), actionHandler) {
 
@@ -2764,14 +2790,6 @@ public class DefaultSwingViewFactory extends
     view.getPeer().setBorder(
         BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
             view.getDescriptor().getI18nName(translationProvider, locale)));
-    // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
-    // .getI18nName(actionHandler, locale), false, false,
-    // false, false);
-    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
-    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    // iFrame.getContentPane().add(view.getPeer());
-    // iFrame.pack();
-    // view.setPeer(iFrame);
   }
 
   private void expandAll(final JTree tree, final TreePath tp) {
@@ -3149,6 +3167,82 @@ public class DefaultSwingViewFactory extends
             super.setValue(String.valueOf(value));
           }
         }
+      }
+    }
+  }
+
+  private final class ImageTableCellRenderer extends EvenOddTableCellRenderer {
+
+    private static final long   serialVersionUID = 9155173076041284128L;
+
+    @SuppressWarnings("unused")
+    private IPropertyDescriptor propertyDescriptor;
+
+    /**
+     * Constructs a new <code>ImageTableCellRenderer</code> instance.
+     * 
+     * @param propertyDescriptor
+     *          the image property descriptor (either image url or image
+     *          binary).
+     */
+    public ImageTableCellRenderer(IPropertyDescriptor propertyDescriptor) {
+      this.propertyDescriptor = propertyDescriptor;
+      setHorizontalAlignment(SwingConstants.CENTER);
+      setVerticalAlignment(SwingConstants.CENTER);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      if (value instanceof byte[]) {
+        setIcon(new ImageIcon((byte[]) value));
+      } else if (value instanceof String) {
+        setIcon(new ImageIcon(UrlHelper.createURL((String) value)));
+      } else {
+        setIcon(null);
+      }
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setValue(@SuppressWarnings("unused") Object value) {
+      // No string rendering
+    }
+  }
+
+  private final class BinaryTableCellRenderer extends BooleanTableCellRenderer {
+
+    private static final long   serialVersionUID = 9155173076041284128L;
+
+    @SuppressWarnings("unused")
+    private IPropertyDescriptor propertyDescriptor;
+
+    /**
+     * Constructs a new <code>BinaryTableCellRenderer</code> instance.
+     * 
+     * @param propertyDescriptor
+     *          the binary property descriptor.
+     */
+    public BinaryTableCellRenderer(IPropertyDescriptor propertyDescriptor) {
+      this.propertyDescriptor = propertyDescriptor;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setValue(Object value) {
+      if (value != null) {
+        setSelected(true);
+      } else {
+        setSelected(false);
       }
     }
   }
