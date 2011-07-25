@@ -1,161 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
   default-lazy-init="true">
 
-  <!--
-    Hibernate root application context for the Jspresso framework.
-  -->
+  <!-- Hibernate root application context for the Jspresso framework. -->
 
-  <bean
-    id="componentTuplizerInit"
-    class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property
-      name="targetClass"
+  <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetClass"
       value="org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer" />
-    <property
-      name="targetMethod"
-      value="setInlineComponentFactory" />
-    <property
-      name="arguments">
+    <property name="targetMethod" value="setInlineComponentFactory" />
+    <property name="arguments">
       <list>
-        <ref
-          bean="basicComponentFactory" />
+        <ref bean="basicComponentFactory" />
       </list>
     </property>
   </bean>
 
-  <bean
-    id="abstractHibernateSessionFactory"
-    class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-    <property
-      name="dataSource"
-      ref="dataSource" />
-    <property
-      name="mappingLocations">
+  <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="mappingLocations">
       <list>
         <value>classpath*:**/*.hbm.xml</value>
       </list>
     </property>
-    <property
-      name="eventListeners">
+    <property name="eventListeners">
       <map>
-        <entry
-          key="post-load">
+        <entry key="post-load">
           <list>
-            <bean
-              class="org.hibernate.event.def.DefaultPostLoadEventListener" />
-            <bean
-              class="org.jspresso.framework.application.backend.persistence.hibernate.LifecyclePostLoadEventListener" />
+            <bean class="org.hibernate.event.def.DefaultPostLoadEventListener" />
+            <bean class="org.jspresso.framework.application.backend.persistence.hibernate.LifecyclePostLoadEventListener" />
           </list>
         </entry>
       </map>
     </property>
   </bean>
 
-  <bean
-    id="transactionTemplate"
-    class="org.springframework.transaction.support.TransactionTemplate"
-    scope="prototype">
-    <property
-      name="transactionManager">
-      <bean
-        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property
-          name="sessionFactory"
-          ref="hibernateSessionFactory" />
-      </bean>
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager" scope="prototype">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
+  </bean>
+
+  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" scope="prototypeS">
+    <property name="transactionManager" ref="transactionManager">
     </property>
   </bean>
 
-  <bean
-    id="hibernateTemplate"
-    class="org.springframework.orm.hibernate3.HibernateTemplate"
-    scope="prototype">
-    <property
-      name="sessionFactory"
-      ref="hibernateSessionFactory" />
+  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" scope="prototype">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
   </bean>
 
-  <!--
-    Hibernate root action beans.
-  -->
-  <bean
-    abstract="true"
-    id="abstractHibernateBackAction"
+  <!-- Hibernate root action beans. -->
+  <bean abstract="true" id="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
-  <bean
-    id="criteriaFactory"
-    class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
-    <property name="triStateBooleanSupported" ref="triStateBooleanSupported"/>
-  </bean>
-  
-  <bean
-    id="queryEntitiesBackAction"
-    parent="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction">
-    <property name="criteriaFactory" ref="criteriaFactory"/>
+  <bean id="criteriaFactory" class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
+    <property name="triStateBooleanSupported" ref="triStateBooleanSupported" />
   </bean>
 
-  <bean
-    id="removeCollectionFromMasterBackAction"
-    parent="abstractHibernateBackAction"
+  <bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
+    class="org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction">
+    <property name="criteriaFactory" ref="criteriaFactory" />
+  </bean>
+
+  <bean id="removeCollectionFromMasterBackAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction" />
 
-  <bean
-    id="removeModuleObjectAction"
-    parent="abstractHibernateBackAction"
+  <bean id="removeModuleObjectAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.module.RemoveModuleObjectAction" />
 
-  <bean
-    id="removeFromModuleObjectsAction"
-    parent="abstractHibernateBackAction"
+  <bean id="removeFromModuleObjectsAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction" />
 
-  <bean
-    id="saveBackAction"
-    parent="abstractHibernateBackAction"
+  <bean id="saveBackAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.SaveAction" />
 
-  <bean
-    id="saveModuleObjectBackAction"
-    parent="saveBackAction"
+  <bean id="saveModuleObjectBackAction" parent="saveBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.SaveModuleObjectAction" />
 
-  <bean
-    id="reloadBackAction"
-    parent="abstractHibernateBackAction"
+  <bean id="reloadBackAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.ReloadAction" />
 
-  <bean
-    id="reloadModuleObjectBackAction"
-    parent="reloadBackAction"
+  <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.ReloadModuleObjectAction" />
 
-  <bean
-    abstract="true"
-    id="abstractHibernateBackController"
-    parent="abstractBackController"
+  <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController">
-    <property
-      name="hibernateTemplate"
-      ref="hibernateTemplate" />
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
   </bean>
 
-  <bean
-    id="smartEntityCloneFactory"
-    class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
+  <bean id="smartEntityCloneFactory" class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
     depends-on="componentTuplizerInit">
-    <property
-      name="accessorFactory"
-      ref="accessorFactory" />
+    <property name="accessorFactory" ref="accessorFactory" />
   </bean>
 
-  <bean
-    id="applicationBackController"
-    parent="abstractHibernateBackController"
-    scope="prototype" />
+  <bean id="applicationBackController" parent="abstractHibernateBackController" scope="prototype" />
 </beans>
