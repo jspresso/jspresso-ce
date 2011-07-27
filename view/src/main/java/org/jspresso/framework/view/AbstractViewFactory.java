@@ -215,7 +215,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -242,6 +244,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
               actionHandler, locale);
         } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
           view = createCollectionView(
+              (ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
+          finishCollectionViewConfiguration(view,
               (ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ICardViewDescriptor) {
           view = createCardView((ICardViewDescriptor) viewDescriptor,
@@ -2676,7 +2680,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     IView<E> view = null;
-
     if (viewDescriptor instanceof IListViewDescriptor) {
       view = createListView((IListViewDescriptor) viewDescriptor,
           actionHandler, locale);
@@ -2684,6 +2687,24 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createTableView((ITableViewDescriptor) viewDescriptor,
           actionHandler, locale);
     }
+    return view;
+  }
+
+  /**
+   * Binds the item selection action and decorates with the pagination view.
+   * 
+   * @param view
+   *          the collection view to configure.
+   * @param viewDescriptor
+   *          the collection view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   */
+  protected void finishCollectionViewConfiguration(IView<E> view,
+      ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     if (view != null) {
       if (viewDescriptor.getItemSelectionAction() != null) {
         ((IItemSelectable) view.getConnector())
@@ -2698,7 +2719,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
             paginationView.getPeer()));
       }
     }
-    return view;
   }
 
   /**
@@ -2928,7 +2948,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+          columnPrefs[i] = new Object[] {
+              column[0], new Integer(column[1])
+          };
         }
       }
     }

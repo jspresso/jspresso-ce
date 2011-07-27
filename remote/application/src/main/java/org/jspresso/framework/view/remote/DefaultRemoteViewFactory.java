@@ -305,7 +305,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         ModelRefPropertyConnector.THIS_PROPERTY);
     connector.setExceptionHandler(actionHandler);
-    RActionComponent viewComponent = createRActionComponent(connector);
+    RActionComponent viewComponent = createRActionComponent(viewDescriptor);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     RAction action = getActionFactory().createAction(
@@ -364,14 +364,17 @@ public class DefaultRemoteViewFactory extends
       });
     }
     connector.setExceptionHandler(actionHandler);
-    RActionField viewComponent = createRActionField(false, connector);
+    RActionField viewComponent = createRActionField(propertyViewDescriptor,
+        false);
     IView<RComponent> propertyView = constructView(viewComponent,
         propertyViewDescriptor, connector);
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {actionList});
+    viewComponent.setActionLists(new RActionList[] {
+      actionList
+    });
     return propertyView;
   }
 
@@ -387,7 +390,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RCheckBox viewComponent = createRCheckBox(connector);
+    RCheckBox viewComponent = createRCheckBox(propertyViewDescriptor);
     if (!propertyDescriptor.isMandatory()) {
       viewComponent.setTriState(true);
     }
@@ -403,7 +406,7 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createBorderView(
       IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RBorderContainer viewComponent = createRBorderContainer();
+    RBorderContainer viewComponent = createRBorderContainer(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
@@ -486,7 +489,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RColorField viewComponent = createRColorField(connector);
+    RColorField viewComponent = createRColorField(propertyViewDescriptor);
     viewComponent
         .setDefaultColor((String) propertyDescriptor.getDefaultValue());
     IView<RComponent> view = constructView(viewComponent,
@@ -504,7 +507,7 @@ public class DefaultRemoteViewFactory extends
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForBeanView(viewDescriptor), null);
-    RForm viewComponent = createRForm();
+    RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()
         .toString());
@@ -584,7 +587,7 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    RConstrainedGridContainer viewComponent = createRConstrainedGridContainer();
+    RConstrainedGridContainer viewComponent = createRConstrainedGridContainer(viewDescriptor);
     List<RComponent> cells = new ArrayList<RComponent>();
     List<CellConstraints> cellConstraints = new ArrayList<CellConstraints>();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
@@ -624,9 +627,9 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
       if (isDateServerParse()) {
@@ -681,7 +684,7 @@ public class DefaultRemoteViewFactory extends
               });
         }
       }
-      viewComponent = createRDateField(connector);
+      viewComponent = createRDateField(propertyViewDescriptor);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType()
           .toString());
       ((RDateField) viewComponent).setTimezoneAware(propertyDescriptor
@@ -713,9 +716,9 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
       if (isNumberServerParse()) {
@@ -727,7 +730,7 @@ public class DefaultRemoteViewFactory extends
             propertyDescriptor.getName());
       }
       connector.setExceptionHandler(actionHandler);
-      viewComponent = createRDecimalField(connector);
+      viewComponent = createRDecimalField(propertyViewDescriptor);
       if (propertyDescriptor.getMaxFractionDigit() != null) {
         ((RDecimalComponent) viewComponent)
             .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
@@ -758,9 +761,9 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
       if (isDurationServerParse()) {
@@ -771,7 +774,7 @@ public class DefaultRemoteViewFactory extends
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
       }
-      viewComponent = createRDurationField(connector);
+      viewComponent = createRDurationField(propertyViewDescriptor);
       if (propertyDescriptor.getMaxMillis() != null) {
         ((RDurationField) viewComponent).setMaxMillis(propertyDescriptor
             .getMaxMillis().longValue());
@@ -790,7 +793,7 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected RComponent createEmptyComponent() {
-    RComponent emptyComponent = createRBorderContainer();
+    RComponent emptyComponent = createRBorderContainer(null);
     emptyComponent.setState(new RemoteCompositeValueState(getGuidGenerator()
         .generateGUID()));
     return emptyComponent;
@@ -808,7 +811,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RComboBox viewComponent = createRComboBox(connector);
+    RComboBox viewComponent = createRComboBox(propertyViewDescriptor);
     viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
     List<String> values = new ArrayList<String>();
     List<String> translations = new ArrayList<String>();
@@ -854,7 +857,7 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    REvenGridContainer viewComponent = createREvenGridContainer();
+    REvenGridContainer viewComponent = createREvenGridContainer(viewDescriptor);
     viewComponent.setDrivingDimension(viewDescriptor.getDrivingDimension()
         .toString());
     viewComponent.setDrivingDimensionCellCount(viewDescriptor
@@ -888,7 +891,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RHtmlArea viewComponent = createRHtmlArea(connector);
+    RHtmlArea viewComponent = createRHtmlArea(propertyViewDescriptor);
     viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
@@ -900,10 +903,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createImagePropertyView(
-      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IValueConnector connector = getConnectorFactory().createValueConnector(
-        viewDescriptor.getModelDescriptor().getName());
+        propertyViewDescriptor.getModelDescriptor().getName());
     connector.setExceptionHandler(actionHandler);
     if (connector instanceof RemoteValueConnector) {
       final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
@@ -935,15 +938,16 @@ public class DefaultRemoteViewFactory extends
         }
       });
     }
-    RImageComponent viewComponent = createRImageComponent(connector);
-    if (viewDescriptor instanceof IImageViewDescriptor) {
-      viewComponent.setScrollable(((IImageViewDescriptor) viewDescriptor)
-          .isScrollable());
+    RImageComponent viewComponent = createRImageComponent(propertyViewDescriptor);
+    if (propertyViewDescriptor instanceof IImageViewDescriptor) {
+      viewComponent
+          .setScrollable(((IImageViewDescriptor) propertyViewDescriptor)
+              .isScrollable());
     } else {
       viewComponent.setScrollable(false);
     }
-    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
+    IView<RComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -963,9 +967,9 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
       if (isNumberServerParse()) {
@@ -975,7 +979,7 @@ public class DefaultRemoteViewFactory extends
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
       }
-      viewComponent = createRIntegerField(connector);
+      viewComponent = createRIntegerField(propertyViewDescriptor);
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -1004,7 +1008,7 @@ public class DefaultRemoteViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    RList viewComponent = createRList(connector);
+    RList viewComponent = createRList(viewDescriptor);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -1079,7 +1083,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RPasswordField viewComponent = createRPasswordField(connector);
+    RPasswordField viewComponent = createRPasswordField(propertyViewDescriptor);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;
@@ -1101,9 +1105,9 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
       if (isNumberServerParse()) {
@@ -1115,7 +1119,7 @@ public class DefaultRemoteViewFactory extends
             propertyDescriptor.getName());
       }
       connector.setExceptionHandler(actionHandler);
-      viewComponent = createRPercentField(connector);
+      viewComponent = createRPercentField(propertyViewDescriptor);
       if (propertyDescriptor.getMaxFractionDigit() != null) {
         ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor
             .getMaxFractionDigit().intValue());
@@ -1204,11 +1208,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote button component.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RActionComponent createRActionComponent(IValueConnector connector) {
+  protected RActionComponent createRActionComponent(
+      IActionViewDescriptor viewDescriptor) {
     RActionComponent component = new RActionComponent(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1219,12 +1224,12 @@ public class DefaultRemoteViewFactory extends
    * 
    * @param showTextField
    *          does it actually show a text field ?
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RActionField createRActionField(boolean showTextField,
-      IValueConnector connector) {
+  protected RActionField createRActionField(
+      IPropertyViewDescriptor viewDescriptor, boolean showTextField) {
     RActionField component = new RActionField(getGuidGenerator().generateGUID());
     component.setShowTextField(showTextField);
     return component;
@@ -1233,9 +1238,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote border container.
    * 
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RBorderContainer createRBorderContainer() {
+  protected RBorderContainer createRBorderContainer(
+      IBorderViewDescriptor viewDescriptor) {
     return new RBorderContainer(getGuidGenerator().generateGUID());
   }
 
@@ -1259,11 +1267,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote check box.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RCheckBox createRCheckBox(IValueConnector connector) {
+  protected RCheckBox createRCheckBox(IPropertyViewDescriptor viewDescriptor) {
     RCheckBox component = new RCheckBox(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1271,11 +1279,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote color field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RColorField createRColorField(IValueConnector connector) {
+  protected RColorField createRColorField(IPropertyViewDescriptor viewDescriptor) {
     RColorField component = new RColorField(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1283,11 +1291,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote combo box.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RComboBox createRComboBox(IValueConnector connector) {
+  protected RComboBox createRComboBox(IPropertyViewDescriptor viewDescriptor) {
     RComboBox component = new RComboBox(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1295,20 +1303,23 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote contrained grid container.
    * 
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RConstrainedGridContainer createRConstrainedGridContainer() {
+  protected RConstrainedGridContainer createRConstrainedGridContainer(
+      IConstrainedGridViewDescriptor viewDescriptor) {
     return new RConstrainedGridContainer(getGuidGenerator().generateGUID());
   }
 
   /**
    * Creates a remote date field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RDateField createRDateField(IValueConnector connector) {
+  protected RDateField createRDateField(IPropertyViewDescriptor viewDescriptor) {
     RDateField component = new RDateField(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1316,11 +1327,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote decimal field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RDecimalField createRDecimalField(IValueConnector connector) {
+  protected RDecimalField createRDecimalField(
+      IPropertyViewDescriptor viewDescriptor) {
     RDecimalField component = new RDecimalField(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1329,11 +1341,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote duration field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RDurationField createRDurationField(IValueConnector connector) {
+  protected RDurationField createRDurationField(
+      IPropertyViewDescriptor viewDescriptor) {
     RDurationField component = new RDurationField(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1356,12 +1369,12 @@ public class DefaultRemoteViewFactory extends
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
-      viewComponent = createRActionField(true, connector);
+      viewComponent = createRActionField(propertyViewDescriptor, true);
     }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
@@ -1372,9 +1385,11 @@ public class DefaultRemoteViewFactory extends
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation(
-          "lov.element.description", new Object[] {propertyDescriptor
-              .getReferencedDescriptor().getI18nName(actionHandler, locale)},
-          locale));
+          "lov.element.description",
+          new Object[] {
+            propertyDescriptor.getReferencedDescriptor().getI18nName(
+                actionHandler, locale)
+          }, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1382,8 +1397,12 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {lovAction});
-      viewComponent.setActionLists(new RActionList[] {actionList});
+      actionList.setActions(new RAction[] {
+        lovAction
+      });
+      viewComponent.setActionLists(new RActionList[] {
+        actionList
+      });
     }
     return view;
   }
@@ -1391,29 +1410,34 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote even grid container.
    * 
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected REvenGridContainer createREvenGridContainer() {
+  protected REvenGridContainer createREvenGridContainer(
+      IEvenGridViewDescriptor viewDescriptor) {
     return new REvenGridContainer(getGuidGenerator().generateGUID());
   }
 
   /**
    * Creates a remote form.
    * 
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RForm createRForm() {
+  protected RForm createRForm(IComponentViewDescriptor viewDescriptor) {
     return new RForm(getGuidGenerator().generateGUID());
   }
 
   /**
    * Creates a remote html area.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RHtmlArea createRHtmlArea(IValueConnector connector) {
+  protected RHtmlArea createRHtmlArea(IPropertyViewDescriptor viewDescriptor) {
     RHtmlArea component = new RHtmlArea(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1421,11 +1445,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote image component.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RImageComponent createRImageComponent(IValueConnector connector) {
+  protected RImageComponent createRImageComponent(
+      IPropertyViewDescriptor viewDescriptor) {
     RImageComponent component = new RImageComponent(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1434,11 +1459,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote integer field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RIntegerField createRIntegerField(IValueConnector connector) {
+  protected RIntegerField createRIntegerField(
+      IPropertyViewDescriptor viewDescriptor) {
     RIntegerField component = new RIntegerField(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1447,13 +1473,14 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote label.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @param bold
    *          make it bold ?
    * @return the created remote component.
    */
-  protected RLabel createRLabel(IValueConnector connector, boolean bold) {
+  protected RLabel createRLabel(IPropertyViewDescriptor viewDescriptor,
+      boolean bold) {
     RLabel component = new RLabel(getGuidGenerator().generateGUID());
     if (bold) {
       if (bold) {
@@ -1466,11 +1493,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote link.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RLink createRLink(IValueConnector connector) {
+  protected RLink createRLink(IPropertyViewDescriptor viewDescriptor) {
     RLink component = new RLink(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1478,11 +1505,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote list.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RList createRList(ICollectionConnector connector) {
+  protected RList createRList(IListViewDescriptor viewDescriptor) {
     RList component = new RList(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1490,11 +1517,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote password field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RPasswordField createRPasswordField(IValueConnector connector) {
+  protected RPasswordField createRPasswordField(
+      IPropertyViewDescriptor viewDescriptor) {
     RPasswordField component = new RPasswordField(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1503,11 +1531,12 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote percent field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RPercentField createRPercentField(IValueConnector connector) {
+  protected RPercentField createRPercentField(
+      IPropertyViewDescriptor viewDescriptor) {
     RPercentField component = new RPercentField(getGuidGenerator()
         .generateGUID());
     return component;
@@ -1516,29 +1545,34 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote split container.
    * 
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RSplitContainer createRSplitContainer() {
+  protected RSplitContainer createRSplitContainer(
+      ISplitViewDescriptor viewDescriptor) {
     return new RSplitContainer(getGuidGenerator().generateGUID());
   }
 
   /**
    * Creates a remote tab container.
    * 
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RTabContainer createRTabContainer() {
+  protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
     return new RTabContainer(getGuidGenerator().generateGUID());
   }
 
   /**
    * Creates a remote table.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RTable createRTable(IValueConnector connector) {
+  protected RTable createRTable(ITableViewDescriptor viewDescriptor) {
     RTable component = new RTable(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1546,11 +1580,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote text area.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RTextArea createRTextArea(IValueConnector connector) {
+  protected RTextArea createRTextArea(IPropertyViewDescriptor viewDescriptor) {
     RTextArea component = new RTextArea(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1558,11 +1592,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote text field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RTextField createRTextField(IValueConnector connector) {
+  protected RTextField createRTextField(IPropertyViewDescriptor viewDescriptor) {
     RTextField component = new RTextField(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1570,11 +1604,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote time field.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RTimeField createRTimeField(IValueConnector connector) {
+  protected RTimeField createRTimeField(IPropertyViewDescriptor viewDescriptor) {
     RTimeField component = new RTimeField(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1582,11 +1616,11 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote tree.
    * 
-   * @param connector
-   *          the component connector.
+   * @param viewDescriptor
+   *          the component view descriptor.
    * @return the created remote component.
    */
-  protected RTree createRTree(IValueConnector connector) {
+  protected RTree createRTree(ITreeViewDescriptor viewDescriptor) {
     RTree component = new RTree(getGuidGenerator().generateGUID());
     return component;
   }
@@ -1620,7 +1654,7 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createSplitView(
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RSplitContainer viewComponent = createRSplitContainer();
+    RSplitContainer viewComponent = createRSplitContainer(viewDescriptor);
     viewComponent.setOrientation(viewDescriptor.getOrientation().toString());
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
@@ -1657,12 +1691,12 @@ public class DefaultRemoteViewFactory extends
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
-      viewComponent = createRTextField(connector);
+      viewComponent = createRTextField(propertyViewDescriptor);
     }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
@@ -1699,7 +1733,7 @@ public class DefaultRemoteViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    RTable viewComponent = createRTable(connector);
+    RTable viewComponent = createRTable(viewDescriptor);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -1785,7 +1819,7 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createTabView(
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    final RTabContainer viewComponent = createRTabContainer();
+    final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
     final BasicIndexedView<RComponent> view = constructIndexedView(
         viewComponent, viewDescriptor);
 
@@ -1856,7 +1890,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RTextArea viewComponent = createRTextArea(connector);
+    RTextArea viewComponent = createRTextArea(propertyViewDescriptor);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;
@@ -1899,9 +1933,9 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(connector);
+        viewComponent = createRLink(propertyViewDescriptor);
       } else {
-        viewComponent = createRLabel(connector, true);
+        viewComponent = createRLabel(propertyViewDescriptor, true);
       }
     } else {
       if (isDateServerParse()) {
@@ -1949,7 +1983,7 @@ public class DefaultRemoteViewFactory extends
               }
             });
       }
-      viewComponent = createRTimeField(connector);
+      viewComponent = createRTimeField(propertyViewDescriptor);
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -1967,7 +2001,7 @@ public class DefaultRemoteViewFactory extends
     final ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, actionHandler, locale);
 
-    RTree viewComponent = createRTree(connector);
+    RTree viewComponent = createRTree(viewDescriptor);
     viewComponent.setExpanded(viewDescriptor.isExpanded());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
