@@ -39,7 +39,7 @@
     <property name="sessionFactory" ref="hibernateSessionFactory" />
   </bean>
 
-  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" scope="prototypeS">
+  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" scope="prototype">
     <property name="transactionManager" ref="transactionManager">
     </property>
   </bean>
