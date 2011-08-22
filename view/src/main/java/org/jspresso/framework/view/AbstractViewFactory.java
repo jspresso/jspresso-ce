@@ -109,6 +109,7 @@ import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
@@ -1883,8 +1884,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createImagePropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      view = createBinaryPropertyView(propertyViewDescriptor, actionHandler,
-          locale);
+      if (propertyViewDescriptor instanceof IImageViewDescriptor) {
+        view = createImagePropertyView(propertyViewDescriptor, actionHandler,
+            locale);
+      } else {
+        view = createBinaryPropertyView(propertyViewDescriptor, actionHandler,
+            locale);
+      }
     } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
       view = createColorPropertyView(propertyViewDescriptor, actionHandler,
           locale);
