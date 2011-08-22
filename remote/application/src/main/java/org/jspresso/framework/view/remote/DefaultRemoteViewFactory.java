@@ -1907,11 +1907,13 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IView<RComponent> view = super.createTextualPropertyView(
         propertyViewDescriptor, actionHandler, locale);
-    if (propertyDescriptor.getMaxLength() != null) {
-      ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor
-          .getMaxLength().intValue());
-    } else {
-      ((RTextComponent) view.getPeer()).setMaxLength(-1);
+    if (view.getPeer() instanceof RTextComponent) {
+      if (propertyDescriptor.getMaxLength() != null) {
+        ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor
+            .getMaxLength().intValue());
+      } else {
+        ((RTextComponent) view.getPeer()).setMaxLength(-1);
+      }
     }
     return view;
   }
