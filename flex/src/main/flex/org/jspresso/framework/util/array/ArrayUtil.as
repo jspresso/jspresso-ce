@@ -15,6 +15,8 @@
 package org.jspresso.framework.util.array {
   import mx.utils.ObjectUtil;
   
+  import org.jspresso.framework.util.remote.IRemotePeer;
+  
   public class ArrayUtil {
     
     public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
@@ -38,7 +40,14 @@ package org.jspresso.framework.util.array {
     
     public static function arrayIndexOf(arr:Array, element:Object):int {
       for(var i:int = 0; i < arr.length; i++) {
-        if(ObjectUtil.compare(element, arr[i]) == 0) {
+        var arrElement:Object = arr[i];
+        if(element is IRemotePeer) {
+          if(arrElement is IRemotePeer) {
+            if(ObjectUtil.compare((arrElement as IRemotePeer).guid, (element as IRemotePeer).guid) == 0) {
+              return i;
+            }
+          }
+        } else if(ObjectUtil.compare(element, arrElement) == 0) {
           return i;
         }
       }
