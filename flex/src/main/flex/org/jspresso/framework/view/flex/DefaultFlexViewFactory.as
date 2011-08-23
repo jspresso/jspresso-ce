@@ -1850,15 +1850,23 @@ package org.jspresso.framework.view.flex {
             tableModel.addItem(item);
           }
         } else if(event.kind == CollectionEventKind.REMOVE) {
+          // This is to prevent negative getItemIndex when ArrayCollection is sorted.
           for each (item in event.items) {
-            tableModel.removeItemAt(tableModel.getItemIndex(item));
+            var removedItemIndex:int = tableModel.list.getItemIndex(item);
+            tableModel.list.removeItemAt(removedItemIndex);
+          }
+          if(tableModel.sort) {
+            tableModel.refresh();
           }
         } else if(event.kind == CollectionEventKind.REPLACE) {
           for each (item in event.items) {
             var oldItem:Object = (item as PropertyChangeEvent).oldValue;
             var newItem:Object = (item as PropertyChangeEvent).newValue;
-            tableModel.setItemAt(newItem,
-                                 tableModel.getItemIndex(oldItem));
+            var itemIndex:int = tableModel.list.getItemIndex(oldItem);
+            tableModel.list.setItemAt(newItem, itemIndex);
+          }
+          if(tableModel.sort) {
+            tableModel.refresh();
           }
         } else if(event.kind == CollectionEventKind.RESET) {
           // could be finer.
