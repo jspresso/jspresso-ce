@@ -201,21 +201,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
                               ICollectionConnector collConnector = (ICollectionConnector) evt
                                   .getSource();
                               int[] newSelection = evt.getNewSelection();
-                              Set<Object> selectedModels = null;
-                              if (newSelection != null
-                                  && newSelection.length > 0) {
-                                selectedModels = new HashSet<Object>();
-                                for (int i = 0; i < newSelection.length; i++) {
-                                  IValueConnector childConnector = collConnector
-                                      .getChildConnector(newSelection[i]);
-                                  if (childConnector != null) {
-                                    selectedModels.add(childConnector
-                                        .getConnectorValue());
-                                  }
-                                }
-                              }
-                              ((IModelGate) clonedGate)
-                                  .setModel(selectedModels);
+                              assignCollectionBasedGateModel(clonedGate,
+                                  collConnector, newSelection);
                             }
                           });
                   // tracks selected children model change
@@ -229,23 +216,16 @@ public abstract class AbstractActionFactory<E, F, G> implements
                                   .getSource();
                               int[] newSelection = collConnector
                                   .getSelectedIndices();
-                              Set<Object> selectedModels = null;
-                              if (newSelection != null
-                                  && newSelection.length > 0) {
-                                selectedModels = new HashSet<Object>();
-                                for (int i = 0; i < newSelection.length; i++) {
-                                  IValueConnector childConnector = collConnector
-                                      .getChildConnector(newSelection[i]);
-                                  if (childConnector != null) {
-                                    selectedModels.add(childConnector
-                                        .getConnectorValue());
-                                  }
-                                }
-                              }
-                              ((IModelGate) clonedGate)
-                                  .setModel(selectedModels);
+                              assignCollectionBasedGateModel(clonedGate,
+                                  collConnector, newSelection);
                             }
                           });
+                  // to respect init state
+                  assignCollectionBasedGateModel(clonedGate,
+                      ((ICollectionConnectorProvider) viewConnector)
+                          .getCollectionConnector(),
+                      ((ICollectionConnectorProvider) viewConnector)
+                          .getCollectionConnector().getSelectedIndices());
                 } else if (viewConnector instanceof IItemSelectable) {
                   ((IModelGate) clonedGate).setModel(null);
                   ((IItemSelectable) viewConnector)
@@ -257,25 +237,13 @@ public abstract class AbstractActionFactory<E, F, G> implements
                           if (selectedItem == event.getSource()) {
                             return;
                           }
-                          if (selectedItem != null) {
-                            if (selectedItem instanceof IValueConnector) {
-                              Object connectorValue = ((IValueConnector) selectedItem)
-                                  .getConnectorValue();
-                              if (connectorValue != null) {
-                                ((IModelGate) clonedGate).setModel(Collections
-                                    .singleton(connectorValue));
-                              } else {
-                                ((IModelGate) clonedGate).setModel(null);
-                              }
-                            } else {
-                              ((IModelGate) clonedGate).setModel(Collections
-                                  .singleton(event.getSelectedItem()));
-                            }
-                          } else {
-                            ((IModelGate) clonedGate).setModel(null);
-                          }
+                          assignCollectionBasedGateModel(clonedGate,
+                              selectedItem);
                         }
                       });
+                  // to respect init state
+                  assignCollectionBasedGateModel(clonedGate,
+                      ((IItemSelectable) viewConnector).getSelectedItem());
                 } else {
                   bindSimpleGateModel(clonedGate, viewConnector,
                       modelDescriptor);
@@ -358,6 +326,41 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   protected IIconFactory<G> getIconFactory() {
     return iconFactory;
+  }
+
+  private void assignCollectionBasedGateModel(final IGate gate,
+      ICollectionConnector collConnector, int[] selectedIndices) {
+    Set<Object> selectedModels = null;
+    if (selectedIndices != null && selectedIndices.length > 0) {
+      selectedModels = new HashSet<Object>();
+      for (int i = 0; i < selectedIndices.length; i++) {
+        IValueConnector childConnector = collConnector
+            .getChildConnector(selectedIndices[i]);
+        if (childConnector != null) {
+          selectedModels.add(childConnector.getConnectorValue());
+        }
+      }
+    }
+    ((IModelGate) gate).setModel(selectedModels);
+  }
+
+  private void assignCollectionBasedGateModel(final IGate gate,
+      Object selectedItem) {
+    if (selectedItem != null) {
+      if (selectedItem instanceof IValueConnector) {
+        Object connectorValue = ((IValueConnector) selectedItem)
+            .getConnectorValue();
+        if (connectorValue != null) {
+          ((IModelGate) gate).setModel(Collections.singleton(connectorValue));
+        } else {
+          ((IModelGate) gate).setModel(null);
+        }
+      } else {
+        ((IModelGate) gate).setModel(Collections.singleton(selectedItem));
+      }
+    } else {
+      ((IModelGate) gate).setModel(null);
+    }
   }
 
   private final class GatesListener implements PropertyChangeListener {
