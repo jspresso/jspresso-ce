@@ -26,10 +26,6 @@ import org.hibernate.ObjectNotFoundException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.orm.hibernate3.HibernateAccessor;
-import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 /**
  * Reloads the entities provided by the context <code>ActionParameter</code>.
@@ -49,39 +45,22 @@ public class ReloadAction extends AbstractHibernateAction {
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
     getController(context).clearPendingOperations();
-    getTransactionTemplate(context).execute(
-        new TransactionCallbackWithoutResult() {
-
-          @Override
-          protected void doInTransactionWithoutResult(TransactionStatus status) {
-            HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
-            int oldFlushMode = hibernateTemplate.getFlushMode();
-            try {
-              // Temporary switch to a read-only session.
-              hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-
-              List<IEntity> entitiesToReload = getEntitiesToReload(context);
-              Exception deletedObjectEx = null;
-              for (Iterator<IEntity> ite = entitiesToReload.iterator(); ite
-                  .hasNext();) {
-                IEntity entity = ite.next();
-                try {
-                  reloadEntity(entity, context);
-                } catch (ObjectNotFoundException ex) {
-                  ite.remove();
-                  deletedObjectEx = ex;
-                }
-              }
-              status.setRollbackOnly();
-              if (deletedObjectEx != null) {
-                throw new ConcurrencyFailureException(deletedObjectEx
-                    .getMessage(), deletedObjectEx);
-              }
-            } finally {
-              hibernateTemplate.setFlushMode(oldFlushMode);
-            }
-          }
-        });
+    List<IEntity> entitiesToReload = getEntitiesToReload(context);
+    Exception deletedObjectEx = null;
+    for (Iterator<IEntity> ite = entitiesToReload.iterator(); ite
+        .hasNext();) {
+      IEntity entity = ite.next();
+      try {
+        reloadEntity(entity, context);
+      } catch (ObjectNotFoundException ex) {
+        ite.remove();
+        deletedObjectEx = ex;
+      }
+    }
+    if (deletedObjectEx != null) {
+      throw new ConcurrencyFailureException(deletedObjectEx
+          .getMessage(), deletedObjectEx);
+    }
     return super.execute(actionHandler, context);
   }
 

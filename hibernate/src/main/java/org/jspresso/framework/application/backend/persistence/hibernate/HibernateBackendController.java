@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.hibernate.Hibernate;
 import org.hibernate.LockOptions;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.collection.PersistentCollection;
@@ -43,18 +44,21 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -264,7 +268,9 @@ public class HibernateBackendController extends AbstractBackendController {
               }
               return;
             } catch (Exception ex) {
-              LOG.error("An internal error occurred when forcing {} collection initialization.", propertyName);
+              LOG.error(
+                  "An internal error occurred when forcing {} collection initialization.",
+                  propertyName);
               LOG.error("Source exception", ex);
             }
           }
@@ -842,12 +848,91 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the entity to reload.
    */
   @Override
-  public void reload(IEntity entity) {
+  public void reload(final IEntity entity) {
+    // builds a collection of entities to reload.
+    Set<IEntity> dirtyReachableEntities = buildReachableDirtyEntitySet(entity);
+
     if (entity.isPersistent()) {
-      HibernateTemplate ht = getHibernateTemplate();
-      merge(
-          (IEntity) ht.load(entity.getComponentContract().getName(),
-              entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
+      getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+
+        @Override
+        protected void doInTransactionWithoutResult(TransactionStatus status) {
+          HibernateTemplate ht = getHibernateTemplate();
+          int oldFlushMode = ht.getFlushMode();
+          try {
+            // Temporary switch to a read-only session.
+            ht.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+
+            Exception deletedObjectEx = null;
+            try {
+              merge((IEntity) ht.load(entity.getComponentContract().getName(),
+                  entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
+            } catch (ObjectNotFoundException ex) {
+              deletedObjectEx = ex;
+            }
+            status.setRollbackOnly();
+            if (deletedObjectEx != null) {
+              throw new ConcurrencyFailureException(deletedObjectEx
+                  .getMessage(), deletedObjectEx);
+            }
+          } finally {
+            ht.setFlushMode(oldFlushMode);
+          }
+        }
+      });
+    }
+
+    // traverse the reachable dirty entities to explicitely reload the
+    // ones that were not reloaded by the previous pass.
+    for (IEntity reachableEntity : dirtyReachableEntities) {
+      if (reachableEntity.isPersistent() && isDirty(reachableEntity)) {
+        reload(reachableEntity);
+      }
+    }
+  }
+
+  private Set<IEntity> buildReachableDirtyEntitySet(IEntity entity) {
+    Set<IEntity> reachableDirtyEntities = new HashSet<IEntity>();
+    completeReachableDirtyEntities(entity, reachableDirtyEntities,
+        new HashSet<IEntity>());
+    return reachableDirtyEntities;
+  }
+
+  private void completeReachableDirtyEntities(IEntity entity,
+      Set<IEntity> reachableDirtyEntities, Set<IEntity> alreadyTraversed) {
+    if (alreadyTraversed.contains(entity)) {
+      return;
+    }
+    alreadyTraversed.add(entity);
+    if (isDirty(entity)) {
+      reachableDirtyEntities.add(entity);
+    }
+    Map<String, Object> entityProps = entity.straightGetProperties();
+    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
+        .getComponentDescriptor(entity.getComponentContract());
+    for (Map.Entry<String, Object> property : entityProps.entrySet()) {
+      Object propertyValue = property.getValue();
+      if (propertyValue instanceof IEntity) {
+        IPropertyDescriptor propertyDescriptor = entityDescriptor
+            .getPropertyDescriptor(property.getKey());
+        if (isInitialized(propertyValue)
+            && propertyDescriptor instanceof IRelationshipEndPropertyDescriptor
+            // It's not a master data relationship.
+            && ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                .getReverseRelationEnd() != null) {
+          completeReachableDirtyEntities((IEntity) propertyValue,
+              reachableDirtyEntities, alreadyTraversed);
+        }
+      } else if (propertyValue instanceof Collection<?>) {
+        if (isInitialized(propertyValue)) {
+          for (Object elt : ((Collection<?>) propertyValue)) {
+            if (elt instanceof IEntity) {
+              completeReachableDirtyEntities((IEntity) elt,
+                  reachableDirtyEntities, alreadyTraversed);
+            }
+          }
+        }
+      }
     }
   }
 
