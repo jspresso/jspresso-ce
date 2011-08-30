@@ -635,8 +635,7 @@ public class DefaultRemoteViewFactory extends
       if (isDateServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
             propertyDescriptor.getName(),
-            createDateFormatter(propertyDescriptor,
-                actionHandler.getClientTimeZone(), actionHandler, locale));
+            formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
@@ -724,7 +723,7 @@ public class DefaultRemoteViewFactory extends
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
             propertyDescriptor.getName(),
-            createDecimalFormatter(propertyDescriptor, locale));
+            formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
@@ -769,7 +768,7 @@ public class DefaultRemoteViewFactory extends
       if (isDurationServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
             propertyDescriptor.getName(),
-            createDurationFormatter(propertyDescriptor, locale));
+            formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
@@ -1113,7 +1112,7 @@ public class DefaultRemoteViewFactory extends
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
             propertyDescriptor.getName(),
-            createPercentFormatter(propertyDescriptor, locale));
+            formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
