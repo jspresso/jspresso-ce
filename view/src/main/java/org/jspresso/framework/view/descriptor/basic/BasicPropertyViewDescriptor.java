@@ -58,6 +58,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   private Integer              width;
   private IAction              action;
   private EHorizontalAlignment horizontalAlignment;
+  private Boolean              sortable;
 
   /**
    * Gets the labelBackground.
@@ -294,6 +295,35 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
       return EHorizontalAlignment.RIGHT;
     }
     return EHorizontalAlignment.LEFT;
+  }
+
+  /**
+   * Gets the sortability.
+   * 
+   * @return the sortable.
+   */
+  @Override
+  public boolean isSortable() {
+    if (sortable != null) {
+      return sortable.booleanValue();
+    }
+    if (getModelDescriptor() instanceof IPropertyDescriptor) {
+      return ((IPropertyDescriptor) getModelDescriptor()).isSortable();
+    }
+    return true;
+  }
+
+  /**
+   * Configure the sortability of a property view when used to defines a table
+   * column for instance. Whenever it is not explicitely set, it falls back to
+   * the model property sortability. If no model descriptor is set, defaults to
+   * <code>true</code>.
+   * 
+   * @param sortable
+   *          the sortable to set.
+   */
+  public void setSortable(Boolean sortable) {
+    this.sortable = sortable;
   }
 
 }

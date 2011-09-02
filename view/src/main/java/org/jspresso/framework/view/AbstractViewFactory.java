@@ -216,9 +216,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -710,8 +708,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
       // for ref sorting to occur properly.
       identifier = identifier + "." + renderedProperty;
     }
-    boolean sortable = true;
-    if (PropertyViewDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
+    boolean sortable = columnDescriptor.isSortable();
+    if (sortable
+        && PropertyViewDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
       // if (propertyName.indexOf('.') < 0) {
       // // not a nested property.
       sortable = rowDescriptor.getPropertyDescriptor(propertyName)
@@ -2954,9 +2953,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
-          };
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
         }
       }
     }

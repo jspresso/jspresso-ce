@@ -60,6 +60,13 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
   List<String> getRenderedChildProperties();
 
   /**
+   * Gets the sortability.
+   * 
+   * @return the sortable.
+   */
+  boolean isSortable();
+
+  /**
    * Gets the default child properties to display in case of a complex property.
    * 
    * @return The list of displayed properties in the case of a complex property.

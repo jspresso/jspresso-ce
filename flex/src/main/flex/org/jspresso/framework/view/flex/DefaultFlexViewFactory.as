@@ -1810,16 +1810,21 @@ package org.jspresso.framework.view.flex {
         column.editorDataField = "state";
         
         if(remoteTable.sortable && !remoteTable.sortingAction) {
-          if(rColumn is RCheckBox) {
-            column.sortCompareFunction = _remoteValueSorter.compareBooleans;
-          } else if(rColumn is RNumericComponent) {
-            column.sortCompareFunction = _remoteValueSorter.compareNumbers;
-          } else if(rColumn is RDateField) {
-            column.sortCompareFunction = _remoteValueSorter.compareDates;
-          } else if(rColumn.state is RemoteFormattedValueState) {
-            column.sortCompareFunction = _remoteValueSorter.compareFormatted;
+          var property:String = remoteTable.columnIds[i];
+          if(!property || property.length == 0 || property.charAt(0) == "#") {
+            column.sortable = false;
           } else {
-            column.sortCompareFunction = _remoteValueSorter.compareStrings;
+            if(rColumn is RCheckBox) {
+              column.sortCompareFunction = _remoteValueSorter.compareBooleans;
+            } else if(rColumn is RNumericComponent) {
+              column.sortCompareFunction = _remoteValueSorter.compareNumbers;
+            } else if(rColumn is RDateField) {
+              column.sortCompareFunction = _remoteValueSorter.compareDates;
+            } else if(rColumn.state is RemoteFormattedValueState) {
+              column.sortCompareFunction = _remoteValueSorter.compareFormatted;
+            } else {
+              column.sortCompareFunction = _remoteValueSorter.compareStrings;
+            }
           }
         }
         columns.push(column);
@@ -1943,7 +1948,13 @@ package org.jspresso.framework.view.flex {
           });
         } else {
           table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
-            _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
+            var headerIndex:int = (event.itemRenderer as DgHeaderItemRenderer).index;
+            var property:String = remoteTable.columnIds[headerIndex - 1];
+            if(!property || property.length == 0 || property.charAt(0) == "#") {
+              // do not sort
+              return;
+            }
+            _remoteValueSorter.sortColumnIndex = headerIndex;
           });
         }
       }
