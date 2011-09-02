@@ -27,7 +27,7 @@ import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor
 import org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicJavaSerializablePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -67,8 +67,9 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
         2);
 
-    BasicStringPropertyDescriptor idPropertyDescriptor = new BasicStringPropertyDescriptor();
+    BasicJavaSerializablePropertyDescriptor idPropertyDescriptor = new BasicJavaSerializablePropertyDescriptor();
     idPropertyDescriptor.setName(IEntity.ID);
+    idPropertyDescriptor.setMaxLength(new Integer(36));
     idPropertyDescriptor.setReadOnly(true);
     propertyDescriptors.add(idPropertyDescriptor);
 
