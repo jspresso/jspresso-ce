@@ -161,4 +161,12 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    * @return the persistence formula.
    */
   String getPersistenceFormula();
+
+  /**
+   * Gets whether this property can be used for sorting, in a tabular view for
+   * instance.
+   * 
+   * @return <code>true</code> if this property can be used for sorting.
+   */
+  boolean isSortable();
 }

@@ -28,4 +28,14 @@ public class BasicPasswordPropertyDescriptor extends
 
     return clonedDescriptor;
   }
+
+  /**
+   * Returns <code>false</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
+  }
 }

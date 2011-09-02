@@ -52,4 +52,14 @@ public class BasicColorPropertyDescriptor extends BasicScalarPropertyDescriptor
   public Class<?> getModelType() {
     return String.class;
   }
+
+  /**
+   * Returns <code>false</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
+  }
 }

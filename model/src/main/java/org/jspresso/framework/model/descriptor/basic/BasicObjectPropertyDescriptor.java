@@ -114,4 +114,13 @@ public class BasicObjectPropertyDescriptor extends
     this.modelTypeClassName = modelTypeClassName;
   }
 
+  /**
+   * Returns <code>false</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
+  }
 }

@@ -74,6 +74,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private Collection<IGate>              readabilityGates;
 
   private Boolean                        readOnly;
+  private Boolean                        sortable;
   private String                         sqlName;
 
   private String                         unicityScope;
@@ -311,6 +312,26 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isSortable() {
+    if (sortable != null) {
+      return sortable.booleanValue();
+    }
+    return getDefaultSortablility();
+  }
+
+  /**
+   * Default property sortability.
+   * 
+   * @return <code>true</code> by default unless overriden in subclasses.
+   */
+  protected boolean getDefaultSortablility() {
+    return true;
+  }
+
+  /**
    * Gets the versionControl.
    * 
    * @return the versionControl.
@@ -351,10 +372,9 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.mandatory", new Object[] {
-                  getI18nName(translationProvider, locale), component
-              }, locale);
+          return translationProvider
+              .getTranslation("integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
         }
 
       };
@@ -591,6 +611,17 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = new Boolean(readOnly);
+  }
+
+  /**
+   * Enforces a property sortability. This is only enforced at the UI level,
+   * i.e. the property can still be used for sorting programmatically.
+   * 
+   * @param sortable
+   *          the sortable to set.
+   */
+  public void setSortable(boolean sortable) {
+    this.sortable = new Boolean(sortable);
   }
 
   /**

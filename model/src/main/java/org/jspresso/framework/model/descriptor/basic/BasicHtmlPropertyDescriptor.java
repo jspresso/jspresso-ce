@@ -29,5 +29,14 @@ import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
  */
 public class BasicHtmlPropertyDescriptor extends BasicTextPropertyDescriptor
     implements IHtmlPropertyDescriptor {
-  // Empty implementation.
+
+  /**
+   * Overriden to disable sorting by default.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
+  }
 }

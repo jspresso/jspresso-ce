@@ -30,5 +30,13 @@ import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 public class BasicImageUrlPropertyDescriptor extends
     BasicStringPropertyDescriptor implements IImageUrlPropertyDescriptor {
 
-  // Empty as of now.
+  /**
+   * Returns <code>false</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
+  }
 }

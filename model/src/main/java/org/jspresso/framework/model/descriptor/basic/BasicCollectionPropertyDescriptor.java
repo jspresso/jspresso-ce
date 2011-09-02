@@ -233,8 +233,8 @@ public class BasicCollectionPropertyDescriptor<E> extends
           orderingProperties.put(untypedOrderingProperty.getKey(),
               (ESort) untypedOrderingProperty.getValue());
         } else if (untypedOrderingProperty.getValue() instanceof String) {
-          orderingProperties.put(untypedOrderingProperty.getKey(), ESort
-              .valueOf((String) untypedOrderingProperty.getValue()));
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.valueOf((String) untypedOrderingProperty.getValue()));
         } else {
           orderingProperties.put(untypedOrderingProperty.getKey(),
               ESort.ASCENDING);
@@ -276,5 +276,15 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return false;
     }
     return true;
+  }
+
+  /**
+   * Returns <code>false</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
   }
 }

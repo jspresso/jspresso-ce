@@ -199,4 +199,14 @@ public class BasicBinaryPropertyDescriptor extends
   public void setContentType(String contentType) {
     this.contentType = contentType;
   }
+
+  /**
+   * Returns <code>false</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultSortablility() {
+    return false;
+  }
 }
