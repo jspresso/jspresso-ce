@@ -18,43 +18,21 @@
  */
 package org.jspresso.framework.util.gate;
 
-import java.util.Collection;
 
 /**
- * A simple gate that tracks collection selection (actually the sub-collection
- * is set as model) and opens whenever the selection is not empty.
+ * Base class for all collection based selection tracking gates.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */
-public class CollectionSelectionTrackingGate extends AbstractModelGate {
+public abstract class AbstractCollectionSelectionTrackingGate extends AbstractModelGate {
 
   /**
-   * <code>INSTANCE</code> is a singleton instance of a gate whose state depends
-   * on the underlying collection connector selection (empty => closed, not
-   * empty => open).
+   * Constructs a new <code>AbstractCollectionSelectionTrackingGate</code> instance.
    */
-  public static final CollectionSelectionTrackingGate INSTANCE = new CollectionSelectionTrackingGate();
-
-  /**
-   * Constructs a new <code>CollectionSelectionTrackingGate</code> instance.
-   */
-  public CollectionSelectionTrackingGate() {
+  public AbstractCollectionSelectionTrackingGate() {
     setCollectionBased(true);
-  }
-
-  /**
-   * Returns true whenever the model collection is not empty.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isOpen() {
-    if (getModel() instanceof Collection<?>) {
-      return !((Collection<?>) getModel()).isEmpty();
-    }
-    return getModel() != null;
   }
 
   /**

@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,9 +30,10 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
-import org.jspresso.framework.util.gate.CollectionSelectionTrackingGate;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.ModelTrackingGate;
+import org.jspresso.framework.util.gate.NotEmptyCollectionSelectionTrackingGate;
+import org.jspresso.framework.util.gate.SingleCollectionSelectionTrackingGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -70,6 +71,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private Collection<IGate>     actionabilityGates;
   private DefaultIconDescriptor actionDescriptor;
   private boolean               collectionBased;
+  private boolean               multiSelectionEnabled;
   private String                mnemonicAsString;
 
   /**
@@ -78,6 +80,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   public FrontendAction() {
     actionDescriptor = new DefaultIconDescriptor();
     setCollectionBased(false);
+    setMultiSelectionEnabled(true);
   }
 
   /**
@@ -222,6 +225,15 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
+   * Gets the multiSelectionEnabled.
+   * 
+   * @return the multiSelectionEnabled.
+   */
+  public boolean isMultiSelectionEnabled() {
+    return multiSelectionEnabled;
+  }
+
+  /**
    * Configures a keyboard accelerator shortcut on this action. Support of this
    * feature depends on the UI execution platform. The syntax used consists of
    * listing keys that should be pressed to trigger the action, i.e.
@@ -278,6 +290,19 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setCollectionBased(boolean collectionBased) {
     this.collectionBased = collectionBased;
+    completeActionabilityGates();
+  }
+
+  /**
+   * Declares the action as being abled to run on a collection containing more
+   * than 1 element. A multiSelectionEnabled = false action will be disabled
+   * when the selection contains no or more than one element.
+   * 
+   * @param multiSelectionEnabled
+   *          the multiSelectionEnabled to set.
+   */
+  public void setMultiSelectionEnabled(boolean multiSelectionEnabled) {
+    this.multiSelectionEnabled = multiSelectionEnabled;
     completeActionabilityGates();
   }
 
@@ -347,14 +372,20 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   private void completeActionabilityGates() {
     if (actionabilityGates == null) {
-      actionabilityGates = new ArrayList<IGate>();
+      actionabilityGates = new LinkedHashSet<IGate>();
     }
     if (isCollectionBased()) {
       actionabilityGates.remove(ModelTrackingGate.INSTANCE);
-      actionabilityGates.add(CollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates.add(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
     } else {
-      actionabilityGates.remove(CollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates
+          .remove(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
       actionabilityGates.add(ModelTrackingGate.INSTANCE);
+    }
+    if (isMultiSelectionEnabled()) {
+      actionabilityGates.remove(SingleCollectionSelectionTrackingGate.INSTANCE);
+    } else {
+      actionabilityGates.add(SingleCollectionSelectionTrackingGate.INSTANCE);
     }
   }
 
