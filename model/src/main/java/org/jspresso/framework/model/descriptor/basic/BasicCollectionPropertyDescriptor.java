@@ -271,11 +271,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    */
   @Override
   protected boolean getDefaultComposition() {
-    if (getReverseRelationEnd() == null
-        || getReverseRelationEnd() instanceof ICollectionPropertyDescriptor<?>) {
-      return false;
-    }
-    return true;
+    return !isManyToMany();
   }
 
   /**
