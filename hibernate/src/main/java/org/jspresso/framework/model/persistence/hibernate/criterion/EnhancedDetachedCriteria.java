@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projection;
 import org.hibernate.impl.CriteriaImpl;
 
 /**
@@ -36,6 +37,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   private static final long                                    serialVersionUID = 1477297471425065631L;
 
   private Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
+  private Projection                                           currentProjection;
 
   /**
    * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
@@ -207,6 +209,27 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
       registerSubCriteria(masterCriteria, associationPath, subCriteria);
     }
     return subCriteria;
+  }
+
+  /**
+   * Keeps track of the current projection.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public DetachedCriteria setProjection(Projection proj) {
+    DetachedCriteria returnedCrit = super.setProjection(proj);
+    currentProjection = proj;
+    return returnedCrit;
+  }
+
+  /**
+   * Gets the current criteria projection.
+   * 
+   * @return the current criteria projection.
+   */
+  public Projection getProjection() {
+    return currentProjection;
   }
 
   private DetachedCriteria getRegisteredSubCriteria(

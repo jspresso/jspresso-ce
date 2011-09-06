@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -176,24 +177,32 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 Integer totalCount = null;
                 Integer pageSize = queryComponent.getPageSize();
                 Integer page = queryComponent.getPage();
+                Projection refinerProjection = criteria.getProjection();
                 if (pageSize != null) {
                   if (page == null) {
                     page = new Integer(0);
                     queryComponent.setPage(page);
                   }
                   if (queryComponent.getRecordCount() == null) {
-                    criteria.setProjection(Projections.rowCount());
+                    if (refinerProjection != null) {
+                      criteria.setProjection(Projections.projectionList()
+                          .add(refinerProjection).add(Projections.rowCount()));
+                    } else {
+                      criteria.setProjection(Projections.rowCount());
+                    }
                     totalCount = new Integer(((Number) hibernateTemplate
                         .findByCriteria(criteria).get(0)).intValue());
                   }
                   critFactory.completeCriteriaWithOrdering(criteria,
                       queryComponent);
+                  criteria.setProjection(refinerProjection);
                   entities = hibernateTemplate.findByCriteria(criteria,
                       page.intValue() * pageSize.intValue(),
                       pageSize.intValue());
                 } else {
                   critFactory.completeCriteriaWithOrdering(criteria,
                       queryComponent);
+                  criteria.setProjection(refinerProjection);
                   entities = hibernateTemplate.findByCriteria(criteria);
                   totalCount = new Integer(entities.size());
                 }
