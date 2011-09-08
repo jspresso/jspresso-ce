@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.descriptor.entity.basic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -86,6 +87,10 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
 
     entityDescriptor.setPropertyDescriptors(propertyDescriptors);
 
+    List<String> emptyList = Collections.emptyList();
+    entityDescriptor.setRenderedProperties(emptyList);
+    entityDescriptor.setQueryableProperties(emptyList);
+
     return entityDescriptor;
   }
 
@@ -103,20 +108,6 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
       ancestorDescriptors.add(ENTITY_DESCRIPTOR);
     }
     return ancestorDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<String> getRenderedProperties() {
-    List<String> superRenderedProperties = super.getRenderedProperties();
-    if (superRenderedProperties != null) {
-      superRenderedProperties.remove(IEntity.ID);
-      superRenderedProperties.remove(IEntity.VERSION);
-      superRenderedProperties.remove(IEntity.PERSISTENT);
-    }
-    return superRenderedProperties;
   }
 
   /**

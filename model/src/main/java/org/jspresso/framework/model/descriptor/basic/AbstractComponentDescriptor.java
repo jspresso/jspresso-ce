@@ -350,13 +350,23 @@ public abstract class AbstractComponentDescriptor<E> extends
   @Override
   public List<String> getQueryableProperties() {
     if (queryableProperties == null) {
-      queryableProperties = new ArrayList<String>();
-      for (String renderedProperty : getRenderedProperties()) {
-        IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(renderedProperty);
-        if (propertyDescriptor.isQueryable()) {
-          queryableProperties.add(renderedProperty);
+      Set<String> queryablePropertiesSet = new LinkedHashSet<String>();
+      if (getAncestorDescriptors() != null) {
+        for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+          for (String propertyName : ancestorDescriptor
+              .getQueryableProperties()) {
+            queryablePropertiesSet.add(propertyName);
+          }
         }
       }
+      for (String renderedProperty : getRenderedProperties()) {
+        IPropertyDescriptor declaredPropertyDescriptor = getDeclaredPropertyDescriptor(renderedProperty);
+        if (declaredPropertyDescriptor != null
+            && declaredPropertyDescriptor.isQueryable()) {
+          queryablePropertiesSet.add(renderedProperty);
+        }
+      }
+      queryableProperties = new ArrayList<String>(queryablePropertiesSet);
     }
     return explodeComponentReferences(this, queryableProperties);
   }
@@ -394,13 +404,24 @@ public abstract class AbstractComponentDescriptor<E> extends
   @Override
   public List<String> getRenderedProperties() {
     if (renderedProperties == null) {
-      renderedProperties = new ArrayList<String>();
-      for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
-        if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
-            && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
-          renderedProperties.add(propertyDescriptor.getName());
+      Set<String> renderedPropertiesSet = new LinkedHashSet<String>();
+      if (getAncestorDescriptors() != null) {
+        for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+          for (String propertyName : ancestorDescriptor.getRenderedProperties()) {
+            renderedPropertiesSet.add(propertyName);
+          }
         }
       }
+      Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+      if (declaredPropertyDescriptors != null) {
+        for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+          if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
+              && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
+            renderedPropertiesSet.add(propertyDescriptor.getName());
+          }
+        }
+      }
+      renderedProperties = new ArrayList<String>(renderedPropertiesSet);
     }
     return explodeComponentReferences(this, renderedProperties);
   }
@@ -1034,10 +1055,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (serviceDelegateBeanNames != null && beanFactory != null) {
       for (Entry<String, String> nextPair : serviceDelegateBeanNames.entrySet()) {
         try {
-          registerService(Class.forName(ObjectUtils
-              .extractRawClassName(nextPair.getKey())),
-              beanFactory.getBean(nextPair.getValue(),
-                  IComponentService.class));
+          registerService(
+              Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())),
+              beanFactory.getBean(nextPair.getValue(), IComponentService.class));
         } catch (ClassNotFoundException ex) {
           throw new DescriptorException(ex);
         }
@@ -1073,8 +1093,8 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
       for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
-        registerLifecycleInterceptor(beanFactory
-            .getBean(lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
+        registerLifecycleInterceptor(beanFactory.getBean(
+            lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
       }
       lifecycleInterceptorBeanNames = null;
     }
