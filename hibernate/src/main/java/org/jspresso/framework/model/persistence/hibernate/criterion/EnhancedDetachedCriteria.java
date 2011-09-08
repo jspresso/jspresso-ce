@@ -25,6 +25,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projection;
 import org.hibernate.impl.CriteriaImpl;
+import org.hibernate.transform.ResultTransformer;
 
 /**
  * An enhanced detached criteria that holds a sub-criteria registry.
@@ -38,6 +39,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   private Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
   private Projection                                           currentProjection;
+  private ResultTransformer                                    currentResultTransformer;
 
   /**
    * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
@@ -224,12 +226,33 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   }
 
   /**
+   * Keeps track of the current criteria result transformer.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public DetachedCriteria setResultTransformer(ResultTransformer transformer) {
+    DetachedCriteria returnedCrit = super.setResultTransformer(transformer);
+    currentResultTransformer = transformer;
+    return returnedCrit;
+  }
+
+  /**
    * Gets the current criteria projection.
    * 
    * @return the current criteria projection.
    */
   public Projection getProjection() {
     return currentProjection;
+  }
+
+  /**
+   * Gets the current criteria result transformer.
+   * 
+   * @return the current criteria result transformer.
+   */
+  public ResultTransformer getResultTransformer() {
+    return currentResultTransformer;
   }
 
   private DetachedCriteria getRegisteredSubCriteria(

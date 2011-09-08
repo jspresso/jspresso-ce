@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
+import org.hibernate.transform.ResultTransformer;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
@@ -174,10 +176,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 if (critRefiner != null) {
                   critRefiner.refineCriteria(criteria, queryComponent, context);
                 }
+                criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
                 Integer totalCount = null;
                 Integer pageSize = queryComponent.getPageSize();
                 Integer page = queryComponent.getPage();
                 Projection refinerProjection = criteria.getProjection();
+                ResultTransformer refinerResultTransformer = criteria
+                    .getResultTransformer();
                 if (pageSize != null) {
                   if (page == null) {
                     page = new Integer(0);
@@ -195,14 +200,24 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                   }
                   critFactory.completeCriteriaWithOrdering(criteria,
                       queryComponent);
-                  criteria.setProjection(refinerProjection);
+                  if (refinerProjection != null) {
+                    criteria.setProjection(refinerProjection);
+                  }
+                  if (refinerResultTransformer != null) {
+                    criteria.setResultTransformer(refinerResultTransformer);
+                  }
                   entities = hibernateTemplate.findByCriteria(criteria,
                       page.intValue() * pageSize.intValue(),
                       pageSize.intValue());
                 } else {
                   critFactory.completeCriteriaWithOrdering(criteria,
                       queryComponent);
-                  criteria.setProjection(refinerProjection);
+                  if (refinerProjection != null) {
+                    criteria.setProjection(refinerProjection);
+                  }
+                  if (refinerResultTransformer != null) {
+                    criteria.setResultTransformer(refinerResultTransformer);
+                  }
                   entities = hibernateTemplate.findByCriteria(criteria);
                   totalCount = new Integer(entities.size());
                 }
