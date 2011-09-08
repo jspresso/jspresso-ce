@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.action.module;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * Retrieves the filter of a module and queries the persistent store to populate
@@ -73,7 +75,19 @@ public class QueryModuleFilterAction extends AbstractQbeAction {
   protected void queryPerformed(IQueryComponent queryComponent,
       Map<String, Object> context) {
     FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
-    module.setModuleObjects(queryComponent.getQueriedComponents());
+    List<?> currentModuleObjects = module.getModuleObjects();
+    List<Object> targetModuleObjects = new ArrayList<Object>(
+        queryComponent.getQueriedComponents());
+    // We need to preserve transient entities from being lost.
+    if (currentModuleObjects != null) {
+      for (Object comp : currentModuleObjects) {
+        if (comp instanceof IEntity && !((IEntity) comp).isPersistent()
+            && !targetModuleObjects.contains(comp)) {
+          targetModuleObjects.add(comp);
+        }
+      }
+    }
+    module.setModuleObjects(targetModuleObjects);
     queryComponent.setQueriedComponents(null);
   }
 }
