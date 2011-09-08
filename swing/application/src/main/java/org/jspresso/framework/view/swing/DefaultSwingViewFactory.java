@@ -1613,12 +1613,9 @@ public class DefaultSwingViewFactory extends
       // actionHandler, locale)}, locale));
       lovAction.putValue(
           Action.SHORT_DESCRIPTION,
-          actionHandler.getTranslation(
-              "lov.element.description",
-              new Object[] {
-                propertyDescriptor.getReferencedDescriptor().getI18nName(
-                    actionHandler, locale)
-              }, locale)
+          actionHandler.getTranslation("lov.element.description",
+              new Object[] {propertyDescriptor.getReferencedDescriptor()
+                  .getI18nName(actionHandler, locale)}, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1855,16 +1852,7 @@ public class DefaultSwingViewFactory extends
               .getModelType());
           // already handled in createColumnConnector
           // if (columnViewDescriptor.getReadabilityGates() != null) {
-          // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-          // columnConnector.addReadabilityGate(gate.clone());
-          // }
-          // }
           // if (columnViewDescriptor.getWritabilityGates() != null) {
-          // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-          // columnConnector.addWritabilityGate(gate.clone());
-          // }
-          // }
-          // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
         } finally {
           actionHandler.restoreLastSecurityContextSnapshot();
         }
@@ -1934,32 +1922,40 @@ public class DefaultSwingViewFactory extends
           viewComponent.addMouseListener((MouseListener) cellRenderer);
         }
         column.setCellRenderer(cellRenderer);
-        if (columnViewDescriptor.getPreferredSize() != null
-            && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
-          column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
-              .getWidth());
+        if (columnViewDescriptorEntry.getValue() != null) {
+          column.setPreferredWidth(columnViewDescriptorEntry.getValue()
+              .intValue());
         } else {
-          int minHeaderWidth = computePixelWidth(viewComponent,
-              columnName.length());
-          if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-              || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-            column.setPreferredWidth(Math.max(
-                computePixelWidth(viewComponent, 2), minHeaderWidth));
-          } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-            column.setPreferredWidth(Math.max(
-                computePixelWidth(
-                    viewComponent,
-                    getEnumerationTemplateValue(
-                        (IEnumerationPropertyDescriptor) propertyDescriptor,
-                        actionHandler, locale).length() + 4), minHeaderWidth));
+          if (columnViewDescriptor.getPreferredSize() != null
+              && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+            column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
+                .getWidth());
           } else {
-            column.setPreferredWidth(Math.max(Math.min(
-                computePixelWidth(
-                    viewComponent,
-                    getFormatLength(
-                        createFormatter(propertyDescriptor, actionHandler,
-                            locale), getTemplateValue(propertyDescriptor))),
-                maxColumnSize), minHeaderWidth));
+            int minHeaderWidth = computePixelWidth(viewComponent,
+                columnName.length());
+            if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+                || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+              column.setPreferredWidth(Math.max(
+                  computePixelWidth(viewComponent, 2), minHeaderWidth));
+            } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+              column
+                  .setPreferredWidth(Math
+                      .max(
+                          computePixelWidth(
+                              viewComponent,
+                              getEnumerationTemplateValue(
+                                  (IEnumerationPropertyDescriptor) propertyDescriptor,
+                                  actionHandler, locale).length() + 4),
+                          minHeaderWidth));
+            } else {
+              column.setPreferredWidth(Math.max(Math.min(
+                  computePixelWidth(
+                      viewComponent,
+                      getFormatLength(
+                          createFormatter(propertyDescriptor, actionHandler,
+                              locale), getTemplateValue(propertyDescriptor))),
+                  maxColumnSize), minHeaderWidth));
+            }
           }
         }
         columnIndex++;
@@ -2069,8 +2065,7 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())
-          };
+              new Integer(columnModel.getColumn(i).getWidth())};
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);
