@@ -469,6 +469,11 @@
     <property name="description" value="module.restart.description" />
   </bean>
 
+  <bean id="restartModuleWithConfirmationFrontAction" parent="restartModuleFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
+    <property name="messageCode" value="module.restart.confirm.message"/>
+    <property name="yesAction" ref="restartModuleFrontAction" />
+  </bean>
+
   <bean id="moveUpFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
     <property name="name" value="moveUp.name" />
@@ -625,7 +630,7 @@
     <property name="name" value="FILE" />
     <property name="actions">
       <list>
-        <ref local="restartModuleFrontAction" />
+        <ref local="restartModuleWithConfirmationFrontAction" />
         <ref local="saveModuleObjectFrontAction" />
         <ref local="reloadModuleObjectFrontAction" />
       </list>
