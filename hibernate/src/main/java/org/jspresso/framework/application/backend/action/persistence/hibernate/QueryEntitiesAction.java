@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.transform.ResultTransformer;
@@ -176,7 +175,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 if (critRefiner != null) {
                   critRefiner.refineCriteria(criteria, queryComponent, context);
                 }
-                criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
                 Integer totalCount = null;
                 Integer pageSize = queryComponent.getPageSize();
                 Integer page = queryComponent.getPage();
