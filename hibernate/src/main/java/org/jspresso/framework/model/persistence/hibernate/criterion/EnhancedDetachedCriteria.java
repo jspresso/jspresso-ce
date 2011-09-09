@@ -281,5 +281,4 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     }
     subCriterias.put(associationPath, subCriteria);
   }
-
 }

@@ -114,4 +114,12 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * @return the query component clone.
    */
   IQueryComponent clone();
+
+  /**
+   * Gets wether to enforce select distinct when querying.
+   * 
+   * @return the distinctEnforced.
+   */
+  boolean isDistinctEnforced();
+
 }

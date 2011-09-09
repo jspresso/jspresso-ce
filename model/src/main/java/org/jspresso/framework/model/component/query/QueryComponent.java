@@ -55,6 +55,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private Integer                 page;
   private Integer                 pageSize;
   private Integer                 recordCount;
+  private boolean                 distinctEnforced;
 
   /**
    * Constructs a new <code>QueryComponent</code> instance.
@@ -68,6 +69,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
     this.componentFactory = componentFactory;
+    this.distinctEnforced = false;
   }
 
   /**
@@ -488,5 +490,25 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public QueryComponent clone() {
     QueryComponent clone = (QueryComponent) super.clone();
     return clone;
+  }
+
+  /**
+   * Gets wether to enforce select distinct when querying.
+   * 
+   * @return the distinctEnforced.
+   */
+  @Override
+  public boolean isDistinctEnforced() {
+    return distinctEnforced;
+  }
+
+  /**
+   * Sets the distinctEnforced.
+   * 
+   * @param distinctEnforced
+   *          the distinctEnforced to set.
+   */
+  public void setDistinctEnforced(boolean distinctEnforced) {
+    this.distinctEnforced = distinctEnforced;
   }
 }

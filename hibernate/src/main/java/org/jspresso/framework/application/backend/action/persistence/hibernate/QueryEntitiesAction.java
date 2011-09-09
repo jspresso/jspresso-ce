@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.ResultTransformer;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -178,29 +178,30 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 Integer totalCount = null;
                 Integer pageSize = queryComponent.getPageSize();
                 Integer page = queryComponent.getPage();
-                Projection refinerProjection = criteria.getProjection();
                 ResultTransformer refinerResultTransformer = criteria
                     .getResultTransformer();
+
+                if (queryComponent.isDistinctEnforced()) {
+                  criteria.setProjection(Projections.distinct(Projections.id()));
+                  EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
+                      .forEntityName(queryComponent.getQueryContract()
+                          .getName());
+                  outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
+                  criteria = outerCriteria;
+                }
+
                 if (pageSize != null) {
                   if (page == null) {
                     page = new Integer(0);
                     queryComponent.setPage(page);
                   }
                   if (queryComponent.getRecordCount() == null) {
-                    if (refinerProjection != null) {
-                      criteria.setProjection(Projections.projectionList()
-                          .add(refinerProjection).add(Projections.rowCount()));
-                    } else {
-                      criteria.setProjection(Projections.rowCount());
-                    }
+                    criteria.setProjection(Projections.rowCount());
                     totalCount = new Integer(((Number) hibernateTemplate
                         .findByCriteria(criteria).get(0)).intValue());
                   }
                   critFactory.completeCriteriaWithOrdering(criteria,
                       queryComponent);
-                  if (refinerProjection != null) {
-                    criteria.setProjection(refinerProjection);
-                  }
                   if (refinerResultTransformer != null) {
                     criteria.setResultTransformer(refinerResultTransformer);
                   }
@@ -210,9 +211,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 } else {
                   critFactory.completeCriteriaWithOrdering(criteria,
                       queryComponent);
-                  if (refinerProjection != null) {
-                    criteria.setProjection(refinerProjection);
-                  }
                   if (refinerResultTransformer != null) {
                     criteria.setResultTransformer(refinerResultTransformer);
                   }
