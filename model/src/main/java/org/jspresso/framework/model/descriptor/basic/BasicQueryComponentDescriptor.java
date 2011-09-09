@@ -91,7 +91,6 @@ public class BasicQueryComponentDescriptor extends
 
     BasicIntegerPropertyDescriptor displayPageIndexPropertyDescripror = new BasicIntegerPropertyDescriptor();
     displayPageIndexPropertyDescripror.setName(IPageable.DISPLAY_PAGE_INDEX);
-    displayPageIndexPropertyDescripror.setReadOnly(true);
     propertyDescriptors.add(displayPageIndexPropertyDescripror);
 
     BasicIntegerPropertyDescriptor pageSizePropertyDescripror = new BasicIntegerPropertyDescriptor();

@@ -29,37 +29,42 @@ public interface IPageable {
   /**
    * "nextPageEnabled" string constant.
    */
-  String NEXT_PAGE_ENABLED     = "nextPageEnabled";
+  String NEXT_PAGE_ENABLED       = "nextPageEnabled";
 
   /**
    * "page" string constant.
    */
-  String PAGE                  = "page";
+  String PAGE                    = "page";
 
   /**
    * "displayPageIndex" string constant.
    */
-  String DISPLAY_PAGE_INDEX    = "displayPageIndex";
+  String DISPLAY_PAGE_INDEX      = "displayPageIndex";
 
   /**
    * "pageCount" string constant.
    */
-  String PAGE_COUNT            = "pageCount";
+  String PAGE_COUNT              = "pageCount";
+
+  /**
+   * "pageNavigationEnabled" string constant.
+   */
+  String PAGE_NAVIGATION_ENABLED = "pageNavigationEnabled";
 
   /**
    * "pageSize" string constant.
    */
-  String PAGE_SIZE             = "pageSize";
+  String PAGE_SIZE               = "pageSize";
 
   /**
    * "previousPageEnabled" string constant.
    */
-  String PREVIOUS_PAGE_ENABLED = "previousPageEnabled";
+  String PREVIOUS_PAGE_ENABLED   = "previousPageEnabled";
 
   /**
    * "recordCount" string constant.
    */
-  String RECORD_COUNT          = "recordCount";
+  String RECORD_COUNT            = "recordCount";
 
   /**
    * Gets the page number used for query actions.
@@ -74,6 +79,14 @@ public interface IPageable {
    * @return the page index to display graphically.
    */
   Integer getDisplayPageIndex();
+
+  /**
+   * Sets the page index to display.
+   * 
+   * @param displayPageIndex
+   *          the page index to display.
+   */
+  void setDisplayPageIndex(Integer displayPageIndex);
 
   /**
    * Gets the current page count.
@@ -102,6 +115,13 @@ public interface IPageable {
    * @return true if navigation to next page is enabled, false otherwise.
    */
   boolean isNextPageEnabled();
+
+  /**
+   * Wether page navigation is enabled.
+   * 
+   * @return true if page navigation is enabled, false otherwise.
+   */
+  boolean isPageNavigationEnabled();
 
   /**
    * Wether navigation to previous page is enabled.

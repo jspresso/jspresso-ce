@@ -18,9 +18,12 @@
  */
 package org.jspresso.framework.application.backend.action.module;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
@@ -29,6 +32,7 @@ import org.jspresso.framework.application.model.descriptor.FilterableBeanCollect
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.collection.IPageable;
 
 /**
  * Initialize a module filter with a brand new query component and resets the
@@ -49,30 +53,50 @@ public class InitModuleFilterAction extends BackendAction {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    FilterableBeanCollectionModule beanCollectionModule = (FilterableBeanCollectionModule) getModule(context);
+  public boolean execute(final IActionHandler actionHandler,
+      final Map<String, Object> context) {
+    final FilterableBeanCollectionModule filterableBeanCollectionModule = (FilterableBeanCollectionModule) getModule(context);
     context
         .put(
             CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
-            ((IComponentDescriptor<?>) beanCollectionModule.getViewDescriptor()
-                .getModelDescriptor())
+            ((IComponentDescriptor<?>) filterableBeanCollectionModule
+                .getViewDescriptor().getModelDescriptor())
                 .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
-    IQueryComponent queryComponent;
+    final IQueryComponent queryComponent;
     if (createQueryComponentAction != null) {
       actionHandler.execute(createQueryComponentAction, context);
       queryComponent = (IQueryComponent) context
           .get(IQueryComponent.QUERY_COMPONENT);
     } else {
       queryComponent = getEntityFactory(context).createQueryComponentInstance(
-          (Class<? extends IComponent>) beanCollectionModule
+          (Class<? extends IComponent>) filterableBeanCollectionModule
               .getElementComponentDescriptor().getComponentContract());
     }
     if (queryComponentRefiner != null) {
       queryComponentRefiner.refineQueryComponent(queryComponent, context);
     }
-    beanCollectionModule.setFilter(queryComponent);
-    beanCollectionModule.setModuleObjects(null);
+    filterableBeanCollectionModule.setFilter(queryComponent);
+    filterableBeanCollectionModule.setModuleObjects(null);
+
+    if (filterableBeanCollectionModule.getPagingAction() != null) {
+      PropertyChangeListener paginationListener = new PropertyChangeListener() {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          if (evt.getOldValue() != null && evt.getNewValue() != null) {
+            try {
+              context.put(AbstractQbeAction.PAGINATE, null);
+              actionHandler.execute(
+                  filterableBeanCollectionModule.getPagingAction(), context);
+            } finally {
+              context.remove(AbstractQbeAction.PAGINATE);
+            }
+          }
+        }
+      };
+      queryComponent.addPropertyChangeListener(IPageable.PAGE,
+          paginationListener);
+    }
     return super.execute(actionHandler, context);
   }
 

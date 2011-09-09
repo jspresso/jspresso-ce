@@ -18,12 +18,16 @@
  */
 package org.jspresso.framework.application.frontend.action.lov;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
@@ -39,6 +43,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -86,6 +91,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private String                                nonLovTriggeringChars = "%;"
                                                                           + IQueryComponent.NOT_VAL
                                                                           + IQueryComponent.NULL_VAL;
+  private IAction                               pagingAction;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -98,8 +104,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(final IActionHandler actionHandler,
+      final Map<String, Object> context) {
 
     IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
@@ -194,6 +200,24 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
+    if (pagingAction != null) {
+      PropertyChangeListener paginationListener = new PropertyChangeListener() {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          if (evt.getOldValue() != null && evt.getNewValue() != null) {
+            try {
+              context.put(AbstractQbeAction.PAGINATE, null);
+              actionHandler.execute(pagingAction, context);
+            } finally {
+              context.remove(AbstractQbeAction.PAGINATE);
+            }
+          }
+        }
+      };
+      queryComponent.addPropertyChangeListener(IPageable.PAGE,
+          paginationListener);
+    }
     return super.execute(actionHandler, context);
   }
 
@@ -373,5 +397,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       return (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
     }
     return null;
+  }
+
+  /**
+   * Sets the pagingAction.
+   * 
+   * @param pagingAction
+   *          the pagingAction to set.
+   */
+  public void setPagingAction(IAction pagingAction) {
+    this.pagingAction = pagingAction;
   }
 }

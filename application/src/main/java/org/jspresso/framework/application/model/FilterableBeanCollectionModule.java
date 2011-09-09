@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -61,6 +62,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   private Integer                       pageSize;
   private IQueryViewDescriptorFactory   queryViewDescriptorFactory;
   private IViewDescriptor               paginationViewDescriptor;
+  private BackendAction                 pagingAction;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -195,10 +197,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (filter != null) {
       filter.setPageSize(getPageSize());
       filter.setDefaultOrderingProperties(getOrderingProperties());
-    }
-    if (filter instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) filter)
-          .addPropertyChangeListener(filterComponentTracker);
+      filter.addPropertyChangeListener(filterComponentTracker);
     }
     firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER,
         oldValue, getFilter());
@@ -303,33 +302,36 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   private static class FilterComponentTracker implements PropertyChangeListener {
-    
+
     private FilterableBeanCollectionModule target;
 
-    
     /**
-     * Constructs a new <code>FilterableBeanCollectionModule.FilterComponentTracker</code> instance.
-     * @param target the target filter module.
+     * Constructs a new
+     * <code>FilterableBeanCollectionModule.FilterComponentTracker</code>
+     * instance.
      * 
+     * @param target
+     *          the target filter module.
      */
     public FilterComponentTracker(FilterableBeanCollectionModule target) {
       this.target = target;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      target.firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
-          + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+      target.firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER
+          + "." + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
       if (IPageable.DISPLAY_PAGE_INDEX.equals(evt.getPropertyName())
           || IPageable.NEXT_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.PAGE.equals(evt.getPropertyName())
           || IPageable.PAGE_COUNT.equals(evt.getPropertyName())
           || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
           || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
-          || IPageable.RECORD_COUNT.equals(evt.getPropertyName())) {
+          || IPageable.RECORD_COUNT.equals(evt.getPropertyName())
+          || IPageable.PAGE_NAVIGATION_ENABLED.equals(evt.getPropertyName())) {
         target.firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
             evt.getNewValue());
       }
@@ -348,7 +350,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public Integer getDisplayPageIndex() {
@@ -359,7 +363,21 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setDisplayPageIndex(Integer displayPageIndex) {
+    if (filter != null) {
+      filter.setDisplayPageIndex(displayPageIndex);
+    }
+  }
+
+  /**
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public Integer getPage() {
@@ -370,7 +388,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public Integer getPageCount() {
@@ -381,7 +401,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public Integer getRecordCount() {
@@ -392,7 +414,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public boolean isNextPageEnabled() {
@@ -403,7 +427,22 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isPageNavigationEnabled() {
+    if (filter != null) {
+      return filter.isPageNavigationEnabled();
+    }
+    return false;
+  }
+
+  /**
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public boolean isPreviousPageEnabled() {
@@ -414,7 +453,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public void setPage(Integer page) {
@@ -424,7 +465,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Delegates to filter. {@inheritDoc}
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public void setRecordCount(Integer recordCount) {
@@ -445,5 +488,24 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
       clone.setFilter(filter.clone());
     }
     return clone;
+  }
+
+  /**
+   * Gets the pagingAction.
+   * 
+   * @return the pagingAction.
+   */
+  public BackendAction getPagingAction() {
+    return pagingAction;
+  }
+
+  /**
+   * Sets the pagingAction.
+   * 
+   * @param pagingAction
+   *          the pagingAction to set.
+   */
+  public void setPagingAction(BackendAction pagingAction) {
+    this.pagingAction = pagingAction;
   }
 }

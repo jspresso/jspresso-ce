@@ -39,12 +39,12 @@ import org.jspresso.framework.util.collection.ESort;
 public abstract class AbstractQbeAction extends BackendAction {
 
   /**
-   * Page offset action constant.
+   * Pagination action constant.
    */
-  public static final String PAGE_OFFSET = "PAGE_OFFSET";
+  public static final String PAGINATE = "PAGINATE";
 
   private IAction            queryAction;
-  private boolean            sortOnly    = false;
+  private boolean            sortOnly = false;
 
   /**
    * {@inheritDoc}
@@ -76,9 +76,7 @@ public abstract class AbstractQbeAction extends BackendAction {
             queryPerformed(queryComponent, context);
           }
         } else {
-          Integer pageOffset = (Integer) context
-              .get(AbstractQbeAction.PAGE_OFFSET);
-          if (pageOffset == null || pageOffset.intValue() == 0) {
+          if (!context.containsKey(AbstractQbeAction.PAGINATE)) {
             // This is a plain first query.
             queryComponent.setPage(null);
             queryComponent.setRecordCount(null);
@@ -87,16 +85,6 @@ public abstract class AbstractQbeAction extends BackendAction {
                 || queryComponent.getPageSize() == null) {
               // do not navigate into pages unless a 1st query has been done or
               // pagination is disabled.
-              return false;
-            }
-            if (queryComponent.getPage() != null
-                && queryComponent.getPage().intValue() + pageOffset.intValue() >= 0
-                && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
-                    .getPageCount().intValue()) {
-              queryComponent.setPage(new Integer(queryComponent.getPage()
-                  .intValue() + pageOffset.intValue()));
-            } else {
-              // We are off limits
               return false;
             }
           }

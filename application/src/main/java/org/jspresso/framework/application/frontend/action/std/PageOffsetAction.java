@@ -23,6 +23,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.util.collection.IPageable;
 
 /**
  * This action simply augment the context with a page offset integer (
@@ -48,7 +49,14 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(AbstractQbeAction.PAGE_OFFSET, pageOffset);
+    context.put(AbstractQbeAction.PAGINATE, null);
+    IPageable pageableModel = ((IPageable) getModel(context));
+    if (pageableModel.getPage() != null) {
+      pageableModel.setPage(new Integer(pageableModel.getPage().intValue()
+          + pageOffset.intValue()));
+    } else {
+      pageableModel.setPage(pageOffset);
+    }
     return super.execute(actionHandler, context);
   }
 
