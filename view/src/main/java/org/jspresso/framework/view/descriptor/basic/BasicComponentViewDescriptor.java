@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
         propertyViewDescriptor.setName(renderedProperty);
         propertyViewDescriptor.setWidth(getPropertyWidth(renderedProperty));
         propertyViewDescriptor
-            .setRenderedChildProperties(getRenderedChildProperties(renderedProperty));
+            .setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
         propertyViewDescriptor.setModelDescriptor(componentDescriptor
             .getPropertyDescriptor(renderedProperty));
         defaultPropertyViewDescriptors.add(propertyViewDescriptor);
@@ -330,7 +331,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     return new Integer(1);
   }
 
-  private List<String> getRenderedChildProperties(String propertyName) {
+  private List<String> computeDefaultRenderedChildProperties(String propertyName) {
     List<String> childProperties = null;
     if (renderedChildProperties != null) {
       childProperties = renderedChildProperties.get(propertyName);
@@ -343,8 +344,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
             .getCollectionDescriptor()).getElementDescriptor()
             .getRenderedProperties();
       } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-        return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
-            .getReferencedDescriptor().getRenderedProperties();
+        // return the toString property
+        return Collections
+            .singletonList(((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
+                .getReferencedDescriptor().getToStringProperty());
       }
     }
     return childProperties;
