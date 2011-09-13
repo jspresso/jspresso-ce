@@ -165,6 +165,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       }
     }
 
+    // We must bind before querying for potential lazy loading to happen during
+    // the transaction.
+    IView<E> lovView = getViewFactory(context).createView(
+        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
+            okAction), actionHandler, getLocale(context));
+    IValueConnector queryEntityConnector = (IValueConnector) context
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
+    getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
+
     if (autoquery) {
       actionHandler.execute(findAction, context);
       if (queryPropertyValue != null && queryPropertyValue.length() > 0
@@ -190,15 +199,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actions.add(okAction);
     actions.add(cancelAction);
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
-    IView<E> lovView = getViewFactory(context).createView(
-        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
-            okAction), actionHandler, getLocale(context));
     context.put(ModalDialogAction.DIALOG_TITLE,
         getI18nName(getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
-    IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
-    getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     if (pagingAction != null) {
       PropertyChangeListener paginationListener = new PropertyChangeListener() {
@@ -230,8 +233,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -247,8 +251,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
