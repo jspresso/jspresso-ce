@@ -216,7 +216,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -1855,7 +1857,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IView<E> view = null;
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+    // First of all, test for Image property view before deciding based on the
+    // model.
+    if (propertyViewDescriptor instanceof IImageViewDescriptor) {
+      view = createImagePropertyView(propertyViewDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       view = createBooleanPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
@@ -1883,13 +1890,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createImagePropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      if (propertyViewDescriptor instanceof IImageViewDescriptor) {
-        view = createImagePropertyView(propertyViewDescriptor, actionHandler,
-            locale);
-      } else {
-        view = createBinaryPropertyView(propertyViewDescriptor, actionHandler,
-            locale);
-      }
+      view = createBinaryPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
       view = createColorPropertyView(propertyViewDescriptor, actionHandler,
           locale);
@@ -2953,7 +2955,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+          columnPrefs[i] = new Object[] {
+              column[0], new Integer(column[1])
+          };
         }
       }
     }
