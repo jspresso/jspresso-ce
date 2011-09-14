@@ -33,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.jspresso.framework.action.ActionContextConstants;
@@ -107,6 +108,7 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
@@ -2994,4 +2996,24 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     return userColumnViewDescriptors;
   }
+
+  /**
+   * Filters enumeration values if refined.
+   * 
+   * @param enumerationValues
+   *          the original collection to filter.
+   * @param propertyViewDescriptor
+   *          the property view descriptor for the enumeration.
+   */
+  protected void filterEnumerationValues(List<String> enumerationValues,
+      IPropertyViewDescriptor propertyViewDescriptor) {
+    if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor) {
+      Set<String> allowedValues = ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+          .getAllowedValues();
+      if (allowedValues != null && !allowedValues.isEmpty()) {
+        enumerationValues.retainAll(allowedValues);
+      }
+    }
+  }
+
 }

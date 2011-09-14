@@ -634,8 +634,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       if (isDateServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
-            propertyDescriptor.getName(),
-            formatter);
+            propertyDescriptor.getName(), formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
@@ -722,8 +721,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
-            propertyDescriptor.getName(),
-            formatter);
+            propertyDescriptor.getName(), formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
@@ -767,8 +765,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       if (isDurationServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
-            propertyDescriptor.getName(),
-            formatter);
+            propertyDescriptor.getName(), formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
@@ -819,6 +816,7 @@ public class DefaultRemoteViewFactory extends
         propertyViewDescriptor, connector);
     List<String> enumerationValues = new ArrayList<String>(
         propertyDescriptor.getEnumerationValues());
+    filterEnumerationValues(enumerationValues, propertyViewDescriptor);
     if (!propertyDescriptor.isMandatory()) {
       enumerationValues.add(0, "");
     }
@@ -1111,8 +1109,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
-            propertyDescriptor.getName(),
-            formatter);
+            propertyDescriptor.getName(), formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());

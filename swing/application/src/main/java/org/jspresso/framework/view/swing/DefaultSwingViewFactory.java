@@ -865,7 +865,11 @@ public class DefaultSwingViewFactory extends
       if (!propertyDescriptor.isMandatory()) {
         ((JComboBox) viewComponent).addItem(null);
       }
-      for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
+      List<String> enumerationValues = new ArrayList<String>(
+          propertyDescriptor.getEnumerationValues());
+      filterEnumerationValues(enumerationValues,
+          propertyViewDescriptor);
+      for (Object enumElement : enumerationValues) {
         ((JComboBox) viewComponent).addItem(enumElement);
       }
       ((JComboBox) viewComponent)
@@ -1613,9 +1617,12 @@ public class DefaultSwingViewFactory extends
       // actionHandler, locale)}, locale));
       lovAction.putValue(
           Action.SHORT_DESCRIPTION,
-          actionHandler.getTranslation("lov.element.description",
-              new Object[] {propertyDescriptor.getReferencedDescriptor()
-                  .getI18nName(actionHandler, locale)}, locale)
+          actionHandler.getTranslation(
+              "lov.element.description",
+              new Object[] {
+                propertyDescriptor.getReferencedDescriptor().getI18nName(
+                    actionHandler, locale)
+              }, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -2065,7 +2072,8 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())};
+              new Integer(columnModel.getColumn(i).getWidth())
+          };
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);
