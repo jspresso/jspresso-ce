@@ -34,6 +34,7 @@ public class BasicEnumerationPropertyViewDescriptor extends
     BasicPropertyViewDescriptor implements IEnumerationPropertyViewDescriptor {
 
   private Set<String> allowedValues;
+  private Set<String> forbiddenValues;
 
   /**
    * Configures an optional filter set of values to restrict the model ones.
@@ -55,6 +56,28 @@ public class BasicEnumerationPropertyViewDescriptor extends
   @Override
   public Set<String> getAllowedValues() {
     return allowedValues;
+  }
+
+  /**
+   * Returns an optional forbidden set of values to restrict the model ones.
+   * Only values not belonging to the forbidden ones should actually be made
+   * available as a choice.
+   * 
+   * @param forbiddenValues
+   *          an optional forbidden set of values to restrict the model ones.
+   */
+  public void setForbiddenValues(Set<String> forbiddenValues) {
+    this.forbiddenValues = forbiddenValues;
+  }
+
+  /**
+   * Gets the forbiddenValues.
+   * 
+   * @return the forbiddenValues.
+   */
+  @Override
+  public Set<String> getForbiddenValues() {
+    return forbiddenValues;
   }
 
 }

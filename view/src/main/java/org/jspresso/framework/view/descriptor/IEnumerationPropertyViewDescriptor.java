@@ -31,12 +31,21 @@ public interface IEnumerationPropertyViewDescriptor extends
     IPropertyViewDescriptor {
 
   /**
-   * Returns an optional filter set of values to restrict the model ones. Only
-   * values belonging to the filter should be actually made available as a
+   * Returns an optional allowed set of values to restrict the model ones. Only
+   * values belonging to the allowed ones should actually be made available as a
    * choice.
    * 
-   * @return an optional filter set of values to restrict the model ones.
+   * @return an optional allowed set of values to restrict the model ones.
    */
   Set<String> getAllowedValues();
+
+  /**
+   * Returns an optional forbidden set of values to restrict the model ones. Only
+   * values not belonging to the forbidden ones should actually be made available as a
+   * choice.
+   * 
+   * @return an optional forbidden set of values to restrict the model ones.
+   */
+  Set<String> getForbiddenValues();
 
 }

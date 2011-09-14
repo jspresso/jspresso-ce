@@ -3010,8 +3010,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor) {
       Set<String> allowedValues = ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
           .getAllowedValues();
+      Set<String> forbiddenValues = ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+          .getForbiddenValues();
       if (allowedValues != null && !allowedValues.isEmpty()) {
         enumerationValues.retainAll(allowedValues);
+      }
+      if (forbiddenValues != null && !forbiddenValues.isEmpty()) {
+        enumerationValues.removeAll(forbiddenValues);
       }
     }
   }
