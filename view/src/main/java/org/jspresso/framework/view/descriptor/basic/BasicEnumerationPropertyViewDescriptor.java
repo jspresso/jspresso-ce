@@ -37,9 +37,9 @@ public class BasicEnumerationPropertyViewDescriptor extends
   private Set<String> forbiddenValues;
 
   /**
-   * Configures an optional filter set of values to restrict the model ones.
-   * Only values belonging to the filter should be actually made available as a
-   * choice.
+   * Returns an optional forbidden set of values to restrict the model ones.
+   * Only values belonging to the allowed ones should actually be made
+   * available as a choice.
    * 
    * @param allowedValues
    *          the allowedValues to set.
