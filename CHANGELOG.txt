@@ -1,5 +1,31 @@
 Jspresso CE - Change Log
 
+Jspresso CE - 3.5.7 (Released 2011-07-21) [ View Issues ]
+=========================================
+- 0000383: [View] Customize available options in an enumeration (vvandens) - closed.
+- 0000384: [Backend] LOV find might lead to weird hibernate exception when lazy collections have to be loaded (vvandens) - closed.
+- 0000382: [View] References toString property is incorrectly taken when building a filter forms (vvandens) - closed.
+- 0000377: [Backend] Support for a distinct API in EnhancedDetachedCriteria (vvandens) - closed.
+- 0000374: [Frontend] Reinitialize buttons - No confirmation dialog box (vvandens) - closed.
+- 0000379: [Frontend] Allow to directly access to a certain page in a paginated result (vvandens) - closed.
+- 0000371: [View] CRUD - Sorting by clicking on columns removes the unsaved new entries (vvandens) - closed.
+- 0000373: [Model] Rendered properties inheritance (vvandens) - closed.
+- 0000378: [View] Column width are not correctly restored from prefs in Swing (vvandens) - closed.
+- 0000376: [Persistence] Uni-directional 1-N relationship is not composition by default (vvandens) - closed.
+- 0000370: [Frontend] Introduce an attribute that tells if an action can work on a collection or only a single element (vvandens) - closed.
+- 0000365: [Model] Define a sortable attribute on model property descriptors (vvandens) - closed.
+ - 0000366: [View] Define a sortable attribute on property view descriptors (vvandens) - closed.
+- 0000364: [Persistence] Allow for customization of entity id and version properties (vvandens) - closed.
+- 0000357: [View] Improve view factories extensibility (vvandens) - closed.
+- 0000362: [Frontend] Make the login model a 1st level bean (vvandens) - closed.
+- 0000361: [Backend] Reload may not reload associated entities if the relationship is not persistent (vvandens) - closed.
+- 0000360: [View] Swing contextual menus actions that are collection based are wrongly disabled (vvandens) - closed.
+- 0000359: [View] Flex table / lists selections can be abnormally long when the selection contains a lot of elements (vvandens) - closed.
+- 0000358: [View] Flex tables may fail updating when locally sorted (vvandens) - closed.
+- 0000352: [View] Turn image view into a property view so that it can be included into component views (vvandens) - closed.
+- 0000356: [Backend] Make the transactionManager a configurable singleton bean (vvandens) - closed.
+[22 issues]
+
 Jspresso CE - 3.5.6 (Released 2011-07-05) [ View Issues ]
 =========================================
 - 0000350: [Build & tools] Archetype does not create the complete directory structure, i.e. empty directories (vvandens) - closed.
