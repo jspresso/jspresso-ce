@@ -37,8 +37,6 @@ import org.jspresso.framework.model.persistence.hibernate.property.EntityPropert
  */
 public class DynamicPojoEntityTuplizer extends PojoEntityTuplizer {
 
-  private static final long serialVersionUID = 519439258744322320L;
-
   /**
    * Constructs a new <code>ProxyPojoEntityTuplizer</code> instance.
    * 
@@ -54,8 +52,8 @@ public class DynamicPojoEntityTuplizer extends PojoEntityTuplizer {
   }
 
   private void fixPropertyAccessors(PersistentClass mappedEntity) {
-    @SuppressWarnings("unchecked") Iterator<Property> properties = mappedEntity
-        .getPropertyIterator();
+    @SuppressWarnings("unchecked")
+    Iterator<Property> properties = mappedEntity.getPropertyIterator();
     while (properties.hasNext()) {
       properties.next().setPropertyAccessorName(
           EntityPropertyAccessor.class.getName());

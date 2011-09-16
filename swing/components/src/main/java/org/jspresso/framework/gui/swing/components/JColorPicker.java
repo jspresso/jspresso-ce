@@ -43,11 +43,11 @@ import javax.swing.event.EventListenerList;
  */
 public class JColorPicker extends JPanel {
 
-  private static final long     serialVersionUID = -1151212557773199513L;
+  private static final long     serialVersionUID  = -1151212557773199513L;
 
-  private transient ChangeEvent changeEvent      = null;
+  private transient ChangeEvent changeEvent       = null;
   private JButton               chooseButton;
-  private EventListenerList     listenerList     = new EventListenerList();
+  private EventListenerList     eventListenerList = new EventListenerList();
   private JButton               resetButton;
 
   private Color                 resetValue;
@@ -115,23 +115,23 @@ public class JColorPicker extends JPanel {
    * Adds a <code>ChangeListener</code> to the JColorPicker.
    * 
    * @param l
-   *            the listener to add
+   *          the listener to add
    */
   public void addChangeListener(ChangeListener l) {
-    listenerList.add(ChangeListener.class, l);
+    eventListenerList.add(ChangeListener.class, l);
   }
 
   /**
    * Returns an array of all the change listeners registered on this
    * <code>JColorPicker</code>.
    * 
-   * @return all of this model's <code>ChangeListener</code>s or an empty
-   *         array if no change listeners are currently registered
+   * @return all of this model's <code>ChangeListener</code>s or an empty array
+   *         if no change listeners are currently registered
    * @see #addChangeListener
    * @see #removeChangeListener
    */
   public ChangeListener[] getChangeListeners() {
-    return listenerList.getListeners(ChangeListener.class);
+    return eventListenerList.getListeners(ChangeListener.class);
   }
 
   /**
@@ -156,17 +156,17 @@ public class JColorPicker extends JPanel {
    * Removes a <code>ChangeListener</code> from the JColorPicker.
    * 
    * @param l
-   *            the listener to remove
+   *          the listener to remove
    */
   public void removeChangeListener(ChangeListener l) {
-    listenerList.remove(ChangeListener.class, l);
+    eventListenerList.remove(ChangeListener.class, l);
   }
 
   /**
    * Sets the resetValue.
    * 
    * @param resetValue
-   *            the resetValue to set.
+   *          the resetValue to set.
    */
   public void setResetValue(Color resetValue) {
     this.resetValue = resetValue;
@@ -176,7 +176,7 @@ public class JColorPicker extends JPanel {
    * Sets the value.
    * 
    * @param value
-   *            the value to set.
+   *          the value to set.
    */
   public void setValue(Color value) {
     this.value = value;
@@ -192,7 +192,7 @@ public class JColorPicker extends JPanel {
    */
   protected void fireStateChanged() {
     // Guaranteed to return a non-null array
-    Object[] listeners = listenerList.getListenerList();
+    Object[] listeners = eventListenerList.getListenerList();
     // Process the listeners last to first, notifying
     // those that are interested in this event
     for (int i = listeners.length - 2; i >= 0; i -= 2) {
