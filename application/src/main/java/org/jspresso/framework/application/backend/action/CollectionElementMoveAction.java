@@ -86,13 +86,18 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       for (int i = 0; i < indicesToMove.length; i++) {
         targetList.add(targetIndices[i], elementsToMove.get(i));
       }
-      IComponent masterComponent = (IComponent) collectionConnector
-          .getParentConnector().getConnectorValue();
+      Object master = collectionConnector.getParentConnector()
+          .getConnectorValue();
+      Class<?> targetContract;
+      if (master instanceof IComponent) {
+        targetContract = ((IComponent) master).getComponentContract();
+      } else {
+        targetContract = master.getClass();
+      }
       try {
-        getAccessorFactory(context)
-            .createPropertyAccessor(collectionConnector.getId(),
-                masterComponent.getComponentContract()).setValue(
-                masterComponent, targetList);
+        getAccessorFactory(context).createPropertyAccessor(
+            collectionConnector.getId(), targetContract).setValue(master,
+            targetList);
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);
       } catch (InvocationTargetException ex) {
