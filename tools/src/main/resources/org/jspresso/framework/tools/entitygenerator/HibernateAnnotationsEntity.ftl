@@ -349,12 +349,15 @@ public interface ${componentName}
       <#local reverseFkName=propertyDescriptor.reverseRelationEnd.fkName/>
     </#if>
     <#if manyToMany>
+      <#--
       <#if (compareStrings(elementName, componentName) != 0)>
         <#local inverse=(compareStrings(elementName, componentName) > 0)/>
       <#else>
-        <#-- Reflexive many to many -->
+        Reflexive many to many
         <#local inverse=(compareStrings(propertyName, reversePropertyName) > 0)/>
       </#if>
+      -->
+      <#local inverse = !propertyDescriptor.leadingPersistence/>
     <#else>
       <#if hibernateCollectionType="list">
         <#local inverse=false/>
@@ -540,12 +543,15 @@ public interface ${componentName}
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
       <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
       <#local elementName=propertyType[propertyType?last_index_of(".")+1..]/>
+      <#--
       <#if (compareStrings(elementName, componentName) != 0)>
         <#local reverseOneToOne=(compareStrings(elementName, componentName) < 0)/>
       <#else>
-        <#-- Reflexive one to one -->
+        Reflexive one to one
         <#local reverseOneToOne=(compareStrings(propertyName, reversePropertyName) < 0)/>
       </#if>
+      -->
+      <#local reverseOneToOne = !propertyDescriptor.leadingPersistence/>
     <#else>
       <#local reverseOneToOne=false/>
       <#if propertyDescriptor.reverseRelationEnd.modelType.name="java.util.List">

@@ -39,8 +39,9 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   private Boolean                            composition;
   private String                             fkName;
-  private IRelationshipEndPropertyDescriptor reverseRelationEnd;
+  private boolean                            leadingPersistence = true;
 
+  private IRelationshipEndPropertyDescriptor reverseRelationEnd;
   private IRelationshipEndPropertyDescriptor tempReverseRelationEnd;
 
   /**
@@ -168,12 +169,29 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     // We only ant to actually update reverse relation end if it is an 'actual'
     // property descriptor, e.g. not a compound one used only for the view.
     if (this.reverseRelationEnd != reverseRelationEnd) {
-      if (getName().indexOf(".") < 0 && this.reverseRelationEnd != null) {
-        this.reverseRelationEnd.setReverseRelationEnd(null);
+      if (getName().indexOf(".") < 0) {
+        if (this.reverseRelationEnd != null) {
+          this.reverseRelationEnd.setReverseRelationEnd(null);
+        }
+      }
+      if (reverseRelationEnd == null) {
+        // it is set uni-directional.
+        leadingPersistence = true;
+      } else {
+        if (reverseRelationEnd.getReverseRelationEnd() == this) {
+          // The other side is already connected to this side.
+          // We are setting the reverse as a consequence of the other side
+          // reverse setting.
+          leadingPersistence = false;
+        } else {
+          leadingPersistence = true;
+        }
       }
       this.reverseRelationEnd = reverseRelationEnd;
-      if (getName().indexOf(".") < 0 && this.reverseRelationEnd != null) {
-        this.reverseRelationEnd.setReverseRelationEnd(this);
+      if (getName().indexOf(".") < 0) {
+        if (this.reverseRelationEnd != null) {
+          this.reverseRelationEnd.setReverseRelationEnd(this);
+        }
       }
     }
   }
@@ -190,6 +208,15 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
       setReverseRelationEnd(tempReverseRelationEnd);
       tempReverseRelationEnd = null;
     }
+  }
+
+  /**
+   * Gets the leadingPersistence.
+   * 
+   * @return the leadingPersistence.
+   */
+  public boolean isLeadingPersistence() {
+    return leadingPersistence;
   }
 
   /**
