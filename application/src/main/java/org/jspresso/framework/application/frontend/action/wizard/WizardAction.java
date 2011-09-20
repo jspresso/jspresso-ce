@@ -344,6 +344,10 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
         createWizardStepActions(wizardStep, view, actionHandler,
             translationProvider, locale, modelConnector, context), title,
         getSourceComponent(context), context, dialogSize, reuseCurrent);
+    // We must update the context
+    context.putAll(getActionFactory(context).createActionContext(actionHandler,
+        view, view.getConnector(), getActionCommand(context),
+        getActionWidget(context)));
   }
 
   private Dimension getDialogSize(Map<String, Object> context) {
