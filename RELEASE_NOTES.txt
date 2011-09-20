@@ -1,6 +1,22 @@
+3.5.8
+=====
+- We have changed the way bidirectional 1-1 and n-n relationships get mapped in the DB.
+See http://www.jspresso.org/mantis/view.php?id=390.
+A bi-directional 1-1 relationship is conceptually perfectly symmetric.
+However it is mapped as a 1-n relationship (using a foreign key column) with a unique constraint
+enforced on the foreign key column. One side of the relationship has to be "elected" as the "leading" side,
+i.e. the one holding the fk. Since there was no way to tell Jspresso which one it is, the generator compares alphabetically
+the 2 table names (and the 2 property names if it is a reflexive relationship) to "elect" the leading end.
+From now on, the leading end will be the (1st) side that is explicitly assigned with a reverse property.
+This rule might imply a change on which side is assigned the "reverse" end in order to keep an existing
+schema during version migration. Note that this does not change model conceptual design at all.
+
+
+
+
 3.5.5
 =====
--Got rid of broken flexmojos wrapper plugin.
+- Got rid of broken flexmojos wrapper plugin.
 Update webapp/src/main/webapp/flex/index.html with the following values :
 ${bgcolor} => #869ca7
 ${width} => 100%
@@ -59,12 +75,6 @@ webapp pom.xml as "provided". So add the following dependency section in webapp/
       <scope>provided</scope>
     </dependency>
  
-
-3.5.4
-=====
-No change to manually perform
-
-
 
 3.5.3
 =====
