@@ -20,6 +20,7 @@ package org.jspresso.framework.application.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -142,6 +143,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (filterViewDesc == null) {
       filterViewDesc = queryViewDescriptorFactory
           .createQueryViewDescriptor(filterComponentDesc);
+    } else {
+      // Deeply clean model descriptors on filter views
+      cleanupFilterViewDescriptor(filterViewDesc);
     }
     ((BasicViewDescriptor) filterViewDesc)
         .setModelDescriptor(moduleDescriptor
@@ -172,6 +176,21 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
     return decorator;
+  }
+
+  private void cleanupFilterViewDescriptor(IViewDescriptor filterViewDesc) {
+    if (filterViewDescriptor instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(null);
+    }
+    if (filterViewDesc instanceof ICompositeViewDescriptor) {
+      List<IViewDescriptor> children = ((ICompositeViewDescriptor) filterViewDesc)
+          .getChildViewDescriptors();
+      if (children != null) {
+        for (IViewDescriptor childViewDesc : children) {
+          cleanupFilterViewDescriptor(childViewDesc);
+        }
+      }
+    }
   }
 
   /**
