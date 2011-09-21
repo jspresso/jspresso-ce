@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.ResultTransformer;
@@ -187,12 +188,19 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         ResultTransformer refinerResultTransformer = criteria
             .getResultTransformer();
 
+        List<Order> refinerOrders = criteria.getOrders();
+
         if (queryComponent.isDistinctEnforced()) {
           criteria.setProjection(Projections.distinct(Projections.id()));
           EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
               .forEntityName(queryComponent.getQueryContract().getName());
           outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
           criteria = outerCriteria;
+          if (refinerOrders != null) {
+            for (Order order : refinerOrders) {
+              criteria.addOrder(order);
+            }
+          }
         }
 
         if (pageSize != null) {

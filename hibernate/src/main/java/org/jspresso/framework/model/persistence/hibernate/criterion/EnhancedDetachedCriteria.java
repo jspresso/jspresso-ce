@@ -18,11 +18,14 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.criterion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.impl.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
@@ -40,6 +43,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   private Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
   private Projection                                           currentProjection;
   private ResultTransformer                                    currentResultTransformer;
+  private List<Order>                                          currentOrders;
 
   /**
    * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
@@ -253,6 +257,28 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    */
   public ResultTransformer getResultTransformer() {
     return currentResultTransformer;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public DetachedCriteria addOrder(Order order) {
+    DetachedCriteria returnedCrit = super.addOrder(order);
+    if (currentOrders == null) {
+      currentOrders = new ArrayList<Order>();
+      currentOrders.add(order);
+    }
+    return returnedCrit;
+  }
+  
+  /**
+   * Gets the current criteria orders.
+   * 
+   * @return the current criteria orders.
+   */
+  public List<Order> getOrders() {
+    return currentOrders;
   }
 
   private DetachedCriteria getRegisteredSubCriteria(
