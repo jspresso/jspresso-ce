@@ -99,9 +99,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
     IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
         .getComponentDescriptor();
-    if (propertyViewDescriptors == null) {
+    List<IPropertyViewDescriptor> declaredPropertyViewDescriptors = propertyViewDescriptors;
+    if (declaredPropertyViewDescriptors == null) {
       List<String> viewRenderedProperties = getRenderedProperties();
-      List<IPropertyViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      declaredPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
         propertyViewDescriptor.setName(renderedProperty);
@@ -110,12 +111,11 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
             .setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
         propertyViewDescriptor.setModelDescriptor(componentDescriptor
             .getPropertyDescriptor(renderedProperty));
-        defaultPropertyViewDescriptors.add(propertyViewDescriptor);
+        declaredPropertyViewDescriptors.add(propertyViewDescriptor);
       }
-      return defaultPropertyViewDescriptors;
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
-    for (IPropertyViewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
+    for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
       List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
           .explodeComponentReferences(propertyViewDescriptor,
               (IComponentDescriptorProvider<?>) getModelDescriptor());
