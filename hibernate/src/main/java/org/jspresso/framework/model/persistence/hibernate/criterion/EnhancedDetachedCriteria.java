@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.criterion;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -271,14 +272,43 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     }
     return returnedCrit;
   }
-  
+
   /**
    * Gets the current criteria orders.
    * 
    * @return the current criteria orders.
    */
   public List<Order> getOrders() {
-    return currentOrders;
+    return new ArrayList<Order>(currentOrders);
+  }
+
+  /**
+   * Removes an order by clause.
+   */
+  public void removeAllOrders() {
+    try {
+      List<Order> orders = privateGetOrders();
+      orders.removeAll(orders);
+      currentOrders = null;
+    } catch (Throwable ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private List<Order> privateGetOrders() throws IllegalAccessException,
+      NoSuchFieldException {
+
+    Field implField = DetachedCriteria.class.getDeclaredField("impl");
+    implField.setAccessible(true);
+    CriteriaImpl critImpl = (CriteriaImpl) implField.get(this);
+
+    Field orderEntriesField = CriteriaImpl.class
+        .getDeclaredField("orderEntries");
+    orderEntriesField.setAccessible(true);
+    List<Order> orders = (List<Order>) orderEntriesField.get(critImpl);
+
+    return orders;
   }
 
   private DetachedCriteria getRegisteredSubCriteria(

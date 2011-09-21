@@ -31,6 +31,7 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
@@ -185,22 +186,21 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         Integer totalCount = null;
         Integer pageSize = queryComponent.getPageSize();
         Integer page = queryComponent.getPage();
+
         ResultTransformer refinerResultTransformer = criteria
             .getResultTransformer();
-
         List<Order> refinerOrders = criteria.getOrders();
 
+        ((QueryComponent) queryComponent).setDistinctEnforced(true);
         if (queryComponent.isDistinctEnforced()) {
           criteria.setProjection(Projections.distinct(Projections.id()));
+          if (refinerOrders != null) {
+            criteria.removeAllOrders();
+          }
           EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
               .forEntityName(queryComponent.getQueryContract().getName());
           outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
           criteria = outerCriteria;
-          if (refinerOrders != null) {
-            for (Order order : refinerOrders) {
-              criteria.addOrder(order);
-            }
-          }
         }
 
         if (pageSize != null) {
@@ -213,6 +213,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             totalCount = new Integer(((Number) hibernateTemplate
                 .findByCriteria(criteria).get(0)).intValue());
           }
+          if (refinerOrders != null) {
+            for (Order order : refinerOrders) {
+              criteria.addOrder(order);
+            }
+          }
           critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
           if (refinerResultTransformer != null) {
             criteria.setResultTransformer(refinerResultTransformer);
@@ -220,6 +225,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           entities = hibernateTemplate.findByCriteria(criteria, page.intValue()
               * pageSize.intValue(), pageSize.intValue());
         } else {
+          if (refinerOrders != null) {
+            for (Order order : refinerOrders) {
+              criteria.addOrder(order);
+            }
+          }
           critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
           if (refinerResultTransformer != null) {
             criteria.setResultTransformer(refinerResultTransformer);
