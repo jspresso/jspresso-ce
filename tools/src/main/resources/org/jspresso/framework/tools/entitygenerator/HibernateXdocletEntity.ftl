@@ -80,9 +80,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#else> {
 </#if>
   <#if isEntity && !superEntity?exists>
-
     <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("id")/>
-
     <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("version")/>
   </#if>
 
@@ -102,6 +100,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} to set.
    */
   void set${propertyName?cap_first}(${propertyType} ${propertyName});
+
 </#macro>
 
 <#macro generateScalarGetter componentDescriptor propertyDescriptor>
@@ -197,6 +196,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#else>
   ${propertyType} get${propertyName?cap_first}();
   </#if>
+
 </#macro>
 
 <#macro generateCollectionSetter componentDescriptor propertyDescriptor>
@@ -210,6 +210,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} to set.
    */
   void set${propertyName?cap_first}(${collectionType}<${elementType}> ${propertyName});
+
 </#macro>
 
 <#macro generateCollectionAdder componentDescriptor propertyDescriptor>
@@ -235,6 +236,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    */
   void addTo${propertyName?cap_first}(int index, ${elementType} ${propertyName}Element);
   </#if>
+
 </#macro>
 
 <#macro generateCollectionRemer componentDescriptor propertyDescriptor>
@@ -247,6 +249,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} element to remove.
    */
   void removeFrom${propertyName?cap_first}(${elementType} ${propertyName}Element);
+
 </#macro>
 
 <#macro generateCollectionGetter componentDescriptor propertyDescriptor>
@@ -446,6 +449,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   @org.jspresso.framework.util.bean.ElementClass(${elementType}.class)
   </#if>
   ${collectionType}<${elementType}> get${propertyName?cap_first}();
+
 </#macro>
 
 <#macro generateEntityRefSetter componentDescriptor propertyDescriptor>
@@ -458,6 +462,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} to set.
    */
   void set${propertyName?cap_first}(${propertyType} ${propertyName});
+  
 </#macro>
 
 <#macro generateComponentRefGetter componentDescriptor propertyDescriptor>
@@ -594,6 +599,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @return the ${propertyName}.
    */
   ${propertyType} get${propertyName?cap_first}();
+  
 </#macro>
 
 <#macro generatePropertyNameConstant propertyDescriptor>
@@ -602,43 +608,51 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * Constant value for ${propertyName}.
    */
   String ${generateSQLName(propertyName)} = "${propertyName}";
+
+</#macro>
+
+<#macro generateEnumerationConstants propertyDescriptor>
+  <#local propertyName=propertyDescriptor.name/>
+  <#local enumerationName=propertyDescriptor.enumerationName/>
+  <#list propertyDescriptor.enumerationValues as enumerationValue>
+  /**
+   * Constant enumeration values for ${propertyName}.
+   */
+  String ${generateSQLName(propertyName + "_" + enumerationValue)} = "${enumerationValue}";
+
+  </#list>
 </#macro>
 
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
   <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
-
   <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
   <#if propertyDescriptor.modifiable>
     <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
     <@generateCollectionAdder componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
     <@generateCollectionRemer componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
   </#if>
+
 </#macro>
 
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
   <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
-
   <@generateComponentRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
   <#if propertyDescriptor.modifiable>
     <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
   </#if>
+
 </#macro>
 
 <#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
   <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
-
+  <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor")>
+    <@generateEnumerationConstants propertyDescriptor=propertyDescriptor/>
+  </#if>
   <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
   <#if propertyDescriptor.modifiable>
     <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-
   </#if>
+
 </#macro>
 
 <#macro generatePropertyAccessors componentDescriptor propertyDescriptor>
@@ -649,6 +663,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#else>
     <@generateScalarPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
   </#if>
+
 </#macro>
 <@generateClassHeader componentDescriptor=componentDescriptor/>
 <#if componentDescriptor.declaredPropertyDescriptors?exists>
