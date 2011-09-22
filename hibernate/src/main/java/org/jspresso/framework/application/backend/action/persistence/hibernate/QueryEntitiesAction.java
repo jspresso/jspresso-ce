@@ -191,7 +191,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             .getResultTransformer();
         List<Order> refinerOrders = criteria.getOrders();
 
-        ((QueryComponent) queryComponent).setDistinctEnforced(true);
         if (queryComponent.isDistinctEnforced()) {
           criteria.setProjection(Projections.distinct(Projections.id()));
           if (refinerOrders != null) {

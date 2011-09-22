@@ -279,6 +279,9 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * @return the current criteria orders.
    */
   public List<Order> getOrders() {
+    if (currentOrders == null) {
+      return null;
+    }
     return new ArrayList<Order>(currentOrders);
   }
 
