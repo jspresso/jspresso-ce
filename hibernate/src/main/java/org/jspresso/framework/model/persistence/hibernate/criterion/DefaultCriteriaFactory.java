@@ -232,12 +232,19 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                 } else {
                   // the joined component is an entity so we must use
                   // nested criteria.
-                  DetachedCriteria joinCriteria = rootCriteria
-                      .getSubCriteriaFor(currentCriteria, prefixedProperty,
-                          CriteriaSpecification.INNER_JOIN);
-                  abort = abort
-                      || completeCriteria(rootCriteria, joinCriteria, null,
-                          joinedComponent);
+                  // unless the only nested criteria is a null value.
+                  if (joinedComponent.size() == 1
+                      && IQueryComponent.NULL_VAL.equals(joinedComponent
+                          .values().iterator().next())) {
+                    currentCriteria.add(Restrictions.isNull(prefixedProperty));
+                  } else {
+                    DetachedCriteria joinCriteria = rootCriteria
+                        .getSubCriteriaFor(currentCriteria, prefixedProperty,
+                            CriteriaSpecification.INNER_JOIN);
+                    abort = abort
+                        || completeCriteria(rootCriteria, joinCriteria, null,
+                            joinedComponent);
+                  }
                 }
               }
             }
