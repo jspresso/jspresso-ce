@@ -39,7 +39,9 @@ public class GenerateSqlName implements TemplateMethodModel {
 
   private static final Formatter       DEFAULT_FORMATTER;
   private static final KeyWordProvider DEFAULT_KEY_WORD_PROVIDER;
-  private static final String          WORD_SEP = "_";
+  private static final String          WORD_SEP        = "_";
+  private static final String          FORBIDDEN_CHARS = ",\';.:{([|!&\"#'^@)]=}'";
+
   static {
     DEFAULT_FORMATTER = new Formatter() {
 
@@ -51,7 +53,11 @@ public class GenerateSqlName implements TemplateMethodModel {
               && Character.isUpperCase(name.charAt(i))) {
             result.append(WORD_SEP);
           }
-          result.append(Character.toUpperCase(name.charAt(i)));
+          if (FORBIDDEN_CHARS.indexOf(name.charAt(i)) >= 0) {
+            result.append(WORD_SEP);
+          } else {
+            result.append(Character.toUpperCase(name.charAt(i)));
+          }
         }
         return result.toString();
       }
@@ -61,10 +67,8 @@ public class GenerateSqlName implements TemplateMethodModel {
 
       @Override
       public List<String> run() {
-        return Arrays.asList(new String[] {
-      "BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
-      "DAY", "MONTH", "YEAR", "FROM", "TO"
-        });
+        return Arrays.asList(new String[] {"BEGIN", "END", "GROUP", "FUNCTION",
+      "ACTION", "ARRAY", "DATE", "DATA", "DAY", "MONTH", "YEAR", "FROM", "TO"});
       }
     };
   }
@@ -86,8 +90,8 @@ public class GenerateSqlName implements TemplateMethodModel {
    * {@inheritDoc}
    */
   @Override
-  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
-      throws TemplateModelException {
+  public TemplateModel exec(@SuppressWarnings("rawtypes")
+  List arguments) throws TemplateModelException {
 
     String sqlColumnName = formatter.run(arguments.get(0).toString());
     if (isReserved(sqlColumnName)) {
