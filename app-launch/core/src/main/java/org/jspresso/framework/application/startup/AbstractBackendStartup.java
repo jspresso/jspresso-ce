@@ -29,6 +29,8 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.security.UserPrincipal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract class for application startup including only the backend layer. This
@@ -39,9 +41,12 @@ import org.jspresso.framework.security.UserPrincipal;
  */
 public abstract class AbstractBackendStartup extends AbstractStartup {
 
-  private IBackendController backendController;
-  private Locale             startupLocale;
-  private TimeZone           clientTimeZone;
+  private IBackendController  backendController;
+  private Locale              startupLocale;
+  private TimeZone            clientTimeZone;
+
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(AbstractBackendStartup.class);
 
   /**
    * Gets the application backend controller.
@@ -56,8 +61,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
       }
       return backendController;
     } catch (RuntimeException ex) {
-      getLogger().error("applicationBackController could not be instanciated.",
-          ex);
+      LOG.error("applicationBackController could not be instanciated.", ex);
       throw ex;
     }
   }

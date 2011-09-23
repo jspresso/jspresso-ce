@@ -36,12 +36,10 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  */
 public abstract class AbstractStartup implements IStartup {
 
-  private BeanFactory applicationContext;
+  private BeanFactory         applicationContext;
 
-  /**
-   * Logger, available to subclasses.
-   */
-  private final Logger   logger = LoggerFactory.getLogger(getClass());
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(AbstractStartup.class);
 
   /**
    * Gets the applicationContext.
@@ -59,11 +57,8 @@ public abstract class AbstractStartup implements IStartup {
       }
       return applicationContext;
     } catch (RuntimeException ex) {
-      if (getLogger().isErrorEnabled()) {
-        getLogger().error(
-            getApplicationContextKey() + " context could not be instanciated.",
-            ex);
-      }
+      LOG.error("{} context could not be instanciated.",
+          getApplicationContextKey(), ex);
       throw ex;
     }
   }
@@ -85,15 +80,6 @@ public abstract class AbstractStartup implements IStartup {
    * @return the used application context key.
    */
   protected abstract String getApplicationContextKey();
-
-  /**
-   * Gets the logger.
-   * 
-   * @return the logger.
-   */
-  protected Logger getLogger() {
-    return logger;
-  }
 
   /**
    * Gets the startup locale.

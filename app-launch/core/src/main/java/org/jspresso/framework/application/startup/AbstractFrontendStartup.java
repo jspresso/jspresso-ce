@@ -20,6 +20,8 @@ package org.jspresso.framework.application.startup;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract class for application startup including all layers.
@@ -37,6 +39,9 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
 
   private IBackendController           backendController;
   private IFrontendController<E, F, G> frontendController;
+
+  private static final Logger          LOG = LoggerFactory
+                                               .getLogger(AbstractFrontendStartup.class);
 
   /**
    * Both front and back controllers are retrieved from the spring context,
@@ -66,8 +71,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
       }
       return backendController;
     } catch (RuntimeException ex) {
-      getLogger().error("applicationBackController could not be instanciated.",
-          ex);
+      LOG.error("applicationBackController could not be instanciated.", ex);
       throw ex;
     }
 
@@ -87,8 +91,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
       }
       return frontendController;
     } catch (RuntimeException ex) {
-      getLogger().error(
-          "applicationFrontController could not be instanciated.", ex);
+      LOG.error("applicationFrontController could not be instanciated.", ex);
       throw ex;
     }
   }
