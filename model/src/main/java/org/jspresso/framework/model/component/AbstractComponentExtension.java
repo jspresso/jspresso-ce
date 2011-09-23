@@ -91,21 +91,24 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(
       IPropertyChangeCapable sourceBean, String sourceProperty,
-      final String forwardedProperty) {
+      final String... forwardedProperty) {
     sourceBean.addPropertyChangeListener(sourceProperty,
         new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {
               try {
-                Object newValue = getComponentFactory().getAccessorFactory()
-                    .createPropertyAccessor(forwardedProperty,
-                        getComponent().getComponentContract()).getValue(
-                        getComponent());
-                getComponent().firePropertyChange(forwardedProperty,
-                    new Object(), newValue);
+                for (String prop : forwardedProperty) {
+                  Object newValue = getComponentFactory()
+                      .getAccessorFactory()
+                      .createPropertyAccessor(prop,
+                          getComponent().getComponentContract())
+                      .getValue(getComponent());
+                  getComponent().firePropertyChange(prop, new Object(),
+                      newValue);
+                }
               } catch (IllegalAccessException ex) {
                 throw new NestedRuntimeException(ex);
               } catch (InvocationTargetException ex) {
