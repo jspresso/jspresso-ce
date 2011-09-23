@@ -56,9 +56,12 @@
     <property name="triStateBooleanSupported" ref="triStateBooleanSupported" />
   </bean>
 
+  <bean id="applicationCriteriaRefiner" class="org.jspresso.framework.application.backend.action.persistence.hibernate.MockCriteriaRefiner" />
+
   <bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction">
     <property name="criteriaFactory" ref="criteriaFactory" />
+    <property name="criteriaRefiner" ref="applicationCriteriaRefiner"/>
   </bean>
 
   <bean id="removeCollectionFromMasterBackAction" parent="abstractHibernateBackAction"
