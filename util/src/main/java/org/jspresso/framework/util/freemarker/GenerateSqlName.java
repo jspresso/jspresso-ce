@@ -39,8 +39,7 @@ public class GenerateSqlName implements TemplateMethodModel {
 
   private static final Formatter       DEFAULT_FORMATTER;
   private static final KeyWordProvider DEFAULT_KEY_WORD_PROVIDER;
-  private static final String          WORD_SEP        = "_";
-  private static final String          FORBIDDEN_CHARS = ",\';.:{([|!&\"#'^@)]=}'";
+  private static final String          WORD_SEP = "_";
 
   static {
     DEFAULT_FORMATTER = new Formatter() {
@@ -53,10 +52,11 @@ public class GenerateSqlName implements TemplateMethodModel {
               && Character.isUpperCase(name.charAt(i))) {
             result.append(WORD_SEP);
           }
-          if (FORBIDDEN_CHARS.indexOf(name.charAt(i)) >= 0) {
-            result.append(WORD_SEP);
-          } else {
+          if ((i == 0 && Character.isJavaIdentifierStart(name.charAt(i)))
+              || (i > 0 && Character.isJavaIdentifierPart(name.charAt(i)))) {
             result.append(Character.toUpperCase(name.charAt(i)));
+          } else {
+            result.append(WORD_SEP);
           }
         }
         return result.toString();

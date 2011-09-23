@@ -708,7 +708,7 @@ public interface ${componentName}
   <#local enumerationName=propertyDescriptor.enumerationName/>
   <#list propertyDescriptor.enumerationValues as enumerationValue>
   /**
-   * Constant enumeration values for ${propertyName}.
+   * Constant enumeration value for ${propertyName} : ${enumerationValue}.
    */
   String ${generateSQLName(propertyName + "_" + enumerationValue)} = "${enumerationValue}";
 

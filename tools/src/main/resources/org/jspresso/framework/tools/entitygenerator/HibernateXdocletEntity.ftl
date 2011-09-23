@@ -616,7 +616,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local enumerationName=propertyDescriptor.enumerationName/>
   <#list propertyDescriptor.enumerationValues as enumerationValue>
   /**
-   * Constant enumeration values for ${propertyName}.
+   * Constant enumeration value for ${propertyName} : ${enumerationValue}.
    */
   String ${generateSQLName(propertyName + "_" + enumerationValue)} = "${enumerationValue}";
 
