@@ -175,6 +175,11 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public IValueConnector getChildConnector(String connectorKey) {
+    int lastDotIndex = connectorKey.lastIndexOf('.');
+    if (lastDotIndex > 0) {
+      String lastNestedConnectorKey = connectorKey.substring(lastDotIndex + 1);
+      return childConnectors.get(lastNestedConnectorKey);
+    }
     return childConnectors.get(connectorKey);
   }
 
