@@ -533,6 +533,8 @@ public class DefaultRemoteViewFactory extends
       }
       IView<RComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
+      propertyView.setParent(view);
+
       boolean forbidden = !actionHandler
           .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
@@ -1751,6 +1753,7 @@ public class DefaultRemoteViewFactory extends
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IView<RComponent> column = createView(columnViewDescriptor,
             actionHandler, locale);
+        column.setParent(view);
         // Do not use standard createColumnConnector method to preserve
         // formatted value connectors.
         // IValueConnector columnConnector = createColumnConnector(columnId,

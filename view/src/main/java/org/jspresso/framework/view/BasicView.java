@@ -31,10 +31,10 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicView<E> implements IView<E> {
 
-  private IValueConnector   connector;
-  private IViewDescriptor   descriptor;
-  private ICompositeView<E> parent;
-  private E                 peer;
+  private IValueConnector connector;
+  private IViewDescriptor descriptor;
+  private IView<E>        parent;
+  private E               peer;
 
   /**
    * Constructs a new <code>BasicView</code> instance.
@@ -72,7 +72,7 @@ public class BasicView<E> implements IView<E> {
    * @return the parent.
    */
   @Override
-  public ICompositeView<E> getParent() {
+  public IView<E> getParent() {
     return parent;
   }
 
@@ -124,7 +124,7 @@ public class BasicView<E> implements IView<E> {
    *          the parent to set.
    */
   @Override
-  public void setParent(ICompositeView<E> parent) {
+  public void setParent(IView<E> parent) {
     this.parent = parent;
   }
 

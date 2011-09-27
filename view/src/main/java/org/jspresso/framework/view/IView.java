@@ -52,7 +52,7 @@ public interface IView<E> extends IViewProvider<E> {
    * 
    * @return the parent view or null if it's a root view.
    */
-  ICompositeView<E> getParent();
+  IView<E> getParent();
 
   /**
    * Gets the view peer of this view.
@@ -76,7 +76,7 @@ public interface IView<E> extends IViewProvider<E> {
    * @param parent
    *          the parent view or null if it's a root view.
    */
-  void setParent(ICompositeView<E> parent);
+  void setParent(IView<E> parent);
 
   /**
    * Sets the view peer of this view.

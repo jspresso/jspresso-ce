@@ -530,6 +530,8 @@ public class DefaultSwingViewFactory extends
       }
       IView<JComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
+      propertyView.setParent(view);
+      
       boolean forbidden = !actionHandler
           .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
@@ -1902,6 +1904,7 @@ public class DefaultSwingViewFactory extends
 
         IView<JComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
+        editorView.setParent(view);
         editorView.getConnector().resetReadabilityGates();
         editorView.getConnector().resetWritabilityGates();
         if (editorView.getConnector().getParentConnector() == null) {
