@@ -91,13 +91,31 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(
       IPropertyChangeCapable sourceBean, String sourceProperty,
+      String forwardedProperty) {
+    registerNotificationForwarding(sourceBean, sourceProperty, new String[] {
+      forwardedProperty
+    });
+  }
+
+  /**
+   * Registers a property change listener to forward property changes.
+   * 
+   * @param sourceBean
+   *          the source bean.
+   * @param sourceProperty
+   *          the name of the source property.
+   * @param forwardedProperty
+   *          the name of the forwarded property.
+   */
+  protected void registerNotificationForwarding(
+      IPropertyChangeCapable sourceBean, String sourceProperty,
       final String... forwardedProperty) {
     sourceBean.addPropertyChangeListener(sourceProperty,
         new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {
               try {
                 for (String prop : forwardedProperty) {
