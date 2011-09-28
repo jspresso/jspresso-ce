@@ -154,24 +154,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
 
-    IViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
+    BasicCollectionViewDescriptor moduleObjectsView = extractMainCollectionView(getProjectedViewDescriptor());
     if (getPageSize() != null && getPageSize().intValue() >= 0) {
-      BasicCollectionViewDescriptor pageableView = null;
-      if (moduleObjectsView instanceof BasicCollectionViewDescriptor) {
-        pageableView = (BasicCollectionViewDescriptor) moduleObjectsView;
-      } else if (moduleObjectsView instanceof ICompositeViewDescriptor
-          && ((ICompositeViewDescriptor) moduleObjectsView)
-              .getChildViewDescriptors() != null
-          && ((ICompositeViewDescriptor) moduleObjectsView)
-              .getChildViewDescriptors().size() > 0
-          && ((ICompositeViewDescriptor) moduleObjectsView)
-              .getChildViewDescriptors().get(0) instanceof BasicCollectionViewDescriptor) {
-        pageableView = (BasicCollectionViewDescriptor) ((ICompositeViewDescriptor) moduleObjectsView)
-            .getChildViewDescriptors().get(0);
-      }
-      if (pageableView != null
-          && pageableView.getPaginationViewDescriptor() == null) {
-        pageableView.setPaginationViewDescriptor(paginationViewDescriptor);
+      if (moduleObjectsView != null
+          && moduleObjectsView.getPaginationViewDescriptor() == null) {
+        moduleObjectsView.setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());

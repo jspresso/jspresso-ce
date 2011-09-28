@@ -22,6 +22,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -198,15 +199,18 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     IModelDescriptor actualModelDescriptor = null;
     if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
       actualModelDescriptor = modelDescriptor;
-      // } else if (modelDescriptor instanceof IComponentDescriptor<?>) {
-      // actualModelDescriptor = new BasicSetDescriptor<Object>();
-      // ((BasicCollectionDescriptor<Object>) actualModelDescriptor)
-      // .setElementDescriptor((IComponentDescriptor<Object>) modelDescriptor);
+    } else if (modelDescriptor instanceof IComponentDescriptor<?>) {
+      actualModelDescriptor = new BasicListDescriptor<Object>();
+      ((BasicListDescriptor<Object>) actualModelDescriptor)
+          .setElementDescriptor((IComponentDescriptor<Object>) modelDescriptor);
+      ((BasicListDescriptor<Object>) actualModelDescriptor)
+          .setName("ROOT_COLLECTION");
     }
     super.setModelDescriptor(actualModelDescriptor);
   }

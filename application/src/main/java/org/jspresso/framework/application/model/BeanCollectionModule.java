@@ -27,8 +27,10 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -168,27 +170,40 @@ public class BeanCollectionModule extends Module {
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
-    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+    IViewDescriptor moduleObjectsView = extractMainCollectionView(getProjectedViewDescriptor());
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) projectedViewDescriptor)
+    ((BasicViewDescriptor) moduleObjectsView)
         .setModelDescriptor(moduleDescriptor
             .getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
     BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
-    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+    moduleViewDescriptor.setCenterViewDescriptor(moduleObjectsView);
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 
-    // TEST
-    // BasicListViewDescriptor subModulesListViewDescriptor = new
-    // BasicListViewDescriptor();
-    // subModulesListViewDescriptor.setRenderedProperty("name");
-    // subModulesListViewDescriptor.setModelDescriptor(moduleDescriptor
-    // .getPropertyDescriptor(Module.SUB_MODULES));
-    // subModulesListViewDescriptor.setPreferredWidth(new Integer(300));
-    // subModulesListViewDescriptor.setPreferredHeight(new Integer(300));
-    // moduleViewDescriptor.setEastViewDescriptor(subModulesListViewDescriptor);
-    // TEST
-
     return moduleViewDescriptor;
+  }
+
+  /**
+   * Dig the view descriptor to extract the main collection view.
+   * 
+   * @param viewDescriptor
+   *          the module projected view descriptor.
+   * @return the main collection view descriptor.
+   */
+  protected BasicCollectionViewDescriptor extractMainCollectionView(
+      IViewDescriptor viewDescriptor) {
+    BasicCollectionViewDescriptor mainCollectionView = null;
+    if (viewDescriptor instanceof BasicCollectionViewDescriptor) {
+      mainCollectionView = (BasicCollectionViewDescriptor) viewDescriptor;
+    } else if (viewDescriptor instanceof ICompositeViewDescriptor
+        && ((ICompositeViewDescriptor) viewDescriptor)
+            .getChildViewDescriptors() != null) {
+      for (int i = 0; mainCollectionView == null && i < ((ICompositeViewDescriptor) viewDescriptor)
+          .getChildViewDescriptors().size(); i++) {
+        mainCollectionView = extractMainCollectionView(((ICompositeViewDescriptor) viewDescriptor)
+            .getChildViewDescriptors().get(i));
+      }
+    }
+    return mainCollectionView;
   }
 
   /**
