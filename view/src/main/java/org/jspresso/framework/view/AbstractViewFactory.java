@@ -83,6 +83,7 @@ import org.jspresso.framework.model.descriptor.ITimeAwarePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
@@ -218,9 +219,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -1141,12 +1140,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (!(gate instanceof ISecurable)
             || actionHandler.isAccessGranted((ISecurable) gate)) {
           IGate clonedGate = gate.clone();
-          if (clonedGate instanceof IActionHandlerAware) {
-            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
-          }
-          if (clonedGate instanceof ISubjectAware) {
-            ((ISubjectAware) clonedGate).setSubject(actionHandler.getSubject());
-          }
+          applyGateDependencyInjection(clonedGate, actionHandler);
           columnConnector.addReadabilityGate(clonedGate);
         }
       }
@@ -1156,14 +1150,33 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (!(gate instanceof ISecurable)
             || actionHandler.isAccessGranted((ISecurable) gate)) {
           IGate clonedGate = gate.clone();
-          if (clonedGate instanceof IActionHandlerAware) {
-            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
-          }
+          applyGateDependencyInjection(clonedGate, actionHandler);
           columnConnector.addWritabilityGate(clonedGate);
         }
       }
     }
     return columnConnector;
+  }
+
+  /**
+   * Performs dependency injection on a gate.
+   * 
+   * @param gate
+   *          the gate.
+   * @param actionHandler
+   *          the action handler.
+   */
+  protected void applyGateDependencyInjection(IGate gate,
+      IActionHandler actionHandler) {
+    if (gate instanceof ISecurityHandlerAware) {
+      ((ISecurityHandlerAware) gate).setSecurityHandler(actionHandler);
+    }
+    if (gate instanceof IActionHandlerAware) {
+      ((IActionHandlerAware) gate).setActionHandler(actionHandler);
+    }
+    if (gate instanceof ISubjectAware) {
+      ((ISubjectAware) gate).setSubject(actionHandler.getSubject());
+    }
   }
 
   /**
@@ -2957,9 +2970,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
-          };
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
         }
       }
     }

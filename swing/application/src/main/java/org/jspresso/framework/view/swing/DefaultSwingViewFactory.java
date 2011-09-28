@@ -97,6 +97,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.view.ControllerAwareViewFactory;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -167,7 +168,6 @@ import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.url.UrlHelper;
-import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
@@ -212,7 +212,7 @@ import chrriis.dj.swingsuite.LinkListener;
  * @author Vincent Vandenschrick
  */
 public class DefaultSwingViewFactory extends
-    AbstractViewFactory<JComponent, Icon, Action> {
+    ControllerAwareViewFactory<JComponent, Icon, Action> {
 
   private static final Dimension    TREE_PREFERRED_SIZE = new Dimension(128,
                                                             128);
@@ -363,7 +363,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createBooleanPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JComponent viewComponent;
@@ -475,7 +476,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createColorPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JColorPicker viewComponent = createJColorPicker(propertyViewDescriptor);
@@ -869,8 +871,7 @@ public class DefaultSwingViewFactory extends
       }
       List<String> enumerationValues = new ArrayList<String>(
           propertyDescriptor.getEnumerationValues());
-      filterEnumerationValues(enumerationValues,
-          propertyViewDescriptor);
+      filterEnumerationValues(enumerationValues, propertyViewDescriptor);
       for (Object enumElement : enumerationValues) {
         ((JComboBox) viewComponent).addItem(enumElement);
       }
@@ -966,7 +967,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createImagePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     JLabel imageLabel = createJLabel(propertyViewDescriptor, false);
     JImageConnector connector = new JImageConnector(propertyViewDescriptor
         .getModelDescriptor().getName(), imageLabel);
@@ -1490,7 +1492,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createPasswordPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JPasswordField viewComponent = createJPasswordField(propertyViewDescriptor);
@@ -1619,12 +1622,9 @@ public class DefaultSwingViewFactory extends
       // actionHandler, locale)}, locale));
       lovAction.putValue(
           Action.SHORT_DESCRIPTION,
-          actionHandler.getTranslation(
-              "lov.element.description",
-              new Object[] {
-                propertyDescriptor.getReferencedDescriptor().getI18nName(
-                    actionHandler, locale)
-              }, locale)
+          actionHandler.getTranslation("lov.element.description",
+              new Object[] {propertyDescriptor.getReferencedDescriptor()
+                  .getI18nName(actionHandler, locale)}, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1663,7 +1663,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createSourceCodePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ISourceCodePropertyDescriptor propertyDescriptor = (ISourceCodePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JEditTextArea viewComponent = createJEditTextArea(propertyViewDescriptor,
@@ -1720,7 +1721,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createStringPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JComponent viewComponent;
@@ -2048,23 +2050,26 @@ public class DefaultSwingViewFactory extends
     }
 
     @Override
-    public void columnRemoved(
-        @SuppressWarnings("unused") TableColumnModelEvent e) {
+    public void columnRemoved(@SuppressWarnings("unused")
+    TableColumnModelEvent e) {
       // NO-OP.
     }
 
     @Override
-    public void columnMoved(@SuppressWarnings("unused") TableColumnModelEvent e) {
+    public void columnMoved(@SuppressWarnings("unused")
+    TableColumnModelEvent e) {
       columnsChanged = true;
     }
 
     @Override
-    public void columnMarginChanged(@SuppressWarnings("unused") ChangeEvent e) {
+    public void columnMarginChanged(@SuppressWarnings("unused")
+    ChangeEvent e) {
       columnsChanged = true;
     }
 
     @Override
-    public void columnAdded(@SuppressWarnings("unused") TableColumnModelEvent e) {
+    public void columnAdded(@SuppressWarnings("unused")
+    TableColumnModelEvent e) {
       // NO-OP.
     }
 
@@ -2075,8 +2080,7 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())
-          };
+              new Integer(columnModel.getColumn(i).getWidth())};
           columnPrefs[i] = columnPref;
         }
         storeTablePreferences(tableId, columnPrefs, actionHandler);
@@ -2183,7 +2187,8 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createTextPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector;
@@ -2258,8 +2263,8 @@ public class DefaultSwingViewFactory extends
       viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
 
         @Override
-        public void treeNodesChanged(
-            @SuppressWarnings("unused") TreeModelEvent e) {
+        public void treeNodesChanged(@SuppressWarnings("unused")
+        TreeModelEvent e) {
           // NO-OP.
         }
 
@@ -2269,8 +2274,8 @@ public class DefaultSwingViewFactory extends
         }
 
         @Override
-        public void treeNodesRemoved(
-            @SuppressWarnings("unused") TreeModelEvent e) {
+        public void treeNodesRemoved(@SuppressWarnings("unused")
+        TreeModelEvent e) {
           // NO-OP.
         }
 
@@ -2584,14 +2589,18 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createBooleanTableCellRenderer(
-      @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IBooleanPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return new BooleanTableCellRenderer();
   }
 
   private TableCellRenderer createCollectionTableCellRenderer(
-      @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return null;
   }
 
@@ -2601,8 +2610,9 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createColorTableCellRenderer(
-      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
     return new ColorTableCellRenderer();
   }
 
@@ -2765,8 +2775,10 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createReferenceTableCellRenderer(
-      @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return null;
   }
 
@@ -2793,8 +2805,8 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createStringTableCellRenderer(
-      IStringPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      IStringPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
       return new FormattedTableCellRenderer(new PasswordFormatter());
     } else if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
@@ -3265,7 +3277,8 @@ public class DefaultSwingViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    protected void setValue(@SuppressWarnings("unused") Object value) {
+    protected void setValue(@SuppressWarnings("unused")
+    Object value) {
       // No string rendering
     }
   }

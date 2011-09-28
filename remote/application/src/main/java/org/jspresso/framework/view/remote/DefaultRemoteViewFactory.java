@@ -38,6 +38,7 @@ import org.jspresso.framework.application.frontend.command.remote.IRemoteCommand
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
+import org.jspresso.framework.application.view.ControllerAwareViewFactory;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -124,7 +125,6 @@ import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
-import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
@@ -158,7 +158,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class DefaultRemoteViewFactory extends
-    AbstractViewFactory<RComponent, RIcon, RAction> {
+    ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
   private boolean               dateServerParse;
 
@@ -264,12 +264,12 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(
-      @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") RComponent component,
-      @SuppressWarnings("unused") IFormatter formatter,
-      @SuppressWarnings("unused") Object templateValue,
-      @SuppressWarnings("unused") int extraWidth) {
+  protected void adjustSizes(@SuppressWarnings("unused")
+  IViewDescriptor viewDescriptor, @SuppressWarnings("unused")
+  RComponent component, @SuppressWarnings("unused")
+  IFormatter formatter, @SuppressWarnings("unused")
+  Object templateValue, @SuppressWarnings("unused")
+  int extraWidth) {
     // Empty as of now.
   }
 
@@ -288,9 +288,9 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected int computePixelWidth(
-      @SuppressWarnings("unused") RComponent component,
-      @SuppressWarnings("unused") int characterLength) {
+  protected int computePixelWidth(@SuppressWarnings("unused")
+  RComponent component, @SuppressWarnings("unused")
+  int characterLength) {
     // Empty as of now.
     return 0;
   }
@@ -372,9 +372,7 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
   }
 
@@ -384,7 +382,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createBooleanPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -483,7 +482,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createColorPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -884,7 +884,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createHtmlPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -903,7 +904,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createImagePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyViewDescriptor.getModelDescriptor().getName());
     connector.setExceptionHandler(actionHandler);
@@ -1076,7 +1078,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createPasswordPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -1383,11 +1386,9 @@ public class DefaultRemoteViewFactory extends
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation(
-          "lov.element.description",
-          new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(
-                actionHandler, locale)
-          }, locale));
+          "lov.element.description", new Object[] {propertyDescriptor
+              .getReferencedDescriptor().getI18nName(actionHandler, locale)},
+          locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1395,12 +1396,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
     }
     return view;
   }
@@ -1680,7 +1677,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createStringPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -1883,7 +1881,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createTextPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -2136,8 +2135,9 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void decorateWithBorder(IView<RComponent> view,
-      @SuppressWarnings("unused") ITranslationProvider translationProvider,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      ITranslationProvider translationProvider, @SuppressWarnings("unused")
+      Locale locale) {
     view.getPeer().setBorderType(
         view.getDescriptor().getBorderType().toString());
   }

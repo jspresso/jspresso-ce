@@ -172,18 +172,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
           if (!(gate instanceof ISecurable)
               || actionHandler.isAccessGranted((ISecurable) gate)) {
             final IGate clonedGate = gate.clone();
-            if (clonedGate instanceof ISecurityHandlerAware) {
-              ((ISecurityHandlerAware) clonedGate)
-                  .setSecurityHandler(actionHandler);
-            }
-            if (clonedGate instanceof IActionHandlerAware) {
-              ((IActionHandlerAware) clonedGate)
-                  .setActionHandler(actionHandler);
-            }
-            if (clonedGate instanceof ISubjectAware) {
-              ((ISubjectAware) clonedGate).setSubject(actionHandler
-                  .getSubject());
-            }
+            applyGateDependencyInjection(clonedGate, actionHandler);
             if (clonedGate instanceof IModelGate && viewConnector != null) {
               if (((IModelGate) clonedGate).isCollectionBased()) {
                 if (/*
@@ -259,6 +248,27 @@ public abstract class AbstractActionFactory<E, F, G> implements
       }
     } finally {
       actionHandler.restoreLastSecurityContextSnapshot();
+    }
+  }
+
+  /**
+   * Performs dependency injection on a gate.
+   * 
+   * @param gate
+   *          the gate.
+   * @param actionHandler
+   *          the action handler.
+   */
+  protected void applyGateDependencyInjection(IGate gate,
+      IActionHandler actionHandler) {
+    if (gate instanceof ISecurityHandlerAware) {
+      ((ISecurityHandlerAware) gate).setSecurityHandler(actionHandler);
+    }
+    if (gate instanceof IActionHandlerAware) {
+      ((IActionHandlerAware) gate).setActionHandler(actionHandler);
+    }
+    if (gate instanceof ISubjectAware) {
+      ((ISubjectAware) gate).setSubject(actionHandler.getSubject());
     }
   }
 
@@ -389,8 +399,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
      * {@inheritDoc}
      */
     @Override
-    public void propertyChange(
-        @SuppressWarnings("unused") PropertyChangeEvent evt) {
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
       setActionEnabled(action, GateHelper.areGatesOpen(gates));
     }
   }

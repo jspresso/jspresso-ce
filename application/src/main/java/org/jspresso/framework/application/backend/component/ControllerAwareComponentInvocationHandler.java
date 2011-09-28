@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.component;
 import java.lang.reflect.Proxy;
 
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.session.IApplicationSessionAware;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtension;
@@ -88,9 +89,16 @@ public class ControllerAwareComponentInvocationHandler extends
   @Override
   protected void configureExtension(IComponentExtension<IComponent> extension) {
     super.configureExtension(extension);
-    if (extension instanceof ISubjectAware && getBackendController() != null) {
-      ((ISubjectAware) extension).setSubject(getBackendController()
-          .getApplicationSession().getSubject());
+    if (getBackendController() != null) {
+      if (extension instanceof ISubjectAware) {
+        ((ISubjectAware) extension).setSubject(getBackendController()
+            .getApplicationSession().getSubject());
+      }
+      if (extension instanceof IApplicationSessionAware) {
+        ((IApplicationSessionAware) extension)
+            .setApplicationSession(getBackendController()
+                .getApplicationSession());
+      }
     }
     if (extension instanceof IEntityLifecycleHandlerAware) {
       ((IEntityLifecycleHandlerAware) extension)

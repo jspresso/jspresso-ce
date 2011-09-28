@@ -30,9 +30,9 @@ import javax.swing.KeyStroke;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.view.ControllerAwareActionFactory;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.view.AbstractActionFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -43,7 +43,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @author Vincent Vandenschrick
  */
 public class SwingActionFactory extends
-    AbstractActionFactory<Action, JComponent, Icon> {
+    ControllerAwareActionFactory<Action, JComponent, Icon> {
 
   /**
    * {@inheritDoc}

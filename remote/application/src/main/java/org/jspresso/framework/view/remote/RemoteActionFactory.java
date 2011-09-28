@@ -28,6 +28,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+import org.jspresso.framework.application.view.ControllerAwareActionFactory;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -35,7 +36,6 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
-import org.jspresso.framework.view.AbstractActionFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -46,7 +46,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @author Vincent Vandenschrick
  */
 public class RemoteActionFactory extends
-    AbstractActionFactory<RAction, RComponent, RIcon> {
+    ControllerAwareActionFactory<RAction, RComponent, RIcon> {
 
   private IGUIDGenerator        guidGenerator;
   private IRemoteCommandHandler remoteCommandHandler;
