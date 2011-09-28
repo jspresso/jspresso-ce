@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -69,7 +70,9 @@ public class CreateQueryComponentAction extends BackendAction {
 
   private IQueryComponentRefiner           queryComponentRefiner;
 
-  private static final Logger                 LOG                      = LoggerFactory
+  private static final String              SESSION_PROPERTY_PREFIX  = "session.";
+
+  private static final Logger              LOG                      = LoggerFactory
                                                                         .getLogger(CreateQueryComponentAction.class);
 
   /**
@@ -155,7 +158,40 @@ public class CreateQueryComponentAction extends BackendAction {
             initializedAttribute.getKey(), queryComponent.getQueryContract());
         try {
           Object initValue;
-          if (masterComponent != null
+          if (initializedAttribute.getValue() instanceof String
+              && ((String) initializedAttribute.getValue())
+                  .startsWith(SESSION_PROPERTY_PREFIX)) {
+            String sessionProperty = ((String) initializedAttribute.getValue())
+                .substring(SESSION_PROPERTY_PREFIX.length());
+            IApplicationSession applicationSession = getApplicationSession(context);
+            if (applicationSession != null) {
+              Class<?> sessionContract = applicationSession.getClass();
+              try {
+                IAccessor sessionAccessor = accessorFactory
+                    .createPropertyAccessor(sessionProperty, sessionContract);
+                initValue = sessionAccessor.getValue(masterComponent);
+                if (LOG.isDebugEnabled()) {
+                  LOG.debug("Session contract : " + sessionContract.getName());
+                  LOG.debug("Init value computed from session : " + initValue);
+                }
+              } catch (MissingPropertyException ex) {
+                // the value in the initialization mapping is not a sesion
+                // value.
+                // Handle it as null.
+                initValue = null;
+                if (LOG.isDebugEnabled()) {
+                  LOG.debug(
+                      "Init value '{}' not found on application session. Assigning null.",
+                      sessionProperty);
+                }
+              }
+            } else {
+              initValue = null;
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Application session is null. Assigning null.");
+              }
+            }
+          } else if (masterComponent != null
               && initializedAttribute.getValue() instanceof String) {
             Class<?> masterComponentContract = null;
             if (masterComponent instanceof IComponent) {
