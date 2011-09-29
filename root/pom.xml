@@ -994,6 +994,24 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <versionRange>[1.4,)</versionRange>
+                    <goals>
+                      <goal>add-source</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <execute>
+                        <!-- <runOnConfiguration>true</runOnConfiguration> -->
+                        <!-- <runOnIncremental>true</runOnIncremental> -->
+                      </execute>
+                    </execute>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
                     <groupId>org.sonatype.flexmojos</groupId>
                     <artifactId>flexmojos-maven-plugin</artifactId>
                     <versionRange>[3.6,)</versionRange>
