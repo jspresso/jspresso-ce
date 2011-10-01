@@ -106,16 +106,6 @@
 
   <bean id="lovAction" parent="lovActionBase" />
 
-  <bean id="lovFindBackAction" class="org.jspresso.framework.application.backend.action.FindAction">
-    <property name="queryAction">
-      <bean parent="queryEntitiesBackAction">
-        <property name="mergeMode">
-          <null />
-        </property>
-      </bean>
-    </property>
-  </bean>
-
   <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="name" value="find.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
@@ -271,8 +261,6 @@
     </property>
   </bean>
 
-  <bean id="changePasswordBackAction" class="org.jspresso.framework.application.backend.action.BackendAction" />
-
   <bean id="modalDialogAction" class="org.jspresso.framework.application.frontend.action.ModalDialogAction" />
 
   <bean id="closeDialogAction" class="org.jspresso.framework.application.frontend.action.CloseDialogAction" />
@@ -298,23 +286,12 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
   </bean>
 
-  <bean id="queryModuleFilterBackAction" class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
-    <property name="queryAction" ref="queryEntitiesBackAction" />
-  </bean>
-
   <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="name" value="query.filter.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
     <property name="wrappedAction" ref="queryModuleFilterBackAction" />
     <property name="nextAction" ref="checkModuleDirtyStateFrontAction" />
   </bean>
-
-  <bean id="scriptedBackAction" class="org.jspresso.framework.application.backend.action.ScriptedBackendAction">
-    <property name="scriptHandler" ref="scriptHandler" />
-  </bean>
-
-  <bean id="staticScriptedBackAction" abstract="true" parent="scriptedBackAction"
-    class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction" />
 
   <bean id="abstractFrontendAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
 
@@ -398,10 +375,6 @@
         <property name="transferMode" value="MOVE" />
       </bean>
     </property>
-  </bean>
-
-  <bean id="pasteCollectionBackAction" class="org.jspresso.framework.application.backend.action.PasteCollectionToMasterAction">
-    <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
   </bean>
 
   <bean id="pasteCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">

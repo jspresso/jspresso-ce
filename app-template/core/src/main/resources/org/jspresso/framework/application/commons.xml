@@ -250,4 +250,31 @@
 
   <bean id="abstractBackendAction" abstract="true" class="org.jspresso.framework.application.backend.action.BackendAction" />
 
+  <bean id="lovFindBackAction" class="org.jspresso.framework.application.backend.action.FindAction">
+    <property name="queryAction">
+      <bean parent="queryEntitiesBackAction">
+        <property name="mergeMode">
+          <null />
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="changePasswordBackAction" class="org.jspresso.framework.application.backend.action.BackendAction" />
+
+  <bean id="queryModuleFilterBackAction" class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
+    <property name="queryAction" ref="queryEntitiesBackAction" />
+  </bean>
+
+  <bean id="scriptedBackAction" class="org.jspresso.framework.application.backend.action.ScriptedBackendAction">
+    <property name="scriptHandler" ref="scriptHandler" />
+  </bean>
+
+  <bean id="staticScriptedBackAction" abstract="true" parent="scriptedBackAction"
+    class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction" />
+
+  <bean id="pasteCollectionBackAction" class="org.jspresso.framework.application.backend.action.PasteCollectionToMasterAction">
+    <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
+  </bean>
+
 </beans>
