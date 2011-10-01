@@ -231,13 +231,31 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                           (IQueryComponent) property.getValue());
                 } else {
                   // the joined component is an entity so we must use
-                  // nested criteria.
-                  // unless the only nested criteria is a null value.
-                  if (joinedComponent.size() == 1
-                      && IQueryComponent.NULL_VAL.equals(joinedComponent
-                          .values().iterator().next())) {
-                    currentCriteria.add(Restrictions.isNull(prefixedProperty));
-                  } else {
+                  // nested criteria; unless the autoComplete property
+                  // is a special char.
+                  boolean digDeeper = true;
+                  String autoCompleteProperty = joinedComponent
+                      .getComponentDescriptor().getAutoCompleteProperty();
+                  if (autoCompleteProperty != null) {
+                    String val = (String) joinedComponent
+                        .get(autoCompleteProperty);
+                    if (val != null) {
+                      boolean negate = false;
+                      if (val.startsWith(IQueryComponent.NOT_VAL)) {
+                        val = val.substring(1);
+                        negate = true;
+                      }
+                      if (IQueryComponent.NULL_VAL.equals(val)) {
+                        Criterion crit = Restrictions.isNull(prefixedProperty);
+                        if (negate) {
+                          crit = Restrictions.not(crit);
+                        }
+                        currentCriteria.add(crit);
+                        digDeeper = false;
+                      }
+                    }
+                  }
+                  if (digDeeper) {
                     DetachedCriteria joinCriteria = rootCriteria
                         .getSubCriteriaFor(currentCriteria, prefixedProperty,
                             CriteriaSpecification.INNER_JOIN);
