@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application;
 
+import java.util.Locale;
 import java.util.Map;
 
 import javax.security.auth.Subject;
@@ -41,7 +42,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractController implements IController {
 
-  private IExceptionHandler       customExceptionHandler;
+  private IExceptionHandler customExceptionHandler;
 
   /**
    * Gets the subject out of the application session.
@@ -57,7 +58,8 @@ public abstract class AbstractController implements IController {
    * Gets the translationProvider.
    * 
    * @return the translationProvider.
-   * @deprecated the controller is itself a translation provider. will return this.
+   * @deprecated the controller is itself a translation provider. will return
+   *             this.
    */
   @Override
   @Deprecated
@@ -102,5 +104,21 @@ public abstract class AbstractController implements IController {
    */
   public void setCustomExceptionHandler(IExceptionHandler customExceptionHandler) {
     this.customExceptionHandler = customExceptionHandler;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDatePattern(Locale locale) {
+    return getTranslation("date_format", locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTimePattern(@SuppressWarnings("unused") Locale locale) {
+    return "HH:mm:ss";
   }
 }

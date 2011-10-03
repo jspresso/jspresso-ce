@@ -156,6 +156,7 @@ package org.jspresso.framework.view.flex {
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
     private var _passwordFormatter:PasswordFormatter;
+    private var _datePattern:String;
     
     private var _lastActionTimestamp:Date = new Date();
 
@@ -1433,7 +1434,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
-      dateField.formatString = ResourceManager.getInstance().getString("Common_messages", "date_format");
+      dateField.formatString = datePattern;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
       sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT);
@@ -2303,7 +2304,7 @@ package org.jspresso.framework.view.flex {
     protected function createFormatter(remoteComponent:RComponent):Formatter {
       if(remoteComponent is RDateField) {
         var dateFormatter:DateFormatter = new DateFormatter();
-        dateFormatter.formatString = ResourceManager.getInstance().getString("Common_messages", "date_format");
+        dateFormatter.formatString = datePattern;
         if((remoteComponent as RDateField).type == "DATE_TIME") {
           dateFormatter.formatString = dateFormatter.formatString + " " + _timeFormatter.formatString; 
         }
@@ -2476,5 +2477,17 @@ package org.jspresso.framework.view.flex {
         component.setStyle("textAlign","right");
       }
     }
+
+    public function get datePattern():String {
+      if(_datePattern) {
+        return _datePattern;
+      }
+      return ResourceManager.getInstance().getString("Common_messages", "date_format");
+    }
+
+    public function set datePattern(value:String):void {
+      _datePattern = value;
+    }
+
   }
 }

@@ -567,6 +567,7 @@ public class DefaultRemoteController extends
     List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
     RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
     localeCommand.setLanguage(getLocale().getLanguage());
+    localeCommand.setDatePattern(getDatePattern(getLocale()));
     initCommands.add(localeCommand);
     RemoteInitCommand initCommand = new RemoteInitCommand();
     initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));

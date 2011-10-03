@@ -259,6 +259,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this._handleFileDownload(command);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand) {
         qx.locale.Manager.getInstance().setLocale(command.getLanguage());
+        this.__viewFactory.setDatePattern(command.getDatePattern());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {
         var loginButton = this.__viewFactory.createButton(command.getOkLabel(), null, command.getOkIcon());
         loginButton.addListener("execute", function(event) {

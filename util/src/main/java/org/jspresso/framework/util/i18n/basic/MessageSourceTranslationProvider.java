@@ -75,4 +75,20 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
     return messageSource;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDatePattern(Locale locale) {
+    return getTranslation("date_format", locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTimePattern(@SuppressWarnings("unused") Locale locale) {
+    return "HH:mm:ss";
+  }
+
 }

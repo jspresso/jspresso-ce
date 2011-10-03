@@ -75,6 +75,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __timeFormats : null,
     /** @type Array */
     __dateTimeFormats : null,
+    /** @type String */
+    __datePattern : null,
+    
 
     /**
      * @param {org.jspresso.framework.gui.remote.RComponent}
@@ -2675,7 +2678,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     _createDateFormatPatterns : function() {
       var formatPatterns = new Array();
-      var defaultFormatPattern = qx.locale.Date.getDateFormat("short");
+      var defaultFormatPattern = this._getDatePattern();
       formatPatterns.push(defaultFormatPattern);
       for(var i = defaultFormatPattern.length; i > 0 ; i--) {
         var subPattern = defaultFormatPattern.substring(0, i);
@@ -2766,7 +2769,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } else if (alignment == "RIGHT") {
         component.setTextAlign("right");
       }
-    }
+    },
+    
+    /**
+     * 
+     * @param {String}
+     *            datePattern
+     * @return void
+     */
+    setDatePattern : function(datePattern) {
+      this.__datePattern = datePattern;
+    },
 
+    /**
+     * 
+     * @return String
+     */
+    _getDatePattern : function() {
+      if(this.__datePattern) {
+        return this.__datePattern;
+      }
+      return qx.locale.Date.getDateFormat("short");
+    }
   }
 });

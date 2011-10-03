@@ -317,6 +317,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
         if(locale) {
           ResourceManager.getInstance().localeChain = [locale.toString()].concat(_initialLocaleChain);
         }
+        if((command as RemoteLocaleCommand).datePattern) {
+          getViewFactory().datePattern = (command as RemoteLocaleCommand).datePattern.toUpperCase();
+        }
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = getViewFactory().createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);

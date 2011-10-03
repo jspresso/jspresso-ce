@@ -21,6 +21,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     language :
     {
       check : "String"
+    },
+    datePattern :
+    {
+      check : "String"
     }
   }
 });

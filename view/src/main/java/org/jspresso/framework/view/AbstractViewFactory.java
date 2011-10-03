@@ -1333,7 +1333,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected String getDatePattern(IDatePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return translationProvider.getTranslation("date_format", locale);
+    return translationProvider.getDatePattern(locale);
   }
 
   /**
@@ -1350,7 +1350,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected String getTimePattern(
       ITimeAwarePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return "HH:mm:ss";
+    return translationProvider.getTimePattern(locale);
   }
 
   /**

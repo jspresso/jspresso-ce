@@ -58,4 +58,19 @@ public class MockTranslationProvider implements ITranslationProvider {
     return message.toString();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDatePattern(@SuppressWarnings("unused") Locale locale) {
+    return "dd/MM/yyyy";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTimePattern(@SuppressWarnings("unused") Locale locale) {
+    return "HH:mm:ss";
+  }
 }

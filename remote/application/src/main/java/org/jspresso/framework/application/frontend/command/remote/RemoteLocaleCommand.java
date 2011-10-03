@@ -29,6 +29,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
   private static final long serialVersionUID = -1105201434420105157L;
 
   private String            language;
+  private String            datePattern;
 
   /**
    * Gets the language.
@@ -47,5 +48,23 @@ public class RemoteLocaleCommand extends RemoteCommand {
    */
   public void setLanguage(String language) {
     this.language = language;
+  }
+
+  /**
+   * Gets the datePattern.
+   * 
+   * @return the datePattern.
+   */
+  public String getDatePattern() {
+    return datePattern;
+  }
+
+  /**
+   * Sets the datePattern.
+   * 
+   * @param datePattern the datePattern to set.
+   */
+  public void setDatePattern(String datePattern) {
+    this.datePattern = datePattern;
   }
 }
