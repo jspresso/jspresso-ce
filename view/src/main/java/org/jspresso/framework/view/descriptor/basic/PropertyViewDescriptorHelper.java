@@ -59,8 +59,14 @@ public final class PropertyViewDescriptorHelper {
     List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
     IComponentDescriptor<?> rootComponentDescriptor = componentDescriptorProvider
         .getComponentDescriptor();
-    IPropertyDescriptor propertyDescriptor = rootComponentDescriptor
-        .getPropertyDescriptor(propertyViewDescriptor.getName());
+    IPropertyDescriptor propertyDescriptor;
+    if (propertyViewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+      propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+    } else {
+      propertyDescriptor = rootComponentDescriptor
+          .getPropertyDescriptor(propertyViewDescriptor.getName());
+    }
     /*
      * Exlude explicitely configured reference property view filled with a
      * custom LOV action
