@@ -129,6 +129,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.format.PercentParser;
   import org.jspresso.framework.util.format.TimeParser;
   import org.jspresso.framework.util.gui.CellConstraints;
+  import org.jspresso.framework.util.gui.Dimension;
   import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.lang.DateDto;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -240,20 +241,24 @@ package org.jspresso.framework.view.flex {
         component.setStyle("borderStyle","solid");
       }
       applyComponentStyle(component, remoteComponent);
-      if(remoteComponent.preferredSize) {
-        component.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
-          if(remoteComponent.preferredSize.width > 0) {
-            component.width = remoteComponent.preferredSize.width;
-          }
-          if(remoteComponent.preferredSize.height > 0) {
-            component.height = remoteComponent.preferredSize.height;
-          }
-        });
-      }
+      applyComponentPreferredSize(component, remoteComponent.preferredSize);
       if(registerState) {
         getRemotePeerRegistry().register(remoteComponent.state);
       }
       return component;
+    }
+    
+    protected function applyComponentPreferredSize(component:UIComponent, preferredSize:Dimension):void {
+      if(preferredSize) {
+        component.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
+          if(preferredSize.width > 0) {
+            component.width = preferredSize.width;
+          }
+          if(preferredSize.height > 0) {
+            component.height = preferredSize.height;
+          }
+        });
+      }
     }
     
     protected function applyComponentStyle(component:*, remoteComponent:RComponent):void {
@@ -297,8 +302,8 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
-      var toolBar:ApplicationControlBar;
-      var secondaryToolBar:ApplicationControlBar;
+      var toolBar:UIComponent;
+      var secondaryToolBar:UIComponent;
       if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
         toolBar = createToolBar(remoteComponent, component);
       } else {
@@ -313,11 +318,15 @@ package org.jspresso.framework.view.flex {
         component.percentHeight = 100.0;
         
         if(toolBar) {
-          surroundingBox.addChild(decorateWithSlideBar(toolBar));
+          toolBar = decorateWithSlideBar(toolBar);
+          toolBar.percentWidth = 100.0;
+          surroundingBox.addChild(toolBar);
         }
         surroundingBox.addChild(component);
         if(secondaryToolBar) {
-          surroundingBox.addChild(decorateWithSlideBar(secondaryToolBar));
+          secondaryToolBar = decorateWithSlideBar(secondaryToolBar);
+          secondaryToolBar.percentWidth = 100.0;
+          surroundingBox.addChild(secondaryToolBar);
         }
         surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
         surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
@@ -326,7 +335,7 @@ package org.jspresso.framework.view.flex {
       return component;
     }
     
-    public function decorateWithSlideBar(component:UIComponent):ButtonScrollingCanvas {
+    public function decorateWithSlideBar(component:UIComponent):UIComponent {
       var slideBar:ButtonScrollingCanvas = new ButtonScrollingCanvas();
       slideBar.addChild(component);
       slideBar.percentWidth = 100.0;
@@ -334,7 +343,11 @@ package org.jspresso.framework.view.flex {
       slideBar.startScrollingEvent= MouseEvent.MOUSE_OVER;
       slideBar.stopScrollingEvent= MouseEvent.MOUSE_OUT;
       component.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-        slideBar.height = (event.currentTarget as UIComponent).measuredHeight;
+        if(component.height > 0) {
+          slideBar.height = component.height;
+        } else {
+          slideBar.height = component.measuredHeight;
+        }
         slideBar.minHeight = slideBar.height;
         slideBar.maxHeight = slideBar.height;
       });
@@ -1314,7 +1327,12 @@ package org.jspresso.framework.view.flex {
 
     protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
       var splitContainer:DividedBox = new DividedBox();
-      splitContainer.resizeToContent = true;
+      if(remoteSplitContainer.preferredSize != null &&
+        (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0)) {
+        splitContainer.resizeToContent = false;
+      } else {
+        splitContainer.resizeToContent = true;
+      }
       splitContainer.liveDragging = true;
 
       var component:UIComponent;
@@ -1377,10 +1395,20 @@ package org.jspresso.framework.view.flex {
 
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
       getRemotePeerRegistry().register(remoteTabContainer);
-      var tabContainer:TabNavigator = new TabNavigator();
+      var tabContainer:TabNavigator = new EnhancedTabNavigator();
       tabContainer.historyManagementEnabled = false;
+      if(remoteTabContainer.preferredSize != null &&
+        (remoteTabContainer.preferredSize.height > 0 || remoteTabContainer.preferredSize.width > 0)) {
+        tabContainer.resizeToContent = false;
+      } else {
+        tabContainer.resizeToContent = true;
+      }
+
       for(var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
         var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
+        var tabContent:UIComponent = createComponent(rTab);
+        tabContent.percentWidth = 100.0;
+        tabContent.percentHeight = 100.0;
         
         var tabCanvas:Canvas = new Canvas();
         tabCanvas.percentWidth = 100.0;
@@ -1389,27 +1417,24 @@ package org.jspresso.framework.view.flex {
         tabCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
         tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         tabContainer.addChild(tabCanvas);
-        
         if(rTab.tooltip != null) {
     		  tabCanvas.toolTip = rTab.tooltip + TOOLTIP_ELLIPSIS;
         }
-
-        var tabContent:UIComponent = createComponent(rTab);
-        tabContent.percentWidth = 100.0;
-        tabContent.percentHeight = 100.0;
         tabCanvas.addChild(tabContent);
       }
-      var creationComplete:Function = function (event:FlexEvent):void {
+      
+      var assignTabsIcons:Function = function (event:FlexEvent):void {
         if(event.target is TabNavigator) {
           var tabContainer:TabNavigator = event.target as TabNavigator;
           for(var tabIndex:int = 0; tabIndex < tabContainer.getChildren().length; tabIndex ++) {
             var tabButton:Button = tabContainer.getTabAt(tabIndex);
-      		  tabButton.setStyle("icon", getIconForComponent(tabButton, (remoteTabContainer.tabs[tabIndex] as RComponent).icon));
-      		}
-      		tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
+            tabButton.setStyle("icon", getIconForComponent(tabButton, (remoteTabContainer.tabs[tabIndex] as RComponent).icon));
+          }
+          tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, assignTabsIcons);
         }
       };
-      tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
+      tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, assignTabsIcons);
+
       BindingUtils.bindProperty(tabContainer, "selectedIndex", remoteTabContainer, "selectedIndex", true);
       BindingUtils.bindSetter(function(index:int):void {
         remoteTabContainer.selectedIndex = index;
