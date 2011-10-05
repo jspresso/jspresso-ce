@@ -170,13 +170,14 @@ public class BeanCollectionModule extends Module {
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
-    IViewDescriptor moduleObjectsView = extractMainCollectionView(getProjectedViewDescriptor());
+    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+    IViewDescriptor moduleObjectsView = extractMainCollectionView(projectedViewDescriptor);
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
     ((BasicViewDescriptor) moduleObjectsView)
         .setModelDescriptor(moduleDescriptor
             .getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
     BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
-    moduleViewDescriptor.setCenterViewDescriptor(moduleObjectsView);
+    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 
     return moduleViewDescriptor;
