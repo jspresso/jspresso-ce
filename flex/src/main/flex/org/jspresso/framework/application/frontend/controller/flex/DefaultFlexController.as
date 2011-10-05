@@ -33,9 +33,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
+  import mx.containers.HDividedBox;
   import mx.containers.Panel;
   import mx.containers.VBox;
   import mx.containers.ViewStack;
+  import mx.containers.dividedBoxClasses.BoxDivider;
   import mx.controls.Alert;
   import mx.controls.Button;
   import mx.controls.CheckBox;
@@ -894,7 +896,28 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                   secondaryActions:Array,
                                                   helpActions:Array):UIComponent {
 
-      var split:HBox = new HBox();
+      var split:HDividedBox = new HDividedBox();
+      split.liveDragging = true;
+      split.resizeToContent = true;
+      navigationAccordion.horizontalScrollPolicy = ScrollPolicy.OFF;
+      navigationAccordion.verticalScrollPolicy = ScrollPolicy.OFF;
+      var adjustDividerLocation:Function = function (event:Event):void {
+        var divider:BoxDivider = split.getDividerAt(0);
+        var dividerX:int = divider.x;
+        var accordionWidth:int = navigationAccordion.measuredWidth;
+        accordionWidth += 2;
+        if(dividerX != accordionWidth) {
+          split.moveDivider(0, accordionWidth - dividerX);
+        }
+      };
+      var adjustMinDividerLocation:Function = function (event:Event):void {
+        split.callLater(function():void {
+          split.moveDivider(0, 1);
+          split.moveDivider(0, -1);
+        });
+      };
+      navigationAccordion.addEventListener("closeDrawerComplete", adjustMinDividerLocation);
+      navigationAccordion.addEventListener("openDrawerComplete", adjustDividerLocation);
       split.addChild(navigationAccordion);
       split.addChild(mainViewStack);
       split.percentWidth = 100.0;
