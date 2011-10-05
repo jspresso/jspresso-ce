@@ -29,7 +29,23 @@ RichTextEditor
   textAreaStyleName: richTextEditorTextArea;
 }
 
-.drawerButton {
+Panel
+{
+  borderAlpha: 1;
+  borderThicknessLeft: 2;
+  borderThicknessRight: 2;
+  borderThicknessBottom: 2;
+}
+
+ApplicationControlBar
+{
+  fillAlphas: 0.5, 0.5;
+  fillColors: #BBBBBB,#666666;
+  horizontalGap: 2;
+}
+
+.drawerButton
+{
   fontFamily: ArialBold;
   fontSize: 12;
   textAlign: left;
@@ -38,11 +54,13 @@ RichTextEditor
   paddingLeft: 10;
 }
 
-.drawerAccordion {
+.drawerAccordion
+{
   headerStyleName: drawerAccordionHeader;
 }
 
-.drawerAccordionHeader {
+.drawerAccordionHeader
+{
   fontFamily: ArialBold;
   fontSize: 12;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
@@ -50,18 +68,20 @@ RichTextEditor
   paddingLeft: 10;
 }
 
-.drawerCloseRight {
-  up-skin:Embed(source="assets/images/closeaccordion2.png");
-  over-skin:Embed(source="assets/images/closeaccordion2.png");
-  down-skin:Embed(source="assets/images/closeaccordion2.png");
-  disabled-skin:Embed(source="assets/images/closeaccordion2.png");
+.drawerCloseRight
+{
+  up-skin: Embed(source="assets/images/closeaccordion2.png");
+  over-skin: Embed(source="assets/images/closeaccordion2.png");
+  down-skin: Embed(source="assets/images/closeaccordion2.png");
+  disabled-skin: Embed(source="assets/images/closeaccordion2.png");
 }
 
-.drawerCloseLeft {
-  up-skin:Embed(source="assets/images/closeaccordion2.png");
-  over-skin:Embed(source="assets/images/closeaccordion2.png");
-  down-skin:Embed(source="assets/images/closeaccordion2.png");
-  disabled-skin:Embed(source="assets/images/closeaccordion2.png");
+.drawerCloseLeft
+{
+  up-skin: Embed(source="assets/images/closeaccordion2.png");
+  over-skin: Embed(source="assets/images/closeaccordion2.png");
+  down-skin: Embed(source="assets/images/closeaccordion2.png");
+  disabled-skin: Embed(source="assets/images/closeaccordion2.png");
 }
 
 .richTextEditorStatus
@@ -70,4 +90,126 @@ RichTextEditor
 
 .richTextEditorTextArea
 {
-} 
+}
+
+.form
+{
+  paddingLeft: 2;
+  paddingRight: 2;
+  paddingTop: 2;
+  paddingBottom: 2;
+  horizontalGap: 2;
+  verticalGap: 2;
+}
+
+.asideLabelCell
+{
+  verticalAlign: middle;
+  horizontalAlign: right;
+}
+
+.aboveLabelCell
+{
+}
+
+.componentCell
+{
+  verticalAlign: middle;
+}
+
+.borderContainer
+{
+  horizontalGap: 1;
+  verticalGap: 1;
+}
+
+.northCell
+{
+  paddingLeft: 2;
+  paddingRight: 2;
+}
+
+.westCell
+{
+  horizontalAlign: left;
+  paddingLeft: 2;
+}
+
+.centerCell
+{
+}
+
+.eastCell
+{
+  horizontalAlign: right;
+  paddingRight: 2;
+}
+
+.southCell
+{
+  paddingLeft: 2;
+  paddingRight: 2;
+}
+
+.constrainedGridContainer
+{
+  horizontalGap: 1;
+  verticalGap: 1;
+}
+
+.evenGridContainer {
+  horizontalGap: 1;
+  verticalGap: 1;
+}
+
+.dateTimeField
+{
+  horizontalGap: 2;
+  verticalGap: 0;
+  paddingTop: 2;
+  paddingBottom: 2;
+  paddingLeft: 2;
+  paddingRight: 2;
+}
+
+.htmlEditor
+{
+  headerHeight: 0;
+}
+
+.htmlText
+{
+  borderStyle: none;
+  focusAlpha: 0;
+}
+
+.actionField
+{
+  verticalAlign: middle;
+}
+
+.emptyActionField
+{
+  verticalAlign: middle;
+  borderStyle: none;
+}
+
+.filledActionField
+{
+  verticalAlign: middle;
+  borderStyle: solid;
+  borderThickness: 1;
+  borderColor: #FF0000;
+}
+
+.scrollableImage
+{
+  horizontalAlign: left;
+  verticalAlign: top;
+}
+
+.unscrollableImage
+{
+  horizontalAlign: center;
+  verticalAlign: middle;
+}

@@ -233,10 +233,6 @@ package org.jspresso.framework.view.flex {
         decorator.addChild(component);
         decorator.title = remoteComponent.label;
         decorator.titleIcon = getIconForComponent(decorator, remoteComponent.icon);
-        decorator.setStyle("borderAlpha", 1);
-        decorator.setStyle("borderThicknessLeft", 2);
-        decorator.setStyle("borderThicknessRight", 2);
-        decorator.setStyle("borderThicknessBottom", 2);
         decorator.horizontalScrollPolicy = ScrollPolicy.OFF;
         decorator.verticalScrollPolicy = ScrollPolicy.OFF;
         component = decorator;
@@ -372,9 +368,6 @@ package org.jspresso.framework.view.flex {
     public function createToolBarFromActionLists(actionLists:Array):ApplicationControlBar {
       var toolBar:ApplicationControlBar = new ApplicationControlBar();
       toolBar.percentWidth = 100.0;
-      toolBar.setStyle("fillAlphas",[0.5,0.5]);
-      toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
-      toolBar.setStyle("horizontalGap",2);
       installActionLists(toolBar, actionLists);
       return toolBar;
     }
@@ -601,14 +594,12 @@ package org.jspresso.framework.view.flex {
       imageComponent.scaleContent = false;
       bindImage(imageComponent, remoteImageComponent.state);
       if(remoteImageComponent.scrollable) {
-        imageComponent.setStyle("horizontalAlign","left");
-        imageComponent.setStyle("verticalAlign","top");
+        imageComponent.styleName = "scrollableImage";
         var scrollPane:Canvas = new Canvas();
         scrollPane.addChild(imageComponent);
         return scrollPane;
       } else {
-        imageComponent.setStyle("horizontalAlign","center");
-        imageComponent.setStyle("verticalAlign","middle");
+        imageComponent.styleName = "unscrollableImage";
       }
       return imageComponent;
     }
@@ -627,7 +618,7 @@ package org.jspresso.framework.view.flex {
     
     protected function createActionField(remoteActionField:RActionField):UIComponent {
       var actionField:HBox = new HBox();
-      actionField.setStyle("verticalAlign","middle");
+      actionField.styleName = "actionField";
       actionField.regenerateStyleCache(false);
       var hGap:int = actionField.getStyle("horizontalGap");
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
@@ -671,11 +662,9 @@ package org.jspresso.framework.view.flex {
           }
         } else {
           if(value == null) {
-            actionField.setStyle("borderStyle","none");
+            actionField.styleName = "emptyActionField";
           } else {
-            actionField.setStyle("borderStyle","solid");
-            actionField.setStyle("borderThickness", 1);
-            actionField.setStyle("borderColor", "0xFF0000");
+            actionField.styleName = "filledActionField";
           }
         }
       };
@@ -835,8 +824,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createBorderContainer(remoteBorderContainer:RBorderContainer):Container {
       var borderContainer:Grid = new Grid();
-      borderContainer.setStyle("horizontalGap",2);
-      borderContainer.setStyle("verticalGap",2);
+      borderContainer.styleName = "borderContainer";
 
       var row:GridRow;
       var cell:GridItem;
@@ -857,6 +845,7 @@ package org.jspresso.framework.view.flex {
         borderContainer.addChild(row);
         
         cell = new GridItem();
+        cell.styleName = "northCell";
         cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         cell.colSpan = nbCols;
@@ -866,14 +855,10 @@ package org.jspresso.framework.view.flex {
           cell.minHeight = cellComponent.minHeight;
           if(cellComponent.height > 0) {
             cell.height = cellComponent.height;
-            cell.setStyle("paddingLeft",2);
-            cell.setStyle("paddingRight",2);
             cell.height += 4;
           }
           if(cellComponent.maxHeight > 0) {
             cell.maxHeight = cellComponent.maxHeight;
-            cell.setStyle("paddingLeft",2);
-            cell.setStyle("paddingRight",2);
             cell.maxHeight += 4;
           }
           cellComponent.percentWidth = 100.0;
@@ -892,19 +877,17 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.west != null) {
         cellComponent = createComponent(remoteBorderContainer.west);
         cell = new GridItem();
+        cell.styleName = "westCell";
         cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         cell.verticalScrollPolicy  = ScrollPolicy.OFF;
-        cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
         if(cellComponent.width > 0) {
           cell.width = cellComponent.width;
-          cell.setStyle("paddingLeft",2);
           cell.width += 2;
         }
         if(cellComponent.maxWidth > 0) {
           cell.maxWidth = cellComponent.maxWidth;
-          cell.setStyle("paddingLeft",2);
           cell.maxWidth += 2;
         }
         cellComponent.percentWidth = 100.0;
@@ -914,6 +897,7 @@ package org.jspresso.framework.view.flex {
       }
   
       cell = new GridItem();
+      cell.styleName = "centerCell";
       cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
       cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.percentHeight = 100.0;
@@ -929,19 +913,17 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.east != null) {
         cellComponent = createComponent(remoteBorderContainer.east);
         cell = new GridItem();
+        cell.styleName = "eastCell";
         cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         cell.verticalScrollPolicy  = ScrollPolicy.OFF;
-        cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
         if(cellComponent.width > 0) {
           cell.width = cellComponent.width;
-          cell.setStyle("paddingRight",2);
           cell.width += 2;
         }
         if(cellComponent.maxWidth > 0) {
           cell.maxWidth = cellComponent.maxWidth;
-          cell.setStyle("paddingRight",2);
           cell.maxWidth += 2;
         }
         cellComponent.percentWidth = 100.0;
@@ -956,6 +938,7 @@ package org.jspresso.framework.view.flex {
         row.percentWidth = 100.0;
         borderContainer.addChild(row);
         cell = new GridItem();
+        cell.styleName = "southCell";
         cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         cell.colSpan = nbCols;
@@ -965,14 +948,10 @@ package org.jspresso.framework.view.flex {
           cell.minHeight = cellComponent.minHeight;
           if(cellComponent.height > 0) {
             cell.height = cellComponent.height;
-            cell.setStyle("paddingLeft",2);
-            cell.setStyle("paddingRight",2);
             cell.height += 4;
           }
           if(cellComponent.maxHeight > 0) {
             cell.maxHeight = cellComponent.maxHeight;
-            cell.setStyle("paddingLeft",2);
-            cell.setStyle("paddingRight",2);
             cell.maxHeight += 4;
           }
           cellComponent.percentWidth = 100.0;
@@ -1037,8 +1016,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):Container {
       var constrainedGridContainer:Grid = new Grid();
-      constrainedGridContainer.setStyle("horizontalGap",2);
-      constrainedGridContainer.setStyle("verticalGap",2);
+      constrainedGridContainer.styleName = "constrainedGridContainer";
       
       var i:int;
       var j:int;
@@ -1111,8 +1089,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createEvenGridContainer(remoteEvenGridContainer:REvenGridContainer):Container {
       var evenGridContainer:Grid = new Grid();
-      evenGridContainer.setStyle("horizontalGap",2);
-      evenGridContainer.setStyle("verticalGap",2);
+      evenGridContainer.styleName = "evenGridContainer";
       
       var nbRows:int;
       var nbCols:int;
@@ -1182,7 +1159,7 @@ package org.jspresso.framework.view.flex {
       var labelsRow:GridRow;
       var componentsRow:GridRow;
       
-      form.styleName = "contentPane";
+      form.styleName = "form";
       
       componentsRow = new GridRow();
       componentsRow.percentWidth = 100.0;
@@ -1217,9 +1194,9 @@ package org.jspresso.framework.view.flex {
         }
 
         var componentCell:GridItem = new GridItem();
+        componentCell.styleName = "componentCell";
         componentCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         componentCell.verticalScrollPolicy  = ScrollPolicy.OFF;
-        componentCell.setStyle("verticalAlign","middle");
         
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
@@ -1241,12 +1218,11 @@ package org.jspresso.framework.view.flex {
         }
         
         if(remoteForm.labelsPosition == "ABOVE") {
+          labelCell.styleName = "aboveLabelCell";
           labelCell.colSpan = elementWidth;
           componentCell.colSpan = elementWidth;
         } else if(remoteForm.labelsPosition == "ASIDE") {
-          labelCell.setStyle("verticalAlign","middle");
-          labelCell.setStyle("horizontalAlign","right");
-          // labelCell.setStyle("borderStyle","solid");
+          labelCell.styleName = "asideLabelCell";
           componentCell.colSpan = (elementWidth * 2) - 1;
         } else if(remoteForm.labelsPosition == "NONE") {
           componentCell.colSpan = elementWidth;
@@ -1319,12 +1295,6 @@ package org.jspresso.framework.view.flex {
         }
       }
       form.addChild(resizerRow);
-      
-        
-      form.setStyle("paddingLeft", 2);
-      form.setStyle("paddingRight", 2);
-      form.setStyle("paddingTop", 2);
-      form.setStyle("paddingBottom", 2);
       return form;
     }
 
@@ -1548,14 +1518,9 @@ package org.jspresso.framework.view.flex {
 
     protected function createDateTimeField(remoteDateField:RDateField):UIComponent {
       var dateTimeField:HBox = new HBox();
+      dateTimeField.styleName = "dateTimeField";
       dateTimeField.horizontalScrollPolicy = ScrollPolicy.OFF;
       dateTimeField.verticalScrollPolicy = ScrollPolicy.OFF;
-      dateTimeField.setStyle("horizontalGap",2);
-      dateTimeField.setStyle("verticalGap",0);
-      dateTimeField.setStyle("paddingTop",2);
-      dateTimeField.setStyle("paddingBottom",2);
-      dateTimeField.setStyle("paddingLeft",2);
-      dateTimeField.setStyle("paddingRight",2);
 
       var dateField:UIComponent = createDateField(remoteDateField)
       dateField.percentWidth = 100.0;
@@ -2125,7 +2090,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
       var htmlEditor:EnhancedRichTextEditor = new EnhancedRichTextEditor();
-      htmlEditor.setStyle("headerHeight",0);
+      htmlEditor.styleName = "htmlEditor";
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
     }
@@ -2143,9 +2108,8 @@ package org.jspresso.framework.view.flex {
 
     protected function createHtmlText(remoteHtmlArea:RHtmlArea):UIComponent {
       var htmlText:TextArea = new TextArea();
+      htmlText.styleName = "htmlText";
       htmlText.editable = false;
-      htmlText.setStyle("borderStyle","none");
-      htmlText.setStyle("focusAlpha",0);
       bindHtmlText(htmlText, remoteHtmlArea.state);
       return htmlText;
     }
