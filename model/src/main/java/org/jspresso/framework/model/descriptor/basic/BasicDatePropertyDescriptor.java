@@ -35,6 +35,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
 
   private EDateType type;
   private boolean   timeZoneAware;
+  private boolean   secondsAware;
 
   /**
    * Constructs a new <code>BasicDatePropertyDescriptor</code> instance.
@@ -42,6 +43,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   public BasicDatePropertyDescriptor() {
     type = EDateType.DATE;
     timeZoneAware = false;
+    secondsAware = true;
   }
 
   /**
@@ -111,5 +113,24 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   @Override
   public boolean isTimeZoneAware() {
     return timeZoneAware;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isSecondsAware() {
+    return secondsAware;
+  }
+
+  /**
+   * Should this time information include seconds.
+   * 
+   * @param secondsAware
+   *          Configure to <code>true</code> if this time information include
+   *          seconds.
+   */
+  public void setSecondsAware(boolean secondsAware) {
+    this.secondsAware = secondsAware;
   }
 }

@@ -73,4 +73,12 @@ public class MockTranslationProvider implements ITranslationProvider {
   public String getTimePattern(@SuppressWarnings("unused") Locale locale) {
     return "HH:mm:ss";
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getShortTimePattern(@SuppressWarnings("unused") Locale locale) {
+    return "HH:mm";
+  }
 }

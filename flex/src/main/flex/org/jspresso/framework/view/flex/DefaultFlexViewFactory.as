@@ -156,6 +156,7 @@ package org.jspresso.framework.view.flex {
     private var _commandHandler:IRemoteCommandHandler;
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
+    private var _shortTimeFormatter:DateFormatter;
     private var _passwordFormatter:PasswordFormatter;
     private var _datePattern:String;
     
@@ -168,9 +169,11 @@ package org.jspresso.framework.view.flex {
       _actionHandler = actionHandler;
       _commandHandler = commandHandler;
       _remoteValueSorter = new RemoteValueSorter();
-      _timeFormatter = new DateFormatter();
       _passwordFormatter = new PasswordFormatter();
+      _timeFormatter = new DateFormatter();
       _timeFormatter.formatString = "JJ:NN:SS"
+      _shortTimeFormatter = new DateFormatter();
+      _shortTimeFormatter.formatString = "JJ:NN"
     }
     
     public function createComponent(remoteComponent:RComponent, registerState:Boolean=true):UIComponent {
@@ -1565,6 +1568,7 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.guid = remoteDateField.guid;
       remoteTimeField.state = remoteDateField.state;
       remoteTimeField.tooltip = remoteDateField.tooltip;
+      remoteTimeField.secondsAware = remoteDateField.secondsAware;
       
       var timeField:UIComponent = createComponent(remoteTimeField, false);
       timeField.percentWidth = 100.0;
@@ -2335,7 +2339,11 @@ package org.jspresso.framework.view.flex {
         }
         return dateFormatter;
       } else if(remoteComponent is RTimeField) {
-        return _timeFormatter;
+        if((remoteComponent as RTimeField).secondsAware) {
+          return _timeFormatter;
+        } else {
+          return _shortTimeFormatter;
+        }
       } else if(remoteComponent is RPasswordField) {
         return _passwordFormatter;
       } else if(remoteComponent is RNumericComponent) {

@@ -33,6 +33,15 @@ import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
     implements ITimePropertyDescriptor {
 
+  private boolean secondsAware;
+
+  /**
+   * Constructs a new <code>BasicTimePropertyDescriptor</code> instance.
+   */
+  public BasicTimePropertyDescriptor() {
+    secondsAware = true;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -50,5 +59,24 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
   @Override
   public Class<?> getModelType() {
     return Date.class;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isSecondsAware() {
+    return secondsAware;
+  }
+
+  /**
+   * Should this time information include seconds.
+   * 
+   * @param secondsAware
+   *          Configure to <code>true</code> if this time information include
+   *          seconds.
+   */
+  public void setSecondsAware(boolean secondsAware) {
+    this.secondsAware = secondsAware;
   }
 }

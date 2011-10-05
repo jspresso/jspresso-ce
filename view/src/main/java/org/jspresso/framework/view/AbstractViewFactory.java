@@ -219,7 +219,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -1350,7 +1352,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected String getTimePattern(
       ITimeAwarePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return translationProvider.getTimePattern(locale);
+    if (propertyDescriptor.isSecondsAware()) {
+      return translationProvider.getTimePattern(locale);
+    }
+    return translationProvider.getShortTimePattern(locale);
   }
 
   /**
@@ -2970,7 +2975,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
+          columnPrefs[i] = new Object[] {
+              column[0], new Integer(column[1])
+          };
         }
       }
     }

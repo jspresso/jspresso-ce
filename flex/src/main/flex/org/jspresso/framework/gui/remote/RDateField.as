@@ -21,6 +21,7 @@ package org.jspresso.framework.gui.remote {
 
         private var _type:String;
         private var _timezoneAware:Boolean;
+        private var _secondsAware:Boolean;
 
         public function RDateField() {
           //default constructor.
@@ -43,5 +44,12 @@ package org.jspresso.framework.gui.remote {
           _timezoneAware = value;
         }
 
+        public function get secondsAware():Boolean {
+          return _secondsAware;
+        }
+
+        public function set secondsAware(value:Boolean):void {
+          _secondsAware = value;
+        }
     }
 }

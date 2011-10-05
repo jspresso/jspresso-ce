@@ -74,7 +74,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     /** @type Array */
     __timeFormats : null,
     /** @type Array */
+    __shortTimeFormats : null,
+    /** @type Array */
     __dateTimeFormats : null,
+    /** @type Array */
+    __shortDateTimeFormats : null,
     /** @type String */
     __datePattern : null,
     
@@ -1205,6 +1209,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setGuid(remoteDateField.getGuid());
       remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setTooltip(remoteDateField.getTooltip());
+      remoteTimeField.setSecondsAware(remoteDateField.isSecondsAware());
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this
           ._sizeMaxComponentWidth(
@@ -2618,10 +2623,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-          if(!this.__dateTimeFormats) {
-            this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
+          if(remoteComponent.isSecondsAware()) {
+            if(!this.__dateTimeFormats) {
+              this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
+            }
+            dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
+          } else {
+            if(!this.__shortDateTimeFormats) {
+              this.__shortDateTimeFormats = this._createDateFormats(this._createShortDateTimeFormatPatterns());
+            }
+            dateTimeFormat.setFormatDelegates(this.__shortDateTimeFormats);
           }
-          dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
           dateTimeFormat.setRemoteComponent(remoteComponent);
           return dateTimeFormat;
         } else {
@@ -2637,10 +2649,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         return new org.jspresso.framework.util.format.PasswordFormat();
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-        if(!this.__timeFormats) {
-          this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
+        if(remoteComponent.isSecondsAware()) {
+          if(!this.__timeFormats) {
+            this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
+          }
+          timeFormat.setFormatDelegates(this.__timeFormats);
+        } else {
+          if(!this.__shortTimeFormats) {
+            this.__shortTimeFormats = this._createDateFormats(this._createShortTimeFormatPatterns());
+          }
+          timeFormat.setFormatDelegates(this.__shortTimeFormats);
         }
-        timeFormat.setFormatDelegates(this.__timeFormats);
         timeFormat.setRemoteComponent(remoteComponent);
         return timeFormat;
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
@@ -2676,6 +2695,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return formatPatterns;
     },
 
+    _createShortTimeFormatPatterns : function() {
+      var formatPatterns = new Array();
+      formatPatterns.push(qx.locale.Date
+          .getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date
+          .getDateTimeFormat("HH", "HH"));
+      return formatPatterns;
+    },
+
     _createDateFormatPatterns : function() {
       var formatPatterns = new Array();
       var defaultFormatPattern = this._getDatePattern();
@@ -2702,6 +2730,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return formatPatterns;
     },
     
+    _createShortDateTimeFormatPatterns : function() {
+      var dateFormatPatterns = this._createDateFormatPatterns();
+      var timeFormatPatterns = this._createShortTimeFormatPatterns();
+      var formatPatterns = new Array();
+      for(var i = 0; i < dateFormatPatterns.length; i++) {
+        for(var j = 0; j < timeFormatPatterns.length; j++) {
+          formatPatterns.push(dateFormatPatterns[i] + " " + timeFormatPatterns[j]);
+        }
+        formatPatterns.push(dateFormatPatterns[i]);
+      }
+      return formatPatterns;
+    },
+
     _createDateFormats : function(formatPatterns) {
       var formats = new Array();
       for(var i = 0; i < formatPatterns.length; i++) {

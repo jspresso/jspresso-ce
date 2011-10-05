@@ -111,14 +111,22 @@ public abstract class AbstractController implements IController {
    */
   @Override
   public String getDatePattern(Locale locale) {
-    return getTranslation("date_format", locale);
+    return getTranslation(DATE_FORMAT_KEY, locale);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getTimePattern(@SuppressWarnings("unused") Locale locale) {
-    return "HH:mm:ss";
+  public String getTimePattern(Locale locale) {
+    return getTranslation(TIME_FORMAT_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getShortTimePattern(Locale locale) {
+    return getTranslation(TIME_FORMAT_SHORT_KEY, locale);
   }
 }

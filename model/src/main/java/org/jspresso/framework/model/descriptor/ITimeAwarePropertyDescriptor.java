@@ -25,5 +25,11 @@ package org.jspresso.framework.model.descriptor;
  * @author Vincent Vandenschrick
  */
 public interface ITimeAwarePropertyDescriptor {
-  // Empty as of now.
+
+  /**
+   * Should this time information include seconds.
+   * 
+   * @return <code>true</code> if this time information include seconds.
+   */
+  boolean isSecondsAware();
 }

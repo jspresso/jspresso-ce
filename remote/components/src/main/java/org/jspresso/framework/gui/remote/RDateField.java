@@ -30,6 +30,7 @@ public class RDateField extends RComponent {
 
   private String            type;
   private boolean           timezoneAware;
+  private boolean           secondsAware;
 
   /**
    * Constructs a new <code>RDateField</code> instance.
@@ -86,5 +87,23 @@ public class RDateField extends RComponent {
    */
   public void setTimezoneAware(boolean timezoneAware) {
     this.timezoneAware = timezoneAware;
+  }
+
+  /**
+   * Gets the secondsAware.
+   * 
+   * @return the secondsAware.
+   */
+  public boolean isSecondsAware() {
+    return secondsAware;
+  }
+
+  /**
+   * Sets the secondsAware.
+   * 
+   * @param secondsAware the secondsAware to set.
+   */
+  public void setSecondsAware(boolean secondsAware) {
+    this.secondsAware = secondsAware;
   }
 }

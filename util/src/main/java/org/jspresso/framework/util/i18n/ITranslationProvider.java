@@ -29,6 +29,19 @@ import java.util.Locale;
 public interface ITranslationProvider {
 
   /**
+   * <code>TIME_FORMAT_SHORT_KEY</code>.
+   */
+  String TIME_FORMAT_SHORT_KEY = "time_format_short";
+  /**
+   * <code>TIME_FORMAT_KEY</code>.
+   */
+  String TIME_FORMAT_KEY = "time_format";
+  /**
+   * <code>DATE_FORMAT_KEY</code>.
+   */
+  String DATE_FORMAT_KEY = "date_format";
+
+  /**
    * Gets a translated string based on a key.
    * 
    * @param key
@@ -62,11 +75,22 @@ public interface ITranslationProvider {
   String getDatePattern(Locale locale);
 
   /**
-   * Return the default time pattern expressed as a SimpleDateFormat pattern.
+   * Return the default time pattern (including seconds) expressed as a
+   * SimpleDateFormat pattern.
    * 
    * @param locale
    *          the locale.
-   * @return the default date pattern.
+   * @return the default short time pattern.
    */
   String getTimePattern(Locale locale);
+
+  /**
+   * Return the default short time pattern (without seconds) expressed as a
+   * SimpleDateFormat pattern.
+   * 
+   * @param locale
+   *          the locale.
+   * @return the default short time pattern.
+   */
+  String getShortTimePattern(Locale locale);
 }

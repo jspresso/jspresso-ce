@@ -19,9 +19,18 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTimeField")]
     public class RTimeField extends RComponent {
 
-        public function RTimeField() {
-          //default constructor.
-        }
+      private var _secondsAware:Boolean;
 
+      public function RTimeField() {
+        //default constructor.
+      }
+
+      public function get secondsAware():Boolean {
+        return _secondsAware;
+      }
+      
+      public function set secondsAware(value:Boolean):void {
+        _secondsAware = value;
+      }
     }
 }

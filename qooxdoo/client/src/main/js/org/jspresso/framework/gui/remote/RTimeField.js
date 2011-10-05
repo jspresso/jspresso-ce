@@ -18,6 +18,13 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTimeField",
 
   construct : function() {
     this.base(arguments);
-  }
+  },
 
+  properties :
+  {
+    secondsAware :
+    {
+      check : "Boolean"
+    }
+  }
 });
