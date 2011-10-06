@@ -113,6 +113,9 @@ public class EditComponentAction<E, F, G> extends
   @Override
   protected Object getComponentToEdit(Map<String, Object> context) {
     Object model = getActionParameter(context);
+    if (model == null) {
+      model = getSelectedModel(context);
+    }
     if (model instanceof Collection<?>) {
       if (((Collection<?>) model).isEmpty()) {
         return null;
