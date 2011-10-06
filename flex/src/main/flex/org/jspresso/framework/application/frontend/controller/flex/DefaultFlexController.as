@@ -896,6 +896,23 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                   secondaryActions:Array,
                                                   helpActions:Array):UIComponent {
 
+      var split:UIComponent = assembleSplittedSection(navigationAccordion, mainViewStack);
+      assembleApplicationControlBar(exitAction, navigationActions, actions, helpActions);
+      if(secondaryActions && secondaryActions.length > 0) {
+        var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions));
+        var surroundingBox:VBox = new VBox();
+        surroundingBox.percentWidth = 100.0;
+        surroundingBox.percentHeight = 100.0;
+        surroundingBox.addChild(split);
+        surroundingBox.addChild(secondaryToolBar);
+        return surroundingBox;
+      } else {
+        return split;
+      }
+    }
+    
+    protected function assembleSplittedSection(navigationAccordion:CollapsibleAccordion,
+                                               mainViewStack:ViewStack):UIComponent {
       var split:HDividedBox = new HDividedBox();
       split.liveDragging = true;
       split.resizeToContent = true;
@@ -922,8 +939,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       split.addChild(mainViewStack);
       split.percentWidth = 100.0;
       split.percentHeight = 100.0;
-
-
+      return split;
+    }
+    
+    protected function assembleApplicationControlBar(exitAction:RAction,
+                                                     navigationActions:Array,
+                                                     actions:Array,
+                                                     helpActions:Array):ApplicationControlBar {
       var applicationFrame:Application = Application.application as Application;
       var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
       if(controlBar) {
@@ -961,18 +983,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       getViewFactory().addSeparator(controlBar);
       controlBar.addChild(getViewFactory().createAction(exitAction));
-
-      if(secondaryActions && secondaryActions.length > 0) {
-        var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions));
-        var surroundingBox:VBox = new VBox();
-        surroundingBox.percentWidth = 100.0;
-        surroundingBox.percentHeight = 100.0;
-        surroundingBox.addChild(split);
-        surroundingBox.addChild(secondaryToolBar);
-        return surroundingBox;
-      } else {
-        return split;
-      }
+      return controlBar;
     }
 
     protected function createApplicationMenuBar(actions:Array,
