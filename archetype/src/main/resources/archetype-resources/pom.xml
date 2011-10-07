@@ -6,6 +6,7 @@
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
     <version>${jspressoVersion}</version>
+    <relativePath />
   </parent>
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
