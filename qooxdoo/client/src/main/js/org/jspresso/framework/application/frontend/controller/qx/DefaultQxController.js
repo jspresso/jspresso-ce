@@ -437,7 +437,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       uploadDialog.add(buttonBox);
       
       uploadForm.addListener("completed",function(e) {
-        uploadField.setFieldValue('');
+        uploadField.setFileName('');
         var document = uploadForm.getIframeDocument();
         var resource = document.firstChild;
         var id = resource.getAttribute("id");
