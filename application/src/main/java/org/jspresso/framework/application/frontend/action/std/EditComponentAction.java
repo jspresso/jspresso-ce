@@ -25,11 +25,12 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * This action pulls a model out of the context (action parameter), creates a
- * view, binds it on the model and prepares for chaining with a modal dialog
- * action to pop-up the result. The translated name of the action, whenever not
- * empty, will be used as the dialog title. If the context extracted model is a
- * collection, the first element of the collection is used. Custom actions (
+ * This action pulls a model out of the context (action parameter or selected
+ * model if action parameter is not filled), creates a view, binds it on the
+ * model and prepares for chaining with a modal dialog action to pop-up the
+ * result. The translated name of the action, whenever not empty, will be used
+ * as the dialog title. If the context extracted model is a collection, the
+ * first element of the collection is used. Custom actions (
  * <code>okAction</code> and <code>cancelAction</code>) can be configured to
  * take care of user decision when closing the dialog.
  * 
