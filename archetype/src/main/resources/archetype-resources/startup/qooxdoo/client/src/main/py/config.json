@@ -79,8 +79,18 @@
     },
     "source-script" :
     {
+      "copy-files" :
+      {
+        "files" : ["*.html"],
+        "source" : "${symbol_dollar}{ROOT}/html",
+        "target" : "${symbol_dollar}{TARGET}/web-debug"
+      },
       "compile-options" :
       {
+        "paths" :
+        {
+          "file" : "${symbol_dollar}{TARGET}/web-debug/script/${symbol_dollar}{APPLICATION}.js"
+        },
         "uris" : 
         {
           "add-nocache-param" : false
@@ -89,8 +99,18 @@
     },
     "source-all-script" :
     {
+      "copy-files" :
+      {
+        "files" : ["*.html"],
+        "source" : "${symbol_dollar}{ROOT}/html",
+        "target" : "${symbol_dollar}{TARGET}/web-debug"
+      },
       "compile-options" :
       {
+        "paths" :
+        {
+          "file" : "${symbol_dollar}{TARGET}/web-debug/script/${symbol_dollar}{APPLICATION}.js"
+        },
         "uris" : 
         {
           "add-nocache-param" : false

@@ -105,31 +105,20 @@
             <phase>prepare-package</phase>
             <configuration>
               <tasks>
-                <property name="web-debug.dir" value="${symbol_dollar}{project.build.directory}/web-debug" />
-                <property name="js.source.dir" value="${symbol_dollar}{basedir}/src/main/source" />
-                <property name="html.source.dir" value="${symbol_dollar}{basedir}/src/main/html" />
+                <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
                 <mkdir dir="" />
-                <copy todir="${symbol_dollar}{web-debug.dir}">
-                  <fileset dir="${symbol_dollar}{js.source.dir}">
-                    <include name="**/*.js" />
-                  </fileset>
-                  <fileset dir="${symbol_dollar}{html.source.dir}">
-                    <include name="**/*.html" />
-                  </fileset>
-                </copy>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../../target" value="file:///${symbol_dollar}{project.build.directory}">
-                  <include name="**/*.js"/>
+                <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
+                  <include name="**/*.js" />
                 </replace>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../" value="file:///${symbol_dollar}{basedir}/src/main/">
-                  <include name="**/*.js"/>
+                <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
+                  <include name="**/*.js" />
                 </replace>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="\" value="/">
-                  <include name="**/*.js"/>
+                <replace dir="${web-debug.dir}" token="\" value="/">
+                  <include name="**/*.js" />
                 </replace>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="//(" value="\/(">
-                  <include name="**/*.js"/>
+                <replace dir="${web-debug.dir}" token="//(" value="\/(">
+                  <include name="**/*.js" />
                 </replace>
-                <delete dir="${symbol_dollar}{js.source.dir}" />
               </tasks>
             </configuration>
           </execution>
