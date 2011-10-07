@@ -2679,7 +2679,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                 .getMaxFractionDigit());
           }
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
-          format = qx.util.format.NumberFormat.getIntegerInstance();
+          format = new qx.util.format.NumberFormat();
+          format.setMaximumFractionDigits(0);
         }
       }
       return format;
