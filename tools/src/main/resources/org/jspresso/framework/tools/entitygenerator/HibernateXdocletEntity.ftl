@@ -613,7 +613,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateEnumerationConstants propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#local enumerationName=propertyDescriptor.enumerationName/>
   <#list propertyDescriptor.enumerationValues as enumerationValue>
   /**
    * Constant enumeration value for ${propertyName} : ${enumerationValue}.
