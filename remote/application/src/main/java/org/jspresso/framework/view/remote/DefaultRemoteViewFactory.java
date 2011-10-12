@@ -808,46 +808,59 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
-    connector.setExceptionHandler(actionHandler);
-    RComboBox viewComponent = createRComboBox(propertyViewDescriptor);
-    viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
-    List<String> values = new ArrayList<String>();
-    List<String> translations = new ArrayList<String>();
-    List<RIcon> icons = new ArrayList<RIcon>();
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    List<String> enumerationValues = new ArrayList<String>(
-        propertyDescriptor.getEnumerationValues());
-    filterEnumerationValues(enumerationValues, propertyViewDescriptor);
-    if (!propertyDescriptor.isMandatory()) {
-      enumerationValues.add(0, "");
-    }
-    for (String value : enumerationValues) {
-      values.add(value);
-      icons.add(getIconFactory().getIcon(
-          propertyDescriptor.getIconImageURL(value),
-          getIconFactory().getTinyIconSize()));
-      if (value != null && propertyDescriptor.isTranslated()) {
-        if ("".equals(value)) {
-          translations.add(" ");
+    IValueConnector connector;
+    RComponent viewComponent;
+    IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
+        actionHandler, locale);
+    if (propertyViewDescriptor.isReadOnly()
+        && propertyViewDescriptor.getAction() != null) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(), formatter);
+      viewComponent = createRLink(propertyViewDescriptor);
+    } else {
+      connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+      viewComponent = createRComboBox(propertyViewDescriptor);
+      ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor
+          .isReadOnly());
+      List<String> values = new ArrayList<String>();
+      List<String> translations = new ArrayList<String>();
+      List<RIcon> icons = new ArrayList<RIcon>();
+      List<String> enumerationValues = new ArrayList<String>(
+          propertyDescriptor.getEnumerationValues());
+      filterEnumerationValues(enumerationValues, propertyViewDescriptor);
+      if (!propertyDescriptor.isMandatory()) {
+        enumerationValues.add(0, "");
+      }
+      for (String value : enumerationValues) {
+        values.add(value);
+        icons.add(getIconFactory().getIcon(
+            propertyDescriptor.getIconImageURL(value),
+            getIconFactory().getTinyIconSize()));
+        if (value != null && propertyDescriptor.isTranslated()) {
+          if ("".equals(value)) {
+            translations.add(" ");
+          } else {
+            translations.add(actionHandler.getTranslation(
+                computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                    value), locale));
+          }
         } else {
-          translations.add(actionHandler.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                  value), locale));
-        }
-      } else {
-        if (value == null) {
-          translations.add(" ");
-        } else {
-          translations.add(value);
+          if (value == null) {
+            translations.add(" ");
+          } else {
+            translations.add(value);
+          }
         }
       }
+      ((RComboBox) viewComponent).setValues(values.toArray(new String[0]));
+      ((RComboBox) viewComponent).setTranslations(translations
+          .toArray(new String[0]));
+      ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[0]));
     }
-    viewComponent.setValues(values.toArray(new String[0]));
-    viewComponent.setTranslations(translations.toArray(new String[0]));
-    viewComponent.setIcons(icons.toArray(new RIcon[0]));
+    connector.setExceptionHandler(actionHandler);
+    IView<RComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
