@@ -1,6 +1,6 @@
 3.5.9
 =====
-- Due to the mifgration to qooxdoo 1.5, there is a manual change to perform on existing projects.
+- Due to the migration to qooxdoo 1.5, there is a manual change to perform on existing projects.
 Edit startup/qooxdoo/client/pom.xml and replace the following section :
 	  <execution>
 	    <id>web-debug</id>
