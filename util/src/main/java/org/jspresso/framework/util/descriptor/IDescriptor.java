@@ -22,7 +22,6 @@ import java.util.Locale;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * This interface is implemented by anything which can be described.
  * 
@@ -34,11 +33,15 @@ public interface IDescriptor {
   /**
    * <code>DESCRIPTION</code>="description".
    */
-  String DESCRIPTION = "description";
+  String DESCRIPTION  = "description";
   /**
    * <code>NAME</code>="name".
    */
-  String NAME        = "name";
+  String NAME         = "name";
+  /**
+   * <code>LAST_UPDATED</code>="lastUpdated".
+   */
+  String LAST_UPDATED = "lastUpdated";
 
   /**
    * Gets the end-user understandable description.
@@ -51,11 +54,11 @@ public interface IDescriptor {
    * Gets the internationalized end-user understandable description.
    * 
    * @param translationProvider
-   *            the translation provider which can be used by the descriptor to
-   *            compute its internationalized description.
+   *          the translation provider which can be used by the descriptor to
+   *          compute its internationalized description.
    * @param locale
-   *            the locale in which the descriptor must compute its
-   *            internationalized description.
+   *          the locale in which the descriptor must compute its
+   *          internationalized description.
    * @return The user-friendly description
    */
   String getI18nDescription(ITranslationProvider translationProvider,
@@ -65,11 +68,11 @@ public interface IDescriptor {
    * Gets the internationalized name of this descriptor.
    * 
    * @param translationProvider
-   *            the translation provider which can be used by the descriptor to
-   *            compute its internationalized name.
+   *          the translation provider which can be used by the descriptor to
+   *          compute its internationalized name.
    * @param locale
-   *            the locale in which the descriptor must compute its
-   *            internationalized name.
+   *          the locale in which the descriptor must compute its
+   *          internationalized name.
    * @return The internationalized name of this descripted object
    */
   String getI18nName(ITranslationProvider translationProvider, Locale locale);
@@ -82,4 +85,11 @@ public interface IDescriptor {
    * @return The name of this descripted object
    */
   String getName();
+
+  /**
+   * Gets the timestamp of the last update of this descriptor or -1 if no information is available.
+   * 
+   * @return the timestamp of the last update of this descriptor or -1 if no information is available.
+   */
+  long getLastUpdated();
 }

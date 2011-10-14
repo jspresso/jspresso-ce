@@ -34,6 +34,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   private String description;
   private String i18nNameKey;
   private String name;
+  private long   lastUpdated = -1L;
 
   /**
    * {@inheritDoc}
@@ -136,5 +137,26 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    */
   public String getI18nNameKey() {
     return i18nNameKey;
+  }
+
+  /**
+   * Gets the lastUpdated.
+   * 
+   * @return the lastUpdated.
+   */
+  @Override
+  public long getLastUpdated() {
+    return lastUpdated;
+  }
+
+  /**
+   * Sets the lastUpdated.
+   * 
+   * @param lastUpdated
+   *          the lastUpdated to set.
+   * @internal
+   */
+  public void setLastUpdated(long lastUpdated) {
+    this.lastUpdated = lastUpdated;
   }
 }

@@ -513,4 +513,25 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
   }
+
+  /**
+   * Gets the lastUpdated.
+   * 
+   * @return the lastUpdated.
+   */
+  @Override
+  public long getLastUpdated() {
+    return actionDescriptor.getLastUpdated();
+  }
+
+  /**
+   * Sets the lastUpdated.
+   * 
+   * @param lastUpdated
+   *          the lastUpdated to set.
+   * @internal
+   */
+  public void setLastUpdated(long lastUpdated) {
+    actionDescriptor.setLastUpdated(lastUpdated);
+  }
 }

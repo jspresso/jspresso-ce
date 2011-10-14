@@ -512,6 +512,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public long getLastUpdated() {
+    return controllerDescriptor.getLastUpdated();
+  }
+
+  /**
    * Gets the selectedWorkspaceName.
    * 
    * @return the selectedWorkspaceName.
@@ -740,6 +748,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setName(String name) {
     controllerDescriptor.setName(name);
+  }
+
+  /**
+   * Sets the lastUpdated.
+   * 
+   * @param lastUpdated
+   *          the lastUpdated to set.
+   * @internal
+   */
+  public void setLastUpdated(long lastUpdated) {
+    controllerDescriptor.setLastUpdated(lastUpdated);
   }
 
   /**

@@ -149,4 +149,25 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
     this.projectedViewDescriptor = projectedViewDescriptor;
   }
+
+  /**
+   * Gets the lastUpdated.
+   * 
+   * @return the lastUpdated.
+   */
+  @Override
+  public long getLastUpdated() {
+    return descriptor.getLastUpdated();
+  }
+
+  /**
+   * Sets the lastUpdated.
+   * 
+   * @param lastUpdated
+   *          the lastUpdated to set.
+   * @internal
+   */
+  public void setLastUpdated(long lastUpdated) {
+    descriptor.setLastUpdated(lastUpdated);
+  }
 }

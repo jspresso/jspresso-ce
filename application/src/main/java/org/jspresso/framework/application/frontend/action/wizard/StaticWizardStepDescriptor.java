@@ -11,7 +11,6 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * A static wizard step.
  * 
@@ -99,8 +98,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   @Override
   public IWizardStepDescriptor getNextStepDescriptor(
-      @SuppressWarnings("unused")
-      Map<String, Object> context) {
+      @SuppressWarnings("unused") Map<String, Object> context) {
     return nextStepDescriptor;
   }
 
@@ -139,8 +137,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   @Override
   public IWizardStepDescriptor getPreviousStepDescriptor(
-      @SuppressWarnings("unused")
-      Map<String, Object> context) {
+      @SuppressWarnings("unused") Map<String, Object> context) {
     return previousStepDescriptor;
   }
 
@@ -154,7 +151,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * @param description
-   *            the description to set.
+   *          the description to set.
    * @see org.jspresso.framework.util.descriptor.DefaultDescriptor#setDescription(java.lang.String)
    */
   public void setDescription(String description) {
@@ -163,7 +160,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * @param name
-   *            the name to set.
+   *          the name to set.
    * @see org.jspresso.framework.util.descriptor.DefaultDescriptor#setName(java.lang.String)
    */
   public void setName(String name) {
@@ -174,7 +171,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the nextLabelKey.
    * 
    * @param nextLabelKey
-   *            the nextLabelKey to set.
+   *          the nextLabelKey to set.
    */
   public void setNextLabelKey(String nextLabelKey) {
     this.nextLabelKey = nextLabelKey;
@@ -184,7 +181,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the nextStepDescriptor.
    * 
    * @param nextStepDescriptor
-   *            the nextStepDescriptor to set.
+   *          the nextStepDescriptor to set.
    */
   public void setNextStepDescriptor(IWizardStepDescriptor nextStepDescriptor) {
     this.nextStepDescriptor = nextStepDescriptor;
@@ -197,7 +194,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the onEnterAction.
    * 
    * @param onEnterAction
-   *            the onEnterAction to set.
+   *          the onEnterAction to set.
    */
   public void setOnEnterAction(IAction onEnterAction) {
     this.onEnterAction = onEnterAction;
@@ -207,7 +204,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the onLeaveAction.
    * 
    * @param onLeaveAction
-   *            the onLeaveAction to set.
+   *          the onLeaveAction to set.
    */
   public void setOnLeaveAction(IAction onLeaveAction) {
     this.onLeaveAction = onLeaveAction;
@@ -217,7 +214,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the previousLabelKey.
    * 
    * @param previousLabelKey
-   *            the previousLabelKey to set.
+   *          the previousLabelKey to set.
    */
   public void setPreviousLabelKey(String previousLabelKey) {
     this.previousLabelKey = previousLabelKey;
@@ -227,10 +224,30 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the viewDescriptor.
    * 
    * @param viewDescriptor
-   *            the viewDescriptor to set.
+   *          the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
   }
 
+  /**
+   * Gets the lastUpdated.
+   * 
+   * @return the lastUpdated.
+   */
+  @Override
+  public long getLastUpdated() {
+    return descriptor.getLastUpdated();
+  }
+
+  /**
+   * Sets the lastUpdated.
+   * 
+   * @param lastUpdated
+   *          the lastUpdated to set.
+   * @internal
+   */
+  public void setLastUpdated(long lastUpdated) {
+    descriptor.setLastUpdated(lastUpdated);
+  }
 }
