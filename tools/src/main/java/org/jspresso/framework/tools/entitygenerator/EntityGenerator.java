@@ -235,7 +235,7 @@ public class EntityGenerator {
     rootContext.put("compareStrings", new CompareStrings(wrapper));
     rootContext.put("generateAnnotations", new Boolean(generateAnnotations));
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
-      OutputStream out;
+      OutputStream out = null;
       if (outputDir != null) {
         try {
           File outFile = new File(outputDir + "/"
@@ -245,8 +245,11 @@ public class EntityGenerator {
               outFile.getParentFile().mkdirs();
             }
             outFile.createNewFile();
+            out = new FileOutputStream(outFile);
+          } else if (componentDescriptor.getLastUpdated() > outFile
+              .lastModified()) {
+            out = new FileOutputStream(outFile);
           }
-          out = new FileOutputStream(outFile);
         } catch (IOException ex) {
           ex.printStackTrace();
           return;
@@ -254,19 +257,21 @@ public class EntityGenerator {
       } else {
         out = System.out;
       }
-      rootContext.put("componentDescriptor", componentDescriptor);
-      try {
-        template.process(rootContext, new OutputStreamWriter(out));
-        out.flush();
-        if (out != System.out) {
-          out.close();
+      if (out != null) {
+        rootContext.put("componentDescriptor", componentDescriptor);
+        try {
+          template.process(rootContext, new OutputStreamWriter(out));
+          out.flush();
+          if (out != System.out) {
+            out.close();
+          }
+        } catch (TemplateException ex) {
+          ex.printStackTrace();
+          return;
+        } catch (IOException ex) {
+          ex.printStackTrace();
+          return;
         }
-      } catch (TemplateException ex) {
-        ex.printStackTrace();
-        return;
-      } catch (IOException ex) {
-        ex.printStackTrace();
-        return;
       }
     }
   }
