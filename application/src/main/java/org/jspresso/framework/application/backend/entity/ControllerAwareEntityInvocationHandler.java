@@ -258,4 +258,13 @@ public class ControllerAwareEntityInvocationHandler extends
       super.straightSetProperty(proxy, propertyName, newPropertyValue);
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isCollectionSortOnReadEnabled() {
+    // To prevent erratic sort of collections during flush
+    return !getBackendController().isUnitOfWorkActive();
+  }
 }

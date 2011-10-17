@@ -391,9 +391,20 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
     }
-    inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
-        propertyDescriptor.getName());
+    if (isCollectionSortOnReadEnabled()) {
+      inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
+          propertyDescriptor.getName());
+    }
     return property;
+  }
+
+  /**
+   * Allow to disable collection property sorting on read.
+   * 
+   * @return true if collection sorting is enabled on read access.
+   */
+  protected boolean isCollectionSortOnReadEnabled() {
+    return true;
   }
 
   /**

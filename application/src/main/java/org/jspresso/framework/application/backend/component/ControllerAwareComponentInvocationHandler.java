@@ -174,4 +174,13 @@ public class ControllerAwareComponentInvocationHandler extends
           newPropertyValue);
     }
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isCollectionSortOnReadEnabled() {
+    //To prevent erratic sort of collections during flush
+    return !getBackendController().isUnitOfWorkActive();
+  }
 }
