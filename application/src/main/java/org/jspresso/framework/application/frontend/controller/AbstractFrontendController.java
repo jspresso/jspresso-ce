@@ -178,7 +178,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public void displayModule(String workspaceName, Module module) {
-    Module currentModule = selectedModules.get(getSelectedWorkspaceName());
+    Module currentModule = getSelectedModule(getSelectedWorkspaceName());
     if ((currentModule == null && module == null)
         || ObjectUtils.equals(currentModule, module)) {
       return;
@@ -354,6 +354,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
     // action context.
     actionContext.putAll(context);
     context.putAll(actionContext);
+    // This is handled here since the selected module might have changed during
+    // the action chain.
+    context.put(ActionContextConstants.MODULE,
+        getSelectedModule(getSelectedWorkspaceName()));
     try {
       // Should be handled before getting there.
       // checkAccess(action);
@@ -463,8 +467,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
-    initialActionContext.put(ActionContextConstants.MODULE,
-        selectedModules.get(getSelectedWorkspaceName()));
     return initialActionContext;
   }
 
