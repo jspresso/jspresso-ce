@@ -1015,7 +1015,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
               cardViewDescriptor = ((IViewDescriptorProvider) cardModel)
                   .getViewDescriptor();
             } else {
-              cardViewDescriptor = cardView.getDescriptor();
+              cardViewDescriptor = cardView.getDescriptor()
+                  .getCardViewDescriptor(cardName);
             }
             if (cardViewDescriptor != null) {
               childCardView = createView(cardViewDescriptor, actionHandler,
