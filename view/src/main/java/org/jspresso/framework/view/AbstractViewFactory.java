@@ -123,7 +123,6 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
@@ -1010,14 +1009,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (cardName != null) {
           IView<E> childCardView = cardView.getChild(cardName);
           if (childCardView == null) {
-            IViewDescriptor cardViewDescriptor;
-            if (cardModel instanceof IViewDescriptorProvider) {
-              cardViewDescriptor = ((IViewDescriptorProvider) cardModel)
-                  .getViewDescriptor();
-            } else {
-              cardViewDescriptor = cardView.getDescriptor()
-                  .getCardViewDescriptor(cardName);
-            }
+            IViewDescriptor cardViewDescriptor = cardView.getDescriptor()
+                .getCardViewDescriptor(cardName);
             if (cardViewDescriptor != null) {
               childCardView = createView(cardViewDescriptor, actionHandler,
                   locale);

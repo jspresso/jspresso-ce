@@ -68,6 +68,22 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   }
 
   /**
+   * Puts the child view registered in the card view by its name.
+   * 
+   * @param cardName
+   *          the card name to lookup the view for.
+   * @param cardViewDescriptor
+   *          the child view descriptor.
+   */
+  protected void putCardViewDescriptor(String cardName,
+      IViewDescriptor cardViewDescriptor) {
+    if (cardViewDescriptors == null) {
+      cardViewDescriptors = new HashMap<String, IViewDescriptor>();
+    }
+    cardViewDescriptors.put(cardName, cardViewDescriptor);
+  }
+
+  /**
    * Sets the childViewDescriptors.
    * 
    * @param cardViewDescriptors
@@ -77,4 +93,5 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
       Map<String, IViewDescriptor> cardViewDescriptors) {
     this.cardViewDescriptors = cardViewDescriptors;
   }
+
 }

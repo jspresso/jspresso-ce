@@ -43,8 +43,11 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
     if (model instanceof Module) {
       IViewDescriptor pvd = ((Module) model).getProjectedViewDescriptor();
       if (pvd != null) {
-        return Integer.toString(((Module) model).getProjectedViewDescriptor()
-            .hashCode());
+        String cardName = Integer.toString(pvd.hashCode());
+        if (getCardViewDescriptor(cardName) == null) {
+          putCardViewDescriptor(cardName, ((Module) model).getViewDescriptor());
+        }
+        return cardName;
       }
       return null;
     }
