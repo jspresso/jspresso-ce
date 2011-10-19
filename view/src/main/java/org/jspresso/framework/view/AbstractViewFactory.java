@@ -1005,16 +1005,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
         Object cardModel = evt.getNewValue();
         E cardsPeer = cardView.getPeer();
         // IView<E> currentChildCardView = cardView.getCurrentView();
-        String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-            .getCardNameForModel(cardModel, actionHandler.getSubject());
+        String cardName = cardView.getDescriptor().getCardNameForModel(
+            cardModel, actionHandler.getSubject());
         if (cardName != null) {
           IView<E> childCardView = cardView.getChild(cardName);
-          if (childCardView == null
-              && cardModel instanceof IViewDescriptorProvider) {
-            IViewDescriptor providedViewDescriptor = ((IViewDescriptorProvider) cardModel)
-                .getViewDescriptor();
-            if (providedViewDescriptor != null) {
-              childCardView = createView(providedViewDescriptor, actionHandler,
+          if (childCardView == null) {
+            IViewDescriptor cardViewDescriptor;
+            if (cardModel instanceof IViewDescriptorProvider) {
+              cardViewDescriptor = ((IViewDescriptorProvider) cardModel)
+                  .getViewDescriptor();
+            } else {
+              cardViewDescriptor = cardView.getDescriptor();
+            }
+            if (cardViewDescriptor != null) {
+              childCardView = createView(cardViewDescriptor, actionHandler,
                   locale);
               addCard(cardView, childCardView, cardName);
             }

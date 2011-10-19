@@ -463,14 +463,6 @@ public class DefaultRemoteViewFactory extends
     BasicMapView<RComponent> view = constructMapView(viewComponent,
         viewDescriptor);
 
-    for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
-        .getCardViewDescriptors().entrySet()) {
-      IView<RComponent> childView = createView(childViewDescriptor.getValue(),
-          actionHandler, locale);
-      cardNames.add(childViewDescriptor.getKey());
-      cards.add(childView.getPeer());
-      view.addToChildrenMap(childViewDescriptor.getKey(), childView);
-    }
     viewComponent.setCardNames(cardNames.toArray(new String[0]));
     viewComponent.setCards(cards.toArray(new RComponent[0]));
     view.setConnector(createCardViewConnector(view, actionHandler, locale));

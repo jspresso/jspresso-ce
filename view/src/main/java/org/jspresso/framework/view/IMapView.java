@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view;
 
+import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 
 /**
  * This interface establishes the general contract of a composite view which has
@@ -27,7 +28,7 @@ package org.jspresso.framework.view;
  * @author Vincent Vandenschrick
  * @param <E>
  */
-public interface IMapView<E> extends ICompositeView<E> {
+public interface IMapView<E> extends IView<E> {
 
   /**
    * Adds a child view to the map.
@@ -62,4 +63,12 @@ public interface IMapView<E> extends ICompositeView<E> {
    *          the currently displayed view.
    */
   void setCurrentView(IView<E> currentView);
+
+  /**
+   * Refines to ICardViewDescriptor.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  ICardViewDescriptor getDescriptor();
 }

@@ -85,7 +85,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
       ICardViewDescriptor cvd = (ICardViewDescriptor) editViewDescriptor;
       String cardName = cvd.getCardNameForModel(component,
           getBackendController(context).getApplicationSession().getSubject());
-      IViewDescriptor vd = cvd.getCardViewDescriptors().get(cardName);
+      IViewDescriptor vd = cvd.getCardViewDescriptor(cardName);
       modelDescriptor = vd.getModelDescriptor();
     }
 

@@ -18,9 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
@@ -55,37 +53,18 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   private Map<String, IViewDescriptor> cardViewDescriptors;
 
   /**
-   * Gets the childViewDescriptors.
+   * Gets the child view registered in the card view by its name.
    * 
-   * @return the childViewDescriptors.
+   * @param cardName
+   *          the card name to lookup the view for.
+   * @return the child view descriptor.
    */
   @Override
-  public Map<String, IViewDescriptor> getCardViewDescriptors() {
+  public IViewDescriptor getCardViewDescriptor(String cardName) {
     if (cardViewDescriptors == null) {
       cardViewDescriptors = new HashMap<String, IViewDescriptor>();
     }
-    return cardViewDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<IViewDescriptor> getChildViewDescriptors() {
-    if (cardViewDescriptors != null) {
-      return new ArrayList<IViewDescriptor>(cardViewDescriptors.values());
-    }
-    return null;
-  }
-
-  /**
-   * Never cascade models on card views.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isCascadingModels() {
-    return false;
+    return cardViewDescriptors.get(cardName);
   }
 
   /**

@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-import java.util.Map;
 
 /**
  * This public interface is implemented by "Card" view descriptors. A typical
@@ -28,8 +27,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICardViewDescriptor extends ICompositeViewDescriptor,
-    ICardNameSelector {
+public interface ICardViewDescriptor extends IViewDescriptor, ICardNameSelector {
 
   /**
    * <code>DEFAULT_CARD</code>.
@@ -42,10 +40,11 @@ public interface ICardViewDescriptor extends ICompositeViewDescriptor,
   String SECURITY_CARD = "SECURITY_CARD";
 
   /**
-   * Gets the children views registered in the card view and indexed by their
-   * card names.
+   * Gets the child view registered in the card view by its name.
    * 
-   * @return the children view descriptors.
+   * @param cardName
+   *          the card name to lookup the view for.
+   * @return the child view descriptor.
    */
-  Map<String, IViewDescriptor> getCardViewDescriptors();
+  IViewDescriptor getCardViewDescriptor(String cardName);
 }
