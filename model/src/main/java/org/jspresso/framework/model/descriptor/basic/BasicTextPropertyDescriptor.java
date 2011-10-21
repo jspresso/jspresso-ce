@@ -78,6 +78,10 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
     queryDescriptor.setWritabilityGates(defaultQueryDecriptor
         .getWritabilityGates());
 
+    queryDescriptor.setDelegateClassName(defaultQueryDecriptor
+        .getDelegateClassName());
+    queryDescriptor.setComputed(defaultQueryDecriptor.isComputed());
+
     return queryDescriptor;
   }
 
