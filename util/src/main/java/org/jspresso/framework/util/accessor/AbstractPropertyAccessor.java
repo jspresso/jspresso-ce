@@ -21,7 +21,8 @@ package org.jspresso.framework.util.accessor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.beanutils.expression.DefaultResolver;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
@@ -32,7 +33,67 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  */
 public abstract class AbstractPropertyAccessor implements IAccessor {
 
-  private String property;
+  private String                         property;
+
+  private static final PropertyUtilsBean PROPERTY_UTILS_BEAN = new PropertyUtilsBean();
+  static {
+    PROPERTY_UTILS_BEAN.setResolver(new DefaultResolver() {
+
+      /**
+       * Supports properties starting with a single lowercase letter.
+       * <p>
+       * {@inheritDoc}
+       */
+      @Override
+      public String getProperty(String expression) {
+        String prop = super.getProperty(expression);
+        prop = toJavaBeanPropertyName(prop);
+        return prop;
+      }
+    });
+  }
+
+  /**
+   * Whenever a property name starts with a single lowercase letter, the actual
+   * java bean property starts with an upper case letter.
+   * 
+   * @param prop
+   *          the property name.
+   * @return the fixed java bean property name.
+   */
+  public static String toJavaBeanPropertyName(String prop) {
+    if (prop != null && prop.length() >= 2) {
+      if (Character.isLowerCase(prop.charAt(0))
+          && Character.isUpperCase(prop.charAt(1))) {
+        StringBuffer fixedProp = new StringBuffer(prop.substring(0, 1)
+            .toUpperCase());
+        fixedProp.append(prop.substring(1));
+        return fixedProp.toString();
+      }
+    }
+    return prop;
+  }
+
+  /**
+   * Whenever a property name starts with a single lowercase letter, the actual
+   * java bean property starts with an upper case letter.
+   * 
+   * @param prop
+   *          the property name.
+   * @return the fixed java bean property name.
+   */
+  public static String fromJavaBeanPropertyName(String prop) {
+    if (prop != null && prop.length() >= 2) {
+      if (Character.isUpperCase(prop.charAt(0))
+          && Character.isUpperCase(prop.charAt(1))) {
+        StringBuffer fixedProp = new StringBuffer(prop.substring(0, 1)
+            .toLowerCase());
+        fixedProp.append(prop.substring(1));
+        return fixedProp.toString();
+      }
+    }
+    return prop;
+  }
 
   /**
    * Constructs a new <code>AbstractPropertyAccessor</code> instance.
@@ -67,14 +128,17 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
         if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
             getLastNestedProperty())) {
           // We are explicitely on a bean property. Do not use
-          // PropertyUtils.getProperty since it will detect that the target
+          // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
+          // target
           // is a Map and access its properties as such.
-          return PropertyUtils.getSimpleProperty(finalTarget,
+          return PROPERTY_UTILS_BEAN.getSimpleProperty(finalTarget,
               getLastNestedProperty());
         }
-        return PropertyUtils.getProperty(finalTarget, getLastNestedProperty());
+        return PROPERTY_UTILS_BEAN.getProperty(finalTarget,
+            getLastNestedProperty());
       }
-      return PropertyUtils.getProperty(finalTarget, getLastNestedProperty());
+      return PROPERTY_UTILS_BEAN.getProperty(finalTarget,
+          getLastNestedProperty());
     }
     return null;
   }
@@ -105,17 +169,18 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
           if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
               getLastNestedProperty())) {
             // We are explicitely on a bean property. Do not use
-            // PropertyUtils.getProperty since it will detect that the target
+            // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
+            // target
             // is a Map and access its properties as such.
-            PropertyUtils.setSimpleProperty(finalTarget,
+            PROPERTY_UTILS_BEAN.setSimpleProperty(finalTarget,
                 getLastNestedProperty(), value);
           } else {
-            PropertyUtils.setProperty(finalTarget, getLastNestedProperty(),
-                value);
+            PROPERTY_UTILS_BEAN.setProperty(finalTarget,
+                getLastNestedProperty(), value);
           }
         } else {
-          PropertyUtils
-              .setProperty(finalTarget, getLastNestedProperty(), value);
+          PROPERTY_UTILS_BEAN.setProperty(finalTarget, getLastNestedProperty(),
+              value);
         }
       }
     } catch (InvocationTargetException ex) {
@@ -164,20 +229,24 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
       if (target instanceof Map<?, ?>) {
         if (PropertyHelper.getPropertyNames(target.getClass()).contains(prop)) {
           // We are explicitely on a bean property. Do not use
-          // PropertyUtils.getProperty since it will detect that the target is
+          // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
+          // target is
           // a
           // Map and access its properties as such.
-          return getLastNestedTarget(PropertyUtils.getSimpleProperty(target,
-              prop.substring(0, indexOfNestedDelim)), prop
-              .substring(indexOfNestedDelim + 1));
+          return getLastNestedTarget(
+              PROPERTY_UTILS_BEAN.getSimpleProperty(target,
+                  prop.substring(0, indexOfNestedDelim)),
+              prop.substring(indexOfNestedDelim + 1));
         }
-        return getLastNestedTarget(PropertyUtils.getProperty(target, prop
-            .substring(0, indexOfNestedDelim)), prop
-            .substring(indexOfNestedDelim + 1));
+        return getLastNestedTarget(
+            PROPERTY_UTILS_BEAN.getProperty(target,
+                prop.substring(0, indexOfNestedDelim)),
+            prop.substring(indexOfNestedDelim + 1));
       }
-      return getLastNestedTarget(PropertyUtils.getProperty(target, prop
-          .substring(0, indexOfNestedDelim)), prop
-          .substring(indexOfNestedDelim + 1));
+      return getLastNestedTarget(
+          PROPERTY_UTILS_BEAN.getProperty(target,
+              prop.substring(0, indexOfNestedDelim)),
+          prop.substring(indexOfNestedDelim + 1));
     }
     return null;
   }

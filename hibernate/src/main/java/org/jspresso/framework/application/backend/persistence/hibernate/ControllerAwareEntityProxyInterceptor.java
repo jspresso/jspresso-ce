@@ -33,6 +33,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 
 /**
  * Hibernate session interceptor aware of a backend controller to deal with
@@ -106,7 +107,9 @@ public class ControllerAwareEntityProxyInterceptor extends
       int[] indices = new int[propertyNames.length];
       int n = 0;
       for (int i = 0; i < propertyNames.length; i++) {
-        if (dirtyProperties.containsKey(propertyNames[i])) {
+        String propertyName = AbstractPropertyAccessor
+            .fromJavaBeanPropertyName(propertyNames[i]);
+        if (dirtyProperties.containsKey(propertyName)) {
           indices[n] = i;
           n++;
         }
@@ -158,8 +161,9 @@ public class ControllerAwareEntityProxyInterceptor extends
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
           if (state[i] != null) {
-            if (!isHibernateInternal(propertyNames[i])) {
-              properties.put(propertyNames[i], state[i]);
+            String propertyName = propertyNames[i];
+            if (!isHibernateInternal(propertyName)) {
+              properties.put(propertyName, state[i]);
             }
           }
         }

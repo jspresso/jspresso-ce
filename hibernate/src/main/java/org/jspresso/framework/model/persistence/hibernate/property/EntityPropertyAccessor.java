@@ -28,6 +28,7 @@ import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
@@ -89,7 +90,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      *          the name of the property to access.
      */
     public EntityPropertyGetter(Class<?> theClass, String propertyName) {
-      this.propertyName = propertyName;
+      this.propertyName = AbstractPropertyAccessor
+          .fromJavaBeanPropertyName(propertyName);
       this.propertyClass = PropertyHelper.getPropertyType(theClass,
           propertyName);
     }
@@ -139,7 +141,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     public Class<?> getReturnType() {
       return propertyClass;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -169,7 +171,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      *          the name of the property to access.
      */
     public EntityPropertySetter(String propertyName) {
-      this.propertyName = propertyName;
+      this.propertyName = AbstractPropertyAccessor
+          .fromJavaBeanPropertyName(propertyName);
     }
 
     /**
