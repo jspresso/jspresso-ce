@@ -63,8 +63,10 @@ package ${package};
         <#local propertyName=propertyDescriptor.name/>
         <#if propertyDescriptor.sqlName?exists>
           <#local columnName=propertyDescriptor.sqlName/>
+          <#local columnNameGenerated = false/>
         <#else>  
           <#local columnName=generateSQLName(propertyName)/>
+          <#local columnNameGenerated = true/>
         </#if>
         <#if uniqueConstraints?exists>
           <#local uniqueConstraint = uniqueConstraints[propertyDescriptor.unicityScope]/>
@@ -192,8 +194,10 @@ public interface ${componentName}
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local columnName=propertyDescriptor.sqlName/>
+    <#local columnNameGenerated = false/>
   <#else>  
     <#local columnName=generateSQLName(propertyName)/>
+    <#local columnNameGenerated = true/>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -389,12 +393,16 @@ public interface ${componentName}
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local propSqlName=propertyDescriptor.sqlName/>
+    <#local propSqlNameGenerated = false/>
   <#else>  
     <#local propSqlName=generateSQLName(propertyName)/>
+    <#local propSqlNameGenerated = true/>
   </#if>
+  <#local revSqlNameGenerated = true/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
 	  <#if propertyDescriptor.reverseRelationEnd.sqlName?exists>
 	    <#local revSqlName=propertyDescriptor.reverseRelationEnd.sqlName/>
+      <#local revSqlNameGenerated = false/>
 	  <#else>  
 	    <#local revSqlName=generateSQLName(reversePropertyName)/>
 	  </#if>
@@ -485,7 +493,11 @@ public interface ${componentName}
     <#else>
       <#if !inverse>
   @javax.persistence.JoinColumn(
+        <#if revSqlNameGenerated>
       name = "${revSqlName}_ID"
+        <#else>
+      name = "${revSqlName}"
+        </#if>
   )
         <#if fkName?exists>
   @org.hibernate.annotations.ForeignKey(
@@ -573,8 +585,10 @@ public interface ${componentName}
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local propSqlName=propertyDescriptor.sqlName/>
+    <#local propSqlNameGenerated = false/>
   <#else>  
     <#local propSqlName=generateSQLName(propertyName)/>
+    <#local propSqlNameGenerated = true/>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -603,7 +617,11 @@ public interface ${componentName}
     </#if>
     <#if !oneToOne || !reverseOneToOne>
   @javax.persistence.JoinColumn(
+      <#if propSqlNameGenerated>
       name = "${propSqlName}_ID"
+      <#else>
+      name = "${propSqlName}"
+      </#if>
       <#if propertyDescriptor.mandatory>
     , nullable = false
       </#if>
@@ -683,7 +701,11 @@ public interface ${componentName}
     , metaType = "string"
   )
   @javax.persistence.JoinColumn(
+      <#if propSqlNameGenerated>
       name = "${propSqlName}_ID"
+      <#else>
+      name = "${propSqlName}"
+      </#if>
       <#if propertyDescriptor.mandatory>
     , nullable = false
       </#if>

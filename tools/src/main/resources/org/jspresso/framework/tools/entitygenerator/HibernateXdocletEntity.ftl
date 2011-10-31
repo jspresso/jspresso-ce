@@ -17,7 +17,7 @@
 	        </#if>
 	        <#local idDescriptor = componentDescriptor.getPropertyDescriptor("id")/>
 	        <#if idDescriptor.sqlName?exists>
-	          <#local idColumnName=idDescriptor.sqlName/>
+            <#local idColumnName=idDescriptor.sqlName/>
 	        <#else>  
 	          <#local idColumnName=generateSQLName(idDescriptor.name)/>
 	        </#if>
@@ -112,8 +112,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local columnName=propertyDescriptor.sqlName/>
+    <#local columnNameGenerated = false/>
   <#else>  
     <#local columnName=generateSQLName(propertyName)/>
+    <#local columnNameGenerated = true/>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -313,12 +315,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local propSqlName=propertyDescriptor.sqlName/>
+    <#local propSqlNameGenerated = false/>
   <#else>  
     <#local propSqlName=generateSQLName(propertyName)/>
+    <#local propSqlNameGenerated = true/>
   </#if>
+  <#local revSqlNameGenerated = true/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
 	  <#if propertyDescriptor.reverseRelationEnd.sqlName?exists>
 	    <#local revSqlName=propertyDescriptor.reverseRelationEnd.sqlName/>
+      <#local revSqlNameGenerated = false/>
 	  <#else>  
 	    <#local revSqlName=generateSQLName(reversePropertyName)/>
 	  </#if>
@@ -409,7 +415,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       </#if>
     <#else>
    * @hibernate.key
+      <#if revSqlNameGenerated>
    *           column = "${revSqlName}_ID"
+      <#else>
+   *           column = "${revSqlName}"
+      </#if>
       <#if bidirectional>
         <#if reverseMandatory>
    *           not-null = "true"
@@ -509,8 +519,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local propSqlName=propertyDescriptor.sqlName/>
+    <#local propSqlNameGenerated = false/>
   <#else>  
     <#local propSqlName=generateSQLName(propertyName)/>
+    <#local propSqlNameGenerated = true/>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -564,7 +576,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           </#if>
         </#if>
    * @hibernate.column
+        <#if propSqlNameGenerated>
    *           name = "${propSqlName}_ID"
+        <#else>
+   *           name = "${propSqlName}"
+        </#if>
         <#if propertyDescriptor.mandatory>
    *           not-null = "true"
         </#if>
@@ -587,7 +603,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.any-column
    *           name = "${propSqlName}_NAME"
    * @hibernate.any-column
+      <#if propSqlNameGenerated>
    *           name = "${propSqlName}_ID"
+      <#else>
+   *           name = "${propSqlName}"
+      </#if>
       <#if propertyDescriptor.mandatory>
    *           not-null = "true"
       </#if>
