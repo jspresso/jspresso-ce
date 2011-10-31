@@ -189,12 +189,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         ResultTransformer refinerResultTransformer = criteria
             .getResultTransformer();
         List<Order> refinerOrders = criteria.getOrders();
+        if (refinerOrders != null) {
+          criteria.removeAllOrders();
+        }
 
         if (queryComponent.isDistinctEnforced()) {
           criteria.setProjection(Projections.distinct(Projections.id()));
-          if (refinerOrders != null) {
-            criteria.removeAllOrders();
-          }
           EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
               .forEntityName(queryComponent.getQueryContract().getName());
           outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
