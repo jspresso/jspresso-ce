@@ -1,5 +1,10 @@
 3.5.9
 =====
+- Page navigation refactoring :
+nextModuleFilterPageAction and nextLovPageAction have both been relaced by a single action : nextPageFrontAction.
+previousModuleFilterPageAction and previousLovPageAction have both been relaced by a single action : previousPageFrontAction.
+They are backward compatible so it should be sufficient to change the references to the old actions by the new names.
+
 - ICardViewDescriptor changes the following way :
 
 extends ICompositeViewDescripror ->  extends IViewDescripror
