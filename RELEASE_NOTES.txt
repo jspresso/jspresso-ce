@@ -1,5 +1,29 @@
 3.5.9
 =====
+- New locales : ES and PT
+In order to use the new translation locales in existing projects : 
+
+Edit startup/qooxdoo/client/src/main/py/config.json and change :
+  "LOCALES"      : ["en","fr"],
+  to
+  "LOCALES"      : ["en","fr","es","pt"],
+
+Edit startup/flex/client/pom.xml and change :
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+          </locales>
+  to  
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
+          </locales>
+
+Create the es_ES and pt_BR directories in startup/flex/client/src/main/locales.
+
+
 - Page navigation refactoring :
 nextModuleFilterPageAction and nextLovPageAction have both been relaced by a single action : nextPageFrontAction.
 previousModuleFilterPageAction and previousLovPageAction have both been relaced by a single action : previousPageFrontAction.

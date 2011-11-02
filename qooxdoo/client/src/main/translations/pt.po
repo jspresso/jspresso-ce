@@ -13,71 +13,71 @@ msgstr ""
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1288
 msgid "change_font_family"
-msgstr "Modifier la police"
+msgstr "Alterar o olho da letra"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1331
 msgid "change_font_size"
-msgstr "Modifier la taille de la police"
+msgstr "Alterar o tamanho do olho da letra"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1363
 msgid "format_bold"
-msgstr "Gras"
+msgstr "em Bold"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1364
 msgid "format_italic"
-msgstr "Italique"
+msgstr "em Itálico"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1365
 msgid "format_underline"
-msgstr "Souligné"
+msgstr "em Sublinhado"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1366
 msgid "format_strikethrough"
-msgstr "Barré"
+msgstr "Riscado"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1367
 msgid "remove_format"
-msgstr "Supprimer le format"
+msgstr "Suprimir a formatação efectuada"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1371
 msgid "align_left"
-msgstr "Aligner à gauche"
+msgstr "Alinhar a esquerda"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1372
 msgid "align_center"
-msgstr "Centrer"
+msgstr "Colocar ao centro"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1373
 msgid "align_right"
-msgstr "Aligner à droite"
+msgstr "Alinhar a direita"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1374
 msgid "align_justify"
-msgstr "Justifier"
+msgstr "Justificar"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1386
 msgid "indent_more"
-msgstr "Indenter"
+msgstr "Paragrafo"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1387
 msgid "indent_less"
-msgstr "Désindenter"
+msgstr "Outdent"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1397
 msgid "insert_ordered_list"
-msgstr "Insérer une liste ordonnée"
+msgstr "Inserir uma lista ordenada"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1398
 msgid "insert_unordered_list"
-msgstr "Insérer une liste non-ordonnée"
+msgstr "Inserir uma lista não ordenada"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1402
 msgid "undo"
-msgstr "Annuler"
+msgstr "Cancelar"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1403
 msgid "redo"
-msgstr "Rétablir"
+msgstr "Restaurar"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1689
 msgid "Ok"
@@ -85,12 +85,12 @@ msgstr "Ok"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1699
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Cancelar"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1709
 msgid "Yes"
-msgstr "Oui"
+msgstr "Sim"
 
 #: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1719
 msgid "No"
-msgstr "Non"
+msgstr "Nao"
