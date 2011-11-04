@@ -174,27 +174,31 @@ public class ControllerAwareEntityProxyInterceptor extends
     return super.onLoad(entity, id, state, propertyNames, types);
   }
 
-  /**
-   * registers Enitities to be merged back from the uow to the session on
-   * commmit.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
-    while (entities.hasNext()) {
-      Object entity = entities.next();
-      if (entity instanceof IEntity) {
-        backendController.recordAsSynchronized((IEntity) entity);
-      }
-    }
-    super.postFlush(entities);
-  }
+  // Moved to preFlush to solve bug
+  // http://www.jspresso.org/mantis/view.php?id=455.
+  // /**
+  // * registers Enitities to be merged back from the uow to the session on
+  // * commmit.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+  // while (entities.hasNext()) {
+  // Object entity = entities.next();
+  // if (entity instanceof IEntity) {
+  // // backendController.recordAsSynchronized((IEntity) entity);
+  // }
+  // }
+  // super.postFlush(entities);
+  // }
 
   /**
    * This is the place to trigger the update lifecycle handler. onFlushDirty is
    * not the right place since it cannot deal with transient new instances that
-   * might be added to the object tree.
+   * might be added to the object tree. It also registers Enitities to be merged
+   * back from the uow to the session on commmit. This last action is done here
+   * instead of postFlush. See http://www.jspresso.org/mantis/view.php?id=455.
    * <p>
    * {@inheritDoc}
    */
@@ -206,33 +210,36 @@ public class ControllerAwareEntityProxyInterceptor extends
       cloneSet.add(entities.next());
     }
     for (Object entity : cloneSet) {
-      if (entity instanceof IEntity && ((IEntity) entity).isPersistent()) {
-        boolean isClean = false;
-        Map<String, Object> dirtyProperties = backendController
-            .getDirtyProperties((IEntity) entity);
-        if (dirtyProperties != null) {
-          dirtyProperties.remove(IEntity.VERSION);
+      if (entity instanceof IEntity) {
+        if (((IEntity) entity).isPersistent()) {
+          boolean isClean = false;
+          Map<String, Object> dirtyProperties = backendController
+              .getDirtyProperties((IEntity) entity);
+          if (dirtyProperties != null) {
+            dirtyProperties.remove(IEntity.VERSION);
+          }
+          if (dirtyProperties == null) {
+            isClean = true;
+          } else if (dirtyProperties.isEmpty()) {
+            isClean = true;
+          } else if (dirtyProperties.containsKey(IEntity.ID)) {
+            // whenever an entity has just been saved, its state is in the dirty
+            // store. Hibernate might ask to check dirtyness especially for
+            // collection members. Those just saved entities must not be
+            // considered dirty.
+            isClean = true;
+          } else {
+            isClean = false;
+          }
+          if (!isClean
+              && !backendController
+                  .isEntityRegisteredForDeletion((IEntity) entity)) {
+            // the entity is dirty and is going to be flushed.
+            ((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
+                getEntityLifecycleHandler());
+          }
         }
-        if (dirtyProperties == null) {
-          isClean = true;
-        } else if (dirtyProperties.isEmpty()) {
-          isClean = true;
-        } else if (dirtyProperties.containsKey(IEntity.ID)) {
-          // whenever an entity has just been saved, its state is in the dirty
-          // store. Hibernate might ask to check dirtyness especially for
-          // collection members. Those just saved entities must not be
-          // considered dirty.
-          isClean = true;
-        } else {
-          isClean = false;
-        }
-        if (!isClean
-            && !backendController
-                .isEntityRegisteredForDeletion((IEntity) entity)) {
-          // the entity is dirty and is going to be flushed.
-          ((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
-              getEntityLifecycleHandler());
-        }
+        backendController.recordAsSynchronized((IEntity) entity);
       }
     }
   }
