@@ -705,7 +705,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected String computeColumnIdentifier(
       IComponentDescriptor<?> rowDescriptor,
       IPropertyViewDescriptor columnDescriptor) {
-    String propertyName = columnDescriptor.getName();
+    String propertyName = columnDescriptor.getModelDescriptor().getName();
     String identifier = propertyName;
     String renderedProperty = computeRenderedProperty(columnDescriptor);
     if (renderedProperty != null) {

@@ -24,6 +24,7 @@ import java.util.List;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -101,9 +102,16 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
+      IModelDescriptor columnModelDescriptor = propertyViewDescriptor.getModelDescriptor();
+      if (columnModelDescriptor == null) {
+        if (propertyViewDescriptor.getName() != null) {
+          columnModelDescriptor = rowModelDescriptor
+              .getPropertyDescriptor(propertyViewDescriptor.getName());
+        }
+      }
       // Collection properties are not supported as columns
-      if (!(rowModelDescriptor.getPropertyDescriptor(propertyViewDescriptor
-          .getName()) instanceof ICollectionPropertyDescriptor<?>)) {
+      if (columnModelDescriptor != null
+          && !(columnModelDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
         actualPropertyViewDescriptors.addAll(PropertyViewDescriptorHelper
             .explodeComponentReferences(propertyViewDescriptor,
                 rowModelDescriptor));
