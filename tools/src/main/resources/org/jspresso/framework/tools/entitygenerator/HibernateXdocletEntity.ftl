@@ -128,6 +128,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#elseif propertyDescriptor.name ="version">
    * @hibernate.version
    *           unsaved-value = "null"
+   *           column = "${columnName}"
+   *           type = "integer"
     <#else>
    * @hibernate.property
     </#if>
