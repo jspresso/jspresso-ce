@@ -132,6 +132,16 @@
             </goals>
             <configuration>
               <outputFile>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}-all-${symbol_dollar}{project.version}.${symbol_dollar}{project.packaging}</outputFile>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>                                       
+                  </excludes>
+                </filter>
+              </filters>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                   <resource>META-INF/spring.handlers</resource>
