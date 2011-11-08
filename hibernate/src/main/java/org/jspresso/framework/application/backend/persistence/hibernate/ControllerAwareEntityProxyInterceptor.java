@@ -174,24 +174,22 @@ public class ControllerAwareEntityProxyInterceptor extends
     return super.onLoad(entity, id, state, propertyNames, types);
   }
 
-  // Moved to preFlush to solve bug
-  // http://www.jspresso.org/mantis/view.php?id=455.
-  // /**
-  // * registers Enitities to be merged back from the uow to the session on
-  // * commmit.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
-  // while (entities.hasNext()) {
-  // Object entity = entities.next();
-  // if (entity instanceof IEntity) {
-  // // backendController.recordAsSynchronized((IEntity) entity);
-  // }
-  // }
-  // super.postFlush(entities);
-  // }
+  /**
+   * registers Enitities to be merged back from the uow to the session on
+   * commmit.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+    while (entities.hasNext()) {
+      Object entity = entities.next();
+      if (entity instanceof IEntity) {
+        backendController.recordAsSynchronized((IEntity) entity);
+      }
+    }
+    super.postFlush(entities);
+  }
 
   /**
    * This is the place to trigger the update lifecycle handler. onFlushDirty is
@@ -213,23 +211,26 @@ public class ControllerAwareEntityProxyInterceptor extends
       if (entity instanceof IEntity) {
         if (((IEntity) entity).isPersistent()) {
           boolean isClean = false;
-          Map<String, Object> dirtyProperties = backendController
-              .getDirtyProperties((IEntity) entity);
-          if (dirtyProperties != null) {
-            dirtyProperties.remove(IEntity.VERSION);
-          }
-          if (dirtyProperties == null) {
-            isClean = true;
-          } else if (dirtyProperties.isEmpty()) {
-            isClean = true;
-          } else if (dirtyProperties.containsKey(IEntity.ID)) {
-            // whenever an entity has just been saved, its state is in the dirty
-            // store. Hibernate might ask to check dirtyness especially for
-            // collection members. Those just saved entities must not be
-            // considered dirty.
-            isClean = true;
-          } else {
-            isClean = false;
+          // Previously updated entities must be considered dirty thus
+          // we should trigger the onUpdate.
+          if (!backendController.isUpdatedInUnitOfWork((IEntity) entity)) {
+            Map<String, Object> dirtyProperties = backendController
+                .getDirtyProperties((IEntity) entity);
+            if (dirtyProperties != null) {
+              dirtyProperties.remove(IEntity.VERSION);
+            }
+            if (dirtyProperties == null) {
+              isClean = true;
+            } else if (dirtyProperties.isEmpty()) {
+              isClean = true;
+            } else if (dirtyProperties.containsKey(IEntity.ID)) {
+              // whenever an entity has just been saved, its state is in the
+              // dirty
+              // store. Hibernate might ask to check dirtyness especially for
+              // collection members. Those just saved entities must not be
+              // considered dirty.
+              isClean = true;
+            }
           }
           if (!isClean
               && !backendController
@@ -239,7 +240,6 @@ public class ControllerAwareEntityProxyInterceptor extends
                 getEntityLifecycleHandler());
           }
         }
-        backendController.recordAsSynchronized((IEntity) entity);
       }
     }
   }
