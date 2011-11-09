@@ -34,6 +34,8 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hibernate session interceptor aware of a backend controller to deal with
@@ -46,6 +48,9 @@ public class ControllerAwareEntityProxyInterceptor extends
     EntityProxyInterceptor {
 
   private static final long          serialVersionUID = -6834992000307471098L;
+
+  private static final Logger        LOG              = LoggerFactory
+                                                          .getLogger(ControllerAwareEntityProxyInterceptor.class);
 
   private HibernateBackendController backendController;
 
@@ -203,10 +208,11 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
 
-    // if (!backendController.isUnitOfWorkActive()) {
-    // throw new BackendException(
-    // "A save has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
-    // }
+    if (!backendController.isUnitOfWorkActive()) {
+      // throw new BackendException(
+      // "A save has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
+      LOG.warn("A flush has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
+    }
 
     // To avoid concurrent access modifications
     Set<Object> cloneSet = new LinkedHashSet<Object>();
