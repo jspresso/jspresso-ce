@@ -29,6 +29,7 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
+import org.jspresso.framework.application.backend.BackendException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
@@ -202,6 +203,10 @@ public class ControllerAwareEntityProxyInterceptor extends
    */
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+    if (!backendController.isUnitOfWorkActive()) {
+      throw new BackendException(
+          "A save has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
+    }
     // To avoid concurrent access modifications
     Set<Object> cloneSet = new LinkedHashSet<Object>();
     while (entities.hasNext()) {
