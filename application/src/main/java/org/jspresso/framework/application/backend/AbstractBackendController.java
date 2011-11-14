@@ -1726,7 +1726,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Configures a custom translation plugin on the controller. The controller
    * itself is a translation provider and is used as such across most of the
-   * application layers. The custom security plugin is used to override the
+   * application layers. The custom translation plugin is used to override the
    * default static, bundle-based, i18n scheme.
    * 
    * @param customTranslationPlugin
