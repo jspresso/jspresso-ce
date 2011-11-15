@@ -192,6 +192,19 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
+   * Gets the module this action has been executed on. The value is stored using
+   * the <code>ActionContextConstants.MODULE</code> key.
+   * 
+   * @param context
+   *          the action context.
+   * @param module
+   *          the module this action executes on.
+   */
+  protected void setModule(Module module, Map<String, Object> context) {
+    context.put(ActionContextConstants.MODULE, module);
+  }
+
+  /**
    * Gets the parent model this action was triggered on.
    * 
    * @param context
