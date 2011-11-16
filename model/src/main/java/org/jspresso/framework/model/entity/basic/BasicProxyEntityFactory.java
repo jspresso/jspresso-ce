@@ -29,6 +29,7 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.basic.AbstractComponentFactory;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -113,7 +114,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
             ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
       }
     }
-    entity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+    if (entity instanceof ILifecycleCapable) {
+      ((ILifecycleCapable) entity).onCreate(this, getPrincipal(),
+          getEntityLifecycleHandler());
+    }
     return entity;
   }
 
@@ -282,14 +286,16 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
     Class<?>[] implementedClasses;
     if (extraInterfaces != null) {
-      implementedClasses = new Class[extraInterfaces.length + 1];
+      implementedClasses = new Class[extraInterfaces.length + 2];
       implementedClasses[0] = entityDescriptor.getComponentContract();
+      implementedClasses[1] = ILifecycleCapable.class;
       for (int i = 0; i < extraInterfaces.length; i++) {
-        implementedClasses[i + 1] = extraInterfaces[i];
+        implementedClasses[i + 2] = extraInterfaces[i];
       }
     } else {
-      implementedClasses = new Class[1];
+      implementedClasses = new Class[2];
       implementedClasses[0] = entityDescriptor.getComponentContract();
+      implementedClasses[1] = ILifecycleCapable.class;
     }
     T entity = (T) Proxy.newProxyInstance(Thread.currentThread()
         .getContextClassLoader(), implementedClasses, entityHandler);

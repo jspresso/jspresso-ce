@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.datatransfer.ETransferMode;
 import org.jspresso.framework.model.entity.IEntity;
@@ -96,7 +97,9 @@ public class PasteCollectionToMasterAction extends
               clone = entityCloneFactory.cloneComponent((IComponent) component,
                   getEntityFactory(context));
             }
-            clone.onClone((IComponent) component);
+            if (clone instanceof ILifecycleCapable) {
+              ((ILifecycleCapable) clone).onClone((IComponent) component);
+            }
             componentsToTransfer.set(i, clone);
           }
         }

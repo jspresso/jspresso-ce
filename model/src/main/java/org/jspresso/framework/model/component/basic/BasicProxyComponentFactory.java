@@ -25,6 +25,7 @@ import java.util.Collection;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -83,7 +84,10 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
             ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
       }
     }
-    createdComponent.onCreate(null, getPrincipal(), null);
+    if (createdComponent instanceof ILifecycleCapable) {
+      ((ILifecycleCapable) createdComponent).onCreate(null, getPrincipal(),
+          null);
+    }
     return createdComponent;
   }
 
@@ -208,14 +212,16 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
     }
     Class<?>[] implementedClasses;
     if (extraInterfaces != null) {
-      implementedClasses = new Class[extraInterfaces.length + 1];
+      implementedClasses = new Class[extraInterfaces.length + 2];
       implementedClasses[0] = componentDescriptor.getComponentContract();
+      implementedClasses[1] = ILifecycleCapable.class;
       for (int i = 0; i < extraInterfaces.length; i++) {
-        implementedClasses[i + 1] = extraInterfaces[i];
+        implementedClasses[i + 2] = extraInterfaces[i];
       }
     } else {
-      implementedClasses = new Class[1];
+      implementedClasses = new Class[2];
       implementedClasses[0] = componentDescriptor.getComponentContract();
+      implementedClasses[1] = ILifecycleCapable.class;
     }
     T component = (T) Proxy.newProxyInstance(Thread.currentThread()
         .getContextClassLoader(), implementedClasses, componentHandler);

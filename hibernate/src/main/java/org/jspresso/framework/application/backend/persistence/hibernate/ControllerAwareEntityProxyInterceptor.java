@@ -30,6 +30,7 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
@@ -221,7 +222,8 @@ public class ControllerAwareEntityProxyInterceptor extends
       preFlushedEntities.add(entities.next());
     }
     Set<Object> onUpdatedEntities = new HashSet<Object>();
-    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
+    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities,
+        onUpdatedEntities);
     while (onUpdateTriggered) {
       // Until the state is stable.
       onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
@@ -232,7 +234,8 @@ public class ControllerAwareEntityProxyInterceptor extends
       Set<Object> onUpdatedEntities) {
     boolean onUpdateTriggered = false;
     for (Object entity : preFlushedEntities) {
-      if (!onUpdatedEntities.contains(entity)) {
+      if (entity instanceof ILifecycleCapable
+          && !onUpdatedEntities.contains(entity)) {
         if (entity instanceof IEntity) {
           if (((IEntity) entity).isPersistent()) {
             boolean isClean = false;
@@ -258,8 +261,8 @@ public class ControllerAwareEntityProxyInterceptor extends
                 && !backendController
                     .isEntityRegisteredForDeletion((IEntity) entity)) {
               // the entity is dirty and is going to be flushed.
-              ((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
-                  getEntityLifecycleHandler());
+              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(),
+                  getPrincipal(), getEntityLifecycleHandler());
               onUpdatedEntities.add(entity);
               onUpdateTriggered = true;
             }

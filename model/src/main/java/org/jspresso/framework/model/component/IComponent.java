@@ -29,7 +29,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
+public interface IComponent extends IPropertyChangeCapable {
 
   /**
    * Notifies its <code>PropertyChangeListener</code>s on a specific property

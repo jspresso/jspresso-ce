@@ -28,6 +28,7 @@ import org.jspresso.framework.application.backend.action.AbstractCollectionActio
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
@@ -80,7 +81,9 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
           clone = entityCloneFactory.cloneComponent((IComponent) component,
               getEntityFactory(context));
         }
-        clone.onClone((IComponent) component);
+        if (clone instanceof ILifecycleCapable) {
+          ((ILifecycleCapable) clone).onClone((IComponent) component);
+        }
         entityClones.add(clone);
       }
     }
