@@ -980,7 +980,7 @@ public abstract class AbstractComponentInvocationHandler implements
       if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
           && isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)) {
         Object inlineComponent = getProperty(proxy, propertyDescriptor);
-        if (inlineComponent != null) {
+        if (inlineComponent instanceof ILifecycleCapable) {
           try {
             Object interceptorResult = MethodUtils.invokeMethod(
                 inlineComponent, lifecycleMethod.getName(), args,
