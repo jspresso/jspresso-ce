@@ -807,6 +807,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
             if (parentConnector != null && oldChildConnector != null) {
               getMvcBinder().bind(oldChildConnector, null);
               parentConnector.removeChildConnector(oldChildConnector.getId());
+              oldChildConnector.setParentConnector(null);
             }
             if (parentConnector != null && childConnector != null) {
               parentConnector.addChildConnector(childConnector.getId(),

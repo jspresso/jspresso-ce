@@ -373,10 +373,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public void removeChildConnector(String storageKey) {
-    IValueConnector removedConnector = childConnectors.remove(storageKey);
-    if (removedConnector != null) {
-      removedConnector.setParentConnector(null);
-    }
+    childConnectors.remove(storageKey);
   }
 
   /**

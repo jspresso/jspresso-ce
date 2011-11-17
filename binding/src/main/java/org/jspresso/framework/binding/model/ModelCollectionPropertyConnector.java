@@ -19,8 +19,10 @@
 package org.jspresso.framework.binding.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -345,12 +347,13 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void removeChildConnector(String storageKey) {
-    IValueConnector removedConnector = childConnectors.remove(storageKey);
-    if (removedConnector != null) {
-      removedConnector.setParentConnector(null);
-      removedConnector.cleanBindings();
-      removedConnector.setConnectorValue(null);
-    }
+    childConnectors.remove(storageKey);
+  }
+
+  private void cleanupConnector(IValueConnector removedConnector) {
+    removedConnector.setParentConnector(null);
+    removedConnector.cleanBindings();
+    removedConnector.setConnectorValue(null);
   }
 
   /**
@@ -358,23 +361,40 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   private void updateChildConnectors() {
     Collection<?> modelCollection = (Collection<?>) getConnecteeValue();
-    int modelCollectionSize = 0;
+    Map<Object, List<IValueConnector>> existingConnectorsByValue = new HashMap<Object, List<IValueConnector>>();
+    for (String connectorKey : new ArrayList<String>(getChildConnectorKeys())) {
+      IValueConnector childConnector = getChildConnector(connectorKey);
+      List<IValueConnector> existingConnectors = existingConnectorsByValue
+          .get(childConnector.getConnectorValue());
+      if (existingConnectors == null) {
+        existingConnectors = new ArrayList<IValueConnector>();
+        existingConnectorsByValue.put(childConnector.getConnectorValue(),
+            existingConnectors);
+      }
+      existingConnectors.add(childConnector);
+      removeChildConnector(connectorKey);
+    }
     if (modelCollection != null && modelCollection.size() > 0) {
-      modelCollectionSize = modelCollection.size();
       int i = 0;
-
       for (Object nextCollectionElement : modelCollection) {
-        IValueConnector childConnector = getChildConnector(i);
-        if (childConnector == null) {
-          childConnector = createChildConnector(getId() + "Element");
-          addChildConnector(computeStorageKey(i), childConnector);
+        IValueConnector connector;
+        List<IValueConnector> existingConnectors = existingConnectorsByValue
+            .get(nextCollectionElement);
+        if (existingConnectors != null && !existingConnectors.isEmpty()) {
+          connector = existingConnectors.remove(0);
+        } else {
+          connector = createChildConnector(getId() + "Element");
+          connector.setConnectorValue(nextCollectionElement);
         }
-        childConnector.setConnectorValue(nextCollectionElement);
+        addChildConnector(computeStorageKey(i), connector);
         i++;
       }
     }
-    while (getChildConnectorCount() != modelCollectionSize) {
-      removeChildConnector(computeStorageKey(getChildConnectorCount() - 1));
+    for (List<IValueConnector> obsoleteConnectors : existingConnectorsByValue
+        .values()) {
+      for (IValueConnector obsoleteConnector : obsoleteConnectors) {
+        cleanupConnector(obsoleteConnector);
+      }
     }
   }
 }
