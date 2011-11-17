@@ -218,9 +218,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -632,7 +630,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
               .createConfigurableCollectionConnectorProvider(
                   ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector());
+          mainConnector.addChildConnector(masterView.getConnector().getId(),
+              masterView.getConnector());
           if (masterView.getConnector() instanceof ICollectionConnector) {
             mainConnector
                 .setCollectionConnectorProvider((ICollectionConnector) masterView
@@ -643,7 +642,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           ICompositeValueConnector mainConnector = getConnectorFactory()
               .createCompositeValueConnector(
                   ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector());
+          mainConnector.addChildConnector(masterView.getConnector().getId(),
+              masterView.getConnector());
           viewConnector = mainConnector;
         }
         view.setConnector(viewConnector);
@@ -655,7 +655,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
-            wrapper.addChildConnector(detailView.getConnector());
+            wrapper.addChildConnector(detailView.getConnector().getId(),
+                detailView.getConnector());
             if (detailView.getConnector() instanceof ICollectionConnector) {
               wrapper
                   .setCollectionConnectorProvider((ICollectionConnector) detailView
@@ -687,7 +688,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<E> childView : view.getChildren()) {
-          connector.addChildConnector(childView.getConnector());
+          connector.addChildConnector(childView.getConnector().getId(),
+              childView.getConnector());
         }
       }
     }
@@ -804,10 +806,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
             ICompositeValueConnector parentConnector = (AbstractCompositeValueConnector) getConnector();
             if (parentConnector != null && oldChildConnector != null) {
               getMvcBinder().bind(oldChildConnector, null);
-              parentConnector.removeChildConnector(oldChildConnector);
+              parentConnector.removeChildConnector(oldChildConnector.getId());
             }
             if (parentConnector != null && childConnector != null) {
-              parentConnector.addChildConnector(childConnector);
+              parentConnector.addChildConnector(childConnector.getId(),
+                  childConnector);
               if (parentConnector.getModelConnector() != null) {
                 getMvcBinder().bind(
                     childConnector,
@@ -2195,7 +2198,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
               ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
                   viewDescriptor, actionHandler, locale, subtreeViewDescriptor,
                   1);
-              compositeConnector.addChildConnector(subtreeConnector);
+              compositeConnector.addChildConnector(subtreeConnector.getId(),
+                  subtreeConnector);
               subtreeConnectors.add(subtreeConnector);
             } finally {
               actionHandler.restoreLastSecurityContextSnapshot();
@@ -2219,7 +2223,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             actionHandler.pushToSecurityContext(childDescriptor);
             ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
                 viewDescriptor, actionHandler, locale, childDescriptor, 1);
-            simpleConnector.addChildConnector(subtreeConnector);
+            simpleConnector.addChildConnector(subtreeConnector.getId(),
+                subtreeConnector);
             simpleConnector.setCollectionConnectorProvider(subtreeConnector);
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
@@ -2780,7 +2785,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             ICollectionConnectorProvider childConnector = createNodeGroupConnector(
                 viewDescriptor, actionHandler, locale, childDescriptor,
                 depth + 1);
-            nodeGroupPrototypeConnector.addChildConnector(childConnector);
+            nodeGroupPrototypeConnector.addChildConnector(
+                childConnector.getId(), childConnector);
             subtreeConnectors.add(childConnector);
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
@@ -2878,7 +2884,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
         actionHandler.pushToSecurityContext(childDescriptor);
         ICollectionConnectorProvider childConnector = createNodeGroupConnector(
             viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
+        nodeGroupPrototypeConnector.addChildConnector(childConnector.getId(),
+            childConnector);
         nodeGroupPrototypeConnector
             .setCollectionConnectorProvider(childConnector);
       } finally {
@@ -2973,9 +2980,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
-          };
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
         }
       }
     }

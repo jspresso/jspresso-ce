@@ -73,17 +73,6 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * After having called the super implementation, removes the child connector
-   * from the cache since it is held by the connector itself.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void addChildConnector(IValueConnector connector) {
-    super.addChildConnector(connector);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -159,7 +148,7 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public IValueConnector getChildConnector(int index) {
-    return getChildConnector(computeConnectorId(index));
+    return getChildConnector(computeStorageKey(index));
   }
 
   /**
@@ -340,34 +329,34 @@ public abstract class AbstractCollectionConnector extends
    * Updates child connectors depending on the state of the model connector.
    */
   protected void updateChildConnectors() {
-    Collection<String> childConnectorsToRemove = new HashSet<String>();
-    childConnectorsToRemove.addAll(getChildConnectorKeys());
+    Collection<String> storageKeysToRemove = new HashSet<String>();
+    storageKeysToRemove.addAll(getChildConnectorKeys());
     if (getModelConnector() != null) {
       int i = 0;
-      for (String nextModelConnectorId : ((ICollectionConnector) getModelConnector())
+      for (String nextStorageKey : ((ICollectionConnector) getModelConnector())
           .getChildConnectorKeys()) {
-        childConnectorsToRemove.remove(nextModelConnectorId);
+        storageKeysToRemove.remove(nextStorageKey);
         IValueConnector childModelConnector = ((ICollectionConnector) getModelConnector())
-            .getChildConnector(nextModelConnectorId);
-        IValueConnector childConnector = getChildConnector(nextModelConnectorId);
+            .getChildConnector(nextStorageKey);
+        IValueConnector childConnector = getChildConnector(nextStorageKey);
         if (childConnector == null) {
-          childConnector = createChildConnector(computeConnectorId(i));
-          addChildConnector(childConnector);
+          childConnector = createChildConnector(getId() + "Element");
+          addChildConnector(computeStorageKey(i), childConnector);
         }
         mvcBinder.bind(childConnector, childModelConnector);
         i++;
       }
     }
     removedChildrenConnectors = new ArrayList<IValueConnector>();
-    for (String nextModelConnectorId : childConnectorsToRemove) {
-      IValueConnector connectorToRemove = getChildConnector(nextModelConnectorId);
+    for (String nextStorageKey : storageKeysToRemove) {
+      IValueConnector connectorToRemove = getChildConnector(nextStorageKey);
       mvcBinder.bind(connectorToRemove, null);
       removedChildrenConnectors.add(connectorToRemove);
-      removeChildConnector(connectorToRemove);
+      removeChildConnector(nextStorageKey);
     }
   }
 
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  private String computeStorageKey(int i) {
+    return CollectionConnectorHelper.computeStorageKey(getId(), i);
   }
 }

@@ -53,21 +53,26 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   }
 
   /**
+   * Unsupported operation.
+   * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unused")
   @Override
-  public void addChildConnector(
-      @SuppressWarnings("unused") IValueConnector childConnector) {
+  public void addChildConnector(String storageKey,
+      IValueConnector childConnector) {
     throw new UnsupportedOperationException(
         "Child connectors cannot be added to action field connector");
   }
 
   /**
+   * Unsupported operation.
+   * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unused")
   @Override
-  public void removeChildConnector(
-      @SuppressWarnings("unused") IValueConnector childConnector) {
+  public void removeChildConnector(String storageKey) {
     throw new UnsupportedOperationException(
         "Child connectors cannot be removed to action field connector");
   }
@@ -214,7 +219,8 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused")
+    ValueChangeEvent evt) {
       protectedSetConnecteeValue(getConnecteeValue());
     }
   }

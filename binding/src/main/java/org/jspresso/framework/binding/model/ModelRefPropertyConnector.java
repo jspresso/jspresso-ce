@@ -73,24 +73,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addChildConnector(
-      @SuppressWarnings("unused") IValueConnector childConnector) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void removeChildConnector(
-      @SuppressWarnings("unused") IValueConnector childConnector) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
    * The child connectors will use this method to keep track of the referenced
    * model. They will then be notified of the model reference changes.
    * <p>
@@ -165,33 +147,38 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * {@inheritDoc}
    */
   @Override
-  public IValueConnector getChildConnector(String connectorKey) {
-    if (THIS_PROPERTY.equals(connectorKey)) {
+  public IValueConnector getChildConnector(String storageKey) {
+    String actualKey = storageKey;
+    int dashIndex = actualKey.indexOf("#");
+    if (dashIndex >= 0) {
+      actualKey = actualKey.substring(0, dashIndex);
+    }
+    if (THIS_PROPERTY.equals(actualKey)) {
       return this;
     }
-    int dotIndex = connectorKey.indexOf('.');
+    int dotIndex = actualKey.indexOf('.');
     if (dotIndex > 0) {
-      String root = connectorKey.substring(0, dotIndex);
-      String nested = connectorKey.substring(dotIndex + 1);
+      String root = actualKey.substring(0, dotIndex);
+      String nested = actualKey.substring(dotIndex + 1);
 
       ICompositeValueConnector rootC = (ICompositeValueConnector) getChildConnector(root);
       return rootC.getChildConnector(nested);
     }
-    IValueConnector connector = childConnectors.get(connectorKey);
+    IValueConnector connector = childConnectors.get(actualKey);
     if (connector == null) {
       IComponentDescriptor<?> componentDescriptor = getModelDescriptor()
           .getComponentDescriptor();
       if (componentDescriptor != null) {
         try {
           getSecurityHandler().pushToSecurityContext(componentDescriptor);
-          connector = modelConnectorFactory.createModelConnector(connectorKey,
-              componentDescriptor.getPropertyDescriptor(connectorKey),
+          connector = modelConnectorFactory.createModelConnector(actualKey,
+              componentDescriptor.getPropertyDescriptor(actualKey),
               getSecurityHandler());
         } finally {
           getSecurityHandler().restoreLastSecurityContextSnapshot();
         }
         connector.setParentConnector(this);
-        childConnectors.put(connectorKey, connector);
+        childConnectors.put(actualKey, connector);
       }
     }
     return connector;
@@ -319,5 +306,28 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   protected void fireModelChange(Object oldModel, Object newModel) {
     modelChangeSupport.fireModelChange(oldModel, newModel);
+  }
+
+  /**
+   * Unsupported operation.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  @Override
+  public void addChildConnector(String storageKey,
+      IValueConnector childConnector) {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Unsupported operation.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  @Override
+  public void removeChildConnector(String storageKey) {
+    throw new UnsupportedOperationException();
   }
 }

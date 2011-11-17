@@ -54,15 +54,15 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
    * {@inheritDoc}
    */
   @Override
-  public void addChildConnector(IValueConnector connector) {
-    Collection<String> childKey = getChildConnectorKeys();
+  public void addChildConnector(String storageKey, IValueConnector connector) {
+    Collection<String> childrenKeys = getChildConnectorKeys();
     int n = 1;
-    String connectorKey = connector.getId();
-    while (childKey.contains(connectorKey)) {
-      connectorKey = getRankedKey(connector.getId(), n);
+    String dedupKey = storageKey;
+    while (childrenKeys.contains(dedupKey)) {
+      dedupKey = getRankedKey(storageKey, n);
       n++;
     }
-    addChildConnector(connectorKey, connector);
+    super.addChildConnector(dedupKey, connector);
   }
 
   /**
