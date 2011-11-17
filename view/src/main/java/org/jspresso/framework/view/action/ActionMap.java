@@ -60,7 +60,12 @@ public class ActionMap implements ISecurable, IPermIdSource {
     if (actionLists != null) {
       Map<String, ActionList> mapOfActionLists = new LinkedHashMap<String, ActionList>();
       for (ActionList al : actionLists) {
-        mapOfActionLists.put(al.getName(), al);
+        if (al.getName() != null) {
+          mapOfActionLists.put(al.getName(), al);
+        } else {
+          // to avoid dups
+          mapOfActionLists.put(Integer.toHexString(al.hashCode()), al);
+        }
       }
       for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists
           .entrySet()) {
