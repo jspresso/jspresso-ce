@@ -52,6 +52,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   private SelectionChangeSupport       selectionChangeSupport;
 
+  private List<IValueConnector>        connectorTank;
+
   /**
    * Constructs a new model property connector on a model collection property.
    * This constructor does not specify the element class of this collection
@@ -69,6 +71,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     this.modelConnectorFactory = modelConnectorFactory;
     childConnectors = new LinkedHashMap<String, IValueConnector>();
     selectionChangeSupport = new SelectionChangeSupport(this);
+    connectorTank = new ArrayList<IValueConnector>();
   }
 
   /**
@@ -152,6 +155,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public IValueConnector createChildConnector(String connectorId) {
+    if (!connectorTank.isEmpty()) {
+      return connectorTank.remove(0);
+    }
     IComponentDescriptor<?> componentDescriptor;
     componentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
         .getCollectionDescriptor().getElementDescriptor();
@@ -354,6 +360,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     removedConnector.setParentConnector(null);
     removedConnector.cleanBindings();
     removedConnector.setConnectorValue(null);
+    connectorTank.add(removedConnector);
   }
 
   /**

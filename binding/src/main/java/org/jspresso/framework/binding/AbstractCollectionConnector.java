@@ -53,6 +53,8 @@ public abstract class AbstractCollectionConnector extends
   private List<IValueConnector>    removedChildrenConnectors;
   private SelectionChangeSupport   selectionChangeSupport;
 
+  private List<IValueConnector>    connectorTank;
+
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
    * 
@@ -71,6 +73,7 @@ public abstract class AbstractCollectionConnector extends
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
     selectionChangeSupport = new SelectionChangeSupport(this);
+    connectorTank = new ArrayList<IValueConnector>();
   }
 
   /**
@@ -133,6 +136,9 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public IValueConnector createChildConnector(String newConnectorId) {
+    if (!connectorTank.isEmpty()) {
+      return connectorTank.remove(0);
+    }
     return childConnectorPrototype.clone(newConnectorId);
   }
 
@@ -322,6 +328,7 @@ public abstract class AbstractCollectionConnector extends
     removedConnector.setParentConnector(null);
     removedConnector.cleanBindings();
     removedConnector.setConnectorValue(null);
+    connectorTank.add(removedConnector);
   }
 
   /**
