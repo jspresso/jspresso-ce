@@ -20,10 +20,12 @@ package org.jspresso.framework.view.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FontMetrics;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
@@ -49,8 +51,15 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
     if (backgroundBase != null) {
       actualBackground = backgroundBase;
     }
+    setVerticalAlignment(TOP);
     super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
         isSelected, row));
+    FontMetrics fm = getFontMetrics(getFont());
+    if (HtmlHelper.isHtml(getText())
+        || fm.stringWidth(getText()) > table.getColumnModel().getColumn(column)
+            .getWidth()) {
+      setToolTipText(getText());
+    }
     return super.getTableCellRendererComponent(table, value, isSelected,
         hasFocus, row, column);
   }
