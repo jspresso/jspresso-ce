@@ -49,15 +49,10 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable",
       }
       /** @type qx.ui.tooltip.ToolTip */
       var tt = this.getToolTip();
-      if ((v instanceof String || typeof(v) === 'string') && v != "") {
+      if (v != null && v != "") {
         tt.setLabel(v);
         if(tt.isVisible()) {
-//          var bounds = tt.getBounds();
-//          if(bounds 
-//             && (   Math.abs(bounds["left"] - pageX) > 50
-//                 || Math.abs(bounds["top"]  - pageY) > 50)) {
           tt.placeToMouse(e);
-//          }
         }
       } else {
         tt.hide();

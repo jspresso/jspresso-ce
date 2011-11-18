@@ -281,12 +281,15 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     },
 
     getToolTip: function(column, row) {
-      if (column >= 0 && row >= 0) {
-        try {
-          return this.getValue(column, row);
-        } catch (e) {
+      if (row >= 0) {
+        if(column > 0) {
+          var v = this.getValue(column, row);
+          if(v != null && (v instanceof String || typeof(v) === 'string')) {
+            return v;
+          }
           return null;
         }
+        return this.getRowData(row).getValue();
       }
     }
 
