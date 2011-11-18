@@ -141,9 +141,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (component == null) {
         component = new qx.ui.core.Widget();
       }
-      if (remoteComponent.getTooltip() != null && remoteComponent.getTooltip().getValue() != null) {
+      if (remoteComponent.getTooltip() != nul) {
         component.setToolTip(new qx.ui.tooltip.ToolTip(remoteComponent
-            .getTooltip().getValue()));
+            .getTooltip()));
       }
       component = this._decorateWithActions(remoteComponent, component);
       if (remoteComponent.getBorderType()

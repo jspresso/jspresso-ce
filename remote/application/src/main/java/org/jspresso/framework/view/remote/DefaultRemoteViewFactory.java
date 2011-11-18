@@ -2170,9 +2170,7 @@ public class DefaultRemoteViewFactory extends
     String viewDescription = viewDescriptor.getI18nDescription(
         translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
-      RemoteValueState staticTooltip = new RemoteValueState(null);
-      staticTooltip.setValue(viewDescription + TOOLTIP_ELLIPSIS);
-      viewPeer.setTooltip(staticTooltip);
+      viewPeer.setTooltip(viewDescription + TOOLTIP_ELLIPSIS);
     }
     viewPeer.setForeground(viewDescriptor.getForeground());
     viewPeer.setBackground(viewDescriptor.getBackground());

@@ -12,59 +12,72 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
-			extend : org.jspresso.framework.util.remote.RemotePeer,
+qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
+{
+  extend : org.jspresso.framework.util.remote.RemotePeer,
+  
+  implement : [org.jspresso.framework.state.remote.IRemoteStateOwner],
+  
+  construct : function() {
+    this.base(arguments);
+  },
 
-			implement : [org.jspresso.framework.state.remote.IRemoteStateOwner],
-
-			construct : function() {
-				this.base(arguments);
-			},
-
-			properties : {
-				actionLists : {
-					check : "Array",
-					nullable : true
-				},
-				secondaryActionLists : {
-					check : "Array",
-					nullable : true
-				},
-				background : {
-					check : "String",
-					nullable : true
-				},
-				borderType : {
-					check : "String",
-					nullable : true
-				},
-				font : {
-					check : "org.jspresso.framework.util.gui.Font",
-					nullable : true
-				},
-				foreground : {
-					check : "String",
-					nullable : true
-				},
-				icon : {
-					check : "org.jspresso.framework.gui.remote.RIcon",
-					nullable : true
-				},
-				label : {
-					check : "String",
-					nullable : true
-				},
-				state : {
-					check : "org.jspresso.framework.state.remote.RemoteValueState",
-					nullable : true
-				},
-				tooltip : {
-					check : "org.jspresso.framework.state.remote.RemoteValueState",
-					nullable : true
-				},
-				preferredSize : {
-					check : "org.jspresso.framework.util.gui.Dimension",
-					nullable : true
-				}
-			}
-		});
+  properties :
+  {
+    actionLists :
+    {
+      check : "Array",
+      nullable : true
+    },
+    secondaryActionLists :
+    {
+      check : "Array",
+      nullable : true
+    },
+    background :
+    {
+      check : "String",
+      nullable : true
+    },
+    borderType :
+    {
+      check : "String",
+      nullable : true
+    },
+    font :
+    {
+      check : "org.jspresso.framework.util.gui.Font",
+      nullable : true
+    },
+    foreground :
+    {
+      check : "String",
+      nullable : true
+    },
+    icon :
+    {
+      check : "org.jspresso.framework.gui.remote.RIcon",
+      nullable : true
+    },
+    label :
+    {
+      check : "String",
+      nullable : true
+    },
+    state :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable : true
+    },
+    tooltip :
+    {
+      check : "String",
+      nullable : true
+    },
+    preferredSize :
+    {
+      check : "org.jspresso.framework.util.gui.Dimension",
+      nullable : true
+    }
+  }
+});
