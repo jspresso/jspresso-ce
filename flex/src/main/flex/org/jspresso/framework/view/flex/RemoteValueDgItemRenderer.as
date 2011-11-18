@@ -144,10 +144,14 @@ package org.jspresso.framework.view.flex {
           label.htmlText = HtmlUtil.convertHtmlEntities(extractFirstLine(cellText));
         }
       }
-      if(toolTip) {
-        label.toolTip = cellText;
+      if(index == 1) {
+        label.toolTip = (data as RemoteCompositeValueState).value as String;
       } else {
-        label.toolTip = null;
+        if(toolTip) {
+          label.toolTip = cellText;
+        } else {
+          label.toolTip = null;
+        }
       }
   	}
 
