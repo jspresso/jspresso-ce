@@ -71,6 +71,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
   import mx.graphics.SolidColor;
+  import mx.managers.ToolTipManager;
   import mx.resources.ResourceManager;
   import mx.utils.ObjectUtil;
   
@@ -174,6 +175,7 @@ package org.jspresso.framework.view.flex {
       _timeFormatter.formatString = "JJ:NN:SS"
       _shortTimeFormatter = new DateFormatter();
       _shortTimeFormatter.formatString = "JJ:NN"
+      ToolTipManager.toolTipClass = HtmlToolTip;
     }
     
     public function createComponent(remoteComponent:RComponent, registerState:Boolean=true):UIComponent {

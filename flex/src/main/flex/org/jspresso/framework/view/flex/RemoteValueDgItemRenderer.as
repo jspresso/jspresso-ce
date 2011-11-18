@@ -119,14 +119,6 @@ package org.jspresso.framework.view.flex {
 	        cellLabel = _formatter.format(cellValue);
 	      } else {
   	      cellLabel = cellValue.toString();
-  	      var i:int = cellLabel.indexOf("\n");
-  	      if(i >= 0) {
-  	        cellLabel = cellLabel.substr(0,i);
-  	      }
-          i = cellLabel.indexOf("\r");
-          if(i >= 0) {
-            cellLabel = cellLabel.substr(0,i);
-          }
   	    }
   	  } else {
   	    cellLabel = null;
@@ -146,14 +138,14 @@ package org.jspresso.framework.view.flex {
   	  super.commitProperties();
   	  var cellText:String = label.text;
       if(_action != null) {
-        label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
+        label.htmlText = "<u><a href='event:action'>" + extractFirstLine(cellText) + "</a></u>";
       } else {
         if(HtmlUtil.isHtml(cellText)) {
-          label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
+          label.htmlText = HtmlUtil.convertHtmlEntities(extractFirstLine(cellText));
         }
       }
       if(toolTip) {
-        label.toolTip = label.text;
+        label.toolTip = cellText;
       } else {
         label.toolTip = null;
       }
@@ -170,6 +162,20 @@ package org.jspresso.framework.view.flex {
           });
         });
       }
+    }
+    
+    private function extractFirstLine(multiLine:String):String {
+      var firstLine:String = multiLine;
+      if(firstLine) {
+        var lineBreaks:Array = ["\n", "\r", "<p>", "<br>"];
+        for(var i:int = 0; i < lineBreaks.length; i++) {
+          var j:int = firstLine.indexOf(lineBreaks[i]);
+          if(i >= 0) {
+            firstLine = firstLine.substr(0,j);
+          }
+        }
+      }
+      return firstLine;
     }
 
     public function set actionHandler(value:IActionHandler):void
