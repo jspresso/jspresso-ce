@@ -24,7 +24,9 @@ import java.awt.FontMetrics;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
 
+import org.jspresso.framework.binding.swing.CollectionConnectorTableModel;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.SwingUtil;
 
@@ -55,10 +57,20 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
     super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
         isSelected, row));
     FontMetrics fm = getFontMetrics(getFont());
-    if (HtmlHelper.isHtml(getText())
-        || fm.stringWidth(getText()) > table.getColumnModel().getColumn(column)
-            .getWidth()) {
-      setToolTipText(getText());
+    if (column == 0) {
+      TableModel tm = table.getModel();
+      if (tm instanceof AbstractTableSorter) {
+        tm = ((AbstractTableSorter) tm).getTableModel();
+      }
+      if (tm instanceof CollectionConnectorTableModel) {
+        setToolTipText(((CollectionConnectorTableModel) tm).getRowToolTip(row));
+      }
+    } else {
+      if (HtmlHelper.isHtml(getText())
+          || fm.stringWidth(getText()) > table.getColumnModel()
+              .getColumn(column).getWidth()) {
+        setToolTipText(getText());
+      }
     }
     return super.getTableCellRendererComponent(table, value, isSelected,
         hasFocus, row, column);

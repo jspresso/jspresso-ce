@@ -250,8 +250,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
      * {@inheritDoc}
      */
     @Override
-    public void propertyChange(
-        @SuppressWarnings("unused") final PropertyChangeEvent evt) {
+    public void propertyChange(@SuppressWarnings("unused")
+    final PropertyChangeEvent evt) {
       updateCell();
     }
 
@@ -259,8 +259,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(
-        @SuppressWarnings("unused") final ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused")
+    final ValueChangeEvent evt) {
       updateCell();
     }
 
@@ -289,8 +289,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(
-        @SuppressWarnings("unused") final ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused")
+    final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         @Override
@@ -307,6 +307,17 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         }
       });
     }
+  }
+
+  /**
+   * Gets the value to display as row tooltip.
+   * 
+   * @param rowIndex
+   *          the row index to compute the tooltip for.
+   * @return the row tooltip or null.
+   */
+  public String getRowToolTip(int rowIndex) {
+    return collectionConnector.getChildConnector(rowIndex).toString();
   }
 
   private class TableConnectorListener implements IValueChangeListener {
