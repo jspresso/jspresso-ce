@@ -221,7 +221,7 @@ package org.jspresso.framework.view.flex {
       }
       component.id = remoteComponent.guid;
       if(remoteComponent.tooltip != null) {
-        component.toolTip = remoteComponent.tooltip;
+        component.toolTip = remoteComponent.tooltip.value as String;
       }
       component = decorateWithActions(remoteComponent, component);
       if(remoteComponent.borderType == "TITLED") {
@@ -1391,7 +1391,7 @@ package org.jspresso.framework.view.flex {
         tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         tabContainer.addChild(tabCanvas);
         if(rTab.tooltip != null) {
-    		  tabCanvas.toolTip = rTab.tooltip + TOOLTIP_ELLIPSIS;
+    		  tabCanvas.toolTip = rTab.tooltip.value as String;
         }
         tabCanvas.addChild(tabContent);
       }

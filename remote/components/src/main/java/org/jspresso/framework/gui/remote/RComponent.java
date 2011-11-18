@@ -45,7 +45,7 @@ public abstract class RComponent extends RemotePeer implements
   private String            label;
   private Dimension         preferredSize;
   private RemoteValueState  state;
-  private String            tooltip;
+  private RemoteValueState  tooltip;
 
   /**
    * Constructs a new <code>RComponent</code> instance.
@@ -160,7 +160,7 @@ public abstract class RComponent extends RemotePeer implements
    * 
    * @return the description.
    */
-  public String getTooltip() {
+  public RemoteValueState getTooltip() {
     return tooltip;
   }
 
@@ -260,7 +260,7 @@ public abstract class RComponent extends RemotePeer implements
    * @param tooltip
    *          the tooltip to set.
    */
-  public void setTooltip(String tooltip) {
+  public void setTooltip(RemoteValueState tooltip) {
     this.tooltip = tooltip;
   }
 
@@ -276,7 +276,8 @@ public abstract class RComponent extends RemotePeer implements
    * {@inheritDoc}
    */
   @Override
-  public void setValueFromState(@SuppressWarnings("unused") Object stateValue) {
+  public void setValueFromState(@SuppressWarnings("unused")
+  Object stateValue) {
     // Empty implementation.
   }
 

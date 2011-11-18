@@ -2536,21 +2536,6 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale,
-      IView<JComponent> view) {
-    if (view != null && propertyDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          propertyDescriptor.getI18nDescription(translationProvider, locale)
-              + TOOLTIP_ELLIPSIS);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
       ITranslationProvider translationProvider, Locale locale,
       IView<JComponent> view) {
@@ -2571,9 +2556,10 @@ public class DefaultSwingViewFactory extends
       viewPeer
           .setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
-    if (viewDescriptor.getDescription() != null) {
-      viewPeer.setToolTipText(viewDescriptor.getI18nDescription(
-          translationProvider, locale) + TOOLTIP_ELLIPSIS);
+    String viewDescription = viewDescriptor.getI18nDescription(
+        translationProvider, locale);
+    if (viewDescription != null && viewDescription.length() > 0) {
+      viewPeer.setToolTipText(viewDescription + TOOLTIP_ELLIPSIS);
     }
   }
 

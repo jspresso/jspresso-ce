@@ -753,6 +753,7 @@
       <list>
         <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
           <property name="name" value="username" />
+          <property name="description" value="username" />
           <property name="maxLength" value="64" />
         </bean>
         <bean class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor">

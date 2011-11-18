@@ -1918,7 +1918,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createColorPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    decorateWithDescription(propertyDescriptor, actionHandler, locale, view);
     return view;
   }
 
@@ -2281,22 +2280,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract void decorateWithBorder(IView<E> view,
       ITranslationProvider translationProvider, Locale locale);
-
-  /**
-   * Decorates a property view with its description.
-   * 
-   * @param propertyDescriptor
-   *          the property descriptor.
-   * @param translationProvider
-   *          the translation provider.
-   * @param locale
-   *          the locale.
-   * @param view
-   *          the property view.
-   */
-  protected abstract void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale, IView<E> view);
 
   /**
    * Applies the font and color configuration to a view.

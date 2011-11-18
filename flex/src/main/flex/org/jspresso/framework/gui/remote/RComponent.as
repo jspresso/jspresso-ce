@@ -33,7 +33,7 @@ package org.jspresso.framework.gui.remote {
         private var _icon:RIcon;
         private var _label:String;
         private var _state:RemoteValueState;
-        private var _tooltip:String;
+        private var _tooltip:RemoteValueState;
         private var _preferredSize:Dimension;
 
         public function RComponent() {
@@ -96,10 +96,10 @@ package org.jspresso.framework.gui.remote {
             return _state;
         }
 
-        public function set tooltip(value:String):void {
+        public function set tooltip(value:RemoteValueState):void {
             _tooltip = value;
         }
-        public function get tooltip():String {
+        public function get tooltip():RemoteValueState {
             return _tooltip;
         }
 

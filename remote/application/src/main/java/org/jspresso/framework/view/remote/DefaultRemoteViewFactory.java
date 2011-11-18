@@ -2156,20 +2156,6 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale,
-      IView<RComponent> view) {
-    if (view != null && propertyDescriptor.getDescription() != null) {
-      view.getPeer().setTooltip(
-          propertyDescriptor.getI18nDescription(translationProvider, locale));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
       ITranslationProvider translationProvider, Locale locale,
       IView<RComponent> view) {
@@ -2181,11 +2167,12 @@ public class DefaultRemoteViewFactory extends
       ITranslationProvider translationProvider, Locale locale,
       RComponent viewPeer) {
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
-    if (viewDescriptor.getDescription() != null) {
-      viewPeer.setTooltip(viewDescriptor.getI18nDescription(
-          translationProvider, locale));
-    } else {
-      viewPeer.setTooltip(null);
+    String viewDescription = viewDescriptor.getI18nDescription(
+        translationProvider, locale);
+    if (viewDescription != null && viewDescription.length() > 0) {
+      RemoteValueState staticTooltip = new RemoteValueState(null);
+      staticTooltip.setValue(viewDescription + TOOLTIP_ELLIPSIS);
+      viewPeer.setTooltip(staticTooltip);
     }
     viewPeer.setForeground(viewDescriptor.getForeground());
     viewPeer.setBackground(viewDescriptor.getBackground());
