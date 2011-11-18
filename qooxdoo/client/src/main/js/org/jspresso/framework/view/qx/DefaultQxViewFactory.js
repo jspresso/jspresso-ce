@@ -141,7 +141,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (component == null) {
         component = new qx.ui.core.Widget();
       }
-      if (remoteComponent.getTooltip() != nul) {
+      if (remoteComponent.getTooltip() != null) {
         component.setToolTip(new qx.ui.tooltip.ToolTip(remoteComponent
             .getTooltip()));
       }
@@ -472,7 +472,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       /** @type qx.ui.table.Table */
       var table;
       if (remoteTable.isHorizontallyScrollable()) {
-        table = new qx.ui.table.Table(tableModel);
+        table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel);
       } else {
         // Customize the table column model. We want one that
         // automatically
@@ -482,7 +482,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             return new qx.ui.table.columnmodel.Resize(obj);
           }
         };
-        table = new qx.ui.table.Table(tableModel, custom);
+        table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
       }
       var columnModel = table.getTableColumnModel();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
