@@ -140,8 +140,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 			if (component == null) {
 				component = new qx.ui.core.Widget();
 			}
-			if (remoteComponent.getToolTip() != null) {
-        var toolTip = new new qx.ui.tooltip.ToolTip(remoteComponent
+			if (remoteComponent.getToolTip() != null && component.getToolTip() == null) {
+        var toolTip = new qx.ui.tooltip.ToolTip(remoteComponent
             .getToolTip());
         toolTip.setRich(true);
 				component.setToolTip(toolTip);
