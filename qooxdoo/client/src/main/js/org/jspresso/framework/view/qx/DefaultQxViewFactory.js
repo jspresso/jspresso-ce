@@ -141,7 +141,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 				component = new qx.ui.core.Widget();
 			}
 			if (remoteComponent.getToolTip() != null) {
-        var toolTip = new new qx.ui.toolTip.ToolTip(remoteComponent
+        var toolTip = new new qx.ui.tooltip.ToolTip(remoteComponent
             .getToolTip());
         toolTip.setRich(true);
 				component.setToolTip(toolTip);
@@ -1683,7 +1683,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 			// Special toolTip handling
 			var state = remoteForm.getState();
 			var modelController = new qx.data.controller.Object(state);
-			var toolTip = new qx.ui.toolTip.ToolTip();
+			var toolTip = new qx.ui.tooltip.ToolTip();
       toolTip.setRich(true);
 			modelController.addTarget(toolTip, "label", "value", false, {
 						converter : this._modelToViewFieldConverter
@@ -2549,7 +2549,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 				button.setLabel(label);
 			}
 			if (toolTip) {
-				button.setToolTip(new qx.ui.toolTip.ToolTip(toolTip
+				button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip
 						+ this.self(arguments).__TOOLTIP_ELLIPSIS));
 			}
 		},
