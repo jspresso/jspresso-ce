@@ -20,7 +20,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable",
   {
     this.base(arguments, tableModel, custom);
     
-    var tt = new qx.ui.tooltip.ToolTip("");
+    var tt = new qx.ui.toolTip.ToolTip("");
     tt.setRich(true);
     this.setToolTip(tt);
     this.addListener("mousemove", this._refineToolTip, this);
@@ -47,7 +47,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable",
           }
         }
       }
-      /** @type qx.ui.tooltip.ToolTip */
+      /** @type qx.ui.toolTip.ToolTip */
       var tt = this.getToolTip();
       if (v != null && v != "") {
         tt.setLabel(v);

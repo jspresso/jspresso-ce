@@ -265,7 +265,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * grouping related actions as they are grouped in the action lists.</li>
    * <li>each action contained in an action list is represented by a toolbar
    * button using the action image as icon and translated action description as
-   * tooltip.</li>
+   * toolTip.</li>
    * </ul>
    * Depending on the UI channel, the view action map may also be replicated in
    * a component contextual menu. In that case, the translated action name is

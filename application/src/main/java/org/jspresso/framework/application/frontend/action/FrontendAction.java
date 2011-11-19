@@ -46,7 +46,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * how actions are organized in Jspresso, please refer to
  * <code>AbstractAction</code> documentation.
  * <p>
- * This base class allows for visual (name, icon, tooltip) as well as
+ * This base class allows for visual (name, icon, toolTip) as well as
  * accessibility (accelerator, mnemonic shortcuts) and actionability (using
  * gates) parameterization.
  * <p>
@@ -308,7 +308,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Sets the key used to compute the internationalized description of the
-   * action. The translated description is then usually used as tooltip for the
+   * action. The translated description is then usually used as toolTip for the
    * action.
    * 
    * @param description

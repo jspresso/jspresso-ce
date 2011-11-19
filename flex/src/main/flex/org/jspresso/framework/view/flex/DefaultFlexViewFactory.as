@@ -222,8 +222,8 @@ package org.jspresso.framework.view.flex {
         component.minWidth = 0;
       }
       component.id = remoteComponent.guid;
-      if(remoteComponent.tooltip != null) {
-        component.toolTip = remoteComponent.tooltip;
+      if(remoteComponent.toolTip != null) {
+        component.toolTip = remoteComponent.toolTip;
       }
       component = decorateWithActions(remoteComponent, component);
       if(remoteComponent.borderType == "TITLED") {
@@ -1297,6 +1297,12 @@ package org.jspresso.framework.view.flex {
         }
       }
       form.addChild(resizerRow);
+      // Special toolTip handling
+      var remoteState:RemoteValueState = remoteForm.state;
+      var updateToolTip:Function = function (value:Object):void {
+        form.toolTip = value as String;
+      };
+      BindingUtils.bindSetter(updateToolTip, remoteState, "value", true);
       return form;
     }
 
@@ -1392,8 +1398,8 @@ package org.jspresso.framework.view.flex {
         tabCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
         tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         tabContainer.addChild(tabCanvas);
-        if(rTab.tooltip != null) {
-    		  tabCanvas.toolTip = rTab.tooltip;
+        if(rTab.toolTip != null) {
+    		  tabCanvas.toolTip = rTab.toolTip;
         }
         tabCanvas.addChild(tabContent);
       }
@@ -1534,7 +1540,7 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.foreground = remoteDateField.foreground;
       remoteTimeField.guid = remoteDateField.guid;
       remoteTimeField.state = remoteDateField.state;
-      remoteTimeField.tooltip = remoteDateField.tooltip;
+      remoteTimeField.toolTip = remoteDateField.toolTip;
       remoteTimeField.secondsAware = remoteDateField.secondsAware;
       
       var timeField:UIComponent = createComponent(remoteTimeField, false);
@@ -2217,13 +2223,13 @@ package org.jspresso.framework.view.flex {
       return button;
     }
     
-    public function createButton(label:String, tooltip:String, icon:RIcon):Button {
+    public function createButton(label:String, toolTip:String, icon:RIcon):Button {
       var button:Button = new EnhancedButton();
-      configureButton(button, label, tooltip, icon);
+      configureButton(button, label, toolTip, icon);
       return button;
     }
     
-    protected function configureButton(button:Button, label:String, tooltip:String, icon:RIcon):void {
+    protected function configureButton(button:Button, label:String, toolTip:String, icon:RIcon):void {
       button.setStyle("icon", null);
       if(icon) {
         button.setStyle("icon", getIconForComponent(button, icon));
@@ -2231,8 +2237,8 @@ package org.jspresso.framework.view.flex {
       if(label) {
         button.label = label;
       }
-      if(tooltip) {
-        button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
+      if(toolTip) {
+        button.toolTip = toolTip + TOOLTIP_ELLIPSIS;
       }
     }
 

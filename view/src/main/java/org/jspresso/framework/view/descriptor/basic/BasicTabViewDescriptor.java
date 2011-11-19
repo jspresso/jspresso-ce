@@ -27,7 +27,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * This composite view arranges its children in tabs. Each tab potentially
  * displays a label (that is translated based on the name of the view in the
- * tab), an icon (based on the icon of the view in the tab) and a tooltip (based
+ * tab), an icon (based on the icon of the view in the tab) and a toolTip (based
  * on the description of the view in the tab).
  * <p>
  * Default cascading order follows the order of nested view registrations in the

@@ -310,11 +310,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   }
 
   /**
-   * Gets the value to display as row tooltip.
+   * Gets the value to display as row toolTip.
    * 
    * @param rowIndex
-   *          the row index to compute the tooltip for.
-   * @return the row tooltip or null.
+   *          the row index to compute the toolTip for.
+   * @return the row toolTip or null.
    */
   public String getRowToolTip(int rowIndex) {
     return collectionConnector.getChildConnector(rowIndex).toString();

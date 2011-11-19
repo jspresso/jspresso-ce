@@ -496,9 +496,12 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
+    IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor()).getComponentDescriptor();
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForBeanView(viewDescriptor), null);
+            getConnectorIdForBeanView(viewDescriptor),
+            modelDescriptor.getToHtmlProperty());
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()
@@ -1733,7 +1736,7 @@ public class DefaultRemoteViewFactory extends
         .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            rowDescriptor.getToStringProperty());
+            rowDescriptor.getToHtmlProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -2170,7 +2173,7 @@ public class DefaultRemoteViewFactory extends
     String viewDescription = viewDescriptor.getI18nDescription(
         translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
-      viewPeer.setTooltip(viewDescription + TOOLTIP_ELLIPSIS);
+      viewPeer.setToolTip(viewDescription + TOOLTIP_ELLIPSIS);
     }
     viewPeer.setForeground(viewDescriptor.getForeground());
     viewPeer.setBackground(viewDescriptor.getBackground());

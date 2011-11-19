@@ -69,7 +69,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
       check : "org.jspresso.framework.state.remote.RemoteValueState",
       nullable : true
     },
-    tooltip :
+    toolTip :
     {
       check : "String",
       nullable : true

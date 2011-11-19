@@ -494,10 +494,13 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICompositeValueConnector connector = getConnectorFactory()
+    IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor()).getComponentDescriptor();
+    IRenderableCompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForBeanView(viewDescriptor), null);
-    JPanel viewComponent = createJPanel();
+            getConnectorIdForBeanView(viewDescriptor),
+            modelDescriptor.getToHtmlProperty());
+    final JPanel viewComponent = createJPanel();
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -535,14 +538,11 @@ public class DefaultSwingViewFactory extends
       connector.addChildConnector(propertyName, propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
-      // for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-      // propertyView.getConnector().addReadabilityGate(gate.clone());
-      // }
+      // ...
       // }
       // if (propertyViewDescriptor.getWritabilityGates() != null) {
       // for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-      // propertyView.getConnector().addWritabilityGate(gate.clone());
-      // }
+      // ...
       // }
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
@@ -676,6 +676,19 @@ public class DefaultSwingViewFactory extends
       }
       viewComponent.add(filler, constraints);
     }
+    // Special toolTip handling
+    connector.getRenderingConnector().addValueChangeListener(
+        new IValueChangeListener() {
+
+          @Override
+          public void valueChange(ValueChangeEvent evt) {
+            if (evt.getNewValue() != null) {
+              viewComponent.setToolTipText(evt.getNewValue().toString());
+            } else {
+              viewComponent.setToolTipText(null);
+            }
+          }
+        });
     return view;
   }
 
@@ -1817,7 +1830,7 @@ public class DefaultSwingViewFactory extends
         .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            rowDescriptor.getToStringProperty());
+            rowDescriptor.getToHtmlProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);

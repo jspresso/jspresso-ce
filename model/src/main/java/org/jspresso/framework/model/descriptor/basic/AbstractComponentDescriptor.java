@@ -110,6 +110,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<IPropertyDescriptor>                       tempPropertyBuffer;
 
   private String                                          toStringProperty;
+  private String                                          toHtmlProperty;
   private String                                          autoCompleteProperty;
 
   private Collection<String>                              unclonedProperties;
@@ -533,6 +534,19 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Gets the toStringProperty.
+   * 
+   * @return the toStringProperty.
+   */
+  @Override
+  public synchronized String getToHtmlProperty() {
+    if (toHtmlProperty == null) {
+      return getToStringProperty();
+    }
+    return toHtmlProperty;
+  }
+
+  /**
    * Gets the autocomplete property.
    * <p>
    * {@inheritDoc}
@@ -942,6 +956,24 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Allows to customize the HTML representation of a component instance. The
+   * property name assigned will be used when displaying the component instance
+   * as HTML. It may be a computed property that composes several other
+   * properties in a human friendly format.
+   * <p>
+   * Whenever this property is <code>null</code>, the
+   * <code>toStringProperty</code> is used. Note that this property is not
+   * inherited by children descriptors, i.e. even if an ancestor defines an
+   * explicit <i>toHtmlString</i> property, its children ignore this setting.
+   * 
+   * @param toHtmlProperty
+   *          the toHtmlProperty to set.
+   */
+  public void setToHtmlProperty(String toHtmlProperty) {
+    this.toHtmlProperty = toHtmlProperty;
+  }
+
+  /**
    * Allows to customize the property used to autocomplete reference fields on
    * this component.
    * <p>
@@ -1146,7 +1178,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused") String permId) {
+  public void setPermId(@SuppressWarnings("unused")
+  String permId) {
     throw new UnsupportedOperationException();
   }
 }

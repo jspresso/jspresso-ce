@@ -94,7 +94,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    * Sets the description of this descriptor. Most of the descriptor
    * descriptions are used in conjunction with the Jspresso i18n layer so that
    * the description property set here is actually an i18n key used for
-   * translation. Description is mainly used for UI (in tooltips for instance)
+   * translation. Description is mainly used for UI (in toolTips for instance)
    * but may also be used for project technical documentation, contextual help,
    * and so on.
    * 

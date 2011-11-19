@@ -277,7 +277,7 @@ public class Workspace implements ISecurable, IPermIdSource {
   /**
    * Configures the key used to translate actual internationalized workspace
    * description. The resulting translation will generally be leveraged as a
-   * tooltip on the UI side but its use may be extended for online help.
+   * toolTip on the UI side but its use may be extended for online help.
    * 
    * @param description
    *          the workspace description.
@@ -303,7 +303,7 @@ public class Workspace implements ISecurable, IPermIdSource {
 
   /**
    * Stores the internationalized workspace description for use in the UI as
-   * tooltip for instance.
+   * toolTip for instance.
    * 
    * @param i18nDescription
    *          the i18nDescription to set.
