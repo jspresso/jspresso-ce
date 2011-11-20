@@ -297,6 +297,9 @@ public abstract class AbstractComponentDescriptor<E> extends
   @Override
   public synchronized IPropertyDescriptor getPropertyDescriptor(
       String propertyName) {
+    if (propertyName == null) {
+      return null;
+    }
     if (propertyDescriptorsCache.containsKey(propertyName)) {
       return propertyDescriptorsCache.get(propertyName);
     }
@@ -308,14 +311,18 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
       descriptor = nestedPropertyDescriptors.get(propertyName);
       if (descriptor == null) {
-        IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getPropertyDescriptor(propertyName
-            .substring(0, nestedDotIndex))).getComponentDescriptor();
-        descriptor = componentDescriptor.getPropertyDescriptor(
-            propertyName.substring(nestedDotIndex + 1)).clone();
-        if (descriptor instanceof BasicPropertyDescriptor) {
-          ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+        IPropertyDescriptor rootProp = getPropertyDescriptor(propertyName
+            .substring(0, nestedDotIndex));
+        if (rootProp instanceof IComponentDescriptorProvider<?>) {
+          IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
+              .getComponentDescriptor();
+          descriptor = componentDescriptor.getPropertyDescriptor(
+              propertyName.substring(nestedDotIndex + 1)).clone();
+          if (descriptor instanceof BasicPropertyDescriptor) {
+            ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+          }
+          nestedPropertyDescriptors.put(propertyName, descriptor);
         }
-        nestedPropertyDescriptors.put(propertyName, descriptor);
       }
     } else {
       descriptor = getDeclaredPropertyDescriptor(propertyName);

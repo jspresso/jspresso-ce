@@ -128,6 +128,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
+import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -498,10 +499,18 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor()).getComponentDescriptor();
+    // Dynamic toolTips
+    String toolTipProperty = null;
+    if (viewDescriptor.getDescription() != null) {
+      IPropertyDescriptor descriptionProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getDescription());
+      if (descriptionProperty != null) {
+        toolTipProperty = viewDescriptor.getDescription();
+      }
+    }
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForBeanView(viewDescriptor),
-            modelDescriptor.getToHtmlProperty());
+            getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()
@@ -1007,9 +1016,11 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            viewDescriptor.getRenderedProperty());
+            rowDescriptor.getToHtmlProperty());
     if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
           .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
@@ -1025,8 +1036,7 @@ public class DefaultRemoteViewFactory extends
 
     if (viewDescriptor.getRenderedProperty() != null) {
       IValueConnector cellConnector = createListConnector(
-          viewDescriptor.getRenderedProperty(), modelDescriptor
-              .getCollectionDescriptor().getElementDescriptor());
+          viewDescriptor.getRenderedProperty(), rowDescriptor);
       rowConnectorPrototype.addChildConnector(
           viewDescriptor.getRenderedProperty(), cellConnector);
     }
@@ -1399,7 +1409,8 @@ public class DefaultRemoteViewFactory extends
       lovAction.setDescription(actionHandler.getTranslation(
           "lov.element.description", new Object[] {propertyDescriptor
               .getReferencedDescriptor().getI18nName(actionHandler, locale)},
-          locale));
+          locale)
+          + IActionFactory.TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -2173,7 +2184,7 @@ public class DefaultRemoteViewFactory extends
     String viewDescription = viewDescriptor.getI18nDescription(
         translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
-      viewPeer.setToolTip(viewDescription + TOOLTIP_ELLIPSIS);
+      viewPeer.setToolTip(viewDescription);
     }
     viewPeer.setForeground(viewDescriptor.getForeground());
     viewPeer.setBackground(viewDescriptor.getBackground());

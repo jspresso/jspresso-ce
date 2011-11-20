@@ -132,8 +132,8 @@ public class RemoteActionFactory extends
           actionHandler, locale));
       String i18nDescription = ((IDisplayableAction) action)
           .getI18nDescription(actionHandler, locale);
-      if (i18nDescription != null) {
-        remoteAction.setDescription(i18nDescription);
+      if (i18nDescription != null && i18nDescription.length() > 0) {
+        remoteAction.setDescription(i18nDescription + TOOLTIP_ELLIPSIS);
       }
       remoteAction.setIcon(getIconFactory().getIcon(
           ((IDisplayableAction) action).getIconImageURL(), dimension));

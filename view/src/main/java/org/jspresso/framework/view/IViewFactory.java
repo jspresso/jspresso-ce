@@ -39,11 +39,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public interface IViewFactory<E, F, G> {
 
   /**
-   * <code>TOOLTIP_ELLIPSIS</code> is "...".
-   */
-  String TOOLTIP_ELLIPSIS = "...";
-
-  /**
    * Creates a new view from a view descriptor.
    * 
    * @param viewDescriptor

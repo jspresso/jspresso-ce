@@ -172,6 +172,7 @@ import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
+import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -496,23 +497,28 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
     IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor()).getComponentDescriptor();
+    // Dynamic toolTips
+    String toolTipProperty = null;
+    if (viewDescriptor.getDescription() != null) {
+      IPropertyDescriptor descriptionProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getDescription());
+      if (descriptionProperty != null) {
+        toolTipProperty = viewDescriptor.getDescription();
+      }
+    }
     IRenderableCompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForBeanView(viewDescriptor),
-            modelDescriptor.getToHtmlProperty());
+            getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     final JPanel viewComponent = createJPanel();
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
     GridBagLayout layout = new GridBagLayout();
     viewComponent.setLayout(layout);
-
     int currentX = 0;
     int currentY = 0;
-
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
-
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
@@ -541,11 +547,8 @@ public class DefaultSwingViewFactory extends
       // ...
       // }
       // if (propertyViewDescriptor.getWritabilityGates() != null) {
-      // for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
       // ...
       // }
-      // propertyView.getConnector().setLocallyWritable(
-      // !propertyViewDescriptor.isReadOnly());
       JLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
           propertyView.getPeer(), actionHandler, locale);
       if (forbidden) {
@@ -561,7 +564,6 @@ public class DefaultSwingViewFactory extends
         currentX = 0;
         currentY++;
       }
-
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
@@ -592,7 +594,6 @@ public class DefaultSwingViewFactory extends
           && propertyLabel.getText().length() > 0) {
         viewComponent.add(propertyLabel, constraints);
       }
-
       // component positionning
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
@@ -677,18 +678,20 @@ public class DefaultSwingViewFactory extends
       viewComponent.add(filler, constraints);
     }
     // Special toolTip handling
-    connector.getRenderingConnector().addValueChangeListener(
-        new IValueChangeListener() {
+    if (connector.getRenderingConnector() != null) {
+      connector.getRenderingConnector().addValueChangeListener(
+          new IValueChangeListener() {
 
-          @Override
-          public void valueChange(ValueChangeEvent evt) {
-            if (evt.getNewValue() != null) {
-              viewComponent.setToolTipText(evt.getNewValue().toString());
-            } else {
-              viewComponent.setToolTipText(null);
+            @Override
+            public void valueChange(ValueChangeEvent evt) {
+              if (evt.getNewValue() != null) {
+                viewComponent.setToolTipText(evt.getNewValue().toString());
+              } else {
+                viewComponent.setToolTipText(null);
+              }
             }
-          }
-        });
+          });
+    }
     return view;
   }
 
@@ -1440,9 +1443,11 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            viewDescriptor.getRenderedProperty());
+            rowDescriptor.getToHtmlProperty());
     if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
           .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
@@ -1460,13 +1465,12 @@ public class DefaultSwingViewFactory extends
 
     if (viewDescriptor.getRenderedProperty() != null) {
       IValueConnector cellConnector = createListConnector(
-          viewDescriptor.getRenderedProperty(), modelDescriptor
-              .getCollectionDescriptor().getElementDescriptor());
+          viewDescriptor.getRenderedProperty(), rowDescriptor);
       rowConnectorPrototype.addChildConnector(
           viewDescriptor.getRenderedProperty(), cellConnector);
     }
-    viewComponent
-        .setCellRenderer(new EvenOddListCellRenderer(getIconFactory()));
+    viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory(),
+        viewDescriptor.getRenderedProperty()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector,
@@ -1632,7 +1636,7 @@ public class DefaultSwingViewFactory extends
           actionHandler.getTranslation("lov.element.description",
               new Object[] {propertyDescriptor.getReferencedDescriptor()
                   .getI18nName(actionHandler, locale)}, locale)
-              + TOOLTIP_ELLIPSIS);
+              + IActionFactory.TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
             Action.SMALL_ICON,
@@ -2169,8 +2173,7 @@ public class DefaultSwingViewFactory extends
         }
         if (childViewDescriptor.getDescription() != null) {
           viewComponent.addTab(tabText, childIcon, childView.getPeer(),
-              childViewDescriptor.getI18nDescription(actionHandler, locale)
-                  + TOOLTIP_ELLIPSIS);
+              childViewDescriptor.getI18nDescription(actionHandler, locale));
         } else {
           viewComponent.addTab(tabText, childIcon, childView.getPeer());
         }
@@ -2572,7 +2575,7 @@ public class DefaultSwingViewFactory extends
     String viewDescription = viewDescriptor.getI18nDescription(
         translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
-      viewPeer.setToolTipText(viewDescription + TOOLTIP_ELLIPSIS);
+      viewPeer.setToolTipText(viewDescription);
     }
   }
 
@@ -3040,12 +3043,11 @@ public class DefaultSwingViewFactory extends
               ((IRenderableCompositeValueConnector) value)
                   .getDisplayIconImageUrl(),
               getIconFactory().getSmallIconSize()));
-          if (((IRenderableCompositeValueConnector) value)
-              .getDisplayDescription() != null) {
+          String displayDescription = ((IRenderableCompositeValueConnector) value)
+              .getDisplayDescription();
+          if (displayDescription != null && displayDescription.length() > 0) {
             ToolTipManager.sharedInstance().registerComponent(tree);
-            renderer
-                .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription() + TOOLTIP_ELLIPSIS);
+            renderer.setToolTipText(displayDescription);
           }
         } else {
           renderer.setText(value.toString());
