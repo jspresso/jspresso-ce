@@ -102,7 +102,7 @@ package org.jspresso.framework.view.flex {
   	    if(rendererListData.owner is DataGrid) {
   	      cellValueState = ((rendererData as RemoteCompositeValueState).children[index] as RemoteValueState); 
   	    } else {
-  	      cellValueState = rendererData as RemoteValueState;
+  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[1] as RemoteValueState);
   	    }
   	    if(valueChangeListener != null) {
   	      valueChangeListener.unwatch();
@@ -144,7 +144,7 @@ package org.jspresso.framework.view.flex {
           label.htmlText = HtmlUtil.convertHtmlEntities(extractFirstLine(cellText));
         }
       }
-      if(index == 1) {
+      if(index == 1 || index == -1) {
         label.toolTip = (data as RemoteCompositeValueState).value as String;
       } else {
         if(toolTip) {
