@@ -14,25 +14,32 @@
 
 qx.Class.define("org.jspresso.framework.view.qx.EnhancedListDelegate",
 {
-
-  implement : [qx.ui.list.core.IListDelegate],
+  extend : qx.core.Object,
   
   members :
   {
-	  /**
-	   * Uses the first format delegate.
-	   * 
+    
+   /**
+     * @param item
+     *            {qx.ui.core.Widget}
+     */
+   configureItem: function(item) {
+      var toolTip = new qx.ui.tooltip.ToolTip();
+      toolTip.setRich(true);
+      item.setToolTip(toolTip);
+   },
+   
+   /**
 	   * @param controller
-	   *            {qx.ui.list.core.MWidgetController}
+	   *            {qx.data.controller.List}
      * @param item
      *            {qx.ui.core.Widget}
      * @param id
      *            {integer}
 	   */
     bindItem: function(controller, item, id) {
-      var toolTip = new qx.ui.tooltip.ToolTip();
-      toolTip.setRich(true);
-      controller.bindProperty("value", "toolTip", options, item, id); 
+      controller.bindDefaultProperties(item, id);
+      controller.bindProperty("value", "toolTip.label", null, item, id); 
     }
   }
 });
