@@ -59,5 +59,12 @@ package org.jspresso.framework.view.flex {
 				}
 			}
 		}
+    
+    protected override function commitProperties():void {
+      super.commitProperties();
+      if(data is RemoteCompositeValueState) {
+        label.toolTip = (data as RemoteCompositeValueState).value as String;
+      }
+    }
   }
 }
