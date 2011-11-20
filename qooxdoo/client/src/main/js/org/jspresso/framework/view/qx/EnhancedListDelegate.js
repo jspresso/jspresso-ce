@@ -30,6 +30,8 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedListDelegate",
      *            {integer}
 	   */
     bindItem: function(controller, item, id) {
+      var toolTip = new qx.ui.tooltip.ToolTip();
+      toolTip.setRich(true);
       controller.bindProperty("value", "toolTip", options, item, id); 
     }
   }
