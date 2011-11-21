@@ -1302,6 +1302,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       } catch (LoginException le) {
         System.err.println("Authentication failed:");
         System.err.println("  " + le.getMessage());
+        if (le.getCause() != null) {
+          le.printStackTrace(System.err);
+        }
         return false;
       }
     } else {

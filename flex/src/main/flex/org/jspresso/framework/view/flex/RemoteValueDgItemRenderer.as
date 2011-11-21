@@ -147,10 +147,15 @@ package org.jspresso.framework.view.flex {
       if(index == 1 || index == -1) {
         label.toolTip = (data as RemoteCompositeValueState).value as String;
       } else {
-        if(toolTip) {
+        if(HtmlUtil.isHtml(cellText)) {
+          // unconditional
           label.toolTip = cellText;
         } else {
-          label.toolTip = null;
+          if(toolTip) {
+            label.toolTip = cellText;
+          } else {
+            label.toolTip = null;
+          }
         }
       }
   	}
