@@ -57,7 +57,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
     super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
         isSelected, row));
     FontMetrics fm = getFontMetrics(getFont());
-    if (column == 0) {
+    if (table.convertColumnIndexToModel(column) == 0) {
       TableModel tm = table.getModel();
       if (tm instanceof AbstractTableSorter) {
         tm = ((AbstractTableSorter) tm).getTableModel();
