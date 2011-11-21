@@ -971,7 +971,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Whenever this property is <code>null</code>, the
    * <code>toStringProperty</code> is used. Note that this property is not
    * inherited by children descriptors, i.e. even if an ancestor defines an
-   * explicit <i>toHtmlString</i> property, its children ignore this setting.
+   * explicit <i>toHtmlProperty</i> property, its children ignore this setting.
    * 
    * @param toHtmlProperty
    *          the toHtmlProperty to set.
