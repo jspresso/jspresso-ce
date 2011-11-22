@@ -1046,9 +1046,6 @@ public class DefaultRemoteViewFactory extends
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
-    if (viewDescriptor.isAutoSelectFirstRow()) {
-      attachDefaultCollectionListener(connector);
-    }
     return view;
   }
 
@@ -1824,9 +1821,6 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
-    }
-    if (viewDescriptor.isAutoSelectFirstRow()) {
-      attachDefaultCollectionListener(connector);
     }
     return view;
   }
