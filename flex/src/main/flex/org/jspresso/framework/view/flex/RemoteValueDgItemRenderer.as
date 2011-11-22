@@ -183,7 +183,7 @@ package org.jspresso.framework.view.flex {
         var lineBreaks:Array = ["\n", "\r", "<p>", "<br>"];
         for(var i:int = 0; i < lineBreaks.length; i++) {
           var j:int = firstLine.indexOf(lineBreaks[i]);
-          if(i >= 0) {
+          if(j > 0) {
             firstLine = firstLine.substr(0,j);
           }
         }
