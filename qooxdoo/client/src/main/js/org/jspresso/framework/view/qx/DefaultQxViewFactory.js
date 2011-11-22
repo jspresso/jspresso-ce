@@ -329,7 +329,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 		 */
 		_createList : function(remoteList) {
 			var list = new qx.ui.form.List();
-			if (remoteList.getSelectionMode() == "SINGLE_SELECTION") {
+			if (   remoteList.getSelectionMode() == "SINGLE_SELECTION"
+          || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
 				list.setSelectionMode("single");
 			} else {
 				list.setSelectionMode("multi");
@@ -629,6 +630,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 			} else if (remoteTable.getSelectionMode() == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
 				selectionModel
 						.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE);
+      } else if (remoteTable.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+        selectionModel
+            .setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
 			} else {
 				selectionModel
 						.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);

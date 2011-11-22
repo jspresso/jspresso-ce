@@ -2894,6 +2894,7 @@ public class DefaultSwingViewFactory extends
     int selectionMode;
     switch (viewDescriptor.getSelectionMode()) {
       case SINGLE_SELECTION:
+      case SINGLE_CUMULATIVE_SELECTION:
         selectionMode = ListSelectionModel.SINGLE_SELECTION;
         break;
       case SINGLE_INTERVAL_SELECTION:

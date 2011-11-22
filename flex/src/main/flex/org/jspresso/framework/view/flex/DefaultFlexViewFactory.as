@@ -1609,14 +1609,16 @@ package org.jspresso.framework.view.flex {
       var list:EnhancedList = new EnhancedList();
       list.horizontalScrollPolicy = ScrollPolicy.AUTO;
       list.verticalScrollPolicy = ScrollPolicy.AUTO;
-      if(remoteList.selectionMode == "SINGLE_SELECTION") {
+      if(   remoteList.selectionMode == "SINGLE_SELECTION"
+         || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
         list.allowMultipleSelection = false;
       } else {
         list.allowMultipleSelection = true;
-        if(   remoteList.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
-           || remoteList.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
-          list.cumulativeSelection = true;
-        }
+      }
+      if(   remoteList.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteList.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
+        list.cumulativeSelection = true;
       }
       
       var itemRenderer:ClassFactory = new ClassFactory(RemoteValueListItemRenderer);
@@ -1702,24 +1704,26 @@ package org.jspresso.framework.view.flex {
       
       table.regenerateStyleCache(false);
       
-      if(remoteTable.selectionMode == "SINGLE_SELECTION") {
+      if(   remoteTable.selectionMode == "SINGLE_SELECTION"
+         || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
         table.allowMultipleSelection = false;
       } else {
         table.allowMultipleSelection = true;
-        if(   remoteTable.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
-           || remoteTable.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
-          table.cbMultiSelection = true;
-        }
-        if(table.cbMultiSelection) {
-          var selectionColumn:DataGridColumn = new DataGridColumn();
-          selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);
-          selectionColumn.width = 20;
-          selectionColumn.sortable = false;
-          selectionColumn.draggable = false;
-          selectionColumn.dataField = "guid";
-          selectionColumn.headerText = " ";
-          columns.push(selectionColumn);
-        }
+      }
+      if(   remoteTable.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteTable.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
+        table.cbMultiSelection = true;
+      }
+      if(table.cbMultiSelection) {
+        var selectionColumn:DataGridColumn = new DataGridColumn();
+        selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);
+        selectionColumn.width = 20;
+        selectionColumn.sortable = false;
+        selectionColumn.draggable = false;
+        selectionColumn.dataField = "guid";
+        selectionColumn.headerText = " ";
+        columns.push(selectionColumn);
       }
       
       for(var i:int=0; i < remoteTable.columns.length; i++) {
