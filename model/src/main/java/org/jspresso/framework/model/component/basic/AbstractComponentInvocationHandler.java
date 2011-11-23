@@ -624,34 +624,49 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       referenceTrackers.remove(propertyName);
     }
-    InlineReferenceTracker newTracker = null;
-    if (newPropertyValue != null) {
-      newTracker = new InlineReferenceTracker(propertyName,
-          isInlineComponentReference(propertyDescriptor));
-      ((IPropertyChangeCapable) newPropertyValue)
-          .addPropertyChangeListener(newTracker);
-      referenceTrackers.put(propertyName, newTracker);
-    }
     storeProperty(propertyName, newPropertyValue);
-    if (newTracker != null) {
-      if (newPropertyValue instanceof IComponent) {
-        for (Map.Entry<String, Object> property : ((IComponent) newPropertyValue)
-            .straightGetProperties().entrySet()) {
-          if (oldPropertyValue instanceof IComponent) {
-            newTracker.propertyChange(new PropertyChangeEvent(newPropertyValue,
-                property.getKey(), null, property.getValue()));
-          } else {
-            newTracker.propertyChange(new PropertyChangeEvent(newPropertyValue,
-                property.getKey(), null, property.getValue()));
-          }
-        }
-      }
+    if (newPropertyValue instanceof IPropertyChangeCapable) {
+      InlineReferenceTracker newTracker = new InlineReferenceTracker(
+          propertyName, isInlineComponentReference(propertyDescriptor));
+      referenceTrackers.put(propertyName, newTracker);
+      initializeInlineTrackerIfNeeded(
+          (IPropertyChangeCapable) newPropertyValue, propertyName);
     } else if (oldTracker != null) {
-      if (oldPropertyValue instanceof IComponent) {
+      if (oldPropertyValue instanceof IComponent
+          && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
         for (Map.Entry<String, Object> property : ((IComponent) oldPropertyValue)
             .straightGetProperties().entrySet()) {
           oldTracker.propertyChange(new PropertyChangeEvent(oldPropertyValue,
               property.getKey(), property.getValue(), null));
+        }
+      }
+    }
+  }
+
+  /**
+   * Performs (potentially delayed due to lazy initialization) inline tracker
+   * attachement.
+   * 
+   * @param referenceProperty
+   *          the reference to link the tracker to.
+   * @param propertyName
+   *          the property name of the tracker.
+   */
+  protected void initializeInlineTrackerIfNeeded(
+      IPropertyChangeCapable referenceProperty, String propertyName) {
+    if (/* To avoid breaking lazy initialization optim */isInitialized(referenceProperty)) {
+      InlineReferenceTracker storedTracker = referenceTrackers
+          .get(propertyName);
+      if (storedTracker != null && !storedTracker.isInitialized()) {
+        storedTracker.setInitialized(true);
+        referenceProperty.addPropertyChangeListener(storedTracker);
+        if (referenceProperty instanceof IComponent) {
+          for (Map.Entry<String, Object> property : ((IComponent) referenceProperty)
+              .straightGetProperties().entrySet()) {
+            storedTracker
+                .propertyChange(new PropertyChangeEvent(referenceProperty,
+                    property.getKey(), null, property.getValue()));
+          }
         }
       }
     }
@@ -1303,6 +1318,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
     private String  componentName;
     private boolean enabled;
+    private boolean initialized;
     private boolean inlinedComponent;
 
     /**
@@ -1317,6 +1333,7 @@ public abstract class AbstractComponentInvocationHandler implements
       this.componentName = componentName;
       this.inlinedComponent = inlinedComponent;
       this.enabled = true;
+      this.initialized = false;
     }
 
     /**
@@ -1343,6 +1360,24 @@ public abstract class AbstractComponentInvocationHandler implements
           enabled = wasEnabled;
         }
       }
+    }
+
+    /**
+     * Gets the initialized.
+     * 
+     * @return the initialized.
+     */
+    public boolean isInitialized() {
+      return initialized;
+    }
+
+    /**
+     * Sets the initialized.
+     * 
+     * @param initialized the initialized to set.
+     */
+    public void setInitialized(boolean initialized) {
+      this.initialized = initialized;
     }
   }
 

@@ -43,6 +43,7 @@ import org.jspresso.framework.model.entity.basic.BasicEntityInvocationHandler;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * This entity invocation handler handles initialization of lazy loaded
@@ -158,8 +159,14 @@ public class ControllerAwareEntityInvocationHandler extends
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
 
-    getBackendController().initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor.getName());
+    String propertyName = propertyDescriptor.getName();
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy,
+        propertyName);
+    Object reference = straightGetProperty(proxy, propertyName);
+    if (reference instanceof IPropertyChangeCapable) {
+      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference,
+          propertyName);
+    }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 

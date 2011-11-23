@@ -34,6 +34,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * This component invocation handler handles initialization of lazy loaded
@@ -132,8 +133,14 @@ public class ControllerAwareComponentInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+    String propertyName = propertyDescriptor.getName();
     getBackendController().initializePropertyIfNeeded((IComponent) proxy,
-        propertyDescriptor.getName());
+        propertyName);
+    Object reference = straightGetProperty(proxy, propertyName);
+    if (reference instanceof IPropertyChangeCapable) {
+      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference,
+          propertyName);
+    }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
@@ -174,13 +181,13 @@ public class ControllerAwareComponentInvocationHandler extends
           newPropertyValue);
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected boolean isCollectionSortOnReadEnabled() {
-    //To prevent erratic sort of collections during flush
+    // To prevent erratic sort of collections during flush
     return !getBackendController().isUnitOfWorkActive();
   }
 }
