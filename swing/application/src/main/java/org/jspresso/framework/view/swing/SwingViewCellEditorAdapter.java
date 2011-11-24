@@ -144,8 +144,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       // To prevent the editor to be read-only.
       connectorValue = NULLMAP;
     }
-    // to avoid trigerring the view action.
-    editorConnector.getModelConnector().setConnectorValue(connectorValue);
+    editorConnector.setConnectorValue(connectorValue);
     Component editorComponent = editorView.getPeer();
     if (editorComponent instanceof JTextField) {
       ((JTextField) editorComponent).selectAll();

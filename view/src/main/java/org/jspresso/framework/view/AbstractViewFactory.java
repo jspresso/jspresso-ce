@@ -2982,12 +2982,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
     @Override
     public void valueChange(ValueChangeEvent evt) {
       IValueConnector viewConnector = (IValueConnector) evt.getSource();
-      IValueConnector modelConnector = viewConnector.getModelConnector();
+      final IValueConnector modelConnector = viewConnector.getModelConnector();
       if (modelConnector != null
           && !ObjectUtils.equals(evt.getNewValue(),
               modelConnector.getConnectorValue())) {
-        // this is not a model notification, so tyrigger the action.
-        triggerAction(evt.getNewValue());
+        // this is not a model notification, so arm to trigger the action once
+        // the model is actually updated.
+        modelConnector.addValueChangeListener(new IValueChangeListener() {
+
+          @Override
+          public void valueChange(ValueChangeEvent modelEvt) {
+            // This is a 1 shot event.
+            modelConnector.removeValueChangeListener(this);
+            triggerAction(modelEvt.getOldValue());
+          }
+        });
       }
 
     }
