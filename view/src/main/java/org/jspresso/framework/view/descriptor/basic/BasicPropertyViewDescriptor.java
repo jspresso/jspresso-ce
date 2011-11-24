@@ -257,14 +257,6 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isReadOnly() {
-    return getAction() != null || super.isReadOnly();
-  }
-
-  /**
    * This property allows to control the property alignment in views that
    * support it. This is either a value of the <code>EHorizontalAlignment</code>
    * enum or its equivalent string representation :

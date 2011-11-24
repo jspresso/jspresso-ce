@@ -21,11 +21,9 @@ package org.jspresso.framework.binding;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -38,6 +36,7 @@ import org.jspresso.framework.util.event.ValueChangeSupport;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.lang.ICloneable;
 import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
@@ -138,6 +137,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   @Override
+  public Set<IValueChangeListener> getValueChangeListeners() {
+    return valueChangeSupport.getValueChangeListeners();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void addWritabilityGate(IGate gate) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
@@ -186,7 +193,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public void cleanBindings() {
-    for (IValueChangeListener listener : valueChangeSupport.getListeners()) {
+    for (IValueChangeListener listener : valueChangeSupport
+        .getValueChangeListeners()) {
       removeValueChangeListener(listener);
     }
   }
@@ -208,6 +216,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
         .clone(newConnectorId);
     clonedConnector.oldConnectorValue = null;
     clonedConnector.valueChangeSupport = new ValueChangeSupport(clonedConnector);
+    for (IValueChangeListener listener : valueChangeSupport
+        .getValueChangeListeners()) {
+      if (listener instanceof ICloneable) {
+        clonedConnector
+            .addValueChangeListener((IValueChangeListener) ((ICloneable) listener)
+                .clone());
+      }
+    }
     clonedConnector.parentConnector = null;
     clonedConnector.modelConnector = null;
     clonedConnector.readabilityGates = null;
@@ -254,26 +270,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return -1;
     }
     return 0;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getConnectorPath() {
-    List<String> connectorPath = new ArrayList<String>();
-    IValueConnector c = this;
-    while (c != null) {
-      connectorPath.add(c.getId());
-      c = c.getParentConnector();
-    }
-    Collections.reverse(connectorPath);
-    StringBuffer path = new StringBuffer();
-    for (String id : connectorPath) {
-      path.append("/");
-      path.append(id);
-    }
-    return path.toString();
   }
 
   /**
@@ -340,8 +336,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(
-            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+        public void propertyChange(@SuppressWarnings("unused")
+        PropertyChangeEvent evt) {
           readabilityChange();
         }
       };
@@ -359,8 +355,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(
-            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+        public void propertyChange(@SuppressWarnings("unused")
+        PropertyChangeEvent evt) {
           writabilityChange();
         }
       };
@@ -472,11 +468,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
             expectedType = Boolean.class;
           }
           try {
-            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
-              String.class
-            }).newInstance(new Object[] {
-              aValue.toString()
-            });
+            Object adaptedValue = expectedType.getConstructor(
+                new Class<?>[] {String.class}).newInstance(
+                new Object[] {aValue.toString()});
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorBindingException(ex);
@@ -571,8 +565,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelReadabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
             readabilityChange();
           }
         };
@@ -581,8 +575,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelWritabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
             writabilityChange();
           }
         };

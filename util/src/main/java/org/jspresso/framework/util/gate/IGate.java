@@ -19,6 +19,7 @@
 package org.jspresso.framework.util.gate;
 
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * A simple open / close, true / false interface.
@@ -26,7 +27,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IGate extends IPropertyChangeCapable, Cloneable {
+public interface IGate extends IPropertyChangeCapable, ICloneable {
 
   /**
    * <code>OPEN_PROPERTY</code>.
@@ -38,6 +39,7 @@ public interface IGate extends IPropertyChangeCapable, Cloneable {
    * 
    * @return the cloned gate.
    */
+  @Override
   IGate clone();
 
   /**

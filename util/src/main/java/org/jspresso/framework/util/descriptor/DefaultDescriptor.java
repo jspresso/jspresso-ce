@@ -21,6 +21,7 @@ package org.jspresso.framework.util.descriptor;
 import java.util.Locale;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * This is a utility class from which most named descriptors inherit for
@@ -29,7 +30,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultDescriptor implements IDescriptor, Cloneable {
+public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   private String description;
   private String i18nNameKey;

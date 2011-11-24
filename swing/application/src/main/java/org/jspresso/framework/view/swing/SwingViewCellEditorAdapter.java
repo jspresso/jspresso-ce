@@ -88,8 +88,8 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
           new IValueChangeListener() {
 
             @Override
-            public void valueChange(
-                @SuppressWarnings("unused") ValueChangeEvent evt) {
+            public void valueChange(@SuppressWarnings("unused")
+            ValueChangeEvent evt) {
               stopCellEditing();
             }
           });
@@ -144,7 +144,8 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       // To prevent the editor to be read-only.
       connectorValue = NULLMAP;
     }
-    editorConnector.setConnectorValue(connectorValue);
+    // to avoid trigerring the view action.
+    editorConnector.getModelConnector().setConnectorValue(connectorValue);
     Component editorComponent = editorView.getPeer();
     if (editorComponent instanceof JTextField) {
       ((JTextField) editorComponent).selectAll();

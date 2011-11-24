@@ -24,6 +24,7 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.gate.IGateAccessible;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * This interface is the super-interface of all properties descriptors.
@@ -32,7 +33,7 @@ import org.jspresso.framework.util.gate.IGateAccessible;
  * @author Vincent Vandenschrick
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */
-public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
+public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
     ISecurable, IGateAccessible, IPermIdSource {
 
   /**
@@ -40,6 +41,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    * 
    * @return the descriptor's clone.
    */
+  @Override
   IPropertyDescriptor clone();
 
   /**

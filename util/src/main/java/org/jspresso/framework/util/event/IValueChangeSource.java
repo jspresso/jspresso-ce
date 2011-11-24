@@ -18,8 +18,10 @@
  */
 package org.jspresso.framework.util.event;
 
+import java.util.Set;
+
 /**
- * TODO Comment needed.
+ * Source of value change events.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -41,5 +43,12 @@ public interface IValueChangeSource {
    *          The removed listener.
    */
   void removeValueChangeListener(IValueChangeListener listener);
+
+  /**
+   * Gets the registered <code>IValueChangeListener</code>s.
+   * 
+   * @return the registered <code>IValueChangeListener</code>s.
+   */
+  Set<IValueChangeListener> getValueChangeListeners();
 
 }

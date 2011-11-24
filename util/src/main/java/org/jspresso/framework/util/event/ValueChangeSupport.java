@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.util.event;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -110,8 +111,7 @@ public class ValueChangeSupport implements IValueChangeSource {
       if (ObjectUtils.equals(oldValue, newValue)) {
         return;
       }
-      for (IValueChangeListener listener : new LinkedHashSet<IValueChangeListener>(
-          listeners)) {
+      for (IValueChangeListener listener : getValueChangeListeners()) {
         if (inhibitedListeners == null
             || !inhibitedListeners.contains(listener)) {
           if (listeners.contains(listener)) {
@@ -127,11 +127,12 @@ public class ValueChangeSupport implements IValueChangeSource {
    * 
    * @return the listeners.
    */
-  public Set<IValueChangeListener> getListeners() {
+  @Override
+  public Set<IValueChangeListener> getValueChangeListeners() {
     if (listeners != null) {
-      return new HashSet<IValueChangeListener>(listeners);
+      return new LinkedHashSet<IValueChangeListener>(listeners);
     }
-    return new HashSet<IValueChangeListener>();
+    return Collections.emptySet();
   }
 
   /**
