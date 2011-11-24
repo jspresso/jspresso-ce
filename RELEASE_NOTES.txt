@@ -1,3 +1,11 @@
+3.5.10
+======
+- Setting an action on a property view has an improved behaviour; There are 2 cases : 
+   - If the property is read-only, then assigning an action turns the property into a clickable hyperlink (original behaviour)
+   - If the property is read-write, the registered action will be trigerred when the user changes the value of the field.
+     Note thet in that case, the action is executed after the model has been updated. However the old property value can
+     be retrieved from the context action param. 
+
 3.5.9
 =====
 - New locales : ES and PT
