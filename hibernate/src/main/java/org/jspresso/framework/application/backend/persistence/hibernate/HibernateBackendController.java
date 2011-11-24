@@ -756,13 +756,8 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
       EMergeMode mergeMode, Class<? extends T> clazz) {
-    List<T> ret = findByCriteria(criteria);
+    List<T> ret = findByCriteria(criteria, 0, 1, mergeMode, clazz);
     if (ret != null && !ret.isEmpty()) {
-      if (isUnitOfWorkActive()) {
-        return cloneInUnitOfWork(ret.get(0));
-      } else if (mergeMode != null) {
-        return merge(ret.get(0), mergeMode);
-      }
       return ret.get(0);
     }
     return null;
@@ -785,7 +780,31 @@ public class HibernateBackendController extends AbstractBackendController {
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, EMergeMode mergeMode,
       Class<? extends T> clazz) {
-    List<T> res = findByCriteria(criteria);
+    return findByCriteria(criteria, -1, -1, mergeMode, clazz);
+  }
+
+  /**
+   * Search Hibernate using criteria. The result is then merged into session.
+   * 
+   * @param <T>
+   *          the entity type to return
+   * @param criteria
+   *          the detached criteria.
+   * @param firstResult
+   *          the first result rank to retrieve.
+   * @param maxResults
+   *          the max number of results to retrieve.
+   * @param mergeMode
+   *          the merge mode to use when merging back retrieved entities or null
+   *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
+   * @return the first found entity or null;
+   */
+  public <T extends IEntity> List<T> findByCriteria(
+      final DetachedCriteria criteria, int firstResult, int maxResults,
+      EMergeMode mergeMode, Class<? extends T> clazz) {
+    List<T> res = findByCriteria(criteria, firstResult, maxResults);
     if (res != null) {
       if (isUnitOfWorkActive()) {
         return cloneInUnitOfWork(res);
@@ -799,18 +818,20 @@ public class HibernateBackendController extends AbstractBackendController {
 
   @SuppressWarnings("unchecked")
   private <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria) {
+      final DetachedCriteria criteria, final int firstResult,
+      final int maxResults) {
     List<T> res = getTransactionTemplate().execute(
         new TransactionCallback<List<T>>() {
 
           @Override
-          public List<T> doInTransaction(
-              @SuppressWarnings("unused") TransactionStatus status) {
+          public List<T> doInTransaction(@SuppressWarnings("unused")
+          TransactionStatus status) {
             int oldFlushMode = getHibernateTemplate().getFlushMode();
             try {
               getHibernateTemplate()
                   .setFlushMode(HibernateAccessor.FLUSH_NEVER);
-              return getHibernateTemplate().findByCriteria(criteria);
+              return getHibernateTemplate().findByCriteria(criteria,
+                  firstResult, maxResults);
             } finally {
               getHibernateTemplate().setFlushMode(oldFlushMode);
             }
