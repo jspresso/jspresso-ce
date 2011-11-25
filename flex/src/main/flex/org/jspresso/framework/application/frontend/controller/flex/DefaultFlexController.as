@@ -30,6 +30,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
@@ -448,10 +449,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;
         } else if(command is RemoteChildrenCommand) {
-          var children:IList = (targetPeer as RemoteCompositeValueState).children;
+          var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
           _postponedNotificationBuffer[targetPeer.guid] = null;
-          //children.removeAll();
-          var childIndex:int = 0;
+          var newChildren:ArrayCollection = new ArrayCollection();
           if((command as RemoteChildrenCommand).children != null) {
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if(isRegistered(child.guid)) {
@@ -459,20 +459,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
               } else {
                 register(child);
               }
-              if(childIndex < children.length) {
-                var existingChild:RemoteValueState = children.getItemAt(childIndex) as RemoteValueState;
-                if(existingChild != child) {
-                  children.setItemAt(child, childIndex);
-                }
-              } else {
-                children.addItem(child);
-              }
-              childIndex++;
+              newChildren.addItem(child);
             }
           }
-          while(childIndex < children.length) {
-            var removedChild:RemoteValueState = children.removeItemAt(childIndex) as RemoteValueState;
-          }
+          children.removeAll();
+          children.addAll(newChildren);
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(
             targetPeer as ViewStack,
