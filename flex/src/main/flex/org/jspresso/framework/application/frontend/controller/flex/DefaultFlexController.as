@@ -451,30 +451,34 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else if(command is RemoteChildrenCommand) {
           var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
           _postponedNotificationBuffer[targetPeer.guid] = null;
-          var newChildren:ArrayCollection = new ArrayCollection();
-          var cl:int = 0;
-          var index:int = 0;
           if((command as RemoteChildrenCommand).children != null) {
-            cl = (command as RemoteChildrenCommand).children.length;
+            var newChildren:ArrayCollection = new ArrayCollection();
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if(isRegistered(child.guid)) {
                 child = getRegistered(child.guid) as RemoteValueState;
-                var existingIndex:int = children.getItemIndex(child);
+              } else {
+                register(child);
+              }
+              newChildren.addItem(child);
+            }
+            for(var toRemove:int = children.length - 1; toRemove >= 0; toRemove--) {
+              if(newChildren.getItemIndex(children.getItemAt(toRemove)) < 0) {
+                children.removeItemAt(toRemove);
+              }
+            }
+            var index:int = 0;
+            for each(var newChild:RemoteValueState in newChildren) {
+              var existingIndex:int = children.getItemIndex(newChild);
+              if(existingIndex != index) {
                 if(existingIndex >=0) {
                   children.removeItemAt(existingIndex);
                 }
-                children.addItemAt(child, index);
-              } else {
-                register(child);
-                children.addItemAt(child, index);
+                children.addItemAt(newChild, index);
               }
-              index ++;
+              index++;
             }
           } else {
-            cl = 0;
-          }
-          for(var toRemove:int = children.length - 1; toRemove >= cl; toRemove--) {
-            children.removeItemAt(toRemove);
+            children.removeAll();
           }
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(

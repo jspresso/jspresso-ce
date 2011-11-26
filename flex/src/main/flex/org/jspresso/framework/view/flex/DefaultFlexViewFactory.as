@@ -24,6 +24,8 @@ package org.jspresso.framework.view.flex {
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
+  import mx.collections.IList;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -1853,41 +1855,9 @@ package org.jspresso.framework.view.flex {
       table.verticalScrollPolicy = ScrollPolicy.AUTO;
       
       // Clone array collection to avoid re-ordering items in original collection when sorting.
-      var tableModel:ArrayCollection = new ArrayCollection((remoteTable.state as RemoteCompositeValueState).children.toArray());
-      table.dataProvider = tableModel;
-      (remoteTable.state as RemoteCompositeValueState).children.addEventListener(CollectionEvent.COLLECTION_CHANGE, function(event:CollectionEvent):void {
-        var item:Object;
-        if(event.kind == CollectionEventKind.ADD) {
-          for each (item in event.items) {
-            tableModel.addItem(item);
-          }
-        } else if(event.kind == CollectionEventKind.REMOVE) {
-          // This is to prevent negative getItemIndex when ArrayCollection is sorted.
-          for each (item in event.items) {
-            var removedItemIndex:int = tableModel.list.getItemIndex(item);
-            tableModel.list.removeItemAt(removedItemIndex);
-          }
-          if(tableModel.sort) {
-            tableModel.refresh();
-          }
-        } else if(event.kind == CollectionEventKind.REPLACE) {
-          for each (item in event.items) {
-            var oldItem:Object = (item as PropertyChangeEvent).oldValue;
-            var newItem:Object = (item as PropertyChangeEvent).newValue;
-            var itemIndex:int = tableModel.list.getItemIndex(oldItem);
-            tableModel.list.setItemAt(newItem, itemIndex);
-          }
-          if(tableModel.sort) {
-            tableModel.refresh();
-          }
-        } else if(event.kind == CollectionEventKind.RESET) {
-          // could be finer.
-          tableModel.removeAll();
-          for each (item in (event.currentTarget as ArrayCollection).source) {
-            tableModel.addItem(item);
-          }
-        }
-      });
+      // Not necessary since we've built a ListCollectionView around children array colection
+      table.dataProvider = new ListCollectionView((remoteTable.state as RemoteCompositeValueState).children);
+        
       bindTable(table, remoteTable);
       if(remoteTable.rowAction) {
         getRemotePeerRegistry().register(remoteTable.rowAction);
@@ -2015,7 +1985,7 @@ package org.jspresso.framework.view.flex {
           if(table.itemEditorInstance is RemoteValueDgItemEditor) {
             var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
             var state:RemoteValueState = currentEditor.state;
-            var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
+            var row:RemoteCompositeValueState = (table.dataProvider as ListCollectionView).getItemAt(event.rowIndex) as RemoteCompositeValueState; 
             var cell:RemoteValueState = row.children[currentEditor.index] as RemoteValueState;
 
             cell.value = state.value;
@@ -2035,8 +2005,8 @@ package org.jspresso.framework.view.flex {
           return;
         }
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
-        var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
-        var rowValueState:RemoteCompositeValueState = rowCollection[event.rowIndex] as RemoteCompositeValueState;
+        var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
+        var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(event.rowIndex) as RemoteCompositeValueState;
         if(!rowValueState.writable) {
           event.preventDefault();
         } else {
@@ -2055,12 +2025,12 @@ package org.jspresso.framework.view.flex {
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
         var dg:DataGrid = event.currentTarget as DataGrid;
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
-        var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
+        var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
         var cellValueState:RemoteValueState;
         var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
         // watch out checkbox selection column...
         if(columnRenderer.properties && columnRenderer.properties["index"]) {
-          cellValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
+          cellValueState = (rowCollection.getItemAt(event.rowIndex) as RemoteCompositeValueState)
             .children[columnRenderer.properties["index"] as int] as RemoteValueState;
           _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
         }
