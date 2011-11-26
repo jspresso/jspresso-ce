@@ -452,18 +452,30 @@ package org.jspresso.framework.application.frontend.controller.flex {
           var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
           _postponedNotificationBuffer[targetPeer.guid] = null;
           var newChildren:ArrayCollection = new ArrayCollection();
+          var cl:int = 0;
+          var index:int = 0;
           if((command as RemoteChildrenCommand).children != null) {
+            cl = (command as RemoteChildrenCommand).children.length;
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if(isRegistered(child.guid)) {
                 child = getRegistered(child.guid) as RemoteValueState;
+                var existingIndex:int = children.getItemIndex(child);
+                if(existingIndex >=0) {
+                  children.removeItemAt(existingIndex);
+                }
+                children.addItemAt(child, index);
               } else {
                 register(child);
+                children.addItemAt(child, index);
               }
-              newChildren.addItem(child);
+              index ++;
             }
+          } else {
+            cl = 0;
           }
-          children.removeAll();
-          children.addAll(newChildren);
+          for(var toRemove:int = children.length - 1; toRemove >= cl; toRemove--) {
+            children.removeItemAt(toRemove);
+          }
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(
             targetPeer as ViewStack,
