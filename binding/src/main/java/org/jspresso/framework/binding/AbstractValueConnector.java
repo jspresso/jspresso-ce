@@ -192,17 +192,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   @Override
-  public void cleanBindings() {
-    for (IValueChangeListener listener : valueChangeSupport
-        .getValueChangeListeners()) {
-      removeValueChangeListener(listener);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public AbstractValueConnector clone() {
     return clone(getId());
   }
@@ -211,11 +200,32 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   @Override
+  public void recycle() {
+    oldConnectorValue = null;
+    valueChangeSupport = new ValueChangeSupport(this);
+    parentConnector = null;
+    modelConnector = null;
+    readabilityGates = null;
+    writabilityGates = null;
+    modelReadabilityListener = null;
+    modelWritabilityListener = null;
+    readabilityGatesListener = null;
+    writabilityGatesListener = null;
+    readabilityGates = null;
+    writabilityGates = null;
+    oldReadability = isReadable();
+    oldWritability = isWritable();
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public AbstractValueConnector clone(String newConnectorId) {
     AbstractValueConnector clonedConnector = (AbstractValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.oldConnectorValue = null;
-    clonedConnector.valueChangeSupport = new ValueChangeSupport(clonedConnector);
+    clonedConnector.recycle();
     for (IValueChangeListener listener : valueChangeSupport
         .getValueChangeListeners()) {
       if (listener instanceof ICloneable) {
@@ -224,14 +234,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
                 .clone());
       }
     }
-    clonedConnector.parentConnector = null;
-    clonedConnector.modelConnector = null;
-    clonedConnector.readabilityGates = null;
-    clonedConnector.writabilityGates = null;
-    clonedConnector.modelReadabilityListener = null;
-    clonedConnector.modelWritabilityListener = null;
-    clonedConnector.readabilityGatesListener = null;
-    clonedConnector.writabilityGatesListener = null;
     if (readabilityGates != null) {
       for (IGate gate : readabilityGates) {
         clonedConnector.addReadabilityGate(gate.clone());
@@ -242,8 +244,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
         clonedConnector.addWritabilityGate(gate.clone());
       }
     }
-    clonedConnector.oldReadability = clonedConnector.isReadable();
-    clonedConnector.oldWritability = clonedConnector.isWritable();
     return clonedConnector;
   }
 

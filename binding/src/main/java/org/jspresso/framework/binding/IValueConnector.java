@@ -91,7 +91,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * Cleans all bindings with view connectors.
    */
-  void cleanBindings();
+  void recycle();
 
   /**
    * Clones this connector.

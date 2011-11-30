@@ -357,9 +357,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   private void cleanupConnector(IValueConnector removedConnector) {
-    removedConnector.setParentConnector(null);
-    removedConnector.cleanBindings();
-    removedConnector.setConnectorValue(null);
+    removedConnector.recycle();
     connectorTank.add(removedConnector);
   }
 

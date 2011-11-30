@@ -126,6 +126,7 @@ public abstract class AbstractCollectionConnector extends
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     clonedConnector.removedChildrenConnectors = null;
+    clonedConnector.connectorTank = new ArrayList<IValueConnector>();
     return clonedConnector;
   }
 
@@ -325,9 +326,7 @@ public abstract class AbstractCollectionConnector extends
   }
 
   private void cleanupConnector(IValueConnector removedConnector) {
-    removedConnector.setParentConnector(null);
-    removedConnector.cleanBindings();
-    removedConnector.setConnectorValue(null);
+    removedConnector.recycle();
     connectorTank.add(removedConnector);
   }
 

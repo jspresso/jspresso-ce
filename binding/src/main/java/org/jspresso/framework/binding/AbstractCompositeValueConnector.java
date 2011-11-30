@@ -83,11 +83,20 @@ public abstract class AbstractCompositeValueConnector extends
    * {@inheritDoc}
    */
   @Override
+  public void recycle() {
+    super.recycle();
+    itemSelectionSupport = new ItemSelectionSupport();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public AbstractCompositeValueConnector clone(String newConnectorId) {
     AbstractCompositeValueConnector clonedConnector = (AbstractCompositeValueConnector) super
         .clone(newConnectorId);
+    // Do not put in recycle() to keep the connector hierarchy
     clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
-    clonedConnector.itemSelectionSupport = new ItemSelectionSupport();
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector.addChildConnector(connectorKey,
           getChildConnector(connectorKey).clone());

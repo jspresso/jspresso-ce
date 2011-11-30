@@ -55,10 +55,18 @@ public class BasicValueConnector extends AbstractValueConnector {
    * {@inheritDoc}
    */
   @Override
+  public void recycle() {
+    super.recycle();
+    connecteeValue = null;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public BasicValueConnector clone(String newConnectorId) {
     BasicValueConnector clonedConnector = (BasicValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.connecteeValue = null;
     return clonedConnector;
   }
 
