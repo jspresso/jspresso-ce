@@ -801,43 +801,46 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the first found entity or null;
    */
+  @SuppressWarnings("unchecked")
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, int firstResult, int maxResults,
       EMergeMode mergeMode, Class<? extends T> clazz) {
-    List<T> res = findByCriteria(criteria, firstResult, maxResults);
-    if (res != null) {
-      if (isUnitOfWorkActive()) {
-        return cloneInUnitOfWork(res);
-      } else if (mergeMode != null) {
-        return merge(res, mergeMode);
-      }
-      return res;
+    List<T> res = null;
+    if (isUnitOfWorkActive()) {
+      // merge mode must be ignored if a transaction is pre-existing, so force
+      // to null.
+      res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
+          maxResults, null));
+    } else {
+      // merge mode is passed for merge to occur inside the transaction.
+      res = findByCriteria(criteria, firstResult, maxResults, mergeMode);
     }
-    return null;
+    return res;
   }
 
   @SuppressWarnings("unchecked")
   private <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, final int firstResult,
-      final int maxResults) {
-    List<T> res = getTransactionTemplate().execute(
-        new TransactionCallback<List<T>>() {
+      final int maxResults, final EMergeMode mergeMode) {
+    return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
-          @Override
-          public List<T> doInTransaction(@SuppressWarnings("unused")
-          TransactionStatus status) {
-            int oldFlushMode = getHibernateTemplate().getFlushMode();
-            try {
-              getHibernateTemplate()
-                  .setFlushMode(HibernateAccessor.FLUSH_NEVER);
-              return getHibernateTemplate().findByCriteria(criteria,
-                  firstResult, maxResults);
-            } finally {
-              getHibernateTemplate().setFlushMode(oldFlushMode);
-            }
+      @Override
+      public List<T> doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
+        int oldFlushMode = getHibernateTemplate().getFlushMode();
+        try {
+          getHibernateTemplate().setFlushMode(HibernateAccessor.FLUSH_NEVER);
+          List<T> entities = getHibernateTemplate().findByCriteria(criteria,
+              firstResult, maxResults);
+          if (mergeMode != null) {
+            entities = merge(entities, mergeMode);
           }
-        });
-    return res;
+          return entities;
+        } finally {
+          getHibernateTemplate().setFlushMode(oldFlushMode);
+        }
+      }
+    });
   }
 
   /**
