@@ -281,8 +281,11 @@ public abstract class AbstractActionContextAware {
       int[] selectedIndices = getSelectedIndices(context);
       if (selectedIndices != null && selectedIndices.length > 0) {
         for (int i = 0; i < selectedIndices.length; i++) {
-          models.add(((ICollectionConnector) modelConnector).getChildConnector(
-              selectedIndices[i]).getConnectorValue());
+          IValueConnector childConnector = ((ICollectionConnector) modelConnector)
+              .getChildConnector(selectedIndices[i]);
+          if (childConnector != null) {
+            models.add(childConnector.getConnectorValue());
+          }
         }
       }
     } else {
