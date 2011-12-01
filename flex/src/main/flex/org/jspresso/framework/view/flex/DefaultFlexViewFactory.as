@@ -264,7 +264,7 @@ package org.jspresso.framework.view.flex {
       }
     }
     
-    protected function applyComponentStyle(component:*, remoteComponent:RComponent):void {
+    public function applyComponentStyle(component:*, remoteComponent:RComponent):void {
       if(remoteComponent.foreground) {
         component.setStyle("color", remoteComponent.foreground);
         if(component is IFlexDisplayObject) {
@@ -1730,13 +1730,14 @@ package org.jspresso.framework.view.flex {
       
       for(var i:int=0; i < remoteTable.columns.length; i++) {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
+        var rColumnHeader:RComponent = remoteTable.columnHeaders[i] as RComponent;
         if(rColumn.state == null) {
           rColumn.state = new RemoteValueState();
         }
         var editorComponent:UIComponent = createComponent(rColumn, false);
 
         var column:DataGridColumn = new DataGridColumn();
-        column.headerText = rColumn.label;
+        column.headerText = rColumnHeader.label;
         applyComponentStyle(column, rColumn);
         var itemRenderer:ClassFactory;
         if(rColumn is RComboBox) {
@@ -1799,7 +1800,10 @@ package org.jspresso.framework.view.flex {
         column.itemEditor = itemEditor;
 
         var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
-        headerRenderer.properties = {index:i+1, toolTip:editorComponent.toolTip};
+        headerRenderer.properties = { index:i+1,
+                                      toolTip:editorComponent.toolTip,
+                                      viewFactory:this,
+                                      rTemplate:rColumnHeader};
         column.headerRenderer = headerRenderer;
         
         if(rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {

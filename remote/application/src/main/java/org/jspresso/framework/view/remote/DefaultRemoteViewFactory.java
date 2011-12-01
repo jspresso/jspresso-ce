@@ -1793,7 +1793,8 @@ public class DefaultRemoteViewFactory extends
         columnConnector.setLocallyWritable(locallyWritable);
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
-        if (propertyDescriptor.isMandatory()) {
+        if (propertyDescriptor.isMandatory()
+            && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
           if (column.getPeer().getLabel() != null) {
             column.getPeer().setLabel(column.getPeer().getLabel() + "*");
           } else {

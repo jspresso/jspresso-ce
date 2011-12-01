@@ -1572,7 +1572,6 @@ public class DefaultSwingViewFactory extends
     if (propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
-      propertyLabel.setForeground(Color.RED);
     }
     propertyLabel.setText(labelText.toString());
     propertyLabel.setLabelFor(propertyComponent);
@@ -1589,6 +1588,13 @@ public class DefaultSwingViewFactory extends
     if (propertyViewDescriptor.getLabelForeground() != null) {
       propertyLabel.setForeground(createColor(propertyViewDescriptor
           .getLabelForeground()));
+    } else {
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      if (propertyDescriptor.isMandatory()
+          && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
+        propertyLabel.setForeground(Color.RED);
+      }
     }
     if (propertyViewDescriptor.getLabelBackground() != null) {
       propertyLabel.setBackground(createColor(propertyViewDescriptor
@@ -2006,6 +2012,11 @@ public class DefaultSwingViewFactory extends
     if (cellRenderer instanceof JComponent) {
       configureComponent(columnViewDescriptor, actionHandler, locale,
           (JComponent) cellRenderer);
+      if (cellRenderer instanceof EvenOddTableCellRenderer) {
+        // To preserve font that has been set and avoid Jtable changing it.
+        ((EvenOddTableCellRenderer) cellRenderer)
+            .setCustomFont(((JComponent) cellRenderer).getFont());
+      }
     }
     if (columnViewDescriptor.getAction() != null
         && columnViewDescriptor.isReadOnly()) {
@@ -2016,8 +2027,10 @@ public class DefaultSwingViewFactory extends
       viewComponent.addMouseListener((MouseListener) cellRenderer);
     }
     column.setCellRenderer(cellRenderer);
-    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+    EvenOddTableCellRenderer headerRenderer = new EvenOddTableCellRenderer();
     configureLabelComponent(headerRenderer, columnViewDescriptor);
+    // To preserve font that has been set and avoid Jtable changing it.
+    headerRenderer.setCustomFont(headerRenderer.getFont());
     if (tableModel instanceof AbstractTableSorter) {
       column.setHeaderRenderer(new AbstractTableSorter.SortableHeaderRenderer(
           (AbstractTableSorter) tableModel, headerRenderer));
