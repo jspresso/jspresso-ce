@@ -574,11 +574,18 @@ public abstract class AbstractComponentDescriptor<E> extends
             }
           }
           if (autoCompleteProperty == null) {
-            autoCompleteProperty = rp.get(0);
+            Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
+            for (IPropertyDescriptor pd : allProps) {
+              if (pd instanceof IStringPropertyDescriptor
+                  && !IEntity.ID.equals(pd.getName())) {
+                autoCompleteProperty = pd.getName();
+                break;
+              }
+            }
           }
-        } else {
-          autoCompleteProperty = getPropertyDescriptors().iterator().next()
-              .getName();
+          if (autoCompleteProperty == null) {
+            autoCompleteProperty = IEntity.ID;
+          }
         }
       }
     }
