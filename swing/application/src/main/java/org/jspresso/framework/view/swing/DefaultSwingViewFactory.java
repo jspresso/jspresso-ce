@@ -1576,6 +1576,12 @@ public class DefaultSwingViewFactory extends
     }
     propertyLabel.setText(labelText.toString());
     propertyLabel.setLabelFor(propertyComponent);
+    configureLabelComponent(propertyLabel, propertyViewDescriptor);
+    return propertyLabel;
+  }
+
+  private void configureLabelComponent(JComponent propertyLabel,
+      IPropertyViewDescriptor propertyViewDescriptor) {
     if (propertyViewDescriptor.getLabelFont() != null) {
       propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
           propertyLabel.getFont()));
@@ -1588,7 +1594,6 @@ public class DefaultSwingViewFactory extends
       propertyLabel.setBackground(createColor(propertyViewDescriptor
           .getLabelBackground()));
     }
-    return propertyLabel;
   }
 
   /**
@@ -1913,7 +1918,8 @@ public class DefaultSwingViewFactory extends
       if (!forbiddenColumns.contains(propertyName)) {
         configureTableColumn(actionHandler, locale, rowDescriptor, connector,
             viewComponent, view, maxColumnSize, columnIndex,
-            columnViewDescriptorEntry, columnViewDescriptor, propertyName);
+            columnViewDescriptorEntry, columnViewDescriptor, propertyName,
+            viewComponent.getModel());
         columnIndex++;
       }
     }
@@ -1958,7 +1964,8 @@ public class DefaultSwingViewFactory extends
       ICollectionConnector connector, JTable viewComponent,
       IView<JComponent> view, int maxColumnSize, int columnIndex,
       Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry,
-      IPropertyViewDescriptor columnViewDescriptor, String propertyName) {
+      IPropertyViewDescriptor columnViewDescriptor, String propertyName,
+      TableModel tableModel) {
     TableColumn column = viewComponent.getColumnModel().getColumn(columnIndex);
     column.setIdentifier(computeColumnIdentifier(rowDescriptor,
         columnViewDescriptor));
@@ -2009,6 +2016,14 @@ public class DefaultSwingViewFactory extends
       viewComponent.addMouseListener((MouseListener) cellRenderer);
     }
     column.setCellRenderer(cellRenderer);
+    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+    configureLabelComponent(headerRenderer, columnViewDescriptor);
+    if (tableModel instanceof AbstractTableSorter) {
+      column.setHeaderRenderer(new AbstractTableSorter.SortableHeaderRenderer(
+          (AbstractTableSorter) tableModel, headerRenderer));
+    } else {
+      column.setHeaderRenderer(headerRenderer);
+    }
     if (columnViewDescriptorEntry.getValue() != null) {
       column.setPreferredWidth(columnViewDescriptorEntry.getValue().intValue());
     } else {
