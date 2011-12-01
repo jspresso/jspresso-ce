@@ -12,17 +12,13 @@
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
     
     <!-- Dependencies versions -->
+
     <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
-    <junit.version>3.8.1</junit.version>
 
+    <junit.version>3.8.1</junit.version>
     <flex.version>3.6.0.16995</flex.version>
     <flexunit.version>0.90</flexunit.version>
-    <!--
-    <flex.version>4.0.0.8811</flex.version>
-    <flexunit.version>4.0-rc-1</flexunit.version>
-    -->
-
     <blazeds.version>4.0.0.14931</blazeds.version>
     <flexlib.version>2.5</flexlib.version>
     <resizecontainers.version>1.0</resizecontainers.version>
