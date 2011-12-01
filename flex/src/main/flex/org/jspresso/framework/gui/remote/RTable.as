@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RTable extends RCollectionComponent {
 
         private var _columns:Array;
+        private var _columnHeaders:Array;
         private var _columnIds:Array;
         private var _sortingAction:RAction;
         private var _horizontallyScrollable:Boolean;
@@ -30,12 +31,19 @@ package org.jspresso.framework.gui.remote {
         }
 
         public function set columns(value:Array):void {
-            _columns = value;
+          _columns = value;
         }
         public function get columns():Array {
-            return _columns;
+          return _columns;
         }
-
+        
+        public function set columnHeaders(value:Array):void {
+          _columnHeaders = value;
+        }
+        public function get columnHeaders():Array {
+          return _columnHeaders;
+        }
+        
         public function set columnIds(value:Array):void {
             _columnIds = value;
         }

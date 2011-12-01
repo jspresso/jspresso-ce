@@ -1760,6 +1760,7 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setHorizontallyScrollable(viewDescriptor
         .isHorizontallyScrollable());
     List<RComponent> columns = new ArrayList<RComponent>();
+    List<RComponent> columnHeaders = new ArrayList<RComponent>();
     List<String> columnIds = new ArrayList<String>();
     Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
         viewDescriptor, actionHandler);
@@ -1800,6 +1801,8 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columns.add(column.getPeer());
+        columnHeaders.add(createPropertyLabel(columnViewDescriptor,
+            column.getPeer(), actionHandler, locale));
         columnIds.add(computeColumnIdentifier(rowDescriptor,
             columnViewDescriptor));
         if (column.getPeer() instanceof RLink) {
@@ -1815,6 +1818,7 @@ public class DefaultRemoteViewFactory extends
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
+    viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
     viewComponent.setColumnIds(columnIds.toArray(new String[0]));
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
