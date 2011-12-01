@@ -93,18 +93,10 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
    * {@inheritDoc}
    */
   @Override
-  public void recycle() {
-    super.recycle();
-    connecteeValue = null;
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public BasicCompositeConnector clone(String newConnectorId) {
     BasicCompositeConnector clonedConnector = (BasicCompositeConnector) super
         .clone(newConnectorId);
+    clonedConnector.connecteeValue = null;
     return clonedConnector;
   }
 

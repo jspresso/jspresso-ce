@@ -37,7 +37,7 @@ public class BasicValueConnector extends AbstractValueConnector {
    * Constructs a new instance of BasicValueConnector.
    * 
    * @param id
-   *            the connector identifier
+   *          the connector identifier
    */
   public BasicValueConnector(String id) {
     super(id);
@@ -55,18 +55,10 @@ public class BasicValueConnector extends AbstractValueConnector {
    * {@inheritDoc}
    */
   @Override
-  public void recycle() {
-    super.recycle();
-    connecteeValue = null;
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public BasicValueConnector clone(String newConnectorId) {
     BasicValueConnector clonedConnector = (BasicValueConnector) super
         .clone(newConnectorId);
+    clonedConnector.connecteeValue = null;
     return clonedConnector;
   }
 
@@ -84,7 +76,7 @@ public class BasicValueConnector extends AbstractValueConnector {
    * Sets the self-hosted value.
    * 
    * @param connecteeValue
-   *            the value to host
+   *          the value to host
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
