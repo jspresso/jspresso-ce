@@ -1,12 +1,12 @@
 package org.jspresso.framework.view.flex {
-  import mx.controls.Label;
-  import mx.core.UIComponent;
+  import mx.controls.Text;
   
   import org.jspresso.framework.gui.remote.RComponent;
+  import org.jspresso.framework.util.html.HtmlUtil;
   
   
 
-  public class DgHeaderItemRenderer extends Label implements IColumnIndexProvider {
+  public class DgHeaderItemRenderer extends Text implements IColumnIndexProvider {
     
     private var _index:int;
     private var _viewFactory:DefaultFlexViewFactory;
@@ -33,6 +33,14 @@ package org.jspresso.framework.view.flex {
       _rTemplate = value;
       if(_viewFactory != null) {
         _viewFactory.applyComponentStyle(this, _rTemplate);
+      }
+    }
+    
+    protected override function commitProperties():void {
+      super.commitProperties();
+      var cellText:String = text;
+      if(HtmlUtil.isHtml(cellText)) {
+        htmlText = HtmlUtil.convertHtmlEntities(cellText);
       }
     }
   }

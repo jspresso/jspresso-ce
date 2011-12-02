@@ -23,8 +23,6 @@ package org.jspresso.framework.view.flex {
   import flexlib.containers.ButtonScrollingCanvas;
   
   import mx.binding.utils.BindingUtils;
-  import mx.collections.ArrayCollection;
-  import mx.collections.IList;
   import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
@@ -48,6 +46,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.List;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
+  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -58,8 +57,6 @@ package org.jspresso.framework.view.flex {
   import mx.core.IFlexDisplayObject;
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
-  import mx.events.CollectionEvent;
-  import mx.events.CollectionEventKind;
   import mx.events.ColorPickerEvent;
   import mx.events.DataGridEvent;
   import mx.events.DataGridEventReason;
@@ -67,7 +64,6 @@ package org.jspresso.framework.view.flex {
   import mx.events.IndexChangedEvent;
   import mx.events.ListEvent;
   import mx.events.MenuEvent;
-  import mx.events.PropertyChangeEvent;
   import mx.formatters.Formatter;
   import mx.formatters.NumberBase;
   import mx.formatters.NumberBaseRoundType;
@@ -1234,7 +1230,8 @@ package org.jspresso.framework.view.flex {
 
         if(remoteForm.labelsPosition != "NONE") {
           labelsRow.addChild(labelCell);
-          if((componentLabel as Label).text.length > 0) {
+          if(   ((componentLabel as Label).text && (componentLabel as Label).text.length > 0)
+             || ((componentLabel as Label).htmlText && (componentLabel as Label).htmlText.length > 0)) {
             labelCell.addChild(componentLabel);
             // makes alignment wrong
             //if(remoteForm.labelsPosition == "ASIDE") {
@@ -2112,7 +2109,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
-      var label:Label = new Label();
+      var label:Text = new Text();
       if(remoteLabel.state) {
         label.selectable = true;
       }
