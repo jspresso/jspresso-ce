@@ -39,6 +39,8 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  */
 public class TransferToClipboardAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  private IClipboardTransferHandler clipboardTransferHandler;
+
   /**
    * Retrieves the managed collection from the model connector then registers
    * the selected elements.
@@ -50,9 +52,29 @@ public class TransferToClipboardAction<E, F, G> extends FrontendAction<E, F, G> 
       Map<String, Object> context) {
     List<?> transferedComponents = getSelectedModels(context);
     getController(context).setClipboardContent(
-        transferedComponents.toString(),
-        "<html>C'est du HTML :<p>" + transferedComponents.toString()
-            + "</html>");
+        getClipboardTransferHandler().toPlainText(transferedComponents),
+        getClipboardTransferHandler().toHtml(transferedComponents));
     return super.execute(actionHandler, context);
   }
+
+  /**
+   * Gets the clipboardTransferHandler.
+   * 
+   * @return the clipboardTransferHandler.
+   */
+  protected IClipboardTransferHandler getClipboardTransferHandler() {
+    return clipboardTransferHandler;
+  }
+
+  /**
+   * Sets the clipboardTransferHandler.
+   * 
+   * @param clipboardTransferHandler
+   *          the clipboardTransferHandler to set.
+   */
+  public void setClipboardTransferHandler(
+      IClipboardTransferHandler clipboardTransferHandler) {
+    this.clipboardTransferHandler = clipboardTransferHandler;
+  }
+
 }
