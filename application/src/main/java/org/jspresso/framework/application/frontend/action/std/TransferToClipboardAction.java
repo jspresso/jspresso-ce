@@ -16,26 +16,28 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action;
+package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.model.component.IComponent;
-import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.datatransfer.ETransferMode;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * An action used to register a collection of domain objects into the
- * application's clipboard along with a transfer mode semantics.
+ * An action used to transfer textual representation(s) of selected models to
+ * the system clipboard.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class TransferCollectionAction extends BackendAction {
-
-  private ETransferMode transferMode;
+public class TransferToClipboardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Retrieves the managed collection from the model connector then registers
@@ -47,23 +49,10 @@ public class TransferCollectionAction extends BackendAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     List<?> transferedComponents = getSelectedModels(context);
-    getController(context).storeComponents(
-        new ComponentTransferStructure<IComponent>(transferedComponents,
-            transferMode));
+    getController(context).setClipboardContent(
+        transferedComponents.toString(),
+        "<html>C'est du HTML :<p>" + transferedComponents.toString()
+            + "</html>");
     return super.execute(actionHandler, context);
-  }
-
-  /**
-   * Configures the transferMode to use when pasting will be requested, i.e. :
-   * <ul>
-   * <li><code>ETransferMode.COPY</code> for copy semantics.</li>
-   * <li><code>ETransferMode.MOVE</code> for move/cut semantics.</li>
-   * </ul>
-   * 
-   * @param transferMode
-   *          the transferMode to set.
-   */
-  public void setTransferMode(ETransferMode transferMode) {
-    this.transferMode = transferMode;
   }
 }

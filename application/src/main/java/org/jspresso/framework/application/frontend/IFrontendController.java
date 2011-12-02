@@ -388,4 +388,14 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the key under which the preference is stored.
    */
   void removeClientPreference(String key);
+
+  /**
+   * Assigns system clipboard content.
+   * 
+   * @param plainContent
+   *          the plain text content to assign to system clipboard.
+   * @param htmlContent
+   *          the html text content to assign to system clipboard.
+   */
+  void setClipboardContent(String plainContent, String htmlContent);
 }

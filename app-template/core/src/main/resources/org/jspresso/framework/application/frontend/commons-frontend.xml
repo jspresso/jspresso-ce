@@ -351,7 +351,7 @@
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
-  <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.std.TransferToClipboardAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_copy-48x48.png" />
     <property name="name" value="copy.name" />
     <property name="description" value="copy.description" />
@@ -364,7 +364,7 @@
     </property>
   </bean>
 
-  <bean id="cutCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="cutCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.std.TransferToClipboardAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_cut-48x48.png" />
     <property name="name" value="cut.name" />
     <property name="description" value="cut.description" />

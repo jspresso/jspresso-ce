@@ -174,7 +174,8 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
+  public Workspace getWorkspace(@SuppressWarnings("unused")
+  String workspaceName) {
     return null;
   }
 
@@ -190,38 +191,33 @@ public class MockSwingController extends
     if (ex instanceof SecurityException) {
       JOptionPane.showMessageDialog(sourceComponent,
           HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
-              .getMessage()))),
-          getTranslation("error", getLocale()),
+              .getMessage()))), getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(((BusinessException) ex).getI18nMessage(
-                  this, getLocale())))),
-          getTranslation("error", getLocale()),
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(this,
+                  getLocale())))), getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof DataIntegrityViolationException) {
       JOptionPane
           .showMessageDialog(
               sourceComponent,
-              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
-                  .escapeForHTML(this
-                      .getTranslation(
-                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                          getLocale())))), this
+              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
+                  .getTranslation(
+                      refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                      getLocale())))), this
                   .getTranslation("error", getLocale()),
               JOptionPane.ERROR_MESSAGE,
               getIconFactory()
                   .getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(getTranslation(
-                  "concurrency.error.description", getLocale())))),
-          getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE,
+          .toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(getTranslation(
+              "concurrency.error.description", getLocale())))),
+          getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
       ex.printStackTrace();
@@ -349,5 +345,14 @@ public class MockSwingController extends
   @Override
   protected IPreferencesStore createClientPreferencesStore() {
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  @Override
+  public void setClipboardContent(String plainContent, String htmlContent) {
+    // NO-OP
   }
 }

@@ -78,6 +78,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
@@ -1236,6 +1237,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand",RemoteCleanupCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand",RemoteClipboardCommand);
   
       registerClassAlias("org.jspresso.framework.util.gui.CellConstraints",CellConstraints);
       registerClassAlias("org.jspresso.framework.util.gui.Dimension",Dimension);

@@ -24,6 +24,7 @@ import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -93,6 +94,7 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.swing.BasicTransferable;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -739,7 +741,8 @@ public class DefaultSwingController extends
        * {@inheritDoc}
        */
       @Override
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
+      public void windowClosing(@SuppressWarnings("unused")
+      WindowEvent e) {
         execute(getExitAction(), new HashMap<String, Object>());
       }
     });
@@ -930,7 +933,8 @@ public class DefaultSwingController extends
     loginButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
         if (performLogin()) {
           dialog.dispose();
           updateControllerFrame();
@@ -1018,8 +1022,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameActivated(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameActivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
 
@@ -1027,8 +1031,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameClosed(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameClosed(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(null);
     }
 
@@ -1036,8 +1040,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameClosing(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameClosing(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(null);
     }
 
@@ -1045,8 +1049,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeactivated(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameDeactivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       // displayWorkspace(null);
     }
 
@@ -1054,8 +1058,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeiconified(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameDeiconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
 
@@ -1063,8 +1067,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameIconified(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameIconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       // displayWorkspace(null);
     }
 
@@ -1072,8 +1076,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameOpened(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameOpened(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
   }
@@ -1099,5 +1103,16 @@ public class DefaultSwingController extends
   @Override
   protected IPreferencesStore createClientPreferencesStore() {
     return new JavaPreferencesStore();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setClipboardContent(String plainContent, String htmlContent) {
+    Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+    BasicTransferable dataTransferObject = new BasicTransferable(plainContent,
+        htmlContent);
+    cb.setContents(dataTransferObject, dataTransferObject);
   }
 }
