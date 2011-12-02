@@ -2564,6 +2564,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (toolTip) {
         button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip
             + this.self(arguments).__TOOLTIP_ELLIPSIS));
+        //to unblock tooltips on menu buttons
+        button.setBlockToolTip(false);
       }
     },
 

@@ -2497,8 +2497,8 @@ public class DefaultSwingViewFactory extends
                     default:
                       break;
                   }
-                  if (mainAction.getAcceleratorAsString() != null) {
-                    KeyStroke ks = KeyStroke.getKeyStroke(mainAction
+                  if (menuAction.getAcceleratorAsString() != null) {
+                    KeyStroke ks = KeyStroke.getKeyStroke(menuAction
                         .getAcceleratorAsString());
                     view.getPeer().getActionMap()
                         .put(swingAction.getValue(Action.NAME), swingAction);
