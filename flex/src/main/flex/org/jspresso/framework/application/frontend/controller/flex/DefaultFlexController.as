@@ -13,6 +13,8 @@
  */
 
 package org.jspresso.framework.application.frontend.controller.flex {
+  import flash.desktop.Clipboard;
+  import flash.desktop.ClipboardFormats;
   import flash.display.DisplayObject;
   import flash.display.Sprite;
   import flash.events.DataEvent;
@@ -409,6 +411,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else {
           _statusBar.visible = false;
         }
+      } else if(command is RemoteClipboardCommand) {
+        handleClipboardCommand(command as RemoteClipboardCommand);
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
@@ -574,6 +578,38 @@ package org.jspresso.framework.application.frontend.controller.flex {
              alertCloseHandler,
              null,
              Alert.NO);
+        fixAlertSize(alert);
+      }
+    }
+    
+    protected function handleClipboardCommand(clipboardCommand:RemoteClipboardCommand):void {
+      try {
+        Clipboard.generalClipboard.clear();
+        Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+        Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+      } catch(error:Error) {
+        // we are certainly running on FP 10 or above. Need an extra
+        // dialog to initiate the browsing...
+        var alertCloseHandler:Function = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.YES:
+              Clipboard.generalClipboard.clear();
+              Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+              Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+              break;
+            default:
+              break;
+          }
+          popFakeDialog();
+        };
+        pushFakeDialog();
+        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "system.clipboard.continue"),
+          ResourceManager.getInstance().getString("Common_messages", "content.copy"),
+          Alert.YES|Alert.NO,
+          null,
+          alertCloseHandler,
+          null,
+          Alert.NO);
         fixAlertSize(alert);
       }
     }
