@@ -325,6 +325,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else {
           this.__statusBar.setVisibility("excluded");
         }
+      } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand) {
+        this._handleClipboardCommand(command);
       } else {
         var targetPeerGuid = command.getTargetPeerGuid();
         var targetPeer = this.getRegistered(targetPeerGuid);
@@ -485,6 +487,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this.__dlFrame.resetSource();
       }
       this.__dlFrame.setSource(downloadCommand.getFileUrl());  
+    },
+
+    /**
+     * 
+     * @param {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand} clipboardCommand
+     */
+    _handleClipboardCommand : function(clipboardCommand) {
+      var dataTransfers = new Array();
+      if(clipboardCommand.getPlainContent()) {
+        dataTransfers.push("text/unicode");
+        dataTransfers.push(clipboardCommand.getPlainContent());
+      }
+      if(clipboardCommand.getHtmlContent()) {
+        dataTransfers.push("text/html");
+        dataTransfers.push(clipboardCommand.getHtmlContent());
+      }
+      org.jspresso.framework.util.browser.ClipboardHelper.copyToSystemClipboard(dataTransfers);
     },
 
     /**
