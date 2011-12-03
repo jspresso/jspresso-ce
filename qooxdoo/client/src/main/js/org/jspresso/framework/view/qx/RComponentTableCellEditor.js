@@ -71,10 +71,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
       state.addListener("changeValue", function() {
          cellInfo.table.stopEditing();
       }, this);
-      if(this.__rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
-        var editor = new qx.ui.container.Composite(new qx.ui.layout.HBox().set({
-          alignX: "center",
-          alignY: "middle"
+      
+      if(!(editorWidget instanceof qx.ui.container.Composite)) {
+        var editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
+          alignX: "center"
         })).set({
           focusable: true
         });
@@ -86,6 +86,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
         editor.addListener("activate", function() {
           editorWidget.activate();
         });
+        editorWidget.setAllowStretchY(false, false);
+        editorWidget.setAllowStretchX(true, true);
         editor.add(editorWidget);
         editorWidget = editor;
       }

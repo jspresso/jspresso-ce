@@ -1290,6 +1290,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var actionComponent = this.createAction(actionList
               .getActions()[j])
           actionComponent.setFocusable(false);
+          actionComponent.setAllowStretchY(false, false);
           actionField.add(actionComponent);
           if (!mainAction) {
             mainAction = actionList.getActions()[j];
