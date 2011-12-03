@@ -138,10 +138,13 @@ package org.jspresso.framework.view.flex {
   	  super.commitProperties();
   	  var cellText:String = label.text;
       if(_action != null) {
-        label.htmlText = "<u><a href='event:action'>" + extractFirstLine(cellText) + "</a></u>";
+        if(HtmlUtil.isHtml(cellText)) {
+          cellText = HtmlUtil.convertHtmlEntities(cellText);
+        }
+        label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
       } else {
         if(HtmlUtil.isHtml(cellText)) {
-          label.htmlText = HtmlUtil.convertHtmlEntities(extractFirstLine(cellText));
+          label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
         }
       }
       if(index == 1 || index == -1) {
@@ -179,15 +182,15 @@ package org.jspresso.framework.view.flex {
     
     private function extractFirstLine(multiLine:String):String {
       var firstLine:String = multiLine;
-      if(firstLine) {
-        var lineBreaks:Array = ["\n", "\r", "<p>", "<br>"];
-        for(var i:int = 0; i < lineBreaks.length; i++) {
-          var j:int = firstLine.indexOf(lineBreaks[i]);
-          if(j > 0) {
-            firstLine = firstLine.substr(0,j);
-          }
-        }
-      }
+//      if(firstLine) {
+//        var lineBreaks:Array = ["\n", "\r", "<p>", "<br>"];
+//        for(var i:int = 0; i < lineBreaks.length; i++) {
+//          var j:int = firstLine.indexOf(lineBreaks[i]);
+//          if(j > 0) {
+//            firstLine = firstLine.substr(0,j);
+//          }
+//        }
+//      }
       return firstLine;
     }
 

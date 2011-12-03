@@ -1608,6 +1608,7 @@ package org.jspresso.framework.view.flex {
       var list:EnhancedList = new EnhancedList();
       list.horizontalScrollPolicy = ScrollPolicy.AUTO;
       list.verticalScrollPolicy = ScrollPolicy.AUTO;
+      list.variableRowHeight = true;
       if(   remoteList.selectionMode == "SINGLE_SELECTION"
          || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
         list.allowMultipleSelection = false;
@@ -1701,6 +1702,7 @@ package org.jspresso.framework.view.flex {
       
       var columns:Array = new Array();
       
+      table.variableRowHeight = true;
       table.regenerateStyleCache(false);
       
       if(   remoteTable.selectionMode == "SINGLE_SELECTION"

@@ -20,6 +20,7 @@ package org.jspresso.framework.view.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 
@@ -82,6 +83,10 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
     if (getCustomFont() != null) {
       // to override default font mgt of JTable
       c.setFont(getCustomFont());
+    }
+    Dimension ps = c.getPreferredSize();
+    if (row >= 0 && ps.height > table.getRowHeight(row)) {
+      table.setRowHeight(row, ps.height);
     }
     return c;
   }
