@@ -160,7 +160,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     JPanel wrapperPanel = new JPanel();
     wrapperPanel.setLayout(new GridBagLayout());
     wrapperPanel.add(editorComponent, new GridBagConstraints(0, 0, 1, 1, 1.0,
-        1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+        1.0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
         new Insets(0, 0, 0, 0), 0, 0));
     return wrapperPanel;
   }
