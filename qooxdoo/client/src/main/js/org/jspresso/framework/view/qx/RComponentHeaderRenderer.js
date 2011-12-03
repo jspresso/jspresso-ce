@@ -23,8 +23,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer",
    * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
    * @param {org.jspresso.framework.action.IActionHandler} actionHandler
    */
-  construct : function(viewFactory, rComponent) {
+  construct : function(table, viewFactory, rComponent) {
     this.base(arguments);
+    this.__table = table;
     this.__viewFactory = viewFactory;
     this.__rComponent = rComponent;
   },
@@ -32,13 +33,19 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer",
 
   members :
   {
+    __table : null,
     __viewFactory : null,
     __rComponent : null,
     
     createHeaderCell : function(cellInfo) {
-      var headerComponent = this.base(arguments, cellInfo);
-      this.__viewFactory.applyComponentStyle(headerComponent, this.__rComponent);
-      return headerComponent;
+      var widget = new org.jspresso.framework.view.qx.MultilineHeaderCell();
+      this.updateHeaderCell(cellInfo, widget);
+      this.__viewFactory.applyComponentStyle(widget, this.__rComponent);
+      var heightHint = widget.getSizeHint()["height"];
+      if(this.__table.getHeaderCellHeight() < heightHint) {
+        this.__table.setHeaderCellHeight(heightHint);
+      }
+      return widget;
     }
   }
 });

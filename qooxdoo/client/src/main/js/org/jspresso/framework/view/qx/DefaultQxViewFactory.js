@@ -577,7 +577,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer.setAdditionalAttributes(additionalAttributes);
 
           columnModel.setDataCellRenderer(i, cellRenderer);
-          columnModel.setHeaderCellRenderer(i, new org.jspresso.framework.view.qx.RComponentHeaderRenderer(this, rColumnHeader));
+          columnModel.setHeaderCellRenderer(i, new org.jspresso.framework.view.qx.RComponentHeaderRenderer(table, this, rColumnHeader));
         }
         var columnWidth;
         if (rColumn.getPreferredSize()
