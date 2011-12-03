@@ -180,20 +180,6 @@ package org.jspresso.framework.view.flex {
       }
     }
     
-    private function extractFirstLine(multiLine:String):String {
-      var firstLine:String = multiLine;
-//      if(firstLine) {
-//        var lineBreaks:Array = ["\n", "\r", "<p>", "<br>"];
-//        for(var i:int = 0; i < lineBreaks.length; i++) {
-//          var j:int = firstLine.indexOf(lineBreaks[i]);
-//          if(j > 0) {
-//            firstLine = firstLine.substr(0,j);
-//          }
-//        }
-//      }
-      return firstLine;
-    }
-
     public function set actionHandler(value:IActionHandler):void
     {
       _actionHandler = value;

@@ -521,7 +521,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
         } else {
           var format = this._createFormat(rColumn);
-          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(format);
+          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format);
           cellRenderer.setUseAutoAlign(false);
 
           if (rColumn instanceof org.jspresso.framework.gui.remote.RLink) {
