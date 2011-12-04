@@ -67,7 +67,7 @@ package org.jspresso.framework.view.flex
         _editor.setStyle("verticalCenter", 0);
       } else {
         _editor.percentWidth = 100.0;
-        _editor.percentHeight = 100.0;
+        //_editor.percentHeight = 100.0;
       }
       addChild(_editor);
     }
