@@ -32,7 +32,9 @@ import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
@@ -92,8 +94,8 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
           new IValueChangeListener() {
 
             @Override
-            public void valueChange(@SuppressWarnings("unused")
-            ValueChangeEvent evt) {
+            public void valueChange(
+                @SuppressWarnings("unused") ValueChangeEvent evt) {
               stopCellEditing();
             }
           });
@@ -157,12 +159,15 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     } else if (editorComponent instanceof JDateField) {
       ((JDateField) editorComponent).getFormattedTextField().selectAll();
     }
-    JPanel wrapperPanel = new JPanel();
-    wrapperPanel.setLayout(new GridBagLayout());
-    wrapperPanel.add(editorComponent, new GridBagConstraints(0, 0, 1, 1, 1.0,
-        1.0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
-        new Insets(0, 0, 0, 0), 0, 0));
-    return wrapperPanel;
+    if (!(editorComponent instanceof JTextArea || editorComponent instanceof JScrollPane)) {
+      JPanel wrapperPanel = new JPanel();
+      wrapperPanel.setLayout(new GridBagLayout());
+      wrapperPanel.add(editorComponent, new GridBagConstraints(0, 0, 1, 1, 1.0,
+          1.0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+          new Insets(0, 0, 0, 0), 0, 0));
+      editorComponent = wrapperPanel;
+    }
+    return editorComponent;
   }
 
   /**
