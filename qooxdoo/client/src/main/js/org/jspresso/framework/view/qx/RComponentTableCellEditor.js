@@ -58,6 +58,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
       if(!cellState.isWritable()) {
         return null;
       }
+      this.__cleanCurrentCellBinding();
       this.__currentCellState = cellState;
       var state = this.__rComponent.getState();
       state.setWritable(true);
@@ -72,7 +73,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
          cellInfo.table.stopEditing();
       }, this);
       
-      if(!(editorWidget instanceof qx.ui.container.Composite)) {
+      if(   !(editorWidget instanceof qx.ui.container.Composite)
+         && !(editorWidget instanceof qx.ui.form.TextArea)) {
         var editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
           alignX: "center"
         })).set({
@@ -100,10 +102,12 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
     },
     
     __cleanCurrentCellBinding : function(e) {
-      this.__currentCellState.removeBinding(this.__currentBinding);
-      this.__currentBinding = null;
-      this.__currentCellState = null;
-      this.__actionHandler.setCurrentViewStateGuid(null, null);
+      if(this.__currentCellState && this.__currentBinding) {
+        this.__currentCellState.removeBinding(this.__currentBinding);
+        this.__currentBinding = null;
+        this.__currentCellState = null;
+        this.__actionHandler.setCurrentViewStateGuid(null, null);
+      }
     }
   }
 });

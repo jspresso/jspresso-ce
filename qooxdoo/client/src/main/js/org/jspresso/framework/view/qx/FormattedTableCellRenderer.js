@@ -37,6 +37,12 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
     },
     
     _getContentHtml : function(cellInfo) {
+      if(!org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)
+         && (typeof(cellInfo.value) == "string" || cellInfo.value instanceof String)) {
+        if(cellInfo.value.indexOf("\n")) {
+          cellInfo.value = "<html>" + cellInfo.value.replace(new RegExp("\n", 'g'),"<br>") + "</html>";
+        }
+      }
       var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
       if(this.__table.getRowHeight() < contentHeight) {
         this.__table.setRowHeight(contentHeight);
