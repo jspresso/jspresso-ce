@@ -42,8 +42,12 @@ package org.jspresso.framework.view.flex {
       if(HtmlUtil.isHtml(cellText)) {
         htmlText = HtmlUtil.convertHtmlEntities(cellText);
       }
-      // To prevent word wrapping to occur
-      width = 1000;
+      textField.wordWrap = false;
+    }
+    
+    protected override function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+      super.updateDisplayList(unscaledWidth, unscaledHeight);
+      textField.wordWrap = false;
     }
   }
 }
