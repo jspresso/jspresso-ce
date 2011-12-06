@@ -36,6 +36,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.hibernate.type.BasicTypeRegistry;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.freemarker.CompareStrings;
 import org.jspresso.framework.util.freemarker.GenerateSqlName;
@@ -234,6 +235,7 @@ public class EntityGenerator {
     rootContext.put("instanceof", new InstanceOf(wrapper));
     rootContext.put("compareStrings", new CompareStrings(wrapper));
     rootContext.put("generateAnnotations", new Boolean(generateAnnotations));
+    rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
       OutputStream out = null;
       if (outputDir != null) {
