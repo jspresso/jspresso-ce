@@ -23,10 +23,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.action.AbstractActionContextAware;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IFileFilterable;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 
@@ -60,8 +58,7 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
     OutputStream os = new BufferedOutputStream(out);
     // Do not use getSelectedModel() since it will return
     // the component holding the binary property
-    Object connectorValue = ((IValueConnector) context
-        .get(ActionContextConstants.VIEW_CONNECTOR)).getConnectorValue();
+    Object connectorValue = getViewConnector(context).getConnectorValue();
     byte[] content;
     if (connectorValue instanceof String) {
       content = ((String) connectorValue).getBytes();

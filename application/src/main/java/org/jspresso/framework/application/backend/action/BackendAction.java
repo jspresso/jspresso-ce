@@ -23,8 +23,12 @@ import java.util.Map;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.view.IView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -37,6 +41,9 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @author Vincent Vandenschrick
  */
 public class BackendAction extends AbstractAction {
+
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(BackendAction.class);
 
   /**
    * {@inheritDoc}
@@ -102,5 +109,40 @@ public class BackendAction extends AbstractAction {
   protected TransactionTemplate getTransactionTemplate(
       Map<String, Object> context) {
     return getController(context).getTransactionTemplate();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getSelectedModel(int[] viewPath, Map<String, Object> context) {
+    warnBadFrontendAccess();
+    return super.getSelectedModel(viewPath, context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<?> getView(int[] viewPath, Map<String, Object> context) {
+    warnBadFrontendAccess();
+    return super.getView(viewPath, context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IValueConnector getViewConnector(int[] viewPath,
+      Map<String, Object> context) {
+    warnBadFrontendAccess();
+    return super.getViewConnector(viewPath, context);
+  }
+
+  private void warnBadFrontendAccess() {
+    LOG.warn(
+        "Access to frontend context detected from a backend action which is strongly discouraged. "
+            + "{} should use either the action parameter or a specific variable.",
+        getClass().getName());
   }
 }
