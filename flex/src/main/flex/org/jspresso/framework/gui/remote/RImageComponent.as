@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RImageComponent extends RComponent {
 
         private var _scrollable:Boolean;
+        private var _action:RAction;
 
         public function RImageComponent() {
           //default constructor.
@@ -31,5 +32,16 @@ package org.jspresso.framework.gui.remote {
         public function get scrollable():Boolean {
             return _scrollable;
         }
+
+        public function get action():RAction
+        {
+          return _action;
+        }
+
+        public function set action(value:RAction):void
+        {
+          _action = value;
+        }
+
     }
 }

@@ -24,11 +24,12 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RImageComponent extends RComponent {
+public class RImageComponent extends RComponent implements RActionable {
 
   private static final long serialVersionUID = 7583953076670140848L;
 
   private boolean           scrollable;
+  private RAction           action;
 
   /**
    * Constructs a new <code>RImageComponent</code> instance.
@@ -65,5 +66,26 @@ public class RImageComponent extends RComponent {
    */
   public void setScrollable(boolean scrollable) {
     this.scrollable = scrollable;
+  }
+
+  
+  /**
+   * Gets the action.
+   * 
+   * @return the action.
+   */
+  public RAction getAction() {
+    return action;
+  }
+
+  
+  /**
+   * Sets the action.
+   * 
+   * @param action the action to set.
+   */
+  @Override
+  public void setAction(RAction action) {
+    this.action = action;
   }
 }
