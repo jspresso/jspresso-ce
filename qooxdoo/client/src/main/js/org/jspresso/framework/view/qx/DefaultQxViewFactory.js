@@ -441,10 +441,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(imageComponent, "source", "value");
 
+      if(remoteImageComponent.getAction() != null) {
+        this.__remotePeerRegistry.register(remoteImageComponent.getAction());
+        imageComponent.addListener("click", function(e) {
+              this.__actionHandler.execute(remoteImageComponent.getAction());
+            }, this);
+      }
+
       if (remoteImageComponent.isScrollable()) {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.add(imageComponent);
-        return scrollContainer;
+        imageComponent = scrollContainer;
       } else {
         var borderContainer = new qx.ui.container.Composite();
         var borderLayout = new qx.ui.layout.Dock();
@@ -453,8 +460,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         borderContainer.add(imageComponent, {
               edge : "center"
             });
-        return borderContainer;
+        imageComponent = scrollContainer;
       }
+      return imageComponent;
     },
 
     /**
@@ -519,6 +527,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else if (rColumn instanceof org.jspresso.framework.gui.remote.RActionField
             && !rColumn.isShowTextField()) {
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
+        } else if (rColumn instanceof org.jspresso.framework.gui.remote.RImageComponent) {
+          cellRenderer = new org.jspresso.framework.view.qx.ImageTableCellRenderer();
+          this.__remotePeerRegistry.register(rColumn.getAction());
+          cellRenderer.setAction(rColumn.getAction());
         } else {
           var format = this._createFormat(rColumn);
           cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format);
@@ -617,7 +629,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var col = e.getColumn();
         var renderer = table.getTableColumnModel()
             .getDataCellRenderer(col);
-        if (renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer
+        if ((    renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer
+              || renderer instanceof org.jspresso.framework.view.qx.ImageTableCellRenderer)
             && renderer.getAction()) {
           this.__actionHandler.execute(renderer.getAction());
         }
