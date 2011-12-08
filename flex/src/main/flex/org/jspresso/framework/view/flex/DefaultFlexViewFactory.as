@@ -601,6 +601,13 @@ package org.jspresso.framework.view.flex {
       } else {
         imageComponent.styleName = "unscrollableImage";
       }
+      if(remoteImageComponent.action) {
+        getRemotePeerRegistry().register(remoteImageComponent.action);
+        imageComponent.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+          // To ensure that the row is selected before the action gets executed.
+          imageComponent.callLater(_actionHandler.execute, [remoteImageComponent.action]);
+        });
+      }
       return imageComponent;
     }
     
