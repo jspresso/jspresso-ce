@@ -225,8 +225,9 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the module this action has been executed on. The value is stored using
-   * the <code>ActionContextConstants.MODULE</code> key.
+   * Gets the module this action has been executed on. The value is immutable
+   * during the action chain and is stored using the
+   * <code>ActionContextConstants.MODULE</code> key.
    * 
    * @param context
    *          the action context.
@@ -237,16 +238,16 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the module this action has been executed on. The value is stored using
-   * the <code>ActionContextConstants.MODULE</code> key.
+   * Gets the current module from the context. The value might change during the
+   * action chain if one of the action navigates the workspace/module. It is
+   * stored using the <code>ActionContextConstants.CURRENT_MODULE</code> key.
    * 
    * @param context
    *          the action context.
-   * @param module
-   *          the module this action executes on.
+   * @return the module this action executes on.
    */
-  protected void setModule(Module module, Map<String, Object> context) {
-    context.put(ActionContextConstants.MODULE, module);
+  protected Module getCurrentModule(Map<String, Object> context) {
+    return (Module) context.get(ActionContextConstants.CURRENT_MODULE);
   }
 
   /**

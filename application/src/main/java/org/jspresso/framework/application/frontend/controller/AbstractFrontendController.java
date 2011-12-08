@@ -354,6 +354,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
     // action context.
     actionContext.putAll(context);
     context.putAll(actionContext);
+    // This is handled here since the selected module might have changed during
+    // the action chain.
+    context.put(ActionContextConstants.CURRENT_MODULE,
+        getSelectedModule(getSelectedWorkspaceName()));
     try {
       // Should be handled before getting there.
       // checkAccess(action);

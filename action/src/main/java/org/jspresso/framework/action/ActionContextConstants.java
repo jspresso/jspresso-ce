@@ -62,6 +62,11 @@ public final class ActionContextConstants {
   public static final String MODULE           = "MODULE";
 
   /**
+   * CURRENT_MODULE context key.
+   */
+  public static final String CURRENT_MODULE   = "CURRENT_MODULE";
+
+  /**
    * FROM_MODULE context key.
    */
   public static final String FROM_MODULE      = "FROM_MODULE";
