@@ -266,18 +266,30 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
+   * Adds a new child connector to this composite. The key used as storage key
+   * is the child connector id.
+   * 
+   * @param childConnector
+   *          the added connector.
+   */
+  @Override
+  public final void addChildConnector(IValueConnector childConnector) {
+    addChildConnector(childConnector.getId(), childConnector);
+  }
+
+  /**
    * Adds a new child connector using a specified storage key.
    * 
    * @param storageKey
    *          the key to use to store the child connector. It may be different
    *          from its id.
-   * @param connector
+   * @param childConnector
    *          the connector to be added as composite.
    */
   @Override
-  public void addChildConnector(String storageKey, IValueConnector connector) {
-    childConnectors.put(storageKey, connector);
-    connector.setParentConnector(this);
+  public void addChildConnector(String storageKey, IValueConnector childConnector) {
+    childConnectors.put(storageKey, childConnector);
+    childConnector.setParentConnector(this);
   }
 
   /**

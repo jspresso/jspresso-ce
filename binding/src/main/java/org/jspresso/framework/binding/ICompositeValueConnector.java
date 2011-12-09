@@ -41,6 +41,15 @@ public interface ICompositeValueConnector extends IValueConnector {
   void addChildConnector(String storageKey, IValueConnector childConnector);
 
   /**
+   * Adds a new child connector to this composite. The key used as storage key
+   * is the child connector id.
+   * 
+   * @param childConnector
+   *          the added connector.
+   */
+  void addChildConnector(IValueConnector childConnector);
+
+  /**
    * Removes a child connector from this composite.
    * 
    * @param storageKey

@@ -53,6 +53,18 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   }
 
   /**
+   * Adds a new child connector to this composite. The key used as storage key
+   * is the child connector id.
+   * 
+   * @param childConnector
+   *          the added connector.
+   */
+  @Override
+  public final void addChildConnector(IValueConnector childConnector) {
+    addChildConnector(childConnector.getId(), childConnector);
+  }
+
+  /**
    * Unsupported operation.
    * <p>
    * {@inheritDoc}
