@@ -569,7 +569,8 @@ public class DefaultRemoteViewFactory extends
       // }
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
-      if (propertyView.getPeer() instanceof RActionable) {
+      if (propertyView.getPeer() instanceof RActionable
+          && propertyViewDescriptor.getAction() != null) {
         IView<RComponent> targetView;
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           targetView = propertyView;
@@ -1809,9 +1810,11 @@ public class DefaultRemoteViewFactory extends
             column.getPeer(), actionHandler, locale));
         columnIds.add(computeColumnIdentifier(rowDescriptor,
             columnViewDescriptor));
-        if (column.getPeer() instanceof RActionable) {
-          ((RActionable) column.getPeer()).setAction(getActionFactory().createAction(
-              columnViewDescriptor.getAction(), actionHandler, view, locale));
+        if (column.getPeer() instanceof RActionable
+            && columnViewDescriptor.getAction() != null) {
+          ((RActionable) column.getPeer()).setAction(getActionFactory()
+              .createAction(columnViewDescriptor.getAction(), actionHandler,
+                  view, locale));
         }
         if (columnViewDescriptorEntry.getValue() != null) {
           column.getPeer()
