@@ -78,6 +78,9 @@ public abstract class AbstractActionFactory<E, F, G> implements
   @Override
   public E createAction(IAction action, IActionHandler actionHandler,
       IView<F> view, Locale locale) {
+    if (action == null) {
+      return null;
+    }
     return createAction(action, null, actionHandler, view, locale);
   }
 

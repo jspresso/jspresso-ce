@@ -60,6 +60,9 @@ public class RemoteActionFactory extends
   @Override
   public RAction createAction(IAction action, Dimension dimension,
       IActionHandler actionHandler, IView<RComponent> view, Locale locale) {
+    if (action == null) {
+      return null;
+    }
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();

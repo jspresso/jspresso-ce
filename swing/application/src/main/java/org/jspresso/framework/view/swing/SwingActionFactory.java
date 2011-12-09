@@ -51,6 +51,9 @@ public class SwingActionFactory extends
   @Override
   public Action createAction(IAction action, Dimension dimension,
       IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
+    if (action == null) {
+      return null;
+    }
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
