@@ -57,6 +57,8 @@ package org.jspresso.framework.view.flex {
   import mx.core.IFlexDisplayObject;
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
+  import mx.events.CollectionEvent;
+  import mx.events.CollectionEventKind;
   import mx.events.ColorPickerEvent;
   import mx.events.DataGridEvent;
   import mx.events.DataGridEventReason;
@@ -1864,9 +1866,24 @@ package org.jspresso.framework.view.flex {
       }
       table.verticalScrollPolicy = ScrollPolicy.AUTO;
       
-      // Clone array collection to avoid re-ordering items in original collection when sorting.
-      // Not necessary since we've built a ListCollectionView around children array colection
-      table.dataProvider = new ListCollectionView((remoteTable.state as RemoteCompositeValueState).children);
+      var tableModel:ListCollectionView;
+      if(table.customSort) {
+        tableModel = (remoteTable.state as RemoteCompositeValueState).children;
+      } else {
+        // Clone array collection to avoid re-ordering items in original collection when sorting.
+        // Not necessary since we've built a ListCollectionView around children array collection
+        tableModel  = new ListCollectionView((remoteTable.state as RemoteCompositeValueState).children);
+        (remoteTable.state as RemoteCompositeValueState).children.addEventListener(CollectionEvent.COLLECTION_CHANGE,
+          function(event:CollectionEvent):void {
+            if(event.kind == CollectionEventKind.REMOVE) {
+              if(tableModel.sort) {
+                tableModel.refresh();
+              }
+            }
+          }
+        );
+      }
+      table.dataProvider = tableModel;
         
       bindTable(table, remoteTable);
       if(remoteTable.rowAction) {
