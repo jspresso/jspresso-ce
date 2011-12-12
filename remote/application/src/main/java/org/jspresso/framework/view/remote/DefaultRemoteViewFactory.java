@@ -114,6 +114,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -1793,6 +1794,22 @@ public class DefaultRemoteViewFactory extends
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
           }
+        }
+        if (columnViewDescriptor.getAction() != null
+            && !columnViewDescriptor.isReadOnly()) {
+          for (IValueChangeListener listener : columnConnector
+              .getValueChangeListeners()) {
+            if (listener instanceof ConnectorActionAdapter) {
+              // to avoid the action to be fired by the editor.
+              columnConnector.removeValueChangeListener(listener);
+            }
+          }
+          // We must listen for incoming connector value change to trigger the
+          // action.
+          columnConnector
+              .addValueChangeListener(new ConnectorActionAdapter<RComponent, RAction>(
+                  columnViewDescriptor.getAction(), getActionFactory(),
+                  actionHandler, view));
         }
         columnConnector.setLocallyWritable(locallyWritable);
         IPropertyDescriptor propertyDescriptor = rowDescriptor
