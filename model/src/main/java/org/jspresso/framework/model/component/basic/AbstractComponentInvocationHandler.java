@@ -60,7 +60,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.AccessorInfo;
 import org.jspresso.framework.util.bean.EAccessorType;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
-import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
+import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
@@ -78,7 +78,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
   private IAccessorFactory                                                             accessorFactory;
-  private SinglePropertyChangeSupport                                                  changeSupport;
+  private SingleWeakPropertyChangeSupport                                              changeSupport;
   private IComponentCollectionFactory<IComponent>                                      collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
@@ -769,7 +769,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return;
     }
     if (changeSupport == null) {
-      changeSupport = new SinglePropertyChangeSupport(proxy);
+      changeSupport = new SingleWeakPropertyChangeSupport(proxy);
     }
     changeSupport.addPropertyChangeListener(listener);
   }
@@ -780,7 +780,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return;
     }
     if (changeSupport == null) {
-      changeSupport = new SinglePropertyChangeSupport(proxy);
+      changeSupport = new SingleWeakPropertyChangeSupport(proxy);
     }
     changeSupport.addPropertyChangeListener(propertyName, listener);
   }
@@ -1374,7 +1374,8 @@ public abstract class AbstractComponentInvocationHandler implements
     /**
      * Sets the initialized.
      * 
-     * @param initialized the initialized to set.
+     * @param initialized
+     *          the initialized to set.
      */
     public void setInitialized(boolean initialized) {
       this.initialized = initialized;
