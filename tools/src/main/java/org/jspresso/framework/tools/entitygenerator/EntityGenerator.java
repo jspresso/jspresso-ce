@@ -67,6 +67,8 @@ public class EntityGenerator {
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
   private static final String INCLUDE_PACKAGES        = "includePackages";
   private static final String OUTPUT_DIR              = "outputDir";
+  private static final String CLASSNAME_PREFIX        = "classnamePrefix";
+  private static final String CLASSNAME_SUFFIX        = "classnameSuffix";
   private static final String TEMPLATE_NAME           = "templateName";
   private static final String TEMPLATE_RESOURCE_PATH  = "templateResourcePath";
 
@@ -77,6 +79,8 @@ public class EntityGenerator {
   private boolean             generateAnnotations;
   private String[]            includePackages;
   private String              outputDir;
+  private String              classnamePrefix;
+  private String              classnameSuffix;
   private String              templateName;
   private String              templateResourcePath;
 
@@ -117,6 +121,12 @@ public class EntityGenerator {
     options.addOption(OptionBuilder.withArgName(OUTPUT_DIR).hasArg()
         .withDescription("sets the output directory for generated source.")
         .create(OUTPUT_DIR));
+    options.addOption(OptionBuilder.withArgName(CLASSNAME_PREFIX).hasArg()
+        .withDescription("appends a prefix to generated class names.")
+        .create(CLASSNAME_PREFIX));
+    options.addOption(OptionBuilder.withArgName(CLASSNAME_SUFFIX).hasArg()
+        .withDescription("appends a sufffix to generated class names.")
+        .create(CLASSNAME_SUFFIX));
     options
         .addOption(OptionBuilder
             .withArgName(INCLUDE_PACKAGES)
@@ -165,6 +175,8 @@ public class EntityGenerator {
         .getOptionValue(TEMPLATE_RESOURCE_PATH));
     generator.setTemplateName(cmd.getOptionValue(TEMPLATE_NAME));
     generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR));
+    generator.setClassnamePrefix(cmd.getOptionValue(CLASSNAME_PREFIX));
+    generator.setClassnameSuffix(cmd.getOptionValue(CLASSNAME_SUFFIX));
     generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
     generator.setExcludePatterns(cmd.getOptionValues(EXCLUDE_PATTERN));
     generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
@@ -236,12 +248,27 @@ public class EntityGenerator {
     rootContext.put("compareStrings", new CompareStrings(wrapper));
     rootContext.put("generateAnnotations", new Boolean(generateAnnotations));
     rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
+    if (classnamePrefix == null) {
+      classnamePrefix = "";
+    }
+    if (classnameSuffix == null) {
+      classnameSuffix = "";
+    }
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
       OutputStream out = null;
       if (outputDir != null) {
+        String cDescName = componentDescriptor.getName();
+        int lastDotIndex = cDescName.lastIndexOf('.');
+        if (lastDotIndex >= 0) {
+          cDescName = cDescName.substring(0, lastDotIndex + 1)
+              + classnamePrefix + cDescName.substring(lastDotIndex + 1);
+        } else {
+          cDescName = classnamePrefix + cDescName;
+        }
+        cDescName = cDescName + classnameSuffix;
         try {
-          File outFile = new File(outputDir + "/"
-              + componentDescriptor.getName().replace('.', '/') + ".java");
+          File outFile = new File(outputDir + "/" + cDescName.replace('.', '/')
+              + ".java");
           if (!outFile.exists()) {
             if (!outFile.getParentFile().exists()) {
               outFile.getParentFile().mkdirs();
@@ -346,6 +373,26 @@ public class EntityGenerator {
    */
   public void setOutputDir(String outputDir) {
     this.outputDir = outputDir;
+  }
+  
+  
+  /**
+   * Sets the classnamePrefix.
+   * 
+   * @param classnamePrefix the classnamePrefix to set.
+   */
+  public void setClassnamePrefix(String classnamePrefix) {
+    this.classnamePrefix = classnamePrefix;
+  }
+  
+  
+  /**
+   * Sets the classnameSuffix.
+   * 
+   * @param classnameSuffix the classnameSuffix to set.
+   */
+  public void setClassnameSuffix(String classnameSuffix) {
+    this.classnameSuffix = classnameSuffix;
   }
 
   /**
