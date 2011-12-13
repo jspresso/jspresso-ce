@@ -331,9 +331,11 @@ public class HibernateBackendController extends AbstractBackendController {
       if (entity != null) {
         for (Map.Entry<String, Object> property : entity
             .straightGetProperties().entrySet()) {
-          if (property.getValue() instanceof IEntity) {
-            if (owner.equals(property.getValue())
-                && owner != property.getValue()) {
+          if (property.getValue() instanceof IEntity
+              && owner instanceof IEntity) {
+            if (owner != property.getValue() // avoid lazy initialization
+                && ((IEntity) owner).getId().equals(
+                    ((IEntity) property.getValue()).getId())) {
               entity.straightSetProperty(property.getKey(), owner);
             }
           }
