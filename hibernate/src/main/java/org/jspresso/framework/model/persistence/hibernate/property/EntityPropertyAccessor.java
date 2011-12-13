@@ -62,10 +62,9 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public Setter getSetter(@SuppressWarnings("rawtypes") Class theClass,
       String propertyName) {
-    return new EntityPropertySetter(propertyName);
+    return new EntityPropertySetter(theClass, propertyName);
   }
 
   /**
@@ -80,12 +79,13 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     private static final long serialVersionUID = -7896937881971754040L;
     private Class<?>          propertyClass;
     private String            propertyName;
+    private Method            getter;
 
     /**
      * Constructs a new <code>EntityPropertyGetter</code> instance.
      * 
      * @param theClass
-     *          The class of the property.
+     *          The class of the entity.
      * @param propertyName
      *          the name of the property to access.
      */
@@ -94,6 +94,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
           .fromJavaBeanPropertyName(propertyName);
       this.propertyClass = PropertyHelper.getPropertyType(theClass,
           propertyName);
+      this.getter = PropertyHelper
+          .getPropertyDescriptor(theClass, propertyName).getReadMethod();
     }
 
     /**
@@ -115,22 +117,25 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     }
 
     /**
-     * Actually returns null.
+     * Actually returns the getter method.
      * <p>
      * {@inheritDoc}
      */
     @Override
     public Method getMethod() {
-      return null;
+      return getter;
     }
 
     /**
-     * Actually returns null.
+     * Actually returns getter method name.
      * <p>
      * {@inheritDoc}
      */
     @Override
     public String getMethodName() {
+      if (getter != null) {
+        return getter.getName();
+      }
       return null;
     }
 
@@ -143,11 +148,11 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     }
 
     /**
-     * {@inheritDoc}
+     * Actually returns the getter method. {@inheritDoc}
      */
     @Override
     public Member getMember() {
-      return null;
+      return getter;
     }
 
   }
@@ -163,35 +168,43 @@ public class EntityPropertyAccessor implements PropertyAccessor {
 
     private static final long serialVersionUID = 1836686220358025728L;
     private String            propertyName;
+    private Method            setter;
 
     /**
      * Constructs a new <code>EntityPropertySetter</code> instance.
      * 
+     * @param theClass
+     *          The class of the entity.
      * @param propertyName
      *          the name of the property to access.
      */
-    public EntityPropertySetter(String propertyName) {
+    public EntityPropertySetter(Class<?> theClass, String propertyName) {
       this.propertyName = AbstractPropertyAccessor
           .fromJavaBeanPropertyName(propertyName);
+      this.setter = PropertyHelper
+          .getPropertyDescriptor(theClass, propertyName).getWriteMethod();
     }
 
     /**
-     * Actually returns null.
+     * Actually returns the setter.
      * <p>
      * {@inheritDoc}
      */
     @Override
     public Method getMethod() {
-      return null;
+      return setter;
     }
 
     /**
-     * Actually returns null.
+     * Actually returns the setter name.
      * <p>
      * {@inheritDoc}
      */
     @Override
     public String getMethodName() {
+      if (setter != null) {
+        return setter.getName();
+      }
       return null;
     }
 
