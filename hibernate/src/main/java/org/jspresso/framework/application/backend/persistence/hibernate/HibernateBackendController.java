@@ -38,6 +38,7 @@ import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
@@ -270,6 +271,20 @@ public class HibernateBackendController extends AbstractBackendController {
             } catch (Exception ex) {
               LOG.error(
                   "An internal error occurred when forcing {} collection initialization.",
+                  propertyName);
+              LOG.error("Source exception", ex);
+            }
+          }
+        } else if (initializedProperty instanceof HibernateProxy) {
+          HibernateProxy proxy = (HibernateProxy) initializedProperty;
+          LazyInitializer li = proxy.getHibernateLazyInitializer();
+          if (li.getSession() != null && li.getSession().isOpen()) {
+            try {
+              Hibernate.initialize(initializedProperty);
+              return;
+            } catch (Exception ex) {
+              LOG.error(
+                  "An internal error occurred when forcing {} reference initialization.",
                   propertyName);
               LOG.error("Source exception", ex);
             }
