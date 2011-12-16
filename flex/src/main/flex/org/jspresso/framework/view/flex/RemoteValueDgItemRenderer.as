@@ -33,7 +33,7 @@ package org.jspresso.framework.view.flex {
 
   public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
     
-    private var valueChangeListener:ChangeWatcher;
+    private var _valueChangeListener:ChangeWatcher;
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
@@ -104,10 +104,10 @@ package org.jspresso.framework.view.flex {
   	    } else {
   	      cellValueState = ((rendererData as RemoteCompositeValueState).children[1] as RemoteValueState);
   	    }
-  	    if(valueChangeListener != null) {
-  	      valueChangeListener.unwatch();
+  	    if(_valueChangeListener != null) {
+  	      _valueChangeListener.unwatch();
   	    }
-  	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+  	    _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
     	  rendererListData.label = computeLabel(cellValueState.value);
   	  }
   	}

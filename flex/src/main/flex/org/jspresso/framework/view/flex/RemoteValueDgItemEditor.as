@@ -16,6 +16,8 @@ package org.jspresso.framework.view.flex
 {
   import flash.events.FocusEvent;
   
+  import mx.binding.utils.BindingUtils;
+  import mx.binding.utils.ChangeWatcher;
   import mx.containers.Canvas;
   import mx.controls.CheckBox;
   import mx.controls.TextInput;
@@ -28,6 +30,7 @@ package org.jspresso.framework.view.flex
   
   public class RemoteValueDgItemEditor extends Canvas implements IColumnIndexProvider {
     
+    private var _valueChangeListener:ChangeWatcher;
     private var _editor:UIComponent;
     private var _state:RemoteValueState;
     private var _index:int;
@@ -74,11 +77,16 @@ package org.jspresso.framework.view.flex
 
     override public function set data(value:Object):void {
       super.data = value;
+      var cellValueState:RemoteValueState;
       if(index != -1 && value is RemoteCompositeValueState) {
-        _state.value = ((value as RemoteCompositeValueState).children[index] as RemoteValueState).value;
+        cellValueState = (value as RemoteCompositeValueState).children[index] as RemoteValueState;
       } else if(value is RemoteValueState) {
-        _state.value = (value as RemoteValueState).value;
+        cellValueState = value as RemoteValueState;
       }
+      if(_valueChangeListener != null) {
+        _valueChangeListener.unwatch();
+      }
+      _valueChangeListener = BindingUtils.bindProperty(_state, "value", cellValueState, "value", true);
       if(_state.value == null || _state.value == ""){
         var tf:UIComponent;
         if(_editor is Container) {

@@ -27,8 +27,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.net.navigateToURL;
   import flash.net.registerClassAlias;
   
-  import flex.utils.ui.resize.ResizablePanel;
-  
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
@@ -186,7 +184,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _dialogStack.push([null, null, null]);
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
-      _fakeDialog = new Panel();
+      _fakeDialog = getViewFactory().createPanelComponent();
       if (ExternalInterface.available) {
         ExternalInterface.addCallback("stop", stop);
       }
@@ -328,7 +326,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
-        var loginButton:Button = getViewFactory().createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
+        var loginButton:Button = getViewFactory().createDialogButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
         loginButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
           performLogin();
         });
@@ -348,7 +346,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
         var dialogButtons:Array = new Array();
         for each(var action:RAction in dialogCommand.actions) {
-          dialogButtons.push(getViewFactory().createAction(action));
+          dialogButtons.push(getViewFactory().createDialogAction(action));
         }
         var dialogView:UIComponent = null;
         var icon:RIcon = null;
@@ -1163,10 +1161,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       dialogBox.addChild(buttonBox);
 
-      var dialog:ResizablePanel;
+      var dialog:Panel;
       var newDialog:Boolean = true;
       if(useCurrent && _dialogStack && _dialogStack.length > 1) {
-        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as ResizablePanel;
+        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as Panel;
         dialog.removeAllChildren();
         newDialog = false;
       } else {
@@ -1177,8 +1175,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //        } else {
         dialogParent = Application.application as DisplayObject;
         //        }
-        dialog = PopUpManager.createPopUp(dialogParent,ResizablePanel,true) as ResizablePanel;
-        dialog.resizable = true;
+        dialog = getViewFactory().createResizableDialog(dialogParent);
         dialog.setStyle("borderAlpha", 1);
         dialog.setStyle("borderThicknessLeft", 5);
         dialog.setStyle("borderThicknessRight", 5);

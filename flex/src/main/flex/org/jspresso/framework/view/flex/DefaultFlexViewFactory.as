@@ -20,6 +20,8 @@ package org.jspresso.framework.view.flex {
   import flash.events.MouseEvent;
   import flash.events.TextEvent;
   
+  import flex.utils.ui.resize.ResizablePanel;
+  
   import flexlib.containers.ButtonScrollingCanvas;
   
   import mx.binding.utils.BindingUtils;
@@ -71,6 +73,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
   import mx.graphics.SolidColor;
+  import mx.managers.PopUpManager;
   import mx.managers.ToolTipManager;
   import mx.resources.ResourceManager;
   import mx.utils.ObjectUtil;
@@ -227,7 +230,7 @@ package org.jspresso.framework.view.flex {
       }
       component = decorateWithActions(remoteComponent, component);
       if(remoteComponent.borderType == "TITLED") {
-        var decorator:Panel = new Panel();
+        var decorator:Panel = createPanelComponent();
         decorator.percentWidth = component.percentWidth;
         decorator.percentHeight = component.percentHeight;
         component.percentWidth = 100.0;
@@ -247,6 +250,16 @@ package org.jspresso.framework.view.flex {
         getRemotePeerRegistry().register(remoteComponent.state);
       }
       return component;
+    }
+    
+    public function createPanelComponent():Panel {
+      return new Panel();
+    }
+
+    public function createResizableDialog(dialogParent:DisplayObject):Panel {
+      var dialog:ResizablePanel = PopUpManager.createPopUp(dialogParent,ResizablePanel,true) as ResizablePanel;
+      dialog.resizable = true;
+      return dialog;
     }
     
     protected function applyComponentPreferredSize(component:UIComponent, preferredSize:Dimension):void {
@@ -485,11 +498,11 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTree(remoteTree:RTree):UIComponent {
-      var tree:SelectionTrackingTree = new SelectionTrackingTree();
+      var tree:SelectionTrackingTree = createTreeComponent();
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.dataDescriptor = new RCVSDataDescriptor();
-      tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
+      tree.itemRenderer = createTreeItemRenderer();
       tree.dataProvider = remoteTree.state;
       tree.minWidth = 200;
       tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
@@ -515,6 +528,14 @@ package org.jspresso.framework.view.flex {
         });
       }
       return tree;
+    }
+    
+    public function createTreeComponent():SelectionTrackingTree {
+      return new SelectionTrackingTree();
+    }
+    
+    public function createTreeItemRenderer():ClassFactory {
+      return new ClassFactory(RemoteValueTreeItemRenderer);
     }
     
     protected function expandItem(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
@@ -716,7 +737,7 @@ package org.jspresso.framework.view.flex {
       colorPicker.name = "cc";
       bindColorPicker(colorPicker, remoteColorField.state);
       colorField.addChild(colorPicker);
-      var resetButton:Button = new EnhancedButton();
+      var resetButton:Button = createButtonComponent();
       resetButton.setStyle("icon", _resetIcon);
       colorField.addChild(resetButton);
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
@@ -798,7 +819,7 @@ package org.jspresso.framework.view.flex {
         BindingUtils.bindProperty(label, "value", remoteComboBox.state, "value", true);
         return label;
       } else {
-        var comboBox:RIconComboBox = new RIconComboBox();
+        var comboBox:RIconComboBox = createComboBoxComponent();
         comboBox.dataProvider = remoteComboBox.values;
         comboBox.labels = remoteComboBox.translations;
         comboBox.icons = remoteComboBox.icons;
@@ -823,6 +844,10 @@ package org.jspresso.framework.view.flex {
         }
         return comboBox;
       }
+    }
+    
+    public function createComboBoxComponent():RIconComboBox {
+      return new RIconComboBox();
     }
 
     protected function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
@@ -1384,7 +1409,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
       getRemotePeerRegistry().register(remoteTabContainer);
-      var tabContainer:TabNavigator = new EnhancedTabNavigator();
+      var tabContainer:TabNavigator = createTabNavigatorComponent();
       tabContainer.historyManagementEnabled = false;
       if(remoteTabContainer.preferredSize != null &&
         (remoteTabContainer.preferredSize.height > 0 || remoteTabContainer.preferredSize.width > 0)) {
@@ -1434,6 +1459,10 @@ package org.jspresso.framework.view.flex {
         _commandHandler.registerCommand(command);
       }, tabContainer, "selectedIndex",true);
       return tabContainer;
+    }
+    
+    public function createTabNavigatorComponent():TabNavigator {
+      return new EnhancedTabNavigator();
     }
     
     protected function createDateComponent(remoteDateField:RDateField):UIComponent {
@@ -2098,10 +2127,14 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlEditor:EnhancedRichTextEditor = new EnhancedRichTextEditor();
+      var htmlEditor:EnhancedRichTextEditor = createRichTextEditorComponent();
       htmlEditor.styleName = "htmlEditor";
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
+    }
+    
+    public function createRichTextEditorComponent():EnhancedRichTextEditor {
+      return new EnhancedRichTextEditor();
     }
     
     protected function bindHtmlEditor(htmlEditor:EnhancedRichTextEditor, remoteState:RemoteValueState):void {
@@ -2208,28 +2241,46 @@ package org.jspresso.framework.view.flex {
 
     public function createAction(remoteAction:RAction):Button {
       var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon);
-		  //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
+      configureActionButton(button, remoteAction);
+      return button;
+    }
+
+    public function createDialogAction(remoteAction:RAction):Button {
+      var button:Button = createDialogButton(remoteAction.name, remoteAction.description, remoteAction.icon);
+      configureActionButton(button, remoteAction);
+      return button;
+    }
+    
+    protected function configureActionButton(button:Button, remoteAction:RAction):void {
+      //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
       var updateButtonState:Function = function (enabled:Boolean):void {
         button.enabled = enabled;
       };
       BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
-		  getRemotePeerRegistry().register(remoteAction);
-		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+      getRemotePeerRegistry().register(remoteAction);
+      button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
         if ((new Date()).time - _lastActionTimestamp.time < 400) {
           return;
         }
         _lastActionTimestamp = new Date();
         _actionHandler.execute(remoteAction);
-		  });
-      return button;
+      });
     }
     
     public function createButton(label:String, toolTip:String, icon:RIcon):Button {
-      var button:Button = new EnhancedButton();
+      var button:Button = createButtonComponent();
       configureButton(button, label, toolTip, icon);
       return button;
     }
+
+    public function createDialogButton(label:String, toolTip:String, icon:RIcon):Button {
+      return createButton(label, toolTip, icon);
+    }
     
+    public function createButtonComponent():Button {
+      return new EnhancedButton();
+    }
+
     protected function configureButton(button:Button, label:String, toolTip:String, icon:RIcon):void {
       button.setStyle("icon", null);
       if(icon) {
