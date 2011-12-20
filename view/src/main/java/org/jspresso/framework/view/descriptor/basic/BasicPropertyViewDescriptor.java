@@ -322,8 +322,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * @param sortable
    *          the sortable to set.
    */
-  public void setSortable(Boolean sortable) {
-    this.sortable = sortable;
+  public void setSortable(boolean sortable) {
+    this.sortable = new Boolean(sortable);
   }
 
 }
