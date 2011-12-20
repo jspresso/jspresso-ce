@@ -2239,8 +2239,8 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    public function createAction(remoteAction:RAction):Button {
-      var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon);
+    public function createAction(remoteAction:RAction, topApplicationAction:Boolean=false):Button {
+      var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon, topApplicationAction);
       configureActionButton(button, remoteAction);
       return button;
     }
@@ -2267,8 +2267,8 @@ package org.jspresso.framework.view.flex {
       });
     }
     
-    public function createButton(label:String, toolTip:String, icon:RIcon):Button {
-      var button:Button = createButtonComponent();
+    public function createButton(label:String, toolTip:String, icon:RIcon, topApplicationButton:Boolean=false):Button {
+      var button:Button = createButtonComponent(topApplicationButton);
       configureButton(button, label, toolTip, icon);
       return button;
     }
@@ -2277,7 +2277,7 @@ package org.jspresso.framework.view.flex {
       return createButton(label, toolTip, icon);
     }
     
-    public function createButtonComponent():Button {
+    public function createButtonComponent(topApplicationButton:Boolean=false):Button {
       return new EnhancedButton();
     }
 
@@ -2453,18 +2453,18 @@ package org.jspresso.framework.view.flex {
       return menus;
     }
 
-    public function createPopupButton(actionList:RActionList):Button {
+    public function createPopupButton(actionList:RActionList, topApplicationButton:Boolean=false):Button {
       if(actionList.actions == null || actionList.actions.length == 0) {
         return null;
       }
       if(actionList.actions.length == 1) {
-        return createAction(actionList.actions[0]);
+        return createAction(actionList.actions[0], topApplicationButton);
       }
       var dp:Object = createMenuItems(actionList);
       var menu:Menu = new Menu();
       menu.dataProvider = dp;
       menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
-      var popupButton:PopUpButton = new PopUpButton();
+      var popupButton:PopUpButton = createPopUpButtonComponent(topApplicationButton);
       popupButton.popUp = menu;
       var menuHandler:Function = function(event:MenuEvent):void  {
         if (event.item["data"] is RAction) {
@@ -2480,6 +2480,10 @@ package org.jspresso.framework.view.flex {
       });
       menu.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
       return popupButton;
+    }
+    
+    public function createPopUpButtonComponent(topApplicationButton:Boolean = false):PopUpButton {
+      return new PopUpButton();
     }
     
     public function createMenu(actionList:RActionList):Object {
