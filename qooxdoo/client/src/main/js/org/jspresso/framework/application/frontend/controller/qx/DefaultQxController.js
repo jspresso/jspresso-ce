@@ -1030,7 +1030,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if(buttons.length > 0) {
         dialog.addListener("keypress", function(e) {
           if(   e.getKeyIdentifier() == "Enter"
-             && !qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])) {
+             && ! qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])
+             && !(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)) {
             buttons[0].focus();
             buttons[0].execute(); // and call the default button's
           }
