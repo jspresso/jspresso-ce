@@ -655,7 +655,7 @@ package org.jspresso.framework.view.flex {
       actionField.verticalScrollPolicy = ScrollPolicy.OFF;
       var textField:TextInput;
       if(remoteActionField.showTextField) {
-        textField = new TextInput();
+        textField = createTextInputComponent();
         actionField.percentWidth = 100.0;
         textField.percentWidth = 100.0;
         textField.name = "tf";
@@ -1592,7 +1592,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
-      var timeField:TextInput = new TextInput();
+      var timeField:TextInput = createTextInputComponent();
       sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
       bindTextInput(timeField, remoteTimeField.state,
         createFormatter(remoteTimeField), createParser(remoteTimeField));
@@ -1600,7 +1600,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
-      var decimalField:TextInput = new TextInput();
+      var decimalField:TextInput = createTextInputComponent();
       var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter;
       bindTextInput(decimalField, remoteDecimalField.state,
                     decimalFormatter, createParser(remoteDecimalField));
@@ -1612,7 +1612,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createIntegerField(remoteIntegerField:RIntegerField):UIComponent {
-      var integerField:TextInput = new TextInput();
+      var integerField:TextInput = createTextInputComponent();
       var integerFormatter:NumberFormatter = createFormatter(remoteIntegerField) as NumberFormatter;
       bindTextInput(integerField, remoteIntegerField.state,
                     integerFormatter, createParser(remoteIntegerField));
@@ -1624,7 +1624,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createPercentField(remotePercentField:RPercentField):UIComponent {
-      var percentField:TextInput = new TextInput();
+      var percentField:TextInput = createTextInputComponent();
       var percentFormatter:NumberFormatter = createFormatter(remotePercentField) as NumberFormatter; 
       bindTextInput(percentField, remotePercentField.state,
                     percentFormatter, createParser(remotePercentField));
@@ -1636,7 +1636,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createDurationField(remoteDurationField:RDurationField):UIComponent {
-      var durationField:TextInput = new TextInput();
+      var durationField:TextInput = createTextInputComponent();
       bindTextInput(durationField, remoteDurationField.state,
                     createFormatter(remoteDurationField), createParser(remoteDurationField));
       return durationField;
@@ -1722,7 +1722,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createPasswordField(remotePasswordField:RPasswordField):UIComponent {
-      var passwordField:TextInput = new TextInput();
+      var passwordField:TextInput = createTextInputComponent();
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
       sizeMaxComponentWidth(passwordField, remotePasswordField);
@@ -2227,7 +2227,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createTextField(remoteTextField:RTextField):UIComponent {
-      var textField:TextInput = new TextInput();
+      var textField:TextInput = createTextInputComponent();
       if(remoteTextField.maxLength > 0) {
         textField.maxChars = remoteTextField.maxLength;
         sizeMaxComponentWidth(textField, remoteTextField, remoteTextField.maxLength +2);
@@ -2292,6 +2292,12 @@ package org.jspresso.framework.view.flex {
       if(toolTip) {
         button.toolTip = toolTip + TOOLTIP_ELLIPSIS;
       }
+    }
+
+    public function createTextInputComponent():TextInput {
+      var tf:EnhancedTextInput = new EnhancedTextInput();
+      tf.preventDefaultButton = true;
+      return tf;
     }
 
     protected function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
