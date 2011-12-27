@@ -71,6 +71,8 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
@@ -100,6 +102,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <code>MAX_LOGIN_RETRIES</code>.
    */
   protected static final int                    MAX_LOGIN_RETRIES = 3;
+
+  private static final Logger                   LOG               = LoggerFactory
+                                                                      .getLogger(AbstractFrontendController.class);
 
   private ActionMap                             actionMap;
   private ActionMap                             secondaryActionMap;
@@ -232,9 +237,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
-            moduleModelIndex
-          }, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(
+              new int[] {moduleModelIndex}, moduleModelIndex);
         }
       }
     } finally {
@@ -327,8 +331,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
-      Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused")
+  E sourceWidget, Map<String, Object> context) {
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
       // preserve action param
@@ -884,6 +888,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public boolean stop() {
+    if (getApplicationSession().getPrincipal() != null) {
+      LOG.info("User {} logged out for session {}.", getApplicationSession()
+          .getPrincipal().getName(), getApplicationSession().getId());
+    }
     selectedModules = new HashMap<String, Module>();
     workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
     workspaceViews = new HashMap<String, IMapView<E>>();
@@ -1289,31 +1297,37 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected boolean performLogin() {
     if (getLoginContextName() != null) {
+      CallbackHandler lch = getLoginCallbackHandler();
       try {
         LoginContext lc = null;
         try {
-          lc = new LoginContext(getLoginContextName(),
-              getLoginCallbackHandler());
+          lc = new LoginContext(getLoginContextName(), lch);
         } catch (LoginException le) {
-          System.err.println("Cannot create LoginContext. " + le.getMessage());
+          LOG.error("Cannot create LoginContext.", le);
           return false;
         } catch (SecurityException se) {
-          System.err.println("Cannot create LoginContext. " + se.getMessage());
+          LOG.error("Cannot create LoginContext.", se);
           return false;
         }
         lc.login();
         loggedIn(lc.getSubject());
       } catch (LoginException le) {
-        System.err.println("Authentication failed:");
-        System.err.println("  " + le.getMessage());
         if (le.getCause() != null) {
-          le.printStackTrace(System.err);
+          LOG.error("A technical exception occurred on login module.",
+              le.getCause());
+        }
+        if (lch instanceof UsernamePasswordHandler) {
+          LOG.info("User {} failed to log in for session {}.",
+              ((UsernamePasswordHandler) lch).getUsername(),
+              getApplicationSession().getId());
         }
         return false;
       }
     } else {
       loggedIn(getAnonymousSubject());
     }
+    LOG.info("User {} logged in  for session {}.", getApplicationSession()
+        .getPrincipal().getName(), getApplicationSession().getId());
     return true;
   }
 
@@ -1412,9 +1426,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {
-            childCollectionConnector, new Integer(moduleModelIndex)
-        };
+        result = new Object[] {childCollectionConnector,
+            new Integer(moduleModelIndex)};
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -1574,9 +1587,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {
-        getName()
-      });
+      clientPreferencesStore.setStorePath(new String[] {getName()});
     }
     return clientPreferencesStore;
   }

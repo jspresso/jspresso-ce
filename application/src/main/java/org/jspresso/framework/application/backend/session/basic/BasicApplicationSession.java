@@ -128,7 +128,6 @@ public class BasicApplicationSession implements IApplicationSession {
     return new HashMap<String, Object>(customValues);
   }
 
-  
   /**
    * Gets the timeZone.
    * 
@@ -138,13 +137,21 @@ public class BasicApplicationSession implements IApplicationSession {
     return timeZone;
   }
 
-  
   /**
    * Sets the timeZone.
    * 
-   * @param timeZone the timeZone to set.
+   * @param timeZone
+   *          the timeZone to set.
    */
   public void setTimeZone(TimeZone timeZone) {
     this.timeZone = timeZone;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getId() {
+    return Integer.toHexString(hashCode());
   }
 }

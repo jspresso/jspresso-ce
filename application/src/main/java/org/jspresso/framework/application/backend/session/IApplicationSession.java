@@ -96,4 +96,11 @@ public interface IApplicationSession {
    *          the session owner.
    */
   void setSubject(Subject sessionOwner);
+
+  /**
+   * Gets the session identifier.
+   * 
+   * @return the sessin identifier.
+   */
+  String getId();
 }
