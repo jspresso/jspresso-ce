@@ -93,9 +93,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
       qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
       qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
       
-      // Restored good old Qx date Json generation
-      qx.util.Json.CONVERT_DATES = true;
-
       // Enable logging in debug variant
       if (qx.core.Environment.get("qx.debug"))
       {

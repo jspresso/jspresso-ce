@@ -25,8 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Refines the way Qooxdoo rpc handles JSON types.
@@ -43,7 +44,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    */
   @Override
   public Object fromJava(Object obj) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
+      InvocationTargetException, NoSuchMethodException, JSONException {
     if (obj instanceof List<?>) {
       List<?> list = (List<?>) obj;
       JSONObject jsonObject = new JSONObject();
@@ -54,24 +55,6 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
       return super.fromJava(new Double(((BigDecimal) obj).doubleValue()));
     } else if (obj instanceof BigInteger) {
       return super.fromJava(new Long(((BigInteger) obj).longValue()));
-      // } else if (obj instanceof RemoteValueState) {
-      // Object value = ((RemoteValueState) obj).getValue();
-      // JSONObject jsonObject = (JSONObject) super.fromJava(obj);
-      // if (value instanceof byte[]) {
-      // jsonObject.put("value", RemotePeerRegistryServlet
-      // .computeDownloadUrl(((RemoteValueState) obj).getGuid()));
-      // }
-      // return jsonObject;
-      // } else if (obj instanceof RemoteValueCommand) {
-      // Object value = ((RemoteValueCommand) obj).getValue();
-      // JSONObject jsonObject = (JSONObject) super.fromJava(obj);
-      // if (value instanceof byte[]) {
-      // jsonObject
-      // .put("value", RemotePeerRegistryServlet
-      // .computeDownloadUrl(((RemoteValueCommand) obj)
-      // .getTargetPeerGuid()));
-      // }
-      // return jsonObject;
     }
     return super.fromJava(obj);
   }
@@ -83,8 +66,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public Object toJava(Object obj,
-      @SuppressWarnings("rawtypes") Class targetType) {
+  public Object toJava(Object obj, @SuppressWarnings("rawtypes")
+  Class targetType) {
     if (obj instanceof JSONObject) {
       JSONObject jsonObject = (JSONObject) obj;
       String requestedTypeName = jsonObject.optString("class", null);
@@ -120,9 +103,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({
-      "unchecked", "rawtypes"
-  })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   protected Map filter(Object obj, Map map) {
     Map filteredMap = super.filter(obj, map);
@@ -135,7 +116,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    */
   @Override
   protected Class<?> resolveClassHint(String requestedTypeName,
-      @SuppressWarnings("rawtypes") Class targetType) throws Exception {
+      @SuppressWarnings("rawtypes")
+      Class targetType) throws Exception {
     Class<?> clazz = super.resolveClassHint(requestedTypeName, targetType);
     if (clazz == null) {
       return Class.forName(requestedTypeName);

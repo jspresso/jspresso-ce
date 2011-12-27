@@ -31,12 +31,12 @@ package org.jspresso.framework.view.flex
       }
     }
 
-    public function get preventDefaultButton()
+    public function get preventDefaultButton():Boolean
     {
       return _preventDefaultButton;
     }
 
-    public function set preventDefaultButton(value):void
+    public function set preventDefaultButton(value:Boolean):void
     {
       _preventDefaultButton = value;
     }

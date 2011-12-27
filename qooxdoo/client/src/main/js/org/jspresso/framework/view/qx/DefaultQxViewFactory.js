@@ -460,7 +460,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         borderContainer.add(imageComponent, {
               edge : "center"
             });
-        imageComponent = scrollContainer;
+        imageComponent = borderContainer;
       }
       return imageComponent;
     },
@@ -1530,23 +1530,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var c = 0;
 
       if (remoteEvenGridContainer.getDrivingDimension() == "ROW") {
-        nbRows = remoteEvenGridContainer.getCells().length
-            / remoteEvenGridContainer
-                .getDrivingDimensionCellCount();
-        if (remoteEvenGridContainer.getCells().length
-            % remoteEvenGridContainer
-                .getDrivingDimensionCellCount() > 0) {
+        nbCols = remoteEvenGridContainer.getDrivingDimensionCellCount();
+        nbRows = remoteEvenGridContainer.getCells().length / nbCols;
+        if (remoteEvenGridContainer.getCells().length % nbCols > 0) {
           nbRows += 1
         }
-        nbCols = remoteEvenGridContainer.getDrivingDimensionCellCount();
       } else {
         nbRows = remoteEvenGridContainer.getDrivingDimensionCellCount();
-        nbCols = remoteEvenGridContainer.getCells().length
-            / remoteEvenGridContainer
-                .getDrivingDimensionCellCount();
-        if (remoteEvenGridContainer.getCells().length
-            % remoteEvenGridContainer
-                .getDrivingDimensionCellCount() > 0) {
+        nbCols = remoteEvenGridContainer.getCells().length / nbRows;
+        if (remoteEvenGridContainer.getCells().length % nbRows > 0) {
           nbCols += 1
         }
       }

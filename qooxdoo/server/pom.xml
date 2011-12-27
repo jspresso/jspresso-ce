@@ -15,6 +15,10 @@
 			<artifactId>qooxdoo-java-rpc</artifactId>
 		</dependency>
     <dependency>
+      <groupId>org.codehaus.jettison</groupId>
+      <artifactId>jettison</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>

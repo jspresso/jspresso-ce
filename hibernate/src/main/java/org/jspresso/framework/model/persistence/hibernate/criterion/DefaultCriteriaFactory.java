@@ -41,6 +41,8 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of a criteria factory.
@@ -50,7 +52,10 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
  */
 public class DefaultCriteriaFactory implements ICriteriaFactory {
 
-  private boolean triStateBooleanSupported;
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(DefaultCriteriaFactory.class);
+
+  private boolean             triStateBooleanSupported;
 
   /**
    * Constructs a new <code>DefaultCriteriaFactory</code> instance.
@@ -83,15 +88,22 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           for (; sortable && i < propElts.length - 1; i++) {
             IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
                 .getPropertyDescriptor(propElts[i]));
-            sortable = sortable && isSortable(refPropDescriptor);
-            IComponentDescriptor<?> referencedDesc = refPropDescriptor
-                .getReferencedDescriptor();
-            if (!IEntity.class.isAssignableFrom(referencedDesc
-                .getComponentContract()) && !referencedDesc.isPurelyAbstract()) {
-              break;
+            if (refPropDescriptor != null) {
+              sortable = sortable && isSortable(refPropDescriptor);
+              IComponentDescriptor<?> referencedDesc = refPropDescriptor
+                  .getReferencedDescriptor();
+              if (!IEntity.class.isAssignableFrom(referencedDesc
+                  .getComponentContract())
+                  && !referencedDesc.isPurelyAbstract()) {
+                break;
+              }
+              currentCompDesc = referencedDesc;
+              path.add(propElts[i]);
+            } else {
+              LOG.error("Ordering property {} not found on {}", propElts[i],
+                  currentCompDesc.getComponentContract().getName());
+              sortable = false;
             }
-            currentCompDesc = referencedDesc;
-            path.add(propElts[i]);
           }
           if (sortable) {
             StringBuffer name = new StringBuffer();
@@ -117,8 +129,16 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             }
           }
         } else {
-          sortable = isSortable(queryComponent.getComponentDescriptor()
-              .getPropertyDescriptor(propertyName));
+          IPropertyDescriptor propertyDescriptor = queryComponent
+              .getComponentDescriptor().getPropertyDescriptor(propertyName);
+          if (propertyDescriptor != null) {
+            sortable = isSortable(propertyDescriptor);
+          } else {
+            LOG.error("Ordering property {} not found on {}", propertyName,
+                queryComponent.getComponentDescriptor().getComponentContract()
+                    .getName());
+            sortable = false;
+          }
         }
         if (sortable) {
           Order order;
@@ -139,8 +159,9 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   }
 
   private boolean isSortable(IPropertyDescriptor propertyDescriptor) {
-    return !propertyDescriptor.isComputed()
-        || propertyDescriptor.getPersistenceFormula() != null;
+    return propertyDescriptor != null
+        && (!propertyDescriptor.isComputed() || propertyDescriptor
+            .getPersistenceFormula() != null);
   }
 
   /**
