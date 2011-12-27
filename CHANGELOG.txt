@@ -1,6 +1,40 @@
 Jspresso CE - Change Log
 
 
+Jspresso CE - 3.5.10 (Released 2011-11-10) [ View Issues ]
+==========================================
+- 0000389: [Build & tools] Libraries versions update (vvandens) - closed.
+- 0000488: [View] Modal window view oppened from another window changing this view is invalide. (vvandens) - closed.
+- 0000496: [View] Improve theming flexibility in Flex (vvandens) - closed.
+- 0000492: [View] Recalculate value not applied after 'tab' when from 2 adjacent table cells (vvandens) - closed.
+- 0000486: [Persistence] Calling getId() on an uninitialized Hibernate proxy forces its initialization (vvandens) - closed.
+- 0000485: [Model] Using nested property notation leaks memory (vvandens) - closed.
+- 0000484: [Build & tools] Allow the EntityGenerator to customize prefix/suffix of geneated class names (vvandens) - closed.
+- 0000432: [Frontend] Context for a next/wrapped action doesn't change when changing module (vvandens) - closed.
+- 0000386: [Frontend] Improve the ActionContextAware API to extract model/selectedmodels from the view hierarchy (vvandens) - closed.
+- 0000416: [Model] Allow for arbitrary id types (vvandens) - closed.
+- 0000427: [View] Multiple lines header for table columns (vvandens) - closed.
+- 0000481: [View] Table views should support multiline cells with html values (vvandens) - closed.
+- 0000450: [View] Collapsible actions - tooltips (vvandens) - closed.
+- 0000479: [Frontend] COPY to clipboard (vvandens) - closed.
+- 0000457: [View] Property table columns labelBackground, labelForeground and labelFont doesn't work in Jspresso (vvandens) - closed.
+- 0000473: [View] Point notation in a filter view causes a cast error. (vvandens) - closed.
+- 0000477: [Frontend] navbar refresh problem (vvandens) - closed.
+- 0000478: [Backend] Hibernate findXXX methods perform the merge outside of the transaction. (vvandens) - closed.
+- 0000446: [View] LOV Behaviour on exact matches (vvandens) - closed.
+- 0000459: [View] Add the possibility to trigger an action on property views state change (checkbox, combobox, ...) (vvandens) - closed.
+- 0000472: [Persistence] Preserve lazy initialization for references (vvandens) - closed.
+- 0000470: [View] The itemSelectionAction method of cartesianChart object don't call the selected action (vvandens) - closed.
+- 0000469: [View] Introduce a SINGLE_CUMULATIVE selection mode (vvandens) - closed.
+- 0000467: [View] Multiple lines Tooltips (vvandens) - closed.
+- 0000468: [Model] Create a toHtml property to be used in UI tooltips (vvandens) - closed.
+- 0000417: [Frontend] No name for actionList (vvandens) - closed.
+- 0000428: [Model] Collections, when set as mandatory, will be checked for the existence of at least one entry to be validated (vvandens) - closed.
+- 0000466: [Model] Get rid of ILifecycleCapable interface on IComponent/IEntity (vvandens) - closed.
+- 0000463: [View] Study a way to better handle collection connector changes in collections (vvandens) - closed.
+- 0000455: [Persistence] LifecycleInterceptor - onUpdate may not be triggered on parent entities when their state is changed by children onUpdate (vvandens) - closed.
+[30 issues]
+
 Jspresso CE - 3.5.9 (Released 2011-10-06) [ View Issues ]
 =========================================
 - 0000460: [Frontend] Improve HTTPS support in Flex (vvandens) - closed.
