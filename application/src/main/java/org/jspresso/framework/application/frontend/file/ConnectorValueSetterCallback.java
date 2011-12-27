@@ -49,8 +49,7 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
       if (modelDescriptor instanceof IStringPropertyDescriptor) {
         valueToSet = new String((byte[]) valueToSet);
       }
-      IValueConnector viewConnector = (IValueConnector) context
-          .get(ActionContextConstants.VIEW_CONNECTOR);
+      IValueConnector viewConnector = getViewConnector(context);
       viewConnector.setConnectorValue(valueToSet);
     }
   }

@@ -350,13 +350,16 @@
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
+  
+  <bean id="applicationClipboardTransferHandler" class="org.jspresso.framework.application.frontend.action.std.DefaultClipboardTransferHandler"/>
 
-  <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.std.TransferToClipboardAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_copy-48x48.png" />
     <property name="name" value="copy.name" />
     <property name="description" value="copy.description" />
     <property name="acceleratorAsString" value="ctrl C" />
     <property name="collectionBased" value="true" />
+    <property name="clipboardTransferHandler" ref="applicationClipboardTransferHandler"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="COPY" />
@@ -364,12 +367,13 @@
     </property>
   </bean>
 
-  <bean id="cutCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="cutCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.std.TransferToClipboardAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_cut-48x48.png" />
     <property name="name" value="cut.name" />
     <property name="description" value="cut.description" />
     <property name="acceleratorAsString" value="ctrl X" />
     <property name="collectionBased" value="true" />
+    <property name="clipboardTransferHandler" ref="applicationClipboardTransferHandler"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="MOVE" />

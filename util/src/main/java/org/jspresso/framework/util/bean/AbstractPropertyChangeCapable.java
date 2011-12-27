@@ -5,8 +5,11 @@ package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * Abstract class to build a property change capable bean.
@@ -16,13 +19,20 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @internal
  */
 public abstract class AbstractPropertyChangeCapable implements
-    IPropertyChangeCapable, Cloneable {
+    IPropertyChangeCapable, ICloneable {
 
-  private transient SinglePropertyChangeSupport propertyChangeSupport;
+  private transient SinglePropertyChangeSupport     propertyChangeSupport;
+  private transient SingleWeakPropertyChangeSupport weakPropertyChangeSupport;
 
   private synchronized void initializePropertyChangeSupportIfNeeded() {
     if (propertyChangeSupport == null) {
       this.propertyChangeSupport = new SinglePropertyChangeSupport(this);
+    }
+  }
+
+  private synchronized void initializeWeakPropertyChangeSupportIfNeeded() {
+    if (weakPropertyChangeSupport == null) {
+      this.weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(this);
     }
   }
 
@@ -39,10 +49,29 @@ public abstract class AbstractPropertyChangeCapable implements
    * {@inheritDoc}
    */
   @Override
+  public void addWeakPropertyChangeListener(PropertyChangeListener listener) {
+    initializeWeakPropertyChangeSupportIfNeeded();
+    weakPropertyChangeSupport.addPropertyChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
     initializePropertyChangeSupportIfNeeded();
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addWeakPropertyChangeListener(String propertyName,
+      PropertyChangeListener listener) {
+    initializeWeakPropertyChangeSupportIfNeeded();
+    weakPropertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
   /**
@@ -54,6 +83,7 @@ public abstract class AbstractPropertyChangeCapable implements
       AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super
           .clone();
       clonedBean.propertyChangeSupport = null;
+      clonedBean.weakPropertyChangeSupport = null;
       return clonedBean;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);
@@ -68,6 +98,9 @@ public abstract class AbstractPropertyChangeCapable implements
     if (propertyChangeSupport != null) {
       propertyChangeSupport.removePropertyChangeListener(listener);
     }
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.removePropertyChangeListener(listener);
+    }
   }
 
   /**
@@ -80,6 +113,10 @@ public abstract class AbstractPropertyChangeCapable implements
       propertyChangeSupport
           .removePropertyChangeListener(propertyName, listener);
     }
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.removePropertyChangeListener(propertyName,
+          listener);
+    }
   }
 
   /**
@@ -90,6 +127,9 @@ public abstract class AbstractPropertyChangeCapable implements
   protected void firePropertyChange(PropertyChangeEvent evt) {
     if (propertyChangeSupport != null) {
       propertyChangeSupport.firePropertyChange(evt);
+    }
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.firePropertyChange(evt);
     }
   }
 
@@ -109,6 +149,10 @@ public abstract class AbstractPropertyChangeCapable implements
       propertyChangeSupport
           .firePropertyChange(propertyName, oldValue, newValue);
     }
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.firePropertyChange(propertyName, oldValue,
+          newValue);
+    }
   }
 
   /**
@@ -127,6 +171,10 @@ public abstract class AbstractPropertyChangeCapable implements
       propertyChangeSupport
           .firePropertyChange(propertyName, oldValue, newValue);
     }
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.firePropertyChange(propertyName, oldValue,
+          newValue);
+    }
   }
 
   /**
@@ -144,6 +192,10 @@ public abstract class AbstractPropertyChangeCapable implements
     if (propertyChangeSupport != null) {
       propertyChangeSupport.firePropertyChange(propertyName,
           new Long(oldValue), new Long(newValue));
+    }
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.firePropertyChange(propertyName, new Long(
+          oldValue), new Long(newValue));
     }
   }
 
@@ -171,10 +223,16 @@ public abstract class AbstractPropertyChangeCapable implements
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
   protected PropertyChangeListener[] getPropertyChangeListeners() {
+    ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
-      return propertyChangeSupport.getPropertyChangeListeners();
+      listeners.addAll(Arrays.asList(propertyChangeSupport
+          .getPropertyChangeListeners()));
     }
-    return new PropertyChangeListener[0];
+    if (weakPropertyChangeSupport != null) {
+      listeners.addAll(Arrays.asList(weakPropertyChangeSupport
+          .getPropertyChangeListeners()));
+    }
+    return listeners.toArray(new PropertyChangeListener[0]);
   }
 
   /**
@@ -187,10 +245,16 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected PropertyChangeListener[] getPropertyChangeListeners(
       String propertyName) {
+    ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
-      return propertyChangeSupport.getPropertyChangeListeners(propertyName);
+      listeners.addAll(Arrays.asList(propertyChangeSupport
+          .getPropertyChangeListeners(propertyName)));
     }
-    return new PropertyChangeListener[0];
+    if (weakPropertyChangeSupport != null) {
+      listeners.addAll(Arrays.asList(weakPropertyChangeSupport
+          .getPropertyChangeListeners(propertyName)));
+    }
+    return listeners.toArray(new PropertyChangeListener[0]);
   }
 
   /**
@@ -200,8 +264,13 @@ public abstract class AbstractPropertyChangeCapable implements
    * @see java.beans.PropertyChangeSupport#hasListeners(java.lang.String)
    */
   protected boolean hasListeners(String propertyName) {
-    if (propertyChangeSupport != null) {
-      return propertyChangeSupport.hasListeners(propertyName);
+    if (propertyChangeSupport != null
+        && propertyChangeSupport.hasListeners(propertyName)) {
+      return true;
+    }
+    if (weakPropertyChangeSupport != null
+        && weakPropertyChangeSupport.hasListeners(propertyName)) {
+      return true;
     }
     return false;
   }

@@ -17,20 +17,16 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
   extend : qx.ui.table.cellrenderer.Default,
   include : [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
-  /**
-   * 
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
-   */
-  construct : function(format) {
+  construct : function(table, format) {
     this.base(arguments);
+    this.__table = table;
     this.__format = format;
   },
 
   members :
   {
     __format : null,
+    __table  : null,
     __action : null,
     
     _formatValue : function(cellInfo) {
@@ -41,6 +37,16 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
     },
     
     _getContentHtml : function(cellInfo) {
+      if(!org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)
+         && (typeof(cellInfo.value) == "string" || cellInfo.value instanceof String)) {
+        if(cellInfo.value.indexOf("\n")) {
+          cellInfo.value = "<html>" + cellInfo.value.replace(new RegExp("\n", 'g'),"<br>") + "</html>";
+        }
+      }
+      var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
+      if(this.__table.getRowHeight() < contentHeight) {
+        this.__table.setRowHeight(contentHeight);
+      }
       if(this.__action) {
         //return "<a href='javascript:qx.event.Registration.fireEvent(qx.core.Init.getApplication().getRoot(),\"tableLinkClicked\",\"qx.event.type.Data\",\""+this.__action.getGuid()+"\");'>"+this._formatValue(cellInfo)+"</a>";
         //return "<a href='javascript:>"+this._formatValue(cellInfo)+"</a>";

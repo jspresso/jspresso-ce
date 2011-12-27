@@ -32,6 +32,18 @@ public interface ICompositeValueConnector extends IValueConnector {
   /**
    * Adds a new child connector to this composite.
    * 
+   * @param storageKey
+   *          the key under which the child connector will be stored /
+   *          retrieved.
+   * @param childConnector
+   *          the added connector.
+   */
+  void addChildConnector(String storageKey, IValueConnector childConnector);
+
+  /**
+   * Adds a new child connector to this composite. The key used as storage key
+   * is the child connector id.
+   * 
    * @param childConnector
    *          the added connector.
    */
@@ -40,10 +52,10 @@ public interface ICompositeValueConnector extends IValueConnector {
   /**
    * Removes a child connector from this composite.
    * 
-   * @param childConnector
-   *          the connector to remove.
+   * @param storageKey
+   *          the key to remove the child connector for.
    */
-  void removeChildConnector(IValueConnector childConnector);
+  void removeChildConnector(String storageKey);
 
   /**
    * Are the children connectors readable ?

@@ -33,7 +33,7 @@ package org.jspresso.framework.view.flex {
 
   public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
     
-    private var valueChangeListener:ChangeWatcher;
+    private var _valueChangeListener:ChangeWatcher;
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
@@ -102,12 +102,12 @@ package org.jspresso.framework.view.flex {
   	    if(rendererListData.owner is DataGrid) {
   	      cellValueState = ((rendererData as RemoteCompositeValueState).children[index] as RemoteValueState); 
   	    } else {
-  	      cellValueState = rendererData as RemoteValueState;
+  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[1] as RemoteValueState);
   	    }
-  	    if(valueChangeListener != null) {
-  	      valueChangeListener.unwatch();
+  	    if(_valueChangeListener != null) {
+  	      _valueChangeListener.unwatch();
   	    }
-  	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+  	    _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
     	  rendererListData.label = computeLabel(cellValueState.value);
   	  }
   	}
@@ -119,14 +119,6 @@ package org.jspresso.framework.view.flex {
 	        cellLabel = _formatter.format(cellValue);
 	      } else {
   	      cellLabel = cellValue.toString();
-  	      var i:int = cellLabel.indexOf("\n");
-  	      if(i >= 0) {
-  	        cellLabel = cellLabel.substr(0,i);
-  	      }
-          i = cellLabel.indexOf("\r");
-          if(i >= 0) {
-            cellLabel = cellLabel.substr(0,i);
-          }
   	    }
   	  } else {
   	    cellLabel = null;
@@ -146,16 +138,32 @@ package org.jspresso.framework.view.flex {
   	  super.commitProperties();
   	  var cellText:String = label.text;
       if(_action != null) {
+        if(HtmlUtil.isHtml(cellText)) {
+          cellText = HtmlUtil.convertHtmlEntities(cellText);
+        }
         label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
       } else {
         if(HtmlUtil.isHtml(cellText)) {
           label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
         }
       }
-      if(toolTip) {
-        label.toolTip = label.text;
+      if(index == 1 || index == -1) {
+        if(data) {
+          label.toolTip = (data as RemoteCompositeValueState).value as String;
+        } else {
+          label.toolTip = null;
+        }
       } else {
-        label.toolTip = null;
+        if(HtmlUtil.isHtml(cellText)) {
+          // unconditional
+          label.toolTip = cellText;
+        } else {
+          if(toolTip) {
+            label.toolTip = cellText;
+          } else {
+            label.toolTip = null;
+          }
+        }
       }
   	}
 
@@ -171,7 +179,7 @@ package org.jspresso.framework.view.flex {
         });
       }
     }
-
+    
     public function set actionHandler(value:IActionHandler):void
     {
       _actionHandler = value;

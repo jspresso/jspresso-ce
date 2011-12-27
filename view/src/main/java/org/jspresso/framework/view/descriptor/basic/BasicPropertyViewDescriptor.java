@@ -233,9 +233,17 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Configures the action to be triggered when the user activates (clicks) this
-   * property view. Setting a not-null action typically turns the property view
-   * into a read-only link.
+   * Configures the action to be triggered when <i>acting</i> on this property.
+   * There are 2 cases :
+   * <p>
+   * <ol>
+   * <li>If the property is read-only, then assigning an action turns the
+   * property into a clickable hyperlink</li>
+   * <li>If the property is read-write, the registered action will be trigerred
+   * when the user changes the value of the field. Note thet in that case, the
+   * action is executed <i>after</i> the model has been updated. However the old
+   * property value can be retrieved from the context action param.</li>
+   * </ol>
    * 
    * @param action
    *          the action to set.
@@ -254,14 +262,6 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
       w = ((IPropertyDescriptor) getModelDescriptor()).getPreferredWidth();
     }
     return w;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isReadOnly() {
-    return getAction() != null || super.isReadOnly();
   }
 
   /**
@@ -322,8 +322,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * @param sortable
    *          the sortable to set.
    */
-  public void setSortable(Boolean sortable) {
-    this.sortable = sortable;
+  public void setSortable(boolean sortable) {
+    this.sortable = new Boolean(sortable);
   }
 
 }

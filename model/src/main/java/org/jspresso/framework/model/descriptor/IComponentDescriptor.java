@@ -152,6 +152,14 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   String getToStringProperty();
 
   /**
+   * Gets the property used to build the HTML representation of the component.
+   * 
+   * @return the property used to build the HTML representation of the
+   *         component.
+   */
+  String getToHtmlProperty();
+
+  /**
    * Gets the property used to autocomplete when performing a LOV.
    * 
    * @return the property used to autocomplete when performing a LOV.

@@ -130,6 +130,8 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * contiguous interval selection with toggle behaviour</li>
    * <li><code>SINGLE_SELECTION</code> for allowing only a single item selection
    * </li>
+   * <li><code>SINGLE_CUMULATIVE_SELECTION</code> for allowing only a single
+   * item selection with toggle behaviour</li>
    * </ul>
    * <p>
    * Default value is <code>ESelectionMode.MULTIPLE_INTERVAL_SELECTION</code>,
@@ -177,7 +179,8 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
       return autoSelectFirstRow.booleanValue();
     }
     return getSelectionMode() != ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION
-        && getSelectionMode() != ESelectionMode.SINGLE_INTERVAL_CUMULATIVE_SELECTION;
+        && getSelectionMode() != ESelectionMode.SINGLE_INTERVAL_CUMULATIVE_SELECTION
+        && getSelectionMode() != ESelectionMode.SINGLE_CUMULATIVE_SELECTION;
   }
 
   /**

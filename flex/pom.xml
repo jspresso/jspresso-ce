@@ -54,6 +54,9 @@
             <goals>
               <goal>compile-swc</goal>
             </goals>
+            <configuration>
+             <targetPlayer>10.0.0</targetPlayer>
+            </configuration>
           </execution>
         </executions>
         <!--

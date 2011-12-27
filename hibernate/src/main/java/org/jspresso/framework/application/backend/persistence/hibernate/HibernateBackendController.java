@@ -38,6 +38,7 @@ import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
@@ -274,6 +275,20 @@ public class HibernateBackendController extends AbstractBackendController {
               LOG.error("Source exception", ex);
             }
           }
+        } else if (initializedProperty instanceof HibernateProxy) {
+          HibernateProxy proxy = (HibernateProxy) initializedProperty;
+          LazyInitializer li = proxy.getHibernateLazyInitializer();
+          if (li.getSession() != null && li.getSession().isOpen()) {
+            try {
+              Hibernate.initialize(initializedProperty);
+              return;
+            } catch (Exception ex) {
+              LOG.error(
+                  "An internal error occurred when forcing {} reference initialization.",
+                  propertyName);
+              LOG.error("Source exception", ex);
+            }
+          }
         }
 
         int oldFlushMode = hibernateTemplate.getFlushMode();
@@ -331,9 +346,11 @@ public class HibernateBackendController extends AbstractBackendController {
       if (entity != null) {
         for (Map.Entry<String, Object> property : entity
             .straightGetProperties().entrySet()) {
-          if (property.getValue() instanceof IEntity) {
-            if (owner.equals(property.getValue())
-                && owner != property.getValue()) {
+          if (property.getValue() instanceof IEntity
+              && owner instanceof IEntity) {
+            if (owner != property.getValue() // avoid lazy initialization
+                && ((IEntity) owner).getId().equals(
+                    ((IEntity) property.getValue()).getId())) {
               entity.straightSetProperty(property.getKey(), owner);
             }
           }
@@ -756,13 +773,8 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
       EMergeMode mergeMode, Class<? extends T> clazz) {
-    List<T> ret = findByCriteria(criteria);
+    List<T> ret = findByCriteria(criteria, 0, 1, mergeMode, clazz);
     if (ret != null && !ret.isEmpty()) {
-      if (isUnitOfWorkActive()) {
-        return cloneInUnitOfWork(ret.get(0));
-      } else if (mergeMode != null) {
-        return merge(ret.get(0), mergeMode);
-      }
       return ret.get(0);
     }
     return null;
@@ -785,38 +797,67 @@ public class HibernateBackendController extends AbstractBackendController {
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, EMergeMode mergeMode,
       Class<? extends T> clazz) {
-    List<T> res = findByCriteria(criteria);
-    if (res != null) {
-      if (isUnitOfWorkActive()) {
-        return cloneInUnitOfWork(res);
-      } else if (mergeMode != null) {
-        return merge(res, mergeMode);
-      }
-      return res;
+    return findByCriteria(criteria, -1, -1, mergeMode, clazz);
+  }
+
+  /**
+   * Search Hibernate using criteria. The result is then merged into session.
+   * 
+   * @param <T>
+   *          the entity type to return
+   * @param criteria
+   *          the detached criteria.
+   * @param firstResult
+   *          the first result rank to retrieve.
+   * @param maxResults
+   *          the max number of results to retrieve.
+   * @param mergeMode
+   *          the merge mode to use when merging back retrieved entities or null
+   *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
+   * @return the first found entity or null;
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends IEntity> List<T> findByCriteria(
+      final DetachedCriteria criteria, int firstResult, int maxResults,
+      EMergeMode mergeMode, Class<? extends T> clazz) {
+    List<T> res = null;
+    if (isUnitOfWorkActive()) {
+      // merge mode must be ignored if a transaction is pre-existing, so force
+      // to null.
+      res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
+          maxResults, null));
+    } else {
+      // merge mode is passed for merge to occur inside the transaction.
+      res = findByCriteria(criteria, firstResult, maxResults, mergeMode);
     }
-    return null;
+    return res;
   }
 
   @SuppressWarnings("unchecked")
   private <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria) {
-    List<T> res = getTransactionTemplate().execute(
-        new TransactionCallback<List<T>>() {
+      final DetachedCriteria criteria, final int firstResult,
+      final int maxResults, final EMergeMode mergeMode) {
+    return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
-          @Override
-          public List<T> doInTransaction(
-              @SuppressWarnings("unused") TransactionStatus status) {
-            int oldFlushMode = getHibernateTemplate().getFlushMode();
-            try {
-              getHibernateTemplate()
-                  .setFlushMode(HibernateAccessor.FLUSH_NEVER);
-              return getHibernateTemplate().findByCriteria(criteria);
-            } finally {
-              getHibernateTemplate().setFlushMode(oldFlushMode);
-            }
+      @Override
+      public List<T> doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
+        int oldFlushMode = getHibernateTemplate().getFlushMode();
+        try {
+          getHibernateTemplate().setFlushMode(HibernateAccessor.FLUSH_NEVER);
+          List<T> entities = getHibernateTemplate().findByCriteria(criteria,
+              firstResult, maxResults);
+          if (mergeMode != null) {
+            entities = merge(entities, mergeMode);
           }
-        });
-    return res;
+          return entities;
+        } finally {
+          getHibernateTemplate().setFlushMode(oldFlushMode);
+        }
+      }
+    });
   }
 
   /**

@@ -36,6 +36,8 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.ICompositeView;
+import org.jspresso.framework.view.IView;
 
 /**
  * Abstract class for all objects that need to manipulate an action context. It
@@ -136,7 +138,24 @@ public abstract class AbstractActionContextAware {
    * @return the model.
    */
   protected Object getModel(Map<String, Object> context) {
-    IValueConnector modelConnector = getModelConnector(context);
+    return getModel(null, context);
+  }
+
+  /**
+   * Gets the model this action was triggered on.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the model.
+   */
+  protected Object getModel(int[] viewPath, Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector != null) {
       if (modelConnector instanceof ICompositeValueConnector) {
         return modelConnector.getConnectorValue();
@@ -160,8 +179,34 @@ public abstract class AbstractActionContextAware {
    * @return the model connector this action was triggered on.
    */
   protected IValueConnector getModelConnector(Map<String, Object> context) {
-    return ((IValueConnector) context
-        .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
+    return getModelConnector(null, context);
+  }
+
+  /**
+   * Gets the model connector this action was triggered on. The model connector
+   * is the versatile binding structure that adapts the actual model to the
+   * Jspresso binding architecture. The actual model is stored in the model
+   * connector value. Unless developing very generic actions, this method will
+   * rarely be used in favor of the more concrete <code>getXXXModel</code>
+   * context accessors.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the model connector this action was triggered on.
+   */
+  protected IValueConnector getModelConnector(int[] viewPath,
+      Map<String, Object> context) {
+    IValueConnector viewConnector = getViewConnector(viewPath, context);
+    if (viewConnector != null) {
+      return viewConnector.getModelConnector();
+    }
+    return null;
   }
 
   /**
@@ -180,8 +225,9 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the module this action has been executed on. The value is stored using
-   * the <code>ActionContextConstants.MODULE</code> key.
+   * Gets the module this action has been executed on. The value is immutable
+   * during the action chain and is stored using the
+   * <code>ActionContextConstants.MODULE</code> key.
    * 
    * @param context
    *          the action context.
@@ -189,6 +235,19 @@ public abstract class AbstractActionContextAware {
    */
   protected Module getModule(Map<String, Object> context) {
     return (Module) context.get(ActionContextConstants.MODULE);
+  }
+
+  /**
+   * Gets the current module from the context. The value might change during the
+   * action chain if one of the action navigates the workspace/module. It is
+   * stored using the <code>ActionContextConstants.CURRENT_MODULE</code> key.
+   * 
+   * @param context
+   *          the action context.
+   * @return the module this action executes on.
+   */
+  protected Module getCurrentModule(Map<String, Object> context) {
+    return (Module) context.get(ActionContextConstants.CURRENT_MODULE);
   }
 
   /**
@@ -234,8 +293,26 @@ public abstract class AbstractActionContextAware {
    * @return the selected model.
    */
   protected Object getSelectedModel(Map<String, Object> context) {
-    IValueConnector viewConnector = (IValueConnector) context
-        .get(ActionContextConstants.VIEW_CONNECTOR);
+    return getSelectedModel(null, context);
+  }
+
+  /**
+   * This is a versatile helper method that retrieves the selected model either
+   * from the 1st selected child connector if the action was trigerred on a
+   * collection connector or from the connector itself.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the selected model.
+   */
+  protected Object getSelectedModel(int[] viewPath, Map<String, Object> context) {
+    IValueConnector viewConnector = getViewConnector(viewPath, context);
     Object selectedModel;
     if (viewConnector instanceof IItemSelectable) {
       selectedModel = ((IItemSelectable) viewConnector).getSelectedItem();
@@ -243,7 +320,7 @@ public abstract class AbstractActionContextAware {
         selectedModel = ((IValueConnector) selectedModel).getConnectorValue();
       }
     } else {
-      selectedModel = getModel(context);
+      selectedModel = getModel(viewPath, context);
     }
     return selectedModel;
   }
@@ -258,7 +335,27 @@ public abstract class AbstractActionContextAware {
    * @return the list of selected models.
    */
   protected List<?> getSelectedModels(Map<String, Object> context) {
-    IValueConnector modelConnector = getModelConnector(context);
+    return getSelectedModels(null, context);
+  }
+
+  /**
+   * This is a versatile helper method that retrieves the selected models model
+   * either from the selected child connectors if the action was trigerred on a
+   * collection connector or from the connector itself.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the list of selected models.
+   */
+  protected List<?> getSelectedModels(int[] viewPath,
+      Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector == null) {
       return null;
     }
@@ -268,12 +365,15 @@ public abstract class AbstractActionContextAware {
       int[] selectedIndices = getSelectedIndices(context);
       if (selectedIndices != null && selectedIndices.length > 0) {
         for (int i = 0; i < selectedIndices.length; i++) {
-          models.add(((ICollectionConnector) modelConnector).getChildConnector(
-              selectedIndices[i]).getConnectorValue());
+          IValueConnector childConnector = ((ICollectionConnector) modelConnector)
+              .getChildConnector(selectedIndices[i]);
+          if (childConnector != null) {
+            models.add(childConnector.getConnectorValue());
+          }
         }
       }
     } else {
-      models = Collections.singletonList(getSelectedModel(context));
+      models = Collections.singletonList(getSelectedModel(viewPath, context));
     }
     return models;
   }
@@ -338,5 +438,149 @@ public abstract class AbstractActionContextAware {
       setSelectedIndices(ConnectorHelper.getIndicesOf(
           (ICollectionConnector) modelConnector, selectedModels), context);
     }
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view this action has
+   * been executed on from its context. It uses well-known context keys of the
+   * action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW</code> to get the the view the action
+   * executes on.
+   * </ul>
+   * <p>
+   * The returned view mainly serves for acting on the view component the action
+   * has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the view this action was triggered on.
+   */
+  protected IView<?> getView(Map<String, Object> context) {
+    return getView(null, context);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view this action has
+   * been executed on from its context. It uses well-known context keys of the
+   * action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW</code> to get the the view the action
+   * executes on.
+   * </ul>
+   * <p>
+   * The returned view mainly serves for acting on the view component the action
+   * has to be triggered on.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li> <li>A negative
+   *          integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the view this action was triggered on.
+   */
+  protected IView<?> getView(int[] viewPath, Map<String, Object> context) {
+    return navigate((IView<?>) context.get(ActionContextConstants.VIEW),
+        viewPath);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the view
+   * value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the value connector this action was triggered on.
+   */
+  protected IValueConnector getViewConnector(Map<String, Object> context) {
+    return getViewConnector(null, context);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the view
+   * value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li> <li>A negative
+   *          integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the value connector this action was triggered on.
+   */
+  protected IValueConnector getViewConnector(int[] viewPath,
+      Map<String, Object> context) {
+    if (viewPath == null || viewPath.length == 0) {
+      return (IValueConnector) context
+          .get(ActionContextConstants.VIEW_CONNECTOR);
+    }
+    IView<?> view = getView(viewPath, context);
+    if (view != null) {
+      return view.getConnector();
+    }
+    return null;
+  }
+
+  /**
+   * Sarts from a view and navigates the view hierarchy following an index
+   * navigation path.
+   * 
+   * @param fromView
+   *          the view to start from.
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @return the view navigated to.
+   */
+  protected IView<?> navigate(IView<?> fromView, int[] viewPath) {
+    IView<?> target = fromView;
+    if (viewPath != null) {
+      for (int nextIndex : viewPath) {
+        if (target != null) {
+          if (nextIndex < 0) {
+            for (int j = 0; j > nextIndex; j--) {
+              if (target != null) {
+                target = target.getParent();
+              }
+            }
+          } else {
+            if (target instanceof ICompositeView<?>
+                && ((ICompositeView<?>) target).getChildren() != null
+                && nextIndex < ((ICompositeView<?>) target).getChildren()
+                    .size()) {
+              target = ((ICompositeView<?>) target).getChildren()
+                  .get(nextIndex);
+            } else {
+              target = null;
+            }
+          }
+        }
+      }
+    }
+    return target;
   }
 }

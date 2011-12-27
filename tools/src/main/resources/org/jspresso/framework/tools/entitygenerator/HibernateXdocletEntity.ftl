@@ -107,6 +107,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local propertyName=propertyDescriptor.name/>
   <#if propertyDescriptor.modelType.array>
     <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
+  <#elseif propertyDescriptor.name ="id">
+    <#local propertyType="java.io.Serializable"/>
   <#else>
     <#local propertyType=propertyDescriptor.modelType.name/>
   </#if>
@@ -124,7 +126,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if propertyDescriptor.name ="id">
    * @hibernate.id
    *           generator-class = "assigned"
+      <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)?exists>
+        <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)/>
+      </#if>
+      <#if hibernateType?exists>
+   *           type = "${hibernateType.name}"
+      <#else>
    *           type = "string"
+      </#if>
     <#elseif propertyDescriptor.name ="version">
    * @hibernate.version
    *           unsaved-value = "null"

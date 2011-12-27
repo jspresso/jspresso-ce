@@ -20,10 +20,12 @@ package org.jspresso.framework.view.flex {
   import flash.events.MouseEvent;
   import flash.events.TextEvent;
   
+  import flex.utils.ui.resize.ResizablePanel;
+  
   import flexlib.containers.ButtonScrollingCanvas;
   
   import mx.binding.utils.BindingUtils;
-  import mx.collections.ArrayCollection;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -46,6 +48,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.List;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
+  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -65,12 +68,13 @@ package org.jspresso.framework.view.flex {
   import mx.events.IndexChangedEvent;
   import mx.events.ListEvent;
   import mx.events.MenuEvent;
-  import mx.events.PropertyChangeEvent;
   import mx.formatters.Formatter;
   import mx.formatters.NumberBase;
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
   import mx.graphics.SolidColor;
+  import mx.managers.PopUpManager;
+  import mx.managers.ToolTipManager;
   import mx.resources.ResourceManager;
   import mx.utils.ObjectUtil;
   
@@ -174,6 +178,7 @@ package org.jspresso.framework.view.flex {
       _timeFormatter.formatString = "JJ:NN:SS"
       _shortTimeFormatter = new DateFormatter();
       _shortTimeFormatter.formatString = "JJ:NN"
+      ToolTipManager.toolTipClass = HtmlToolTip;
     }
     
     public function createComponent(remoteComponent:RComponent, registerState:Boolean=true):UIComponent {
@@ -220,12 +225,12 @@ package org.jspresso.framework.view.flex {
         component.minWidth = 0;
       }
       component.id = remoteComponent.guid;
-      if(remoteComponent.tooltip != null) {
-        component.toolTip = remoteComponent.tooltip;
+      if(remoteComponent.toolTip != null) {
+        component.toolTip = remoteComponent.toolTip;
       }
       component = decorateWithActions(remoteComponent, component);
       if(remoteComponent.borderType == "TITLED") {
-        var decorator:Panel = new Panel();
+        var decorator:Panel = createPanelComponent();
         decorator.percentWidth = component.percentWidth;
         decorator.percentHeight = component.percentHeight;
         component.percentWidth = 100.0;
@@ -247,6 +252,16 @@ package org.jspresso.framework.view.flex {
       return component;
     }
     
+    public function createPanelComponent():Panel {
+      return new Panel();
+    }
+
+    public function createResizableDialog(dialogParent:DisplayObject):Panel {
+      var dialog:ResizablePanel = PopUpManager.createPopUp(dialogParent,ResizablePanel,true) as ResizablePanel;
+      dialog.resizable = true;
+      return dialog;
+    }
+    
     protected function applyComponentPreferredSize(component:UIComponent, preferredSize:Dimension):void {
       if(preferredSize) {
         component.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
@@ -260,7 +275,7 @@ package org.jspresso.framework.view.flex {
       }
     }
     
-    protected function applyComponentStyle(component:*, remoteComponent:RComponent):void {
+    public function applyComponentStyle(component:*, remoteComponent:RComponent):void {
       if(remoteComponent.foreground) {
         component.setStyle("color", remoteComponent.foreground);
         if(component is IFlexDisplayObject) {
@@ -483,11 +498,11 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTree(remoteTree:RTree):UIComponent {
-      var tree:SelectionTrackingTree = new SelectionTrackingTree();
+      var tree:SelectionTrackingTree = createTreeComponent();
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.dataDescriptor = new RCVSDataDescriptor();
-      tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
+      tree.itemRenderer = createTreeItemRenderer();
       tree.dataProvider = remoteTree.state;
       tree.minWidth = 200;
       tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
@@ -513,6 +528,14 @@ package org.jspresso.framework.view.flex {
         });
       }
       return tree;
+    }
+    
+    public function createTreeComponent():SelectionTrackingTree {
+      return new SelectionTrackingTree();
+    }
+    
+    public function createTreeItemRenderer():ClassFactory {
+      return new ClassFactory(RemoteValueTreeItemRenderer);
     }
     
     protected function expandItem(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
@@ -601,6 +624,13 @@ package org.jspresso.framework.view.flex {
       } else {
         imageComponent.styleName = "unscrollableImage";
       }
+      if(remoteImageComponent.action) {
+        getRemotePeerRegistry().register(remoteImageComponent.action);
+        imageComponent.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+          // To ensure that the row is selected before the action gets executed.
+          imageComponent.callLater(_actionHandler.execute, [remoteImageComponent.action]);
+        });
+      }
       return imageComponent;
     }
     
@@ -625,7 +655,7 @@ package org.jspresso.framework.view.flex {
       actionField.verticalScrollPolicy = ScrollPolicy.OFF;
       var textField:TextInput;
       if(remoteActionField.showTextField) {
-        textField = new TextInput();
+        textField = createTextInputComponent();
         actionField.percentWidth = 100.0;
         textField.percentWidth = 100.0;
         textField.name = "tf";
@@ -707,7 +737,7 @@ package org.jspresso.framework.view.flex {
       colorPicker.name = "cc";
       bindColorPicker(colorPicker, remoteColorField.state);
       colorField.addChild(colorPicker);
-      var resetButton:Button = new EnhancedButton();
+      var resetButton:Button = createButtonComponent();
       resetButton.setStyle("icon", _resetIcon);
       colorField.addChild(resetButton);
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
@@ -789,7 +819,7 @@ package org.jspresso.framework.view.flex {
         BindingUtils.bindProperty(label, "value", remoteComboBox.state, "value", true);
         return label;
       } else {
-        var comboBox:RIconComboBox = new RIconComboBox();
+        var comboBox:RIconComboBox = createComboBoxComponent();
         comboBox.dataProvider = remoteComboBox.values;
         comboBox.labels = remoteComboBox.translations;
         comboBox.icons = remoteComboBox.icons;
@@ -814,6 +844,10 @@ package org.jspresso.framework.view.flex {
         }
         return comboBox;
       }
+    }
+    
+    public function createComboBoxComponent():RIconComboBox {
+      return new RIconComboBox();
     }
 
     protected function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
@@ -1230,7 +1264,8 @@ package org.jspresso.framework.view.flex {
 
         if(remoteForm.labelsPosition != "NONE") {
           labelsRow.addChild(labelCell);
-          if((componentLabel as Label).text.length > 0) {
+          if(   ((componentLabel as Label).text && (componentLabel as Label).text.length > 0)
+             || ((componentLabel as Label).htmlText && (componentLabel as Label).htmlText.length > 0)) {
             labelCell.addChild(componentLabel);
             // makes alignment wrong
             //if(remoteForm.labelsPosition == "ASIDE") {
@@ -1295,6 +1330,12 @@ package org.jspresso.framework.view.flex {
         }
       }
       form.addChild(resizerRow);
+      // Special toolTip handling
+      var remoteState:RemoteValueState = remoteForm.state;
+      var updateToolTip:Function = function (value:Object):void {
+        form.toolTip = value as String;
+      };
+      BindingUtils.bindSetter(updateToolTip, remoteState, "value", true);
       return form;
     }
 
@@ -1368,7 +1409,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
       getRemotePeerRegistry().register(remoteTabContainer);
-      var tabContainer:TabNavigator = new EnhancedTabNavigator();
+      var tabContainer:TabNavigator = createTabNavigatorComponent();
       tabContainer.historyManagementEnabled = false;
       if(remoteTabContainer.preferredSize != null &&
         (remoteTabContainer.preferredSize.height > 0 || remoteTabContainer.preferredSize.width > 0)) {
@@ -1390,8 +1431,8 @@ package org.jspresso.framework.view.flex {
         tabCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
         tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         tabContainer.addChild(tabCanvas);
-        if(rTab.tooltip != null) {
-    		  tabCanvas.toolTip = rTab.tooltip + TOOLTIP_ELLIPSIS;
+        if(rTab.toolTip != null) {
+    		  tabCanvas.toolTip = rTab.toolTip;
         }
         tabCanvas.addChild(tabContent);
       }
@@ -1418,6 +1459,10 @@ package org.jspresso.framework.view.flex {
         _commandHandler.registerCommand(command);
       }, tabContainer, "selectedIndex",true);
       return tabContainer;
+    }
+    
+    public function createTabNavigatorComponent():TabNavigator {
+      return new EnhancedTabNavigator();
     }
     
     protected function createDateComponent(remoteDateField:RDateField):UIComponent {
@@ -1532,7 +1577,7 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.foreground = remoteDateField.foreground;
       remoteTimeField.guid = remoteDateField.guid;
       remoteTimeField.state = remoteDateField.state;
-      remoteTimeField.tooltip = remoteDateField.tooltip;
+      remoteTimeField.toolTip = remoteDateField.toolTip;
       remoteTimeField.secondsAware = remoteDateField.secondsAware;
       
       var timeField:UIComponent = createComponent(remoteTimeField, false);
@@ -1547,7 +1592,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
-      var timeField:TextInput = new TextInput();
+      var timeField:TextInput = createTextInputComponent();
       sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
       bindTextInput(timeField, remoteTimeField.state,
         createFormatter(remoteTimeField), createParser(remoteTimeField));
@@ -1555,7 +1600,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
-      var decimalField:TextInput = new TextInput();
+      var decimalField:TextInput = createTextInputComponent();
       var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter;
       bindTextInput(decimalField, remoteDecimalField.state,
                     decimalFormatter, createParser(remoteDecimalField));
@@ -1567,7 +1612,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createIntegerField(remoteIntegerField:RIntegerField):UIComponent {
-      var integerField:TextInput = new TextInput();
+      var integerField:TextInput = createTextInputComponent();
       var integerFormatter:NumberFormatter = createFormatter(remoteIntegerField) as NumberFormatter;
       bindTextInput(integerField, remoteIntegerField.state,
                     integerFormatter, createParser(remoteIntegerField));
@@ -1579,7 +1624,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createPercentField(remotePercentField:RPercentField):UIComponent {
-      var percentField:TextInput = new TextInput();
+      var percentField:TextInput = createTextInputComponent();
       var percentFormatter:NumberFormatter = createFormatter(remotePercentField) as NumberFormatter; 
       bindTextInput(percentField, remotePercentField.state,
                     percentFormatter, createParser(remotePercentField));
@@ -1591,7 +1636,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createDurationField(remoteDurationField:RDurationField):UIComponent {
-      var durationField:TextInput = new TextInput();
+      var durationField:TextInput = createTextInputComponent();
       bindTextInput(durationField, remoteDurationField.state,
                     createFormatter(remoteDurationField), createParser(remoteDurationField));
       return durationField;
@@ -1601,14 +1646,17 @@ package org.jspresso.framework.view.flex {
       var list:EnhancedList = new EnhancedList();
       list.horizontalScrollPolicy = ScrollPolicy.AUTO;
       list.verticalScrollPolicy = ScrollPolicy.AUTO;
-      if(remoteList.selectionMode == "SINGLE_SELECTION") {
+      list.variableRowHeight = true;
+      if(   remoteList.selectionMode == "SINGLE_SELECTION"
+         || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
         list.allowMultipleSelection = false;
       } else {
         list.allowMultipleSelection = true;
-        if(   remoteList.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
-           || remoteList.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
-          list.cumulativeSelection = true;
-        }
+      }
+      if(   remoteList.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteList.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
+        list.cumulativeSelection = true;
       }
       
       var itemRenderer:ClassFactory = new ClassFactory(RemoteValueListItemRenderer);
@@ -1674,7 +1722,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createPasswordField(remotePasswordField:RPasswordField):UIComponent {
-      var passwordField:TextInput = new TextInput();
+      var passwordField:TextInput = createTextInputComponent();
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
       sizeMaxComponentWidth(passwordField, remotePasswordField);
@@ -1692,37 +1740,41 @@ package org.jspresso.framework.view.flex {
       
       var columns:Array = new Array();
       
+      table.variableRowHeight = true;
       table.regenerateStyleCache(false);
       
-      if(remoteTable.selectionMode == "SINGLE_SELECTION") {
+      if(   remoteTable.selectionMode == "SINGLE_SELECTION"
+         || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
         table.allowMultipleSelection = false;
       } else {
         table.allowMultipleSelection = true;
-        if(   remoteTable.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
-           || remoteTable.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
-          table.cbMultiSelection = true;
-        }
-        if(table.cbMultiSelection) {
-          var selectionColumn:DataGridColumn = new DataGridColumn();
-          selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);
-          selectionColumn.width = 20;
-          selectionColumn.sortable = false;
-          selectionColumn.draggable = false;
-          selectionColumn.dataField = "guid";
-          selectionColumn.headerText = " ";
-          columns.push(selectionColumn);
-        }
+      }
+      if(   remoteTable.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteTable.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"
+         || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
+        table.cbMultiSelection = true;
+      }
+      if(table.cbMultiSelection) {
+        var selectionColumn:DataGridColumn = new DataGridColumn();
+        selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);
+        selectionColumn.width = 20;
+        selectionColumn.sortable = false;
+        selectionColumn.draggable = false;
+        selectionColumn.dataField = "guid";
+        selectionColumn.headerText = " ";
+        columns.push(selectionColumn);
       }
       
       for(var i:int=0; i < remoteTable.columns.length; i++) {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
+        var rColumnHeader:RComponent = remoteTable.columnHeaders[i] as RComponent;
         if(rColumn.state == null) {
           rColumn.state = new RemoteValueState();
         }
         var editorComponent:UIComponent = createComponent(rColumn, false);
 
         var column:DataGridColumn = new DataGridColumn();
-        column.headerText = rColumn.label;
+        column.headerText = rColumnHeader.label;
         applyComponentStyle(column, rColumn);
         var itemRenderer:ClassFactory;
         if(rColumn is RComboBox) {
@@ -1785,7 +1837,10 @@ package org.jspresso.framework.view.flex {
         column.itemEditor = itemEditor;
 
         var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
-        headerRenderer.properties = {index:i+1, toolTip:editorComponent.toolTip};
+        headerRenderer.properties = { index:i+1,
+                                      toolTip:editorComponent.toolTip,
+                                      viewFactory:this,
+                                      rTemplate:rColumnHeader};
         column.headerRenderer = headerRenderer;
         
         if(rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {
@@ -1840,42 +1895,25 @@ package org.jspresso.framework.view.flex {
       }
       table.verticalScrollPolicy = ScrollPolicy.AUTO;
       
-      // Clone array collection to avoid re-ordering items in original collection when sorting.
-      var tableModel:ArrayCollection = new ArrayCollection((remoteTable.state as RemoteCompositeValueState).children.toArray());
+      var tableModel:ListCollectionView;
+      if(table.customSort) {
+        tableModel = (remoteTable.state as RemoteCompositeValueState).children;
+      } else {
+        // Clone array collection to avoid re-ordering items in original collection when sorting.
+        // Not necessary since we've built a ListCollectionView around children array collection
+        tableModel  = new ListCollectionView((remoteTable.state as RemoteCompositeValueState).children);
+        (remoteTable.state as RemoteCompositeValueState).children.addEventListener(CollectionEvent.COLLECTION_CHANGE,
+          function(event:CollectionEvent):void {
+            if(event.kind == CollectionEventKind.REMOVE) {
+              if(tableModel.sort) {
+                tableModel.refresh();
+              }
+            }
+          }
+        );
+      }
       table.dataProvider = tableModel;
-      (remoteTable.state as RemoteCompositeValueState).children.addEventListener(CollectionEvent.COLLECTION_CHANGE, function(event:CollectionEvent):void {
-        var item:Object;
-        if(event.kind == CollectionEventKind.ADD) {
-          for each (item in event.items) {
-            tableModel.addItem(item);
-          }
-        } else if(event.kind == CollectionEventKind.REMOVE) {
-          // This is to prevent negative getItemIndex when ArrayCollection is sorted.
-          for each (item in event.items) {
-            var removedItemIndex:int = tableModel.list.getItemIndex(item);
-            tableModel.list.removeItemAt(removedItemIndex);
-          }
-          if(tableModel.sort) {
-            tableModel.refresh();
-          }
-        } else if(event.kind == CollectionEventKind.REPLACE) {
-          for each (item in event.items) {
-            var oldItem:Object = (item as PropertyChangeEvent).oldValue;
-            var newItem:Object = (item as PropertyChangeEvent).newValue;
-            var itemIndex:int = tableModel.list.getItemIndex(oldItem);
-            tableModel.list.setItemAt(newItem, itemIndex);
-          }
-          if(tableModel.sort) {
-            tableModel.refresh();
-          }
-        } else if(event.kind == CollectionEventKind.RESET) {
-          // could be finer.
-          tableModel.removeAll();
-          for each (item in (event.currentTarget as ArrayCollection).source) {
-            tableModel.addItem(item);
-          }
-        }
-      });
+        
       bindTable(table, remoteTable);
       if(remoteTable.rowAction) {
         getRemotePeerRegistry().register(remoteTable.rowAction);
@@ -2003,7 +2041,7 @@ package org.jspresso.framework.view.flex {
           if(table.itemEditorInstance is RemoteValueDgItemEditor) {
             var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
             var state:RemoteValueState = currentEditor.state;
-            var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
+            var row:RemoteCompositeValueState = (table.dataProvider as ListCollectionView).getItemAt(event.rowIndex) as RemoteCompositeValueState; 
             var cell:RemoteValueState = row.children[currentEditor.index] as RemoteValueState;
 
             cell.value = state.value;
@@ -2023,8 +2061,8 @@ package org.jspresso.framework.view.flex {
           return;
         }
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
-        var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
-        var rowValueState:RemoteCompositeValueState = rowCollection[event.rowIndex] as RemoteCompositeValueState;
+        var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
+        var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(event.rowIndex) as RemoteCompositeValueState;
         if(!rowValueState.writable) {
           event.preventDefault();
         } else {
@@ -2043,12 +2081,12 @@ package org.jspresso.framework.view.flex {
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
         var dg:DataGrid = event.currentTarget as DataGrid;
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
-        var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
+        var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
         var cellValueState:RemoteValueState;
         var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
         // watch out checkbox selection column...
         if(columnRenderer.properties && columnRenderer.properties["index"]) {
-          cellValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
+          cellValueState = (rowCollection.getItemAt(event.rowIndex) as RemoteCompositeValueState)
             .children[columnRenderer.properties["index"] as int] as RemoteValueState;
           _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
         }
@@ -2089,10 +2127,14 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlEditor:EnhancedRichTextEditor = new EnhancedRichTextEditor();
+      var htmlEditor:EnhancedRichTextEditor = createRichTextEditorComponent();
       htmlEditor.styleName = "htmlEditor";
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
+    }
+    
+    public function createRichTextEditorComponent():EnhancedRichTextEditor {
+      return new EnhancedRichTextEditor();
     }
     
     protected function bindHtmlEditor(htmlEditor:EnhancedRichTextEditor, remoteState:RemoteValueState):void {
@@ -2126,7 +2168,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
-      var label:Label = new Label();
+      var label:Text = new Text();
       if(remoteLabel.state) {
         label.selectable = true;
       }
@@ -2185,7 +2227,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createTextField(remoteTextField:RTextField):UIComponent {
-      var textField:TextInput = new TextInput();
+      var textField:TextInput = createTextInputComponent();
       if(remoteTextField.maxLength > 0) {
         textField.maxChars = remoteTextField.maxLength;
         sizeMaxComponentWidth(textField, remoteTextField, remoteTextField.maxLength +2);
@@ -2197,31 +2239,49 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    public function createAction(remoteAction:RAction):Button {
-      var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon);
-		  //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
+    public function createAction(remoteAction:RAction, topApplicationAction:Boolean=false):Button {
+      var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon, topApplicationAction);
+      configureActionButton(button, remoteAction);
+      return button;
+    }
+
+    public function createDialogAction(remoteAction:RAction):Button {
+      var button:Button = createDialogButton(remoteAction.name, remoteAction.description, remoteAction.icon);
+      configureActionButton(button, remoteAction);
+      return button;
+    }
+    
+    protected function configureActionButton(button:Button, remoteAction:RAction):void {
+      //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
       var updateButtonState:Function = function (enabled:Boolean):void {
         button.enabled = enabled;
       };
       BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
-		  getRemotePeerRegistry().register(remoteAction);
-		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+      getRemotePeerRegistry().register(remoteAction);
+      button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
         if ((new Date()).time - _lastActionTimestamp.time < 400) {
           return;
         }
         _lastActionTimestamp = new Date();
         _actionHandler.execute(remoteAction);
-		  });
-      return button;
+      });
     }
     
-    public function createButton(label:String, tooltip:String, icon:RIcon):Button {
-      var button:Button = new EnhancedButton();
-      configureButton(button, label, tooltip, icon);
+    public function createButton(label:String, toolTip:String, icon:RIcon, topApplicationButton:Boolean=false):Button {
+      var button:Button = createButtonComponent(topApplicationButton);
+      configureButton(button, label, toolTip, icon);
       return button;
     }
+
+    public function createDialogButton(label:String, toolTip:String, icon:RIcon):Button {
+      return createButton(label, toolTip, icon);
+    }
     
-    protected function configureButton(button:Button, label:String, tooltip:String, icon:RIcon):void {
+    public function createButtonComponent(topApplicationButton:Boolean=false):Button {
+      return new EnhancedButton();
+    }
+
+    protected function configureButton(button:Button, label:String, toolTip:String, icon:RIcon):void {
       button.setStyle("icon", null);
       if(icon) {
         button.setStyle("icon", getIconForComponent(button, icon));
@@ -2229,9 +2289,15 @@ package org.jspresso.framework.view.flex {
       if(label) {
         button.label = label;
       }
-      if(tooltip) {
-        button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
+      if(toolTip) {
+        button.toolTip = toolTip + TOOLTIP_ELLIPSIS;
       }
+    }
+
+    public function createTextInputComponent():TextInput {
+      var tf:EnhancedTextInput = new EnhancedTextInput();
+      tf.preventDefaultButton = true;
+      return tf;
     }
 
     protected function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
@@ -2393,18 +2459,18 @@ package org.jspresso.framework.view.flex {
       return menus;
     }
 
-    public function createPopupButton(actionList:RActionList):Button {
+    public function createPopupButton(actionList:RActionList, topApplicationButton:Boolean=false):Button {
       if(actionList.actions == null || actionList.actions.length == 0) {
         return null;
       }
       if(actionList.actions.length == 1) {
-        return createAction(actionList.actions[0]);
+        return createAction(actionList.actions[0], topApplicationButton);
       }
       var dp:Object = createMenuItems(actionList);
       var menu:Menu = new Menu();
       menu.dataProvider = dp;
       menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
-      var popupButton:PopUpButton = new PopUpButton();
+      var popupButton:PopUpButton = createPopUpButtonComponent(topApplicationButton);
       popupButton.popUp = menu;
       var menuHandler:Function = function(event:MenuEvent):void  {
         if (event.item["data"] is RAction) {
@@ -2420,6 +2486,10 @@ package org.jspresso.framework.view.flex {
       });
       menu.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
       return popupButton;
+    }
+    
+    public function createPopUpButtonComponent(topApplicationButton:Boolean = false):PopUpButton {
+      return new PopUpButton();
     }
     
     public function createMenu(actionList:RActionList):Object {

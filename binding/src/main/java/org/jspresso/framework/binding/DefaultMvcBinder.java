@@ -52,15 +52,15 @@ public class DefaultMvcBinder implements IMvcBinder {
 
   private void bindChildren(ICompositeValueConnector viewConnector,
       ICompositeValueConnector modelConnector) {
-    for (String nextConnectorId : viewConnector.getChildConnectorKeys()) {
+    for (String nextChildConnectorKey : viewConnector.getChildConnectorKeys()) {
       IValueConnector nextChildViewConnector = viewConnector
-          .getChildConnector(nextConnectorId);
+          .getChildConnector(nextChildConnectorKey);
       if (modelConnector != null) {
         IValueConnector nextChildModelConnector = modelConnector
-            .getChildConnector(nextChildViewConnector.getId());
+            .getChildConnector(nextChildConnectorKey);
         if (nextChildModelConnector == null) {
-          throw new MissingConnectorException("Missing model connector for id "
-              + nextChildViewConnector.getId());
+          throw new MissingConnectorException(
+              "Missing model connector for key " + nextChildConnectorKey);
         }
         bind(nextChildViewConnector, nextChildModelConnector);
       } else {

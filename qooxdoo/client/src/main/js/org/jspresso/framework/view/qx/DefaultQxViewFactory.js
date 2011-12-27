@@ -13,19 +13,19 @@
  */
 
 /*
-#asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
-#asset(qx/icon/Oxygen/22/actions/dialog-close.png)
-#asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
-#asset(qx/icon/Oxygen/16/actions/dialog-close.png)
-
-#asset(qx/icon/Oxygen/16/actions/format-*.png)
-#asset(qx/icon/Oxygen/16/actions/edit-*.png)
-#asset(qx/icon/Oxygen/16/actions/insert-image.png)
-#asset(qx/icon/Oxygen/16/actions/insert-link.png)
-#asset(qx/icon/Oxygen/16/actions/insert-text.png)
-
-#asset(org/jspresso/framework/htmleditor/list-*.png)
-*/
+ * #asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
+ * #asset(qx/icon/Oxygen/22/actions/dialog-close.png)
+ * #asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
+ * #asset(qx/icon/Oxygen/16/actions/dialog-close.png)
+ * 
+ * #asset(qx/icon/Oxygen/16/actions/format-*.png)
+ * #asset(qx/icon/Oxygen/16/actions/edit-*.png)
+ * #asset(qx/icon/Oxygen/16/actions/insert-image.png)
+ * #asset(qx/icon/Oxygen/16/actions/insert-link.png)
+ * #asset(qx/icon/Oxygen/16/actions/insert-text.png)
+ * 
+ * #asset(org/jspresso/framework/htmleditor/list-*.png)
+ */
 
 qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   extend : qx.core.Object,
@@ -41,7 +41,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     _hexColorToQxColor : function(hexColor) {
       if (hexColor) {
-        return "#" + hexColor.substring(4); // ignore alpha
+        var offset;
+        if(hexColor.length == 10) {
+          offset = 4;
+        } else {
+          offset = 2;
+        }
+        return "#" + hexColor.substring(offset); // ignore alpha
       }
       return hexColor;
     },
@@ -50,7 +56,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (qxColor) {
         var rgbColor = qx.util.ColorUtil.stringToRgb(qxColor);
         return "0x" + "FF" + qx.util.ColorUtil.rgbToHexString(rgbColor); // ignore
-                                          // alpha
+        // alpha
       }
       return qxColor;
     }
@@ -69,7 +75,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __actionHandler : null,
     /** @type org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler */
     __commandHandler : null,
-    
+
     /** @type Array */
     __dateFormats : null,
     /** @type Array */
@@ -82,7 +88,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __shortDateTimeFormats : null,
     /** @type String */
     __datePattern : null,
-    
 
     /**
      * @param {org.jspresso.framework.gui.remote.RComponent}
@@ -141,9 +146,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (component == null) {
         component = new qx.ui.core.Widget();
       }
-      if (remoteComponent.getTooltip() != null) {
-        component.setToolTip(new qx.ui.tooltip.ToolTip(remoteComponent
-            .getTooltip()));
+      if (remoteComponent.getToolTip() != null && component.getToolTip() == null) {
+        var toolTip = new qx.ui.tooltip.ToolTip(remoteComponent
+            .getToolTip());
+        toolTip.setRich(true);
+        component.setToolTip(toolTip);
       }
       component = this._decorateWithActions(remoteComponent, component);
       if (remoteComponent.getBorderType()
@@ -158,7 +165,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         decorator.add(component);
         component = decorator;
       }
-      this._applyComponentStyle(component, remoteComponent);
+      this.applyComponentStyle(component, remoteComponent);
       var preferredSize = remoteComponent.getPreferredSize();
       if (preferredSize) {
         if (preferredSize.getWidth() > 0) {
@@ -174,7 +181,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return component;
     },
 
-    _applyComponentStyle : function(component, remoteComponent) {
+    applyComponentStyle : function(component, remoteComponent) {
       if (remoteComponent.getForeground()) {
         component
             .setTextColor(org.jspresso.framework.view.qx.DefaultQxViewFactory
@@ -328,7 +335,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createList : function(remoteList) {
       var list = new qx.ui.form.List();
-      if (remoteList.getSelectionMode() == "SINGLE_SELECTION") {
+      if (   remoteList.getSelectionMode() == "SINGLE_SELECTION"
+          || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
         list.setSelectionMode("single");
       } else {
         list.setSelectionMode("multi");
@@ -336,7 +344,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       /** @type org.jspresso.framework.state.remote.RemoteCompositeValueState */
       var state = remoteList.getState();
       var listController = new qx.data.controller.List(state
-              .getChildren(), list, "value");
+              .getChildren(), list, "children[1].value");
+      listController.setDelegate(new org.jspresso.framework.view.qx.EnhancedListDelegate());
       listController.setIconPath("iconImageUrl");
 
       listController.addListener("changeSelection", function(e) {
@@ -432,10 +441,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(imageComponent, "source", "value");
 
+      if(remoteImageComponent.getAction() != null) {
+        this.__remotePeerRegistry.register(remoteImageComponent.getAction());
+        imageComponent.addListener("click", function(e) {
+              this.__actionHandler.execute(remoteImageComponent.getAction());
+            }, this);
+      }
+
       if (remoteImageComponent.isScrollable()) {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.add(imageComponent);
-        return scrollContainer;
+        imageComponent = scrollContainer;
       } else {
         var borderContainer = new qx.ui.container.Composite();
         var borderLayout = new qx.ui.layout.Dock();
@@ -444,8 +460,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         borderContainer.add(imageComponent, {
               edge : "center"
             });
-        return borderContainer;
+        imageComponent = borderContainer;
       }
+      return imageComponent;
     },
 
     /**
@@ -472,7 +489,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       /** @type qx.ui.table.Table */
       var table;
       if (remoteTable.isHorizontallyScrollable()) {
-        table = new qx.ui.table.Table(tableModel);
+        table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel);
       } else {
         // Customize the table column model. We want one that
         // automatically
@@ -482,11 +499,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             return new qx.ui.table.columnmodel.Resize(obj);
           }
         };
-        table = new qx.ui.table.Table(tableModel, custom);
+        table = new org.jspresso.framework.view.qx.EnhancedTable(
+            tableModel, custom);
       }
       var columnModel = table.getTableColumnModel();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         var rColumn = remoteTable.getColumns()[i];
+        var rColumnHeader = remoteTable.getColumnHeaders()[i];
         var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(
             this, rColumn, this.__actionHandler);
         columnModel.setCellEditorFactory(i, editor);
@@ -508,9 +527,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else if (rColumn instanceof org.jspresso.framework.gui.remote.RActionField
             && !rColumn.isShowTextField()) {
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
+        } else if (rColumn instanceof org.jspresso.framework.gui.remote.RImageComponent) {
+          cellRenderer = new org.jspresso.framework.view.qx.ImageTableCellRenderer();
+          this.__remotePeerRegistry.register(rColumn.getAction());
+          cellRenderer.setAction(rColumn.getAction());
         } else {
           var format = this._createFormat(rColumn);
-          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(format);
+          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format);
           cellRenderer.setUseAutoAlign(false);
 
           if (rColumn instanceof org.jspresso.framework.gui.remote.RLink) {
@@ -566,6 +589,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer.setAdditionalAttributes(additionalAttributes);
 
           columnModel.setDataCellRenderer(i, cellRenderer);
+          columnModel.setHeaderCellRenderer(i, new org.jspresso.framework.view.qx.RComponentHeaderRenderer(table, this, rColumnHeader));
         }
         var columnWidth;
         if (rColumn.getPreferredSize()
@@ -605,7 +629,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var col = e.getColumn();
         var renderer = table.getTableColumnModel()
             .getDataCellRenderer(col);
-        if (renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer
+        if ((    renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer
+              || renderer instanceof org.jspresso.framework.view.qx.ImageTableCellRenderer)
             && renderer.getAction()) {
           this.__actionHandler.execute(renderer.getAction());
         }
@@ -626,6 +651,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } else if (remoteTable.getSelectionMode() == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
         selectionModel
             .setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE);
+      } else if (remoteTable.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+        selectionModel
+            .setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
       } else {
         selectionModel
             .setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
@@ -1132,8 +1160,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     _createDateComponent : function(remoteDateField) {
-      var dateComponent; 
-      if(remoteDateField.getType() == "DATE_TIME") {
+      var dateComponent;
+      if (remoteDateField.getType() == "DATE_TIME") {
         dateComponent = this._createDateTimeField(remoteDateField);
       } else {
         dateComponent = this._createDateField(remoteDateField);
@@ -1153,34 +1181,35 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       dateField.setDateFormat(dateFormat);
       var state = remoteDateField.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(dateField, "value", "value", true,
-        {
-          converter : function(modelValue, model) {
-            if(modelValue instanceof org.jspresso.framework.util.lang.DateDto) {
-              return org.jspresso.framework.util.format.DateUtils.fromDateDto(modelValue);
-            }
-            if(modelValue === undefined) {
-              modelValue = null;
-            }
-            if(!modelValue) {
-              dateField.resetValue();
-            }
-            return modelValue;
+      modelController.addTarget(dateField, "value", "value", true, {
+        converter : function(modelValue, model) {
+          if (modelValue instanceof org.jspresso.framework.util.lang.DateDto) {
+            return org.jspresso.framework.util.format.DateUtils
+                .fromDateDto(modelValue);
           }
-        }, {
-          converter : function(viewValue, model) {
-            if (viewValue != null && !remoteDateField.isTimezoneAware()) {
-              return org.jspresso.framework.util.format.DateUtils.fromDate(viewValue);
-            }
-            if(viewValue === undefined) {
-              viewValue = null;
-            }
-            if(!viewValue) {
-              dateField.resetValue();
-            }
-            return viewValue;
+          if (modelValue === undefined) {
+            modelValue = null;
           }
-        });
+          if (!modelValue) {
+            dateField.resetValue();
+          }
+          return modelValue;
+        }
+      }, {
+        converter : function(viewValue, model) {
+          if (viewValue != null && !remoteDateField.isTimezoneAware()) {
+            return org.jspresso.framework.util.format.DateUtils
+                .fromDate(viewValue);
+          }
+          if (viewValue === undefined) {
+            viewValue = null;
+          }
+          if (!viewValue) {
+            dateField.resetValue();
+          }
+          return viewValue;
+        }
+      });
       modelController.addTarget(dateField, "enabled", "writable", false);
       this
           ._sizeMaxComponentWidth(
@@ -1193,7 +1222,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createDateTimeField : function(remoteDateField) {
       var dateTimeField = new qx.ui.container.Composite();
       dateTimeField.setLayout(new qx.ui.layout.HBox());
-      
+
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
@@ -1201,7 +1230,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } finally {
         remoteDateField.setType(oldType);
       }
-      
+
       var remoteTimeField = new org.jspresso.framework.gui.remote.RTimeField();
       remoteTimeField.setBackground(remoteDateField.getBackground());
       remoteTimeField.setBorderType(remoteDateField.getBorderType());
@@ -1209,7 +1238,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setForeground(remoteDateField.getForeground());
       remoteTimeField.setGuid(remoteDateField.getGuid());
       remoteTimeField.setState(remoteDateField.getState());
-      remoteTimeField.setTooltip(remoteDateField.getTooltip());
+      remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.isSecondsAware());
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this
@@ -1217,10 +1246,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               dateTimeField,
               remoteDateField,
               org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
-              + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT + 4);
+                  + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT
+                  + 4);
       return dateTimeField;
     },
-    
+
     /**
      * @param {org.jspresso.framework.gui.remote.RActionComponent}
      *            remoteActionComponent
@@ -1273,6 +1303,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var actionComponent = this.createAction(actionList
               .getActions()[j])
           actionComponent.setFocusable(false);
+          actionComponent.setAllowStretchY(false, false);
           actionField.add(actionComponent);
           if (!mainAction) {
             mainAction = actionList.getActions()[j];
@@ -1292,8 +1323,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (content && content.length > 0) {
             if (content != state.getValue()) {
               textField.setValue(state.getValue());
-              if(e instanceof qx.event.type.Focus) {
-                if(e.getRelatedTarget() && e.getRelatedTarget() == actionField) {
+              if (e instanceof qx.event.type.Focus) {
+                if (e.getRelatedTarget()
+                    && e.getRelatedTarget() == actionField) {
                   return;
                 }
               }
@@ -1498,19 +1530,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var c = 0;
 
       if (remoteEvenGridContainer.getDrivingDimension() == "ROW") {
-        nbRows = remoteEvenGridContainer.getCells().length / remoteEvenGridContainer.getDrivingDimensionCellCount();
-        if (remoteEvenGridContainer.getCells().length
-            % remoteEvenGridContainer
-                .getDrivingDimensionCellCount() > 0) {
+        nbCols = remoteEvenGridContainer.getDrivingDimensionCellCount();
+        nbRows = remoteEvenGridContainer.getCells().length / nbCols;
+        if (remoteEvenGridContainer.getCells().length % nbCols > 0) {
           nbRows += 1
         }
-        nbCols = remoteEvenGridContainer.getDrivingDimensionCellCount();
       } else {
         nbRows = remoteEvenGridContainer.getDrivingDimensionCellCount();
-        nbCols = remoteEvenGridContainer.getCells().length / remoteEvenGridContainer.getDrivingDimensionCellCount();
-        if (remoteEvenGridContainer.getCells().length
-            % remoteEvenGridContainer
-                .getDrivingDimensionCellCount() > 0) {
+        nbCols = remoteEvenGridContainer.getCells().length / nbRows;
+        if (remoteEvenGridContainer.getCells().length % nbRows > 0) {
           nbCols += 1
         }
       }
@@ -1671,6 +1699,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             colSpan : 1
           });
       formLayout.setColumnFlex(lastCol, 10);
+      // Special toolTip handling
+      var state = remoteForm.getState();
+      var modelController = new qx.data.controller.Object(state);
+      var toolTip = new qx.ui.tooltip.ToolTip();
+      toolTip.setRich(true);
+      modelController.addTarget(toolTip, "label", "value", false, {
+            converter : this._modelToViewFieldConverter
+          });
+      form.setToolTip(toolTip);
       return form;
     },
 
@@ -2432,14 +2469,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param {String}
      *            label
      * @param {String}
-     *            tooltip
+     *            toolTip
      * @param {org.jspresso.framework.gui.remote.RIcon}
      *            icon
      * @return {qx.ui.form.Button}
      */
-    createButton : function(label, tooltip, icon) {
+    createButton : function(label, toolTip, icon) {
       var button = new qx.ui.form.Button();
-      this._completeButton(button, label, tooltip, icon);
+      this._completeButton(button, label, toolTip, icon);
       return button;
     },
 
@@ -2448,14 +2485,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param {String}
      *            label
      * @param {String}
-     *            tooltip
+     *            toolTip
      * @param {org.jspresso.framework.gui.remote.RIcon}
      *            icon
      * @return {qx.ui.menubar.Button}
      */
-    createMenubarButton : function(label, tooltip, icon) {
+    createMenubarButton : function(label, toolTip, icon) {
       var button = new qx.ui.menubar.Button();
-      this._completeButton(button, label, tooltip, icon);
+      this._completeButton(button, label, toolTip, icon);
       return button;
     },
 
@@ -2520,19 +2557,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param {String}
      *            label
      * @param {String}
-     *            tooltip
+     *            toolTip
      * @param {org.jspresso.framework.gui.remote.RIcon}
      *            icon
      * @return void
      */
-    _completeButton : function(button, label, tooltip, icon) {
+    _completeButton : function(button, label, toolTip, icon) {
       this.setIcon(button, icon);
       if (label) {
         button.setLabel(label);
       }
-      if (tooltip) {
-        button.setToolTip(new qx.ui.tooltip.ToolTip(tooltip
+      if (toolTip) {
+        button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip
             + this.self(arguments).__TOOLTIP_ELLIPSIS));
+        //to unblock tooltips on menu buttons
+        button.setBlockToolTip(false);
       }
     },
 
@@ -2624,23 +2663,30 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-          if(remoteComponent.isSecondsAware()) {
-            if(!this.__dateTimeFormats) {
-              this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
+          if (remoteComponent.isSecondsAware()) {
+            if (!this.__dateTimeFormats) {
+              this.__dateTimeFormats = this
+                  ._createDateFormats(this
+                      ._createDateTimeFormatPatterns());
             }
-            dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
+            dateTimeFormat
+                .setFormatDelegates(this.__dateTimeFormats);
           } else {
-            if(!this.__shortDateTimeFormats) {
-              this.__shortDateTimeFormats = this._createDateFormats(this._createShortDateTimeFormatPatterns());
+            if (!this.__shortDateTimeFormats) {
+              this.__shortDateTimeFormats = this
+                  ._createDateFormats(this
+                      ._createShortDateTimeFormatPatterns());
             }
-            dateTimeFormat.setFormatDelegates(this.__shortDateTimeFormats);
+            dateTimeFormat
+                .setFormatDelegates(this.__shortDateTimeFormats);
           }
           dateTimeFormat.setRemoteComponent(remoteComponent);
           return dateTimeFormat;
         } else {
           var dateFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-          if(!this.__dateFormats) {
-            this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
+          if (!this.__dateFormats) {
+            this.__dateFormats = this._createDateFormats(this
+                ._createDateFormatPatterns());
           }
           dateFormat.setFormatDelegates(this.__dateFormats);
           dateFormat.setRemoteComponent(remoteComponent);
@@ -2650,14 +2696,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         return new org.jspresso.framework.util.format.PasswordFormat();
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-        if(remoteComponent.isSecondsAware()) {
-          if(!this.__timeFormats) {
-            this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
+        if (remoteComponent.isSecondsAware()) {
+          if (!this.__timeFormats) {
+            this.__timeFormats = this._createDateFormats(this
+                ._createTimeFormatPatterns());
           }
           timeFormat.setFormatDelegates(this.__timeFormats);
         } else {
-          if(!this.__shortTimeFormats) {
-            this.__shortTimeFormats = this._createDateFormats(this._createShortTimeFormatPatterns());
+          if (!this.__shortTimeFormats) {
+            this.__shortTimeFormats = this._createDateFormats(this
+                ._createShortTimeFormatPatterns());
           }
           timeFormat.setFormatDelegates(this.__shortTimeFormats);
         }
@@ -2688,21 +2736,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     _createTimeFormatPatterns : function() {
       var formatPatterns = new Array();
-      formatPatterns.push(qx.locale.Date
-          .getDateTimeFormat("HHmmss", "HH:mm:ss"));
-      formatPatterns.push(qx.locale.Date
-          .getDateTimeFormat("HHmm", "HH:mm"));
-      formatPatterns.push(qx.locale.Date
-          .getDateTimeFormat("HH", "HH"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss",
+          "HH:mm:ss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm",
+          "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
       return formatPatterns;
     },
 
     _createShortTimeFormatPatterns : function() {
       var formatPatterns = new Array();
-      formatPatterns.push(qx.locale.Date
-          .getDateTimeFormat("HHmm", "HH:mm"));
-      formatPatterns.push(qx.locale.Date
-          .getDateTimeFormat("HH", "HH"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm",
+          "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
       return formatPatterns;
     },
 
@@ -2710,10 +2756,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var formatPatterns = new Array();
       var defaultFormatPattern = this._getDatePattern();
       formatPatterns.push(defaultFormatPattern);
-      for(var i = defaultFormatPattern.length; i > 0 ; i--) {
+      for (var i = defaultFormatPattern.length; i > 0; i--) {
         var subPattern = defaultFormatPattern.substring(0, i);
-        if(subPattern.charAt(subPattern.length -1) == "/") {
-          formatPatterns.push(subPattern.substring(0, subPattern.length -1));
+        if (subPattern.charAt(subPattern.length - 1) == "/") {
+          formatPatterns.push(subPattern.substring(0,
+              subPattern.length - 1));
         }
       }
       return formatPatterns;
@@ -2723,22 +2770,24 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var dateFormatPatterns = this._createDateFormatPatterns();
       var timeFormatPatterns = this._createTimeFormatPatterns();
       var formatPatterns = new Array();
-      for(var i = 0; i < dateFormatPatterns.length; i++) {
-        for(var j = 0; j < timeFormatPatterns.length; j++) {
-          formatPatterns.push(dateFormatPatterns[i] + " " + timeFormatPatterns[j]);
+      for (var i = 0; i < dateFormatPatterns.length; i++) {
+        for (var j = 0; j < timeFormatPatterns.length; j++) {
+          formatPatterns.push(dateFormatPatterns[i] + " "
+              + timeFormatPatterns[j]);
         }
         formatPatterns.push(dateFormatPatterns[i]);
       }
       return formatPatterns;
     },
-    
+
     _createShortDateTimeFormatPatterns : function() {
       var dateFormatPatterns = this._createDateFormatPatterns();
       var timeFormatPatterns = this._createShortTimeFormatPatterns();
       var formatPatterns = new Array();
-      for(var i = 0; i < dateFormatPatterns.length; i++) {
-        for(var j = 0; j < timeFormatPatterns.length; j++) {
-          formatPatterns.push(dateFormatPatterns[i] + " " + timeFormatPatterns[j]);
+      for (var i = 0; i < dateFormatPatterns.length; i++) {
+        for (var j = 0; j < timeFormatPatterns.length; j++) {
+          formatPatterns.push(dateFormatPatterns[i] + " "
+              + timeFormatPatterns[j]);
         }
         formatPatterns.push(dateFormatPatterns[i]);
       }
@@ -2747,7 +2796,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     _createDateFormats : function(formatPatterns) {
       var formats = new Array();
-      for(var i = 0; i < formatPatterns.length; i++) {
+      for (var i = 0; i < formatPatterns.length; i++) {
         formats.push(new qx.util.format.DateFormat(formatPatterns[i]));
       }
       return formats;
@@ -2766,7 +2815,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _sizeMaxComponentWidth : function(component, remoteComponent,
         expectedCharCount, maxCharCount) {
       var w;
-      this._applyComponentStyle(component, remoteComponent);
+      this.applyComponentStyle(component, remoteComponent);
       if (expectedCharCount == null) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
       }
@@ -2813,7 +2862,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         component.setTextAlign("right");
       }
     },
-    
+
     /**
      * 
      * @param {String}
@@ -2829,7 +2878,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return String
      */
     _getDatePattern : function() {
-      if(this.__datePattern) {
+      if (this.__datePattern) {
         return this.__datePattern;
       }
       return qx.locale.Date.getDateFormat("short");

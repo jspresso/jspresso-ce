@@ -126,4 +126,12 @@ public class MockFrontendController<E, F, G> extends
     return null;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setClipboardContent(String plainContent, String htmlContent) {
+    // NO-OP
+  }
+
 }

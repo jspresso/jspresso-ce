@@ -26,6 +26,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.collection.ISortable;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * A simple adapter to wrap a component used as selection criteria and a list of
@@ -36,7 +37,7 @@ import org.jspresso.framework.util.collection.ISortable;
  * @author Vincent Vandenschrick
  */
 public interface IQueryComponent extends Map<String, Object>, IPageable,
-    ISortable, Cloneable, IPropertyChangeCapable {
+    ISortable, ICloneable, IPropertyChangeCapable {
 
   /**
    * Ordering properties action constant.
@@ -113,6 +114,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * 
    * @return the query component clone.
    */
+  @Override
   IQueryComponent clone();
 
   /**

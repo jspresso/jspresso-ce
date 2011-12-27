@@ -21,16 +21,14 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
-import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -363,22 +361,10 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   @Override
   @SuppressWarnings("unchecked")
   public void preprocessSetter(final Object component, Object newValue) {
-    if (isMandatory() && newValue == null) {
-      IntegrityException ie = new IntegrityException("Mandatory property ["
-          + getName() + "] on component [" + component + "].") {
-
-        private static final long serialVersionUID = 5518554460713051123L;
-
-        @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
-          return translationProvider
-              .getTranslation("integrity.property.mandatory", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
-        }
-
-      };
-      throw ie;
+    if (isMandatory()
+        && (newValue == null || newValue instanceof Collection<?>
+            && ((Collection<?>) newValue).isEmpty())) {
+      throw new MandatoryPropertyException(this, component);
     }
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
@@ -776,7 +762,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused") String permId) {
+  public void setPermId(@SuppressWarnings("unused")
+  String permId) {
     throw new UnsupportedOperationException();
   }
 }

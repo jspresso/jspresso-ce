@@ -20,6 +20,7 @@ package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -29,6 +30,7 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
@@ -215,18 +217,28 @@ public class ControllerAwareEntityProxyInterceptor extends
     }
 
     // To avoid concurrent access modifications
-    Set<Object> cloneSet = new LinkedHashSet<Object>();
+    Set<Object> preFlushedEntities = new LinkedHashSet<Object>();
     while (entities.hasNext()) {
-      cloneSet.add(entities.next());
+      preFlushedEntities.add(entities.next());
     }
-    for (Object entity : cloneSet) {
-      if (entity instanceof IEntity) {
-        if (((IEntity) entity).isPersistent()) {
-          boolean isClean = false;
-          // Previously updated entities must be considered dirty thus
-          // we should trigger the onUpdate.
-          if (!(backendController.isUnitOfWorkActive() && backendController
-              .isUpdatedInUnitOfWork((IEntity) entity))) {
+    Set<Object> onUpdatedEntities = new HashSet<Object>();
+    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities,
+        onUpdatedEntities);
+    while (onUpdateTriggered) {
+      // Until the state is stable.
+      onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
+    }
+  }
+
+  private boolean triggerOnUpdate(Set<Object> preFlushedEntities,
+      Set<Object> onUpdatedEntities) {
+    boolean onUpdateTriggered = false;
+    for (Object entity : preFlushedEntities) {
+      if (entity instanceof ILifecycleCapable
+          && !onUpdatedEntities.contains(entity)) {
+        if (entity instanceof IEntity) {
+          if (((IEntity) entity).isPersistent()) {
+            boolean isClean = false;
             Map<String, Object> dirtyProperties = backendController
                 .getDirtyProperties((IEntity) entity);
             if (dirtyProperties != null) {
@@ -244,17 +256,21 @@ public class ControllerAwareEntityProxyInterceptor extends
               // considered dirty.
               isClean = true;
             }
-          }
-          if (!isClean
-              && !backendController
-                  .isEntityRegisteredForDeletion((IEntity) entity)) {
-            // the entity is dirty and is going to be flushed.
-            ((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
-                getEntityLifecycleHandler());
+            if (!onUpdatedEntities.contains(entity)
+                && !isClean
+                && !backendController
+                    .isEntityRegisteredForDeletion((IEntity) entity)) {
+              // the entity is dirty and is going to be flushed.
+              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(),
+                  getPrincipal(), getEntityLifecycleHandler());
+              onUpdatedEntities.add(entity);
+              onUpdateTriggered = true;
+            }
           }
         }
       }
     }
+    return onUpdateTriggered;
   }
 
   /**

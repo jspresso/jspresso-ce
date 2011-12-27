@@ -100,6 +100,8 @@ import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.ICloneable;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -218,9 +220,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -258,9 +258,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
               actionHandler, locale);
           if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
             ((IItemSelectable) view.getConnector())
-                .addItemSelectionListener(new ItemSelectionAdapter(
+                .addItemSelectionListener(new ConnectorActionAdapter<E, G>(
                     ((ITreeViewDescriptor) viewDescriptor)
-                        .getItemSelectionAction(), actionHandler, view));
+                        .getItemSelectionAction(), getActionFactory(),
+                    actionHandler, view));
           }
         } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
           view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
@@ -612,7 +613,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected void attachDefaultCollectionListener(
       ICollectionConnector collectionConnector) {
     collectionConnector.addValueChangeListener(firstRowSelector);
-
   }
 
   /**
@@ -632,7 +632,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
               .createConfigurableCollectionConnectorProvider(
                   ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector());
+          mainConnector.addChildConnector(masterView.getConnector().getId(),
+              masterView.getConnector());
           if (masterView.getConnector() instanceof ICollectionConnector) {
             mainConnector
                 .setCollectionConnectorProvider((ICollectionConnector) masterView
@@ -643,7 +644,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           ICompositeValueConnector mainConnector = getConnectorFactory()
               .createCompositeValueConnector(
                   ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector());
+          mainConnector.addChildConnector(masterView.getConnector().getId(),
+              masterView.getConnector());
           viewConnector = mainConnector;
         }
         view.setConnector(viewConnector);
@@ -655,7 +657,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
-            wrapper.addChildConnector(detailView.getConnector());
+            wrapper.addChildConnector(detailView.getConnector().getId(),
+                detailView.getConnector());
             if (detailView.getConnector() instanceof ICollectionConnector) {
               wrapper
                   .setCollectionConnectorProvider((ICollectionConnector) detailView
@@ -687,7 +690,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<E> childView : view.getChildren()) {
-          connector.addChildConnector(childView.getConnector());
+          connector.addChildConnector(childView.getConnector().getId(),
+              childView.getConnector());
         }
       }
     }
@@ -804,10 +808,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
             ICompositeValueConnector parentConnector = (AbstractCompositeValueConnector) getConnector();
             if (parentConnector != null && oldChildConnector != null) {
               getMvcBinder().bind(oldChildConnector, null);
-              parentConnector.removeChildConnector(oldChildConnector);
+              parentConnector.removeChildConnector(oldChildConnector.getId());
+              oldChildConnector.setParentConnector(null);
             }
             if (parentConnector != null && childConnector != null) {
-              parentConnector.addChildConnector(childConnector);
+              parentConnector.addChildConnector(childConnector.getId(),
+                  childConnector);
               if (parentConnector.getModelConnector() != null) {
                 getMvcBinder().bind(
                     childConnector,
@@ -1914,7 +1920,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createColorPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    decorateWithDescription(propertyDescriptor, actionHandler, locale, view);
+    if (view != null && propertyViewDescriptor.getAction() != null
+        && !propertyViewDescriptor.isReadOnly()) {
+      // We must listen for incoming connector value change to trigger the
+      // action.
+      final IValueConnector viewConnector = view.getConnector();
+      if (viewConnector != null) {
+        viewConnector.addValueChangeListener(new ConnectorActionAdapter<E, G>(
+            propertyViewDescriptor.getAction(), getActionFactory(),
+            actionHandler, view));
+      }
+    }
     return view;
   }
 
@@ -2195,7 +2211,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
               ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
                   viewDescriptor, actionHandler, locale, subtreeViewDescriptor,
                   1);
-              compositeConnector.addChildConnector(subtreeConnector);
+              compositeConnector.addChildConnector(subtreeConnector.getId(),
+                  subtreeConnector);
               subtreeConnectors.add(subtreeConnector);
             } finally {
               actionHandler.restoreLastSecurityContextSnapshot();
@@ -2219,7 +2236,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             actionHandler.pushToSecurityContext(childDescriptor);
             ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
                 viewDescriptor, actionHandler, locale, childDescriptor, 1);
-            simpleConnector.addChildConnector(subtreeConnector);
+            simpleConnector.addChildConnector(subtreeConnector.getId(),
+                subtreeConnector);
             simpleConnector.setCollectionConnectorProvider(subtreeConnector);
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
@@ -2275,22 +2293,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract void decorateWithBorder(IView<E> view,
       ITranslationProvider translationProvider, Locale locale);
-
-  /**
-   * Decorates a property view with its description.
-   * 
-   * @param propertyDescriptor
-   *          the property descriptor.
-   * @param translationProvider
-   *          the translation provider.
-   * @param locale
-   *          the locale.
-   * @param view
-   *          the property view.
-   */
-  protected abstract void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale, IView<E> view);
 
   /**
    * Applies the font and color configuration to a view.
@@ -2733,8 +2735,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (view != null) {
       if (viewDescriptor.getItemSelectionAction() != null) {
         ((IItemSelectable) view.getConnector())
-            .addItemSelectionListener(new ItemSelectionAdapter(viewDescriptor
-                .getItemSelectionAction(), actionHandler, view));
+            .addItemSelectionListener(new ConnectorActionAdapter<E, G>(
+                viewDescriptor.getItemSelectionAction(), getActionFactory(),
+                actionHandler, view));
       }
       if (viewDescriptor.getPaginationViewDescriptor() != null) {
         IView<E> paginationView = createPaginationView(
@@ -2742,6 +2745,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
             locale);
         view.setPeer(decorateWithPaginationView(view.getPeer(),
             paginationView.getPeer()));
+      }
+      if (viewDescriptor.isAutoSelectFirstRow()) {
+        attachDefaultCollectionListener((ICollectionConnector) view
+            .getConnector());
       }
     }
   }
@@ -2780,7 +2787,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             ICollectionConnectorProvider childConnector = createNodeGroupConnector(
                 viewDescriptor, actionHandler, locale, childDescriptor,
                 depth + 1);
-            nodeGroupPrototypeConnector.addChildConnector(childConnector);
+            nodeGroupPrototypeConnector.addChildConnector(
+                childConnector.getId(), childConnector);
             subtreeConnectors.add(childConnector);
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
@@ -2878,7 +2886,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
         actionHandler.pushToSecurityContext(childDescriptor);
         ICollectionConnectorProvider childConnector = createNodeGroupConnector(
             viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
+        nodeGroupPrototypeConnector.addChildConnector(childConnector.getId(),
+            childConnector);
         nodeGroupPrototypeConnector
             .setCollectionConnectorProvider(childConnector);
       } finally {
@@ -2904,15 +2913,42 @@ public abstract class AbstractViewFactory<E, F, G> implements
     return nodeGroupCollectionConnector;
   }
 
-  private class ItemSelectionAdapter implements IItemSelectionListener {
+  /**
+   * Connector action adapter.
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   * @param <E>
+   *          the actual component type.
+   * @param <F>
+   *          the actual action type.
+   */
+  protected static class ConnectorActionAdapter<E, F> implements
+      IItemSelectionListener, IValueChangeListener, ICloneable {
 
-    private IAction        actionDelegate;
-    private IActionHandler actionHandler;
-    private IView<E>       view;
+    private IAction              actionDelegate;
+    private IActionFactory<F, E> actionFactory;
+    private IActionHandler       actionHandler;
+    private IView<E>             view;
 
-    public ItemSelectionAdapter(IAction actionDelegate,
-        IActionHandler actionHandler, IView<E> view) {
+    /**
+     * Constructs a new <code>ConnectorActionAdapter</code> instance.
+     * 
+     * @param actionDelegate
+     *          the action to trigger when the connector value/selection
+     *          changes.
+     * @param actionFactory
+     *          the action factory.
+     * @param actionHandler
+     *          the action handler.
+     * @param view
+     *          the view to use in the context.
+     */
+    public ConnectorActionAdapter(IAction actionDelegate,
+        IActionFactory<F, E> actionFactory, IActionHandler actionHandler,
+        IView<E> view) {
       this.actionDelegate = actionDelegate;
+      this.actionFactory = actionFactory;
       this.actionHandler = actionHandler;
       this.view = view;
     }
@@ -2920,11 +2956,55 @@ public abstract class AbstractViewFactory<E, F, G> implements
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
+    @Override
+    public ConnectorActionAdapter<E, F> clone() {
+      try {
+        return (ConnectorActionAdapter<E, F>) super.clone();
+      } catch (CloneNotSupportedException ex) {
+        // Cannot happen.
+        return null;
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void selectedItemChange(ItemSelectionEvent event) {
-      Map<String, Object> context = getActionFactory().createActionContext(
+      Object actionParam = event.getSelectedItem();
+      triggerAction(actionParam);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void valueChange(ValueChangeEvent evt) {
+      IValueConnector viewConnector = (IValueConnector) evt.getSource();
+      final IValueConnector modelConnector = viewConnector.getModelConnector();
+      if (modelConnector != null
+          && !ObjectUtils.equals(evt.getNewValue(),
+              modelConnector.getConnectorValue())) {
+        // this is not a model notification, so arm to trigger the action once
+        // the model is actually updated.
+        modelConnector.addValueChangeListener(new IValueChangeListener() {
+
+          @Override
+          public void valueChange(ValueChangeEvent modelEvt) {
+            // This is a 1 shot event.
+            modelConnector.removeValueChangeListener(this);
+            triggerAction(modelEvt.getOldValue());
+          }
+        });
+      }
+
+    }
+
+    private void triggerAction(Object actionParam) {
+      Map<String, Object> context = actionFactory.createActionContext(
           actionHandler, view, view.getConnector(), null, view.getPeer());
-      context.put(ActionContextConstants.ACTION_PARAM, event.getSelectedItem());
+      context.put(ActionContextConstants.ACTION_PARAM, actionParam);
       actionHandler.execute(actionDelegate, context);
     }
   }
@@ -2973,9 +3053,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
-          columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
-          };
+          columnPrefs[i] = new Object[] {column[0], new Integer(column[1])};
         }
       }
     }

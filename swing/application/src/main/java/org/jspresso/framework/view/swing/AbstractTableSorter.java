@@ -251,13 +251,13 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
       TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
       if (defaultRenderer instanceof SortableHeaderRenderer) {
         this.tableHeader
-            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
+            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).delegate);
       }
     }
     this.tableHeader = tableHeader;
     if (this.tableHeader != null) {
       this.tableHeader.addMouseListener(mouseListener);
-      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
+      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(this,
           this.tableHeader.getDefaultRenderer()));
     }
   }
@@ -351,7 +351,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    *          column.
    * @return HeaderRendererIcon
    */
-  protected Icon getHeaderRendererIcon(int column) {
+  public Icon getHeaderRendererIcon(int column) {
     Directive directive = getDirective(column);
     if (directive == NOT_SORTED_DIRECTIVE) {
       return null;
@@ -479,18 +479,29 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     }
   }
 
-  private class SortableHeaderRenderer implements TableCellRenderer {
+  /**
+   * Decorates a table cell renderer with sorting state.
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   */
+  public static class SortableHeaderRenderer implements TableCellRenderer {
 
-    private TableCellRenderer tableCellRenderer;
+    private AbstractTableSorter tableSorter;
+    private TableCellRenderer   delegate;
 
     /**
      * Constructs a new <code>SortableHeaderRenderer</code> instance.
      * 
-     * @param tableCellRenderer
+     * @param tableSorter
+     *          the table sorter used to compute the sort icon.
+     * @param delegate
      *          the wrapped table cell renderer.
      */
-    public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
-      this.tableCellRenderer = tableCellRenderer;
+    public SortableHeaderRenderer(AbstractTableSorter tableSorter,
+        TableCellRenderer delegate) {
+      this.tableSorter = tableSorter;
+      this.delegate = delegate;
     }
 
     /**
@@ -499,13 +510,13 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
         boolean isSelected, boolean hasFocus, int row, int column) {
-      Component c = tableCellRenderer.getTableCellRendererComponent(table,
-          value, isSelected, hasFocus, row, column);
+      Component c = delegate.getTableCellRendererComponent(table, value,
+          isSelected, hasFocus, row, column);
       if (c instanceof JLabel) {
         JLabel l = (JLabel) c;
         l.setHorizontalTextPosition(SwingConstants.LEFT);
         int modelColumn = table.convertColumnIndexToModel(column);
-        l.setIcon(getHeaderRendererIcon(modelColumn));
+        l.setIcon(tableSorter.getHeaderRendererIcon(modelColumn));
       }
       return c;
     }

@@ -50,7 +50,7 @@ public final class CollectionConnectorHelper {
    *            the index used.
    * @return the created connector id.
    */
-  public static String computeConnectorId(String baseId, int i) {
+  public static String computeStorageKey(String baseId, int i) {
     return baseId + "[" + i + "]";
   }
 

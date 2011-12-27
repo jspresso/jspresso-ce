@@ -138,8 +138,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           connector.removeValueChangeListener(this);
         } else {
           ((IRemoteStateOwner) connector).synchRemoteState();
-          RemoteValueState state = ((IRemoteStateOwner) connector)
-              .getState();
+          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
           RemoteValueCommand command = new RemoteValueCommand();
           command.setTargetPeerGuid(state.getGuid());
           command.setValue(state.getValue());
@@ -153,7 +152,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void valueChange(ValueChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
         ((IRemoteStateOwner) connector).synchRemoteState();
-        RemoteFormattedValueState state = (RemoteFormattedValueState) ((IRemoteStateOwner) connector).getState();
+        RemoteFormattedValueState state = (RemoteFormattedValueState) ((IRemoteStateOwner) connector)
+            .getState();
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());
@@ -389,8 +389,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public RemoteValueState createRemoteValueState(String guid,
-      String permId) {
+  public RemoteValueState createRemoteValueState(String guid, String permId) {
     RemoteValueState state = new RemoteValueState(guid);
     state.setPermId(registerPermId(permId, guid));
     // connectors are registered with the same guid as their state.
@@ -554,8 +553,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       AbstractCompositeValueConnector compositeValueConnector,
       String renderingConnectorId) {
     if (renderingConnectorId != null) {
-      compositeValueConnector
-          .addChildConnector(createValueConnector(renderingConnectorId));
+      compositeValueConnector.addChildConnector(renderingConnectorId,
+          createValueConnector(renderingConnectorId));
       compositeValueConnector
           .setRenderingChildConnectorId(renderingConnectorId);
     }

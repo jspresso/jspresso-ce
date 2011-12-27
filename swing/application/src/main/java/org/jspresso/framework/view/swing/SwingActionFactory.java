@@ -51,6 +51,9 @@ public class SwingActionFactory extends
   @Override
   public Action createAction(IAction action, Dimension dimension,
       IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
+    if (action == null) {
+      return null;
+    }
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
@@ -108,7 +111,7 @@ public class SwingActionFactory extends
         putValue(Action.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
             .getI18nDescription(actionHandler, locale);
-        if (i18nDescription != null) {
+        if (i18nDescription != null && i18nDescription.length() > 1) {
           putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
         }
         putValue(

@@ -25,13 +25,14 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.ToolTipManager;
 
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.swing.CollectionConnectorListModel;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
-import org.jspresso.framework.view.IViewFactory;
 
 /**
  * A list cell renderer alternating background color.
@@ -39,21 +40,25 @@ import org.jspresso.framework.view.IViewFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EvenOddListCellRenderer extends
-    DefaultListCellRenderer {
+public class EvenOddListCellRenderer extends DefaultListCellRenderer {
 
   private static final long  serialVersionUID = 2051850807889065438L;
   private Color              backgroundBase;
   private IIconFactory<Icon> iconFactory;
+  private String             cellConnectorKey;
 
   /**
    * Constructs a new <code>EvenOddListCellRenderer</code> instance.
    * 
    * @param iconFactory
+   * @param cellConnectorKey
+   *          the key used to retrieve the child cell connector.
    */
-  public EvenOddListCellRenderer(IIconFactory<Icon> iconFactory) {
+  public EvenOddListCellRenderer(IIconFactory<Icon> iconFactory,
+      String cellConnectorKey) {
     super();
     this.iconFactory = iconFactory;
+    this.cellConnectorKey = cellConnectorKey;
   }
 
   /**
@@ -62,20 +67,30 @@ public class EvenOddListCellRenderer extends
   @Override
   public Component getListCellRendererComponent(JList list, Object value,
       int index, boolean isSelected, boolean cellHasFocus) {
-    JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
-        cellHasFocus);
+    JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value,
+        index, isSelected, cellHasFocus);
     if (value instanceof IValueConnector) {
       if (value instanceof IRenderableCompositeValueConnector) {
-        renderer.setText(((IRenderableCompositeValueConnector) value)
-            .getDisplayValue());
+        IValueConnector cellConnector = ((IRenderableCompositeValueConnector) value)
+            .getChildConnector(cellConnectorKey);
+        if (cellConnector.getConnectorValue() != null) {
+          renderer.setText(cellConnector.getConnectorValue().toString());
+        } else {
+          renderer.setText("");
+        }
         renderer.setIcon(iconFactory.getIcon(
             ((IRenderableCompositeValueConnector) value)
                 .getDisplayIconImageUrl(), iconFactory.getSmallIconSize()));
+        ListModel lm = list.getModel();
+        if (lm instanceof CollectionConnectorListModel) {
+          setToolTipText(((CollectionConnectorListModel) lm)
+              .getRowToolTip(index));
+        }
         if (((IRenderableCompositeValueConnector) value)
             .getDisplayDescription() != null) {
           ToolTipManager.sharedInstance().registerComponent(list);
           renderer.setToolTipText(((IRenderableCompositeValueConnector) value)
-              .getDisplayDescription() + IViewFactory.TOOLTIP_ELLIPSIS);
+              .getDisplayDescription());
         }
       } else {
         renderer.setText(value.toString());

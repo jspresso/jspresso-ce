@@ -103,8 +103,8 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
       AbstractCompositeValueConnector compositeValueConnector,
       String renderingConnectorId) {
     if (renderingConnectorId != null) {
-      compositeValueConnector
-          .addChildConnector(createValueConnector(renderingConnectorId));
+      compositeValueConnector.addChildConnector(renderingConnectorId,
+          createValueConnector(renderingConnectorId));
       compositeValueConnector
           .setRenderingChildConnectorId(renderingConnectorId);
     }

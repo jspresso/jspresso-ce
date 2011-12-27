@@ -30,6 +30,7 @@ public class RTable extends RCollectionComponent {
 
   private String[]          columnIds;
   private RComponent[]      columns;
+  private RComponent[]      columnHeaders;
   private boolean           horizontallyScrollable;
   private boolean           sortable;
   private RAction           sortingAction;
@@ -45,8 +46,8 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
-   * Constructs a new <code>RTable</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RTable</code> instance. Only used for serialization
+   * support.
    */
   public RTable() {
     // For serialization support
@@ -145,5 +146,24 @@ public class RTable extends RCollectionComponent {
    */
   public void setSortingAction(RAction sortingAction) {
     this.sortingAction = sortingAction;
+  }
+
+  /**
+   * Gets the columnHeaders.
+   * 
+   * @return the columnHeaders.
+   */
+  public RComponent[] getColumnHeaders() {
+    return columnHeaders;
+  }
+
+  /**
+   * Sets the columnHeaders.
+   * 
+   * @param columnHeaders
+   *          the columnHeaders to set.
+   */
+  public void setColumnHeaders(RComponent[] columnHeaders) {
+    this.columnHeaders = columnHeaders;
   }
 }

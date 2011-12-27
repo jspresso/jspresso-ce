@@ -64,17 +64,6 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Adds a new child connector.
-   * 
-   * @param connector
-   *          the connector to be added as composite.
-   */
-  @Override
-  public void addChildConnector(IValueConnector connector) {
-    addChildConnector(connector.getId(), connector);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -100,8 +89,8 @@ public abstract class AbstractCompositeValueConnector extends
     clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
     clonedConnector.itemSelectionSupport = new ItemSelectionSupport();
     for (String connectorKey : getChildConnectorKeys()) {
-      clonedConnector
-          .addChildConnector(getChildConnector(connectorKey).clone());
+      clonedConnector.addChildConnector(connectorKey,
+          getChildConnector(connectorKey).clone());
     }
     return clonedConnector;
   }
@@ -277,17 +266,30 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
+   * Adds a new child connector to this composite. The key used as storage key
+   * is the child connector id.
+   * 
+   * @param childConnector
+   *          the added connector.
+   */
+  @Override
+  public final void addChildConnector(IValueConnector childConnector) {
+    addChildConnector(childConnector.getId(), childConnector);
+  }
+
+  /**
    * Adds a new child connector using a specified storage key.
    * 
    * @param storageKey
    *          the key to use to store the child connector. It may be different
    *          from its id.
-   * @param connector
+   * @param childConnector
    *          the connector to be added as composite.
    */
-  protected void addChildConnector(String storageKey, IValueConnector connector) {
-    childConnectors.put(storageKey, connector);
-    connector.setParentConnector(this);
+  @Override
+  public void addChildConnector(String storageKey, IValueConnector childConnector) {
+    childConnectors.put(storageKey, childConnector);
+    childConnector.setParentConnector(this);
   }
 
   /**
@@ -379,18 +381,11 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Removes a child connector.
-   * 
-   * @param connector
-   *          the connector to be removed.
+   * {@inheritDoc}
    */
   @Override
-  public void removeChildConnector(IValueConnector connector) {
-    IValueConnector removedConnector = childConnectors
-        .remove(connector.getId());
-    if (removedConnector != null) {
-      removedConnector.setParentConnector(null);
-    }
+  public void removeChildConnector(String storageKey) {
+    childConnectors.remove(storageKey);
   }
 
   /**

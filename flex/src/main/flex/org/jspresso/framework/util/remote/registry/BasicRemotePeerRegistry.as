@@ -24,7 +24,7 @@ package org.jspresso.framework.util.remote.registry {
     }
 
     public function register(remotePeer:IRemotePeer):void {
-      if(remotePeer) {
+      if(remotePeer && remotePeer.guid) {
         _backingStore[remotePeer.guid] = remotePeer;
       }
     }
@@ -34,7 +34,7 @@ package org.jspresso.framework.util.remote.registry {
     }
 
     public function unregister(remotePeer:IRemotePeer):void {
-      if(remotePeer) {
+      if(remotePeer && remotePeer.guid) {
         delete _backingStore[remotePeer.guid];
       }
     }

@@ -19,8 +19,10 @@
 package org.jspresso.framework.binding.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   private SelectionChangeSupport       selectionChangeSupport;
 
+  private List<IValueConnector>        connectorTank;
+
   /**
    * Constructs a new model property connector on a model collection property.
    * This constructor does not specify the element class of this collection
@@ -67,17 +71,27 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     this.modelConnectorFactory = modelConnectorFactory;
     childConnectors = new LinkedHashMap<String, IValueConnector>();
     selectionChangeSupport = new SelectionChangeSupport(this);
+    connectorTank = new ArrayList<IValueConnector>();
   }
 
   /**
-   * Adds a new child connector.
+   * Adds a new child connector to this composite. The key used as storage key
+   * is the child connector id.
    * 
-   * @param connector
-   *          the connector to be added as composite.
+   * @param childConnector
+   *          the added connector.
    */
   @Override
-  public void addChildConnector(IValueConnector connector) {
-    childConnectors.put(connector.getId(), connector);
+  public final void addChildConnector(IValueConnector childConnector) {
+    addChildConnector(childConnector.getId(), childConnector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addChildConnector(String storageKey, IValueConnector connector) {
+    childConnectors.put(storageKey, connector);
     connector.setParentConnector(this);
   }
 
@@ -153,6 +167,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public IValueConnector createChildConnector(String connectorId) {
+    if (!connectorTank.isEmpty()) {
+      return connectorTank.remove(0);
+    }
     IComponentDescriptor<?> componentDescriptor;
     componentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
         .getCollectionDescriptor().getElementDescriptor();
@@ -167,7 +184,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public IValueConnector getChildConnector(int index) {
-    return getChildConnector(computeConnectorId(index));
+    return getChildConnector(computeStorageKey(index));
   }
 
   /**
@@ -313,8 +330,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   @Override
-  public void setTracksChildrenSelection(
-      @SuppressWarnings("unused") boolean tracksChildrenSelection) {
+  public void setTracksChildrenSelection(@SuppressWarnings("unused")
+  boolean tracksChildrenSelection) {
     throw new UnsupportedOperationException();
   }
 
@@ -339,25 +356,21 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
   }
 
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  private String computeStorageKey(int i) {
+    return CollectionConnectorHelper.computeStorageKey(getId(), i);
   }
 
   /**
-   * Removes a child connector.
-   * 
-   * @param connector
-   *          the connector to be removed.
+   * {@inheritDoc}
    */
   @Override
-  public void removeChildConnector(IValueConnector connector) {
-    IValueConnector removedConnector = childConnectors
-        .remove(connector.getId());
-    if (removedConnector != null) {
-      removedConnector.setParentConnector(null);
-      removedConnector.cleanBindings();
-      removedConnector.setConnectorValue(null);
-    }
+  public void removeChildConnector(String storageKey) {
+    childConnectors.remove(storageKey);
+  }
+
+  private void cleanupConnector(IValueConnector removedConnector) {
+    removedConnector.recycle();
+    connectorTank.add(removedConnector);
   }
 
   /**
@@ -365,24 +378,40 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   private void updateChildConnectors() {
     Collection<?> modelCollection = (Collection<?>) getConnecteeValue();
-    int modelCollectionSize = 0;
+    Map<Object, List<IValueConnector>> existingConnectorsByValue = new HashMap<Object, List<IValueConnector>>();
+    for (String connectorKey : new ArrayList<String>(getChildConnectorKeys())) {
+      IValueConnector childConnector = getChildConnector(connectorKey);
+      List<IValueConnector> existingConnectors = existingConnectorsByValue
+          .get(childConnector.getConnectorValue());
+      if (existingConnectors == null) {
+        existingConnectors = new ArrayList<IValueConnector>();
+        existingConnectorsByValue.put(childConnector.getConnectorValue(),
+            existingConnectors);
+      }
+      existingConnectors.add(childConnector);
+      removeChildConnector(connectorKey);
+    }
     if (modelCollection != null && modelCollection.size() > 0) {
-      modelCollectionSize = modelCollection.size();
       int i = 0;
-
       for (Object nextCollectionElement : modelCollection) {
-        IValueConnector childConnector = getChildConnector(i);
-        if (childConnector == null) {
-          childConnector = createChildConnector(computeConnectorId(i));
-          addChildConnector(childConnector);
+        IValueConnector connector;
+        List<IValueConnector> existingConnectors = existingConnectorsByValue
+            .get(nextCollectionElement);
+        if (existingConnectors != null && !existingConnectors.isEmpty()) {
+          connector = existingConnectors.remove(0);
+        } else {
+          connector = createChildConnector(getId() + "Element");
+          connector.setConnectorValue(nextCollectionElement);
         }
-        childConnector.setConnectorValue(nextCollectionElement);
+        addChildConnector(computeStorageKey(i), connector);
         i++;
       }
     }
-    while (getChildConnectorCount() != modelCollectionSize) {
-      IValueConnector childConnector = getChildConnector(computeConnectorId(getChildConnectorCount() - 1));
-      removeChildConnector(childConnector);
+    for (List<IValueConnector> obsoleteConnectors : existingConnectorsByValue
+        .values()) {
+      for (IValueConnector obsoleteConnector : obsoleteConnectors) {
+        cleanupConnector(obsoleteConnector);
+      }
     }
   }
 }

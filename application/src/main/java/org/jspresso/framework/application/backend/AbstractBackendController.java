@@ -56,6 +56,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -314,7 +315,7 @@ public abstract class AbstractBackendController extends AbstractController
         Object currentProperty = entity.straightGetProperty(property.getKey());
         if ((currentProperty != null
             && !(currentProperty instanceof Collection) && currentProperty
-            .equals(property.getValue()))
+              .equals(property.getValue()))
             || (currentProperty == null && propertyValue == null)) {
           // Unfortunately, we cannot ignore collections that have been
           // changed but reset to their original state. This prevents the entity
@@ -1056,8 +1057,10 @@ public abstract class AbstractBackendController extends AbstractController
     }
     unitOfWork
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
-    uowEntity.onLoad();
-    uowEntity.onClone(entity);
+    if (uowEntity instanceof ILifecycleCapable) {
+      ((ILifecycleCapable) uowEntity).onLoad();
+      ((ILifecycleCapable) uowEntity).onClone(entity);
+    }
     return uowEntity;
   }
 
@@ -1243,8 +1246,10 @@ public abstract class AbstractBackendController extends AbstractController
         // case only versionControl false properties have changed.
         cleanDirtyProperties(registeredEntity);
       }
-      registeredEntity.onLoad();
-      registeredEntity.onClone(entity);
+      if (registeredEntity instanceof ILifecycleCapable) {
+        ((ILifecycleCapable) registeredEntity).onLoad();
+        ((ILifecycleCapable) registeredEntity).onClone(entity);
+      }
       return registeredEntity;
     } finally {
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);
@@ -1536,7 +1541,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-      /* getName(), */getApplicationSession().getPrincipal().getName()});
+        /* getName(), */getApplicationSession().getPrincipal().getName()
+      });
     }
 
   }
@@ -1726,7 +1732,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Configures a custom translation plugin on the controller. The controller
    * itself is a translation provider and is used as such across most of the
-   * application layers. The custom security plugin is used to override the
+   * application layers. The custom translation plugin is used to override the
    * default static, bundle-based, i18n scheme.
    * 
    * @param customTranslationPlugin

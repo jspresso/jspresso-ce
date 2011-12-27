@@ -60,6 +60,9 @@ public class RemoteActionFactory extends
   @Override
   public RAction createAction(IAction action, Dimension dimension,
       IActionHandler actionHandler, IView<RComponent> view, Locale locale) {
+    if (action == null) {
+      return null;
+    }
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
@@ -132,8 +135,8 @@ public class RemoteActionFactory extends
           actionHandler, locale));
       String i18nDescription = ((IDisplayableAction) action)
           .getI18nDescription(actionHandler, locale);
-      if (i18nDescription != null) {
-        remoteAction.setDescription(i18nDescription);
+      if (i18nDescription != null && i18nDescription.length() > 0) {
+        remoteAction.setDescription(i18nDescription + TOOLTIP_ELLIPSIS);
       }
       remoteAction.setIcon(getIconFactory().getIcon(
           ((IDisplayableAction) action).getIconImageURL(), dimension));

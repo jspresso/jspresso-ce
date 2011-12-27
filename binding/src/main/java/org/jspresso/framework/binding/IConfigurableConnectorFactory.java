@@ -53,7 +53,7 @@ public interface IConfigurableConnectorFactory {
    *          the child connector used to render the composite connector value.
    * @return the created connector.
    */
-  ICompositeValueConnector createCompositeValueConnector(String id,
+  IRenderableCompositeValueConnector createCompositeValueConnector(String id,
       String renderingConnectorId);
 
   /**

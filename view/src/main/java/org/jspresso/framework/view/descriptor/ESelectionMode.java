@@ -49,5 +49,10 @@ public enum ESelectionMode {
   /**
    * <code>SINGLE_SELECTION</code>.
    */
-  SINGLE_SELECTION
+  SINGLE_SELECTION,
+
+  /**
+   * <code>SINGLE_CUMULATIVE_SELECTION</code>.
+   */
+  SINGLE_CUMULATIVE_SELECTION
 }

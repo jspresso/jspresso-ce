@@ -27,7 +27,7 @@ qx.Class.define("org.jspresso.framework.util.remote.registry.BasicRemotePeerRegi
     __backingStore : {},
     
     register : function(remotePeer){
-      if(remotePeer) {
+      if(remotePeer && remotePeer.getGuid()) {
         this.__backingStore[remotePeer.getGuid()] = remotePeer;
       }
     },
@@ -37,7 +37,7 @@ qx.Class.define("org.jspresso.framework.util.remote.registry.BasicRemotePeerRegi
     },
 
     unregister : function(remotePeer){
-      if(remotePeer) {
+      if(remotePeer && remotePeer.getGuid()) {
         delete this.__backingStore[remotePeer.getGuid()];
       }
     },

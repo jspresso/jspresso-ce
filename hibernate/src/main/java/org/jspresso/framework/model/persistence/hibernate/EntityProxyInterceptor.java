@@ -24,6 +24,7 @@ import java.util.Collection;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.type.Type;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.EntityException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -87,8 +88,8 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
-    if (entity instanceof IEntity) {
-      ((IEntity) entity).onDelete(getEntityFactory(), getPrincipal(),
+    if (entity instanceof ILifecycleCapable) {
+      ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(),
           getEntityLifecycleHandler());
     }
   }
@@ -101,9 +102,9 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   public boolean onSave(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
     boolean stateUpdated = false;
-    if (entity instanceof IEntity) {
-      if (((IEntity) entity).onPersist(getEntityFactory(), getPrincipal(),
-          getEntityLifecycleHandler())) {
+    if (entity instanceof IEntity && entity instanceof ILifecycleCapable) {
+      if (((ILifecycleCapable) entity).onPersist(getEntityFactory(),
+          getPrincipal(), getEntityLifecycleHandler())) {
         extractState((IEntity) entity, propertyNames, state);
         stateUpdated = true;
       }

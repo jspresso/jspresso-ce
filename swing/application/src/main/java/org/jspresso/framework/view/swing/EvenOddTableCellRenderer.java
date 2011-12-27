@@ -20,10 +20,16 @@ package org.jspresso.framework.view.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
 
+import org.jspresso.framework.binding.swing.CollectionConnectorTableModel;
+import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
@@ -38,6 +44,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
   private static final long serialVersionUID = -635326662239616998L;
 
   private Color             backgroundBase;
+  private Font              customFont;
 
   /**
    * {@inheritDoc}
@@ -45,14 +52,43 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
   @Override
   public Component getTableCellRendererComponent(JTable table, Object value,
       boolean isSelected, boolean hasFocus, int row, int column) {
-    Color actualBackground = table.getBackground();
-    if (backgroundBase != null) {
-      actualBackground = backgroundBase;
+    if (row >= 0) {
+      Color actualBackground = table.getBackground();
+      if (backgroundBase != null) {
+        actualBackground = backgroundBase;
+      }
+      setVerticalAlignment(TOP);
+      super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
+          isSelected, row));
+      FontMetrics fm = getFontMetrics(getFont());
+      if (table.convertColumnIndexToModel(column) == 0) {
+        TableModel tm = table.getModel();
+        if (tm instanceof AbstractTableSorter) {
+          tm = ((AbstractTableSorter) tm).getTableModel();
+        }
+        if (tm instanceof CollectionConnectorTableModel) {
+          setToolTipText(((CollectionConnectorTableModel) tm)
+              .getRowToolTip(row));
+        }
+      } else {
+        if (HtmlHelper.isHtml(getText())
+            || fm.stringWidth(getText()) > table.getColumnModel()
+                .getColumn(column).getWidth()) {
+          setToolTipText(getText());
+        }
+      }
     }
-    super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
-        isSelected, row));
-    return super.getTableCellRendererComponent(table, value, isSelected,
+    Component c = super.getTableCellRendererComponent(table, value, isSelected,
         hasFocus, row, column);
+    if (getCustomFont() != null) {
+      // to override default font mgt of JTable
+      c.setFont(getCustomFont());
+    }
+    Dimension ps = c.getPreferredSize();
+    if (row >= 0 && ps.height > table.getRowHeight(row)) {
+      table.setRowHeight(row, ps.height);
+    }
+    return c;
   }
 
   /**
@@ -62,5 +98,24 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
   public void setBackground(Color c) {
     backgroundBase = c;
     super.setBackground(c);
+  }
+
+  /**
+   * Gets the customFont.
+   * 
+   * @return the customFont.
+   */
+  protected Font getCustomFont() {
+    return customFont;
+  }
+
+  /**
+   * Sets the customFont.
+   * 
+   * @param customFont
+   *          the customFont to set.
+   */
+  public void setCustomFont(Font customFont) {
+    this.customFont = customFont;
   }
 }

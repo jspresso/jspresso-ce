@@ -13,6 +13,8 @@
  */
 
 package org.jspresso.framework.application.frontend.controller.flex {
+  import flash.desktop.Clipboard;
+  import flash.desktop.ClipboardFormats;
   import flash.display.DisplayObject;
   import flash.display.Sprite;
   import flash.events.DataEvent;
@@ -25,11 +27,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.net.navigateToURL;
   import flash.net.registerClassAlias;
   
-  import flex.utils.ui.resize.ResizablePanel;
-  
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
@@ -77,6 +78,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
@@ -182,7 +184,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _dialogStack.push([null, null, null]);
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
-      _fakeDialog = new Panel();
+      _fakeDialog = getViewFactory().createPanelComponent();
       if (ExternalInterface.available) {
         ExternalInterface.addCallback("stop", stop);
       }
@@ -324,7 +326,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
-        var loginButton:Button = getViewFactory().createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
+        var loginButton:Button = getViewFactory().createDialogButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
         loginButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
           performLogin();
         });
@@ -344,7 +346,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
         var dialogButtons:Array = new Array();
         for each(var action:RAction in dialogCommand.actions) {
-          dialogButtons.push(getViewFactory().createAction(action));
+          dialogButtons.push(getViewFactory().createDialogAction(action));
         }
         var dialogView:UIComponent = null;
         var icon:RIcon = null;
@@ -407,6 +409,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else {
           _statusBar.visible = false;
         }
+      } else if(command is RemoteClipboardCommand) {
+        handleClipboardCommand(command as RemoteClipboardCommand);
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
@@ -448,30 +452,36 @@ package org.jspresso.framework.application.frontend.controller.flex {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;
         } else if(command is RemoteChildrenCommand) {
-          var children:IList = (targetPeer as RemoteCompositeValueState).children;
+          var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
           _postponedNotificationBuffer[targetPeer.guid] = null;
-          //children.removeAll();
-          var childIndex:int = 0;
           if((command as RemoteChildrenCommand).children != null) {
+            var newChildren:ArrayCollection = new ArrayCollection();
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if(isRegistered(child.guid)) {
                 child = getRegistered(child.guid) as RemoteValueState;
               } else {
                 register(child);
               }
-              if(childIndex < children.length) {
-                var existingChild:RemoteValueState = children.getItemAt(childIndex) as RemoteValueState;
-                if(existingChild != child) {
-                  children.setItemAt(child, childIndex);
-                }
-              } else {
-                children.addItem(child);
-              }
-              childIndex++;
+              newChildren.addItem(child);
             }
-          }
-          while(childIndex < children.length) {
-            var removedChild:RemoteValueState = children.removeItemAt(childIndex) as RemoteValueState;
+            for(var toRemove:int = children.length - 1; toRemove >= 0; toRemove--) {
+              if(newChildren.getItemIndex(children.getItemAt(toRemove)) < 0) {
+                children.removeItemAt(toRemove);
+              }
+            }
+            var index:int = 0;
+            for each(var newChild:RemoteValueState in newChildren) {
+              var existingIndex:int = children.getItemIndex(newChild);
+              if(existingIndex != index) {
+                if(existingIndex >=0) {
+                  children.removeItemAt(existingIndex);
+                }
+                children.addItemAt(newChild, index);
+              }
+              index++;
+            }
+          } else {
+            children.removeAll();
           }
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(
@@ -566,6 +576,38 @@ package org.jspresso.framework.application.frontend.controller.flex {
              alertCloseHandler,
              null,
              Alert.NO);
+        fixAlertSize(alert);
+      }
+    }
+    
+    protected function handleClipboardCommand(clipboardCommand:RemoteClipboardCommand):void {
+      try {
+        Clipboard.generalClipboard.clear();
+        Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+        Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+      } catch(error:Error) {
+        // we are certainly running on FP 10 or above. Need an extra
+        // dialog to initiate the browsing...
+        var alertCloseHandler:Function = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.YES:
+              Clipboard.generalClipboard.clear();
+              Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+              Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+              break;
+            default:
+              break;
+          }
+          popFakeDialog();
+        };
+        pushFakeDialog();
+        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "system.clipboard.continue"),
+          ResourceManager.getInstance().getString("Common_messages", "content.copy"),
+          Alert.YES|Alert.NO,
+          null,
+          alertCloseHandler,
+          null,
+          Alert.NO);
         fixAlertSize(alert);
       }
     }
@@ -961,7 +1003,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var popupButton:Button;
       if(actions != null) {
         for(i = 0; i < actions.length; i++) {
-          popupButton = getViewFactory().createPopupButton(actions[i] as RActionList);
+          popupButton = getViewFactory().createPopupButton(actions[i] as RActionList, true);
           if(popupButton != null) {
             controlBar.addChild(popupButton);
           }
@@ -975,7 +1017,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       controlBar.addChild(sb);
       if(helpActions != null) {
         for(i = 0; i < helpActions.length; i++) {
-          popupButton = getViewFactory().createPopupButton(helpActions[i] as RActionList);
+          popupButton = getViewFactory().createPopupButton(helpActions[i] as RActionList, true);
           if(popupButton != null) {
             controlBar.addChild(popupButton);
           }
@@ -1119,10 +1161,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       dialogBox.addChild(buttonBox);
 
-      var dialog:ResizablePanel;
+      var dialog:Panel;
       var newDialog:Boolean = true;
       if(useCurrent && _dialogStack && _dialogStack.length > 1) {
-        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as ResizablePanel;
+        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as Panel;
         dialog.removeAllChildren();
         newDialog = false;
       } else {
@@ -1133,8 +1175,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //        } else {
         dialogParent = Application.application as DisplayObject;
         //        }
-        dialog = PopUpManager.createPopUp(dialogParent,ResizablePanel,true) as ResizablePanel;
-        dialog.resizable = true;
+        dialog = getViewFactory().createResizableDialog(dialogParent);
         dialog.setStyle("borderAlpha", 1);
         dialog.setStyle("borderThicknessLeft", 5);
         dialog.setStyle("borderThicknessRight", 5);
@@ -1229,6 +1270,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand",RemoteCleanupCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand",RemoteClipboardCommand);
   
       registerClassAlias("org.jspresso.framework.util.gui.CellConstraints",CellConstraints);
       registerClassAlias("org.jspresso.framework.util.gui.Dimension",Dimension);

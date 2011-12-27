@@ -110,6 +110,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<IPropertyDescriptor>                       tempPropertyBuffer;
 
   private String                                          toStringProperty;
+  private String                                          toHtmlProperty;
   private String                                          autoCompleteProperty;
 
   private Collection<String>                              unclonedProperties;
@@ -296,6 +297,9 @@ public abstract class AbstractComponentDescriptor<E> extends
   @Override
   public synchronized IPropertyDescriptor getPropertyDescriptor(
       String propertyName) {
+    if (propertyName == null) {
+      return null;
+    }
     if (propertyDescriptorsCache.containsKey(propertyName)) {
       return propertyDescriptorsCache.get(propertyName);
     }
@@ -307,14 +311,18 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
       descriptor = nestedPropertyDescriptors.get(propertyName);
       if (descriptor == null) {
-        IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getPropertyDescriptor(propertyName
-            .substring(0, nestedDotIndex))).getComponentDescriptor();
-        descriptor = componentDescriptor.getPropertyDescriptor(
-            propertyName.substring(nestedDotIndex + 1)).clone();
-        if (descriptor instanceof BasicPropertyDescriptor) {
-          ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+        IPropertyDescriptor rootProp = getPropertyDescriptor(propertyName
+            .substring(0, nestedDotIndex));
+        if (rootProp instanceof IComponentDescriptorProvider<?>) {
+          IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
+              .getComponentDescriptor();
+          descriptor = componentDescriptor.getPropertyDescriptor(
+              propertyName.substring(nestedDotIndex + 1)).clone();
+          if (descriptor instanceof BasicPropertyDescriptor) {
+            ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+          }
+          nestedPropertyDescriptors.put(propertyName, descriptor);
         }
-        nestedPropertyDescriptors.put(propertyName, descriptor);
       }
     } else {
       descriptor = getDeclaredPropertyDescriptor(propertyName);
@@ -533,6 +541,19 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Gets the toStringProperty.
+   * 
+   * @return the toStringProperty.
+   */
+  @Override
+  public synchronized String getToHtmlProperty() {
+    if (toHtmlProperty == null) {
+      return getToStringProperty();
+    }
+    return toHtmlProperty;
+  }
+
+  /**
    * Gets the autocomplete property.
    * <p>
    * {@inheritDoc}
@@ -553,11 +574,18 @@ public abstract class AbstractComponentDescriptor<E> extends
             }
           }
           if (autoCompleteProperty == null) {
-            autoCompleteProperty = rp.get(0);
+            Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
+            for (IPropertyDescriptor pd : allProps) {
+              if (pd instanceof IStringPropertyDescriptor
+                  && !IEntity.ID.equals(pd.getName())) {
+                autoCompleteProperty = pd.getName();
+                break;
+              }
+            }
           }
-        } else {
-          autoCompleteProperty = getPropertyDescriptors().iterator().next()
-              .getName();
+          if (autoCompleteProperty == null) {
+            autoCompleteProperty = IEntity.ID;
+          }
         }
       }
     }
@@ -942,6 +970,24 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Allows to customize the HTML representation of a component instance. The
+   * property name assigned will be used when displaying the component instance
+   * as HTML. It may be a computed property that composes several other
+   * properties in a human friendly format.
+   * <p>
+   * Whenever this property is <code>null</code>, the
+   * <code>toStringProperty</code> is used. Note that this property is not
+   * inherited by children descriptors, i.e. even if an ancestor defines an
+   * explicit <i>toHtmlProperty</i> property, its children ignore this setting.
+   * 
+   * @param toHtmlProperty
+   *          the toHtmlProperty to set.
+   */
+  public void setToHtmlProperty(String toHtmlProperty) {
+    this.toHtmlProperty = toHtmlProperty;
+  }
+
+  /**
    * Allows to customize the property used to autocomplete reference fields on
    * this component.
    * <p>
@@ -1146,7 +1192,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused") String permId) {
+  public void setPermId(@SuppressWarnings("unused")
+  String permId) {
     throw new UnsupportedOperationException();
   }
 }

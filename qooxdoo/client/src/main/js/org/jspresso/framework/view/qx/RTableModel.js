@@ -278,6 +278,20 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     
     setEditable : function(editable) {
       this.__editable = editable;
+    },
+
+    getToolTip: function(column, row) {
+      if (row >= 0) {
+        if(column > 0) {
+          var v = this.getValue(column, row);
+          if(v != null && (v instanceof String || typeof(v) === 'string')) {
+            return v;
+          }
+          return null;
+        }
+        return this.getRowData(row).getValue();
+      }
     }
+
   }
 });

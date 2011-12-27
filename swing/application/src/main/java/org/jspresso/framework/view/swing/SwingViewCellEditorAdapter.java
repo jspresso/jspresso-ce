@@ -19,6 +19,9 @@
 package org.jspresso.framework.view.swing;
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.EventObject;
@@ -28,7 +31,10 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
@@ -152,6 +158,14 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       ((JActionField) editorComponent).selectAll();
     } else if (editorComponent instanceof JDateField) {
       ((JDateField) editorComponent).getFormattedTextField().selectAll();
+    }
+    if (!(editorComponent instanceof JTextArea || editorComponent instanceof JScrollPane)) {
+      JPanel wrapperPanel = new JPanel();
+      wrapperPanel.setLayout(new GridBagLayout());
+      wrapperPanel.add(editorComponent, new GridBagConstraints(0, 0, 1, 1, 1.0,
+          1.0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+          new Insets(0, 0, 0, 0), 0, 0));
+      editorComponent = wrapperPanel;
     }
     return editorComponent;
   }

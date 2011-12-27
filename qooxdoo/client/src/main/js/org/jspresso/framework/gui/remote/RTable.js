@@ -26,6 +26,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable",
     {
       check : "Array"
     },
+    columnHeaders :
+    {
+      check : "Array"
+    },
     columnIds :
     {
       check : "Array"

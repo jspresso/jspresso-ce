@@ -50,6 +50,7 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RActionField;
 import org.jspresso.framework.gui.remote.RActionList;
+import org.jspresso.framework.gui.remote.RActionable;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RCheckBox;
@@ -113,6 +114,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -128,6 +130,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
+import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -496,9 +499,20 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
+    IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor()).getComponentDescriptor();
+    // Dynamic toolTips
+    String toolTipProperty = null;
+    if (viewDescriptor.getDescription() != null) {
+      IPropertyDescriptor descriptionProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getDescription());
+      if (descriptionProperty != null) {
+        toolTipProperty = viewDescriptor.getDescription();
+      }
+    }
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForBeanView(viewDescriptor), null);
+            getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()
@@ -542,7 +556,7 @@ public class DefaultRemoteViewFactory extends
       }
       elementLabels.add(propertyLabel);
       elementWidths.add(propertyViewDescriptor.getWidth());
-      connector.addChildConnector(propertyView.getConnector());
+      connector.addChildConnector(propertyName, propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
       // for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
@@ -556,14 +570,15 @@ public class DefaultRemoteViewFactory extends
       // }
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
-      if (propertyView.getPeer() instanceof RLink) {
+      if (propertyView.getPeer() instanceof RActionable
+          && propertyViewDescriptor.getAction() != null) {
         IView<RComponent> targetView;
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           targetView = propertyView;
         } else {
           targetView = view;
         }
-        ((RLink) propertyView.getPeer()).setAction(getActionFactory()
+        ((RActionable) propertyView.getPeer()).setAction(getActionFactory()
             .createAction(propertyViewDescriptor.getAction(), actionHandler,
                 targetView, locale));
       }
@@ -1002,9 +1017,11 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            viewDescriptor.getRenderedProperty());
+            rowDescriptor.getToHtmlProperty());
     if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
           .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
@@ -1020,18 +1037,15 @@ public class DefaultRemoteViewFactory extends
 
     if (viewDescriptor.getRenderedProperty() != null) {
       IValueConnector cellConnector = createListConnector(
-          viewDescriptor.getRenderedProperty(), modelDescriptor
-              .getCollectionDescriptor().getElementDescriptor());
-      rowConnectorPrototype.addChildConnector(cellConnector);
+          viewDescriptor.getRenderedProperty(), rowDescriptor);
+      rowConnectorPrototype.addChildConnector(
+          viewDescriptor.getRenderedProperty(), cellConnector);
     }
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
-    }
-    if (viewDescriptor.isAutoSelectFirstRow()) {
-      attachDefaultCollectionListener(connector);
     }
     return view;
   }
@@ -1394,7 +1408,8 @@ public class DefaultRemoteViewFactory extends
           new Object[] {
             propertyDescriptor.getReferencedDescriptor().getI18nName(
                 actionHandler, locale)
-          }, locale));
+          }, locale)
+          + IActionFactory.TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1734,7 +1749,7 @@ public class DefaultRemoteViewFactory extends
         .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            rowDescriptor.getToStringProperty());
+            rowDescriptor.getToHtmlProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1750,6 +1765,7 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setHorizontallyScrollable(viewDescriptor
         .isHorizontallyScrollable());
     List<RComponent> columns = new ArrayList<RComponent>();
+    List<RComponent> columnHeaders = new ArrayList<RComponent>();
     List<String> columnIds = new ArrayList<String>();
     Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
         viewDescriptor, actionHandler);
@@ -1766,9 +1782,9 @@ public class DefaultRemoteViewFactory extends
         // IValueConnector columnConnector = createColumnConnector(columnId,
         // rowDescriptor);
         IValueConnector columnConnector = column.getConnector();
-        rowConnectorPrototype.addChildConnector(columnConnector);
         String propertyName = columnViewDescriptor.getModelDescriptor()
             .getName();
+        rowConnectorPrototype.addChildConnector(propertyName, columnConnector);
         boolean locallyWritable = !columnViewDescriptor.isReadOnly();
         if (locallyWritable) {
           try {
@@ -1779,10 +1795,27 @@ public class DefaultRemoteViewFactory extends
             actionHandler.restoreLastSecurityContextSnapshot();
           }
         }
+        if (columnViewDescriptor.getAction() != null
+            && !columnViewDescriptor.isReadOnly()) {
+          for (IValueChangeListener listener : columnConnector
+              .getValueChangeListeners()) {
+            if (listener instanceof ConnectorActionAdapter) {
+              // to avoid the action to be fired by the editor.
+              columnConnector.removeValueChangeListener(listener);
+            }
+          }
+          // We must listen for incoming connector value change to trigger the
+          // action.
+          columnConnector
+              .addValueChangeListener(new ConnectorActionAdapter<RComponent, RAction>(
+                  columnViewDescriptor.getAction(), getActionFactory(),
+                  actionHandler, view));
+        }
         columnConnector.setLocallyWritable(locallyWritable);
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
-        if (propertyDescriptor.isMandatory()) {
+        if (propertyDescriptor.isMandatory()
+            && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
           if (column.getPeer().getLabel() != null) {
             column.getPeer().setLabel(column.getPeer().getLabel() + "*");
           } else {
@@ -1790,11 +1823,15 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columns.add(column.getPeer());
+        columnHeaders.add(createPropertyLabel(columnViewDescriptor,
+            column.getPeer(), actionHandler, locale));
         columnIds.add(computeColumnIdentifier(rowDescriptor,
             columnViewDescriptor));
-        if (column.getPeer() instanceof RLink) {
-          ((RLink) column.getPeer()).setAction(getActionFactory().createAction(
-              columnViewDescriptor.getAction(), actionHandler, view, locale));
+        if (column.getPeer() instanceof RActionable
+            && columnViewDescriptor.getAction() != null) {
+          ((RActionable) column.getPeer()).setAction(getActionFactory()
+              .createAction(columnViewDescriptor.getAction(), actionHandler,
+                  view, locale));
         }
         if (columnViewDescriptorEntry.getValue() != null) {
           column.getPeer()
@@ -1805,15 +1842,13 @@ public class DefaultRemoteViewFactory extends
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
+    viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
     viewComponent.setColumnIds(columnIds.toArray(new String[0]));
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
-    }
-    if (viewDescriptor.isAutoSelectFirstRow()) {
-      attachDefaultCollectionListener(connector);
     }
     return view;
   }
@@ -2155,20 +2190,6 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale,
-      IView<RComponent> view) {
-    if (view != null && propertyDescriptor.getDescription() != null) {
-      view.getPeer().setTooltip(
-          propertyDescriptor.getI18nDescription(translationProvider, locale));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
       ITranslationProvider translationProvider, Locale locale,
       IView<RComponent> view) {
@@ -2180,11 +2201,10 @@ public class DefaultRemoteViewFactory extends
       ITranslationProvider translationProvider, Locale locale,
       RComponent viewPeer) {
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
-    if (viewDescriptor.getDescription() != null) {
-      viewPeer.setTooltip(viewDescriptor.getI18nDescription(
-          translationProvider, locale));
-    } else {
-      viewPeer.setTooltip(null);
+    String viewDescription = viewDescriptor.getI18nDescription(
+        translationProvider, locale);
+    if (viewDescription != null && viewDescription.length() > 0) {
+      viewPeer.setToolTip(viewDescription);
     }
     viewPeer.setForeground(viewDescriptor.getForeground());
     viewPeer.setBackground(viewDescriptor.getBackground());

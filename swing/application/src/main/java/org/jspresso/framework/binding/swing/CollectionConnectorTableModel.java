@@ -20,11 +20,10 @@ package org.jspresso.framework.binding.swing;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -49,15 +48,16 @@ import org.jspresso.framework.util.swing.SwingUtil;
  */
 public class CollectionConnectorTableModel extends AbstractTableModel {
 
-  private static final long                       serialVersionUID = -3323472361980315420L;
+  private static final long      serialVersionUID = -3323472361980315420L;
 
-  private Map<Coordinates, CellConnectorListener> cachedCellListeners;
-  private Map<Integer, IValueChangeListener>      cachedRowListeners;
-  private ICollectionConnector                    collectionConnector;
-  private List<Class<?>>                          columnClasses;
-  private List<String>                            columnConnectorKeys;
+  private TableConnectorListener tableListener;
+  private RowConnectorListener   rowListener;
+  private CellConnectorListener  cellListener;
+  private ICollectionConnector   collectionConnector;
+  private List<Class<?>>         columnClasses;
+  private List<String>           columnConnectorKeys;
 
-  private IExceptionHandler                       exceptionHandler;
+  private IExceptionHandler      exceptionHandler;
 
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
@@ -76,6 +76,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     this.collectionConnector = collectionConnector;
     this.columnConnectorKeys = columnConnectorKeys;
     this.columnClasses = columnClasses;
+    this.tableListener = new TableConnectorListener();
+    this.rowListener = new RowConnectorListener();
+    this.cellListener = new CellConnectorListener();
     bindConnector();
   }
 
@@ -123,9 +126,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       return cellConnector;
     }
     Object connectorValue = cellConnector.getConnectorValue();
-    // if (connectorValue instanceof byte[]) {
-    // return null;
-    // }
     return connectorValue;
   }
 
@@ -137,6 +137,37 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     return collectionConnector.isWritable()
         && collectionConnector.getChildConnector(rowIndex).isWritable()
         && getConnectorAt(rowIndex, columnIndex).isWritable();
+  }
+
+  private Coordinates computeCoordinates(IValueConnector connector) {
+    IValueConnector cellConnector = connector;
+    ICompositeValueConnector rowConnector = cellConnector.getParentConnector();
+    while (rowConnector != null
+        && rowConnector.getParentConnector() != collectionConnector) {
+      cellConnector = rowConnector;
+      rowConnector = rowConnector.getParentConnector();
+    }
+    int col = -1;
+    int row = -1;
+    if (rowConnector != null) {
+      row = computeRow(rowConnector);
+      for (String key : columnConnectorKeys) {
+        if (rowConnector.getChildConnector(key) == cellConnector) {
+          break;
+        }
+        col++;
+      }
+    }
+    return new Coordinates(row, col);
+  }
+
+  private int computeRow(IValueConnector connector) {
+    for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
+      if (collectionConnector.getChildConnector(i) == connector) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /**
@@ -171,55 +202,29 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private void bindChildRowConnector(int row) {
     ICompositeValueConnector rowConnector = (ICompositeValueConnector) collectionConnector
         .getChildConnector(row);
-    rowConnector.addValueChangeListener(getChildRowConnectorListener(row));
-    for (int col = 0; col < columnConnectorKeys.size(); col++) {
-      IValueConnector cellConnector = rowConnector
-          .getChildConnector(columnConnectorKeys.get(col));
-      if (cellConnector instanceof IRenderableCompositeValueConnector
-          && ((IRenderableCompositeValueConnector) cellConnector)
-              .getRenderingConnector() != null) {
-        ((IRenderableCompositeValueConnector) cellConnector)
-            .getRenderingConnector().addValueChangeListener(
-                getChildCellConnectorListener(row, col));
-      } else {
-        CellConnectorListener listener = getChildCellConnectorListener(row, col);
-        cellConnector.addValueChangeListener(listener);
-        cellConnector.addPropertyChangeListener(listener);
+    if (!rowConnector.getValueChangeListeners().contains(rowListener)) {
+      rowConnector.addValueChangeListener(rowListener);
+      for (int col = 0; col < columnConnectorKeys.size(); col++) {
+        IValueConnector cellConnector = rowConnector
+            .getChildConnector(columnConnectorKeys.get(col));
+        if (cellConnector instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) cellConnector)
+                .getRenderingConnector() != null) {
+          ((IRenderableCompositeValueConnector) cellConnector)
+              .getRenderingConnector().addValueChangeListener(cellListener);
+        } else {
+          cellConnector.addValueChangeListener(cellListener);
+          cellConnector.addPropertyChangeListener(cellListener);
+        }
       }
     }
   }
 
   private void bindConnector() {
-    collectionConnector.addValueChangeListener(new TableConnectorListener());
+    collectionConnector.addValueChangeListener(tableListener);
     for (int row = 0; row < collectionConnector.getChildConnectorCount(); row++) {
       bindChildRowConnector(row);
     }
-  }
-
-  private CellConnectorListener getChildCellConnectorListener(int row, int col) {
-    if (cachedCellListeners == null) {
-      cachedCellListeners = new HashMap<Coordinates, CellConnectorListener>();
-    }
-    CellConnectorListener cachedListener = cachedCellListeners
-        .get(new Coordinates(row, col));
-    if (cachedListener == null) {
-      cachedListener = new CellConnectorListener(row, col);
-      cachedCellListeners.put(new Coordinates(row, col), cachedListener);
-    }
-    return cachedListener;
-  }
-
-  private IValueChangeListener getChildRowConnectorListener(int row) {
-    if (cachedRowListeners == null) {
-      cachedRowListeners = new HashMap<Integer, IValueChangeListener>();
-    }
-    IValueChangeListener cachedListener = cachedRowListeners.get(new Integer(
-        row));
-    if (cachedListener == null) {
-      cachedListener = new RowConnectorListener(row);
-      cachedRowListeners.put(new Integer(row), cachedListener);
-    }
-    return cachedListener;
   }
 
   /**
@@ -240,36 +245,29 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private final class CellConnectorListener implements IValueChangeListener,
       PropertyChangeListener {
 
-    private Coordinates cell;
-
-    private CellConnectorListener(int row, int col) {
-      cell = new Coordinates(row, col);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      updateCell(computeCoordinates((IValueConnector) evt.getSource()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void propertyChange(
-        @SuppressWarnings("unused") final PropertyChangeEvent evt) {
-      updateCell();
+    public void valueChange(ValueChangeEvent evt) {
+      updateCell(computeCoordinates((IValueConnector) evt.getSource()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void valueChange(
-        @SuppressWarnings("unused") final ValueChangeEvent evt) {
-      updateCell();
-    }
-
-    private void updateCell() {
+    private void updateCell(final Coordinates cell) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         @Override
         public void run() {
-          if (cell.getX() < getRowCount()) {
+          if (cell.getX() >= 0 && cell.getY() > 0
+              && cell.getX() < getRowCount()) {
             fireTableCellUpdated(cell.getX(), cell.getY());
           }
         }
@@ -279,23 +277,20 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   private final class RowConnectorListener implements IValueChangeListener {
 
-    private int row;
-
-    private RowConnectorListener(int row) {
-      this.row = row;
-    }
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(
-        @SuppressWarnings("unused") final ValueChangeEvent evt) {
+    public void valueChange(ValueChangeEvent evt) {
+      updateRow(computeRow((IValueConnector) evt.getSource()));
+    }
+
+    private void updateRow(final int row) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         @Override
         public void run() {
-          if (row < getRowCount()) {
+          if (row >= 0 && row < getRowCount()) {
             fireTableRowsUpdated(row, row);
           }
           if (collectionConnector.getSelectedIndices() != null) {
@@ -309,6 +304,17 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     }
   }
 
+  /**
+   * Gets the value to display as row toolTip.
+   * 
+   * @param rowIndex
+   *          the row index to compute the toolTip for.
+   * @return the row toolTip or null.
+   */
+  public String getRowToolTip(int rowIndex) {
+    return collectionConnector.getChildConnector(rowIndex).toString();
+  }
+
   private class TableConnectorListener implements IValueChangeListener {
 
     /**
@@ -320,25 +326,32 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
         @Override
         public void run() {
-          Collection<?> oldCollection = null;
+          List<?> oldCollection = new ArrayList<Object>();
           if (evt.getOldValue() instanceof Collection<?>) {
-            oldCollection = (Collection<?>) evt.getOldValue();
+            oldCollection = new ArrayList<Object>((Collection<?>) evt
+                .getOldValue());
           }
-          Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-          int oldCollectionSize = 0;
-          int newCollectionSize = 0;
-          if (oldCollection != null) {
-            oldCollectionSize = oldCollection.size();
+          List<?> newCollection = new ArrayList<Object>();
+          if (evt.getNewValue() instanceof Collection<?>) {
+            newCollection = new ArrayList<Object>((Collection<?>) evt
+                .getNewValue());
           }
-          if (newCollection != null) {
-            newCollectionSize = newCollection.size();
-          }
-          if (newCollectionSize > oldCollectionSize) {
-            fireTableRowsInserted(oldCollectionSize, newCollectionSize - 1);
-            for (int row = oldCollectionSize; row < newCollectionSize; row++) {
-              bindChildRowConnector(row);
+
+          int oldCollectionSize = oldCollection.size();
+          int newCollectionSize = newCollection.size();
+
+          for (int i = 0; i < newCollectionSize; i++) {
+            Object element = newCollection.get(i);
+            if (oldCollectionSize > i) {
+              if (oldCollection.get(i) != element) {
+                fireTableRowsUpdated(i, i);
+              }
+            } else {
+              fireTableRowsInserted(i, i);
             }
-          } else if (newCollectionSize < oldCollectionSize) {
+            bindChildRowConnector(i);
+          }
+          if (newCollectionSize < oldCollectionSize) {
             fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
           }
         }

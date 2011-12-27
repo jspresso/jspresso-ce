@@ -20,7 +20,7 @@ package org.jspresso.framework.view.swing;
 
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.format.IFormatter;
-
+import org.jspresso.framework.util.html.HtmlHelper;
 
 /**
  * A table cell renderer based on a formatter.
@@ -37,7 +37,7 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
    * Constructs a new <code>FormattedTableCellRenderer</code> instance.
    * 
    * @param formatter
-   *            the formatter used to format object values.
+   *          the formatter used to format object values.
    */
   public FormattedTableCellRenderer(IFormatter formatter) {
     super();
@@ -49,19 +49,26 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
    */
   @Override
   protected void setValue(Object value) {
+    Object valueToSet = null;
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
       if (formatter != null) {
-        super.setValue(formatter.format(connectorValue));
+        valueToSet = formatter.format(connectorValue);
       } else {
-        super.setValue(connectorValue);
+        valueToSet = connectorValue;
       }
     } else {
       if (formatter != null) {
-        super.setValue(formatter.format(value));
+        valueToSet = formatter.format(value);
       } else {
-        super.setValue(value);
+        valueToSet = value;
       }
     }
+    if (valueToSet instanceof String && !HtmlHelper.isHtml((String) valueToSet)
+        && ((String) valueToSet).indexOf("\n") > 0) {
+      valueToSet = HtmlHelper.toHtml(((String) valueToSet).replaceAll("\n",
+          "<br>"));
+    }
+    super.setValue(valueToSet);
   }
 }

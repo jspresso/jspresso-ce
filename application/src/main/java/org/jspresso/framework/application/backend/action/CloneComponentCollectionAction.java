@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
@@ -64,7 +65,9 @@ public class CloneComponentCollectionAction extends
         clone = entityCloneFactory.cloneComponent((IComponent) element,
             getEntityFactory(context));
       }
-      clone.onClone((IComponent) element);
+      if (clone instanceof ILifecycleCapable) {
+        ((ILifecycleCapable) clone).onClone((IComponent) element);
+      }
       return clone;
     }
     throw new ActionException(

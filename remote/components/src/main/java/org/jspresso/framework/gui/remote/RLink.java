@@ -24,7 +24,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision: 2669 $
  * @author Vincent Vandenschrick
  */
-public class RLink extends RLabel {
+public class RLink extends RLabel implements RActionable {
 
   private static final long serialVersionUID = 286004875148865037L;
 
@@ -63,6 +63,7 @@ public class RLink extends RLabel {
    * @param action
    *          the action to set.
    */
+  @Override
   public void setAction(RAction action) {
     this.action = action;
   }

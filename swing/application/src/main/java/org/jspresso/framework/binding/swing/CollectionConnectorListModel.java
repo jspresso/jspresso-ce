@@ -65,7 +65,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
    */
   @Override
   public Object getElementAt(int index) {
-    return collectionConnector.getChildConnector(index)/* .getConnectorValue() */;
+    return collectionConnector.getChildConnector(index);
   }
 
   /**
@@ -113,6 +113,17 @@ public class CollectionConnectorListModel extends AbstractListModel {
     return cachedListener;
   }
 
+  /**
+   * Gets the value to display as row toolTip.
+   * 
+   * @param rowIndex
+   *          the row index to compute the toolTip for.
+   * @return the row toolTip or null.
+   */
+  public String getRowToolTip(int rowIndex) {
+    return collectionConnector.getChildConnector(rowIndex).toString();
+  }
+
   private final class CellConnectorListener implements IValueChangeListener {
 
     private int index;
@@ -125,8 +136,8 @@ public class CollectionConnectorListModel extends AbstractListModel {
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(
-        @SuppressWarnings("unused") final ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused")
+    final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         @Override

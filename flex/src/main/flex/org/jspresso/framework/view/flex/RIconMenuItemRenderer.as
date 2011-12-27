@@ -66,6 +66,7 @@ package org.jspresso.framework.view.flex {
         if(!value["label"]) {
           value["label"] = "";
         }
+        label.toolTip = value["description"];
       }
     }
 

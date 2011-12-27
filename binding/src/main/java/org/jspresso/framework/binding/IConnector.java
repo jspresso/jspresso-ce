@@ -19,6 +19,7 @@
 package org.jspresso.framework.binding;
 
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * This public interface has to be implemented by any class which implements a
@@ -31,20 +32,13 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IConnector extends IPropertyChangeCapable, Cloneable {
-
-  /**
-   * Clones this connector.
-   * 
-   * @return the connector's clone.
-   */
-  IConnector clone();
+public interface IConnector extends IPropertyChangeCapable, ICloneable {
 
   /**
    * Clones this connector.
    * 
    * @param newConnectorId
-   *            the identifier of the clone connector
+   *          the identifier of the clone connector
    * @return the connector's clone.
    */
   IConnector clone(String newConnectorId);
@@ -62,7 +56,7 @@ public interface IConnector extends IPropertyChangeCapable, Cloneable {
    * identifier will be the property name.
    * 
    * @param id
-   *            The connector identifier.
+   *          The connector identifier.
    */
   void setId(String id);
 }

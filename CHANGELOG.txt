@@ -1,5 +1,54 @@
 Jspresso CE - Change Log
 
+
+Jspresso CE - 3.5.9 (Released 2011-10-06) [ View Issues ]
+=========================================
+- 0000460: [Frontend] Improve HTTPS support in Flex (vvandens) - closed.
+- 0000456: [Model] sqlname doesn't properly match the variables of reference type (vvandens) - closed.
+- 0000458: [Persistence] Version property is mapped to lowercase column since 3.5.7 (vvandens) - closed.
+- 0000455: [Persistence] LifecycleInterceptor - isDirty method don't word on the second call (vvandens) - closed.
+- 0000449: [Build & tools] Introduce a Version static class / resource (vvandens) - closed.
+- 0000415: [View] Add translations for PT and ES (vvandens) - closed.
+- 0000423: [Frontend] Filter result pagination toolbar (vvandens) - closed.
+- 0000443: [Model] property names starting with a single lower case letter are not correctly handled (vvandens) - closed.
+- 0000447: [Persistence] Computed text property descriptor gets included in Hibernate criteria generated for QBE (vvandens) - closed.
+- 0000432: [Frontend] Context for a next/wrapped action doesn't change when changing module (vvandens) - closed.
+- 0000441: [View] Change card view descriptor API to allow for arbitrary card creation (vvandens) - closed.
+- 0000439: [Persistence] Ordered collection properties can crash flush cascading (vvandens) - closed.
+- 0000437: [Build & tools] Use build metadata in entity generator to avoid class regeneration if model has not changed (vvandens) - closed.
+- 0000435: [Build & tools] Create build metadata that can be used by tooling for date based optimizations (vvandens) - closed.
+- 0000431: [Build & tools] The archetype should use the 'includeDirectory' syntax in order to include groovy parts from a relative path (vvandens) - closed.
+- 0000433: [View] Hypenlink don't work with enum field (vvandens) - closed.
+- 0000430: [Build & tools] Entity generator is failing on enumeration properties without 'enumName' (vvandens) - closed.
+- 0000429: [Frontend] EditComponentAction.getComponentToEdit(Map<String, Object> context), retrieve Model from ActionParameter OR getSelectedModel(..) (vvandens) - closed.
+[18 issues]
+
+Jspresso CE - 3.5.8 (Released 2011-09-15) [ View Issues ]
+=========================================
+- 0000425: [View] Tree node menu distorted (vvandens) - closed.
+- 0000420: [View] Flex tab panes get an incorrect preferred size (vvandens) - closed.
+- 0000345: [View] Make date_time fields format configurable (vvandens) - closed.
+- 0000419: [View] Allow date format to be customized from server resource bundle only (vvandens) - closed.
+- 0000411: [Frontend] Sometimes, navigation in the workspace tree installs an unexpected view in to the application frame (vvandens) - closed.
+- 0000413: [Backend] Move backend action beans from commons-frontend.xml to commons.xml (vvandens) - closed.
+- 0000412: [Build & tools] Display SJS errors in Eclipse when they are not catched by JDS (vvandens) - closed.
+- 0000396: [Frontend] Modules filter views and result views cannot be assigned a model descriptor (vvandens) - closed.
+- 0000410: [Model] Allow to access application session in initialization mapping using session.* properties (vvandens) - closed.
+- 0000409: [Backend] Introduce IApplicationSessionAware interface to support application session injection everywhere ISubjectAware is supported (vvandens) - closed.
+- 0000408: [View] PropertyView 'parent' is incorrectly set in component views (vvandens) - closed.
+- 0000407: [View] Collections in forms, when fed, raise a bug (vvandens) - closed.
+- 0000400: [Model] Multi forwardedProperty for a single sourceProperty on a registerNotificationForwarding (vvandens) - closed.
+- 0000405: [Backend] Adding a bean "applicationQueryRefiner" that can be override by a custom queryRefiner (vvandens) - closed.
+- 0000401: [Model] Corresponding static keys in Java model code for an Enum field (vvandens) - closed.
+- 0000402: [Backend] Support # as IS NULL for filter reference fields (vvandens) - closed.
+- 0000393: [Persistence] QueryComponent setDistinctEnforced(true)- ordering bug (vvandens) - closed.
+- 0000395: [View] Component references are not correctly exploded in component views (vvandens) - closed.
+- 0000394: [View] Support non-collection model descriptors on tables (vvandens) - closed.
+- 0000392: [Frontend] Wizard does not correctly update onLeave/onEnter action context when switching wizard step (vvandens) - closed.
+- 0000391: [Frontend] CollectionElementMoveAction does not support Map models (vvandens) - closed.
+- 0000388: [Persistence] Determine the leading side of a bi-di 1-1 or n-n relationship in another way than aphabetical order (vvandens) - closed.
+[22 issues]
+
 Jspresso CE - 3.5.7 (Released 2011-07-21) [ View Issues ]
 =========================================
 - 0000383: [View] Customize available options in an enumeration (vvandens) - closed.

@@ -107,12 +107,12 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     if (!backingStore.containsKey(remotePeer.getGuid())) {
       backingStore.put(remotePeer.getGuid(), remotePeer);
     }
-    if (remotePeer instanceof IPermIdSource) {
-      String permId = ((IPermIdSource) remotePeer).getPermId();
-      if (permId != null) {
-        automationBackingStore.put(permId, remotePeer.getGuid());
-      }
-    }
+//    if (remotePeer instanceof IPermIdSource) {
+//      String permId = ((IPermIdSource) remotePeer).getPermId();
+//      if (permId != null) {
+//        automationBackingStore.put(permId, remotePeer.getGuid());
+//      }
+//    }
     fireRemotePeerAdded(remotePeer);
   }
 

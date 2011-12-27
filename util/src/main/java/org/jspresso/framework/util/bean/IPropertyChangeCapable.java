@@ -41,19 +41,27 @@ public interface IPropertyChangeCapable {
    * Adds a new <code>PropertyChangeListener</code>.
    * 
    * @param listener
-   *            The added listener.
-   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(
-   *      PropertyChangeListener)
+   *          The added listener.
+   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
    */
   void addPropertyChangeListener(PropertyChangeListener listener);
+
+  /**
+   * Adds a new <code>PropertyChangeListener</code> using a weak reference.
+   * 
+   * @param listener
+   *          The added listener.
+   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
+   */
+  void addWeakPropertyChangeListener(PropertyChangeListener listener);
 
   /**
    * Adds a new <code>PropertyChangeListener</code> on a specific property.
    * 
    * @param propertyName
-   *            The listened property.
+   *          The listened property.
    * @param listener
-   *            The added listener.
+   *          The added listener.
    * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(String,
    *      PropertyChangeListener)
    */
@@ -61,12 +69,25 @@ public interface IPropertyChangeCapable {
       PropertyChangeListener listener);
 
   /**
+   * Adds a new <code>PropertyChangeListener</code> on a specific property using
+   * a weak reference.
+   * 
+   * @param propertyName
+   *          The listened property.
+   * @param listener
+   *          The added listener.
+   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(String,
+   *      PropertyChangeListener)
+   */
+  void addWeakPropertyChangeListener(String propertyName,
+      PropertyChangeListener listener);
+
+  /**
    * Removes a new <code>PropertyChangeListener</code>.
    * 
    * @param listener
-   *            The removed listener.
-   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(
-   *      PropertyChangeListener)
+   *          The removed listener.
+   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(PropertyChangeListener)
    */
   void removePropertyChangeListener(PropertyChangeListener listener);
 
@@ -74,9 +95,9 @@ public interface IPropertyChangeCapable {
    * Removes a <code>PropertyChangeListener</code> on a specific property.
    * 
    * @param propertyName
-   *            The listened property.
+   *          The listened property.
    * @param listener
-   *            The removed listener.
+   *          The removed listener.
    * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(String,
    *      PropertyChangeListener)
    */

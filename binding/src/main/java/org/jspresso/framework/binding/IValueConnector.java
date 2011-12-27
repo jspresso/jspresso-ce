@@ -91,7 +91,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * Cleans all bindings with view connectors.
    */
-  void cleanBindings();
+  void recycle();
 
   /**
    * Clones this connector.
@@ -110,13 +110,6 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    */
   @Override
   IValueConnector clone(String newConnectorId);
-
-  /**
-   * Computes the full connector path following the parent / child hierarchy.
-   * 
-   * @return the full connector path following the parent / child hierarchy.
-   */
-  String getConnectorPath();
 
   /**
    * Gets the value of the peer object.
