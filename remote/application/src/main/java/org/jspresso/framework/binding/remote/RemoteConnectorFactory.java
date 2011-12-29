@@ -67,7 +67,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
 
   private IValueChangeListener     collectionConnectorValueChangeListener;
   private IValueChangeListener     formattedConnectorValueChangeListener;
-  private IGUIDGenerator           guidGenerator;
+  private IGUIDGenerator<String>   guidGenerator;
   private PropertyChangeListener   readabilityListener;
   private IRemoteCommandHandler    remoteCommandHandler;
   private IRemotePeerRegistry      remotePeerRegistry;
@@ -483,7 +483,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * @param guidGenerator
    *          the guidGenerator to set.
    */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+  public void setGuidGenerator(IGUIDGenerator<String> guidGenerator) {
     this.guidGenerator = guidGenerator;
   }
 

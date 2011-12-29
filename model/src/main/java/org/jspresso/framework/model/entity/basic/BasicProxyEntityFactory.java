@@ -55,7 +55,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   private IComponentCollectionFactory<IComponent> entityCollectionFactory;
   private IComponentExtensionFactory              entityExtensionFactory;
-  private IGUIDGenerator                          entityGUIDGenerator;
+  private IGUIDGenerator<?>                       entityGUIDGenerator;
   private IComponentFactory                       inlineComponentFactory;
 
   /**
@@ -201,7 +201,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @param entityGUIDGenerator
    *          the entityGUIDGenerator to set.
    */
-  public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
+  public void setEntityGUIDGenerator(IGUIDGenerator<?> entityGUIDGenerator) {
     this.entityGUIDGenerator = entityGUIDGenerator;
   }
 
@@ -308,7 +308,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * 
    * @return the entityGUIDGenerator.
    */
-  protected IGUIDGenerator getEntityGUIDGenerator() {
+  protected IGUIDGenerator<?> getEntityGUIDGenerator() {
     return entityGUIDGenerator;
   }
 }

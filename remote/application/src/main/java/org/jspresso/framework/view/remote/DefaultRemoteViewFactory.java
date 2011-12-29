@@ -163,14 +163,14 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteViewFactory extends
     ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
-  private boolean               dateServerParse;
+  private boolean                dateServerParse;
 
-  private boolean               durationServerParse;
-  private IGUIDGenerator        guidGenerator;
-  private boolean               numberServerParse;
+  private boolean                durationServerParse;
+  private IGUIDGenerator<String> guidGenerator;
+  private boolean                numberServerParse;
 
-  private IRemoteCommandHandler remoteCommandHandler;
-  private IRemotePeerRegistry   remotePeerRegistry;
+  private IRemoteCommandHandler  remoteCommandHandler;
+  private IRemotePeerRegistry    remotePeerRegistry;
 
   /**
    * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
@@ -207,7 +207,7 @@ public class DefaultRemoteViewFactory extends
    * @param guidGenerator
    *          the guidGenerator to set.
    */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+  public void setGuidGenerator(IGUIDGenerator<String> guidGenerator) {
     this.guidGenerator = guidGenerator;
   }
 
@@ -2233,7 +2233,7 @@ public class DefaultRemoteViewFactory extends
    * 
    * @return the getGuidGenerator().
    */
-  protected IGUIDGenerator getGuidGenerator() {
+  protected IGUIDGenerator<String> getGuidGenerator() {
     return guidGenerator;
   }
 

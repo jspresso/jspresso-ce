@@ -32,7 +32,7 @@ import org.jspresso.framework.view.AbstractIconFactory;
  */
 public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
 
-  private IGUIDGenerator guidGenerator;
+  private IGUIDGenerator<String> guidGenerator;
 
   /**
    * Sets the guidGenerator.
@@ -40,7 +40,7 @@ public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
    * @param guidGenerator
    *          the guidGenerator to set.
    */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+  public void setGuidGenerator(IGUIDGenerator<String> guidGenerator) {
     this.guidGenerator = guidGenerator;
   }
 

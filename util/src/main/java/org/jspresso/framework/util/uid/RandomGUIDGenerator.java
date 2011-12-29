@@ -25,7 +25,7 @@ package org.jspresso.framework.util.uid;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RandomGUIDGenerator implements IGUIDGenerator {
+public class RandomGUIDGenerator implements IGUIDGenerator<String> {
 
   /**
    * Generates a GUID based on Marc A. Mnich RandomGUID implementation.

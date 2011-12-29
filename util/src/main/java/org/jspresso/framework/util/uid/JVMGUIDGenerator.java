@@ -24,13 +24,13 @@ package org.jspresso.framework.util.uid;
  * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
-public class JVMGUIDGenerator implements IGUIDGenerator {
+public class JVMGUIDGenerator implements IGUIDGenerator<String> {
 
-  private static int instanceIndex;
-  private static final Object LOCK = new Object();
+  private static int          instanceIndex;
+  private static final Object LOCK  = new Object();
 
-  private String     instanceId;
-  private long       index = 0;
+  private String              instanceId;
+  private long                index = 0;
 
   /**
    * Constructs a new <code>JVMGUIDGenerator</code> instance.

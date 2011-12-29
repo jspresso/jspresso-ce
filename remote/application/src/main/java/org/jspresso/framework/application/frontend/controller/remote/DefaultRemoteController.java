@@ -113,17 +113,17 @@ public class DefaultRemoteController extends
     AbstractFrontendController<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, IRemotePeerRegistry, IRemotePeerRegistryListener {
 
-  private int                 commandLowPriorityOffset;
-  private List<RemoteCommand> commandQueue;
-  private List<String>        removedPeersGuids;
-  private boolean             commandRegistrationEnabled;
-  private IGUIDGenerator      guidGenerator;
-  private IRemotePeerRegistry remotePeerRegistry;
-  private Set<String>         workspaceViews;
+  private int                    commandLowPriorityOffset;
+  private List<RemoteCommand>    commandQueue;
+  private List<String>           removedPeersGuids;
+  private boolean                commandRegistrationEnabled;
+  private IGUIDGenerator<String> guidGenerator;
+  private IRemotePeerRegistry    remotePeerRegistry;
+  private Set<String>            workspaceViews;
 
   // Keep a hard reference on the login view, so that it is not garbage
   // collected.
-  private IView<RComponent>   loginView;
+  private IView<RComponent>      loginView;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -479,7 +479,7 @@ public class DefaultRemoteController extends
    *          the guidGenerator to set.
    * @internal
    */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+  public void setGuidGenerator(IGUIDGenerator<String> guidGenerator) {
     this.guidGenerator = guidGenerator;
   }
 

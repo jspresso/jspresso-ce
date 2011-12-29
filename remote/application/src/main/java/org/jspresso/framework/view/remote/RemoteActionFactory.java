@@ -48,11 +48,11 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 public class RemoteActionFactory extends
     ControllerAwareActionFactory<RAction, RComponent, RIcon> {
 
-  private IGUIDGenerator        guidGenerator;
-  private IRemoteCommandHandler remoteCommandHandler;
-  private IRemotePeerRegistry   remotePeerRegistry;
+  private IGUIDGenerator<String> guidGenerator;
+  private IRemoteCommandHandler  remoteCommandHandler;
+  private IRemotePeerRegistry    remotePeerRegistry;
 
-  private Set<RAction>          hardReferences;
+  private Set<RAction>           hardReferences;
 
   /**
    * {@inheritDoc}
@@ -102,7 +102,7 @@ public class RemoteActionFactory extends
    * @param guidGenerator
    *          the guidGenerator to set.
    */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+  public void setGuidGenerator(IGUIDGenerator<String> guidGenerator) {
     this.guidGenerator = guidGenerator;
   }
 

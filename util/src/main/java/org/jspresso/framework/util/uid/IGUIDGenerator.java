@@ -18,18 +18,22 @@
  */
 package org.jspresso.framework.util.uid;
 
+import java.io.Serializable;
+
 /**
  * This interface has to be implemented by generators of GUID.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual UID type generated.
  */
-public interface IGUIDGenerator {
+public interface IGUIDGenerator<E extends Serializable> {
 
   /**
    * Generates a new GUID.
    * 
    * @return the GUID generated.
    */
-  String generateGUID();
+  E generateGUID();
 }
