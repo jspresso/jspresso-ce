@@ -54,9 +54,9 @@
     <property name="mvcBinder" ref="mvcBinder" />
   </bean>
 
-  <!-- The GUID generator used to implement entities "synthetic key". The idea was taken from 'maulinshah' post on the hibernate 
-    wiki. The implementation of the GUID generator has been written by Marc A. Mnich who published it on http://www.javaexchange.com/aboutRandomGUID.html -->
-  <bean id="entityGUIDGenerator" class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
+  <bean id="stringGUIDGenerator" class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
+  <bean id="binaryGUIDGenerator" class="org.jspresso.framework.util.uid.RandomBinaryGUIDGenerator" />
+  <bean id="entityGUIDGenerator" parent="stringGUIDGenerator"/>
 
   <bean id="guidGenerator" class="org.jspresso.framework.util.uid.JVMGUIDGenerator" scope="prototype" />
 
@@ -277,4 +277,47 @@
     <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
   </bean>
 
+  <bean id="rootEntityId" class="org.jspresso.framework.model.descriptor.basic.BasicJavaSerializablePropertyDescriptor">
+    <property name="name" value="id" />
+    <property name="maxLength" value="36" />
+  </bean>
+
+  <bean id="rootEntityVersion" class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+    <property name="name" value="version" />
+  </bean>
+
+  <bean id="rootEntityDescriptor" class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor">
+    <constructor-arg value="org.jspresso.framework.model.entity.IEntity" />
+    <property name="propertyDescriptors">
+      <list>
+        <bean parent="rootEntityId">
+          <property name="readOnly" value="true" />
+        </bean>
+        <bean parent="rootEntityVersion">
+          <property name="readOnly" value="true" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor">
+          <property name="name" value="persistent" />
+          <property name="readOnly" value="true" />
+          <property name="computed" value="true" />
+        </bean>
+      </list>
+    </property>
+    <property name="renderedProperties">
+      <list />
+    </property>
+    <property name="queryableProperties">
+      <list />
+    </property>
+  </bean>
+
+  <bean id="EnityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetClass" value="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor" />
+    <property name="targetMethod" value="setRootEntityDescriptor" />
+    <property name="arguments">
+      <list>
+        <ref bean="rootEntityDescriptor" />
+      </list>
+    </property>
+  </bean>
 </beans>

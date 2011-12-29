@@ -105,10 +105,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.modelType.array>
-    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
-  <#elseif propertyDescriptor.name ="id">
+  <#if propertyDescriptor.name ="id">
     <#local propertyType="java.io.Serializable"/>
+  <#elseif propertyDescriptor.modelType.array>
+    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
   <#else>
     <#local propertyType=propertyDescriptor.modelType.name/>
   </#if>

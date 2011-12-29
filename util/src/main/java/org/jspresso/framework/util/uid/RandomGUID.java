@@ -58,8 +58,8 @@ import java.util.Random;
  * (IP, time, random number) from the resulting GUIDs as the MD5 hash algorithm
  * provides one way encryption.
  * <p>
- * ----> Security of RandomGUID: <----- RandomGUID can be called one of two ways --
- * with the basic java Random number generator or a cryptographically strong
+ * ----> Security of RandomGUID: <----- RandomGUID can be called one of two ways
+ * -- with the basic java Random number generator or a cryptographically strong
  * random generator (SecureRandom). The choice is offered because the secure
  * random generator takes about 3.5 times longer to generate its random numbers
  * and this performance hit may not be worth the added security especially
@@ -95,6 +95,11 @@ public class RandomGUID extends Object {
   private static Random       myRand;
   private static SecureRandom mySecureRand;
   private static String       sId;
+
+  private String              separator;
+  private String              valueAfterMD5  = "";
+  private String              valueBeforeMD5 = "";
+
   /**
    * Static block to take care of one time secureRandom seed. It takes a few
    * seconds to initialize SecureRandom. You might want to consider removing
@@ -112,28 +117,41 @@ public class RandomGUID extends Object {
     }
   }
 
-  private String              valueAfterMD5  = "";
-
-  private String              valueBeforeMD5 = "";
-
   /**
    * Default constructor. With no specification of security option, this
    * constructor defaults to lower security, high performance.
    */
   public RandomGUID() {
-    getRandomGUID(false);
+    this(false);
   }
 
   /**
    * Constructor with security option.
    * 
    * @param secure
-   *            Setting secure true enables each random number generated to be
-   *            cryptographically strong. Secure false defaults to the standard
-   *            Random function seeded with a single cryptographically strong
-   *            random number.
+   *          Setting secure true enables each random number generated to be
+   *          cryptographically strong. Secure false defaults to the standard
+   *          Random function seeded with a single cryptographically strong
+   *          random number.
    */
   public RandomGUID(boolean secure) {
+    this(secure, "-");
+  }
+
+  /**
+   * Constructor with security option.
+   * 
+   * @param secure
+   *          Setting secure true enables each random number generated to be
+   *          cryptographically strong. Secure false defaults to the standard
+   *          Random function seeded with a single cryptographically strong
+   *          random number.
+   * @param separator
+   *          the separator to use between the different GUID parts.
+   *          <code>null</code> means no sepârator.
+   */
+  public RandomGUID(boolean secure, String separator) {
+    this.separator = separator;
     getRandomGUID(secure);
   }
 
@@ -141,7 +159,7 @@ public class RandomGUID extends Object {
    * Demonstraton and self test of class.
    * 
    * @param args
-   *            program arguments.
+   *          program arguments.
    */
   public static void main(String[] args) {
     for (int i = 0; i < 10000; i++) {
@@ -163,13 +181,21 @@ public class RandomGUID extends Object {
     String raw = valueAfterMD5.toUpperCase();
     StringBuffer sb = new StringBuffer();
     sb.append(raw.substring(0, 8));
-    sb.append("-");
+    if (separator != null) {
+      sb.append(separator);
+    }
     sb.append(raw.substring(8, 12));
-    sb.append("-");
+    if (separator != null) {
+      sb.append(separator);
+    }
     sb.append(raw.substring(12, 16));
-    sb.append("-");
+    if (separator != null) {
+      sb.append(separator);
+    }
     sb.append(raw.substring(16, 20));
-    sb.append("-");
+    if (separator != null) {
+      sb.append(separator);
+    }
     sb.append(raw.substring(20));
 
     return sb.toString();

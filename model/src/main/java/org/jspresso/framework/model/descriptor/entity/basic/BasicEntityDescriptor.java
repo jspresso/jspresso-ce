@@ -45,9 +45,8 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> {
 
-  private static final IComponentDescriptor<IEntity> ENTITY_DESCRIPTOR = createEntityDescriptor();
-
-  private boolean                                    purelyAbstract;
+  private boolean                              purelyAbstract;
+  private static IComponentDescriptor<IEntity> rootEntityDescriptor;
 
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
@@ -61,12 +60,12 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
     this.purelyAbstract = false;
   }
 
-  private static IComponentDescriptor<IEntity> createEntityDescriptor() {
-    BasicInterfaceDescriptor<IEntity> entityDescriptor = new BasicInterfaceDescriptor<IEntity>(
+  private static IComponentDescriptor<IEntity> createDefaultEntityDescriptor() {
+    BasicInterfaceDescriptor<IEntity> defaultEntityDescriptor = new BasicInterfaceDescriptor<IEntity>(
         IEntity.class.getName());
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
-        2);
+        3);
 
     BasicJavaSerializablePropertyDescriptor idPropertyDescriptor = new BasicJavaSerializablePropertyDescriptor();
     idPropertyDescriptor.setName(IEntity.ID);
@@ -85,13 +84,13 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
     persistentPropertyDescriptor.setReadOnly(true);
     propertyDescriptors.add(persistentPropertyDescriptor);
 
-    entityDescriptor.setPropertyDescriptors(propertyDescriptors);
+    defaultEntityDescriptor.setPropertyDescriptors(propertyDescriptors);
 
     List<String> emptyList = Collections.emptyList();
-    entityDescriptor.setRenderedProperties(emptyList);
-    entityDescriptor.setQueryableProperties(emptyList);
+    defaultEntityDescriptor.setRenderedProperties(emptyList);
+    defaultEntityDescriptor.setQueryableProperties(emptyList);
 
-    return entityDescriptor;
+    return defaultEntityDescriptor;
   }
 
   /**
@@ -104,8 +103,9 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
     if (ancestorDescriptors == null) {
       ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>(1);
     }
-    if (!ancestorDescriptors.contains(ENTITY_DESCRIPTOR)) {
-      ancestorDescriptors.add(ENTITY_DESCRIPTOR);
+    IComponentDescriptor<IEntity> rootEntityDesc = getRootEntityDescriptor();
+    if (!ancestorDescriptors.contains(rootEntityDesc)) {
+      ancestorDescriptors.add(rootEntityDesc);
     }
     return ancestorDescriptors;
   }
@@ -149,5 +149,30 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;
+  }
+
+  /**
+   * Configures the root entity descriptor to use globally for the application.
+   * Jspresso will ensure that all entity descriptors have this root descriptor
+   * as ancestor.
+   * 
+   * @param rootEntityDescriptor
+   *          the root entity descriptor to use globally for the application.
+   */
+  public static synchronized void setRootEntityDescriptor(
+      IComponentDescriptor<IEntity> rootEntityDescriptor) {
+    BasicEntityDescriptor.rootEntityDescriptor = rootEntityDescriptor;
+  }
+
+  /**
+   * Gets the entityDescriptor.
+   * 
+   * @return the entityDescriptor.
+   */
+  public static synchronized IComponentDescriptor<IEntity> getRootEntityDescriptor() {
+    if (rootEntityDescriptor == null) {
+      rootEntityDescriptor = createDefaultEntityDescriptor();
+    }
+    return rootEntityDescriptor;
   }
 }
