@@ -208,6 +208,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            openFileAsBinaryPropertyAction;
   private IDisplayableAction            resetPropertyAction;
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
+  private String                        mandatoryPropertyColorHex        = "0xFFFF0000";
 
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
@@ -3115,4 +3116,40 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
   }
 
+  /**
+   * Gets the mandatoryPropertyColorHex.
+   * 
+   * @return the mandatoryPropertyColorHex.
+   */
+  protected String getMandatoryPropertyColorHex() {
+    return mandatoryPropertyColorHex;
+  }
+
+  /**
+   * Configures the color to be used to highlight mandatory labels. It defaults
+   * to red, i.e. <code>0xFFFF0000</code>.
+   * 
+   * @param mandatoryPropertyColorHex
+   *          the mandatoryPropertyColorHex to set.
+   */
+  public void setMandatoryPropertyColorHex(String mandatoryPropertyColorHex) {
+    this.mandatoryPropertyColorHex = mandatoryPropertyColorHex;
+  }
+
+  /**
+   * Decorates mandatory property label. Default is to append a &quot;*&quot;.
+   * 
+   * @param labelText
+   *          the original label text.
+   * @return the decorated label text.
+   */
+  protected String decorateMandatoryPropertyLabel(String labelText) {
+    String decoratedLabelText;
+    if (labelText != null) {
+      decoratedLabelText = labelText + "*";
+    } else {
+      decoratedLabelText = "*";
+    }
+    return decoratedLabelText;
+  }
 }

@@ -1597,23 +1597,25 @@ public class DefaultSwingViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       JComponent propertyComponent, ITranslationProvider translationProvider,
       Locale locale) {
-    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
     JLabel propertyLabel = createJLabel(propertyViewDescriptor, false);
     StringBuffer labelText = new StringBuffer(
         propertyViewDescriptor.getI18nName(translationProvider, locale));
-    if (propertyDescriptor.isMandatory()
-        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
-      labelText.append("*");
-    }
     propertyLabel.setText(labelText.toString());
     propertyLabel.setLabelFor(propertyComponent);
-    configureLabelComponent(propertyLabel, propertyViewDescriptor);
+    configurePropertyLabel(propertyLabel, propertyViewDescriptor);
     return propertyLabel;
   }
 
-  private void configureLabelComponent(JComponent propertyLabel,
+  private void configurePropertyLabel(JLabel propertyLabel,
       IPropertyViewDescriptor propertyViewDescriptor) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
+      propertyLabel.setForeground(createColor(getMandatoryPropertyColorHex()));
+      propertyLabel.setText(decorateMandatoryPropertyLabel(propertyLabel
+          .getText()));
+    }
     if (propertyViewDescriptor.getLabelFont() != null) {
       propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
           propertyLabel.getFont()));
@@ -1621,13 +1623,6 @@ public class DefaultSwingViewFactory extends
     if (propertyViewDescriptor.getLabelForeground() != null) {
       propertyLabel.setForeground(createColor(propertyViewDescriptor
           .getLabelForeground()));
-    } else {
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
-          .getModelDescriptor();
-      if (propertyDescriptor.isMandatory()
-          && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
-        propertyLabel.setForeground(Color.RED);
-      }
     }
     if (propertyViewDescriptor.getLabelBackground() != null) {
       propertyLabel.setBackground(createColor(propertyViewDescriptor
@@ -2061,7 +2056,7 @@ public class DefaultSwingViewFactory extends
     }
     column.setCellRenderer(cellRenderer);
     EvenOddTableCellRenderer headerRenderer = new EvenOddTableCellRenderer();
-    configureLabelComponent(headerRenderer, columnViewDescriptor);
+    configurePropertyLabel(headerRenderer, columnViewDescriptor);
     // To preserve font that has been set and avoid Jtable changing it.
     headerRenderer.setCustomFont(headerRenderer.getFont());
     if (tableModel instanceof AbstractTableSorter) {
