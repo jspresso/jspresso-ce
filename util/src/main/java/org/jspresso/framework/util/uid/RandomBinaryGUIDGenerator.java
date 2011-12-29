@@ -29,7 +29,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision: 5396 $
  * @author Vincent Vandenschrick
  */
-public class RandomBinaryGUIDGenerator implements IGUIDGenerator<byte[]> {
+public class RandomBinaryGUIDGenerator implements IGUIDGenerator<Bytes> {
 
   /**
    * Generates a GUID based on Marc A. Mnich RandomGUID implementation.
@@ -37,10 +37,10 @@ public class RandomBinaryGUIDGenerator implements IGUIDGenerator<byte[]> {
    * {@inheritDoc}
    */
   @Override
-  public byte[] generateGUID() {
+  public Bytes generateGUID() {
     String hex = new RandomGUID(false, null).toString();
     try {
-      return Hex.decodeHex(hex.toCharArray());
+      return new Bytes(Hex.decodeHex(hex.toCharArray()));
     } catch (DecoderException ex) {
       throw new NestedRuntimeException(ex, "Unable to decode GUID from hex.");
     }
