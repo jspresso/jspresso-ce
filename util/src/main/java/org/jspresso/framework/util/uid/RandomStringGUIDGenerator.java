@@ -18,18 +18,14 @@
  */
 package org.jspresso.framework.util.uid;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
-
 /**
- * An implementation of IGUIDGenerator based on Marc A. Mnich RandomGUID
- * implementation that returns a byte array.
+ * Default implementation of IGUIDGenerator based on Marc A. Mnich RandomGUID
+ * implementation.
  * 
- * @version $LastChangedRevision: 5396 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RandomBinaryGUIDGenerator implements IGUIDGenerator<Bytes> {
+public class RandomStringGUIDGenerator implements IGUIDGenerator<String> {
 
   /**
    * Generates a GUID based on Marc A. Mnich RandomGUID implementation.
@@ -37,13 +33,8 @@ public class RandomBinaryGUIDGenerator implements IGUIDGenerator<Bytes> {
    * {@inheritDoc}
    */
   @Override
-  public Bytes generateGUID() {
-    String hex = new RandomGUID(false, null).toString();
-    try {
-      return new Bytes(Hex.decodeHex(hex.toCharArray()));
-    } catch (DecoderException ex) {
-      throw new NestedRuntimeException(ex, "Unable to decode GUID from hex.");
-    }
+  public String generateGUID() {
+    return new RandomGUID().toString();
   }
 
 }

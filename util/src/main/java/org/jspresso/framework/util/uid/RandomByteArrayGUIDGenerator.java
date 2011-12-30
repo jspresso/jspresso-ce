@@ -18,36 +18,32 @@
  */
 package org.jspresso.framework.util.uid;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
+
 /**
- * An instance that creates unique ids sequentially for a JVM.
+ * An implementation of IGUIDGenerator based on Marc A. Mnich RandomGUID
+ * implementation that returns a byte array.
  * 
- * @version $LastChangedRevision: 2529 $
+ * @version $LastChangedRevision: 5396 $
  * @author Vincent Vandenschrick
  */
-public class JVMGUIDGenerator implements IGUIDGenerator<String> {
-
-  private static int          instanceIndex;
-  private static final Object LOCK  = new Object();
-
-  private String              instanceId;
-  private long                index = 0;
+public class RandomByteArrayGUIDGenerator implements IGUIDGenerator<ByteArray> {
 
   /**
-   * Constructs a new <code>JVMGUIDGenerator</code> instance.
-   */
-  public JVMGUIDGenerator() {
-    synchronized (LOCK) {
-      instanceId = Integer.toHexString(instanceIndex++);
-    }
-  }
-
-  /**
-   * Generates a GUID based on a locally kept index.
+   * Generates a GUID based on Marc A. Mnich RandomGUID implementation.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public synchronized String generateGUID() {
-    return instanceId + Long.toHexString(index++);
+  public ByteArray generateGUID() {
+    String hex = new RandomGUID(false, null).toString();
+    try {
+      return new ByteArray(Hex.decodeHex(hex.toCharArray()));
+    } catch (DecoderException ex) {
+      throw new NestedRuntimeException(ex, "Unable to decode GUID from hex.");
+    }
   }
+
 }

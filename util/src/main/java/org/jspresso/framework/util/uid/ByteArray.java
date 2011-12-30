@@ -29,7 +29,7 @@ import org.apache.commons.codec.binary.Hex;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public final class Bytes implements Serializable, Comparable<Bytes> {
+public final class ByteArray implements Serializable, Comparable<ByteArray> {
 
   private static final long serialVersionUID = 4906103696506778514L;
 
@@ -42,7 +42,7 @@ public final class Bytes implements Serializable, Comparable<Bytes> {
    * @param bytes
    *          the bytes content.
    */
-  public Bytes(byte[] bytes) {
+  public ByteArray(byte[] bytes) {
     this.bytes = bytes;
     cachedHashcode = Hex.encodeHexString(bytes).hashCode();
   }
@@ -54,10 +54,10 @@ public final class Bytes implements Serializable, Comparable<Bytes> {
    */
   @Override
   public boolean equals(Object other) {
-    if (other == null || !(other instanceof Bytes)) {
+    if (other == null || !(other instanceof ByteArray)) {
       return false;
     }
-    return Arrays.equals(((Bytes) other).bytes, bytes);
+    return Arrays.equals(((ByteArray) other).bytes, bytes);
   }
 
   /**
@@ -98,7 +98,7 @@ public final class Bytes implements Serializable, Comparable<Bytes> {
    * {@inheritDoc}
    */
   @Override
-  public int compareTo(Bytes o) {
+  public int compareTo(ByteArray o) {
     if (o == null) {
       return 1;
     }

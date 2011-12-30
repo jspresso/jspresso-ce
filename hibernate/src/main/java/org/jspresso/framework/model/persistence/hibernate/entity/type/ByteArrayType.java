@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.usertype.UserType;
-import org.jspresso.framework.util.uid.Bytes;
+import org.jspresso.framework.util.uid.ByteArray;
 
 /**
  * A user type to be able to use byte arrays as entity identifiers.
@@ -33,7 +33,7 @@ import org.jspresso.framework.util.uid.Bytes;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BytesType implements UserType {
+public class ByteArrayType implements UserType {
 
   /**
    * {@inheritDoc}
@@ -60,7 +60,7 @@ public class BytesType implements UserType {
    */
   @Override
   public Class<?> returnedClass() {
-    return Bytes.class;
+    return ByteArray.class;
   }
 
   /**
@@ -99,7 +99,7 @@ public class BytesType implements UserType {
     if (rs.wasNull()) {
       return null;
     }
-    return new Bytes(bytes);
+    return new ByteArray(bytes);
   }
 
   /**
@@ -116,7 +116,7 @@ public class BytesType implements UserType {
     if (value == null) {
       st.setNull(index, Types.VARBINARY);
     } else {
-      st.setBytes(index, ((Bytes) value).getBytes());
+      st.setBytes(index, ((ByteArray) value).getBytes());
     }
   }
 

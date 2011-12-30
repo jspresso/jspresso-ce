@@ -19,22 +19,35 @@
 package org.jspresso.framework.util.uid;
 
 /**
- * Default implementation of IGUIDGenerator based on Marc A. Mnich RandomGUID
- * implementation.
+ * An instance that creates unique ids sequentially for a JVM.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
-public class RandomGUIDGenerator implements IGUIDGenerator<String> {
+public class JVMStringGUIDGenerator implements IGUIDGenerator<String> {
+
+  private static int          instanceIndex;
+  private static final Object LOCK  = new Object();
+
+  private String              instanceId;
+  private long                index = 0;
 
   /**
-   * Generates a GUID based on Marc A. Mnich RandomGUID implementation.
+   * Constructs a new <code>JVMGUIDGenerator</code> instance.
+   */
+  public JVMStringGUIDGenerator() {
+    synchronized (LOCK) {
+      instanceId = Integer.toHexString(instanceIndex++);
+    }
+  }
+
+  /**
+   * Generates a GUID based on a locally kept index.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public String generateGUID() {
-    return new RandomGUID().toString();
+  public synchronized String generateGUID() {
+    return instanceId + Long.toHexString(index++);
   }
-
 }

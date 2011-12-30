@@ -54,11 +54,13 @@
     <property name="mvcBinder" ref="mvcBinder" />
   </bean>
 
-  <bean id="stringGUIDGenerator" class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
-  <bean id="binaryGUIDGenerator" class="org.jspresso.framework.util.uid.RandomBinaryGUIDGenerator" />
+  <bean id="stringGUIDGenerator" class="org.jspresso.framework.util.uid.RandomStringGUIDGenerator" />
+  <bean id="jvmStringGUIDGenerator" class="org.jspresso.framework.util.uid.JVMStringGUIDGenerator" />
+  <bean id="binaryGUIDGenerator" class="org.jspresso.framework.util.uid.RandomByteArrayGUIDGenerator" />
+  
   <bean id="entityGUIDGenerator" parent="stringGUIDGenerator"/>
 
-  <bean id="guidGenerator" class="org.jspresso.framework.util.uid.JVMGUIDGenerator" scope="prototype" />
+  <bean id="guidGenerator" parent="jvmStringGUIDGenerator" scope="prototype" />
 
   <!-- The root abstract implementation used as Application Session. -->
   <bean id="applicationSession" scope="prototype"

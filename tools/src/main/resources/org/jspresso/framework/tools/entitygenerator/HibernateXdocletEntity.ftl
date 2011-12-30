@@ -128,7 +128,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           generator-class = "assigned"
       <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)?exists>
         <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")>
-          <#local hibernateTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.BytesType"/>
+          <#local hibernateTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.ByteArrayType"/>
         <#else> 
           <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)/>
           <#if hibernateType?exists>
