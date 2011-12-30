@@ -127,10 +127,17 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.id
    *           generator-class = "assigned"
       <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)?exists>
-        <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)/>
+        <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")>
+          <#local hibernateTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.BytesType"/>
+        <#else> 
+          <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)/>
+          <#if hibernateType?exists>
+            <#local hibernateTypeName=hibernateType.name/>
+          </#if>
+        </#if>
       </#if>
-      <#if hibernateType?exists>
-   *           type = "${hibernateType.name}"
+      <#if hibernateTypeName?exists>
+   *           type = "${hibernateTypeName}"
       <#else>
    *           type = "string"
       </#if>

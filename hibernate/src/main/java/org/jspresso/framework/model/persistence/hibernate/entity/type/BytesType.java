@@ -35,14 +35,12 @@ import org.jspresso.framework.util.uid.Bytes;
  */
 public class BytesType implements UserType {
 
-  private static final int[] SQL_TYPES = {Types.VARBINARY};
-
   /**
    * {@inheritDoc}
    */
   @Override
   public int[] sqlTypes() {
-    return SQL_TYPES;
+    return new int[] {Types.VARBINARY};
   }
 
   /**
