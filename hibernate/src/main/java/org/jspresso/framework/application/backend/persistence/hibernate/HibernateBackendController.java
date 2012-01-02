@@ -302,12 +302,11 @@ public class HibernateBackendController extends AbstractBackendController {
              */
             @Override
             public Object doInHibernate(Session session) {
-              // cleanPersistentCollectionDirtyState(componentOrEntity);
               if (componentOrEntity instanceof IEntity) {
                 if (((IEntity) componentOrEntity).isPersistent()) {
                   lockInHibernate((IEntity) componentOrEntity, session);
                 } else if (initializedProperty instanceof IEntity) {
-                  lockInHibernate((IEntity) componentOrEntity, session);
+                  lockInHibernate((IEntity) initializedProperty, session);
                 }
               } else if (initializedProperty instanceof IEntity) {
                 // to handle initialization of component properties.
@@ -655,7 +654,9 @@ public class HibernateBackendController extends AbstractBackendController {
       // Do not use get before trying to lock.
       // Get performs a DB query.
       try {
-        clearPersistentCollectionDirtyState(entity);
+        if (isInitialized(entity)) {
+          clearPersistentCollectionDirtyState(entity);
+        }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
         IComponent sessionEntity = (IComponent) hibernateSession.get(
@@ -1010,8 +1011,7 @@ public class HibernateBackendController extends AbstractBackendController {
       } else {
         if (propertyValue instanceof HibernateProxy) {
           // Unfortunately there is actually no mean of performing a shallow
-          // copy
-          // of it.
+          // copy of it.
         }
       }
     }
