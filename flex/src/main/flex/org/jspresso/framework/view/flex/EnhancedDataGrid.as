@@ -155,5 +155,12 @@ package org.jspresso.framework.view.flex {
       }
       super.drawItem(item, selected, highlighted, caret, transition);
     }
+    
+    override public function destroyItemEditor():void {
+      if (itemEditorInstance is RemoteValueDgItemEditor) {
+        (itemEditorInstance as RemoteValueDgItemEditor).cleanup();
+      }
+      super.destroyItemEditor();
+    }
   }
 }

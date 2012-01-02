@@ -86,7 +86,11 @@ package org.jspresso.framework.view.flex
       if(_valueChangeListener != null) {
         _valueChangeListener.unwatch();
       }
-      _valueChangeListener = BindingUtils.bindProperty(_state, "value", cellValueState, "value", true);
+      if(_valueChangeListener) {
+        _valueChangeListener.reset(cellValueState);
+      } else {
+        _valueChangeListener = BindingUtils.bindProperty(_state, "value", cellValueState, "value", true);
+      }
       if(_state.value == null || _state.value == ""){
         var tf:UIComponent;
         if(_editor is Container) {
@@ -98,6 +102,12 @@ package org.jspresso.framework.view.flex
       }
     }
     
+    public function cleanup():void {
+      if(_valueChangeListener != null) {
+        _valueChangeListener.unwatch();
+      }
+    }
+
     override public function setFocus():void {
       var tf:UIComponent;
       if(_editor is Container) {

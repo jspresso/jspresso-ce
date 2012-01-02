@@ -107,7 +107,11 @@ package org.jspresso.framework.view.flex {
   	    if(_valueChangeListener != null) {
   	      _valueChangeListener.unwatch();
   	    }
-  	    _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+        if(_valueChangeListener) {
+          _valueChangeListener.reset(cellValueState);
+        } else {
+          _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+        }
     	  rendererListData.label = computeLabel(cellValueState.value);
   	  }
   	}
