@@ -13,6 +13,10 @@ package org.jspresso.framework.view.flex
     
     private var _preventDefaultButton:Boolean = false;
          
+    public function EnhancedTextInput() {
+      super();
+    }
+
     override protected function focusInHandler(event:FocusEvent):void {
       super.focusInHandler(event);
       if(preventDefaultButton) {
