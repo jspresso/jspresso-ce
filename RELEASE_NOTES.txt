@@ -1,3 +1,10 @@
+3.5.11
+======
+- Due to a groupId change of the hsqldb artifact in the central Maven repository, you must change all hsqldb references :
+  <groupId>hsqldb</groupId>
+    to
+  <groupId>org.hsqldb</groupId> 
+
 3.5.10
 ======
 - Setting an action on a property view has an improved behaviour; There are 2 cases : 
