@@ -287,7 +287,8 @@ public abstract class AbstractCompositeValueConnector extends
    *          the connector to be added as composite.
    */
   @Override
-  public void addChildConnector(String storageKey, IValueConnector childConnector) {
+  public void addChildConnector(String storageKey,
+      IValueConnector childConnector) {
     childConnectors.put(storageKey, childConnector);
     childConnector.setParentConnector(this);
   }
@@ -403,5 +404,16 @@ public abstract class AbstractCompositeValueConnector extends
                 renderingConnector.getConnectorValue()));
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void recycle(IMvcBinder mvcBinder) {
+    super.recycle(mvcBinder);
+    displayDescription = null;
+    displayIconImageUrl = null;
+    displayValue = null;
   }
 }

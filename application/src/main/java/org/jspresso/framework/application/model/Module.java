@@ -501,7 +501,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the icon image URL used to identify this workspace. Supported URL
+   * Sets the icon image URL used to identify this module. Supported URL
    * protocols include :
    * <ul>
    * <li>all JVM supported protocols</li>

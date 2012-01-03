@@ -326,7 +326,7 @@ public abstract class AbstractCollectionConnector extends
   }
 
   private void cleanupConnector(IValueConnector removedConnector) {
-    removedConnector.recycle();
+    removedConnector.recycle(mvcBinder);
     connectorTank.add(removedConnector);
   }
 

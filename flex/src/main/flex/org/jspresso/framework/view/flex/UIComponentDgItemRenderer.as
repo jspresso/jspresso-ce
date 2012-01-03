@@ -25,7 +25,7 @@ package org.jspresso.framework.view.flex {
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remoteComponent:RComponent;
 
-    private var valueChangeListener:ChangeWatcher;
+    private var _valueChangeListener:ChangeWatcher;
     
     public function UIComponentDgItemRenderer() {
       //default constructor.
@@ -65,10 +65,14 @@ package org.jspresso.framework.view.flex {
       } else if(value is RemoteValueState) {
         cellValueState = value as RemoteValueState;
       }
-	    if(valueChangeListener != null) {
-	      valueChangeListener.unwatch();
+	    if(_valueChangeListener != null) {
+	      _valueChangeListener.unwatch();
 	    }
-	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+      if(_valueChangeListener) {
+        _valueChangeListener.reset(cellValueState);
+      } else {
+        _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+      }
     }
     
   	protected function refresh(value:Object):void {

@@ -369,7 +369,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   private void cleanupConnector(IValueConnector removedConnector) {
-    removedConnector.recycle();
+    removedConnector.recycle(null);
     connectorTank.add(removedConnector);
   }
 

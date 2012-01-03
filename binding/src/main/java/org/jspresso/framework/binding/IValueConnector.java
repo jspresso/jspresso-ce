@@ -90,8 +90,12 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Cleans all bindings with view connectors.
+   * 
+   * @param mvcBinder
+   *          the mvcBinder used to unbind view connectors. It might be
+   *          <code>null</code> for model connectors.
    */
-  void recycle();
+  void recycle(IMvcBinder mvcBinder);
 
   /**
    * Clones this connector.
