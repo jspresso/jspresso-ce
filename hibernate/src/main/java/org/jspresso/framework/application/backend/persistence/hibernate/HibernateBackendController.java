@@ -164,7 +164,7 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
     final List<E> uowEntities = super.cloneInUnitOfWork(entities);
-    hibernateTemplate.execute(new HibernateCallback<Object>() {
+    getHibernateTemplate().execute(new HibernateCallback<Object>() {
 
       @Override
       public Object doInHibernate(Session session) {
@@ -191,17 +191,18 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected <E extends IEntity> E performUowEntityCloning(final E entity) {
-    E sessionEntity = hibernateTemplate.execute(new HibernateCallback<E>() {
+    E sessionEntity = getHibernateTemplate().execute(
+        new HibernateCallback<E>() {
 
-      @Override
-      public E doInHibernate(Session session) {
-        if (session.contains(entity)) {
-          return entity;
-        }
-        return null;
-      }
+          @Override
+          public E doInHibernate(Session session) {
+            if (session.contains(entity)) {
+              return entity;
+            }
+            return null;
+          }
 
-    });
+        });
     if (sessionEntity != null) {
       return sessionEntity;
     }
@@ -243,97 +244,112 @@ public class HibernateBackendController extends AbstractBackendController {
     return hibernateTemplate;
   }
 
+  private Session currentInitializationSession = null;
+
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       final String propertyName) {
-    boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
-    try {
-      getDirtRecorder().setEnabled(false);
-      final Object initializedProperty = componentOrEntity
-          .straightGetProperty(propertyName);
-      if (!Hibernate.isInitialized(initializedProperty)) {
-        if (initializedProperty instanceof AbstractPersistentCollection) {
-          if (((AbstractPersistentCollection) initializedProperty).getSession() != null
-              && ((AbstractPersistentCollection) initializedProperty)
-                  .getSession().isOpen()) {
+    if (currentInitializationSession != null) {
+      performPropertyInitialization(componentOrEntity, propertyName,
+          currentInitializationSession);
+    } else {
+      HibernateTemplate ht = getHibernateTemplate();
+      boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
+      int oldFlushMode = ht.getFlushMode();
+      try {
+        // Temporary switch to a read-only session.
+        getDirtRecorder().setEnabled(false);
+        ht.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+        ht.execute(new HibernateCallback<Object>() {
+
+          /**
+           * {@inheritDoc}
+           */
+          @Override
+          public Object doInHibernate(Session session) {
             try {
-              Hibernate.initialize(initializedProperty);
-              if (initializedProperty instanceof Collection<?>) {
-                relinkAfterInitialization(
-                    (Collection<IEntity>) initializedProperty,
-                    componentOrEntity);
-              }
-              return;
-            } catch (Exception ex) {
-              LOG.error(
-                  "An internal error occurred when forcing {} collection initialization.",
-                  propertyName);
-              LOG.error("Source exception", ex);
-            }
-          }
-        } else if (initializedProperty instanceof HibernateProxy) {
-          HibernateProxy proxy = (HibernateProxy) initializedProperty;
-          LazyInitializer li = proxy.getHibernateLazyInitializer();
-          if (li.getSession() != null && li.getSession().isOpen()) {
-            try {
-              Hibernate.initialize(initializedProperty);
-              return;
-            } catch (Exception ex) {
-              LOG.error(
-                  "An internal error occurred when forcing {} reference initialization.",
-                  propertyName);
-              LOG.error("Source exception", ex);
-            }
-          }
-        }
-
-        int oldFlushMode = hibernateTemplate.getFlushMode();
-        try {
-          // Temporary switch to a read-only session.
-          hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-          hibernateTemplate.execute(new HibernateCallback<Object>() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public Object doInHibernate(Session session) {
-              if (componentOrEntity instanceof IEntity) {
-                if (((IEntity) componentOrEntity).isPersistent()) {
-                  lockInHibernate((IEntity) componentOrEntity, session);
-                } else if (initializedProperty instanceof IEntity) {
-                  lockInHibernate((IEntity) initializedProperty, session);
-                }
-              } else if (initializedProperty instanceof IEntity) {
-                // to handle initialization of component properties.
-                lockInHibernate((IEntity) initializedProperty, session);
-              }
-
-              Hibernate.initialize(initializedProperty);
-              if (initializedProperty instanceof Collection<?>) {
-                relinkAfterInitialization(
-                    (Collection<IEntity>) initializedProperty,
-                    componentOrEntity);
-              } else {
-                relinkAfterInitialization(
-                    Collections.singleton((IEntity) initializedProperty),
-                    componentOrEntity);
-              }
+              currentInitializationSession = session;
+              performPropertyInitialization(componentOrEntity, propertyName,
+                  session);
               return null;
+            } finally {
+              currentInitializationSession = null;
             }
-          });
-        } finally {
-          hibernateTemplate.setFlushMode(oldFlushMode);
-        }
-        super.initializePropertyIfNeeded(componentOrEntity, propertyName);
-        clearPropertyDirtyState(initializedProperty);
+          }
+        });
+      } finally {
+        getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+        ht.setFlushMode(oldFlushMode);
       }
-    } finally {
-      getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void performPropertyInitialization(
+      final IComponent componentOrEntity, final String propertyName,
+      Session session) {
+    Object initializedProperty = componentOrEntity
+        .straightGetProperty(propertyName);
+    if (!Hibernate.isInitialized(initializedProperty)) {
+      if (initializedProperty instanceof AbstractPersistentCollection) {
+        if (((AbstractPersistentCollection) initializedProperty).getSession() != null
+            && ((AbstractPersistentCollection) initializedProperty)
+                .getSession().isOpen()) {
+          try {
+            Hibernate.initialize(initializedProperty);
+            if (initializedProperty instanceof Collection<?>) {
+              relinkAfterInitialization(
+                  (Collection<IEntity>) initializedProperty, componentOrEntity);
+            }
+            return;
+          } catch (Exception ex) {
+            LOG.error(
+                "An internal error occurred when forcing {} collection initialization.",
+                propertyName);
+            LOG.error("Source exception", ex);
+          }
+        }
+      } else if (initializedProperty instanceof HibernateProxy) {
+        HibernateProxy proxy = (HibernateProxy) initializedProperty;
+        LazyInitializer li = proxy.getHibernateLazyInitializer();
+        if (li.getSession() != null && li.getSession().isOpen()) {
+          try {
+            Hibernate.initialize(initializedProperty);
+            return;
+          } catch (Exception ex) {
+            LOG.error(
+                "An internal error occurred when forcing {} reference initialization.",
+                propertyName);
+            LOG.error("Source exception", ex);
+          }
+        }
+      }
+
+      if (componentOrEntity instanceof IEntity) {
+        if (((IEntity) componentOrEntity).isPersistent()) {
+          lockInHibernate((IEntity) componentOrEntity, session);
+        } else if (initializedProperty instanceof IEntity) {
+          lockInHibernate((IEntity) initializedProperty, session);
+        }
+      } else if (initializedProperty instanceof IEntity) {
+        // to handle initialization of component properties.
+        lockInHibernate((IEntity) initializedProperty, session);
+      }
+
+      Hibernate.initialize(initializedProperty);
+      if (initializedProperty instanceof Collection<?>) {
+        relinkAfterInitialization((Collection<IEntity>) initializedProperty,
+            componentOrEntity);
+      } else {
+        relinkAfterInitialization(
+            Collections.singleton((IEntity) initializedProperty),
+            componentOrEntity);
+      }
+      super.initializePropertyIfNeeded(componentOrEntity, propertyName);
+      clearPropertyDirtyState(initializedProperty);
     }
   }
 
@@ -378,7 +394,7 @@ public class HibernateBackendController extends AbstractBackendController {
   public void performPendingOperations() {
     if (!traversedPendingOperations) {
       traversedPendingOperations = true;
-      hibernateTemplate.execute(new HibernateCallback<Object>() {
+      getHibernateTemplate().execute(new HibernateCallback<Object>() {
 
         /**
          * {@inheritDoc}
@@ -843,8 +859,8 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
+      public List<T> doInTransaction(@SuppressWarnings("unused")
+      TransactionStatus status) {
         int oldFlushMode = getHibernateTemplate().getFlushMode();
         try {
           getHibernateTemplate().setFlushMode(HibernateAccessor.FLUSH_NEVER);
