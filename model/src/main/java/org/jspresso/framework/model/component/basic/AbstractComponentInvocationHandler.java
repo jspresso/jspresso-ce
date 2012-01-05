@@ -628,7 +628,7 @@ public abstract class AbstractComponentInvocationHandler implements
     InlineReferenceTracker oldTracker = null;
     if (oldPropertyValue != null) {
       oldTracker = referenceTrackers.get(propertyName);
-      if (oldTracker != null) {
+      if (oldTracker != null && isInitialized(oldPropertyValue)) {
         ((IPropertyChangeCapable) oldPropertyValue)
             .removePropertyChangeListener(oldTracker);
       }

@@ -200,8 +200,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   @Override
-  public void recycle() {
-    setModelConnector(null);
+  public void recycle(IMvcBinder mvcBinder) {
+    if (mvcBinder != null) {
+      mvcBinder.bind(this, null);
+    }
     setParentConnector(null);
     setConnectorValue(null);
   }
@@ -335,8 +337,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(@SuppressWarnings("unused")
-        PropertyChangeEvent evt) {
+        public void propertyChange(
+            @SuppressWarnings("unused") PropertyChangeEvent evt) {
           readabilityChange();
         }
       };
@@ -354,8 +356,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(@SuppressWarnings("unused")
-        PropertyChangeEvent evt) {
+        public void propertyChange(
+            @SuppressWarnings("unused") PropertyChangeEvent evt) {
           writabilityChange();
         }
       };
@@ -467,9 +469,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
             expectedType = Boolean.class;
           }
           try {
-            Object adaptedValue = expectedType.getConstructor(
-                new Class<?>[] {String.class}).newInstance(
-                new Object[] {aValue.toString()});
+            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
+              String.class
+            }).newInstance(new Object[] {
+              aValue.toString()
+            });
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorBindingException(ex);
@@ -564,8 +568,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelReadabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             readabilityChange();
           }
         };
@@ -574,8 +578,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelWritabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             writabilityChange();
           }
         };
