@@ -57,8 +57,8 @@
   <bean id="stringGUIDGenerator" class="org.jspresso.framework.util.uid.RandomStringGUIDGenerator" />
   <bean id="jvmStringGUIDGenerator" class="org.jspresso.framework.util.uid.JVMStringGUIDGenerator" />
   <bean id="binaryGUIDGenerator" class="org.jspresso.framework.util.uid.RandomByteArrayGUIDGenerator" />
-  
-  <bean id="entityGUIDGenerator" parent="stringGUIDGenerator"/>
+
+  <bean id="entityGUIDGenerator" parent="stringGUIDGenerator" />
 
   <bean id="guidGenerator" parent="jvmStringGUIDGenerator" scope="prototype" />
 
@@ -170,7 +170,11 @@
   <bean abstract="true" id="abstractFrontControllerBase" class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
     <property name="mvcBinder" ref="mvcBinder" />
     <property name="viewFactory" ref="viewFactory" />
-    <property name="workspacesMenuIconImageUrl" value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
+    <property name="workspacesMenuIconImageUrl">
+      <bean parent="abstractFwIconImageURL" >
+        <constructor-arg index="0" value="workspaces" />
+      </bean>
+    </property>
     <property name="loginViewDescriptor" ref="loginViewDescriptor" />
     <property name="navigationActionMap" ref="moduleHistoryNavigationActionMap" />
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
@@ -181,30 +185,83 @@
   <bean abstract="true" id="abstractFrontController" parent="abstractFrontControllerBase" />
 
   <bean id="iconSetBase" class="org.jspresso.framework.view.PathBasedIconSet">
-    <property name="rootPath" value="classpath:org/jspresso/framework/application/images"/>
-    <property name="defaultExtension" value=".png"/>
-    <property name="iconKeyToNameMapping">
-      <map>
-        <entry key="BACKWARD_ICON" value="backward-48x48"/>
-        <entry key="CANCEL_ICON" value="cancel-48x48"/>
-        <entry key="DOWN_ICON" value="1downarrow-48x48"/>
-        <entry key="ERROR_ICON" value="error-48x48"/>
-        <entry key="FORBIDDEN_ICON" value="forbidden-48x48"/>
-        <entry key="FORWARD_ICON" value="forward-48x48"/>
-        <entry key="INFO_ICON" value="info-48x48"/>
-        <entry key="NO_ICON" value="no-48x48"/>
-        <entry key="OK_YES_ICON" value="ok-48x48"/>
-        <entry key="QUESTION_ICON" value="question-48x48"/>
-        <entry key="UP_ICON" value="1uparrow-48x48"/>
-        <entry key="WARNING_ICON" value="warning-48x48"/>
-      </map>
-    </property>
+    <property name="rootPath" value="classpath:org/jspresso/framework/application/images" />
+    <property name="defaultExtension" value=".png" />
   </bean>
-  
-  <bean id="iconSet" parent="iconSetBase"/>
-   
+
+  <bean id="iconSet" parent="iconSetBase" />
+
+  <bean id="abstractFwIconImageURL" abstract="true" factory-bean="iconSet" factory-method="getIconImageURL">
+    <constructor-arg index="1">
+      <bean class="org.jspresso.framework.util.gui.Dimension">
+        <property name="width" value="48" />
+        <property name="height" value="48" />
+      </bean>
+    </constructor-arg>
+  </bean>
+
   <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">
-    <property name="iconSet" ref="iconSet"/>
+    <property name="iconSet" ref="iconSet" />
+    <property name="backwardIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="backward" />
+      </bean>
+    </property>
+    <property name="cancelIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="cancel" />
+      </bean>
+    </property>
+    <property name="downIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="1downarrow" />
+      </bean>
+    </property>
+    <property name="errorIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="1downarrow" />
+      </bean>
+    </property>
+    <property name="forbiddenIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="forbidden" />
+      </bean>
+    </property>
+    <property name="forwardIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="forward" />
+      </bean>
+    </property>
+    <property name="infoIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="info" />
+      </bean>
+    </property>
+    <property name="noIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="no" />
+      </bean>
+    </property>
+    <property name="okYesIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="ok" />
+      </bean>
+    </property>
+    <property name="questionIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="question" />
+      </bean>
+    </property>
+    <property name="upIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="1uparrow" />
+      </bean>
+    </property>
+    <property name="warningIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="warning" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="iconFactoryBase" parent="abstractIconFactory" abstract="true" />

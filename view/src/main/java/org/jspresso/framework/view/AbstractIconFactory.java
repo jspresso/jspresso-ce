@@ -33,13 +33,25 @@ import org.jspresso.framework.util.gui.Dimension;
  */
 public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
-  private Map<String, Map<Dimension, E>> iconStore;
+  private String                         backwardIconImageURL;
+  private String                         cancelIconImageURL;
+  private String                         downIconImageURL;
+  private String                         errorIconImageURL;
+  private String                         forbiddenIconImageURL;
+  private String                         forwardIconImageURL;
+  private String                         infoIconImageURL;
+  private String                         noIconImageURL;
+  private String                         okYesIconImageURL;
+  private String                         questionIconImageURL;
+  private String                         upIconImageURL;
+  private String                         warningIconImageURL;
 
   private Dimension                      largeIconSize;
   private Dimension                      mediumIconSize;
   private Dimension                      smallIconSize;
   private Dimension                      tinyIconSize;
 
+  private Map<String, Map<Dimension, E>> iconStore;
   private IIconSet                       iconSet;
 
   /**
@@ -47,6 +59,114 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   protected AbstractIconFactory() {
     iconStore = new HashMap<String, Map<Dimension, E>>();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getBackwardIcon(Dimension iconSize) {
+    return getIcon(backwardIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the backwardIconImageURL.
+   * 
+   * @return the backwardIconImageURL.
+   */
+  @Override
+  public String getBackwardIconImageURL() {
+    return backwardIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getCancelIcon(Dimension iconSize) {
+    return getIcon(cancelIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the cancelIconImageURL.
+   * 
+   * @return the cancelIconImageURL.
+   */
+  @Override
+  public String getCancelIconImageURL() {
+    return cancelIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getDownIcon(Dimension iconSize) {
+    return getIcon(downIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the downIconImageURL.
+   * 
+   * @return the downIconImageURL.
+   */
+  @Override
+  public String getDownIconImageURL() {
+    return downIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getErrorIcon(Dimension iconSize) {
+    return getIcon(errorIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the errorIconImageURL.
+   * 
+   * @return the errorIconImageURL.
+   */
+  @Override
+  public String getErrorIconImageURL() {
+    return errorIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getForbiddenIcon(Dimension iconSize) {
+    return getIcon(forbiddenIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the forbiddenIconImageURL.
+   * 
+   * @return the forbiddenIconImageURL.
+   */
+  @Override
+  public String getForbiddenIconImageURL() {
+    return forbiddenIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getForwardIcon(Dimension iconSize) {
+    return getIcon(forwardIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the forwardIconImageURL.
+   * 
+   * @return the forwardIconImageURL.
+   */
+  @Override
+  public String getForwardIconImageURL() {
+    return forwardIconImageURL;
   }
 
   /**
@@ -65,6 +185,24 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
       multiDimStore.put(iconSize, cachedIcon);
     }
     return cachedIcon;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getInfoIcon(Dimension iconSize) {
+    return getIcon(infoIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the infoIconImageURL.
+   * 
+   * @return the infoIconImageURL.
+   */
+  @Override
+  public String getInfoIconImageURL() {
+    return infoIconImageURL;
   }
 
   /**
@@ -94,6 +232,60 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getNoIcon(Dimension iconSize) {
+    return getIcon(noIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the noIconImageURL.
+   * 
+   * @return the noIconImageURL.
+   */
+  @Override
+  public String getNoIconImageURL() {
+    return noIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getOkYesIcon(Dimension iconSize) {
+    return getIcon(okYesIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the okYesIconImageURL.
+   * 
+   * @return the okYesIconImageURL.
+   */
+  @Override
+  public String getOkYesIconImageURL() {
+    return okYesIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getQuestionIcon(Dimension iconSize) {
+    return getIcon(questionIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the questionIconImageURL.
+   * 
+   * @return the questionIconImageURL.
+   */
+  @Override
+  public String getQuestionIconImageURL() {
+    return questionIconImageURL;
+  }
+
+  /**
    * Gets the smallIconSize.
    * 
    * @return the smallIconSize.
@@ -120,6 +312,112 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getUpIcon(Dimension iconSize) {
+    return getIcon(upIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the upIconImageURL.
+   * 
+   * @return the upIconImageURL.
+   */
+  @Override
+  public String getUpIconImageURL() {
+    return upIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getWarningIcon(Dimension iconSize) {
+    return getIcon(warningIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the warningIconImageURL.
+   * 
+   * @return the warningIconImageURL.
+   */
+  @Override
+  public String getWarningIconImageURL() {
+    return warningIconImageURL;
+  }
+
+  /**
+   * Sets the backwardIconImageURL.
+   * 
+   * @param backwardIconImageURL
+   *          the backwardIconImageURL to set.
+   */
+  public void setBackwardIconImageURL(String backwardIconImageURL) {
+    this.backwardIconImageURL = backwardIconImageURL;
+  }
+
+  /**
+   * Sets the cancelIconImageURL.
+   * 
+   * @param cancelIconImageURL
+   *          the cancelIconImageURL to set.
+   */
+  public void setCancelIconImageURL(String cancelIconImageURL) {
+    this.cancelIconImageURL = cancelIconImageURL;
+  }
+
+  /**
+   * Sets the downIconImageURL.
+   * 
+   * @param downIconImageURL
+   *          the downIconImageURL to set.
+   */
+  public void setDownIconImageURL(String downIconImageURL) {
+    this.downIconImageURL = downIconImageURL;
+  }
+
+  /**
+   * Sets the errorIconImageURL.
+   * 
+   * @param errorIconImageURL
+   *          the errorIconImageURL to set.
+   */
+  public void setErrorIconImageURL(String errorIconImageURL) {
+    this.errorIconImageURL = errorIconImageURL;
+  }
+
+  /**
+   * Sets the forbiddenIconImageURL.
+   * 
+   * @param forbiddenIconImageURL
+   *          the forbiddenIconImageURL to set.
+   */
+  public void setForbiddenIconImageURL(String forbiddenIconImageURL) {
+    this.forbiddenIconImageURL = forbiddenIconImageURL;
+  }
+
+  /**
+   * Sets the forwardIconImageURL.
+   * 
+   * @param forwardIconImageURL
+   *          the forwardIconImageURL to set.
+   */
+  public void setForwardIconImageURL(String forwardIconImageURL) {
+    this.forwardIconImageURL = forwardIconImageURL;
+  }
+
+  /**
+   * Sets the infoIconImageURL.
+   * 
+   * @param infoIconImageURL
+   *          the infoIconImageURL to set.
+   */
+  public void setInfoIconImageURL(String infoIconImageURL) {
+    this.infoIconImageURL = infoIconImageURL;
+  }
+
+  /**
    * Sets the largeIconSize.
    * 
    * @param largeIconSize
@@ -140,6 +438,36 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
+   * Sets the noIconImageURL.
+   * 
+   * @param noIconImageURL
+   *          the noIconImageURL to set.
+   */
+  public void setNoIconImageURL(String noIconImageURL) {
+    this.noIconImageURL = noIconImageURL;
+  }
+
+  /**
+   * Sets the okYesIconImageURL.
+   * 
+   * @param okYesIconImageURL
+   *          the okYesIconImageURL to set.
+   */
+  public void setOkYesIconImageURL(String okYesIconImageURL) {
+    this.okYesIconImageURL = okYesIconImageURL;
+  }
+
+  /**
+   * Sets the questionIconImageURL.
+   * 
+   * @param questionIconImageURL
+   *          the questionIconImageURL to set.
+   */
+  public void setQuestionIconImageURL(String questionIconImageURL) {
+    this.questionIconImageURL = questionIconImageURL;
+  }
+
+  /**
    * Sets the smallIconSize.
    * 
    * @param smallIconSize
@@ -157,6 +485,26 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public void setTinyIconSize(Dimension tinyIconSize) {
     this.tinyIconSize = tinyIconSize;
+  }
+
+  /**
+   * Sets the upIconImageURL.
+   * 
+   * @param upIconImageURL
+   *          the upIconImageURL to set.
+   */
+  public void setUpIconImageURL(String upIconImageURL) {
+    this.upIconImageURL = upIconImageURL;
+  }
+
+  /**
+   * Sets the warningIconImageURL.
+   * 
+   * @param warningIconImageURL
+   *          the warningIconImageURL to set.
+   */
+  public void setWarningIconImageURL(String warningIconImageURL) {
+    this.warningIconImageURL = warningIconImageURL;
   }
 
   /**
@@ -182,204 +530,13 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
-   * Configures the icon set to use.
+   * Sets the iconSet.
    * 
-   * @param iconSet the iconSet to set.
+   * @param iconSet
+   *          the iconSet to set.
    */
   public void setIconSet(IIconSet iconSet) {
     this.iconSet = iconSet;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getBackwardIconImageURL() {
-    return getIconSet().getBackwardIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getCancelIconImageURL() {
-    return getIconSet().getCancelIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getDownIconImageURL() {
-    return getIconSet().getDownIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getErrorIconImageURL() {
-    return getIconSet().getErrorIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getForbiddenIconImageURL() {
-    return getIconSet().getForbiddenIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getForwardIconImageURL() {
-    return getIconSet().getForwardIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getInfoIconImageURL() {
-    return getIconSet().getInfoIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getNoIconImageURL() {
-    return getIconSet().getNoIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getOkYesIconImageURL() {
-    return getIconSet().getOkYesIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getQuestionIconImageURL() {
-    return getIconSet().getQuestionIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getUpIconImageURL() {
-    return getIconSet().getUpIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getWarningIconImageURL() {
-    return getIconSet().getWarningIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getBackwardIcon(Dimension iconSize) {
-    return getIcon(getBackwardIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getCancelIcon(Dimension iconSize) {
-    return getIcon(getCancelIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getDownIcon(Dimension iconSize) {
-    return getIcon(getDownIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getErrorIcon(Dimension iconSize) {
-    return getIcon(getErrorIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getForbiddenIcon(Dimension iconSize) {
-    return getIcon(getForbiddenIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getForwardIcon(Dimension iconSize) {
-    return getIcon(getForwardIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getInfoIcon(Dimension iconSize) {
-    return getIcon(getInfoIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getNoIcon(Dimension iconSize) {
-    return getIcon(getNoIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getOkYesIcon(Dimension iconSize) {
-    return getIcon(getOkYesIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getQuestionIcon(Dimension iconSize) {
-    return getIcon(getQuestionIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getUpIcon(Dimension iconSize) {
-    return getIcon(getUpIconImageURL(), iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public E getWarningIcon(Dimension iconSize) {
-    return getIcon(getWarningIconImageURL(), iconSize);
   }
 
 }

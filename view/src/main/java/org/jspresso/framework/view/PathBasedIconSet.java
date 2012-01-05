@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view;
 
-import java.util.Map;
-
 import org.jspresso.framework.util.gui.Dimension;
 
 /**
@@ -28,7 +26,7 @@ import org.jspresso.framework.util.gui.Dimension;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class PathBasedIconSet extends AbstractIconSet {
+public class PathBasedIconSet implements IIconSet {
 
   private static final String PNG_EXTENSION       = ".png";
   private static final String GIF_EXTENSION       = ".gif";
@@ -36,25 +34,16 @@ public class PathBasedIconSet extends AbstractIconSet {
   private static final String JPEG_EXTENSION      = ".jpeg";
 
   private String              rootPath;
-  private String[]            supportedExtensions = {
-      PNG_EXTENSION, GIF_EXTENSION, JPG_EXTENSION, JPEG_EXTENSION
-                                                  };
+  private String[]            supportedExtensions = {PNG_EXTENSION,
+      GIF_EXTENSION, JPG_EXTENSION, JPEG_EXTENSION};
   private String              defaultExtension    = PNG_EXTENSION;
-  private Map<String, String> iconKeyToNameMapping;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageUrl(String iconNameOrKey, Dimension dim) {
-    String translatedName = iconNameOrKey;
-    if (iconKeyToNameMapping != null) {
-      String t = iconKeyToNameMapping.get(iconNameOrKey);
-      if (t != null) {
-        translatedName = t;
-      }
-    }
-    String[] imageNameParts = splitIconNameParts(translatedName);
+  public String getIconImageURL(String iconName, Dimension dim) {
+    String[] imageNameParts = splitIconNameParts(iconName);
     StringBuffer url = new StringBuffer();
     if (getRootPath() != null) {
       url.append(getRootPath()).append("/");
@@ -85,13 +74,10 @@ public class PathBasedIconSet extends AbstractIconSet {
         return new String[] {
             iconName.substring(0,
                 iconName.length() - supportedExtension.length()),
-            iconName.substring(iconName.length() - supportedExtension.length())
-        };
+            iconName.substring(iconName.length() - supportedExtension.length())};
       }
     }
-    return new String[] {
-        iconName, getDefaultExtension()
-    };
+    return new String[] {iconName, getDefaultExtension()};
   }
 
   /**
@@ -151,25 +137,6 @@ public class PathBasedIconSet extends AbstractIconSet {
    */
   public void setDefaultExtension(String defaultExtension) {
     this.defaultExtension = defaultExtension;
-  }
-
-  /**
-   * Gets the iconKeyToNameMapping.
-   * 
-   * @return the iconKeyToNameMapping.
-   */
-  protected Map<String, String> getIconKeyToNameMapping() {
-    return iconKeyToNameMapping;
-  }
-
-  /**
-   * Sets the iconKeyToNameMapping.
-   * 
-   * @param iconKeyToNameMapping
-   *          the iconKeyToNameMapping to set.
-   */
-  public void setIconKeyToNameMapping(Map<String, String> iconKeyToNameMapping) {
-    this.iconKeyToNameMapping = iconKeyToNameMapping;
   }
 
 }
