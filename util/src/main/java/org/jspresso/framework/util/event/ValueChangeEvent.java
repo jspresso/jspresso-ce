@@ -20,6 +20,8 @@ package org.jspresso.framework.util.event;
 
 import java.util.EventObject;
 
+import org.jspresso.framework.util.lang.ObjectUtils;
+
 /**
  * A "ValueChangeEvent" event gets delivered whenever a source detects a change
  * in its value. A ValueChangeEvent object is sent as an argument to the
@@ -78,5 +80,14 @@ public class ValueChangeEvent extends EventObject {
    */
   public Object getOldValue() {
     return oldValue;
+  }
+
+  /**
+   * Tells if this event requires propagation.
+   * 
+   * @return true if oldValue != newValue.
+   */
+  public boolean needsFiring() {
+    return !ObjectUtils.equals(oldValue, newValue);
   }
 }

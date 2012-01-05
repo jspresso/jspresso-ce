@@ -62,4 +62,17 @@ public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {
   public List<IValueConnector> getRemovedChildrenConnectors() {
     return removedChildrenConnectors;
   }
+
+  /**
+   * The event needs firing if any connector removal need to be notified even if
+   * oldValue and newValue are equal.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean needsFiring() {
+    return super.needsFiring()
+        || (removedChildrenConnectors != null && !removedChildrenConnectors
+            .isEmpty());
+  }
 }

@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -121,7 +122,7 @@ public abstract class AbstractBackendController extends AbstractController
   private IEntityUnitOfWork                                unitOfWork;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
-  private Map<Module, IValueConnector>                     moduleConnectors;
+  private LRUMap                                           moduleConnectors;
 
   private IPreferencesStore                                userPreferencesStore;
   private ITranslationProvider                             translationProvider;
@@ -136,7 +137,6 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
    */
-  @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
     dirtRecorder = new BeanPropertyChangeRecorder();
     // moduleConnectors = new HashMap<Module, IValueConnector>();
@@ -403,12 +403,19 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public IValueConnector getModuleConnector(Module module) {
     if (module == null) {
       return null;
     }
-    IValueConnector moduleConnector = moduleConnectors.get(module);
+    // we must rehash entries in case in case modules hashcode have changed and
+    // still preserve LRU order.
+    Map<Module, IValueConnector> buff = new LinkedHashMap<Module, IValueConnector>();
+    buff.putAll(moduleConnectors);
+    moduleConnectors.clear();
+    moduleConnectors.putAll(buff);
+    IValueConnector moduleConnector = (IValueConnector) moduleConnectors.get(module);
     if (moduleConnector == null) {
       moduleConnector = createModelConnector(module.getName(),
           ModuleDescriptor.MODULE_DESCRIPTOR);
