@@ -412,8 +412,10 @@ public abstract class AbstractCompositeValueConnector extends
   @Override
   public void recycle(IMvcBinder mvcBinder) {
     super.recycle(mvcBinder);
+    // Keep displayIconImageUrl since it is set statically at creation time. So
+    // it does not support recycling.
+    // displayIconImageUrl = null;
     displayDescription = null;
-    displayIconImageUrl = null;
     displayValue = null;
   }
 }
