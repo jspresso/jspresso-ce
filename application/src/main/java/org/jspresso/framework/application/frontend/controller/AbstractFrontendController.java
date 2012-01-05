@@ -333,6 +333,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public void disposeModalDialog(@SuppressWarnings("unused")
   E sourceWidget, Map<String, Object> context) {
+    LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
       // preserve action param
@@ -1110,6 +1111,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected void displayModalDialog(Map<String, Object> context,
       boolean reuseCurrent) {
     if (!reuseCurrent || dialogContextStack.size() == 0) {
+      LOG.debug("Popping-up modal dialog.");
       dialogContextStack.add(0, context);
     }
   }
