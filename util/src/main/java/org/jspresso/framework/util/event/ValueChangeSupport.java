@@ -23,8 +23,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jspresso.framework.util.lang.ObjectUtils;
-
 /**
  * Helper class to ease the IValueChangeListener management.
  * 
@@ -105,12 +103,7 @@ public class ValueChangeSupport implements IValueChangeSource {
    *          the propagated <code>ValueChangeEvent</code>
    */
   public void fireValueChange(ValueChangeEvent evt) {
-    if (listeners != null) {
-      Object oldValue = evt.getOldValue();
-      Object newValue = evt.getNewValue();
-      if (ObjectUtils.equals(oldValue, newValue)) {
-        return;
-      }
+    if (listeners != null && evt.needsFiring()) {
       for (IValueChangeListener listener : getValueChangeListeners()) {
         if (inhibitedListeners == null
             || !inhibitedListeners.contains(listener)) {
