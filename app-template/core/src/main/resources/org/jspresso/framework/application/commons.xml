@@ -219,7 +219,7 @@
     </property>
     <property name="errorIconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="1downarrow" />
+        <constructor-arg index="0" value="error" />
       </bean>
     </property>
     <property name="forbiddenIconImageURL">
