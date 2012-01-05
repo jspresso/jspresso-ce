@@ -306,7 +306,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     if (readOnly != null) {
       return readOnly.booleanValue();
     }
-    return false;
+    return !isModifiable();
   }
 
   /**

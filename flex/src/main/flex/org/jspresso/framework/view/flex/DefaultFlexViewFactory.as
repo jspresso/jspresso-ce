@@ -2139,9 +2139,11 @@ package org.jspresso.framework.view.flex {
     
     protected function bindHtmlEditor(htmlEditor:EnhancedRichTextEditor, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(htmlEditor, "xhtmlText", remoteState, "value", true);
-      BindingUtils.bindProperty(htmlEditor, "enabled", remoteState, "writable");
+      BindingUtils.bindProperty(htmlEditor, "editable", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
-        remoteState.value = (event.currentTarget as EnhancedRichTextEditor).xhtmlText;
+        if(htmlEditor.editable) {
+          remoteState.value = htmlEditor.xhtmlText;
+        }
       };
       htmlEditor.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
       htmlEditor.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
