@@ -16,6 +16,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
 {
   extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
   
+  construct : function() {
+    this.base(arguments);
+  },
+
   properties :
   {
     language :
@@ -25,6 +29,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     datePattern :
     {
       check : "String"
+    },
+    translations :
+    {
+      check : "Object"
     }
   }
 });

@@ -15,6 +15,7 @@
     <property name="parentMessageSource" ref="mockMessageSource" />
     <property name="basenames">
       <list>
+        <value>org.jspresso.framework.application.i18n.Client</value>
         <value>org.jspresso.framework.application.i18n.Formats</value>
         <value>org.jspresso.framework.application.i18n.Commons</value>
       </list>

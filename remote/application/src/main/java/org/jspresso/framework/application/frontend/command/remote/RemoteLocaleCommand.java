@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import java.util.Map;
+
 /**
  * Changes the locale of the remote peer.
  * 
@@ -26,10 +28,11 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteLocaleCommand extends RemoteCommand {
 
-  private static final long serialVersionUID = -1105201434420105157L;
+  private static final long   serialVersionUID = -1105201434420105157L;
 
-  private String            language;
-  private String            datePattern;
+  private String              language;
+  private String              datePattern;
+  private Map<String, String> translations;
 
   /**
    * Gets the language.
@@ -62,9 +65,29 @@ public class RemoteLocaleCommand extends RemoteCommand {
   /**
    * Sets the datePattern.
    * 
-   * @param datePattern the datePattern to set.
+   * @param datePattern
+   *          the datePattern to set.
    */
   public void setDatePattern(String datePattern) {
     this.datePattern = datePattern;
+  }
+
+  /**
+   * Gets the translations.
+   * 
+   * @return the translations.
+   */
+  public Map<String, String> getTranslations() {
+    return translations;
+  }
+
+  /**
+   * Sets the translations.
+   * 
+   * @param translations
+   *          the translations to set.
+   */
+  public void setTranslations(Map<String, String> translations) {
+    this.translations = translations;
   }
 }

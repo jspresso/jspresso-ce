@@ -114,11 +114,14 @@ public abstract class RemoteStartup extends
    * 
    * @param startupLanguage
    *          the client language.
+   * @param clientKeysToTranslate
+   *          the array of client keys to translate.
    * @param timeZoneOffset
    *          the client timeZone offset in milliseconds.
    * @return the commands to be executed by the client peer on startup.
    */
-  public List<RemoteCommand> start(String startupLanguage, int timeZoneOffset) {
+  public List<RemoteCommand> start(String startupLanguage,
+      String[] clientKeysToTranslate, int timeZoneOffset) {
     setStartupLocale(new Locale(startupLanguage));
     TimeZone serverTimeZone = TimeZone.getDefault();
     int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
@@ -146,8 +149,10 @@ public abstract class RemoteStartup extends
     started = true;
     restarting = false;
     try {
+      RemoteStartCommand startCommand = new RemoteStartCommand();
+      startCommand.setKeysToTranslate(clientKeysToTranslate);
       return handleCommands(Collections
-          .singletonList((RemoteCommand) new RemoteStartCommand()));
+          .singletonList((RemoteCommand) startCommand));
     } catch (Throwable ex) {
       if (!restarting) {
         ex.printStackTrace();

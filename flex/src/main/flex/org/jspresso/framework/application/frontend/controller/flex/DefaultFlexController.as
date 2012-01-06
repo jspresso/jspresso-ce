@@ -152,7 +152,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
   
   
-  [ResourceBundle("Common_messages")]
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler, IRemoteCommandHandler {
     
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
@@ -171,6 +170,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _fileReference:FileReference;
     private var _initialLocaleChain:Array;
     private var _fakeDialog:Panel;
+    private var _translations:Object;
     
     private var _postponedNotificationBuffer:Object;
     
@@ -324,6 +324,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         if((command as RemoteLocaleCommand).datePattern) {
           getViewFactory().datePattern = (command as RemoteLocaleCommand).datePattern.toUpperCase();
         }
+        _translations = (command as RemoteLocaleCommand).translations;
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = getViewFactory().createDialogButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
@@ -536,8 +537,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         };
         pushFakeDialog();
-        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
-               ResourceManager.getInstance().getString("Common_messages", "file.upload"),
+        var alert:Alert = Alert.show(translate("FS.browse.continue"),
+               translate("file.upload"),
                Alert.YES|Alert.NO,
                null,
                alertCloseHandler,
@@ -569,8 +570,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
           popFakeDialog();
         };
         pushFakeDialog();
-        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
-             ResourceManager.getInstance().getString("Common_messages", "file.download"),
+        var alert:Alert = Alert.show(translate("FS.browse.continue"),
+             translate("file.download"),
              Alert.YES|Alert.NO,
              null,
              alertCloseHandler,
@@ -601,8 +602,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
           popFakeDialog();
         };
         pushFakeDialog();
-        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "system.clipboard.continue"),
-          ResourceManager.getInstance().getString("Common_messages", "content.copy"),
+        var alert:Alert = Alert.show(translate("system.clipboard.continue"),
+          translate("content.copy"),
           Alert.YES|Alert.NO,
           null,
           alertCloseHandler,
@@ -1062,7 +1063,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function start():void {
       var operation:Operation = _remoteController.operations[START_METHOD] as Operation;
-      operation.send(_userLanguage, new Date().timezoneOffset * (-60000));
+      operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
+    }
+    
+    protected function getKeysToTranslate():Array {
+      return ["date_format","FS.browse.continue","file.upload","file.download","system.clipboard.continue","content.copy"];
+    }
+    
+    public function translate(key:String):String {
+      var tr:String = _translations[key] as String;
+      if(tr != null) {
+        return tr;
+      }
+      return key;
     }
     
     protected function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {

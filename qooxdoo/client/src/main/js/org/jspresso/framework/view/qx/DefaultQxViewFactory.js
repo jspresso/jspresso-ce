@@ -1891,7 +1891,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _fontFamilyToolbarEntry : function(htmlEditor) {
       var button = new qx.ui.form.SelectBox;
       button.set({
-            toolTipText : htmlEditor.tr("change_font_family"),
+            toolTipText : this.__actionHandler.translate("change_font_family"),
             focusable : false,
             keepFocus : true,
             width : 120,
@@ -1934,7 +1934,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _fontSizeToolbarEntry : function(htmlEditor) {
       var button = new qx.ui.form.SelectBox;
       button.set({
-            toolTipText : htmlEditor.tr("change_font_size"),
+            toolTipText : this.__actionHandler.translate("change_font_size"),
             focusable : false,
             keepFocus : true,
             width : 50,
@@ -1967,27 +1967,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createHtmlEditorToolBar : function(htmlEditor) {
       var toolbarEntries = [{
         bold : {
-          text : htmlEditor.tr("format_bold"),
+          text : this.__actionHandler.translate("format_bold"),
           image : "qx/icon/Oxygen/16/actions/format-text-bold.png",
           action : htmlEditor.setBold
         },
         italic : {
-          text : htmlEditor.tr("format_italic"),
+          text : this.__actionHandler.translate("format_italic"),
           image : "qx/icon/Oxygen/16/actions/format-text-italic.png",
           action : htmlEditor.setItalic
         },
         underline : {
-          text : htmlEditor.tr("format_underline"),
+          text : this.__actionHandler.translate("format_underline"),
           image : "qx/icon/Oxygen/16/actions/format-text-underline.png",
           action : htmlEditor.setUnderline
         },
         strikethrough : {
-          text : htmlEditor.tr("format_strikethrough"),
+          text : this.__actionHandler.translate("format_strikethrough"),
           image : "qx/icon/Oxygen/16/actions/format-text-strikethrough.png",
           action : htmlEditor.setStrikeThrough
         },
         removeFormat : {
-          text : htmlEditor.tr("remove_format"),
+          text : this.__actionHandler.translate("remove_format"),
           image : "qx/icon/Oxygen/16/actions/edit-clear.png",
           action : htmlEditor.removeFormat
         }
@@ -1995,22 +1995,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       {
         alignLeft : {
-          text : htmlEditor.tr("align_left"),
+          text : this.__actionHandler.translate("align_left"),
           image : "qx/icon/Oxygen/16/actions/format-justify-left.png",
           action : htmlEditor.setJustifyLeft
         },
         alignCenter : {
-          text : htmlEditor.tr("align_center"),
+          text : this.__actionHandler.translate("align_center"),
           image : "qx/icon/Oxygen/16/actions/format-justify-center.png",
           action : htmlEditor.setJustifyCenter
         },
         alignRight : {
-          text : htmlEditor.tr("align_right"),
+          text : this.__actionHandler.translate("align_right"),
           image : "qx/icon/Oxygen/16/actions/format-justify-right.png",
           action : htmlEditor.setJustifyRight
         },
         alignJustify : {
-          text : htmlEditor.tr("align_justify"),
+          text : this.__actionHandler.translate("align_justify"),
           image : "qx/icon/Oxygen/16/actions/format-justify-fill.png",
           action : htmlEditor.setJustifyFull
         }
@@ -2035,12 +2035,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       {
         indent : {
-          text : htmlEditor.tr("indent_more"),
+          text : this.__actionHandler.translate("indent_more"),
           image : "qx/icon/Oxygen/16/actions/format-indent-more.png",
           action : htmlEditor.insertIndent
         },
         outdent : {
-          text : htmlEditor.tr("indent_less"),
+          text : this.__actionHandler.translate("indent_less"),
           image : "qx/icon/Oxygen/16/actions/format-indent-less.png",
           action : htmlEditor.insertOutdent
         }
@@ -2057,22 +2057,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
           {
             ol : {
-              text : htmlEditor.tr("insert_ordered_list"),
+              text : this.__actionHandler.translate("insert_ordered_list"),
               image : "org/jspresso/framework/htmleditor/list-ordered.png",
               action : htmlEditor.insertOrderedList
             },
             ul : {
-              text : htmlEditor.tr("insert_unordered_list"),
+              text : this.__actionHandler.translate("insert_unordered_list"),
               image : "org/jspresso/framework/htmleditor/list-unordered.png",
               action : htmlEditor.insertUnorderedList
             }
           }
       // ,
       // {
-      // undo: { text: htmlEditor.tr("undo"), image:
+      // undo: { text: this.__actionHandler.translate("undo"), image:
       // "qx/icon/Oxygen/16/actions/edit-undo.png", action:
       // htmlEditor.undo },
-      // redo: { text: htmlEditor.tr("redo"), image:
+      // redo: { text: this.__actionHandler.translate("redo"), image:
       // "qx/icon/Oxygen/16/actions/edit-redo.png", action:
       // htmlEditor.redo }
       // }
@@ -2430,7 +2430,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createOkButton : function() {
       var b = new qx.ui.form.Button();
       b.setIcon("qx/icon/Oxygen/22/actions/dialog-ok.png");
-      b.setLabel(b.tr("Ok"));
+      b.setLabel(this.__actionHandler.translate("ok"));
       return b;
     },
 
@@ -2440,7 +2440,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createCancelButton : function() {
       var b = new qx.ui.form.Button();
       b.setIcon("qx/icon/Oxygen/22/actions/dialog-cancel.png");
-      b.setLabel(b.tr("Cancel"));
+      b.setLabel(this.__actionHandler.translate("cancel"));
       return b;
     },
 
@@ -2450,7 +2450,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createYesButton : function() {
       var b = new qx.ui.form.Button();
       b.setIcon("qx/icon/Oxygen/22/actions/dialog-ok.png");
-      b.setLabel(b.tr("Yes"));
+      b.setLabel(this.__actionHandler.translate("yes"));
       return b;
     },
 
@@ -2460,7 +2460,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createNoButton : function() {
       var b = new qx.ui.form.Button();
       b.setIcon("qx/icon/Oxygen/22/actions/dialog-close.png");
-      b.setLabel(b.tr("No"));
+      b.setLabel(this.__actionHandler.translate("no"));
       return b;
     },
 

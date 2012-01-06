@@ -28,5 +28,25 @@ public class RemoteStartCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -8122101348450476262L;
 
-  // NO-OP.
+  private String[]          keysToTranslate;
+
+  /**
+   * Gets the keysToTranslate.
+   * 
+   * @return the keysToTranslate.
+   */
+  public String[] getKeysToTranslate() {
+    return keysToTranslate;
+  }
+
+  /**
+   * Sets the keysToTranslate.
+   * 
+   * @param keysToTranslate
+   *          the keysToTranslate to set.
+   */
+  public void setKeysToTranslate(String[] keysToTranslate) {
+    this.keysToTranslate = keysToTranslate;
+  }
+
 }

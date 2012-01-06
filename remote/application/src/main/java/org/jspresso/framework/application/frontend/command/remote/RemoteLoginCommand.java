@@ -28,5 +28,4 @@ public class RemoteLoginCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -6555019123301858049L;
 
-  // NO-OP
 }

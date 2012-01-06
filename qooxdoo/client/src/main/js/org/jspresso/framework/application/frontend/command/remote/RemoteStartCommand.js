@@ -18,6 +18,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
 
   construct : function() {
     this.base(arguments);
+  },
+  
+  properties :
+  {
+    clientKeysToTranslate :
+    {
+      check : "Array"
+    }
+
   }
   
 });

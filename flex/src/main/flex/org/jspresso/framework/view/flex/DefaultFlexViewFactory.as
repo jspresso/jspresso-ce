@@ -2551,7 +2551,7 @@ package org.jspresso.framework.view.flex {
       if(_datePattern) {
         return _datePattern;
       }
-      return ResourceManager.getInstance().getString("Common_messages", "date_format");
+      return getActionHandler().translate("date_format");
     }
 
     public function set datePattern(value:String):void {

@@ -18,9 +18,18 @@ package org.jspresso.framework.application.frontend.command.remote {
 		
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand")]
     public class RemoteStartCommand extends RemoteCommand {
+      
+        private var _clientKeysToTranslate:Array;
 
         public function RemoteStartCommand() {
           //default constructor.
+        }
+
+        public function get clientKeysToTranslate():Array {
+          return _clientKeysToTranslate;
+        }
+        public function set clientKeysToTranslate(value:Array):void {
+          _clientKeysToTranslate = value;
         }
 
     }

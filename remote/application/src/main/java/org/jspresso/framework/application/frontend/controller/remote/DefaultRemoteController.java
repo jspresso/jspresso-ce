@@ -124,6 +124,7 @@ public class DefaultRemoteController extends
   // Keep a hard reference on the login view, so that it is not garbage
   // collected.
   private IView<RComponent>      loginView;
+  private String[]               clientKeysToTranslate;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -567,10 +568,17 @@ public class DefaultRemoteController extends
    * @return the init commands to be sent to the remote peer.
    */
   protected List<RemoteCommand> createInitCommands() {
+    Map<String, String> translations = new HashMap<String, String>();
+    if (clientKeysToTranslate != null) {
+      for (String key : clientKeysToTranslate) {
+        translations.put(key, getTranslation(key, getLocale()));
+      }
+    }
     List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
     RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
     localeCommand.setLanguage(getLocale().getLanguage());
     localeCommand.setDatePattern(getDatePattern(getLocale()));
+    localeCommand.setTranslations(translations);
     initCommands.add(localeCommand);
     RemoteInitCommand initCommand = new RemoteInitCommand();
     initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));
@@ -638,6 +646,8 @@ public class DefaultRemoteController extends
    */
   protected void handleCommand(RemoteCommand command) {
     if (command instanceof RemoteStartCommand) {
+      clientKeysToTranslate = ((RemoteStartCommand) command)
+          .getKeysToTranslate();
       if (getLoginContextName() != null) {
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();

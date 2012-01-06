@@ -25,6 +25,7 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _language:String;
         private var _datePattern:String;
+        private var _translations:Object;
 
         public function set language(value:String):void {
             _language = value;
@@ -40,5 +41,11 @@ package org.jspresso.framework.application.frontend.command.remote {
           _datePattern = value;
         }
 
+        public function get translations():Object {
+          return _translations;
+        }
+        public function set translations(value:Object):void {
+          _translations = value;
+        }
     }
 }

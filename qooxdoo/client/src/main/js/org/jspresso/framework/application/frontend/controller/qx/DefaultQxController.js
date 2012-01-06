@@ -78,6 +78,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __dialogStack : null,
     /**@type String*/
     __userLanguage : null,
+    /**@type Object*/
+    __translations : null,
     
     /**
      * @param {org.jspresso.framework.gui.remote.RComponent} remoteComponent
@@ -260,6 +262,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand) {
         qx.locale.Manager.getInstance().setLocale(command.getLanguage());
         this.__viewFactory.setDatePattern(command.getDatePattern());
+        this.__translations = command.getTranslations();
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {
         var loginButton = this.__viewFactory.createButton(command.getOkLabel(), null, command.getOkIcon());
         loginButton.addListener("execute", function(event) {
@@ -755,9 +758,47 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__application.getRoot().setGlobalCursor("wait");
       this.__remoteController.callAsyncListeners(true,
                                                  org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__START_METHOD,
-                                                 this.__userLanguage, new Date().getTimezoneOffset() * (-60000));
+                                                 this.__userLanguage, this._getKeysToTranslate(),
+                                                 new Date().getTimezoneOffset() * (-60000));
+    },
+    
+    /**
+     * @return Array
+     */
+    _getKeysToTranslate:function() {
+      return [
+	      "change_font_family",
+				"change_font_size",
+				"format_bold",
+				"format_italic",
+				"format_underline",
+				"format_strikethrough",
+				"remove_format",
+				"align_left",
+				"align_center",
+				"align_right",
+				"align_justify",
+				"indent_more",
+				"indent_less",
+				"insert_ordered_list",
+				"insert_unordered_list",
+				"undo",  
+				"redo",
+				"ok",  
+				"cancel",  
+				"yes",
+				"no"
+			]
     },
 
+    translate:function(key) {
+      var tr = this.__translations[key];
+      if(tr != null) {
+        return tr;
+      }
+      return key;
+    },
+    
     /**
      * @param {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand} messageCommand
      */

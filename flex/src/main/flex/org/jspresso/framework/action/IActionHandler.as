@@ -24,5 +24,6 @@ package org.jspresso.framework.action {
     
     function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void;
     
+    function translate(key:String):String;
   }
 }

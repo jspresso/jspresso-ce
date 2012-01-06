@@ -8,6 +8,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand"/>
@@ -28,6 +29,8 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand"/>
@@ -77,15 +80,19 @@
     <classEntry path="org.jspresso.framework.state.remote.RemoteFormattedValueState"/>
     <classEntry path="org.jspresso.framework.state.remote.RemoteValueState"/>
     <classEntry path="org.jspresso.framework.util.array.ArrayUtil"/>
+    <classEntry path="org.jspresso.framework.util.format.DateFormatter"/>
+    <classEntry path="org.jspresso.framework.util.format.DateUtils"/>
     <classEntry path="org.jspresso.framework.util.format.NumberParser"/>
     <classEntry path="org.jspresso.framework.util.format.Parser"/>
     <classEntry path="org.jspresso.framework.util.format.PasswordFormatter"/>
     <classEntry path="org.jspresso.framework.util.format.PercentFormatter"/>
     <classEntry path="org.jspresso.framework.util.format.PercentParser"/>
+    <classEntry path="org.jspresso.framework.util.format.TimeParser"/>
     <classEntry path="org.jspresso.framework.util.gui.CellConstraints"/>
     <classEntry path="org.jspresso.framework.util.gui.Dimension"/>
     <classEntry path="org.jspresso.framework.util.gui.Font"/>
     <classEntry path="org.jspresso.framework.util.html.HtmlUtil"/>
+    <classEntry path="org.jspresso.framework.util.lang.DateDto"/>
     <classEntry path="org.jspresso.framework.util.remote.IRemotePeer"/>
     <classEntry path="org.jspresso.framework.util.remote.RemotePeer"/>
     <classEntry path="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry"/>
@@ -97,7 +104,10 @@
     <classEntry path="org.jspresso.framework.view.flex.EnhancedDataGrid"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedList"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedRichTextEditor"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedTabNavigator"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedTextInput"/>
     <classEntry path="org.jspresso.framework.view.flex.EnumerationDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.HtmlToolTip"/>
     <classEntry path="org.jspresso.framework.view.flex.IColumnIndexProvider"/>
     <classEntry path="org.jspresso.framework.view.flex.IconFactory"/>
     <classEntry path="org.jspresso.framework.view.flex.RCVSDataDescriptor"/>
@@ -115,13 +125,12 @@
     <classEntry path="org.jspresso.framework.view.flex.SelectionCheckBoxRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.SelectionTrackingTree"/>
     <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
-    <classEntry path="org.jspresso.framework.view.flex.HtmlToolTip"/>
   </includeClasses>
   <includeResources>
     <resourceEntry destPath="assets/images/closeaccordion2.png" sourcePath="assets/images/closeaccordion2.png"/>
     <resourceEntry destPath="assets/images/closeleft.png" sourcePath="assets/images/closeleft.png"/>
-    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
     <resourceEntry destPath="defaults.css" sourcePath="defaults.css"/>
+    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
     <resourceEntry destPath="assets/images/reset-16x16.png" sourcePath="assets/images/reset-16x16.png"/>
   </includeResources>
   <namespaceManifests/>

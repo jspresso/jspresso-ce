@@ -3,7 +3,25 @@
 - Due to a groupId change of the hsqldb artifact in the central Maven repository, you must change all hsqldb references :
   <groupId>hsqldb</groupId>
     to
-  <groupId>org.hsqldb</groupId> 
+  <groupId>org.hsqldb</groupId>
+  
+- Due to the introduction of server-side client translation, the following change must be applied on the
+  existing projects that use the Qooxdoo frontend :
+  
+  Edit the source file QooxdooApplicationStartup.java and replace
+
+  public List<RemoteCommand> startQx(String startupLanguage, int timezoneOffset)
+      throws RemoteException {
+    return super.start(startupLanguage, timezoneOffset);
+  }
+  
+  by
+  
+  public List<RemoteCommand> startQx(String startupLanguage,
+      String[] clientKeysToTranslate, int timeZoneOffset)
+      throws RemoteException {
+    return super.start(startupLanguage, clientKeysToTranslate, timeZoneOffset);
+  }
 
 3.5.10
 ======

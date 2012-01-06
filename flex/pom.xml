@@ -59,32 +59,6 @@
             </configuration>
           </execution>
         </executions>
-        <!--
-        <executions>
-          <execution>
-            <id>generate-asdoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>asdoc</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>optimize-swc</id>
-            <goals>
-              <goal>optimize</goal>
-            </goals>
-          </execution>
-        </executions>
-        -->
-        <configuration>
-          <locales>
-            <locale>en_US</locale>
-            <locale>fr_FR</locale>
-            <locale>es_ES</locale>
-            <locale>pt_BR</locale>
-          </locales>
-          <mergeResourceBundle>true</mergeResourceBundle>
-        </configuration>
       </plugin>
     </plugins>
   </build>
