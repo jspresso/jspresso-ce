@@ -13,18 +13,18 @@
  */
 
 /*
- * #asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
- * #asset(qx/icon/Oxygen/22/actions/dialog-close.png)
- * #asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
- * #asset(qx/icon/Oxygen/16/actions/dialog-close.png)
- * 
- * #asset(qx/icon/Oxygen/16/actions/format-*.png)
- * #asset(qx/icon/Oxygen/16/actions/edit-*.png)
- * #asset(qx/icon/Oxygen/16/actions/insert-image.png)
- * #asset(qx/icon/Oxygen/16/actions/insert-link.png)
- * #asset(qx/icon/Oxygen/16/actions/insert-text.png)
- * 
- * #asset(org/jspresso/framework/htmleditor/list-*.png)
+#asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
+#asset(qx/icon/Oxygen/22/actions/dialog-close.png)
+#asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
+#asset(qx/icon/Oxygen/16/actions/dialog-close.png)
+
+#asset(qx/icon/Oxygen/16/actions/format-*.png)
+#asset(qx/icon/Oxygen/16/actions/edit-*.png)
+#asset(qx/icon/Oxygen/16/actions/insert-image.png)
+#asset(qx/icon/Oxygen/16/actions/insert-link.png)
+#asset(qx/icon/Oxygen/16/actions/insert-text.png)
+
+#asset(org/jspresso/framework/htmleditor/list-*.png)
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
