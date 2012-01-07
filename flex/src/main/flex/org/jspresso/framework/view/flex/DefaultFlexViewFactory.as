@@ -1800,13 +1800,16 @@ package org.jspresso.framework.view.flex {
                                      remoteComponent:rColumn,
                                      index:i+1};
         } else {
+          var readOnly:Boolean = false;
           var columnAction:RAction = null;
           if(rColumn is RLink) {
+            readOnly = true;
             columnAction = (rColumn as RLink).action;
             getRemotePeerRegistry().register(columnAction);
           }
           var alignment:String = "left";
           if (rColumn is RLabel) {
+            readOnly = true;
             alignment = (rColumn as RLabel).horizontalAlignment;
           } else if (rColumn is RTextField) {
             alignment = (rColumn as RTextField).horizontalAlignment;
@@ -1825,7 +1828,9 @@ package org.jspresso.framework.view.flex {
           itemRenderer.properties = {formatter:createFormatter(rColumn),
                                      index:i+1,
                                      action:columnAction,
-                                     actionHandler:getActionHandler()};
+                                     actionHandler:getActionHandler(),
+                                     selectable:readOnly};
+          column.editable = !readOnly;
         }
         column.itemRenderer = itemRenderer
         

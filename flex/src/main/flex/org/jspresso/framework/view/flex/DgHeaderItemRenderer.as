@@ -14,6 +14,7 @@ package org.jspresso.framework.view.flex {
 
     public function DgHeaderItemRenderer() {
       _index = -1;
+      selectable = false;
     }
     
     public function set index(value:int):void {

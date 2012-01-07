@@ -37,16 +37,17 @@ package org.jspresso.framework.view.flex {
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
+    private var _selectable:Boolean;
     private var _action:RAction;
     private var _actionHandler:IActionHandler;
     
     public function RemoteValueDgItemRenderer() {
       _index = -1;
       addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-        label.selectable = true;
+        label.selectable = _selectable;
       });
     }
-
+    
   	override public function set listData(value:BaseListData):void {
    	  updateLabel(data, value);
    	  if(value) {
@@ -73,7 +74,17 @@ package org.jspresso.framework.view.flex {
     public function get index():int {
       return _index;
     }
-
+    
+    public function set selectable(value:Boolean):void {
+      _selectable = value;
+      if(label) {
+        label.selectable = true;
+      }
+    }
+    public function get selectable():Boolean {
+      return _selectable;
+    }
+    
   	protected function set listDataIcon(value:Class):void {
   	  if(super.listData != null) {
   	    (super.listData as ListData).icon = value;
