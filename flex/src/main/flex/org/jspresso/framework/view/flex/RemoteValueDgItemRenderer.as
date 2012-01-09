@@ -105,10 +105,8 @@ package org.jspresso.framework.view.flex {
   	      cellValueState = ((rendererData as RemoteCompositeValueState).children[1] as RemoteValueState);
   	    }
   	    if(_valueChangeListener != null) {
-  	      _valueChangeListener.unwatch();
-  	    }
-        if(_valueChangeListener) {
           _valueChangeListener.reset(cellValueState);
+          refresh(cellValueState.value);
         } else {
           _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
         }
