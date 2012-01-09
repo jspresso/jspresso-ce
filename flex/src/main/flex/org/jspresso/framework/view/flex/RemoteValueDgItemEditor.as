@@ -84,10 +84,8 @@ package org.jspresso.framework.view.flex
         cellValueState = value as RemoteValueState;
       }
       if(_valueChangeListener != null) {
-        _valueChangeListener.unwatch();
-      }
-      if(_valueChangeListener) {
         _valueChangeListener.reset(cellValueState);
+        _state.value = cellValueState.value;
       } else {
         _valueChangeListener = BindingUtils.bindProperty(_state, "value", cellValueState, "value", true);
       }

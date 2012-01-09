@@ -40,10 +40,11 @@ package org.jspresso.framework.view.flex {
 
     override public function set data(value:Object):void {
       if(value && value["data"] is RAction) {
-        if(_cw == null) {
-          _cw = BindingUtils.bindSetter(updateState, value["data"], "enabled", true);
-        } else {
+        if(_cw != null) {
           _cw.reset(value["data"]);
+          updateState(value["data"]["enabled"]);
+        } else {
+          _cw = BindingUtils.bindSetter(updateState, value["data"], "enabled", true);
         }
       }
       syncView(value);
