@@ -17,19 +17,19 @@
 
   <bean id="displayReportAction" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
 
-  <bean id="chartAction" class="org.jspresso.framework.application.charting.frontend.action.AbstractChartAction" />
+  <bean id="chartAction" parent="abstractChartAction" class="org.jspresso.framework.application.charting.frontend.action.AbstractChartAction" />
 
   <bean id="iconFactory" parent="iconFactoryBase" />
 
   <bean id="viewFactory" parent="viewFactoryBase" />
 
-  <bean id="openFileAction" class="org.jspresso.framework.mockups.OpenFileActionMock" />
+  <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.mockups.OpenFileActionMock" />
 
-  <bean id="openFileAsBinaryPropertyAction" class="org.jspresso.framework.mockups.OpenFileActionMock" />
+  <bean id="openFileAsBinaryPropertyAction" parent="abstractOpenFileAction" class="org.jspresso.framework.mockups.OpenFileActionMock" />
 
-  <bean id="saveFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
+  <bean id="saveFileAction" parent="abstractSaveFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
 
-  <bean id="saveBinaryPropertyAsFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
+  <bean id="saveBinaryPropertyAsFileAction" parent="saveFileAction" class="org.jspresso.framework.mockups.SaveFileActionMock" />
   
   <bean id="frontController" class="org.jspresso.framework.mockups.MockFrontendController"/>
 
