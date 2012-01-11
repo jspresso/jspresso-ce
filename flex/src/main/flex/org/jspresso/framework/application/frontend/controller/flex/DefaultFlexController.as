@@ -1208,10 +1208,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
       dialogBox.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
-        dialog.width = dialogView.getExplicitOrMeasuredWidth() + 10;
-        //dialog.height = dialogView.getExplicitOrMeasuredHeight();
+        dialog.width = dialogView.getExplicitOrMeasuredWidth() + 15;
+        dialog.height = dialog.height + 15;
         dialog.minWidth = dialogBox.minWidth * 1.2;
         dialog.minHeight = dialogBox.minHeight * 1.2;
+        dialogView.width = NaN;
+        dialogView.percentWidth = 100.0;
+        dialogView.height = NaN;
+        dialogView.percentHeight = 100.0;
         });
       var focusInit:Function = function():void {
         //find first focusable component
