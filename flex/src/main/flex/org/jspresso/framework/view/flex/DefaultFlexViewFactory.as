@@ -1434,6 +1434,15 @@ package org.jspresso.framework.view.flex {
         if(rTab.toolTip != null) {
     		  tabCanvas.toolTip = rTab.toolTip;
         }
+        var fixTabSize:Function = function (event:FlexEvent):void {
+          if(event.target is Canvas) {
+            var tabC:Canvas = event.target as Canvas;
+            tabC.measuredWidth = (tabC.getChildAt(0) as UIComponent) .measuredWidth;
+            tabC.measuredHeight = (tabC.getChildAt(0) as UIComponent) .measuredHeight;
+            tabC.removeEventListener(FlexEvent.CREATION_COMPLETE,fixTabSize);
+          }
+        };
+        tabCanvas.addEventListener(FlexEvent.CREATION_COMPLETE, fixTabSize);
         tabCanvas.addChild(tabContent);
       }
       
@@ -1443,6 +1452,13 @@ package org.jspresso.framework.view.flex {
           for(var tabIndex:int = 0; tabIndex < tabContainer.getChildren().length; tabIndex ++) {
             var tabButton:Button = tabContainer.getTabAt(tabIndex);
             tabButton.setStyle("icon", getIconForComponent(tabButton, (remoteTabContainer.tabs[tabIndex] as RComponent).icon));
+            var tab:UIComponent = tabContainer.getChildAt(tabIndex) as UIComponent;
+            if(tab.getExplicitOrMeasuredWidth() > tabContainer.getExplicitOrMeasuredWidth()) {
+              tabContainer.measuredWidth = tab.getExplicitOrMeasuredWidth();
+            }
+            if(tab.getExplicitOrMeasuredHeight() > tabContainer.getExplicitOrMeasuredHeight()) {
+              tabContainer.measuredHeight = tab.getExplicitOrMeasuredHeight();
+            }
           }
           tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, assignTabsIcons);
         }
