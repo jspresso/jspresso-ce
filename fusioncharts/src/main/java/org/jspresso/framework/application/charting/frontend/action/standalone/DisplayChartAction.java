@@ -28,6 +28,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.charting.frontend.action.AbstractChartAction;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -67,7 +68,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
         });
 
     Map<String, String> flashContext = new LinkedHashMap<String, String>();
-    flashContext.put("dataXml", chartData);
+    flashContext.put("dataXml", StringUtils.prependUtf8Bom(chartData));
     Dimension d = getChartDescriptor().getDimension();
     flashContext.put("chartWidth", Integer.toString(d.getWidth() - 20));
     flashContext.put("chartHeight", Integer.toString(d.getHeight() - 100));

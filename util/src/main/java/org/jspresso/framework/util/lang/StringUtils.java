@@ -34,6 +34,13 @@ import java.util.Set;
  */
 public final class StringUtils {
 
+  /**
+   * UTF-8 BOM.
+   */
+  // FEFF because this is the Unicode char represented by the UTF-8 byte order
+  // mark (EF BB BF).
+  public static final String UTF8_BOM = "\uFEFF";
+
   private StringUtils() {
     // Helper class constructor
   }
@@ -95,8 +102,8 @@ public final class StringUtils {
     if (sourceMap == null) {
       return null;
     }
-    Map<String, String> result = new LinkedHashMap<String, String>(sourceMap
-        .size());
+    Map<String, String> result = new LinkedHashMap<String, String>(
+        sourceMap.size());
     for (Map.Entry<String, String> sourceEntry : sourceMap.entrySet()) {
       result.put(ensureSpaceFree(sourceEntry.getKey()),
           ensureSpaceFree(sourceEntry.getValue()));
@@ -135,5 +142,16 @@ public final class StringUtils {
       return null;
     }
     return source.replaceAll("\\s*", "");
+  }
+
+  /**
+   * Prepends the UTF-8 bom to a source string.
+   * 
+   * @param source
+   *          the source to prepend the BOM to.
+   * @return the bom-ed string.
+   */
+  public static String prependUtf8Bom(String source) {
+    return UTF8_BOM + source;
   }
 }

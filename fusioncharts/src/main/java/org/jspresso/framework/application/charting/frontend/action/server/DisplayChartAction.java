@@ -30,6 +30,7 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.charting.frontend.action.AbstractChartAction;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
@@ -56,10 +57,6 @@ import org.springframework.jdbc.core.ConnectionCallback;
  */
 public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
 
-  // FEFF because this is the Unicode char represented by the UTF-8 byte order
-  // mark (EF BB BF).
-  public static final String UTF8_BOM = "\uFEFF";
-
   /**
    * {@inheritDoc}
    */
@@ -80,8 +77,8 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
         });
     IResource resource;
     try {
-      resource = new MemoryResource(null, "text/xml",
-          (UTF8_BOM + chartData).getBytes("UTF-8"));
+      resource = new MemoryResource(null, "text/xml", StringUtils
+          .prependUtf8Bom(chartData).getBytes("UTF-8"));
     } catch (UnsupportedEncodingException ex) {
       throw new ActionException(ex);
     }
