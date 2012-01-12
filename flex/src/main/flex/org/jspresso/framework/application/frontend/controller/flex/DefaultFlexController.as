@@ -1134,13 +1134,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, buttons:Array, useCurrent:Boolean=false, dimension:Dimension=null):void {
-      if(dimension != null) {
-        dialogView.width = dimension.width;
-        dialogView.height = dimension.height;
-      } else {
-        dialogView.percentWidth = 100.0;
-        dialogView.percentHeight = 100.0;
-      }
+      dialogView.percentWidth = 100.0;
+      dialogView.percentHeight = 100.0;
       dialogView.maxWidth = 90.0 * (Application.application as DisplayObject).width / 100.0;
       dialogView.maxHeight = 90.0 * (Application.application as DisplayObject).height / 100.0;
       var buttonBox:HBox = new HBox();
@@ -1208,15 +1203,24 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
       dialogBox.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
-        dialog.width = dialogView.getExplicitOrMeasuredWidth() + 15;
-        dialog.height = dialog.height + 15;
+        if(dimension) {
+          if(dimension.width > 0) {
+            dialog.width = dimension.width;
+          }
+          if(dimension.height > 0) {
+            dialog.height = dimension.height;
+          }
+        } else {
+          dialog.width = dialogView.getExplicitOrMeasuredWidth() + 15;
+          dialog.height = dialog.height;
+          dialogView.width = NaN;
+          dialogView.percentWidth = 100.0;
+          dialogView.height = NaN;
+          dialogView.percentHeight = 100.0;
+        }
         dialog.minWidth = dialogBox.minWidth * 1.2;
         dialog.minHeight = dialogBox.minHeight * 1.2;
-        dialogView.width = NaN;
-        dialogView.percentWidth = 100.0;
-        dialogView.height = NaN;
-        dialogView.percentHeight = 100.0;
-        });
+      });
       var focusInit:Function = function():void {
         //find first focusable component
         var focusableChild:UIComponent = findFirstFocusableComponent(dialogView);

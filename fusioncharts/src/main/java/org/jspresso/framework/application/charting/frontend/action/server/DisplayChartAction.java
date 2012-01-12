@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.charting.frontend.action.server;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.charting.frontend.action.AbstractChartAction;
 import org.jspresso.framework.util.gui.Dimension;
@@ -54,6 +56,10 @@ import org.springframework.jdbc.core.ConnectionCallback;
  */
 public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
 
+  // FEFF because this is the Unicode char represented by the UTF-8 byte order
+  // mark (EF BB BF).
+  public static final String UTF8_BOM = "\uFEFF";
+
   /**
    * {@inheritDoc}
    */
@@ -61,8 +67,8 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
-    String chartUrl = ResourceProviderServlet
-        .computeLocalResourceDownloadUrl(getChartDescriptor().getUrl());
+    String chartUrl = ResourceProviderServlet.computeLocalResourceDownloadUrl(
+        getChartDescriptor().getUrl(), true);
     String chartData = getJdbcTemplate().execute(
         new ConnectionCallback<String>() {
 
@@ -72,15 +78,20 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
                 getTranslationProvider(context), getLocale(context));
           }
         });
-    IResource resource = new MemoryResource(null, "text/xml", chartData
-        .getBytes());
+    IResource resource;
+    try {
+      resource = new MemoryResource(null, "text/xml",
+          (UTF8_BOM + chartData).getBytes("UTF-8"));
+    } catch (UnsupportedEncodingException ex) {
+      throw new ActionException(ex);
+    }
     String resourceId = ResourceManager.getInstance().register(resource);
     Map<String, String> flashContext = new LinkedHashMap<String, String>();
     Dimension d = getChartDescriptor().getDimension();
-    flashContext.put("chartWidth", Integer.toString(d.getWidth()));
-    flashContext.put("chartHeight", Integer.toString(d.getHeight()));
-    flashContext.put("dataURL", ResourceProviderServlet
-        .computeDownloadUrl(resourceId));
+    flashContext.put("chartWidth", Integer.toString(d.getWidth() - 20));
+    flashContext.put("chartHeight", Integer.toString(d.getHeight() - 100));
+    flashContext.put("dataURL",
+        ResourceProviderServlet.computeDownloadUrl(resourceId));
     List<G> chartActions = new ArrayList<G>();
     for (IDisplayableAction action : getActions()) {
       chartActions.add(getActionFactory(context).createAction(action,

@@ -93,6 +93,11 @@ public class ResourceProviderServlet extends HttpServlet {
    */
   private static final String LOCAL_URL_PARAMETER          = "localUrl";
 
+  /**
+   * ommitFileName.
+   */
+  private static final String OMMIT_FILE_NAME_PARAMETER    = "ommitFileName";
+
   private static final long   serialVersionUID             = 5253634459280974738L;
 
   /**
@@ -144,9 +149,26 @@ public class ResourceProviderServlet extends HttpServlet {
    * @return the resource url.
    */
   public static String computeLocalResourceDownloadUrl(String localUrl) {
+    return computeLocalResourceDownloadUrl(localUrl, false);
+  }
+
+  /**
+   * Computes the url where the resource is available for download.
+   * 
+   * @param localUrl
+   *          the resource local url.
+   * @param ommitFileName
+   *          when set to true, the file name will not be added as
+   *          Content-disposition header in the response. This helps to
+   *          workaround scurity issues in flash SWFLoader.
+   * @return the resource url.
+   */
+  public static String computeLocalResourceDownloadUrl(String localUrl,
+      boolean ommitFileName) {
     if (localUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      return computeUrl(request, "?" + LOCAL_URL_PARAMETER + "=" + localUrl);
+      return computeUrl(request, "?" + OMMIT_FILE_NAME_PARAMETER + "="
+          + ommitFileName + "&" + LOCAL_URL_PARAMETER + "=" + localUrl);
     }
     return null;
   }
@@ -276,6 +298,8 @@ public class ResourceProviderServlet extends HttpServlet {
       String localUrlSpec = request.getParameter(LOCAL_URL_PARAMETER);
       String imageUrlSpec = request.getParameter(IMAGE_URL_PARAMETER);
       String id = request.getParameter(ID_PARAMETER);
+      boolean ommitFileName = Boolean.parseBoolean(request
+          .getParameter(OMMIT_FILE_NAME_PARAMETER));
 
       if (id == null && localUrlSpec == null && imageUrlSpec == null) {
         throw new ServletException("No resource id nor local URL specified.");
@@ -290,7 +314,9 @@ public class ResourceProviderServlet extends HttpServlet {
         }
 
         response.setContentType(resource.getMimeType());
-        completeFileName(response, resource.getName());
+        if (!ommitFileName) {
+          completeFileName(response, resource.getName());
+        }
         long resourceLength = resource.getSize();
         if (resourceLength > 0) {
           response.setContentLength((int) resourceLength);
@@ -318,14 +344,18 @@ public class ResourceProviderServlet extends HttpServlet {
         if (localUrl == null) {
           throw new ServletException("Bad local URL : " + localUrlSpec);
         }
-        completeFileName(response, localUrl.getFile());
+        if (!ommitFileName) {
+          completeFileName(response, localUrl.getFile());
+        }
         inputStream = new BufferedInputStream(localUrl.openStream());
       } else if (imageUrlSpec != null) {
         URL imageUrl = UrlHelper.createURL(imageUrlSpec);
         if (imageUrl == null) {
           throw new ServletException("Bad image URL : " + imageUrlSpec);
         }
-        completeFileName(response, imageUrl.getFile());
+        if (!ommitFileName) {
+          completeFileName(response, imageUrl.getFile());
+        }
         String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
         String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
         if (width != null && height != null) {
