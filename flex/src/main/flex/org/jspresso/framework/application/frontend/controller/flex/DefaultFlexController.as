@@ -1136,8 +1136,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, buttons:Array, useCurrent:Boolean=false, dimension:Dimension=null):void {
       dialogView.percentWidth = 100.0;
       dialogView.percentHeight = 100.0;
-      dialogView.maxWidth = 90.0 * (Application.application as DisplayObject).width / 100.0;
-      dialogView.maxHeight = 90.0 * (Application.application as DisplayObject).height / 100.0;
       var buttonBox:HBox = new HBox();
       buttonBox.setStyle("horizontalAlign","right");
       buttonBox.setStyle("paddingLeft", 5);
@@ -1198,9 +1196,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       dialogBox.percentWidth = 100.0;
       dialogBox.percentHeight = 100.0;
-      var applicationFrame:Application = Application.application as Application;
-      dialogBox.maxHeight = applicationFrame.height * 95 / 100;
-      dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
       dialogBox.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
         if(dimension) {
@@ -1211,8 +1206,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
             dialog.height = dimension.height;
           }
         } else {
-          dialog.width = dialogView.getExplicitOrMeasuredWidth() + 15;
-          dialog.height = dialog.height;
+          var applicationFrame:Application = Application.application as Application;
+          dialog.width = Math.min(dialogView.getExplicitOrMeasuredWidth() + 15, applicationFrame.width * 95 / 100);
+          dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight() + 15), applicationFrame.height * 95 / 100);
           dialogView.width = NaN;
           dialogView.percentWidth = 100.0;
           dialogView.height = NaN;
