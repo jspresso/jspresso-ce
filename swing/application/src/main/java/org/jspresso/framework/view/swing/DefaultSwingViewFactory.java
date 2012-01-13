@@ -635,8 +635,8 @@ public class DefaultSwingViewFactory extends
       }
       viewComponent.add(propertyView.getPeer(), constraints);
       if (propertyView.getPeer() instanceof JLink<?>) {
-        configureJLinkAction((JLink<Action>) propertyView.getPeer(), view,
-            actionHandler, locale);
+        configureJLinkAction((JLink<Action>) propertyView.getPeer(),
+            propertyView, actionHandler, locale);
       }
 
       currentX += propertyWidth;
