@@ -1208,14 +1208,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else {
           var applicationFrame:Application = Application.application as Application;
           dialog.width = Math.min(dialogView.getExplicitOrMeasuredWidth() + 15, applicationFrame.width * 95 / 100);
-          dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight() + 15), applicationFrame.height * 95 / 100);
+          dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight() + 80), applicationFrame.height * 95 / 100);
           dialogView.width = NaN;
           dialogView.percentWidth = 100.0;
           dialogView.height = NaN;
           dialogView.percentHeight = 100.0;
         }
-        dialog.minWidth = dialogBox.minWidth * 1.2;
-        dialog.minHeight = dialogBox.minHeight * 1.2;
       });
       var focusInit:Function = function():void {
         //find first focusable component

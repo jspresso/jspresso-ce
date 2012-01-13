@@ -886,14 +886,9 @@ package org.jspresso.framework.view.flex {
         cell.percentWidth = 100.0;
         if(remoteBorderContainer.north != null) {
           cellComponent = createComponent(remoteBorderContainer.north);
-          cell.minHeight = cellComponent.minHeight;
           if(cellComponent.height > 0) {
             cell.height = cellComponent.height;
             cell.height += 4;
-          }
-          if(cellComponent.maxHeight > 0) {
-            cell.maxHeight = cellComponent.maxHeight;
-            cell.maxHeight += 4;
           }
           cellComponent.percentWidth = 100.0;
           cellComponent.percentHeight = 100.0;
@@ -979,14 +974,9 @@ package org.jspresso.framework.view.flex {
         cell.percentWidth = 100.0;
         if(remoteBorderContainer.south != null) {
           cellComponent = createComponent(remoteBorderContainer.south);
-          cell.minHeight = cellComponent.minHeight;
           if(cellComponent.height > 0) {
             cell.height = cellComponent.height;
             cell.height += 4;
-          }
-          if(cellComponent.maxHeight > 0) {
-            cell.maxHeight = cellComponent.maxHeight;
-            cell.maxHeight += 4;
           }
           cellComponent.percentWidth = 100.0;
           cellComponent.percentHeight = 100.0;
