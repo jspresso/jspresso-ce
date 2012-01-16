@@ -2210,16 +2210,25 @@ package org.jspresso.framework.view.flex {
       if(remoteLabel is RLink && (remoteLabel as RLink).action != null) {
         getRemotePeerRegistry().register((remoteLabel as RLink).action);
         updateLabel = function (value:Object):void {
-          if(value == null) {
+          if(remoteState.value == null) {
             label.htmlText = null;
           } else {
-            label.htmlText = "<u><a href='event:action'>" + value.toString() + "</a></u>";
+            var labelText:String = remoteState.value.toString();
+            if(HtmlUtil.isHtml(labelText)) {
+              labelText = HtmlUtil.convertHtmlEntities(labelText);
+            }
+            if(((remoteLabel as RLink).action).enabled) {
+              label.htmlText = "<u><a href='event:action'>" + labelText + "</a></u>";
+            } else {
+              label.htmlText = labelText;
+            }
           }
         };
         label.selectable = true;
         label.addEventListener("link", function(evt:TextEvent):void {
           getActionHandler().execute((remoteLabel as RLink).action);
         });
+        BindingUtils.bindSetter(updateLabel, (remoteLabel as RLink).action, "enabled", true);
       } else {
          updateLabel = function (value:Object):void {
           if(value == null) {
