@@ -1207,7 +1207,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         } else {
           var applicationFrame:Application = Application.application as Application;
-          dialog.width = Math.min(dialogView.getExplicitOrMeasuredWidth() + 15, applicationFrame.width * 95 / 100);
+          dialog.width  = Math.min(Math.max(dialog.width,  dialogView.getExplicitOrMeasuredWidth()  + 15),                                           applicationFrame.width * 95  / 100);
           dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight() + 80), applicationFrame.height * 95 / 100);
           dialogView.width = NaN;
           dialogView.percentWidth = 100.0;
@@ -1225,9 +1225,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialog.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
         dialog.callLater(focusInit);
       });
-      if(newDialog) {
-        PopUpManager.centerPopUp(dialog);
-      }
+      PopUpManager.centerPopUp(dialog);
     }
     
     private function findFirstFocusableComponent(root:UIComponent):UIComponent {
