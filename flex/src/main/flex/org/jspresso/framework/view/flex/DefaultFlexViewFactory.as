@@ -1721,6 +1721,9 @@ package org.jspresso.framework.view.flex {
           }
           if(!ArrayUtil.areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
             list.selectedItems = selectedItems;
+            if(selectedItems.length == 1) {
+              list.scrollToIndex((list.dataProvider as ListCollectionView).getItemIndex(selectedItems[0]));
+            }
           }
         } else {
           list.selectedItem = null;

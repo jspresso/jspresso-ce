@@ -18,8 +18,12 @@
  */
 package org.jspresso.framework.binding.swing;
 
+import java.awt.Rectangle;
 import java.util.Arrays;
 
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -63,29 +67,34 @@ public class DefaultListSelectionModelBinder implements
    * {@inheritDoc}
    */
   @Override
-  public void bindSelectionModel(ISelectable selectable,
-      ListSelectionModel selectionModel, IIndexMapper rowMapper) {
+  public void bindSelectionModel(JComponent collectionComponent,
+      ISelectable selectable, ListSelectionModel selectionModel,
+      IIndexMapper rowMapper) {
     selectionModel.addListSelectionListener(new SelectionModelListener(
         selectable, rowMapper));
     selectable.addSelectionChangeListener(new SelectionChangeListener(
-        selectionModel, rowMapper));
+        collectionComponent, selectionModel, rowMapper));
   }
 
   private static final class SelectionChangeListener implements
       ISelectionChangeListener {
 
+    private JComponent         collectionComponent;
     private IIndexMapper       rowMapper;
     private ListSelectionModel selectionModel;
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
      * 
+     * @param collectionComponent
+     *          the collection component to bind the selection model with.
      * @param selectionModel
      *          the selection model to forward the changes to.
      * @param rowMapper
      */
-    public SelectionChangeListener(ListSelectionModel selectionModel,
-        IIndexMapper rowMapper) {
+    public SelectionChangeListener(JComponent collectionComponent,
+        ListSelectionModel selectionModel, IIndexMapper rowMapper) {
+      this.collectionComponent = collectionComponent;
       this.selectionModel = selectionModel;
       this.rowMapper = rowMapper;
     }
@@ -147,6 +156,19 @@ public class DefaultListSelectionModelBinder implements
             firstSelection = false;
           } else {
             selectionModel.addSelectionInterval(nextRangeMin, nextRangeMax);
+          }
+          if (evt.getLeadingIndex() >= 0) {
+            Rectangle visibleCell = null;
+            if (collectionComponent instanceof JTable) {
+              visibleCell = ((JTable) collectionComponent).getCellRect(
+                  evt.getLeadingIndex(), 0, true);
+            } else if (collectionComponent instanceof JList) {
+              visibleCell = ((JList) collectionComponent).getCellBounds(
+                  evt.getLeadingIndex(), evt.getLeadingIndex());
+            }
+            if (visibleCell != null) {
+              collectionComponent.scrollRectToVisible(visibleCell);
+            }
           }
         }
       });

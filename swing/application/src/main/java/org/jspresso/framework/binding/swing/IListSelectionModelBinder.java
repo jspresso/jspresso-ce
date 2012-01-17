@@ -18,11 +18,11 @@
  */
 package org.jspresso.framework.binding.swing;
 
+import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.gui.IIndexMapper;
-
 
 /**
  * Helper class used to bind collection view connectors to list selection models
@@ -36,13 +36,16 @@ public interface IListSelectionModelBinder {
   /**
    * Binds a collection connector to keep track of a selection model selections.
    * 
+   * @param collectionCompnent
+   *          the collection component to bind the selection model for.
    * @param selectable
-   *            the connector to bind.
+   *          the connector to bind.
    * @param selectionModel
-   *            the selection model to bind.
+   *          the selection model to bind.
    * @param rowMapper
-   *            a row indices transformer or null if none.
+   *          a row indices transformer or null if none.
    */
-  void bindSelectionModel(ISelectable selectable,
-      ListSelectionModel selectionModel, IIndexMapper rowMapper);
+  void bindSelectionModel(JComponent collectionCompnent,
+      ISelectable selectable, ListSelectionModel selectionModel,
+      IIndexMapper rowMapper);
 }

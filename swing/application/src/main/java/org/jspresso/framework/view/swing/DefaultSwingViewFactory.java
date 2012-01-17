@@ -1480,7 +1480,7 @@ public class DefaultSwingViewFactory extends
         viewDescriptor.getRenderedProperty()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(connector,
+    listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
         viewComponent.getSelectionModel(), null);
     if (viewDescriptor.getRowAction() != null) {
       final Action rowAction = getActionFactory().createAction(
@@ -2169,11 +2169,11 @@ public class DefaultSwingViewFactory extends
       sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
       sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
       viewComponent.setModel(sorterDecorator);
-      listSelectionModelBinder.bindSelectionModel(connector,
+      listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
           viewComponent.getSelectionModel(), sorterDecorator);
     } else {
       viewComponent.setModel(tableModel);
-      listSelectionModelBinder.bindSelectionModel(connector,
+      listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
           viewComponent.getSelectionModel(), null);
     }
   }
