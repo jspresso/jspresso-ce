@@ -25,6 +25,7 @@ package org.jspresso.framework.view.flex {
   import flexlib.containers.ButtonScrollingCanvas;
   
   import mx.binding.utils.BindingUtils;
+  import mx.collections.ICollectionView;
   import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
@@ -2039,6 +2040,9 @@ package org.jspresso.framework.view.flex {
           }
           if(!ArrayUtil.areUnorderedArraysEqual(table.selectedItems, selectedItems)) {
             table.selectedItems = selectedItems;
+            if(selectedItems.length == 1) {
+              table.scrollToIndex((table.dataProvider as ListCollectionView).getItemIndex(selectedItems[0]));
+            }
           }
         } else {
           table.selectedItem = null;
