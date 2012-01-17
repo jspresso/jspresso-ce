@@ -747,6 +747,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (stateLeadingIndex >= 0) {
             selectionModel.addSelectionInterval(stateLeadingIndex,
                 stateLeadingIndex);
+            table.scrollCellVisible(0, stateLeadingIndex);
           }
           selectionModel.setBatchMode(false);
         }
