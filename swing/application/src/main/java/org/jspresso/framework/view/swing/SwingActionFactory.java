@@ -28,6 +28,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.view.ControllerAwareActionFactory;
@@ -141,6 +142,7 @@ public class SwingActionFactory extends
         Map<String, Object> actionContext = createActionContext(actionHandler,
             view, viewConnector, e.getActionCommand(),
             (JComponent) e.getSource());
+        actionContext.put(ActionContextConstants.UI_ACTION, this);
         actionHandler.execute(action, actionContext);
       }
     }

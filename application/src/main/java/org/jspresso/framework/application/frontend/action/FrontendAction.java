@@ -411,6 +411,18 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
+   * Retrieves the concrete action (swing, remote) that was triggered triggered from the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the concrete action that was triggered.
+   */
+  @SuppressWarnings("unchecked")
+  protected G getUiAction(Map<String, Object> context) {
+    return (G) context.get(ActionContextConstants.UI_ACTION);
+  }
+
+  /**
    * Gets the frontend controller out of the action context.
    * 
    * @param context

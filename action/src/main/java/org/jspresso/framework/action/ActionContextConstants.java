@@ -96,6 +96,11 @@ public final class ActionContextConstants {
    */
   public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
 
+  /**
+   * UI_ACTION context key.
+   */
+  public static final String UI_ACTION = "UI_ACTION";
+
   private ActionContextConstants() {
     // to prevent this class from being instanciated.
   }

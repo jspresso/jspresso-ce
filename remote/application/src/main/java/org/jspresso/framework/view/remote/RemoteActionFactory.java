@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -205,6 +206,7 @@ public class RemoteActionFactory extends
             actionHandler, view, contextViewConnector, parameter,
             sourceComponent);
         actionContext.putAll(defaultActionContext);
+        actionContext.put(ActionContextConstants.UI_ACTION, this);
         actionHandler.execute(action, actionContext);
       }
     }
