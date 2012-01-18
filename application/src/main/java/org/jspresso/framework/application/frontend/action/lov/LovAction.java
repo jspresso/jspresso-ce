@@ -34,6 +34,7 @@ import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelProvider;
@@ -86,6 +87,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * <code>LOV_PRESELECTED_ITEM</code>.
    */
   public static final String                    LOV_PRESELECTED_ITEM  = "LOV_PRESELECTED_ITEM";
+  /**
+   * <code>LOV_SELECTED_ITEM</code>.
+   */
+  public static final String                    LOV_SELECTED_ITEM     = "LOV_SELECTED_ITEM";
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;
   private CreateQueryComponentAction            createQueryComponentAction;
@@ -119,11 +124,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         erqDescriptor);
 
     IValueConnector viewConnector = getViewConnector(context);
+    Object preselectedItem = context.get(LOV_PRESELECTED_ITEM);
     String autoCompletePropertyValue = getActionCommand(context);
 
     Object masterComponent = null;
     if (getModelDescriptor(context) instanceof IPropertyDescriptor
         && viewConnector.getParentConnector() != null) {
+      if (preselectedItem == null) {
+        preselectedItem = viewConnector.getConnectorValue();
+      }
       // The following relies on a workaround used to determine the bean
       // model whenever the lov component is used inside a jtable.
       IValueConnector parentModelConnector = viewConnector.getParentConnector()
@@ -199,7 +208,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           && autoCompletePropertyValue.length() > 0
           && !autoCompletePropertyValue.equals("*")
           && queryComponent.getQueriedComponents() != null) {
-        if (queryComponent.getQueriedComponents().size() >= 1) {
+        if (queryComponent.getQueriedComponents().size() > 0) {
           Object selectedItem = null;
           Object firstItem = queryComponent.getQueriedComponents().get(0);
           if (queryComponent.getQueriedComponents().size() == 1) {
@@ -218,7 +227,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
               }
             } catch (Exception ex) {
               LOG.warn("Could not retrieve {} on {}", new Object[] {
-                  autoCompletePropertyName, firstItem, ex});
+                  autoCompletePropertyName, firstItem, ex
+              });
             }
           }
           if (selectedItem != null) {
@@ -226,9 +236,26 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
               selectedItem = getController(context).getBackendController()
                   .merge((IEntity) selectedItem, EMergeMode.MERGE_LAZY);
             }
-            context.put(LOV_PRESELECTED_ITEM, selectedItem);
+            context.put(LOV_SELECTED_ITEM, selectedItem);
             actionHandler.execute(okAction, context);
             return true;
+          }
+        }
+      }
+      if (preselectedItem != null && queryComponent.getQueriedComponents().size() > 0) {
+        for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
+          if (preselectedItem.equals(queryComponent.getQueriedComponents()
+              .get(i))) {
+            // this is from the dialog.
+            ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView
+                .getConnector())
+                .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+            if (resultConnector != null) {
+              resultConnector.setSelectedIndices(new int[] {
+                i
+              });
+            }
+            break;
           }
         }
       }
@@ -276,8 +303,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -293,8 +321,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }

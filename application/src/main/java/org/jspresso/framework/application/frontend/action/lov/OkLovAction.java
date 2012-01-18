@@ -50,7 +50,7 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    if (!context.containsKey(LovAction.LOV_PRESELECTED_ITEM)) {
+    if (!context.containsKey(LovAction.LOV_SELECTED_ITEM)) {
       ICollectionConnector resultConnector;
       IValueConnector viewConnector = getViewConnector(context);
       // to support double click on the table
@@ -80,7 +80,7 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
       getController(context).disposeModalDialog(getActionWidget(context),
           context);
     } else {
-      setActionParameter(context.get(LovAction.LOV_PRESELECTED_ITEM), context);
+      setActionParameter(context.get(LovAction.LOV_SELECTED_ITEM), context);
     }
     return super.execute(actionHandler, context);
   }

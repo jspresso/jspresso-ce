@@ -45,5 +45,13 @@ package org.jspresso.framework.view.flex {
       }
       return super.selectItem(item, shiftKey, ctrlKey, transition);
     }
+
+    /**
+     *  Work arounds a NPE that occurs when a selection is made before the table is drawn.
+     */
+    override protected function UIDToItemRenderer(uid:String):IListItemRenderer {
+      if (!(listContent && visibleData)) return null;
+      return super.UIDToItemRenderer(uid);
+    }
   }
 }
