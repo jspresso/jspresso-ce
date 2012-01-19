@@ -266,7 +266,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
         @Override
         public void run() {
-          if (cell.getX() >= 0 && cell.getY() > 0
+          if (cell.getX() >= 0 && cell.getY() >= 0
               && cell.getX() < getRowCount()) {
             fireTableCellUpdated(cell.getX(), cell.getY());
           }
