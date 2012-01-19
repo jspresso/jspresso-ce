@@ -73,6 +73,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.componentDescriptor = componentDescriptor;
     this.queryDescriptor = componentFactory
         .getComponentDescriptor(componentDescriptor.getQueryComponentContract());
+    if (queryDescriptor == null) {
+      queryDescriptor = componentDescriptor;
+    }
     this.componentFactory = componentFactory;
     this.distinctEnforced = false;
   }
