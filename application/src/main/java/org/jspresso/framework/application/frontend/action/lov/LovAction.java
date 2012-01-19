@@ -50,7 +50,6 @@ import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -197,7 +196,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     // the transaction.
     IView<E> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
-            okAction), actionHandler, getLocale(context));
+            okAction, context), actionHandler, getLocale(context));
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
@@ -227,8 +226,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
               }
             } catch (Exception ex) {
               LOG.warn("Could not retrieve {} on {}", new Object[] {
-                  autoCompletePropertyName, firstItem, ex
-              });
+                  autoCompletePropertyName, firstItem, ex});
             }
           }
           if (selectedItem != null) {
@@ -242,18 +240,17 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           }
         }
       }
-      if (preselectedItem != null && queryComponent.getQueriedComponents().size() > 0) {
+      if (preselectedItem != null
+          && queryComponent.getQueriedComponents().size() > 0) {
         for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
-          if (preselectedItem.equals(queryComponent.getQueriedComponents()
-              .get(i))) {
+          if (preselectedItem.equals(queryComponent.getQueriedComponents().get(
+              i))) {
             // this is from the dialog.
             ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView
                 .getConnector())
                 .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
             if (resultConnector != null) {
-              resultConnector.setSelectedIndices(new int[] {
-                i
-              });
+              resultConnector.setSelectedIndices(new int[] {i});
             }
             break;
           }
@@ -303,9 +300,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -321,9 +317,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }

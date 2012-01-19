@@ -238,7 +238,7 @@ public class CreateQueryComponentAction extends BackendAction {
               }
             } else {
               IPropertyDescriptor initializedPropertyDescriptor = queryComponent
-                  .getComponentDescriptor().getPropertyDescriptor(
+                  .getQueryDescriptor().getPropertyDescriptor(
                       initializedAttribute.getKey());
 
               if (initializedPropertyDescriptor != null) {

@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.action.lov;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
@@ -65,18 +67,26 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
       if (resultConnector != null) {
         int[] resultSelectedIndices = resultConnector.getSelectedIndices();
         if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
-          Object selectedElement = resultConnector.getChildConnector(
-              resultSelectedIndices[0]).getConnectorValue();
-          if (selectedElement instanceof IEntity) {
-            selectedElement = getController(context).getBackendController()
-                .merge((IEntity) selectedElement, EMergeMode.MERGE_LAZY);
+          List<Object> selectedElements = new ArrayList<Object>();
+          for (int i = 0; i < resultSelectedIndices.length; i++) {
+            Object selectedElement = resultConnector.getChildConnector(
+                resultSelectedIndices[i]).getConnectorValue();
+            if (selectedElement instanceof IEntity) {
+              selectedElement = getController(context).getBackendController()
+                  .merge((IEntity) selectedElement, EMergeMode.MERGE_LAZY);
+            }
+            selectedElements.add(selectedElement);
           }
-          setActionParameter(selectedElement, context);
+          if (selectedElements.size() == 1) {
+            setActionParameter(selectedElements.get(0), context);
+          } else {
+            setActionParameter(selectedElements, context);
+          }
         } else {
           setActionParameter(null, context);
         }
       }
-      //Only in that case a dialog has been opened
+      // Only in that case a dialog has been opened
       getController(context).disposeModalDialog(getActionWidget(context),
           context);
     } else {

@@ -1,5 +1,14 @@
 3.5.11
 ======
+- We have refactored the signature of the ILovViewDescriptorFactory interface method to include the action context as parameter.
+This allows to tailor the LOV view based on the action context, e.g. customize the LOV view based on the actual model it's triggered on.
+For instance, this allows to introduce multi-selection on result view when the model is a a QueryComponent (i.e. in filter views).
+
+- We have changed the package definition of ILovViewDescriptorFactory and BasicLovViewDescriptorFactory
+    from org.jspresso.framework.view.descriptor.basic
+    to   org.jspresso.framework.application.frontend.action.lov
+  and we have moved them from jspresso-view module to jspresso-application module.
+
 - Due to a groupId change of the hsqldb artifact in the central Maven repository, you must change all hsqldb references :
   <groupId>hsqldb</groupId>
     to

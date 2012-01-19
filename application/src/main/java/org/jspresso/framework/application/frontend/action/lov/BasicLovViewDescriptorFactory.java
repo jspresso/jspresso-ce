@@ -16,8 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor.basic;
+package org.jspresso.framework.application.frontend.action.lov;
 
+import java.util.Map;
+
+import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
@@ -26,17 +29,21 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
-import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A default implementation for lov view factories.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
-public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory {
+public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
+    implements ILovViewDescriptorFactory {
 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
   private ActionMap                   resultViewActionMap;
@@ -49,14 +56,15 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   @Override
   public IViewDescriptor createLovViewDescriptor(
       IComponentDescriptorProvider<IEntity> entityRefDescriptor,
-      IDisplayableAction okAction) {
+      IDisplayableAction okAction, Map<String, Object> lovContext) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
         .createQueryViewDescriptor(entityRefDescriptor);
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());
-    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor);
+    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(
+        entityRefDescriptor, lovContext);
     if (resultViewDescriptor instanceof BasicTableViewDescriptor) {
       ((BasicTableViewDescriptor) resultViewDescriptor)
           .setSortingAction(sortingAction);
@@ -114,10 +122,13 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * 
    * @param entityRefDescriptor
    *          the entity reference descriptor.
+   * @param lovContext
+   *          the action context the LOV was triggered on.
    * @return a result collection view.
    */
   protected BasicCollectionViewDescriptor createResultViewDescriptor(
-      IComponentDescriptorProvider<IEntity> entityRefDescriptor) {
+      IComponentDescriptorProvider<IEntity> entityRefDescriptor,
+      Map<String, Object> lovContext) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicListDescriptor<IEntity> queriedEntitiesListDescriptor = new BasicListDescriptor<IEntity>();
@@ -133,7 +144,13 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     resultViewDescriptor.setReadOnly(true);
     resultViewDescriptor.setRenderedProperties(entityRefDescriptor
         .getRenderedProperties());
-    resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
+    if (getModel(lovContext) instanceof IQueryComponent) {
+      // We are on a filter view that suppports multi selection
+      resultViewDescriptor
+          .setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
+    } else {
+      resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
+    }
 
     resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
     return resultViewDescriptor;

@@ -20,7 +20,9 @@ package org.jspresso.framework.model.component.query;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +51,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private static final long       serialVersionUID = 4271673164192796253L;
 
   private IComponentDescriptor<?> componentDescriptor;
+  private IComponentDescriptor<?> queryDescriptor;
   private IComponentFactory       componentFactory;
   private Map<String, ESort>      defaultOrderingProperties;
   private Map<String, ESort>      orderingProperties;
@@ -68,6 +71,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public QueryComponent(IComponentDescriptor<?> componentDescriptor,
       IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
+    this.queryDescriptor = componentFactory
+        .getComponentDescriptor(componentDescriptor.getQueryComponentContract());
     this.componentFactory = componentFactory;
     this.distinctEnforced = false;
   }
@@ -136,29 +141,77 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
           String tsProp = referencedDescriptor.getToStringProperty();
           String acProp = referencedDescriptor.getAutoCompleteProperty();
           if (value != null) {
-            ((IQueryComponent) actualValue).put(IEntity.ID,
-                ((IEntity) value).getId());
-            ((IQueryComponent) actualValue).put(tsProp,
-                ((IEntity) value).toString());
-            if (acProp != null) {
-              Object acPropVaue;
-              try {
-                acPropVaue = getComponentFactory()
-                    .getAccessorFactory()
-                    .createPropertyAccessor(acProp,
-                        ((IEntity) value).getComponentContract())
-                    .getValue(value);
-              } catch (IllegalAccessException ex) {
-                throw new NestedRuntimeException(ex, "Invalid property: "
-                    + acProp);
-              } catch (InvocationTargetException ex) {
-                throw new NestedRuntimeException(ex.getTargetException(),
-                    "Invalid property: " + acProp);
-              } catch (NoSuchMethodException ex) {
-                throw new NestedRuntimeException(ex, "Invalid property: "
-                    + acProp);
+            if (value instanceof IEntity) {
+              Serializable[] queryPropertyValues = extractQueryPropertyValues(
+                  (IEntity) value, acProp);
+              ((IQueryComponent) actualValue).put(IEntity.ID,
+                  queryPropertyValues[0]);
+              ((IQueryComponent) actualValue).put(tsProp,
+                  queryPropertyValues[1]);
+              if (acProp != null) {
+                ((IQueryComponent) actualValue).put(acProp,
+                    queryPropertyValues[2]);
               }
-              ((IQueryComponent) actualValue).put(acProp, acPropVaue);
+            } else if (value instanceof Collection<?>) {
+              if (((Collection<?>) value).size() == 1) {
+                return put(key, ((Collection<?>) value).iterator().next());
+              }
+              StringBuffer idValue = null;
+              StringBuffer tsValue = null;
+              StringBuffer acValue = null;
+              for (Object element : (Collection<?>) value) {
+                if (element instanceof IEntity) {
+                  Serializable[] queryPropertyValues = extractQueryPropertyValues(
+                      (IEntity) element, acProp);
+                  if (queryPropertyValues[0] instanceof CharSequence) {
+                    if (idValue == null) {
+                      idValue = new StringBuffer(
+                          queryPropertyValues[0].toString());
+                    } else {
+                      idValue.append(IQueryComponent.DISJUNCT).append(
+                          queryPropertyValues[0].toString());
+                    }
+                  }
+                  if (queryPropertyValues[1] instanceof CharSequence) {
+                    if (tsValue == null) {
+                      tsValue = new StringBuffer(
+                          queryPropertyValues[1].toString());
+                    } else {
+                      tsValue.append(IQueryComponent.DISJUNCT).append(
+                          queryPropertyValues[1].toString());
+                    }
+                  }
+                  if (acProp != null
+                      && queryPropertyValues[2] instanceof CharSequence) {
+                    if (acValue == null) {
+                      acValue = new StringBuffer(
+                          queryPropertyValues[2].toString());
+                    } else {
+                      acValue.append(IQueryComponent.DISJUNCT).append(
+                          queryPropertyValues[2].toString());
+                    }
+                  }
+                }
+              }
+              if (idValue != null) {
+                ((IQueryComponent) actualValue).put(IEntity.ID,
+                    idValue.toString());
+              } else {
+                ((IQueryComponent) actualValue).remove(IEntity.ID);
+              }
+              if (tsValue != null) {
+                ((IQueryComponent) actualValue).put(tsProp, tsValue.toString());
+              } else {
+                ((IQueryComponent) actualValue).remove(tsProp);
+              }
+              if (acProp != null) {
+                if (acValue != null) {
+                  ((IQueryComponent) actualValue).put(acProp,
+                      acValue.toString());
+                } else {
+                  ((IQueryComponent) actualValue).remove(acProp);
+                }
+              }
             }
           } else {
             ((IQueryComponent) actualValue).remove(IEntity.ID);
@@ -172,6 +225,26 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       }
     }
     return super.put(key, value);
+  }
+
+  private Serializable[] extractQueryPropertyValues(IEntity entity,
+      String acProp) {
+    String acPropValue = null;
+    if (acProp != null) {
+      try {
+        acPropValue = (String) getComponentFactory().getAccessorFactory()
+            .createPropertyAccessor(acProp, entity.getComponentContract())
+            .getValue(entity);
+      } catch (IllegalAccessException ex) {
+        throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
+      } catch (InvocationTargetException ex) {
+        throw new NestedRuntimeException(ex.getTargetException(),
+            "Invalid property: " + acProp);
+      } catch (NoSuchMethodException ex) {
+        throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
+      }
+    }
+    return new Serializable[] {entity.getId(), entity.toString(), acPropValue};
   }
 
   /**
@@ -199,6 +272,16 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public IComponentDescriptor<?> getComponentDescriptor() {
     return componentDescriptor;
+  }
+
+  /**
+   * Gets the queryComponentDescriptor.
+   * 
+   * @return the componentDescriptor.
+   */
+  @Override
+  public IComponentDescriptor<?> getQueryDescriptor() {
+    return queryDescriptor;
   }
 
   /**

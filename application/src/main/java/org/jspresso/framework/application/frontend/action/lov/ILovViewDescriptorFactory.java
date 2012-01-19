@@ -16,16 +16,19 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.application.frontend.action.lov;
+
+import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * Factory for list-of-value views.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 3703 $
  * @author Vincent Vandenschrick
  */
 public interface ILovViewDescriptorFactory {
@@ -37,9 +40,11 @@ public interface ILovViewDescriptorFactory {
    *          the entity reference descriptor.
    * @param okAction
    *          the action used to select the entity in the LOV.
+   * @param lovContext
+   *          the action context the LOV was triggered on.
    * @return the created view descriptor.
    */
   IViewDescriptor createLovViewDescriptor(
       IComponentDescriptorProvider<IEntity> entityRefDescriptor,
-      IDisplayableAction okAction);
+      IDisplayableAction okAction, Map<String, Object> lovContext);
 }

@@ -4,7 +4,7 @@
   default-lazy-init="true">
 
   <!-- View factories -->
-  <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
+  <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.application.frontend.action.lov.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="sortingAction">
       <bean parent="lovFindFrontAction">

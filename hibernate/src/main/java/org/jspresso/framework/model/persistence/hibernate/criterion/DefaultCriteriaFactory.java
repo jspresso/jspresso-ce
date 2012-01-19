@@ -82,7 +82,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
         boolean sortable = true;
         if (propElts.length > 1) {
           IComponentDescriptor<?> currentCompDesc = queryComponent
-              .getComponentDescriptor();
+              .getQueryDescriptor();
           int i = 0;
           List<String> path = new ArrayList<String>();
           for (; sortable && i < propElts.length - 1; i++) {
@@ -130,12 +130,12 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           }
         } else {
           IPropertyDescriptor propertyDescriptor = queryComponent
-              .getComponentDescriptor().getPropertyDescriptor(propertyName);
+              .getQueryDescriptor().getPropertyDescriptor(propertyName);
           if (propertyDescriptor != null) {
             sortable = isSortable(propertyDescriptor);
           } else {
             LOG.error("Ordering property {} not found on {}", propertyName,
-                queryComponent.getComponentDescriptor().getComponentContract()
+                queryComponent.getQueryDescriptor().getComponentContract()
                     .getName());
             sortable = false;
           }
@@ -194,7 +194,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           infValue, supValue);
     } else {
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
-          .getComponentDescriptor();
+          .getQueryDescriptor();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(property.getKey());
@@ -256,7 +256,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                   // is a special char.
                   boolean digDeeper = true;
                   String autoCompleteProperty = joinedComponent
-                      .getComponentDescriptor().getAutoCompleteProperty();
+                      .getQueryDescriptor().getAutoCompleteProperty();
                   if (autoCompleteProperty != null) {
                     String val = (String) joinedComponent
                         .get(autoCompleteProperty);
@@ -286,6 +286,10 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                   }
                 }
               }
+            } else {
+              // Unknown property type. Assume equals.
+              currentCriteria.add(Restrictions.eq(prefixedProperty,
+                  property.getValue()));
             }
           }
         }
@@ -310,7 +314,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
       IPropertyDescriptor propertyDescriptor, DetachedCriteria currentCriteria,
       String propertyValue, String prefixedProperty) {
     if (propertyValue.length() > 0) {
-      String[] propValues = propertyValue.split(";");
+      String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
       Junction disjunction = Restrictions.disjunction();
       currentCriteria.add(disjunction);
       for (int i = 0; i < propValues.length; i++) {
@@ -426,7 +430,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
       return true;
     }
     IComponentDescriptor<?> componentDescriptor = queryComponent
-        .getComponentDescriptor();
+        .getQueryDescriptor();
     for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
       IPropertyDescriptor propertyDescriptor = componentDescriptor
           .getPropertyDescriptor(property.getKey());

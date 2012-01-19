@@ -65,11 +65,23 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   String NOT_VAL             = "!";
 
   /**
+   * Disjunct.
+   */
+  String DISJUNCT            = ";";
+
+  /**
+   * Gets the descriptor of this query component.
+   * 
+   * @return the descriptor of this query component.
+   */
+  IComponentDescriptor<?> getComponentDescriptor();
+
+  /**
    * Gets the descriptor of the queried components.
    * 
    * @return the descriptor of the queried components.
    */
-  IComponentDescriptor<?> getComponentDescriptor();
+  IComponentDescriptor<?> getQueryDescriptor();
 
   /**
    * Gets the list of components result of the query.
