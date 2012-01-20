@@ -19,6 +19,7 @@
 package org.jspresso.framework.security.auth.spi;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.security.acl.Group;
 import java.util.Map;
 
@@ -235,8 +236,19 @@ public class DevelopmentLoginModule implements LoginModule {
     try {
       if (sharedState != null && sharedState.containsKey(SHARED_NAME_KEY)
           && sharedState.containsKey(SHARED_PASSWORD_KEY)) {
-        username = (String) sharedState.get(SHARED_NAME_KEY);
-        password = (char[]) sharedState.get(SHARED_PASSWORD_KEY);
+        Object sharedName = sharedState.get(SHARED_NAME_KEY);
+        if (sharedName instanceof Principal) {
+          username = ((Principal) sharedState.get(SHARED_NAME_KEY)).getName();
+        } else if (sharedState.get(SHARED_NAME_KEY) != null) {
+          username = sharedState.get(SHARED_NAME_KEY).toString();
+        }
+        Object sharedPassword = sharedState.get(SHARED_PASSWORD_KEY);
+        if (sharedPassword instanceof char[]) {
+          password = (char[]) sharedState.get(SHARED_PASSWORD_KEY);
+        } else if (sharedState.get(SHARED_PASSWORD_KEY) != null) {
+          password = sharedState.get(SHARED_PASSWORD_KEY).toString()
+              .toCharArray();
+        }
       } else {
         callbackHandler.handle(callbacks);
         username = ((NameCallback) callbacks[0]).getName();
