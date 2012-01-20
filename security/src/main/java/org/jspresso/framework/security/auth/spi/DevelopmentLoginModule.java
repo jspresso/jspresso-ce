@@ -56,6 +56,7 @@ public class DevelopmentLoginModule implements LoginModule {
   private CallbackHandler     callbackHandler;
   private boolean             commitSucceeded     = false;
   private Map<String, ?>      options;
+  private Map<String, ?>      sharedState;
   private char[]              password;
   private Subject             subject;
   private boolean             succeeded           = false;
@@ -138,8 +139,11 @@ public class DevelopmentLoginModule implements LoginModule {
     userPrincipal = new UserPrincipal(username);
     for (Map.Entry<String, ?> option : options.entrySet()) {
       if (option.getKey().startsWith(CUSTOM_PROPERTY_OPT + suffix)) {
-        userPrincipal.putCustomProperty(option.getKey().substring(
-            (CUSTOM_PROPERTY_OPT + suffix).length() + 1), option.getValue());
+        userPrincipal
+            .putCustomProperty(
+                option.getKey().substring(
+                    (CUSTOM_PROPERTY_OPT + suffix).length() + 1),
+                option.getValue());
       }
     }
     if (!subject.getPrincipals().contains(userPrincipal)) {
@@ -192,6 +196,7 @@ public class DevelopmentLoginModule implements LoginModule {
 
     subject = aSubject;
     callbackHandler = aCallbackHandler;
+    sharedState = aSharedState;
     options = aOptions;
   }
 
@@ -208,6 +213,7 @@ public class DevelopmentLoginModule implements LoginModule {
    *              if this <code>LoginModule</code> is unable to perform the
    *              authentication.
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean login() throws LoginException {
 
@@ -224,17 +230,24 @@ public class DevelopmentLoginModule implements LoginModule {
         LoginUtils.CRED_MESSAGE);
 
     try {
-      callbackHandler.handle(callbacks);
-      username = ((NameCallback) callbacks[0]).getName();
-      char[] tmpPassword = ((PasswordCallback) callbacks[1]).getPassword();
-      if (tmpPassword == null) {
-        // treat a NULL password as an empty password
-        tmpPassword = new char[0];
+      if (sharedState != null
+          && sharedState.containsKey("javax.security.auth.login.name")
+          && sharedState.containsKey("javax.security.auth.login.password")) {
+        username = (String) sharedState.get("javax.security.auth.login.name");
+        password = (char[]) sharedState
+            .get("javax.security.auth.login.password");
+      } else {
+        callbackHandler.handle(callbacks);
+        username = ((NameCallback) callbacks[0]).getName();
+        char[] tmpPassword = ((PasswordCallback) callbacks[1]).getPassword();
+        if (tmpPassword == null) {
+          // treat a NULL password as an empty password
+          tmpPassword = new char[0];
+        }
+        password = new char[tmpPassword.length];
+        System.arraycopy(tmpPassword, 0, password, 0, tmpPassword.length);
+        ((PasswordCallback) callbacks[1]).clearPassword();
       }
-      password = new char[tmpPassword.length];
-      System.arraycopy(tmpPassword, 0, password, 0, tmpPassword.length);
-      ((PasswordCallback) callbacks[1]).clearPassword();
-
     } catch (java.io.IOException ioe) {
       throw new LoginException(ioe.toString());
     } catch (UnsupportedCallbackException uce) {
@@ -259,6 +272,11 @@ public class DevelopmentLoginModule implements LoginModule {
           }
         }
       }
+      // Populate shared state
+      ((Map<String, Object>) sharedState).put("javax.security.auth.login.name",
+          username);
+      ((Map<String, Object>) sharedState).put(
+          "javax.security.auth.login.password", password);
       return true;
     }
     succeeded = false;
