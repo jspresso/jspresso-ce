@@ -53,6 +53,9 @@ public class DevelopmentLoginModule implements LoginModule {
   private static final String ROLES_OPT           = "roles";
   private static final String USER_OPT            = "user";
 
+  private static final String SHARED_NAME_KEY     = "javax.security.auth.login.name";
+  private static final String SHARED_PASSWORD_KEY = "javax.security.auth.login.password";
+
   private CallbackHandler     callbackHandler;
   private boolean             commitSucceeded     = false;
   private Map<String, ?>      options;
@@ -230,12 +233,10 @@ public class DevelopmentLoginModule implements LoginModule {
         LoginUtils.CRED_MESSAGE);
 
     try {
-      if (sharedState != null
-          && sharedState.containsKey("javax.security.auth.login.name")
-          && sharedState.containsKey("javax.security.auth.login.password")) {
-        username = (String) sharedState.get("javax.security.auth.login.name");
-        password = (char[]) sharedState
-            .get("javax.security.auth.login.password");
+      if (sharedState != null && sharedState.containsKey(SHARED_NAME_KEY)
+          && sharedState.containsKey(SHARED_PASSWORD_KEY)) {
+        username = (String) sharedState.get(SHARED_NAME_KEY);
+        password = (char[]) sharedState.get(SHARED_PASSWORD_KEY);
       } else {
         callbackHandler.handle(callbacks);
         username = ((NameCallback) callbacks[0]).getName();
@@ -273,10 +274,8 @@ public class DevelopmentLoginModule implements LoginModule {
         }
       }
       // Populate shared state
-      ((Map<String, Object>) sharedState).put("javax.security.auth.login.name",
-          username);
-      ((Map<String, Object>) sharedState).put(
-          "javax.security.auth.login.password", password);
+      ((Map<String, Object>) sharedState).put(SHARED_NAME_KEY, username);
+      ((Map<String, Object>) sharedState).put(SHARED_PASSWORD_KEY, password);
       return true;
     }
     succeeded = false;
