@@ -29,6 +29,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
+import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
@@ -83,10 +84,14 @@ public class BasicQueryViewDescriptorFactory implements
     for (String queriableProperty : componentDescriptorProvider
         .getQueryableProperties()) {
       // To preserve col spans for query structures.
-      propertyWidths.put(queriableProperty, new Integer(3));
+      propertyWidths.put(queriableProperty, new Integer(4));
+      if (actualModelDescriptor.getPropertyDescriptor(queriableProperty) instanceof ComparableQueryStructureDescriptor) {
+        propertyWidths.put(queriableProperty + "."
+            + ComparableQueryStructureDescriptor.SUP_VALUE, new Integer(2));
+      }
     }
     queryComponentViewDescriptor.setPropertyWidths(propertyWidths);
-    queryComponentViewDescriptor.setColumnCount(6);
+    queryComponentViewDescriptor.setColumnCount(8);
 
     IViewDescriptor queryViewDescriptor;
     if (horizontallyResizable) {

@@ -1286,10 +1286,12 @@ package org.jspresso.framework.view.flex {
           }
         } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
           component.percentWidth = 100.0;
-          if((col + elementWidth < remoteForm.columnCount)
-            || !(rComponent is RComboBox)) {
+          if(elementWidth == 1 && ((col + elementWidth < remoteForm.columnCount)
+            || !(rComponent is RComboBox))) {
             componentCell.maxWidth = component.maxWidth;
             componentCell.width = component.maxWidth;
+//            componentCell.setStyle("borderStyle","solid");
+//            componentCell.setStyle("borderColor","0xFF0000");
           } else {
             //Allow last cell to grow if it's a ComboBox
             component.percentWidth = 100.0;
