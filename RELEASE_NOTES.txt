@@ -1,5 +1,10 @@
 3.5.11
 ======
+- Filter views have been reworked in order to improve the aspect of comparable properties sub-forms (operator/min/max values).
+For the min and max value fields to stick better to the operator field, the max field value has been assigned a with of 2. This has an
+impact on overloaded query views since default property width is now 4 instead of 3. Existing forms used as filter view should take care
+of this change => all explicit property widths on filter forms must be applied a 4/3 factor.
+
 - We have refactored the signature of the ILovViewDescriptorFactory interface method to include the action context as parameter.
 This allows to tailor the LOV view based on the action context, e.g. customize the LOV view based on the actual model it's triggered on.
 For instance, this allows to introduce multi-selection on result view when the model is a a QueryComponent (i.e. in filter views).
