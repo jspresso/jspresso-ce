@@ -695,7 +695,8 @@ public abstract class AbstractComponentInvocationHandler implements
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
-      if (!propertyDescriptor.isComputed()) {
+      if (!(propertyDescriptor.isComputed() && propertyDescriptor
+          .getPersistenceFormula() == null)) {
         allProperties.put(propertyName,
             straightGetProperty(proxy, propertyName));
       }
@@ -716,7 +717,9 @@ public abstract class AbstractComponentInvocationHandler implements
   protected Object straightGetProperty(Object proxy, String propertyName) {
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor == null || propertyDescriptor.isComputed()) {
+    if (propertyDescriptor == null
+        || (propertyDescriptor.isComputed() && propertyDescriptor
+            .getPersistenceFormula() == null)) {
       return null;
     }
     Object propertyValue = retrievePropertyValue(propertyName);
@@ -742,7 +745,9 @@ public abstract class AbstractComponentInvocationHandler implements
       Object newPropertyValue) {
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor == null || propertyDescriptor.isComputed()) {
+    if (propertyDescriptor == null
+        || (propertyDescriptor.isComputed() && propertyDescriptor
+            .getPersistenceFormula() == null)) {
       return;
     }
     Object currentPropertyValue = straightGetProperty(proxy, propertyName);
@@ -760,13 +765,14 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy
-            .newProxyInstance(
-                Thread.currentThread().getContextClassLoader(),
-                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                    .getReferencedDescriptor().getCollectionInterface()},
-                new NeverEqualsInvocationHandler(CollectionHelper
-                    .cloneCollection((Collection<?>) currentPropertyValue)));
+        currentPropertyValue = Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
+            new Class[] {
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .getReferencedDescriptor().getCollectionInterface()
+            },
+            new NeverEqualsInvocationHandler(CollectionHelper
+                .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
@@ -1449,8 +1455,8 @@ public abstract class AbstractComponentInvocationHandler implements
      * {@inheritDoc}
      */
     @Override
-    public Object invoke(@SuppressWarnings("unused")
-    Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(@SuppressWarnings("unused") Object proxy,
+        Method method, Object[] args) throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
         return new Boolean(false);
       }

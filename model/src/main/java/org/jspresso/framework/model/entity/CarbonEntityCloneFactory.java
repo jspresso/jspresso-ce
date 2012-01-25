@@ -70,8 +70,8 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)
-          && /* propertyDescriptor.isModifiable() */!propertyDescriptor
-              .isComputed()) {
+          && /* propertyDescriptor.isModifiable() */!(propertyDescriptor
+              .isComputed() && propertyDescriptor.getPersistenceFormula() == null)) {
         String propertyName = propertyDescriptor.getName();
         clonedComponent.straightSetProperty(propertyName,
             componentToClone.straightGetProperty(propertyName));
