@@ -123,7 +123,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private ActionMap                             helpActionMap;
   private ActionMap                             navigationActionMap;
 
-  private CallbackHandler                       loginCallbackHandler;
+  private UsernamePasswordHandler               loginCallbackHandler;
 
   private String                                loginContextName;
   private IViewDescriptor                       loginViewDescriptor;
@@ -237,8 +237,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(
-              new int[] {moduleModelIndex}, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
+            moduleModelIndex
+          }, moduleModelIndex);
         }
       }
     } finally {
@@ -331,8 +332,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused")
-  E sourceWidget, Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
+      Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
@@ -907,7 +908,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return a new login callback handler
    */
-  protected CallbackHandler createLoginCallbackHandler() {
+  protected UsernamePasswordHandler createLoginCallbackHandler() {
     UsernamePasswordHandler uph = createUsernamePasswordHandler();
     String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
     if (savedUserPass != null && savedUserPass.length == 2
@@ -1192,7 +1193,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the loginCallbackHandler.
    */
-  protected CallbackHandler getLoginCallbackHandler() {
+  protected UsernamePasswordHandler getLoginCallbackHandler() {
     if (loginCallbackHandler == null) {
       loginCallbackHandler = createLoginCallbackHandler();
     }
@@ -1206,6 +1207,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected String getLoginContextName() {
     return loginContextName;
+  }
+
+  /**
+   * Should a login dialog be displayed or should we process login implicitely
+   * (either through SSO or using an anonymous subject in case of un-protected
+   * application).
+   * 
+   * @return true if <code>getLoginContext()</code> returns null.
+   */
+  protected boolean isLoginInteractive() {
+    return getLoginContextName() != null;
   }
 
   /**
@@ -1260,16 +1272,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public void loggedIn(Subject subject) {
-    if (getLoginCallbackHandler() instanceof UsernamePasswordHandler) {
-      UsernamePasswordHandler uph = (UsernamePasswordHandler) getLoginCallbackHandler();
-      if (uph.isRememberMe()) {
-        putClientPreference(UP_KEY,
-            encodeUserPass(uph.getUsername(), uph.getPassword()));
-      } else {
-        removeClientPreference(UP_KEY);
-      }
-      uph.clear();
+    UsernamePasswordHandler uph = getLoginCallbackHandler();
+    if (uph.isRememberMe()) {
+      putClientPreference(UP_KEY,
+          encodeUserPass(uph.getUsername(), uph.getPassword()));
+    } else {
+      removeClientPreference(UP_KEY);
     }
+    uph.clear();
     getBackendController().loggedIn(subject);
     execute(getLoginAction(), getInitialActionContext());
     if (workspaces != null) {
@@ -1298,12 +1308,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return true if login succeeded.
    */
   protected boolean performLogin() {
-    if (getLoginContextName() != null) {
+    String lcName = getLoginContextName();
+    if (lcName != null) {
       CallbackHandler lch = getLoginCallbackHandler();
       try {
         LoginContext lc = null;
         try {
-          lc = new LoginContext(getLoginContextName(), lch);
+          lc = new LoginContext(lcName, lch);
         } catch (LoginException le) {
           LOG.error("Cannot create LoginContext.", le);
           return false;
@@ -1428,8 +1439,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {childCollectionConnector,
-            new Integer(moduleModelIndex)};
+        result = new Object[] {
+            childCollectionConnector, new Integer(moduleModelIndex)
+        };
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -1589,7 +1601,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {getName()});
+      clientPreferencesStore.setStorePath(new String[] {
+        getName()
+      });
     }
     return clientPreferencesStore;
   }

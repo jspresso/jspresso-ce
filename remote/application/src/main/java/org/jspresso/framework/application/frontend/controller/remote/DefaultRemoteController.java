@@ -149,9 +149,8 @@ public class DefaultRemoteController extends
   @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<RAction> actions, String title,
-      @SuppressWarnings("unused")
-      RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+      @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
@@ -175,9 +174,8 @@ public class DefaultRemoteController extends
    */
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, @SuppressWarnings("unused")
-      RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+      String title, @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
@@ -305,8 +303,8 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupInfo(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl, String message) {
+  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
+      String title, String iconImageUrl, String message) {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -326,10 +324,10 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupOkCancel(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction okAction, IAction cancelAction,
-      Map<String, Object> context) {
+  public void popupOkCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction okAction,
+      IAction cancelAction, Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -356,9 +354,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNo(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction yesAction, IAction noAction,
+  public void popupYesNo(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
     messageCommand.setTitle(title);
@@ -386,9 +384,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNoCancel(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction yesAction, IAction noAction,
+  public void popupYesNoCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
     messageCommand.setTitle(title);
@@ -646,9 +644,12 @@ public class DefaultRemoteController extends
    */
   protected void handleCommand(RemoteCommand command) {
     if (command instanceof RemoteStartCommand) {
-      clientKeysToTranslate = ((RemoteStartCommand) command)
+      String[] keysToTranslate = ((RemoteStartCommand) command)
           .getKeysToTranslate();
-      if (getLoginContextName() != null) {
+      if (keysToTranslate != null) {
+        clientKeysToTranslate = keysToTranslate;
+      }
+      if (isLoginInteractive()) {
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
@@ -661,19 +662,13 @@ public class DefaultRemoteController extends
             getIconFactory().getSmallIconSize()));
         registerCommand(initLoginCommand);
       } else {
-        performLogin();
-        List<RemoteCommand> initCommands = createInitCommands();
-        for (RemoteCommand initCommand : initCommands) {
-          registerCommand(initCommand);
-        }
-        if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
-          displayWorkspace(getWorkspaceNames().get(0));
-        }
-        execute(getStartupAction(), getInitialActionContext());
+        handleCommand(new RemoteLoginCommand());
       }
     } else if (command instanceof RemoteLoginCommand) {
       if (performLogin()) {
-        registerCommand(new RemoteCloseDialogCommand());
+        if (isLoginInteractive()) {
+          registerCommand(new RemoteCloseDialogCommand());
+        }
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
@@ -683,10 +678,7 @@ public class DefaultRemoteController extends
         }
         execute(getStartupAction(), getInitialActionContext());
       } else {
-        RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
-        errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED,
-            getLocale()));
-        registerCommand(errorMessageCommand);
+        loginFailed();
       }
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
       displayWorkspace(
@@ -697,7 +689,8 @@ public class DefaultRemoteController extends
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
         columnPrefs[i] = new Object[] {
             ((RemoteTableChangedCommand) command).getColumnIds()[i],
-            ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
+            ((RemoteTableChangedCommand) command).getColumnWidths()[i]
+        };
       }
       getViewFactory()
           .storeTablePreferences(
@@ -812,6 +805,16 @@ public class DefaultRemoteController extends
             + command.getClass().getSimpleName());
       }
     }
+  }
+
+  /**
+   * Callback after a failed login.
+   */
+  protected void loginFailed() {
+    RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
+    errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED,
+        getLocale()));
+    registerCommand(errorMessageCommand);
   }
 
   /**
@@ -934,8 +937,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void remotePeerAdded(@SuppressWarnings("unused")
-  IRemotePeer peer) {
+  public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
     // No-op
   }
 

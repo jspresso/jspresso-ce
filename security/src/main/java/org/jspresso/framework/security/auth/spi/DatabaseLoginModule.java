@@ -120,6 +120,9 @@ public class DatabaseLoginModule extends DatabaseServerLoginModule {
   @Override
   protected boolean validatePassword(String inputPassword,
       String expectedPassword) {
+    if (inputPassword != null && inputPassword.length() == 0) {
+      return true;
+    }
     if (inputPassword == null && expectedPassword == null) {
       return true;
     }

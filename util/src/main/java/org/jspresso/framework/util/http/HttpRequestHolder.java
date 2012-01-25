@@ -99,6 +99,7 @@ public class HttpRequestHolder implements Filter {
     }
     chain.doFilter(request, response);
     setServletRequest(null);
+    setServletResponse(null);
   }
 
   /**

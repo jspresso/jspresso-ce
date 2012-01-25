@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.callback.CallbackHandler;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -44,6 +43,7 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
@@ -174,8 +174,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public Workspace getWorkspace(@SuppressWarnings("unused")
-  String workspaceName) {
+  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
     return null;
   }
 
@@ -324,7 +323,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected CallbackHandler createLoginCallbackHandler() {
+  protected UsernamePasswordHandler createLoginCallbackHandler() {
     return null;
   }
 

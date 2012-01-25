@@ -286,7 +286,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                   }
                 }
               }
-            } else {
+            } else if (property.getValue() != null) {
               // Unknown property type. Assume equals.
               currentCriteria.add(Restrictions.eq(prefixedProperty,
                   property.getValue()));
