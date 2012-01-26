@@ -96,6 +96,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
       qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
       qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
       
+      // In order to cope with dates the old "new Date(Date.UTC..." way
+      qx.io.remote.Rpc.CONVERT_DATES = true;
+      
       // Enable logging in debug variant
       if (qx.core.Environment.get("qx.debug"))
       {
