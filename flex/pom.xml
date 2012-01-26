@@ -77,6 +77,8 @@
           <locales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
           </locales>
           <mergeResourceBundle>true</mergeResourceBundle>
         </configuration>
