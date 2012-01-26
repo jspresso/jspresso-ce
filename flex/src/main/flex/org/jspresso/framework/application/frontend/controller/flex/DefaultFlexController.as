@@ -66,6 +66,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.managers.PopUpManager;
   import mx.resources.Locale;
   import mx.resources.ResourceManager;
+  import mx.rpc.AbstractOperation;
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
   import mx.rpc.remoting.mxml.Operation;
@@ -157,6 +158,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
     private static const START_METHOD:String = "start";
+    private static const STOP_METHOD:String = "stop";
     private var _remoteController:RemoteObject;
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
@@ -780,7 +782,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     protected function stop():void {
-      _remoteController.channelSet.disconnectAll();
+      var operation:AbstractOperation = _remoteController.getOperation(STOP_METHOD);
+      operation.send();
+      // breaks SSO
+      //_remoteController.channelSet.disconnectAll();
     }
 
     protected function handleError(message:String):void {
@@ -800,7 +805,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function dispatchCommands():void {
-      var operation:Operation = _remoteController.operations[HANDLE_COMMANDS_METHOD] as Operation;
+      var operation:AbstractOperation = _remoteController.getOperation(HANDLE_COMMANDS_METHOD);
       operation.send(_commandsQueue);
       _commandsQueue.removeAll();
     }
@@ -821,11 +826,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
         handleError(faultEvent.fault.message);
       };
-      var operation:Operation;
-      operation = _remoteController.operations[HANDLE_COMMANDS_METHOD];
+      var operation:AbstractOperation;
+      operation = _remoteController.getOperation(HANDLE_COMMANDS_METHOD);
       operation.addEventListener(ResultEvent.RESULT, commandsHandler);
       operation.addEventListener(FaultEvent.FAULT, errorHandler);
-      operation = _remoteController.operations[START_METHOD];
+      operation = _remoteController.getOperation(START_METHOD);
       operation.addEventListener(ResultEvent.RESULT, commandsHandler);
       operation.addEventListener(FaultEvent.FAULT, errorHandler);
     }
@@ -1063,7 +1068,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     public function start():void {
-      var operation:Operation = _remoteController.operations[START_METHOD] as Operation;
+      var operation:AbstractOperation = _remoteController.getOperation(START_METHOD);
       operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
     }
     

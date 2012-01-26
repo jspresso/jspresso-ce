@@ -73,11 +73,6 @@
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
-        <artifactId>${rootArtifactId}-startup-qooxdoo-server</artifactId>
-        <version>${symbol_dollar}{project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
         <version>${symbol_dollar}{project.version}</version>
         <classifier>web-resources</classifier>

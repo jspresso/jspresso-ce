@@ -39,8 +39,5 @@
   </mx:Script>
 
   <mx:RemoteObject id="remoteController" 
-          destination="remoteController">
-    <mx:method name="handleCommands"/>
-    <mx:method name="start"/>
-  </mx:RemoteObject>
+                   destination="remoteController"/>
 </mx:Application>

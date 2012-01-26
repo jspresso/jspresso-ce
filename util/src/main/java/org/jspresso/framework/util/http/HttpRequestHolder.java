@@ -28,6 +28,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * This filter needs to be installed on any broker servlet so that iot keeps
@@ -97,6 +98,10 @@ public class HttpRequestHolder implements Filter {
       setServletRequest((HttpServletRequest) request);
       setServletResponse((HttpServletResponse) response);
     }
+    if (getServletRequest().getRequestURI().endsWith(".html")) {
+      HttpSession s = getServletRequest().getSession();
+      System.out.println("Request session " + s.hashCode());
+    }
     chain.doFilter(request, response);
     setServletRequest(null);
     setServletResponse(null);
@@ -106,7 +111,8 @@ public class HttpRequestHolder implements Filter {
    * {@inheritDoc}
    */
   @Override
-  public void init(@SuppressWarnings("unused") FilterConfig config) {
+  public void init(@SuppressWarnings("unused")
+  FilterConfig config) {
     // Nothing to init.
   }
 

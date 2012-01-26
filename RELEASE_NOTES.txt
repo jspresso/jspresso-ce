@@ -1,5 +1,10 @@
 3.5.11
 ======
+- In order for browser close event to be correctly handled, edit all index.html files and replace:
+  onUnload="stop()"
+  by
+  onBeforeUnload="stop()"
+  
 - Filter views have been reworked in order to improve the aspect of comparable properties sub-forms (operator/min/max values).
 For the min and max value fields to stick better to the operator field, the max field value has been assigned a with of 2. This has an
 impact on overloaded query views since default property width is now 4 instead of 3. Existing forms used as filter view should take care

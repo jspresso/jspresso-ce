@@ -84,6 +84,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
 
   members :
   {
+    /**@type org.jspresso.framework.application.frontend.controller.qx.DefaultQxController*/
+    __qxController : null,
+
     main : function()
     {
       this.base(arguments);
@@ -102,6 +105,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
         qx.log.appender.Console;
       }
       this.start();
+    },
+    
+    startController : function(remoteController) {
+      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(this, remoteController, "en");
+      this.__qxController.start();
+    },
+    
+    close : function() {
+      this.base(arguments);
+      this.__qxController.stop()
     }
   }
 });

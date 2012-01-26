@@ -49,7 +49,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   /**
    * PeerRegistry.
    */
-  private static final String PEER_REGISTRY                = "PeerRegistry";
+  public static final String PEER_REGISTRY                = "peerRegistry";
 
   /**
    * the url pattern to activate a resource download.

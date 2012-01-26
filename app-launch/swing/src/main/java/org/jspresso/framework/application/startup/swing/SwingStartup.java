@@ -53,5 +53,4 @@ public abstract class SwingStartup extends
   protected TimeZone getClientTimeZone() {
     return TimeZone.getDefault();
   }
-
 }

@@ -21,8 +21,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
   
   statics :
   {
-    __HANDLE_COMMANDS_METHOD : "handleCommandsQx",
-    __START_METHOD : "startQx"
+    __HANDLE_COMMANDS_METHOD : "handleCommands",
+    __START_METHOD : "start",
+    __STOP_METHOD : "stop"
   },
   
   construct : function(application, remoteController, userLanguage) {
@@ -762,6 +763,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                                                  new Date().getTimezoneOffset() * (-60000));
     },
     
+    /**
+     * @return void
+     */
+    stop : function() {
+      this.__remoteController.callAsyncListeners(true,
+                                                 org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__STOP_METHOD);
+    },
+
     /**
      * @return Array
      */

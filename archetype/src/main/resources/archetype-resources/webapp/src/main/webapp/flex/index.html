@@ -43,7 +43,7 @@ var requiredRevision = 0;
 </script>
 </head>
 
-<body scroll="no" onunload="stop()" onLoad="window.document['${rootArtifactId}-startup-flex-client'].focus()">
+<body scroll="no" onBeforeUnload="stop()" onLoad="window.document['${rootArtifactId}-startup-flex-client'].focus()">
 <script language="JavaScript" type="text/javascript">
 <!--
 // Version check based upon the values entered above in "Globals"

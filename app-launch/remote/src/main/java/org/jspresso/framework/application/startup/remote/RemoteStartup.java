@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpSession;
 import javax.swing.Action;
 
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -32,6 +33,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteStartCom
 import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -105,9 +107,28 @@ public abstract class RemoteStartup extends
           ResourceProviderServlet.computeStaticUrl("conf/jaas.config"));
     }
     super.start();
-    HttpRequestHolder.getServletRequest().getSession()
-        .setAttribute("PeerRegistry", getFrontendController());
+    HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+    if (session != null) {
+      session.setAttribute(RemotePeerRegistryServlet.PEER_REGISTRY,
+          getFrontendController());
+    }
   }
+
+  // /**
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // @SuppressWarnings("unchecked")
+  // public void stop() {
+  // super.stop();
+  // HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+  // if (session != null) {
+  // for (Enumeration<String> e = session.getAttributeNames(); e
+  // .hasMoreElements();) {
+  // session.removeAttribute(e.nextElement());
+  // }
+  // }
+  // }
 
   /**
    * Starts the remote application passing it the client locale.

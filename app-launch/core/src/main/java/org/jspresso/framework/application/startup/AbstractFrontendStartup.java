@@ -95,4 +95,16 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
       throw ex;
     }
   }
+
+  /**
+   * Programmatically stops the application and performs all necessary cleanups.
+   */
+  public void stop() {
+    if (frontendController != null) {
+      frontendController.stop();
+    }
+    if (backendController != null) {
+      backendController.stop();
+    }
+  }
 }

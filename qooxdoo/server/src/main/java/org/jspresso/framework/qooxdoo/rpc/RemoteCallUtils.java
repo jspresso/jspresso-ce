@@ -19,6 +19,7 @@
 package org.jspresso.framework.qooxdoo.rpc;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({"unchecked", "rawtypes" })
   @Override
   protected Map filter(Object obj, Map map) {
     Map filteredMap = super.filter(obj, map);
@@ -123,5 +124,18 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
       return Class.forName(requestedTypeName);
     }
     return clazz;
+  }
+
+  /**
+   * Make the Rpc java lib more permissive, i.e. do not imposa any signature
+   * constraint on public method.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  @Override
+  protected boolean throwsExpectedException(Method method) {
+    // Removes the exception constraints on method signature.
+    return true;
   }
 }
