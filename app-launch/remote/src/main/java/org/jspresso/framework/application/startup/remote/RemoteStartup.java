@@ -33,6 +33,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteStartCom
 import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.qooxdoo.rpc.Remote;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
@@ -45,7 +46,7 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  */
 public abstract class RemoteStartup extends
     AbstractFrontendStartup<RComponent, RIcon, Action> implements
-    IRemoteCommandHandler {
+    IRemoteCommandHandler, Remote {
 
   private boolean  started;
   private boolean  restarting;
