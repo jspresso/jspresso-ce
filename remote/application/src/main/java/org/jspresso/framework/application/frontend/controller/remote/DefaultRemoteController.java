@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
-
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -79,7 +77,6 @@ import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
-import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -135,8 +132,6 @@ public class DefaultRemoteController extends
   public DefaultRemoteController() {
     commandLowPriorityOffset = 0;
     commandRegistrationEnabled = false;
-    HttpSession s = HttpRequestHolder.getServletRequest().getSession();
-    System.out.println("Controller session " + s.hashCode());
   }
 
   /**
@@ -573,18 +568,18 @@ public class DefaultRemoteController extends
    * @return the init commands to be sent to the remote peer.
    */
   protected List<RemoteCommand> createInitCommands() {
-    Map<String, String> translations = new HashMap<String, String>();
-    if (clientKeysToTranslate != null) {
-      for (String key : clientKeysToTranslate) {
-        translations.put(key, getTranslation(key, getLocale()));
-      }
-    }
     List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
-    RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
-    localeCommand.setLanguage(getLocale().getLanguage());
-    localeCommand.setDatePattern(getDatePattern(getLocale()));
-    localeCommand.setTranslations(translations);
-    initCommands.add(localeCommand);
+    initCommands.add(createLocaleCommand());
+    initCommands.add(createInitCommand());
+    return initCommands;
+  }
+
+  /**
+   * Create the application frame init command.
+   * 
+   * @return the application frame init command.
+   */
+  protected RemoteInitCommand createInitCommand() {
     RemoteInitCommand initCommand = new RemoteInitCommand();
     initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));
     initCommand
@@ -597,8 +592,26 @@ public class DefaultRemoteController extends
         .setNavigationActions(createRActionLists(getNavigationActions()));
     initCommand.setExitAction(getViewFactory().getActionFactory().createAction(
         getExitAction(), this, null, getLocale()));
-    initCommands.add(initCommand);
-    return initCommands;
+    return initCommand;
+  }
+
+  /**
+   * Creates the locale command for translations and client locale handling.
+   * 
+   * @return the locale command for translations and client locale handling.
+   */
+  protected RemoteLocaleCommand createLocaleCommand() {
+    Map<String, String> translations = new HashMap<String, String>();
+    if (clientKeysToTranslate != null) {
+      for (String key : clientKeysToTranslate) {
+        translations.put(key, getTranslation(key, getLocale()));
+      }
+    }
+    RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
+    localeCommand.setLanguage(getLocale().getLanguage());
+    localeCommand.setDatePattern(getDatePattern(getLocale()));
+    localeCommand.setTranslations(translations);
+    return localeCommand;
   }
 
   /**
@@ -657,6 +670,7 @@ public class DefaultRemoteController extends
         clientKeysToTranslate = keysToTranslate;
       }
       if (isLoginInteractive()) {
+        registerCommand(createLocaleCommand());
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
