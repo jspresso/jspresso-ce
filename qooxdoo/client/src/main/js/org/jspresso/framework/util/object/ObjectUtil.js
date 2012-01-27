@@ -102,6 +102,15 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil",
               typedRoot[member] = this.typeObjectGraph(root[member]);
             }
           }
+        } else if (typeof root === "string"){
+					var iso8601regexp = "^([0-9]{4})-([0-9]{2})-([0-9]{2})" +
+					        "T([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?" +
+					        "(Z|(([-+])([0-9]{2}):([0-9]{2})))?$";
+          if(root.match(iso8601regexp)) {
+            typedRoot = new Date(root);
+          } else {
+            typedRoot = root
+          }
         } else {
           typedRoot = root;
         }

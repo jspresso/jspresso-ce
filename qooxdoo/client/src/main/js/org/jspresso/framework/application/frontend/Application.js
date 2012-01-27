@@ -97,7 +97,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
       qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
       
       // In order to cope with dates the old "new Date(Date.UTC..." way
-      qx.io.remote.Rpc.CONVERT_DATES = true;
+      // Not used anymore. Jspresso now handles dates using the ISO8601 spec
+      // qx.io.remote.Rpc.CONVERT_DATES = true;
       
       // Enable logging in debug variant
       if (qx.core.Environment.get("qx.debug"))
