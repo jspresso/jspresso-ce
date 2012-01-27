@@ -113,7 +113,6 @@ public abstract class RemoteStartup extends
     if (session != null) {
       session.setAttribute(RemotePeerRegistryServlet.PEER_REGISTRY,
           getFrontendController());
-      System.out.println("##### Started " + session.hashCode());
     }
   }
 
@@ -126,7 +125,6 @@ public abstract class RemoteStartup extends
     super.stop();
     HttpSession session = HttpRequestHolder.getServletRequest().getSession();
     if (session != null) {
-      System.out.println("##### Stopped " + session.hashCode());
       for (Enumeration<String> e = session.getAttributeNames(); e
           .hasMoreElements();) {
         session.removeAttribute(e.nextElement());
