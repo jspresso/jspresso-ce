@@ -52,8 +52,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
   @Override
   public void start() {
     // start on brand new instances.
-    frontendController = null;
-    backendController = null;
+    stop();
     getFrontendController().start(getBackendController(), getStartupLocale(),
         getClientTimeZone());
   }
@@ -106,5 +105,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     if (backendController != null) {
       backendController.stop();
     }
+    frontendController = null;
+    backendController = null;
   }
 }

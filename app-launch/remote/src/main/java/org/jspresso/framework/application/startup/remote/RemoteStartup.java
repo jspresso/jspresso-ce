@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.startup.remote;
 
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -113,22 +112,6 @@ public abstract class RemoteStartup extends
     if (session != null) {
       session.setAttribute(RemotePeerRegistryServlet.PEER_REGISTRY,
           getFrontendController());
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public void stop() {
-    super.stop();
-    HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-    if (session != null) {
-      for (Enumeration<String> e = session.getAttributeNames(); e
-          .hasMoreElements();) {
-        session.removeAttribute(e.nextElement());
-      }
     }
   }
 
