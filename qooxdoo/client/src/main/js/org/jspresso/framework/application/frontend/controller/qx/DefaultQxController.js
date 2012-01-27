@@ -748,7 +748,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__commandsBacklog = new Array();
       this.__dialogStack = new Array();
       this.__dialogStack.push([null, null, null]);
-      this.registerCommand(new org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand());
+      this.start();
     },
 
     

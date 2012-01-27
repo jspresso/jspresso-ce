@@ -103,4 +103,9 @@ public interface IApplicationSession {
    * @return the sessin identifier.
    */
   String getId();
+
+  /**
+   * Clears the application session.
+   */
+  void clear();
 }

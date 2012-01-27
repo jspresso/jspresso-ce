@@ -128,4 +128,9 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    * work.
    */
   void rollback();
+
+  /**
+   * Clears the UOW.
+   */
+  void clear();
 }

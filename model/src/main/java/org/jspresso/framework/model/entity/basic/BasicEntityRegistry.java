@@ -104,4 +104,14 @@ public class BasicEntityRegistry implements IEntityRegistry {
       contractStore.put(entity.getId(), entity);
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    if (backingStore != null) {
+      backingStore.clear();
+    }
+  }
 }

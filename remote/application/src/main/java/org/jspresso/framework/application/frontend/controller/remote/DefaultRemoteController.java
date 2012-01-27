@@ -139,8 +139,12 @@ public class DefaultRemoteController extends
    */
   @Override
   public void clear() {
-    remotePeerRegistry.clear();
-    removedPeersGuids.clear();
+    if (remotePeerRegistry != null) {
+      remotePeerRegistry.clear();
+    }
+    if (removedPeersGuids != null) {
+      removedPeersGuids.clear();
+    }
   }
 
   /**
@@ -536,9 +540,7 @@ public class DefaultRemoteController extends
    */
   @Override
   public boolean stop() {
-    if (remotePeerRegistry != null) {
-      remotePeerRegistry.clear();
-    }
+    clear();
     if (workspaceViews != null) {
       workspaceViews.clear();
     }

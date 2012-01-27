@@ -237,9 +237,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public void cleanRelationshipsOnDeletion(
-      @SuppressWarnings("unused") IComponent component,
-      @SuppressWarnings("unused") boolean dryRun) {
+  public void cleanRelationshipsOnDeletion(@SuppressWarnings("unused")
+  IComponent component, @SuppressWarnings("unused")
+  boolean dryRun) {
     throw new UnsupportedOperationException(
         "entity unit of work does not support cleanRelationshipsOnDeletion.");
   }
@@ -250,9 +250,18 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public void reload(@SuppressWarnings("unused") IEntity entity) {
-    // TODO Auto-generated method stub
+  public void reload(@SuppressWarnings("unused")
+  IEntity entity) {
     throw new UnsupportedOperationException(
         "entity unit of work does not support reload of an entity.");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    clearPendingOperations();
+    cleanup();
   }
 }

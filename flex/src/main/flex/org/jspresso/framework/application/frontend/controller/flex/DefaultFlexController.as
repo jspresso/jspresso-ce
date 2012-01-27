@@ -97,7 +97,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
-  import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
@@ -778,7 +777,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
       _dialogStack.push([null, null, null]);
-      registerCommand(new RemoteStartCommand());
+      start()
     }
 
     protected function stop():void {

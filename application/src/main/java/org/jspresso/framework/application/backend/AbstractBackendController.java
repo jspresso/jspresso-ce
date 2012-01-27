@@ -415,7 +415,8 @@ public abstract class AbstractBackendController extends AbstractController
     buff.putAll(moduleConnectors);
     moduleConnectors.clear();
     moduleConnectors.putAll(buff);
-    IValueConnector moduleConnector = (IValueConnector) moduleConnectors.get(module);
+    IValueConnector moduleConnector = (IValueConnector) moduleConnectors
+        .get(module);
     if (moduleConnector == null) {
       moduleConnector = createModelConnector(module.getName(),
           ModuleDescriptor.MODULE_DESCRIPTOR);
@@ -514,7 +515,8 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
+  public boolean isInitialized(@SuppressWarnings("unused")
+  Object objectOrProxy) {
     return true;
   }
 
@@ -793,6 +795,25 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean stop() {
+    if (applicationSession != null) {
+      applicationSession.clear();
+    }
+    if (dirtRecorder != null) {
+      dirtRecorder.clear();
+    }
+    if (entityRegistry != null) {
+      entityRegistry.clear();
+    }
+    if (unitOfWork != null) {
+      unitOfWork.clear();
+    }
+    if (workspaceConnectors != null) {
+      workspaceConnectors.clear();
+    }
+    if (moduleConnectors != null) {
+      moduleConnectors.clear();
+    }
+    transferStructure = null;
     return true;
   }
 
@@ -1548,8 +1569,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-        /* getName(), */getApplicationSession().getPrincipal().getName()
-      });
+      /* getName(), */getApplicationSession().getPrincipal().getName()});
     }
 
   }

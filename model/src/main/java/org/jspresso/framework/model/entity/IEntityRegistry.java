@@ -35,9 +35,9 @@ public interface IEntityRegistry {
    * Get an entity from the registry.
    * 
    * @param entityContract
-   *            the entity contract.
+   *          the entity contract.
    * @param id
-   *            the entity identifier.
+   *          the entity identifier.
    * @return the registered entity or <tt>null</tt>
    */
   IEntity get(Class<? extends IEntity> entityContract, Object id);
@@ -46,7 +46,12 @@ public interface IEntityRegistry {
    * Registers an entity in the registry.
    * 
    * @param entity
-   *            the entity to register.
+   *          the entity to register.
    */
   void register(IEntity entity);
+
+  /**
+   * Clears the registry.
+   */
+  void clear();
 }

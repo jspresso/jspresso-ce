@@ -483,7 +483,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public Locale getLocale() {
     if (getBackendController() != null) {
-      return getBackendController().getApplicationSession().getLocale();
+      Locale sessionLocale = getBackendController().getApplicationSession()
+          .getLocale();
+      if (sessionLocale != null) {
+        return sessionLocale;
+      }
     }
     if (getForcedStartingLocale() != null) {
       return new Locale(getForcedStartingLocale());
@@ -893,11 +897,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
       LOG.info("User {} logged out for session {}.", getApplicationSession()
           .getPrincipal().getName(), getApplicationSession().getId());
     }
-    selectedModules = new HashMap<String, Module>();
-    workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
-    workspaceViews = new HashMap<String, IMapView<E>>();
-    backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
-    forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
+    if (selectedModules != null) {
+      selectedModules.clear();
+    }
+    if (workspaceNavigatorConnectors != null) {
+      workspaceNavigatorConnectors.clear();
+    }
+    if (workspaceViews != null) {
+      workspaceViews.clear();
+    }
+    if (backwardHistoryEntries != null) {
+      backwardHistoryEntries.clear();
+    }
+    if (forwardHistoryEntries != null) {
+      forwardHistoryEntries.clear();
+    }
+    if (dialogContextStack != null) {
+      dialogContextStack.clear();
+    }
+
     selectedWorkspaceName = null;
     loginCallbackHandler = null;
     return getBackendController().stop();

@@ -154,4 +154,17 @@ public class BasicApplicationSession implements IApplicationSession {
   public String getId() {
     return Integer.toHexString(hashCode());
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    if (customValues != null) {
+      customValues.clear();
+    }
+    locale = null;
+    timeZone = null;
+    subject = null;
+  }
 }

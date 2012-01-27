@@ -102,8 +102,10 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
     if (enabled && evt.getPropertyName().indexOf('.') < 0) {
       Map<String, Object> changedProperties = changedPropertiesMap.get(evt
           .getSource());
-      if (!changedProperties.containsKey(evt.getPropertyName())) {
-        changedProperties.put(evt.getPropertyName(), evt.getOldValue());
+      if (changedProperties != null) {
+        if (!changedProperties.containsKey(evt.getPropertyName())) {
+          changedProperties.put(evt.getPropertyName(), evt.getOldValue());
+        }
       }
       if (interceptor != null) {
         interceptor.propertyChange(evt);
@@ -169,5 +171,13 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    */
   public void unregister(IPropertyChangeCapable bean) {
     changedPropertiesMap.remove(bean);
+  }
+
+  /**
+   * Clears the recorder.
+   */
+  public void clear() {
+    changedPropertiesMap.clear();
+    setEnabled(true);
   }
 }
