@@ -258,7 +258,6 @@ public class HibernateBackendController extends AbstractBackendController {
       HibernateTemplate ht = getHibernateTemplate();
       boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
       try {
-        // Temporary switch to a read-only session.
         getDirtRecorder().setEnabled(false);
         ht.execute(new HibernateCallback<Object>() {
 

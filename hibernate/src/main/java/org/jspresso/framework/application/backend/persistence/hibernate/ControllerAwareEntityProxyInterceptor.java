@@ -210,7 +210,7 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
 
-    if (!backendController.isUnitOfWorkActive()) {
+    if (!backendController.isUnitOfWorkActive() && entities.hasNext()) {
       // throw new BackendException(
       // "A save has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
       LOG.warn("A flush has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
