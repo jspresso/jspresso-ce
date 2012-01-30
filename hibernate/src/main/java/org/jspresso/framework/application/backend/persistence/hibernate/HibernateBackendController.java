@@ -53,7 +53,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
@@ -258,11 +257,9 @@ public class HibernateBackendController extends AbstractBackendController {
     } else {
       HibernateTemplate ht = getHibernateTemplate();
       boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
-      int oldFlushMode = ht.getFlushMode();
       try {
         // Temporary switch to a read-only session.
         getDirtRecorder().setEnabled(false);
-        ht.setFlushMode(HibernateAccessor.FLUSH_NEVER);
         ht.execute(new HibernateCallback<Object>() {
 
           /**
@@ -282,7 +279,6 @@ public class HibernateBackendController extends AbstractBackendController {
         });
       } finally {
         getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
-        ht.setFlushMode(oldFlushMode);
       }
     }
   }
@@ -859,20 +855,14 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
-        int oldFlushMode = getHibernateTemplate().getFlushMode();
-        try {
-          getHibernateTemplate().setFlushMode(HibernateAccessor.FLUSH_NEVER);
-          List<T> entities = getHibernateTemplate().findByCriteria(criteria,
-              firstResult, maxResults);
-          if (mergeMode != null) {
-            entities = merge(entities, mergeMode);
-          }
-          return entities;
-        } finally {
-          getHibernateTemplate().setFlushMode(oldFlushMode);
+      public List<T> doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
+        List<T> entities = getHibernateTemplate().findByCriteria(criteria,
+            firstResult, maxResults);
+        if (mergeMode != null) {
+          entities = merge(entities, mergeMode);
         }
+        return entities;
       }
     });
   }
@@ -916,25 +906,18 @@ public class HibernateBackendController extends AbstractBackendController {
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
           HibernateTemplate ht = getHibernateTemplate();
-          int oldFlushMode = ht.getFlushMode();
-          try {
-            // Temporary switch to a read-only session.
-            ht.setFlushMode(HibernateAccessor.FLUSH_NEVER);
 
-            Exception deletedObjectEx = null;
-            try {
-              merge((IEntity) ht.load(entity.getComponentContract().getName(),
-                  entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
-            } catch (ObjectNotFoundException ex) {
-              deletedObjectEx = ex;
-            }
-            status.setRollbackOnly();
-            if (deletedObjectEx != null) {
-              throw new ConcurrencyFailureException(deletedObjectEx
-                  .getMessage(), deletedObjectEx);
-            }
-          } finally {
-            ht.setFlushMode(oldFlushMode);
+          Exception deletedObjectEx = null;
+          try {
+            merge((IEntity) ht.load(entity.getComponentContract().getName(),
+                entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
+          } catch (ObjectNotFoundException ex) {
+            deletedObjectEx = ex;
+          }
+          status.setRollbackOnly();
+          if (deletedObjectEx != null) {
+            throw new ConcurrencyFailureException(deletedObjectEx.getMessage(),
+                deletedObjectEx);
           }
         }
       });

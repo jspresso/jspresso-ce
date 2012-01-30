@@ -99,12 +99,13 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
    * Programmatically stops the application and performs all necessary cleanups.
    */
   public void stop() {
-    if (frontendController != null) {
-      frontendController.stop();
-    }
-    if (backendController != null) {
-      backendController.stop();
-    }
+    // Breaks SSO. Useless to perform before garbage collecting.
+    // if (frontendController != null) {
+    // frontendController.stop();
+    // }
+    // if (backendController != null) {
+    // backendController.stop();
+    // }
     frontendController = null;
     backendController = null;
   }

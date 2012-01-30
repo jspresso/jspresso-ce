@@ -34,7 +34,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
-import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -156,93 +155,86 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   protected List<?> performQuery(final IQueryComponent queryComponent,
       final Map<String, Object> context) {
     HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
-    int oldFlushMode = hibernateTemplate.getFlushMode();
-    try {
-      // Temporary switch to a read-only session.
-      hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-      ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
-          .get(CRITERIA_FACTORY);
-      if (critFactory == null) {
-        queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
-        critFactory = getCriteriaFactory();
-      }
-      EnhancedDetachedCriteria criteria = critFactory
-          .createCriteria(queryComponent);
-      List<?> entities;
-      if (criteria == null) {
-        entities = new ArrayList<IEntity>();
-        queryComponent.setRecordCount(new Integer(0));
-      } else {
-        ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
-            .get(CRITERIA_REFINER);
-        if (critRefiner == null && criteriaRefiner != null) {
-          queryComponent.put(CRITERIA_REFINER, criteriaRefiner);
-          critRefiner = criteriaRefiner;
-        }
-        if (critRefiner != null) {
-          critRefiner.refineCriteria(criteria, queryComponent, context);
-        }
-        Integer totalCount = null;
-        Integer pageSize = queryComponent.getPageSize();
-        Integer page = queryComponent.getPage();
-
-        ResultTransformer refinerResultTransformer = criteria
-            .getResultTransformer();
-        List<Order> refinerOrders = criteria.getOrders();
-        if (refinerOrders != null) {
-          criteria.removeAllOrders();
-        }
-
-        if (queryComponent.isDistinctEnforced()) {
-          criteria.setProjection(Projections.distinct(Projections.id()));
-          EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
-              .forEntityName(queryComponent.getQueryContract().getName());
-          outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
-          criteria = outerCriteria;
-        }
-
-        if (pageSize != null) {
-          if (page == null) {
-            page = new Integer(0);
-            queryComponent.setPage(page);
-          }
-          if (queryComponent.getRecordCount() == null) {
-            criteria.setProjection(Projections.rowCount());
-            totalCount = new Integer(((Number) hibernateTemplate
-                .findByCriteria(criteria).get(0)).intValue());
-          }
-          if (refinerOrders != null) {
-            for (Order order : refinerOrders) {
-              criteria.addOrder(order);
-            }
-          }
-          critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
-          if (refinerResultTransformer != null) {
-            criteria.setResultTransformer(refinerResultTransformer);
-          }
-          entities = hibernateTemplate.findByCriteria(criteria, page.intValue()
-              * pageSize.intValue(), pageSize.intValue());
-        } else {
-          if (refinerOrders != null) {
-            for (Order order : refinerOrders) {
-              criteria.addOrder(order);
-            }
-          }
-          critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
-          if (refinerResultTransformer != null) {
-            criteria.setResultTransformer(refinerResultTransformer);
-          }
-          entities = hibernateTemplate.findByCriteria(criteria);
-          totalCount = new Integer(entities.size());
-        }
-        if (totalCount != null) {
-          queryComponent.setRecordCount(totalCount);
-        }
-      }
-      return entities;
-    } finally {
-      hibernateTemplate.setFlushMode(oldFlushMode);
+    ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
+        .get(CRITERIA_FACTORY);
+    if (critFactory == null) {
+      queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
+      critFactory = getCriteriaFactory();
     }
+    EnhancedDetachedCriteria criteria = critFactory
+        .createCriteria(queryComponent);
+    List<?> entities;
+    if (criteria == null) {
+      entities = new ArrayList<IEntity>();
+      queryComponent.setRecordCount(new Integer(0));
+    } else {
+      ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
+          .get(CRITERIA_REFINER);
+      if (critRefiner == null && criteriaRefiner != null) {
+        queryComponent.put(CRITERIA_REFINER, criteriaRefiner);
+        critRefiner = criteriaRefiner;
+      }
+      if (critRefiner != null) {
+        critRefiner.refineCriteria(criteria, queryComponent, context);
+      }
+      Integer totalCount = null;
+      Integer pageSize = queryComponent.getPageSize();
+      Integer page = queryComponent.getPage();
+
+      ResultTransformer refinerResultTransformer = criteria
+          .getResultTransformer();
+      List<Order> refinerOrders = criteria.getOrders();
+      if (refinerOrders != null) {
+        criteria.removeAllOrders();
+      }
+
+      if (queryComponent.isDistinctEnforced()) {
+        criteria.setProjection(Projections.distinct(Projections.id()));
+        EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
+            .forEntityName(queryComponent.getQueryContract().getName());
+        outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
+        criteria = outerCriteria;
+      }
+
+      if (pageSize != null) {
+        if (page == null) {
+          page = new Integer(0);
+          queryComponent.setPage(page);
+        }
+        if (queryComponent.getRecordCount() == null) {
+          criteria.setProjection(Projections.rowCount());
+          totalCount = new Integer(((Number) hibernateTemplate.findByCriteria(
+              criteria).get(0)).intValue());
+        }
+        if (refinerOrders != null) {
+          for (Order order : refinerOrders) {
+            criteria.addOrder(order);
+          }
+        }
+        critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
+        if (refinerResultTransformer != null) {
+          criteria.setResultTransformer(refinerResultTransformer);
+        }
+        entities = hibernateTemplate.findByCriteria(criteria, page.intValue()
+            * pageSize.intValue(), pageSize.intValue());
+      } else {
+        if (refinerOrders != null) {
+          for (Order order : refinerOrders) {
+            criteria.addOrder(order);
+          }
+        }
+        critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
+        if (refinerResultTransformer != null) {
+          criteria.setResultTransformer(refinerResultTransformer);
+        }
+        entities = hibernateTemplate.findByCriteria(criteria);
+        totalCount = new Integer(entities.size());
+      }
+      if (totalCount != null) {
+        queryComponent.setRecordCount(totalCount);
+      }
+    }
+    return entities;
   }
 
   /**

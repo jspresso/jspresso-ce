@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.session.basic;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -71,8 +72,12 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   @Override
   public UserPrincipal getPrincipal() {
-    if (subject != null && !subject.getPrincipals().isEmpty()) {
-      return (UserPrincipal) subject.getPrincipals().iterator().next();
+    if (subject != null) {
+      for (Principal principal : subject.getPrincipals()) {
+        if (principal instanceof UserPrincipal) {
+          return (UserPrincipal) principal;
+        }
+      }
     }
     return null;
   }
