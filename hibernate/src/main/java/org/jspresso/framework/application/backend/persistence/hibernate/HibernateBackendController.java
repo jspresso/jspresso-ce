@@ -250,59 +250,23 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
+  @SuppressWarnings("unchecked")
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       final String propertyName) {
-    if (currentInitializationSession != null) {
-      performPropertyInitialization(componentOrEntity, propertyName,
-          currentInitializationSession);
-    } else {
-      HibernateTemplate ht = getHibernateTemplate();
-      boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
-      int oldFlushMode = ht.getFlushMode();
-      try {
-        // Temporary switch to a read-only session.
-        getDirtRecorder().setEnabled(false);
-        ht.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-        ht.execute(new HibernateCallback<Object>() {
-
-          /**
-           * {@inheritDoc}
-           */
-          @Override
-          public Object doInHibernate(Session session) {
-            try {
-              currentInitializationSession = session;
-              performPropertyInitialization(componentOrEntity, propertyName,
-                  session);
-              return null;
-            } finally {
-              currentInitializationSession = null;
-            }
-          }
-        });
-      } finally {
-        getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
-        ht.setFlushMode(oldFlushMode);
-      }
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private void performPropertyInitialization(
-      final IComponent componentOrEntity, final String propertyName,
-      Session session) {
-    Object initializedProperty = componentOrEntity
-        .straightGetProperty(propertyName);
-    if (!Hibernate.isInitialized(initializedProperty)) {
-      if (initializedProperty instanceof AbstractPersistentCollection) {
-        if (((AbstractPersistentCollection) initializedProperty).getSession() != null
-            && ((AbstractPersistentCollection) initializedProperty)
-                .getSession().isOpen()) {
+    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+    if (!Hibernate.isInitialized(propertyValue)) {
+      // First of all, try to deal with existing opened session from which the
+      // lazy property was loaded. We must delay as much as posible the use of
+      // the Hibernate template that may create a new thread-bound session.
+      if (propertyValue instanceof AbstractPersistentCollection) {
+        if (((AbstractPersistentCollection) propertyValue).getSession() != null
+            && ((AbstractPersistentCollection) propertyValue).getSession()
+                .isOpen()) {
           try {
-            Hibernate.initialize(initializedProperty);
-            if (initializedProperty instanceof Collection<?>) {
-              relinkAfterInitialization(
-                  (Collection<IEntity>) initializedProperty, componentOrEntity);
+            Hibernate.initialize(propertyValue);
+            if (propertyValue instanceof Collection<?>) {
+              relinkAfterInitialization((Collection<IEntity>) propertyValue,
+                  componentOrEntity);
             }
             return;
           } catch (Exception ex) {
@@ -312,12 +276,12 @@ public class HibernateBackendController extends AbstractBackendController {
             LOG.error("Source exception", ex);
           }
         }
-      } else if (initializedProperty instanceof HibernateProxy) {
-        HibernateProxy proxy = (HibernateProxy) initializedProperty;
+      } else if (propertyValue instanceof HibernateProxy) {
+        HibernateProxy proxy = (HibernateProxy) propertyValue;
         LazyInitializer li = proxy.getHibernateLazyInitializer();
         if (li.getSession() != null && li.getSession().isOpen()) {
           try {
-            Hibernate.initialize(initializedProperty);
+            Hibernate.initialize(propertyValue);
             return;
           } catch (Exception ex) {
             LOG.error(
@@ -328,28 +292,71 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       }
 
+      // If it couldn't succeed, then get the Hibernate template and perform
+      // necessary locks and initialization.
+      if (currentInitializationSession != null) {
+        performPropertyInitializationUsingSession(componentOrEntity,
+            propertyName, currentInitializationSession);
+      } else {
+        HibernateTemplate ht = getHibernateTemplate();
+        boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
+        int oldFlushMode = ht.getFlushMode();
+        try {
+          // Temporary switch to a read-only session.
+          getDirtRecorder().setEnabled(false);
+          ht.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+          ht.execute(new HibernateCallback<Object>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public Object doInHibernate(Session session) {
+              try {
+                currentInitializationSession = session;
+                performPropertyInitializationUsingSession(componentOrEntity,
+                    propertyName, session);
+                return null;
+              } finally {
+                currentInitializationSession = null;
+              }
+            }
+          });
+        } finally {
+          getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+          ht.setFlushMode(oldFlushMode);
+        }
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void performPropertyInitializationUsingSession(
+      final IComponent componentOrEntity, final String propertyName,
+      Session session) {
+    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+    if (!Hibernate.isInitialized(propertyValue)) {
       if (componentOrEntity instanceof IEntity) {
         if (((IEntity) componentOrEntity).isPersistent()) {
           lockInHibernate((IEntity) componentOrEntity, session);
-        } else if (initializedProperty instanceof IEntity) {
-          lockInHibernate((IEntity) initializedProperty, session);
+        } else if (propertyValue instanceof IEntity) {
+          lockInHibernate((IEntity) propertyValue, session);
         }
-      } else if (initializedProperty instanceof IEntity) {
+      } else if (propertyValue instanceof IEntity) {
         // to handle initialization of component properties.
-        lockInHibernate((IEntity) initializedProperty, session);
+        lockInHibernate((IEntity) propertyValue, session);
       }
 
-      Hibernate.initialize(initializedProperty);
-      if (initializedProperty instanceof Collection<?>) {
-        relinkAfterInitialization((Collection<IEntity>) initializedProperty,
+      Hibernate.initialize(propertyValue);
+      if (propertyValue instanceof Collection<?>) {
+        relinkAfterInitialization((Collection<IEntity>) propertyValue,
             componentOrEntity);
       } else {
         relinkAfterInitialization(
-            Collections.singleton((IEntity) initializedProperty),
-            componentOrEntity);
+            Collections.singleton((IEntity) propertyValue), componentOrEntity);
       }
       super.initializePropertyIfNeeded(componentOrEntity, propertyName);
-      clearPropertyDirtyState(initializedProperty);
+      clearPropertyDirtyState(propertyValue);
     }
   }
 
