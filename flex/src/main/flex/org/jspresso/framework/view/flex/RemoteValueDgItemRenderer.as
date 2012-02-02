@@ -162,19 +162,19 @@ package org.jspresso.framework.view.flex {
       }
       if(index == 1 || index == -1) {
         if(data) {
-          label.toolTip = (data as RemoteCompositeValueState).value as String;
+          toolTip = (data as RemoteCompositeValueState).value as String;
         } else {
-          label.toolTip = null;
+          toolTip = null;
         }
       } else {
         if(HtmlUtil.isHtml(cellText)) {
           // unconditional
-          label.toolTip = cellText;
+          toolTip = cellText;
         } else {
           if(toolTip) {
-            label.toolTip = cellText;
+            toolTip = cellText;
           } else {
-            label.toolTip = null;
+            toolTip = null;
           }
         }
       }

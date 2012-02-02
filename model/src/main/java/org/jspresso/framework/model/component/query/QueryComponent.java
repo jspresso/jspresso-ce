@@ -597,4 +597,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public void setDistinctEnforced(boolean distinctEnforced) {
     this.distinctEnforced = distinctEnforced;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return "";
+  }
 }
