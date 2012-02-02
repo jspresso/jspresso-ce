@@ -877,6 +877,8 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.north != null) {
         row = new GridRow();
         row.percentWidth = 100.0;
+//        row.setStyle("borderStyle","solid");
+//        row.setStyle("borderColor","0x00FF00");
         borderContainer.addChild(row);
         
         cell = new GridItem();
@@ -902,6 +904,8 @@ package org.jspresso.framework.view.flex {
       row = new GridRow();
       row.percentWidth = 100.0;
       row.percentHeight = 100.0;
+//      row.setStyle("borderStyle","solid");
+//      row.setStyle("borderColor","0xFF0000");
       borderContainer.addChild(row);
   
       if(remoteBorderContainer.west != null) {
@@ -936,8 +940,12 @@ package org.jspresso.framework.view.flex {
         cellComponent = createComponent(remoteBorderContainer.center);
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
+//        cellComponent.setStyle("borderStyle","solid");
+//        cellComponent.setStyle("borderColor","0xFF0000");
         cell.addChild(cellComponent);
       }
+//      cell.setStyle("borderStyle","solid");
+//      cell.setStyle("borderColor","0x00FF00");
       row.addChild(cell);
   
       if(remoteBorderContainer.east != null) {
@@ -966,6 +974,8 @@ package org.jspresso.framework.view.flex {
         // SOUTH
         row = new GridRow();
         row.percentWidth = 100.0;
+//        row.setStyle("borderStyle","solid");
+//        row.setStyle("borderColor","0x0000FF");
         borderContainer.addChild(row);
         cell = new GridItem();
         cell.styleName = "southCell";
@@ -986,6 +996,8 @@ package org.jspresso.framework.view.flex {
         row.addChild(cell);
       }
 
+//      borderContainer.setStyle("borderStyle","solid");
+//      borderContainer.setStyle("borderColor","0xFF0000");
       return borderContainer;
     }
 
