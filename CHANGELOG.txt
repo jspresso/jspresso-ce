@@ -1,6 +1,38 @@
 Jspresso CE - Change Log
 
 
+Jspresso CE - 3.5.11 (Released 2011-12-27) [ View Issues ]
+==========================================
+- 0000525: [View] Remove intempestive tooltips (vvandens) - closed.
+- 0000523: [View] Remove double title for LOV (vvandens) - closed.
+- 0000522: [View] Remove "Red" for mandatory fields (vvandens) - closed.
+- 0000526: [View] loose focus on OK login button (vvandens) - closed.
+- 0000527: [Backend] Jta transaction synchronisation is broken by after commit property initializations (vvandens) - closed.
+- 0000506: [View] Extend booleanActionabilityGate to manage reference attributes as boolean (vvandens) - closed.
+- 0000519: [Backend] Validate and suppress flush mode explicit modification (-> FLUSH_NEVER) in framework classes (vvandens) - closed.
+- 0000516: [Backend] Rework qooxdoo RPC dates serialization to produce JSON compliant responses (vvandens) - closed.
+- 0000513: [Persistence] Allow sql name formulas to hydrate computed properties (vvandens) - closed.
+- 0000511: [Frontend] Multiselection in LOV dialog (vvandens) - closed.
+- 0000494: [Frontend] Change the index of the selected line in Lov (vvandens) - closed.
+- 0000510: [Frontend] The option "parent" doesn't work on th workspace (vvandens) - closed.
+- 0000507: [View] Flex UI: Popup window which contains tabs does not display correctly (vvandens) - closed.
+- 0000471: [View] Scroll bars remains fixed to where they were when changing page in a pageable view. (vvandens) - closed.
+- 0000509: [Frontend] Concrete action inside context (vvandens) - closed.
+- 0000462: [View] Action on propertyView, when deactivated (with gates), still displays the property underlined (vvandens) - closed.
+- 0000448: [View] Wizard modal windows position is incorrect (vvandens) - closed.
+- 0000474: [View] Preferred height behavior isn't intuitive. Some other options to define a window dimension are needed. (vvandens) - closed.
+- 0000445: [View] copy a string in a table. (vvandens) - closed.
+- 0000504: [Frontend] Framework i18n key translation (vvandens) - closed.
+- 0000503: [View] Flex UI: html component displays computed data in a wrong way (vvandens) - closed.
+- 0000502: [View] Make framework icon set overridable by theme (vvandens) - closed.
+- 0000501: [View] Icons sometimes disapear in tree views (vvandens) - closed.
+- 0000500: [Persistence] OnLoad interceptor may throw Hibernate exceptions during proxy initializations (vvandens) - closed.
+- 0000499: [Persistence] Jspresso fails to duplicate an entity holing uninitialized entity references (vvandens) - closed.
+- 0000498: [View] Flex datagrid badly handles "Enter" key in editor (vvandens) - closed.
+- 0000497: [Persistence] Give the ability to have alternative IDs and especially binary ones (vvandens) - closed.
+- 0000483: [View] Allow the setting of the color red on the column labels (mandatory data) (vvandens) - closed.
+[28 issues]
+
 Jspresso CE - 3.5.10 (Released 2011-11-10) [ View Issues ]
 ==========================================
 - 0000389: [Build & tools] Libraries versions update (vvandens) - closed.
