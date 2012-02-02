@@ -1723,6 +1723,9 @@ package org.jspresso.framework.view.flex {
 
     protected function createPasswordField(remotePasswordField:RPasswordField):UIComponent {
       var passwordField:TextInput = createTextInputComponent();
+      if(passwordField is EnhancedTextInput) {
+        (passwordField as EnhancedTextInput).preventDefaultButton = false;
+      }
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
       sizeMaxComponentWidth(passwordField, remotePasswordField);
