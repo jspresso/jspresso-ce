@@ -148,59 +148,59 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * <code>BOLD_FONT</code>.
    */
-  protected static final String         BOLD_FONT                        = ";BOLD;";
+  protected static final String         BOLD_FONT                            = ";BOLD;";
   /**
    * <code>DEF_DISP_MAX_FRACTION_DIGIT</code>.
    */
-  protected static final int            DEF_DISP_MAX_FRACTION_DIGIT      = 2;
+  protected static final int            DEF_DISP_MAX_FRACTION_DIGIT          = 2;
   /**
    * <code>DEF_DISP_MAX_VALUE</code>.
    */
-  protected static final double         DEF_DISP_MAX_VALUE               = 1000;
+  protected static final double         DEF_DISP_MAX_VALUE                   = 1000;
   /**
    * <code>DEF_DISP_TEMPLATE_PERCENT</code>.
    */
-  protected static final double         DEF_DISP_TEMPLATE_PERCENT        = 99;
+  protected static final double         DEF_DISP_TEMPLATE_PERCENT            = 99;
   /**
    * <code>TEMPLATE_CHAR</code>.
    */
-  protected static final char           TEMPLATE_CHAR                    = 'O';
+  protected static final char           TEMPLATE_CHAR                        = 'O';
   /**
    * <code>TEMPLATE_DATE</code>.
    */
-  protected static final Date           TEMPLATE_DATE                    = new Date(
-                                                                             27166271000L);
+  protected static final Date           TEMPLATE_DATE                        = new Date(
+                                                                                 27166271000L);
   /**
    * <code>TEMPLATE_DURATION</code>.
    */
-  protected static final Long           TEMPLATE_DURATION                = new Long(
-                                                                             EDuration.ONE_SECOND
-                                                                                 .getMillis()
-                                                                                 + EDuration.ONE_MINUTE
+  protected static final Long           TEMPLATE_DURATION                    = new Long(
+                                                                                 EDuration.ONE_SECOND
                                                                                      .getMillis()
-                                                                                 + EDuration.ONE_HOUR
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_DAY
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_WEEK
-                                                                                     .getMillis());
+                                                                                     + EDuration.ONE_MINUTE
+                                                                                         .getMillis()
+                                                                                     + EDuration.ONE_HOUR
+                                                                                         .getMillis()
+                                                                                     + EDuration.ONE_DAY
+                                                                                         .getMillis()
+                                                                                     + EDuration.ONE_WEEK
+                                                                                         .getMillis());
 
   /**
    * <code>TEMPLATE_TIME</code>.
    */
-  protected static final Date           TEMPLATE_TIME                    = new Date(
-                                                                             366000);
+  protected static final Date           TEMPLATE_TIME                        = new Date(
+                                                                                 366000);
 
   private IActionFactory<G, E>          actionFactory;
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
-  private ERenderingOptions             defaultActionMapRenderingOptions = ERenderingOptions.ICON;
+  private ERenderingOptions             defaultActionMapRenderingOptions     = ERenderingOptions.ICON;
   private IValueChangeListener          firstRowSelector;
   private IIconFactory<F>               iconFactory;
 
   private IDisplayableAction            lovAction;
-  private int                           maxCharacterLength               = 32;
-  private int                           maxColumnCharacterLength         = 32;
+  private int                           maxCharacterLength                   = 32;
+  private int                           maxColumnCharacterLength             = 32;
   private IModelCascadingBinder         modelCascadingBinder;
   private IModelConnectorFactory        modelConnectorFactory;
   private IMvcBinder                    mvcBinder;
@@ -208,6 +208,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            openFileAsBinaryPropertyAction;
   private IDisplayableAction            resetPropertyAction;
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
+  private String                        formLabelMandatoryPropertyColorHex   = "0xFFFF0000";
+  private String                        tableHeaderMandatoryPropertyColorHex = null;
 
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
@@ -3115,4 +3117,72 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
   }
 
+  /**
+   * Configures the color to be used to highlight mandatory labels. It defaults
+   * to red, i.e. <code>0xFFFF0000</code>.
+   * 
+   * @param mandatoryPropertyColorHex
+   *          the mandatoryPropertyColorHex to set.
+   */
+  public void setMandatoryPropertyColorHex(String mandatoryPropertyColorHex) {
+    this.formLabelMandatoryPropertyColorHex = mandatoryPropertyColorHex;
+    this.tableHeaderMandatoryPropertyColorHex = mandatoryPropertyColorHex;
+  }
+
+  /**
+   * Decorates mandatory property label. Default is to append a &quot;*&quot;.
+   * 
+   * @param labelText
+   *          the original label text.
+   * @return the decorated label text.
+   */
+  protected String decorateMandatoryPropertyLabel(String labelText) {
+    String decoratedLabelText;
+    if (labelText != null) {
+      decoratedLabelText = labelText + "*";
+    } else {
+      decoratedLabelText = "*";
+    }
+    return decoratedLabelText;
+  }
+
+  /**
+   * Gets the formLabelMandatoryPropertyColorHex.
+   * 
+   * @return the formLabelMandatoryPropertyColorHex.
+   */
+  public String getFormLabelMandatoryPropertyColorHex() {
+    return formLabelMandatoryPropertyColorHex;
+  }
+
+  /**
+   * Sets the formLabelMandatoryPropertyColorHex.
+   * 
+   * @param formLabelMandatoryPropertyColorHex
+   *          the formLabelMandatoryPropertyColorHex to set.
+   */
+  public void setFormLabelMandatoryPropertyColorHex(
+      String formLabelMandatoryPropertyColorHex) {
+    this.formLabelMandatoryPropertyColorHex = formLabelMandatoryPropertyColorHex;
+  }
+
+  /**
+   * Gets the tableHeaderMandatoryPropertyColorHex.
+   * 
+   * @return the tableHeaderMandatoryPropertyColorHex.
+   */
+  public String getTableHeaderMandatoryPropertyColorHex() {
+    return tableHeaderMandatoryPropertyColorHex;
+  }
+
+  /**
+   * Sets the tableHeaderMandatoryPropertyColorHex.
+   * 
+   * @param tableHeaderMandatoryPropertyColorHex
+   *          the tableHeaderMandatoryPropertyColorHex to set.
+   */
+  public void setTableHeaderMandatoryPropertyColorHex(
+      String tableHeaderMandatoryPropertyColorHex) {
+    this.tableHeaderMandatoryPropertyColorHex = tableHeaderMandatoryPropertyColorHex;
+  }
 }
