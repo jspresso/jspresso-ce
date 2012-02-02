@@ -266,8 +266,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actions.add(okAction);
     actions.add(cancelAction);
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
-    context.put(ModalDialogAction.DIALOG_TITLE,
-        getI18nName(getTranslationProvider(context), getLocale(context)));
+    context.put(
+        ModalDialogAction.DIALOG_TITLE,
+        getI18nName(getTranslationProvider(context), getLocale(context))
+            + " : "
+            + erqDescriptor.getReferencedDescriptor().getI18nName(
+                getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
 
     if (pagingAction != null) {

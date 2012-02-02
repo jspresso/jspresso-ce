@@ -31,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -96,14 +95,11 @@ public class BasicQueryViewDescriptorFactory implements
     IViewDescriptor queryViewDescriptor;
     if (horizontallyResizable) {
       queryComponentViewDescriptor.setModelDescriptor(actualModelDescriptor);
-      queryComponentViewDescriptor.setBorderType(EBorderType.TITLED);
       queryViewDescriptor = queryComponentViewDescriptor;
     } else {
       BasicBorderViewDescriptor borderViewDescriptor = new BasicBorderViewDescriptor();
       borderViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
-
       borderViewDescriptor.setModelDescriptor(actualModelDescriptor);
-      borderViewDescriptor.setBorderType(EBorderType.TITLED);
       queryViewDescriptor = borderViewDescriptor;
     }
 

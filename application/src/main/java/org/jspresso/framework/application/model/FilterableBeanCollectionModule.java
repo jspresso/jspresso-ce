@@ -35,6 +35,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -146,6 +147,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     } else {
       // Deeply clean model descriptors on filter views
       cleanupFilterViewDescriptor(filterViewDesc);
+    }
+    if (filterViewDesc instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
     }
     ((BasicViewDescriptor) filterViewDesc)
         .setModelDescriptor(moduleDescriptor
