@@ -741,7 +741,8 @@ public class DefaultSwingController extends
        * {@inheritDoc}
        */
       @Override
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
+      public void windowClosing(@SuppressWarnings("unused")
+      WindowEvent e) {
         execute(getExitAction(), new HashMap<String, Object>());
       }
     });
@@ -933,11 +934,12 @@ public class DefaultSwingController extends
     loginButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
         if (performLogin()) {
           dialog.dispose();
           updateControllerFrame();
-          execute(getStartupAction(), getInitialActionContext());
+          execute(getStartupAction(), getStartupActionContext());
         } else {
           loginFailed(dialog);
         }
@@ -1033,8 +1035,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameActivated(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameActivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
 
@@ -1042,8 +1044,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameClosed(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameClosed(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(null);
     }
 
@@ -1051,8 +1053,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameClosing(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameClosing(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(null);
     }
 
@@ -1060,8 +1062,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeactivated(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameDeactivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       // displayWorkspace(null);
     }
 
@@ -1069,8 +1071,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeiconified(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameDeiconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
 
@@ -1078,8 +1080,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameIconified(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameIconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       // displayWorkspace(null);
     }
 
@@ -1087,8 +1089,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameOpened(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
+    public void internalFrameOpened(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
   }

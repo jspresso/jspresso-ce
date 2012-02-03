@@ -709,7 +709,7 @@ public class DefaultRemoteController extends
         if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
           displayWorkspace(getWorkspaceNames().get(0));
         }
-        execute(getStartupAction(), getInitialActionContext());
+        execute(getStartupAction(), getStartupActionContext());
       } else {
         loginFailed();
       }
@@ -1014,18 +1014,37 @@ public class DefaultRemoteController extends
   }
 
   /**
+   * Complements with request parameters.
+   * <p>
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> getInitialActionContext() {
-    Map<String, Object> initialActionContext = super.getInitialActionContext();
+  protected Map<String, Object> getLoginActionContext() {
+    Map<String, Object> loginActionContext = super.getLoginActionContext();
+    completeActionContextWithRequestParameters(loginActionContext);
+    return loginActionContext;
+  }
+
+  /**
+   * Complements with request parameters.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Map<String, Object> getStartupActionContext() {
+    Map<String, Object> startupActionContext = super.getStartupActionContext();
+    completeActionContextWithRequestParameters(startupActionContext);
+    return startupActionContext;
+  }
+
+  private void completeActionContextWithRequestParameters(
+      Map<String, Object> actionContext) {
     HttpSession session = HttpRequestHolder.getServletRequest().getSession();
     @SuppressWarnings("unchecked")
     Map<String, Object> requestParams = (Map<String, Object>) session
         .getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
     if (requestParams != null) {
-      initialActionContext.putAll(requestParams);
+      actionContext.putAll(requestParams);
     }
-    return initialActionContext;
   }
 }

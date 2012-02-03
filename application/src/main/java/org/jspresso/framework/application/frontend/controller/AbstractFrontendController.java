@@ -1299,7 +1299,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     uph.clear();
     getBackendController().loggedIn(subject);
-    execute(getLoginAction(), getInitialActionContext());
+    execute(getLoginAction(), getLoginActionContext());
     if (workspaces != null) {
       Map<String, Workspace> filteredWorkspaces = new HashMap<String, Workspace>();
       for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
@@ -1318,6 +1318,26 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
       getBackendController().installWorkspaces(filteredWorkspaces);
     }
+  }
+
+  /**
+   * Constructs the context to call the login action. Defaults to
+   * {@link AbstractFrontendController#getInitialActionContext()}.
+   * 
+   * @return the login action context.
+   */
+  protected Map<String, Object> getLoginActionContext() {
+    return getInitialActionContext();
+  }
+
+  /**
+   * Constructs the context to call the startup action. Defaults to
+   * {@link AbstractFrontendController#getInitialActionContext()}.
+   * 
+   * @return the startup action context.
+   */
+  protected Map<String, Object> getStartupActionContext() {
+    return getInitialActionContext();
   }
 
   /**
