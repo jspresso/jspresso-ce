@@ -121,4 +121,19 @@
   </filter-mapping>
   <!-- End Qooxdoo RPC section -->
 
+  <!-- Request params filter section -->
+  <filter>
+    <filter-name>RequestParamsHttpFilter</filter-name>
+    <filter-class>org.jspresso.framework.util.http.RequestParamsHttpFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>RequestParamsHttpFilter</filter-name>
+    <url-pattern>/flex/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>RequestParamsHttpFilter</filter-name>
+    <url-pattern>/qooxdoo/*</url-pattern>
+  </filter-mapping>
+  <!-- End request params filter section -->
+
 </web-app>

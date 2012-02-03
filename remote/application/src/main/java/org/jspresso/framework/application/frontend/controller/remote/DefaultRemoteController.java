@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -77,6 +79,8 @@ import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
+import org.jspresso.framework.util.http.HttpRequestHolder;
+import org.jspresso.framework.util.http.RequestParamsHttpFilter;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -541,11 +545,17 @@ public class DefaultRemoteController extends
   @Override
   public boolean stop() {
     clear();
+    clearRequestParams();
     if (workspaceViews != null) {
       workspaceViews.clear();
     }
     registerCommand(new RemoteRestartCommand());
     return super.stop();
+  }
+
+  private void clearRequestParams() {
+    HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+    session.removeAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
   }
 
   /**
@@ -1001,5 +1011,21 @@ public class DefaultRemoteController extends
     clipboardCommand.setPlainContent(plainContent);
     clipboardCommand.setHtmlContent(htmlContent);
     registerCommand(clipboardCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> getInitialActionContext() {
+    Map<String, Object> initialActionContext = super.getInitialActionContext();
+    HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+    @SuppressWarnings("unchecked")
+    Map<String, Object> requestParams = (Map<String, Object>) session
+        .getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
+    if (requestParams != null) {
+      initialActionContext.putAll(requestParams);
+    }
+    return initialActionContext;
   }
 }
