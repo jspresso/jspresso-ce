@@ -2696,8 +2696,11 @@ public class DefaultSwingViewFactory extends
   }
 
   private Color createColor(String colorAsHexString) {
-    int[] rgba = ColorHelper.fromHexString(colorAsHexString);
-    return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+    if (colorAsHexString != null) {
+      int[] rgba = ColorHelper.fromHexString(colorAsHexString);
+      return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+    }
+    return null;
   }
 
   private TableCellRenderer createColorTableCellRenderer(
