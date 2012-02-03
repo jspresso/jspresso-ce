@@ -1,3 +1,25 @@
+3.5.12
+======
+- Whenever you want to use the new direct access feature described in this feature request
+  http://mantis.jspresso.org/view.php?id=524
+  you should add the following filter definition in your web.xml descriptor :
+  
+	  <!-- Request params filter section -->
+	  <filter>
+	    <filter-name>RequestParamsHttpFilter</filter-name>
+	    <filter-class>org.jspresso.framework.util.http.RequestParamsHttpFilter</filter-class>
+	  </filter>
+	  <filter-mapping>
+	    <filter-name>RequestParamsHttpFilter</filter-name>
+	    <url-pattern>/flex/*</url-pattern>
+	  </filter-mapping>
+	  <filter-mapping>
+	    <filter-name>RequestParamsHttpFilter</filter-name>
+	    <url-pattern>/qooxdoo/*</url-pattern>
+	  </filter-mapping>
+	  <!-- End request params filter section -->
+
+
 3.5.11
 ======
 - In order for browser close event to be correctly handled, edit all index.html files and replace:
