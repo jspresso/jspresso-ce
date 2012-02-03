@@ -1,5 +1,14 @@
 3.5.12
 ======
+- In order to give the opportunity to ignore missing translation keys, we have added 2 methods to the ITranslationProvider
+  interface, containing a default value :
+
+  String getTranslation(String key, String defaultMessage, Locale locale);
+  String getTranslation(String key, Object[] args, String defaultMessage, Locale locale);
+  
+  The default message is returned when no translation can be found for the key.
+  
+  
 - Whenever you want to use the new direct access feature described in this feature request
   http://mantis.jspresso.org/view.php?id=524
   you should add the following filter definition in your web.xml descriptor :
