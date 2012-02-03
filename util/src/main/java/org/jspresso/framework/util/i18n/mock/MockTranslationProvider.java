@@ -20,8 +20,7 @@ package org.jspresso.framework.util.i18n.mock;
 
 import java.util.Locale;
 
-import org.jspresso.framework.util.i18n.ITranslationProvider;
-
+import org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider;
 
 /**
  * Mock implementation returning the passed key.
@@ -29,40 +28,21 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MockTranslationProvider implements ITranslationProvider {
+public class MockTranslationProvider extends MessageSourceTranslationProvider {
 
   /**
-   * Just return "[key]" .
-   * <p>
-   * {@inheritDoc}
+   * Constructs a new <code>MockTranslationProvider</code> instance.
    */
-  @Override
-  public String getTranslation(String key, Locale locale) {
-    return "[" + locale.getISO3Language() + ":" + key + "]";
+  public MockTranslationProvider() {
+    setMessageSource(new MockMessageSource());
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getTranslation(String key, Object[] args, Locale locale) {
-    StringBuffer message = new StringBuffer(getTranslation(key, locale));
-    if (args != null && args.length > 0) {
-      message.append(" { ");
-      for (Object arg : args) {
-        message.append(String.valueOf(arg));
-        message.append(" ");
-      }
-      message.append("}");
-    }
-    return message.toString();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getDatePattern(@SuppressWarnings("unused") Locale locale) {
+  public String getDatePattern(@SuppressWarnings("unused")
+  Locale locale) {
     return "dd/MM/yyyy";
   }
 
@@ -70,7 +50,8 @@ public class MockTranslationProvider implements ITranslationProvider {
    * {@inheritDoc}
    */
   @Override
-  public String getTimePattern(@SuppressWarnings("unused") Locale locale) {
+  public String getTimePattern(@SuppressWarnings("unused")
+  Locale locale) {
     return "HH:mm:ss";
   }
 
@@ -78,7 +59,8 @@ public class MockTranslationProvider implements ITranslationProvider {
    * {@inheritDoc}
    */
   @Override
-  public String getShortTimePattern(@SuppressWarnings("unused") Locale locale) {
+  public String getShortTimePattern(@SuppressWarnings("unused")
+  Locale locale) {
     return "HH:mm";
   }
 }

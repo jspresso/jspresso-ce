@@ -1682,6 +1682,42 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * Delegates to the translation provider.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTranslation(String key, String defaultMessage, Locale locale) {
+    if (customTranslationPlugin != null) {
+      String translation = customTranslationPlugin.getTranslation(key, locale,
+          getApplicationSession());
+      if (translation != null) {
+        return translation;
+      }
+    }
+    return translationProvider.getTranslation(key, defaultMessage, locale);
+  }
+
+  /**
+   * Delegates to the translation provider.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTranslation(String key, Object[] args,
+      String defaultMessage, Locale locale) {
+    if (customTranslationPlugin != null) {
+      String translation = customTranslationPlugin.getTranslation(key, args,
+          locale, getApplicationSession());
+      if (translation != null) {
+        return translation;
+      }
+    }
+    return translationProvider
+        .getTranslation(key, args, defaultMessage, locale);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

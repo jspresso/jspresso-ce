@@ -35,11 +35,11 @@ public interface ITranslationProvider {
   /**
    * <code>TIME_FORMAT_KEY</code>.
    */
-  String TIME_FORMAT_KEY = "time_format";
+  String TIME_FORMAT_KEY       = "time_format";
   /**
    * <code>DATE_FORMAT_KEY</code>.
    */
-  String DATE_FORMAT_KEY = "date_format";
+  String DATE_FORMAT_KEY       = "date_format";
 
   /**
    * Gets a translated string based on a key.
@@ -53,6 +53,20 @@ public interface ITranslationProvider {
   String getTranslation(String key, Locale locale);
 
   /**
+   * Gets a translated string based on a key using a default message when not
+   * found.
+   * 
+   * @param key
+   *          the i18n key.
+   * @param defaultMessage
+   *          the default message to use whenever the key is not found.
+   * @param locale
+   *          the locale the string must be translated into.
+   * @return the translated string.
+   */
+  String getTranslation(String key, String defaultMessage, Locale locale);
+
+  /**
    * Gets a translated message based on a key.
    * 
    * @param key
@@ -64,6 +78,23 @@ public interface ITranslationProvider {
    * @return the translated string.
    */
   String getTranslation(String key, Object[] args, Locale locale);
+
+  /**
+   * Gets a translated message based on a key using a default message when not
+   * found.
+   * 
+   * @param key
+   *          the i18n key.
+   * @param args
+   *          the message arguments used in message format.
+   * @param defaultMessage
+   *          the default message to use whenever the key is not found.
+   * @param locale
+   *          the locale the string must be translated into.
+   * @return the translated string.
+   */
+  String getTranslation(String key, Object[] args, String defaultMessage,
+      Locale locale);
 
   /**
    * Return the default date pattern expressed as a SimpleDateFormat pattern.

@@ -20,7 +20,7 @@ package org.jspresso.framework.util.i18n.basic;
 
 import java.util.Locale;
 
-import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.i18n.AbstractTranslationProvider;
 import org.springframework.context.MessageSource;
 
 /**
@@ -30,7 +30,8 @@ import org.springframework.context.MessageSource;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MessageSourceTranslationProvider implements ITranslationProvider {
+public class MessageSourceTranslationProvider extends
+    AbstractTranslationProvider {
 
   private MessageSource messageSource;
 
@@ -38,22 +39,12 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
    * {@inheritDoc}
    */
   @Override
-  public String getTranslation(String key, Locale locale) {
+  public String getTranslation(String key, Object[] args,
+      String defaultMessage, Locale locale) {
     if (key == null || key.length() == 0) {
       return "";
     }
-    return messageSource.getMessage(key, null, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getTranslation(String key, Object[] args, Locale locale) {
-    if (key == null || key.length() == 0) {
-      return "";
-    }
-    return messageSource.getMessage(key, args, locale);
+    return messageSource.getMessage(key, args, defaultMessage, locale);
   }
 
   /**

@@ -33,7 +33,8 @@ import org.springframework.context.MessageSourceResolvable;
  */
 public class MockMessageSource implements MessageSource {
 
-  private static final Logger LOG = LoggerFactory.getLogger(MockMessageSource.class);
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(MockMessageSource.class);
 
   /**
    * {@inheritDoc}
@@ -58,10 +59,14 @@ public class MockMessageSource implements MessageSource {
   @Override
   public String getMessage(String key, Object[] args, String defaultMessage,
       Locale locale) {
+    if (defaultMessage != null) {
+      return defaultMessage;
+    }
     if (LOG.isWarnEnabled()) {
       LOG.warn(key + "=/*TO_REPLACE*/");
     }
-    StringBuffer message = new StringBuffer(getTranslation(key, locale));
+    StringBuffer message = new StringBuffer("[" + locale.getLanguage() + ":"
+        + key + "]");
     if (args != null && args.length > 0) {
       message.append(" { ");
       for (Object arg : args) {
@@ -70,14 +75,6 @@ public class MockMessageSource implements MessageSource {
       }
       message.append("}");
     }
-    if (defaultMessage != null) {
-      message.append("[").append(defaultMessage).append("]");
-    }
     return message.toString();
   }
-
-  private String getTranslation(String key, Locale locale) {
-    return "[" + locale.getLanguage() + ":" + key + "]";
-  }
-
 }

@@ -1707,6 +1707,28 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Delegates to the backend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTranslation(String key, String defaultMessage, Locale locale) {
+    return getBackendController().getTranslation(key, defaultMessage, locale);
+  }
+
+  /**
+   * Delegates to the backend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTranslation(String key, Object[] args,
+      String defaultMessage, Locale locale) {
+    return getBackendController().getTranslation(key, args, defaultMessage,
+        locale);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
