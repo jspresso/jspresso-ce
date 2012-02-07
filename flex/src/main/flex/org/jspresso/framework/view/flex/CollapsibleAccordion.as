@@ -108,7 +108,10 @@ package org.jspresso.framework.view.flex
     public function CollapsibleAccordion()
     {
       super();
-      addEventListener( FlexEvent.CREATION_COMPLETE, onCreateComplete );
+      var delayedOpening:Function = function(event : FlexEvent):void {
+        callLater(onCreateComplete, [event]);
+      };
+      addEventListener( FlexEvent.CREATION_COMPLETE, delayedOpening );
       buttonDict = new ArrayCollection();
       verticalScrollPolicy = ScrollPolicy.OFF;
       horizontalScrollPolicy = ScrollPolicy.OFF;
