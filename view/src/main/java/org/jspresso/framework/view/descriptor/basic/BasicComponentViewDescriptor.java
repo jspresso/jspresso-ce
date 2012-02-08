@@ -365,4 +365,21 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
     return renderedProperties;
   }
+
+  /**
+   * Queries the model property descriptor to determine read-only state.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isReadOnly() {
+    boolean readOnly = super.isReadOnly();
+    if (!readOnly && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+        return ((IComponentDescriptorProvider<?>) getModelDescriptor())
+            .getComponentDescriptor().isReadOnly();
+      }
+    }
+    return readOnly;
+  }
 }
