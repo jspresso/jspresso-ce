@@ -44,7 +44,7 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jspresso.version>3.5.h4</jspresso.version>
+    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
     
     <ant-contrib.version>1.0b3</ant-contrib.version>
