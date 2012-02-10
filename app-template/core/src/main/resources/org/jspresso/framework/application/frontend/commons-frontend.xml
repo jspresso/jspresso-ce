@@ -531,7 +531,7 @@
 
   <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction" />
 
-  <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.SelectedModelToActionParamAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="view" />

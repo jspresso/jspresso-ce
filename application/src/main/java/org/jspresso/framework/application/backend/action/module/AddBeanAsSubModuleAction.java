@@ -63,7 +63,10 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    List<?> selectedModels = getSelectedModels(context);
+    List<?> selectedModels = (List<?>) getActionParameter(context);
+    if (selectedModels == null) {
+      selectedModels = getSelectedModels(context);
+    }
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
     Module parentModule = getModule(context);
     List<Module> childModules = parentModule.getSubModules();
