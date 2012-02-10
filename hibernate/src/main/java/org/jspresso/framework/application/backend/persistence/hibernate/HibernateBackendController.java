@@ -47,7 +47,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
 import org.slf4j.Logger;
@@ -56,11 +55,9 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * This is the default Jspresso implementation of Hibernate-based backend
@@ -539,20 +536,6 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * The configured entity factory will be configured with the necessary
-   * interceptors so that the controller can be notified of entity creations.
-   * <p>
-   * {@inheritDoc}
-   * 
-   * @internal
-   */
-  @Override
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    super.setEntityFactory(entityFactory);
-    linkHibernateArtifacts();
-  }
-
-  /**
    * Assigns the Spring hibernate template to this backend controller. This
    * property can only be set once and should only be used by the DI container.
    * It will rarely be changed from built-in defaults unless you need to specify
@@ -566,26 +549,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the hibernateTemplate to set.
    */
   public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-    if (this.hibernateTemplate != null) {
-      throw new IllegalArgumentException(
-          "Spring hibernate template can only be configured once.");
-    }
     this.hibernateTemplate = hibernateTemplate;
-    linkHibernateArtifacts();
-  }
-
-  /**
-   * The configured transaction template will be configured with the necessary
-   * interceptors so that the controller can be notified of transactions.
-   * <p>
-   * {@inheritDoc}
-   * 
-   * @internal
-   */
-  @Override
-  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-    super.setTransactionTemplate(transactionTemplate);
-    linkHibernateArtifacts();
   }
 
   /**
@@ -648,20 +612,6 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     return super.wrapDetachedCollection(owner, transientCollection,
         varSnapshotCollection, role);
-  }
-
-  private void linkHibernateArtifacts() {
-    if (getHibernateTemplate() != null && getTransactionTemplate() != null
-        && getEntityFactory() != null) {
-      ControllerAwareEntityProxyInterceptor entityInterceptor = new ControllerAwareEntityProxyInterceptor();
-      entityInterceptor.setBackendController(this);
-      entityInterceptor.setEntityFactory(getEntityFactory());
-      getHibernateTemplate().setEntityInterceptor(entityInterceptor);
-      if (getTransactionTemplate().getTransactionManager() instanceof HibernateTransactionManager) {
-        ((HibernateTransactionManager) getTransactionTemplate()
-            .getTransactionManager()).setEntityInterceptor(entityInterceptor);
-      }
-    }
   }
 
   /**
@@ -866,8 +816,8 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
+      public List<T> doInTransaction(@SuppressWarnings("unused")
+      TransactionStatus status) {
         List<T> entities = getHibernateTemplate().findByCriteria(criteria,
             firstResult, maxResults);
         if (mergeMode != null) {

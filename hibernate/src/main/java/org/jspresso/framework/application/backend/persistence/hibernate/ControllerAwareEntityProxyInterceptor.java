@@ -30,6 +30,8 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
+import org.jspresso.framework.application.backend.BackendControllerHolder;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -49,12 +51,10 @@ import org.slf4j.LoggerFactory;
 public class ControllerAwareEntityProxyInterceptor extends
     EntityProxyInterceptor {
 
-  private static final long          serialVersionUID = -6834992000307471098L;
+  private static final long   serialVersionUID = -6834992000307471098L;
 
-  private static final Logger        LOG              = LoggerFactory
-                                                          .getLogger(ControllerAwareEntityProxyInterceptor.class);
-
-  private HibernateBackendController backendController;
+  private static final Logger LOG              = LoggerFactory
+                                                   .getLogger(ControllerAwareEntityProxyInterceptor.class);
 
   // Not usefull anymore since the new transaction template takes care of that
   // in every situation including JTA, when this interceptor is not called.
@@ -65,7 +65,7 @@ public class ControllerAwareEntityProxyInterceptor extends
   // */
   // @Override
   // public void afterTransactionBegin(Transaction tx) {
-  // backendController.joinTransaction();
+  // getBackendController().joinTransaction();
   // super.afterTransactionBegin(tx);
   // }
 
@@ -77,9 +77,9 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   public void afterTransactionCompletion(Transaction tx) {
     if (tx.wasCommitted()) {
-      backendController.commitUnitOfWork();
+      getBackendController().commitUnitOfWork();
     } else {
-      backendController.rollbackUnitOfWork();
+      getBackendController().rollbackUnitOfWork();
     }
     super.afterTransactionCompletion(tx);
   }
@@ -93,7 +93,7 @@ public class ControllerAwareEntityProxyInterceptor extends
   public int[] findDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      Map<String, Object> dirtyProperties = backendController
+      Map<String, Object> dirtyProperties = getBackendController()
           .getDirtyProperties((IEntity) entity);
       if (dirtyProperties != null) {
         dirtyProperties.remove(IEntity.VERSION);
@@ -135,9 +135,9 @@ public class ControllerAwareEntityProxyInterceptor extends
   @SuppressWarnings("unchecked")
   @Override
   public Object getEntity(String entityName, Serializable id) {
-    if (!backendController.isUnitOfWorkActive()) {
+    if (!getBackendController().isUnitOfWorkActive()) {
       try {
-        IEntity registeredEntity = backendController.getRegisteredEntity(
+        IEntity registeredEntity = getBackendController().getRegisteredEntity(
             (Class<? extends IEntity>) Class.forName(entityName), id);
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
@@ -161,9 +161,9 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
-    if (!backendController.isUnitOfWorkActive()) {
+    if (!getBackendController().isUnitOfWorkActive()) {
       if (entity instanceof IEntity
-          && backendController.getRegisteredEntity(
+          && getBackendController().getRegisteredEntity(
               ((IEntity) entity).getComponentContract(), id) == null) {
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
@@ -175,7 +175,7 @@ public class ControllerAwareEntityProxyInterceptor extends
           }
         }
         ((IEntity) entity).straightSetProperties(properties);
-        backendController.registerEntity((IEntity) entity, false);
+        getBackendController().registerEntity((IEntity) entity, false);
       }
     }
     return super.onLoad(entity, id, state, propertyNames, types);
@@ -188,11 +188,12 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+  public void postFlush(@SuppressWarnings("rawtypes")
+  Iterator entities) {
     while (entities.hasNext()) {
       Object entity = entities.next();
       if (entity instanceof IEntity) {
-        backendController.recordAsSynchronized((IEntity) entity);
+        getBackendController().recordAsSynchronized((IEntity) entity);
       }
     }
     super.postFlush(entities);
@@ -208,9 +209,10 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+  public void preFlush(@SuppressWarnings("rawtypes")
+  Iterator entities) {
 
-    if (!backendController.isUnitOfWorkActive() && entities.hasNext()) {
+    if (!getBackendController().isUnitOfWorkActive() && entities.hasNext()) {
       // throw new BackendException(
       // "A save has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
       LOG.warn("A flush has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
@@ -239,7 +241,7 @@ public class ControllerAwareEntityProxyInterceptor extends
         if (entity instanceof IEntity) {
           if (((IEntity) entity).isPersistent()) {
             boolean isClean = false;
-            Map<String, Object> dirtyProperties = backendController
+            Map<String, Object> dirtyProperties = getBackendController()
                 .getDirtyProperties((IEntity) entity);
             if (dirtyProperties != null) {
               dirtyProperties.remove(IEntity.VERSION);
@@ -258,8 +260,8 @@ public class ControllerAwareEntityProxyInterceptor extends
             }
             if (!onUpdatedEntities.contains(entity)
                 && !isClean
-                && !backendController
-                    .isEntityRegisteredForDeletion((IEntity) entity)) {
+                && !getBackendController().isEntityRegisteredForDeletion(
+                    (IEntity) entity)) {
               // the entity is dirty and is going to be flushed.
               ((ILifecycleCapable) entity).onUpdate(getEntityFactory(),
                   getPrincipal(), getEntityLifecycleHandler());
@@ -274,13 +276,12 @@ public class ControllerAwareEntityProxyInterceptor extends
   }
 
   /**
-   * Sets the backendController.
+   * Gets the getBackendController().
    * 
-   * @param backendController
-   *          the backendController to set.
+   * @return the backendController.
    */
-  public void setBackendController(HibernateBackendController backendController) {
-    this.backendController = backendController;
+  protected IBackendController getBackendController() {
+    return BackendControllerHolder.getCurrentBackendController();
   }
 
   /**
@@ -288,7 +289,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    */
   @Override
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return backendController;
+    return getBackendController();
   }
 
   /**
@@ -298,6 +299,6 @@ public class ControllerAwareEntityProxyInterceptor extends
    */
   @Override
   protected UserPrincipal getPrincipal() {
-    return backendController.getApplicationSession().getPrincipal();
+    return getBackendController().getApplicationSession().getPrincipal();
   }
 }

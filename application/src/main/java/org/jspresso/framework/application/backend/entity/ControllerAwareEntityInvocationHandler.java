@@ -23,6 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.component.ControllerAwareComponentInvocationHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSessionAware;
@@ -60,8 +61,6 @@ public class ControllerAwareEntityInvocationHandler extends
 
   private static final long   serialVersionUID                = 3663517052427878204L;
 
-  private IBackendController  backendController;
-
   private Set<IEntity>        detachedEntities;
 
   /**
@@ -80,19 +79,15 @@ public class ControllerAwareEntityInvocationHandler extends
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
-   * @param backendController
-   *          the current backend controller.
    */
   protected ControllerAwareEntityInvocationHandler(
       IComponentDescriptor<IEntity> entityDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory,
-      IBackendController backendController) {
+      IComponentExtensionFactory extensionFactory) {
     super(entityDescriptor, inlineComponentFactory, collectionFactory,
         accessorFactory, extensionFactory);
-    this.backendController = backendController;
   }
 
   /**
@@ -138,7 +133,7 @@ public class ControllerAwareEntityInvocationHandler extends
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
-    return backendController;
+    return BackendControllerHolder.getCurrentBackendController();
   }
 
   /**

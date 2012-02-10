@@ -16,6 +16,10 @@
     </property>
   </bean>
 
+  <bean id="entityInterceptor" class ="org.jspresso.framework.application.backend.persistence.hibernate.ControllerAwareEntityProxyInterceptor">
+    <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+  </bean>
+
   <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
     <property name="mappingLocations">
@@ -23,6 +27,7 @@
         <value>classpath*:**/*.hbm.xml</value>
       </list>
     </property>
+    <property name="entityInterceptor" ref="entityInterceptor"/>
     <property name="eventListeners">
       <map>
         <entry key="post-load">
@@ -35,18 +40,19 @@
     </property>
   </bean>
 
-  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager" scope="prototype">
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
+    <property name="entityInterceptor" ref="entityInterceptor"/>
   </bean>
 
-  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" scope="prototype">
-    <property name="transactionManager" ref="transactionManager">
-    </property>
+  <bean id="transactionTemplate" class="org.jspresso.framework.application.backend.ControllerAwareTransactionTemplate">
+    <property name="transactionManager" ref="transactionManager"/>
   </bean>
 
-  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" scope="prototype">
+  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
     <property name="flushModeName" value="FLUSH_COMMIT"/>
+    <property name="entityInterceptor" ref="entityInterceptor"/>
   </bean>
 
   <!-- Hibernate root action beans. -->

@@ -20,6 +20,7 @@ package org.jspresso.framework.application.backend.component;
 
 import java.lang.reflect.Proxy;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSessionAware;
 import org.jspresso.framework.model.component.IComponent;
@@ -47,9 +48,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 public class ControllerAwareComponentInvocationHandler extends
     BasicComponentInvocationHandler {
 
-  private static final long  serialVersionUID = -3613223267370638150L;
-
-  private IBackendController backendController;
+  private static final long serialVersionUID = -3613223267370638150L;
 
   /**
    * Constructs a new <code>ControllerAwareEntityInvocationHandler</code>
@@ -67,19 +66,15 @@ public class ControllerAwareComponentInvocationHandler extends
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
-   * @param backendController
-   *          the current backend controller.
    */
   protected ControllerAwareComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory,
-      IBackendController backendController) {
+      IComponentExtensionFactory extensionFactory) {
     super(componentDescriptor, inlineComponentFactory, collectionFactory,
         accessorFactory, extensionFactory);
-    this.backendController = backendController;
   }
 
   /**
@@ -113,7 +108,7 @@ public class ControllerAwareComponentInvocationHandler extends
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
-    return backendController;
+    return BackendControllerHolder.getCurrentBackendController();
   }
 
   /**

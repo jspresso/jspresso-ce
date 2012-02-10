@@ -96,13 +96,13 @@
     <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
   </bean>
 
-  <bean id="sessionAwareComponentFactory" parent="basicComponentFactory"
-    class="org.jspresso.framework.application.backend.component.ControllerAwareProxyComponentFactory" scope="prototype">
+  <bean id="controllerAwareComponentFactory" parent="basicComponentFactory"
+    class="org.jspresso.framework.application.backend.component.ControllerAwareProxyComponentFactory">
   </bean>
 
-  <bean id="sessionAwareEntityFactory" parent="basicEntityFactory"
-    class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory" scope="prototype">
-    <property name="inlineComponentFactory" ref="sessionAwareComponentFactory" />
+  <bean id="controllerAwareEntityFactory" parent="basicEntityFactory"
+    class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory">
+    <property name="inlineComponentFactory" ref="controllerAwareComponentFactory" />
   </bean>
   <!-- Root action beans. -->
 
@@ -270,7 +270,7 @@
 
 
   <bean abstract="true" id="abstractBackControllerBase" class="org.jspresso.framework.application.backend.AbstractBackendController">
-    <property name="entityFactory" ref="sessionAwareEntityFactory" />
+    <property name="entityFactory" ref="controllerAwareEntityFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="translationProvider" ref="translationProvider" />
     <property name="applicationSession" ref="applicationSession" />

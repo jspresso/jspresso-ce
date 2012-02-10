@@ -30,28 +30,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
-  private static final long  serialVersionUID = 7416468234402124464L;
-
-  private IBackendController controller;
-
-  /**
-   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
-   * 
-   * @param source
-   *          the transaction template source.
-   * @param controller
-   *          the controller.
-   */
-  public ControllerAwareTransactionTemplate(TransactionTemplate source,
-      IBackendController controller) {
-    setIsolationLevel(source.getIsolationLevel());
-    setName(source.getName());
-    setPropagationBehavior(source.getPropagationBehavior());
-    setReadOnly(source.isReadOnly());
-    setTimeout(source.getTimeout());
-    setTransactionManager(source.getTransactionManager());
-    this.controller = controller;
-  }
+  private static final long serialVersionUID = 7416468234402124464L;
 
   /**
    * Ensures that the controller has joined the transaction, starting a UoW if
@@ -61,7 +40,7 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
    */
   @Override
   public <T> T execute(TransactionCallback<T> action) {
-    controller.joinTransaction();
+    BackendControllerHolder.getCurrentBackendController().joinTransaction();
     return super.execute(action);
   }
 

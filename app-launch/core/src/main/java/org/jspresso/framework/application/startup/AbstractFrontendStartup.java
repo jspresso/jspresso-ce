@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.startup;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     stop();
     getFrontendController().start(getBackendController(), getStartupLocale(),
         getClientTimeZone());
+    BackendControllerHolder.setCurrentBackendController(getBackendController());
   }
 
   /**
@@ -108,5 +110,6 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     // }
     frontendController = null;
     backendController = null;
+    BackendControllerHolder.setCurrentBackendController(null);
   }
 }

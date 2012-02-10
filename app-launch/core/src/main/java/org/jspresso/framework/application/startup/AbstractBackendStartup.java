@@ -25,6 +25,7 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
@@ -72,7 +73,10 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   protected void startController() {
     // start on brand new instances.
     backendController = null;
-    getBackendController().start(getStartupLocale(), getClientTimeZone());
+    IBackendController controller = getBackendController();
+    BackendControllerHolder.setCurrentBackendController(controller);
+    controller.start(getStartupLocale(), getClientTimeZone());
+
   }
 
   /**

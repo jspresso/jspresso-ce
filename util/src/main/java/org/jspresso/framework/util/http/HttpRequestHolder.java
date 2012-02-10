@@ -46,7 +46,7 @@ public class HttpRequestHolder implements Filter {
    * 
    * @return the current servlet request.
    */
-  public static HttpServletRequest getServletRequest() {
+  public static final HttpServletRequest getServletRequest() {
     return CURRENT_HTTP_REQUEST.get();
   }
 
@@ -56,7 +56,7 @@ public class HttpRequestHolder implements Filter {
    * @param request
    *          the servlet request.
    */
-  public static void setServletRequest(HttpServletRequest request) {
+  public static final void setServletRequest(HttpServletRequest request) {
     CURRENT_HTTP_REQUEST.set(request);
   }
 
@@ -65,7 +65,7 @@ public class HttpRequestHolder implements Filter {
    * 
    * @return the current servlet response.
    */
-  public static HttpServletResponse getServletResponse() {
+  public static final HttpServletResponse getServletResponse() {
     return CURRENT_HTTP_RESPONSE.get();
   }
 
@@ -75,7 +75,7 @@ public class HttpRequestHolder implements Filter {
    * @param response
    *          the servlet response.
    */
-  public static void setServletResponse(HttpServletResponse response) {
+  public static final void setServletResponse(HttpServletResponse response) {
     CURRENT_HTTP_RESPONSE.set(response);
   }
 
@@ -109,6 +109,15 @@ public class HttpRequestHolder implements Filter {
   public void init(@SuppressWarnings("unused")
   FilterConfig config) {
     // Nothing to init.
+  }
+
+  /**
+   * Gets wether a thread-bound request is available.
+   * 
+   * @return true if a thread-bound request is available.
+   */
+  public static boolean isAvailable() {
+    return CURRENT_HTTP_REQUEST.get() != null;
   }
 
 }

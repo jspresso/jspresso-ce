@@ -72,6 +72,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.ControllerException;
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
@@ -908,6 +909,7 @@ public class DefaultSwingController extends
   }
 
   private void initLoginProcess() {
+    BackendControllerHolder.setCurrentBackendController(getBackendController());
     createControllerFrame();
     String lcName = getLoginContextName();
     if (lcName == null) {

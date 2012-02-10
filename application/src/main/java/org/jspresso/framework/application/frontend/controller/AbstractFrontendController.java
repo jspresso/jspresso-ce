@@ -880,7 +880,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public boolean start(IBackendController peerController,
       Locale theClientLocale, TimeZone theClientTimeZone) {
     this.clientLocale = theClientLocale;
-    setBackendController(peerController);
+    this.backendController = peerController;
     Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
       initialLocale = new Locale(forcedStartingLocale);
@@ -1422,16 +1422,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       return "error.integrity";
     }
     return "error.integrity";
-  }
-
-  /**
-   * Sets the backend controller this controller is attached to.
-   * 
-   * @param backendController
-   *          the backend controller to set.
-   */
-  protected void setBackendController(IBackendController backendController) {
-    this.backendController = backendController;
   }
 
   private void navigatorSelectionChanged(String workspaceName,

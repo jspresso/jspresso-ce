@@ -20,6 +20,7 @@ package org.jspresso.framework.application.backend.component;
 
 import java.lang.reflect.InvocationHandler;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.basic.BasicProxyComponentFactory;
@@ -36,18 +37,6 @@ import org.jspresso.framework.security.UserPrincipal;
 public class ControllerAwareProxyComponentFactory extends
     BasicProxyComponentFactory {
 
-  private IBackendController backendController;
-
-  /**
-   * Sets the backendController.
-   * 
-   * @param backendController
-   *          the backendController to set.
-   */
-  public void setBackendController(IBackendController backendController) {
-    this.backendController = backendController;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -56,7 +45,7 @@ public class ControllerAwareProxyComponentFactory extends
       IComponentDescriptor<IComponent> componentDescriptor) {
     return new ControllerAwareComponentInvocationHandler(componentDescriptor,
         this, getComponentCollectionFactory(), getAccessorFactory(),
-        getComponentExtensionFactory(), getBackendController());
+        getComponentExtensionFactory());
   }
 
   /**
@@ -65,7 +54,7 @@ public class ControllerAwareProxyComponentFactory extends
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
-    return backendController;
+    return BackendControllerHolder.getCurrentBackendController();
   }
 
   /**

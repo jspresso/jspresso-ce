@@ -20,8 +20,8 @@ package org.jspresso.framework.application.backend.entity;
 
 import java.lang.reflect.InvocationHandler;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
-import org.jspresso.framework.application.backend.component.ControllerAwareProxyComponentFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -36,8 +36,6 @@ import org.jspresso.framework.security.UserPrincipal;
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
-
-  private IBackendController backendController;
 
   /**
    * Takes care of registering the newly created bean in the backend controller.
@@ -67,20 +65,6 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
   }
 
   /**
-   * Sets the backend controller.
-   * 
-   * @param backendController
-   *          the backend controller to set.
-   */
-  public void setBackendController(IBackendController backendController) {
-    this.backendController = backendController;
-    if (getInlineComponentFactory() instanceof ControllerAwareProxyComponentFactory) {
-      ((ControllerAwareProxyComponentFactory) getInlineComponentFactory())
-          .setBackendController(backendController);
-    }
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -88,8 +72,7 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
       IComponentDescriptor<IEntity> entityDescriptor) {
     return new ControllerAwareEntityInvocationHandler(entityDescriptor,
         getInlineComponentFactory(), getEntityCollectionFactory(),
-        getAccessorFactory(), getEntityExtensionFactory(),
-        getBackendController());
+        getAccessorFactory(), getEntityExtensionFactory());
   }
 
   /**
@@ -98,7 +81,7 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
-    return backendController;
+    return BackendControllerHolder.getCurrentBackendController();
   }
 
   /**

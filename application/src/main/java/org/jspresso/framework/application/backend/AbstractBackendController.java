@@ -702,8 +702,6 @@ public abstract class AbstractBackendController extends AbstractController
           "entityFactory must be a ControllerAwareProxyEntityFactory.");
     }
     this.entityFactory = entityFactory;
-    ((ControllerAwareProxyEntityFactory) getEntityFactory())
-        .setBackendController(this);
   }
 
   /**
@@ -756,10 +754,7 @@ public abstract class AbstractBackendController extends AbstractController
       throw new IllegalArgumentException(
           "Spring transaction template can only be configured once.");
     }
-    if (transactionTemplate != null) {
-      this.transactionTemplate = new ControllerAwareTransactionTemplate(
-          transactionTemplate, this);
-    }
+    this.transactionTemplate = transactionTemplate;
   }
 
   /**

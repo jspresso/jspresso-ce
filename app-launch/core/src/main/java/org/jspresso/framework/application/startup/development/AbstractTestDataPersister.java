@@ -21,13 +21,13 @@ package org.jspresso.framework.application.startup.development;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.jspresso.framework.application.backend.BackendControllerHolder;
+import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
-import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-
 
 /**
  * A utility class used to persist some test data.
@@ -44,18 +44,14 @@ public abstract class AbstractTestDataPersister {
    * Constructs a new <code>AbstractTestDataPersister</code> instance.
    * 
    * @param beanFactory
-   *            the spring bean factory to use.
+   *          the spring bean factory to use.
    */
   public AbstractTestDataPersister(BeanFactory beanFactory) {
-    // use basicEntityFactory instead of entityFactory so that the created
-    // beans do not get registered in the session.
-    entityFactory = (IEntityFactory) beanFactory.getBean("basicEntityFactory");
-
-    hibernateTemplate = (HibernateTemplate) beanFactory
-        .getBean("hibernateTemplate");
-    EntityProxyInterceptor entityInterceptor = new EntityProxyInterceptor();
-    entityInterceptor.setEntityFactory(entityFactory);
-    hibernateTemplate.setEntityInterceptor(entityInterceptor);
+    HibernateBackendController hbc = (HibernateBackendController) beanFactory
+        .getBean("applicationBackController");
+    BackendControllerHolder.setCurrentBackendController(hbc);
+    hibernateTemplate = hbc.getHibernateTemplate();
+    entityFactory = hbc.getEntityFactory();
   }
 
   /**
@@ -67,12 +63,13 @@ public abstract class AbstractTestDataPersister {
    * Creates a component instance.
    * 
    * @param <T>
-   *            the actual component type.
+   *          the actual component type.
    * @param componentContract
-   *            the component contract.
+   *          the component contract.
    * @return the created component.
    */
-  protected <T extends IComponent> T createComponentInstance(Class<T> componentContract) {
+  protected <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract) {
     return entityFactory.createComponentInstance(componentContract);
   }
 
@@ -80,9 +77,9 @@ public abstract class AbstractTestDataPersister {
    * Creates an entity instance.
    * 
    * @param <T>
-   *            the actual entity type.
+   *          the actual entity type.
    * @param entityContract
-   *            the entity contract.
+   *          the entity contract.
    * @return the created entity.
    */
   protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
@@ -93,7 +90,7 @@ public abstract class AbstractTestDataPersister {
    * Persists or update an entity.
    * 
    * @param entity
-   *            the entity to persist or update.
+   *          the entity to persist or update.
    */
   protected void saveOrUpdate(IEntity entity) {
     hibernateTemplate.saveOrUpdate(entity);
@@ -103,7 +100,7 @@ public abstract class AbstractTestDataPersister {
    * Query entities.
    * 
    * @param queryString
-   *            the HSQL query string.
+   *          the HSQL query string.
    * @return the entity list.
    */
   protected List<?> find(String queryString) {
@@ -114,7 +111,7 @@ public abstract class AbstractTestDataPersister {
    * Query entities by criteria.
    * 
    * @param criteria
-   *            the Hibernate detached criteria.
+   *          the Hibernate detached criteria.
    * @return the entity list.
    */
   protected List<?> findByCriteria(DetachedCriteria criteria) {
