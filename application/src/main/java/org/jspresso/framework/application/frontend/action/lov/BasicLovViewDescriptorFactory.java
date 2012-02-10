@@ -21,14 +21,10 @@ package org.jspresso.framework.application.frontend.action.lov;
 import java.util.Map;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
-import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
@@ -45,17 +41,18 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
     implements ILovViewDescriptorFactory {
 
-  private IQueryViewDescriptorFactory queryViewDescriptorFactory;
-  private ActionMap                   resultViewActionMap;
-  private IDisplayableAction          sortingAction;
-  private IViewDescriptor             paginationViewDescriptor;
+  private IQueryViewDescriptorFactory     queryViewDescriptorFactory;
+  private ILovResultViewDescriptorFactory resultViewDescriptorFactory;
+  private ActionMap                       resultViewActionMap;
+  private IDisplayableAction              sortingAction;
+  private IViewDescriptor                 paginationViewDescriptor;
 
   /**
    * {@inheritDoc}
    */
   @Override
   public IViewDescriptor createLovViewDescriptor(
-      IComponentDescriptorProvider<IEntity> entityRefDescriptor,
+      IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       IDisplayableAction okAction, Map<String, Object> lovContext) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
@@ -127,33 +124,10 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
    * @return a result collection view.
    */
   protected BasicCollectionViewDescriptor createResultViewDescriptor(
-      IComponentDescriptorProvider<IEntity> entityRefDescriptor,
+      IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
-    BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
-
-    BasicListDescriptor<IEntity> queriedEntitiesListDescriptor = new BasicListDescriptor<IEntity>();
-    queriedEntitiesListDescriptor.setElementDescriptor(entityRefDescriptor
-        .getComponentDescriptor());
-
-    BasicCollectionPropertyDescriptor<IEntity> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
-    queriedEntitiesDescriptor
-        .setReferencedDescriptor(queriedEntitiesListDescriptor);
-    queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
-
-    resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
-    resultViewDescriptor.setReadOnly(true);
-    resultViewDescriptor.setRenderedProperties(entityRefDescriptor
-        .getRenderedProperties());
-    if (getModel(lovContext) instanceof IQueryComponent) {
-      // We are on a filter view that suppports multi selection
-      resultViewDescriptor
-          .setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
-    } else {
-      resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
-    }
-
-    resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
-    return resultViewDescriptor;
+    return getResultViewDescriptorFactory().createResultViewDescriptor(
+        entityRefDescriptor, lovContext);
   }
 
   /**
@@ -165,5 +139,34 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
   public void setPaginationViewDescriptor(
       BasicViewDescriptor paginationViewDescriptor) {
     this.paginationViewDescriptor = paginationViewDescriptor;
+  }
+
+  /**
+   * Gets the resultViewDescriptorFactory.
+   * 
+   * @return the resultViewDescriptorFactory.
+   */
+  protected ILovResultViewDescriptorFactory getResultViewDescriptorFactory() {
+    return resultViewDescriptorFactory;
+  }
+
+  /**
+   * Sets the resultViewDescriptorFactory.
+   * 
+   * @param resultViewDescriptorFactory
+   *          the resultViewDescriptorFactory to set.
+   */
+  public void setResultViewDescriptorFactory(
+      ILovResultViewDescriptorFactory resultViewDescriptorFactory) {
+    this.resultViewDescriptorFactory = resultViewDescriptorFactory;
+  }
+
+  /**
+   * Gets the queryViewDescriptorFactory.
+   * 
+   * @return the queryViewDescriptorFactory.
+   */
+  protected IQueryViewDescriptorFactory getQueryViewDescriptorFactory() {
+    return queryViewDescriptorFactory;
   }
 }

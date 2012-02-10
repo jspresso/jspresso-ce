@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * Interface contract for factories creating query component descriptors.
@@ -37,5 +37,5 @@ public interface IQueryComponentDescriptorFactory {
    * @return the created query component descriptor.
    */
   IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
-      IComponentDescriptorProvider<IEntity> componentDescriptorProvider);
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider);
 }

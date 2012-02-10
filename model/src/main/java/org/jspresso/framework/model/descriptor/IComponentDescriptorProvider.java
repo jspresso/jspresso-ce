@@ -38,7 +38,7 @@ public interface IComponentDescriptorProvider<E> extends IModelDescriptor,
    * 
    * @return the referenced component descriptor.
    */
-  IComponentDescriptor<E> getComponentDescriptor();
+  IComponentDescriptor<? extends E> getComponentDescriptor();
 
   /**
    * Get the default queryable properties of this component.

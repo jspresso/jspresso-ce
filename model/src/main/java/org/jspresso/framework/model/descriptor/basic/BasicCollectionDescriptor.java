@@ -49,9 +49,9 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
     ICollectionDescriptor<E> {
 
-  private Class<?>                collectionInterface;
-  private IComponentDescriptor<E> elementDescriptor;
-  private Map<String, ESort>      orderingProperties;
+  private Class<?>                          collectionInterface;
+  private IComponentDescriptor<? extends E> elementDescriptor;
+  private Map<String, ESort>                orderingProperties;
 
   /**
    * {@inheritDoc}
@@ -77,7 +77,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * {@inheritDoc}
    */
   @Override
-  public IComponentDescriptor<E> getElementDescriptor() {
+  public IComponentDescriptor<? extends E> getElementDescriptor() {
     return elementDescriptor;
   }
 
@@ -133,7 +133,8 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * @param elementDescriptor
    *          the elementDescriptor to set.
    */
-  public void setElementDescriptor(IComponentDescriptor<E> elementDescriptor) {
+  public void setElementDescriptor(
+      IComponentDescriptor<? extends E> elementDescriptor) {
     this.elementDescriptor = elementDescriptor;
   }
 
@@ -166,8 +167,8 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
           orderingProperties.put(untypedOrderingProperty.getKey(),
               (ESort) untypedOrderingProperty.getValue());
         } else if (untypedOrderingProperty.getValue() instanceof String) {
-          orderingProperties.put(untypedOrderingProperty.getKey(), ESort
-              .valueOf((String) untypedOrderingProperty.getValue()));
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.valueOf((String) untypedOrderingProperty.getValue()));
         } else {
           orderingProperties.put(untypedOrderingProperty.getKey(),
               ESort.ASCENDING);

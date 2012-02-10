@@ -1,5 +1,8 @@
 3.5.12
 ======
+- We have relaxed a lot of interface APIs around List Of Values. Most of them now use Icomponent instead of IEntity.
+A straightforward API alignement will be needed when upgrading.
+
 - All ControllerAware artifacts are now Spring singletons which will ease a lot 3rd party products integration.
 see http://mantis.jspresso.org/view.php?id=533 
 

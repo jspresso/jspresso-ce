@@ -4,8 +4,11 @@
   default-lazy-init="true">
 
   <!-- View factories -->
-  <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.application.frontend.action.lov.BasicLovViewDescriptorFactory">
+  <bean id="lovResultViewDescriptorFactory" class="org.jspresso.framework.application.frontend.action.lov.BasicLovResultViewDescriptorFactory" />
+
+  <bean id="lovViewDescriptorFactoryBase" class="org.jspresso.framework.application.frontend.action.lov.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
+    <property name="resultViewDescriptorFactory" ref="lovResultViewDescriptorFactory" />
     <property name="sortingAction">
       <bean parent="lovFindFrontAction">
         <property name="wrappedAction">
@@ -17,6 +20,9 @@
     </property>
     <property name="paginationViewDescriptor" ref="pagingNavigationView" />
   </bean>
+
+  <bean id="lovViewDescriptorFactory" parent="lovViewDescriptorFactoryBase" />
+
 
   <!-- Standard views -->
   <bean id="pageableStatusModel" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
@@ -39,8 +45,8 @@
           <property name="writabilityGates">
             <list>
               <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-                 <property name="accessorFactory" ref="accessorFactory" />
-                 <property name="propertyName" value="pageNavigationEnabled" />
+                <property name="accessorFactory" ref="accessorFactory" />
+                <property name="propertyName" value="pageNavigationEnabled" />
               </bean>
             </list>
           </property>
@@ -430,8 +436,8 @@
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
-  
-  <bean id="applicationClipboardTransferHandler" class="org.jspresso.framework.application.frontend.action.std.DefaultClipboardTransferHandler"/>
+
+  <bean id="applicationClipboardTransferHandler" class="org.jspresso.framework.application.frontend.action.std.DefaultClipboardTransferHandler" />
 
   <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.std.TransferToClipboardAction">
     <property name="iconImageURL">
@@ -443,7 +449,7 @@
     <property name="description" value="copy.description" />
     <property name="acceleratorAsString" value="ctrl C" />
     <property name="collectionBased" value="true" />
-    <property name="clipboardTransferHandler" ref="applicationClipboardTransferHandler"/>
+    <property name="clipboardTransferHandler" ref="applicationClipboardTransferHandler" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="COPY" />
@@ -461,7 +467,7 @@
     <property name="description" value="cut.description" />
     <property name="acceleratorAsString" value="ctrl X" />
     <property name="collectionBased" value="true" />
-    <property name="clipboardTransferHandler" ref="applicationClipboardTransferHandler"/>
+    <property name="clipboardTransferHandler" ref="applicationClipboardTransferHandler" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="MOVE" />
@@ -506,22 +512,22 @@
   <bean id="removeModuleObjectFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
     <property name="yesAction">
       <bean class="org.jspresso.framework.application.frontend.action.FrontendAction">
-        <property name="wrappedAction" ref="removeModuleObjectAction"/>
-        <property name="nextAction" ref="previousPinnedModuleAction"/>
+        <property name="wrappedAction" ref="removeModuleObjectAction" />
+        <property name="nextAction" ref="previousPinnedModuleAction" />
       </bean>
     </property>
-    <property name="collectionBased" value="false"/>
+    <property name="collectionBased" value="false" />
   </bean>
 
   <bean id="removeFromModuleObjectsFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
     <property name="yesAction" ref="removeFromModuleObjectsAction" />
   </bean>
 
-  <alias alias="removeFromModuleObjectFrontAction" name="removeFromModuleObjectsFrontAction"/>
+  <alias alias="removeFromModuleObjectFrontAction" name="removeFromModuleObjectsFrontAction" />
 
   <bean id="addToModuleObjectsFrontAction" parent="addToMasterFrontAction" />
 
-  <alias alias="addToModuleObjectFrontAction" name="addToModuleObjectsFrontAction"/>
+  <alias alias="addToModuleObjectFrontAction" name="addToModuleObjectsFrontAction" />
 
   <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction" />
 
@@ -550,8 +556,9 @@
     <property name="description" value="module.restart.description" />
   </bean>
 
-  <bean id="restartModuleWithConfirmationFrontAction" parent="restartModuleFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
-    <property name="messageCode" value="module.restart.confirm.message"/>
+  <bean id="restartModuleWithConfirmationFrontAction" parent="restartModuleFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
+    <property name="messageCode" value="module.restart.confirm.message" />
     <property name="yesAction" ref="restartModuleFrontAction" />
   </bean>
 
@@ -918,7 +925,7 @@
       </bean>
     </property>
     <property name="columnCount" value="1" />
-    <property name="modelDescriptor" ref="loginModelDescriptor"/>
+    <property name="modelDescriptor" ref="loginModelDescriptor" />
   </bean>
 
   <!-- Standard ready to use modules -->

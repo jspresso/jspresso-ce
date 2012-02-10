@@ -37,13 +37,13 @@ public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     IReferencePropertyDescriptor<E> {
 
-  private EFetchType              fetchType = EFetchType.SELECT;
-  private Map<String, Object>     initializationMapping;
-  private Boolean                 oneToOne;
-  private Integer                 pageSize;
-  private IComponentDescriptor<E> referencedDescriptor;
-  private List<String>            queryableProperties;
-  private List<String>            renderedProperties;
+  private EFetchType                        fetchType = EFetchType.SELECT;
+  private Map<String, Object>               initializationMapping;
+  private Boolean                           oneToOne;
+  private Integer                           pageSize;
+  private IComponentDescriptor<? extends E> referencedDescriptor;
+  private List<String>                      queryableProperties;
+  private List<String>                      renderedProperties;
 
   /**
    * {@inheritDoc}
@@ -65,9 +65,9 @@ public class BasicReferencePropertyDescriptor<E> extends
   public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
     BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super
         .createQueryDescriptor();
-    IComponentDescriptor<E> realReferencedDescriptor = queryDescriptor
+    IComponentDescriptor<? extends E> realReferencedDescriptor = queryDescriptor
         .getReferencedDescriptor();
-    IComponentDescriptor<E> queryReferencedDescriptor = realReferencedDescriptor
+    IComponentDescriptor<? extends E> queryReferencedDescriptor = realReferencedDescriptor
         .createQueryDescriptor();
     queryDescriptor.setReferencedDescriptor(queryReferencedDescriptor);
     return queryDescriptor;
@@ -77,7 +77,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public IComponentDescriptor<E> getComponentDescriptor() {
+  public IComponentDescriptor<? extends E> getComponentDescriptor() {
     return getReferencedDescriptor();
   }
 
@@ -123,7 +123,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public IComponentDescriptor<E> getReferencedDescriptor() {
+  public IComponentDescriptor<? extends E> getReferencedDescriptor() {
     return referencedDescriptor;
   }
 
@@ -236,7 +236,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    *          the referencedDescriptor to set.
    */
   public void setReferencedDescriptor(
-      IComponentDescriptor<E> referencedDescriptor) {
+      IComponentDescriptor<? extends E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
   }
 

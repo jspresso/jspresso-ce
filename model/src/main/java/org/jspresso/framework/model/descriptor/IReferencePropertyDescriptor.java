@@ -57,7 +57,7 @@ public interface IReferencePropertyDescriptor<E> extends
    * 
    * @return the referenced component descriptor
    */
-  IComponentDescriptor<E> getReferencedDescriptor();
+  IComponentDescriptor<? extends E> getReferencedDescriptor();
 
   /**
    * Gets whether this reference property descriptor is a one-to-one end.
@@ -65,5 +65,5 @@ public interface IReferencePropertyDescriptor<E> extends
    * @return true if this reference property descriptor is a one-to-one end.
    */
   boolean isOneToOne();
-  
+
 }

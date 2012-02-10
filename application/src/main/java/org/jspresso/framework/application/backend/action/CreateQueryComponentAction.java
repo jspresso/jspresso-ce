@@ -33,7 +33,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
@@ -86,11 +85,11 @@ public class CreateQueryComponentAction extends BackendAction {
   @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IReferencePropertyDescriptor<IEntity> erqDescriptor = (IReferencePropertyDescriptor<IEntity>) context
+    IReferencePropertyDescriptor<IComponent> erqDescriptor = (IReferencePropertyDescriptor<IComponent>) context
         .get(COMPONENT_REF_DESCRIPTOR);
     if (erqDescriptor == null) {
       IModelDescriptor modelDescriptor = getModelDescriptor(context);
-      erqDescriptor = (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
+      erqDescriptor = (IReferencePropertyDescriptor<IComponent>) modelDescriptor;
     }
     IQueryComponent queryComponent = getEntityFactory(context)
         .createQueryComponentInstance(

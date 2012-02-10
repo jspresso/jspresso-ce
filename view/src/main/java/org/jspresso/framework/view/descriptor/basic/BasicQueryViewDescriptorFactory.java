@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -30,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -58,7 +58,7 @@ public class BasicQueryViewDescriptorFactory implements
    */
   @Override
   public IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
     IComponentDescriptor<IQueryComponent> actualModelDescriptor = getQueryComponentDescriptorFactory()
         .createQueryComponentDescriptor(componentDescriptorProvider);
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
@@ -123,7 +123,7 @@ public class BasicQueryViewDescriptorFactory implements
    */
   @Override
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
-      IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
     return getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
         componentDescriptorProvider);
   }

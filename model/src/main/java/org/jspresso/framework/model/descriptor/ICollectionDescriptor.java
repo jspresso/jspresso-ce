@@ -47,7 +47,7 @@ public interface ICollectionDescriptor<E> extends
    * 
    * @return The collection's component descriptor.
    */
-  IComponentDescriptor<E> getElementDescriptor();
+  IComponentDescriptor<? extends E> getElementDescriptor();
 
   /**
    * Get the list of properties ordering this collection.

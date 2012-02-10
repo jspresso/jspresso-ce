@@ -38,6 +38,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelProvider;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -79,30 +80,30 @@ import org.slf4j.LoggerFactory;
  */
 public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private static final Logger                   LOG                   = LoggerFactory
-                                                                          .getLogger(LovAction.class);
+  private static final Logger                        LOG                   = LoggerFactory
+                                                                               .getLogger(LovAction.class);
 
   /**
    * <code>LOV_PRESELECTED_ITEM</code>.
    */
-  public static final String                    LOV_PRESELECTED_ITEM  = "LOV_PRESELECTED_ITEM";
+  public static final String                         LOV_PRESELECTED_ITEM  = "LOV_PRESELECTED_ITEM";
   /**
    * <code>LOV_SELECTED_ITEM</code>.
    */
-  public static final String                    LOV_SELECTED_ITEM     = "LOV_SELECTED_ITEM";
-  private boolean                               autoquery;
-  private IDisplayableAction                    cancelAction;
-  private CreateQueryComponentAction            createQueryComponentAction;
-  private IComponentDescriptor<IEntity>         entityDescriptor;
-  private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
-  private IDisplayableAction                    findAction;
-  private Map<String, Object>                   initializationMapping;
-  private ILovViewDescriptorFactory             lovViewDescriptorFactory;
-  private IDisplayableAction                    okAction;
-  private String                                nonLovTriggeringChars = "%;"
-                                                                          + IQueryComponent.NOT_VAL
-                                                                          + IQueryComponent.NULL_VAL;
-  private IAction                               pagingAction;
+  public static final String                         LOV_SELECTED_ITEM     = "LOV_SELECTED_ITEM";
+  private boolean                                    autoquery;
+  private IDisplayableAction                         cancelAction;
+  private CreateQueryComponentAction                 createQueryComponentAction;
+  private IComponentDescriptor<? extends IComponent> entityDescriptor;
+  private IReferencePropertyDescriptor<IComponent>   entityRefQueryDescriptor;
+  private IDisplayableAction                         findAction;
+  private Map<String, Object>                        initializationMapping;
+  private ILovViewDescriptorFactory                  lovViewDescriptorFactory;
+  private IDisplayableAction                         okAction;
+  private String                                     nonLovTriggeringChars = "%;"
+                                                                               + IQueryComponent.NOT_VAL
+                                                                               + IQueryComponent.NULL_VAL;
+  private IAction                                    pagingAction;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -118,7 +119,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
 
-    IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
+    IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
         erqDescriptor);
 
@@ -392,7 +393,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * @param entityDescriptor
    *          the entityDescriptor to set.
    */
-  public void setEntityDescriptor(IComponentDescriptor<IEntity> entityDescriptor) {
+  public void setEntityDescriptor(
+      IComponentDescriptor<? extends IComponent> entityDescriptor) {
     this.entityDescriptor = entityDescriptor;
   }
 
@@ -454,21 +456,21 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * @return the entityRefQueryDescriptor.
    */
   @SuppressWarnings("unchecked")
-  protected IReferencePropertyDescriptor<IEntity> getEntityRefQueryDescriptor(
+  protected IReferencePropertyDescriptor<IComponent> getEntityRefQueryDescriptor(
       Map<String, Object> context) {
     if (entityDescriptor != null) {
       if (entityRefQueryDescriptor == null) {
-        entityRefQueryDescriptor = new BasicReferencePropertyDescriptor<IEntity>();
-        ((BasicReferencePropertyDescriptor<IEntity>) entityRefQueryDescriptor)
+        entityRefQueryDescriptor = new BasicReferencePropertyDescriptor<IComponent>();
+        ((BasicReferencePropertyDescriptor<IComponent>) entityRefQueryDescriptor)
             .setReferencedDescriptor(entityDescriptor);
-        ((BasicReferencePropertyDescriptor<IEntity>) entityRefQueryDescriptor)
+        ((BasicReferencePropertyDescriptor<IComponent>) entityRefQueryDescriptor)
             .setInitializationMapping(initializationMapping);
       }
       return entityRefQueryDescriptor;
     }
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-      return (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
+      return (IReferencePropertyDescriptor<IComponent>) modelDescriptor;
     }
     return null;
   }

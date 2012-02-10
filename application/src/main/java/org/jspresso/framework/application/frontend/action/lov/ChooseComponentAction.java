@@ -119,7 +119,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
                 + actionParam.getClass().getName());
           }
           ((BasicCollectionDescriptor<Object>) collectionDescriptorProvider)
-              .setElementDescriptor((IComponentDescriptor<Object>) elementDescriptor);
+              .setElementDescriptor(elementDescriptor);
           ((BasicCollectionViewDescriptor) viewDescriptor)
               .setModelDescriptor(collectionDescriptorProvider
                   .getCollectionDescriptor());

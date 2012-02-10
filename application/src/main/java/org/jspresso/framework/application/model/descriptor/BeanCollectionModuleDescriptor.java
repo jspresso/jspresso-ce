@@ -54,14 +54,13 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    * @param moduleObjectReferencedDescriptor
    *          the component descriptor of the module objects.
    */
-  @SuppressWarnings("unchecked")
   protected BeanCollectionModuleDescriptor(String name,
       IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor) {
     super(name);
 
     BasicListDescriptor<Object> moduleObjectsListDescriptor = new BasicListDescriptor<Object>();
     moduleObjectsListDescriptor
-        .setElementDescriptor((IComponentDescriptor<Object>) moduleObjectReferencedDescriptor);
+        .setElementDescriptor(moduleObjectReferencedDescriptor);
 
     BasicCollectionPropertyDescriptor<Object> moduleObjectsDescriptor = new BasicCollectionPropertyDescriptor<Object>();
     moduleObjectsDescriptor

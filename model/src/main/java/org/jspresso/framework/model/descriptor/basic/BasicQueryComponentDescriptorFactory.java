@@ -18,12 +18,11 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
-import org.jspresso.framework.model.entity.IEntity;
-
 
 /**
  * Basic implementation. Creates basic query component descriptors.
@@ -41,7 +40,7 @@ public class BasicQueryComponentDescriptorFactory implements
    */
   @Override
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
-      IComponentDescriptorProvider<IEntity> componentDescriptorProvider) {
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
     return new BasicQueryComponentDescriptor(componentDescriptorProvider);
   }
 

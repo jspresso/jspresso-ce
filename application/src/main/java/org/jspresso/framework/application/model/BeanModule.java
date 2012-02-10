@@ -86,7 +86,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * @return the componentDescriptor.
    */
   @SuppressWarnings("unchecked")
-  public IComponentDescriptor<Object> getComponentDescriptor() {
+  public IComponentDescriptor<? extends Object> getComponentDescriptor() {
     if (componentDescriptor == null) {
       if (getProjectedViewDescriptor() != null
           && getProjectedViewDescriptor().getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
@@ -184,7 +184,8 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * {@inheritDoc}
    */
   @Override
-  public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
+  public void propertyChange(@SuppressWarnings("unused")
+  PropertyChangeEvent evt) {
     String oldI18nName = getI18nName();
     setI18nName(String.valueOf(this.moduleObject));
     firePropertyChange(I18N_NAME, oldI18nName, getI18nName());

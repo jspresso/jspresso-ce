@@ -26,11 +26,11 @@ import java.util.Map;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
@@ -55,16 +55,16 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class FilterableBeanCollectionModule extends BeanCollectionModule
     implements IPageable {
 
-  private IQueryComponent               filter;
-  private IComponentDescriptor<IEntity> filterComponentDescriptor;
-  private PropertyChangeListener        filterComponentTracker;
-  private IViewDescriptor               filterViewDescriptor;
+  private IQueryComponent                  filter;
+  private IComponentDescriptor<IComponent> filterComponentDescriptor;
+  private PropertyChangeListener           filterComponentTracker;
+  private IViewDescriptor                  filterViewDescriptor;
 
-  private Map<String, ESort>            orderingProperties;
-  private Integer                       pageSize;
-  private IQueryViewDescriptorFactory   queryViewDescriptorFactory;
-  private IViewDescriptor               paginationViewDescriptor;
-  private BackendAction                 pagingAction;
+  private Map<String, ESort>               orderingProperties;
+  private Integer                          pageSize;
+  private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
+  private IViewDescriptor                  paginationViewDescriptor;
+  private BackendAction                    pagingAction;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -88,9 +88,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * @return the filterComponentDescriptor.
    */
   @SuppressWarnings("unchecked")
-  public IComponentDescriptor<IEntity> getFilterComponentDescriptor() {
+  public IComponentDescriptor<IComponent> getFilterComponentDescriptor() {
     if (filterComponentDescriptor == null) {
-      return (IComponentDescriptor<IEntity>) getElementComponentDescriptor();
+      return (IComponentDescriptor<IComponent>) getElementComponentDescriptor();
     }
     return filterComponentDescriptor;
   }
@@ -139,7 +139,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor
         .getModelDescriptor();
 
-    IComponentDescriptor<IEntity> filterComponentDesc = getFilterComponentDescriptor();
+    IComponentDescriptor<IComponent> filterComponentDesc = getFilterComponentDescriptor();
     IViewDescriptor filterViewDesc = getFilterViewDescriptor();
     if (filterViewDesc == null) {
       filterViewDesc = queryViewDescriptorFactory
@@ -222,7 +222,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    *          the filterComponentDescriptor to set.
    */
   public void setFilterComponentDescriptor(
-      IComponentDescriptor<IEntity> filterComponentDescriptor) {
+      IComponentDescriptor<IComponent> filterComponentDescriptor) {
     this.filterComponentDescriptor = filterComponentDescriptor;
   }
 
