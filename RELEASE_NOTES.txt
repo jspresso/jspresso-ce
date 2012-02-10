@@ -1,5 +1,13 @@
 3.5.12
 ======
+- To prepare for Hibernate 4 migration, you should change the cache provider in your hibernate configurations (xxx-config.xml)
+from <prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
+to   <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+
+- Libraries version update :
+  Spring: 3.1.0-RELEASE
+  Hibernate: 3.6.9.Final
+  
 - In order to give the opportunity to ignore missing translation keys, we have added 2 methods to the ITranslationProvider
   interface, containing a default value :
 

@@ -3903,7 +3903,7 @@ tree<co id="BasicTreeViewDescriptor" />('Company.tree',
       &lt;prop key="hibernate.jdbc.use_streams_for_binary"&gt;true&lt;/prop&gt;
       &lt;prop key="hibernate.cache.region_prefix"&gt;hibernate.test&lt;/prop&gt;
       &lt;prop
-        key="hibernate.cache.provider_class"&gt;org.hibernate.cache.HashtableCacheProvider&lt;/prop&gt;
+        key="hibernate.cache.provider_class"&gt;org.hibernate.cache.EhCacheProvider&lt;/prop&gt;
       &lt;prop key="hibernate.hbm2ddl.auto"&gt;update&lt;/prop&gt; <co
               id="hbm2ddl" />
       &lt;prop key="hibernate.jdbc.batch_size"&gt;0&lt;/prop&gt;

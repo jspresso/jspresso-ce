@@ -49,7 +49,7 @@
         <prop
           key="hibernate.cache.region_prefix">hibernate.test</prop>
         <prop
-          key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
+          key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
         <prop
           key="hibernate.hbm2ddl.auto">update</prop>
         <prop
