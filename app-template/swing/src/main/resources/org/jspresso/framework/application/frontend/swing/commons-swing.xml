@@ -19,10 +19,9 @@
     class="org.jspresso.framework.application.charting.frontend.action.standalone.DisplayChartAction" />
 
   <!-- The implementation used as view factory. -->
-  <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.swing.SwingIconFactory" scope="prototype" />
+  <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.swing.SwingIconFactory" />
 
-  <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.swing.SwingActionFactory"
-    scope="prototype" />
+  <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.swing.SwingActionFactory" />
 
   <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.application.frontend.action.swing.file.OpenFileAction" />
 
