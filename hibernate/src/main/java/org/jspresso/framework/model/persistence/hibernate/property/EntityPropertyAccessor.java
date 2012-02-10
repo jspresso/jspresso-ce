@@ -22,8 +22,8 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
@@ -53,8 +53,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * {@inheritDoc}
    */
   @Override
-  public Getter getGetter(@SuppressWarnings("rawtypes") Class theClass,
-      String propertyName) {
+  public Getter getGetter(@SuppressWarnings("rawtypes")
+  Class theClass, String propertyName) {
     return new EntityPropertyGetter(theClass, propertyName);
   }
 
@@ -62,8 +62,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * {@inheritDoc}
    */
   @Override
-  public Setter getSetter(@SuppressWarnings("rawtypes") Class theClass,
-      String propertyName) {
+  public Setter getSetter(@SuppressWarnings("rawtypes")
+  Class theClass, String propertyName) {
     return new EntityPropertySetter(theClass, propertyName);
   }
 
@@ -111,8 +111,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      */
     @Override
     @SuppressWarnings("unused")
-    public Object getForInsert(Object target,
-        @SuppressWarnings("rawtypes") Map mergeMap, SessionImplementor session) {
+    public Object getForInsert(Object target, @SuppressWarnings("rawtypes")
+    Map mergeMap, SessionImplementor session) {
       return get(target);
     }
 

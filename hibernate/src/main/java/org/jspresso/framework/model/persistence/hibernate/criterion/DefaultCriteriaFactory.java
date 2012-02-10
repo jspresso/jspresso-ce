@@ -30,6 +30,7 @@ import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -123,7 +124,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             if (sortable) {
               for (String pathElt : path) {
                 orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria,
-                    pathElt, CriteriaSpecification.LEFT_JOIN);
+                    pathElt, JoinType.LEFT_OUTER_JOIN);
               }
               propertyName = name.toString();
             }
@@ -279,7 +280,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                   if (digDeeper) {
                     DetachedCriteria joinCriteria = rootCriteria
                         .getSubCriteriaFor(currentCriteria, prefixedProperty,
-                            CriteriaSpecification.INNER_JOIN);
+                            JoinType.INNER_JOIN);
                     abort = abort
                         || completeCriteria(rootCriteria, joinCriteria, null,
                             joinedComponent);

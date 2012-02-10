@@ -15,12 +15,8 @@
       <artifactId>jspresso-util</artifactId>
     </dependency>
     <dependency>
-      <groupId>jboss</groupId>
+      <groupId>org.picketbox</groupId>
       <artifactId>jbosssx</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>jboss-common</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

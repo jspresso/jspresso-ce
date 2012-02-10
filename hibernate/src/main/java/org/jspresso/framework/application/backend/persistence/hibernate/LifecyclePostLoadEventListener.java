@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
-import org.hibernate.event.PostLoadEvent;
-import org.hibernate.event.PostLoadEventListener;
+import org.hibernate.event.spi.PostLoadEvent;
+import org.hibernate.event.spi.PostLoadEventListener;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 
 /**

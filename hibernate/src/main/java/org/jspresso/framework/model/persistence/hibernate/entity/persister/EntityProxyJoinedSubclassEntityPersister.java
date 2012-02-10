@@ -18,10 +18,9 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.entity.persister;
 
-import org.hibernate.EntityMode;
-import org.hibernate.cache.access.EntityRegionAccessStrategy;
-import org.hibernate.engine.Mapping;
-import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.cache.spi.access.EntityRegionAccessStrategy;
+import org.hibernate.engine.spi.Mapping;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
@@ -66,19 +65,11 @@ public class EntityProxyJoinedSubclassEntityPersister extends
    */
   @Override
   public EntityPersister getSubclassEntityPersister(Object instance,
-      SessionFactoryImplementor factory, EntityMode entityMode) {
+      SessionFactoryImplementor factory) {
     if (instance instanceof IEntity) {
-      return factory.getEntityPersister(((IEntity) instance).getComponentContract()
-          .getName());
+      return factory.getEntityPersister(((IEntity) instance)
+          .getComponentContract().getName());
     }
-    return super.getSubclassEntityPersister(instance, factory, entityMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public EntityMode guessEntityMode(@SuppressWarnings("unused") Object object) {
-    return EntityMode.POJO;
+    return super.getSubclassEntityPersister(instance, factory);
   }
 }

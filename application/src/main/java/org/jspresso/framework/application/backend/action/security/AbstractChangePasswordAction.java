@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.security.Util;
+import org.jboss.security.auth.spi.Util;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -114,8 +114,9 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
     UserPrincipal principal = getApplicationSession(context).getPrincipal();
     if (changePassword(principal, (String) actionParam.get(PASSWD_CURRENT),
         typedPasswd)) {
-      setActionParameter(getTranslationProvider(context).getTranslation(
-          "password.change.success", getLocale(context)), context);
+      setActionParameter(
+          getTranslationProvider(context).getTranslation(
+              "password.change.success", getLocale(context)), context);
       return super.execute(actionHandler, context);
     }
     return false;

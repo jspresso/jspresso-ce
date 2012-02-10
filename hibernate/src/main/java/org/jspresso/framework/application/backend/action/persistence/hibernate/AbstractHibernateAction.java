@@ -21,11 +21,11 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  * This the root abstract class of all hibernate related persistence actions. It
@@ -72,14 +72,14 @@ public abstract class AbstractHibernateAction extends BackendAction {
   }
 
   /**
-   * Gets the hibernateTemplate.
+   * Gets the hibernateSession.
    * 
    * @param context
    *          the action context.
-   * @return the hibernateTemplate.
+   * @return the hibernateSession.
    */
-  protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
-    return getController(context).getHibernateTemplate();
+  protected Session getHibernateSession(Map<String, Object> context) {
+    return getController(context).getHibernateSession();
   }
 
   /**

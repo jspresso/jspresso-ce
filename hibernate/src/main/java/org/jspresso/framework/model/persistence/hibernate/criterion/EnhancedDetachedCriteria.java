@@ -28,7 +28,8 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
-import org.hibernate.impl.CriteriaImpl;
+import org.hibernate.internal.CriteriaImpl;
+import org.hibernate.sql.JoinType;
 import org.hibernate.transform.ResultTransformer;
 
 /**
@@ -159,9 +160,29 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * @param joinType
    *          the join type.
    * @return the new or previously registered sub-criteria.
+   * @deprecated use
+   *             {@link #getSubCriteriaFor(DetachedCriteria, String, JoinType)}
    */
+  @Deprecated
   public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
       String associationPath, int joinType) {
+    return getSubCriteriaFor(masterCriteria, associationPath,
+        JoinType.parse(joinType));
+  }
+
+  /**
+   * Creates or gets a previously registered sub-criteria.
+   * 
+   * @param masterCriteria
+   *          the parent criteria holding the sub-criteria.
+   * @param associationPath
+   *          the association path.
+   * @param joinType
+   *          the join type.
+   * @return the new or previously registered sub-criteria.
+   */
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
+      String associationPath, JoinType joinType) {
     DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria,
         associationPath);
     if (subCriteria == null) {
@@ -205,9 +226,31 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * @param joinType
    *          the join type.
    * @return the new or previously registered sub-criteria.
+   * @deprecated use
+   *             {@link #getSubCriteriaFor(DetachedCriteria, String, String, JoinType)}
    */
+  @Deprecated
   public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
       String associationPath, String alias, int joinType) {
+    return getSubCriteriaFor(masterCriteria, associationPath, alias,
+        JoinType.parse(joinType));
+  }
+
+  /**
+   * Creates or gets a previously registered sub-criteria.
+   * 
+   * @param masterCriteria
+   *          the parent criteria holding the sub-criteria.
+   * @param associationPath
+   *          the association path.
+   * @param alias
+   *          the alias.
+   * @param joinType
+   *          the join type.
+   * @return the new or previously registered sub-criteria.
+   */
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
+      String associationPath, String alias, JoinType joinType) {
     DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria,
         associationPath);
     if (subCriteria == null) {
