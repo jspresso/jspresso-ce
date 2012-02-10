@@ -18,37 +18,14 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.dialect;
 
-import org.hibernate.dialect.MySQL5Dialect;
-
 /**
  * Mysql5 InnoDB dialect.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MySQL5InnoDBDialect extends MySQL5Dialect {
+public class MySQL5InnoDBDialect extends
+    org.hibernate.dialect.MySQL5InnoDBDialect {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getTableTypeString() {
-    return " ENGINE=InnoDB";
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean hasSelfReferentialForeignKeyBug() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean supportsCascadeDelete() {
-    return true;
-  }
+  // Empty as of now.
 }
