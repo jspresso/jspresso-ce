@@ -1,5 +1,12 @@
 3.5.12
 ======
+- All ControllerAware artifacts are now Spring singletons which will ease a lot 3rd party products integration.
+see http://mantis.jspresso.org/view.php?id=533 
+
+- To prepare for Hibernate 4 migration, the HibernateTemplate usage is now deprectated. From now on, you should use
+the equivalent getHibernateSession(...) that leverages the Hibernate getCurrentSession() method. As soon as Jspresso migrates
+to Hibernate 4, the Hibernate template access wil be removed.
+
 - To prepare for Hibernate 4 migration, you should change the cache provider in your hibernate configurations (xxx-config.xml)
 from <prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
 to   <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>

@@ -94,7 +94,9 @@
 
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController">
+    <property name="hibernateSessionFactory" ref="hibernateSessionFactory"/>
     <property name="hibernateTemplate" ref="hibernateTemplate" />
+    <property name="defaultTxFlushMode" value="COMMIT"/>
   </bean>
 
   <bean id="smartEntityCloneFactory" class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"

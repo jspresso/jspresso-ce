@@ -20,6 +20,7 @@ package org.jspresso.framework.application.startup.development;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
@@ -27,7 +28,6 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  * A utility class used to persist some test data.
@@ -37,8 +37,8 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
  */
 public abstract class AbstractTestDataPersister {
 
-  private IEntityFactory    entityFactory;
-  private HibernateTemplate hibernateTemplate;
+  private IEntityFactory entityFactory;
+  private Session        hibernateSession;
 
   /**
    * Constructs a new <code>AbstractTestDataPersister</code> instance.
@@ -50,7 +50,7 @@ public abstract class AbstractTestDataPersister {
     HibernateBackendController hbc = (HibernateBackendController) beanFactory
         .getBean("applicationBackController");
     BackendControllerHolder.setCurrentBackendController(hbc);
-    hibernateTemplate = hbc.getHibernateTemplate();
+    hibernateSession = hbc.getHibernateSession();
     entityFactory = hbc.getEntityFactory();
   }
 
@@ -93,7 +93,8 @@ public abstract class AbstractTestDataPersister {
    *          the entity to persist or update.
    */
   protected void saveOrUpdate(IEntity entity) {
-    hibernateTemplate.saveOrUpdate(entity);
+    hibernateSession.saveOrUpdate(entity);
+    hibernateSession.flush();
   }
 
   /**
@@ -104,7 +105,7 @@ public abstract class AbstractTestDataPersister {
    * @return the entity list.
    */
   protected List<?> find(String queryString) {
-    return hibernateTemplate.find(queryString);
+    return hibernateSession.createQuery(queryString).list();
   }
 
   /**
@@ -115,6 +116,6 @@ public abstract class AbstractTestDataPersister {
    * @return the entity list.
    */
   protected List<?> findByCriteria(DetachedCriteria criteria) {
-    return hibernateTemplate.findByCriteria(criteria);
+    return criteria.getExecutableCriteria(hibernateSession).list();
   }
 }

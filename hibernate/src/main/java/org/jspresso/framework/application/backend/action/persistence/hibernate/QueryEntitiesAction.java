@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Subqueries;
@@ -34,7 +35,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
@@ -154,7 +154,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   protected List<?> performQuery(final IQueryComponent queryComponent,
       final Map<String, Object> context) {
-    HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
+    Session hibernateSession = getHibernateSession(context);
     ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
         .get(CRITERIA_FACTORY);
     if (critFactory == null) {
@@ -203,8 +203,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         }
         if (queryComponent.getRecordCount() == null) {
           criteria.setProjection(Projections.rowCount());
-          totalCount = new Integer(((Number) hibernateTemplate.findByCriteria(
-              criteria).get(0)).intValue());
+          totalCount = new Integer(
+              ((Number) criteria.getExecutableCriteria(hibernateSession).list()
+                  .get(0)).intValue());
         }
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
@@ -215,8 +216,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
-        entities = hibernateTemplate.findByCriteria(criteria, page.intValue()
-            * pageSize.intValue(), pageSize.intValue());
+        entities = criteria.getExecutableCriteria(hibernateSession)
+            .setFirstResult(page.intValue() * pageSize.intValue())
+            .setMaxResults(pageSize.intValue()).list();
       } else {
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
@@ -227,7 +229,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
-        entities = hibernateTemplate.findByCriteria(criteria);
+        entities = criteria.getExecutableCriteria(hibernateSession).list();
         totalCount = new Integer(entities.size());
       }
       if (totalCount != null) {

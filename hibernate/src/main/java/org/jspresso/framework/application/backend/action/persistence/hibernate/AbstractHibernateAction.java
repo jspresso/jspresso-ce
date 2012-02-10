@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.model.component.IComponent;
@@ -77,9 +78,22 @@ public abstract class AbstractHibernateAction extends BackendAction {
    * @param context
    *          the action context.
    * @return the hibernateTemplate.
+   * @deprecated use {@link #getHibernateSession(Map)} instead.
    */
+  @Deprecated
   protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
     return getController(context).getHibernateTemplate();
+  }
+
+  /**
+   * Gets the hibernateTemplate.
+   * 
+   * @param context
+   *          the action context.
+   * @return the hibernateTemplate.
+   */
+  protected Session getHibernateSession(Map<String, Object> context) {
+    return getController(context).getHibernateSession();
   }
 
   /**
