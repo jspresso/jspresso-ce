@@ -228,8 +228,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
               if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
-                currentCriteria.add(Restrictions.eq(prefixedProperty,
-                    property.getValue()));
+                createIdRestriction(propertyDescriptor, currentCriteria,
+                    property.getValue(), prefixedProperty);
               } else {
                 createStringRestriction(propertyDescriptor, currentCriteria,
                     (String) property.getValue(), prefixedProperty);
@@ -299,6 +299,29 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   }
 
   /**
+   * Creates an id based restriction.
+   * 
+   * @param propertyDescriptor
+   *          the id property descriptor.
+   * @param currentCriteria
+   *          the current criteria being built.
+   * @param propertyValue
+   *          the string property value.
+   * @param prefixedProperty
+   *          the full path of the property.
+   */
+  protected void createIdRestriction(IPropertyDescriptor propertyDescriptor,
+      DetachedCriteria currentCriteria, Object propertyValue,
+      String prefixedProperty) {
+    if (propertyValue instanceof String) {
+      createStringRestriction(propertyDescriptor, currentCriteria,
+          (String) propertyValue, prefixedProperty);
+    } else {
+      currentCriteria.add(Restrictions.eq(prefixedProperty, propertyValue));
+    }
+  }
+
+  /**
    * Creates a string based restriction.
    * 
    * @param propertyDescriptor
@@ -329,7 +352,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           if (IQueryComponent.NULL_VAL.equals(val)) {
             crit = Restrictions.isNull(prefixedProperty);
           } else {
-            if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            if (IEntity.ID.equals(propertyDescriptor.getName())
+                || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
               crit = Restrictions.eq(prefixedProperty, val);
             } else {
               crit = createLikeRestriction(propertyDescriptor,
