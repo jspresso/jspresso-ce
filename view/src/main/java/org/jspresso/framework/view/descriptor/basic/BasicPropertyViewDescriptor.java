@@ -27,6 +27,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
@@ -326,4 +327,19 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     this.sortable = new Boolean(sortable);
   }
 
+  /**
+   * Queries the model property descriptor to determine read-only state.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isReadOnly() {
+    boolean readOnly = super.isReadOnly();
+    if (!readOnly && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).isReadOnly();
+      }
+    }
+    return readOnly;
+  }
 }

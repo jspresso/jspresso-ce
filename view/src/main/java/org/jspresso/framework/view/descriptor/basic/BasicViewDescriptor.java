@@ -26,7 +26,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -247,11 +246,6 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   @Override
   public boolean isReadOnly() {
-    if (!readOnly && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).isReadOnly();
-      }
-    }
     return readOnly;
   }
 
