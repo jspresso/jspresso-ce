@@ -80,7 +80,7 @@ public class BasicComponentDescriptorRegistry implements
   private void buildContractNameIdMap() {
     contractNameToComponentDescriptorMap = new HashMap<String, IComponentDescriptor<?>>();
     Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext
-        .getBeansOfType(IComponentDescriptor.class);
+        .getBeansOfType(IComponentDescriptor.class, false, false);
     for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
       if (descriptorEntry.getValue().getComponentContract() != null) {
