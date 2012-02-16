@@ -1039,5 +1039,18 @@ public class HibernateBackendController extends AbstractBackendController {
   public void setDefaultTxFlushMode(String defaultTxFlushMode) {
     this.defaultTxFlushMode = FlushMode.parse(defaultTxFlushMode);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void joinTransaction() {
+    // This is to avoid having entities attached to 2 open sessions
+    // and to periodically clear the noTxSession cache.
+    if (noTxSession != null) {
+      noTxSession.clear();
+    }
+    super.joinTransaction();
+  }
 
 }
