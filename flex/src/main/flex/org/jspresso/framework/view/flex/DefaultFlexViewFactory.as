@@ -148,7 +148,6 @@ package org.jspresso.framework.view.flex {
     [Embed(source="/assets/images/reset-16x16.png")]
     private var _resetIcon:Class;
 
-    private static const TOOLTIP_ELLIPSIS:String = "...";
     private static const TEMPLATE_CHAR:String = "O";
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
     private static const NUMERIC_FIELD_MAX_CHAR_COUNT:int = 16;
@@ -2336,7 +2335,7 @@ package org.jspresso.framework.view.flex {
         button.label = label;
       }
       if(toolTip) {
-        button.toolTip = toolTip + TOOLTIP_ELLIPSIS;
+        button.toolTip = toolTip;
       }
     }
 

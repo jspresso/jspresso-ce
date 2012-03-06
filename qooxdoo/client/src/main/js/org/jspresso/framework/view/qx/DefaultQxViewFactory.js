@@ -31,7 +31,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   extend : qx.core.Object,
 
   statics : {
-    __TOOLTIP_ELLIPSIS : "...",
     __TEMPLATE_CHAR : "O",
     __FIELD_MAX_CHAR_COUNT : 32,
     __NUMERIC_FIELD_MAX_CHAR_COUNT : 16,
@@ -2415,8 +2414,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         command.setLabel(remoteAction.getName());
       }
       if (remoteAction.getDescription()) {
-        command.setToolTipText(remoteAction.getDescription()
-            + this.self(arguments).__TOOLTIP_ELLIPSIS);
+        command.setToolTipText(remoteAction.getDescription());
       }
       remoteAction.bind("enabled", command, "enabled");
       command.addListener("execute", function(e) {
@@ -2569,8 +2567,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         button.setLabel(label);
       }
       if (toolTip) {
-        button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip
-            + this.self(arguments).__TOOLTIP_ELLIPSIS));
+        button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip));
         //to unblock tooltips on menu buttons
         button.setBlockToolTip(false);
       }
