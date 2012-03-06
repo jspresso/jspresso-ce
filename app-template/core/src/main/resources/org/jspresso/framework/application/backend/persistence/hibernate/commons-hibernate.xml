@@ -5,7 +5,7 @@
 
   <!-- Hibernate root application context for the Jspresso framework. -->
 
-  <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+  <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
     <property name="targetClass"
       value="org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer" />
     <property name="targetMethod" value="setInlineComponentFactory" />
