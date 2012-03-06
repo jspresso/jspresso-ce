@@ -1735,7 +1735,11 @@ package org.jspresso.framework.view.flex {
           if(!ArrayUtil.areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
             list.selectedItems = selectedItems;
             if(selectedItems.length == 1) {
-              list.scrollToIndex((list.dataProvider as ListCollectionView).getItemIndex(selectedItems[0]));
+              var selIdx:int = (list.dataProvider as ListCollectionView).getItemIndex(selectedItems[0]);
+              if(selIdx < 0) {
+                selIdx = 0;
+              }
+              list.scrollToIndex(selIdx);
             }
           }
         } else {
@@ -2060,7 +2064,11 @@ package org.jspresso.framework.view.flex {
           if(!ArrayUtil.areUnorderedArraysEqual(table.selectedItems, selectedItems)) {
             table.selectedItems = selectedItems;
             if(selectedItems.length == 1) {
-              table.scrollToIndex((table.dataProvider as ListCollectionView).getItemIndex(selectedItems[0]));
+              var selIdx:int = (table.dataProvider as ListCollectionView).getItemIndex(selectedItems[0]);
+              if(selIdx < 0) {
+                selIdx = 0;
+              }
+              table.scrollToIndex(selIdx);
             }
           }
         } else {
