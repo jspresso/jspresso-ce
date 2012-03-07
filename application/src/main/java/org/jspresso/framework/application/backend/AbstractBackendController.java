@@ -515,8 +515,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(@SuppressWarnings("unused")
-  Object objectOrProxy) {
+  public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
     return true;
   }
 
@@ -1564,7 +1563,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-      /* getName(), */getApplicationSession().getPrincipal().getName()});
+        /* getName(), */getApplicationSession().getPrincipal().getName()
+      });
     }
 
   }
@@ -1812,5 +1812,13 @@ public abstract class AbstractBackendController extends AbstractController
       return clientTimeZone;
     }
     return TimeZone.getDefault();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void cleanupRequestResources() {
+    // Empty implementation
   }
 }

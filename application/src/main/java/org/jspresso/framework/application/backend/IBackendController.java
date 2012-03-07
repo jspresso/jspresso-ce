@@ -350,4 +350,10 @@ public interface IBackendController extends IController,
    */
   void storeComponents(
       ComponentTransferStructure<? extends IComponent> components);
+  
+  /**
+   * Cleans-up request-scoped resources.
+   * 
+   */
+  void cleanupRequestResources();
 }

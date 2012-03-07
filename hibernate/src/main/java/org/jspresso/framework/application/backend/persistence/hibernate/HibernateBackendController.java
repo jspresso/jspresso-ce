@@ -819,8 +819,8 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
+      public List<T> doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
         Criteria executableCriteria = criteria
             .getExecutableCriteria(getHibernateSession());
         if (firstResult >= 0) {
@@ -1039,7 +1039,7 @@ public class HibernateBackendController extends AbstractBackendController {
   public void setDefaultTxFlushMode(String defaultTxFlushMode) {
     this.defaultTxFlushMode = FlushMode.parse(defaultTxFlushMode);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -1053,4 +1053,15 @@ public class HibernateBackendController extends AbstractBackendController {
     super.joinTransaction();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void cleanupRequestResources() {
+    super.cleanupRequestResources();
+    if (noTxSession != null) {
+      noTxSession.close();
+      noTxSession = null;
+    }
+  }
 }
