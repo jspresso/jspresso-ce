@@ -49,6 +49,7 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvid
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IMvcBinder;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
@@ -88,6 +89,7 @@ import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.IValueChangeSource;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.DurationFormatter;
@@ -2984,10 +2986,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
     @Override
     public void valueChange(ValueChangeEvent evt) {
       IValueConnector viewConnector = (IValueConnector) evt.getSource();
-      final IValueConnector modelConnector = viewConnector.getModelConnector();
+      IValueConnector modelConnector = viewConnector.getModelConnector();
       if (modelConnector != null
           && !ObjectUtils.equals(evt.getNewValue(),
               modelConnector.getConnectorValue())) {
+        if (modelConnector.getConnectorValue() instanceof Map<?, ?>
+            && modelConnector.getModelDescriptor() instanceof IReferencePropertyDescriptor<?>
+            && viewConnector instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) viewConnector)
+                .getRenderingConnector() != null) {
+          modelConnector = ((IRenderableCompositeValueConnector) viewConnector)
+              .getRenderingConnector().getModelConnector();
+        }
         // this is not a model notification, so arm to trigger the action once
         // the model is actually updated.
         modelConnector.addValueChangeListener(new IValueChangeListener() {
@@ -2995,7 +3005,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           @Override
           public void valueChange(ValueChangeEvent modelEvt) {
             // This is a 1 shot event.
-            modelConnector.removeValueChangeListener(this);
+            ((IValueChangeSource) modelEvt.getSource())
+                .removeValueChangeListener(this);
             triggerAction(modelEvt.getOldValue());
           }
         });
