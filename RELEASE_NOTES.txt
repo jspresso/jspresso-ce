@@ -1,5 +1,31 @@
 3.5.12
 ======
+- New locale : DE
+In order to use the new translation locales in existing projects : 
+
+Edit startup/qooxdoo/client/src/main/py/config.json and change :
+  "LOCALES"      : ["en","fr","es","pt"],
+  to
+  "LOCALES"      : ["en","fr","es","pt","de"],
+
+Edit startup/flex/client/pom.xml and change :
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
+          </locales>
+  to  
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
+            <locale>de_DE</locale>
+          </locales>
+
+Create the de_DE directories in startup/flex/client/src/main/locales.
+
 - We have relaxed a lot of interface APIs around List Of Values. Most of them now use Icomponent instead of IEntity.
 A straightforward API alignement will be needed when upgrading.
 
