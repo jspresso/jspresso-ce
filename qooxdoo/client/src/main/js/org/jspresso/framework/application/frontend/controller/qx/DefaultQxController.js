@@ -198,7 +198,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     execute : function(action, actionEvent) {
-      param = (typeof param == 'undefined') ? null : param;
+      actionEvent = (typeof actionEvent == 'undefined') ? null : actionEvent;
       if(action && action.isEnabled()) {
         //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();

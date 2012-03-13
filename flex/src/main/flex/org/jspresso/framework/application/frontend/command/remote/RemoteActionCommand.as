@@ -29,7 +29,7 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function set actionEvent(value:RActionEvent):void {
             _actionEvent = value;
         }
-        public function get parameter():RActionEvent {
+        public function get actionEvent():RActionEvent {
             return _actionEvent;
         }
     }
