@@ -13,7 +13,6 @@
  */
 
 package org.jspresso.framework.util.array {
-  import mx.collections.ArrayCollection;
   import mx.collections.ListCollectionView;
   import mx.core.ClassFactory;
   import mx.events.CollectionEvent;
@@ -22,6 +21,7 @@ package org.jspresso.framework.util.array {
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.util.remote.IRemotePeer;
+  import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   
   public class ArrayUtil {
     
@@ -60,35 +60,48 @@ package org.jspresso.framework.util.array {
       return -1;
     }
 
-    public static function mirrorCollectionViews(source:ListCollectionView, target:ListCollectionView, targetElementFactory:ClassFactory):void {
+    public static function mirrorCollectionViews(source:ListCollectionView,
+                                                 target:ListCollectionView,
+                                                 targetElementFactory:ClassFactory,
+                                                 remotePeerRegistry:IRemotePeerRegistry = null):void {
       for(var i:int = 0; i < source.length; i++) {
-        var element:Object = targetElementFactory.newInstance();
-        element['delegate'] = source[i];
-        target.addItem(element);
-        attachItemUpdateListener(element, target);
+        var element:Object = cacheCreate(source[i], targetElementFactory);
+        if(!target.contains(element)) {
+          target.addItem(element);
+          attachItemUpdateListener(element, target);
+        }
       }
       source.addEventListener(CollectionEvent.COLLECTION_CHANGE,
         function(event:CollectionEvent):void {
           var item:Object;
           if(event.kind == CollectionEventKind.ADD) {
             for each (item in event.items) {
-              var addedElement:Object = targetElementFactory.newInstance();
-              addedElement['delegate'] =item;
-              target.addItem(addedElement);
-              attachItemUpdateListener(addedElement, target);
+              var addedElement:Object = cacheCreate(item, targetElementFactory);
+              if(!target.contains(element)) {
+                target.addItem(addedElement);
+                attachItemUpdateListener(addedElement, target);
+              }
             }
           } else if(event.kind == CollectionEventKind.REMOVE) {
             for each (item in event.items) {
-              var removedElement:Object = targetElementFactory.newInstance();
-              removedElement['delegate'] = item;
+              var removedElement:Object;
+              if(item is IRemotePeer) {
+                removedElement = item;
+              } else {
+                removedElement = cacheCreate(item, targetElementFactory);
+              }
               target.removeItemAt(arrayIndexOf(target.toArray(),removedElement));
             }
           } else if(event.kind == CollectionEventKind.REPLACE) {
             for each (item in event.items) {
-              var oldElement:Object = targetElementFactory.newInstance();
-              oldElement['delegate'] = (item as PropertyChangeEvent).oldValue;
-              var newElement:Object = targetElementFactory.newInstance();
-              newElement['delegate'] = (item as PropertyChangeEvent).newValue;
+              var oldElement:Object;
+              var oldItem:Object = (item as PropertyChangeEvent).oldValue;
+              if(oldItem is IRemotePeer) {
+                oldElement = oldItem;
+              } else {
+                oldElement = cacheCreate(oldItem, targetElementFactory);
+              }
+              var newElement:Object = cacheCreate((item as PropertyChangeEvent).newValue, targetElementFactory);
               target.setItemAt(newElement, arrayIndexOf(target.toArray(), oldElement));
               attachItemUpdateListener(newElement, target);
             }
@@ -96,13 +109,27 @@ package org.jspresso.framework.util.array {
             // could be finer.
             target.removeAll();
             for each (item in (event.currentTarget as ListCollectionView).toArray()) {
-              var resetElement:Object = targetElementFactory.newInstance();
-              resetElement['delegate'] = (item as PropertyChangeEvent).oldValue;
+              var resetElement:Object =cacheCreate((item as PropertyChangeEvent).oldValue, targetElementFactory);
               target.addItem(resetElement);
               attachItemUpdateListener(resetElement, target);
             }
           }
         });
+    }
+    
+    private static function cacheCreate(delegate:Object, targetElementFactory:ClassFactory, remotePeerRegistry:IRemotePeerRegistry = null):Object {
+      var target:Object = null;
+      if(delegate is IRemotePeer && remotePeerRegistry) {
+        target = remotePeerRegistry.getRegistered((delegate as IRemotePeer).guid);
+      }
+      if(target == null) {
+        target = targetElementFactory.newInstance();
+        target['delegate'] = delegate;
+        if(target is IRemotePeer && remotePeerRegistry) {
+          remotePeerRegistry.register(target as IRemotePeer);
+        }
+      }
+      return target;
     }
     
     public static function attachItemUpdateListener(element:Object, collection:ListCollectionView):void {

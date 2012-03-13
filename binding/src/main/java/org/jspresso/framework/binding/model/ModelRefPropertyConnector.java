@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
@@ -32,6 +33,7 @@ import org.jspresso.framework.model.ModelChangeSupport;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
@@ -171,8 +173,13 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       if (componentDescriptor != null) {
         try {
           getSecurityHandler().pushToSecurityContext(componentDescriptor);
+          IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(actualKey);
+          if (propertyDescriptor == null) {
+            throw new ConnectorBindingException("Property ["
+                + actualKey + "] does not exist on {" + componentDescriptor.getName() + "}.");
+          }
           connector = modelConnectorFactory.createModelConnector(actualKey,
-              componentDescriptor.getPropertyDescriptor(actualKey),
+              propertyDescriptor,
               getSecurityHandler());
         } finally {
           getSecurityHandler().restoreLastSecurityContextSnapshot();

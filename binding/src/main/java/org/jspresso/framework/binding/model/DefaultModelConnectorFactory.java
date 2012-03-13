@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.binding.model;
 
+import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -86,37 +87,39 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         }
       }
     }
-    if (modelConnector != null) {
-      modelConnector.setSecurityHandler(securityHandler);
-      if (modelDescriptor instanceof IGateAccessible) {
-        boolean locallyWritable = !((IGateAccessible) modelDescriptor)
-            .isReadOnly();
-        if (locallyWritable && modelDescriptor instanceof ISecurable) {
-          try {
-            securityHandler.pushToSecurityContext(EAuthorization.ENABLED);
-            locallyWritable = securityHandler
-                .isAccessGranted((ISecurable) modelDescriptor);
-          } finally {
-            securityHandler.restoreLastSecurityContextSnapshot();
+    if (modelConnector == null) {
+      throw new ConnectorBindingException("Could not create child connector ["
+          + id + "].");
+    }
+    modelConnector.setSecurityHandler(securityHandler);
+    if (modelDescriptor instanceof IGateAccessible) {
+      boolean locallyWritable = !((IGateAccessible) modelDescriptor)
+          .isReadOnly();
+      if (locallyWritable && modelDescriptor instanceof ISecurable) {
+        try {
+          securityHandler.pushToSecurityContext(EAuthorization.ENABLED);
+          locallyWritable = securityHandler
+              .isAccessGranted((ISecurable) modelDescriptor);
+        } finally {
+          securityHandler.restoreLastSecurityContextSnapshot();
+        }
+      }
+      modelConnector.setLocallyWritable(locallyWritable);
+      if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
+        for (IGate gate : ((IGateAccessible) modelDescriptor)
+            .getReadabilityGates()) {
+          if (!(gate instanceof ISecurable)
+              || securityHandler.isAccessGranted((ISecurable) gate)) {
+            modelConnector.addReadabilityGate(gate.clone());
           }
         }
-        modelConnector.setLocallyWritable(locallyWritable);
-        if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
-          for (IGate gate : ((IGateAccessible) modelDescriptor)
-              .getReadabilityGates()) {
-            if (!(gate instanceof ISecurable)
-                || securityHandler.isAccessGranted((ISecurable) gate)) {
-              modelConnector.addReadabilityGate(gate.clone());
-            }
-          }
-        }
-        if (((IGateAccessible) modelDescriptor).getWritabilityGates() != null) {
-          for (IGate gate : ((IGateAccessible) modelDescriptor)
-              .getWritabilityGates()) {
-            if (!(gate instanceof ISecurable)
-                || securityHandler.isAccessGranted((ISecurable) gate)) {
-              modelConnector.addWritabilityGate(gate.clone());
-            }
+      }
+      if (((IGateAccessible) modelDescriptor).getWritabilityGates() != null) {
+        for (IGate gate : ((IGateAccessible) modelDescriptor)
+            .getWritabilityGates()) {
+          if (!(gate instanceof ISecurable)
+              || securityHandler.isAccessGranted((ISecurable) gate)) {
+            modelConnector.addWritabilityGate(gate.clone());
           }
         }
       }
