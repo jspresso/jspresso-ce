@@ -206,8 +206,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         command.setPermId(action.getPermId());
         if(!actionEvent) {
           actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-          command.setActionEvent(actionEvent);
         }
+        command.setActionEvent(actionEvent);
         actionEvent.setViewStateGuid(this.__dialogStack[this.__dialogStack.length -1][1]);
         actionEvent.setViewStatePermId(this.__dialogStack[this.__dialogStack.length -1][2]);
         this.registerCommand(command);
