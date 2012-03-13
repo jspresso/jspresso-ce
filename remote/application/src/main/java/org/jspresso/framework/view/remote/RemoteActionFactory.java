@@ -205,6 +205,7 @@ public class RemoteActionFactory extends
             actionEvent.getActionCommand(), sourceComponent);
         actionContext.putAll(defaultActionContext);
         actionContext.put(ActionContextConstants.UI_ACTION, this);
+        actionContext.put(ActionContextConstants.UI_EVENT, actionEvent);
         actionHandler.execute(action, actionContext);
       }
     }
