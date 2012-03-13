@@ -39,6 +39,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController"/>
     <classEntry path="org.jspresso.framework.gui.remote.RAction"/>
     <classEntry path="org.jspresso.framework.gui.remote.RActionComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RActionEvent"/>
     <classEntry path="org.jspresso.framework.gui.remote.RActionField"/>
     <classEntry path="org.jspresso.framework.gui.remote.RActionList"/>
     <classEntry path="org.jspresso.framework.gui.remote.RBorderContainer"/>
