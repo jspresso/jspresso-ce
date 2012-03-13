@@ -16,7 +16,7 @@ qx.Interface.define("org.jspresso.framework.action.IActionHandler",
 {    
   members :
 	{
-    execute : function (action, param){},
+    execute : function (action, actionEvent){},
     
     setCurrentViewStateGuid : function(viewStateGuid, viewStatePermId){},
     

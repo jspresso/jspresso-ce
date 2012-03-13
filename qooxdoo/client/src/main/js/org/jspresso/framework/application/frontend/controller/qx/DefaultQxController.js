@@ -197,16 +197,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {String} param
      * @return void
      */
-    execute : function(action, param) {
+    execute : function(action, actionEvent) {
       param = (typeof param == 'undefined') ? null : param;
       if(action && action.isEnabled()) {
         //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
         command.setTargetPeerGuid(action.getGuid());
         command.setPermId(action.getPermId());
-        command.setParameter(param);
-        command.setViewStateGuid(this.__dialogStack[this.__dialogStack.length -1][1]);
-        command.setViewStatePermId(this.__dialogStack[this.__dialogStack.length -1][2]);
+        if(!actionEvent) {
+          actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+          command.setActionEvent(actionEvent);
+        }
+        actionEvent.setViewStateGuid(this.__dialogStack[this.__dialogStack.length -1][1]);
+        actionEvent.setViewStatePermId(this.__dialogStack[this.__dialogStack.length -1][2]);
         this.registerCommand(command);
       }
     },
@@ -448,7 +451,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var resource = document.firstChild;
         var id = resource.getAttribute("id");
         if(id) {
-          this.execute(uploadCommand.getSuccessCallbackAction(), id);
+          var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+          actionEvent.setActionCommand(id);
+          this.execute(uploadCommand.getSuccessCallbackAction(), actionEvent);
         }
         uploadDialog.close();
         uploadDialog.destroy();

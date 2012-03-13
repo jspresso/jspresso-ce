@@ -14,38 +14,23 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
+  import org.jspresso.framework.gui.remote.RActionEvent;
 
 		
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand")]
     public class RemoteActionCommand extends RemoteCommand {
 
-        private var _parameter:String;
-        private var _viewStateGuid:String;
-        private var _viewStatePermId:String;
+        private var _actionEvent:RActionEvent;
 
         public function RemoteActionCommand() {
           //default constructor.
         }
 
-        public function set parameter(value:String):void {
-            _parameter = value;
+        public function set actionEvent(value:RActionEvent):void {
+            _actionEvent = value;
         }
-        public function get parameter():String {
-            return _parameter;
-        }
-
-        public function set viewStateGuid(value:String):void {
-            _viewStateGuid = value;
-        }
-        public function get viewStateGuid():String {
-            return _viewStateGuid;
-        }
-
-        public function set viewStatePermId(value:String):void {
-            _viewStatePermId = value;
-        }
-        public function get viewStatePermId():String {
-            return _viewStatePermId;
+        public function get parameter():RActionEvent {
+            return _actionEvent;
         }
     }
 }

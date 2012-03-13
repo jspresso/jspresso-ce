@@ -105,6 +105,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionComponent;
+  import org.jspresso.framework.gui.remote.RActionEvent;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
   import org.jspresso.framework.gui.remote.RBorderContainer;
@@ -265,15 +266,18 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
 
-    public function execute(action:RAction, param:String=null):void {
+    public function execute(action:RAction, actionEvent:RActionEvent = null):void {
       //trace(">>> Execute <<< " + action.name + " param = " + param);
       if(action && action.enabled) {
         var command:RemoteActionCommand = new RemoteActionCommand();
         command.targetPeerGuid = action.guid;
         command.permId = action.permId;
-        command.parameter = param;
-        command.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
-        command.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
+        if(actionEvent == null) {
+          actionEvent = new RActionEvent();
+        }
+        command.actionEvent = actionEvent;
+        actionEvent.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
+        actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
         registerCommand(command);
       }
     }
@@ -516,7 +520,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function(event:DataEvent):void {
         var xml:XML = new XML(event.data);
         var resourceId:String = xml.@id;
-        execute(uploadCommand.successCallbackAction, resourceId);
+        var actionEvent:RActionEvent = new RActionEvent();
+        actionEvent.actionCommand = resourceId;
+        execute(uploadCommand.successCallbackAction, actionEvent);
         popFakeDialog();
       });
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
@@ -553,7 +559,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
       _fileReference = new  FileReference();
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
-        execute(downloadCommand.cancelCallbackAction, downloadCommand.resourceId);
+        var actionEvent:RActionEvent = new RActionEvent();
+        actionEvent.actionCommand = downloadCommand.resourceId;
+        execute(downloadCommand.cancelCallbackAction, actionEvent);
         popFakeDialog();
       });
       try {

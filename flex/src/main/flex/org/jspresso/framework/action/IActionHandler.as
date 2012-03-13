@@ -16,11 +16,12 @@ package org.jspresso.framework.action {
   import mx.core.UIComponent;
   
   import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RActionEvent;
   
   
   public interface IActionHandler {
     
-    function execute(action:RAction, param:String=null):void;
+    function execute(action:RAction, actionEvent:RActionEvent=null):void;
     
     function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void;
     

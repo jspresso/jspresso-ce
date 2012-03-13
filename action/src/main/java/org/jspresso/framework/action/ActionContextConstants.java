@@ -99,7 +99,12 @@ public final class ActionContextConstants {
   /**
    * UI_ACTION context key.
    */
-  public static final String UI_ACTION = "UI_ACTION";
+  public static final String UI_ACTION        = "UI_ACTION";
+
+  /**
+   * UI_EVENT context key.
+   */
+  public static final String UI_EVENT         = "UI_EVENT";
 
   private ActionContextConstants() {
     // to prevent this class from being instanciated.

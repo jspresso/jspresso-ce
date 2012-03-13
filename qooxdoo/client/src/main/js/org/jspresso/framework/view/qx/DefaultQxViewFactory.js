@@ -1329,7 +1329,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                   return;
                 }
               }
-              this.__actionHandler.execute(mainAction, content);
+              var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(content);
+              this.__actionHandler.execute(mainAction, actionEvent);
             }
           } else {
             state.setValue(null);

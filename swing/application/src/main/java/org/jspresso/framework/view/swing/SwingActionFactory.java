@@ -143,6 +143,7 @@ public class SwingActionFactory extends
             view, viewConnector, e.getActionCommand(),
             (JComponent) e.getSource());
         actionContext.put(ActionContextConstants.UI_ACTION, this);
+        actionContext.put(ActionContextConstants.UI_EVENT, e);
         actionHandler.execute(action, actionContext);
       }
     }

@@ -32,6 +32,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteEnableme
 import org.jspresso.framework.application.view.ControllerAwareActionFactory;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionEvent;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.util.gui.Dimension;
@@ -175,14 +176,11 @@ public class RemoteActionFactory extends
     /**
      * Triggers the action execution on the action handler.
      * 
-     * @param parameter
-     *          the action parameter.
-     * @param viewStateGuid
-     *          the guid to retrieve the view connector the action is triggred
-     *          on. This is fundamental for the cell editors.
+     * @param actionEvent
+     *          the action event.
      */
     @Override
-    public void actionPerformed(String parameter, String viewStateGuid,
+    public void actionPerformed(RActionEvent actionEvent,
         Map<String, Object> context) {
       if (actionHandler != null) {
         RComponent sourceComponent = null;
@@ -196,15 +194,15 @@ public class RemoteActionFactory extends
           actionContext.putAll(context);
         }
         IValueConnector contextViewConnector;
-        if (viewStateGuid != null) {
+        if (actionEvent.getViewStateGuid() != null) {
           contextViewConnector = (IValueConnector) remotePeerRegistry
-              .getRegistered(viewStateGuid);
+              .getRegistered(actionEvent.getViewStateGuid());
         } else {
           contextViewConnector = viewConnector;
         }
         Map<String, Object> defaultActionContext = createActionContext(
-            actionHandler, view, contextViewConnector, parameter,
-            sourceComponent);
+            actionHandler, view, contextViewConnector,
+            actionEvent.getActionCommand(), sourceComponent);
         actionContext.putAll(defaultActionContext);
         actionContext.put(ActionContextConstants.UI_ACTION, this);
         actionHandler.execute(action, actionContext);

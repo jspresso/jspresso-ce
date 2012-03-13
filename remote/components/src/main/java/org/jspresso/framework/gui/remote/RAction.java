@@ -51,8 +51,8 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RAction</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RAction</code> instance. Only used for serialization
+   * support.
    */
   public RAction() {
     // For serialization support
@@ -61,15 +61,12 @@ public class RAction extends RemotePeer {
   /**
    * Triggers the action execution.
    * 
-   * @param parameter
-   *          the action parameter.
-   * @param viewStateGuid
-   *          the guid to retrieve the view connector the action is triggred on.
-   *          This is fundamental for the cell editors.
+   * @param actionEvent
+   *          the action event.
    * @param context
    *          a pre-initialized context.
    */
-  public void actionPerformed(String parameter, String viewStateGuid,
+  public void actionPerformed(RActionEvent actionEvent,
       Map<String, Object> context) {
     // NO-OP
   }

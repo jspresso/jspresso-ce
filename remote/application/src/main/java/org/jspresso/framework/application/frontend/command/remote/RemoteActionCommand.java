@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import org.jspresso.framework.gui.remote.RActionEvent;
+
 /**
  * A command to trigger a remote action.
  * 
@@ -28,64 +30,24 @@ public class RemoteActionCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -3055572538206728529L;
 
-  private String            parameter;
-  private String            viewStatePermId;
-  private String            viewStateGuid;
+  private RActionEvent      actionEvent;
 
   /**
-   * Gets the parameter.
+   * Gets the actionEvent.
    * 
-   * @return the parameter.
+   * @return the actionEvent.
    */
-  public String getParameter() {
-    return parameter;
+  public RActionEvent getActionEvent() {
+    return actionEvent;
   }
 
   /**
-   * Gets the viewStatePermId.
+   * Sets the actionEvent.
    * 
-   * @return the viewStatePermId.
+   * @param actionEvent
+   *          the actionEvent to set.
    */
-  public String getViewStatePermId() {
-    return viewStatePermId;
-  }
-
-  /**
-   * Gets the viewStateGuid.
-   * 
-   * @return the viewStateGuid.
-   */
-  public String getViewStateGuid() {
-    return viewStateGuid;
-  }
-
-  /**
-   * Sets the parameter.
-   * 
-   * @param parameter
-   *          the parameter to set.
-   */
-  public void setParameter(String parameter) {
-    this.parameter = parameter;
-  }
-
-  /**
-   * Sets the viewStatePermId.
-   * 
-   * @param viewStatePermId
-   *          the viewStatePermId to set.
-   */
-  public void setViewStatePermId(String viewStatePermId) {
-    this.viewStatePermId = viewStatePermId;
-  }
-
-  /**
-   * Sets the viewStateGuid.
-   * 
-   * @param viewStateGuid
-   *          the viewStateGuid to set.
-   */
-  public void setViewStateGuid(String viewStateGuid) {
-    this.viewStateGuid = viewStateGuid;
+  public void setActionEvent(RActionEvent actionEvent) {
+    this.actionEvent = actionEvent;
   }
 }

@@ -68,6 +68,7 @@ import org.jspresso.framework.binding.IFormattedValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.remote.RemoteConnectorFactory;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionEvent;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
@@ -158,8 +159,9 @@ public class DefaultRemoteController extends
   @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<RAction> actions, String title,
-      @SuppressWarnings("unused") RComponent sourceComponent,
-      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+      @SuppressWarnings("unused")
+      RComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
@@ -183,8 +185,9 @@ public class DefaultRemoteController extends
    */
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, @SuppressWarnings("unused") RComponent sourceComponent,
-      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+      String title, @SuppressWarnings("unused")
+      RComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
@@ -316,8 +319,8 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
-      String title, String iconImageUrl, String message) {
+  public void popupInfo(@SuppressWarnings("unused")
+  RComponent sourceComponent, String title, String iconImageUrl, String message) {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -337,10 +340,10 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupOkCancel(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction okAction,
-      IAction cancelAction, Map<String, Object> context) {
+  public void popupOkCancel(@SuppressWarnings("unused")
+  RComponent sourceComponent, String title, String iconImageUrl,
+      String message, IAction okAction, IAction cancelAction,
+      Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -367,9 +370,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNo(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+  public void popupYesNo(@SuppressWarnings("unused")
+  RComponent sourceComponent, String title, String iconImageUrl,
+      String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
     messageCommand.setTitle(title);
@@ -397,9 +400,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNoCancel(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+  public void popupYesNoCancel(@SuppressWarnings("unused")
+  RComponent sourceComponent, String title, String iconImageUrl,
+      String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
     messageCommand.setTitle(title);
@@ -725,8 +728,7 @@ public class DefaultRemoteController extends
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
         columnPrefs[i] = new Object[] {
             ((RemoteTableChangedCommand) command).getColumnIds()[i],
-            ((RemoteTableChangedCommand) command).getColumnWidths()[i]
-        };
+            ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
       }
       getViewFactory()
           .storeTablePreferences(
@@ -794,20 +796,16 @@ public class DefaultRemoteController extends
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
-        String viewStateGuid = null;
-        String viewStatePermId = ((RemoteActionCommand) command)
-            .getViewStatePermId();
+        RActionEvent actionEvent = ((RemoteActionCommand) command)
+            .getActionEvent();
+        String viewStatePermId = actionEvent.getViewStatePermId();
         if (viewStatePermId != null) {
           IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
           if (viewPeer != null) {
-            viewStateGuid = viewPeer.getGuid();
+            actionEvent.setViewStateGuid(viewPeer.getGuid());
           }
         }
-        if (viewStateGuid == null) {
-          viewStateGuid = ((RemoteActionCommand) command).getViewStateGuid();
-        }
-        action.actionPerformed(((RemoteActionCommand) command).getParameter(),
-            viewStateGuid, null);
+        action.actionPerformed(actionEvent, null);
       } else if (command instanceof RemoteSortCommand) {
         RAction sortAction = (RAction) targetPeer;
         Map<String, String> orderingProperties = ((RemoteSortCommand) command)
@@ -835,7 +833,9 @@ public class DefaultRemoteController extends
         if (viewStateGuid == null) {
           viewStateGuid = ((RemoteSortCommand) command).getViewStateGuid();
         }
-        sortAction.actionPerformed(null, viewStateGuid, context);
+        RActionEvent event = new RActionEvent();
+        event.setViewStateGuid(viewStateGuid);
+        sortAction.actionPerformed(event, context);
       } else {
         throw new CommandException("Unsupported command type : "
             + command.getClass().getSimpleName());
@@ -973,7 +973,8 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
+  public void remotePeerAdded(@SuppressWarnings("unused")
+  IRemotePeer peer) {
     // No-op
   }
 
@@ -1043,7 +1044,8 @@ public class DefaultRemoteController extends
   private void completeActionContextWithRequestParameters(
       Map<String, Object> actionContext) {
     HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-    @SuppressWarnings("unchecked") Map<String, Object> requestParams = (Map<String, Object>) session
+    @SuppressWarnings("unchecked")
+    Map<String, Object> requestParams = (Map<String, Object>) session
         .getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
     if (requestParams != null) {
       actionContext.putAll(requestParams);

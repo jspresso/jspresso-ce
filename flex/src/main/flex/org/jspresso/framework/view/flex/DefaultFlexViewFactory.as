@@ -86,6 +86,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionComponent;
+  import org.jspresso.framework.gui.remote.RActionEvent;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
   import org.jspresso.framework.gui.remote.RBorderContainer;
@@ -719,7 +720,9 @@ package org.jspresso.framework.view.flex {
               && ((event as FocusEvent).relatedObject.parent == actionField && (event as FocusEvent).keyCode == 0)) {
               return;
             }
-            _actionHandler.execute(action, inputText);
+            var actionEvent:RActionEvent = new RActionEvent();
+            actionEvent.actionCommand = inputText;
+            _actionHandler.execute(action, actionEvent);
           }
         };
         textInput.addEventListener(FlexEvent.ENTER,triggerAction);
