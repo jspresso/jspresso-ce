@@ -12,19 +12,10 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jspresso.framework.action {
-  import mx.core.UIComponent;
+package org.jspresso.framework.i18n {
   
-  import org.jspresso.framework.gui.remote.RAction;
-  import org.jspresso.framework.gui.remote.RActionEvent;
-  import org.jspresso.framework.i18n.ITranslationProvider;
-  
-  
-  public interface IActionHandler extends ITranslationProvider {
+  public interface ITranslationProvider {
     
-    function execute(action:RAction, actionEvent:RActionEvent=null):void;
-    
-    function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void;
-    
+    function translate(key:String):String;
   }
 }
