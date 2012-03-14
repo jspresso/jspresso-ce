@@ -66,10 +66,8 @@ package org.jspresso.framework.util.array {
                                                  remotePeerRegistry:IRemotePeerRegistry = null):void {
       for(var i:int = 0; i < source.length; i++) {
         var element:Object = cacheCreate(source[i], targetElementFactory);
-        if(!target.contains(element)) {
-          target.addItem(element);
-          attachItemUpdateListener(element, target);
-        }
+        target.addItem(element);
+        attachItemUpdateListener(element, target);
       }
       source.addEventListener(CollectionEvent.COLLECTION_CHANGE,
         function(event:CollectionEvent):void {
@@ -77,10 +75,8 @@ package org.jspresso.framework.util.array {
           if(event.kind == CollectionEventKind.ADD) {
             for each (item in event.items) {
               var addedElement:Object = cacheCreate(item, targetElementFactory);
-              if(!target.contains(element)) {
-                target.addItem(addedElement);
-                attachItemUpdateListener(addedElement, target);
-              }
+              target.addItem(addedElement);
+              attachItemUpdateListener(addedElement, target);
             }
           } else if(event.kind == CollectionEventKind.REMOVE) {
             for each (item in event.items) {

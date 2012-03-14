@@ -36,7 +36,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
-import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
@@ -119,7 +118,7 @@ public class DefaultRemoteController extends
     AbstractFrontendController<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, IRemotePeerRegistry, IRemotePeerRegistryListener {
 
-  private int                    commandLowPriorityOffset;
+  // private int commandLowPriorityOffset;
   private List<RemoteCommand>    commandQueue;
   private List<String>           removedPeersGuids;
   private boolean                commandRegistrationEnabled;
@@ -136,7 +135,7 @@ public class DefaultRemoteController extends
    * Constructs a new <code>DefaultRemoteController</code> instance.
    */
   public DefaultRemoteController() {
-    commandLowPriorityOffset = 0;
+    // commandLowPriorityOffset = 0;
     commandRegistrationEnabled = false;
   }
 
@@ -159,9 +158,8 @@ public class DefaultRemoteController extends
   @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<RAction> actions, String title,
-      @SuppressWarnings("unused")
-      RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+      @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
@@ -185,9 +183,8 @@ public class DefaultRemoteController extends
    */
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, @SuppressWarnings("unused")
-      RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+      String title, @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
@@ -253,7 +250,7 @@ public class DefaultRemoteController extends
     try {
       commandRegistrationEnabled = true;
       commandQueue = new ArrayList<RemoteCommand>();
-      commandLowPriorityOffset = 0;
+      // commandLowPriorityOffset = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
           handleCommand(command);
@@ -319,8 +316,8 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupInfo(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl, String message) {
+  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
+      String title, String iconImageUrl, String message) {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -340,10 +337,10 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupOkCancel(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction okAction, IAction cancelAction,
-      Map<String, Object> context) {
+  public void popupOkCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction okAction,
+      IAction cancelAction, Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -370,9 +367,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNo(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction yesAction, IAction noAction,
+  public void popupYesNo(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
     messageCommand.setTitle(title);
@@ -400,9 +397,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNoCancel(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction yesAction, IAction noAction,
+  public void popupYesNoCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
     messageCommand.setTitle(title);
@@ -476,14 +473,14 @@ public class DefaultRemoteController extends
   @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
-//      if (command instanceof RemoteChildrenCommand) {
-//        // The remote children commands, that may create and register
-//        // remote server peers on client side must be handled first.
-//        commandQueue.add(commandLowPriorityOffset, command);
-//        commandLowPriorityOffset++;
-//      } else {
-        commandQueue.add(command);
-//      }
+      // if (command instanceof RemoteChildrenCommand) {
+      // // The remote children commands, that may create and register
+      // // remote server peers on client side must be handled first.
+      // commandQueue.add(commandLowPriorityOffset, command);
+      // commandLowPriorityOffset++;
+      // } else {
+      commandQueue.add(command);
+      // }
     }
   }
 
@@ -728,7 +725,8 @@ public class DefaultRemoteController extends
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
         columnPrefs[i] = new Object[] {
             ((RemoteTableChangedCommand) command).getColumnIds()[i],
-            ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
+            ((RemoteTableChangedCommand) command).getColumnWidths()[i]
+        };
       }
       getViewFactory()
           .storeTablePreferences(
@@ -973,8 +971,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void remotePeerAdded(@SuppressWarnings("unused")
-  IRemotePeer peer) {
+  public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
     // No-op
   }
 
@@ -1044,8 +1041,7 @@ public class DefaultRemoteController extends
   private void completeActionContextWithRequestParameters(
       Map<String, Object> actionContext) {
     HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-    @SuppressWarnings("unchecked")
-    Map<String, Object> requestParams = (Map<String, Object>) session
+    @SuppressWarnings("unchecked") Map<String, Object> requestParams = (Map<String, Object>) session
         .getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
     if (requestParams != null) {
       actionContext.putAll(requestParams);
