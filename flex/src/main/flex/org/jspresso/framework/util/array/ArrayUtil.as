@@ -13,7 +13,7 @@
  */
 
 package org.jspresso.framework.util.array {
-  import mx.collections.ListCollectionView;
+  import mx.collections.IList;
   import mx.core.ClassFactory;
   import mx.events.CollectionEvent;
   import mx.events.CollectionEventKind;
@@ -60,8 +60,8 @@ package org.jspresso.framework.util.array {
       return -1;
     }
 
-    public static function mirrorCollectionViews(source:ListCollectionView,
-                                                 target:ListCollectionView,
+    public static function mirrorCollectionViews(source:IList,
+                                                 target:IList,
                                                  targetElementFactory:ClassFactory,
                                                  remotePeerRegistry:IRemotePeerRegistry = null):void {
       for(var i:int = 0; i < source.length; i++) {
@@ -104,7 +104,7 @@ package org.jspresso.framework.util.array {
           } else if(event.kind == CollectionEventKind.RESET) {
             // could be finer.
             target.removeAll();
-            for each (item in (event.currentTarget as ListCollectionView).toArray()) {
+            for each (item in (event.currentTarget as IList).toArray()) {
               var resetElement:Object =cacheCreate((item as PropertyChangeEvent).oldValue, targetElementFactory);
               target.addItem(resetElement);
               attachItemUpdateListener(resetElement, target);
@@ -128,7 +128,7 @@ package org.jspresso.framework.util.array {
       return target;
     }
     
-    public static function attachItemUpdateListener(element:Object, collection:ListCollectionView):void {
+    public static function attachItemUpdateListener(element:Object, collection:IList):void {
       var itemUpdated:Function = function(pce:PropertyChangeEvent):void {
         collection.itemUpdated(pce.source, pce.property, pce.oldValue, pce.newValue);
       };

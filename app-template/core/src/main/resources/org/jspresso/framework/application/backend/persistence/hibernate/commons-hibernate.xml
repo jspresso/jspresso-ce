@@ -99,10 +99,12 @@
     <property name="defaultTxFlushMode" value="COMMIT"/>
   </bean>
 
-  <bean id="smartEntityCloneFactory" class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
+  <bean id="smartEntityCloneFactoryBase" class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
     depends-on="componentTuplizerInit">
     <property name="accessorFactory" ref="accessorFactory" />
   </bean>
+  
+  <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase"/>
 
   <bean id="applicationBackController" parent="abstractHibernateBackController" scope="prototype" />
 </beans>
