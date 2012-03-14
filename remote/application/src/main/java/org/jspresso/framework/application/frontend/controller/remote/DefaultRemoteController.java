@@ -476,14 +476,14 @@ public class DefaultRemoteController extends
   @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
-      if (command instanceof RemoteChildrenCommand) {
-        // The remote children commands, that may create and register
-        // remote server peers on client side must be handled first.
-        commandQueue.add(commandLowPriorityOffset, command);
-        commandLowPriorityOffset++;
-      } else {
+//      if (command instanceof RemoteChildrenCommand) {
+//        // The remote children commands, that may create and register
+//        // remote server peers on client side must be handled first.
+//        commandQueue.add(commandLowPriorityOffset, command);
+//        commandLowPriorityOffset++;
+//      } else {
         commandQueue.add(command);
-      }
+//      }
     }
   }
 
