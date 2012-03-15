@@ -381,7 +381,9 @@ public class HibernateBackendController extends AbstractBackendController {
               && owner instanceof IEntity) {
             if (owner != property.getValue() // avoid lazy initialization
                 && ((IEntity) owner).getId().equals(
-                    ((IEntity) property.getValue()).getId())) {
+                    ((IEntity) property.getValue()).getId())
+                // To avoid bug #548
+                && owner.getClass() == property.getValue().getClass()) {
               entity.straightSetProperty(property.getKey(), owner);
             }
           }
@@ -819,8 +821,8 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
+      public List<T> doInTransaction(@SuppressWarnings("unused")
+      TransactionStatus status) {
         Criteria executableCriteria = criteria
             .getExecutableCriteria(getHibernateSession());
         if (firstResult >= 0) {

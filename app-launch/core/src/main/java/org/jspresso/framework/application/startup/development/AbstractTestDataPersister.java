@@ -118,4 +118,22 @@ public abstract class AbstractTestDataPersister {
   protected List<?> findByCriteria(DetachedCriteria criteria) {
     return criteria.getExecutableCriteria(hibernateSession).list();
   }
+
+  /**
+   * Gets the entityFactory.
+   * 
+   * @return the entityFactory.
+   */
+  protected IEntityFactory getEntityFactory() {
+    return entityFactory;
+  }
+
+  /**
+   * Gets the hibernateSession.
+   * 
+   * @return the hibernateSession.
+   */
+  protected Session getHibernateSession() {
+    return hibernateSession;
+  }
 }
