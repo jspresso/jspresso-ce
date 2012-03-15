@@ -12,7 +12,6 @@
   </bean>
 
   <bean id="commonsMessageSource" class="org.jspresso.framework.util.i18n.EnhancedResourceBundleMessageSource">
-    <property name="parentMessageSource" ref="mockMessageSource" />
     <property name="basenames">
       <list>
         <value>org.jspresso.framework.application.i18n.Client</value>

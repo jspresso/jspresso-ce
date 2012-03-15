@@ -66,7 +66,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
   @Override
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
-    return translationProvider.getTranslation(getDescription(), locale);
+    return translationProvider.getTranslation(getDescription(), "", locale);
   }
 
   /**

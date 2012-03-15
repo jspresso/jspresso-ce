@@ -1489,7 +1489,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private void translateWorkspace(Workspace workspace) {
     workspace.setI18nName(getTranslation(workspace.getName(), getLocale()));
-    workspace.setI18nDescription(getTranslation(workspace.getDescription(),
+    workspace.setI18nDescription(getTranslation(workspace.getDescription(), "",
         getLocale()));
     if (workspace.getModules() != null) {
       for (Module module : workspace.getModules()) {

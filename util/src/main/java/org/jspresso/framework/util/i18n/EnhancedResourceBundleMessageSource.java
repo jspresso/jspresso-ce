@@ -37,8 +37,13 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 public class EnhancedResourceBundleMessageSource extends
     ResourceBundleMessageSource {
 
-  private static final char DOT           = '.';
-  private boolean           resolveNested = true;
+  /**
+   * <code>DEFAULT_MARKER</code>.
+   */
+  public static final String DEFAULT_MARKER = "#default#:";
+
+  private static final char  DOT            = '.';
+  private boolean            resolveNested  = true;
 
   /**
    * Sets the resolveNested.
@@ -143,5 +148,28 @@ public class EnhancedResourceBundleMessageSource extends
       dotIndex = codePart.indexOf(DOT);
     }
     return res;
+  }
+
+  /**
+   * Formats any missing message to display.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String renderDefaultMessage(String defaultMessage, Object[] args,
+      Locale locale) {
+    if (defaultMessage != null && defaultMessage.length() == 0) {
+      // Empty default messages are intentional.
+      return defaultMessage;
+    }
+    return super.renderDefaultMessage(defaultMessage, args, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getDefaultMessage(String code) {
+    return DEFAULT_MARKER + code;
   }
 }

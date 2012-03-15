@@ -61,7 +61,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() != null) {
-      return translationProvider.getTranslation(getDescription(), locale);
+      return translationProvider.getTranslation(getDescription(), "", locale);
     }
     return getI18nName(translationProvider, locale);
   }
@@ -98,7 +98,8 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   @Override
   public IWizardStepDescriptor getNextStepDescriptor(
-      @SuppressWarnings("unused") Map<String, Object> context) {
+      @SuppressWarnings("unused")
+      Map<String, Object> context) {
     return nextStepDescriptor;
   }
 
@@ -137,7 +138,8 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   @Override
   public IWizardStepDescriptor getPreviousStepDescriptor(
-      @SuppressWarnings("unused") Map<String, Object> context) {
+      @SuppressWarnings("unused")
+      Map<String, Object> context) {
     return previousStepDescriptor;
   }
 

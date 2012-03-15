@@ -137,7 +137,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() != null) {
-      return translationProvider.getTranslation(getDescription(), locale);
+      return translationProvider.getTranslation(getDescription(), "", locale);
     }
     return getI18nName(translationProvider, locale);
   }

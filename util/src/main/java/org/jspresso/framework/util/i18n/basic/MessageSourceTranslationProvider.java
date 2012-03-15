@@ -21,6 +21,9 @@ package org.jspresso.framework.util.i18n.basic;
 import java.util.Locale;
 
 import org.jspresso.framework.util.i18n.AbstractTranslationProvider;
+import org.jspresso.framework.util.i18n.EnhancedResourceBundleMessageSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 /**
@@ -33,7 +36,10 @@ import org.springframework.context.MessageSource;
 public class MessageSourceTranslationProvider extends
     AbstractTranslationProvider {
 
-  private MessageSource messageSource;
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(MessageSourceTranslationProvider.class);
+
+  private MessageSource       messageSource;
 
   /**
    * {@inheritDoc}
@@ -44,7 +50,27 @@ public class MessageSourceTranslationProvider extends
     if (key == null || key.length() == 0) {
       return "";
     }
-    return messageSource.getMessage(key, args, defaultMessage, locale);
+    String translation = messageSource.getMessage(key, args, defaultMessage,
+        locale);
+    if (translation != null
+        && translation
+            .startsWith(EnhancedResourceBundleMessageSource.DEFAULT_MARKER)) {
+      if (LOG.isWarnEnabled()) {
+        LOG.warn(key + "=/*TO_REPLACE*/");
+      }
+      StringBuffer message = new StringBuffer("[" + locale.getLanguage() + ":"
+          + key + "]");
+      if (args != null && args.length > 0) {
+        message.append(" { ");
+        for (Object arg : args) {
+          message.append(String.valueOf(arg));
+          message.append(" ");
+        }
+        message.append("}");
+      }
+      return message.toString();
+    }
+    return translation;
   }
 
   /**

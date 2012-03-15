@@ -20,8 +20,6 @@ package org.jspresso.framework.util.i18n.mock;
 
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 
@@ -32,9 +30,6 @@ import org.springframework.context.MessageSourceResolvable;
  * @author Vincent Vandenschrick
  */
 public class MockMessageSource implements MessageSource {
-
-  private static final Logger LOG = LoggerFactory
-                                      .getLogger(MockMessageSource.class);
 
   /**
    * {@inheritDoc}
@@ -61,9 +56,6 @@ public class MockMessageSource implements MessageSource {
       Locale locale) {
     if (defaultMessage != null) {
       return defaultMessage;
-    }
-    if (LOG.isWarnEnabled()) {
-      LOG.warn(key + "=/*TO_REPLACE*/");
     }
     StringBuffer message = new StringBuffer("[" + locale.getLanguage() + ":"
         + key + "]");
