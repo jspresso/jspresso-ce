@@ -649,6 +649,9 @@ public class HibernateBackendController extends AbstractBackendController {
   @SuppressWarnings("unchecked")
   private void lockInHibernateInDepth(IComponent component,
       Session hibernateSession, Set<IEntity> alreadyLocked) {
+    if (component == null) {
+      return;
+    }
     boolean isEntity = component instanceof IEntity;
     if (!isEntity || alreadyLocked.add((IEntity) component)) {
       if (isEntity) {

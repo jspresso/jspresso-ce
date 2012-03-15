@@ -515,7 +515,8 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
+  public boolean isInitialized(@SuppressWarnings("unused")
+  Object objectOrProxy) {
     return true;
   }
 
@@ -1023,12 +1024,16 @@ public abstract class AbstractBackendController extends AbstractController
               .getValue());
           for (IComponent collectionElement : (Collection<IComponent>) property
               .getValue()) {
-            if (collectionElement instanceof IEntity) {
-              uowCollection.add(cloneInUnitOfWork((IEntity) collectionElement,
-                  alreadyCloned));
+            if (collectionElement != null) {
+              if (collectionElement instanceof IEntity) {
+                uowCollection.add(cloneInUnitOfWork(
+                    (IEntity) collectionElement, alreadyCloned));
+              } else {
+                uowCollection.add(cloneComponentInUnitOfWork(collectionElement,
+                    alreadyCloned));
+              }
             } else {
-              uowCollection.add(cloneComponentInUnitOfWork(collectionElement,
-                  alreadyCloned));
+              uowCollection.add(null);
             }
           }
           if (!propertyDescriptor.isComputed()) {
@@ -1563,8 +1568,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-        /* getName(), */getApplicationSession().getPrincipal().getName()
-      });
+      /* getName(), */getApplicationSession().getPrincipal().getName()});
     }
 
   }

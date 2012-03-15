@@ -64,6 +64,8 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the core implementation of all components in the application.
@@ -75,6 +77,9 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
+
+  private static final Logger     LOG = LoggerFactory
+                                        .getLogger(AbstractComponentInvocationHandler.class);
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
@@ -373,39 +378,52 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
-    Object property = straightGetProperty(proxy, propertyDescriptor.getName());
-    if (property == null) {
-      property = collectionFactory.createComponentCollection(propertyDescriptor
-          .getReferencedDescriptor().getCollectionInterface());
-      storeProperty(propertyDescriptor.getName(), property);
-    }
-    if (property instanceof List) {
-      List<IComponent> propertyAsList = (List<IComponent>) property;
-      for (int i = 0; i < propertyAsList.size(); i++) {
-        IComponent referent = propertyAsList.get(i);
-        IComponent decorated = decorateReferent(referent, propertyDescriptor
-            .getReferencedDescriptor().getElementDescriptor()
-            .getComponentDescriptor());
-        if (decorated != referent) {
-          propertyAsList.set(i, decorated);
+    try {
+      Object property = straightGetProperty(proxy, propertyDescriptor.getName());
+      if (property == null) {
+        property = collectionFactory
+            .createComponentCollection(propertyDescriptor
+                .getReferencedDescriptor().getCollectionInterface());
+        storeProperty(propertyDescriptor.getName(), property);
+      }
+      if (property instanceof List) {
+        List<IComponent> propertyAsList = (List<IComponent>) property;
+        for (int i = 0; i < propertyAsList.size(); i++) {
+          IComponent referent = propertyAsList.get(i);
+          IComponent decorated = decorateReferent(referent, propertyDescriptor
+              .getReferencedDescriptor().getElementDescriptor()
+              .getComponentDescriptor());
+          if (decorated != referent) {
+            propertyAsList.set(i, decorated);
+          }
+          if (referent == null) {
+            LOG.warn(
+                "A null element was detected in [{}] indexed list on {} at index "
+                    + i + ".", propertyDescriptor.getName(), proxy);
+            LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
+          }
+        }
+      } else if (property instanceof Set) {
+        Set<IComponent> propertyAsSet = (Set<IComponent>) property;
+        for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
+          IComponent decorated = decorateReferent(referent, propertyDescriptor
+              .getReferencedDescriptor().getElementDescriptor()
+              .getComponentDescriptor());
+          if (decorated != referent) {
+            propertyAsSet.add(decorated);
+          }
         }
       }
-    } else if (property instanceof Set) {
-      Set<IComponent> propertyAsSet = (Set<IComponent>) property;
-      for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
-        IComponent decorated = decorateReferent(referent, propertyDescriptor
-            .getReferencedDescriptor().getElementDescriptor()
-            .getComponentDescriptor());
-        if (decorated != referent) {
-          propertyAsSet.add(decorated);
-        }
+      if (isCollectionSortOnReadEnabled()) {
+        inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
+            propertyDescriptor.getName());
       }
+      return property;
+    } catch (RuntimeException re) {
+      LOG.error("Error when retrieving [{}] collection property on {}",
+          propertyDescriptor.getName(), proxy);
+      throw (re);
     }
-    if (isCollectionSortOnReadEnabled()) {
-      inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
-          propertyDescriptor.getName());
-    }
-    return property;
   }
 
   /**
@@ -765,14 +783,13 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(
-            Thread.currentThread().getContextClassLoader(),
-            new Class[] {
-              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                  .getReferencedDescriptor().getCollectionInterface()
-            },
-            new NeverEqualsInvocationHandler(CollectionHelper
-                .cloneCollection((Collection<?>) currentPropertyValue)));
+        currentPropertyValue = Proxy
+            .newProxyInstance(
+                Thread.currentThread().getContextClassLoader(),
+                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .getReferencedDescriptor().getCollectionInterface()},
+                new NeverEqualsInvocationHandler(CollectionHelper
+                    .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
@@ -1455,8 +1472,8 @@ public abstract class AbstractComponentInvocationHandler implements
      * {@inheritDoc}
      */
     @Override
-    public Object invoke(@SuppressWarnings("unused") Object proxy,
-        Method method, Object[] args) throws Throwable {
+    public Object invoke(@SuppressWarnings("unused")
+    Object proxy, Method method, Object[] args) throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
         return new Boolean(false);
       }
