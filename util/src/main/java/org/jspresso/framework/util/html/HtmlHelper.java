@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.html;
 
+import java.io.StringWriter;
+
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -57,17 +59,69 @@ public final class HtmlHelper {
   }
 
   /**
-   * Escapes special characters for HTML.
+   * Escapes special characters for HTML. Does not escape spaces. If you need
+   * to, you must use {@link #escapeForHTML(String, boolean)} with
+   * <code>escapeSpaces=true</code>.
    * 
-   * @param aText
-   *          the test to escape.
+   * @param text
+   *          the text to escape.
    * @return the ecaped HTML text.
    */
-  public static String escapeForHTML(String aText) {
-    if (aText == null) {
+  public static String escapeForHTML(String text) {
+    return escapeForHTML(text, false);
+  }
+
+  /**
+   * Escapes special characters for HTML.
+   * 
+   * @param text
+   *          the text to escape.
+   * @param escapeSpaces
+   *          should we also escape spaces using &'nbsp'; entity ?
+   * @return the ecaped HTML text.
+   */
+  public static String escapeForHTML(String text, boolean escapeSpaces) {
+    if (text == null) {
       return null;
     }
-    return StringEscapeUtils.escapeHtml(aText);
+    // use apache lib to escape...
+    // this librairie doesn't escape spaces (see workaround bellow)
+    String str = StringEscapeUtils.escapeHtml(text);
+
+    if (escapeSpaces) {
+      // Workaround : we have also to escape spaces...
+      StringWriter writer = new StringWriter((int) (str.length() * 1.5));
+      boolean spaces = false;
+      int len = str.length();
+      for (int i = 0; i < len; i++) {
+        char c = str.charAt(i);
+
+        if (c != ' ') {
+          writer.write(c);
+          spaces = false;
+        } else {
+          // space or spaces...
+          if (i == 0) {
+            // start with space
+            spaces = true;
+          } else if (i == len - 1) {
+            // ends with space
+            spaces = true;
+          } else if (i < len - 1 && str.charAt(i + 1) == ' ') {
+            // two or more spaces
+            spaces = true;
+          }
+
+          if (spaces) {
+            writer.write("&nbsp;");
+          } else {
+            writer.write(' ');
+          }
+        }
+      }
+      str = writer.toString();
+    }
+    return str;
   }
 
   /**
