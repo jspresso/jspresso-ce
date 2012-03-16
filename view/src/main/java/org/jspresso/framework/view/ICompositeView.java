@@ -20,8 +20,6 @@ package org.jspresso.framework.view;
 
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
-
 /**
  * This interface establishes the general contract of a composite view which has
  * child views.
@@ -39,11 +37,4 @@ public interface ICompositeView<E> extends IView<E> {
    */
   List<IView<E>> getChildren();
 
-  /**
-   * Refines the view descriptor to composite.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  ICompositeViewDescriptor getDescriptor();
 }

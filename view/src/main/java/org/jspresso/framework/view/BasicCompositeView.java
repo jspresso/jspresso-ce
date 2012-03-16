@@ -20,8 +20,6 @@ package org.jspresso.framework.view;
 
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
-
 /**
  * Basic composite view.
  * 
@@ -51,14 +49,6 @@ public class BasicCompositeView<E> extends BasicView<E> implements
   @Override
   public List<IView<E>> getChildren() {
     return children;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ICompositeViewDescriptor getDescriptor() {
-    return (ICompositeViewDescriptor) super.getDescriptor();
   }
 
   /**

@@ -18,42 +18,46 @@
  */
 package org.jspresso.framework.binding.swing;
 
-import chrriis.dj.swingsuite.JTriStateCheckBox;
-import chrriis.dj.swingsuite.JTriStateCheckBox.CheckState;
+import javax.swing.JRadioButton;
 
 /**
- * JTriStateCheckox connector.
+ * JRadioButton connector.
  * 
- * @version $LastChangedRevision: 2529 $
+ * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
-public class JTriStateCheckBoxConnector extends
-    JToggleButtonConnector<JTriStateCheckBox> {
+public class JRadioButtonConnector extends JToggleButtonConnector<JRadioButton> {
+
+  private String checkedValue;
 
   /**
-   * Constructs a new <code>JTriStateCheckBoxConnector</code> instance.
+   * Constructs a new <code>JRadioButtonConnector</code> instance.
    * 
    * @param id
    *          the id of the connector.
-   * @param triStateCheckBox
-   *          the connected JTriStateCheckBox.
+   * @param radioButton
+   *          the connected JRadioButton.
+   * @param checkedValue
+   *          the value to set to the connector when the radio button is
+   *          checked.
    */
-  public JTriStateCheckBoxConnector(String id,
-      JTriStateCheckBox triStateCheckBox) {
-    super(id, triStateCheckBox);
+  public JRadioButtonConnector(String id, JRadioButton radioButton,
+      String checkedValue) {
+    super(id, radioButton);
+    this.checkedValue = checkedValue;
   }
 
   /**
-   * Returns a <code>Boolean</code> object mapping the state of the button.
+   * Returns a <code>String</code> object mapping the state of the button.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected Object getConnecteeValue() {
-    if (getConnectedJComponent().getState() == CheckState.INDETERMINATE) {
-      return null;
+    if (getConnectedJComponent().isSelected()) {
+      return checkedValue;
     }
-    return new Boolean(getConnectedJComponent().isSelected());
+    return null;
   }
 
   /**
@@ -63,10 +67,10 @@ public class JTriStateCheckBoxConnector extends
    */
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
-    if (aValue == null) {
-      getConnectedJComponent().setState(CheckState.INDETERMINATE);
+    if (checkedValue.equals(aValue)) {
+      getConnectedJComponent().setSelected(true);
     } else {
-      getConnectedJComponent().setSelected(((Boolean) aValue).booleanValue());
+      getConnectedJComponent().setSelected(false);
     }
   }
 }

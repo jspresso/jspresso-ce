@@ -627,8 +627,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the composite view to bind.
    */
   protected void bindCompositeView(ICompositeView<E> view) {
-    if (view != null) {
-      ICompositeViewDescriptor viewDescriptor = view.getDescriptor();
+    if (view != null
+        && view.getDescriptor() instanceof ICompositeViewDescriptor) {
+      ICompositeViewDescriptor viewDescriptor = (ICompositeViewDescriptor) view
+          .getDescriptor();
       if (viewDescriptor.isCascadingModels()) {
         IView<E> masterView = view.getChildren().get(0);
         IValueConnector viewConnector;

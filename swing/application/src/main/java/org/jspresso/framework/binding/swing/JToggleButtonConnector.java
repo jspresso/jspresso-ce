@@ -28,18 +28,21 @@ import javax.swing.JToggleButton;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual toggle button class.
  */
-public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
+public class JToggleButtonConnector<E extends JToggleButton> extends
+    JComponentConnector<E> {
 
   /**
    * Constructs a new <code>JToggleButtonConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param toggleButton
-   *            the connected JToggleButton.
+   *          the connected JToggleButton.
    */
-  public JToggleButtonConnector(String id, JToggleButton toggleButton) {
+  public JToggleButtonConnector(String id, E toggleButton) {
     super(id, toggleButton);
   }
 

@@ -35,11 +35,12 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   private Set<String> allowedValues;
   private Set<String> forbiddenValues;
+  private boolean     radio;
 
   /**
    * Returns an optional forbidden set of values to restrict the model ones.
-   * Only values belonging to the allowed ones should actually be made
-   * available as a choice.
+   * Only values belonging to the allowed ones should actually be made available
+   * as a choice.
    * 
    * @param allowedValues
    *          the allowedValues to set.
@@ -78,6 +79,27 @@ public class BasicEnumerationPropertyViewDescriptor extends
   @Override
   public Set<String> getForbiddenValues() {
     return forbiddenValues;
+  }
+
+  /**
+   * Gets the radio.
+   * 
+   * @return the radio.
+   */
+  @Override
+  public boolean isRadio() {
+    return radio;
+  }
+
+  /**
+   * Configures the rendering of the enumeration property as radio buttons if
+   * supported instead of combobox. Default value is <code>false</code>.
+   * 
+   * @param radio
+   *          the radio to set.
+   */
+  public void setRadio(boolean radio) {
+    this.radio = radio;
   }
 
 }

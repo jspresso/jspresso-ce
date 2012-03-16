@@ -40,12 +40,20 @@ public interface IEnumerationPropertyViewDescriptor extends
   Set<String> getAllowedValues();
 
   /**
-   * Returns an optional forbidden set of values to restrict the model ones. Only
-   * values not belonging to the forbidden ones should actually be made available as a
-   * choice.
+   * Returns an optional forbidden set of values to restrict the model ones.
+   * Only values not belonging to the forbidden ones should actually be made
+   * available as a choice.
    * 
    * @return an optional forbidden set of values to restrict the model ones.
    */
   Set<String> getForbiddenValues();
+
+  /**
+   * Should values be rendered separately using radio buttons.
+   * 
+   * @return <code>true</code> if values should be rendered separately using
+   *         radio buttons.
+   */
+  boolean isRadio();
 
 }

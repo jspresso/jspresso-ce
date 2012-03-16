@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -60,6 +61,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -122,6 +124,7 @@ import org.jspresso.framework.binding.swing.JImageConnector;
 import org.jspresso.framework.binding.swing.JLabelConnector;
 import org.jspresso.framework.binding.swing.JPasswordFieldConnector;
 import org.jspresso.framework.binding.swing.JPercentFieldConnector;
+import org.jspresso.framework.binding.swing.JRadioButtonConnector;
 import org.jspresso.framework.binding.swing.JReferenceFieldConnector;
 import org.jspresso.framework.binding.swing.JTextAreaConnector;
 import org.jspresso.framework.binding.swing.JTextFieldConnector;
@@ -188,6 +191,7 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
@@ -372,8 +376,8 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     if (propertyDescriptor.isMandatory()) {
       viewComponent = createJCheckBox(propertyViewDescriptor);
-      connector = new JToggleButtonConnector(propertyDescriptor.getName(),
-          (JCheckBox) viewComponent);
+      connector = new JToggleButtonConnector<JCheckBox>(
+          propertyDescriptor.getName(), (JCheckBox) viewComponent);
     } else {
       viewComponent = createJTriStateCheckBox(propertyViewDescriptor);
       connector = new JTriStateCheckBoxConnector(propertyDescriptor.getName(),
@@ -541,7 +545,8 @@ public class DefaultSwingViewFactory extends
       if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
       }
-      connector.addChildConnector(propertyName, propertyView.getConnector());
+      connector.addChildConnector(propertyView.getConnector().getId(),
+          propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
       // ...
@@ -868,53 +873,93 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     final IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IValueConnector connector;
-    final JComponent viewComponent;
+    IView<JComponent> view;
     if (propertyViewDescriptor.isReadOnly()) {
       IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
           actionHandler, locale);
+      final JLabel viewComponent;
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(),
-          (JLabel) viewComponent);
+      IValueConnector connector = new JLabelConnector(
+          propertyDescriptor.getName(), viewComponent);
       connector.addValueChangeListener(new IValueChangeListener() {
 
         @Override
         public void valueChange(ValueChangeEvent evt) {
-          ((JLabel) viewComponent).setIcon(getIconFactory().getIcon(
+          viewComponent.setIcon(getIconFactory().getIcon(
               propertyDescriptor.getIconImageURL(String.valueOf(evt
                   .getNewValue())), getIconFactory().getTinyIconSize()));
         }
       });
       ((JLabelConnector) connector).setFormatter(formatter);
+      connector.setExceptionHandler(actionHandler);
+      view = constructView(viewComponent, propertyViewDescriptor, connector);
     } else {
-      viewComponent = createJComboBox(propertyViewDescriptor);
-      if (!propertyDescriptor.isMandatory()) {
-        ((JComboBox) viewComponent).addItem(null);
-      }
       List<String> enumerationValues = new ArrayList<String>(
           propertyDescriptor.getEnumerationValues());
       filterEnumerationValues(enumerationValues, propertyViewDescriptor);
-      for (Object enumElement : enumerationValues) {
-        ((JComboBox) viewComponent).addItem(enumElement);
+      if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+              .isRadio()) {
+        IRenderableCompositeValueConnector connector = getConnectorFactory()
+            .createCompositeValueConnector(
+                ModelRefPropertyConnector.THIS_PROPERTY,
+                propertyDescriptor.getName());
+        JPanel viewComponent = createJPanel();
+        viewComponent.setLayout(new FlowLayout());
+        List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+        for (String enumElement : enumerationValues) {
+          JRadioButton subViewComponent = new JRadioButton();
+          subViewComponent.setText(actionHandler.getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  enumElement), locale));
+          JRadioButtonConnector subConnector = new JRadioButtonConnector(
+              propertyDescriptor.getName(), subViewComponent, enumElement);
+          adjustSizes(
+              propertyViewDescriptor,
+              subViewComponent,
+              null,
+              getEnumerationTemplateValue(propertyDescriptor, actionHandler,
+                  locale),
+              Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
+          viewComponent.add(subViewComponent);
+          subConnector.setExceptionHandler(actionHandler);
+          IView<JComponent> subView = constructView(subViewComponent,
+              propertyViewDescriptor, subConnector);
+          connector.addChildConnector(subConnector);
+          childrenViews.add(subView);
+        }
+        view = constructCompositeView(viewComponent, propertyViewDescriptor);
+        ((BasicCompositeView<JComponent>) view).setChildren(childrenViews);
+        connector.setExceptionHandler(actionHandler);
+        view.setConnector(connector);
+      } else {
+        JComboBox viewComponent = createJComboBox(propertyViewDescriptor);
+        if (!propertyDescriptor.isMandatory()) {
+          viewComponent.addItem(null);
+        }
+        for (Object enumElement : enumerationValues) {
+          viewComponent.addItem(enumElement);
+        }
+        viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
+            propertyDescriptor, actionHandler, locale));
+        adjustSizes(
+            propertyViewDescriptor,
+            viewComponent,
+            null,
+            getEnumerationTemplateValue(propertyDescriptor, actionHandler,
+                locale),
+            Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
+        IValueConnector connector = new JComboBoxConnector(
+            propertyDescriptor.getName(), viewComponent);
+        connector.setExceptionHandler(actionHandler);
+        view = constructView(viewComponent, propertyViewDescriptor, connector);
       }
-      ((JComboBox) viewComponent)
-          .setRenderer(new TranslatedEnumerationListCellRenderer(
-              propertyDescriptor, actionHandler, locale));
-      adjustSizes(
-          propertyViewDescriptor,
-          viewComponent,
-          null,
-          getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale),
-          Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
-      connector = new JComboBoxConnector(propertyDescriptor.getName(),
-          ((JComboBox) viewComponent));
     }
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return view;
   }
 
   /**
@@ -1107,6 +1152,18 @@ public class DefaultSwingViewFactory extends
    */
   protected JCheckBox createJCheckBox(IPropertyViewDescriptor viewDescriptor) {
     return new JCheckBox();
+  }
+
+  /**
+   * Creates a radio button.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @return the created radio button.
+   */
+  protected JRadioButton createJRadioButton(
+      IPropertyViewDescriptor viewDescriptor) {
+    return new JRadioButton();
   }
 
   /**
