@@ -116,6 +116,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           component = this._createCheckBox(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
           component = this._createComboBox(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RRadioBox) {
+          component = this._createRadioBox(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RColorField) {
           component = this._createColorField(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RContainer) {
@@ -1157,6 +1159,46 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             false);
         return comboBox;
       }
+    },
+
+    /**
+     * @param {org.jspresso.framework.gui.remote.RRadioBox}
+     *            remoteRadioBox
+     * @return {qx.ui.core.Widget}
+     */
+    _createRadioBox : function(remoteRadioBox) {
+      var radioBox = new qx.ui.form.RadioButtonGroup();
+      if (remoteRadioBox.getOrientation() == "HORIZONTAL") {
+        radioBox.setLayout(new qx.ui.layout.HBox(4))
+      } else {
+        radioBox.setLayout(new qx.ui.layout.VBox(4));
+      }
+      radioBox.setAllowStretchY(false, false);
+      for (var i = 0; i < remoteRadioBox.getValues().length; i++) {
+        var rb = new qx.ui.form.RadioButton(remoteRadioBox.getTranslations()[i]);
+        rb.setModel(remoteRadioBox.getValues()[i]);
+        radioBox.add(rb);
+      }
+
+      var state = remoteRadioBox.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(radioBox, "modelSelection", "value",
+          false, {
+            converter : function(modelValue, model) {
+              return [modelValue];
+            }
+          });
+      radioBox.getModelSelection().addListener("change", function(e) {
+            var modelSelection = e.getTarget();
+            if (modelSelection.length > 0) {
+              state.setValue(modelSelection.getItem(0));
+            } else {
+              state.setValue(null);
+            }
+          });
+      modelController.addTarget(radioBox, "enabled", "writable",
+          false);
+      return radioBox;
     },
 
     _createDateComponent : function(remoteDateField) {
