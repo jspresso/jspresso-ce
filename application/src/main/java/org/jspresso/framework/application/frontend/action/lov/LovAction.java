@@ -80,17 +80,20 @@ import org.slf4j.LoggerFactory;
  */
 public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private static final Logger                        LOG                   = LoggerFactory
-                                                                               .getLogger(LovAction.class);
+  private static final Logger                        LOG                      = LoggerFactory
+                                                                                  .getLogger(LovAction.class);
 
   /**
    * <code>LOV_PRESELECTED_ITEM</code>.
    */
-  public static final String                         LOV_PRESELECTED_ITEM  = "LOV_PRESELECTED_ITEM";
+  public static final String                         LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
   /**
    * <code>LOV_SELECTED_ITEM</code>.
    */
-  public static final String                         LOV_SELECTED_ITEM     = "LOV_SELECTED_ITEM";
+  public static final String                         LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
+  private static final String                        NON_LOV_TRIGGERING_CHARS = "%;"
+                                                                                  + IQueryComponent.NOT_VAL
+                                                                                  + IQueryComponent.NULL_VAL;
   private boolean                                    autoquery;
   private IDisplayableAction                         cancelAction;
   private CreateQueryComponentAction                 createQueryComponentAction;
@@ -100,9 +103,6 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private Map<String, Object>                        initializationMapping;
   private ILovViewDescriptorFactory                  lovViewDescriptorFactory;
   private IDisplayableAction                         okAction;
-  private String                                     nonLovTriggeringChars = "%;"
-                                                                               + IQueryComponent.NOT_VAL
-                                                                               + IQueryComponent.NULL_VAL;
   private IAction                                    pagingAction;
 
   /**
@@ -161,7 +161,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, ESort> lovOrderingProperties = new LinkedHashMap<String, ESort>();
       autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector)
           .getRenderingConnector().getModelDescriptor().getName();
-      lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
+      if (autoCompletePropertyValue != null
+          && autoCompletePropertyValue.length() > 0
+          && !autoCompletePropertyValue.equals("*")
+          && !containsNonLovTriggeringChar(autoCompletePropertyValue)) {
+        // only modify sort ordering if we are in auto complete mode
+        // see bug #549
+        lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
+      }
       Map<String, ESort> legacyOrderingProperties = queryComponent
           .getOrderingProperties();
       if (legacyOrderingProperties != null) {
@@ -169,26 +176,20 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       }
       queryComponent.setOrderingProperties(lovOrderingProperties);
       if (getModel(context) instanceof IQueryComponent) {
-        if (nonLovTriggeringChars != null) {
-          for (int i = 0; i < nonLovTriggeringChars.length(); i++) {
-            if (autoCompletePropertyValue != null
-                && autoCompletePropertyValue.indexOf(nonLovTriggeringChars
-                    .charAt(i)) >= 0) {
-              // This is important since the typed in value (queryPropertyValue)
-              // is only passed as
-              // action parameter. We want to preserve it in the UI.
-              Object connectorValue = viewConnector.getConnectorValue();
-              if (connectorValue instanceof IQueryComponent) {
-                ((IQueryComponent) connectorValue).putAll(queryComponent);
-              } else {
-                viewConnector.setConnectorValue(queryComponent);
-              }
-              ((IRenderableCompositeValueConnector) viewConnector)
-                  .getRenderingConnector().setConnectorValue(
-                      autoCompletePropertyValue);
-              return true;
-            }
+        if (containsNonLovTriggeringChar(autoCompletePropertyValue)) {
+          // This is important since the typed in value (queryPropertyValue)
+          // is only passed as
+          // action parameter. We want to preserve it in the UI.
+          Object connectorValue = viewConnector.getConnectorValue();
+          if (connectorValue instanceof IQueryComponent) {
+            ((IQueryComponent) connectorValue).putAll(queryComponent);
+          } else {
+            viewConnector.setConnectorValue(queryComponent);
           }
+          ((IRenderableCompositeValueConnector) viewConnector)
+              .getRenderingConnector().setConnectorValue(
+                  autoCompletePropertyValue);
+          return true;
         }
       }
     }
@@ -294,6 +295,17 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           paginationListener);
     }
     return super.execute(actionHandler, context);
+  }
+
+  private static boolean containsNonLovTriggeringChar(String value) {
+    if (value != null) {
+      for (int i = 0; i < NON_LOV_TRIGGERING_CHARS.length(); i++) {
+        if (value.indexOf(NON_LOV_TRIGGERING_CHARS.charAt(i)) >= 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
