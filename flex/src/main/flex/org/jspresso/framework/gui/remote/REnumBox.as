@@ -12,23 +12,33 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RComboBox",
-{
-  extend : org.jspresso.framework.gui.remote.REnumBox,
-  
-  construct : function() {
-    this.base(arguments);
-  },
 
-  properties :
-  {
-    icons :
-    {
-      check : "Array"
-    },
-    readOnly :
-    {
-      check : "Boolean"
+package org.jspresso.framework.gui.remote {
+
+		
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.REnumBox")]
+    public class REnumBox extends RComponent {
+
+        private var _translations:Array;
+        private var _values:Array;
+
+        public function REnumBox() {
+          //default constructor.
+        }
+
+        public function set translations(value:Array):void {
+            _translations = value;
+        }
+        public function get translations():Array {
+            return _translations;
+        }
+
+        public function set values(value:Array):void {
+            _values = value;
+        }
+        public function get values():Array {
+            return _values;
+        }
+
     }
-  }
-});
+}

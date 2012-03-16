@@ -55,6 +55,7 @@
     <classEntry path="org.jspresso.framework.gui.remote.RDecimalComponent"/>
     <classEntry path="org.jspresso.framework.gui.remote.RDecimalField"/>
     <classEntry path="org.jspresso.framework.gui.remote.RDurationField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.REnumBox"/>
     <classEntry path="org.jspresso.framework.gui.remote.REvenGridContainer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RForm"/>
     <classEntry path="org.jspresso.framework.gui.remote.RHtmlArea"/>
@@ -67,6 +68,7 @@
     <classEntry path="org.jspresso.framework.gui.remote.RNumericComponent"/>
     <classEntry path="org.jspresso.framework.gui.remote.RPasswordField"/>
     <classEntry path="org.jspresso.framework.gui.remote.RPercentField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RRadioBox"/>
     <classEntry path="org.jspresso.framework.gui.remote.RSecurityComponent"/>
     <classEntry path="org.jspresso.framework.gui.remote.RSplitContainer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RTabContainer"/>

@@ -28,6 +28,7 @@ package org.jspresso.framework.view.flex {
   import mx.collections.ICollectionView;
   import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
+  import mx.containers.Box;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
   import mx.containers.DividedBox;
@@ -49,6 +50,8 @@ package org.jspresso.framework.view.flex {
   import mx.controls.List;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
+  import mx.controls.RadioButton;
+  import mx.controls.RadioButtonGroup;
   import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
@@ -67,6 +70,7 @@ package org.jspresso.framework.view.flex {
   import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
   import mx.events.IndexChangedEvent;
+  import mx.events.ItemClickEvent;
   import mx.events.ListEvent;
   import mx.events.MenuEvent;
   import mx.formatters.Formatter;
@@ -113,6 +117,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RNumericComponent;
   import org.jspresso.framework.gui.remote.RPasswordField;
   import org.jspresso.framework.gui.remote.RPercentField;
+  import org.jspresso.framework.gui.remote.RRadioBox;
   import org.jspresso.framework.gui.remote.RSecurityComponent;
   import org.jspresso.framework.gui.remote.RSplitContainer;
   import org.jspresso.framework.gui.remote.RTabContainer;
@@ -193,6 +198,8 @@ package org.jspresso.framework.view.flex {
           component = createCheckBox(remoteComponent as RCheckBox);
         } else if(remoteComponent is RComboBox) {
           component = createComboBox(remoteComponent as RComboBox);
+        } else if(remoteComponent is RRadioBox) {
+          component = createRadioBox(remoteComponent as RRadioBox);
         } else if(remoteComponent is RColorField) {
           component = createColorField(remoteComponent as RColorField);
         } else if(remoteComponent is RContainer) {
@@ -857,6 +864,40 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value", true);
       BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem", true);
       BindingUtils.bindProperty(comboBox, "enabled", remoteComboBox.state, "writable");
+    }
+
+    protected function createRadioBox(remoteRadioBox:RRadioBox):UIComponent {
+      var radioBox:Box = new Box();
+      if(remoteRadioBox.orientation == "HORIZONTAL") {
+        radioBox.direction = BoxDirection.HORIZONTAL;
+      } else {
+        radioBox.direction = BoxDirection.VERTICAL;
+      }
+      var radioGroup:RadioButtonGroup = new RadioButtonGroup();
+      for(var i:int = 0; i < remoteRadioBox.values.length; i++) {
+        var rb:RadioButton = createRadioButtonComponent();
+        rb.value = remoteRadioBox.values[i];
+        rb.label = remoteRadioBox.translations[i];
+        rb.group = radioGroup;
+        sizeMaxComponentWidth(rb, remoteRadioBox, rb.label.length + 5);
+        radioBox.addChild(rb);
+      }
+      bindRadioGroup(radioGroup, remoteRadioBox);
+      return radioBox;
+    }
+
+    public function createRadioButtonComponent():RadioButton {
+      return new RadioButton();
+    }
+
+    protected function bindRadioGroup(radioGroup:RadioButtonGroup, remoteRadioBox:RRadioBox):void {
+      var remoteState:RemoteValueState = remoteRadioBox.state;
+      var values:Array = remoteRadioBox.values;
+      radioGroup.addEventListener(ItemClickEvent.ITEM_CLICK, function(event:ItemClickEvent):void {
+        remoteState.value = (event.relatedObject as RadioButton).value;
+      });
+      BindingUtils.bindProperty(radioGroup, "selectedValue", remoteState, "value");
+      BindingUtils.bindProperty(radioGroup, "enabled", remoteState, "writable");
     }
 
     protected function createBorderContainer(remoteBorderContainer:RBorderContainer):Container {

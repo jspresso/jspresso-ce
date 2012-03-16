@@ -17,11 +17,9 @@ package org.jspresso.framework.gui.remote {
 
 		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComboBox")]
-    public class RComboBox extends RComponent {
+    public class RComboBox extends REnumBox {
 
         private var _icons:Array;
-        private var _translations:Array;
-        private var _values:Array;
         private var _readOnly:Boolean;
 
         public function RComboBox() {
@@ -33,20 +31,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get icons():Array {
             return _icons;
-        }
-
-        public function set translations(value:Array):void {
-            _translations = value;
-        }
-        public function get translations():Array {
-            return _translations;
-        }
-
-        public function set values(value:Array):void {
-            _values = value;
-        }
-        public function get values():Array {
-            return _values;
         }
 
         public function get readOnly():Boolean {

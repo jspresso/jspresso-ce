@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.Set;
 
+import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 
 /**
@@ -33,9 +34,10 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 public class BasicEnumerationPropertyViewDescriptor extends
     BasicPropertyViewDescriptor implements IEnumerationPropertyViewDescriptor {
 
-  private Set<String> allowedValues;
-  private Set<String> forbiddenValues;
-  private boolean     radio;
+  private Set<String>  allowedValues;
+  private Set<String>  forbiddenValues;
+  private boolean      radio;
+  private EOrientation orientation = EOrientation.VERTICAL;
 
   /**
    * Returns an optional forbidden set of values to restrict the model ones.
@@ -100,6 +102,28 @@ public class BasicEnumerationPropertyViewDescriptor extends
    */
   public void setRadio(boolean radio) {
     this.radio = radio;
+  }
+
+  /**
+   * Gets the orientation.
+   * 
+   * @return the orientation.
+   */
+  @Override
+  public EOrientation getOrientation() {
+    return orientation;
+  }
+
+  /**
+   * Configures wether radio values be rendered horizontally or vertically.
+   * <code>HORIZONTAL</code> if radio values should be rendered horizontally and
+   * <code>VERTICAL</code> otherwise. Default value is <code>VERTICAL</code>.
+   * 
+   * @param orientation
+   *          the orientation to set.
+   */
+  public void setOrientation(EOrientation orientation) {
+    this.orientation = orientation;
   }
 
 }

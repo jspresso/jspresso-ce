@@ -12,23 +12,28 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RComboBox",
-{
-  extend : org.jspresso.framework.gui.remote.REnumBox,
-  
-  construct : function() {
-    this.base(arguments);
-  },
 
-  properties :
-  {
-    icons :
-    {
-      check : "Array"
-    },
-    readOnly :
-    {
-      check : "Boolean"
+package org.jspresso.framework.gui.remote {
+
+		
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RRadioBox")]
+    public class RRadioBox extends REnumBox {
+
+      private var _orientation:String;
+
+      public function RRadioBox() {
+          //default constructor.
+      }
+
+      public function get orientation():String
+      {
+        return _orientation;
+      }
+
+      public function set orientation(value:String):void
+      {
+        _orientation = value;
+      }
+
     }
-  }
-});
+}

@@ -62,6 +62,7 @@ import org.jspresso.framework.gui.remote.RDateField;
 import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
+import org.jspresso.framework.gui.remote.REnumBox;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RHtmlArea;
@@ -74,6 +75,7 @@ import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
+import org.jspresso.framework.gui.remote.RRadioBox;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
@@ -144,6 +146,7 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
@@ -267,12 +270,12 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(
-      @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") RComponent component,
-      @SuppressWarnings("unused") IFormatter formatter,
-      @SuppressWarnings("unused") Object templateValue,
-      @SuppressWarnings("unused") int extraWidth) {
+  protected void adjustSizes(@SuppressWarnings("unused")
+  IViewDescriptor viewDescriptor, @SuppressWarnings("unused")
+  RComponent component, @SuppressWarnings("unused")
+  IFormatter formatter, @SuppressWarnings("unused")
+  Object templateValue, @SuppressWarnings("unused")
+  int extraWidth) {
     // Empty as of now.
   }
 
@@ -291,9 +294,9 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected int computePixelWidth(
-      @SuppressWarnings("unused") RComponent component,
-      @SuppressWarnings("unused") int characterLength) {
+  protected int computePixelWidth(@SuppressWarnings("unused")
+  RComponent component, @SuppressWarnings("unused")
+  int characterLength) {
     // Empty as of now.
     return 0;
   }
@@ -375,9 +378,7 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
   }
 
@@ -387,7 +388,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createBooleanPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -478,7 +480,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createColorPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -515,8 +518,7 @@ public class DefaultRemoteViewFactory extends
             getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
-    viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()
-        .toString());
+    viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition().name());
 
     List<Integer> elementWidths = new ArrayList<Integer>();
     List<RComponent> elements = new ArrayList<RComponent>();
@@ -709,8 +711,7 @@ public class DefaultRemoteViewFactory extends
         }
       }
       viewComponent = createRDateField(propertyViewDescriptor);
-      ((RDateField) viewComponent).setType(propertyDescriptor.getType()
-          .toString());
+      ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
       ((RDateField) viewComponent).setTimezoneAware(propertyDescriptor
           .isTimeZoneAware());
       ((RDateField) viewComponent).setSecondsAware(propertyDescriptor
@@ -844,12 +845,8 @@ public class DefaultRemoteViewFactory extends
     } else {
       connector = getConnectorFactory().createValueConnector(
           propertyDescriptor.getName());
-      viewComponent = createRComboBox(propertyViewDescriptor);
-      ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor
-          .isReadOnly());
       List<String> values = new ArrayList<String>();
       List<String> translations = new ArrayList<String>();
-      List<RIcon> icons = new ArrayList<RIcon>();
       List<String> enumerationValues = new ArrayList<String>(
           propertyDescriptor.getEnumerationValues());
       filterEnumerationValues(enumerationValues, propertyViewDescriptor);
@@ -858,9 +855,6 @@ public class DefaultRemoteViewFactory extends
       }
       for (String value : enumerationValues) {
         values.add(value);
-        icons.add(getIconFactory().getIcon(
-            propertyDescriptor.getIconImageURL(value),
-            getIconFactory().getTinyIconSize()));
         if (value != null && propertyDescriptor.isTranslated()) {
           if ("".equals(value)) {
             translations.add(" ");
@@ -877,10 +871,28 @@ public class DefaultRemoteViewFactory extends
           }
         }
       }
-      ((RComboBox) viewComponent).setValues(values.toArray(new String[0]));
-      ((RComboBox) viewComponent).setTranslations(translations
+      if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+              .isRadio()) {
+        viewComponent = createRRadioBox(propertyViewDescriptor);
+        ((RRadioBox) viewComponent)
+            .setOrientation(((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+                .getOrientation().name());
+      } else {
+        viewComponent = createRComboBox(propertyViewDescriptor);
+        ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor
+            .isReadOnly());
+        List<RIcon> icons = new ArrayList<RIcon>();
+        for (String value : enumerationValues) {
+          icons.add(getIconFactory().getIcon(
+              propertyDescriptor.getIconImageURL(value),
+              getIconFactory().getTinyIconSize()));
+        }
+        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[0]));
+      }
+      ((REnumBox) viewComponent).setValues(values.toArray(new String[0]));
+      ((REnumBox) viewComponent).setTranslations(translations
           .toArray(new String[0]));
-      ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[0]));
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -897,7 +909,7 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     REvenGridContainer viewComponent = createREvenGridContainer(viewDescriptor);
     viewComponent.setDrivingDimension(viewDescriptor.getDrivingDimension()
-        .toString());
+        .name());
     viewComponent.setDrivingDimensionCellCount(viewDescriptor
         .getDrivingDimensionCellCount());
     List<RComponent> cells = new ArrayList<RComponent>();
@@ -923,7 +935,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createHtmlPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -942,7 +955,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createImagePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyViewDescriptor.getModelDescriptor().getName());
     connector.setExceptionHandler(actionHandler);
@@ -1058,8 +1072,7 @@ public class DefaultRemoteViewFactory extends
       rowConnectorPrototype.addChildConnector(
           viewDescriptor.getRenderedProperty(), cellConnector);
     }
-    viewComponent
-        .setSelectionMode(viewDescriptor.getSelectionMode().toString());
+    viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
@@ -1114,7 +1127,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createPasswordPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -1335,6 +1349,18 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
+   * Creates a remote radio box.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RRadioBox createRRadioBox(IPropertyViewDescriptor viewDescriptor) {
+    RRadioBox component = new RRadioBox(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
    * Creates a remote contrained grid container.
    * 
    * @param viewDescriptor
@@ -1419,11 +1445,9 @@ public class DefaultRemoteViewFactory extends
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation(
-          "lov.element.description",
-          new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(
-                actionHandler, locale)
-          }, locale)
+          "lov.element.description", new Object[] {propertyDescriptor
+              .getReferencedDescriptor().getI18nName(actionHandler, locale)},
+          locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
@@ -1432,12 +1456,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
     }
     return view;
   }
@@ -1698,7 +1718,7 @@ public class DefaultRemoteViewFactory extends
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     RSplitContainer viewComponent = createRSplitContainer(viewDescriptor);
-    viewComponent.setOrientation(viewDescriptor.getOrientation().toString());
+    viewComponent.setOrientation(viewDescriptor.getOrientation().name());
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
@@ -1725,7 +1745,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createStringPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -1869,8 +1890,7 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
     viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
     viewComponent.setColumnIds(columnIds.toArray(new String[0]));
-    viewComponent
-        .setSelectionMode(viewDescriptor.getSelectionMode().toString());
+    viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
@@ -1950,7 +1970,8 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createTextPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
@@ -2205,10 +2226,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void decorateWithBorder(IView<RComponent> view,
-      @SuppressWarnings("unused") ITranslationProvider translationProvider,
-      @SuppressWarnings("unused") Locale locale) {
-    view.getPeer().setBorderType(
-        view.getDescriptor().getBorderType().toString());
+      @SuppressWarnings("unused")
+      ITranslationProvider translationProvider, @SuppressWarnings("unused")
+      Locale locale) {
+    view.getPeer().setBorderType(view.getDescriptor().getBorderType().name());
   }
 
   /**
@@ -2367,21 +2388,21 @@ public class DefaultRemoteViewFactory extends
   private void configureAlignment(RTextField textField,
       EHorizontalAlignment horizontalAlignment) {
     if (horizontalAlignment != null) {
-      textField.setHorizontalAlignment(horizontalAlignment.toString());
+      textField.setHorizontalAlignment(horizontalAlignment.name());
     }
   }
 
   private void configureAlignment(RLabel label,
       EHorizontalAlignment horizontalAlignment) {
     if (horizontalAlignment != null) {
-      label.setHorizontalAlignment(horizontalAlignment.toString());
+      label.setHorizontalAlignment(horizontalAlignment.name());
     }
   }
 
   private void configureAlignment(RNumericComponent numericField,
       EHorizontalAlignment horizontalAlignment) {
     if (horizontalAlignment != null) {
-      numericField.setHorizontalAlignment(horizontalAlignment.toString());
+      numericField.setHorizontalAlignment(horizontalAlignment.name());
     }
   }
 }

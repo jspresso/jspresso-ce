@@ -24,12 +24,11 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComboBox extends REnumBox {
+public class RRadioBox extends REnumBox {
 
-  private static final long serialVersionUID = -2604499683793881316L;
+  private static final long serialVersionUID = -7698850054607971721L;
 
-  private RIcon[]           icons;
-  private boolean           readOnly;
+  private String            orientation;
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
@@ -37,7 +36,7 @@ public class RComboBox extends REnumBox {
    * @param guid
    *          the guid
    */
-  public RComboBox(String guid) {
+  public RRadioBox(String guid) {
     super(guid);
   }
 
@@ -45,45 +44,26 @@ public class RComboBox extends REnumBox {
    * Constructs a new <code>RComboBox</code> instance. Only used for
    * serialization support.
    */
-  public RComboBox() {
+  public RRadioBox() {
     // For serialization support
   }
 
   /**
-   * Gets the icons.
+   * Gets the orientation.
    * 
-   * @return the icons.
+   * @return the orientation.
    */
-  public RIcon[] getIcons() {
-    return icons;
+  public String getOrientation() {
+    return orientation;
   }
 
   /**
-   * Sets the icons.
+   * Sets the orientation.
    * 
-   * @param icons
-   *          the icons to set.
+   * @param orientation
+   *          the orientation to set.
    */
-  public void setIcons(RIcon[] icons) {
-    this.icons = icons;
-  }
-
-  /**
-   * Gets the readOnly.
-   * 
-   * @return the readOnly.
-   */
-  public boolean isReadOnly() {
-    return readOnly;
-  }
-
-  /**
-   * Sets the readOnly.
-   * 
-   * @param readOnly
-   *          the readOnly to set.
-   */
-  public void setReadOnly(boolean readOnly) {
-    this.readOnly = readOnly;
+  public void setOrientation(String orientation) {
+    this.orientation = orientation;
   }
 }

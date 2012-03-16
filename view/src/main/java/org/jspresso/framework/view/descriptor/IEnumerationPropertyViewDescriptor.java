@@ -56,4 +56,11 @@ public interface IEnumerationPropertyViewDescriptor extends
    */
   boolean isRadio();
 
+  /**
+   * Should radio values be rendered horizontally or vertically.
+   * 
+   * @return <code>HORIZONTAL</code> if radio values should be rendered
+   *         horizontally and <code>VERTICAL</code> otherwise.
+   */
+  EOrientation getOrientation();
 }

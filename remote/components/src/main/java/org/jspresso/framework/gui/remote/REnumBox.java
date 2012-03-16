@@ -24,12 +24,12 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComboBox extends REnumBox {
+public abstract class REnumBox extends RComponent {
 
-  private static final long serialVersionUID = -2604499683793881316L;
+  private static final long serialVersionUID = 2417248698310163199L;
 
-  private RIcon[]           icons;
-  private boolean           readOnly;
+  private String[]          translations;
+  private String[]          values;
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
@@ -37,7 +37,7 @@ public class RComboBox extends REnumBox {
    * @param guid
    *          the guid
    */
-  public RComboBox(String guid) {
+  public REnumBox(String guid) {
     super(guid);
   }
 
@@ -45,45 +45,45 @@ public class RComboBox extends REnumBox {
    * Constructs a new <code>RComboBox</code> instance. Only used for
    * serialization support.
    */
-  public RComboBox() {
+  public REnumBox() {
     // For serialization support
   }
 
   /**
-   * Gets the icons.
+   * Gets the translations.
    * 
-   * @return the icons.
+   * @return the translations.
    */
-  public RIcon[] getIcons() {
-    return icons;
+  public String[] getTranslations() {
+    return translations;
   }
 
   /**
-   * Sets the icons.
+   * Gets the values.
    * 
-   * @param icons
-   *          the icons to set.
+   * @return the values.
    */
-  public void setIcons(RIcon[] icons) {
-    this.icons = icons;
+  public String[] getValues() {
+    return values;
   }
 
   /**
-   * Gets the readOnly.
+   * Sets the translations.
    * 
-   * @return the readOnly.
+   * @param translations
+   *          the translations to set.
    */
-  public boolean isReadOnly() {
-    return readOnly;
+  public void setTranslations(String[] translations) {
+    this.translations = translations;
   }
 
   /**
-   * Sets the readOnly.
+   * Sets the values.
    * 
-   * @param readOnly
-   *          the readOnly to set.
+   * @param values
+   *          the values to set.
    */
-  public void setReadOnly(boolean readOnly) {
-    this.readOnly = readOnly;
+  public void setValues(String[] values) {
+    this.values = values;
   }
 }

@@ -757,6 +757,9 @@
   <profiles>
     <profile>
       <id>attach-sources</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <build>
         <plugins>
           <plugin>
@@ -777,6 +780,9 @@
     </profile>
     <profile>
       <id>attach-javadocs</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <build>
         <plugins>
           <plugin>

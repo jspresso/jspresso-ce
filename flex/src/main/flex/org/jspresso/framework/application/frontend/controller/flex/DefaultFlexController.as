@@ -119,6 +119,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RDateField;
   import org.jspresso.framework.gui.remote.RDecimalField;
   import org.jspresso.framework.gui.remote.RDurationField;
+  import org.jspresso.framework.gui.remote.REnumBox;
   import org.jspresso.framework.gui.remote.REvenGridContainer;
   import org.jspresso.framework.gui.remote.RForm;
   import org.jspresso.framework.gui.remote.RIcon;
@@ -129,6 +130,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RList;
   import org.jspresso.framework.gui.remote.RPasswordField;
   import org.jspresso.framework.gui.remote.RPercentField;
+  import org.jspresso.framework.gui.remote.RRadioBox;
   import org.jspresso.framework.gui.remote.RSplitContainer;
   import org.jspresso.framework.gui.remote.RTabContainer;
   import org.jspresso.framework.gui.remote.RTable;
@@ -1319,6 +1321,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.gui.remote.RCheckBox", RCheckBox);
       registerClassAlias("org.jspresso.framework.gui.remote.RColorField", RColorField);
       registerClassAlias("org.jspresso.framework.gui.remote.RComboBox", RComboBox);
+      registerClassAlias("org.jspresso.framework.gui.remote.RRadioBox", RRadioBox);
+      registerClassAlias("org.jspresso.framework.gui.remote.REnumBox", REnumBox);
       registerClassAlias("org.jspresso.framework.gui.remote.RComponent", RComponent);
       registerClassAlias("org.jspresso.framework.gui.remote.RContainer", RContainer);
       registerClassAlias("org.jspresso.framework.gui.remote.RDateField", RDateField);

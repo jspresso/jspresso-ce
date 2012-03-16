@@ -23,7 +23,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -909,7 +908,17 @@ public class DefaultSwingViewFactory extends
                 ModelRefPropertyConnector.THIS_PROPERTY,
                 propertyDescriptor.getName());
         JPanel viewComponent = createJPanel();
-        viewComponent.setLayout(new FlowLayout());
+        GridLayout layout;
+        switch (((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+            .getOrientation()) {
+          case HORIZONTAL:
+            layout = new GridLayout(1, 0);
+            break;
+          case VERTICAL:
+          default:
+            layout = new GridLayout(0, 1);
+        }
+        viewComponent.setLayout(layout);
         List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
         for (String enumElement : enumerationValues) {
           JRadioButton subViewComponent = new JRadioButton();
