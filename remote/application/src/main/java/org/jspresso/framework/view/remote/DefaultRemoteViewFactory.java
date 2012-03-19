@@ -512,6 +512,8 @@ public class DefaultRemoteViewFactory extends
       if (descriptionProperty != null) {
         toolTipProperty = viewDescriptor.getDescription();
       }
+    } else {
+      toolTipProperty = modelDescriptor.getToHtmlProperty();
     }
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(

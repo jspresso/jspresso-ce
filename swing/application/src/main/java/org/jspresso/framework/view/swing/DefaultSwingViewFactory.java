@@ -508,6 +508,8 @@ public class DefaultSwingViewFactory extends
       if (descriptionProperty != null) {
         toolTipProperty = viewDescriptor.getDescription();
       }
+    } else {
+      toolTipProperty = modelDescriptor.getToHtmlProperty();
     }
     IRenderableCompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
