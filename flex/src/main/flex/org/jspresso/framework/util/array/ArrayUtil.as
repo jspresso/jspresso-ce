@@ -13,15 +13,9 @@
  */
 
 package org.jspresso.framework.util.array {
-  import mx.collections.IList;
-  import mx.core.ClassFactory;
-  import mx.events.CollectionEvent;
-  import mx.events.CollectionEventKind;
-  import mx.events.PropertyChangeEvent;
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.util.remote.IRemotePeer;
-  import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   
   public class ArrayUtil {
     
@@ -58,81 +52,6 @@ package org.jspresso.framework.util.array {
         }
       }
       return -1;
-    }
-
-    public static function mirrorCollectionViews(source:IList,
-                                                 target:IList,
-                                                 targetElementFactory:ClassFactory,
-                                                 remotePeerRegistry:IRemotePeerRegistry = null):void {
-      for(var i:int = 0; i < source.length; i++) {
-        var element:Object = cacheCreate(source[i], targetElementFactory);
-        target.addItem(element);
-        attachItemUpdateListener(element, target);
-      }
-      source.addEventListener(CollectionEvent.COLLECTION_CHANGE,
-        function(event:CollectionEvent):void {
-          var item:Object;
-          if(event.kind == CollectionEventKind.ADD) {
-            for each (item in event.items) {
-              var addedElement:Object = cacheCreate(item, targetElementFactory);
-              target.addItem(addedElement);
-              attachItemUpdateListener(addedElement, target);
-            }
-          } else if(event.kind == CollectionEventKind.REMOVE) {
-            for each (item in event.items) {
-              var removedElement:Object;
-              if(item is IRemotePeer) {
-                removedElement = item;
-              } else {
-                removedElement = cacheCreate(item, targetElementFactory);
-              }
-              target.removeItemAt(arrayIndexOf(target.toArray(),removedElement));
-            }
-          } else if(event.kind == CollectionEventKind.REPLACE) {
-            for each (item in event.items) {
-              var oldElement:Object;
-              var oldItem:Object = (item as PropertyChangeEvent).oldValue;
-              if(oldItem is IRemotePeer) {
-                oldElement = oldItem;
-              } else {
-                oldElement = cacheCreate(oldItem, targetElementFactory);
-              }
-              var newElement:Object = cacheCreate((item as PropertyChangeEvent).newValue, targetElementFactory);
-              target.setItemAt(newElement, arrayIndexOf(target.toArray(), oldElement));
-              attachItemUpdateListener(newElement, target);
-            }
-          } else if(event.kind == CollectionEventKind.RESET) {
-            // could be finer.
-            target.removeAll();
-            for each (item in (event.currentTarget as IList).toArray()) {
-              var resetElement:Object =cacheCreate((item as PropertyChangeEvent).oldValue, targetElementFactory);
-              target.addItem(resetElement);
-              attachItemUpdateListener(resetElement, target);
-            }
-          }
-        });
-    }
-    
-    private static function cacheCreate(delegate:Object, targetElementFactory:ClassFactory, remotePeerRegistry:IRemotePeerRegistry = null):Object {
-      var target:Object = null;
-      if(delegate is IRemotePeer && remotePeerRegistry) {
-        target = remotePeerRegistry.getRegistered((delegate as IRemotePeer).guid);
-      }
-      if(target == null) {
-        target = targetElementFactory.newInstance();
-        target['delegate'] = delegate;
-        if(target is IRemotePeer && remotePeerRegistry) {
-          remotePeerRegistry.register(target as IRemotePeer);
-        }
-      }
-      return target;
-    }
-    
-    public static function attachItemUpdateListener(element:Object, collection:IList):void {
-      var itemUpdated:Function = function(pce:PropertyChangeEvent):void {
-        collection.itemUpdated(pce.source, pce.property, pce.oldValue, pce.newValue);
-      };
-      element.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, itemUpdated);
     }
   }
 }
