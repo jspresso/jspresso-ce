@@ -61,9 +61,10 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
       }
       module.removeSubModules(beanModulesToRemove);
     }
+    boolean startupResult = true;
     if (module.getStartupAction() != null) {
-      return actionHandler.execute(module.getStartupAction(), context);
+      startupResult = actionHandler.execute(module.getStartupAction(), context);
     }
-    return true;
+    return startupResult && super.execute(actionHandler, context);
   }
 }
