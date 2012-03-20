@@ -607,6 +607,15 @@ public class DefaultRemoteController extends
         .setNavigationActions(createRActionLists(getNavigationActions()));
     initCommand.setExitAction(getViewFactory().getActionFactory().createAction(
         getExitAction(), this, null, getLocale()));
+    int w = 0;
+    if (getFrameWidth() != null) {
+      w = getFrameWidth().intValue();
+    }
+    int h = 0;
+    if (getFrameHeight() != null) {
+      h = getFrameHeight().intValue();
+    }
+    initCommand.setSize(new Dimension(w, h));
     return initCommand;
   }
 

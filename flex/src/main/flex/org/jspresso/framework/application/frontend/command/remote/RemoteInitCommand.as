@@ -16,6 +16,7 @@
 package org.jspresso.framework.application.frontend.command.remote {
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionList;
+  import org.jspresso.framework.util.gui.Dimension;
 
 		
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand")]
@@ -28,6 +29,7 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _workspaceActions:RActionList;
         private var _workspaceNames:Array;
         private var _exitAction:RAction;
+        private var _size:Dimension;
 
         public function RemoteInitCommand() {
           //default constructor.
@@ -83,6 +85,16 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function set secondaryActions(value:Array):void
         {
           _secondaryActions = value;
+        }
+
+        public function get size():Dimension
+        {
+          return _size;
+        }
+
+        public function set size(value:Dimension):void
+        {
+          _size = value;
         }
 
 

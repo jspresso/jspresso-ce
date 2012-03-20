@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
+import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * Displays the application frame on the client peer.
@@ -38,6 +39,7 @@ public class RemoteInitCommand extends RemoteCommand {
   private RActionList       workspaceActions;
   private RAction           exitAction;
   private String[]          workspaceNames;
+  private Dimension         size;
 
   /**
    * Gets the actions.
@@ -170,5 +172,24 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setSecondaryActions(RActionList[] secondaryActions) {
     this.secondaryActions = secondaryActions;
+  }
+
+  /**
+   * Gets the size.
+   * 
+   * @return the size.
+   */
+  public Dimension getSize() {
+    return size;
+  }
+
+  /**
+   * Sets the size.
+   * 
+   * @param size
+   *          the size to set.
+   */
+  public void setSize(Dimension size) {
+    this.size = size;
   }
 }

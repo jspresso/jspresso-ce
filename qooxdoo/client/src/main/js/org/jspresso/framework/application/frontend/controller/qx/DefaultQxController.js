@@ -318,7 +318,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                              command.getNavigationActions(),
                              command.getActions(),
                              command.getSecondaryActions(),
-                             command.getHelpActions());
+                             command.getHelpActions(),
+                             command.getSize());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
         this._displayWorkspace(command.getWorkspaceName(),
                          command.getWorkspaceView());
@@ -579,6 +580,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {org.jspresso.framework.gui.remote.RActionList[]} workspaceActions
      * @param {org.jspresso.framework.gui.remote.RAction[]} actions
      * @param {org.jspresso.framework.gui.remote.RAction[]} helpActions
+     * @param {org.jspresso.framework.util.Dimension} size
      * @return void
      * 
      */
@@ -588,7 +590,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                                       navigationActions,
                                       actions,
                                       secondaryActions,
-                                      helpActions) {
+                                      helpActions,
+                                      size) {
       //this.__application.getRoot().removeAll();
 
       var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
@@ -630,7 +633,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         secondaryToolBar.add(this.__viewFactory.createToolBarFromActionLists(secondaryActions));
         applicationFrame.add(secondaryToolBar);
       }
-      this.__application.getRoot().add(applicationFrame, {edge:0})
+      if(size) {
+        if(size.getWidth() > 0) {
+          applicationFrame.setMinWidth(size.getWidth());
+        }
+        if(size.getHeight() > 0) {
+          applicationFrame.setMinHeight(size.getHeight());
+        }
+      }
+      var scrollContainer = new qx.ui.container.Scroll();
+      scrollContainer.add(applicationFrame);
+
+      this.__application.getRoot().add(scrollContainer, {edge:0})
     },
     
     /**

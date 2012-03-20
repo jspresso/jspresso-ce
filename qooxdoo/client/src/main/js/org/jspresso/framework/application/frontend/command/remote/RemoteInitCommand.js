@@ -49,6 +49,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     exitAction :
     {
       check : "org.jspresso.framework.gui.remote.RAction"
+    },
+    size :
+    {
+      check : "org.jspresso.framework.util.gui.Dimension",
+      nullable : true
     }
   }
 });

@@ -396,7 +396,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
                              initCommand.navigationActions,
                              initCommand.actions,
                              initCommand.secondaryActions,
-                             initCommand.helpActions);
+                             initCommand.helpActions,
+                             initCommand.size);
       } else if(command is RemoteWorkspaceDisplayCommand) {
         var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
         displayWorkspace(workspaceDisplayCommand.workspaceName,
@@ -908,7 +909,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                             navigationActions:Array,
                                             actions:Array,
                                             secondaryActions:Array,
-                                            helpActions:Array):void {
+                                            helpActions:Array,
+                                            size:Dimension):void {
       _workspaceAccordion = createWorkspaceAccordion(workspaceNames, workspaceActions);
       _workspaceAccordion.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
         for(var i:int = 0; i < workspaceActions.actions.length; i++) {
@@ -939,6 +941,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
         helpActions);
       
       var applicationFrame:Application = Application.application as Application;
+      if(size) {
+        if(size.width > 0) {
+          appContent.minWidth  = size.width;
+        }
+        if(size.height > 0) {
+          appContent.minHeight  = size.height;
+        }
+      }
+      applicationFrame.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      applicationFrame.verticalScrollPolicy = ScrollPolicy.AUTO;
       applicationFrame.addChild(appContent);
     }
     
