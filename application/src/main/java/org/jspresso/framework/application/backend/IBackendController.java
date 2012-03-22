@@ -33,6 +33,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -356,4 +357,30 @@ public interface IBackendController extends IController,
    * Cleans-up request-scoped resources.
    */
   void cleanupRequestResources();
+
+  /**
+   * Wether the backend controller should throw or not an exception whenever a
+   * bad usage is detected like manually merging a dirty entity from an ongoing
+   * UOW.
+   * 
+   * @return true if an excetion should be thrown.
+   */
+  boolean isThrowExceptionOnBadUsage();
+
+  /**
+   * Gives chance to implementors to perform sanity checks and eventually
+   * substitute the passed param by an other one when it's technically
+   * necessary. This is here tat all sanity checks are made regarding UOW
+   * isolation.
+   * 
+   * @param target
+   *          the target being modified.
+   * @param propertyDescriptor
+   *          the descriptor of the property being modified.
+   * @param param
+   *          the modifier parameter.
+   * @return the parameter to actually pass to the modifier
+   */
+  Object sanitizeModifierParam(Object target,
+      IPropertyDescriptor propertyDescriptor, Object param);
 }

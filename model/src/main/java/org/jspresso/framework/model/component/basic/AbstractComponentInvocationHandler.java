@@ -78,8 +78,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  private static final Logger     LOG = LoggerFactory
-                                        .getLogger(AbstractComponentInvocationHandler.class);
+  private static final Logger LOG              = LoggerFactory
+                                                   .getLogger(AbstractComponentInvocationHandler.class);
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
@@ -236,27 +236,36 @@ public abstract class AbstractComponentInvocationHandler implements
             modifierMonitors.add(methodName);
           }
           try {
+            Object param;
             switch (accessorType) {
               case GETTER:
                 return getProperty(proxy, propertyDescriptor);
               case SETTER:
-                setProperty(proxy, propertyDescriptor, args[0]);
+                param = sanitizeModifierParam(proxy, propertyDescriptor,
+                    args[0]);
+                setProperty(proxy, propertyDescriptor, param);
                 return null;
               case ADDER:
                 if (args.length == 2) {
+                  param = sanitizeModifierParam(proxy, propertyDescriptor,
+                      args[1]);
                   addToProperty(proxy,
                       (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                      ((Integer) args[0]).intValue(), args[1]);
+                      ((Integer) args[0]).intValue(), param);
                 } else {
+                  param = sanitizeModifierParam(proxy, propertyDescriptor,
+                      args[0]);
                   addToProperty(proxy,
                       (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                      args[0]);
+                      param);
                 }
                 return null;
               case REMOVER:
+                param = sanitizeModifierParam(proxy, propertyDescriptor,
+                    args[0]);
                 removeFromProperty(proxy,
                     (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                    args[0]);
+                    param);
                 return null;
               default:
                 break;
@@ -290,6 +299,24 @@ public abstract class AbstractComponentInvocationHandler implements
     throw new ComponentException(method.toString()
         + " is not supported on the component "
         + componentDescriptor.getComponentContract().getName());
+  }
+
+  /**
+   * Gives chance to subclasses to perform sanity checks and eventually
+   * substitute the passed param by an other one when it's technically
+   * necessary.
+   * 
+   * @param target
+   *          the target being modified.
+   * @param propertyDescriptor
+   *          the descriptor of the property being modified.
+   * @param param
+   *          the modifier parameter.
+   * @return the parameter to actually pass to the modifier
+   */
+  protected Object sanitizeModifierParam(Object target,
+      IPropertyDescriptor propertyDescriptor, Object param) {
+    return param;
   }
 
   /**

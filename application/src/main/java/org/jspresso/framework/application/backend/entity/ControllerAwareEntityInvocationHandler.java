@@ -35,6 +35,7 @@ import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.basic.BasicComponentInvocationHandler;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -57,9 +58,9 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 public class ControllerAwareEntityInvocationHandler extends
     BasicEntityInvocationHandler {
 
-  private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
-
   private static final long   serialVersionUID                = 3663517052427878204L;
+
+  private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
 
   private Set<IEntity>        detachedEntities;
 
@@ -268,5 +269,17 @@ public class ControllerAwareEntityInvocationHandler extends
   protected boolean isCollectionSortOnReadEnabled() {
     // To prevent erratic sort of collections during flush
     return !getBackendController().isUnitOfWorkActive();
+  }
+
+  /**
+   * Performs necessary checks in order to ensure isolation on unit of work.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object sanitizeModifierParam(Object target,
+      IPropertyDescriptor propertyDescriptor, Object param) {
+    return getBackendController().sanitizeModifierParam(target,
+        propertyDescriptor, param);
   }
 }

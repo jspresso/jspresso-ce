@@ -1852,7 +1852,8 @@ public abstract class AbstractBackendController extends AbstractController
    * 
    * @return the throwExceptionOnBadUsage.
    */
-  protected boolean isThrowExceptionOnBadUsage() {
+  @Override
+  public boolean isThrowExceptionOnBadUsage() {
     return throwExceptionOnBadUsage;
   }
 
@@ -1864,7 +1865,99 @@ public abstract class AbstractBackendController extends AbstractController
    * @param throwExceptionOnBadUsage
    *          the throwExceptionOnBadUsage to set.
    */
-  protected void setThrowExceptionOnBadUsage(boolean throwExceptionOnBadUsage) {
+  public void setThrowExceptionOnBadUsage(boolean throwExceptionOnBadUsage) {
     this.throwExceptionOnBadUsage = throwExceptionOnBadUsage;
   }
+
+  /**
+   * Performs necessary checks in order to ensure isolation on unit of work.
+   */
+  @Override
+  public Object sanitizeModifierParam(Object target,
+      IPropertyDescriptor propertyDescriptor, Object param) {
+    if (param instanceof Collection<?>) {
+      for (Object element : (Collection<?>) param) {
+        // the return value is not leveraged.
+        sanitizeModifierParam(target, propertyDescriptor, element);
+      }
+      return param;
+    }
+    IEntity targetEntity = null;
+    IEntity sessionTargetEntity = null;
+    IEntity paramEntity = null;
+    IEntity sessionParamEntity = null;
+    if (target instanceof IEntity) {
+      targetEntity = (IEntity) target;
+      sessionTargetEntity = getRegisteredEntity(
+          targetEntity.getComponentContract(), targetEntity.getId());
+
+    }
+    if (param instanceof IEntity) {
+      paramEntity = (IEntity) param;
+      sessionParamEntity = getRegisteredEntity(
+          paramEntity.getComponentContract(), paramEntity.getId());
+    }
+    if (isUnitOfWorkActive()) {
+      if (targetEntity != null && targetEntity == sessionTargetEntity) {
+        // We are modifying on a session entity inside a unit of work. This is
+        // not legal.
+        LOG.error(
+            "*BAD UOW USAGE* You are modifying a session registered entity ({}) inside an ongoing UOW.\n"
+                + "You should only work on entities copies you obtain using the backendController.cloneInUnitOfWork(...) method.",
+            targetEntity);
+        LOG.error("*BAD UOW USAGE* The property being modified is [{}]",
+            propertyDescriptor.getName());
+        if (isThrowExceptionOnBadUsage()) {
+          throw new BackendException(
+              "An invalid modification on a session entity has been detected while having an active Unit of Work. "
+                  + "Please check the logs.");
+        }
+      }
+      if (paramEntity != null && paramEntity == sessionParamEntity) {
+        // We are linking an entity with a session entity inside a unit of work.
+        // This is not legal.
+        LOG.error(
+            "*BAD UOW USAGE* You are linking an entity ({}) with a session entity ({}) inside an ongoing UOW.\n"
+                + "You should only work on entities copies you obtain using the backendController.cloneInUnitOfWork(...) method.",
+            target, paramEntity);
+        LOG.error("*BAD UOW USAGE* The property being modified is [{}]",
+            propertyDescriptor.getName());
+        if (isThrowExceptionOnBadUsage()) {
+          throw new BackendException(
+              "An invalid usage of a session entity has been detected while having an active Unit of Work. "
+                  + "Please check the logs.");
+        }
+      }
+    } else {
+      if (targetEntity != null && targetEntity != sessionTargetEntity) {
+        // We are working on an entity that has not been registered in the
+        // session. This is not legal.
+        LOG.error(
+            "*BAD SESSION USAGE* You are modifying an entity ({}) that has not been previously merged in the session.\n"
+                + "You should 1st merge your entities in the session by using the backendController.merge(...) method.",
+            targetEntity);
+        LOG.error("*BAD SESSION USAGE* The property being modified is [{}]",
+            propertyDescriptor.getName());
+        throw new BackendException(
+            "An invalid modification of an entity that was not previously registered in the session has been detected. "
+                + "Please check the logs.");
+      }
+      if (paramEntity != null && paramEntity != sessionParamEntity) {
+        // We are linking an entity with another one that has not been
+        // registered in the session. This is not legal.
+        LOG.error(
+            "*BAD SESSION USAGE* You are linking an entity ({}) with another one ({}) "
+                + "that has not been previously merged in the session.\n"
+                + "You should 1st merge your entities in the session by using the backendController.merge(...) method.",
+            target, paramEntity);
+        LOG.error("*BAD SESSION USAGE* The property being modified is [{}]",
+            propertyDescriptor.getName());
+        throw new BackendException(
+            "An invalid usage of an entity that was not previously registered in the session has been detected. "
+                + "Please check the logs.");
+      }
+    }
+    return param;
+  }
+
 }

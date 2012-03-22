@@ -31,6 +31,7 @@ import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.basic.BasicComponentInvocationHandler;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
@@ -184,5 +185,17 @@ public class ControllerAwareComponentInvocationHandler extends
   protected boolean isCollectionSortOnReadEnabled() {
     // To prevent erratic sort of collections during flush
     return !getBackendController().isUnitOfWorkActive();
+  }
+
+  /**
+   * Performs necessary checks in order to ensure isolation on unit of work.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object sanitizeModifierParam(Object target,
+      IPropertyDescriptor propertyDescriptor, Object param) {
+    return getBackendController().sanitizeModifierParam(target,
+        propertyDescriptor, param);
   }
 }
