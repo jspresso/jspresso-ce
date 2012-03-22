@@ -383,7 +383,8 @@ public class HibernateBackendController extends AbstractBackendController {
                 && ((IEntity) owner).getId().equals(
                     ((IEntity) property.getValue()).getId())
                 // To avoid bug #548
-                && owner.getClass() == property.getValue().getClass()) {
+                && Hibernate.getClass(owner) == Hibernate.getClass(property
+                    .getValue())) {
               entity.straightSetProperty(property.getKey(), owner);
             }
           }
