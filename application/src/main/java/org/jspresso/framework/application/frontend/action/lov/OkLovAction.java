@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * This action augments the context by setting the action parameter to the
@@ -69,10 +71,10 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
           for (int i = 0; i < resultSelectedIndices.length; i++) {
             Object selectedElement = resultConnector.getChildConnector(
                 resultSelectedIndices[i]).getConnectorValue();
-            // if (selectedElement instanceof IEntity) {
-            // selectedElement = getController(context).getBackendController()
-            // .merge((IEntity) selectedElement, EMergeMode.MERGE_LAZY);
-            // }
+            if (selectedElement instanceof IEntity) {
+              selectedElement = getController(context).getBackendController()
+                  .merge((IEntity) selectedElement, EMergeMode.MERGE_LAZY);
+            }
             selectedElements.add(selectedElement);
           }
           if (selectedElements.size() == 1) {
