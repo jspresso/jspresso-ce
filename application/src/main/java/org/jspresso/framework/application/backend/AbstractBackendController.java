@@ -386,7 +386,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
-      Object entityId) {
+      Serializable entityId) {
     return entityRegistry.get(entityContract, entityId);
   }
 

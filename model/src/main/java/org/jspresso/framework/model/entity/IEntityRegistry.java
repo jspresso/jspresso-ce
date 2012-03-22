@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.entity;
 
+import java.io.Serializable;
+
 /**
  * This interface defines the contract of an application session entity
  * registry. An entity registry is used at the application session level to help
@@ -40,7 +42,7 @@ public interface IEntityRegistry {
    *          the entity identifier.
    * @return the registered entity or <tt>null</tt>
    */
-  IEntity get(Class<? extends IEntity> entityContract, Object id);
+  IEntity get(Class<? extends IEntity> entityContract, Serializable id);
 
   /**
    * Registers an entity in the registry.

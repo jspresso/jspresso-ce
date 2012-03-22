@@ -277,28 +277,41 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, Class<?>[] extraInterfaces) {
-    IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) inlineComponentFactory
-        .getComponentDescriptor(entityContract);
-    if (entityDescriptor.isPurelyAbstract()) {
-      throw new EntityException(entityDescriptor.getName()
-          + " is purely abstract. It cannot be instanciated.");
-    }
-    InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
-    Class<?>[] implementedClasses;
-    if (extraInterfaces != null) {
-      implementedClasses = new Class[extraInterfaces.length + 2];
-      implementedClasses[0] = entityDescriptor.getComponentContract();
-      implementedClasses[1] = ILifecycleCapable.class;
-      for (int i = 0; i < extraInterfaces.length; i++) {
-        implementedClasses[i + 2] = extraInterfaces[i];
+    T entity;
+    if (entityContract.isInterface()) {
+      IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) inlineComponentFactory
+          .getComponentDescriptor(entityContract);
+      if (entityDescriptor.isPurelyAbstract()) {
+        throw new EntityException(entityDescriptor.getName()
+            + " is purely abstract. It cannot be instanciated.");
       }
+      InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
+      Class<?>[] implementedClasses;
+      if (extraInterfaces != null) {
+        implementedClasses = new Class[extraInterfaces.length + 2];
+        implementedClasses[0] = entityDescriptor.getComponentContract();
+        implementedClasses[1] = ILifecycleCapable.class;
+        for (int i = 0; i < extraInterfaces.length; i++) {
+          implementedClasses[i + 2] = extraInterfaces[i];
+        }
+      } else {
+        implementedClasses = new Class[2];
+        implementedClasses[0] = entityDescriptor.getComponentContract();
+        implementedClasses[1] = ILifecycleCapable.class;
+      }
+      entity = (T) Proxy.newProxyInstance(Thread.currentThread()
+          .getContextClassLoader(), implementedClasses, entityHandler);
     } else {
-      implementedClasses = new Class[2];
-      implementedClasses[0] = entityDescriptor.getComponentContract();
-      implementedClasses[1] = ILifecycleCapable.class;
+      try {
+        entity = entityContract.newInstance();
+      } catch (InstantiationException ex) {
+        throw new EntityException(ex, "Could not instanciate entity "
+            + entityContract.getName());
+      } catch (IllegalAccessException ex) {
+        throw new EntityException(ex, "Could not instanciate entity "
+            + entityContract.getName());
+      }
     }
-    T entity = (T) Proxy.newProxyInstance(Thread.currentThread()
-        .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
   }

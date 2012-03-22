@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -134,7 +135,7 @@ public interface IBackendController extends IController,
    * @return the registered entity or null.
    */
   IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
-      Object entityId);
+      Serializable entityId);
 
   /**
    * Gets the transactionTemplate.
@@ -350,10 +351,9 @@ public interface IBackendController extends IController,
    */
   void storeComponents(
       ComponentTransferStructure<? extends IComponent> components);
-  
+
   /**
    * Cleans-up request-scoped resources.
-   * 
    */
   void cleanupRequestResources();
 }

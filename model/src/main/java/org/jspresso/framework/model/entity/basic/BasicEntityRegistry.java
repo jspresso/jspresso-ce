@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.entity.basic;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,22 +37,22 @@ import org.jspresso.framework.model.entity.IEntityRegistry;
  */
 public class BasicEntityRegistry implements IEntityRegistry {
 
-  private Map<Class<? extends IEntity>, Map<Object, IEntity>> backingStore;
+  private Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore;
 
   /**
    * Constructs a new <code>BasicEntityRegistry</code> instance.
    */
   public BasicEntityRegistry() {
-    backingStore = new HashMap<Class<? extends IEntity>, Map<Object, IEntity>>();
+    backingStore = new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public IEntity get(Class<? extends IEntity> entityContract, Object id) {
+  public IEntity get(Class<? extends IEntity> entityContract, Serializable id) {
     IEntity registeredEntity = null;
-    Map<Object, IEntity> contractStore = backingStore.get(entityContract);
+    Map<Serializable, IEntity> contractStore = backingStore.get(entityContract);
     if (contractStore != null) {
       registeredEntity = contractStore.get(id);
       if (registeredEntity == null) {
@@ -60,7 +61,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
     }
     if (registeredEntity == null) {
       // we may try subclasses
-      for (Map.Entry<Class<? extends IEntity>, Map<Object, IEntity>> subclassContractStore : backingStore
+      for (Map.Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> subclassContractStore : backingStore
           .entrySet()) {
         if (entityContract.isAssignableFrom(subclassContractStore.getKey())) {
           contractStore = subclassContractStore.getValue();
@@ -94,7 +95,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
       }
       // do nothing since the entity is already registered.
     } else {
-      Map<Object, IEntity> contractStore = backingStore.get(entity
+      Map<Serializable, IEntity> contractStore = backingStore.get(entity
           .getComponentContract());
       if (contractStore == null) {
         contractStore = new ReferenceMap(AbstractReferenceMap.HARD,
