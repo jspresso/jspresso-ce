@@ -24,6 +24,12 @@
   <servlet>
     <servlet-name>ResourceProviderServlet</servlet-name>
     <servlet-class>org.jspresso.framework.util.resources.server.ResourceProviderServlet</servlet-class>
+    <init-param>
+      <description>The regular expression used to allow proxied download URLs.</description>
+      <param-name>allowedLocalUrlRegex</param-name>
+      <!-- <param-value>(classpath|http):.*\.(png|jpg|jpeg|gif|pdf|swf.?)</param-value> -->
+      <param-value/>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>ResourceProviderServlet</servlet-name>

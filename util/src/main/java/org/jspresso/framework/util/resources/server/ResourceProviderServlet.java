@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -53,6 +54,8 @@ import org.jspresso.framework.util.resources.IActiveResource;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.IResourceBase;
 import org.jspresso.framework.util.url.UrlHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This servlet class returns the web resource which matches the specified id
@@ -63,47 +66,75 @@ import org.jspresso.framework.util.url.UrlHelper;
  */
 public class ResourceProviderServlet extends HttpServlet {
 
+  private static final long   serialVersionUID                = 5253634459280974738L;
+
   /**
    * the url pattern to activate a resource download.
    */
-  private static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
+  private static final String DOWNLOAD_SERVLET_URL_PATTERN    = "/download";
 
   /**
    * id.
    */
-  private static final String ID_PARAMETER                 = "id";
+  private static final String ID_PARAMETER                    = "id";
 
   /**
    * height.
    */
-  private static final String IMAGE_HEIGHT_PARAMETER       = "height";
+  private static final String IMAGE_HEIGHT_PARAMETER          = "height";
 
   /**
    * imageUrl.
    */
-  private static final String IMAGE_URL_PARAMETER          = "imageUrl";
+  private static final String IMAGE_URL_PARAMETER             = "imageUrl";
 
   /**
    * width.
    */
-  private static final String IMAGE_WIDTH_PARAMETER        = "width";
+  private static final String IMAGE_WIDTH_PARAMETER           = "width";
 
   /**
    * localUrl.
    */
-  private static final String LOCAL_URL_PARAMETER          = "localUrl";
+  private static final String LOCAL_URL_PARAMETER             = "localUrl";
 
   /**
    * ommitFileName.
    */
-  private static final String OMMIT_FILE_NAME_PARAMETER    = "ommitFileName";
-
-  private static final long   serialVersionUID             = 5253634459280974738L;
+  private static final String OMMIT_FILE_NAME_PARAMETER       = "ommitFileName";
 
   /**
    * the url pattern to activate a resource upload.
    */
-  private static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
+  private static final String UPLOAD_SERVLET_URL_PATTERN      = "/upload";
+
+  /**
+   * the regex pattern to match in order to allow the download of a local
+   * resource.
+   */
+  private static final String DEFAULT_ALLOWED_LOCAL_URL_REGEX = "(classpath|http):.*\\.(png|jpg|jpeg|gif|pdf|swf.?)";
+
+  private static final String ALLOWED_LOCAL_URL_REGEX_KEY     = "allowedLocalUrlRegex";
+
+  private Pattern             allowedLocalUrlPattern          = Pattern
+                                                                  .compile(
+                                                                      DEFAULT_ALLOWED_LOCAL_URL_REGEX,
+                                                                      Pattern.CASE_INSENSITIVE);
+
+  private static final Logger LOG                             = LoggerFactory
+                                                                  .getLogger(ResourceProviderServlet.class);
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void init() {
+    String allowedLocalUrlRegex = getInitParameter(ALLOWED_LOCAL_URL_REGEX_KEY);
+    if (allowedLocalUrlRegex != null && allowedLocalUrlRegex.length() > 0) {
+      allowedLocalUrlPattern = Pattern.compile(allowedLocalUrlRegex,
+          Pattern.CASE_INSENSITIVE);
+    }
+  }
 
   /**
    * Computes the url where the resource is available for download.
@@ -332,37 +363,57 @@ public class ResourceProviderServlet extends HttpServlet {
           outputStream.close();
         }
       } else if (localUrlSpec != null) {
-        if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
-          // we must append parameters that are passed AFTER the localUrl
-          // parameter as they must be considered as part of the localUrl.
-          String queryString = request.getQueryString();
-          localUrlSpec = queryString.substring(
-              queryString.indexOf(LOCAL_URL_PARAMETER)
-                  + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
-        }
-        URL localUrl = UrlHelper.createURL(localUrlSpec);
-        if (localUrl == null) {
-          throw new ServletException("Bad local URL : " + localUrlSpec);
-        }
-        if (!ommitFileName) {
-          completeFileName(response, localUrl.getFile());
-        }
-        inputStream = new BufferedInputStream(localUrl.openStream());
-      } else if (imageUrlSpec != null) {
-        URL imageUrl = UrlHelper.createURL(imageUrlSpec);
-        if (imageUrl == null) {
-          throw new ServletException("Bad image URL : " + imageUrlSpec);
-        }
-        if (!ommitFileName) {
-          completeFileName(response, imageUrl.getFile());
-        }
-        String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
-        String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
-        if (width != null && height != null) {
-          inputStream = scaleImage(imageUrl, Integer.parseInt(width),
-              Integer.parseInt(height));
+        if (isLocalUrlAllowed(localUrlSpec)) {
+          if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
+            // we must append parameters that are passed AFTER the localUrl
+            // parameter as they must be considered as part of the localUrl.
+            String queryString = request.getQueryString();
+            localUrlSpec = queryString.substring(
+                queryString.indexOf(LOCAL_URL_PARAMETER)
+                    + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
+          }
+          URL localUrl = UrlHelper.createURL(localUrlSpec);
+          if (localUrl == null) {
+            throw new ServletException("Bad local URL : " + localUrlSpec);
+          }
+          if (!ommitFileName) {
+            completeFileName(response, localUrl.getFile());
+          }
+          inputStream = new BufferedInputStream(localUrl.openStream());
         } else {
-          inputStream = new BufferedInputStream(imageUrl.openStream());
+          LOG.warn(
+              "The resource provider servlet filtered a forbidden local URL request ({}). You can adapt the regex "
+                  + "security filtering options by modifying the [{}] init parameter on the servlet.",
+              localUrlSpec, ALLOWED_LOCAL_URL_REGEX_KEY);
+          LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY,
+              allowedLocalUrlPattern.pattern());
+          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        }
+      } else if (imageUrlSpec != null) {
+        if (isLocalUrlAllowed(imageUrlSpec)) {
+          URL imageUrl = UrlHelper.createURL(imageUrlSpec);
+          if (imageUrl == null) {
+            throw new ServletException("Bad image URL : " + imageUrlSpec);
+          }
+          if (!ommitFileName) {
+            completeFileName(response, imageUrl.getFile());
+          }
+          String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
+          String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
+          if (width != null && height != null) {
+            inputStream = scaleImage(imageUrl, Integer.parseInt(width),
+                Integer.parseInt(height));
+          } else {
+            inputStream = new BufferedInputStream(imageUrl.openStream());
+          }
+        } else {
+          LOG.warn(
+              "The resource provider servlet filtered a forbidden image URL request ({}). You can adapt the regex "
+                  + "security filtering options by modifying the [{}] init parameter on the servlet.",
+              imageUrlSpec, ALLOWED_LOCAL_URL_REGEX_KEY);
+          LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY,
+              allowedLocalUrlPattern.pattern());
+          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
       }
       if (inputStream != null) {
@@ -471,6 +522,11 @@ public class ResourceProviderServlet extends HttpServlet {
     } while (w != targetWidth || h != targetHeight);
 
     return ret;
+  }
+
+  private boolean isLocalUrlAllowed(String localUrl) {
+    return localUrl == null
+        || allowedLocalUrlPattern.matcher(localUrl).matches();
   }
 
   private static class UploadResourceAdapter extends AbstractResource {
