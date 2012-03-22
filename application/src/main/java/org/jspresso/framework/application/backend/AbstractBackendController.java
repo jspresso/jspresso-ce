@@ -77,6 +77,8 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -108,6 +110,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
+  private static final Logger                              LOG = LoggerFactory
+                                                                   .getLogger(AbstractBackendController.class);
+
   private IApplicationSession                              applicationSession;
   private IEntityCloneFactory                              carbonEntityCloneFactory;
   private IComponentCollectionFactory<IComponent>          collectionFactory;
@@ -134,6 +139,8 @@ public abstract class AbstractBackendController extends AbstractController
 
   private TimeZone                                         clientTimeZone;
 
+  private boolean                                          throwExceptionOnBadUsage;
+
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
    */
@@ -142,6 +149,7 @@ public abstract class AbstractBackendController extends AbstractController
     // moduleConnectors = new HashMap<Module, IValueConnector>();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
+    throwExceptionOnBadUsage = true;
   }
 
   /**
@@ -1146,6 +1154,19 @@ public abstract class AbstractBackendController extends AbstractController
     if (alreadyMerged.containsKey(entity)) {
       return (E) alreadyMerged.get(entity);
     }
+    if (isUnitOfWorkActive() && isDirty(entity)) {
+      LOG.error(
+          "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({}) to the application session.\n"
+              + "This will break transaction isolation since, if the transaction is rolled back,"
+              + " the UOW dirty state will be kept.\n"
+              + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
+          entity);
+      if (isThrowExceptionOnBadUsage()) {
+        throw new BackendException(
+            "A bad usage has been detected on the backend controller."
+                + "This is certainly an application coding problem. Please check the logs.");
+      }
+    }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       if (mergeMode != EMergeMode.MERGE_EAGER) {
@@ -1824,5 +1845,26 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public void cleanupRequestResources() {
     // Empty implementation
+  }
+
+  /**
+   * Gets the throwExceptionOnBadUsage.
+   * 
+   * @return the throwExceptionOnBadUsage.
+   */
+  protected boolean isThrowExceptionOnBadUsage() {
+    return throwExceptionOnBadUsage;
+  }
+
+  /**
+   * Configures the backend controller to throw or not an exception whenever a
+   * bad usage is detected like manually merging a dirty entity from an ongoing
+   * UOW.
+   * 
+   * @param throwExceptionOnBadUsage
+   *          the throwExceptionOnBadUsage to set.
+   */
+  protected void setThrowExceptionOnBadUsage(boolean throwExceptionOnBadUsage) {
+    this.throwExceptionOnBadUsage = throwExceptionOnBadUsage;
   }
 }
