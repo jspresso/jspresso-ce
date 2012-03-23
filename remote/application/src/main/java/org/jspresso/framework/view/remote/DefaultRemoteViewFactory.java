@@ -668,10 +668,37 @@ public class DefaultRemoteViewFactory extends
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
-        if (!propertyDescriptor.isTimeZoneAware()) {
+        final TimeZone serverTz = TimeZone.getDefault();
+        if (propertyDescriptor.isTimeZoneAware()) {
+          ((RemoteValueConnector) connector)
+              .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+
+                @Override
+                public Object getValueForState(Object originalValue) {
+                  return originalValue;
+                }
+
+                @Override
+                public Object getValueFromState(Object originalValue) {
+                  Calendar serverCalendar = Calendar.getInstance(serverTz);
+                  if (originalValue instanceof Date) {
+                    serverCalendar.setTime((Date) originalValue);
+                    if (serverCalendar.getTime().getTime() < 24 * 3600 * 1000) {
+                      // This is a default date. Set it today.
+                      Calendar today = Calendar.getInstance(serverTz);
+                      serverCalendar.set(today.get(Calendar.YEAR),
+                          today.get(Calendar.MONTH), today.get(Calendar.DATE));
+                    }
+                    Date connectorDate = serverCalendar.getTime();
+                    return connectorDate;
+                  }
+                  return originalValue;
+                }
+
+              });
+        } else {
           // In that case, we have to use a Date DTO to avoid any
           // transformation by the network layer
-          final TimeZone serverTz = TimeZone.getDefault();
           ((RemoteValueConnector) connector)
               .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
@@ -685,6 +712,12 @@ public class DefaultRemoteViewFactory extends
                         stateDate.getHour(), stateDate.getMinute(),
                         stateDate.getSecond());
                     serverCalendar.set(Calendar.MILLISECOND, 0);
+                    if (serverCalendar.getTime().getTime() < 24 * 3600 * 1000) {
+                      // This is a default date. Set it today.
+                      Calendar today = Calendar.getInstance(serverTz);
+                      serverCalendar.set(today.get(Calendar.YEAR),
+                          today.get(Calendar.MONTH), today.get(Calendar.DATE));
+                    }
                     Date connectorDate = serverCalendar.getTime();
                     return connectorDate;
                   }

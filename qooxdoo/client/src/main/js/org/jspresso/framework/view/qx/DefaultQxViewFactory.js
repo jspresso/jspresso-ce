@@ -1282,6 +1282,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.isSecondsAware());
+      remoteTimeField.useDateDto(!remoteDateField.isTimezoneAware())
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this
           ._sizeMaxComponentWidth(

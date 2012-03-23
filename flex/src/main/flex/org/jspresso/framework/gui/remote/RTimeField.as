@@ -20,9 +20,11 @@ package org.jspresso.framework.gui.remote {
     public class RTimeField extends RComponent {
 
       private var _secondsAware:Boolean;
+      private var _useDateDto:Boolean;
 
       public function RTimeField() {
         //default constructor.
+        _useDateDto = true;
       }
 
       public function get secondsAware():Boolean {
@@ -31,6 +33,14 @@ package org.jspresso.framework.gui.remote {
       
       public function set secondsAware(value:Boolean):void {
         _secondsAware = value;
+      }
+      
+      
+      public function useDateDto(value:Boolean):void {
+        _useDateDto = value;
+      }
+      public function isUseDateDto():Boolean {
+        return _useDateDto;
       }
     }
 }

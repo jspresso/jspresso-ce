@@ -1644,8 +1644,9 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.state = remoteDateField.state;
       remoteTimeField.toolTip = remoteDateField.toolTip;
       remoteTimeField.secondsAware = remoteDateField.secondsAware;
+      remoteTimeField.useDateDto(!remoteDateField.timezoneAware);
       
-      var timeField:UIComponent = createComponent(remoteTimeField, false);
+      var timeField:TextInput = createComponent(remoteTimeField, false) as TextInput;
       timeField.percentWidth = 100.0;
       
       dateTimeField.addChild(dateField);
@@ -2537,6 +2538,7 @@ package org.jspresso.framework.view.flex {
         return numberParser;
       } else if(remoteComponent is RTimeField) {
         var timeParser:TimeParser = new TimeParser();
+        timeParser.parseDateDto = (remoteComponent as RTimeField).isUseDateDto();
         return timeParser;
       }
       return null;

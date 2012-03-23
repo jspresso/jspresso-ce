@@ -86,12 +86,14 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
           var parsedYear = parsedDate.getFullYear();
           var parsedMonth = parsedDate.getMonth();
           var parsedDay = parsedDate.getDate();
-          var today = new Date();
-          if(str.indexOf("70") < 0 && parsedDate.getTime() > 0 && parsedDate.getTime() < 365*24*3600000) {
-            parsedYear = today.getFullYear();
-          }
-          if(str.indexOf("70") < 0 && str.indexOf("01") < 0 && parsedDate.getTime() > 0 && parsedDate.getTime() < 31*24*3600000) {
-            parsedMonth = today.getMonth();
+          if(!this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField) {
+            var today = new Date();
+	          if(str.indexOf("70") < 0 && parsedDate.getTime() > 0 && parsedDate.getTime() < 365*24*3600000) {
+	            parsedYear = today.getFullYear();
+	          }
+	          if(str.indexOf("70") < 0 && str.indexOf("01") < 0 && parsedDate.getTime() > 0 && parsedDate.getTime() < 31*24*3600000) {
+	            parsedMonth = today.getMonth();
+	          }
           }
           parsedDate = new Date(
             parsedYear,
@@ -102,19 +104,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
             parsedDate.getSeconds(),
             parsedDate.getMilliseconds()
           );
-          if(existingValue == null) {
-            return parsedDate;
-            /*
-            var parsedDateDto = new org.jspresso.framework.util.lang.DateDto();
-            parsedDateDto.setYear(parsedDate.getFullYear());
-            parsedDateDto.setMonth(parsedDate.getMonth());
-            parsedDateDto.setDate(parsedDate.getDate());
-            parsedDateDto.setHour(parsedDate.getHours());
-            parsedDateDto.setMinute(parsedDate.getMinutes());
-            parsedDateDto.setSecond(parsedDate.getSeconds());
-            return parsedDateDto;
-            */
-          } else {
+          if(existingValue != null) {
             if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField) {
               parsedDate = new Date(
                 parsedDate.getFullYear(),
@@ -136,8 +126,12 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
                 parsedDate.getMilliseconds()
               );
             }
-            return parsedDate;
           }
+          if(this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField
+             && this.getRemoteComponent().isUseDateDto()) {
+            parsedDate = org.jspresso.framework.util.format.DateUtils.fromDate(parsedDate);
+          }
+          return parsedDate;
         }
       }
     });

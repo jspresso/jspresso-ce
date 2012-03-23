@@ -18,9 +18,11 @@ package org.jspresso.framework.util.format {
   import org.jspresso.framework.util.lang.DateDto;
   
   public class TimeParser extends Parser {
+    
+    private var _parseDateDto:Boolean = true;
 
     public function TimeParser() {
-      //default constructor.
+      parseDateDto = true;
     }
 
     override public function parse(value:String, existingValue:Object = null):Object	{
@@ -39,11 +41,22 @@ package org.jspresso.framework.util.format {
           parsedDate.setFullYear(existingDateDto.year, existingDateDto.month, existingDateDto.date);
         }
       }
-      if(existingValue is Date) {
-        return parsedDate;
-      } else {
+      if(parseDateDto) {
         return DateUtils.fromDate(parsedDate);
+      } else {
+        return parsedDate;
       }
     }
+
+    public function get parseDateDto():Boolean
+    {
+      return _parseDateDto;
+    }
+
+    public function set parseDateDto(value:Boolean):void
+    {
+      _parseDateDto = value;
+    }
+
   }
 }
