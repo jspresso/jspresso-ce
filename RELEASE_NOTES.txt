@@ -1,5 +1,10 @@
 3.5.12
 ======
+- This release enforces correct usage of transactions (Unit of Work) and session.
+  Please, read carefully bugs :
+    http://mantis.jspresso.org/view.php?id=556
+    http://mantis.jspresso.org/view.php?id=557
+
 - Fixing the bug http://mantis.jspresso.org/view.php?id=541 , SJS does not change the case of
 the workspaces names and descriptions. It was lowering the case of the 1st char but does not do it anymore.
 This change might result in missing translations so change your resource bundles property files
