@@ -196,7 +196,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       execute(currentModule.getExitAction(), navigationContext);
       execute(getOnModuleExitAction(), navigationContext);
     }
-    displayWorkspace(workspaceName);
+    displayWorkspace(workspaceName, true);
     IView<E> moduleAreaView = workspaceViews.get(workspaceName);
     if (moduleAreaView != null) {
 
@@ -312,19 +312,43 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void displayWorkspace(String workspaceName) {
-    if (workspaceName != null) {
-      Workspace workspace = getWorkspace(workspaceName);
-      if (!workspace.isStarted()) {
-        if (workspace.getStartupAction() != null) {
-          Map<String, Object> actionContext = getInitialActionContext();
-          actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
-          execute(workspace.getStartupAction(), actionContext);
-          workspace.setStarted(true);
+  public final void displayWorkspace(String workspaceName) {
+    displayWorkspace(workspaceName, false);
+  }
+
+  /**
+   * Displays a workspace.
+   * 
+   * @param workspaceName
+   *          the workspace identifier.
+   * @param bypassModuleBoundaryActions
+   *          should we bypass module onEnter/Exit actions ?
+   */
+  protected void displayWorkspace(String workspaceName,
+      boolean bypassModuleBoundaryActions) {
+    if ((getSelectedWorkspaceName() == null && workspaceName == null)
+        || ObjectUtils.equals(getSelectedWorkspaceName(), workspaceName)) {
+      return;
+    }
+    if (bypassModuleBoundaryActions) {
+      if (workspaceName != null) {
+        Workspace workspace = getWorkspace(workspaceName);
+        if (!workspace.isStarted()) {
+          if (workspace.getStartupAction() != null) {
+            Map<String, Object> actionContext = getInitialActionContext();
+            actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
+            execute(workspace.getStartupAction(), actionContext);
+            workspace.setStarted(true);
+          }
         }
       }
+      this.selectedWorkspaceName = workspaceName;
+    } else {
+      // do as if we had selected the module in the target workspace.
+      // so that module boundary actions get triggered
+      // see bug #538
+      displayModule(workspaceName, getSelectedModule(workspaceName));
     }
-    this.selectedWorkspaceName = workspaceName;
   }
 
   /**

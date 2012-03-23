@@ -231,9 +231,10 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayWorkspace(String workspaceName) {
+  protected void displayWorkspace(String workspaceName,
+      boolean bypassModuleBoundaryActions) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
+      super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
       if (workspaceName != null) {
         if (workspaceInternalFrames == null) {
           workspaceInternalFrames = new HashMap<String, JInternalFrame>();
