@@ -662,6 +662,7 @@
         <constructor-arg index="0" value="save" />
       </bean>
     </property>
+    <property name="acceleratorAsString" value="ctrl S"/>
     <property name="name" value="save.name" />
     <property name="description" value="save.description" />
     <property name="wrappedAction" ref="saveModuleObjectBackAction" />
@@ -695,6 +696,7 @@
         <constructor-arg index="0" value="reload" />
       </bean>
     </property>
+    <property name="acceleratorAsString" value="ctrl Z"/>
     <property name="name" value="reload.name" />
     <property name="description" value="reload.description" />
     <property name="wrappedAction" ref="reloadModuleObjectBackAction" />

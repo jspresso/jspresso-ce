@@ -2357,6 +2357,7 @@ package org.jspresso.framework.view.flex {
                 if((keyEvent.shiftKey && accShift) || (!keyEvent.shiftKey && !accShift)) {
                   var character:String = String.fromCharCode(keyEvent.charCode);
                   if(splittedAccelerator.indexOf(character.toLowerCase()) >= 0) {
+                    keyEvent.stopPropagation();
                     getActionHandler().execute(action);
                   }
                 }
