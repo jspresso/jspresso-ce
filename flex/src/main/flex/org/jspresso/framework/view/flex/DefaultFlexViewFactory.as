@@ -17,6 +17,7 @@ package org.jspresso.framework.view.flex {
   import flash.display.DisplayObject;
   import flash.events.Event;
   import flash.events.FocusEvent;
+  import flash.events.KeyboardEvent;
   import flash.events.MouseEvent;
   import flash.events.TextEvent;
   
@@ -381,33 +382,33 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-      return createToolBarFromActionLists(remoteComponent.actionLists);
+      return createToolBarFromActionLists(remoteComponent.actionLists, component);
     }
     
     protected function createSecondaryToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-      return createToolBarFromActionLists(remoteComponent.secondaryActionLists);
+      return createToolBarFromActionLists(remoteComponent.secondaryActionLists, component);
     }
     
-    public function createToolBarFromActionLists(actionLists:Array):ApplicationControlBar {
+    public function createToolBarFromActionLists(actionLists:Array, component:UIComponent):ApplicationControlBar {
       var toolBar:ApplicationControlBar = new ApplicationControlBar();
       toolBar.percentWidth = 100.0;
-      installActionLists(toolBar, actionLists);
+      installActionLists(toolBar, actionLists, component);
       return toolBar;
     }
     
-    public function installActionLists(toolBar:ApplicationControlBar, actionLists:Array):void {
+    public function installActionLists(toolBar:ApplicationControlBar, actionLists:Array, component:UIComponent):void {
       if(actionLists != null) {
         for(var i:int = 0; i < actionLists.length; i++) {
           var actionList:RActionList = actionLists[i] as RActionList;
           if(actionList.collapsable) {
-            var popupButton:Button = createPopupButton(actionList);
+            var popupButton:Button = createPopupButton(actionList, component);
             if(popupButton != null) {
               toolBar.addChild(popupButton);
             }
           } else {
             if(actionList.actions != null) {
               for(var j:int = 0; j < actionList.actions.length; j++) {
-                toolBar.addChild(createAction(actionList.actions[j]));
+                toolBar.addChild(createAction(actionList.actions[j], component));
               }
             }
           }
@@ -650,7 +651,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createActionComponent(remoteActionComponent:RActionComponent):UIComponent {
-      var actionComponent:Button = createAction(remoteActionComponent.action);
+      var actionComponent:Button = createAction(remoteActionComponent.action, null);
       return actionComponent;
     }
     
@@ -674,7 +675,7 @@ package org.jspresso.framework.view.flex {
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
-          var actionComponent:Button = createAction(actionList.actions[j]);
+          var actionComponent:Button = createAction(actionList.actions[j], actionField);
           actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             actionComponent.width = actionComponent.height;
           });
@@ -2336,10 +2337,34 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    public function createAction(remoteAction:RAction, topApplicationAction:Boolean=false):Button {
-      var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon, topApplicationAction);
+    public function createAction(remoteAction:RAction, component:UIComponent, topApplicationAction:Boolean=false):Button {
+      var button:Button = createButton(remoteAction.name, createActionTooltip(remoteAction), remoteAction.icon, topApplicationAction);
       configureActionButton(button, remoteAction);
+      installKeyboardShortcut(remoteAction, component);
       return button;
+    }
+    
+    public function installKeyboardShortcut(action:RAction, component:UIComponent):void {
+      if(action.acceleratorAsString && component) {
+        var splittedAccelerator:Array = action.acceleratorAsString.toLowerCase().split(" ");
+        var accAlt:Boolean = splittedAccelerator.indexOf("alt") >= 0;
+        var accCtrl:Boolean = splittedAccelerator.indexOf("ctrl") >= 0;
+        var accShift:Boolean = splittedAccelerator.indexOf("shift") >= 0;
+        component.addEventListener(KeyboardEvent.KEY_UP, function(keyEvent:KeyboardEvent):void {
+          if(keyEvent.altKey || keyEvent.ctrlKey) {
+            if((keyEvent.altKey && accAlt) || (!keyEvent.altKey && !accAlt)) {
+              if((keyEvent.ctrlKey && accCtrl) || (!keyEvent.ctrlKey && !accCtrl)) {
+                if((keyEvent.shiftKey && accShift) || (!keyEvent.shiftKey && !accShift)) {
+                  var character:String = String.fromCharCode(keyEvent.charCode);
+                  if(splittedAccelerator.indexOf(character.toLowerCase()) >= 0) {
+                    getActionHandler().execute(action);
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
     }
 
     public function createDialogAction(remoteAction:RAction):Button {
@@ -2535,19 +2560,19 @@ package org.jspresso.framework.view.flex {
       return _iconTemplate;
     }
 
-    public function createMenus(actionLists:Array, useSeparator:Boolean):Array {
+    public function createMenus(actionLists:Array, useSeparator:Boolean, component:UIComponent):Array {
       var menus:Array = new Array();
       if(actionLists != null) {
         var menu:Object;
         for each (var actionList:RActionList in actionLists) {
           if (!useSeparator || menus.length == 0) {
-            menu = createMenu(actionList);
+            menu = createMenu(actionList, component);
             menus.push(menu);
           } else {
             var separator:Object = new Object();
             separator["type"] = "separator";
             menu["children"].push(separator);
-            for each (var menuItem:Object in createMenuItems(actionList)) {
+            for each (var menuItem:Object in createMenuItems(actionList, component)) {
               menu["children"].push(menuItem);
             }
           }
@@ -2556,14 +2581,14 @@ package org.jspresso.framework.view.flex {
       return menus;
     }
 
-    public function createPopupButton(actionList:RActionList, topApplicationButton:Boolean=false):Button {
+    public function createPopupButton(actionList:RActionList, component:UIComponent, topApplicationButton:Boolean=false):Button {
       if(actionList.actions == null || actionList.actions.length == 0) {
         return null;
       }
       if(actionList.actions.length == 1) {
-        return createAction(actionList.actions[0], topApplicationButton);
+        return createAction(actionList.actions[0], component, topApplicationButton);
       }
-      var dp:Object = createMenuItems(actionList);
+      var dp:Object = createMenuItems(actionList, component);
       var menu:Menu = new Menu();
       menu.dataProvider = dp;
       menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
@@ -2589,7 +2614,7 @@ package org.jspresso.framework.view.flex {
       return new PopUpButton();
     }
     
-    public function createMenu(actionList:RActionList):Object {
+    public function createMenu(actionList:RActionList, component:UIComponent):Object {
       var menu:Object = new Object();
       menu["label"] = actionList.name;
       menu["description"] = actionList.description;
@@ -2600,25 +2625,25 @@ package org.jspresso.framework.view.flex {
       }
       
       var menuItems:Array = new Array();
-      for each (var menuItem:Object in createMenuItems(actionList)) {
+      for each (var menuItem:Object in createMenuItems(actionList, component)) {
         menuItems.push(menuItem);
       }
       menu["children"] = menuItems;
       return menu;
     }
     
-    protected function createMenuItems(actionList:RActionList):Array {
+    protected function createMenuItems(actionList:RActionList, component:UIComponent):Array {
       var menuItems:Array = new Array();
       for each(var action:RAction in actionList.actions) {
-        menuItems.push(createMenuItem(action));
+        menuItems.push(createMenuItem(action, component));
       }
       return menuItems;
     }
     
-    protected function createMenuItem(action:RAction):Object {
+    protected function createMenuItem(action:RAction, component:UIComponent):Object {
       var menuItem:Object = new Object();
       menuItem["label"] = action.name;
-      menuItem["description"] = action.description;
+      menuItem["description"] = createActionTooltip(action);
       menuItem["data"] = action;
       if(action.icon) {
         menuItem["icon"] = iconTemplate;
@@ -2629,7 +2654,17 @@ package org.jspresso.framework.view.flex {
       };
       BindingUtils.bindSetter(updateMenuItemState, action, "enabled", true);
       _remotePeerRegistry.register(action);
+      installKeyboardShortcut(action, component);
       return menuItem;
+    }
+    
+    protected function createActionTooltip(action:RAction):String {
+      var toolTip:String = action.description;
+      if(action.acceleratorAsString) {
+        toolTip = "<html>" + toolTip + " <i>[" + action.acceleratorAsString.split(" ").join("+") + "]</i>" + "</html>";
+        toolTip = HtmlUtil.convertHtmlEntities(toolTip);
+      }
+      return toolTip;
     }
     
     protected function configureHorizontalAlignment(component:UIComponent, alignment:String):void {

@@ -392,7 +392,7 @@
       </bean>
     </property>
     <!-- <property name="mnemonicAsString" value="alt pressed A" /> -->
-    <property name="acceleratorAsString" value="alt A" />
+    <property name="acceleratorAsString" value="ctrl shift A" />
   </bean>
 
   <bean id="addAnyToMasterFrontAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
@@ -411,7 +411,7 @@
     </property>
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
-    <property name="acceleratorAsString" value="alt C" />
+    <property name="acceleratorAsString" value="ctrl shift C" />
     <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneComponentCollectionAction">
@@ -429,7 +429,7 @@
     </property>
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
-    <property name="acceleratorAsString" value="alt C" />
+    <property name="acceleratorAsString" value="ctrl shift C" />
     <property name="collectionBased" value="true" />
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
@@ -496,7 +496,7 @@
     </property>
     <property name="name" value="remove.name" />
     <property name="description" value="remove.description" />
-    <property name="acceleratorAsString" value="alt D" />
+    <property name="acceleratorAsString" value="ctrl shift D" />
     <property name="collectionBased" value="true" />
     <property name="messageCode" value="remove.selected.message" />
     <property name="yesAction" ref="removeCollectionFromMasterBackAction" />

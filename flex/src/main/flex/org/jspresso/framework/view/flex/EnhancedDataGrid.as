@@ -14,10 +14,8 @@
 
 package org.jspresso.framework.view.flex {
   import flash.events.Event;
-  import flash.events.KeyboardEvent;
   import flash.events.MouseEvent;
   
-  import mx.controls.CheckBox;
   import mx.controls.DataGrid;
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.controls.listClasses.IListItemRenderer;

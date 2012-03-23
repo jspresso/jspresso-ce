@@ -966,10 +966,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                   secondaryActions:Array,
                                                   helpActions:Array):UIComponent {
 
+      var applicationFrame:Application = Application.application as Application;
       var split:UIComponent = assembleSplittedSection(navigationAccordion, mainViewStack);
       assembleApplicationControlBar(exitAction, navigationActions, actions, helpActions);
       if(secondaryActions && secondaryActions.length > 0) {
-        var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions));
+        var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions, applicationFrame));
         var surroundingBox:VBox = new VBox();
         surroundingBox.percentWidth = 100.0;
         surroundingBox.percentHeight = 100.0;
@@ -1025,13 +1026,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
         controlBar.dock = true;
         applicationFrame.addChild(controlBar);
       }
-      getViewFactory().installActionLists(controlBar, navigationActions);
+      getViewFactory().installActionLists(controlBar, navigationActions, applicationFrame);
       getViewFactory().addSeparator(controlBar);
       var i:int;
       var popupButton:Button;
       if(actions != null) {
         for(i = 0; i < actions.length; i++) {
-          popupButton = getViewFactory().createPopupButton(actions[i] as RActionList, true);
+          popupButton = getViewFactory().createPopupButton(actions[i] as RActionList, applicationFrame, true);
           if(popupButton != null) {
             controlBar.addChild(popupButton);
           }
@@ -1045,23 +1046,24 @@ package org.jspresso.framework.application.frontend.controller.flex {
       controlBar.addChild(sb);
       if(helpActions != null) {
         for(i = 0; i < helpActions.length; i++) {
-          popupButton = getViewFactory().createPopupButton(helpActions[i] as RActionList, true);
+          popupButton = getViewFactory().createPopupButton(helpActions[i] as RActionList, applicationFrame, true);
           if(popupButton != null) {
             controlBar.addChild(popupButton);
           }
         }
       }
       getViewFactory().addSeparator(controlBar);
-      controlBar.addChild(getViewFactory().createAction(exitAction));
+      controlBar.addChild(getViewFactory().createAction(exitAction, applicationFrame));
       return controlBar;
     }
 
     protected function createApplicationMenuBar(actions:Array,
                                                 helpActions:Array):MenuBar {
+      var applicationFrame:Application = Application.application as Application;
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
-      menus = menus.concat(getViewFactory().createMenus(actions, false));
-      menus = menus.concat(getViewFactory().createMenus(helpActions, true));
+      menus = menus.concat(getViewFactory().createMenus(actions, false, applicationFrame));
+      menus = menus.concat(getViewFactory().createMenus(helpActions, true, applicationFrame));
       menuBarModel["children"] = menus;
       
       var menuBar:MenuBar = new MenuBar();
