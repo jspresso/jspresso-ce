@@ -2114,6 +2114,7 @@ package org.jspresso.framework.view.flex {
                 selIdx = 0;
               }
               table.scrollToIndex(selIdx);
+              table.editedItemPosition = {rowIndex:selIdx, columnIndex:0};
             }
           }
         } else {
