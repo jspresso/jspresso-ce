@@ -34,6 +34,7 @@ import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -167,9 +168,13 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       if (modelDescriptor instanceof IComponentDescriptorProvider<?>
           && ((IComponentDescriptorProvider<?>) modelDescriptor)
               .getComponentDescriptor() != null) {
-        currentSecurityContext.put(SecurityContextConstants.MODEL,
-            ((IComponentDescriptorProvider<?>) modelDescriptor)
-                .getComponentDescriptor().getPermId());
+        if (!(currentSecurityContext.get(LAST_PUSHED_VIEW) instanceof IPropertyViewDescriptor)) {
+          // only dig the model if we are not on a reference property view (LOV
+          // field). see bug #560.
+          currentSecurityContext.put(SecurityContextConstants.MODEL,
+              ((IComponentDescriptorProvider<?>) modelDescriptor)
+                  .getComponentDescriptor().getPermId());
+        }
       } else if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
         currentSecurityContext.put(SecurityContextConstants.MODEL,
             ((ICollectionDescriptorProvider<?>) modelDescriptor)
