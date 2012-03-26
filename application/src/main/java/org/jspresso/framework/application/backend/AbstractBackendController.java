@@ -1898,7 +1898,7 @@ public abstract class AbstractBackendController extends AbstractController
           paramEntity.getComponentContract(), paramEntity.getId());
     }
     if (isUnitOfWorkActive()) {
-      if (targetEntity != null && targetEntity == sessionTargetEntity) {
+      if (targetEntity != null && targetEntity.isPersistent() && targetEntity == sessionTargetEntity) {
         // We are modifying on a session entity inside a unit of work. This is
         // not legal.
         LOG.error(
@@ -1929,7 +1929,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } else {
-      if (targetEntity != null && targetEntity != sessionTargetEntity) {
+      if (targetEntity != null && targetEntity.isPersistent() && targetEntity != sessionTargetEntity) {
         // We are working on an entity that has not been registered in the
         // session. This is not legal.
         LOG.error(
