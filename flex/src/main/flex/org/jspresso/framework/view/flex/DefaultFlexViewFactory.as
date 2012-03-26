@@ -2509,6 +2509,7 @@ package org.jspresso.framework.view.flex {
           numberFormatter = new NumberFormatter();
         }
         numberFormatter.decimalSeparatorFrom = ".";
+        numberFormatter.thousandsSeparatorFrom = " ";
         numberFormatter.rounding = NumberBaseRoundType.NEAREST;
         if(remoteComponent is RDecimalComponent) {
           numberFormatter.precision = (remoteComponent as RDecimalComponent).maxFractionDigit;
