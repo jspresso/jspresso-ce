@@ -42,7 +42,7 @@ public class BasicQueryComponentDescriptorFactory implements
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
     return new BasicQueryComponentDescriptor<IQueryComponent>(
-        componentDescriptorProvider, IQueryComponent.class);
+        componentDescriptorProvider);
   }
 
 }

@@ -20,19 +20,11 @@ package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.util.collection.IPageable;
 
 /**
@@ -45,35 +37,28 @@ import org.jspresso.framework.util.collection.IPageable;
  *          the concrete type of components.
  */
 public class BasicQueryComponentDescriptor<E> extends
-    AbstractComponentDescriptor<E> {
-
-  private Class<E>                                   componentContract;
-  private IComponentDescriptor<? extends IComponent> componentDescriptor;
+    RefQueryComponentDescriptor<IQueryComponent> {
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
    * 
    * @param componentDescriptorProvider
    *          the provider for delegate entity descriptor.
-   * @param componentContract
-   *          the actual query component contract.
    */
   public BasicQueryComponentDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
-      Class<E> componentContract) {
-    super(componentDescriptorProvider.getComponentDescriptor()
-        .getComponentContract().getName());
-    this.componentDescriptor = componentDescriptorProvider
-        .getComponentDescriptor();
-    this.componentContract = componentContract;
-    Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
-      propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
-    }
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
+    super(componentDescriptorProvider, IQueryComponent.class);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Collection<IPropertyDescriptor> getExtraPropertyDescriptors() {
+    Collection<IPropertyDescriptor> extraPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
     BasicListDescriptor<IComponent> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<IComponent>();
     queriedEntitiesCollectionDescriptor
-        .setElementDescriptor(componentDescriptor);
+        .setElementDescriptor(getQueriedComponentsDescriptor());
     queriedEntitiesCollectionDescriptor
         .setName(IQueryComponent.QUERIED_COMPONENTS);
     queriedEntitiesCollectionDescriptor
@@ -82,136 +67,33 @@ public class BasicQueryComponentDescriptor<E> extends
     qCPDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
     qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
 
-    propertyDescriptors.add(qCPDescriptor);
+    extraPropertyDescriptors.add(qCPDescriptor);
 
     BasicIntegerPropertyDescriptor pagePropertyDescriptor = new BasicIntegerPropertyDescriptor();
     pagePropertyDescriptor.setName(IPageable.PAGE);
     pagePropertyDescriptor.setReadOnly(true);
-    propertyDescriptors.add(pagePropertyDescriptor);
+    extraPropertyDescriptors.add(pagePropertyDescriptor);
 
     BasicIntegerPropertyDescriptor displayPageIndexPropertyDescriptor = new BasicIntegerPropertyDescriptor();
     displayPageIndexPropertyDescriptor.setName(IPageable.DISPLAY_PAGE_INDEX);
-    propertyDescriptors.add(displayPageIndexPropertyDescriptor);
+    extraPropertyDescriptors.add(displayPageIndexPropertyDescriptor);
 
     BasicIntegerPropertyDescriptor pageSizePropertyDescriptor = new BasicIntegerPropertyDescriptor();
     pageSizePropertyDescriptor.setName(IPageable.PAGE_SIZE);
     pageSizePropertyDescriptor.setReadOnly(true);
-    propertyDescriptors.add(pageSizePropertyDescriptor);
+    extraPropertyDescriptors.add(pageSizePropertyDescriptor);
 
     BasicIntegerPropertyDescriptor pageCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
     pageCountPropertyDescriptor.setName(IPageable.PAGE_COUNT);
     pageCountPropertyDescriptor.setReadOnly(true);
-    propertyDescriptors.add(pageCountPropertyDescriptor);
+    extraPropertyDescriptors.add(pageCountPropertyDescriptor);
 
     BasicIntegerPropertyDescriptor recordCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
     recordCountPropertyDescriptor.setName(IPageable.RECORD_COUNT);
     recordCountPropertyDescriptor.setReadOnly(true);
-    propertyDescriptors.add(recordCountPropertyDescriptor);
+    extraPropertyDescriptors.add(recordCountPropertyDescriptor);
 
-    setPropertyDescriptors(propertyDescriptors);
-    setDescription(componentDescriptor.getDescription());
-    setIconImageURL(componentDescriptor.getIconImageURL());
-    List<String> qProperties = new ArrayList<String>();
-    for (String queryableProperty : componentDescriptorProvider
-        .getQueryableProperties()) {
-      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
-      if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
-        for (String nestedRenderedProperty : ((ComparableQueryStructureDescriptor) propertyDescriptor)
-            .getRenderedProperties()) {
-          qProperties.add(propertyDescriptor.getName() + "."
-              + nestedRenderedProperty);
-        }
-      } else {
-        qProperties.add(propertyDescriptor.getName());
-      }
-    }
-    setRenderedProperties(qProperties);
-    setToStringProperty(componentDescriptor.getToStringProperty());
-    setUnclonedProperties(componentDescriptor.getUnclonedProperties());
-    setPageSize(componentDescriptor.getPageSize());
-    setOrderingProperties(componentDescriptor.getOrderingProperties());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IPropertyDescriptor refinePropertyDescriptor(
-      IPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor != null
-        && propertyDescriptor.getName() != null
-        && (propertyDescriptor.getName().endsWith(
-            ComparableQueryStructureDescriptor.INF_VALUE) || propertyDescriptor
-            .getName().endsWith(ComparableQueryStructureDescriptor.SUP_VALUE))) {
-      return propertyDescriptor;
-    }
-    IPropertyDescriptor refinedPropertyDescriptor;
-    if (propertyDescriptor instanceof BasicPropertyDescriptor
-        && isPropertyFilterComparable(propertyDescriptor)) {
-      refinedPropertyDescriptor = new ComparableQueryStructureDescriptor(
-          ((BasicPropertyDescriptor) propertyDescriptor)
-              .createQueryDescriptor());
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-      Class<IComponent> refType = (Class<IComponent>) ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getComponentContract();
-      ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor)
-          .setReferencedDescriptor(new BasicQueryComponentDescriptor<IComponent>(
-              (IReferencePropertyDescriptor<IComponent>) propertyDescriptor,
-              refType));
-      refinedPropertyDescriptor = propertyDescriptor;
-    } else {
-      refinedPropertyDescriptor = propertyDescriptor;
-    }
-    return refinedPropertyDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<E> getComponentContract() {
-    return componentContract;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<?> getQueryComponentContract() {
-    return componentDescriptor.getComponentContract();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isEntity() {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isPurelyAbstract() {
-    return false;
-  }
-
-  /**
-   * Wether we need to create a comparable query structure for this property.
-   * 
-   * @param propertyDescriptor
-   *          the property descriptor to test.
-   * @return true if we need to create a comparable query structure for this
-   *         property.
-   */
-  protected boolean isPropertyFilterComparable(
-      IPropertyDescriptor propertyDescriptor) {
-    return propertyDescriptor instanceof INumberPropertyDescriptor
-        || propertyDescriptor instanceof IDatePropertyDescriptor
-        || propertyDescriptor instanceof ITimePropertyDescriptor
-        || propertyDescriptor instanceof IDurationPropertyDescriptor;
+    return extraPropertyDescriptors;
   }
 
   /**
