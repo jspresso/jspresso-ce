@@ -41,10 +41,13 @@ import org.jspresso.framework.util.collection.IPageable;
  * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete type of components.
  */
-public class BasicQueryComponentDescriptor extends
-    AbstractComponentDescriptor<IQueryComponent> {
+public class BasicQueryComponentDescriptor<E> extends
+    AbstractComponentDescriptor<E> {
 
+  private Class<E>                                   componentContract;
   private IComponentDescriptor<? extends IComponent> componentDescriptor;
 
   /**
@@ -52,24 +55,21 @@ public class BasicQueryComponentDescriptor extends
    * 
    * @param componentDescriptorProvider
    *          the provider for delegate entity descriptor.
+   * @param componentContract
+   *          the actual query component contract.
    */
   public BasicQueryComponentDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+      Class<E> componentContract) {
     super(componentDescriptorProvider.getComponentDescriptor()
         .getComponentContract().getName());
     this.componentDescriptor = componentDescriptorProvider
         .getComponentDescriptor();
+    this.componentContract = componentContract;
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
-      if (propertyDescriptor instanceof BasicPropertyDescriptor
-          && isPropertyFilterComparable(propertyDescriptor)) {
-        propertyDescriptors.add(new ComparableQueryStructureDescriptor(
-            ((BasicPropertyDescriptor) propertyDescriptor)
-                .createQueryDescriptor()));
-      } else {
-        propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
-      }
+      propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
     }
     BasicListDescriptor<IComponent> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<IComponent>();
     queriedEntitiesCollectionDescriptor
@@ -116,7 +116,7 @@ public class BasicQueryComponentDescriptor extends
         .getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
       if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
-        for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+        for (String nestedRenderedProperty : ((ComparableQueryStructureDescriptor) propertyDescriptor)
             .getRenderedProperties()) {
           qProperties.add(propertyDescriptor.getName() + "."
               + nestedRenderedProperty);
@@ -135,9 +135,43 @@ public class BasicQueryComponentDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public Class<IQueryComponent> getComponentContract() {
-    return IQueryComponent.class;
+  protected IPropertyDescriptor refinePropertyDescriptor(
+      IPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor != null
+        && propertyDescriptor.getName() != null
+        && (propertyDescriptor.getName().endsWith(
+            ComparableQueryStructureDescriptor.INF_VALUE) || propertyDescriptor
+            .getName().endsWith(ComparableQueryStructureDescriptor.SUP_VALUE))) {
+      return propertyDescriptor;
+    }
+    IPropertyDescriptor refinedPropertyDescriptor;
+    if (propertyDescriptor instanceof BasicPropertyDescriptor
+        && isPropertyFilterComparable(propertyDescriptor)) {
+      refinedPropertyDescriptor = new ComparableQueryStructureDescriptor(
+          ((BasicPropertyDescriptor) propertyDescriptor)
+              .createQueryDescriptor());
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+      Class<IComponent> refType = (Class<IComponent>) ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor().getComponentContract();
+      ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor)
+          .setReferencedDescriptor(new BasicQueryComponentDescriptor<IComponent>(
+              (IReferencePropertyDescriptor<IComponent>) propertyDescriptor,
+              refType));
+      refinedPropertyDescriptor = propertyDescriptor;
+    } else {
+      refinedPropertyDescriptor = propertyDescriptor;
+    }
+    return refinedPropertyDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Class<E> getComponentContract() {
+    return componentContract;
   }
 
   /**

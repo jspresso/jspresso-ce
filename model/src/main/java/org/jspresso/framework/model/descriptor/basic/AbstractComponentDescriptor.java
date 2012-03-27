@@ -316,13 +316,14 @@ public abstract class AbstractComponentDescriptor<E> extends
         if (rootProp instanceof IComponentDescriptorProvider<?>) {
           IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
               .getComponentDescriptor();
-          descriptor = componentDescriptor.getPropertyDescriptor(
-              propertyName.substring(nestedDotIndex + 1));
+          descriptor = componentDescriptor.getPropertyDescriptor(propertyName
+              .substring(nestedDotIndex + 1));
           descriptor = descriptor.clone();
           if (descriptor instanceof BasicPropertyDescriptor) {
             ((BasicPropertyDescriptor) descriptor).setName(propertyName);
           }
-          nestedPropertyDescriptors.put(propertyName, descriptor);
+          nestedPropertyDescriptors.put(propertyName,
+              refinePropertyDescriptor(descriptor));
         }
       }
     } else {
@@ -335,7 +336,8 @@ public abstract class AbstractComponentDescriptor<E> extends
         }
       }
     }
-    propertyDescriptorsCache.put(propertyName, descriptor);
+    propertyDescriptorsCache.put(propertyName,
+        refinePropertyDescriptor(descriptor));
     return descriptor;
   }
 
@@ -364,7 +366,11 @@ public abstract class AbstractComponentDescriptor<E> extends
           allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
         }
       }
-      allPropertyDescriptorsCache = allDescriptors.values();
+      allPropertyDescriptorsCache = new ArrayList<IPropertyDescriptor>();
+      for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
+        allPropertyDescriptorsCache
+            .add(refinePropertyDescriptor(propertyDescriptor));
+      }
     }
     return allPropertyDescriptorsCache;
   }
@@ -1193,8 +1199,20 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused")
-  String permId) {
+  public void setPermId(@SuppressWarnings("unused") String permId) {
     throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Allow subclasses to hook up and potentialy transform the actual property
+   * descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the original property descriptor.
+   * @return the transformed property descriptor.
+   */
+  protected IPropertyDescriptor refinePropertyDescriptor(
+      IPropertyDescriptor propertyDescriptor) {
+    return propertyDescriptor;
   }
 }

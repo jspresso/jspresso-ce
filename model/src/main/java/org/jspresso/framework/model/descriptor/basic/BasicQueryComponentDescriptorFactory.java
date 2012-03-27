@@ -41,7 +41,8 @@ public class BasicQueryComponentDescriptorFactory implements
   @Override
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
-    return new BasicQueryComponentDescriptor(componentDescriptorProvider);
+    return new BasicQueryComponentDescriptor<IQueryComponent>(
+        componentDescriptorProvider, IQueryComponent.class);
   }
 
 }
