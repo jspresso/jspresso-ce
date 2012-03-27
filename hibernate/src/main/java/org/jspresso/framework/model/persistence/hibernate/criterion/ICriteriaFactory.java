@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.criterion;
 
+import java.util.Map;
+
 import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
@@ -35,9 +37,11 @@ public interface ICriteriaFactory {
    *          the enhanced detached criteria to apply ordering for.
    * @param queryComponent
    *          the query component holding the sort order specs.
+   * @param context
+   *          the currect action context.
    */
   void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
-      IQueryComponent queryComponent);
+      IQueryComponent queryComponent, Map<String, Object> context);
 
   /**
    * Creates an Hibernate detached criteria by traversing a query component.
@@ -46,8 +50,11 @@ public interface ICriteriaFactory {
    * 
    * @param queryComponent
    *          the query component to traverse.
+   * @param context
+   *          the currect action context.
    * @return the detached criteria or null if the query component is invalid.
    */
-  EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent);
+  EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent,
+      Map<String, Object> context);
 
 }

@@ -118,7 +118,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private Collection<IGate>                               writabilityGates;
 
   private Map<String, IPropertyDescriptor>                propertyDescriptorsCache;
-  private Collection<IPropertyDescriptor>                 allPropertpropertyDescriptorsCache;
+  private Collection<IPropertyDescriptor>                 allPropertyDescriptorsCache;
 
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
@@ -343,7 +343,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public synchronized Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    if (allPropertpropertyDescriptorsCache == null) {
+    if (allPropertyDescriptorsCache == null) {
       // A map is used instead of a set since a set does not replace an element
       // it
       // already contains.
@@ -363,9 +363,9 @@ public abstract class AbstractComponentDescriptor<E> extends
           allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
         }
       }
-      allPropertpropertyDescriptorsCache = allDescriptors.values();
+      allPropertyDescriptorsCache = allDescriptors.values();
     }
-    return allPropertpropertyDescriptorsCache;
+    return allPropertyDescriptorsCache;
   }
 
   /**
@@ -809,7 +809,7 @@ public abstract class AbstractComponentDescriptor<E> extends
       nestedPropertyDescriptors = null;
     }
     propertyDescriptorsCache = new HashMap<String, IPropertyDescriptor>();
-    allPropertpropertyDescriptorsCache = null;
+    allPropertyDescriptorsCache = null;
   }
 
   /**

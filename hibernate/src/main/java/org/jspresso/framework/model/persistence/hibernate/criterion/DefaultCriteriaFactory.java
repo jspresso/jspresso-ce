@@ -30,6 +30,7 @@ import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -50,7 +51,8 @@ import org.slf4j.LoggerFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultCriteriaFactory implements ICriteriaFactory {
+public class DefaultCriteriaFactory extends AbstractActionContextAware
+    implements ICriteriaFactory {
 
   private static final Logger LOG = LoggerFactory
                                       .getLogger(DefaultCriteriaFactory.class);
@@ -69,7 +71,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
    */
   @Override
   public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
-      IQueryComponent queryComponent) {
+      IQueryComponent queryComponent,
+      @SuppressWarnings("unused") Map<String, Object> context) {
     criteria.setProjection(null);
     criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
     // complete sorting properties
@@ -168,7 +171,9 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
    * {@inheritDoc}
    */
   @Override
-  public EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent) {
+  public EnhancedDetachedCriteria createCriteria(
+      IQueryComponent queryComponent,
+      @SuppressWarnings("unused") Map<String, Object> context) {
     EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria
         .forEntityName(queryComponent.getQueryContract().getName());
     boolean abort = completeCriteria(criteria, criteria, null, queryComponent);

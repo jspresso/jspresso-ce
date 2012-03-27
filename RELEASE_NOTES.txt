@@ -1,5 +1,7 @@
 3.5.12
 ======
+- The methods of ICriteriaFactory now take the action context as extra parameter.
+
 - This release enforces correct usage of transactions (Unit of Work) and session.
   Please, read carefully bugs :
     http://mantis.jspresso.org/view.php?id=556

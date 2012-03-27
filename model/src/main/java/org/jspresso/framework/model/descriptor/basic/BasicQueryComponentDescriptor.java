@@ -84,29 +84,29 @@ public class BasicQueryComponentDescriptor extends
 
     propertyDescriptors.add(qCPDescriptor);
 
-    BasicIntegerPropertyDescriptor pagePropertyDescripror = new BasicIntegerPropertyDescriptor();
-    pagePropertyDescripror.setName(IPageable.PAGE);
-    pagePropertyDescripror.setReadOnly(true);
-    propertyDescriptors.add(pagePropertyDescripror);
+    BasicIntegerPropertyDescriptor pagePropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    pagePropertyDescriptor.setName(IPageable.PAGE);
+    pagePropertyDescriptor.setReadOnly(true);
+    propertyDescriptors.add(pagePropertyDescriptor);
 
-    BasicIntegerPropertyDescriptor displayPageIndexPropertyDescripror = new BasicIntegerPropertyDescriptor();
-    displayPageIndexPropertyDescripror.setName(IPageable.DISPLAY_PAGE_INDEX);
-    propertyDescriptors.add(displayPageIndexPropertyDescripror);
+    BasicIntegerPropertyDescriptor displayPageIndexPropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    displayPageIndexPropertyDescriptor.setName(IPageable.DISPLAY_PAGE_INDEX);
+    propertyDescriptors.add(displayPageIndexPropertyDescriptor);
 
-    BasicIntegerPropertyDescriptor pageSizePropertyDescripror = new BasicIntegerPropertyDescriptor();
-    pageSizePropertyDescripror.setName(IPageable.PAGE_SIZE);
-    pageSizePropertyDescripror.setReadOnly(true);
-    propertyDescriptors.add(pageSizePropertyDescripror);
+    BasicIntegerPropertyDescriptor pageSizePropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    pageSizePropertyDescriptor.setName(IPageable.PAGE_SIZE);
+    pageSizePropertyDescriptor.setReadOnly(true);
+    propertyDescriptors.add(pageSizePropertyDescriptor);
 
-    BasicIntegerPropertyDescriptor pageCountPropertyDescripror = new BasicIntegerPropertyDescriptor();
-    pageCountPropertyDescripror.setName(IPageable.PAGE_COUNT);
-    pageCountPropertyDescripror.setReadOnly(true);
-    propertyDescriptors.add(pageCountPropertyDescripror);
+    BasicIntegerPropertyDescriptor pageCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    pageCountPropertyDescriptor.setName(IPageable.PAGE_COUNT);
+    pageCountPropertyDescriptor.setReadOnly(true);
+    propertyDescriptors.add(pageCountPropertyDescriptor);
 
-    BasicIntegerPropertyDescriptor recordCountPropertyDescripror = new BasicIntegerPropertyDescriptor();
-    recordCountPropertyDescripror.setName(IPageable.RECORD_COUNT);
-    recordCountPropertyDescripror.setReadOnly(true);
-    propertyDescriptors.add(recordCountPropertyDescripror);
+    BasicIntegerPropertyDescriptor recordCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    recordCountPropertyDescriptor.setName(IPageable.RECORD_COUNT);
+    recordCountPropertyDescriptor.setReadOnly(true);
+    propertyDescriptors.add(recordCountPropertyDescriptor);
 
     setPropertyDescriptors(propertyDescriptors);
     setDescription(componentDescriptor.getDescription());

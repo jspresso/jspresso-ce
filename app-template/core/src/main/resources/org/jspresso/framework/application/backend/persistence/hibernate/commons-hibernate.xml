@@ -38,6 +38,19 @@
         </entry>
       </map>
     </property>
+    <property name="filterDefinitions">
+      <list>
+        <bean class="org.springframework.orm.hibernate3.FilterDefinitionFactoryBean">
+          <property name="filterName" value="JspressoSessionGlobals"/>
+          <property name="parameterTypes">
+            <map>
+              <entry key="login" value="string"/>
+              <entry key="language" value="string"/>
+            </map>
+          </property>
+        </bean>
+      </list>
+    </property>
   </bean>
 
   <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
@@ -53,15 +66,18 @@
     <property name="sessionFactory" ref="hibernateSessionFactory" />
     <property name="flushModeName" value="FLUSH_COMMIT"/>
     <property name="entityInterceptor" ref="entityInterceptor"/>
+    <property name="filterName" value="JspressoSessionGlobals"/>
   </bean>
 
   <!-- Hibernate root action beans. -->
   <bean abstract="true" id="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
-  <bean id="criteriaFactory" class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
+  <bean id="criteriaFactoryBase" abstract = "true" class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
     <property name="triStateBooleanSupported" ref="triStateBooleanSupported" />
   </bean>
+
+  <bean id="criteriaFactory" parent="criteriaFactoryBase" />
 
   <bean id="applicationCriteriaRefiner" class="org.jspresso.framework.application.backend.action.persistence.hibernate.MockCriteriaRefiner" />
 

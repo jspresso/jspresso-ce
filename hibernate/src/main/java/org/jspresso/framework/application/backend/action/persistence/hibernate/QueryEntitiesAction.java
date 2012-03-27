@@ -161,8 +161,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
       critFactory = getCriteriaFactory();
     }
-    EnhancedDetachedCriteria criteria = critFactory
-        .createCriteria(queryComponent);
+    EnhancedDetachedCriteria criteria = critFactory.createCriteria(
+        queryComponent, context);
     List<?> entities;
     if (criteria == null) {
       entities = new ArrayList<IEntity>();
@@ -212,7 +212,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             criteria.addOrder(order);
           }
         }
-        critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
+        critFactory.completeCriteriaWithOrdering(criteria, queryComponent,
+            context);
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
@@ -225,7 +226,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             criteria.addOrder(order);
           }
         }
-        critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
+        critFactory.completeCriteriaWithOrdering(criteria, queryComponent,
+            context);
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }

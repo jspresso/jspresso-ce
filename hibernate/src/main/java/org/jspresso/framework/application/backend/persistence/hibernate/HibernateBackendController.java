@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Criteria;
+import org.hibernate.Filter;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -72,14 +73,27 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private HibernateTemplate   hibernateTemplate;
   private SessionFactory      hibernateSessionFactory;
-  private FlushMode           defaultTxFlushMode         = FlushMode.COMMIT;
+  private FlushMode           defaultTxFlushMode                = FlushMode.COMMIT;
 
   private Set<IEntity>        updatedEntities;
   private Set<IEntity>        deletedEntities;
-  private boolean             traversedPendingOperations = false;
+  private boolean             traversedPendingOperations        = false;
 
-  private static final Logger LOG                        = LoggerFactory
-                                                             .getLogger(HibernateBackendController.class);
+  /**
+   * <code>JSPRESSO_SESSION_GLOBALS</code> is "JspressoSessionGlobals".
+   */
+  public static final String  JSPRESSO_SESSION_GLOBALS          = "JspressoSessionGlobals";
+  /**
+   * <code>JSPRESSO_SESSION_GLOBALS_LOGIN</code> is "login".
+   */
+  public static final String  JSPRESSO_SESSION_GLOBALS_LOGIN    = "login";
+  /**
+   * <code>JSPRESSO_SESSION_GLOBALS_LANGUAGE</code> is "language".
+   */
+  public static final String  JSPRESSO_SESSION_GLOBALS_LANGUAGE = "language";
+
+  private static final Logger LOG                               = LoggerFactory
+                                                                    .getLogger(HibernateBackendController.class);
 
   /**
    * Whenever the entity has dirty persistent collection, make them clean to
@@ -229,6 +243,8 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Deprecated
   public HibernateTemplate getHibernateTemplate() {
+    configureHibernateGlobalFilter(hibernateTemplate
+        .enableFilter(JSPRESSO_SESSION_GLOBALS));
     return hibernateTemplate;
   }
 
@@ -256,7 +272,24 @@ public class HibernateBackendController extends AbstractBackendController {
       // we are on a transactional session.
       currentSession.setFlushMode(getDefaultTxFlushMode());
     }
+    configureHibernateGlobalFilter(currentSession
+        .enableFilter(JSPRESSO_SESSION_GLOBALS));
     return currentSession;
+  }
+
+  private void configureHibernateGlobalFilter(Filter filter) {
+    if (getLocale() != null) {
+      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE,
+          getLocale().getLanguage());
+    } else {
+      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, "");
+    }
+    if (getApplicationSession().getPrincipal() != null) {
+      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN,
+          getApplicationSession().getPrincipal().getName());
+    } else {
+      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN, "");
+    }
   }
 
   private Session currentInitializationSession = null;
@@ -825,8 +858,8 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
+      public List<T> doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
         Criteria executableCriteria = criteria
             .getExecutableCriteria(getHibernateSession());
         if (firstResult >= 0) {
