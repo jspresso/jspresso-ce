@@ -317,7 +317,8 @@ public abstract class AbstractComponentDescriptor<E> extends
           IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
               .getComponentDescriptor();
           descriptor = componentDescriptor.getPropertyDescriptor(
-              propertyName.substring(nestedDotIndex + 1)).clone();
+              propertyName.substring(nestedDotIndex + 1));
+          descriptor = descriptor.clone();
           if (descriptor instanceof BasicPropertyDescriptor) {
             ((BasicPropertyDescriptor) descriptor).setName(propertyName);
           }
