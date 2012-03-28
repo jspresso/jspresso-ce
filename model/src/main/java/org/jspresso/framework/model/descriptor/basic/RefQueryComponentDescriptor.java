@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,13 +47,10 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 public class RefQueryComponentDescriptor<E> extends
     AbstractComponentDescriptor<E> {
 
-  private Class<? extends E>                                                               componentContract;
-  private IComponentDescriptorProvider<? extends IComponent>                               queriedComponentsDescriptorProvider;
+  private Class<? extends E>                                                           componentContract;
+  private IComponentDescriptorProvider<? extends IComponent>                           queriedComponentsDescriptorProvider;
 
-  private static Map<Class<? extends IComponent>, RefQueryComponentDescriptor<IComponent>> registry;
-  static {
-    registry = new HashMap<Class<? extends IComponent>, RefQueryComponentDescriptor<IComponent>>();
-  }
+  private Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
@@ -63,12 +59,17 @@ public class RefQueryComponentDescriptor<E> extends
    *          the provider for delegate entity descriptor.
    * @param componentContract
    *          the actual query component contract.
+   * @param registry
+   *          the shared registry to store / retrieve referenced query
+   *          descriptors.
    */
   protected RefQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
-      Class<? extends E> componentContract) {
+      Class<? extends E> componentContract,
+      Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
     super(componentDescriptorProvider.getComponentDescriptor()
         .getComponentContract().getName());
+    this.registry = registry;
     this.queriedComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
@@ -158,17 +159,18 @@ public class RefQueryComponentDescriptor<E> extends
     return refinedPropertyDescriptor;
   }
 
-  private RefQueryComponentDescriptor<IComponent> createOrGetRefQueryDescriptor(
+  private IComponentDescriptor<? extends IComponent> createOrGetRefQueryDescriptor(
       IComponentDescriptor<? extends IComponent> referencedDescriptor,
       Class<? extends IComponent> referencedType) {
-    RefQueryComponentDescriptor<IComponent> refQueryDescriptor;
+    IComponentDescriptor<? extends IComponent> refQueryDescriptor;
     synchronized (registry) {
       refQueryDescriptor = registry.get(referencedType);
       if (refQueryDescriptor == null) {
         refQueryDescriptor = new RefQueryComponentDescriptor<IComponent>(
-            referencedDescriptor, referencedType);
+            referencedDescriptor, referencedType, registry);
         registry.put(referencedType, refQueryDescriptor);
-        refQueryDescriptor.finishConfiguration();
+        ((RefQueryComponentDescriptor<?>) refQueryDescriptor)
+            .finishConfiguration();
       }
     }
     return refQueryDescriptor;

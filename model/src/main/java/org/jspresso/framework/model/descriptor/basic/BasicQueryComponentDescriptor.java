@@ -20,9 +20,11 @@ package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.collection.IPageable;
@@ -47,7 +49,10 @@ public class BasicQueryComponentDescriptor<E> extends
    */
   public BasicQueryComponentDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
-    super(componentDescriptorProvider, IQueryComponent.class);
+    super(
+        componentDescriptorProvider,
+        IQueryComponent.class,
+        new HashMap<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>());
     finishConfiguration();
   }
 
@@ -96,7 +101,7 @@ public class BasicQueryComponentDescriptor<E> extends
 
     return extraPropertyDescriptors;
   }
-  
+
   /**
    * {@inheritDoc}
    */
