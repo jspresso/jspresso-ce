@@ -322,8 +322,7 @@ public abstract class AbstractComponentDescriptor<E> extends
           if (descriptor instanceof BasicPropertyDescriptor) {
             ((BasicPropertyDescriptor) descriptor).setName(propertyName);
           }
-          nestedPropertyDescriptors.put(propertyName,
-              refinePropertyDescriptor(descriptor));
+          nestedPropertyDescriptors.put(propertyName, descriptor);
         }
       }
     } else {
@@ -336,8 +335,8 @@ public abstract class AbstractComponentDescriptor<E> extends
         }
       }
     }
-    propertyDescriptorsCache.put(propertyName,
-        refinePropertyDescriptor(descriptor));
+    descriptor = refinePropertyDescriptor(descriptor);
+    propertyDescriptorsCache.put(propertyName, descriptor);
     return descriptor;
   }
 
