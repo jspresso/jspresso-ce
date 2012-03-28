@@ -184,8 +184,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public void displayModule(String workspaceName, Module module) {
     Module currentModule = getSelectedModule(getSelectedWorkspaceName());
-    if ((currentModule == null && module == null)
-        || ObjectUtils.equals(currentModule, module)) {
+    // Test same workspace and same module. important when module is null and
+    // selected module also to avoid stack overflows.
+    if (((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils
+        .equals(getSelectedWorkspaceName(), workspaceName))
+        && ((currentModule == null && module == null) || ObjectUtils.equals(
+            currentModule, module))) {
       return;
     }
     if (currentModule != null) {
@@ -237,8 +241,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(
-              new int[] {moduleModelIndex}, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
+            moduleModelIndex
+          }, moduleModelIndex);
         }
       }
     } finally {
@@ -355,8 +360,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused")
-  E sourceWidget, Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
+      Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
@@ -1491,8 +1496,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {childCollectionConnector,
-            new Integer(moduleModelIndex)};
+        result = new Object[] {
+            childCollectionConnector, new Integer(moduleModelIndex)
+        };
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -1652,7 +1658,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {getName()});
+      clientPreferencesStore.setStorePath(new String[] {
+        getName()
+      });
     }
     return clientPreferencesStore;
   }
