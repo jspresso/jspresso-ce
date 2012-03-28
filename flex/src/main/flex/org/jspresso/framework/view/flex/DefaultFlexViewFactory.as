@@ -2115,7 +2115,9 @@ package org.jspresso.framework.view.flex {
                 selIdx = 0;
               }
               table.scrollToIndex(selIdx);
-              table.editedItemPosition = {rowIndex:selIdx, columnIndex:0};
+//              if(isDgCellEditable(table, selIdx, 0)) {
+//                table.editedItemPosition = {rowIndex:selIdx, columnIndex:0};
+//              }
             }
           }
         } else {
@@ -2149,22 +2151,8 @@ package org.jspresso.framework.view.flex {
           event.preventDefault();
           return;
         }
-        var column:DataGridColumn = dg.columns[event.columnIndex]; 
-        var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
-        var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(event.rowIndex) as RemoteCompositeValueState;
-        if(!rowValueState.writable) {
+        if(!isDgCellEditable(dg, event.rowIndex, event.columnIndex)) {
           event.preventDefault();
-        } else {
-          var cellValueState:RemoteValueState;
-          var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
-          // watch out checkbox selection column...
-          if(columnRenderer.properties && columnRenderer.properties["index"]) {
-            cellValueState = rowValueState
-              .children[columnRenderer.properties["index"] as int] as RemoteValueState;
-            if(!cellValueState.writable) {
-        	    event.preventDefault();
-        	  }
-          }
         }
     	});
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
@@ -2183,6 +2171,27 @@ package org.jspresso.framework.view.flex {
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
       });
+    }
+    
+    protected function isDgCellEditable(dg:DataGrid, row:int, col:int):Boolean {
+      var column:DataGridColumn = dg.columns[col]; 
+      var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
+      var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(row) as RemoteCompositeValueState;
+      if(!rowValueState.writable) {
+        return false;
+      } else {
+        var cellValueState:RemoteValueState;
+        var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
+        // watch out checkbox selection column...
+        if(columnRenderer.properties && columnRenderer.properties["index"]) {
+          cellValueState = rowValueState
+            .children[columnRenderer.properties["index"] as int] as RemoteValueState;
+          if(!cellValueState.writable) {
+            return false;
+          }
+        }
+      }
+      return true;
     }
 
     protected function createTextArea(remoteTextArea:RTextArea):UIComponent {
