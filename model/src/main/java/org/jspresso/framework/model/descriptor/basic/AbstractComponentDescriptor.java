@@ -362,13 +362,14 @@ public abstract class AbstractComponentDescriptor<E> extends
       Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
       if (declaredPropertyDescriptors != null) {
         for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+          propertyDescriptor = refinePropertyDescriptor(propertyDescriptor);
           allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
         }
       }
       allPropertyDescriptorsCache = new ArrayList<IPropertyDescriptor>();
       for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
         allPropertyDescriptorsCache
-            .add(refinePropertyDescriptor(propertyDescriptor));
+            .add(propertyDescriptor);
       }
     }
     return allPropertyDescriptorsCache;

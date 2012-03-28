@@ -92,9 +92,11 @@ public class RefQueryComponentDescriptor<E> extends
     }
     setRenderedProperties(qProperties);
     setToStringProperty(getQueriedComponentsDescriptor().getToStringProperty());
-    setUnclonedProperties(getQueriedComponentsDescriptor().getUnclonedProperties());
+    setUnclonedProperties(getQueriedComponentsDescriptor()
+        .getUnclonedProperties());
     setPageSize(getQueriedComponentsDescriptor().getPageSize());
-    setOrderingProperties(getQueriedComponentsDescriptor().getOrderingProperties());
+    setOrderingProperties(getQueriedComponentsDescriptor()
+        .getOrderingProperties());
   }
 
   /**
@@ -126,7 +128,9 @@ public class RefQueryComponentDescriptor<E> extends
       refinedPropertyDescriptor = new ComparableQueryStructureDescriptor(
           ((BasicPropertyDescriptor) propertyDescriptor)
               .createQueryDescriptor());
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+    } else if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>)
+        && !(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor() instanceof RefQueryComponentDescriptor<?>)) {
       Class<IComponent> refType = (Class<IComponent>) ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getComponentContract();
       ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor)
