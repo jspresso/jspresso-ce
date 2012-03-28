@@ -318,11 +318,13 @@ public abstract class AbstractComponentDescriptor<E> extends
               .getComponentDescriptor();
           descriptor = componentDescriptor.getPropertyDescriptor(propertyName
               .substring(nestedDotIndex + 1));
-          descriptor = descriptor.clone();
-          if (descriptor instanceof BasicPropertyDescriptor) {
-            ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+          if (descriptor != null) {
+            descriptor = descriptor.clone();
+            if (descriptor instanceof BasicPropertyDescriptor) {
+              ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+            }
+            nestedPropertyDescriptors.put(propertyName, descriptor);
           }
-          nestedPropertyDescriptors.put(propertyName, descriptor);
         }
       }
     } else {
@@ -368,8 +370,7 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
       allPropertyDescriptorsCache = new ArrayList<IPropertyDescriptor>();
       for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
-        allPropertyDescriptorsCache
-            .add(propertyDescriptor);
+        allPropertyDescriptorsCache.add(propertyDescriptor);
       }
     }
     return allPropertyDescriptorsCache;

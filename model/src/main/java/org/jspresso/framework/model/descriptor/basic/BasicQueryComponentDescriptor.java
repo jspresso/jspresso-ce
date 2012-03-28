@@ -48,6 +48,7 @@ public class BasicQueryComponentDescriptor<E> extends
   public BasicQueryComponentDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
     super(componentDescriptorProvider, IQueryComponent.class);
+    finishConfiguration();
   }
 
   /**
@@ -95,7 +96,7 @@ public class BasicQueryComponentDescriptor<E> extends
 
     return extraPropertyDescriptors;
   }
-
+  
   /**
    * {@inheritDoc}
    */

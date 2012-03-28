@@ -21,7 +21,9 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -46,8 +48,13 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 public class RefQueryComponentDescriptor<E> extends
     AbstractComponentDescriptor<E> {
 
-  private Class<E>                                   componentContract;
-  private IComponentDescriptor<? extends IComponent> queriedComponentsDescriptor;
+  private Class<? extends E>                                                               componentContract;
+  private IComponentDescriptorProvider<? extends IComponent>                               queriedComponentsDescriptorProvider;
+
+  private static Map<Class<? extends IComponent>, RefQueryComponentDescriptor<IComponent>> registry;
+  static {
+    registry = new HashMap<Class<? extends IComponent>, RefQueryComponentDescriptor<IComponent>>();
+  }
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
@@ -57,13 +64,12 @@ public class RefQueryComponentDescriptor<E> extends
    * @param componentContract
    *          the actual query component contract.
    */
-  public RefQueryComponentDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
-      Class<E> componentContract) {
+  protected RefQueryComponentDescriptor(
+      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
+      Class<? extends E> componentContract) {
     super(componentDescriptorProvider.getComponentDescriptor()
         .getComponentContract().getName());
-    this.queriedComponentsDescriptor = componentDescriptorProvider
-        .getComponentDescriptor();
+    this.queriedComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     for (IPropertyDescriptor propertyDescriptor : getQueriedComponentsDescriptor()
@@ -74,10 +80,16 @@ public class RefQueryComponentDescriptor<E> extends
     propertyDescriptors.addAll(getExtraPropertyDescriptors());
 
     setPropertyDescriptors(propertyDescriptors);
+  }
+
+  /**
+   * Performs delayed configuration.
+   */
+  protected void finishConfiguration() {
     setDescription(getQueriedComponentsDescriptor().getDescription());
     setIconImageURL(getQueriedComponentsDescriptor().getIconImageURL());
     List<String> qProperties = new ArrayList<String>();
-    for (String queryableProperty : componentDescriptorProvider
+    for (String queryableProperty : queriedComponentsDescriptorProvider
         .getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
       if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
@@ -115,11 +127,10 @@ public class RefQueryComponentDescriptor<E> extends
   @Override
   protected IPropertyDescriptor refinePropertyDescriptor(
       IPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor != null
-        && propertyDescriptor.getName() != null
-        && (propertyDescriptor.getName().endsWith(
-            ComparableQueryStructureDescriptor.INF_VALUE) || propertyDescriptor
-            .getName().endsWith(ComparableQueryStructureDescriptor.SUP_VALUE))) {
+    // Only refine properties that belong to the original entity
+    if (propertyDescriptor == null
+        || getQueriedComponentsDescriptor().getPropertyDescriptor(
+            propertyDescriptor.getName()) == null) {
       return propertyDescriptor;
     }
     IPropertyDescriptor refinedPropertyDescriptor;
@@ -128,15 +139,18 @@ public class RefQueryComponentDescriptor<E> extends
       refinedPropertyDescriptor = new ComparableQueryStructureDescriptor(
           ((BasicPropertyDescriptor) propertyDescriptor)
               .createQueryDescriptor());
-    } else if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>)
-        && !(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor() instanceof RefQueryComponentDescriptor<?>)) {
-      Class<IComponent> refType = (Class<IComponent>) ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getComponentContract();
-      ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor)
-          .setReferencedDescriptor(new RefQueryComponentDescriptor<IComponent>(
-              (IReferencePropertyDescriptor<IComponent>) propertyDescriptor,
-              refType));
+    } else if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>)) {
+      IComponentDescriptor<? extends IComponent> referencedDescriptor;
+      referencedDescriptor = ((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
+          .getReferencedDescriptor();
+      Class<? extends IComponent> referencedType = referencedDescriptor
+          .getComponentContract();
+      if (!(propertyDescriptor instanceof ComparableQueryStructureDescriptor)
+          && !(referencedDescriptor instanceof RefQueryComponentDescriptor<?>)) {
+        ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor)
+            .setReferencedDescriptor(createOrGetRefQueryDescriptor(
+                referencedDescriptor, referencedType));
+      }
       refinedPropertyDescriptor = propertyDescriptor;
     } else {
       refinedPropertyDescriptor = propertyDescriptor;
@@ -144,11 +158,27 @@ public class RefQueryComponentDescriptor<E> extends
     return refinedPropertyDescriptor;
   }
 
+  private RefQueryComponentDescriptor<IComponent> createOrGetRefQueryDescriptor(
+      IComponentDescriptor<? extends IComponent> referencedDescriptor,
+      Class<? extends IComponent> referencedType) {
+    RefQueryComponentDescriptor<IComponent> refQueryDescriptor;
+    synchronized (registry) {
+      refQueryDescriptor = registry.get(referencedType);
+      if (refQueryDescriptor == null) {
+        refQueryDescriptor = new RefQueryComponentDescriptor<IComponent>(
+            referencedDescriptor, referencedType);
+        registry.put(referencedType, refQueryDescriptor);
+        refQueryDescriptor.finishConfiguration();
+      }
+    }
+    return refQueryDescriptor;
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public Class<E> getComponentContract() {
+  public Class<? extends E> getComponentContract() {
     return componentContract;
   }
 
@@ -198,6 +228,6 @@ public class RefQueryComponentDescriptor<E> extends
    * @return the queriedComponentsDescriptor.
    */
   protected IComponentDescriptor<? extends IComponent> getQueriedComponentsDescriptor() {
-    return queriedComponentsDescriptor;
+    return queriedComponentsDescriptorProvider.getComponentDescriptor();
   }
 }
