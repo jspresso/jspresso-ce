@@ -105,6 +105,9 @@ public class RefQueryComponentDescriptor<E> extends
     }
     setRenderedProperties(qProperties);
     setToStringProperty(getQueriedComponentsDescriptor().getToStringProperty());
+    setToHtmlProperty(getQueriedComponentsDescriptor().getToHtmlProperty());
+    setAutoCompleteProperty(getQueriedComponentsDescriptor()
+        .getAutoCompleteProperty());
     setUnclonedProperties(getQueriedComponentsDescriptor()
         .getUnclonedProperties());
     setPageSize(getQueriedComponentsDescriptor().getPageSize());
