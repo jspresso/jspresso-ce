@@ -49,6 +49,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.slf4j.Logger;
@@ -264,8 +265,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
 
-    actions.add(findAction);
     actions.add(okAction);
+    actions.add(findAction);
     actions.add(cancelAction);
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
     context.put(
@@ -275,6 +276,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             + erqDescriptor.getReferencedDescriptor().getI18nName(
                 getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
+    if (lovView instanceof ICompositeView<?>) {
+      context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
+          ((ICompositeView<E>) lovView).getChildren().get(1).getPeer());
+    }
 
     if (pagingAction != null) {
       PropertyChangeListener paginationListener = new PropertyChangeListener() {

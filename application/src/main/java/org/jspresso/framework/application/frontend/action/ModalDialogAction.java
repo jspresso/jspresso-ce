@@ -57,22 +57,27 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * The dialog actions.
    */
-  public static final String DIALOG_ACTIONS = "DIALOG_ACTIONS";
+  public static final String DIALOG_ACTIONS           = "DIALOG_ACTIONS";
 
   /**
    * The dialog size.
    */
-  public static final String DIALOG_SIZE    = "DIALOG_SIZE";
+  public static final String DIALOG_SIZE              = "DIALOG_SIZE";
 
   /**
    * The dialog title.
    */
-  public static final String DIALOG_TITLE   = "DIALOG_TITLE";
+  public static final String DIALOG_TITLE             = "DIALOG_TITLE";
 
   /**
    * The dialog view.
    */
-  public static final String DIALOG_VIEW    = "DIALOG_VIEW";
+  public static final String DIALOG_VIEW              = "DIALOG_VIEW";
+
+  /**
+   * The focused component.
+   */
+  public static final String DIALOG_FOCUSED_COMPONENT = "DIALOG_FOCUSED_COMPONENT";
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
@@ -98,6 +103,10 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     getController(context).displayModalDialog(mainView.getPeer(), actions,
         title, sourceComponent, context, getDialogSize(context), false);
+    E focusedComponent = getFocusedComponent(context);
+    if (focusedComponent != null) {
+      getController(context).focus(focusedComponent);
+    }
     return super.execute(actionHandler, context);
   }
 
@@ -147,4 +156,15 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
     return (String) context.get(DIALOG_TITLE);
   }
 
+  /**
+   * Gets the focused component.
+   * 
+   * @param context
+   *          the action context.
+   * @return the focused component or null if not set.
+   */
+  @SuppressWarnings("unchecked")
+  public E getFocusedComponent(Map<String, Object> context) {
+    return (E) context.get(DIALOG_FOCUSED_COMPONENT);
+  }
 }
