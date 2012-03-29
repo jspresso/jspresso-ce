@@ -2114,10 +2114,12 @@ package org.jspresso.framework.view.flex {
               if(selIdx < 0) {
                 selIdx = 0;
               }
+              if(isDgCellEditable(table, selIdx, 0)) {
+                table.editedItemPosition = {rowIndex:selIdx, columnIndex:0};
+              } else {
+                table.editedItemPosition = null;
+              }
               table.scrollToIndex(selIdx);
-//              if(isDgCellEditable(table, selIdx, 0)) {
-//                table.editedItemPosition = {rowIndex:selIdx, columnIndex:0};
-//              }
             }
           }
         } else {
