@@ -14,9 +14,12 @@
 
 package org.jspresso.framework.view.flex {
   import flash.events.Event;
+  import flash.events.KeyboardEvent;
   import flash.events.MouseEvent;
+  import flash.ui.Keyboard;
   
   import mx.controls.DataGrid;
+  import mx.controls.dataGridClasses.DataGridColumn;
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.controls.listClasses.IListItemRenderer;
   import mx.core.mx_internal;
@@ -167,6 +170,22 @@ package org.jspresso.framework.view.flex {
     override protected function UIDToItemRenderer(uid:String):IListItemRenderer {
       if (!(listContent && visibleData)) return null;
       return super.UIDToItemRenderer(uid);
+    }
+    
+    override protected function keyDownHandler(event:KeyboardEvent):void {
+      switch (event.keyCode) {
+        case Keyboard.LEFT:
+          if(horizontalScrollPosition > 0) {
+            horizontalScrollPosition -= 1;
+          }
+          break;
+        case Keyboard.RIGHT:
+          if(horizontalScrollPosition < columnCount -1) {
+            horizontalScrollPosition += 1;
+          }
+          break;
+      }
+      super.keyDownHandler(event);
     }
   }
 }
