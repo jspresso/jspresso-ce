@@ -110,6 +110,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
               }
             }
           }
+        } else if(remotePeer instanceof org.jspresso.framework.gui.remote.RComponent) {
+          this.register(remotePeer.getState());
         }
         if(this.__postponedCommands) {
           if(this.__postponedCommands[remotePeer.getGuid()]) {
@@ -409,7 +411,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             }, null
           );
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
-          this.__viewFactory.addCard(targetPeer, command.getCard(), command.getCardName());
+          this.__viewFactory.addCard(targetPeer.retrievePeer(), command.getCard(), command.getCardName());
+        } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
+          var focusableChild = this.__findFirstFocusableComponent(targetPeer.retrievePeer());
+          if(focusableChild) {
+            focusableChild.focus();
+          }
         }
       }
     },
@@ -1131,7 +1138,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         || root instanceof qx.ui.form.CheckBox
         || root instanceof qx.ui.form.SelectBox
         || root instanceof qx.ui.form.TextArea
-        || root instanceof qx.ui.form.DateField) {
+        || root instanceof qx.ui.form.DateField
+        || root instanceof qx.ui.table.Table) {
         if(root.isEnabled()) {
           return root;
         }

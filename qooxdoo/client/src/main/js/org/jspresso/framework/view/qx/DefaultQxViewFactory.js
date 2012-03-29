@@ -92,15 +92,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param {org.jspresso.framework.gui.remote.RComponent}
      *            remoteComponent
      * @param {Boolean}
-     *            registerState
+     *            registerPeers
      * @return {qx.ui.core.Widget}
      */
-    createComponent : function(remoteComponent, registerState) {
+    createComponent : function(remoteComponent, registerPeers) {
       if (!remoteComponent) {
         return new qx.ui.core.Widget();
       }
-      if (registerState == null) {
-        registerState = true;
+      if (registerPeers == null) {
+        registerPeers = true;
       }
 
       /**
@@ -147,6 +147,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (component == null) {
         component = new qx.ui.core.Widget();
       }
+      remoteComponent.assignPeer(component);
       if (remoteComponent.getToolTip() != null && component.getToolTip() == null) {
         var toolTip = new qx.ui.tooltip.ToolTip(remoteComponent
             .getToolTip());
@@ -176,8 +177,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           component.setHeight(preferredSize.getHeight());
         }
       }
-      if (registerState) {
-        this.__remotePeerRegistry.register(remoteComponent.getState());
+      if (registerPeers) {
+        this.__remotePeerRegistry.register(remoteComponent);
       }
       return component;
     },
@@ -1345,7 +1346,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         for (var j = 0; j < actionList.getActions().length; j++) {
           var actionComponent = this.createAction(actionList
               .getActions()[j])
-          actionComponent.setFocusable(false);
+          //actionComponent.setFocusable(false);
           actionComponent.setAllowStretchY(false, false);
           actionField.add(actionComponent);
           if (!mainAction) {
@@ -1480,10 +1481,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {qx.ui.core.Widget}
      */
     _createCardContainer : function(remoteCardContainer) {
-      var cardContainer = new org.jspresso.framework.view.qx.RStack();
-      cardContainer.setGuid(remoteCardContainer.getGuid());
-      // view stack may have to be retrieved for late update of cards.
-      this.__remotePeerRegistry.register(cardContainer);
+      var cardContainer = new qx.ui.container.Stack();
 
       for (var i = 0; i < remoteCardContainer.getCardNames().length; i++) {
         var rCardComponent = remoteCardContainer.getCards()[i];

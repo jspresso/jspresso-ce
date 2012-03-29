@@ -79,5 +79,19 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
       check : "org.jspresso.framework.util.gui.Dimension",
       nullable : true
     }
+  },
+  
+  members:
+  {
+    /**@type qx.ui.core.Widget*/
+    __peer : null,
+
+    assignPeer : function(value) {
+      this.__peer = value;
+    },
+    
+    retrievePeer : function() {
+      return this.__peer;
+    }
   }
 });

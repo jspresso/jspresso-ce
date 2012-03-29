@@ -42,6 +42,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDia
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
@@ -1050,5 +1051,15 @@ public class DefaultRemoteController extends
     if (requestParams != null) {
       actionContext.putAll(requestParams);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void focus(RComponent component) {
+    RemoteFocusCommand focusCommand = new RemoteFocusCommand();
+    focusCommand.setTargetPeerGuid(component.getGuid());
+    registerCommand(focusCommand);
   }
 }

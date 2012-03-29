@@ -43,6 +43,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ComboBox;
+  import mx.controls.DataGrid;
   import mx.controls.DateField;
   import mx.controls.HRule;
   import mx.controls.Label;
@@ -87,6 +88,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
@@ -214,6 +216,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
               register(childState);
             }
           }
+        } else if(remotePeer is RComponent) {
+          register((remotePeer as RComponent).state);
         }
         if(_postponedCommands) {
           if(_postponedCommands[remotePeer.guid]) {
@@ -495,9 +499,17 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(
-            targetPeer as ViewStack,
+            (targetPeer as RComponent).retrievePeer() as ViewStack,
             (command as RemoteAddCardCommand).card,
             (command as RemoteAddCardCommand).cardName);
+        } else if(command is RemoteFocusCommand) {
+          //find first focusable component
+          var focusableChild:UIComponent = findFirstFocusableComponent((targetPeer as RComponent).retrievePeer());
+          if(focusableChild) {
+            focusableChild.callLater(function():void {
+              focusableChild.setFocus();
+            });
+          }
         }
       }
     }
@@ -1262,7 +1274,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         || root is CheckBox
         || root is ComboBox
         || root is TextArea
-        || root is DateField) {
+        || root is DateField
+        || root is DataGrid) {
         if(root.enabled) {
           return root;
         }
@@ -1315,6 +1328,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand",RemoteCleanupCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand",RemoteClipboardCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand",RemoteFocusCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand",RemoteCloseDialogCommand);
   
       registerClassAlias("org.jspresso.framework.util.gui.CellConstraints",CellConstraints);
       registerClassAlias("org.jspresso.framework.util.gui.Dimension",Dimension);

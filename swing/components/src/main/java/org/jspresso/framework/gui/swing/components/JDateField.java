@@ -129,7 +129,7 @@ public class JDateField extends DateField {
       public void focusGained(FocusEvent e) {
         if (!e.isTemporary()) {
           JTextField tf = ((DateField) e.getSource()).getFormattedTextField();
-          tf.requestFocus();
+          tf.requestFocusInWindow();
         }
       }
     });
@@ -142,10 +142,10 @@ public class JDateField extends DateField {
 
     /**
      * Constructs a new <code>FixedDayRenderer</code> instance.
-     * 
      */
     public FixedDayRenderer() {
-      //putClientProperty(SubstanceLookAndFeel.WATERMARK_PROPERTY, Boolean.FALSE);
+      // putClientProperty(SubstanceLookAndFeel.WATERMARK_PROPERTY,
+      // Boolean.FALSE);
     }
 
     @Override

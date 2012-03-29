@@ -77,8 +77,9 @@ public class JActionField extends JPanel {
       super.addFocusListener(new FocusAdapter() {
 
         @Override
-        public void focusGained(@SuppressWarnings("unused") FocusEvent e) {
-          textField.requestFocus();
+        public void focusGained(@SuppressWarnings("unused")
+        FocusEvent e) {
+          textField.requestFocusInWindow();
         }
       });
       SwingUtil.enableSelectionOnFocusGained(textField);

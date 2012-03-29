@@ -134,4 +134,12 @@ public class MockFrontendController<E, F, G> extends
     // NO-OP
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void focus(E component) {
+    // NO-OP
+  }
+
 }

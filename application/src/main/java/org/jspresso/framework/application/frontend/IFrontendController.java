@@ -398,4 +398,12 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the html text content to assign to system clipboard.
    */
   void setClipboardContent(String plainContent, String htmlContent);
+
+  /**
+   * Request focus for a component.
+   * 
+   * @param component
+   *          the component to focus.
+   */
+  void focus(E component);
 }

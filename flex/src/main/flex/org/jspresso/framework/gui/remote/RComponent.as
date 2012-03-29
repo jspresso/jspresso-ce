@@ -15,6 +15,8 @@
 
 package org.jspresso.framework.gui.remote {
 
+    import mx.core.UIComponent;
+    
     import org.jspresso.framework.state.remote.IRemoteStateOwner;
     import org.jspresso.framework.state.remote.RemoteValueState;
     import org.jspresso.framework.util.gui.Dimension;
@@ -35,6 +37,8 @@ package org.jspresso.framework.gui.remote {
         private var _state:RemoteValueState;
         private var _toolTip:String;
         private var _preferredSize:Dimension;
+        
+        private var _peer:UIComponent;
 
         public function RComponent() {
           //default constructor.
@@ -120,5 +124,11 @@ package org.jspresso.framework.gui.remote {
           _secondaryActionLists = value;
         }
 
+        public function assignPeer(value:UIComponent):void {
+          _peer = value;
+        }
+        public function retrievePeer():UIComponent {
+          return _peer;
+        }
     }
 }

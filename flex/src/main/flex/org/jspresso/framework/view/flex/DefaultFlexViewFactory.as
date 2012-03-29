@@ -26,7 +26,6 @@ package org.jspresso.framework.view.flex {
   import flexlib.containers.ButtonScrollingCanvas;
   
   import mx.binding.utils.BindingUtils;
-  import mx.collections.ICollectionView;
   import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Box;
@@ -81,7 +80,6 @@ package org.jspresso.framework.view.flex {
   import mx.graphics.SolidColor;
   import mx.managers.PopUpManager;
   import mx.managers.ToolTipManager;
-  import mx.resources.ResourceManager;
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.action.IActionHandler;
@@ -188,7 +186,7 @@ package org.jspresso.framework.view.flex {
       ToolTipManager.toolTipClass = HtmlToolTip;
     }
     
-    public function createComponent(remoteComponent:RComponent, registerState:Boolean=true):UIComponent {
+    public function createComponent(remoteComponent:RComponent, registerPeers:Boolean=true):UIComponent {
       var component:UIComponent = createCustomComponent(remoteComponent);
       if(component == null) {
         if(remoteComponent is RActionField) {
@@ -230,6 +228,7 @@ package org.jspresso.framework.view.flex {
       if(component == null) {
         component = new Canvas();
       }
+      remoteComponent.assignPeer(component);
       if(!(component is Tree)) {
         component.minWidth = 0;
       }
@@ -255,8 +254,8 @@ package org.jspresso.framework.view.flex {
       }
       applyComponentStyle(component, remoteComponent);
       applyComponentPreferredSize(component, remoteComponent.preferredSize);
-      if(registerState) {
-        getRemotePeerRegistry().register(remoteComponent.state);
+      if(registerPeers) {
+        getRemotePeerRegistry().register(remoteComponent);
       }
       return component;
     }
@@ -679,7 +678,7 @@ package org.jspresso.framework.view.flex {
           actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             actionComponent.width = actionComponent.height;
           });
-          actionComponent.focusEnabled = false;
+          //actionComponent.focusEnabled = false;
           actionField.addChild(actionComponent);
           actionComponents.push(actionComponent);
         }
@@ -1046,11 +1045,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createCardContainer(remoteCardContainer:RCardContainer):Container {
-      var cardContainer:RViewStack = new RViewStack(remoteCardContainer.guid);
-      // view stack may have to be retrieved for late update of cards.
-      getRemotePeerRegistry().register(cardContainer);
-      //cardContainer.resizeToContent = true;
-      
+      var cardContainer:ViewStack = new ViewStack();
       for(var i:int = 0; i < remoteCardContainer.cardNames.length; i++) {
         var rCardComponent:RComponent = remoteCardContainer.cards[i] as RComponent; 
         var cardName:String = remoteCardContainer.cardNames[i] as String;
@@ -1457,7 +1452,6 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
-      getRemotePeerRegistry().register(remoteTabContainer);
       var tabContainer:TabNavigator = createTabNavigatorComponent();
       tabContainer.historyManagementEnabled = false;
       if(remoteTabContainer.preferredSize != null &&

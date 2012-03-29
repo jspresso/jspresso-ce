@@ -17,6 +17,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand"/>
@@ -121,7 +122,6 @@
     <classEntry path="org.jspresso.framework.view.flex.RIconListItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.RIconMenuBarItem"/>
     <classEntry path="org.jspresso.framework.view.flex.RIconMenuItemRenderer"/>
-    <classEntry path="org.jspresso.framework.view.flex.RViewStack"/>
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueDgItemEditor"/>
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueDgItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueListItemRenderer"/>
@@ -134,8 +134,8 @@
   <includeResources>
     <resourceEntry destPath="assets/images/closeaccordion2.png" sourcePath="assets/images/closeaccordion2.png"/>
     <resourceEntry destPath="assets/images/closeleft.png" sourcePath="assets/images/closeleft.png"/>
-    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
     <resourceEntry destPath="defaults.css" sourcePath="defaults.css"/>
+    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
     <resourceEntry destPath="assets/images/reset-16x16.png" sourcePath="assets/images/reset-16x16.png"/>
   </includeResources>
   <namespaceManifests/>
