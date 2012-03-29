@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.math.BigDecimal;
+
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 
 /**
@@ -79,4 +81,37 @@ public class BasicIntegerPropertyDescriptor extends
   public void setUsingLong(boolean usingLong) {
     this.usingLong = new Boolean(usingLong);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BigDecimal getMinValue() {
+    BigDecimal min = super.getMinValue();
+    if (min == null) {
+      if (isUsingLong()) {
+        min = new BigDecimal(Long.MIN_VALUE);
+      } else {
+        min = new BigDecimal(Integer.MIN_VALUE);
+      }
+    }
+    return min;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BigDecimal getMaxValue() {
+    BigDecimal max = super.getMaxValue();
+    if (max == null) {
+      if (isUsingLong()) {
+        max = new BigDecimal(Long.MAX_VALUE);
+      } else {
+        max = new BigDecimal(Integer.MAX_VALUE);
+      }
+    }
+    return max;
+  }
+
 }

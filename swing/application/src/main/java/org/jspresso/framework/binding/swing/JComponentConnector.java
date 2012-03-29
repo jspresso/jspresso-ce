@@ -23,6 +23,7 @@ import java.awt.Color;
 import javax.swing.JComponent;
 
 import org.jspresso.framework.binding.AbstractValueConnector;
+import org.jspresso.framework.binding.ConnectorInputException;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
@@ -139,7 +140,13 @@ public abstract class JComponentConnector<E extends JComponent> extends
     // return null;
     // }
     // });
-    protectedFireConnectorValueChange();
+    try {
+      protectedFireConnectorValueChange();
+    } catch (ConnectorInputException ex) {
+      // It's an input error. ignore
+    } catch (RuntimeException ex) {
+      handleException(ex);
+    }
   }
 
   /**

@@ -21,6 +21,7 @@ package org.jspresso.framework.binding;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -337,8 +338,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(
-            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+        public void propertyChange(@SuppressWarnings("unused")
+        PropertyChangeEvent evt) {
           readabilityChange();
         }
       };
@@ -356,8 +357,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(
-            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+        public void propertyChange(@SuppressWarnings("unused")
+        PropertyChangeEvent evt) {
           writabilityChange();
         }
       };
@@ -468,28 +469,29 @@ public abstract class AbstractValueConnector extends AbstractConnector
           if (Boolean.TYPE.equals(expectedType)) {
             expectedType = Boolean.class;
           }
+          String stringValue;
+          if (aValue instanceof Number) {
+            stringValue = new BigDecimal(aValue.toString()).toPlainString();
+          } else {
+            stringValue = aValue.toString();
+          }
           try {
-            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
-              String.class
-            }).newInstance(new Object[] {
-              aValue.toString()
-            });
+            Object adaptedValue = expectedType.getConstructor(
+                new Class<?>[] {String.class}).newInstance(
+                new Object[] {stringValue});
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
-            throw new ConnectorBindingException(ex);
+            throw new ConnectorInputException(ex, stringValue);
           } catch (SecurityException ex) {
-            throw new ConnectorBindingException(ex);
+            throw new ConnectorInputException(ex, stringValue);
           } catch (InstantiationException ex) {
-            throw new ConnectorBindingException(ex);
+            throw new ConnectorInputException(ex, stringValue);
           } catch (IllegalAccessException ex) {
-            throw new ConnectorBindingException(ex);
+            throw new ConnectorInputException(ex, stringValue);
           } catch (InvocationTargetException ex) {
-            if (ex.getCause() instanceof RuntimeException) {
-              throw (RuntimeException) ex.getCause();
-            }
-            throw new ConnectorBindingException(ex.getCause());
+            throw new ConnectorInputException(ex.getCause(), stringValue);
           } catch (NoSuchMethodException ex) {
-            throw new ConnectorBindingException(ex);
+            throw new ConnectorInputException(ex, stringValue);
           }
         }
       } else {
@@ -568,8 +570,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelReadabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
             readabilityChange();
           }
         };
@@ -578,8 +580,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelWritabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
             writabilityChange();
           }
         };
@@ -721,23 +723,19 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Notifies its listeners about a change in the connector's value.
    */
   protected void fireConnectorValueChange() {
-    boolean propagatedCorrectly = true;
     try {
       fireValueChange(createChangeEvent(oldConnectorValue, getConnecteeValue()));
     } catch (RuntimeException ex) {
-      propagatedCorrectly = false;
       try {
         propagateRollback();
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.
       }
-      handleException(ex);
+      throw ex;
     }
-    if (propagatedCorrectly) {
-      // the change propagated correctly. Save the value propagated as the old
-      // value of the connector.
-      oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
-    }
+    // the change propagated correctly. Save the value propagated as the old
+    // value of the connector.
+    oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
   }
 
   /**

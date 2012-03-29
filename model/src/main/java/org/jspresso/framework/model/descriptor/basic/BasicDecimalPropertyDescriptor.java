@@ -101,4 +101,32 @@ public class BasicDecimalPropertyDescriptor extends
   public void setUsingBigDecimal(boolean usingBigDecimal) {
     this.usingBigDecimal = new Boolean(usingBigDecimal);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BigDecimal getMinValue() {
+    BigDecimal min = super.getMinValue();
+    if (min == null) {
+      if (!isUsingBigDecimal()) {
+        min = new BigDecimal(Double.MIN_VALUE);
+      }
+    }
+    return min;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BigDecimal getMaxValue() {
+    BigDecimal max = super.getMaxValue();
+    if (max == null) {
+      if (!isUsingBigDecimal()) {
+        max = new BigDecimal(Double.MAX_VALUE);
+      }
+    }
+    return max;
+  }
 }

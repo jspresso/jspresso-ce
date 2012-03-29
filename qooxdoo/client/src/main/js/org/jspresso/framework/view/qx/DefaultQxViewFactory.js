@@ -804,14 +804,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         numericComponent = this
             ._createIntegerField(remoteNumericComponent);
       }
-      if (remoteNumericComponent.getMaxValue()) {
+      var maxChars = -1;
+      if(remoteNumericComponent.getMinValue() != null && remoteNumericComponent.getMaxValue() != null) {
+        var formatter = this._createFormat(remoteNumericComponent);
+        maxChars = Math.max(formatter.format(remoteNumericComponent.getMaxValue()).length,
+                            formatter.format(remoteNumericComponent.getMinValue()).length);
+        if(numericComponent instanceof qx.ui.form.AbstractField) {
+          numericComponent.setMaxLength(maxChars);
+        }
+      }
+      if (maxChars > 0) {
         this
             ._sizeMaxComponentWidth(
                 numericComponent,
                 remoteNumericComponent,
-                this._createFormat(remoteNumericComponent)
-                    .format(remoteNumericComponent
-                        .getMaxValue()).length,
+                maxChars,
                 org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
         this
@@ -924,7 +931,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }, {
             converter : function(viewValue, model) {
               var parsedValue = viewValue;
-              if (format) {
+              if(viewValue == null || viewValue.length == 0) {
+                parsedValue = null;
+              } else if (format) {
                 try {
                   parsedValue = format.parse(viewValue);
                 } catch (ex) {

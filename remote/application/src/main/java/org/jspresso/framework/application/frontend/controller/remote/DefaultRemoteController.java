@@ -61,6 +61,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspac
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
+import org.jspresso.framework.binding.ConnectorInputException;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
@@ -76,6 +77,7 @@ import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -267,6 +269,8 @@ public class DefaultRemoteController extends
         registerCommand(cleanupCommand);
         removedPeersGuids.clear();
       }
+    } catch (Exception ex) {
+      handleException(ex, null);
     } finally {
       commandRegistrationEnabled = false;
       IBackendController bc = getBackendController();
@@ -759,35 +763,52 @@ public class DefaultRemoteController extends
         throw new CommandException("Target remote peer could not be retrieved");
       }
       if (command instanceof RemoteValueCommand) {
-        if (targetPeer instanceof IFormattedValueConnector) {
-          ((IFormattedValueConnector) targetPeer)
-              .setConnectorValueAsString((String) ((RemoteValueCommand) command)
-                  .getValue());
-        } else if (targetPeer instanceof IRemoteStateOwner) {
-          ((IRemoteStateOwner) targetPeer)
-              .setValueFromState(((RemoteValueCommand) command).getValue());
-        } else if (targetPeer instanceof IValueConnector) {
-          ((IValueConnector) targetPeer)
-              .setConnectorValue(((RemoteValueCommand) command).getValue());
-        } else {
-          throw new CommandException("Target peer type cannot be handled : "
-              + targetPeer.getClass().getName());
-        }
+        try {
+          if (targetPeer instanceof IFormattedValueConnector) {
+            ((IFormattedValueConnector) targetPeer)
+                .setConnectorValueAsString((String) ((RemoteValueCommand) command)
+                    .getValue());
+          } else if (targetPeer instanceof IRemoteStateOwner) {
+            ((IRemoteStateOwner) targetPeer)
+                .setValueFromState(((RemoteValueCommand) command).getValue());
+          } else if (targetPeer instanceof IValueConnector) {
+            ((IValueConnector) targetPeer)
+                .setConnectorValue(((RemoteValueCommand) command).getValue());
+          } else {
+            throw new CommandException("Target peer type cannot be handled : "
+                + targetPeer.getClass().getName());
+          }
 
-        // The following code has been handled at a lower level,
-        // see AbstractCompositeValueConnector.propagateRollback
-        // if (targetPeer instanceof IRemoteStateOwner) {
-        // ((IRemoteStateOwner) targetPeer).synchRemoteState();
-        // RemoteValueState state = ((IRemoteStateOwner) targetPeer).getState();
-        // if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(),
-        // state.getValue())) {
-        //
-        // RemoteValueCommand reverseCommand = new RemoteValueCommand();
-        // reverseCommand.setTargetPeerGuid(state.getGuid());
-        // reverseCommand.setValue(state.getValue());
-        // registerCommand(reverseCommand);
-        // }
-        // }
+          // The following code has been handled at a lower level,
+          // see AbstractCompositeValueConnector.propagateRollback
+          // if (targetPeer instanceof IRemoteStateOwner) {
+          // ((IRemoteStateOwner) targetPeer).synchRemoteState();
+          // RemoteValueState state = ((IRemoteStateOwner)
+          // targetPeer).getState();
+          // if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(),
+          // state.getValue())) {
+          //
+          // RemoteValueCommand reverseCommand = new RemoteValueCommand();
+          // reverseCommand.setTargetPeerGuid(state.getGuid());
+          // reverseCommand.setValue(state.getValue());
+          // registerCommand(reverseCommand);
+          // }
+          // }
+        } catch (ConnectorInputException ex) {
+          if (targetPeer instanceof IRemoteStateOwner) {
+            ((IRemoteStateOwner) targetPeer).synchRemoteState();
+            RemoteValueState state = ((IRemoteStateOwner) targetPeer)
+                .getState();
+            if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(),
+                state.getValue())) {
+
+              RemoteValueCommand rollbackCommand = new RemoteValueCommand();
+              rollbackCommand.setTargetPeerGuid(state.getGuid());
+              rollbackCommand.setValue(state.getValue());
+              registerCommand(rollbackCommand);
+            }
+          }
+        }
       } else if (command instanceof RemoteSelectionCommand) {
         if (targetPeer instanceof RTabContainer) {
           ((RTabContainer) targetPeer)

@@ -466,9 +466,18 @@ package org.jspresso.framework.view.flex {
       } else if(remoteNumericComponent is RIntegerField) {
         numericComponent = createIntegerField(remoteNumericComponent as RIntegerField);
       }
-      if(remoteNumericComponent.maxValue) {
+
+      var maxChars:int = -1;
+      if(!isNaN(remoteNumericComponent.minValue) && !isNaN(remoteNumericComponent.maxValue)) {
+        var formatter:Formatter = createFormatter(remoteNumericComponent);
+        maxChars = Math.max(formatter.format(remoteNumericComponent.minValue).length, formatter.format(remoteNumericComponent.maxValue).length);
+        if(numericComponent is TextInput) {
+          (numericComponent as TextInput).maxChars = maxChars;
+        }
+      }
+      if(maxChars > 0) {
         sizeMaxComponentWidth(numericComponent,remoteNumericComponent,
-          createFormatter(remoteNumericComponent).format(remoteNumericComponent.maxValue).length,
+          maxChars,
           NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
         sizeMaxComponentWidth(numericComponent,remoteNumericComponent,
