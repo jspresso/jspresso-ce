@@ -1,7 +1,44 @@
 Jspresso CE - Change Log
 
 
-Jspresso CE - 3.5.11 (Released 2011-12-27) [ View Issues ]
+Jspresso CE - 3.5.12 (Released 2012-03-30) [ View Issues ]
+==========================================
+- 0000562: [View] Limit the number of digits entered for an Integer (vvandens) - closed.
+- 0000442: [View] LOV evolution - work without the mouse (vvandens) - closed.
+- 0000566: [Frontend] Be able to focus a component (vvandens) - closed.
+- 0000539: [View] Allow to use left and right arrows of keyboard in a component table (vvandens) - closed.
+- 0000544: [Frontend] Focus on first line/first field for add action (vvandens) - closed.
+- 0000565: [Model] Nested references to comparable properties are incorectly handled in filter views (vvandens) - closed.
+- 0000561: [View] Bug with flex component for german language (vvandens) - closed.
+- 0000528: [View] Calendar Date/Time component is set to 1st january 1970 when only filling the time part (vvandens) - closed.
+- 0000538: [Frontend] exit action defined on module isn't triggered while changing workspace (vvandens) - closed.
+- 0000560: [Backend] model inside context for security plugin (vvandens) - closed.
+- 0000543: [View] Action keyboard shortcut in Flex (vvandens) - closed.
+- 0000557: [Persistence] Regarding entities manipulation when the entity is out of session (vvandens) - closed.
+- 0000556: [Persistence] Raising an error when trying to merge a dirty entity from within a transaction (vvandens) - closed.
+- 0000558: [Backend] Secure the ResourceProviderServlet proxied local URL (vvandens) - closed.
+- 0000537: [Frontend] It's impossible to add next or wrapped action after ModuleRestartAction (vvandens) - closed.
+- 0000545: [Frontend] horizontal and vertical Scroll bar for application entire screen (vvandens) - closed.
+- 0000553: [View] description bubble on mouse is not refreshed (vvandens) - closed.
+- 0000551: [View] pb linked to 0000542: add de_DE framework locale (vvandens) - closed.
+- 0000549: [View] LOV window columns are not sorted according entity declaration (vvandens) - closed.
+- 0000554: [View] Allow enumeration property views to be rendered as radio buttons instead of combo boxes (vvandens) - closed.
+- 0000546: [Build & tools] Please remove the maven-source/javadoc-plugin from the default build (vvandens) - closed.
+- 0000547: [Model] Crash when a "list" collection finds duplicate or missing elements (vvandens) - closed.
+- 0000548: [Persistence] error to load 2 entities with same id (vvandens) - closed.
+- 0000529: [View] Remove tooltip for fields when there is no translation (vvandens) - closed.
+- 0000542: [Frontend] add de_DE framework locale (vvandens) - closed.
+- 0000540: [Frontend] Reference property view actions are not triggered on filter views (vvandens) - closed.
+- 0000536: [Backend] AddBeanAsSubModuleAction makes use of the frontend action context (vvandens) - closed.
+- 0000535: [Frontend] MultiSelection in LOV dialog does not work correctly (vvandens) - closed.
+- 0000534: [Frontend] Make lovViewDescriptorFactory more easily configurable (vvandens) - closed.
+- 0000533: [Backend] Make ControllerAware types singleton compatible. (vvandens) - closed.
+- 0000531: [View] Nested form view must not be made read-only when the backing reference property is. (vvandens) - closed.
+- 0000508: [View] Tree left menu distorsion (vvandens) - closed.
+- 0000524: [Frontend] SSO and perma link (vvandens) - closed.
+[33 issues]
+
+Jspresso CE - 3.5.11 (Released 2011-02-02) [ View Issues ]
 ==========================================
 - 0000525: [View] Remove intempestive tooltips (vvandens) - closed.
 - 0000523: [View] Remove double title for LOV (vvandens) - closed.
@@ -33,7 +70,7 @@ Jspresso CE - 3.5.11 (Released 2011-12-27) [ View Issues ]
 - 0000483: [View] Allow the setting of the color red on the column labels (mandatory data) (vvandens) - closed.
 [28 issues]
 
-Jspresso CE - 3.5.10 (Released 2011-11-10) [ View Issues ]
+Jspresso CE - 3.5.10 (Released 2011-12-27) [ View Issues ]
 ==========================================
 - 0000389: [Build & tools] Libraries versions update (vvandens) - closed.
 - 0000488: [View] Modal window view oppened from another window changing this view is invalide. (vvandens) - closed.
@@ -67,7 +104,7 @@ Jspresso CE - 3.5.10 (Released 2011-11-10) [ View Issues ]
 - 0000455: [Persistence] LifecycleInterceptor - onUpdate may not be triggered on parent entities when their state is changed by children onUpdate (vvandens) - closed.
 [30 issues]
 
-Jspresso CE - 3.5.9 (Released 2011-10-06) [ View Issues ]
+Jspresso CE - 3.5.9 (Released 2011-11-10) [ View Issues ]
 =========================================
 - 0000460: [Frontend] Improve HTTPS support in Flex (vvandens) - closed.
 - 0000456: [Model] sqlname doesn't properly match the variables of reference type (vvandens) - closed.
@@ -89,7 +126,7 @@ Jspresso CE - 3.5.9 (Released 2011-10-06) [ View Issues ]
 - 0000429: [Frontend] EditComponentAction.getComponentToEdit(Map<String, Object> context), retrieve Model from ActionParameter OR getSelectedModel(..) (vvandens) - closed.
 [18 issues]
 
-Jspresso CE - 3.5.8 (Released 2011-09-15) [ View Issues ]
+Jspresso CE - 3.5.8 (Released 2011-10-06) [ View Issues ]
 =========================================
 - 0000425: [View] Tree node menu distorted (vvandens) - closed.
 - 0000420: [View] Flex tab panes get an incorrect preferred size (vvandens) - closed.
@@ -115,7 +152,7 @@ Jspresso CE - 3.5.8 (Released 2011-09-15) [ View Issues ]
 - 0000388: [Persistence] Determine the leading side of a bi-di 1-1 or n-n relationship in another way than aphabetical order (vvandens) - closed.
 [22 issues]
 
-Jspresso CE - 3.5.7 (Released 2011-07-21) [ View Issues ]
+Jspresso CE - 3.5.7 (Released 2011-09-15) [ View Issues ]
 =========================================
 - 0000383: [View] Customize available options in an enumeration (vvandens) - closed.
 - 0000384: [Backend] LOV find might lead to weird hibernate exception when lazy collections have to be loaded (vvandens) - closed.
@@ -141,7 +178,7 @@ Jspresso CE - 3.5.7 (Released 2011-07-21) [ View Issues ]
 - 0000356: [Backend] Make the transactionManager a configurable singleton bean (vvandens) - closed.
 [22 issues]
 
-Jspresso CE - 3.5.6 (Released 2011-07-05) [ View Issues ]
+Jspresso CE - 3.5.6 (Released 2011-07-21) [ View Issues ]
 =========================================
 - 0000350: [Build & tools] Archetype does not create the complete directory structure, i.e. empty directories (vvandens) - closed.
 - 0000346: [Build & tools] Make archetype launch configurations independent from the root project folder (vvandens) - closed.
