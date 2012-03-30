@@ -382,7 +382,11 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.AddComponentCollectionToMasterAction" />
     </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
+    <property name="nextAction">
+      <bean parent="connectorSelectionFrontAction">
+        <property name="editSelection" value="true"/>
+      </bean>
+    </property>
   </bean>
 
   <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
@@ -418,7 +422,11 @@
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
       </bean>
     </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
+    <property name="nextAction">
+      <bean parent="connectorSelectionFrontAction">
+        <property name="editSelection" value="true"/>
+      </bean>
+    </property>
   </bean>
 
   <bean id="cloneMapCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
@@ -434,7 +442,11 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
+    <property name="nextAction">
+      <bean parent="connectorSelectionFrontAction">
+        <property name="editSelection" value="true"/>
+      </bean>
+    </property>
   </bean>
 
   <bean id="applicationClipboardTransferHandler" class="org.jspresso.framework.application.frontend.action.std.DefaultClipboardTransferHandler" />

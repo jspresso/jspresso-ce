@@ -102,7 +102,8 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-      IModelDescriptor columnModelDescriptor = propertyViewDescriptor.getModelDescriptor();
+      IModelDescriptor columnModelDescriptor = propertyViewDescriptor
+          .getModelDescriptor();
       if (columnModelDescriptor == null) {
         if (propertyViewDescriptor.getName() != null) {
           columnModelDescriptor = rowModelDescriptor

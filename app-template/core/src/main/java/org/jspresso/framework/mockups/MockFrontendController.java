@@ -133,13 +133,4 @@ public class MockFrontendController<E, F, G> extends
   public void setClipboardContent(String plainContent, String htmlContent) {
     // NO-OP
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void focus(E component) {
-    // NO-OP
-  }
-
 }

@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.controller.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -48,8 +47,6 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
@@ -63,7 +60,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -71,7 +67,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.text.JTextComponent;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -81,7 +76,6 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.gui.swing.components.JDateField;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
@@ -1136,40 +1130,5 @@ public class DefaultSwingController extends
     BasicTransferable dataTransferObject = new BasicTransferable(plainContent,
         htmlContent);
     cb.setContents(dataTransferObject, dataTransferObject);
-  }
-
-  private JComponent findFirstFocusableComponent(Component root) {
-    if (root instanceof JTextComponent || root instanceof JCheckBox
-        || root instanceof JComboBox || root instanceof JDateField
-        || root instanceof JTable) {
-
-      return (JComponent) root;
-    }
-    if (root instanceof Container) {
-      for (Component child : ((Container) root).getComponents()) {
-        JComponent focusableChild = findFirstFocusableComponent(child);
-        if (focusableChild != null) {
-          return focusableChild;
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void focus(JComponent component) {
-    final JComponent focusableChild = findFirstFocusableComponent(component);
-    if (focusableChild != null) {
-      SwingUtilities.invokeLater(new Runnable() {
-
-        @Override
-        public void run() {
-          focusableChild.requestFocusInWindow();
-        }
-      });
-    }
   }
 }

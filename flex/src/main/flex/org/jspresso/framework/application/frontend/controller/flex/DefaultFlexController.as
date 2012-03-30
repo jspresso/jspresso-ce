@@ -84,6 +84,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
@@ -1330,6 +1331,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand",RemoteClipboardCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand",RemoteFocusCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand",RemoteCloseDialogCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand",RemoteEditCommand);
   
       registerClassAlias("org.jspresso.framework.util.gui.CellConstraints",CellConstraints);
       registerClassAlias("org.jspresso.framework.util.gui.Dimension",Dimension);

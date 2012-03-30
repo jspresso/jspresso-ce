@@ -36,6 +36,8 @@ import java.util.zip.Checksum;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.view.ControllerAwareViewFactory;
@@ -2439,5 +2441,25 @@ public class DefaultRemoteViewFactory extends
     if (horizontalAlignment != null) {
       numericField.setHorizontalAlignment(horizontalAlignment.name());
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void focus(RComponent component) {
+    RemoteFocusCommand focusCommand = new RemoteFocusCommand();
+    focusCommand.setTargetPeerGuid(component.getGuid());
+    getRemoteCommandHandler().registerCommand(focusCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void edit(RComponent component) {
+    RemoteEditCommand editCommand = new RemoteEditCommand();
+    editCommand.setTargetPeerGuid(component.getGuid());
+    getRemoteCommandHandler().registerCommand(editCommand);
   }
 }

@@ -406,4 +406,12 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the component to focus.
    */
   void focus(E component);
+
+  /**
+   * Request editing for a component.
+   * 
+   * @param component
+   *          the component to turn to editing mode.
+   */
+  void edit(E component);
 }

@@ -241,9 +241,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
-            moduleModelIndex
-          }, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(
+              new int[] {moduleModelIndex}, moduleModelIndex);
         }
       }
     } finally {
@@ -360,8 +359,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
-      Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused")
+  E sourceWidget, Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
@@ -1496,9 +1495,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {
-            childCollectionConnector, new Integer(moduleModelIndex)
-        };
+        result = new Object[] {childCollectionConnector,
+            new Integer(moduleModelIndex)};
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -1658,9 +1656,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {
-        getName()
-      });
+      clientPreferencesStore.setStorePath(new String[] {getName()});
     }
     return clientPreferencesStore;
   }
@@ -1802,4 +1798,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
     return this;
   }
 
+  /**
+   * Delegates to view factory.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void focus(E component) {
+    getViewFactory().focus(component);
+  }
+
+  /**
+   * Delegates to view factory.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void edit(E component) {
+    getViewFactory().edit(component);
+  }
 }

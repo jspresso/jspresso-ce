@@ -40,6 +40,8 @@ import org.jspresso.framework.binding.ICollectionConnector;
  */
 public class ConnectorSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  private boolean editSelection = false;
+
   /**
    * Selects indices on the view collection connector based on the
    * <code>ActionContextConstants.SELECTED_INDICES</code> context value.
@@ -53,7 +55,31 @@ public class ConnectorSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
     if (collectionConnector != null) {
       int[] connectorSelection = getSelectedIndices(context);
       collectionConnector.setSelectedIndices(connectorSelection);
+      if (editSelection && connectorSelection != null
+          && connectorSelection.length == 1) {
+        E component = getView(context).getPeer();
+        getFrontendController(context).edit(component);
+      }
     }
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Gets the editSelection.
+   * 
+   * @return the editSelection.
+   */
+  public boolean isEditSelection() {
+    return editSelection;
+  }
+
+  /**
+   * Sets the editSelection.
+   * 
+   * @param editSelection
+   *          the editSelection to set.
+   */
+  public void setEditSelection(boolean editSelection) {
+    this.editSelection = editSelection;
   }
 }

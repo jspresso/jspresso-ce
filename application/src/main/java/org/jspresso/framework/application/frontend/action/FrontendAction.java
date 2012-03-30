@@ -36,6 +36,7 @@ import org.jspresso.framework.util.gate.SingleCollectionSelectionTrackingGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -442,10 +443,9 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * @return the frontend controller.
    */
   @Override
-  @SuppressWarnings("unchecked")
   protected IFrontendController<E, F, G> getController(
       Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) getFrontendController(context);
+    return getFrontendController(context);
   }
 
   /**
@@ -516,4 +516,42 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   public void setLastUpdated(long lastUpdated) {
     actionDescriptor.setLastUpdated(lastUpdated);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected IFrontendController<E, F, G> getFrontendController(
+      Map<String, Object> context) {
+    return (IFrontendController<E, F, G>) super.getFrontendController(context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected IView<E> getView(int[] viewPath, Map<String, Object> context) {
+    return (IView<E>) super.getView(viewPath, context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected IView<E> getView(Map<String, Object> context) {
+    return (IView<E>) super.getView(context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected IView<E> navigate(IView<?> fromView, int[] viewPath) {
+    return (IView<E>) super.navigate(fromView, viewPath);
+  }
+
 }

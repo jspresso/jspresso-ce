@@ -87,4 +87,21 @@ public interface IViewFactory<E, F, G> {
    */
   void storeTablePreferences(String tableId, Object[][] columnPrefs,
       IActionHandler actionHandler);
+
+  /**
+   * Request focus for a component.
+   * 
+   * @param component
+   *          the component to focus.
+   */
+  void focus(E component);
+
+  /**
+   * Request editing for a component.
+   * 
+   * @param component
+   *          the component to turn to editing mode.
+   */
+  void edit(E component);
+
 }

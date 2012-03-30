@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -91,6 +92,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -3504,5 +3506,87 @@ public class DefaultSwingViewFactory extends
           propertyViewDescriptor.getHorizontalAlignment());
     }
     return propertyView;
+  }
+
+  /**
+   * Finds the first focusable component in the hierarchy.
+   * 
+   * @param root
+   *          th hierarchy root to explore.
+   * @return the first focusable component or null if none.
+   */
+  protected JComponent findFirstFocusableComponent(Component root) {
+    if (root instanceof JTextComponent || root instanceof JCheckBox
+        || root instanceof JComboBox || root instanceof JDateField
+        || root instanceof JTable) {
+
+      return (JComponent) root;
+    }
+    if (root instanceof Container) {
+      for (Component child : ((Container) root).getComponents()) {
+        JComponent focusableChild = findFirstFocusableComponent(child);
+        if (focusableChild != null) {
+          return focusableChild;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Finds the first editable component in the hierarchy.
+   * 
+   * @param root
+   *          th hierarchy root to explore.
+   * @return the first editable component or null if none.
+   */
+  protected JComponent findFirstEditableComponent(Component root) {
+    if (root instanceof JTable) {
+      return (JComponent) root;
+    }
+    if (root instanceof Container) {
+      for (Component child : ((Container) root).getComponents()) {
+        JComponent editableChild = findFirstEditableComponent(child);
+        if (editableChild != null) {
+          return editableChild;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void focus(JComponent component) {
+    final JComponent focusableChild = findFirstFocusableComponent(component);
+    if (focusableChild != null) {
+      SwingUtilities.invokeLater(new Runnable() {
+
+        @Override
+        public void run() {
+          focusableChild.requestFocusInWindow();
+        }
+      });
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void edit(JComponent component) {
+    JComponent editableChild = findFirstEditableComponent(component);
+    if (editableChild instanceof JTable) {
+      JTable table = (JTable) editableChild;
+      if (table.getSelectedRow() >= 0) {
+        table.editCellAt(table.getSelectedRow(), 0);
+        Component editor = table.getEditorComponent();
+        if (editor instanceof JComponent) {
+          focus((JComponent) editor);
+        }
+      }
+    }
   }
 }

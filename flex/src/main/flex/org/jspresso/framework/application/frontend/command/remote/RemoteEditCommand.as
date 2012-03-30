@@ -12,12 +12,16 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  construct : function() {
-    this.base(arguments);
-  }
+package org.jspresso.framework.application.frontend.command.remote {
 
-});
+		
+    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand")]
+    public class RemoteEditCommand extends RemoteCommand {
+
+        public function RemoteEditCommand() {
+          //default constructor.
+        }
+
+    }
+}

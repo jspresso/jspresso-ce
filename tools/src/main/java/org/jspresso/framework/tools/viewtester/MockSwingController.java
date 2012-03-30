@@ -36,7 +36,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -355,19 +354,5 @@ public class MockSwingController extends
   @Override
   public void setClipboardContent(String plainContent, String htmlContent) {
     // NO-OP
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void focus(final JComponent component) {
-    SwingUtilities.invokeLater(new Runnable() {
-
-      @Override
-      public void run() {
-        component.requestFocusInWindow();
-      }
-    });
   }
 }
