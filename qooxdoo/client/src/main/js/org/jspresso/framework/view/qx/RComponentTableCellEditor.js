@@ -73,9 +73,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
          cellInfo.table.stopEditing();
       }, this);
       
+      var editor;
       if(   !(editorWidget instanceof qx.ui.container.Composite)
          && !(editorWidget instanceof qx.ui.form.TextArea)) {
-        var editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
+        editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
           alignX: "center"
         })).set({
           focusable: true
@@ -91,9 +92,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
         editorWidget.setAllowStretchY(false, false);
         editorWidget.setAllowStretchX(true, true);
         editor.add(editorWidget);
-        editorWidget = editor;
+      } else {
+        editor = editorWidget;
       }
-      return editorWidget;
+      return editor;
     },
 
     // interface implementation
