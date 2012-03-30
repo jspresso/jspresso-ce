@@ -504,13 +504,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
             (command as RemoteAddCardCommand).card,
             (command as RemoteAddCardCommand).cardName);
         } else if(command is RemoteFocusCommand) {
-          //find first focusable component
-          var focusableChild:UIComponent = findFirstFocusableComponent((targetPeer as RComponent).retrievePeer());
-          if(focusableChild) {
-            focusableChild.callLater(function():void {
-              focusableChild.setFocus();
-            });
-          }
+          getViewFactory().focus((targetPeer as RComponent).retrievePeer());
+        } else if(command is RemoteEditCommand) {
+          getViewFactory().edit((targetPeer as RComponent).retrievePeer());
         }
       }
     }
@@ -1258,41 +1254,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       });
       var focusInit:Function = function():void {
-        //find first focusable component
-        var focusableChild:UIComponent = findFirstFocusableComponent(dialogView);
-        if(focusableChild) {
-          focusableChild.setFocus();
-        }
+        getViewFactory().focus(dialogView);
       }
       dialog.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
         dialog.callLater(focusInit);
       });
       PopUpManager.centerPopUp(dialog);
-    }
-    
-    private function findFirstFocusableComponent(root:UIComponent):UIComponent {
-      if(  root is TextInput
-        || root is CheckBox
-        || root is ComboBox
-        || root is TextArea
-        || root is DateField
-        || root is DataGrid) {
-        if(root.enabled) {
-          return root;
-        }
-      }
-      if(root is Container) {
-        for(var i:int = 0; i < (root as Container).getChildren().length; i++) {
-          var child:DisplayObject = root.getChildAt(i);
-          if(child is UIComponent) {
-            var focusableChild:UIComponent = findFirstFocusableComponent(child as UIComponent);
-            if(focusableChild != null) {
-              return focusableChild;
-            }
-          }
-        }
-      }
-      return null;
     }
     
     public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void {

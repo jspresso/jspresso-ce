@@ -43,6 +43,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ColorPicker;
+  import mx.controls.ComboBox;
   import mx.controls.DataGrid;
   import mx.controls.DateField;
   import mx.controls.Image;
@@ -2117,17 +2118,6 @@ package org.jspresso.framework.view.flex {
               if(selIdx < 0) {
                 selIdx = 0;
               }
-              var col:int = 0;
-              var columnRenderer:ClassFactory = table.columns[0].itemRenderer as ClassFactory;
-              // watch out checkbox selection column...
-              if(!columnRenderer.properties || isNaN(columnRenderer.properties["index"])) {
-                col++;
-              }
-              if(isDgCellEditable(table, selIdx, col)) {
-                table.editedItemPosition = {rowIndex:selIdx, columnIndex:col};
-              } else {
-                table.editedItemPosition = null;
-              }
               table.scrollToIndex(selIdx);
             }
           }
@@ -2713,5 +2703,60 @@ package org.jspresso.framework.view.flex {
       _datePattern = value;
     }
 
+    protected function findFirstFocusableComponent(root:UIComponent):UIComponent {
+      if(  root is TextInput
+        || root is CheckBox
+        || root is ComboBox
+        || root is TextArea
+        || root is DateField
+        || root is DataGrid) {
+        if(root.enabled) {
+          return root;
+        }
+      }
+      if(root is Container) {
+        for(var i:int = 0; i < (root as Container).getChildren().length; i++) {
+          var child:DisplayObject = root.getChildAt(i);
+          if(child is UIComponent) {
+            var focusableChild:UIComponent = findFirstFocusableComponent(child as UIComponent);
+            if(focusableChild != null) {
+              return focusableChild;
+            }
+          }
+        }
+      }
+      return null;
+    }
+    
+    public function edit(component:UIComponent):void {
+      if(component is DataGrid) {
+        var table:DataGrid = component as DataGrid;
+        var selIdx:int = table.selectedIndex;
+        if(selIdx >= 0) {
+          var col:int = 0;
+          var columnRenderer:ClassFactory = table.columns[0].itemRenderer as ClassFactory;
+          // watch out checkbox selection column...
+          if(!columnRenderer.properties || isNaN(columnRenderer.properties["index"])) {
+            col++;
+          }
+          if(isDgCellEditable(table, selIdx, col)) {
+            table.editedItemPosition = {rowIndex:selIdx, columnIndex:col};
+          } else {
+            table.editedItemPosition = null;
+          }
+        }
+      }
+    }
+    
+    public function focus(component:UIComponent):void {
+      //find first focusable component
+      var focusableChild:UIComponent = findFirstFocusableComponent(component);
+      if(focusableChild) {
+        focusableChild.callLater(function():void {
+          focusableChild.setFocus();
+        });
+      }
+    }
+    
   }
 }
