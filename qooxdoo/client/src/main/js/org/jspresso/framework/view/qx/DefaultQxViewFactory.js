@@ -749,7 +749,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (stateLeadingIndex >= 0) {
             selectionModel.addSelectionInterval(stateLeadingIndex,
                 stateLeadingIndex);
-            table.scrollCellVisible(0, stateLeadingIndex);
+            table.setFocusedCell(0, stateLeadingIndex, true);
           }
           selectionModel.setBatchMode(false);
         }
@@ -2932,6 +2932,80 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         return this.__datePattern;
       }
       return qx.locale.Date.getDateFormat("short");
+    },
+
+    /**
+     * @param {qx.ui.core.Widget} root
+     * @return {qx.ui.core.Widget}
+     */
+    _findFirstFocusableComponent : function(root) {
+      if(  root instanceof qx.ui.form.TextField
+        || root instanceof qx.ui.form.CheckBox
+        || root instanceof qx.ui.form.SelectBox
+        || root instanceof qx.ui.form.TextArea
+        || root instanceof qx.ui.form.DateField
+        || root instanceof qx.ui.table.Table) {
+        if(root.isEnabled()) {
+          return root;
+        }
+      }
+      if(   root instanceof qx.ui.container.Composite
+         || root instanceof qx.ui.splitpane.Pane
+         || root instanceof qx.ui.tabview.TabView) {
+        for(var i = 0; i < root.getChildren().length; i++) {
+          var child = root.getChildren()[i];
+          if(child instanceof qx.ui.core.Widget) {
+            var focusableChild = this._findFirstFocusableComponent(child);
+            if(focusableChild != null) {
+              return focusableChild;
+            }
+          }
+        }
+      }
+      return null;
+    },
+    
+    /**
+     * @param {qx.ui.core.Widget} root
+     * @return {qx.ui.core.Widget}
+     */
+    _findFirstEditableComponent : function(root) {
+      if(  root instanceof qx.ui.table.Table) {
+        if(root.isEnabled()) {
+          return root;
+        }
+      }
+      if(   root instanceof qx.ui.container.Composite
+         || root instanceof qx.ui.splitpane.Pane
+         || root instanceof qx.ui.tabview.TabView) {
+        for(var i = 0; i < root.getChildren().length; i++) {
+          var child = root.getChildren()[i];
+          if(child instanceof qx.ui.core.Widget) {
+            var editableChild = this._findFirstEditableComponent(child);
+            if(editableChild != null) {
+              return editableChild;
+            }
+          }
+        }
+      }
+      return null;
+    },
+
+    focus : function(component) {
+      var focusableChild = this._findFirstFocusableComponent(component);
+      if(focusableChild) {
+        focusableChild.focus();
+      }
+    },
+    
+    edit : function(component) {
+      var editableChild = this._findFirstEditableComponent(component);
+      if(editableChild instanceof qx.ui.table.Table) {
+        /** @type qx.ui.table.Table */
+        var table = editableChild;
+        table.startEditing();
+      }
     }
+    
   }
 });

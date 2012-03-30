@@ -2728,9 +2728,30 @@ package org.jspresso.framework.view.flex {
       return null;
     }
     
+    protected function findFirstEditableComponent(root:UIComponent):UIComponent {
+      if(root is DataGrid) {
+        if(root.enabled) {
+          return root;
+        }
+      }
+      if(root is Container) {
+        for(var i:int = 0; i < (root as Container).getChildren().length; i++) {
+          var child:DisplayObject = root.getChildAt(i);
+          if(child is UIComponent) {
+            var editableChild:UIComponent = findFirstEditableComponent(child as UIComponent);
+            if(editableChild != null) {
+              return editableChild;
+            }
+          }
+        }
+      }
+      return null;
+    }
+    
     public function edit(component:UIComponent):void {
-      if(component is DataGrid) {
-        var table:DataGrid = component as DataGrid;
+      var editableChild:UIComponent = findFirstEditableComponent(component);
+      if(editableChild is DataGrid) {
+        var table:DataGrid = editableChild as DataGrid;
         var selIdx:int = table.selectedIndex;
         if(selIdx >= 0) {
           var col:int = 0;
@@ -2749,7 +2770,6 @@ package org.jspresso.framework.view.flex {
     }
     
     public function focus(component:UIComponent):void {
-      //find first focusable component
       var focusableChild:UIComponent = findFirstFocusableComponent(component);
       if(focusableChild) {
         focusableChild.callLater(function():void {

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
 /**
@@ -40,7 +41,12 @@ public abstract class AbstractCollectionAction extends BackendAction {
    */
   @Override
   protected ICollectionConnector getModelConnector(Map<String, Object> context) {
-    return (ICollectionConnector) super.getModelConnector(context);
+    IValueConnector connector = super.getModelConnector(context);
+    // for handling table editing connectors...
+    while (connector != null && !(connector instanceof ICollectionConnector)) {
+      connector = connector.getParentConnector();
+    }
+    return (ICollectionConnector) connector;
   }
 
   /**

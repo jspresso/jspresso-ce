@@ -413,10 +413,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
           this.__viewFactory.addCard(targetPeer.retrievePeer(), command.getCard(), command.getCardName());
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
-          var focusableChild = this.__findFirstFocusableComponent(targetPeer.retrievePeer());
-          if(focusableChild) {
-            focusableChild.focus();
-          }
+          this.__viewFactory.focus(targetPeer.retrievePeer());
+        } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand) {
+          this.__viewFactory.edit(targetPeer.retrievePeer());
         }
       }
     },
@@ -1123,41 +1122,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if(newDialog) {
         dialog.center();
       }
-      var focusableChild = this.__findFirstFocusableComponent(dialogBox);
-      if(focusableChild) {
-        focusableChild.focus();
-      }
-    },
-
-    /**
-     * @param {qx.ui.core.Widget} root
-     * @return {qx.ui.core.Widget}
-     */
-    __findFirstFocusableComponent : function(root) {
-      if(  root instanceof qx.ui.form.TextField
-        || root instanceof qx.ui.form.CheckBox
-        || root instanceof qx.ui.form.SelectBox
-        || root instanceof qx.ui.form.TextArea
-        || root instanceof qx.ui.form.DateField
-        || root instanceof qx.ui.table.Table) {
-        if(root.isEnabled()) {
-          return root;
-        }
-      }
-      if(   root instanceof qx.ui.container.Composite
-         || root instanceof qx.ui.splitpane.Pane
-         || root instanceof qx.ui.tabview.TabView) {
-        for(var i = 0; i < root.getChildren().length; i++) {
-          var child = root.getChildren()[i];
-          if(child instanceof qx.ui.core.Widget) {
-            var focusableChild = this.__findFirstFocusableComponent(child);
-            if(focusableChild != null) {
-              return focusableChild;
-            }
-          }
-        }
-      }
-      return null;
+      this.__viewFactory.focus(dialogBox);
     }
   }
 });

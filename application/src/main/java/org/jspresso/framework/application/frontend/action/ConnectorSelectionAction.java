@@ -21,7 +21,8 @@ package org.jspresso.framework.application.frontend.action;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.ISelectable;
 
 /**
  * This is a very generic action that takes an array of indices (
@@ -51,10 +52,16 @@ public class ConnectorSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
-    if (collectionConnector != null) {
+    IValueConnector selectableConnector = getViewConnector(context);
+    // for handling table editing connectors...
+    while (selectableConnector != null
+        && !(selectableConnector instanceof ISelectable)) {
+      selectableConnector = selectableConnector.getParentConnector();
+    }
+    if (selectableConnector != null) {
       int[] connectorSelection = getSelectedIndices(context);
-      collectionConnector.setSelectedIndices(connectorSelection);
+      ((ISelectable) selectableConnector)
+          .setSelectedIndices(connectorSelection);
       if (editSelection && connectorSelection != null
           && connectorSelection.length == 1) {
         E component = getView(context).getPeer();
