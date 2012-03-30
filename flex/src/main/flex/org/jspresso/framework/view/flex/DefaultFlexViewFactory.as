@@ -2015,7 +2015,7 @@ package org.jspresso.framework.view.flex {
           for each (var dgColumn:DataGridColumn in table.columns) {
             var columnRenderer:ClassFactory = dgColumn.itemRenderer as ClassFactory;
             // watch out checkbox selection column...
-            if(columnRenderer.properties && columnRenderer.properties["index"]) {
+            if(columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
               columnIds.push(remoteTable.columnIds[(columnRenderer.properties["index"] as int) - 1]);
               columnWidths.push(dgColumn.width);
             }
@@ -2042,7 +2042,7 @@ package org.jspresso.framework.view.flex {
             var property:String;
             var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
             // watch out checkbox selection column...
-            if(columnRenderer.properties && columnRenderer.properties["index"]) {
+            if(columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
               property = remoteTable.columnIds[(columnRenderer.properties["index"] as int) - 1];
             }
             if(!property || property.length == 0 || property.charAt(0) == "#") {
@@ -2117,8 +2117,14 @@ package org.jspresso.framework.view.flex {
               if(selIdx < 0) {
                 selIdx = 0;
               }
-              if(isDgCellEditable(table, selIdx, 0)) {
-                table.editedItemPosition = {rowIndex:selIdx, columnIndex:0};
+              var col:int = 0;
+              var columnRenderer:ClassFactory = table.columns[0].itemRenderer as ClassFactory;
+              // watch out checkbox selection column...
+              if(!columnRenderer.properties || isNaN(columnRenderer.properties["index"])) {
+                col++;
+              }
+              if(isDgCellEditable(table, selIdx, col)) {
+                table.editedItemPosition = {rowIndex:selIdx, columnIndex:col};
               } else {
                 table.editedItemPosition = null;
               }
@@ -2167,7 +2173,7 @@ package org.jspresso.framework.view.flex {
         var cellValueState:RemoteValueState;
         var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
         // watch out checkbox selection column...
-        if(columnRenderer.properties && columnRenderer.properties["index"]) {
+        if(columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
           cellValueState = (rowCollection.getItemAt(event.rowIndex) as RemoteCompositeValueState)
             .children[columnRenderer.properties["index"] as int] as RemoteValueState;
           _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
@@ -2188,7 +2194,7 @@ package org.jspresso.framework.view.flex {
         var cellValueState:RemoteValueState;
         var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
         // watch out checkbox selection column...
-        if(columnRenderer.properties && columnRenderer.properties["index"]) {
+        if(columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
           cellValueState = rowValueState
             .children[columnRenderer.properties["index"] as int] as RemoteValueState;
           if(!cellValueState.writable) {
