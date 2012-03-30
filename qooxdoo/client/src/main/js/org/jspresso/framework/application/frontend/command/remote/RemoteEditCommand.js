@@ -12,7 +12,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand",
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand",
 {
   extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
