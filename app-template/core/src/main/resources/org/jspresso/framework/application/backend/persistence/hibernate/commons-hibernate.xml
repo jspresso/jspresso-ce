@@ -66,7 +66,6 @@
     <property name="sessionFactory" ref="hibernateSessionFactory" />
     <property name="flushModeName" value="FLUSH_COMMIT"/>
     <property name="entityInterceptor" ref="entityInterceptor"/>
-    <property name="filterName" value="JspressoSessionGlobals"/>
   </bean>
 
   <!-- Hibernate root action beans. -->
