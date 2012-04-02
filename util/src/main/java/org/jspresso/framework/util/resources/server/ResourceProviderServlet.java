@@ -363,15 +363,15 @@ public class ResourceProviderServlet extends HttpServlet {
           outputStream.close();
         }
       } else if (localUrlSpec != null) {
+        if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
+          // we must append parameters that are passed AFTER the localUrl
+          // parameter as they must be considered as part of the localUrl.
+          String queryString = request.getQueryString();
+          localUrlSpec = queryString.substring(
+              queryString.indexOf(LOCAL_URL_PARAMETER)
+                  + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
+        }
         if (isLocalUrlAllowed(localUrlSpec)) {
-          if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
-            // we must append parameters that are passed AFTER the localUrl
-            // parameter as they must be considered as part of the localUrl.
-            String queryString = request.getQueryString();
-            localUrlSpec = queryString.substring(
-                queryString.indexOf(LOCAL_URL_PARAMETER)
-                    + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
-          }
           URL localUrl = UrlHelper.createURL(localUrlSpec);
           if (localUrl == null) {
             throw new ServletException("Bad local URL : " + localUrlSpec);
