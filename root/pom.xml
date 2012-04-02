@@ -11,6 +11,9 @@
     <generator.templateResourcePath>/org/jspresso/framework/tools/entitygenerator</generator.templateResourcePath>
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
     
+    <!-- Java version -->
+    <java.version>1.6</java.version>
+    
     <!-- Dependencies versions -->
 
     <jspresso.version>3.5-SNAPSHOT</jspresso.version>
@@ -75,6 +78,7 @@
 
     <!-- Plugins versions -->
     <compiler-plugin.version>2.0.2</compiler-plugin.version>
+    <jar-plugin.version>2.3.1</jar-plugin.version>
     <surefire-plugin.version>2.4.3</surefire-plugin.version>
     <assembly-plugin.version>2.2.1</assembly-plugin.version>
     <javadoc-plugin.version>2.8</javadoc-plugin.version>
@@ -812,6 +816,19 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${jar-plugin.version}</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefire-plugin.version}</version>
         </plugin>
@@ -819,6 +836,14 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
           <version>${war-plugin.version}</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -1181,8 +1206,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
