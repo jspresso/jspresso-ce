@@ -110,7 +110,7 @@ public class BasicDecimalPropertyDescriptor extends
     BigDecimal min = super.getMinValue();
     if (min == null) {
       if (!isUsingBigDecimal()) {
-        min = new BigDecimal(Double.MIN_VALUE);
+        min = new BigDecimal(-Double.MAX_VALUE);
       }
     }
     return min;
