@@ -32,8 +32,7 @@ public class StaticYesNoCancelAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(getTranslationProvider(context).getTranslation(
-        messageCode, getLocale(context)), context);
+    setActionParameter(translate(messageCode, context), context);
     return super.execute(actionHandler, context);
   }
 

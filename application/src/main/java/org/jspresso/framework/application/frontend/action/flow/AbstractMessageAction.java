@@ -58,4 +58,42 @@ public abstract class AbstractMessageAction<E, F, G> extends
     return HtmlHelper
         .toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(msg)));
   }
+
+  /**
+   * Allows subclasses to retrieve message arguments from the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the message arguments to be passed to the translation provider for
+   *         being used with message format.
+   */
+  protected Object[] getMessageArgs(Map<String, Object> context) {
+    return null;
+  }
+
+  /**
+   * Utility method used to translate a code using the context translation
+   * provider. If {@link #getMessageArgs(Map)} returns a not-null array or
+   * arguments, they are passed to the translation provider to be used as mesage
+   * format arguments.
+   * 
+   * @param messageCode
+   *          the message code to translate.
+   * @param context
+   *          the action context.
+   * @return the translated message.
+   */
+  protected String translate(String messageCode, Map<String, Object> context) {
+    Object[] messageArgs = getMessageArgs(context);
+    String translation;
+    if (messageArgs == null) {
+      translation = getTranslationProvider(context).getTranslation(messageCode,
+          getLocale(context));
+    } else {
+      translation = getTranslationProvider(context).getTranslation(messageCode,
+          messageArgs, getLocale(context));
+    }
+    return translation;
+  }
+
 }

@@ -31,8 +31,7 @@ public class StaticInfoAction<E, F, G> extends InfoAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(getTranslationProvider(context).getTranslation(
-        messageCode, getLocale(context)), context);
+    setActionParameter(translate(messageCode, context), context);
     return super.execute(actionHandler, context);
   }
 
@@ -48,5 +47,4 @@ public class StaticInfoAction<E, F, G> extends InfoAction<E, F, G> {
   public void setMessageCode(String messageCode) {
     this.messageCode = messageCode;
   }
-
 }
