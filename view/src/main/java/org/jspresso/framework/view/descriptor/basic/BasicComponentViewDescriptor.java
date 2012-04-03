@@ -61,6 +61,16 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   private Map<String, Integer>          propertyWidths;
   private Map<String, List<String>>     renderedChildProperties;
   private List<String>                  renderedProperties;
+  private boolean                       verticallyScrollable;
+  
+  
+  /**
+   * Constructs a new <code>BasicComponentViewDescriptor</code> instance.
+   * 
+   */
+  public BasicComponentViewDescriptor() {
+    verticallyScrollable = false;
+  }
 
   /**
    * {@inheritDoc}
@@ -381,5 +391,28 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       }
     }
     return readOnly;
+  }
+
+  /**
+   * Gets the verticallyScrollable.
+   * 
+   * @return the verticallyScrollable.
+   */
+  @Override
+  public boolean isVerticallyScrollable() {
+    return verticallyScrollable;
+  }
+
+  /**
+   * This property allows to define the form vertical scrolling behaviour.
+   * Whenever it is set to true, the corresponding UI component will
+   * install a vertical scrollbar when the available vertical space is not enough.
+   * <p>
+   * Default value is <code>false</code>.
+   * 
+   * @param verticallyScrollable the verticallyScrollable to set.
+   */
+  public void setVerticallyScrollable(boolean verticallyScrollable) {
+    this.verticallyScrollable = verticallyScrollable;
   }
 }

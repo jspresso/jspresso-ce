@@ -136,6 +136,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           component = this._createSecurityComponent(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTable) {
           component = this._createTable(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm) {
+          component = this._createForm(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextComponent) {
           component = this._createTextComponent(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
@@ -1426,8 +1428,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             ._createConstrainedGridContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.REvenGridContainer) {
         container = this._createEvenGridContainer(remoteContainer);
-      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RForm) {
-        container = this._createForm(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
         container = this._createSplitContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RTabContainer) {
@@ -1760,7 +1760,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             converter : this._modelToViewFieldConverter
           });
       form.setToolTip(toolTip);
-      return form;
+      var decoratedForm = form;
+      if(remoteForm.isVerticallyScrollable()) {
+        var scrollContainer = new qx.ui.container.Scroll();
+        scrollContainer.setScrollbarX("off");
+        scrollContainer.setScrollbarY("auto");
+        scrollContainer.add(form);
+        decoratedForm = scrollContainer;
+      }
+      return decoratedForm;
     },
 
     /**

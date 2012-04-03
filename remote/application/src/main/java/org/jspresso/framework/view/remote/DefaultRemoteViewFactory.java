@@ -521,6 +521,7 @@ public class DefaultRemoteViewFactory extends
         .createCompositeValueConnector(
             getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
+    viewComponent.setVerticallyScrollable(viewDescriptor.isVerticallyScrollable());
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition().name());
 

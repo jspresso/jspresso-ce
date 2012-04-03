@@ -24,7 +24,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RForm extends RContainer {
+public class RForm extends RComponent {
 
   private static final long serialVersionUID = -5376646056261143239L;
 
@@ -33,6 +33,7 @@ public class RForm extends RContainer {
   private RComponent[]      elements;
   private Integer[]         elementWidths;
 
+  private boolean           verticallyScrollable;
   private String            labelsPosition;
 
   /**
@@ -146,6 +147,24 @@ public class RForm extends RContainer {
    */
   public void setLabelsPosition(String labelsPosition) {
     this.labelsPosition = labelsPosition;
+  }
+
+  /**
+   * Gets the verticallyScrollable.
+   * 
+   * @return the verticallyScrollable.
+   */
+  public boolean isVerticallyScrollable() {
+    return verticallyScrollable;
+  }
+
+  /**
+   * Sets the verticallyScrollable.
+   * 
+   * @param verticallyScrollable the verticallyScrollable to set.
+   */
+  public void setVerticallyScrollable(boolean verticallyScrollable) {
+    this.verticallyScrollable = verticallyScrollable;
   }
 
 }

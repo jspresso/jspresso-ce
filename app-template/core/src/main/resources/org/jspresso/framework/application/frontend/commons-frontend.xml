@@ -931,7 +931,7 @@
     </property>
   </bean>
 
-  <bean id="loginViewDescriptor" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
+  <bean id="loginViewDescriptorBase" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="name" value="login.name" />
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
@@ -941,7 +941,9 @@
     <property name="columnCount" value="1" />
     <property name="modelDescriptor" ref="loginModelDescriptor" />
   </bean>
-
+  
+  <bean id="loginViewDescriptor" parent="loginViewDescriptorBase"/>
+  
   <!-- Standard ready to use modules -->
 
   <bean abstract="true" id="abstractSimpleModule" class="org.jspresso.framework.application.model.Module">

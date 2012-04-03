@@ -14,7 +14,7 @@
 
 qx.Class.define("org.jspresso.framework.gui.remote.RForm",
 {
-  extend : org.jspresso.framework.gui.remote.RContainer,
+  extend : org.jspresso.framework.gui.remote.RComponent,
   
   construct : function() {
     this.base(arguments);
@@ -41,6 +41,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RForm",
     labelsPosition :
     {
       check : "String"
+    },
+    verticallyScrollable :
+    {
+      check : "Boolean"
     }
   }
 });

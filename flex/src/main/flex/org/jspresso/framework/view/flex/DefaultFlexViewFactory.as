@@ -218,6 +218,8 @@ package org.jspresso.framework.view.flex {
           component = createSecurityComponent(remoteComponent as RSecurityComponent);
         } else if(remoteComponent is RTable) {
           component = createTable(remoteComponent as RTable);
+        } else if(remoteComponent is RForm) {
+          component = createForm(remoteComponent as RForm);
         } else if(remoteComponent is RTextComponent) {
           component = createTextComponent(remoteComponent as RTextComponent);
         } else if(remoteComponent is RTimeField) {
@@ -448,8 +450,6 @@ package org.jspresso.framework.view.flex {
         container = createConstrainedGridContainer(remoteContainer as RConstrainedGridContainer);
       } else if(remoteContainer is REvenGridContainer) {
         container = createEvenGridContainer(remoteContainer as REvenGridContainer);
-      } else if(remoteContainer is RForm) {
-        container = createForm(remoteContainer as RForm);
       } else if(remoteContainer is RSplitContainer) {
         container = createSplitContainer(remoteContainer as RSplitContainer);
       } else if(remoteContainer is RTabContainer) {
@@ -1390,7 +1390,23 @@ package org.jspresso.framework.view.flex {
         form.toolTip = value as String;
       };
       BindingUtils.bindSetter(updateToolTip, remoteState, "value", true);
-      return form;
+      form.horizontalScrollPolicy = ScrollPolicy.OFF;
+      form.verticalScrollPolicy = ScrollPolicy.OFF;
+      var decoratedForm:Container = form;
+      if(remoteForm.verticallyScrollable) {
+        var scroller:Canvas = new Canvas();
+        form.percentWidth = 100.0;
+        form.percentHeight = 100.0;
+        scroller.addChild(form);
+        scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
+        scroller.verticalScrollPolicy = ScrollPolicy.AUTO;
+        scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
+          scroller.width = form.getExplicitOrMeasuredWidth();
+          scroller.height = form.getExplicitOrMeasuredHeight();
+        });
+        decoratedForm = scroller;
+      }
+      return decoratedForm;
     }
 
     protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {

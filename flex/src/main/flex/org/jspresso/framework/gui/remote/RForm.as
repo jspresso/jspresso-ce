@@ -17,13 +17,14 @@ package org.jspresso.framework.gui.remote {
 
 		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RForm")]
-    public class RForm extends RContainer {
+    public class RForm extends RComponent {
 
         private var _columnCount:int;
         private var _elementWidths:Array;
         private var _elements:Array;
         private var _elementLabels:Array;
         private var _labelsPosition:String;
+        private var _verticallyScrollable:Boolean;
 
         public function RForm() {
           //default constructor.
@@ -63,5 +64,14 @@ package org.jspresso.framework.gui.remote {
         public function get labelsPosition():String {
             return _labelsPosition;
         }
+
+        public function get verticallyScrollable():Boolean {
+          return _verticallyScrollable;
+        }
+
+        public function set verticallyScrollable(value:Boolean):void {
+          _verticallyScrollable = value;
+        }
+
     }
 }
