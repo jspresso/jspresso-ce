@@ -157,7 +157,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void joinTransaction() {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       beginUnitOfWork();
     }
   }
@@ -167,7 +167,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void beginUnitOfWork() {
-    if (unitOfWork.isActive()) {
+    if (isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot begin a new unit of work. Another one is already active.");
     }
@@ -189,7 +189,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public <E extends IEntity> E cloneInUnitOfWork(E entity) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
@@ -201,7 +201,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
@@ -216,16 +216,19 @@ public abstract class AbstractBackendController extends AbstractController
     return uowEntities;
   }
 
+  private boolean committingUow = false;
+  
   /**
    * {@inheritDoc}
    */
   @Override
   public void commitUnitOfWork() {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot commit a unit of work that has not begun.");
     }
     try {
+      committingUow = true;
       Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
       if (unitOfWork.getUpdatedEntities() != null) {
         for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
@@ -233,6 +236,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } finally {
+      committingUow = false;
       unitOfWork.commit();
     }
   }
@@ -310,7 +314,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public Map<String, Object> getDirtyProperties(IEntity entity) {
     Map<String, Object> dirtyProperties;
-    if (unitOfWork.isActive()) {
+    if (isUnitOfWorkActive()) {
       dirtyProperties = unitOfWork.getDirtyProperties(entity);
     } else {
       dirtyProperties = dirtRecorder.getChangedProperties(entity);
@@ -533,7 +537,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isUnitOfWorkActive() {
-    return unitOfWork.isActive();
+    return !committingUow && unitOfWork.isActive();
   }
 
   /**
@@ -541,7 +545,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot access unit of work.");
     }
     return unitOfWork.isUpdated(entity);
@@ -574,7 +578,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void recordAsSynchronized(IEntity flushedEntity) {
-    if (unitOfWork.isActive()) {
+    if (isUnitOfWorkActive()) {
       boolean isDirty = isDirty(flushedEntity);
       unitOfWork.clearDirtyState(flushedEntity);
       if (isDirty) {
@@ -588,7 +592,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void registerEntity(IEntity entity, boolean isEntityTransient) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       entityRegistry.register(entity);
       Map<String, Object> initialDirtyProperties = null;
       if (isEntityTransient) {
@@ -637,7 +641,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void rollbackUnitOfWork() {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot rollback a unit of work that has not begun.");
     }
@@ -1154,7 +1158,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (alreadyMerged.containsKey(entity)) {
       return (E) alreadyMerged.get(entity);
     }
-    if (isUnitOfWorkActive() && isDirty(entity)) {
+    if (/*!committingUow && */isUnitOfWorkActive() && (entity.isPersistent() && isDirty(entity))) {
       LOG.error(
           "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({}) to the application session.\n"
               + "This will break transaction isolation since, if the transaction is rolled back,"
@@ -1898,7 +1902,7 @@ public abstract class AbstractBackendController extends AbstractController
           paramEntity.getComponentContract(), paramEntity.getId());
     }
     if (isUnitOfWorkActive()) {
-      if (targetEntity != null && targetEntity.isPersistent() && targetEntity == sessionTargetEntity) {
+      if (targetEntity != null && targetEntity.isPersistent() && objectEquals(targetEntity, sessionTargetEntity)) {
         // We are modifying on a session entity inside a unit of work. This is
         // not legal.
         LOG.error(
@@ -1913,7 +1917,7 @@ public abstract class AbstractBackendController extends AbstractController
                   + "Please check the logs.");
         }
       }
-      if (paramEntity != null && paramEntity == sessionParamEntity) {
+      if (paramEntity != null && objectEquals(paramEntity, sessionParamEntity)) {
         // We are linking an entity with a session entity inside a unit of work.
         // This is not legal.
         LOG.error(
@@ -1929,7 +1933,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } else {
-      if (targetEntity != null && targetEntity.isPersistent() && targetEntity != sessionTargetEntity) {
+      if (targetEntity != null && targetEntity.isPersistent() && !objectEquals(targetEntity, sessionTargetEntity)) {
         // We are working on an entity that has not been registered in the
         // session. This is not legal.
         LOG.error(
@@ -1942,7 +1946,7 @@ public abstract class AbstractBackendController extends AbstractController
             "An invalid modification of an entity that was not previously registered in the session has been detected. "
                 + "Please check the logs.");
       }
-      if (paramEntity != null && paramEntity != sessionParamEntity) {
+      if (paramEntity != null && !objectEquals(paramEntity, sessionParamEntity)) {
         // We are linking an entity with another one that has not been
         // registered in the session. This is not legal.
         LOG.error(
@@ -1959,5 +1963,16 @@ public abstract class AbstractBackendController extends AbstractController
     }
     return param;
   }
-
+  
+  /**
+   * Checks object equality between 2 entities ignoring any implementation details like proxy optimisation.
+   * 
+   * @param e1 the 1st entity.
+   * @param e2 the 2nd entity.
+   * @return true if both entity are object equal.
+   */
+  protected boolean objectEquals(IEntity e1, IEntity e2) {
+    return e1 == e2;
+  }
+  
 }
