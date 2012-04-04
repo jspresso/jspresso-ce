@@ -326,8 +326,8 @@ public abstract class AbstractBackendController extends AbstractController
         Object propertyValue = property.getValue();
         Object currentProperty = entity.straightGetProperty(property.getKey());
         if ((currentProperty != null
-            && !(currentProperty instanceof Collection) && currentProperty
-              .equals(property.getValue()))
+            && !(currentProperty instanceof Collection) && areEqualWithoutInitializing(
+              currentProperty, property.getValue()))
             || (currentProperty == null && propertyValue == null)) {
           // Unfortunately, we cannot ignore collections that have been
           // changed but reset to their original state. This prevents the entity
@@ -339,6 +339,23 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return dirtyProperties;
+  }
+
+  private boolean areEqualWithoutInitializing(Object obj1, Object obj2) {
+    if (obj1 == obj2) {
+      return true;
+    }
+    if (obj1 == null || obj2 == null) {
+      return false;
+    }
+    if (obj1 instanceof IEntity) {
+      // To prevent lazy initialization.
+      if (obj2 instanceof IEntity) {
+        return ((IEntity) obj1).getId().equals(((IEntity) obj2).getId());
+      }
+      return false;
+    }
+    return obj1.equals(obj2);
   }
 
   /**
@@ -1998,5 +2015,4 @@ public abstract class AbstractBackendController extends AbstractController
   protected boolean objectEquals(IEntity e1, IEntity e2) {
     return e1 == e2;
   }
-
 }
