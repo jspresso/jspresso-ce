@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -46,6 +47,10 @@ public class SaveAction extends AbstractHibernateAction {
 
     List<IEntity> entitiesToSave = getEntitiesToSave(context);
     if (entitiesToSave != null) {
+      IBackendController bc = getController(context);
+      if (bc.isUnitOfWorkActive()) {
+        entitiesToSave = bc.cloneInUnitOfWork(entitiesToSave);
+      }
       for (IEntity entityToSave : entitiesToSave) {
         getController(context).registerForUpdate(entityToSave);
       }
