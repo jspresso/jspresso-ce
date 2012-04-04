@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>3.5.11-SNAPSHOT</version>
+  <version>3.5.11.3</version>
   <name>Jspresso Application Framework</name>
   <description>Jspresso is an innovative framework for building high quality java rich internet applications. Jspresso dramatically reduces the development cycles needed to get your corporate application up and running.</description>
   <url>http://www.jspresso.org</url>
@@ -21,7 +21,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/branches/jspresso-framework-3.5.11.x</connection>
+    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/tags/jspresso-framework-3.5.11.3</connection>
   </scm>
   <issueManagement>
     <system>Sourceforge Tracker</system>
