@@ -13,6 +13,12 @@
  */
 
 package org.jspresso.framework.util.array {
+  import mx.collections.ArrayCollection;
+  import mx.collections.ListCollectionView;
+  import mx.core.ClassFactory;
+  import mx.events.CollectionEvent;
+  import mx.events.CollectionEventKind;
+  import mx.events.PropertyChangeEvent;
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.util.remote.IRemotePeer;
@@ -52,6 +58,58 @@ package org.jspresso.framework.util.array {
         }
       }
       return -1;
+    }
+
+    public static function mirrorCollectionViews(source:ListCollectionView, target:ListCollectionView, targetElementFactory:ClassFactory):void {
+      for(var i:int = 0; i < source.length; i++) {
+        var element:Object = targetElementFactory.newInstance();
+        element['delegate'] = source[i];
+        target.addItem(element);
+        attachItemUpdateListener(element, target);
+      }
+      source.addEventListener(CollectionEvent.COLLECTION_CHANGE,
+        function(event:CollectionEvent):void {
+          var item:Object;
+          if(event.kind == CollectionEventKind.ADD) {
+            for each (item in event.items) {
+              var addedElement:Object = targetElementFactory.newInstance();
+              addedElement['delegate'] =item;
+              target.addItem(addedElement);
+              attachItemUpdateListener(addedElement, target);
+            }
+          } else if(event.kind == CollectionEventKind.REMOVE) {
+            for each (item in event.items) {
+              var removedElement:Object = targetElementFactory.newInstance();
+              removedElement['delegate'] = item;
+              target.removeItemAt(arrayIndexOf(target.toArray(),removedElement));
+            }
+          } else if(event.kind == CollectionEventKind.REPLACE) {
+            for each (item in event.items) {
+              var oldElement:Object = targetElementFactory.newInstance();
+              oldElement['delegate'] = (item as PropertyChangeEvent).oldValue;
+              var newElement:Object = targetElementFactory.newInstance();
+              newElement['delegate'] = (item as PropertyChangeEvent).newValue;
+              target.setItemAt(newElement, arrayIndexOf(target.toArray(), oldElement));
+              attachItemUpdateListener(newElement, target);
+            }
+          } else if(event.kind == CollectionEventKind.RESET) {
+            // could be finer.
+            target.removeAll();
+            for each (item in (event.currentTarget as ListCollectionView).toArray()) {
+              var resetElement:Object = targetElementFactory.newInstance();
+              resetElement['delegate'] = (item as PropertyChangeEvent).oldValue;
+              target.addItem(resetElement);
+              attachItemUpdateListener(resetElement, target);
+            }
+          }
+        });
+    }
+    
+    public static function attachItemUpdateListener(element:Object, collection:ListCollectionView):void {
+      var itemUpdated:Function = function(pce:PropertyChangeEvent):void {
+        collection.itemUpdated(pce.source, pce.property, pce.oldValue, pce.newValue);
+      };
+      element.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, itemUpdated);
     }
   }
 }
