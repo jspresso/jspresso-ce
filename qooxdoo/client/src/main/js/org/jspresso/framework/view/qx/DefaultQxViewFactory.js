@@ -1766,6 +1766,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         scrollContainer.setScrollbarX("off");
         scrollContainer.setScrollbarY("auto");
         scrollContainer.add(form);
+        scrollContainer.setWidth(form.getWidth());
+        scrollContainer.setHeight(form.getHeight());
         decoratedForm = scrollContainer;
       }
       return decoratedForm;
