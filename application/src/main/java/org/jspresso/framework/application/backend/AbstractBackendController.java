@@ -1174,14 +1174,26 @@ public abstract class AbstractBackendController extends AbstractController
     if (alreadyMerged.containsKey(entity)) {
       return (E) alreadyMerged.get(entity);
     }
-    if (/* !committingUow && */isUnitOfWorkActive()
-        && (entity.isPersistent() && isDirty(entity))) {
+    if (isUnitOfWorkActive()) {
+      if (entity.isPersistent() && isDirty(entity)) {
+        LOG.error(
+            "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({})[{}] to the application session.\n"
+                + "This will break transaction isolation since, if the transaction is rolled back,"
+                + " the UOW dirty state will be kept.\n"
+                + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
+            entity, entity.getComponentContract().getSimpleName());
+        if (isThrowExceptionOnBadUsage()) {
+          throw new BackendException(
+              "A bad usage has been detected on the backend controller."
+                  + "This is certainly an application coding problem. Please check the logs.");
+        }
+      }
+    } else {
       LOG.error(
-          "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity [{}]({}) to the application session.\n"
-              + "This will break transaction isolation since, if the transaction is rolled back,"
-              + " the UOW dirty state will be kept.\n"
-              + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
-          entity, entity.getComponentContract().getSimpleName());
+          "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
+              + "Where does your entity come from ? Please merge it while the UOW is active so that any"
+              + " extra lazy initialization access can be performed.", entity,
+          entity.getComponentContract().getSimpleName());
       if (isThrowExceptionOnBadUsage()) {
         throw new BackendException(
             "A bad usage has been detected on the backend controller."
