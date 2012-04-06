@@ -14,4 +14,43 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1333693741950</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-checkout</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1333693741952</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-apidocs</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1333693741954</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-cache</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1333693741955</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-qooxdoo-sdk</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>
+
