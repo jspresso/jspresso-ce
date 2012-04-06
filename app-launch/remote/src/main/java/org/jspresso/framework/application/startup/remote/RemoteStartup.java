@@ -80,7 +80,7 @@ public abstract class RemoteStartup extends
           .handleCommands(commands);
     } catch (Throwable ex) {
       if (!restarting) {
-        ex.printStackTrace();
+        getFrontendController().traceUnexpectedException(ex);
       }
       return Collections.emptyList();
     }
@@ -161,7 +161,7 @@ public abstract class RemoteStartup extends
           .singletonList((RemoteCommand) startCommand));
     } catch (Throwable ex) {
       if (!restarting) {
-        ex.printStackTrace();
+        getFrontendController().traceUnexpectedException(ex);
       }
       return Collections.emptyList();
     }

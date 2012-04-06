@@ -381,7 +381,7 @@ public class DefaultSwingController extends
           getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
-      ex.printStackTrace();
+      traceUnexpectedException(ex);
       JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent, this,
           getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(

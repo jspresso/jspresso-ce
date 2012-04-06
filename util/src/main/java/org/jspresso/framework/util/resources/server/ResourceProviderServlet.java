@@ -42,7 +42,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.jspresso.framework.util.gui.Dimension;
@@ -307,12 +306,8 @@ public class ResourceProviderServlet extends HttpServlet {
       }
       out.flush();
       out.close();
-    } catch (FileUploadException fue) {
-      fue.printStackTrace();
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (Exception ex) {
+      LOG.error("An unexpected error occured while uploading the content.", ex);
     } finally {
       HttpRequestHolder.setServletRequest(null);
     }

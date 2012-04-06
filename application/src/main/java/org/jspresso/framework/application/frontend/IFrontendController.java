@@ -414,4 +414,12 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the component to turn to editing mode.
    */
   void edit(E component);
+
+  /**
+   * Traces unexpected exceptions properly.
+   * 
+   * @param ex
+   *          the exception to trace.
+   */
+  void traceUnexpectedException(Throwable ex);
 }

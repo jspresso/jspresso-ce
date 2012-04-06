@@ -149,7 +149,7 @@ public class ControllerAwareEntityProxyInterceptor extends
             .clearPersistentCollectionDirtyState(registeredEntity);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
+        LOG.error("Class for entity {} was not found", entityName, ex);
       }
     }
     return super.getEntity(entityName, id);

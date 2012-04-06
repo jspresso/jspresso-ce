@@ -304,7 +304,7 @@ public class DefaultRemoteController extends
       messageCommand.setMessage(getTranslation("concurrency.error.description",
           getLocale()));
     } else {
-      ex.printStackTrace();
+      traceUnexpectedException(ex);
       messageCommand.setMessage(ex.getLocalizedMessage());
     }
     registerCommand(messageCommand);

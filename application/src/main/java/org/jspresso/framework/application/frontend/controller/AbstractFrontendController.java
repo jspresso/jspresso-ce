@@ -1817,4 +1817,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public void edit(E component) {
     getViewFactory().edit(component);
   }
+
+  /**
+   * Traces unexpecttd exceptions properly.
+   * 
+   * @param ex
+   *          the exception to trace.
+   */
+  @Override
+  public void traceUnexpectedException(Throwable ex) {
+    String sessionId = "[unknown session]";
+    String userId = "[unknown user]";
+    if (getApplicationSession() != null) {
+      sessionId = getApplicationSession().getId();
+      if (getApplicationSession().getPrincipal() != null) {
+        userId = getApplicationSession().getPrincipal().getName();
+      }
+    }
+    LOG.error("An unexpected error occurred for user {} on session {}.",
+        new Object[] {userId, sessionId, ex});
+  }
 }

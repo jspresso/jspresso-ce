@@ -30,6 +30,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.impl.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An enhanced detached criteria that holds a sub-criteria registry.
@@ -40,6 +42,8 @@ import org.hibernate.transform.ResultTransformer;
 public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   private static final long                                    serialVersionUID = 1477297471425065631L;
+  private static final Logger                                  LOG              = LoggerFactory
+                                                                                    .getLogger(EnhancedDetachedCriteria.class);
 
   private Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
   private Projection                                           currentProjection;
@@ -294,7 +298,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
       orders.removeAll(orders);
       currentOrders = null;
     } catch (Throwable ex) {
-      ex.printStackTrace();
+      LOG.error("An error occured when removiong orders.", ex);
     }
   }
 
