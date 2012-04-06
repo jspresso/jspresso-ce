@@ -27,11 +27,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 import org.jspresso.framework.gui.remote.RAction;
-import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.util.resources.AbstractActiveResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
-import org.jspresso.framework.view.IView;
 
 /**
  * This action lets the user browse his local file system and choose a file to
@@ -56,7 +54,6 @@ public class SaveFileAction extends ChooseFileAction {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -73,7 +70,7 @@ public class SaveFileAction extends ChooseFileAction {
         .computeDownloadUrl(resourceId));
     RAction cancelCallbackAction = getActionFactory(context).createAction(
         createCancelCallbackAction(fileSaveCallback), actionHandler,
-        (IView<RComponent>) getView(context), getLocale(context));
+        getView(context), getLocale(context));
     fileDownloadCommand.setCancelCallbackAction(cancelCallbackAction);
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);

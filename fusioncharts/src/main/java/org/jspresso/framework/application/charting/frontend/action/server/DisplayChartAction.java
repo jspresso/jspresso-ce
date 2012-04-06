@@ -35,7 +35,6 @@ import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.ConnectionCallback;
 
@@ -60,7 +59,6 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
@@ -92,7 +90,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
     List<G> chartActions = new ArrayList<G>();
     for (IDisplayableAction action : getActions()) {
       chartActions.add(getActionFactory(context).createAction(action,
-          actionHandler, (IView<E>) getView(context), getLocale(context)));
+          actionHandler, getView(context), getLocale(context)));
     }
     getController(context).displayFlashObject(
         chartUrl,
