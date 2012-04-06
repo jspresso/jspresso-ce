@@ -759,7 +759,8 @@ public class DefaultRemoteController extends
         targetPeer = getRegistered(command.getTargetPeerGuid());
       }
       if (targetPeer == null) {
-        throw new CommandException("Target remote peer could not be retrieved");
+        throw new CommandException(getTranslation("session.unsynced",
+            getApplicationSession().getLocale()));
       }
       if (command instanceof RemoteValueCommand) {
         try {
