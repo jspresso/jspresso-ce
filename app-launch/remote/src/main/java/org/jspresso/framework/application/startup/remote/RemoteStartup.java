@@ -24,19 +24,22 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
-import javax.swing.Action;
 
+import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.startup.AbstractFrontendStartup;
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.qooxdoo.rpc.Remote;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
+import org.jspresso.framework.view.IIconFactory;
 
 /**
  * Default remote startup class.
@@ -45,22 +48,11 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * @author Vincent Vandenschrick
  */
 public abstract class RemoteStartup extends
-    AbstractFrontendStartup<RComponent, RIcon, Action> implements
+    AbstractFrontendStartup<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, Remote {
 
-  private boolean  started;
-  private boolean  restarting;
   private Locale   startupLocale;
   private TimeZone clientTimeZone;
-
-  /**
-   * Constructs a new <code>RemoteStartup</code> instance.
-   */
-  public RemoteStartup() {
-    // This is a brand new session instance.
-    started = false;
-    restarting = false;
-  }
 
   /**
    * Delegates to the frontend controller.
@@ -69,8 +61,7 @@ public abstract class RemoteStartup extends
    */
   @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
-    if (!restarting && !started) {
-      restarting = true;
+    if (!getFrontendController().isStarted()) {
       // we are on a brand new session instance.
       return Collections
           .singletonList((RemoteCommand) new RemoteRestartCommand());
@@ -79,9 +70,7 @@ public abstract class RemoteStartup extends
       return ((IRemoteCommandHandler) getFrontendController())
           .handleCommands(commands);
     } catch (Throwable ex) {
-      if (!restarting) {
-        ex.printStackTrace();
-      }
+      getFrontendController().traceUnexpectedException(ex);
       return Collections.emptyList();
     }
   }
@@ -128,7 +117,17 @@ public abstract class RemoteStartup extends
    */
   public List<RemoteCommand> start(String startupLanguage,
       String[] clientKeysToTranslate, int timeZoneOffset) {
-    setStartupLocale(new Locale(startupLanguage));
+    Locale locale = new Locale(startupLanguage);
+    if (getFrontendController().isStarted()) {
+      IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+      RemoteMessageCommand errorMessage = createErrorMessageCommand();
+      errorMessage.setMessage(controller.getTranslation("session.dup",
+          new Object[] {
+            controller.getI18nName(controller, locale)
+          }, locale));
+      return Collections.singletonList((RemoteCommand) errorMessage);
+    }
+    setStartupLocale(locale);
     TimeZone serverTimeZone = TimeZone.getDefault();
     int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
     TimeZone clientTz = null;
@@ -152,17 +151,13 @@ public abstract class RemoteStartup extends
     }
     setClientTimeZone(clientTz);
     start();
-    started = true;
-    restarting = false;
     try {
       RemoteStartCommand startCommand = new RemoteStartCommand();
       startCommand.setKeysToTranslate(clientKeysToTranslate);
       return handleCommands(Collections
           .singletonList((RemoteCommand) startCommand));
     } catch (Throwable ex) {
-      if (!restarting) {
-        ex.printStackTrace();
-      }
+      getFrontendController().traceUnexpectedException(ex);
       return Collections.emptyList();
     }
   }
@@ -207,4 +202,16 @@ public abstract class RemoteStartup extends
     return clientTimeZone;
   }
 
+  private RemoteMessageCommand createErrorMessageCommand() {
+    IIconFactory<RIcon> iconFactory = getFrontendController().getViewFactory()
+        .getIconFactory();
+    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+    messageCommand.setTitle(getFrontendController().getTranslation("error",
+        getFrontendController().getLocale()));
+    messageCommand.setTitleIcon(iconFactory.getErrorIcon(iconFactory
+        .getTinyIconSize()));
+    messageCommand.setMessageIcon(iconFactory.getErrorIcon(iconFactory
+        .getLargeIconSize()));
+    return messageCommand;
+  }
 }

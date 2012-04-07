@@ -26,6 +26,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * In the multitude of java GUID generators, I found none that guaranteed
  * randomness. GUIDs are guaranteed to be globally unique by using ethernet
@@ -92,6 +95,9 @@ import java.util.Random;
  */
 public class RandomGUID extends Object {
 
+  private static final Logger LOG            = LoggerFactory
+                                                 .getLogger(RandomGUID.class);
+
   private static Random       myRand;
   private static SecureRandom mySecureRand;
   private static String       sId;
@@ -113,7 +119,7 @@ public class RandomGUID extends Object {
     try {
       sId = InetAddress.getLocalHost().toString();
     } catch (UnknownHostException e) {
-      e.printStackTrace();
+      LOG.error("An unexpected error occured while generating a UID.", e);
     }
   }
 

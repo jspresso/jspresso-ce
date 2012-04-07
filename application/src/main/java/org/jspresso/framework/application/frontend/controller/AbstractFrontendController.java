@@ -106,6 +106,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private static final Logger                   LOG               = LoggerFactory
                                                                       .getLogger(AbstractFrontendController.class);
 
+  private boolean                               started;
   private ActionMap                             actionMap;
   private ActionMap                             secondaryActionMap;
   private IBackendController                    backendController;
@@ -159,6 +160,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
   public AbstractFrontendController() {
+    started = false;
     controllerDescriptor = new DefaultIconDescriptor();
     selectedModules = new HashMap<String, Module>();
     dialogContextStack = new ArrayList<Map<String, Object>>();
@@ -241,8 +243,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(
-              new int[] {moduleModelIndex}, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
+            moduleModelIndex
+          }, moduleModelIndex);
         }
       }
     } finally {
@@ -359,8 +362,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused")
-  E sourceWidget, Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
+      Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
@@ -913,7 +916,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (forcedStartingLocale != null) {
       initialLocale = new Locale(forcedStartingLocale);
     }
-    return peerController.start(initialLocale, theClientTimeZone);
+    started = peerController.start(initialLocale, theClientTimeZone);
+    return started;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isStarted() {
+    return started;
   }
 
   /**
@@ -946,7 +958,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
     selectedWorkspaceName = null;
     loginCallbackHandler = null;
-    return getBackendController().stop();
+    started = !getBackendController().stop();
+    return !started;
   }
 
   /**
@@ -1495,8 +1508,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {childCollectionConnector,
-            new Integer(moduleModelIndex)};
+        result = new Object[] {
+            childCollectionConnector, new Integer(moduleModelIndex)
+        };
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -1656,7 +1670,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {getName()});
+      clientPreferencesStore.setStorePath(new String[] {
+        getName()
+      });
     }
     return clientPreferencesStore;
   }
@@ -1816,5 +1832,27 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public void edit(E component) {
     getViewFactory().edit(component);
+  }
+
+  /**
+   * Traces unexpecttd exceptions properly.
+   * 
+   * @param ex
+   *          the exception to trace.
+   */
+  @Override
+  public void traceUnexpectedException(Throwable ex) {
+    String sessionId = "[unknown session]";
+    String userId = "[unknown user]";
+    if (getApplicationSession() != null) {
+      sessionId = getApplicationSession().getId();
+      if (getApplicationSession().getPrincipal() != null) {
+        userId = getApplicationSession().getPrincipal().getName();
+      }
+    }
+    LOG.error("An unexpected error occurred for user {} on session {}.",
+        new Object[] {
+            userId, sessionId, ex
+        });
   }
 }

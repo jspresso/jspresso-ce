@@ -37,6 +37,8 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This connector is a model property connector.
@@ -47,8 +49,11 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 public abstract class ModelPropertyConnector extends AbstractValueConnector
     implements IModelChangeListener, PropertyChangeListener {
 
-  private IAccessor        accessor;
-  private IAccessorFactory accessorFactory;
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(ModelPropertyConnector.class);
+
+  private IAccessor           accessor;
+  private IAccessorFactory    accessorFactory;
 
   /**
    * Constructs a new model connector on a model property.
@@ -164,7 +169,8 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * {@inheritDoc}
    */
   @Override
-  public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
+  public void propertyChange(@SuppressWarnings("unused")
+  PropertyChangeEvent evt) {
     fireConnectorValueChange();
   }
 
@@ -233,7 +239,10 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
         accessor = accessorFactory.createPropertyAccessor(getId(),
             getModelProvider().getModelDescriptor().getModelType());
       } catch (Exception ex) {
-        ex.printStackTrace();
+        LOG.error(
+            "An error occured when creating the accessor for the {} property on {} class.",
+            new Object[] {getId(),
+                getModelProvider().getModelDescriptor().getModelType(), ex});
       }
       if (accessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) accessor)

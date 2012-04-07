@@ -56,6 +56,8 @@ import javax.swing.WindowConstants;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -64,6 +66,9 @@ import org.jspresso.framework.view.IIconFactory;
  * CallbackHandler
  */
 public class DialogCallbackHandler implements CallbackHandler {
+
+  private static final Logger  LOG                  = LoggerFactory
+                                                        .getLogger(DialogCallbackHandler.class);
 
   private static final int     DEFAULT_FIELD_LENGTH = 32;
   private static final Insets  DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
@@ -225,13 +230,13 @@ public class DialogCallbackHandler implements CallbackHandler {
         }
       });
     } catch (InterruptedException ex) {
-      ex.printStackTrace();
+      LOG.error("An unexpected error occured when handing callbacks.", ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException
           && ex.getCause().getCause() instanceof UnsupportedCallbackException) {
         throw (UnsupportedCallbackException) ex.getCause().getCause();
       }
-      ex.printStackTrace();
+      LOG.error("An unexpected error occured when handing callbacks.", ex);
     }
   }
 
@@ -304,7 +309,8 @@ public class DialogCallbackHandler implements CallbackHandler {
       optionButton.addActionListener(new ActionListener() {
 
         @Override
-        public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+        public void actionPerformed(@SuppressWarnings("unused")
+        ActionEvent e) {
           cc.setSelectedIndex(option);
           callbackDialog.dispose();
         }
@@ -352,7 +358,8 @@ public class DialogCallbackHandler implements CallbackHandler {
         optionButton.addActionListener(new ActionListener() {
 
           @Override
-          public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+          public void actionPerformed(@SuppressWarnings("unused")
+          ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
             callbackDialog.dispose();
           }
@@ -365,33 +372,41 @@ public class DialogCallbackHandler implements CallbackHandler {
       }
       switch (confirmationOptionType) {
         case ConfirmationCallback.YES_NO_OPTION:
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, translationProvider.getTranslation(
-                  "yes", locale), proceedActions), constraints);
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, translationProvider.getTranslation("no",
-                  locale), proceedActions), constraints);
+          optionPanel.add(
+              createOptionButton(callbackDialog, cc, ConfirmationCallback.YES,
+                  translationProvider.getTranslation("yes", locale),
+                  proceedActions), constraints);
+          optionPanel.add(
+              createOptionButton(callbackDialog, cc, ConfirmationCallback.NO,
+                  translationProvider.getTranslation("no", locale),
+                  proceedActions), constraints);
           break;
         case ConfirmationCallback.YES_NO_CANCEL_OPTION:
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, translationProvider.getTranslation(
-                  "yes", locale), proceedActions), constraints);
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, translationProvider.getTranslation("no",
-                  locale), proceedActions), constraints);
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.CANCEL, translationProvider.getTranslation(
-                  "cancel", locale), proceedActions), constraints);
+          optionPanel.add(
+              createOptionButton(callbackDialog, cc, ConfirmationCallback.YES,
+                  translationProvider.getTranslation("yes", locale),
+                  proceedActions), constraints);
+          optionPanel.add(
+              createOptionButton(callbackDialog, cc, ConfirmationCallback.NO,
+                  translationProvider.getTranslation("no", locale),
+                  proceedActions), constraints);
+          optionPanel.add(
+              createOptionButton(callbackDialog, cc,
+                  ConfirmationCallback.CANCEL,
+                  translationProvider.getTranslation("cancel", locale),
+                  proceedActions), constraints);
           break;
         case ConfirmationCallback.OK_CANCEL_OPTION:
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.OK, translationProvider.getTranslation("ok",
-                  locale), proceedActions), constraints);
+          optionPanel.add(
+              createOptionButton(callbackDialog, cc, ConfirmationCallback.OK,
+                  translationProvider.getTranslation("ok", locale),
+                  proceedActions), constraints);
           if (hasInput) {
-            optionPanel.add(createOptionButton(callbackDialog, cc,
-                ConfirmationCallback.CANCEL, translationProvider
-                    .getTranslation("cancel", locale), proceedActions),
-                constraints);
+            optionPanel.add(
+                createOptionButton(callbackDialog, cc,
+                    ConfirmationCallback.CANCEL,
+                    translationProvider.getTranslation("cancel", locale),
+                    proceedActions), constraints);
           }
           break;
         default:
@@ -405,8 +420,7 @@ public class DialogCallbackHandler implements CallbackHandler {
       JPanel inputPanel, final NameCallback nc) {
     // JLabel promptLabel = new JLabel(nc.getPrompt());
     JLabel promptLabel = new JLabel(translationProvider.getTranslation("user",
-        locale)
-        + " :");
+        locale) + " :");
     final JTextField nameTextField = new JTextField(DEFAULT_FIELD_LENGTH);
 
     // String defaultName = nc.getDefaultName();
@@ -429,7 +443,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     proceedActions.add(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
         nc.setName(nameTextField.getText());
       }
     });
@@ -440,8 +455,7 @@ public class DialogCallbackHandler implements CallbackHandler {
       final PasswordCallback pc) {
     // JLabel promptLabel = new JLabel(pc.getPrompt());
     JLabel promptLabel = new JLabel(translationProvider.getTranslation(
-        "password", locale)
-        + " :");
+        "password", locale) + " :");
 
     final JPasswordField passwordField = new JPasswordField(
         DEFAULT_FIELD_LENGTH);
@@ -464,7 +478,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     proceedActions.add(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
         pc.setPassword(passwordField.getPassword());
       }
     });
@@ -472,8 +487,8 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   private void processTextOutputCallback(JPanel messagePanel,
       TextOutputCallback toc) throws UnsupportedCallbackException {
-    JLabel messageLabel = new JLabel(translationProvider.getTranslation(toc
-        .getMessage(), locale), getIcon(toc), SwingConstants.LEADING);
+    JLabel messageLabel = new JLabel(translationProvider.getTranslation(
+        toc.getMessage(), locale), getIcon(toc), SwingConstants.LEADING);
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.insets = DEFAULT_INSETS;
     constraints.gridx = GridBagConstraints.RELATIVE;

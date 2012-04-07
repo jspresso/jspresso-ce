@@ -32,7 +32,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Filter;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -259,9 +258,9 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   public Session getHibernateSession() {
     Session currentSession;
-    try {
+    if (isUnitOfWorkActive()) {
       currentSession = getHibernateSessionFactory().getCurrentSession();
-    } catch (HibernateException igored) {
+    } else {
       if (noTxSession == null) {
         noTxSession = getHibernateSessionFactory().openSession();
         noTxSession.setFlushMode(FlushMode.MANUAL);
@@ -279,8 +278,8 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private void configureHibernateGlobalFilter(Filter filter) {
     if (getLocale() != null) {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE,
-          getLocale().getLanguage());
+      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, getLocale()
+          .getLanguage());
     } else {
       filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, "");
     }
@@ -1102,5 +1101,26 @@ public class HibernateBackendController extends AbstractBackendController {
       noTxSession.close();
       noTxSession = null;
     }
+  }
+
+  /**
+   * Checks also for Hibernate proxies.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean objectEquals(IEntity e1, IEntity e2) {
+    IEntity actualE1 = e1;
+    IEntity actualE2 = e2;
+
+    if (actualE1 instanceof HibernateProxy) {
+      actualE1 = (IEntity) ((HibernateProxy) actualE1)
+          .getHibernateLazyInitializer().getImplementation();
+    }
+    if (actualE2 instanceof HibernateProxy) {
+      actualE2 = (IEntity) ((HibernateProxy) actualE2)
+          .getHibernateLazyInitializer().getImplementation();
+    }
+    return super.objectEquals(actualE1, actualE2);
   }
 }

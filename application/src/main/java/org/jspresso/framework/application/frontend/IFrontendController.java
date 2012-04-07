@@ -331,6 +331,13 @@ public interface IFrontendController<E, F, G> extends IController,
    */
   boolean start(IBackendController backendController, Locale clientLocale,
       TimeZone clientTimeZone);
+  
+  /**
+   * Gets wether this controller has been started and not stopped.
+   * 
+   * @return wether this controller has been started and not stopped.
+   */
+  boolean isStarted();
 
   /**
    * Gets the application navigation action map.
@@ -414,4 +421,12 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the component to turn to editing mode.
    */
   void edit(E component);
+
+  /**
+   * Traces unexpected exceptions properly.
+   * 
+   * @param ex
+   *          the exception to trace.
+   */
+  void traceUnexpectedException(Throwable ex);
 }

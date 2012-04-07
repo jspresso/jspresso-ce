@@ -157,7 +157,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void joinTransaction() {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       beginUnitOfWork();
     }
   }
@@ -167,7 +167,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void beginUnitOfWork() {
-    if (unitOfWork.isActive()) {
+    if (isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot begin a new unit of work. Another one is already active.");
     }
@@ -189,7 +189,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public <E extends IEntity> E cloneInUnitOfWork(E entity) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
@@ -201,7 +201,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
@@ -216,16 +216,19 @@ public abstract class AbstractBackendController extends AbstractController
     return uowEntities;
   }
 
+  private boolean committingUow = false;
+
   /**
    * {@inheritDoc}
    */
   @Override
   public void commitUnitOfWork() {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot commit a unit of work that has not begun.");
     }
     try {
+      committingUow = true;
       Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
       if (unitOfWork.getUpdatedEntities() != null) {
         for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
@@ -233,6 +236,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } finally {
+      committingUow = false;
       unitOfWork.commit();
     }
   }
@@ -310,7 +314,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public Map<String, Object> getDirtyProperties(IEntity entity) {
     Map<String, Object> dirtyProperties;
-    if (unitOfWork.isActive()) {
+    if (isUnitOfWorkActive()) {
       dirtyProperties = unitOfWork.getDirtyProperties(entity);
     } else {
       dirtyProperties = dirtRecorder.getChangedProperties(entity);
@@ -322,8 +326,8 @@ public abstract class AbstractBackendController extends AbstractController
         Object propertyValue = property.getValue();
         Object currentProperty = entity.straightGetProperty(property.getKey());
         if ((currentProperty != null
-            && !(currentProperty instanceof Collection) && currentProperty
-              .equals(property.getValue()))
+            && !(currentProperty instanceof Collection) && areEqualWithoutInitializing(
+              currentProperty, property.getValue()))
             || (currentProperty == null && propertyValue == null)) {
           // Unfortunately, we cannot ignore collections that have been
           // changed but reset to their original state. This prevents the entity
@@ -335,6 +339,23 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return dirtyProperties;
+  }
+
+  private boolean areEqualWithoutInitializing(Object obj1, Object obj2) {
+    if (obj1 == obj2) {
+      return true;
+    }
+    if (obj1 == null || obj2 == null) {
+      return false;
+    }
+    if (obj1 instanceof IEntity) {
+      // To prevent lazy initialization.
+      if (obj2 instanceof IEntity) {
+        return ((IEntity) obj1).getId().equals(((IEntity) obj2).getId());
+      }
+      return false;
+    }
+    return obj1.equals(obj2);
   }
 
   /**
@@ -523,8 +544,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(@SuppressWarnings("unused")
-  Object objectOrProxy) {
+  public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
     return true;
   }
 
@@ -533,7 +553,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isUnitOfWorkActive() {
-    return unitOfWork.isActive();
+    return !committingUow && unitOfWork.isActive();
   }
 
   /**
@@ -541,7 +561,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot access unit of work.");
     }
     return unitOfWork.isUpdated(entity);
@@ -574,7 +594,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void recordAsSynchronized(IEntity flushedEntity) {
-    if (unitOfWork.isActive()) {
+    if (isUnitOfWorkActive()) {
       boolean isDirty = isDirty(flushedEntity);
       unitOfWork.clearDirtyState(flushedEntity);
       if (isDirty) {
@@ -588,7 +608,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void registerEntity(IEntity entity, boolean isEntityTransient) {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       entityRegistry.register(entity);
       Map<String, Object> initialDirtyProperties = null;
       if (isEntityTransient) {
@@ -637,7 +657,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void rollbackUnitOfWork() {
-    if (!unitOfWork.isActive()) {
+    if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot rollback a unit of work that has not begun.");
     }
@@ -1154,13 +1174,26 @@ public abstract class AbstractBackendController extends AbstractController
     if (alreadyMerged.containsKey(entity)) {
       return (E) alreadyMerged.get(entity);
     }
-    if (isUnitOfWorkActive() && isDirty(entity)) {
+    if (isUnitOfWorkActive()) {
+      if (entity.isPersistent() && isDirty(entity)) {
+        LOG.error(
+            "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({})[{}] to the application session.\n"
+                + "This will break transaction isolation since, if the transaction is rolled back,"
+                + " the UOW dirty state will be kept.\n"
+                + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
+            entity, entity.getComponentContract().getSimpleName());
+        if (isThrowExceptionOnBadUsage()) {
+          throw new BackendException(
+              "A bad usage has been detected on the backend controller."
+                  + "This is certainly an application coding problem. Please check the logs.");
+        }
+      }
+    } else {
       LOG.error(
-          "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({}) to the application session.\n"
-              + "This will break transaction isolation since, if the transaction is rolled back,"
-              + " the UOW dirty state will be kept.\n"
-              + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
-          entity);
+          "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
+              + "Where does your entity come from ? Please merge it while the UOW is active so that any"
+              + " extra lazy initialization access can be performed.", entity,
+          entity.getComponentContract().getSimpleName());
       if (isThrowExceptionOnBadUsage()) {
         throw new BackendException(
             "A bad usage has been detected on the backend controller."
@@ -1589,7 +1622,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {
-      /* getName(), */getApplicationSession().getPrincipal().getName()});
+        /* getName(), */getApplicationSession().getPrincipal().getName()
+      });
     }
 
   }
@@ -1882,6 +1916,7 @@ public abstract class AbstractBackendController extends AbstractController
       }
       return param;
     }
+    Class<?> targetClass;
     IEntity targetEntity = null;
     IEntity sessionTargetEntity = null;
     IEntity paramEntity = null;
@@ -1890,38 +1925,50 @@ public abstract class AbstractBackendController extends AbstractController
       targetEntity = (IEntity) target;
       sessionTargetEntity = getRegisteredEntity(
           targetEntity.getComponentContract(), targetEntity.getId());
-
     }
+    if (target instanceof IComponent) {
+      targetClass = ((IComponent) target).getComponentContract();
+    } else {
+      targetClass = target.getClass();
+    }
+
     if (param instanceof IEntity) {
       paramEntity = (IEntity) param;
       sessionParamEntity = getRegisteredEntity(
           paramEntity.getComponentContract(), paramEntity.getId());
     }
     if (isUnitOfWorkActive()) {
-      if (targetEntity != null && targetEntity.isPersistent() && targetEntity == sessionTargetEntity) {
+      if (targetEntity != null && targetEntity.isPersistent()
+          && objectEquals(targetEntity, sessionTargetEntity)) {
         // We are modifying on a session entity inside a unit of work. This is
         // not legal.
         LOG.error(
-            "*BAD UOW USAGE* You are modifying a session registered entity ({}) inside an ongoing UOW.\n"
-                + "You should only work on entities copies you obtain using the backendController.cloneInUnitOfWork(...) method.",
-            targetEntity);
-        LOG.error("*BAD UOW USAGE* The property being modified is [{}]",
-            propertyDescriptor.getName());
+            "*BAD UOW USAGE* You are modifying a session registered entity ({})[{}] inside an ongoing UOW.\n"
+                + "You should only work on entities copies you obtain using the "
+                + "backendController.cloneInUnitOfWork(...) method.\n"
+                + "The property being modified is [{}].", new Object[] {
+                targetEntity,
+                targetEntity.getComponentContract().getSimpleName(),
+                propertyDescriptor.getName()
+            });
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
               "An invalid modification on a session entity has been detected while having an active Unit of Work. "
                   + "Please check the logs.");
         }
       }
-      if (paramEntity != null && paramEntity == sessionParamEntity) {
+      if (paramEntity != null && objectEquals(paramEntity, sessionParamEntity)) {
         // We are linking an entity with a session entity inside a unit of work.
         // This is not legal.
         LOG.error(
-            "*BAD UOW USAGE* You are linking an entity ({}) with a session entity ({}) inside an ongoing UOW.\n"
-                + "You should only work on entities copies you obtain using the backendController.cloneInUnitOfWork(...) method.",
-            target, paramEntity);
-        LOG.error("*BAD UOW USAGE* The property being modified is [{}]",
-            propertyDescriptor.getName());
+            "*BAD UOW USAGE* You are linking an entity ({})[{}] with a session entity ({})[{}] inside an ongoing UOW.\n"
+                + "You should only work on entities copies you obtain using the "
+                + "backendController.cloneInUnitOfWork(...) method\n"
+                + "The property being modified is [{}].", new Object[] {
+                target, targetClass.getSimpleName(), paramEntity,
+                paramEntity.getComponentContract().getSimpleName(),
+                propertyDescriptor.getName()
+            });
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
               "An invalid usage of a session entity has been detected while having an active Unit of Work. "
@@ -1929,29 +1976,36 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } else {
-      if (targetEntity != null && targetEntity.isPersistent() && targetEntity != sessionTargetEntity) {
+      if (targetEntity != null && targetEntity.isPersistent()
+          && !objectEquals(targetEntity, sessionTargetEntity)) {
         // We are working on an entity that has not been registered in the
         // session. This is not legal.
         LOG.error(
-            "*BAD SESSION USAGE* You are modifying an entity ({}) that has not been previously merged in the session.\n"
-                + "You should 1st merge your entities in the session by using the backendController.merge(...) method.",
-            targetEntity);
-        LOG.error("*BAD SESSION USAGE* The property being modified is [{}]",
-            propertyDescriptor.getName());
+            "*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the session.\n"
+                + "You should 1st merge your entities in the session by using the "
+                + "backendController.merge(...) method.\n"
+                + "The property being modified is [{}].", new Object[] {
+                targetEntity,
+                targetEntity.getComponentContract().getSimpleName(),
+                propertyDescriptor.getName()
+            });
         throw new BackendException(
             "An invalid modification of an entity that was not previously registered in the session has been detected. "
                 + "Please check the logs.");
       }
-      if (paramEntity != null && paramEntity != sessionParamEntity) {
+      if (paramEntity != null && !objectEquals(paramEntity, sessionParamEntity)) {
         // We are linking an entity with another one that has not been
         // registered in the session. This is not legal.
         LOG.error(
-            "*BAD SESSION USAGE* You are linking an entity ({}) with another one ({}) "
+            "*BAD SESSION USAGE* You are linking an entity ({})[{}] with another one ({})[{}] "
                 + "that has not been previously merged in the session.\n"
-                + "You should 1st merge your entities in the session by using the backendController.merge(...) method.",
-            target, paramEntity);
-        LOG.error("*BAD SESSION USAGE* The property being modified is [{}]",
-            propertyDescriptor.getName());
+                + "You should 1st merge your entities in the session by using the "
+                + "backendController.merge(...) method.\n"
+                + "The property being modified is [{}].", new Object[] {
+                target, targetClass.getSimpleName(), paramEntity,
+                paramEntity.getComponentContract().getSimpleName(),
+                propertyDescriptor.getName()
+            });
         throw new BackendException(
             "An invalid usage of an entity that was not previously registered in the session has been detected. "
                 + "Please check the logs.");
@@ -1960,4 +2014,17 @@ public abstract class AbstractBackendController extends AbstractController
     return param;
   }
 
+  /**
+   * Checks object equality between 2 entities ignoring any implementation
+   * details like proxy optimisation.
+   * 
+   * @param e1
+   *          the 1st entity.
+   * @param e2
+   *          the 2nd entity.
+   * @return true if both entity are object equal.
+   */
+  protected boolean objectEquals(IEntity e1, IEntity e2) {
+    return e1 == e2;
+  }
 }

@@ -254,8 +254,34 @@ public class DefaultSwingViewFactory extends
   @Override
   protected void addCard(IMapView<JComponent> cardView, IView<JComponent> card,
       String cardName) {
-    cardView.getPeer().add(card.getPeer(), cardName);
-    cardView.addToChildrenMap(cardName, card);
+    Container cardPanel = findFirstCardPanel(cardView.getPeer());
+    if (cardPanel != null) {
+      cardPanel.add(card.getPeer(), cardName);
+      cardView.addToChildrenMap(cardName, card);
+    }
+  }
+
+  /**
+   * Finds the first card panel startibng from a root component.
+   * 
+   * @param root
+   *          the root component to start for searching.
+   * @return the 1st found card panel or null if none.
+   */
+  protected JComponent findFirstCardPanel(Component root) {
+    if (root instanceof JComponent
+        && ((JComponent) root).getLayout() instanceof CardLayout) {
+      return (JComponent) root;
+    }
+    if (root instanceof Container) {
+      for (Component child : ((Container) root).getComponents()) {
+        JComponent childCardPanel = findFirstCardPanel(child);
+        if (childCardPanel != null) {
+          return childCardPanel;
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -2722,7 +2748,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected void showCardInPanel(JComponent cardsPeer, String cardName) {
-    ((CardLayout) cardsPeer.getLayout()).show(cardsPeer, cardName);
+    JComponent cardPanel = findFirstCardPanel(cardsPeer);
+    if (cardPanel != null) {
+      ((CardLayout) cardPanel.getLayout()).show(cardPanel, cardName);
+    }
   }
 
   private TableCellRenderer createBooleanTableCellRenderer(
