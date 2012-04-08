@@ -632,7 +632,7 @@
       <para>The <code>Nameable</code> interface may be described as follow
       :</para>
 
-      <para><programlisting language="java">Interface<co id="Nameable_1" /> ('Nameable'<co
+      <para><programlisting language="groovy">Interface<co id="Nameable_1" /> ('Nameable'<co
             id="Nameable_2" />) {
   string_64<co id="Nameable_3" /> 'name'<co id="Nameable_4" />, mandatory:true<co
             id="Nameable_5" />
@@ -678,7 +678,7 @@
       <para>So now, lets describe the <code>Traceable</code> interface as
       follow :</para>
 
-      <para><programlisting language="java">Interface('Traceable',
+      <para><programlisting language="groovy">Interface('Traceable',
           uncloned:['createTimestamp', 'lastUpdateTimestamp']<co
             id="Traceable_1" />) {
   date_time<co id="Traceable_2" /> 'createTimestamp', readOnly:true<co
@@ -916,7 +916,7 @@ public class TraceableLifecycleInterceptor extends
       <para>We can now link the life-cycle interceptor to our
       <code>Traceable</code> interface bean descriptor as below :</para>
 
-      <para><programlisting language="java">Interface('Traceable',
+      <para><programlisting language="groovy">Interface('Traceable',
     <emphasis role="bold">interceptors:'TraceableLifecycleInterceptor'</emphasis><co
             id="TraceableLifecycleInterceptor_1" />,
     uncloned:['createTimestamp', 'lastUpdateTimestamp']) {
@@ -941,7 +941,7 @@ public class TraceableLifecycleInterceptor extends
 
       <para>So let's describe the <code>City</code> entity as below :</para>
 
-      <para><programlisting language="java">Entity<co id="City_1" />('City',
+      <para><programlisting language="groovy">Entity<co id="City_1" />('City',
        extend:'Nameable'<co id="City_2" />) {
   string_10 'zip'
 }</programlisting><calloutlist>
@@ -1046,7 +1046,7 @@ public interface City extends
       <para>So let's describe the <code>ContactInfo</code> component as below
       :</para>
 
-      <para><programlisting language="java">Component<co id="ContactInfo_1" />('ContactInfo') {
+      <para><programlisting language="groovy">Component<co id="ContactInfo_1" />('ContactInfo') {
   string_256 'address'
   string_32  'phone'
   string_128 'email', regex:"[\\w\\-\\.]*@[\\w\\-\\.]*"<co id="ContactInfo_2" />, regexSample:'contact@acme.com'<co
@@ -1174,7 +1174,7 @@ public interface ContactInfo extends
 
         <para>The following SJS fragment will do the trick :</para>
 
-        <para><programlisting language="java">Component('ContactInfo') {
+        <para><programlisting language="groovy">Component('ContactInfo') {
   ...
   <emphasis role="bold">reference 'city'</emphasis><co id="ContactInfo_ref_1" /><emphasis
               role="bold">, ref:'City'</emphasis><co id="ContactInfo_ref_2" />
@@ -1223,7 +1223,7 @@ public interface ContactInfo extends
         <para>To end with the commons model part, let's define the Event
         entity :</para>
 
-        <para><programlisting language="java">Entity('Event',extend:'Traceable'<co
+        <para><programlisting language="groovy">Entity('Event',extend:'Traceable'<co
               id="Event_1" />){
   html<co id="Event_2" /> 'text', maxLength:2048 , id:'Event-text'<co
               id="Event_3" />
@@ -1269,7 +1269,7 @@ public interface ContactInfo extends
 
         <para>Let's look at the SJS code below :</para>
 
-        <para><programlisting language="java">Entity ('Employee',
+        <para><programlisting language="groovy">Entity ('Employee',
         extend:['Nameable','Traceable']) {
   string_32 'firstName', mandatory:true
   string_10 'ssn', regex:'[\\d]{10}'<co id="Employee_1" />, regexSample:'0123456789', unicityScope:'empSsn'<co
@@ -1373,7 +1373,7 @@ public interface ContactInfo extends
         top-level bean for the collection property, with an id in the form of
         <emphasis>Owner-property</emphasis>, i.e.
         <emphasis>Employee-events</emphasis>) :<programlisting
-        language="java">Entity ('Employee'...) {
+        language="groovy">Entity ('Employee'...) {
   ...
   list<co id="Employee-events_1" /> 'events', composition:true<co
               id="Employee-events_2" />, ref:'Event'<co id="Employee-events_3" />
@@ -1714,7 +1714,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
       inheritance graph and we will deal with their relationships next
       :</para>
 
-      <para><programlisting language="java">Entity('Company',
+      <para><programlisting language="groovy">Entity('Company',
        extend:['Nameable', 'Traceable']) {
   reference 'contact', ref:'ContactInfo'
 }
@@ -1754,7 +1754,7 @@ Entity('Team',
       descriptor a top level reference, name it contact and reference it in
       the 3 entities above. The result will be :</para>
 
-      <para><programlisting language="java">Entity('Employee'...) {
+      <para><programlisting language="groovy">Entity('Employee'...) {
   ...
   reference 'contact', ref:'ContactInfo', <emphasis role="bold">id:'contact'</emphasis><co
             id="contact_1" />
@@ -1808,7 +1808,7 @@ Entity('OrganizationalUnit'...) {
         end of the 1 side of the composition. This is achieved using the
         following SJS fragment :</para>
 
-        <para><programlisting language="java">Entity('Company'...) {
+        <para><programlisting language="groovy">Entity('Company'...) {
   ...
   set 'departments', composition:true, ref:'Department'<co
               id="Company-departments_1" />
@@ -1895,7 +1895,7 @@ Entity('Department'...) {
 
         <para>We describe the <code>Department</code> &lt;-&gt;
         <code>Team</code> relationship the same way :<programlisting
-        language="java">Entity('Department'...) {
+        language="groovy">Entity('Department'...) {
   ...
   set 'teams', composition:true, ref:'Team'
 }
@@ -1907,7 +1907,7 @@ Entity('Team'...) {
         <para>And, to be complete, the <code>Company</code> &lt;-&gt;
         <code>Employees</code> relationship :</para>
 
-        <para><programlisting language="java">Entity('Company'...) {
+        <para><programlisting language="groovy">Entity('Company'...) {
   ...
   set 'employees', composition:true, ref:'Employee'
 }
@@ -1927,7 +1927,7 @@ Entity('Employee'...) {
         bi-directional 1-1 relationships than 1-N relationships except that
         both ends are reference property descriptors :</para>
 
-        <para><programlisting language="java">Entity('Employee'...) {
+        <para><programlisting language="groovy">Entity('Employee'...) {
   ...
   reference 'managedOu', ref:'OrganizationalUnit', <emphasis role="bold">reverse:'OrganizationalUnit-manager'</emphasis>
 }
@@ -1953,7 +1953,7 @@ Entity('OrganizationalUnit'...) {
         illustrates this for the <code>Team</code> &lt;-&gt;
         <code>Employee</code> relationship :</para>
 
-        <para><programlisting language="java">Entity('Employee'...) {
+        <para><programlisting language="groovy">Entity('Employee'...) {
   ...
   set 'teams', ref:'Team'
 }
@@ -1986,7 +1986,7 @@ Entity('Team'...) {
 
       <para>Let's see how we can attach this service :</para>
 
-      <para><programlisting language="java">Entity('Employee',
+      <para><programlisting language="groovy">Entity('Employee',
        ...
        services<co id="Employee-services_1" />:[EmployeeService<co
             id="Employee-services_2" />:'EmployeeServiceDelegate<co
@@ -2118,7 +2118,7 @@ public interface Employee extends
 
       <para>Let's see how we can link it using Jspresso :</para>
 
-      <para><programlisting language="java">Entity('Employee',
+      <para><programlisting language="groovy">Entity('Employee',
        ...
        <emphasis role="bold">extension :'EmployeeExtension'</emphasis><co
             id="EmployeeExtension_1" />) {
@@ -2417,7 +2417,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 
       <para>The following SJS fragment declares these processors :</para>
 
-      <para><programlisting language="java">Entity('Employee'
+      <para><programlisting language="groovy">Entity('Employee'
        ...
        <emphasis role="bold">processor:'EmployeePropertyProcessors'</emphasis><co
             id="Employee-processors_1" />) {
@@ -2616,7 +2616,7 @@ public class EmployeePropertyProcessors {
 
     <para>Here is what it looks like :</para>
 
-    <para><programlisting language="java">// Implement your views here using the SJS DSL.
+    <para><programlisting language="groovy">// Implement your views here using the SJS DSL.
 </programlisting></para>
 
     <para>In order to ease the work of the GUI designer, Jspresso provides a
@@ -2658,7 +2658,7 @@ public class EmployeePropertyProcessors {
         <para>Let's describe our first component view on the company entity in
         the <filename>view.groovy</filename> file:</para>
 
-        <para><programlisting language="java">form<co id="Company.pane_1" /> 'Company.pane'<co
+        <para><programlisting language="groovy">form<co id="Company.pane_1" /> 'Company.pane'<co
               id="Company.pane_2" />,
   parent:'decoratedView'<co id="Company.pane_3" />,
   labelsPosition:'ABOVE'<co id="Company.pane_4" />,
@@ -2708,7 +2708,7 @@ public class EmployeePropertyProcessors {
         a result, we simply have to reference the view to test in the
         <filename>view.</filename>groovy file as follows :</para>
 
-        <para><programlisting language="java">bean 'testView',
+        <para><programlisting language="groovy">bean 'testView',
   parent:'Company.pane'</programlisting></para>
 
         <para>Now, launching the tester will produce the following result
@@ -2910,7 +2910,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para>The following change to the view descriptor achieves that
         :</para>
 
-        <para><programlisting language="java">form 'Company.pane',
+        <para><programlisting language="groovy">form 'Company.pane',
   ...
   columnCount:2<co id="Company.pane.custo_1" />,
   ...
@@ -3010,7 +3010,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         display the tracing properties and assemble the company view and the
         tracing view into a tab composite view :</para>
 
-        <para><programlisting language="java">form<co id="Traceable.pane_1" /> 'Traceable.pane'<co
+        <para><programlisting language="groovy">form<co id="Traceable.pane_1" /> 'Traceable.pane'<co
               id="Traceable.pane_2" />,
   model:'Traceable',
   labelsPosition:'ABOVE',
@@ -3086,7 +3086,7 @@ tabs<co id="Traceable.pane_3" /> 'Company.tab.pane',
         <code>Company</code> and the <code>Traceable</code> components
         :</para>
 
-        <para><programlisting language="java">Interface('Traceable',
+        <para><programlisting language="groovy">Interface('Traceable',
           ...
           icon<co id="Traceable-icon_1" />:'traceable-48x48.png') {
   ...
@@ -3112,7 +3112,7 @@ Entity('Company',
         are entries in the I18N property files that we will translate. The
         following SJS fragments achieves that :</para>
 
-        <para><programlisting language="java">form 'Traceable.pane',
+        <para><programlisting language="groovy">form 'Traceable.pane',
   ...
   description:'traceable.editing'<co id="traceable.editing" />
 
@@ -3277,7 +3277,7 @@ form 'Company.pane',
 
         <para>Let's consider the following SJS fragment :</para>
 
-        <para><programlisting language="java">table<co
+        <para><programlisting language="groovy">table<co
               id="BasicTableViewDescriptor" /> 'Company-departments.table'<co
               id="Company-departments-model" />,
   parent:'decoratedView'
@@ -3361,7 +3361,7 @@ split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<c
         maps) that are sufficient for most classic operations. Look at the
         following SJS fragment :</para>
 
-        <para><programlisting language="java">table 'Company-departments.table',
+        <para><programlisting language="groovy">table 'Company-departments.table',
   ...
   actionMap<co id="masterDetailActionMap" />:'masterDetailActionMap'</programlisting><calloutlist>
             <callout arearefs="masterDetailActionMap">
@@ -3409,7 +3409,7 @@ split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<c
         global setting on the view descriptor itself. So let's go back to the
         department entity descriptor :</para>
 
-        <para><programlisting language="java">Entity('Department',
+        <para><programlisting language="groovy">Entity('Department',
     ...
     rendered<co id="renderedProperties" />:['ouId','name','manager','contact']) {
   ...
@@ -3505,7 +3505,7 @@ split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<c
         itself instead of globally configuring the rendered properties of the
         team entity :</para>
 
-        <para><programlisting language="java">table 'Department-teams.table',
+        <para><programlisting language="groovy">table 'Department-teams.table',
   parent:'decoratedView',
   actionMap:'masterDetailActionMap',
   columns<co id="columnViewDescriptors" />:['ouId','name','manager']  </programlisting><calloutlist>
@@ -3522,7 +3522,7 @@ split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<c
         Jspresso to drive the teams table content with the departments table
         selection :</para>
 
-        <para><programlisting language="java">split_vertical<co
+        <para><programlisting language="groovy">split_vertical<co
               id="Departments.and.teams.view" /> 'Departments.and.teams.view',
   cascadingModels:true<co id="cascadingModels" />,
   top<co id="Company-departments.table" />:'Company-departments.table',
@@ -3564,7 +3564,7 @@ split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<c
         departments table view by our new
         <code>Departments.and.teams.view</code> :</para>
 
-        <para><programlisting language="java">split_vertical 'Company.organization.view',
+        <para><programlisting language="groovy">split_vertical 'Company.organization.view',
   model:'Company',
   top:'Company.tab.pane',
   bottom:'Departments.and.teams.view'<co id="Bottom.reworked" /></programlisting><calloutlist>
@@ -3638,7 +3638,7 @@ split_vertical<co id="BasicSplitViewDescriptor" /> 'Company.organization.view'<c
 
         <para>Look at the following SJS fragment :</para>
 
-        <para><programlisting language="java">treeNode<co
+        <para><programlisting language="groovy">treeNode<co
               id="BasicSimpleTreeLevelDescriptor" /> 'Department-teams.treeNode'<co
               id="Department-teams" />,
   rendered:'ouId'<co id="renderedProperty" />,
@@ -3711,7 +3711,7 @@ tree<co id="BasicTreeViewDescriptor" />('Company.tree',
         tree view in a new tab of the company tab view. We do this by
         modifying the <code>Company.tab.pane</code> view as below :</para>
 
-        <para><programlisting language="java">tabs 'Company.tab.pane',
+        <para><programlisting language="groovy">tabs 'Company.tab.pane',
   views:['Company.pane'<emphasis role="bold">,'Company.tree'</emphasis><co
               id="Company.tree" />,'Traceable.pane']</programlisting><calloutlist>
             <callout arearefs="Company.tree">
@@ -3861,7 +3861,7 @@ tree<co id="BasicTreeViewDescriptor" />('Company.tree',
         <filename>backend.groovy</filename>. Here is what it looks like
         :</para>
 
-        <para><programlisting language="java">// Implement your application backend here using the SJS DSL.
+        <para><programlisting language="groovy">// Implement your application backend here using the SJS DSL.
 </programlisting>And the good news is that there is nothing to code here for a
         standard usage.</para>
       </section>
@@ -3986,7 +3986,7 @@ tree<co id="BasicTreeViewDescriptor" />('Company.tree',
         minimal frontend controller definition. Here is what it contains
         :</para>
 
-        <para><programlisting language="java">// Implement your application frontend here using the SJS DSL.
+        <para><programlisting language="groovy">// Implement your application frontend here using the SJS DSL.
 
 /*
  * The workspaces and modules
@@ -4191,7 +4191,7 @@ hrsample { <co id="hrsample-app" />
 
         <para>Here is the code commented :</para>
 
-        <programlisting language="xml">package org.jspresso.hrsample.startup.swing;
+        <programlisting language="java">package org.jspresso.hrsample.startup.swing;
 
 import org.jspresso.framework.application.startup.swing.SwingStartup;
 
@@ -4371,7 +4371,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
         <para>Open the <filename>frontend.groovy</filename> SJS source file
         and add the following :</para>
 
-        <para><programlisting language="java">workspace<co id="Workspace" />('masterdata.workspace',
+        <para><programlisting language="groovy">workspace<co id="Workspace" />('masterdata.workspace',
   icon:'masterdata-48x48.png') {<co id="modules" />
   filterModule<co id="abstractFilterableBeanCollectionModule" />('masterdata.cities.module',
     component:'City'<co id="elementComponentDescriptor" />)
@@ -4514,7 +4514,7 @@ controller 'hrsample.name',
         how we slightly modify the workspace description in the following SJS
         fragment :</para>
 
-        <para><programlisting language="java">workspace('masterdata.workspace',
+        <para><programlisting language="groovy">workspace('masterdata.workspace',
   icon:'masterdata-48x48.png') {
   nodeModule<co id="abstractSimpleModule" />('masterdata.geography.module',
     icon:'geography-48x48.png') {<co id="subModules" />
@@ -4579,7 +4579,7 @@ controller 'hrsample.name',
         <para>Beforehand, we are going to declare the new city component view
         in the <filename>view.groovy</filename> :</para>
 
-        <para><programlisting language="java">form('City.module.view',
+        <para><programlisting language="groovy">form('City.module.view',
   parent:'decoratedView'
   columnCount:1<co id="cityColumnCount" />) {
   actionMap<co id="cityActionMap" /> {
@@ -4617,7 +4617,7 @@ controller 'hrsample.name',
         <para>Once the customized view is declared, we need to register it in
         the bean collection module as follows :</para>
 
-        <para><programlisting language="java">workspace('masterdata.workspace',
+        <para><programlisting language="groovy">workspace('masterdata.workspace',
   icon:'masterdata-48x48.png') {
   nodeModule('masterdata.geography.module',
     icon:'geography-48x48.png') {
@@ -5167,7 +5167,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
           <para>In the <filename>model.groovy</filename> SJS source file
           :</para>
 
-          <para><programlisting language="java">Entity('OrganizationalUnit',
+          <para><programlisting language="groovy">Entity('OrganizationalUnit',
     ...
     processor<co id="manager.processor_1" /> :'OrganizationalUnitPropertyProcessors',
     extension<co id="company.computed_1" /> :'OrganizationalUnitExtension') {
@@ -5437,7 +5437,7 @@ public class OrganizationalUnitPropertyProcessors {
           presenting the team members in the <filename>view.groovy</filename>
           :</para>
 
-          <para><programlisting language="java">listView<co
+          <para><programlisting language="groovy">listView<co
                 id="Team-teamMembers.table" />('Team-teamMembers.list'<co
                 id="Team-teamMembers" />) {
   actionMap<co id="teamMembers-actionMap" /> {
@@ -5728,7 +5728,7 @@ split_vertical('Departments.and.teams.view',
         "administrator". We will secure the application workspaces accordingly
         :</para>
 
-        <para><programlisting language="java">workspace('employees.workspace',
+        <para><programlisting language="groovy">workspace('employees.workspace',
   ...
   grantedRoles<co id="grantedRoles" />:['administrator','staff-manager']) {
   ...

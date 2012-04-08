@@ -7,6 +7,7 @@
   exclude-result-prefixes="#default">
 
   <xsl:import href="urn:docbkx:stylesheet"/>
+  <xsl:import href="urn:docbkx:stylesheet/highlight.xsl"/>
   <xsl:import href="html-titlepages.xsl" />
 
   <xsl:param name="graphicsize.extension">1</xsl:param>
@@ -16,10 +17,7 @@
   <xsl:param name="formal.title.placement">figure after</xsl:param>
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="ulink.show">0</xsl:param>
-  <!--
-  looses callouts
   <xsl:param name="highlight.source">1</xsl:param>
-  -->
   <xsl:param name="chapter.autolabel">I</xsl:param>
   <xsl:param name="section.autolabel">1</xsl:param>
   <xsl:param name="section.autolabel.max.depth">3</xsl:param>

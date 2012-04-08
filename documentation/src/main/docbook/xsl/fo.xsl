@@ -7,6 +7,7 @@
   exclude-result-prefixes="#default">
 
   <xsl:import href="urn:docbkx:stylesheet"/>
+  <xsl:import href="urn:docbkx:stylesheet/highlight.xsl"/>
   <xsl:import href="fo-titlepages.xsl" />
 
   <xsl:param name="paper.type">A4</xsl:param>
@@ -25,10 +26,7 @@
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="ulink.show">0</xsl:param>
   <xsl:param name="shade.verbatim">1</xsl:param>
-  <!--
-  looses callouts
   <xsl:param name="highlight.source">1</xsl:param>
-  -->
   <xsl:param name="body.start.indent">1em</xsl:param>
   <xsl:param name="alignment">left</xsl:param>
   <xsl:param name="body.font.master">11</xsl:param>
