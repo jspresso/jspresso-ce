@@ -94,7 +94,7 @@
     <shade-plugin.version>1.4</shade-plugin.version>
     <webdav-jackrabbit.version>1.0-beta-7</webdav-jackrabbit.version>
 
-    <docbkx-plugin.version>2.0.8</docbkx-plugin.version>
+    <docbkx-plugin.version>2.0.14</docbkx-plugin.version>
     <xdoclet2-plugin.version>2.0.7.1</xdoclet2-plugin.version>
     <xdoclet2-hibernate-plugin.version>1.0.5</xdoclet2-hibernate-plugin.version>
     <build-helper-plugin.version>1.4</build-helper-plugin.version>

@@ -226,8 +226,11 @@
                 <exclude name="**/generated/**/*.xml" />
               </fileset>
             </copy>
-            <xslt style="src/main/docbook/xsl/titlepage.xsl" extension=".xsl" basedir="src/main/docbook/xsl" destdir="target/staging/xsl" includes="**/fo-titlepages.xml **/html-titlepages.xml">
-            </xslt>
+            <xslt style="src/main/docbook/xsl/titlepage.xsl"
+                  extension=".xsl"
+                  basedir="src/main/docbook/xsl"
+                  destdir="target/staging/xsl"
+                  includes="**/fo-titlepages.xml **/html-titlepages.xml"/>
           </preProcess>
         </configuration>
         <dependencies>
