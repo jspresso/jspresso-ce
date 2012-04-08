@@ -146,6 +146,12 @@
                     <include name="**/*.*" />
                   </fileset>
                 </copy>
+                <copy todir="target/reference/html-chunked/en">
+                  <fileset dir="target/reference/html-chunked/en/reference-guide">
+                    <include name="**/*.*" />
+                  </fileset>
+                </copy>
+                <delete dir="target/reference/html-chunked/en/reference-guide"/>
               </postProcess>
             </configuration>
           </execution>
