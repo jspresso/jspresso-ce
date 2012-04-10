@@ -1189,16 +1189,20 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } else {
-      LOG.error(
-          "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
-              + "Where does your entity come from ? Please merge it while the UOW is active so that any"
-              + " extra lazy initialization access can be performed.", entity,
-          entity.getComponentContract().getSimpleName());
-      if (isThrowExceptionOnBadUsage()) {
-        throw new BackendException(
-            "A bad usage has been detected on the backend controller."
-                + "This is certainly an application coding problem. Please check the logs.");
-      }
+      //The following does not work for OkLovAction...
+      
+      // LOG.error(
+      // "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
+      // +
+      // "Where does your entity come from ? Please merge it while the UOW is active so that any"
+      // + " extra lazy initialization access can be performed.", entity,
+      // entity.getComponentContract().getSimpleName());
+      // if (isThrowExceptionOnBadUsage()) {
+      // throw new BackendException(
+      // "A bad usage has been detected on the backend controller."
+      // +
+      // "This is certainly an application coding problem. Please check the logs.");
+      // }
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
