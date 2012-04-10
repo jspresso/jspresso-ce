@@ -91,29 +91,4 @@ public class MessageSourceTranslationProvider extends
   protected MessageSource getMessageSource() {
     return messageSource;
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getDatePattern(Locale locale) {
-    return getTranslation(DATE_FORMAT_KEY, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getTimePattern(Locale locale) {
-    return getTranslation(TIME_FORMAT_KEY, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getShortTimePattern(Locale locale) {
-    return getTranslation(TIME_FORMAT_SHORT_KEY, locale);
-  }
-
 }

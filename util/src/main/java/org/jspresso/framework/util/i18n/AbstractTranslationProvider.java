@@ -52,4 +52,28 @@ public abstract class AbstractTranslationProvider implements
   public String getTranslation(String key, String defaultMessage, Locale locale) {
     return getTranslation(key, null, defaultMessage, locale);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDatePattern(Locale locale) {
+    return getTranslation(DATE_FORMAT_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getTimePattern(Locale locale) {
+    return getTranslation(TIME_FORMAT_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getShortTimePattern(Locale locale) {
+    return getTranslation(TIME_FORMAT_SHORT_KEY, locale);
+  }
 }
