@@ -2225,7 +2225,11 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
       BindingUtils.bindProperty(textArea, "editable", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
-        remoteState.value = (event.currentTarget as TextArea).text;
+        var text:String = (event.currentTarget as TextArea).text;
+        if(text != null && text.length == 0) {
+          text = null;
+        }
+        remoteState.value = text;
       };
       textArea.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
       textArea.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
@@ -2257,7 +2261,11 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindProperty(htmlEditor, "editable", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         if(htmlEditor.editable) {
-          remoteState.value = htmlEditor.xhtmlText;
+          var xhtmlText:String = htmlEditor.xhtmlText;
+          if(xhtmlText != null && xhtmlText.length == 0) {
+            xhtmlText = null;
+          }
+          remoteState.value = xhtmlText;
         }
       };
       htmlEditor.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
