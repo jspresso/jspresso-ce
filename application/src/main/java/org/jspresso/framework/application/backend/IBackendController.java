@@ -312,8 +312,10 @@ public interface IBackendController extends IController,
    * @param isEntityTransient
    *          wether this entity has to be considered as a transient one. It is
    *          not safe to rely on entity.isPersistent() to determine it.
+   * @return the registered entity which is either the entity itself or a clone
+   *         in unit of work.
    */
-  void registerEntity(IEntity entity, boolean isEntityTransient);
+  <T extends IEntity> T registerEntity(T entity, boolean isEntityTransient);
 
   /**
    * Acts as a clipboard for retrieving previously stored component references
