@@ -45,7 +45,6 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
   @Override
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T newEntity = super.createEntityInstance(entityContract);
-    getBackendController().registerEntity(newEntity, true);
     return newEntity;
   }
 
@@ -57,10 +56,7 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    */
   @Override
   protected <T extends IEntity> T initializeEntity(T entity) {
-    T actualEntity = entity;
-    if (getBackendController().isUnitOfWorkActive()) {
-      actualEntity = getBackendController().cloneInUnitOfWork(entity);
-    }
+    T actualEntity = getBackendController().registerEntity(entity, true);
     return super.initializeEntity(actualEntity);
   }
 

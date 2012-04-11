@@ -607,25 +607,28 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public void registerEntity(IEntity entity, boolean isEntityTransient) {
-    if (!isUnitOfWorkActive()) {
-      entityRegistry.register(entity);
-      Map<String, Object> initialDirtyProperties = null;
-      if (isEntityTransient) {
-        initialDirtyProperties = new HashMap<String, Object>();
-        for (Map.Entry<String, Object> property : entity
-            .straightGetProperties().entrySet()) {
-          String propertyName = property.getKey();
-          Object propertyValue = property.getValue();
-          if (propertyValue != null
-              && !(propertyValue instanceof Collection<?> && ((Collection<?>) property
-                  .getValue()).isEmpty())) {
-            initialDirtyProperties.put(propertyName, null);
-          }
+  public <T extends IEntity> T registerEntity(T entity,
+      boolean isEntityTransient) {
+    if (isUnitOfWorkActive()) {
+      return cloneInUnitOfWork(entity);
+    }
+    entityRegistry.register(entity);
+    Map<String, Object> initialDirtyProperties = null;
+    if (isEntityTransient) {
+      initialDirtyProperties = new HashMap<String, Object>();
+      for (Map.Entry<String, Object> property : entity.straightGetProperties()
+          .entrySet()) {
+        String propertyName = property.getKey();
+        Object propertyValue = property.getValue();
+        if (propertyValue != null
+            && !(propertyValue instanceof Collection<?> && ((Collection<?>) property
+                .getValue()).isEmpty())) {
+          initialDirtyProperties.put(propertyName, null);
         }
       }
-      dirtRecorder.register(entity, initialDirtyProperties);
     }
+    dirtRecorder.register(entity, initialDirtyProperties);
+    return entity;
   }
 
   /**
@@ -1189,8 +1192,8 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } else {
-      //The following does not work for OkLovAction...
-      
+      // The following does not work for OkLovAction...
+
       // LOG.error(
       // "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
       // +
@@ -1942,7 +1945,7 @@ public abstract class AbstractBackendController extends AbstractController
           paramEntity.getComponentContract(), paramEntity.getId());
     }
     if (isUnitOfWorkActive()) {
-      if (targetEntity != null && targetEntity.isPersistent()
+      if (targetEntity != null
           && objectEquals(targetEntity, sessionTargetEntity)) {
         // We are modifying on a session entity inside a unit of work. This is
         // not legal.
@@ -1980,7 +1983,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } else {
-      if (targetEntity != null && targetEntity.isPersistent()
+      if (targetEntity != null
           && !objectEquals(targetEntity, sessionTargetEntity)) {
         // We are working on an entity that has not been registered in the
         // session. This is not legal.
