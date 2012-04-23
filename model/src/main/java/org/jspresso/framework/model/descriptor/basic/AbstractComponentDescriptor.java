@@ -402,15 +402,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     return explodeComponentReferences(this, queryableProperties);
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<?> getQueryComponentContract() {
-    return getComponentContract();
-  }
-
+  
   /**
    * Gets the readabilityGates.
    * 

@@ -31,6 +31,7 @@ import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -72,7 +73,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
     this.queryDescriptor = componentFactory
-        .getComponentDescriptor(componentDescriptor.getQueryComponentContract());
+        .getComponentDescriptor(getQueryContract());
     if (queryDescriptor == null) {
       queryDescriptor = componentDescriptor;
     }
@@ -247,7 +248,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
       }
     }
-    return new Serializable[] {entity.getId(), entity.toString(), acPropValue};
+    return new Serializable[] {
+        entity.getId(), entity.toString(), acPropValue
+    };
   }
 
   /**
@@ -387,7 +390,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public Class<?> getQueryContract() {
-    return componentDescriptor.getQueryComponentContract();
+    if (componentDescriptor instanceof IQueryComponentDescriptor) {
+      return ((IQueryComponentDescriptor) componentDescriptor)
+          .getQueriedComponentsDescriptor().getComponentContract();
+    }
+    return componentDescriptor.getComponentContract();
   }
 
   /**
@@ -403,8 +410,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public boolean isInlineComponent() {
-    return !IEntity.class.isAssignableFrom(componentDescriptor
-        .getQueryComponentContract())
+    return !IEntity.class.isAssignableFrom(getQueryContract())
         && !componentDescriptor.isPurelyAbstract();
   }
 

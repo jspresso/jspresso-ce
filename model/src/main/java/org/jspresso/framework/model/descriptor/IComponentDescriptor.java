@@ -110,13 +110,6 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   Collection<IPropertyDescriptor> getPropertyDescriptors();
 
   /**
-   * Gets the query contract of this component descriptor.
-   * 
-   * @return the query contract of this component descriptor.
-   */
-  Class<?> getQueryComponentContract();
-
-  /**
    * Retrieves list of service contract class names implemented by this
    * component.
    * 

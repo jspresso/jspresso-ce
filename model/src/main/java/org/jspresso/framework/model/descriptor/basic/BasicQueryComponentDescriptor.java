@@ -48,7 +48,7 @@ public class BasicQueryComponentDescriptor<E> extends
    *          the provider for delegate entity descriptor.
    */
   public BasicQueryComponentDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
+      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider) {
     super(
         componentDescriptorProvider,
         IQueryComponent.class,
