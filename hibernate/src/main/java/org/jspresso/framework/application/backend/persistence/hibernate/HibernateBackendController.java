@@ -277,18 +277,22 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   private void configureHibernateGlobalFilter(Filter filter) {
+    String filterLanguage = null;
     if (getLocale() != null) {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, getLocale()
-          .getLanguage());
-    } else {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, "");
+      filterLanguage = getLocale().getLanguage();
     }
+    if (filterLanguage == null) {
+      filterLanguage = "";
+    }
+    String filterLogin = null;
     if (getApplicationSession().getPrincipal() != null) {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN,
-          getApplicationSession().getPrincipal().getName());
-    } else {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN, "");
+      filterLogin = getApplicationSession().getPrincipal().getName();
     }
+    if (filterLogin == null) {
+      filterLogin = "";
+    }
+    filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, filterLanguage);
+    filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN, filterLogin);
   }
 
   private Session currentInitializationSession = null;
