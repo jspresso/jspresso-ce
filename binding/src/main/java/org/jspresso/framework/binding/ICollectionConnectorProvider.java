@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.binding;
 
+import org.jspresso.framework.util.event.ISelectable;
+
 /**
  * Marks objects being able to provide a collection connector.
  * 
@@ -25,7 +27,7 @@ package org.jspresso.framework.binding;
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnectorProvider extends
-    ICollectionConnectorListProvider {
+    ICollectionConnectorListProvider, ISelectable {
 
   /**
    * Clones this connector.

@@ -123,13 +123,6 @@ public abstract class AbstractActionFactory<E, F, G> implements
     actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
     actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
         refinedViewConnector);
-    if (refinedViewConnector instanceof ICollectionConnectorProvider
-        && ((ICollectionConnectorProvider) refinedViewConnector)
-            .getCollectionConnector() != null) {
-      actionContext.put(ActionContextConstants.SELECTED_INDICES,
-          ((ICollectionConnectorProvider) refinedViewConnector)
-              .getCollectionConnector().getSelectedIndices());
-    }
     actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
     actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);
     return actionContext;

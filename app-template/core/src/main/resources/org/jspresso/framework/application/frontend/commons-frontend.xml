@@ -342,9 +342,9 @@
     <property name="cancelAction" ref="cancelDialogFrontAction" />
   </bean>
 
-  <bean id="connectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.ConnectorSelectionAction" />
+  <bean id="editSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.EditSelectionAction" />
 
-  <bean id="moduleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
+  <bean id="moduleSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ModuleSelectionAction" />
 
   <bean id="parentModuleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction">
     <property name="name" value="module.parent.select.name" />
@@ -382,11 +382,7 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.AddComponentCollectionToMasterAction" />
     </property>
-    <property name="nextAction">
-      <bean parent="connectorSelectionFrontAction">
-        <property name="editSelection" value="true"/>
-      </bean>
-    </property>
+    <property name="nextAction" ref="editSelectionFrontAction"/>
   </bean>
 
   <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
@@ -422,11 +418,7 @@
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
       </bean>
     </property>
-    <property name="nextAction">
-      <bean parent="connectorSelectionFrontAction">
-        <property name="editSelection" value="true"/>
-      </bean>
-    </property>
+    <property name="nextAction" ref="editSelectionFrontAction"/>
   </bean>
 
   <bean id="cloneMapCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
@@ -442,11 +434,7 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
-    <property name="nextAction">
-      <bean parent="connectorSelectionFrontAction">
-        <property name="editSelection" value="true"/>
-      </bean>
-    </property>
+    <property name="nextAction" ref="editSelectionFrontAction"/>
   </bean>
 
   <bean id="applicationClipboardTransferHandler" class="org.jspresso.framework.application.frontend.action.std.DefaultClipboardTransferHandler" />
@@ -555,7 +543,7 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
     </property>
-    <property name="nextAction" ref="moduleConnectorSelectionFrontAction" />
+    <property name="nextAction" ref="moduleSelectionFrontAction" />
   </bean>
 
   <bean id="restartModuleFrontAction" class="org.jspresso.framework.application.frontend.action.module.ModuleRestartAction">
@@ -588,7 +576,6 @@
         <property name="offset" value="-1" />
       </bean>
     </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
   <bean id="moveDownFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
@@ -605,7 +592,6 @@
         <property name="offset" value="1" />
       </bean>
     </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
   <bean id="resetPropertyFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">

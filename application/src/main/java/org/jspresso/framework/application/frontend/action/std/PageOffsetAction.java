@@ -18,12 +18,16 @@
  */
 package org.jspresso.framework.application.frontend.action.std;
 
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.util.collection.IPageable;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
 /**
  * This action simply augment the context with a page offset integer (
@@ -51,13 +55,33 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> context) {
     context.put(AbstractQbeAction.PAGINATE, null);
     IPageable pageableModel = ((IPageable) getModel(context));
-    if (pageableModel.getPage() != null) {
-      pageableModel.setPage(new Integer(pageableModel.getPage().intValue()
-          + pageOffset.intValue()));
-    } else {
-      pageableModel.setPage(pageOffset);
+    /*
+     * we are on the pagination button view.
+     */
+    int[] collectionViewPath = new int[] {-1, -1};
+    List<?> stickyResults = null;
+    IView<E> collectionView = getView(collectionViewPath, context);
+    if (collectionView.getDescriptor() instanceof ICollectionViewDescriptor
+        && ((ICollectionViewDescriptor) collectionView.getDescriptor())
+            .getSelectionMode() == ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION) {
+      stickyResults = getSelectedModels(collectionViewPath, context);
     }
-    return super.execute(actionHandler, context);
+    pageableModel.setStickyResults(stickyResults);
+
+    try {
+      if (pageableModel.getPage() != null) {
+        pageableModel.setPage(new Integer(pageableModel.getPage().intValue()
+            + pageOffset.intValue()));
+      } else {
+        pageableModel.setPage(pageOffset);
+      }
+      return super.execute(actionHandler, context);
+    } finally {
+      if (stickyResults != null) {
+        setSelectedModels(collectionViewPath, stickyResults, context);
+      }
+      pageableModel.setStickyResults(null);
+    }
   }
 
   /**

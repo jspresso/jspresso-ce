@@ -50,6 +50,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   String QUERIED_COMPONENTS  = "queriedComponents";
 
   /**
+   * sticky results action constant.
+   */
+  String STICKY_RESULTS      = "STICKY_RESULTS";
+
+  /**
    * Query component action constant.
    */
   String QUERY_COMPONENT     = "QUERY_COMPONENT";

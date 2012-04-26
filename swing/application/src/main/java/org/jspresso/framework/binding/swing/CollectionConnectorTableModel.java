@@ -293,14 +293,17 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
           if (row >= 0 && row < getRowCount()) {
             fireTableRowsUpdated(row, row);
           }
-          if (collectionConnector.getSelectedIndices() != null) {
-            if (Arrays.binarySearch(collectionConnector.getSelectedIndices(),
-                row) >= 0) {
-              collectionConnector.setSelectedIndices(new int[0]);
-            }
-          }
+          resetRowSelection(row);
         }
       });
+    }
+  }
+
+  private void resetRowSelection(int row) {
+    if (collectionConnector.getSelectedIndices() != null) {
+      if (Arrays.binarySearch(collectionConnector.getSelectedIndices(), row) >= 0) {
+        collectionConnector.setSelectedIndices(new int[0]);
+      }
     }
   }
 
@@ -345,9 +348,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
             if (oldCollectionSize > i) {
               if (oldCollection.get(i) != element) {
                 fireTableRowsUpdated(i, i);
+                resetRowSelection(i);
               }
             } else {
               fireTableRowsInserted(i, i);
+              resetRowSelection(i);
             }
             bindChildRowConnector(i);
           }

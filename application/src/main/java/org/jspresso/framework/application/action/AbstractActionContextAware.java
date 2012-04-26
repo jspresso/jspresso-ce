@@ -35,6 +35,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
@@ -268,19 +269,47 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the selected indices out of the action context. The value is stored
-   * with the key <code>ActionContextConstants.SELECTED_INDICES</code>. The
-   * context is initialized with the array of selected indices of the UI
-   * component if it is a collection component (table, list, ...). More
-   * acurately, the selected indices are taken from the view connector that
-   * adapts the UI component to the Jspresso binding architecture.
+   * Gets the selected indices out of the UI component if it
+   * is a collection component (table, list, ...). More acurately, the selected
+   * indices are taken from the view connector that adapts the UI component to
+   * the Jspresso binding architecture.
    * 
    * @param context
    *          the action context.
    * @return the selected indices stored in the action context.
    */
   protected int[] getSelectedIndices(Map<String, Object> context) {
-    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
+    return getSelectedIndices(null, context);
+  }
+
+  /**
+   * Gets the selected indices out of the UI component if it
+   * is a collection component (table, list, ...). More acurately, the selected
+   * indices are taken from the view connector that adapts the UI component to
+   * the Jspresso binding architecture.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param context
+   *          the action context.
+   * @return the selected indices stored in the action context.
+   */
+  protected int[] getSelectedIndices(int[] viewPath, Map<String, Object> context) {
+    int[] selectedIndices = null;
+    IValueConnector selectableConnector = getViewConnector(viewPath, context);
+    while (selectableConnector != null
+        && !(selectableConnector instanceof ISelectable)) {
+      selectableConnector = selectableConnector.getParentConnector();
+    }
+    if (selectableConnector instanceof ISelectable) {
+      selectedIndices = ((ISelectable) selectableConnector)
+          .getSelectedIndices();
+    }
+    return selectedIndices;
   }
 
   /**
@@ -362,7 +391,7 @@ public abstract class AbstractActionContextAware {
     List<Object> models;
     if (modelConnector instanceof ICollectionConnector) {
       models = new ArrayList<Object>();
-      int[] selectedIndices = getSelectedIndices(context);
+      int[] selectedIndices = getSelectedIndices(viewPath, context);
       if (selectedIndices != null && selectedIndices.length > 0) {
         for (int i = 0; i < selectedIndices.length; i++) {
           IValueConnector childConnector = ((ICollectionConnector) modelConnector)
@@ -408,8 +437,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Sets the selected indices to the action context. The value is stored using
-   * the <code>ActionContextConstants.SELECTED_INDICES</code> key.
+   * Sets the selected indices of the UI component if it
+   * is a collection component (table, list, ...). More acurately, the selected
+   * indices are set to the view connector that adapts the UI component to
+   * the Jspresso binding architecture.
    * 
    * @param selectedIndices
    *          the selected indices to store in the action context.
@@ -418,7 +449,36 @@ public abstract class AbstractActionContextAware {
    */
   protected void setSelectedIndices(int[] selectedIndices,
       Map<String, Object> context) {
-    context.put(ActionContextConstants.SELECTED_INDICES, selectedIndices);
+    setSelectedIndices(null, selectedIndices, context);
+  }
+
+  /**
+   * Sets the selected indices of the UI component if it
+   * is a collection component (table, list, ...). More acurately, the selected
+   * indices are set to the view connector that adapts the UI component to
+   * the Jspresso binding architecture.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param selectedIndices
+   *          the selected indices to store in the action context.
+   * @param context
+   *          the action context.
+   */
+  protected void setSelectedIndices(int[] viewPath, int[] selectedIndices,
+      Map<String, Object> context) {
+    IValueConnector selectableConnector = getViewConnector(viewPath, context);
+    while (selectableConnector != null
+        && !(selectableConnector instanceof ISelectable)) {
+      selectableConnector = selectableConnector.getParentConnector();
+    }
+    if (selectableConnector instanceof ISelectable) {
+      ((ISelectable) selectableConnector).setSelectedIndices(selectedIndices);
+    }
   }
 
   /**
@@ -433,9 +493,30 @@ public abstract class AbstractActionContextAware {
    */
   protected void setSelectedModels(Collection<?> selectedModels,
       Map<String, Object> context) {
-    IValueConnector modelConnector = getModelConnector(context);
+    setSelectedModels(null, selectedModels, context);
+  }
+
+  /**
+   * Retrieves the selected models indices out of the model connector if it's a
+   * collection connector and set them as selected indices in the action
+   * context.
+   * 
+   * @param viewPath
+   *          the view index path to follow.
+   *          <ul>
+   *          <li>A positive integer n means the nth child.</li>
+   *          <li>A negative integer -n means the nth parent.</li>
+   *          </ul>
+   * @param selectedModels
+   *          the list of models to select in the view connector.
+   * @param context
+   *          the action context.
+   */
+  protected void setSelectedModels(int[] viewPath,
+      Collection<?> selectedModels, Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector instanceof ICollectionConnector) {
-      setSelectedIndices(ConnectorHelper.getIndicesOf(
+      setSelectedIndices(viewPath, ConnectorHelper.getIndicesOf(
           (ICollectionConnector) modelConnector, selectedModels), context);
     }
   }

@@ -1,3 +1,10 @@
+3.5.13
+======
+- [get|set]Selected[Models|Index] now directly synchs the selection on the corresponding views. ModuleSelectionAction
+  and ConnectorSelectionAction that were only meant to be chained to apply selection have been suppressed since they
+  are now useless.
+
+
 3.5.12
 ======
 - The methods of ICriteriaFactory now take the action context as extra parameter.

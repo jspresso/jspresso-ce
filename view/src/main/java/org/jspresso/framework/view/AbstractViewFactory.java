@@ -2749,6 +2749,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         IView<E> paginationView = createPaginationView(
             viewDescriptor.getPaginationViewDescriptor(), view, actionHandler,
             locale);
+        paginationView.setParent(view);
         view.setPeer(decorateWithPaginationView(view.getPeer(),
             paginationView.getPeer()));
       }

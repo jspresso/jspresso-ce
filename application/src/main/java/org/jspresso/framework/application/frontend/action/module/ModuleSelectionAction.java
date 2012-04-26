@@ -55,29 +55,34 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
     String wsName = getWorkspaceName(context);
     String moName = getModuleName(context);
-
-    Workspace ws = getController(context).getWorkspace(wsName);
-    if (ws != null && getController(context).isAccessGranted(ws)) {
-      try {
-        getController(context).pushToSecurityContext(ws);
-        for (Module m : ws.getModules()) {
-          try {
-            getController(context).pushToSecurityContext(m);
-            if (moName.equals(m.getName())) {
-              if (getController(context).isAccessGranted(m)) {
-                getController(context).displayModule(wsName, m);
+    if (wsName == null && moName == null) {
+      Object param = getActionParameter(context);
+      if (param instanceof Module) {
+        getController(context).displayModule((Module) param);
+      }
+    } else {
+      Workspace ws = getController(context).getWorkspace(wsName);
+      if (ws != null && getController(context).isAccessGranted(ws)) {
+        try {
+          getController(context).pushToSecurityContext(ws);
+          for (Module m : ws.getModules()) {
+            try {
+              getController(context).pushToSecurityContext(m);
+              if (moName.equals(m.getName())) {
+                if (getController(context).isAccessGranted(m)) {
+                  getController(context).displayModule(wsName, m);
+                }
+                break;
               }
-              break;
+            } finally {
+              getController(context).restoreLastSecurityContextSnapshot();
             }
-          } finally {
-            getController(context).restoreLastSecurityContextSnapshot();
           }
+        } finally {
+          getController(context).restoreLastSecurityContextSnapshot();
         }
-      } finally {
-        getController(context).restoreLastSecurityContextSnapshot();
       }
     }
-
     return super.execute(actionHandler, context);
   }
 

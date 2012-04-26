@@ -518,4 +518,27 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public void setPagingAction(BackendAction pagingAction) {
     this.pagingAction = pagingAction;
   }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  @Override
+  public void setStickyResults(List<?> stickyResults) {
+    if (filter != null) {
+      filter.setStickyResults(stickyResults);
+    }
+  }
+
+  /**
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public List<?> getStickyResults() {
+    if (filter != null) {
+      return filter.getStickyResults();
+    }
+    return null;
+  }
 }

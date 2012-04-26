@@ -26,6 +26,7 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 
 /**
@@ -155,5 +156,61 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   @Override
   public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
     implSetTracksChildrenSelection(tracksChildrenSelection);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addSelectionChangeListener(ISelectionChangeListener listener) {
+    ICollectionConnector collectionConnector = getCollectionConnector();
+    if (collectionConnector != null) {
+      collectionConnector.addSelectionChangeListener(listener);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int[] getSelectedIndices() {
+    ICollectionConnector collectionConnector = getCollectionConnector();
+    if (collectionConnector != null) {
+      return collectionConnector.getSelectedIndices();
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void removeSelectionChangeListener(ISelectionChangeListener listener) {
+    ICollectionConnector collectionConnector = getCollectionConnector();
+    if (collectionConnector != null) {
+      collectionConnector.removeSelectionChangeListener(listener);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setSelectedIndices(int[] selectedIndices) {
+    ICollectionConnector collectionConnector = getCollectionConnector();
+    if (collectionConnector != null) {
+      collectionConnector.setSelectedIndices(selectedIndices);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setSelectedIndices(int[] selectedIndices, int leadingIndex) {
+    ICollectionConnector collectionConnector = getCollectionConnector();
+    if (collectionConnector != null) {
+      collectionConnector.setSelectedIndices(selectedIndices, leadingIndex);
+    }
   }
 }

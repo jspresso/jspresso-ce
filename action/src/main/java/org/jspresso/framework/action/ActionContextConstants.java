@@ -77,11 +77,6 @@ public final class ActionContextConstants {
   public static final String TO_MODULE        = "TO_MODULE";
 
   /**
-   * SELECTED_INDICES context key.
-   */
-  public static final String SELECTED_INDICES = "SELECTED_INDICES";
-
-  /**
    * SOURCE_COMPONENT context key.
    */
   public static final String SOURCE_COMPONENT = "SOURCE_COMPONENT";

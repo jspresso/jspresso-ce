@@ -248,9 +248,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
       }
     }
-    return new Serializable[] {
-        entity.getId(), entity.toString(), acPropValue
-    };
+    return new Serializable[] {entity.getId(), entity.toString(), acPropValue};
   }
 
   /**
@@ -610,5 +608,22 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public String toString() {
     return "";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setStickyResults(List<?> stickyResults) {
+    put(STICKY_RESULTS, stickyResults);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<?> getStickyResults() {
+    return (List<Object>) get(STICKY_RESULTS);
   }
 }

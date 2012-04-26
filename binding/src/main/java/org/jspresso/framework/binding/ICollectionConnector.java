@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.binding;
 
-import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 
 /**
@@ -27,8 +26,8 @@ import org.jspresso.framework.util.event.ISelectionChangeListener;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICollectionConnector extends ISelectable,
-    ISelectionChangeListener, ICollectionConnectorProvider {
+public interface ICollectionConnector extends ISelectionChangeListener,
+    ICollectionConnectorProvider {
 
   /**
    * Clones this connector.

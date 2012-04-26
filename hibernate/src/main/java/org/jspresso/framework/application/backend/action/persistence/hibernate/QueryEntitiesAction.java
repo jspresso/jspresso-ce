@@ -19,8 +19,10 @@
 package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -114,11 +116,17 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             }
 
             List<?> queriedComponents = performQuery(queryComponent, context);
-            List<Object> mergedComponents = new ArrayList<Object>();
+            Set<Object> mergedComponents = new LinkedHashSet<Object>();
+
+            List<?> stickyResults = queryComponent.getStickyResults();
+            if (stickyResults != null) {
+              for (Object nextComponent : stickyResults) {
+                mergedComponents.add(nextComponent);
+              }
+            }
 
             IBackendController controller = getController(context);
-            for (int i = 0; i < queriedComponents.size(); i++) {
-              Object nextComponent = queriedComponents.get(i);
+            for (Object nextComponent : queriedComponents) {
               if (nextComponent instanceof IEntity) {
                 if (!controller
                     .isEntityRegisteredForDeletion((IEntity) nextComponent)) {
@@ -133,7 +141,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 mergedComponents.add(nextComponent);
               }
             }
-            queryComponent.setQueriedComponents(mergedComponents);
+            queryComponent.setQueriedComponents(new ArrayList<Object>(
+                mergedComponents));
 
             status.setRollbackOnly();
           }

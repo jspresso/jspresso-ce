@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.collection;
 
+import java.util.List;
+
 /**
  * Pageable models.
  * 
@@ -153,4 +155,19 @@ public interface IPageable {
    *          current record count.
    */
   void setRecordCount(Integer recordCount);
+
+  /**
+   * Gets the collection of sticky results.
+   * 
+   * @param stickyResults
+   *          the collection of sticky results.
+   */
+  void setStickyResults(List<?> stickyResults);
+
+  /**
+   * Sets the collection of sticky results.
+   * 
+   * @return the collection of sticky results.
+   */
+  List<?> getStickyResults();
 }

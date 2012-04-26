@@ -16,21 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.module;
+package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.FrontendAction;
-import org.jspresso.framework.application.model.Module;
 
 /**
- * This action takes an indices array (
- * <code>ActionContextConstants.SELECTED_INDICES</code>) out of the action
- * context, and selects the corresponding child connectors of the currently
- * select one.
+ * This action is meant to trigger editing on the current collection view
+ * whenever a single element is selected.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 5814 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -39,27 +35,20 @@ import org.jspresso.framework.application.model.Module;
  * @param <G>
  *          the actual action type used.
  */
-public class ModuleConnectorSelectionAction<E, F, G> extends
-    FrontendAction<E, F, G> {
+public class EditSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
-   * Selects indices on the module view collection connector based on the
-   * <code>ActionContextConstants.SELECTED_INDICES</code> context value.
+   * Retrieves the current view and turn it to editing mode.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Module module = getModule(context);
-    int[] selectedIndices = getSelectedIndices(context);
-    if (selectedIndices.length > 0 && module != null) {
-      int selectedModuleIndex = selectedIndices[0];
-      if (module.getSubModules() != null
-          && module.getSubModules().size() > selectedModuleIndex) {
-        getController(context).displayModule(
-            module.getSubModules().get(selectedModuleIndex));
-      }
+    int[] selection = getSelectedIndices(context);
+    if (selection != null && selection.length == 1) {
+      E component = getView(context).getPeer();
+      getFrontendController(context).edit(component);
     }
     return super.execute(actionHandler, context);
   }

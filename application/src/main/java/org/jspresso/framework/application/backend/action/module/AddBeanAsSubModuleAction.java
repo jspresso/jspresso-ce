@@ -81,8 +81,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
           .getComponentDescriptor();
     }
 
-    int[] childSelectedIndices = new int[selectedModels.size()];
-    int i = 0;
+    Module moduleToSelect = null;
     for (Object nextSelectedModuleObject : selectedModels) {
       Module nextSubModule = createChildModule(parentModule,
           childComponentDescriptor, nextSelectedModuleObject, context);
@@ -91,19 +90,16 @@ public class AddBeanAsSubModuleAction extends BackendAction {
         nextSubModuleIndex = childModules.indexOf(nextSubModule);
       }
       if (nextSubModuleIndex < 0) {
-        int newSelectedIndex = newSubModules.size();
-        if (childModules != null) {
-          newSelectedIndex += childModules.size();
-        }
-        childSelectedIndices[i] = newSelectedIndex;
         newSubModules.add(nextSubModule);
-      } else {
-        childSelectedIndices[i] = nextSubModuleIndex;
+        if (moduleToSelect == null) {
+          moduleToSelect = nextSubModule;
+        }
+      } else if (moduleToSelect == null && childModules != null) {
+        moduleToSelect = childModules.get(nextSubModuleIndex);
       }
-      i++;
     }
     parentModule.addSubModules(newSubModules);
-    setSelectedIndices(childSelectedIndices, context);
+    setActionParameter(moduleToSelect, context);
     return super.execute(actionHandler, context);
   }
 
