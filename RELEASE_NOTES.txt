@@ -4,6 +4,20 @@
   and ConnectorSelectionAction that were only meant to be chained to apply selection have been suppressed since they
   are now useless.
 
+- for Jspresso EE users, whenever you use web services, you should update your web.xml by changing. This will ensure
+that the new resource cleanup interceptor gets registered at startup and that JDBC connections are correctly returned
+to the pool after execution of the web service :
+    <context-param>
+      <param-name>resteasy.scan.resources</param-name>
+      <param-value>true</param-value>
+    </context-param>
+  to
+    <context-param>
+      <param-name>resteasy.scan</param-name>
+      <param-value>true</param-value>
+    </context-param>
+
+
 
 3.5.12
 ======
