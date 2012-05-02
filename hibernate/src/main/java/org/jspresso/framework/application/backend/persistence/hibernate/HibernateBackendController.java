@@ -671,7 +671,8 @@ public class HibernateBackendController extends AbstractBackendController {
       try {
         if (isInitialized(entity)) {
           clearPersistentCollectionDirtyState(entity);
-          resetUninitializedHibernateProxyProperties(entity, hibernateSession, new HashSet<IComponent>());
+          resetUninitializedHibernateProxyProperties(entity, hibernateSession,
+              new HashSet<IComponent>());
         }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
@@ -684,8 +685,9 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
-  private void resetUninitializedHibernateProxyProperties(IComponent componentOrEntity,
-      Session hibernateSession, Set<IComponent> traversedComponents) {
+  private void resetUninitializedHibernateProxyProperties(
+      IComponent componentOrEntity, Session hibernateSession,
+      Set<IComponent> traversedComponents) {
     if (traversedComponents.contains(componentOrEntity)) {
       return;
     }
@@ -697,8 +699,8 @@ public class HibernateBackendController extends AbstractBackendController {
       Object propertyValue = registeredPropertyEntry.getValue();
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)) {
-          resetUninitializedHibernateProxyProperties((IComponent) propertyValue,
-              hibernateSession, traversedComponents);
+          resetUninitializedHibernateProxyProperties(
+              (IComponent) propertyValue, hibernateSession, traversedComponents);
         } else {
           LazyInitializer li = ((HibernateProxy) propertyValue)
               .getHibernateLazyInitializer();
@@ -1129,7 +1131,9 @@ public class HibernateBackendController extends AbstractBackendController {
   public void cleanupRequestResources() {
     super.cleanupRequestResources();
     if (noTxSession != null) {
-      noTxSession.close();
+      if (noTxSession.isOpen()) {
+        noTxSession.close();
+      }
       noTxSession = null;
     }
   }
