@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
 
-  private IBackendController           backendController;
   private IFrontendController<E, F, G> frontendController;
 
   private static final Logger          LOG = LoggerFactory
@@ -50,32 +49,29 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void start() {
     // start on brand new instances.
     stop();
-    getFrontendController().start(getBackendController(), getStartupLocale(),
-        getClientTimeZone());
-    BackendControllerHolder.setCurrentBackendController(getBackendController());
-  }
-
-  /**
-   * Gets the application backend controller.
-   * 
-   * @return the application backend controller.
-   */
-  protected IBackendController getBackendController() {
+    IBackendController backendController;
     try {
-      if (backendController == null) {
-        backendController = (IBackendController) getApplicationContext()
-            .getBean("applicationBackController");
-      }
-      return backendController;
+      backendController = (IBackendController) getApplicationContext().getBean(
+          "applicationBackController");
     } catch (RuntimeException ex) {
       LOG.error("applicationBackController could not be instanciated.", ex);
       throw ex;
     }
-
+    try {
+      frontendController = (IFrontendController<E, F, G>) getApplicationContext()
+          .getBean("applicationFrontController");
+    } catch (RuntimeException ex) {
+      LOG.error("applicationFrontController could not be instanciated.", ex);
+      throw ex;
+    }
+    frontendController.start(backendController, getStartupLocale(),
+        getClientTimeZone());
+    BackendControllerHolder.setCurrentBackendController(backendController);
   }
 
   /**
@@ -83,18 +79,8 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
    * 
    * @return the application frontend controller.
    */
-  @SuppressWarnings("unchecked")
   protected IFrontendController<E, F, G> getFrontendController() {
-    try {
-      if (frontendController == null) {
-        frontendController = (IFrontendController<E, F, G>) getApplicationContext()
-            .getBean("applicationFrontController");
-      }
-      return frontendController;
-    } catch (RuntimeException ex) {
-      LOG.error("applicationFrontController could not be instanciated.", ex);
-      throw ex;
-    }
+    return frontendController;
   }
 
   /**
@@ -105,11 +91,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     // if (frontendController != null) {
     // frontendController.stop();
     // }
-    // if (backendController != null) {
-    // backendController.stop();
-    // }
     frontendController = null;
-    backendController = null;
     BackendControllerHolder.setCurrentBackendController(null);
   }
 }

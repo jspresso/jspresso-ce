@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractBackendStartup extends AbstractStartup {
 
-  private IBackendController  backendController;
   private Locale              startupLocale;
   private TimeZone            clientTimeZone;
 
@@ -55,28 +54,23 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
    * @return the application backend controller.
    */
   protected IBackendController getBackendController() {
-    try {
-      if (backendController == null) {
-        backendController = (IBackendController) getApplicationContext()
-            .getBean("applicationBackController");
-      }
-      return backendController;
-    } catch (RuntimeException ex) {
-      LOG.error("applicationBackController could not be instanciated.", ex);
-      throw ex;
-    }
+    return BackendControllerHolder.getCurrentBackendController();
   }
 
   /**
    * Back controller is retrieved from the spring context and started.
    */
   protected void startController() {
-    // start on brand new instances.
-    backendController = null;
-    IBackendController controller = getBackendController();
-    BackendControllerHolder.setCurrentBackendController(controller);
-    controller.start(getStartupLocale(), getClientTimeZone());
-
+    try {
+      // start on brand new instance.
+      IBackendController backendController = (IBackendController) getApplicationContext()
+          .getBean("applicationBackController");
+      BackendControllerHolder.setCurrentBackendController(backendController);
+      backendController.start(getStartupLocale(), getClientTimeZone());
+    } catch (RuntimeException ex) {
+      LOG.error("applicationBackController could not be instanciated.", ex);
+      throw ex;
+    }
   }
 
   /**
