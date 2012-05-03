@@ -118,8 +118,8 @@ public abstract class RemoteStartup extends
   public List<RemoteCommand> start(String startupLanguage,
       String[] clientKeysToTranslate, int timeZoneOffset) {
     Locale locale = new Locale(startupLanguage);
-    if (getFrontendController().isStarted()) {
-      IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+    IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+    if (controller != null && controller.isStarted()) {
       RemoteMessageCommand errorMessage = createErrorMessageCommand();
       errorMessage.setMessage(controller.getTranslation("session.dup",
           new Object[] {
@@ -157,7 +157,9 @@ public abstract class RemoteStartup extends
       return handleCommands(Collections
           .singletonList((RemoteCommand) startCommand));
     } catch (Throwable ex) {
-      getFrontendController().traceUnexpectedException(ex);
+      if (controller != null) {
+        controller.traceUnexpectedException(ex);
+      }
       return Collections.emptyList();
     }
   }
