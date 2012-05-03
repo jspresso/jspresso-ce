@@ -614,9 +614,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var alertCloseHandler:Function = function(event:CloseEvent):void {
           switch(event.detail) {
             case Alert.YES:
-              Clipboard.generalClipboard.clear();
-              Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
-              Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+              try {
+                Clipboard.generalClipboard.clear();
+                Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+                Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+              } catch(ignored:Error) {
+                // Not much we can do about it...
+              }
               break;
             default:
               break;
