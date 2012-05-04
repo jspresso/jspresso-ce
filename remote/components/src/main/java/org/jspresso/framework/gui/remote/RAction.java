@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jspresso.framework.util.remote.RemotePeer;
@@ -30,14 +31,16 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RAction extends RemotePeer {
 
-  private static final long serialVersionUID = -2602197965773783997L;
+  private static final long   serialVersionUID = -2602197965773783997L;
 
-  private String            acceleratorAsString;
-  private String            description;
-  private boolean           enabled;
-  private RIcon             icon;
-  private String            mnemonicAsString;
-  private String            name;
+  private String              acceleratorAsString;
+  private String              description;
+  private boolean             enabled;
+  private RIcon               icon;
+  private String              mnemonicAsString;
+  private String              name;
+
+  private Map<String, Object> userValues;
 
   /**
    * Constructs a new <code>RAction</code> instance.
@@ -184,4 +187,36 @@ public class RAction extends RemotePeer {
   public void setName(String name) {
     this.name = name;
   }
+
+  /**
+   * Gets one of this object's properties using the associated key.
+   * 
+   * @param key
+   *          a <code>String</code> containing the key
+   * @return an <code>Object</code> value
+   * @see #putValue
+   */
+  public Object getValue(String key) {
+    if (userValues != null) {
+      return userValues.get(key);
+    }
+    return null;
+  }
+
+  /**
+   * Sets one of this object's properties using the associated key. If the value
+   * has changed, a <code>PropertyChangeEvent</code> is sent to listeners.
+   * 
+   * @param key
+   *          a <code>String</code> containing the key
+   * @param value
+   *          an <code>Object</code> value
+   */
+  public void putValue(String key, Object value) {
+    if (userValues == null) {
+      userValues = new HashMap<String, Object>();
+    }
+    userValues.put(key, value);
+  }
+
 }

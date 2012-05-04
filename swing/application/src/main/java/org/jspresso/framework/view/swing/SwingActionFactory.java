@@ -132,6 +132,7 @@ public class SwingActionFactory extends
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
@@ -144,6 +145,10 @@ public class SwingActionFactory extends
             (JComponent) e.getSource());
         actionContext.put(ActionContextConstants.UI_ACTION, this);
         actionContext.put(ActionContextConstants.UI_EVENT, e);
+        Map<String, Object> staticContext = (Map<String, Object>) getValue(IAction.STATIC_CONTEXT_KEY);
+        if (staticContext != null) {
+          actionContext.putAll(staticContext);
+        }
         actionHandler.execute(action, actionContext);
       }
     }

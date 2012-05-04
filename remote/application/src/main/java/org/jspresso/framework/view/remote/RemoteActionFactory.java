@@ -161,6 +161,7 @@ public class RemoteActionFactory extends
 
     private static final long serialVersionUID = -922942515333636161L;
 
+    private RAction           delegate;
     private IAction           action;
     private IActionHandler    actionHandler;
     private IView<RComponent> view;
@@ -168,10 +169,22 @@ public class RemoteActionFactory extends
     public ActionAdapter(RAction remoteAction, IAction anAction,
         IActionHandler anActionHandler, IView<RComponent> view) {
       super(remoteAction.getGuid());
+      this.delegate = remoteAction;
       this.action = anAction;
       this.actionHandler = anActionHandler;
       this.view = view;
     }
+    
+    @Override
+    public Object getValue(String key) {
+      return delegate.getValue(key);
+    }
+
+    @Override
+    public void putValue(String key, Object value) {
+      delegate.putValue(key, value);
+    }
+    
 
     /**
      * Triggers the action execution on the action handler.
@@ -179,6 +192,7 @@ public class RemoteActionFactory extends
      * @param actionEvent
      *          the action event.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void actionPerformed(RActionEvent actionEvent,
         Map<String, Object> context) {
@@ -204,8 +218,12 @@ public class RemoteActionFactory extends
             actionHandler, view, contextViewConnector,
             actionEvent.getActionCommand(), sourceComponent);
         actionContext.putAll(defaultActionContext);
-        actionContext.put(ActionContextConstants.UI_ACTION, this);
+        actionContext.put(ActionContextConstants.UI_ACTION, delegate);
         actionContext.put(ActionContextConstants.UI_EVENT, actionEvent);
+        Map<String, Object> staticContext = (Map<String, Object>) getValue(IAction.STATIC_CONTEXT_KEY);
+        if (staticContext != null) {
+          actionContext.putAll(staticContext);
+        }
         actionHandler.execute(action, actionContext);
       }
     }

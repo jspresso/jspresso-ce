@@ -269,10 +269,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the selected indices out of the UI component if it
-   * is a collection component (table, list, ...). More acurately, the selected
-   * indices are taken from the view connector that adapts the UI component to
-   * the Jspresso binding architecture.
+   * Gets the selected indices out of the UI component if it is a collection
+   * component (table, list, ...). More acurately, the selected indices are
+   * taken from the view connector that adapts the UI component to the Jspresso
+   * binding architecture.
    * 
    * @param context
    *          the action context.
@@ -283,10 +283,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the selected indices out of the UI component if it
-   * is a collection component (table, list, ...). More acurately, the selected
-   * indices are taken from the view connector that adapts the UI component to
-   * the Jspresso binding architecture.
+   * Gets the selected indices out of the UI component if it is a collection
+   * component (table, list, ...). More acurately, the selected indices are
+   * taken from the view connector that adapts the UI component to the Jspresso
+   * binding architecture.
    * 
    * @param viewPath
    *          the view index path to follow.
@@ -437,10 +437,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Sets the selected indices of the UI component if it
-   * is a collection component (table, list, ...). More acurately, the selected
-   * indices are set to the view connector that adapts the UI component to
-   * the Jspresso binding architecture.
+   * Sets the selected indices of the UI component if it is a collection
+   * component (table, list, ...). More acurately, the selected indices are set
+   * to the view connector that adapts the UI component to the Jspresso binding
+   * architecture.
    * 
    * @param selectedIndices
    *          the selected indices to store in the action context.
@@ -453,10 +453,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Sets the selected indices of the UI component if it
-   * is a collection component (table, list, ...). More acurately, the selected
-   * indices are set to the view connector that adapts the UI component to
-   * the Jspresso binding architecture.
+   * Sets the selected indices of the UI component if it is a collection
+   * component (table, list, ...). More acurately, the selected indices are set
+   * to the view connector that adapts the UI component to the Jspresso binding
+   * architecture.
    * 
    * @param viewPath
    *          the view index path to follow.
@@ -519,6 +519,20 @@ public abstract class AbstractActionContextAware {
       setSelectedIndices(viewPath, ConnectorHelper.getIndicesOf(
           (ICollectionConnector) modelConnector, selectedModels), context);
     }
+  }
+
+  /**
+   * Gets the (IView) property view out of the context. The property view is
+   * only filled when an action is triggered from a table column or a form
+   * field. It contains a reference to the column/field the action was triggered
+   * from.
+   * 
+   * @param context
+   *          the action context.
+   * @return the (IView) property view.
+   */
+  protected String getPropertyView(Map<String, Object> context) {
+    return (String) context.get(ActionContextConstants.PROPERTY_VIEW);
   }
 
   /**

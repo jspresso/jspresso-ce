@@ -87,6 +87,11 @@ public final class ActionContextConstants {
   public static final String VIEW             = "VIEW";
 
   /**
+   * PROPERTY_VIEW context key.
+   */
+  public static final String PROPERTY_VIEW    = "PROPERTY_VIEW";
+
+  /**
    * VIEW_CONNECTOR context key.
    */
   public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";

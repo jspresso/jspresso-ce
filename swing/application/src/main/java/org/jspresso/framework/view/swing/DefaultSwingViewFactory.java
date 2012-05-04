@@ -38,6 +38,7 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -99,6 +100,8 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.view.ControllerAwareViewFactory;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
@@ -671,9 +674,13 @@ public class DefaultSwingViewFactory extends
         } else {
           targetView = view;
         }
-        ((JLink<Action>) propertyView.getPeer()).setTarget(getActionFactory()
+        Action action = getActionFactory()
             .createAction(propertyViewDescriptor.getAction(), actionHandler,
-                targetView, locale));
+                targetView, locale);
+        Map<String, Object> staticContext = new HashMap<String, Object>();
+        staticContext.put(ActionContextConstants.PROPERTY_VIEW, propertyView);
+        action.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+        ((JLink<Action>) propertyView.getPeer()).setTarget(action);
       }
 
       currentX += propertyWidth;
@@ -2157,6 +2164,9 @@ public class DefaultSwingViewFactory extends
         && columnViewDescriptor.isReadOnly()) {
       Action colAction = getActionFactory().createAction(
           columnViewDescriptor.getAction(), actionHandler, view, locale);
+      Map<String, Object> staticContext = new HashMap<String, Object>();
+      staticContext.put(ActionContextConstants.PROPERTY_VIEW, editorView);
+      colAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
       cellRenderer = new HyperlinkTableCellRenderer(cellRenderer, colAction,
           columnIndex);
       viewComponent.addMouseListener((MouseListener) cellRenderer);

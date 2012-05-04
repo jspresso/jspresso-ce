@@ -30,6 +30,12 @@ import org.jspresso.framework.util.automation.IPermIdSource;
  * @author Vincent Vandenschrick
  */
 public interface IAction extends ISecurable, IPermIdSource {
+  
+  /**
+   * <code>STATIC_CONTEXT_KEY</code> is "STATIC_CONTEXT_KEY".
+   */
+  String STATIC_CONTEXT_KEY = "STATIC_CONTEXT_KEY";
+
 
   /**
    * Executes the action. During execution, the action should access its
