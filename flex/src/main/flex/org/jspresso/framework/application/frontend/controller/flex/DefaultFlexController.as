@@ -606,8 +606,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleClipboardCommand(clipboardCommand:RemoteClipboardCommand):void {
       try {
         Clipboard.generalClipboard.clear();
-        Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
-        Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+        if(clipboardCommand.plainContent) {
+          Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+        }
+        if(clipboardCommand.htmlContent) {
+          Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+        }
       } catch(error:Error) {
         // we are certainly running on FP 10 or above. Need an extra
         // dialog to initiate the browsing...
@@ -616,8 +620,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
             case Alert.YES:
               try {
                 Clipboard.generalClipboard.clear();
-                Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
-                Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+                if(clipboardCommand.plainContent) {
+                  Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, clipboardCommand.plainContent);
+                }
+                if(clipboardCommand.htmlContent) {
+                  Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, clipboardCommand.htmlContent);
+                }
               } catch(ignored:Error) {
                 // Not much we can do about it...
               }
