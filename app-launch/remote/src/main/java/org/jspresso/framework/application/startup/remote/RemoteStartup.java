@@ -71,16 +71,17 @@ public abstract class RemoteStartup extends
    */
   @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
-    if (!getFrontendController().isStarted()) {
+    IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+    if (controller  == null || !controller.isStarted()) {
       // we are on a brand new session instance.
       return Collections
           .singletonList((RemoteCommand) new RemoteRestartCommand());
     }
     try {
-      return ((IRemoteCommandHandler) getFrontendController())
+      return ((IRemoteCommandHandler) controller)
           .handleCommands(commands);
     } catch (Throwable ex) {
-      getFrontendController().traceUnexpectedException(ex);
+      controller.traceUnexpectedException(ex);
       return Collections.emptyList();
     }
   }
