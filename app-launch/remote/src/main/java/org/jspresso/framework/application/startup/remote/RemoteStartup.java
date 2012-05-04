@@ -53,6 +53,16 @@ public abstract class RemoteStartup extends
 
   private Locale   startupLocale;
   private TimeZone clientTimeZone;
+  private boolean  dupSessionNotifiedOnce;
+  
+  
+  /**
+   * Constructs a new <code>RemoteStartup</code> instance.
+   * 
+   */
+  public RemoteStartup() {
+    dupSessionNotifiedOnce = false;
+  }
 
   /**
    * Delegates to the frontend controller.
@@ -119,7 +129,8 @@ public abstract class RemoteStartup extends
       String[] clientKeysToTranslate, int timeZoneOffset) {
     Locale locale = new Locale(startupLanguage);
     IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
-    if (controller != null && controller.isStarted()) {
+    if (!dupSessionNotifiedOnce && controller != null && controller.isStarted()) {
+      dupSessionNotifiedOnce = true;
       RemoteMessageCommand errorMessage = createErrorMessageCommand();
       errorMessage.setMessage(controller.getTranslation("session.dup",
           new Object[] {
@@ -127,6 +138,7 @@ public abstract class RemoteStartup extends
           }, locale));
       return Collections.singletonList((RemoteCommand) errorMessage);
     }
+    dupSessionNotifiedOnce = false;
     setStartupLocale(locale);
     TimeZone serverTimeZone = TimeZone.getDefault();
     int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());

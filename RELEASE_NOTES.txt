@@ -17,6 +17,10 @@ to the pool after execution of the web service :
       <param-value>true</param-value>
     </context-param>
 
+- in webapp/src/main/webapp/flex/index.html replace :
+    onUnload
+    by
+    onBeforeUnload
 
 
 3.5.12
