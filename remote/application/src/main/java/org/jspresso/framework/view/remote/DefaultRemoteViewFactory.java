@@ -828,7 +828,7 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
+    IFormatter formatter = createDurationFormatter(propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);

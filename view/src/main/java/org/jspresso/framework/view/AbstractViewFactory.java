@@ -1491,13 +1491,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param propertyDescriptor
    *          the duration property descriptor.
+   * @param translationProvider the translation provider.
    * @param locale
    *          the locale.
    * @return the duration formatter.
    */
   protected IFormatter createDurationFormatter(
-      IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new DurationFormatter(locale);
+      IDurationPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+    return new DurationFormatter(translationProvider, locale);
   }
 
   /**
@@ -1584,7 +1585,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return createDurationFormatter(
-          (IDurationPropertyDescriptor) propertyDescriptor, locale);
+          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       return createDecimalFormatter(
           (IDecimalPropertyDescriptor) propertyDescriptor, locale);

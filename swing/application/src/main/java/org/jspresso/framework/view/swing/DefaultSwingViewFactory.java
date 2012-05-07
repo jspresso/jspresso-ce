@@ -580,11 +580,7 @@ public class DefaultSwingViewFactory extends
           propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
-      // ...
-      // }
       // if (propertyViewDescriptor.getWritabilityGates() != null) {
-      // ...
-      // }
       JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale,
           propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
       int propertyWidth = propertyViewDescriptor.getWidth().intValue();
@@ -674,9 +670,9 @@ public class DefaultSwingViewFactory extends
         } else {
           targetView = view;
         }
-        Action action = getActionFactory()
-            .createAction(propertyViewDescriptor.getAction(), actionHandler,
-                targetView, locale);
+        Action action = getActionFactory().createAction(
+            propertyViewDescriptor.getAction(), actionHandler, targetView,
+            locale);
         Map<String, Object> staticContext = new HashMap<String, Object>();
         staticContext.put(ActionContextConstants.PROPERTY_VIEW, propertyView);
         action.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
@@ -895,7 +891,8 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
+    IFormatter formatter = createDurationFormatter(propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -1936,7 +1933,7 @@ public class DefaultSwingViewFactory extends
           (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       cellRenderer = createDurationTableCellRenderer(
-          (IDurationPropertyDescriptor) propertyDescriptor, locale);
+          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       cellRenderer = createEnumerationTableCellRenderer(
           (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
@@ -2831,9 +2828,10 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createDurationTableCellRenderer(
-      IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
+      IDurationPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
     return new FormattedTableCellRenderer(createDurationFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createEnumerationTableCellRenderer(

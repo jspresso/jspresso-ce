@@ -20,12 +20,12 @@ package org.jspresso.framework.util.format;
 
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import org.joda.time.Instant;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * A formatter / parser to deal with duration properties.
@@ -39,26 +39,25 @@ public class DurationFormatter implements IFormatter {
 
   /**
    * Constructs a new <code>DurationFormatter</code> instance.
+   * @param translationProvider the translation provider for uration labels.
    * 
    * @param locale
    *            the locale the formatter must be constructed in.
    */
-  public DurationFormatter(Locale locale) {
+  public DurationFormatter(ITranslationProvider translationProvider, Locale locale) {
     super();
-    ResourceBundle bundle = ResourceBundle.getBundle(getClass().getName(),
-        locale);
     PeriodFormatterBuilder builder = new PeriodFormatterBuilder();
     builder.appendDays();
-    builder.appendSuffix(" " + bundle.getString("day"), " "
-        + bundle.getString("days"));
+    builder.appendSuffix(" " + translationProvider.getTranslation("day", locale), " "
+        + translationProvider.getTranslation("days", locale));
     builder.appendSeparator(" ");
     builder.appendHours();
-    builder.appendSuffix(" " + bundle.getString("hour"), " "
-        + bundle.getString("hours"));
+    builder.appendSuffix(" " + translationProvider.getTranslation("hour", locale), " "
+        + translationProvider.getTranslation("hours", locale));
     builder.appendSeparator(" ");
     builder.appendMinutes();
-    builder.appendSuffix(" " + bundle.getString("minute"), " "
-        + bundle.getString("minutes"));
+    builder.appendSuffix(" " + translationProvider.getTranslation("minute", locale), " "
+        + translationProvider.getTranslation("minutes", locale));
     this.formatter = builder.toFormatter().withLocale(locale);
   }
 

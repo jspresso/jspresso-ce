@@ -31,7 +31,6 @@ import javax.swing.JOptionPane;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
-import org.jspresso.framework.util.i18n.Messages;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
@@ -58,7 +57,7 @@ public class SaveFileAction extends ChooseFileAction {
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
-        if (file.getName() != null && file.getName().indexOf(".") == -1) { //$NON-NLS-1$
+        if (file.getName() != null && file.getName().indexOf(".") == -1) {
           Map<String, List<String>> fileFilter = getFileFilter(context);
           if (fileFilter != null && !fileFilter.isEmpty()) {
             List<String> extensions = fileFilter.values().iterator().next();
@@ -69,8 +68,8 @@ public class SaveFileAction extends ChooseFileAction {
         }
         if (file.exists()) {
           if (JOptionPane.showConfirmDialog(null,
-              Messages.getString("confirm.override.description"), //$NON-NLS-1$
-              Messages.getString("confirm.override.name"), //$NON-NLS-1$
+              getTranslationProvider(context).getTranslation("confirm.override.description", getLocale(context)),
+              getTranslationProvider(context).getTranslation("confirm.override.name", getLocale(context)),
               JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
             file = null;
           }
