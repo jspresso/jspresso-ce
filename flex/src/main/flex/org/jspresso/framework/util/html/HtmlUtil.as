@@ -164,6 +164,10 @@ package org.jspresso.framework.util.html {
       pattern = /text-align:(.*?);/g;
       str = str.replace(pattern, "ALIGN=\"$1\" ");
     
+      // in order to restore empty lines modifications
+      pattern = />&nbsp;<\/span>/g;
+      str = str.replace(pattern, "></span>");
+
       pattern = /<\/span.*?>/g;
       str = str.replace(pattern, "</FONT>");
     
@@ -242,6 +246,10 @@ package org.jspresso.framework.util.html {
       
       pattern = /<\/FONT.*?>/g;
       str = str.replace(pattern, "</span>");
+
+      // in order to preserve empty lines
+      pattern = /><\/span>/g;
+      str = str.replace(pattern, ">&nbsp;</span>");
       
       pattern= /<\/LI><LI>/g;
       str = str.replace(pattern, "</li><li>");
