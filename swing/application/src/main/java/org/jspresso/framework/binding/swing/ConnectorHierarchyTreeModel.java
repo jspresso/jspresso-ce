@@ -241,23 +241,37 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
               if (newCollection != null) {
                 newCollectionSize = newCollection.size();
               }
-              if (newCollectionSize > oldCollectionSize) {
+              if (newCollection != null
+                  && newCollectionSize > oldCollectionSize) {
                 Object[] insertedChildren = new Object[newCollectionSize
                     - oldCollectionSize];
                 int[] childIndices = new int[newCollectionSize
                     - oldCollectionSize];
-                for (int i = oldCollectionSize; i < newCollectionSize; i++) {
-                  insertedChildren[i - oldCollectionSize] = ((ICollectionConnector) connector)
-                      .getChildConnector(i);
-                  childIndices[i - oldCollectionSize] = i;
+                int i = 0;
+                int j = 0;
+                for (Object newElem : newCollection) {
+                  if (oldCollection == null || !oldCollection.contains(newElem)) {
+                    insertedChildren[j] = ((ICollectionConnector) connector)
+                        .getChildConnector(i);
+                    childIndices[j] = i;
+                    j++;
+                  }
+                  i++;
                 }
                 fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
                     connectorPath.getPath(), childIndices, insertedChildren);
-              } else if (newCollectionSize < oldCollectionSize) {
+              } else if (oldCollection != null
+                  && newCollectionSize < oldCollectionSize) {
                 int[] childIndices = new int[oldCollectionSize
                     - newCollectionSize];
-                for (int i = newCollectionSize; i < oldCollectionSize; i++) {
-                  childIndices[i - newCollectionSize] = i;
+                int i = 0;
+                int j = 0;
+                for (Object newElem : oldCollection) {
+                  if (newCollection == null || !newCollection.contains(newElem)) {
+                    childIndices[j] = i;
+                    j++;
+                  }
+                  i++;
                 }
                 List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                     .getRemovedChildrenConnectors();
@@ -287,8 +301,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 if (connectorPath != null) {
                   fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
                       getTreePathForConnector(parentConnector).getPath(),
-                      new int[] {getIndexOfChild(parentConnector, connector)},
-                      new Object[] {connector});
+                      new int[] {
+                        getIndexOfChild(parentConnector, connector)
+                      }, new Object[] {
+                        connector
+                      });
                 }
               }
             }
