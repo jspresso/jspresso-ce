@@ -317,8 +317,7 @@ public class ResourceProviderServlet extends HttpServlet {
    * {@inheritDoc}
    */
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
     try {
       HttpRequestHolder.setServletRequest(request);
       String localUrlSpec = request.getParameter(LOCAL_URL_PARAMETER);
@@ -420,6 +419,16 @@ public class ResourceProviderServlet extends HttpServlet {
         inputStream.close();
         outputStream.close();
       }
+    } catch (ServletException sex) {
+      LOG.error(
+          "An exception occurred when dealing with the following request : [{}]",
+          request.getRequestURL(), sex);
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    } catch (IOException ioex) {
+      LOG.error(
+          "An exception occurred when dealing with the following request : [{}]",
+          request.getRequestURL(), ioex);
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     } finally {
       HttpRequestHolder.setServletRequest(null);
     }

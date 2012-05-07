@@ -83,10 +83,19 @@ public class BasicQueryViewDescriptorFactory implements
     for (String queriableProperty : componentDescriptorProvider
         .getQueryableProperties()) {
       // To preserve col spans for query structures.
-      propertyWidths.put(queriableProperty, new Integer(4));
       if (actualModelDescriptor.getPropertyDescriptor(queriableProperty) instanceof ComparableQueryStructureDescriptor) {
         propertyWidths.put(queriableProperty + "."
             + ComparableQueryStructureDescriptor.SUP_VALUE, new Integer(2));
+      } else if (queriableProperty
+          .endsWith(ComparableQueryStructureDescriptor.COMPARATOR)
+          || queriableProperty
+              .endsWith(ComparableQueryStructureDescriptor.INF_VALUE)) {
+        propertyWidths.put(queriableProperty, new Integer(1));
+      } else if (queriableProperty
+          .endsWith(ComparableQueryStructureDescriptor.SUP_VALUE)) {
+        propertyWidths.put(queriableProperty, new Integer(2));
+      } else {
+        propertyWidths.put(queriableProperty, new Integer(4));
       }
     }
     queryComponentViewDescriptor.setPropertyWidths(propertyWidths);

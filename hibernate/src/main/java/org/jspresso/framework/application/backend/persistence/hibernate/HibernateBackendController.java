@@ -277,18 +277,22 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   private void configureHibernateGlobalFilter(Filter filter) {
+    String filterLanguage = null;
     if (getLocale() != null) {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, getLocale()
-          .getLanguage());
-    } else {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, "");
+      filterLanguage = getLocale().getLanguage();
     }
+    if (filterLanguage == null) {
+      filterLanguage = "";
+    }
+    String filterLogin = null;
     if (getApplicationSession().getPrincipal() != null) {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN,
-          getApplicationSession().getPrincipal().getName());
-    } else {
-      filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN, "");
+      filterLogin = getApplicationSession().getPrincipal().getName();
     }
+    if (filterLogin == null) {
+      filterLogin = "";
+    }
+    filter.setParameter(JSPRESSO_SESSION_GLOBALS_LANGUAGE, filterLanguage);
+    filter.setParameter(JSPRESSO_SESSION_GLOBALS_LOGIN, filterLogin);
   }
 
   private Session currentInitializationSession = null;
@@ -667,6 +671,8 @@ public class HibernateBackendController extends AbstractBackendController {
       try {
         if (isInitialized(entity)) {
           clearPersistentCollectionDirtyState(entity);
+          resetUninitializedHibernateProxyProperties(entity, hibernateSession,
+              new HashSet<IComponent>());
         }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
@@ -675,6 +681,33 @@ public class HibernateBackendController extends AbstractBackendController {
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
             new HashSet<IEntity>());
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
+      }
+    }
+  }
+
+  private void resetUninitializedHibernateProxyProperties(
+      IComponent componentOrEntity, Session hibernateSession,
+      Set<IComponent> traversedComponents) {
+    if (traversedComponents.contains(componentOrEntity)) {
+      return;
+    }
+    traversedComponents.add(componentOrEntity);
+    // Whenever the entity has uninitialized properties, deassociate them with
+    // their current session if different from the parameter one.
+    for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
+        .straightGetProperties().entrySet()) {
+      Object propertyValue = registeredPropertyEntry.getValue();
+      if (propertyValue instanceof IEntity) {
+        if (isInitialized(propertyValue)) {
+          resetUninitializedHibernateProxyProperties(
+              (IComponent) propertyValue, hibernateSession, traversedComponents);
+        } else {
+          LazyInitializer li = ((HibernateProxy) propertyValue)
+              .getHibernateLazyInitializer();
+          if (li.getSession() != null && li.getSession() != hibernateSession) {
+            li.unsetSession();
+          }
+        }
       }
     }
   }
@@ -1098,7 +1131,9 @@ public class HibernateBackendController extends AbstractBackendController {
   public void cleanupRequestResources() {
     super.cleanupRequestResources();
     if (noTxSession != null) {
-      noTxSession.close();
+      if (noTxSession.isOpen()) {
+        noTxSession.close();
+      }
       noTxSession = null;
     }
   }

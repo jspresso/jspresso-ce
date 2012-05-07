@@ -23,7 +23,9 @@ import java.util.Map;
 import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
@@ -49,8 +51,13 @@ public class BasicLovResultViewDescriptorFactory extends
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicListDescriptor<IComponent> queriedEntitiesListDescriptor = new BasicListDescriptor<IComponent>();
-    queriedEntitiesListDescriptor.setElementDescriptor(entityRefDescriptor
-        .getComponentDescriptor());
+    IComponentDescriptor<? extends IComponent> resultListCompDesc = entityRefDescriptor
+        .getComponentDescriptor();
+    if (resultListCompDesc instanceof IQueryComponentDescriptor) {
+      resultListCompDesc = ((IQueryComponentDescriptor) resultListCompDesc)
+          .getQueriedComponentsDescriptor();
+    }
+    queriedEntitiesListDescriptor.setElementDescriptor(resultListCompDesc);
 
     BasicCollectionPropertyDescriptor<IComponent> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<IComponent>();
     queriedEntitiesDescriptor

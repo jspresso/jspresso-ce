@@ -31,6 +31,7 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
@@ -45,10 +46,10 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
  *          the concrete type of components.
  */
 public class RefQueryComponentDescriptor<E> extends
-    AbstractComponentDescriptor<E> {
+    AbstractComponentDescriptor<E> implements IQueryComponentDescriptor {
 
   private Class<? extends E>                                                           componentContract;
-  private IComponentDescriptorProvider<? extends IComponent>                           queriedComponentsDescriptorProvider;
+  private IComponentDescriptorProvider<? extends IComponent>                           queryComponentsDescriptorProvider;
 
   private Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
 
@@ -70,7 +71,7 @@ public class RefQueryComponentDescriptor<E> extends
     super(componentDescriptorProvider.getComponentDescriptor()
         .getComponentContract().getName());
     this.registry = registry;
-    this.queriedComponentsDescriptorProvider = componentDescriptorProvider;
+    this.queryComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     for (IPropertyDescriptor propertyDescriptor : getQueriedComponentsDescriptor()
@@ -90,7 +91,7 @@ public class RefQueryComponentDescriptor<E> extends
     setDescription(getQueriedComponentsDescriptor().getDescription());
     setIconImageURL(getQueriedComponentsDescriptor().getIconImageURL());
     List<String> qProperties = new ArrayList<String>();
-    for (String queryableProperty : queriedComponentsDescriptorProvider
+    for (String queryableProperty : queryComponentsDescriptorProvider
         .getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
       if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
@@ -104,6 +105,7 @@ public class RefQueryComponentDescriptor<E> extends
       }
     }
     setRenderedProperties(qProperties);
+    setQueryableProperties(queryComponentsDescriptorProvider.getQueryableProperties());
     setToStringProperty(getQueriedComponentsDescriptor().getToStringProperty());
     setToHtmlProperty(getQueriedComponentsDescriptor().getToHtmlProperty());
     setAutoCompleteProperty(getQueriedComponentsDescriptor()
@@ -191,14 +193,6 @@ public class RefQueryComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public Class<?> getQueryComponentContract() {
-    return getQueriedComponentsDescriptor().getComponentContract();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public boolean isEntity() {
     return false;
   }
@@ -232,7 +226,8 @@ public class RefQueryComponentDescriptor<E> extends
    * 
    * @return the queriedComponentsDescriptor.
    */
-  protected IComponentDescriptor<? extends IComponent> getQueriedComponentsDescriptor() {
-    return queriedComponentsDescriptorProvider.getComponentDescriptor();
+  @Override
+  public IComponentDescriptor<? extends IComponent> getQueriedComponentsDescriptor() {
+    return queryComponentsDescriptorProvider.getComponentDescriptor();
   }
 }

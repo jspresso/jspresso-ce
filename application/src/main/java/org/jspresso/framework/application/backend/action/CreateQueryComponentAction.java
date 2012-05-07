@@ -30,6 +30,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
@@ -91,10 +92,17 @@ public class CreateQueryComponentAction extends BackendAction {
       IModelDescriptor modelDescriptor = getModelDescriptor(context);
       erqDescriptor = (IReferencePropertyDescriptor<IComponent>) modelDescriptor;
     }
+    Class<? extends IComponent> queriedContract;
+    if (erqDescriptor.getReferencedDescriptor() instanceof IQueryComponentDescriptor) {
+      queriedContract = ((IQueryComponentDescriptor) erqDescriptor
+          .getReferencedDescriptor()).getQueriedComponentsDescriptor()
+          .getComponentContract();
+    } else {
+      queriedContract = erqDescriptor.getReferencedDescriptor()
+          .getComponentContract();
+    }
     IQueryComponent queryComponent = getEntityFactory(context)
-        .createQueryComponentInstance(
-            (Class<? extends IComponent>) erqDescriptor
-                .getReferencedDescriptor().getQueryComponentContract());
+        .createQueryComponentInstance(queriedContract);
     queryComponent.setPageSize(erqDescriptor.getPageSize());
 
     completeQueryComponent(queryComponent, erqDescriptor, context);
@@ -254,9 +262,11 @@ public class CreateQueryComponentAction extends BackendAction {
                         + expectedType.getName());
                   }
                   try {
-                    initValue = expectedType.getConstructor(
-                        new Class<?>[] {String.class}).newInstance(
-                        new Object[] {initValue.toString()});
+                    initValue = expectedType.getConstructor(new Class<?>[] {
+                      String.class
+                    }).newInstance(new Object[] {
+                      initValue.toString()
+                    });
                     // Whenever an exception occurs, just try to set it
                     // normally
                     // though.

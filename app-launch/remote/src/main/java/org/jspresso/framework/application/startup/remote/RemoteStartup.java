@@ -53,6 +53,16 @@ public abstract class RemoteStartup extends
 
   private Locale   startupLocale;
   private TimeZone clientTimeZone;
+  private boolean  dupSessionNotifiedOnce;
+  
+  
+  /**
+   * Constructs a new <code>RemoteStartup</code> instance.
+   * 
+   */
+  public RemoteStartup() {
+    dupSessionNotifiedOnce = false;
+  }
 
   /**
    * Delegates to the frontend controller.
@@ -61,16 +71,17 @@ public abstract class RemoteStartup extends
    */
   @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
-    if (!getFrontendController().isStarted()) {
+    IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+    if (controller  == null || !controller.isStarted()) {
       // we are on a brand new session instance.
       return Collections
           .singletonList((RemoteCommand) new RemoteRestartCommand());
     }
     try {
-      return ((IRemoteCommandHandler) getFrontendController())
+      return ((IRemoteCommandHandler) controller)
           .handleCommands(commands);
     } catch (Throwable ex) {
-      getFrontendController().traceUnexpectedException(ex);
+      controller.traceUnexpectedException(ex);
       return Collections.emptyList();
     }
   }
@@ -118,8 +129,9 @@ public abstract class RemoteStartup extends
   public List<RemoteCommand> start(String startupLanguage,
       String[] clientKeysToTranslate, int timeZoneOffset) {
     Locale locale = new Locale(startupLanguage);
-    if (getFrontendController().isStarted()) {
-      IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+    IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+    if (!dupSessionNotifiedOnce && controller != null && controller.isStarted()) {
+      dupSessionNotifiedOnce = true;
       RemoteMessageCommand errorMessage = createErrorMessageCommand();
       errorMessage.setMessage(controller.getTranslation("session.dup",
           new Object[] {
@@ -127,6 +139,7 @@ public abstract class RemoteStartup extends
           }, locale));
       return Collections.singletonList((RemoteCommand) errorMessage);
     }
+    dupSessionNotifiedOnce = false;
     setStartupLocale(locale);
     TimeZone serverTimeZone = TimeZone.getDefault();
     int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
@@ -157,7 +170,9 @@ public abstract class RemoteStartup extends
       return handleCommands(Collections
           .singletonList((RemoteCommand) startCommand));
     } catch (Throwable ex) {
-      getFrontendController().traceUnexpectedException(ex);
+      if (controller != null) {
+        controller.traceUnexpectedException(ex);
+      }
       return Collections.emptyList();
     }
   }

@@ -41,8 +41,14 @@ public class BasicQueryComponentDescriptorFactory implements
   @Override
   public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
+    IComponentDescriptorProvider<? extends IComponent> realComponentDescriptorProvider;
+    if (componentDescriptorProvider.getComponentDescriptor() instanceof RefQueryComponentDescriptor<?>) {
+      realComponentDescriptorProvider = ((RefQueryComponentDescriptor<?>) componentDescriptorProvider.getComponentDescriptor())
+          .getQueriedComponentsDescriptor();
+    } else {
+      realComponentDescriptorProvider = componentDescriptorProvider;
+    }
     return new BasicQueryComponentDescriptor<IQueryComponent>(
-        componentDescriptorProvider);
+        realComponentDescriptorProvider);
   }
-
 }
