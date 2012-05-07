@@ -86,4 +86,14 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
       }
     }
   }
+  
+  /**
+   * Disable bad frontend access checks.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean checkBadFrontendAccess() {
+    return false;
+  }
 }

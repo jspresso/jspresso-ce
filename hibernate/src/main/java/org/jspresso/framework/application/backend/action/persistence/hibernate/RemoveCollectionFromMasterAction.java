@@ -107,4 +107,14 @@ public class RemoveCollectionFromMasterAction extends
     }
     return super.execute(actionHandler, context);
   }
+  
+  /**
+   * Disable bad frontend access checks.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean checkBadFrontendAccess() {
+    return false;
+  }
 }

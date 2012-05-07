@@ -139,10 +139,24 @@ public class BackendAction extends AbstractAction {
     return super.getViewConnector(viewPath, context);
   }
 
+  /**
+   * Allows to disable frontend access checks from backend actions. This is
+   * sometimes necessary to avoid over-complicated refactoring when the access
+   * is accepted by the dev team.
+   * 
+   * @return <code>true</code> by default, i.e. bad frontend access detection
+   *         is enabled.
+   */
+  protected boolean checkBadFrontendAccess() {
+    return true;
+  }
+
   private void warnBadFrontendAccess() {
-    LOG.warn(
-        "Access to frontend context detected from a backend action which is strongly discouraged. "
-            + "{} should use either the action parameter or a specific variable.",
-        getClass().getName());
+    if (checkBadFrontendAccess()) {
+      LOG.warn(
+          "Access to frontend context detected from a backend action which is strongly discouraged. "
+              + "{} should use either the action parameter or a specific variable.",
+          getClass().getName());
+    }
   }
 }

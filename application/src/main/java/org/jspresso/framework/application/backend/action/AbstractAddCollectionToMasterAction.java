@@ -130,4 +130,14 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * @return the entity to add to the collection.
    */
   protected abstract List<?> getAddedComponents(Map<String, Object> context);
+
+  /**
+   * Disable bad frontend access checks.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean checkBadFrontendAccess() {
+    return false;
+  }
 }

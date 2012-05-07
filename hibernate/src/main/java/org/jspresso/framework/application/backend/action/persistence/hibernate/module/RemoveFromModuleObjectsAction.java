@@ -162,4 +162,14 @@ public class RemoveFromModuleObjectsAction extends
     // Now handled in cleanRelationshipsOnDeletion when dryRun=false.
     // getController(context).registerForDeletion(entity);
   }
+  
+  /**
+   * Disable bad frontend access checks.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean checkBadFrontendAccess() {
+    return false;
+  }
 }
