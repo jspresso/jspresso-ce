@@ -27,6 +27,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -35,6 +36,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
@@ -115,13 +117,18 @@ public class ViewTester {
       return;
     }
 
-    ViewTester tester = new ViewTester();
+    final ViewTester tester = new ViewTester();
     tester.setBeanFactorySelector(cmd.getOptionValue(BEAN_FACTORY_SELECTOR));
     tester
         .setApplicationContextKey(cmd.getOptionValue(APPLICATION_CONTEXT_KEY));
     tester.setViewId(cmd.getOptionValue(VIEW_ID));
     tester.setLanguage(cmd.getOptionValue(LANGUAGE));
-    tester.displayView();
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        tester.displayView();
+      }
+    });
   }
 
   /**
@@ -144,6 +151,7 @@ public class ViewTester {
         .getBean("applicationFrontController");
     IBackendController mockBackController = (IBackendController) appContext
         .getBean("applicationBackController");
+    BackendControllerHolder.setCurrentBackendController(mockBackController);
 
     mockFrontController
         .start(mockBackController, locale, TimeZone.getDefault());
