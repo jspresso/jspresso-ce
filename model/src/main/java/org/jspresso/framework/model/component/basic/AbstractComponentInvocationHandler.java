@@ -40,6 +40,7 @@ import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtension;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.component.IComponentFactoryAware;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
@@ -325,7 +326,10 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the extension to configure.
    */
   protected void configureExtension(IComponentExtension<IComponent> extension) {
-    // Empty by default.
+    if (extension instanceof IComponentFactoryAware) {
+      ((IComponentFactoryAware) extension)
+          .setComponentFactory(getInlineComponentFactory());
+    }
   }
 
   /**

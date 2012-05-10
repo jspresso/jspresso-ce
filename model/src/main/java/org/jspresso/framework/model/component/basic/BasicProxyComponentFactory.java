@@ -153,7 +153,6 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
    */
   public void setComponentExtensionFactory(
       IComponentExtensionFactory componentExtensionFactory) {
-    componentExtensionFactory.setComponentFactory(this);
     this.componentExtensionFactory = componentExtensionFactory;
   }
 
