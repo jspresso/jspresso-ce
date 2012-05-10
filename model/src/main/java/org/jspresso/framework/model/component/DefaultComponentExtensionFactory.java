@@ -33,8 +33,6 @@ import org.apache.commons.beanutils.ConstructorUtils;
 public class DefaultComponentExtensionFactory implements
     IComponentExtensionFactory {
 
-  private IComponentFactory componentFactory;
-
   /**
    * {@inheritDoc}
    */
@@ -45,12 +43,11 @@ public class DefaultComponentExtensionFactory implements
       Class<? extends E> componentContract, E component) {
     try {
       IComponentExtension<E> extension = (IComponentExtension<E>) ConstructorUtils
-          .invokeConstructor(extensionClass, new Object[] {component},
-              new Class[] {componentContract});
-      if (extension instanceof IComponentFactoryAware) {
-        ((IComponentFactoryAware) extension)
-            .setComponentFactory(componentFactory);
-      }
+          .invokeConstructor(extensionClass, new Object[] {
+            component
+          }, new Class[] {
+            componentContract
+          });
       return extension;
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
@@ -65,16 +62,4 @@ public class DefaultComponentExtensionFactory implements
       throw new ComponentException(ex);
     }
   }
-
-  /**
-   * Sets the componentFactory.
-   * 
-   * @param componentFactory
-   *          the componentFactory to set.
-   */
-  @Override
-  public void setComponentFactory(IComponentFactory componentFactory) {
-    this.componentFactory = componentFactory;
-  }
-
 }

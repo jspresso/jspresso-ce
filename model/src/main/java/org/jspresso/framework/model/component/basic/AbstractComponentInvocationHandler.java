@@ -40,6 +40,7 @@ import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtension;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.component.IComponentFactoryAware;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
@@ -325,7 +326,10 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the extension to configure.
    */
   protected void configureExtension(IComponentExtension<IComponent> extension) {
-    // Empty by default.
+    if (extension instanceof IComponentFactoryAware) {
+      ((IComponentFactoryAware) extension)
+          .setComponentFactory(getInlineComponentFactory());
+    }
   }
 
   /**
@@ -760,13 +764,14 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy
-            .newProxyInstance(
-                Thread.currentThread().getContextClassLoader(),
-                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                    .getReferencedDescriptor().getCollectionInterface()},
-                new NeverEqualsInvocationHandler(CollectionHelper
-                    .cloneCollection((Collection<?>) currentPropertyValue)));
+        currentPropertyValue = Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
+            new Class[] {
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .getReferencedDescriptor().getCollectionInterface()
+            },
+            new NeverEqualsInvocationHandler(CollectionHelper
+                .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
@@ -1449,8 +1454,8 @@ public abstract class AbstractComponentInvocationHandler implements
      * {@inheritDoc}
      */
     @Override
-    public Object invoke(@SuppressWarnings("unused")
-    Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(@SuppressWarnings("unused") Object proxy,
+        Method method, Object[] args) throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
         return new Boolean(false);
       }

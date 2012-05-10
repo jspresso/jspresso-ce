@@ -191,7 +191,6 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    */
   public void setEntityExtensionFactory(
       IComponentExtensionFactory entityExtensionFactory) {
-    entityExtensionFactory.setComponentFactory(this);
     this.entityExtensionFactory = entityExtensionFactory;
   }
 
