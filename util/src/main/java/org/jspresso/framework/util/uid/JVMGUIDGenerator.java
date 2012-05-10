@@ -26,18 +26,19 @@ package org.jspresso.framework.util.uid;
  */
 public class JVMGUIDGenerator implements IGUIDGenerator {
 
-  private static int instanceIndex;
-  private static final Object LOCK = new Object();
+  private static long         instanceIndex;
+  private static final String SEPARATOR = "-";
+  private static final Object LOCK      = new Object();
 
-  private String     instanceId;
-  private long       index = 0;
+  private String              instanceId;
+  private long                index     = 0;
 
   /**
    * Constructs a new <code>JVMGUIDGenerator</code> instance.
    */
   public JVMGUIDGenerator() {
     synchronized (LOCK) {
-      instanceId = Integer.toHexString(instanceIndex++);
+      instanceId = Long.toHexString(instanceIndex++) + SEPARATOR;
     }
   }
 
