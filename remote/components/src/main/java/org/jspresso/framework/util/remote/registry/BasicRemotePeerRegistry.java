@@ -31,6 +31,8 @@ import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.ReferenceMap;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The basic implementation of a remote peer registry. It is stored by a
@@ -40,6 +42,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
+
+  private static final Logger              LOG = LoggerFactory
+                                                   .getLogger(BasicRemotePeerRegistry.class);
 
   private Map<String, String>              automationBackingStore;
   private Map<String, Integer>             automationIndices;
@@ -67,6 +72,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    */
   @Override
   public void clear() {
+    LOG.debug("Clearing remote peer registry.");
     backingStore.clear();
     automationBackingStore.clear();
     automationIndices.clear();
@@ -104,15 +110,21 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    */
   @Override
   public void register(IRemotePeer remotePeer) {
-    if (!backingStore.containsKey(remotePeer.getGuid())) {
-      backingStore.put(remotePeer.getGuid(), remotePeer);
+    String guid = remotePeer.getGuid();
+    LOG.trace("Registering {} with GUID {}.", remotePeer, guid);
+    if (!backingStore.containsKey(guid)) {
+      backingStore.put(guid, remotePeer);
+    } else if (remotePeer != backingStore.get(guid)) {
+      LOG.error(
+          "The server is trying to register a remote peer ({}) having the same GUID as an existing registered one ({}).",
+          remotePeer, backingStore.get(guid));
     }
-//    if (remotePeer instanceof IPermIdSource) {
-//      String permId = ((IPermIdSource) remotePeer).getPermId();
-//      if (permId != null) {
-//        automationBackingStore.put(permId, remotePeer.getGuid());
-//      }
-//    }
+    // if (remotePeer instanceof IPermIdSource) {
+    // String permId = ((IPermIdSource) remotePeer).getPermId();
+    // if (permId != null) {
+    // automationBackingStore.put(permId, guid);
+    // }
+    // }
     fireRemotePeerAdded(remotePeer);
   }
 
@@ -127,6 +139,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
         seed = "generic";
       }
       String permId = computeNextPermId(seed);
+      LOG.trace("Associating GUID {} with permId {}.", guid, permId);
       automationBackingStore.put(permId, guid);
       return permId;
     }
@@ -139,6 +152,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   @Override
   public void unregister(String guid) {
     IRemotePeer remotePeer = backingStore.remove(guid);
+    LOG.trace("Unregistering {} with GUID {}.", remotePeer, guid);
     if (remotePeer instanceof IPermIdSource) {
       String permId = ((IPermIdSource) remotePeer).getPermId();
       if (permId != null) {
@@ -338,6 +352,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    *          the removed remote peer guid.
    */
   protected void fireRemotePeerRemoved(String guid) {
+    LOG.trace("Notifying listeners that GUID {} has been removed from the registry.", guid);
     if (rprListeners != null) {
       for (IRemotePeerRegistryListener listener : rprListeners) {
         listener.remotePeerRemoved(guid);
