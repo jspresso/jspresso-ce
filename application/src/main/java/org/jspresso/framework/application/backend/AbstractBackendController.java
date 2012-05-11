@@ -1916,6 +1916,10 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public Object sanitizeModifierParam(Object target,
       IPropertyDescriptor propertyDescriptor, Object param) {
+    if (propertyDescriptor.isComputed()) {
+      // do not perform any check regarding computed properties.
+      return param;
+    }
     if (param instanceof Collection<?>) {
       for (Object element : (Collection<?>) param) {
         // the return value is not leveraged.
