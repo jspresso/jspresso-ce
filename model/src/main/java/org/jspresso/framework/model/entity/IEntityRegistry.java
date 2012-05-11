@@ -47,10 +47,15 @@ public interface IEntityRegistry {
   /**
    * Registers an entity in the registry.
    * 
+   * @param entityContract
+   *          the entity contract.
+   * @param id
+   *          the entity identifier.
    * @param entity
    *          the entity to register.
    */
-  void register(IEntity entity);
+  void register(Class<? extends IEntity> entityContract, Serializable id,
+      IEntity entity);
 
   /**
    * Clears the registry.

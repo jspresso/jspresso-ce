@@ -606,7 +606,7 @@ public class HibernateBackendController extends AbstractBackendController {
     Collection<IComponent> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
       String collectionRoleName = getHibernateRoleName(
-          owner.getComponentContract(), role);
+          getComponentContract(owner), role);
       if (collectionRoleName == null) {
         // it is not an hibernate managed collection (e.g. "detachedEntities")
         return super.wrapDetachedCollection(owner, transientCollection,
@@ -677,7 +677,7 @@ public class HibernateBackendController extends AbstractBackendController {
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
         IComponent sessionEntity = (IComponent) hibernateSession.get(
-            entity.getComponentContract(), entity.getId());
+            getComponentContract(entity), entity.getId());
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
             new HashSet<IEntity>());
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
@@ -737,7 +737,7 @@ public class HibernateBackendController extends AbstractBackendController {
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
       IComponentDescriptor<?> componentDescriptor = getEntityFactory()
-          .getComponentDescriptor(component.getComponentContract());
+          .getComponentDescriptor(getComponentContract(component));
       for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
         String propertyName = property.getKey();
         Object propertyValue = property.getValue();
@@ -952,7 +952,7 @@ public class HibernateBackendController extends AbstractBackendController {
           try {
             merge(
                 (IEntity) getHibernateSession().load(
-                    entity.getComponentContract().getName(), entity.getId()),
+                    getComponentContract(entity).getName(), entity.getId()),
                 EMergeMode.MERGE_CLEAN_EAGER);
           } catch (ObjectNotFoundException ex) {
             deletedObjectEx = ex;
@@ -993,7 +993,7 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     Map<String, Object> entityProps = entity.straightGetProperties();
     IComponentDescriptor<?> entityDescriptor = getEntityFactory()
-        .getComponentDescriptor(entity.getComponentContract());
+        .getComponentDescriptor(getComponentContract(entity));
     for (Map.Entry<String, Object> property : entityProps.entrySet()) {
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
@@ -1158,4 +1158,28 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     return super.objectEquals(actualE1, actualE2);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected <E extends IComponent> Class<? extends E> getComponentContract(
+      E component) {
+    if (!isInitialized(component)) {
+      if (component instanceof HibernateProxy) {
+        try {
+          return (Class<? extends E>) Class.forName(((HibernateProxy) component)
+              .getHibernateLazyInitializer().getEntityName());
+        } catch (ClassNotFoundException ex) {
+          LOG.error(
+              "Can not retrieve entity class {} without initializing entity.",
+              ((HibernateProxy) component).getHibernateLazyInitializer()
+                  .getEntityName());
+        }
+      }
+    }
+    return super.getComponentContract(component);
+  }
+
 }
