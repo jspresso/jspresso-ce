@@ -936,7 +936,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
             Exception deletedObjectEx = null;
             try {
-              merge((IEntity) ht.load(entity.getComponentContract().getName(),
+              merge((IEntity) ht.load(getComponentContract(entity).getName(),
                   entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
             } catch (ObjectNotFoundException ex) {
               deletedObjectEx = ex;
