@@ -372,7 +372,10 @@ public class HibernateBackendController extends AbstractBackendController {
               && owner instanceof IEntity) {
             if (owner != property.getValue() // avoid lazy initialization
                 && ((IEntity) owner).getId().equals(
-                    ((IEntity) property.getValue()).getId())) {
+                    ((IEntity) property.getValue()).getId())
+                // To avoid bug #548
+                && Hibernate.getClass(owner) == Hibernate.getClass(property
+                    .getValue())) {
               entity.straightSetProperty(property.getKey(), owner);
             }
           }
@@ -600,7 +603,7 @@ public class HibernateBackendController extends AbstractBackendController {
     Collection<IComponent> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
       String collectionRoleName = getHibernateRoleName(
-          owner.getComponentContract(), role);
+          getComponentContract(owner), role);
       if (collectionRoleName == null) {
         // it is not an hibernate managed collection (e.g. "detachedEntities")
         return super.wrapDetachedCollection(owner, transientCollection,
@@ -683,7 +686,7 @@ public class HibernateBackendController extends AbstractBackendController {
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
         IComponent sessionEntity = (IComponent) hibernateSession.get(
-            entity.getComponentContract(), entity.getId());
+            getComponentContract(entity), entity.getId());
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
             new HashSet<IEntity>());
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
@@ -694,6 +697,9 @@ public class HibernateBackendController extends AbstractBackendController {
   @SuppressWarnings("unchecked")
   private void lockInHibernateInDepth(IComponent component,
       Session hibernateSession, Set<IEntity> alreadyLocked) {
+    if (component == null) {
+      return;
+    }
     boolean isEntity = component instanceof IEntity;
     if (!isEntity || alreadyLocked.add((IEntity) component)) {
       if (isEntity) {
@@ -713,7 +719,7 @@ public class HibernateBackendController extends AbstractBackendController {
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
       IComponentDescriptor<?> componentDescriptor = getEntityFactory()
-          .getComponentDescriptor(component.getComponentContract());
+          .getComponentDescriptor(getComponentContract(component));
       for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
         String propertyName = property.getKey();
         Object propertyValue = property.getValue();
@@ -930,7 +936,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
             Exception deletedObjectEx = null;
             try {
-              merge((IEntity) ht.load(entity.getComponentContract().getName(),
+              merge((IEntity) ht.load(getComponentContract(entity).getName(),
                   entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
             } catch (ObjectNotFoundException ex) {
               deletedObjectEx = ex;
@@ -974,7 +980,7 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     Map<String, Object> entityProps = entity.straightGetProperties();
     IComponentDescriptor<?> entityDescriptor = getEntityFactory()
-        .getComponentDescriptor(entity.getComponentContract());
+        .getComponentDescriptor(getComponentContract(entity));
     for (Map.Entry<String, Object> property : entityProps.entrySet()) {
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
@@ -1051,6 +1057,30 @@ public class HibernateBackendController extends AbstractBackendController {
     if (property instanceof PersistentCollection) {
       ((PersistentCollection) property).clearDirty();
     }
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected <E extends IComponent> Class<? extends E> getComponentContract(
+      E component) {
+    if (!isInitialized(component)) {
+      if (component instanceof HibernateProxy) {
+        try {
+          return (Class<? extends E>) Class.forName(((HibernateProxy) component)
+              .getHibernateLazyInitializer().getEntityName());
+        } catch (ClassNotFoundException ex) {
+          LOG.error(
+              "Can not retrieve entity class {} without initializing entity.",
+              ((HibernateProxy) component).getHibernateLazyInitializer()
+                  .getEntityName());
+        }
+      }
+    }
+    return super.getComponentContract(component);
   }
 
 }
