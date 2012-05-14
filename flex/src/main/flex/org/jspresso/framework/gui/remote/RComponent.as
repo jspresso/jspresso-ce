@@ -37,6 +37,7 @@ package org.jspresso.framework.gui.remote {
         private var _state:RemoteValueState;
         private var _toolTip:String;
         private var _preferredSize:Dimension;
+        private var _styleName:String;
         
         private var _peer:UIComponent;
 
@@ -130,5 +131,14 @@ package org.jspresso.framework.gui.remote {
         public function retrievePeer():UIComponent {
           return _peer;
         }
+
+        public function get styleName():String {
+          return _styleName;
+        }
+
+        public function set styleName(value:String):void {
+          _styleName = value;
+        }
+
     }
 }

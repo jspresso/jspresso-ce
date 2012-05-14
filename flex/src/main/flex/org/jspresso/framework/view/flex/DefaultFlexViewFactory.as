@@ -311,6 +311,9 @@ package org.jspresso.framework.view.flex {
           component.setStyle("fontWeight", "bold");
         }
       }
+      if(remoteComponent.styleName) {
+        component.styleName = remoteComponent.styleName;
+      }
     }
     
     protected function getColorFromArgb(argb:String):SolidColor {

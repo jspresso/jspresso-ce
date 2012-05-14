@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
+import org.jspresso.framework.util.descriptor.IStylable;
 import org.jspresso.framework.util.gate.IGate;
 
 
@@ -32,7 +33,7 @@ import org.jspresso.framework.util.gate.IGate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IDisplayableAction extends IAction, IIconDescriptor {
+public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable {
 
   /**
    * Provides the action accelerator to the runtime framework using its string

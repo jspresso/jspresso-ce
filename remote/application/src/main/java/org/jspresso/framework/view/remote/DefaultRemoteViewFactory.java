@@ -828,7 +828,8 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createDurationFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter formatter = createDurationFormatter(propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -1923,9 +1924,8 @@ public class DefaultRemoteViewFactory extends
             columnViewDescriptor));
         if (column.getPeer() instanceof RActionable
             && columnViewDescriptor.getAction() != null) {
-          RAction action = getActionFactory()
-              .createAction(columnViewDescriptor.getAction(), actionHandler,
-                  view, locale);
+          RAction action = getActionFactory().createAction(
+              columnViewDescriptor.getAction(), actionHandler, view, locale);
           Map<String, Object> staticContext = new HashMap<String, Object>();
           staticContext.put(ActionContextConstants.PROPERTY_VIEW, column);
           action.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
@@ -2317,6 +2317,9 @@ public class DefaultRemoteViewFactory extends
               getIconFactory().getSmallIconSize()));
     } else {
       viewPeer.setIcon(null);
+    }
+    if (viewDescriptor.getStyleName() != null) {
+      viewPeer.setStyleName(viewDescriptor.getStyleName());
     }
   }
 

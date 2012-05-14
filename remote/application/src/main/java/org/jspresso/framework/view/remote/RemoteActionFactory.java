@@ -35,6 +35,7 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionEvent;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.util.descriptor.IStylable;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
@@ -73,6 +74,9 @@ public class RemoteActionFactory extends
     if (action instanceof IDisplayableAction) {
       attachActionGates((IDisplayableAction) action, actionHandler, view,
           remoteAction);
+    }
+    if (action instanceof IStylable) {
+      remoteAction.setStyleName(((IStylable) action).getStyleName());
     }
     return remoteAction;
   }
@@ -174,7 +178,7 @@ public class RemoteActionFactory extends
       this.actionHandler = anActionHandler;
       this.view = view;
     }
-    
+
     @Override
     public Object getValue(String key) {
       return delegate.getValue(key);
@@ -184,7 +188,6 @@ public class RemoteActionFactory extends
     public void putValue(String key, Object value) {
       delegate.putValue(key, value);
     }
-    
 
     /**
      * Triggers the action execution on the action handler.

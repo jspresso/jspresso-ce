@@ -224,6 +224,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         component.setFont(font);
       }
+      if(remoteComponent.getStyleName()) {
+        component.setAppearance(remoteComponent.getStyleName());
+      }
     },
 
     _decorateWithActions : function(remoteComponent, component) {

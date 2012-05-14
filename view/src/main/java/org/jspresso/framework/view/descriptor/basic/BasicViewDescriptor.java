@@ -57,6 +57,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   private Collection<IGate>  readabilityGates;
   private boolean            readOnly;
   private Collection<IGate>  writabilityGates;
+  private String             styleName;
 
   /**
    * Gets the actionMap.
@@ -517,5 +518,29 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public void setSecondaryActionMap(ActionMap secondaryActionMap) {
     this.secondaryActionMap = secondaryActionMap;
+  }
+
+  /**
+   * Gets the styleName.
+   * 
+   * @return the styleName.
+   */
+  @Override
+  public String getStyleName() {
+    return styleName;
+  }
+
+  /**
+   * Assigns the style name to use for this view. The way it is actually
+   * leveraged depends on the UI channel. It will generally be mapped to some
+   * sort of CSS style name.
+   * <p>
+   * Default value is <code>null</code>, meaning that a default style is used.
+   * 
+   * @param styleName
+   *          the styleName to set.
+   */
+  public void setStyleName(String styleName) {
+    this.styleName = styleName;
   }
 }

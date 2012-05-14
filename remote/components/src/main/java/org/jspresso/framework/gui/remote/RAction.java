@@ -39,6 +39,7 @@ public class RAction extends RemotePeer {
   private RIcon               icon;
   private String              mnemonicAsString;
   private String              name;
+  private String              styleName;
 
   private Map<String, Object> userValues;
 
@@ -217,6 +218,24 @@ public class RAction extends RemotePeer {
       userValues = new HashMap<String, Object>();
     }
     userValues.put(key, value);
+  }
+
+  /**
+   * Gets the styleName.
+   * 
+   * @return the styleName.
+   */
+  public String getStyleName() {
+    return styleName;
+  }
+
+  /**
+   * Sets the styleName.
+   * 
+   * @param styleName the styleName to set.
+   */
+  public void setStyleName(String styleName) {
+    this.styleName = styleName;
   }
 
 }

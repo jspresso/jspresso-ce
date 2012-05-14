@@ -72,6 +72,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private boolean               collectionBased;
   private boolean               multiSelectionEnabled;
   private String                mnemonicAsString;
+  private String                styleName;
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -552,6 +553,30 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   @Override
   protected IView<E> navigate(IView<?> fromView, int[] viewPath) {
     return (IView<E>) super.navigate(fromView, viewPath);
+  }
+
+  /**
+   * Gets the styleName.
+   * 
+   * @return the styleName.
+   */
+  @Override
+  public String getStyleName() {
+    return styleName;
+  }
+
+  /**
+   * Assigns the style name to use for this view. The way it is actually
+   * leveraged depends on the UI channel. It will generally be mapped to some
+   * sort of CSS style name.
+   * <p>
+   * Default value is <code>null</code>, meaning that a default style is used.
+   * 
+   * @param styleName
+   *          the styleName to set.
+   */
+  public void setStyleName(String styleName) {
+    this.styleName = styleName;
   }
 
 }

@@ -46,6 +46,7 @@ public abstract class RComponent extends RemotePeer implements
   private Dimension         preferredSize;
   private RemoteValueState  state;
   private String            toolTip;
+  private String            styleName;
 
   /**
    * Constructs a new <code>RComponent</code> instance.
@@ -297,5 +298,23 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setSecondaryActionLists(RActionList[] secondaryActionLists) {
     this.secondaryActionLists = secondaryActionLists;
+  }
+
+  /**
+   * Gets the styleName.
+   * 
+   * @return the styleName.
+   */
+  public String getStyleName() {
+    return styleName;
+  }
+
+  /**
+   * Sets the styleName.
+   * 
+   * @param styleName the styleName to set.
+   */
+  public void setStyleName(String styleName) {
+    this.styleName = styleName;
   }
 }
