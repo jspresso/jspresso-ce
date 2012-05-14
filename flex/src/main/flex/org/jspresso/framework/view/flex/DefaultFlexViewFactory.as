@@ -2427,6 +2427,9 @@ package org.jspresso.framework.view.flex {
         _lastActionTimestamp = new Date();
         _actionHandler.execute(remoteAction);
       });
+      if(remoteAction.styleName) {
+        button.styleName = remoteAction.styleName;
+      }
     }
     
     public function createButton(label:String, toolTip:String, icon:RIcon, topApplicationButton:Boolean=false):Button {

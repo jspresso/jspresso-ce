@@ -25,6 +25,7 @@ package org.jspresso.framework.gui.remote {
         private var _description:String;
         private var _enabled:Boolean;
         private var _icon:RIcon;
+        private var _styleName:String;
         private var _mnemonicAsString:String;
         private var _name:String;
 
@@ -73,5 +74,14 @@ package org.jspresso.framework.gui.remote {
         public function get name():String {
             return _name;
         }
+
+        public function get styleName():String {
+          return _styleName;
+        }
+
+        public function set styleName(value:String):void {
+          _styleName = value;
+        }
+
     }
 }

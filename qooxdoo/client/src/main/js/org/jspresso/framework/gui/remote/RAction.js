@@ -42,6 +42,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RAction",
       check : "org.jspresso.framework.gui.remote.RIcon",
       nullable : true
     },
+    styleName :
+    {
+      check : "String",
+      nullable : true
+    },
     mnemonicAsString :
     {
       check : "String",

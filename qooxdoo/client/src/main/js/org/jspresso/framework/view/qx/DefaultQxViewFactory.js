@@ -2667,6 +2667,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       button.addListener("execute", function(event) {
             this.__actionHandler.execute(remoteAction);
           }, this);
+      if(remoteAction.getStyleName()) {
+        button.setAppearance(remoteAction.getStyleName());
+      }
       return button;
     },
 
