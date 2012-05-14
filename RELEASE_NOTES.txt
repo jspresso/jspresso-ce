@@ -1,5 +1,8 @@
 3.5.13
 ======
+- The onLoad() lifecycle interceptor was incorectly triggered during entity technical cloning. From now on,
+  only the onClone(IEntity sourceEntity) method is called.
+
 - [get|set]Selected[Models|Index] now directly synchs the selection on the corresponding views. ModuleSelectionAction
   and ConnectorSelectionAction that were only meant to be chained to apply selection have been suppressed since they
   are now useless.

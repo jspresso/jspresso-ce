@@ -1119,7 +1119,6 @@ public abstract class AbstractBackendController extends AbstractController
     unitOfWork
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     if (uowEntity instanceof ILifecycleCapable) {
-      ((ILifecycleCapable) uowEntity).onLoad();
       ((ILifecycleCapable) uowEntity).onClone(entity);
     }
     return uowEntity;
@@ -1350,7 +1349,6 @@ public abstract class AbstractBackendController extends AbstractController
         cleanDirtyProperties(registeredEntity);
       }
       if (registeredEntity instanceof ILifecycleCapable) {
-        ((ILifecycleCapable) registeredEntity).onLoad();
         ((ILifecycleCapable) registeredEntity).onClone(entity);
       }
       return registeredEntity;
@@ -1358,7 +1356,7 @@ public abstract class AbstractBackendController extends AbstractController
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);
     }
   }
-
+  
   private IComponent mergeComponent(IComponent componentToMerge,
       IComponent registeredComponent, EMergeMode mergeMode,
       IEntityRegistry alreadyMerged) {
