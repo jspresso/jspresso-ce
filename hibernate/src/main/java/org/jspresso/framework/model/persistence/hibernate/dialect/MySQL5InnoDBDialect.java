@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.dialect;
 
+import java.sql.Types;
+
 /**
  * Mysql5 InnoDB dialect.
  * 
@@ -27,5 +29,12 @@ package org.jspresso.framework.model.persistence.hibernate.dialect;
 public class MySQL5InnoDBDialect extends
     org.hibernate.dialect.MySQL5InnoDBDialect {
 
-  // Empty as of now.
+  /**
+   * Constructs a new <code>MySQL5InnoDBDialect</code> instance. Overrides
+   * tinyblob definition by replacing it with varbinary until 64 length.
+   */
+  public MySQL5InnoDBDialect() {
+    super();
+    registerColumnType(Types.VARBINARY, 63, "varbinary($l)");
+  }
 }
