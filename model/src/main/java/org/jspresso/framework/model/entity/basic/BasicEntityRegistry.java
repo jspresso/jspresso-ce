@@ -60,11 +60,14 @@ public class BasicEntityRegistry implements IEntityRegistry {
       }
     }
     if (registeredEntity == null) {
-      // we may try subclasses
-      for (Map.Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> subclassContractStore : backingStore
+      // we may try subclasses / superclasses
+      for (Map.Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> suberclassContractStore : backingStore
           .entrySet()) {
-        if (entityContract.isAssignableFrom(subclassContractStore.getKey())) {
-          contractStore = subclassContractStore.getValue();
+        Class<? extends IEntity> suberClass = suberclassContractStore.getKey();
+        if (suberClass != entityContract
+            && (entityContract.isAssignableFrom(suberClass)
+            || suberClass.isAssignableFrom(entityContract))) {
+          contractStore = suberclassContractStore.getValue();
           if (contractStore != null) {
             registeredEntity = contractStore.get(id);
             if (registeredEntity == null) {
