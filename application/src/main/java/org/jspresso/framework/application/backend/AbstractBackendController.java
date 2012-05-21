@@ -1232,7 +1232,7 @@ public abstract class AbstractBackendController extends AbstractController
                 initializePropertyIfNeeded(registeredEntity, propertyName);
               }
               if (isInitialized(registeredCollection)) {
-                if (newlyRegistered) {
+                if (newlyRegistered && !isInitialized(propertyValue)) {
                   registeredCollection = (Collection<IComponent>) propertyValue;
                 } else {
                   if (propertyValue instanceof Set) {
