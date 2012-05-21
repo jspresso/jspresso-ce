@@ -108,7 +108,7 @@ public class EditSelectedComponentAction<E, F, G> extends
     try {
       c.beginUnitOfWork();
       IEntity uowEntity = c
-          .cloneInUnitOfWork((IEntity) getSelectedModel(context));
+          .cloneInUnitOfWork((IEntity) getSelectedModel(context), true);
       return uowEntity;
     } finally {
       c.rollbackUnitOfWork();

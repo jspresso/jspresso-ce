@@ -32,6 +32,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Filter;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -214,6 +215,11 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void beginUnitOfWork() {
+    // This is to avoid having entities attached to 2 open sessions
+    // and to periodically clear the noTxSession cache.
+    if (noTxSession != null) {
+      noTxSession.clear();
+    }
     updatedEntities = new HashSet<IEntity>();
     deletedEntities = new HashSet<IEntity>();
     super.beginUnitOfWork();
@@ -259,13 +265,13 @@ public class HibernateBackendController extends AbstractBackendController {
   public Session getHibernateSession() {
     Session currentSession;
     if (isUnitOfWorkActive()) {
-      currentSession = getHibernateSessionFactory().getCurrentSession();
-    } else {
-      if (noTxSession == null) {
-        noTxSession = getHibernateSessionFactory().openSession();
-        noTxSession.setFlushMode(FlushMode.MANUAL);
+      try {
+        currentSession = getHibernateSessionFactory().getCurrentSession();
+      } catch (HibernateException ex) {
+        currentSession = getNoTxSession();
       }
-      currentSession = noTxSession;
+    } else {
+      currentSession = getNoTxSession();
     }
     if (currentSession != noTxSession) {
       // we are on a transactional session.
@@ -274,6 +280,14 @@ public class HibernateBackendController extends AbstractBackendController {
     configureHibernateGlobalFilter(currentSession
         .enableFilter(JSPRESSO_SESSION_GLOBALS));
     return currentSession;
+  }
+
+  private Session getNoTxSession() {
+    if (noTxSession == null) {
+      noTxSession = getHibernateSessionFactory().openSession();
+      noTxSession.setFlushMode(FlushMode.MANUAL);
+    }
+    return noTxSession;
   }
 
   private void configureHibernateGlobalFilter(Filter filter) {
@@ -1115,19 +1129,6 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void joinTransaction() {
-    // This is to avoid having entities attached to 2 open sessions
-    // and to periodically clear the noTxSession cache.
-    if (noTxSession != null) {
-      noTxSession.clear();
-    }
-    super.joinTransaction();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void cleanupRequestResources() {
     super.cleanupRequestResources();
     if (noTxSession != null) {
@@ -1169,8 +1170,9 @@ public class HibernateBackendController extends AbstractBackendController {
     if (!isInitialized(component)) {
       if (component instanceof HibernateProxy) {
         try {
-          return (Class<? extends E>) Class.forName(((HibernateProxy) component)
-              .getHibernateLazyInitializer().getEntityName());
+          return (Class<? extends E>) Class
+              .forName(((HibernateProxy) component)
+                  .getHibernateLazyInitializer().getEntityName());
         } catch (ClassNotFoundException ex) {
           LOG.error(
               "Can not retrieve entity class {} without initializing entity.",
