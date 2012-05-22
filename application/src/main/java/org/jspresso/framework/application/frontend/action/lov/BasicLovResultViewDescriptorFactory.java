@@ -23,11 +23,9 @@ import java.util.Map;
 import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
+import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
@@ -41,33 +39,25 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 public class BasicLovResultViewDescriptorFactory extends
     AbstractActionContextAware implements ILovResultViewDescriptorFactory {
 
+  private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
+
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public BasicCollectionViewDescriptor createResultViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
-    BasicListDescriptor<IComponent> queriedEntitiesListDescriptor = new BasicListDescriptor<IComponent>();
-    IComponentDescriptor<? extends IComponent> resultListCompDesc = entityRefDescriptor
-        .getComponentDescriptor();
-    if (resultListCompDesc instanceof IQueryComponentDescriptor) {
-      resultListCompDesc = ((IQueryComponentDescriptor) resultListCompDesc)
-          .getQueriedComponentsDescriptor();
-    }
-    queriedEntitiesListDescriptor.setElementDescriptor(resultListCompDesc);
-
-    BasicCollectionPropertyDescriptor<IComponent> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<IComponent>();
-    queriedEntitiesDescriptor
-        .setReferencedDescriptor(queriedEntitiesListDescriptor);
-    queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
+    ICollectionPropertyDescriptor<IComponent> queriedEntitiesDescriptor;
+    queriedEntitiesDescriptor = (ICollectionPropertyDescriptor<IComponent>) getQueryComponentDescriptorFactory()
+        .createQueryComponentDescriptor(entityRefDescriptor)
+        .getPropertyDescriptor(IQueryComponent.QUERIED_COMPONENTS);
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
-    resultViewDescriptor.setRenderedProperties(entityRefDescriptor
-        .getRenderedProperties());
     if (getModel(lovContext) instanceof IQueryComponent) {
       // We are on a filter view that suppports multi selection
       resultViewDescriptor
@@ -78,6 +68,26 @@ public class BasicLovResultViewDescriptorFactory extends
 
     resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
     return resultViewDescriptor;
+  }
+
+  /**
+   * Gets the queryComponentDescriptorFactory.
+   * 
+   * @return the queryComponentDescriptorFactory.
+   */
+  protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
+    return queryComponentDescriptorFactory;
+  }
+
+  /**
+   * Sets the queryComponentDescriptorFactory.
+   * 
+   * @param queryComponentDescriptorFactory
+   *          the queryComponentDescriptorFactory to set.
+   */
+  public void setQueryComponentDescriptorFactory(
+      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+    this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 
 }

@@ -300,6 +300,7 @@ public class BasicReferencePropertyDescriptor<E> extends
     }
     return AbstractComponentDescriptor.explodeComponentReferences(
         getReferencedDescriptor(), queryableProperties);
+    // return queryableProperties;
   }
 
   /**
@@ -312,5 +313,6 @@ public class BasicReferencePropertyDescriptor<E> extends
     }
     return AbstractComponentDescriptor.explodeComponentReferences(
         getReferencedDescriptor(), renderedProperties);
+    // return renderedProperties;
   }
 }

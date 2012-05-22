@@ -105,7 +105,8 @@ public class RefQueryComponentDescriptor<E> extends
       }
     }
     setRenderedProperties(qProperties);
-    setQueryableProperties(queryComponentsDescriptorProvider.getQueryableProperties());
+    setQueryableProperties(queryComponentsDescriptorProvider
+        .getQueryableProperties());
     setToStringProperty(getQueriedComponentsDescriptor().getToStringProperty());
     setToHtmlProperty(getQueriedComponentsDescriptor().getToHtmlProperty());
     setAutoCompleteProperty(getQueriedComponentsDescriptor()
@@ -153,9 +154,13 @@ public class RefQueryComponentDescriptor<E> extends
           .getComponentContract();
       if (!(propertyDescriptor instanceof ComparableQueryStructureDescriptor)
           && !(referencedDescriptor instanceof RefQueryComponentDescriptor<?>)) {
-        ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor)
-            .setReferencedDescriptor(createOrGetRefQueryDescriptor(
-                referencedDescriptor, referencedType));
+        BasicReferencePropertyDescriptor<IComponent> basicRefPropDesc;
+        basicRefPropDesc = ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor);
+//        List<String> savedRenderedProperties = basicRefPropDesc
+//            .getRenderedProperties();
+        basicRefPropDesc.setReferencedDescriptor(createOrGetRefQueryDescriptor(
+            referencedDescriptor, referencedType));
+        // basicRefPropDesc.setRenderedProperties(savedRenderedProperties);
       }
       refinedPropertyDescriptor = propertyDescriptor;
     } else {
