@@ -128,13 +128,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           generator-class = "assigned"
       <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)?exists>
         <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")>
-          <#local hibernateTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.ByteArrayType"/>
+          <#assign idTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.ByteArrayType"/>
         <#else> 
           <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)/>
           <#if hibernateType?exists>
-            <#local hibernateTypeName=hibernateType.name/>
+            <#assign idTypeName=hibernateType.name/>
           </#if>
         </#if>
+        <#local hibernateTypeName=idTypeName/>
       </#if>
       <#if hibernateTypeName?exists>
    *           type = "${hibernateTypeName}"
@@ -172,6 +173,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")
          )
       && (propertyDescriptor.maxLength?exists)>
+      <#if propertyDescriptor.name ="id">
+        <#assign idTypeLength = propertyDescriptor.maxLength>
+      </#if>
    *           length = "${propertyDescriptor.maxLength?c}"
     <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IColorPropertyDescriptor")>
    *           length = "10"
@@ -614,17 +618,27 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       </#if>
     <#else>
    * @hibernate.any
+      <#if idTypeName?exists>
+   *           id-type = "${idTypeName}"
+      <#else>
    *           id-type = "string"
+      </#if>
       <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
       </#if>
    * @hibernate.any-column
    *           name = "${propSqlName}_NAME"
+      <#if propertyDescriptor.unicityScope?exists>
+   *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
+      </#if>
    * @hibernate.any-column
       <#if propSqlNameGenerated>
    *           name = "${propSqlName}_ID"
       <#else>
    *           name = "${propSqlName}"
+      </#if>
+      <#if idTypeLength?exists>
+   *           length = "${idTypeLength?c}"
       </#if>
       <#if propertyDescriptor.mandatory>
    *           not-null = "true"
