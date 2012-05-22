@@ -4,7 +4,12 @@
   default-lazy-init="true">
 
   <!-- View factories -->
-  <bean id="lovResultViewDescriptorFactory" class="org.jspresso.framework.application.frontend.action.lov.BasicLovResultViewDescriptorFactory" />
+  <bean id="lovResultViewDescriptorFactoryBase" class="org.jspresso.framework.application.frontend.action.lov.BasicLovResultViewDescriptorFactory">
+    <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory"/>
+  </bean>
+
+  <bean id="lovResultViewDescriptorFactory" parent="lovResultViewDescriptorFactoryBase" />
+  
 
   <bean id="lovViewDescriptorFactoryBase" class="org.jspresso.framework.application.frontend.action.lov.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
