@@ -24,8 +24,8 @@
     <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
   </scm>
   <issueManagement>
-    <system>Sourceforge Tracker</system>
-    <url>http://sourceforge.net/tracker/?group_id=231671</url>
+    <system>Jspresso Tracker</system>
+    <url>http://mantis.jspresso.org</url>
   </issueManagement>
   <mailingLists>
     <mailingList>
