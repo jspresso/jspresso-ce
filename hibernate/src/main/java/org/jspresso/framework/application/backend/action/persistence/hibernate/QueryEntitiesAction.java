@@ -97,58 +97,65 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
-    getTransactionTemplate(context).execute(
-        new TransactionCallbackWithoutResult() {
+    if (getController(context).isUnitOfWorkActive()) {
+      // Ignore merge mode since we are in a TX 
+      doQuery(context, null);
+    } else {
+      getTransactionTemplate(context).execute(
+          new TransactionCallbackWithoutResult() {
 
-          @Override
-          protected void doInTransactionWithoutResult(TransactionStatus status) {
-            IQueryComponent queryComponent = getQueryComponent(context);
-
-            IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent
-                .get(COMPONENT_REFINER);
-
-            if (compRefiner == null && queryComponentRefiner != null) {
-              queryComponent.put(COMPONENT_REFINER, queryComponentRefiner);
-              compRefiner = queryComponentRefiner;
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+              doQuery(context, getMergeMode());
+              status.setRollbackOnly();
             }
-            if (compRefiner != null) {
-              compRefiner.refineQueryComponent(queryComponent, context);
-            }
-
-            List<?> queriedComponents = performQuery(queryComponent, context);
-            Set<Object> mergedComponents = new LinkedHashSet<Object>();
-
-            List<?> stickyResults = queryComponent.getStickyResults();
-            if (stickyResults != null) {
-              for (Object nextComponent : stickyResults) {
-                mergedComponents.add(nextComponent);
-              }
-            }
-
-            IBackendController controller = getController(context);
-            for (Object nextComponent : queriedComponents) {
-              if (nextComponent instanceof IEntity) {
-                if (!controller
-                    .isEntityRegisteredForDeletion((IEntity) nextComponent)) {
-                  if (getMergeMode() != null) {
-                    mergedComponents.add(controller.merge(
-                        (IEntity) nextComponent, getMergeMode()));
-                  } else {
-                    mergedComponents.add(nextComponent);
-                  }
-                }
-              } else {
-                mergedComponents.add(nextComponent);
-              }
-            }
-            queryComponent.setQueriedComponents(new ArrayList<Object>(
-                mergedComponents));
-
-            status.setRollbackOnly();
-          }
-        });
+          });
+    }
 
     return super.execute(actionHandler, context);
+  }
+
+  private void doQuery(final Map<String, Object> context, EMergeMode localMergeMode) {
+    IQueryComponent queryComponent = getQueryComponent(context);
+
+    IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent
+        .get(COMPONENT_REFINER);
+
+    if (compRefiner == null && queryComponentRefiner != null) {
+      queryComponent.put(COMPONENT_REFINER, queryComponentRefiner);
+      compRefiner = queryComponentRefiner;
+    }
+    if (compRefiner != null) {
+      compRefiner.refineQueryComponent(queryComponent, context);
+    }
+
+    List<?> queriedComponents = performQuery(queryComponent, context);
+    Set<Object> mergedComponents = new LinkedHashSet<Object>();
+
+    List<?> stickyResults = queryComponent.getStickyResults();
+    if (stickyResults != null) {
+      for (Object nextComponent : stickyResults) {
+        mergedComponents.add(nextComponent);
+      }
+    }
+
+    IBackendController controller = getController(context);
+    for (Object nextComponent : queriedComponents) {
+      if (nextComponent instanceof IEntity) {
+        if (!controller.isEntityRegisteredForDeletion((IEntity) nextComponent)) {
+          if (localMergeMode != null) {
+            mergedComponents.add(controller.merge((IEntity) nextComponent,
+                localMergeMode));
+          } else {
+            mergedComponents.add(nextComponent);
+          }
+        }
+      } else {
+        mergedComponents.add(nextComponent);
+      }
+    }
+    queryComponent
+        .setQueriedComponents(new ArrayList<Object>(mergedComponents));
   }
 
   /**
