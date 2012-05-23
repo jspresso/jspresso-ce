@@ -722,7 +722,16 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(updateView, remoteState, "value", true);
   
       if(textInput) {
-        BindingUtils.bindProperty(textInput, "editable", remoteState, "writable");
+        var updateEditability:Function = function (value:Object):void {
+          if(value) {
+            textInput.setStyle("backgroundColor", null);
+          } else {
+            textInput.setStyle("backgroundColor", textInput.getStyle("backgroundDisabledColor"));
+          }
+          textInput.editable = value as Boolean;
+        };
+        BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+
         var triggerAction:Function = function (event:Event):void {
           var tf:TextInput = (event.currentTarget as TextInput);
           var inputText:String = tf.text;
@@ -2226,7 +2235,16 @@ package org.jspresso.framework.view.flex {
 
     protected function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
-      BindingUtils.bindProperty(textArea, "editable", remoteState, "writable");
+
+      var updateEditability:Function = function (value:Object):void {
+        if(value) {
+          textArea.setStyle("backgroundColor", null);
+        } else {
+          textArea.setStyle("backgroundColor", textArea.getStyle("backgroundDisabledColor"));
+        }
+        textArea.editable = value as Boolean;
+      };
+      BindingUtils.bindSetter(updateEditability, remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         var text:String = (event.currentTarget as TextArea).text;
         if(text != null && text.length == 0) {
@@ -2468,7 +2486,15 @@ package org.jspresso.framework.view.flex {
     protected function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
                                    formatter:Formatter = null, parser:Parser = null):void {
       
-      BindingUtils.bindProperty(textInput, "editable", remoteState, "writable");
+      var updateEditability:Function = function (value:Object):void {
+        if(value) {
+          textInput.setStyle("backgroundColor", null);
+        } else {
+          textInput.setStyle("backgroundColor", textInput.getStyle("backgroundDisabledColor"));
+        }
+        textInput.editable = value as Boolean;
+      };
+      BindingUtils.bindSetter(updateEditability, remoteState, "writable");
 
       var updateView:Function = function (value:Object):void {
         if(value == null) {
