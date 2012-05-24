@@ -45,6 +45,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer",
       if(this.__table.getHeaderCellHeight() < heightHint) {
         this.__table.setHeaderCellHeight(heightHint);
       }
+      if(this.__rComponent.getIcon()) {
+        widget.setIcon(this.__rComponent.getIcon().getImageUrlSpec());
+      }
       return widget;
     }
   }

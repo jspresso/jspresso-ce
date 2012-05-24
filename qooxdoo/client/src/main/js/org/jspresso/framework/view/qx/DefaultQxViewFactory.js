@@ -2228,15 +2228,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {qx.ui.core.Widget}
      */
     _createLabel : function(remoteLabel) {
-      var label = new qx.ui.basic.Label();
+      var atom = new qx.ui.basic.Atom();
+      var label = atom.getChildControl("label");
       var state = remoteLabel.getState();
       if (state) {
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink
             && remoteLabel.getAction()) {
           this.__remotePeerRegistry.register(remoteLabel.getAction());
-          label.setRich(true);
-          modelController.addTarget(label, "value", "value", false, {
+          atom.setRich(true);
+          modelController.addTarget(atom, "label", "value", false, {
                 converter : function(modelValue, model) {
                   if (modelValue) {
                     return "<u><a href='javascript:'>"
@@ -2245,31 +2246,34 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                   return modelValue;
                 }
               });
-          label.addListener("click", function(event) {
+          atom.addListener("click", function(event) {
                 this.__actionHandler.execute(remoteLabel
                     .getAction());
               }, this);
         } else {
-          modelController.addTarget(label, "value", "value", false, {
+          modelController.addTarget(atom, "label", "value", false, {
                 converter : function(modelValue, model) {
                   if (org.jspresso.framework.util.html.HtmlUtil
                       .isHtml(modelValue)) {
-                    label.setRich(true);
+                    atom.setRich(true);
                   } else {
-                    label.setRich(false);
+                    atom.setRich(false);
                   }
                   return modelValue;
                 }
               });
         }
       } else {
-        label.setValue(remoteLabel.getLabel());
-        label.setRich(org.jspresso.framework.util.html.HtmlUtil
+        atom.setLabel(remoteLabel.getLabel());
+        atom.setRich(org.jspresso.framework.util.html.HtmlUtil
             .isHtml(remoteLabel.getLabel()));
       }
       this._configureHorizontalAlignment(label, remoteLabel
               .getHorizontalAlignment());
-      return label;
+      if(remoteLabel.getIcon()) {
+        atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+      }
+      return atom;
     },
 
     /**

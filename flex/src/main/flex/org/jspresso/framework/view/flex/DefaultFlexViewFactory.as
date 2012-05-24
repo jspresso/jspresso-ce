@@ -1329,8 +1329,7 @@ package org.jspresso.framework.view.flex {
 
         if(remoteForm.labelsPosition != "NONE") {
           labelsRow.addChild(labelCell);
-          if(   ((componentLabel as Label).text && (componentLabel as Label).text.length > 0)
-             || ((componentLabel as Label).htmlText && (componentLabel as Label).htmlText.length > 0)) {
+          if((rComponentLabel.label && rComponentLabel.label.length > 0) || rComponentLabel.icon) {
             labelCell.addChild(componentLabel);
             // makes alignment wrong
             //if(remoteForm.labelsPosition == "ASIDE") {
@@ -2334,6 +2333,14 @@ package org.jspresso.framework.view.flex {
       configureHorizontalAlignment(label, remoteLabel.horizontalAlignment);
       if(remoteLabel.state) {
         bindLabel(label, remoteLabel);
+      }
+      if(remoteLabel.icon) {
+        var compoundLabel:HBox = new HBox();
+        var labelIcon:Image = new CachedImage();
+        labelIcon.source = remoteLabel.icon.imageUrlSpec;
+        compoundLabel.addChild(labelIcon);
+        compoundLabel.addChild(label);
+        return compoundLabel;
       }
       return label;
     }

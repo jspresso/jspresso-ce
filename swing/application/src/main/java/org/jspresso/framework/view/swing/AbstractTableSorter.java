@@ -19,16 +19,18 @@
 package org.jspresso.framework.view.swing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
@@ -510,15 +512,21 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
         boolean isSelected, boolean hasFocus, int row, int column) {
-      Component c = delegate.getTableCellRendererComponent(table, value,
-          isSelected, hasFocus, row, column);
-      if (c instanceof JLabel) {
-        JLabel l = (JLabel) c;
-        l.setHorizontalTextPosition(SwingConstants.LEFT);
-        int modelColumn = table.convertColumnIndexToModel(column);
-        l.setIcon(tableSorter.getHeaderRendererIcon(modelColumn));
+      Component rendererComponent = delegate.getTableCellRendererComponent(
+          table, value, isSelected, hasFocus, row, column);
+      int modelColumn = table.convertColumnIndexToModel(column);
+      Icon sortIcon = tableSorter.getHeaderRendererIcon(modelColumn);
+      if (sortIcon != null) {
+        JLabel compoundRenderer = new JLabel();
+        compoundRenderer.setLayout(new BoxLayout(compoundRenderer,
+            BoxLayout.X_AXIS));
+        JLabel sortIconLabel = new JLabel(sortIcon);
+        compoundRenderer.add(rendererComponent);
+        compoundRenderer.add(Box.createRigidArea(new Dimension(5, 0)));
+        compoundRenderer.add(sortIconLabel);
+        rendererComponent = compoundRenderer;
       }
-      return c;
+      return rendererComponent;
     }
   }
 }
