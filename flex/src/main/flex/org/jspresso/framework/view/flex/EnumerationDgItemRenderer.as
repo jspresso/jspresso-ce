@@ -17,6 +17,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.listClasses.BaseListData;
   
   import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.view.flex.CachedImage;
 
   public class EnumerationDgItemRenderer extends RemoteValueDgItemRenderer  {
 
@@ -29,7 +30,7 @@ package org.jspresso.framework.view.flex {
     private var _showIcon:Boolean;
 
 		public function EnumerationDgItemRenderer() {
-		  _image = new Image();
+		  _image = new CachedImage();
 			addChild(_image);
 		}
 

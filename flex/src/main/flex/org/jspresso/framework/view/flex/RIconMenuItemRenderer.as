@@ -22,6 +22,7 @@ package org.jspresso.framework.view.flex {
   
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RIconMenuItemRenderer extends MenuItemRenderer {
 
@@ -29,7 +30,7 @@ package org.jspresso.framework.view.flex {
     private var _cw:ChangeWatcher;
 
 		public function RIconMenuItemRenderer() {
-		  _image = new Image();
+		  _image = new CachedImage();
 			addChild(_image);
 		}
 

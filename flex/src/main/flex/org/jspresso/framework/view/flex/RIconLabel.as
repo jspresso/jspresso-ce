@@ -20,6 +20,7 @@ package org.jspresso.framework.view.flex {
   import mx.core.ScrollPolicy;
   
   import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.view.flex.CachedImage;
     
   public class RIconLabel extends HBox {
       
@@ -34,7 +35,7 @@ package org.jspresso.framework.view.flex {
       horizontalScrollPolicy = ScrollPolicy.OFF;
       verticalScrollPolicy = ScrollPolicy.OFF;
       _label = new Label();
-      _iconImage = new Image();
+      _iconImage = new CachedImage();
       addChild(_iconImage);
       addChild(_label);
     }

@@ -20,6 +20,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.listClasses.ListItemRenderer;
   
   import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RIconListItemRenderer extends ListItemRenderer  {
 
@@ -32,7 +33,7 @@ package org.jspresso.framework.view.flex {
     private var _showIcon:Boolean;
 
 		public function RIconListItemRenderer() {
-		  _image = new Image();
+		  _image = new CachedImage();
 			addChild(_image);
 		}
 

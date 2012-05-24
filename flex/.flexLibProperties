@@ -104,6 +104,7 @@
     <classEntry path="org.jspresso.framework.util.remote.RemotePeer"/>
     <classEntry path="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry"/>
     <classEntry path="org.jspresso.framework.util.remote.registry.IRemotePeerRegistry"/>
+    <classEntry path="org.jspresso.framework.view.flex.CachedImage"/>
     <classEntry path="org.jspresso.framework.view.flex.CollapsibleAccordion"/>
     <classEntry path="org.jspresso.framework.view.flex.DefaultFlexViewFactory"/>
     <classEntry path="org.jspresso.framework.view.flex.DgHeaderItemRenderer"/>
@@ -133,11 +134,11 @@
     <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
   </includeClasses>
   <includeResources>
-    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
     <resourceEntry destPath="assets/images/closeaccordion2.png" sourcePath="assets/images/closeaccordion2.png"/>
     <resourceEntry destPath="assets/images/closeleft.png" sourcePath="assets/images/closeleft.png"/>
-    <resourceEntry destPath="assets/images/reset-16x16.png" sourcePath="assets/images/reset-16x16.png"/>
+    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
     <resourceEntry destPath="defaults.css" sourcePath="defaults.css"/>
+    <resourceEntry destPath="assets/images/reset-16x16.png" sourcePath="assets/images/reset-16x16.png"/>
   </includeResources>
   <namespaceManifests/>
 </flexLibProperties>

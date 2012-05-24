@@ -144,6 +144,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.lang.DateDto;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+  import org.jspresso.framework.view.flex.CachedImage;
   import org.sepy.ui.CheckBoxExtended;
   
   public class DefaultFlexViewFactory {
@@ -634,7 +635,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createImageComponent(remoteImageComponent:RImageComponent):UIComponent {
-      var imageComponent:Image = new Image();
+      var imageComponent:Image = new CachedImage();
       imageComponent.scaleContent = false;
       bindImage(imageComponent, remoteImageComponent.state);
       if(remoteImageComponent.scrollable) {

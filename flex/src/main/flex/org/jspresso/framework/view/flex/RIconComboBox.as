@@ -18,6 +18,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   
   import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.view.flex.CachedImage;
     
   public class RIconComboBox extends ComboBox {
       
@@ -28,7 +29,7 @@ package org.jspresso.framework.view.flex {
     private var _showIcon:Boolean;
     
     public function RIconComboBox() {
-      iconImage = new Image();
+      iconImage = new CachedImage();
       addChild(iconImage);
     }
     

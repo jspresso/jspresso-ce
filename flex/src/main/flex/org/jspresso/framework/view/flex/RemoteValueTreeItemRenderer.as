@@ -18,13 +18,14 @@ package org.jspresso.framework.view.flex {
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.util.html.HtmlUtil;
+  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RemoteValueTreeItemRenderer extends TreeItemRenderer  {
 
 		private var image:Image;
 
 		public function RemoteValueTreeItemRenderer() {
-		  image = new Image();
+		  image = new CachedImage();
 			addChild(image);
 		}
 

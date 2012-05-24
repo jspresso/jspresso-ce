@@ -17,6 +17,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.listClasses.BaseListData;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RemoteValueListItemRenderer extends RemoteValueDgItemRenderer {
 
@@ -24,7 +25,7 @@ package org.jspresso.framework.view.flex {
 		private var _iconTemplate:Class;
 
 		public function RemoteValueListItemRenderer() {
-		  image = new Image();
+		  image = new CachedImage();
 			addChild(image);
 		}
 

@@ -18,13 +18,14 @@ package org.jspresso.framework.view.flex {
   import mx.core.IFlexDisplayObject;
   
   import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RIconMenuBarItem extends MenuBarItem {
 
 		private var _image:Image;
 
 		public function RIconMenuBarItem() {
-		  _image = new Image();
+		  _image = new CachedImage();
 			addChild(_image);
 		}
 
