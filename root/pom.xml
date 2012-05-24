@@ -19,7 +19,7 @@
     <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
 
-    <junit.version>3.8.1</junit.version>
+    <junit.version>4.10</junit.version>
     <flex.version>3.6.0.16995</flex.version>
     <flexunit.version>0.90</flexunit.version>
     <blazeds.version>4.0.0.14931</blazeds.version>
