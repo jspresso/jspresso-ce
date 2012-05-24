@@ -54,11 +54,9 @@ public abstract class RemoteStartup extends
   private Locale   startupLocale;
   private TimeZone clientTimeZone;
   private boolean  dupSessionNotifiedOnce;
-  
-  
+
   /**
    * Constructs a new <code>RemoteStartup</code> instance.
-   * 
    */
   public RemoteStartup() {
     dupSessionNotifiedOnce = false;
@@ -72,14 +70,13 @@ public abstract class RemoteStartup extends
   @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
     IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
-    if (controller  == null || !controller.isStarted()) {
+    if (controller == null || !controller.isStarted()) {
       // we are on a brand new session instance.
       return Collections
           .singletonList((RemoteCommand) new RemoteRestartCommand());
     }
     try {
-      return ((IRemoteCommandHandler) controller)
-          .handleCommands(commands);
+      return ((IRemoteCommandHandler) controller).handleCommands(commands);
     } catch (Throwable ex) {
       controller.traceUnexpectedException(ex);
       return Collections.emptyList();
@@ -103,15 +100,18 @@ public abstract class RemoteStartup extends
    */
   @Override
   public void start() {
-    if (System.getProperty("java.security.auth.login.config") == null) {
+    if (System.getProperty("java.security.auth.login.config") == null
+        && HttpRequestHolder.isAvailable()) {
       System.setProperty("java.security.auth.login.config",
           ResourceProviderServlet.computeStaticUrl("conf/jaas.config"));
     }
     super.start();
-    HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-    if (session != null) {
-      session.setAttribute(RemotePeerRegistryServlet.PEER_REGISTRY,
-          getFrontendController());
+    if (HttpRequestHolder.isAvailable()) {
+      HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+      if (session != null) {
+        session.setAttribute(RemotePeerRegistryServlet.PEER_REGISTRY,
+            getFrontendController());
+      }
     }
   }
 
@@ -134,9 +134,7 @@ public abstract class RemoteStartup extends
       dupSessionNotifiedOnce = true;
       RemoteMessageCommand errorMessage = createErrorMessageCommand();
       errorMessage.setMessage(controller.getTranslation("session.dup",
-          new Object[] {
-            controller.getI18nName(controller, locale)
-          }, locale));
+          new Object[] {controller.getI18nName(controller, locale)}, locale));
       return Collections.singletonList((RemoteCommand) errorMessage);
     }
     dupSessionNotifiedOnce = false;
