@@ -21,10 +21,10 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
+import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -165,11 +165,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   @Override
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null
-        && getModelDescriptor() instanceof IComponentDescriptor<?>) {
-      iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor())
-          .getIconImageURL();
-      setIconImageURL(iconImageURL);
+    if (iconImageURL == null && getModelDescriptor() instanceof IIconDescriptor) {
+      iconImageURL = ((IIconDescriptor) getModelDescriptor()).getIconImageURL();
     }
     return iconImageURL;
   }

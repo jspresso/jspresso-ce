@@ -26,7 +26,7 @@ import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
-import org.jspresso.framework.util.descriptor.DefaultDescriptor;
+import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -51,7 +51,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class BasicPropertyDescriptor extends DefaultDescriptor
+public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
     implements IPropertyDescriptor, BeanFactoryAware {
 
   private BeanFactory                    beanFactory;
