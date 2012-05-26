@@ -89,7 +89,7 @@ public class RefQueryComponentDescriptor<E> extends
    */
   protected void finishConfiguration() {
     setDescription(getQueriedComponentsDescriptor().getDescription());
-    setIconImageURL(getQueriedComponentsDescriptor().getIconImageURL());
+    setIcon(getQueriedComponentsDescriptor().getIcon());
     List<String> qProperties = new ArrayList<String>();
     for (String queryableProperty : queryComponentsDescriptorProvider
         .getQueryableProperties()) {
@@ -156,8 +156,8 @@ public class RefQueryComponentDescriptor<E> extends
           && !(referencedDescriptor instanceof RefQueryComponentDescriptor<?>)) {
         BasicReferencePropertyDescriptor<IComponent> basicRefPropDesc;
         basicRefPropDesc = ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor);
-//        List<String> savedRenderedProperties = basicRefPropDesc
-//            .getRenderedProperties();
+        // List<String> savedRenderedProperties = basicRefPropDesc
+        // .getRenderedProperties();
         basicRefPropDesc.setReferencedDescriptor(createOrGetRefQueryDescriptor(
             referencedDescriptor, referencedType));
         // basicRefPropDesc.setRenderedProperties(savedRenderedProperties);

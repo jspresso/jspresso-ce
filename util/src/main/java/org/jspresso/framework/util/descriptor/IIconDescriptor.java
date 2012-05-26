@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.descriptor;
 
+import org.jspresso.framework.util.gui.Icon;
+
 /**
  * This interface is implemented by anything which is graphically identifiable
  * by an icon.
@@ -28,13 +30,10 @@ package org.jspresso.framework.util.descriptor;
 public interface IIconDescriptor extends IDescriptor {
 
   /**
-   * Gets the URL of the image used by the icon. For Swing view factory a
-   * special kind of URL is supported in the form of
-   * <code>classpath:directory/image.ext</code> to be able to load images as
-   * classpath resource streams.
+   * Gets the icon of the descriptor.
    * 
-   * @return the image URL.
+   * @return the icon of the descriptor.
    */
-  String getIconImageURL();
+  Icon getIcon();
 
 }

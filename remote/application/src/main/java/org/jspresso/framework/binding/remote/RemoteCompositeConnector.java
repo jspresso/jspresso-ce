@@ -162,7 +162,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     currentState.setWritable(isWritable());
     currentState.setDescription(getDisplayDescription());
     currentState.setIconImageUrl(ResourceProviderServlet
-        .computeImageResourceDownloadUrl(getDisplayIconImageUrl(),
+        .computeImageResourceDownloadUrl(getDisplayIcon(),
             RIcon.DEFAULT_DIM));
   }
 

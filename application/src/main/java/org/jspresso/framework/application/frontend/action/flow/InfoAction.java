@@ -46,7 +46,7 @@ public class InfoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
       Map<String, Object> context) {
     getController(context).popupInfo(getSourceComponent(context),
         getI18nName(getTranslationProvider(context), getLocale(context)),
-        getIconImageURL(), getMessage(context));
+        getIcon().getIconImageURL(), getMessage(context));
     return super.execute(actionHandler, context);
   }
 }

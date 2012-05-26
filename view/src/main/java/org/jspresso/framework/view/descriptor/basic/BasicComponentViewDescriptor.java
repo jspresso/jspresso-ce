@@ -33,6 +33,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -62,11 +63,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   private Map<String, List<String>>     renderedChildProperties;
   private List<String>                  renderedProperties;
   private boolean                       verticallyScrollable;
-  
-  
+
   /**
    * Constructs a new <code>BasicComponentViewDescriptor</code> instance.
-   * 
    */
   public BasicComponentViewDescriptor() {
     verticallyScrollable = false;
@@ -84,14 +83,14 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null) {
-      iconImageURL = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor().getIconImageURL();
-      setIconImageURL(iconImageURL);
+  public Icon getIcon() {
+    Icon icon = super.getIcon();
+    if (icon == null) {
+      icon = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor().getIcon();
+      setIcon(icon);
     }
-    return iconImageURL;
+    return icon;
   }
 
   /**
@@ -405,12 +404,13 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * This property allows to define the form vertical scrolling behaviour.
-   * Whenever it is set to true, the corresponding UI component will
-   * install a vertical scrollbar when the available vertical space is not enough.
+   * Whenever it is set to true, the corresponding UI component will install a
+   * vertical scrollbar when the available vertical space is not enough.
    * <p>
    * Default value is <code>false</code>.
    * 
-   * @param verticallyScrollable the verticallyScrollable to set.
+   * @param verticallyScrollable
+   *          the verticallyScrollable to set.
    */
   public void setVerticallyScrollable(boolean verticallyScrollable) {
     this.verticallyScrollable = verticallyScrollable;

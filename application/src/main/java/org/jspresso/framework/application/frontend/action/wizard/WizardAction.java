@@ -19,6 +19,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -390,8 +391,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
      * {@inheritDoc}
      */
     @Override
-    public String getIconImageURL() {
-      return wrappedCancelAction.getIconImageURL();
+    public Icon getIcon() {
+      return wrappedCancelAction.getIcon();
     }
 
     /**
@@ -438,8 +439,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
      * {@inheritDoc}
      */
     @Override
-    public String getIconImageURL() {
-      return wrappedFinishAction.getIconImageURL();
+    public Icon getIcon() {
+      return wrappedFinishAction.getIcon();
     }
 
     /**

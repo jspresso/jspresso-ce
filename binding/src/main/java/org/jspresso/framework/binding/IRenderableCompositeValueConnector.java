@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.binding;
 
+import org.jspresso.framework.util.gui.Icon;
+
 /**
  * This is the interface implemented by displayable composite connectors.
  * (composite).
@@ -40,7 +42,7 @@ public interface IRenderableCompositeValueConnector extends
    * Clones this connector.
    * 
    * @param newConnectorId
-   *            the identifier of the clone connector
+   *          the identifier of the clone connector
    * @return the connector's clone.
    */
   @Override
@@ -52,14 +54,14 @@ public interface IRenderableCompositeValueConnector extends
    * @return the rendered description.
    */
   String getDisplayDescription();
-  
+
   /**
    * Gets the icon used to display this connector.
    * 
    * @return the rendered icon image url.
    */
-  String getDisplayIconImageUrl();
-  
+  Icon getDisplayIcon();
+
   /**
    * Gets the string used to display this connector.
    * 

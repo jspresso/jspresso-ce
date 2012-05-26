@@ -19,6 +19,7 @@
 package org.jspresso.framework.view;
 
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
 
 /**
  * A factory for icons.
@@ -41,6 +42,21 @@ public interface IIconFactory<E> {
    * @return the constructed icon.
    */
   E getIcon(String urlSpec, Dimension iconSize);
+
+  /**
+   * Creates an icon from the image url provided by an icon or get it from a
+   * local cache. Using an icon allows to specify an icon dimension that will
+   * override, if not null, the icon size passed as parameter.
+   * 
+   * @param icon
+   *          the icon.
+   * @param iconSize
+   *          the size of the constructed icon if the icon provider does not
+   *          specify one. The image will be resized if nacessary to match the
+   *          requested size.
+   * @return the constructed icon.
+   */
+  E getIcon(Icon icon, Dimension iconSize);
 
   /**
    * Gets large incon size.

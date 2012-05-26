@@ -917,7 +917,7 @@ public class DefaultRemoteController extends
     rActionList.setName(actionList.getI18nName(this, getLocale()));
     rActionList
         .setDescription(actionList.getI18nDescription(this, getLocale()));
-    rActionList.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+    rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(),
         getIconFactory().getTinyIconSize()));
 
     List<RAction> actions = new ArrayList<RAction>();

@@ -1103,7 +1103,7 @@ public class DefaultRemoteViewFactory extends
             rowDescriptor.getToHtmlProperty());
     if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
-          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+          .setDisplayIcon(viewDescriptor.getIcon());
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
@@ -1267,9 +1267,9 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.getLabelBackground() != null) {
       propertyLabel.setBackground(propertyViewDescriptor.getLabelBackground());
     }
-    if (propertyViewDescriptor.getIconImageURL() != null) {
+    if (propertyViewDescriptor.getIcon() != null) {
       propertyLabel.setIcon(getIconFactory().getIcon(
-          propertyViewDescriptor.getIconImageURL(),
+          propertyViewDescriptor.getIcon(),
           getIconFactory().getTinyIconSize()));
     }
   }
@@ -1502,9 +1502,9 @@ public class DefaultRemoteViewFactory extends
               .getReferencedDescriptor().getI18nName(actionHandler, locale)},
           locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
-      if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+      if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
-            propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+            propertyDescriptor.getReferencedDescriptor().getIcon(),
             getIconFactory().getTinyIconSize()));
       }
       RActionList actionList = new RActionList(getGuidGenerator()
@@ -2241,7 +2241,7 @@ public class DefaultRemoteViewFactory extends
           actionList.setName(nextActionList.getName());
           actionList.setDescription(nextActionList.getDescription());
           actionList.setIcon(getIconFactory().getIcon(
-              nextActionList.getIconImageURL(),
+              nextActionList.getIcon(),
               getIconFactory().getTinyIconSize()));
           viewActionLists.add(actionList);
           List<RAction> actions = new ArrayList<RAction>();
@@ -2317,9 +2317,9 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getFont() != null) {
       viewPeer.setFont(createFont(viewDescriptor.getFont()));
     }
-    if (viewDescriptor.getIconImageURL() != null) {
+    if (viewDescriptor.getIcon() != null) {
       viewPeer.setIcon(getIconFactory()
-          .getIcon(viewDescriptor.getIconImageURL(),
+          .getIcon(viewDescriptor.getIcon(),
               getIconFactory().getSmallIconSize()));
     } else {
       viewPeer.setIcon(null);

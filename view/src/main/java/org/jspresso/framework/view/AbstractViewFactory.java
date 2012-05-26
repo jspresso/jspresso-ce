@@ -2261,7 +2261,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setDisplayDescription(viewDescriptor.getI18nDescription(
               actionHandler, locale));
       ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+          .setDisplayIcon(viewDescriptor.getIcon());
       ((AbstractCompositeValueConnector) connector)
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
@@ -2814,8 +2814,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
               .getI18nDescription(actionHandler, locale));
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
+          .setDisplayIcon(subtreeViewDescriptor
+              .getNodeGroupDescriptor().getIcon());
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
@@ -2868,8 +2868,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
               .getI18nDescription(actionHandler, locale));
       ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
+          .setDisplayIcon(subtreeViewDescriptor
+              .getNodeGroupDescriptor().getIcon());
       ((AbstractCompositeValueConnector) connector)
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
@@ -2910,8 +2910,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
               .getI18nDescription(actionHandler, locale));
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
+          .setDisplayIcon(subtreeViewDescriptor
+              .getNodeGroupDescriptor().getIcon());
       ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }

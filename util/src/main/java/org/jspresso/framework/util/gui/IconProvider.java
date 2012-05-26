@@ -19,22 +19,22 @@
 package org.jspresso.framework.util.gui;
 
 /**
- * Implementations of this interface are designed to provide image urls based on
- * an object.
+ * Implementations of this interface are designed to provide icons based on an
+ * object.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IIconImageURLProvider {
+public interface IconProvider {
 
   /**
    * Given a user object, this method gives the ability to the tree view
-   * descriptor to return the url of an image used to render the user object.
-   * This method may return null.
+   * descriptor to return the icon used to render the user object. This method
+   * may return null.
    * 
    * @param userObject
    *          the user object to render.
    * @return the url of the image to use for the renderer or null.
    */
-  String getIconImageURLForObject(Object userObject);
+  Icon getIconForObject(Object userObject);
 }

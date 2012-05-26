@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
 
 /**
  * A factory for icons.
@@ -167,6 +168,21 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   @Override
   public String getForwardIconImageURL() {
     return forwardIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public E getIcon(Icon icon, Dimension iconSize) {
+    if (icon == null) {
+      return null;
+    }
+    Dimension actualIconSize = iconSize;
+    if (icon.getDimension() != null) {
+      actualIconSize = icon.getDimension();
+    }
+    return getIcon(icon.getIconImageURL(), actualIconSize);
   }
 
   /**

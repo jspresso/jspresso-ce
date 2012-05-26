@@ -19,7 +19,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 
 /**
@@ -42,7 +42,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
     implements IListViewDescriptor {
 
-  private IIconImageURLProvider iconImageURLProvider;
+  private IconProvider iconImageURLProvider;
   private String                renderedProperty;
 
   /**
@@ -51,7 +51,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * @return the iconImageURLProvider.
    */
   @Override
-  public IIconImageURLProvider getIconImageURLProvider() {
+  public IconProvider getIconImageURLProvider() {
     return iconImageURLProvider;
   }
 
@@ -82,7 +82,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
-  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+  public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
   }
 

@@ -975,12 +975,12 @@
   </bean>
 
   <!-- Workspaces -->
-  <bean id="defaultModuleIconImageURLProvider" class="org.jspresso.framework.application.model.WorkspaceIconImageURLProvider">
-    <property name="delegateProvider" ref="defaultDomainImageUrlProvider" />
+  <bean id="defaultModuleIconProvider" class="org.jspresso.framework.application.model.WorkspaceIconProvider">
+    <property name="delegateProvider" ref="defaultDomainIconProvider" />
   </bean>
 
   <bean abstract="true" id="abstractWorkspace" class="org.jspresso.framework.application.model.Workspace">
-    <property name="iconImageURLProvider" ref="defaultModuleIconImageURLProvider" />
+    <property name="iconProvider" ref="defaultModuleIconProvider" />
   </bean>
 
   <!-- Flow actions -->

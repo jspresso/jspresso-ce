@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.util.descriptor;
 
+import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
+
 /**
  * This is a utility class from which most displayable descriptors inherit for
  * factorization purpose. It provides an icon image URL.
@@ -28,7 +31,7 @@ package org.jspresso.framework.util.descriptor;
 public class DefaultIconDescriptor extends DefaultDescriptor implements
     IIconDescriptor {
 
-  private String iconImageURL;
+  private Icon icon;
 
   /**
    * {@inheritDoc}
@@ -44,8 +47,8 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
    * @return the iconImageURL.
    */
   @Override
-  public String getIconImageURL() {
-    return iconImageURL;
+  public Icon getIcon() {
+    return icon;
   }
 
   /**
@@ -61,6 +64,32 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
    *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
-    this.iconImageURL = iconImageURL;
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setIconImageURL(iconImageURL);
+  }
+
+  /**
+   * Sets the icon preferred dimension of this descriptor.
+   * 
+   * @param iconPreferredDim
+   *          the iconPreferredDim to set.
+   */
+  public void setIconPreferredDim(int iconPreferredDim) {
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setDimension(new Dimension(iconPreferredDim, iconPreferredDim));
+  }
+
+  /**
+   * Sets the icon.
+   * 
+   * @param icon
+   *          the icon to set.
+   */
+  public void setIcon(Icon icon) {
+    this.icon = icon;
   }
 }

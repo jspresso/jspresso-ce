@@ -24,7 +24,8 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 
@@ -45,7 +46,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   private ITreeLevelDescriptor       childDescriptor;
   private List<ITreeLevelDescriptor> childrenDescriptors;
   private boolean                    expanded;
-  private IIconImageURLProvider      iconImageURLProvider;
+  private IconProvider               iconImageURLProvider;
 
   private IAction                    itemSelectionAction;
   private int                        maxDepth = 10;
@@ -64,14 +65,13 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null) {
-      iconImageURL = getRootSubtreeDescriptor().getNodeGroupDescriptor()
-          .getIconImageURL();
-      setIconImageURL(iconImageURL);
+  public Icon getIcon() {
+    Icon icon = super.getIcon();
+    if (icon == null) {
+      icon = getRootSubtreeDescriptor().getNodeGroupDescriptor().getIcon();
+      setIcon(icon);
     }
-    return iconImageURL;
+    return icon;
   }
 
   /**
@@ -80,7 +80,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * @return the iconImageURLProvider.
    */
   @Override
-  public IIconImageURLProvider getIconImageURLProvider() {
+  public IconProvider getIconImageURLProvider() {
     return iconImageURLProvider;
   }
 
@@ -242,7 +242,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
-  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+  public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
   }
 

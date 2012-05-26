@@ -146,7 +146,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
       IComponentDescriptor<IEntity> elementEntityDescriptor) {
     this.elementEntityDescriptor = elementEntityDescriptor;
     if (elementEntityDescriptor != null) {
-      setIconImageURL(elementEntityDescriptor.getIconImageURL());
+      setIcon(elementEntityDescriptor.getIcon());
     }
   }
 

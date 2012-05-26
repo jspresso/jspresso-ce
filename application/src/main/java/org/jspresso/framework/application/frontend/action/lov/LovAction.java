@@ -48,6 +48,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescr
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
@@ -351,17 +352,19 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null) {
+  public Icon getIcon() {
+    Icon icon = super.getIcon();
+    if (icon == null) {
       if (entityDescriptor != null) {
-        iconImageURL = entityDescriptor.getIconImageURL();
+        icon = entityDescriptor.getIcon();
       }
-      if (iconImageURL == null) {
-        iconImageURL = "classpath:org/jspresso/framework/application/images/find-48x48.png";
+      if (icon == null) {
+        icon = new Icon(
+            "classpath:org/jspresso/framework/application/images/find-48x48.png",
+            null);
       }
     }
-    return iconImageURL;
+    return icon;
   }
 
   /**

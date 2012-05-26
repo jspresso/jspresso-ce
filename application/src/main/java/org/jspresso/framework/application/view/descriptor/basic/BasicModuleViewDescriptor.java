@@ -24,6 +24,7 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
@@ -50,7 +51,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
     BasicListViewDescriptor moduleNodeGroupDescriptor = new BasicListViewDescriptor();
     moduleNodeGroupDescriptor.setName(getName());
     moduleNodeGroupDescriptor.setDescription(getDescription());
-    moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
+    moduleNodeGroupDescriptor.setIcon(getIcon());
     moduleNodeGroupDescriptor
         .setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
             .getPropertyDescriptor(Module.SUB_MODULES));
@@ -89,8 +90,8 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    return descriptor.getIconImageURL();
+  public Icon getIcon() {
+    return descriptor.getIcon();
   }
 
   /**

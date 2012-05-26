@@ -29,7 +29,9 @@ import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceVi
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -57,47 +59,47 @@ public class Workspace implements ISecurable, IPermIdSource {
   /**
    * <code>DESCRIPTION</code> is "description".
    */
-  public static final String    DESCRIPTION      = "description";
+  public static final String DESCRIPTION      = "description";
 
   /**
    * <code>I18N_DESCRIPTION</code> is "i18nDescription".
    */
-  public static final String    I18N_DESCRIPTION = "i18nDescription";
+  public static final String I18N_DESCRIPTION = "i18nDescription";
 
   /**
    * <code>I18N_NAME</code> is "i18nName".
    */
-  public static final String    I18N_NAME        = "i18nName";
+  public static final String I18N_NAME        = "i18nName";
 
   /**
    * <code>MODULES</code> is "modules".
    */
-  public static final String    MODULES          = "modules";
+  public static final String MODULES          = "modules";
 
   /**
    * <code>NAME</code> is "name".
    */
-  public static final String    NAME             = "name";
+  public static final String NAME             = "name";
 
-  private String                description;
-  private Collection<String>    grantedRoles;
-  private String                i18nDescription;
-  private String                i18nName;
-  private String                iconImageURL;
-  private IIconImageURLProvider iconImageURLProvider;
-  private IAction               itemSelectionAction;
+  private String             description;
+  private Collection<String> grantedRoles;
+  private String             i18nDescription;
+  private String             i18nName;
+  private Icon               icon;
+  private IconProvider       iconProvider;
+  private IAction            itemSelectionAction;
 
-  private List<Module>          modules;
-  private String                name;
+  private List<Module>       modules;
+  private String             name;
 
-  private boolean               started;
+  private boolean            started;
 
-  private IAction               startupAction;
-  private ISecurityHandler      securityHandler;
+  private IAction            startupAction;
+  private ISecurityHandler   securityHandler;
 
-  private IViewDescriptor       viewDescriptor;
+  private IViewDescriptor    viewDescriptor;
 
-  private String                permId;
+  private String             permId;
 
   /**
    * Constructs a new <code>Workspace</code> instance.
@@ -167,12 +169,12 @@ public class Workspace implements ISecurable, IPermIdSource {
   }
 
   /**
-   * Gets the iconImageURL.
+   * Gets the icon.
    * 
-   * @return the iconImageURL.
+   * @return the icon.
    */
-  public String getIconImageURL() {
-    return iconImageURL;
+  public Icon getIcon() {
+    return icon;
   }
 
   /**
@@ -242,13 +244,12 @@ public class Workspace implements ISecurable, IPermIdSource {
       ((BasicWorkspaceViewDescriptor) viewDescriptor).setName(getName());
       ((BasicWorkspaceViewDescriptor) viewDescriptor)
           .setDescription(getDescription());
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
-          .setIconImageURL(getIconImageURL());
-      if (iconImageURLProvider == null) {
-        iconImageURLProvider = new WorkspaceIconImageURLProvider();
+      ((BasicWorkspaceViewDescriptor) viewDescriptor).setIcon(getIcon());
+      if (iconProvider == null) {
+        iconProvider = new WorkspaceIconProvider();
       }
       ((BasicWorkspaceViewDescriptor) viewDescriptor)
-          .setIconImageURLProvider(iconImageURLProvider);
+          .setIconImageURLProvider(iconProvider);
       ((BasicWorkspaceViewDescriptor) viewDescriptor)
           .setItemSelectionAction(getItemSelectionAction());
     }
@@ -326,8 +327,8 @@ public class Workspace implements ISecurable, IPermIdSource {
   }
 
   /**
-   * Sets the icon image URL used to identify this workspace. Supported URL
-   * protocols include :
+   * Sets the icon image URL of this workspace. Supported URL protocols include
+   * :
    * <ul>
    * <li>all JVM supported protocols</li>
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
@@ -338,7 +339,23 @@ public class Workspace implements ISecurable, IPermIdSource {
    *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
-    this.iconImageURL = iconImageURL;
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setIconImageURL(iconImageURL);
+  }
+
+  /**
+   * Sets the icon preferred dimension of this workspace.
+   * 
+   * @param iconPreferredDim
+   *          the iconPreferredDim to set.
+   */
+  public void setIconPreferredDim(int iconPreferredDim) {
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setDimension(new Dimension(iconPreferredDim, iconPreferredDim));
   }
 
   /**
@@ -352,8 +369,8 @@ public class Workspace implements ISecurable, IPermIdSource {
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
-  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
-    this.iconImageURLProvider = iconImageURLProvider;
+  public void setIconProvider(IconProvider iconImageURLProvider) {
+    this.iconProvider = iconImageURLProvider;
   }
 
   /**

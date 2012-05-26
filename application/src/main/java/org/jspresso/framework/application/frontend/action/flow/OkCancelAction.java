@@ -50,11 +50,10 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    getController(context)
-        .popupOkCancel(getSourceComponent(context),
-            getI18nName(getTranslationProvider(context), getLocale(context)),
-            getIconImageURL(), getMessage(context), okAction, cancelAction,
-            context);
+    getController(context).popupOkCancel(getSourceComponent(context),
+        getI18nName(getTranslationProvider(context), getLocale(context)),
+        getIcon().getIconImageURL(), getMessage(context), okAction,
+        cancelAction, context);
     return super.execute(actionHandler, context);
   }
 

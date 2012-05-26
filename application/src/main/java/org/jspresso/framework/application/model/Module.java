@@ -29,6 +29,8 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
+import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -95,7 +97,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   private String             i18nDescription;
   private String             i18nName;
-  private String             iconImageURL;
+  private Icon               icon;
   private String             name;
   private Module             parent;
   private IViewDescriptor    projectedViewDescriptor;
@@ -226,12 +228,12 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Gets the iconImageURL.
+   * Gets the icon.
    * 
-   * @return the iconImageURL.
+   * @return the icon.
    */
-  public String getIconImageURL() {
-    return iconImageURL;
+  public Icon getIcon() {
+    return icon;
   }
 
   /**
@@ -501,8 +503,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the icon image URL used to identify this module. Supported URL
-   * protocols include :
+   * Sets the icon image URL of this descriptor. Supported URL protocols include
+   * :
    * <ul>
    * <li>all JVM supported protocols</li>
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
@@ -513,7 +515,33 @@ public class Module extends AbstractPropertyChangeCapable implements
    *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
-    this.iconImageURL = iconImageURL;
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setIconImageURL(iconImageURL);
+  }
+
+  /**
+   * Sets the icon preferred dimension of this descriptor.
+   * 
+   * @param iconPreferredDim
+   *          the iconPreferredDim to set.
+   */
+  public void setIconPreferredDim(int iconPreferredDim) {
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setDimension(new Dimension(iconPreferredDim, iconPreferredDim));
+  }
+
+  /**
+   * Sets the icon.
+   * 
+   * @param icon
+   *          the icon to set.
+   */
+  public void setIcon(Icon icon) {
+    this.icon = icon;
   }
 
   /**

@@ -69,8 +69,8 @@
   <!-- The implementation used as ComponentDescriptorRegistry. -->
   <bean id="componentDescriptorRegistry" class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
-  <!-- The implementation used as ComponentIconImageURLProvider. -->
-  <bean id="defaultDomainImageUrlProvider" class="org.jspresso.framework.model.descriptor.ComponentIconImageURLProvider">
+  <!-- The implementation used as ComponentIconProvider. -->
+  <bean id="defaultDomainIconProvider" class="org.jspresso.framework.model.descriptor.ComponentIconProvider">
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
   </bean>
 

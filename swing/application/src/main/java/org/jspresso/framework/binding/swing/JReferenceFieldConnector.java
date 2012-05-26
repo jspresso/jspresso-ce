@@ -26,6 +26,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
+import org.jspresso.framework.util.gui.Icon;
 
 /**
  * JReferenceFieldConnector connector.
@@ -171,7 +172,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * {@inheritDoc}
    */
   @Override
-  public String getDisplayIconImageUrl() {
+  public Icon getDisplayIcon() {
     return null;
   }
 

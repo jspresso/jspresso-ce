@@ -53,7 +53,7 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
       Map<String, Object> context) {
     getController(context).popupYesNoCancel(getSourceComponent(context),
         getI18nName(getTranslationProvider(context), getLocale(context)),
-        getIconImageURL(), getMessage(context), yesAction, noAction,
+        getIcon().getIconImageURL(), getMessage(context), yesAction, noAction,
         cancelAction, context);
     return super.execute(actionHandler, context);
   }

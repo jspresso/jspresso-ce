@@ -27,7 +27,8 @@ import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.ItemSelectionSupport;
 import org.jspresso.framework.util.event.ValueChangeEvent;
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This is a simple connector implementation whic allows the management of child
@@ -42,9 +43,9 @@ public abstract class AbstractCompositeValueConnector extends
 
   private Map<String, IValueConnector> childConnectors;
   private String                       displayDescription;
-  private String                       displayIconImageUrl;
+  private Icon                         displayIcon;
   private String                       displayValue;
-  private IIconImageURLProvider        iconImageURLProvider;
+  private IconProvider                 iconImageURLProvider;
   private ItemSelectionSupport         itemSelectionSupport;
   private String                       renderingChildConnectorId;
   private Object                       selectedItem;
@@ -130,21 +131,20 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Gets the static icon image url or uses the icon image url provider to
-   * compute it based on the connector value.
+   * Gets the static icon or uses the icon provider to compute it based on the
+   * connector value.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public String getDisplayIconImageUrl() {
-    String iconImageUrl = null;
+  public Icon getDisplayIcon() {
+    Icon icon = null;
     if (iconImageURLProvider != null) {
-      iconImageUrl = iconImageURLProvider
-          .getIconImageURLForObject(getConnectorValue());
+      icon = iconImageURLProvider.getIconForObject(getConnectorValue());
     } else {
-      iconImageUrl = displayIconImageUrl;
+      icon = displayIcon;
     }
-    return iconImageUrl;
+    return icon;
   }
 
   /**
@@ -205,13 +205,13 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Sets the static displayIconImageUrl.
+   * Sets the static displayIcon.
    * 
-   * @param displayIconImageUrl
-   *          the displayIconImageUrl to set.
+   * @param displayIcon
+   *          the displayIcon to set.
    */
-  public void setDisplayIconImageUrl(String displayIconImageUrl) {
-    this.displayIconImageUrl = displayIconImageUrl;
+  public void setDisplayIcon(Icon displayIcon) {
+    this.displayIcon = displayIcon;
   }
 
   /**
@@ -230,7 +230,7 @@ public abstract class AbstractCompositeValueConnector extends
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
-  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+  public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
   }
 

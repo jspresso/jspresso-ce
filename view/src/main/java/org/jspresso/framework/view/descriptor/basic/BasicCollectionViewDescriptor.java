@@ -23,6 +23,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -50,18 +51,18 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null
+  public Icon getIcon() {
+    Icon icon = super.getIcon();
+    if (icon == null
         && getModelDescriptor() instanceof ICollectionDescriptorProvider<?>) {
       IComponentDescriptor<?> elementDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
           .getCollectionDescriptor().getElementDescriptor();
       if (elementDescriptor != null) {
-        iconImageURL = elementDescriptor.getIconImageURL();
-        setIconImageURL(iconImageURL);
+        icon = elementDescriptor.getIcon();
+        setIcon(icon);
       }
     }
-    return iconImageURL;
+    return icon;
   }
 
   /**

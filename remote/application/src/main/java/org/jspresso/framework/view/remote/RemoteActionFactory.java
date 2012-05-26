@@ -145,7 +145,7 @@ public class RemoteActionFactory extends
         remoteAction.setDescription(i18nDescription + TOOLTIP_ELLIPSIS);
       }
       remoteAction.setIcon(getIconFactory().getIcon(
-          ((IDisplayableAction) action).getIconImageURL(), dimension));
+          ((IDisplayableAction) action).getIcon(), dimension));
       if (((IDisplayableAction) action).getMnemonicAsString() != null) {
         remoteAction.setMnemonicAsString(((IDisplayableAction) action)
             .getMnemonicAsString());

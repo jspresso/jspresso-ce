@@ -45,6 +45,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.io.IoHelper;
@@ -145,6 +146,29 @@ public class ResourceProviderServlet extends HttpServlet {
   public static String computeDownloadUrl(String id) {
     HttpServletRequest request = HttpRequestHolder.getServletRequest();
     return computeDownloadUrl(request, id);
+  }
+
+  /**
+   * Computes the url where the image is available for download.
+   * 
+   * @param icon
+   *          the icon to load the image for.
+   * @param dimension
+   *          the requested dimension for the icon if the icon dimension is not
+   *          set.
+   * @return the resource url.
+   */
+  public static String computeImageResourceDownloadUrl(Icon icon,
+      Dimension dimension) {
+    if (icon == null) {
+      return null;
+    }
+    Dimension actualIconSize = dimension;
+    if (icon.getDimension() != null) {
+      actualIconSize = icon.getDimension();
+    }
+    return computeImageResourceDownloadUrl(icon.getIconImageURL(),
+        actualIconSize);
   }
 
   /**

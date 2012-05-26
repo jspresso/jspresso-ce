@@ -257,7 +257,7 @@ public class DefaultSwingController extends
               workspaceView,
               workspaceNavigatorViewDescriptor.getI18nName(this, getLocale()),
               getIconFactory().getIcon(
-                  workspaceNavigatorViewDescriptor.getIconImageURL(),
+                  workspaceNavigatorViewDescriptor.getIcon(),
                   getIconFactory().getSmallIconSize()));
           workspaceInternalFrame
               .addInternalFrameListener(new WorkspaceInternalFrameListener(
@@ -761,7 +761,7 @@ public class DefaultSwingController extends
     controllerFrame.setSize(w, h);
     // controllerFrame.setSize(1100, 800);
     ImageIcon frameIcon = ((ImageIcon) getIconFactory().getIcon(
-        getIconImageURL(), getIconFactory().getSmallIconSize()));
+        getIcon(), getIconFactory().getSmallIconSize()));
     if (frameIcon != null) {
       controllerFrame.setIconImage(frameIcon.getImage());
     }
@@ -819,7 +819,7 @@ public class DefaultSwingController extends
       menu.setToolTipText(actionList.getI18nDescription(this, getLocale())
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
-    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+    menu.setIcon(getIconFactory().getIcon(actionList.getIcon(),
         getIconFactory().getSmallIconSize()));
     for (JMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);

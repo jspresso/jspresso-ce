@@ -19,7 +19,7 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This public interface is implemented by any tree view descriptor.
@@ -34,7 +34,7 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    * 
    * @return the iconImageURLProvider.
    */
-  IIconImageURLProvider getIconImageURLProvider();
+  IconProvider getIconImageURLProvider();
 
   /**
    * Gets the item selection action that will be attached to the created tree

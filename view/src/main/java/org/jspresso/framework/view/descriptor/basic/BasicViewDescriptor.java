@@ -27,6 +27,7 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.action.ActionMap;
@@ -163,12 +164,12 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null && getModelDescriptor() instanceof IIconDescriptor) {
-      iconImageURL = ((IIconDescriptor) getModelDescriptor()).getIconImageURL();
+  public Icon getIcon() {
+    Icon icon = super.getIcon();
+    if (icon == null && getModelDescriptor() instanceof IIconDescriptor) {
+      icon = ((IIconDescriptor) getModelDescriptor()).getIcon();
     }
-    return iconImageURL;
+    return icon;
   }
 
   /**

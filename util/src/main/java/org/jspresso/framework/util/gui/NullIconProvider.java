@@ -24,14 +24,14 @@ package org.jspresso.framework.util.gui;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class NullIconImageURLProvider implements IIconImageURLProvider {
+public class NullIconProvider implements IconProvider {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURLForObject(
-      @SuppressWarnings("unused") Object userObject) {
+  public Icon getIconForObject(@SuppressWarnings("unused")
+  Object userObject) {
     return null;
   }
 

@@ -25,6 +25,7 @@ import java.util.List;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
@@ -147,13 +148,13 @@ public class BeanCollectionModule extends Module {
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    String iconImageUrl = super.getIconImageURL();
-    if (iconImageUrl == null) {
-      iconImageUrl = getElementComponentDescriptor().getIconImageURL();
-      setIconImageURL(iconImageUrl);
+  public Icon getIcon() {
+    Icon icon = super.getIcon();
+    if (icon == null) {
+      icon = getElementComponentDescriptor().getIcon();
+      setIcon(icon);
     }
-    return iconImageUrl;
+    return icon;
   }
 
   /**
@@ -198,8 +199,9 @@ public class BeanCollectionModule extends Module {
     } else if (viewDescriptor instanceof ICompositeViewDescriptor
         && ((ICompositeViewDescriptor) viewDescriptor)
             .getChildViewDescriptors() != null) {
-      for (int i = 0; mainCollectionView == null && i < ((ICompositeViewDescriptor) viewDescriptor)
-          .getChildViewDescriptors().size(); i++) {
+      for (int i = 0; mainCollectionView == null
+          && i < ((ICompositeViewDescriptor) viewDescriptor)
+              .getChildViewDescriptors().size(); i++) {
         mainCollectionView = extractMainCollectionView(((ICompositeViewDescriptor) viewDescriptor)
             .getChildViewDescriptors().get(i));
       }

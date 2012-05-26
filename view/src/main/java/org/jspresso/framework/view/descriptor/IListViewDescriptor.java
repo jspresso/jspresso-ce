@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This public interface is implemented by list view descriptors. The described
@@ -35,7 +35,7 @@ public interface IListViewDescriptor extends ICollectionViewDescriptor {
    * 
    * @return the iconImageURLProvider.
    */
-  IIconImageURLProvider getIconImageURLProvider();
+  IconProvider getIconImageURLProvider();
 
   /**
    * Gets the name of the underlying model propertiy which is made visible by

@@ -33,6 +33,7 @@ import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gate.NotEmptyCollectionSelectionTrackingGate;
 import org.jspresso.framework.util.gate.SingleCollectionSelectionTrackingGate;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -157,8 +158,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    return actionDescriptor.getIconImageURL();
+  public Icon getIcon() {
+    return actionDescriptor.getIcon();
   }
 
   /**
@@ -336,6 +337,16 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
+   * Sets the icon.
+   * 
+   * @param icon
+   *          the icon to set.
+   */
+  public void setIcon(Icon icon) {
+    actionDescriptor.setIcon(icon);
+  }
+
+  /**
    * Configures the mnemnonic key used for this action. Support of this feature
    * depends on the UI execution platform. Mnemonics are typically used in menu
    * and menu items.
@@ -367,7 +378,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   public String toString() {
     return new ToStringBuilder(this).append("name", getName())
         .append("description", getDescription())
-        .append("iconImageURL", getIconImageURL()).toString();
+        .append("iconImageURL", getIcon()).toString();
   }
 
   private void completeActionabilityGates() {

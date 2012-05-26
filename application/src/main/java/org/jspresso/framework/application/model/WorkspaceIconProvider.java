@@ -18,7 +18,8 @@
  */
 package org.jspresso.framework.application.model;
 
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This image url provider uses a delegate provider to look up the rendering
@@ -27,24 +28,24 @@ import org.jspresso.framework.util.gui.IIconImageURLProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class WorkspaceIconImageURLProvider implements IIconImageURLProvider {
+public class WorkspaceIconProvider implements IconProvider {
 
-  private IIconImageURLProvider delegateProvider;
+  private IconProvider delegateProvider;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURLForObject(Object userObject) {
+  public Icon getIconForObject(Object userObject) {
     if (delegateProvider != null && userObject instanceof BeanModule
         && ((BeanModule) userObject).getModuleObject() != null
-        && ((BeanModule) userObject).getIconImageURL() == null) {
-      return delegateProvider
-          .getIconImageURLForObject(((BeanModule) userObject).getModuleObject());
+        && ((BeanModule) userObject).getIcon() == null) {
+      return delegateProvider.getIconForObject(((BeanModule) userObject)
+          .getModuleObject());
     } else if (userObject instanceof Module) {
-      return ((Module) userObject).getIconImageURL();
+      return ((Module) userObject).getIcon();
     } else if (userObject instanceof Workspace) {
-      return ((Workspace) userObject).getIconImageURL();
+      return ((Workspace) userObject).getIcon();
     }
     return null;
   }
@@ -53,9 +54,9 @@ public class WorkspaceIconImageURLProvider implements IIconImageURLProvider {
    * Sets the delegateProvider.
    * 
    * @param delegateProvider
-   *            the delegateProvider to set.
+   *          the delegateProvider to set.
    */
-  public void setDelegateProvider(IIconImageURLProvider delegateProvider) {
+  public void setDelegateProvider(IconProvider delegateProvider) {
     this.delegateProvider = delegateProvider;
   }
 

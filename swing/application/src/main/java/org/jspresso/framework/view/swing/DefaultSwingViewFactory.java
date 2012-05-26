@@ -1605,7 +1605,7 @@ public class DefaultSwingViewFactory extends
             rowDescriptor.getToHtmlProperty());
     if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
-          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+          .setDisplayIcon(viewDescriptor.getIcon());
       ((AbstractCompositeValueConnector) rowConnectorPrototype)
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
@@ -1742,9 +1742,9 @@ public class DefaultSwingViewFactory extends
       propertyLabel.setBackground(createColor(propertyViewDescriptor
           .getLabelBackground()));
     }
-    if (propertyViewDescriptor.getIconImageURL() != null) {
+    if (propertyViewDescriptor.getIcon() != null) {
       propertyLabel.setIcon(getIconFactory().getIcon(
-          propertyViewDescriptor.getIconImageURL(),
+          propertyViewDescriptor.getIcon(),
           getIconFactory().getTinyIconSize()));
     }
   }
@@ -1792,11 +1792,11 @@ public class DefaultSwingViewFactory extends
               new Object[] {propertyDescriptor.getReferencedDescriptor()
                   .getI18nName(actionHandler, locale)}, locale)
               + IActionFactory.TOOLTIP_ELLIPSIS);
-      if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+      if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
         lovAction.putValue(
             Action.SMALL_ICON,
             getIconFactory().getIcon(
-                propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+                propertyDescriptor.getReferencedDescriptor().getIcon(),
                 getIconFactory().getTinyIconSize()));
       }
       ((JActionField) viewComponent).setActions(Collections
@@ -1998,7 +1998,7 @@ public class DefaultSwingViewFactory extends
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = new JLabel();
-    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIconImageURL(),
+    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIcon(),
         getIconFactory().getTinyIconSize()));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
@@ -2364,7 +2364,7 @@ public class DefaultSwingViewFactory extends
         IView<JComponent> childView = createView(childViewDescriptor,
             actionHandler, locale);
         Icon childIcon = getIconFactory().getIcon(
-            childViewDescriptor.getIconImageURL(),
+            childViewDescriptor.getIcon(),
             getIconFactory().getSmallIconSize());
         String tabText = childViewDescriptor.getI18nName(actionHandler, locale);
         switch (viewDescriptor.getRenderingOptions()) {
@@ -2924,7 +2924,7 @@ public class DefaultSwingViewFactory extends
     JLabel titleLabel = new JLabel();
     titleLabel.setText(viewDescriptor.getI18nName(actionHandler, locale));
     titleLabel.setIcon(getIconFactory().getIcon(
-        viewDescriptor.getIconImageURL(), getIconFactory().getTinyIconSize()));
+        viewDescriptor.getIcon(), getIconFactory().getTinyIconSize()));
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     popupMenu.add(titleLabel);
@@ -3255,7 +3255,7 @@ public class DefaultSwingViewFactory extends
               .getDisplayValue());
           renderer.setIcon(getIconFactory().getIcon(
               ((IRenderableCompositeValueConnector) value)
-                  .getDisplayIconImageUrl(),
+                  .getDisplayIcon(),
               getIconFactory().getSmallIconSize()));
           String displayDescription = ((IRenderableCompositeValueConnector) value)
               .getDisplayDescription();

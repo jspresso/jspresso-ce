@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.util.gui.IIconImageURLProvider;
-
+import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This class uses a collection of component descriptors to be able to determine
@@ -34,24 +34,24 @@ import org.jspresso.framework.util.gui.IIconImageURLProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ComponentIconImageURLProvider implements IIconImageURLProvider {
+public class ComponentIconProvider implements IconProvider {
 
-  private Map<Class<?>, String>               cache;
+  private Map<Class<?>, Icon>                 cache;
   private IComponentDescriptorRegistry        componentDescriptorRegistry;
   private Collection<IComponentDescriptor<?>> componentDescriptors;
 
   /**
    * Constructs a new <code>ComponentIconImageURLProvider</code> instance.
    */
-  protected ComponentIconImageURLProvider() {
-    cache = new HashMap<Class<?>, String>();
+  protected ComponentIconProvider() {
+    cache = new HashMap<Class<?>, Icon>();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURLForObject(Object userObject) {
+  public Icon getIconForObject(Object userObject) {
     if (userObject == null) {
       return null;
     }
@@ -63,16 +63,16 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
       componentDescriptors = componentDescriptorRegistry
           .getComponentDescriptors();
     }
-    String iconImageURL = computeIconImageURL(modelClass);
-    cache.put(modelClass, iconImageURL);
-    return iconImageURL;
+    Icon icon = computeIcon(modelClass);
+    cache.put(modelClass, icon);
+    return icon;
   }
 
   /**
    * Sets the componentDescriptorRegistry.
    * 
    * @param componentDescriptorRegistry
-   *            the componentDescriptorRegistry to set.
+   *          the componentDescriptorRegistry to set.
    */
   public void setComponentDescriptorRegistry(
       IComponentDescriptorRegistry componentDescriptorRegistry) {
@@ -83,30 +83,30 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
    * Sets the componentDescriptors.
    * 
    * @param componentDescriptors
-   *            the componentDescriptors to set.
+   *          the componentDescriptors to set.
    */
   public void setComponentDescriptors(
       Collection<IComponentDescriptor<?>> componentDescriptors) {
     this.componentDescriptors = componentDescriptors;
   }
 
-  private String computeIconImageURL(Class<?> modelClass) {
-    String iconImageURL = null;
+  private Icon computeIcon(Class<?> modelClass) {
+    Icon icon = null;
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
       if (modelClass.equals(componentDescriptor.getComponentContract())
-          && componentDescriptor.getIconImageURL() != null) {
-        iconImageURL = componentDescriptor.getIconImageURL();
+          && componentDescriptor.getIcon() != null) {
+        icon = componentDescriptor.getIcon();
       }
     }
-    if (iconImageURL == null) {
+    if (icon == null) {
       Class<?>[] superInterfaces = modelClass.getInterfaces();
-      for (int i = superInterfaces.length - 1; i >= 0 && iconImageURL == null; i--) {
-        iconImageURL = computeIconImageURL(superInterfaces[i]);
+      for (int i = superInterfaces.length - 1; i >= 0 && icon == null; i--) {
+        icon = computeIcon(superInterfaces[i]);
       }
-      if (iconImageURL == null && modelClass.getSuperclass() != null) {
-        iconImageURL = computeIconImageURL(modelClass.getSuperclass());
+      if (icon == null && modelClass.getSuperclass() != null) {
+        icon = computeIcon(modelClass.getSuperclass());
       }
     }
-    return iconImageURL;
+    return icon;
   }
 }

@@ -60,6 +60,7 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
@@ -243,9 +244,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
-            moduleModelIndex
-          }, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(
+              new int[] {moduleModelIndex}, moduleModelIndex);
         }
       }
     } finally {
@@ -362,8 +362,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
-      Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused")
+  E sourceWidget, Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
@@ -483,8 +483,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL() {
-    return controllerDescriptor.getIconImageURL();
+  public Icon getIcon() {
+    return controllerDescriptor.getIcon();
   }
 
   /**
@@ -919,7 +919,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     started = peerController.start(initialLocale, theClientTimeZone);
     return started;
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -1089,8 +1089,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
           workspaceSelectionAction.setDescription(workspaceViewDescriptor
               .getDescription());
-          workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
-              .getIconImageURL());
+          workspaceSelectionAction.setIcon(workspaceViewDescriptor.getIcon());
           workspaceSelectionActions.add(workspaceSelectionAction);
         } finally {
           restoreLastSecurityContextSnapshot();
@@ -1508,9 +1507,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {
-            childCollectionConnector, new Integer(moduleModelIndex)
-        };
+        result = new Object[] {childCollectionConnector,
+            new Integer(moduleModelIndex)};
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -1670,9 +1668,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {
-        getName()
-      });
+      clientPreferencesStore.setStorePath(new String[] {getName()});
     }
     return clientPreferencesStore;
   }
@@ -1851,8 +1847,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     LOG.error("An unexpected error occurred for user {} on session {}.",
-        new Object[] {
-            userId, sessionId, ex
-        });
+        new Object[] {userId, sessionId, ex});
   }
 }
