@@ -3,7 +3,7 @@
 - The API has been changed to include the Icon class that is a wrapper around an iconImageUrl and a dimension  properties.
 This was necessary to fulfill evolution #628. Setters for dependency injection remain unchanged but the getIconImageUrl() getters
 have been removed in favor of a getIcon() getter. The view factory will respect as much as possible the overriden dimension
-set using setIconDim(int).
+set using setIconWidth(int) and setIconHeight(int).
 
 - The onLoad() lifecycle interceptor was incorectly triggered during entity technical cloning. From now on,
   only the onClone(IEntity sourceEntity) method is called.

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.util.gui;
 
+
 /**
  * Icon representation.
  * 
@@ -90,5 +91,44 @@ public class Icon {
    */
   public void setDimension(Dimension dimension) {
     this.dimension = dimension;
+  }
+
+  /**
+   * Sets the width.
+   * 
+   * @param width
+   *          the width to set.
+   */
+  public void setWidth(int width) {
+    if (dimension == null) {
+      dimension = new Dimension();
+    }
+    dimension.setWidth(width);
+  }
+
+  /**
+   * Sets the height.
+   * 
+   * @param height
+   *          the height to set.
+   */
+  public void setHeight(int height) {
+    if (dimension == null) {
+      dimension = new Dimension();
+    }
+    dimension.setHeight(height);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Icon clone() {
+    try {
+      return (Icon) super.clone();
+    } catch (CloneNotSupportedException ex) {
+      // Cannot happen.
+      return null;
+    }
   }
 }

@@ -29,7 +29,6 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
-import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -522,16 +521,29 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the icon preferred dimension of this descriptor.
+   * Sets the icon preferred width.
    * 
-   * @param iconPreferredDim
-   *          the iconPreferredDim to set.
+   * @param iconPreferredWidth
+   *          the iconPreferredWidth to set.
    */
-  public void setIconPreferredDim(int iconPreferredDim) {
+  public void setIconPreferredWidth(int iconPreferredWidth) {
     if (icon == null) {
       icon = new Icon();
     }
-    icon.setDimension(new Dimension(iconPreferredDim, iconPreferredDim));
+    icon.setWidth(iconPreferredWidth);
+  }
+
+  /**
+   * Sets the icon preferred hidth.
+   * 
+   * @param iconPreferredHeight
+   *          the iconPreferredHeight to set.
+   */
+  public void setIconPreferredHeight(int iconPreferredHeight) {
+    if (icon == null) {
+      icon = new Icon();
+    }
+    icon.setHeight(iconPreferredHeight);
   }
 
   /**
