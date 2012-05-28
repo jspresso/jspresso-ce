@@ -38,7 +38,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
   @Override
   public DefaultIconDescriptor clone() {
     DefaultIconDescriptor clone = (DefaultIconDescriptor) super.clone();
-    if (clone != null) {
+    if (icon != null) {
       clone.icon = icon.clone();
     }
     return clone;
