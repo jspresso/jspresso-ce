@@ -124,5 +124,18 @@ public class Dimension implements Serializable {
     return new StringBuilder().append(getClass().getName()).append(" : width=")
         .append(width).append(", height=").append(height).toString();
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Dimension clone() {
+    try {
+      return (Dimension) super.clone();
+    } catch (CloneNotSupportedException ex) {
+      // Cannot happen.
+      return null;
+    }
+  }
 
 }

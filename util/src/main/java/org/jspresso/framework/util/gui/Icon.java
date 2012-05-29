@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.gui;
 
-
 /**
  * Icon representation.
  * 
@@ -125,7 +124,11 @@ public class Icon {
   @Override
   public Icon clone() {
     try {
-      return (Icon) super.clone();
+      Icon clone = (Icon) super.clone();
+      if (dimension != null) {
+        clone.dimension = dimension.clone();
+      }
+      return clone;
     } catch (CloneNotSupportedException ex) {
       // Cannot happen.
       return null;
