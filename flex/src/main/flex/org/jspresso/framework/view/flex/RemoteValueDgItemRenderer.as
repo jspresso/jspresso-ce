@@ -185,7 +185,7 @@ package org.jspresso.framework.view.flex {
       if(_action != null) {
         addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
           //label.selectable = true;
-          label.addEventListener("link", function(evt:TextEvent):void {
+          label.addEventListener(flash.events.TextEvent.LINK, function(evt:TextEvent):void {
             // To ensure that the row is selected before the action gets executed.
             callLater(_actionHandler.execute, [_action]);
           });

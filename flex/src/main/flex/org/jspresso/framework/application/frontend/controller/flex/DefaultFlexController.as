@@ -26,6 +26,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.net.URLRequest;
   import flash.net.navigateToURL;
   import flash.net.registerClassAlias;
+  import flash.utils.getTimer;
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
@@ -167,6 +168,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _remoteController:RemoteObject;
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
+    private var _lastFiredActions:Object;
     private var _changeNotificationsEnabled:Boolean;
     private var _commandsQueue:IList;
     private var _workspaceAccordion:CollapsibleAccordion;
@@ -179,11 +181,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _initialLocaleChain:Array;
     private var _fakeDialog:Panel;
     private var _translations:Object;
-    
+
     private var _postponedNotificationBuffer:Object;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
+      _lastFiredActions = new Object();
       _viewFactory = createViewFactory();
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
@@ -276,16 +279,21 @@ package org.jspresso.framework.application.frontend.controller.flex {
     public function execute(action:RAction, actionEvent:RActionEvent = null):void {
       //trace(">>> Execute <<< " + action.name + " param = " + param);
       if(action && action.enabled) {
-        var command:RemoteActionCommand = new RemoteActionCommand();
-        command.targetPeerGuid = action.guid;
-        command.permId = action.permId;
-        if(actionEvent == null) {
-          actionEvent = new RActionEvent();
+        var ts:Number = getTimer();
+        var lastTs:Number = _lastFiredActions[action.guid];
+        if(isNaN(lastTs) || (ts - lastTs) > 500) {
+          _lastFiredActions[action.guid] = ts;
+          var command:RemoteActionCommand = new RemoteActionCommand();
+          command.targetPeerGuid = action.guid;
+          command.permId = action.permId;
+          if(actionEvent == null) {
+            actionEvent = new RActionEvent();
+          }
+          command.actionEvent = actionEvent;
+          actionEvent.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
+          actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
+          registerCommand(command);
         }
-        command.actionEvent = actionEvent;
-        actionEvent.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
-        actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
-        registerCommand(command);
       }
     }
     
@@ -805,6 +813,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as IFlexDisplayObject);
       }
       _remotePeerRegistry = new BasicRemotePeerRegistry();
+      _lastFiredActions = new Object();
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();

@@ -2366,7 +2366,7 @@ package org.jspresso.framework.view.flex {
           }
         };
         label.selectable = true;
-        label.addEventListener("link", function(evt:TextEvent):void {
+        label.addEventListener(flash.events.TextEvent.LINK, function(evt:TextEvent):void {
           getActionHandler().execute((remoteLabel as RLink).action);
         });
         BindingUtils.bindSetter(updateLabel, (remoteLabel as RLink).action, "enabled", true);
