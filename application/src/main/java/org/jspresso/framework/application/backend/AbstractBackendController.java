@@ -192,7 +192,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public <E extends IEntity> E cloneInUnitOfWork(E entity) {
+  public final <E extends IEntity> E cloneInUnitOfWork(E entity) {
     return cloneInUnitOfWork(entity, false);
   }
 
@@ -200,7 +200,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public <E extends IEntity> E cloneInUnitOfWork(E entity,
+  public final <E extends IEntity> E cloneInUnitOfWork(E entity,
       boolean allowOuterScopeUpdate) {
     return cloneInUnitOfWork(Collections.singletonList(entity),
         allowOuterScopeUpdate).get(0);
@@ -210,7 +210,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
+  public final <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
     return cloneInUnitOfWork(entities, false);
   }
 

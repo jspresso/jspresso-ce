@@ -178,8 +178,8 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
-    final List<E> uowEntities = super.cloneInUnitOfWork(entities);
+  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities, boolean allowOuterScopeUpdate) {
+    final List<E> uowEntities = super.cloneInUnitOfWork(entities, allowOuterScopeUpdate);
     Set<IEntity> alreadyLocked = new HashSet<IEntity>();
     for (IEntity mergedEntity : uowEntities) {
       lockInHibernateInDepth(mergedEntity, getHibernateSession(), alreadyLocked);
