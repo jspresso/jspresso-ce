@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.action;
 
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.action.AbstractAction;
@@ -46,12 +47,20 @@ public class BackendAction extends AbstractAction {
                                                            .getLogger(BackendAction.class);
 
   private static final String WARN_BAD_ACCESS_DISABLED = "WARN_BAD_ACCESS_DISABLED";
+
   /**
    * <code>SELECTED_MODEL</code> is a static context key to inject into the test
    * context in order to bypass the query to the view to retrieve the selected
    * model.
    */
   public static final String  SELECTED_MODEL           = "SELECTED_MODEL";
+
+  /**
+   * <code>SELECTED_MODELS</code> is a static context key to inject into the test
+   * context in order to bypass the query to the view to retrieve the selected
+   * models.
+   */
+  public static final String  SELECTED_MODELS           = "SELECTED_MODELS";
 
   private boolean             badFrontendAccessChecked;
 
@@ -145,6 +154,31 @@ public class BackendAction extends AbstractAction {
         context.put(WARN_BAD_ACCESS_DISABLED, null);
       }
       return super.getSelectedModel(viewPath, context);
+    } finally {
+      if (!wbad) {
+        context.remove(WARN_BAD_ACCESS_DISABLED);
+      }
+    }
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected List<?> getSelectedModels(int[] viewPath,
+      Map<String, Object> context) {
+    boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
+    try {
+      if (viewPath == null) {
+        // we don't warn about anything if we only query the selected model
+        // since it's supported now by injecting a SELECTED_MODELS variable in
+        // the context during testing.
+        if (context.containsKey(SELECTED_MODELS)) {
+          return (List<?>) context.get(SELECTED_MODELS);
+        }
+        context.put(WARN_BAD_ACCESS_DISABLED, null);
+      }
+      return super.getSelectedModels(viewPath, context);
     } finally {
       if (!wbad) {
         context.remove(WARN_BAD_ACCESS_DISABLED);
