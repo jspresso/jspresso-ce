@@ -45,6 +45,16 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  */
 public class RemoveCollectionFromMasterAction extends
     AbstractHibernateCollectionAction {
+  
+  
+  /**
+   * Constructs a new <code>RemoveCollectionFromMasterAction</code> instance.
+   * 
+   */
+  public RemoveCollectionFromMasterAction() {
+    // Disable bad frontend access checks.
+    setBadFrontendAccessChecked(false);
+  }
 
   /**
    * Retrieves the master and its managed collection from the model connector
@@ -106,15 +116,5 @@ public class RemoveCollectionFromMasterAction extends
       }
     }
     return super.execute(actionHandler, context);
-  }
-  
-  /**
-   * Disable bad frontend access checks.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean checkBadFrontendAccess() {
-    return false;
   }
 }

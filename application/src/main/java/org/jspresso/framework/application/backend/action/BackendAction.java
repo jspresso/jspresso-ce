@@ -42,8 +42,25 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class BackendAction extends AbstractAction {
 
-  private static final Logger LOG = LoggerFactory
-                                      .getLogger(BackendAction.class);
+  private static final Logger LOG                      = LoggerFactory
+                                                           .getLogger(BackendAction.class);
+
+  private static final String WARN_BAD_ACCESS_DISABLED = "WARN_BAD_ACCESS_DISABLED";
+  /**
+   * <code>SELECTED_MODEL</code> is a static context key to inject into the test
+   * context in order to bypass the query to the view to retrieve the selected
+   * model.
+   */
+  public static final String  SELECTED_MODEL           = "SELECTED_MODEL";
+
+  private boolean             badFrontendAccessChecked;
+
+  /**
+   * Constructs a new <code>BackendAction</code> instance.
+   */
+  public BackendAction() {
+    setBadFrontendAccessChecked(true);
+  }
 
   /**
    * {@inheritDoc}
@@ -116,8 +133,23 @@ public class BackendAction extends AbstractAction {
    */
   @Override
   protected Object getSelectedModel(int[] viewPath, Map<String, Object> context) {
-    warnBadFrontendAccess();
-    return super.getSelectedModel(viewPath, context);
+    boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
+    try {
+      if (viewPath == null) {
+        // we don't warn about anything if we only query the selected model
+        // since it's supported now by injecting a SELECTED_MODEL variable in
+        // the context during testing.
+        if (context.containsKey(SELECTED_MODEL)) {
+          return context.get(SELECTED_MODEL);
+        }
+        context.put(WARN_BAD_ACCESS_DISABLED, null);
+      }
+      return super.getSelectedModel(viewPath, context);
+    } finally {
+      if (!wbad) {
+        context.remove(WARN_BAD_ACCESS_DISABLED);
+      }
+    }
   }
 
   /**
@@ -125,7 +157,7 @@ public class BackendAction extends AbstractAction {
    */
   @Override
   protected IView<?> getView(int[] viewPath, Map<String, Object> context) {
-    warnBadFrontendAccess();
+    warnBadFrontendAccess(context);
     return super.getView(viewPath, context);
   }
 
@@ -135,7 +167,7 @@ public class BackendAction extends AbstractAction {
   @Override
   protected IValueConnector getViewConnector(int[] viewPath,
       Map<String, Object> context) {
-    warnBadFrontendAccess();
+    warnBadFrontendAccess(context);
     return super.getViewConnector(viewPath, context);
   }
 
@@ -144,15 +176,26 @@ public class BackendAction extends AbstractAction {
    * sometimes necessary to avoid over-complicated refactoring when the access
    * is accepted by the dev team.
    * 
-   * @return <code>true</code> by default, i.e. bad frontend access detection
-   *         is enabled.
+   * @return <code>true</code> by default, i.e. bad frontend access detection is
+   *         enabled.
    */
-  protected boolean checkBadFrontendAccess() {
-    return true;
+  protected boolean isBadFrontendAccessChecked() {
+    return badFrontendAccessChecked;
   }
 
-  private void warnBadFrontendAccess() {
-    if (checkBadFrontendAccess()) {
+  /**
+   * Sets the badFrontendAccessChecked.
+   * 
+   * @param badFrontendAccessChecked
+   *          the badFrontendAccessChecked to set.
+   */
+  public void setBadFrontendAccessChecked(boolean badFrontendAccessChecked) {
+    this.badFrontendAccessChecked = badFrontendAccessChecked;
+  }
+
+  private void warnBadFrontendAccess(Map<String, Object> context) {
+    if (isBadFrontendAccessChecked()
+        && !context.containsKey(WARN_BAD_ACCESS_DISABLED)) {
       LOG.warn(
           "Access to frontend context detected from a backend action which is strongly discouraged. "
               + "{} should use either the action parameter or a specific variable.",

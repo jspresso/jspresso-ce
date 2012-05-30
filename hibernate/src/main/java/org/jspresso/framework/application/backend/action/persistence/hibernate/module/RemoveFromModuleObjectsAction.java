@@ -47,6 +47,16 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  */
 public class RemoveFromModuleObjectsAction extends
     AbstractHibernateCollectionAction {
+  
+  
+  /**
+   * Constructs a new <code>RemoveFromModuleObjectsAction</code> instance.
+   * 
+   */
+  public RemoveFromModuleObjectsAction() {
+    // Disable bad frontend access checks.
+    setBadFrontendAccessChecked(false);
+  }
 
   private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
@@ -161,15 +171,5 @@ public class RemoveFromModuleObjectsAction extends
     cleanRelationshipsOnDeletion(entity, context, false);
     // Now handled in cleanRelationshipsOnDeletion when dryRun=false.
     // getController(context).registerForDeletion(entity);
-  }
-  
-  /**
-   * Disable bad frontend access checks.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean checkBadFrontendAccess() {
-    return false;
   }
 }

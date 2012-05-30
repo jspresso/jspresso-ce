@@ -48,6 +48,16 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  */
 public abstract class AbstractAddCollectionToMasterAction extends
     AbstractCollectionAction {
+  
+  
+  /**
+   * Constructs a new <code>AbstractAddCollectionToMasterAction</code> instance.
+   * 
+   */
+  public AbstractAddCollectionToMasterAction() {
+    // Disable bad frontend access checks.
+    setBadFrontendAccessChecked(false);
+  }
 
   /**
    * Retrieves the master and its managed collection from the model connector
@@ -130,14 +140,4 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * @return the entity to add to the collection.
    */
   protected abstract List<?> getAddedComponents(Map<String, Object> context);
-
-  /**
-   * Disable bad frontend access checks.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean checkBadFrontendAccess() {
-    return false;
-  }
 }
