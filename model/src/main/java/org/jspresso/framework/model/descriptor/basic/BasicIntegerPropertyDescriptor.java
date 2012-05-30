@@ -114,4 +114,20 @@ public class BasicIntegerPropertyDescriptor extends
     return max;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isDefault(BigDecimal boundValue) {
+    if (boundValue != null) {
+      if (isUsingLong()) {
+        return boundValue.longValue() == Long.MAX_VALUE
+            || boundValue.longValue() == Long.MIN_VALUE;
+      }
+      return boundValue.intValue() == Integer.MAX_VALUE
+          || boundValue.intValue() == Integer.MIN_VALUE;
+    }
+    return super.isDefault(boundValue);
+  }
+
 }

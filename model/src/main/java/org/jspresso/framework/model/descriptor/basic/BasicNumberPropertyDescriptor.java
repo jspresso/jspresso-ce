@@ -95,11 +95,11 @@ public abstract class BasicNumberPropertyDescriptor extends
           public String getI18nMessage(
               ITranslationProvider translationProvider, Locale locale) {
             StringBuffer boundsSpec = new StringBuffer();
-            if (getMinValue() != null) {
+            if (getMinValue() != null && !isDefault(getMinValue())) {
               boundsSpec.append(getMinValue()).append(" <= ");
             }
             boundsSpec.append("x");
-            if (getMaxValue() != null) {
+            if (getMaxValue() != null && !isDefault(getMaxValue())) {
               boundsSpec.append(" <= ").append(getMaxValue());
             }
             String messageKey = null;
@@ -109,15 +109,26 @@ public abstract class BasicNumberPropertyDescriptor extends
             } else {
               messageKey = "integrity.property.toobig";
             }
-            return translationProvider.getTranslation(messageKey,
-                new Object[] {getI18nName(translationProvider, locale),
-                    boundsSpec, component}, locale);
+            return translationProvider.getTranslation(messageKey, new Object[] {
+                getI18nName(translationProvider, locale), boundsSpec, component
+            }, locale);
           }
 
         };
         throw ie;
       }
     }
+  }
+
+  /**
+   * is default value a default one.
+   * 
+   * @param boundValue
+   *          the boundValue to test.
+   * @return true is the boundValue us a default one.
+   */
+  protected boolean isDefault(BigDecimal boundValue) {
+    return false;
   }
 
   /**

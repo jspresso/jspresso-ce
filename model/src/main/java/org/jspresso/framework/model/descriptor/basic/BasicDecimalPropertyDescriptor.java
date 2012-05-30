@@ -129,4 +129,19 @@ public class BasicDecimalPropertyDescriptor extends
     }
     return max;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isDefault(BigDecimal boundValue) {
+    if (boundValue != null) {
+      if (!isUsingBigDecimal()) {
+        return boundValue.doubleValue() == Double.MAX_VALUE
+            || boundValue.doubleValue() == -Double.MAX_VALUE;
+      }
+    }
+    return super.isDefault(boundValue);
+  }
+
 }
