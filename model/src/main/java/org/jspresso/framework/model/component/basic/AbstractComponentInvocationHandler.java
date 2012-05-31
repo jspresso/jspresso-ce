@@ -79,8 +79,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  private static final Logger LOG              = LoggerFactory
-                                                   .getLogger(AbstractComponentInvocationHandler.class);
+  private static final Logger       LOG              = LoggerFactory
+                                                         .getLogger(AbstractComponentInvocationHandler.class);
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
@@ -381,10 +381,15 @@ public abstract class AbstractComponentInvocationHandler implements
    * An empty hook that gets called whenever an entity is detached from a parent
    * one.
    * 
+   * @param parent
+   *          the parent entity.
    * @param child
    *          the child entity.
+   * @param propertyDescriptor
+   *          the property descriptor this entity was detached from.
    */
-  protected void entityDetached(IEntity child) {
+  protected void entityDetached(IEntity parent, IEntity child,
+      IRelationshipEndPropertyDescriptor propertyDescriptor) {
     // defaults to no-op.
   }
 
@@ -1182,7 +1187,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 value);
           }
           if (proxy instanceof IEntity && value instanceof IEntity) {
-            entityDetached((IEntity) value);
+            entityDetached((IEntity) proxy, (IEntity) value, propertyDescriptor);
           }
         }
       }
@@ -1286,8 +1291,9 @@ public abstract class AbstractComponentInvocationHandler implements
             // It is bidirectionnal, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
               // It's a one-to-one relationship
-              if (oldProperty instanceof IEntity) {
-                entityDetached((IEntity) oldProperty);
+              if (proxy instanceof IEntity && oldProperty instanceof IEntity) {
+                entityDetached((IEntity) proxy, (IEntity) oldProperty,
+                    ((IRelationshipEndPropertyDescriptor) propertyDescriptor));
               }
               IAccessor reversePropertyAccessor = accessorFactory
                   .createPropertyAccessor(reversePropertyDescriptor.getName(),

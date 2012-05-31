@@ -27,6 +27,7 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.component.ControllerAwareComponentInvocationHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSessionAware;
+import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtension;
@@ -37,6 +38,7 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -121,9 +123,20 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void entityDetached(IEntity child) {
+  protected void entityDetached(IEntity parent, IEntity child,
+      IRelationshipEndPropertyDescriptor propertyDescriptor) {
     if (detachedEntities == null) {
       detachedEntities = new LinkedHashSet<IEntity>();
+    }
+    if (propertyDescriptor.isComposition()) {
+      try {
+        getBackendController().cleanRelationshipsOnDeletion(child, false);
+      } catch (Exception ex) {
+        throw new ComponentException(ex,
+            "An error occured when detaching the entity [" + child
+                + "] from its parent [" + parent
+                + "]. The updated property is " + propertyDescriptor.getName());
+      }
     }
     detachedEntities.add(child);
   }
