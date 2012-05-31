@@ -23,7 +23,7 @@
   <!-- Jspresso all deployments section -->
   <servlet>
     <servlet-name>ResourceProviderServlet</servlet-name>
-    <servlet-class>org.jspresso.framework.util.resources.server.ResourceProviderServlet</servlet-class>
+    <servlet-class>org.jspresso.framework.application.backend.resources.server.ControllerAwareResourceProviderServlet</servlet-class>
     <init-param>
       <description>The regular expression used to allow proxied download URLs.</description>
       <param-name>allowedLocalUrlRegex</param-name>

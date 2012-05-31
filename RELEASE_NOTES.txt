@@ -1,5 +1,13 @@
 3.5.13
 ======
+- A subclass of ResourceProviderServlet has been created in order to take care of resources cleaning after
+  the download of an active resource in order to avoid JDBC connection leaks. The original ResourceProviderServlet
+  has been made abstract to force the migration. Please replace in your existing web.xml :
+    org.jspresso.framework.util.resources.server.ResourceProviderServlet
+  by
+    org.jspresso.framework.application.backend.resources.server.ControllerAwareResourceProviderServlet
+  
+
 - The entities removed from a composition property are automatically registered for deletion.
   See http://mantis.jspresso.org/view.php?id=630
 
