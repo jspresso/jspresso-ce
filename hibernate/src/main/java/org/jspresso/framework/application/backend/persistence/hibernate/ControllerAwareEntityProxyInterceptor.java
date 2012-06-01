@@ -26,6 +26,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.map.AbstractReferenceMap;
+import org.apache.commons.collections.map.ReferenceMap;
 import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
@@ -51,10 +53,22 @@ import org.slf4j.LoggerFactory;
 public class ControllerAwareEntityProxyInterceptor extends
     EntityProxyInterceptor {
 
-  private static final long   serialVersionUID = -6834992000307471098L;
+  private static final long                         serialVersionUID = -6834992000307471098L;
 
-  private static final Logger LOG              = LoggerFactory
-                                                   .getLogger(ControllerAwareEntityProxyInterceptor.class);
+  private static final Logger                       LOG              = LoggerFactory
+                                                                         .getLogger(ControllerAwareEntityProxyInterceptor.class);
+
+  private Map<Transaction, Set<IBackendController>> completedTransactions;
+
+  /**
+   * Constructs a new <code>ControllerAwareEntityProxyInterceptor</code>
+   * instance.
+   */
+  @SuppressWarnings("unchecked")
+  public ControllerAwareEntityProxyInterceptor() {
+    completedTransactions = new ReferenceMap(AbstractReferenceMap.WEAK,
+        AbstractReferenceMap.HARD, true);
+  }
 
   // Not usefull anymore since the new transaction template takes care of that
   // in every situation including JTA, when this interceptor is not called.
@@ -76,12 +90,30 @@ public class ControllerAwareEntityProxyInterceptor extends
    */
   @Override
   public void afterTransactionCompletion(Transaction tx) {
-    if (tx.wasCommitted()) {
-      getBackendController().commitUnitOfWork();
-    } else {
-      getBackendController().rollbackUnitOfWork();
+    IBackendController backendController = getBackendController();
+    if (registerCompletion(tx, backendController)) {
+      if (tx.wasCommitted()) {
+        backendController.commitUnitOfWork();
+      } else {
+        backendController.rollbackUnitOfWork();
+      }
     }
     super.afterTransactionCompletion(tx);
+  }
+  
+  private synchronized boolean registerCompletion(Transaction tx, IBackendController backendController) {
+    Set<IBackendController> completedBackendControllers = completedTransactions
+        .get(tx);
+    if (completedBackendControllers == null
+        || !completedBackendControllers.contains(backendController)) {
+      if (completedBackendControllers == null) {
+        completedBackendControllers = new HashSet<IBackendController>();
+        completedTransactions.put(tx, completedBackendControllers);
+      }
+      completedBackendControllers.add(backendController);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -188,8 +220,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void postFlush(@SuppressWarnings("rawtypes")
-  Iterator entities) {
+  public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
     while (entities.hasNext()) {
       Object entity = entities.next();
       if (entity instanceof IEntity) {
@@ -209,8 +240,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preFlush(@SuppressWarnings("rawtypes")
-  Iterator entities) {
+  public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
 
     if (!getBackendController().isUnitOfWorkActive() && entities.hasNext()) {
       // throw new BackendException(
