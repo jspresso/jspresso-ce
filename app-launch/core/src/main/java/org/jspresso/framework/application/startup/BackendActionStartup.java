@@ -101,7 +101,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
       super.start();
       executeAction();
     } finally {
-      IBackendController bc = BackendControllerHolder.getCurrentBackendController();
+      IBackendController bc = getBackendController();
       if (bc != null) {
         bc.cleanupRequestResources();
       }
