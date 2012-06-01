@@ -23,6 +23,8 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.BackendAction;
 
 /**
@@ -95,8 +97,15 @@ public class BackendActionStartup extends AbstractBackendStartup {
    */
   @Override
   public void start() {
-    super.start();
-    executeAction();
+    try {
+      super.start();
+      executeAction();
+    } finally {
+      IBackendController bc = BackendControllerHolder.getCurrentBackendController();
+      if (bc != null) {
+        bc.cleanupRequestResources();
+      }
+    }
   }
 
   /**
@@ -114,8 +123,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
    * @return the action execution status.
    */
   protected boolean executeAction() {
-    return executeAction(getAction(), getActionContext(),
-        createSubject(getUserName()), getStartupLocale());
+    return executeAction(getAction(), getActionContext(), createSubject(getUserName()), getStartupLocale());
   }
 
   /**
