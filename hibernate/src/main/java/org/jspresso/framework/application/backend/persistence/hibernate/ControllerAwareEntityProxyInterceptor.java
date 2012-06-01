@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,11 +27,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.map.AbstractReferenceMap;
-import org.apache.commons.collections.map.ReferenceMap;
 import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
+import org.hibernate.transaction.JTATransaction;
 import org.hibernate.type.Type;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -57,18 +57,6 @@ public class ControllerAwareEntityProxyInterceptor extends
 
   private static final Logger                       LOG              = LoggerFactory
                                                                          .getLogger(ControllerAwareEntityProxyInterceptor.class);
-
-  private Map<Transaction, Set<IBackendController>> completedTransactions;
-
-  /**
-   * Constructs a new <code>ControllerAwareEntityProxyInterceptor</code>
-   * instance.
-   */
-  @SuppressWarnings("unchecked")
-  public ControllerAwareEntityProxyInterceptor() {
-    completedTransactions = new ReferenceMap(AbstractReferenceMap.WEAK,
-        AbstractReferenceMap.HARD, true);
-  }
 
   // Not usefull anymore since the new transaction template takes care of that
   // in every situation including JTA, when this interceptor is not called.
@@ -102,18 +90,40 @@ public class ControllerAwareEntityProxyInterceptor extends
   }
   
   private synchronized boolean registerCompletion(Transaction tx, IBackendController backendController) {
-    Set<IBackendController> completedBackendControllers = completedTransactions
-        .get(tx);
-    if (completedBackendControllers == null
-        || !completedBackendControllers.contains(backendController)) {
-      if (completedBackendControllers == null) {
-        completedBackendControllers = new HashSet<IBackendController>();
-        completedTransactions.put(tx, completedBackendControllers);
+    if (tx instanceof JTATransaction) {
+      // This is a hack to check that we are not committing a wrongly enlisted
+      // noTxSession.
+      Object transactionContext = null;
+      Field[] fields = JTATransaction.class.getDeclaredFields();
+      for (int i = 0; i < fields.length && transactionContext == null; i++) {
+        if ("transactionContext".equals(fields[i].getName())) {
+          fields[i].setAccessible(true);
+          try {
+            transactionContext = fields[i].get(tx);
+          } catch (Exception ex) {
+            // Should never happen, but in case, let the userTransaction null.
+          }
+        }
       }
-      completedBackendControllers.add(backendController);
-      return true;
+      Object noTxSession = null;
+      if (backendController instanceof HibernateBackendController) {
+        fields = HibernateBackendController.class.getDeclaredFields();
+        for (int i = 0; i < fields.length && noTxSession == null; i++) {
+          if ("noTxSession".equals(fields[i].getName())) {
+            fields[i].setAccessible(true);
+            try {
+              noTxSession = fields[i].get(backendController);
+            } catch (Exception ex) {
+              // Should never happen, but in case, let the noTxSession null.
+            }
+          }
+        }
+      }
+      if (noTxSession != null && noTxSession == transactionContext) {
+        return false;
+      }
     }
-    return false;
+    return true;
   }
 
   /**
