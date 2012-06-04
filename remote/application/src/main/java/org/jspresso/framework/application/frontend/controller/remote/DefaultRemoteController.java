@@ -101,6 +101,8 @@ import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -116,11 +118,11 @@ import org.springframework.dao.DataIntegrityViolationException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultRemoteController extends
-    AbstractFrontendController<RComponent, RIcon, RAction> implements
+public class DefaultRemoteController extends AbstractFrontendController<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, IRemotePeerRegistry, IRemotePeerRegistryListener {
 
-  // private int commandLowPriorityOffset;
+  private static final Logger    LOG = LoggerFactory.getLogger(DefaultRemoteController.class);
+
   private List<RemoteCommand>    commandQueue;
   private List<String>           removedPeersGuids;
   private boolean                commandRegistrationEnabled;
@@ -158,11 +160,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<RAction> actions, String title,
-      @SuppressWarnings("unused")
-      RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+  public void displayFlashObject(String swfUrl, Map<String, String> flashContext, List<RAction> actions, String title,
+      @SuppressWarnings("unused") RComponent sourceComponent, Map<String, Object> context, Dimension dimension,
+      boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
@@ -185,10 +185,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, @SuppressWarnings("unused")
-      RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+  public void displayModalDialog(RComponent mainView, List<RAction> actions, String title,
+      @SuppressWarnings("unused") RComponent sourceComponent, Map<String, Object> context, Dimension dimension,
+      boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
@@ -215,8 +214,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String workspaceName,
-      boolean bypassModuleBoundaryActions) {
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
     displayWorkspace(workspaceName, bypassModuleBoundaryActions, true);
   }
 
@@ -224,8 +222,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(RComponent sourceWidget,
-      Map<String, Object> context) {
+  public void disposeModalDialog(RComponent sourceWidget, Map<String, Object> context) {
     super.disposeModalDialog(sourceWidget, context);
     registerCommand(new RemoteCloseDialogCommand());
   }
@@ -250,8 +247,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public synchronized List<RemoteCommand> handleCommands(
-      List<RemoteCommand> commands) {
+  public synchronized List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
     try {
       commandRegistrationEnabled = true;
       commandQueue = new ArrayList<RemoteCommand>();
@@ -263,8 +259,7 @@ public class DefaultRemoteController extends
       }
       if (removedPeersGuids != null && removedPeersGuids.size() > 0) {
         RemoteCleanupCommand cleanupCommand = new RemoteCleanupCommand();
-        cleanupCommand.setRemovedPeerGuids(removedPeersGuids
-            .toArray(new String[removedPeersGuids.size()]));
+        cleanupCommand.setRemovedPeerGuids(removedPeersGuids.toArray(new String[removedPeersGuids.size()]));
         registerCommand(cleanupCommand);
         removedPeersGuids.clear();
       }
@@ -292,17 +287,12 @@ public class DefaultRemoteController extends
     if (ex instanceof SecurityException) {
       messageCommand.setMessage(ex.getMessage());
     } else if (ex instanceof BusinessException) {
-      messageCommand.setMessage(((BusinessException) ex).getI18nMessage(this,
-          getLocale()));
+      messageCommand.setMessage(((BusinessException) ex).getI18nMessage(this, getLocale()));
     } else if (ex instanceof DataIntegrityViolationException) {
-      messageCommand
-          .setMessage(this
-              .getTranslation(
-                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                  getLocale()));
+      messageCommand.setMessage(this.getTranslation(
+          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex), getLocale()));
     } else if (ex instanceof ConcurrencyFailureException) {
-      messageCommand.setMessage(getTranslation("concurrency.error.description",
-          getLocale()));
+      messageCommand.setMessage(getTranslation("concurrency.error.description", getLocale()));
     } else {
       traceUnexpectedException(ex);
       messageCommand.setMessage(ex.getLocalizedMessage());
@@ -323,19 +313,16 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupInfo(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl, String message) {
+  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent, String title, String iconImageUrl,
+      String message) {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
-    messageCommand.setTitleIcon(getIconFactory().getInfoIcon(
-        getIconFactory().getTinyIconSize()));
+    messageCommand.setTitleIcon(getIconFactory().getInfoIcon(getIconFactory().getTinyIconSize()));
     if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl, getIconFactory().getLargeIconSize()));
     } else {
-      messageCommand.setMessageIcon(getIconFactory().getInfoIcon(
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getInfoIcon(getIconFactory().getLargeIconSize()));
     }
     registerCommand(messageCommand);
   }
@@ -344,22 +331,17 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupOkCancel(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction okAction, IAction cancelAction,
-      Map<String, Object> context) {
+  public void popupOkCancel(@SuppressWarnings("unused") RComponent sourceComponent, String title, String iconImageUrl,
+      String message, IAction okAction, IAction cancelAction, Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
 
-    messageCommand.setTitleIcon(getIconFactory().getWarningIcon(
-        getIconFactory().getTinyIconSize()));
+    messageCommand.setTitleIcon(getIconFactory().getWarningIcon(getIconFactory().getTinyIconSize()));
     if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl, getIconFactory().getLargeIconSize()));
     } else {
-      messageCommand.setMessageIcon(getIconFactory().getWarningIcon(
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getWarningIcon(getIconFactory().getLargeIconSize()));
     }
     if (okAction != null) {
       messageCommand.setOkAction(createRAction(okAction, context));
@@ -374,22 +356,17 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNo(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction yesAction, IAction noAction,
-      Map<String, Object> context) {
+  public void popupYesNo(@SuppressWarnings("unused") RComponent sourceComponent, String title, String iconImageUrl,
+      String message, IAction yesAction, IAction noAction, Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
 
-    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
-        getIconFactory().getTinyIconSize()));
+    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(getIconFactory().getTinyIconSize()));
     if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl, getIconFactory().getLargeIconSize()));
     } else {
-      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(getIconFactory().getLargeIconSize()));
     }
     if (yesAction != null) {
       messageCommand.setYesAction(createRAction(yesAction, context));
@@ -404,22 +381,18 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNoCancel(@SuppressWarnings("unused")
-  RComponent sourceComponent, String title, String iconImageUrl,
-      String message, IAction yesAction, IAction noAction,
-      IAction cancelAction, Map<String, Object> context) {
+  public void popupYesNoCancel(@SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction, IAction cancelAction,
+      Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
 
-    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
-        getIconFactory().getTinyIconSize()));
+    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(getIconFactory().getTinyIconSize()));
     if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl, getIconFactory().getLargeIconSize()));
     } else {
-      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
-          getIconFactory().getLargeIconSize()));
+      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(getIconFactory().getLargeIconSize()));
     }
     if (yesAction != null) {
       messageCommand.setYesAction(createRAction(yesAction, context));
@@ -440,10 +413,8 @@ public class DefaultRemoteController extends
   public void register(IRemotePeer remotePeer) {
     remotePeerRegistry.register(remotePeer);
     if (remotePeer instanceof ICompositeValueConnector) {
-      for (String childKey : ((ICompositeValueConnector) remotePeer)
-          .getChildConnectorKeys()) {
-        IValueConnector childConnector = ((ICompositeValueConnector) remotePeer)
-            .getChildConnector(childKey);
+      for (String childKey : ((ICompositeValueConnector) remotePeer).getChildConnectorKeys()) {
+        IValueConnector childConnector = ((ICompositeValueConnector) remotePeer).getChildConnector(childKey);
         register((IRemotePeer) childConnector);
       }
     }
@@ -461,8 +432,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void removeRemotePeerRegistryListener(
-      IRemotePeerRegistryListener listener) {
+  public void removeRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
     remotePeerRegistry.removeRemotePeerRegistryListener(listener);
   }
 
@@ -528,20 +498,17 @@ public class DefaultRemoteController extends
    * @internal
    */
   @Override
-  public void setViewFactory(
-      IViewFactory<RComponent, RIcon, RAction> viewFactory) {
+  public void setViewFactory(IViewFactory<RComponent, RIcon, RAction> viewFactory) {
     if (viewFactory instanceof DefaultRemoteViewFactory) {
       ((DefaultRemoteViewFactory) viewFactory).setRemoteCommandHandler(this);
       ((DefaultRemoteViewFactory) viewFactory).setRemotePeerRegistry(this);
     }
-    IActionFactory<RAction, RComponent> actionFactory = viewFactory
-        .getActionFactory();
+    IActionFactory<RAction, RComponent> actionFactory = viewFactory.getActionFactory();
     if (actionFactory instanceof RemoteActionFactory) {
       ((RemoteActionFactory) actionFactory).setRemoteCommandHandler(this);
       ((RemoteActionFactory) actionFactory).setRemotePeerRegistry(this);
     }
-    IConfigurableConnectorFactory connectorFactory = viewFactory
-        .getConnectorFactory();
+    IConfigurableConnectorFactory connectorFactory = viewFactory.getConnectorFactory();
     if (connectorFactory instanceof RemoteConnectorFactory) {
       ((RemoteConnectorFactory) connectorFactory).setRemoteCommandHandler(this);
       ((RemoteConnectorFactory) connectorFactory).setRemotePeerRegistry(this);
@@ -578,10 +545,8 @@ public class DefaultRemoteController extends
     IRemotePeer remotePeer = getRegistered(guid);
     remotePeerRegistry.unregister(guid);
     if (remotePeer instanceof ICompositeValueConnector) {
-      for (String childKey : ((ICompositeValueConnector) remotePeer)
-          .getChildConnectorKeys()) {
-        unregister(((IRemotePeer) ((ICompositeValueConnector) remotePeer)
-            .getChildConnector(childKey)).getGuid());
+      for (String childKey : ((ICompositeValueConnector) remotePeer).getChildConnectorKeys()) {
+        unregister(((IRemotePeer) ((ICompositeValueConnector) remotePeer).getChildConnector(childKey)).getGuid());
       }
     }
   }
@@ -606,16 +571,13 @@ public class DefaultRemoteController extends
   protected RemoteInitCommand createInitCommand() {
     RemoteInitCommand initCommand = new RemoteInitCommand();
     initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));
-    initCommand
-        .setWorkspaceActions(createRActionList(createWorkspaceActionList()));
+    initCommand.setWorkspaceActions(createRActionList(createWorkspaceActionList()));
     initCommand.setActions(createRActionLists(getActionMap()));
-    initCommand
-        .setSecondaryActions(createRActionLists(getSecondaryActionMap()));
+    initCommand.setSecondaryActions(createRActionLists(getSecondaryActionMap()));
     initCommand.setHelpActions(createRActionLists(getHelpActions()));
-    initCommand
-        .setNavigationActions(createRActionLists(getNavigationActions()));
-    initCommand.setExitAction(getViewFactory().getActionFactory().createAction(
-        getExitAction(), this, null, getLocale()));
+    initCommand.setNavigationActions(createRActionLists(getNavigationActions()));
+    initCommand.setExitAction(getViewFactory().getActionFactory()
+        .createAction(getExitAction(), this, null, getLocale()));
     int w = 0;
     if (getFrameWidth() != null) {
       w = getFrameWidth().intValue();
@@ -657,8 +619,7 @@ public class DefaultRemoteController extends
    * @param notifyRemote
    *          if true, a remote notification will be sent to the remote peer.
    */
-  protected void displayWorkspace(String workspaceName,
-      boolean bypassModuleBoundaryActions, boolean notifyRemote) {
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions, boolean notifyRemote) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
       if (workspaceViews == null) {
@@ -668,18 +629,14 @@ public class DefaultRemoteController extends
       if (!workspaceViews.contains(workspaceName)) {
         workspaceView = new RSplitContainer(workspaceName + "_split");
         workspaceView.setOrientation(EOrientation.HORIZONTAL.toString());
-        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
-            workspaceName).getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<RComponent> workspaceNavigator = createWorkspaceNavigator(
-            workspaceName, workspaceNavigatorViewDescriptor);
+        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
+        IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName, workspaceNavigatorViewDescriptor);
         IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
         workspaceView.setLeftTop(workspaceNavigator.getPeer());
         workspaceView.setRightBottom(moduleAreaView.getPeer());
         workspaceViews.add(workspaceName);
-        getMvcBinder().bind(workspaceNavigator.getConnector(),
-            workspaceConnector);
+        getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
       }
       if (notifyRemote) {
         RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
@@ -700,8 +657,7 @@ public class DefaultRemoteController extends
    */
   protected void handleCommand(RemoteCommand command) {
     if (command instanceof RemoteStartCommand) {
-      String[] keysToTranslate = ((RemoteStartCommand) command)
-          .getKeysToTranslate();
+      String[] keysToTranslate = ((RemoteStartCommand) command).getKeysToTranslate();
       if (keysToTranslate != null) {
         clientKeysToTranslate = keysToTranslate;
       }
@@ -710,13 +666,10 @@ public class DefaultRemoteController extends
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
-        initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(this,
-            getLocale()));
-        initLoginCommand.setMessage(getTranslation(LoginUtils.CRED_MESSAGE,
-            getLocale()));
+        initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(this, getLocale()));
+        initLoginCommand.setMessage(getTranslation(LoginUtils.CRED_MESSAGE, getLocale()));
         initLoginCommand.setOkLabel(getTranslation("ok", getLocale()));
-        initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
-            getIconFactory().getSmallIconSize()));
+        initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(getIconFactory().getSmallIconSize()));
         registerCommand(initLoginCommand);
       } else {
         handleCommand(new RemoteLoginCommand());
@@ -738,20 +691,16 @@ public class DefaultRemoteController extends
         loginFailed();
       }
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
-      displayWorkspace(
-          ((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
+      displayWorkspace(((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
     } else if (command instanceof RemoteTableChangedCommand) {
-      Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command)
-          .getColumnIds().length][2];
+      Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command).getColumnIds().length][2];
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
         columnPrefs[i] = new Object[] {
             ((RemoteTableChangedCommand) command).getColumnIds()[i],
-            ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
+            ((RemoteTableChangedCommand) command).getColumnWidths()[i]
+        };
       }
-      getViewFactory()
-          .storeTablePreferences(
-              ((RemoteTableChangedCommand) command).getTableId(), columnPrefs,
-              this);
+      getViewFactory().storeTablePreferences(((RemoteTableChangedCommand) command).getTableId(), columnPrefs, this);
     } else {
       IRemotePeer targetPeer = null;
       if (command.getPermId() != null) {
@@ -761,24 +710,20 @@ public class DefaultRemoteController extends
         targetPeer = getRegistered(command.getTargetPeerGuid());
       }
       if (targetPeer == null) {
-        throw new CommandException(getTranslation("session.unsynced",
-            getApplicationSession().getLocale()));
+        LOG.warn("No target peer registered for GUID {}", command.getTargetPeerGuid());
+        throw new CommandException(getTranslation("session.unsynced", getApplicationSession().getLocale()));
       }
       if (command instanceof RemoteValueCommand) {
         try {
           if (targetPeer instanceof IFormattedValueConnector) {
-            ((IFormattedValueConnector) targetPeer)
-                .setConnectorValueAsString((String) ((RemoteValueCommand) command)
-                    .getValue());
+            ((IFormattedValueConnector) targetPeer).setConnectorValueAsString((String) ((RemoteValueCommand) command)
+                .getValue());
           } else if (targetPeer instanceof IRemoteStateOwner) {
-            ((IRemoteStateOwner) targetPeer)
-                .setValueFromState(((RemoteValueCommand) command).getValue());
+            ((IRemoteStateOwner) targetPeer).setValueFromState(((RemoteValueCommand) command).getValue());
           } else if (targetPeer instanceof IValueConnector) {
-            ((IValueConnector) targetPeer)
-                .setConnectorValue(((RemoteValueCommand) command).getValue());
+            ((IValueConnector) targetPeer).setConnectorValue(((RemoteValueCommand) command).getValue());
           } else {
-            throw new CommandException("Target peer type cannot be handled : "
-                + targetPeer.getClass().getName());
+            throw new CommandException("Target peer type cannot be handled : " + targetPeer.getClass().getName());
           }
 
           // The following code has been handled at a lower level,
@@ -799,10 +744,8 @@ public class DefaultRemoteController extends
         } catch (ConnectorInputException ex) {
           if (targetPeer instanceof IRemoteStateOwner) {
             ((IRemoteStateOwner) targetPeer).synchRemoteState();
-            RemoteValueState state = ((IRemoteStateOwner) targetPeer)
-                .getState();
-            if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(),
-                state.getValue())) {
+            RemoteValueState state = ((IRemoteStateOwner) targetPeer).getState();
+            if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(), state.getValue())) {
 
               RemoteValueCommand rollbackCommand = new RemoteValueCommand();
               rollbackCommand.setTargetPeerGuid(state.getGuid());
@@ -813,27 +756,22 @@ public class DefaultRemoteController extends
         }
       } else if (command instanceof RemoteSelectionCommand) {
         if (targetPeer instanceof RTabContainer) {
-          ((RTabContainer) targetPeer)
-              .setSelectedIndex(((RemoteSelectionCommand) command)
-                  .getLeadingIndex());
+          ((RTabContainer) targetPeer).setSelectedIndex(((RemoteSelectionCommand) command).getLeadingIndex());
         } else {
           ISelectable selectable = null;
           if (targetPeer instanceof ICollectionConnectorProvider) {
-            selectable = ((ICollectionConnectorProvider) targetPeer)
-                .getCollectionConnector();
+            selectable = ((ICollectionConnectorProvider) targetPeer).getCollectionConnector();
           } else if (targetPeer instanceof ISelectable) {
             selectable = (ISelectable) targetPeer;
           }
           if (selectable != null) {
-            selectable.setSelectedIndices(
-                ((RemoteSelectionCommand) command).getSelectedIndices(),
+            selectable.setSelectedIndices(((RemoteSelectionCommand) command).getSelectedIndices(),
                 ((RemoteSelectionCommand) command).getLeadingIndex());
           }
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
-        RActionEvent actionEvent = ((RemoteActionCommand) command)
-            .getActionEvent();
+        RActionEvent actionEvent = ((RemoteActionCommand) command).getActionEvent();
         String viewStatePermId = actionEvent.getViewStatePermId();
         if (viewStatePermId != null) {
           IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
@@ -844,22 +782,17 @@ public class DefaultRemoteController extends
         action.actionPerformed(actionEvent, null);
       } else if (command instanceof RemoteSortCommand) {
         RAction sortAction = (RAction) targetPeer;
-        Map<String, String> orderingProperties = ((RemoteSortCommand) command)
-            .getOrderingProperties();
+        Map<String, String> orderingProperties = ((RemoteSortCommand) command).getOrderingProperties();
         Map<String, ESort> typedOrderingProperties = new LinkedHashMap<String, ESort>();
         if (orderingProperties != null) {
-          for (Map.Entry<String, String> orderingProperty : orderingProperties
-              .entrySet()) {
-            typedOrderingProperties.put(orderingProperty.getKey(),
-                ESort.valueOf(orderingProperty.getValue()));
+          for (Map.Entry<String, String> orderingProperty : orderingProperties.entrySet()) {
+            typedOrderingProperties.put(orderingProperty.getKey(), ESort.valueOf(orderingProperty.getValue()));
           }
         }
         Map<String, Object> context = new HashMap<String, Object>();
-        context.put(IQueryComponent.ORDERING_PROPERTIES,
-            typedOrderingProperties);
+        context.put(IQueryComponent.ORDERING_PROPERTIES, typedOrderingProperties);
         String viewStateGuid = null;
-        String viewStatePermId = ((RemoteSortCommand) command)
-            .getViewStatePermId();
+        String viewStatePermId = ((RemoteSortCommand) command).getViewStatePermId();
         if (viewStatePermId != null) {
           IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
           if (viewPeer != null) {
@@ -873,8 +806,7 @@ public class DefaultRemoteController extends
         event.setViewStateGuid(viewStateGuid);
         sortAction.actionPerformed(event, context);
       } else {
-        throw new CommandException("Unsupported command type : "
-            + command.getClass().getSimpleName());
+        throw new CommandException("Unsupported command type : " + command.getClass().getSimpleName());
       }
     }
   }
@@ -884,8 +816,7 @@ public class DefaultRemoteController extends
    */
   protected void loginFailed() {
     RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
-    errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED,
-        getLocale()));
+    errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED, getLocale()));
     registerCommand(errorMessageCommand);
   }
 
@@ -897,36 +828,29 @@ public class DefaultRemoteController extends
   private RemoteMessageCommand createErrorMessageCommand() {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(getTranslation("error", getLocale()));
-    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
-        getIconFactory().getTinyIconSize()));
-    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
-        getIconFactory().getLargeIconSize()));
+    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(getIconFactory().getTinyIconSize()));
+    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     return messageCommand;
   }
 
   @SuppressWarnings("unchecked")
   private RAction createRAction(IAction action, Map<String, Object> context) {
-    return getViewFactory().getActionFactory().createAction(
-        wrapAction(action, context), this,
-        (IView<RComponent>) context.get(ActionContextConstants.VIEW),
-        getLocale());
+    return getViewFactory().getActionFactory().createAction(wrapAction(action, context), this,
+        (IView<RComponent>) context.get(ActionContextConstants.VIEW), getLocale());
   }
 
   private RActionList createRActionList(ActionList actionList) {
     RActionList rActionList = new RActionList(guidGenerator.generateGUID());
     rActionList.setName(actionList.getI18nName(this, getLocale()));
-    rActionList
-        .setDescription(actionList.getI18nDescription(this, getLocale()));
-    rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(),
-        getIconFactory().getTinyIconSize()));
+    rActionList.setDescription(actionList.getI18nDescription(this, getLocale()));
+    rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(), getIconFactory().getTinyIconSize()));
 
     List<RAction> actions = new ArrayList<RAction>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
         try {
           pushToSecurityContext(action);
-          actions.add(getViewFactory().getActionFactory().createAction(action,
-              this, null, getLocale()));
+          actions.add(getViewFactory().getActionFactory().createAction(action, this, null, getLocale()));
         } finally {
           restoreLastSecurityContextSnapshot();
         }
@@ -961,8 +885,7 @@ public class DefaultRemoteController extends
     return actionLists.toArray(new RActionList[0]);
   }
 
-  private IDisplayableAction wrapAction(IAction action,
-      final Map<String, Object> initialContext) {
+  private IDisplayableAction wrapAction(IAction action, final Map<String, Object> initialContext) {
     FrontendAction<RComponent, RIcon, RAction> wrapper;
     if (action instanceof IDisplayableAction) {
       wrapper = new FrontendAction<RComponent, RIcon, RAction>() {
@@ -971,8 +894,7 @@ public class DefaultRemoteController extends
          * {@inheritDoc}
          */
         @Override
-        public boolean execute(IActionHandler actionHandler,
-            Map<String, Object> context) {
+        public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
           // To keep original context
           context.putAll(initialContext);
           return super.execute(actionHandler, context);
@@ -986,8 +908,7 @@ public class DefaultRemoteController extends
          * {@inheritDoc}
          */
         @Override
-        public boolean execute(IActionHandler actionHandler,
-            Map<String, Object> context) {
+        public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
           // To keep original context
           context.putAll(initialContext);
           return super.execute(actionHandler, context);
@@ -1002,8 +923,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void remotePeerAdded(@SuppressWarnings("unused")
-  IRemotePeer peer) {
+  public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
     // No-op
   }
 
@@ -1070,12 +990,10 @@ public class DefaultRemoteController extends
     return startupActionContext;
   }
 
-  private void completeActionContextWithRequestParameters(
-      Map<String, Object> actionContext) {
+  private void completeActionContextWithRequestParameters(Map<String, Object> actionContext) {
     if (HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-      @SuppressWarnings("unchecked")
-      Map<String, Object> requestParams = (Map<String, Object>) session
+      @SuppressWarnings("unchecked") Map<String, Object> requestParams = (Map<String, Object>) session
           .getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
       if (requestParams != null) {
         actionContext.putAll(requestParams);
