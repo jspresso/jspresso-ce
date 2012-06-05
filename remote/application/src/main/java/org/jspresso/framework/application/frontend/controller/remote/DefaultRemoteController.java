@@ -710,7 +710,8 @@ public class DefaultRemoteController extends AbstractFrontendController<RCompone
         targetPeer = getRegistered(command.getTargetPeerGuid());
       }
       if (targetPeer == null) {
-        LOG.warn("No target peer registered for GUID {}", command.getTargetPeerGuid());
+        LOG.warn("No target peer registered for GUID {} in session {}", command.getTargetPeerGuid(),
+            getApplicationSession().getId());
         throw new CommandException(getTranslation("session.unsynced", getApplicationSession().getLocale()));
       }
       if (command instanceof RemoteValueCommand) {
