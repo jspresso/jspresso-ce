@@ -18,13 +18,19 @@
  */
 package org.jspresso.framework.util.gui;
 
+import java.io.Serializable;
+
+import org.jspresso.framework.util.lang.ICloneable;
+
 /**
  * Icon representation.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Icon {
+public class Icon implements Serializable, ICloneable {
+
+  private static final long serialVersionUID = -3867258316686740976L;
 
   private String    iconImageURL;
   private Dimension dimension;

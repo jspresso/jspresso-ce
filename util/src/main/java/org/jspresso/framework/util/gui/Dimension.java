@@ -20,13 +20,15 @@ package org.jspresso.framework.util.gui;
 
 import java.io.Serializable;
 
+import org.jspresso.framework.util.lang.ICloneable;
+
 /**
  * a simple holder for 2D dimension.
  * 
  * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class Dimension implements Serializable {
+public class Dimension implements Serializable, ICloneable {
 
   private static final long serialVersionUID = -2769276185108835884L;
 
