@@ -108,56 +108,45 @@ public class HibernateBackendController extends AbstractBackendController {
       // Whenever the entity has dirty persistent collection, make them
       // clean to workaround a "bug" with hibernate since hibernate cannot
       // re-attach a "dirty" detached collection.
-      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
-          .straightGetProperties().entrySet()) {
+      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity.straightGetProperties().entrySet()) {
         if (registeredPropertyEntry.getValue() instanceof PersistentCollection) {
+          PersistentCollection persistentCollection = (PersistentCollection) registeredPropertyEntry.getValue();
           if (Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
-            ((PersistentCollection) registeredPropertyEntry.getValue())
-                .clearDirty();
+            (persistentCollection).clearDirty();
           }
-          try {
-            // The folowing is to avoid to avoid Hibernate exceptions due to
-            // reassociating a
-            // collection that is already associated with the session.
-            ((PersistentCollection) registeredPropertyEntry.getValue())
-                .setCurrentSession(null);
-          } catch (Exception ex) {
-            // ignored
+          if (persistentCollection instanceof AbstractPersistentCollection) {
+            // The following is to avoid to avoid Hibernate exceptions due to
+            // reassociating a collection that is already associated with the
+            // session.
+            persistentCollection.unsetSession(((AbstractPersistentCollection) persistentCollection).getSession());
           }
         }
       }
     }
   }
 
-  private static String getHibernateRoleName(Class<?> entityContract,
-      String property) {
+  private static String getHibernateRoleName(Class<?> entityContract, String property) {
     // have to find the highest entity class declaring the collection role.
     PropertyDescriptor roleDescriptor;
     try {
-      roleDescriptor = PropertyHelper.getPropertyDescriptor(entityContract,
-          property);
+      roleDescriptor = PropertyHelper.getPropertyDescriptor(entityContract, property);
     } catch (MissingPropertyException ex) {
       return null;
     }
-    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod()
-        .getDeclaringClass();
+    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod().getDeclaringClass();
     Class<?> roleClass;
     if (IEntity.class.isAssignableFrom(propertyDeclaringClass)) {
       roleClass = propertyDeclaringClass;
     } else {
-      roleClass = getHighestEntityClassInRole(entityContract,
-          propertyDeclaringClass);
+      roleClass = getHighestEntityClassInRole(entityContract, propertyDeclaringClass);
     }
     return roleClass.getName() + "." + property;
   }
 
-  private static Class<?> getHighestEntityClassInRole(Class<?> entityContract,
-      Class<?> propertyDeclaringClass) {
+  private static Class<?> getHighestEntityClassInRole(Class<?> entityContract, Class<?> propertyDeclaringClass) {
     for (Class<?> superInterface : entityContract.getInterfaces()) {
-      if (IEntity.class.isAssignableFrom(superInterface)
-          && propertyDeclaringClass.isAssignableFrom(superInterface)) {
-        return getHighestEntityClassInRole(superInterface,
-            propertyDeclaringClass);
+      if (IEntity.class.isAssignableFrom(superInterface) && propertyDeclaringClass.isAssignableFrom(superInterface)) {
+        return getHighestEntityClassInRole(superInterface, propertyDeclaringClass);
       }
     }
     return entityContract;
@@ -248,8 +237,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Deprecated
   public HibernateTemplate getHibernateTemplate() {
-    configureHibernateGlobalFilter(hibernateTemplate
-        .enableFilter(JSPRESSO_SESSION_GLOBALS));
+    configureHibernateGlobalFilter(hibernateTemplate.enableFilter(JSPRESSO_SESSION_GLOBALS));
     return hibernateTemplate;
   }
 
@@ -277,8 +265,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // we are on a transactional session.
       currentSession.setFlushMode(getDefaultTxFlushMode());
     }
-    configureHibernateGlobalFilter(currentSession
-        .enableFilter(JSPRESSO_SESSION_GLOBALS));
+    configureHibernateGlobalFilter(currentSession.enableFilter(JSPRESSO_SESSION_GLOBALS));
     return currentSession;
   }
 
@@ -316,8 +303,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void initializePropertyIfNeeded(final IComponent componentOrEntity,
-      final String propertyName) {
+  public void initializePropertyIfNeeded(final IComponent componentOrEntity, final String propertyName) {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
     if (!Hibernate.isInitialized(propertyValue)) {
       // turn off dirt tracking.
@@ -329,19 +315,15 @@ public class HibernateBackendController extends AbstractBackendController {
         // the Hibernate template that may create a new thread-bound session.
         if (propertyValue instanceof AbstractPersistentCollection) {
           if (((AbstractPersistentCollection) propertyValue).getSession() != null
-              && ((AbstractPersistentCollection) propertyValue).getSession()
-                  .isOpen()) {
+              && ((AbstractPersistentCollection) propertyValue).getSession().isOpen()) {
             try {
               Hibernate.initialize(propertyValue);
               if (propertyValue instanceof Collection<?>) {
-                relinkAfterInitialization((Collection<IEntity>) propertyValue,
-                    componentOrEntity);
+                relinkAfterInitialization((Collection<IEntity>) propertyValue, componentOrEntity);
               }
               return;
             } catch (Exception ex) {
-              LOG.error(
-                  "An internal error occurred when forcing {} collection initialization.",
-                  propertyName);
+              LOG.error("An internal error occurred when forcing {} collection initialization.", propertyName);
               LOG.error("Source exception", ex);
             }
           }
@@ -353,9 +335,7 @@ public class HibernateBackendController extends AbstractBackendController {
               Hibernate.initialize(propertyValue);
               return;
             } catch (Exception ex) {
-              LOG.error(
-                  "An internal error occurred when forcing {} reference initialization.",
-                  propertyName);
+              LOG.error("An internal error occurred when forcing {} reference initialization.", propertyName);
               LOG.error("Source exception", ex);
             }
           }
@@ -364,8 +344,7 @@ public class HibernateBackendController extends AbstractBackendController {
         // If it couldn't succeed, then get the Hibernate template and perform
         // necessary locks and initialization.
         if (currentInitializationSession != null) {
-          performPropertyInitializationUsingSession(componentOrEntity,
-              propertyName, currentInitializationSession);
+          performPropertyInitializationUsingSession(componentOrEntity, propertyName, currentInitializationSession);
         } else {
           Session hibernateSession = getHibernateSession();
           FlushMode oldFlushMode = hibernateSession.getFlushMode();
@@ -374,8 +353,7 @@ public class HibernateBackendController extends AbstractBackendController {
             hibernateSession.setFlushMode(FlushMode.MANUAL);
             try {
               currentInitializationSession = hibernateSession;
-              performPropertyInitializationUsingSession(componentOrEntity,
-                  propertyName, hibernateSession);
+              performPropertyInitializationUsingSession(componentOrEntity, propertyName, hibernateSession);
             } finally {
               currentInitializationSession = null;
             }
@@ -390,8 +368,7 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  private void performPropertyInitializationUsingSession(
-      final IComponent componentOrEntity, final String propertyName,
+  private void performPropertyInitializationUsingSession(final IComponent componentOrEntity, final String propertyName,
       Session hibernateSession) {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
     if (!Hibernate.isInitialized(propertyValue)) {
@@ -408,33 +385,26 @@ public class HibernateBackendController extends AbstractBackendController {
 
       Hibernate.initialize(propertyValue);
       if (propertyValue instanceof Collection<?>) {
-        relinkAfterInitialization((Collection<IEntity>) propertyValue,
-            componentOrEntity);
+        relinkAfterInitialization((Collection<IEntity>) propertyValue, componentOrEntity);
       } else {
-        relinkAfterInitialization(
-            Collections.singleton((IEntity) propertyValue), componentOrEntity);
+        relinkAfterInitialization(Collections.singleton((IEntity) propertyValue), componentOrEntity);
       }
       super.initializePropertyIfNeeded(componentOrEntity, propertyName);
       clearPropertyDirtyState(propertyValue);
     }
   }
 
-  private void relinkAfterInitialization(Collection<IEntity> entities,
-      Object owner) {
+  private void relinkAfterInitialization(Collection<IEntity> entities, Object owner) {
     for (IEntity entity : entities) {
       // Should always be the case but there might be problems with lists
       // containing holes.
       if (entity != null) {
-        for (Map.Entry<String, Object> property : entity
-            .straightGetProperties().entrySet()) {
-          if (property.getValue() instanceof IEntity
-              && owner instanceof IEntity) {
+        for (Map.Entry<String, Object> property : entity.straightGetProperties().entrySet()) {
+          if (property.getValue() instanceof IEntity && owner instanceof IEntity) {
             if (owner != property.getValue() // avoid lazy initialization
-                && ((IEntity) owner).getId().equals(
-                    ((IEntity) property.getValue()).getId())
+                && ((IEntity) owner).getId().equals(((IEntity) property.getValue()).getId())
                 // To avoid bug #548
-                && Hibernate.getClass(owner) == Hibernate.getClass(property
-                    .getValue())) {
+                && Hibernate.getClass(owner) == Hibernate.getClass(property.getValue())) {
               entity.straightSetProperty(property.getKey(), owner);
             }
           }
@@ -452,8 +422,8 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   private boolean hasBeenProcessed(IEntity entity) {
-    return updatedEntities != null && updatedEntities.contains(entity)
-        || deletedEntities != null && deletedEntities.contains(entity);
+    return updatedEntities != null && updatedEntities.contains(entity) || deletedEntities != null
+        && deletedEntities.contains(entity);
   }
 
   /**
@@ -543,8 +513,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return deletedEntities != null && deletedEntities.contains(entity)
-        || super.isEntityRegisteredForDeletion(entity);
+    return deletedEntities != null && deletedEntities.contains(entity) || super.isEntityRegisteredForDeletion(entity);
   }
 
   /**
@@ -573,8 +542,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return updatedEntities != null && updatedEntities.contains(entity)
-        || super.isEntityRegisteredForUpdate(entity);
+    return updatedEntities != null && updatedEntities.contains(entity) || super.isEntityRegisteredForUpdate(entity);
   }
 
   /**
@@ -614,22 +582,18 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected Collection<IComponent> wrapDetachedCollection(IEntity owner,
-      Collection<IComponent> transientCollection,
+  protected Collection<IComponent> wrapDetachedCollection(IEntity owner, Collection<IComponent> transientCollection,
       Collection<IComponent> snapshotCollection, String role) {
     Collection<IComponent> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
-      String collectionRoleName = getHibernateRoleName(
-          getComponentContract(owner), role);
+      String collectionRoleName = getHibernateRoleName(getComponentContract(owner), role);
       if (collectionRoleName == null) {
         // it is not an hibernate managed collection (e.g. "detachedEntities")
-        return super.wrapDetachedCollection(owner, transientCollection,
-            snapshotCollection, role);
+        return super.wrapDetachedCollection(owner, transientCollection, snapshotCollection, role);
       }
       if (owner.isPersistent()) {
         if (transientCollection instanceof Set) {
-          PersistentSet persistentSet = new PersistentSet(null,
-              (Set<?>) transientCollection);
+          PersistentSet persistentSet = new PersistentSet(null, (Set<?>) transientCollection);
           changeCollectionOwner(persistentSet, owner);
           HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
           if (varSnapshotCollection == null) {
@@ -639,12 +603,10 @@ public class HibernateBackendController extends AbstractBackendController {
           for (Object snapshotCollectionElement : varSnapshotCollection) {
             snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
           }
-          persistentSet
-              .setSnapshot(owner.getId(), collectionRoleName, snapshot);
+          persistentSet.setSnapshot(owner.getId(), collectionRoleName, snapshot);
           return persistentSet;
         } else if (transientCollection instanceof List) {
-          PersistentList persistentList = new PersistentList(null,
-              (List<?>) transientCollection);
+          PersistentList persistentList = new PersistentList(null, (List<?>) transientCollection);
           changeCollectionOwner(persistentList, owner);
           ArrayList<Object> snapshot = new ArrayList<Object>();
           if (varSnapshotCollection == null) {
@@ -654,8 +616,7 @@ public class HibernateBackendController extends AbstractBackendController {
           for (Object snapshotCollectionElement : varSnapshotCollection) {
             snapshot.add(snapshotCollectionElement);
           }
-          persistentList.setSnapshot(owner.getId(), collectionRoleName,
-              snapshot);
+          persistentList.setSnapshot(owner.getId(), collectionRoleName, snapshot);
           return persistentList;
         }
       }
@@ -666,8 +627,7 @@ public class HibernateBackendController extends AbstractBackendController {
         ((PersistentCollection) transientCollection).dirty();
       }
     }
-    return super.wrapDetachedCollection(owner, transientCollection,
-        varSnapshotCollection, role);
+    return super.wrapDetachedCollection(owner, transientCollection, varSnapshotCollection, role);
   }
 
   /**
@@ -685,22 +645,18 @@ public class HibernateBackendController extends AbstractBackendController {
       try {
         if (isInitialized(entity)) {
           clearPersistentCollectionDirtyState(entity);
-          resetUninitializedHibernateProxyProperties(entity, hibernateSession,
-              new HashSet<IComponent>());
+          resetUninitializedHibernateProxyProperties(entity, hibernateSession, new HashSet<IComponent>());
         }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
-        IComponent sessionEntity = (IComponent) hibernateSession.get(
-            getComponentContract(entity), entity.getId());
-        evictFromHibernateInDepth(sessionEntity, hibernateSession,
-            new HashSet<IEntity>());
+        IComponent sessionEntity = (IComponent) hibernateSession.get(getComponentContract(entity), entity.getId());
+        evictFromHibernateInDepth(sessionEntity, hibernateSession, new HashSet<IEntity>());
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       }
     }
   }
 
-  private void resetUninitializedHibernateProxyProperties(
-      IComponent componentOrEntity, Session hibernateSession,
+  private void resetUninitializedHibernateProxyProperties(IComponent componentOrEntity, Session hibernateSession,
       Set<IComponent> traversedComponents) {
     if (traversedComponents.contains(componentOrEntity)) {
       return;
@@ -708,16 +664,13 @@ public class HibernateBackendController extends AbstractBackendController {
     traversedComponents.add(componentOrEntity);
     // Whenever the entity has uninitialized properties, deassociate them with
     // their current session if different from the parameter one.
-    for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
-        .straightGetProperties().entrySet()) {
+    for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity.straightGetProperties().entrySet()) {
       Object propertyValue = registeredPropertyEntry.getValue();
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)) {
-          resetUninitializedHibernateProxyProperties(
-              (IComponent) propertyValue, hibernateSession, traversedComponents);
+          resetUninitializedHibernateProxyProperties((IComponent) propertyValue, hibernateSession, traversedComponents);
         } else {
-          LazyInitializer li = ((HibernateProxy) propertyValue)
-              .getHibernateLazyInitializer();
+          LazyInitializer li = ((HibernateProxy) propertyValue).getHibernateLazyInitializer();
           if (li.getSession() != null && li.getSession() != hibernateSession) {
             li.unsetSession();
           }
@@ -727,8 +680,7 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  private void lockInHibernateInDepth(IComponent component,
-      Session hibernateSession, Set<IEntity> alreadyLocked) {
+  private void lockInHibernateInDepth(IComponent component, Session hibernateSession, Set<IEntity> alreadyLocked) {
     if (component == null) {
       return;
     }
@@ -750,37 +702,31 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
-      IComponentDescriptor<?> componentDescriptor = getEntityFactory()
-          .getComponentDescriptor(getComponentContract(component));
+      IComponentDescriptor<?> componentDescriptor = getEntityFactory().getComponentDescriptor(
+          getComponentContract(component));
       for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
         String propertyName = property.getKey();
         Object propertyValue = property.getValue();
-        IPropertyDescriptor propertyDescriptor = componentDescriptor
-            .getPropertyDescriptor(propertyName);
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (Hibernate.isInitialized(propertyValue)) {
           if (propertyValue instanceof IEntity) {
-            lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
-                alreadyLocked);
+            lockInHibernateInDepth((IEntity) propertyValue, hibernateSession, alreadyLocked);
           } else if (propertyValue instanceof Collection
               && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-            for (IComponent element : ((Collection<IComponent>) property
-                .getValue())) {
+            for (IComponent element : ((Collection<IComponent>) property.getValue())) {
               lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
             }
             if (propertyValue instanceof PersistentCollection) {
               Collection<IComponent> snapshot = null;
-              Object storedSnapshot = ((PersistentCollection) propertyValue)
-                  .getStoredSnapshot();
+              Object storedSnapshot = ((PersistentCollection) propertyValue).getStoredSnapshot();
               if (storedSnapshot instanceof Map<?, ?>) {
-                snapshot = ((Map<IComponent, IComponent>) storedSnapshot)
-                    .keySet();
+                snapshot = ((Map<IComponent, IComponent>) storedSnapshot).keySet();
               } else if (storedSnapshot instanceof Collection<?>) {
                 snapshot = (Collection<IComponent>) storedSnapshot;
               }
               if (snapshot != null) {
                 for (IComponent element : snapshot) {
-                  lockInHibernateInDepth(element, hibernateSession,
-                      alreadyLocked);
+                  lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
                 }
               }
             }
@@ -791,26 +737,21 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  private void evictFromHibernateInDepth(IComponent component,
-      Session hibernateSession, Set<IEntity> alreadyEvicted) {
+  private void evictFromHibernateInDepth(IComponent component, Session hibernateSession, Set<IEntity> alreadyEvicted) {
     boolean isEntity = component instanceof IEntity;
     if (!isEntity || alreadyEvicted.add((IEntity) component)) {
       if (!isEntity || ((IEntity) component).isPersistent()) {
         if (isEntity) {
           hibernateSession.evict(component);
         }
-        Map<String, Object> entityProperties = component
-            .straightGetProperties();
+        Map<String, Object> entityProperties = component.straightGetProperties();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (Hibernate.isInitialized(property.getValue())) {
             if (property.getValue() instanceof IEntity) {
-              evictFromHibernateInDepth((IEntity) property.getValue(),
-                  hibernateSession, alreadyEvicted);
+              evictFromHibernateInDepth((IEntity) property.getValue(), hibernateSession, alreadyEvicted);
             } else if (property.getValue() instanceof Collection) {
-              for (IComponent element : ((Collection<IComponent>) property
-                  .getValue())) {
-                evictFromHibernateInDepth(element, hibernateSession,
-                    alreadyEvicted);
+              for (IComponent element : ((Collection<IComponent>) property.getValue())) {
+                evictFromHibernateInDepth(element, hibernateSession, alreadyEvicted);
               }
             }
           }
@@ -833,8 +774,8 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the first found entity or null;
    */
-  public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
-      EMergeMode mergeMode, Class<? extends T> clazz) {
+  public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria, EMergeMode mergeMode,
+      Class<? extends T> clazz) {
     List<T> ret = findByCriteria(criteria, 0, 1, mergeMode, clazz);
     if (ret != null && !ret.isEmpty()) {
       return ret.get(0);
@@ -856,8 +797,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the first found entity or null;
    */
-  public <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, EMergeMode mergeMode,
+  public <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, EMergeMode mergeMode,
       Class<? extends T> clazz) {
     return findByCriteria(criteria, -1, -1, mergeMode, clazz);
   }
@@ -881,15 +821,13 @@ public class HibernateBackendController extends AbstractBackendController {
    * @return the first found entity or null;
    */
   @SuppressWarnings("unchecked")
-  public <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, int firstResult, int maxResults,
+  public <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, int firstResult, int maxResults,
       EMergeMode mergeMode, Class<? extends T> clazz) {
     List<T> res = null;
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing, so force
       // to null.
-      res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
-          maxResults, null));
+      res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult, maxResults, null));
     } else {
       // merge mode is passed for merge to occur inside the transaction.
       res = findByCriteria(criteria, firstResult, maxResults, mergeMode);
@@ -898,16 +836,13 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, final int firstResult,
+  private <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, final int firstResult,
       final int maxResults, final EMergeMode mergeMode) {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
-        Criteria executableCriteria = criteria
-            .getExecutableCriteria(getHibernateSession());
+      public List<T> doInTransaction(@SuppressWarnings("unused") TransactionStatus status) {
+        Criteria executableCriteria = criteria.getExecutableCriteria(getHibernateSession());
         if (firstResult >= 0) {
           executableCriteria.setFirstResult(firstResult);
         }
@@ -937,8 +872,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // we must unwrap the proxy to avoid class cast exceptions.
       // see
       // http://forum.hibernate.org/viewtopic.php?p=2323464&sid=cb4ba3a4418276e5d2fbdd6c906ba734
-      component = ((HibernateProxy) componentOrProxy)
-          .getHibernateLazyInitializer().getImplementation();
+      component = ((HibernateProxy) componentOrProxy).getHibernateLazyInitializer().getImplementation();
     } else {
       component = componentOrProxy;
     }
@@ -964,17 +898,14 @@ public class HibernateBackendController extends AbstractBackendController {
 
           Exception deletedObjectEx = null;
           try {
-            merge(
-                (IEntity) getHibernateSession().load(
-                    getComponentContract(entity).getName(), entity.getId()),
+            merge((IEntity) getHibernateSession().load(getComponentContract(entity).getName(), entity.getId()),
                 EMergeMode.MERGE_CLEAN_EAGER);
           } catch (ObjectNotFoundException ex) {
             deletedObjectEx = ex;
           }
           status.setRollbackOnly();
           if (deletedObjectEx != null) {
-            throw new ConcurrencyFailureException(deletedObjectEx.getMessage(),
-                deletedObjectEx);
+            throw new ConcurrencyFailureException(deletedObjectEx.getMessage(), deletedObjectEx);
           }
         }
       });
@@ -991,13 +922,12 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private Set<IEntity> buildReachableDirtyEntitySet(IEntity entity) {
     Set<IEntity> reachableDirtyEntities = new HashSet<IEntity>();
-    completeReachableDirtyEntities(entity, reachableDirtyEntities,
-        new HashSet<IEntity>());
+    completeReachableDirtyEntities(entity, reachableDirtyEntities, new HashSet<IEntity>());
     return reachableDirtyEntities;
   }
 
-  private void completeReachableDirtyEntities(IEntity entity,
-      Set<IEntity> reachableDirtyEntities, Set<IEntity> alreadyTraversed) {
+  private void completeReachableDirtyEntities(IEntity entity, Set<IEntity> reachableDirtyEntities,
+      Set<IEntity> alreadyTraversed) {
     if (alreadyTraversed.contains(entity)) {
       return;
     }
@@ -1006,27 +936,21 @@ public class HibernateBackendController extends AbstractBackendController {
       reachableDirtyEntities.add(entity);
     }
     Map<String, Object> entityProps = entity.straightGetProperties();
-    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
-        .getComponentDescriptor(getComponentContract(entity));
+    IComponentDescriptor<?> entityDescriptor = getEntityFactory().getComponentDescriptor(getComponentContract(entity));
     for (Map.Entry<String, Object> property : entityProps.entrySet()) {
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
-            .getPropertyDescriptor(property.getKey());
-        if (isInitialized(propertyValue)
-            && propertyDescriptor instanceof IRelationshipEndPropertyDescriptor
-            // It's not a master data relationship.
-            && ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-                .getReverseRelationEnd() != null) {
-          completeReachableDirtyEntities((IEntity) propertyValue,
-              reachableDirtyEntities, alreadyTraversed);
+        IPropertyDescriptor propertyDescriptor = entityDescriptor.getPropertyDescriptor(property.getKey());
+        if (isInitialized(propertyValue) && propertyDescriptor instanceof IRelationshipEndPropertyDescriptor
+        // It's not a master data relationship.
+            && ((IRelationshipEndPropertyDescriptor) propertyDescriptor).getReverseRelationEnd() != null) {
+          completeReachableDirtyEntities((IEntity) propertyValue, reachableDirtyEntities, alreadyTraversed);
         }
       } else if (propertyValue instanceof Collection<?>) {
         if (isInitialized(propertyValue)) {
           for (Object elt : ((Collection<?>) propertyValue)) {
             if (elt instanceof IEntity) {
-              completeReachableDirtyEntities((IEntity) elt,
-                  reachableDirtyEntities, alreadyTraversed);
+              completeReachableDirtyEntities((IEntity) elt, reachableDirtyEntities, alreadyTraversed);
             }
           }
         }
@@ -1034,8 +958,7 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
-  private void changeCollectionOwner(Collection<?> persistentCollection,
-      Object newOwner) {
+  private void changeCollectionOwner(Collection<?> persistentCollection, Object newOwner) {
     if (persistentCollection instanceof PersistentCollection) {
       ((PersistentCollection) persistentCollection).setOwner(newOwner);
     }
@@ -1053,15 +976,12 @@ public class HibernateBackendController extends AbstractBackendController {
       if (propertyValue instanceof PersistentCollection) {
         if (unwrapProxy((((PersistentCollection) propertyValue).getOwner())) != unwrapProxy(owner)) {
           if (propertyValue instanceof PersistentSet) {
-            clonedPropertyValue = new PersistentSet(
-                ((PersistentSet) propertyValue).getSession());
+            clonedPropertyValue = new PersistentSet(((PersistentSet) propertyValue).getSession());
           } else if (propertyValue instanceof PersistentList) {
-            clonedPropertyValue = new PersistentList(
-                ((PersistentList) propertyValue).getSession());
+            clonedPropertyValue = new PersistentList(((PersistentList) propertyValue).getSession());
           }
           changeCollectionOwner((Collection<?>) clonedPropertyValue, owner);
-          ((PersistentCollection) clonedPropertyValue).setSnapshot(
-              ((PersistentCollection) propertyValue).getKey(),
+          ((PersistentCollection) clonedPropertyValue).setSnapshot(((PersistentCollection) propertyValue).getKey(),
               ((PersistentCollection) propertyValue).getRole(), null);
         }
       } else {
@@ -1150,12 +1070,10 @@ public class HibernateBackendController extends AbstractBackendController {
     IEntity actualE2 = e2;
 
     if (actualE1 instanceof HibernateProxy) {
-      actualE1 = (IEntity) ((HibernateProxy) actualE1)
-          .getHibernateLazyInitializer().getImplementation();
+      actualE1 = (IEntity) ((HibernateProxy) actualE1).getHibernateLazyInitializer().getImplementation();
     }
     if (actualE2 instanceof HibernateProxy) {
-      actualE2 = (IEntity) ((HibernateProxy) actualE2)
-          .getHibernateLazyInitializer().getImplementation();
+      actualE2 = (IEntity) ((HibernateProxy) actualE2).getHibernateLazyInitializer().getImplementation();
     }
     return super.objectEquals(actualE1, actualE2);
   }
@@ -1165,19 +1083,15 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected <E extends IComponent> Class<? extends E> getComponentContract(
-      E component) {
+  protected <E extends IComponent> Class<? extends E> getComponentContract(E component) {
     if (!isInitialized(component)) {
       if (component instanceof HibernateProxy) {
         try {
-          return (Class<? extends E>) Class
-              .forName(((HibernateProxy) component)
-                  .getHibernateLazyInitializer().getEntityName());
+          return (Class<? extends E>) Class.forName(((HibernateProxy) component).getHibernateLazyInitializer()
+              .getEntityName());
         } catch (ClassNotFoundException ex) {
-          LOG.error(
-              "Can not retrieve entity class {} without initializing entity.",
-              ((HibernateProxy) component).getHibernateLazyInitializer()
-                  .getEntityName());
+          LOG.error("Can not retrieve entity class {} without initializing entity.", ((HibernateProxy) component)
+              .getHibernateLazyInitializer().getEntityName());
         }
       }
     }
