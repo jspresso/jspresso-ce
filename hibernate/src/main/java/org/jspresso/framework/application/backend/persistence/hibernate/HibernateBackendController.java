@@ -986,8 +986,9 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       } else {
         if (propertyValue instanceof HibernateProxy) {
-          // Unfortunately there is actually no mean of performing a shallow
-          // copy of it.
+          return getHibernateSession().load(
+              ((HibernateProxy) propertyValue).getHibernateLazyInitializer().getEntityName(),
+              ((IEntity) propertyValue).getId());
         }
       }
     }
