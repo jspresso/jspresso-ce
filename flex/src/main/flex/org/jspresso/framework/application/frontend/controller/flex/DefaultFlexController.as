@@ -832,6 +832,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     protected function stop():void {
+      blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(STOP_METHOD);
       operation.send();
       // breaks SSO
@@ -881,6 +882,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function dispatchCommands():void {
+      blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(HANDLE_COMMANDS_METHOD);
       operation.send(_commandsQueue);
       _commandsQueue.removeAll();
@@ -889,6 +891,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function initRemoteController():void {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
+        blockUI(true);
         _postponedCommands = new Object();
         _postponedNotificationBuffer = new Object();
         try {
@@ -900,6 +903,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
+        blockUI(true);
         popupError(faultEvent.fault.message);
       };
       var operation:AbstractOperation;
@@ -1157,8 +1161,22 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     public function start():void {
+      blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(START_METHOD);
       operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
+    }
+    
+    protected function blockUI(value:Boolean):void {
+      (Application.application as Application).enabled = value;
+      if((Application.application as Application).controlBar) {
+        (Application.application as Application).controlBar.enabled = true;
+      }
+      //      var appChildren:Array = (Application.application as Application).getChildren();
+      //      if(appChildren) {
+      //        for(var i:int = 0; i < appChildren.length; i++) {
+      //          (appChildren[i] as UIComponent).enabled = value;
+      //        }
+      //      }
     }
     
     protected function getKeysToTranslate():Array {

@@ -18,6 +18,10 @@
   fontWeight: bold;
 }
 
+Application {
+  disabledOverlayAlpha: 0;
+}
+
 RichTextEditor
 {
   borderThicknessLeft: 0;
