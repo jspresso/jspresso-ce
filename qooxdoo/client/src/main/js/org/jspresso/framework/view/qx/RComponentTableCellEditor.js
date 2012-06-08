@@ -77,7 +77,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
       if(   !(editorWidget instanceof qx.ui.container.Composite)
          && !(editorWidget instanceof qx.ui.form.TextArea)) {
         editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
-          alignX: "center"
+          alignX: "center",
+          alignY: "middle"
         })).set({
           focusable: true
         });
@@ -90,7 +91,14 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
           editorWidget.activate();
         });
         editorWidget.setAllowStretchY(false, false);
-        editorWidget.setAllowStretchX(true, true);
+        if(!editorWidget instanceof qx.ui.form.CheckBox) {
+          editorWidget.setAllowStretchX(true, true);
+        }
+        editorWidget.setMaxWidth(null);
+        editorWidget.setWidth(null);
+        editorWidget.setMinWidth(0);
+        //editorWidget.setAlignX("center");
+        editorWidget.setAlignY("middle");
         editor.add(editorWidget);
       } else {
         editor = editorWidget;

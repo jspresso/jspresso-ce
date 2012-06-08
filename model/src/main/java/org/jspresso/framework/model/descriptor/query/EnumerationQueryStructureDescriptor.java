@@ -38,7 +38,8 @@ import org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EnumerationQueryStructureDescriptor extends BasicCollectionPropertyDescriptor<EnumValueQueryStructure> {
+public class EnumerationQueryStructureDescriptor extends
+    BasicCollectionPropertyDescriptor<EnumValueQueryStructure> {
 
   /**
    * <code>SELECTED</code> value.
@@ -57,7 +58,8 @@ public class EnumerationQueryStructureDescriptor extends BasicCollectionProperty
    * @param sourceDescriptor
    *          the actual enumeration property descriptor to wrap.
    */
-  public EnumerationQueryStructureDescriptor(AbstractEnumerationPropertyDescriptor sourceDescriptor) {
+  public EnumerationQueryStructureDescriptor(
+      AbstractEnumerationPropertyDescriptor sourceDescriptor) {
     super();
     this.sourceDescriptor = sourceDescriptor;
     setName(sourceDescriptor.getName());
@@ -70,6 +72,7 @@ public class EnumerationQueryStructureDescriptor extends BasicCollectionProperty
     BasicBooleanPropertyDescriptor selectedPropertyDescriptor = new BasicBooleanPropertyDescriptor();
     selectedPropertyDescriptor.setName(SELECTED);
     selectedPropertyDescriptor.setI18nNameKey("enumValue.selected");
+    selectedPropertyDescriptor.setPreferredWidth(new Integer(30));
     BasicPropertyDescriptor valuePropertyDescriptor = sourceDescriptor.clone();
     valuePropertyDescriptor.setName(VALUE);
     if (sourceDescriptor.getI18nNameKey() != null) {
@@ -77,6 +80,7 @@ public class EnumerationQueryStructureDescriptor extends BasicCollectionProperty
     } else {
       valuePropertyDescriptor.setI18nNameKey(sourceDescriptor.getName());
     }
+    valuePropertyDescriptor.setReadOnly(true);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(selectedPropertyDescriptor);

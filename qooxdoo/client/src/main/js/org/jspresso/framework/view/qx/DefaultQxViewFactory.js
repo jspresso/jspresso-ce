@@ -509,6 +509,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table = new org.jspresso.framework.view.qx.EnhancedTable(
             tableModel, custom);
       }
+      table.setStatusBarVisible(false);
       var columnModel = table.getTableColumnModel();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         var rColumn = remoteTable.getColumns()[i];
@@ -1727,7 +1728,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             component.setMaxWidth(null);
           }
         }
-        if (compColSpan > 1) {
+        if (compColSpan > 1 && component.getWidth() == null/*to cope with preferred width*/) {
           component.setAllowGrowX(true);
         }
         col += elementWidth;

@@ -39,6 +39,8 @@ package org.jspresso.framework.view.flex
       _index = -1;
       horizontalScrollPolicy = ScrollPolicy.OFF;
       verticalScrollPolicy = ScrollPolicy.OFF;
+      percentWidth = 100.0
+      percentHeight = 100.0
     }
     
     public function set editor(value:UIComponent):void {
