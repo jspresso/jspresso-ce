@@ -29,8 +29,10 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.query.EnumerationQueryStructureDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Icon;
@@ -53,8 +55,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
-    IComponentViewDescriptor {
+public class BasicComponentViewDescriptor extends BasicViewDescriptor implements IComponentViewDescriptor {
 
   private int                           columnCount    = 1;
   private ELabelPosition                labelsPosition = ELabelPosition.ASIDE;
@@ -86,8 +87,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public Icon getIcon() {
     Icon icon = super.getIcon();
     if (icon == null) {
-      icon = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor().getIcon();
+      icon = ((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().getIcon();
       setIcon(icon);
     }
     return icon;
@@ -116,23 +116,31 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
         BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
         propertyViewDescriptor.setName(renderedProperty);
         propertyViewDescriptor.setWidth(getPropertyWidth(renderedProperty));
-        propertyViewDescriptor
-            .setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
-        propertyViewDescriptor.setModelDescriptor(componentDescriptor
-            .getPropertyDescriptor(renderedProperty));
+        propertyViewDescriptor.setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
+        propertyViewDescriptor.setModelDescriptor(componentDescriptor.getPropertyDescriptor(renderedProperty));
+        if (propertyViewDescriptor.getModelDescriptor() instanceof EnumerationQueryStructureDescriptor) {
+          IEnumerationPropertyDescriptor enumPropertyDescriptor = ((EnumerationQueryStructureDescriptor) propertyViewDescriptor
+              .getModelDescriptor()).getSourceDescriptor();
+          int lineCount = enumPropertyDescriptor.getEnumerationValues().size();
+          if (!enumPropertyDescriptor.isMandatory()) {
+            lineCount++;
+          }
+          if (lineCount > 4) {
+            lineCount = 4;
+          }
+          propertyViewDescriptor.setPreferredHeight(new Integer(25 * (lineCount + 1)));
+          propertyViewDescriptor.setPreferredWidth(new Integer(200));
+        }
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);
       }
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-      List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
-          .explodeComponentReferences(propertyViewDescriptor,
-              (IComponentDescriptorProvider<?>) getModelDescriptor());
-      if (propertyViewDescriptor.getWidth() != null
-          && propertyViewDescriptor.getWidth().intValue() > exploded.size()) {
-        ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1))
-            .setWidth(new Integer(propertyViewDescriptor.getWidth().intValue()
-                - exploded.size() + 1));
+      List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper.explodeComponentReferences(
+          propertyViewDescriptor, (IComponentDescriptorProvider<?>) getModelDescriptor());
+      if (propertyViewDescriptor.getWidth() != null && propertyViewDescriptor.getWidth().intValue() > exploded.size()) {
+        ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1)).setWidth(new Integer(propertyViewDescriptor
+            .getWidth().intValue() - exploded.size() + 1));
       }
       actualPropertyViewDescriptors.addAll(exploded);
     }
@@ -247,8 +255,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * @param propertyViewDescriptors
    *          the propertyViewDescriptors to set.
    */
-  public void setPropertyViewDescriptors(
-      List<IPropertyViewDescriptor> propertyViewDescriptors) {
+  public void setPropertyViewDescriptors(List<IPropertyViewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
   }
 
@@ -274,11 +281,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     this.propertyWidths = new HashMap<String, Integer>();
     for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
       if (propertyWidth.getValue() instanceof String) {
-        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
-            (String) propertyWidth.getValue()));
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer((String) propertyWidth.getValue()));
       } else {
-        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
-            ((Number) propertyWidth.getValue()).intValue()));
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(((Number) propertyWidth.getValue()).intValue()));
       }
     }
   }
@@ -309,8 +314,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * @param renderedChildProperties
    *          the renderedChildProperties to set.
    */
-  public void setRenderedChildProperties(
-      Map<String, List<String>> renderedChildProperties) {
+  public void setRenderedChildProperties(Map<String, List<String>> renderedChildProperties) {
     this.renderedChildProperties = renderedChildProperties;
   }
 
@@ -350,13 +354,11 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
           .getComponentDescriptor().getPropertyDescriptor(propertyName);
       if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
         return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
-            .getCollectionDescriptor()).getElementDescriptor()
-            .getRenderedProperties();
+            .getCollectionDescriptor()).getElementDescriptor().getRenderedProperties();
       } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
         // return the toString property
-        return Collections
-            .singletonList(((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
-                .getReferencedDescriptor().getToStringProperty());
+        return Collections.singletonList(((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
+            .getReferencedDescriptor().getToStringProperty());
       }
     }
     return childProperties;
@@ -369,8 +371,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    */
   private List<String> getRenderedProperties() {
     if (renderedProperties == null) {
-      renderedProperties = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor().getRenderedProperties();
+      renderedProperties = ((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor()
+          .getRenderedProperties();
     }
     return renderedProperties;
   }
@@ -385,8 +387,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     boolean readOnly = super.isReadOnly();
     if (!readOnly && getModelDescriptor() != null) {
       if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
-        return ((IComponentDescriptorProvider<?>) getModelDescriptor())
-            .getComponentDescriptor().isReadOnly();
+        return ((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().isReadOnly();
       }
     }
     return readOnly;
