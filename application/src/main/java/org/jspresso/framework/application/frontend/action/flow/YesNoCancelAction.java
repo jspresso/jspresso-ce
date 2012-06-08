@@ -49,12 +49,10 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     getController(context).popupYesNoCancel(getSourceComponent(context),
-        getI18nName(getTranslationProvider(context), getLocale(context)),
-        getIcon().getIconImageURL(), getMessage(context), yesAction, noAction,
-        cancelAction, context);
+        getI18nName(getTranslationProvider(context), getLocale(context)), getIconImageURL(), getMessage(context),
+        yesAction, noAction, cancelAction, context);
     return super.execute(actionHandler, context);
   }
 
