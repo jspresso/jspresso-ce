@@ -58,7 +58,7 @@ public class TypeEnumerationPropertyDescriptor extends BasicEnumerationPropertyD
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptorList) {
       String componentIconImageUrl = null;
       if (componentDescriptor.getIcon() != null) {
-        componentIconImageUrl = componentDescriptor.getIconImageURL();
+        componentIconImageUrl = componentDescriptor.getIcon().getIconImageURL();
       }
       componentDescriptorImages.put(componentDescriptor.getName(), componentIconImageUrl);
     }
