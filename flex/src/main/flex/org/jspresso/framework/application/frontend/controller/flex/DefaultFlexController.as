@@ -19,6 +19,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.Sprite;
   import flash.events.DataEvent;
   import flash.events.Event;
+  import flash.events.IOErrorEvent;
   import flash.events.MouseEvent;
   import flash.external.ExternalInterface;
   import flash.net.FileFilter;
@@ -549,6 +550,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
         execute(uploadCommand.cancelCallbackAction);
         popFakeDialog();
       });
+      _fileReference.addEventListener(IOErrorEvent.IO_ERROR, function(event:IOErrorEvent):void {
+        popupError(event.text);
+        popFakeDialog();
+      });
       try {
         _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
       } catch(error:Error) {
@@ -584,6 +589,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
         execute(downloadCommand.cancelCallbackAction, actionEvent);
         popFakeDialog();
       });
+      _fileReference.addEventListener(IOErrorEvent.IO_ERROR, function(event:IOErrorEvent):void {
+        popupError(event.text);
+        popFakeDialog();
+      });
+
       try {
         _fileReference.download(new URLRequest(downloadCommand.fileUrl), downloadCommand.defaultFileName);
       } catch(error:Error) {
@@ -828,8 +838,34 @@ package org.jspresso.framework.application.frontend.controller.flex {
       //_remoteController.channelSet.disconnectAll();
     }
 
-    protected function handleError(message:String):void {
-      trace("Recieved error : " + message);
+    protected function popupError(message:String):void {
+      var title:String;
+      var messageHeader:String;
+      try {
+        title = translate("error");
+        messageHeader = translate("error.unexpected");
+      } catch(e:Error) {
+        title = "Error";
+        messageHeader = "An unexpected error occured"
+      }
+      if(message && message.length > 1200) {
+        var buff:String = message.substr(0, 600);
+        buff += "\n...\n...\n...\n";
+        buff += message.substr(message.length -600, message.length);
+        message = buff;
+      }
+      var alert:Alert = Alert.show(messageHeader + "\n\n\n" + message,
+        title,
+        Alert.OK,
+        null,
+        null,
+        null,
+        Alert.OK);
+      fixAlertSize(alert);
+    }
+
+    protected function traceError(errorMessage:String):void {
+      trace("Error : " + errorMessage);
     }
 
     public function getRegistered(guid:String):IRemotePeer {
@@ -864,7 +900,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
-        handleError(faultEvent.fault.message);
+        popupError(faultEvent.fault.message);
       };
       var operation:AbstractOperation;
       operation = _remoteController.getOperation(HANDLE_COMMANDS_METHOD);
@@ -879,16 +915,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
       for(var guid:String in _postponedCommands) {
         var commands:IList = _postponedCommands[guid] as IList;
         for each(var command:RemoteCommand in commands) {
-          handleError("Target remote peer could not be retrieved :");
-          handleError("  guid    = " + command.targetPeerGuid);
-          handleError("  command = " + command);
+          traceError("Target remote peer could not be retrieved :");
+          traceError("  guid    = " + command.targetPeerGuid);
+          traceError("  command = " + command);
           if(command is RemoteValueCommand) {
-            handleError("  value   = " + (command as RemoteValueCommand).value);
+            traceError("  value   = " + (command as RemoteValueCommand).value);
           } else if(command is RemoteChildrenCommand) {
             for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
-              handleError("  child = " + childState);
-              handleError("    guid  = " + childState.guid);
-              handleError("    value = " + childState.value);
+              traceError("  child = " + childState);
+              traceError("    guid  = " + childState.guid);
+              traceError("    value = " + childState.value);
             }
           }
         }
@@ -1126,7 +1162,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function getKeysToTranslate():Array {
-      return ["date_format","FS.browse.continue","file.upload","file.download","system.clipboard.continue","content.copy"];
+      return ["date_format","FS.browse.continue","file.upload","file.download","system.clipboard.continue","content.copy","error","error.unexpected"];
     }
     
     public function translate(key:String):String {
