@@ -38,7 +38,7 @@ public class AsyncActionExecutor extends Thread {
   private IAction                   action;
   private Map<String, Object>       context;
   private AbstractBackendController slaveBackendController;
-  private float                     progress;
+  private double                    progress;
 
   /**
    * Constructs a new <code>AsyncActionExecutor</code> instance.
@@ -54,11 +54,12 @@ public class AsyncActionExecutor extends Thread {
    */
   public AsyncActionExecutor(IAction action, Map<String, Object> context, ThreadGroup group,
       AbstractBackendController slaveBackendController) {
-    super(group, "Jspresso Asynchronous Action Runner [" + action.getClass().getSimpleName() + "]["
-        + slaveBackendController.getApplicationSession().getId() + "]["
+    super(group, /* "Jspresso Asynchronous Action Runner " + */
+    action.getClass().getSimpleName() + "[" + slaveBackendController.getApplicationSession().getId() + "]["
         + slaveBackendController.getApplicationSession().getUsername() + "]");
     this.action = action;
     this.context = context;
+    this.slaveBackendController = slaveBackendController;
   }
 
   /**
@@ -102,7 +103,7 @@ public class AsyncActionExecutor extends Thread {
    * 
    * @return the progress.
    */
-  public float getProgress() {
+  public double getProgress() {
     return progress;
   }
 
@@ -112,7 +113,7 @@ public class AsyncActionExecutor extends Thread {
    * @param progress
    *          the progress to set.
    */
-  public void setProgress(float progress) {
+  public void setProgress(double progress) {
     this.progress = progress;
   }
 }

@@ -280,7 +280,7 @@ public class BackendAction extends AbstractAction {
    * @param progress
    *          the action progress.
    */
-  protected void setProgress(float progress) {
+  protected void setProgress(double progress) {
     if (Thread.currentThread() instanceof AsyncActionExecutor) {
       ((AsyncActionExecutor) Thread.currentThread()).setProgress(progress);
     }

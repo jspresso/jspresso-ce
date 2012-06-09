@@ -20,6 +20,7 @@ package org.jspresso.framework.application.backend;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -316,6 +317,13 @@ public abstract class AbstractBackendController extends AbstractController imple
     AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action, context, asyncActionsThreadGroup,
         slaveBackendController);
     slaveExecutor.start();
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("List of running executors :");
+      for (AsyncActionExecutor executor : getRunningExecutors()) {
+        LOG.debug("  --> Executor {} has completed {}", executor.getName(),
+            NumberFormat.getPercentInstance().format(executor.getProgress()));
+      }
+    }
     return slaveExecutor;
   }
 
