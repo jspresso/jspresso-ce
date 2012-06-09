@@ -78,31 +78,23 @@
   <bean id="queryComponentDescriptorFactory" class="org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory" />
   <bean id="componentExtensionFactory" class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory" />
 
-  <bean id="basicComponentFactory" class="org.jspresso.framework.model.component.basic.BasicProxyComponentFactory">
+  <!-- The implementation used as EntityFactory. -->
+  <bean id="basicEntityFactory" class="org.jspresso.framework.model.entity.basic.BasicProxyEntityFactory">
     <property name="accessorFactory" ref="accessorFactory" />
     <property name="componentCollectionFactory" ref="componentCollectionFactory" />
     <property name="componentExtensionFactory" ref="componentExtensionFactory" />
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
-  </bean>
-
-  <!-- The implementation used as EntityFactory. -->
-  <bean id="basicEntityFactory" class="org.jspresso.framework.model.entity.basic.BasicProxyEntityFactory">
-    <property name="accessorFactory" ref="accessorFactory" />
-    <property name="inlineComponentFactory" ref="basicComponentFactory" />
-    <property name="entityCollectionFactory" ref="componentCollectionFactory" />
-    <property name="entityExtensionFactory" ref="componentExtensionFactory" />
     <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
   </bean>
-
-  <bean id="controllerAwareComponentFactory" parent="basicComponentFactory"
-    class="org.jspresso.framework.application.backend.component.ControllerAwareProxyComponentFactory">
-  </bean>
+  
+  <alias name="basicEntityFactory" alias="basicComponentFactory"/>
 
   <bean id="controllerAwareEntityFactory" parent="basicEntityFactory"
-    class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory">
-    <property name="inlineComponentFactory" ref="controllerAwareComponentFactory" />
-  </bean>
+    class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory"/>
+  
+  <alias name="controllerAwareEntityFactory" alias="controllerAwareComponentFactory"/>
+  
   <!-- Root action beans. -->
 
   <bean id="applicationQueryComponentRefiner" class="org.jspresso.framework.application.backend.action.MockQueryComponentRefiner" />

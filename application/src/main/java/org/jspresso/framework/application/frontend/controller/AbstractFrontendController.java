@@ -900,6 +900,7 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       initialLocale = new Locale(forcedStartingLocale);
     }
     started = peerController.start(initialLocale, theClientTimeZone);
+    BackendControllerHolder.setCurrentBackendController(peerController);
     return started;
   }
 

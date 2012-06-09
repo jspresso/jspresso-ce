@@ -57,8 +57,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ControllerAwareEntityInvocationHandler extends
-    BasicEntityInvocationHandler {
+public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocationHandler {
 
   private static final long   serialVersionUID                = 3663517052427878204L;
 
@@ -83,14 +82,10 @@ public class ControllerAwareEntityInvocationHandler extends
    *          The factory used to create entity extensions based on their
    *          classes.
    */
-  protected ControllerAwareEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory<IComponent> collectionFactory,
-      IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory,
-        accessorFactory, extensionFactory);
+  public ControllerAwareEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor,
+      IComponentFactory inlineComponentFactory, IComponentCollectionFactory<IComponent> collectionFactory,
+      IAccessorFactory accessorFactory, IComponentExtensionFactory extensionFactory) {
+    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
   }
 
   /**
@@ -104,18 +99,14 @@ public class ControllerAwareEntityInvocationHandler extends
     super.configureExtension(extension);
     if (getBackendController() != null) {
       if (extension instanceof ISubjectAware) {
-        ((ISubjectAware) extension).setSubject(getBackendController()
-            .getApplicationSession().getSubject());
+        ((ISubjectAware) extension).setSubject(getBackendController().getApplicationSession().getSubject());
       }
       if (extension instanceof IApplicationSessionAware) {
-        ((IApplicationSessionAware) extension)
-            .setApplicationSession(getBackendController()
-                .getApplicationSession());
+        ((IApplicationSessionAware) extension).setApplicationSession(getBackendController().getApplicationSession());
       }
     }
     if (extension instanceof IEntityLifecycleHandlerAware) {
-      ((IEntityLifecycleHandlerAware) extension)
-          .setEntityLifecycleHandler(getBackendController());
+      ((IEntityLifecycleHandlerAware) extension).setEntityLifecycleHandler(getBackendController());
     }
   }
 
@@ -123,8 +114,7 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void entityDetached(IEntity parent, IEntity child,
-      IRelationshipEndPropertyDescriptor propertyDescriptor) {
+  protected void entityDetached(IEntity parent, IEntity child, IRelationshipEndPropertyDescriptor propertyDescriptor) {
     if (detachedEntities == null) {
       detachedEntities = new LinkedHashSet<IEntity>();
     }
@@ -132,10 +122,8 @@ public class ControllerAwareEntityInvocationHandler extends
       try {
         getBackendController().cleanRelationshipsOnDeletion(child, false);
       } catch (Exception ex) {
-        throw new ComponentException(ex,
-            "An error occured when detaching the entity [" + child
-                + "] from its parent [" + parent
-                + "]. The updated property is " + propertyDescriptor.getName());
+        throw new ComponentException(ex, "An error occured when detaching the entity [" + child + "] from its parent ["
+            + parent + "]. The updated property is " + propertyDescriptor.getName());
       }
     }
     detachedEntities.add(child);
@@ -156,8 +144,7 @@ public class ControllerAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
-    getBackendController().initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor.getName());
+    getBackendController().initializePropertyIfNeeded((IEntity) proxy, propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 
@@ -165,16 +152,13 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object getReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+  protected Object getReferenceProperty(Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
 
     String propertyName = propertyDescriptor.getName();
-    getBackendController().initializePropertyIfNeeded((IComponent) proxy,
-        propertyName);
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyName);
     Object reference = straightGetProperty(proxy, propertyName);
     if (reference instanceof IPropertyChangeCapable) {
-      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference,
-          propertyName);
+      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference, propertyName);
     }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
@@ -193,15 +177,12 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void onUpdate(IEntityFactory entityFactory,
-      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+  protected void onUpdate(IEntityFactory entityFactory, UserPrincipal principal,
+      IEntityLifecycleHandler entityLifecycleHandler) {
     if (detachedEntities != null) {
       for (IEntity detachedEntity : detachedEntities) {
-        if (detachedEntity.isPersistent()
-            && !entityLifecycleHandler
-                .isEntityRegisteredForDeletion(detachedEntity)
-            && !entityLifecycleHandler
-                .isEntityRegisteredForUpdate(detachedEntity)) {
+        if (detachedEntity.isPersistent() && !entityLifecycleHandler.isEntityRegisteredForDeletion(detachedEntity)
+            && !entityLifecycleHandler.isEntityRegisteredForUpdate(detachedEntity)) {
           entityLifecycleHandler.registerForUpdate(detachedEntity);
         }
       }
@@ -214,29 +195,21 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void storeReferenceProperty(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
-      Object oldPropertyValue, Object newPropertyValue) {
-    if (newPropertyValue != null
-        && isInlineComponentReference(propertyDescriptor)) {
+  protected void storeReferenceProperty(IReferencePropertyDescriptor<?> propertyDescriptor, Object oldPropertyValue,
+      Object newPropertyValue) {
+    if (newPropertyValue != null && isInlineComponentReference(propertyDescriptor)) {
       if (Proxy.isProxyClass(newPropertyValue.getClass())
           && Proxy.getInvocationHandler(newPropertyValue) instanceof BasicComponentInvocationHandler
           && !(Proxy.getInvocationHandler(newPropertyValue) instanceof ControllerAwareComponentInvocationHandler)) {
-        IComponent sessionAwareComponent = getInlineComponentFactory()
-            .createComponentInstance(
-                ((IComponent) newPropertyValue).getComponentContract());
-        sessionAwareComponent
-            .straightSetProperties(((IComponent) newPropertyValue)
-                .straightGetProperties());
-        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
-            sessionAwareComponent);
+        IComponent sessionAwareComponent = getInlineComponentFactory().createComponentInstance(
+            ((IComponent) newPropertyValue).getComponentContract());
+        sessionAwareComponent.straightSetProperties(((IComponent) newPropertyValue).straightGetProperties());
+        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue, sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
-            newPropertyValue);
+        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue, newPropertyValue);
       }
     } else {
-      super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
-          newPropertyValue);
+      super.storeReferenceProperty(propertyDescriptor, oldPropertyValue, newPropertyValue);
     }
   }
 
@@ -266,8 +239,7 @@ public class ControllerAwareEntityInvocationHandler extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected void straightSetProperty(Object proxy, String propertyName,
-      Object newPropertyValue) {
+  protected void straightSetProperty(Object proxy, String propertyName, Object newPropertyValue) {
     if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
       detachedEntities = (Set<IEntity>) newPropertyValue;
     } else {
@@ -290,9 +262,7 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object sanitizeModifierParam(Object target,
-      IPropertyDescriptor propertyDescriptor, Object param) {
-    return getBackendController().sanitizeModifierParam(target,
-        propertyDescriptor, param);
+  protected Object sanitizeModifierParam(Object target, IPropertyDescriptor propertyDescriptor, Object param) {
+    return getBackendController().sanitizeModifierParam(target, propertyDescriptor, param);
   }
 }

@@ -46,8 +46,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ControllerAwareComponentInvocationHandler extends
-    BasicComponentInvocationHandler {
+public class ControllerAwareComponentInvocationHandler extends BasicComponentInvocationHandler {
 
   private static final long serialVersionUID = -3613223267370638150L;
 
@@ -68,14 +67,10 @@ public class ControllerAwareComponentInvocationHandler extends
    *          The factory used to create entity extensions based on their
    *          classes.
    */
-  protected ControllerAwareComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor,
-      IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory<IComponent> collectionFactory,
-      IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory) {
-    super(componentDescriptor, inlineComponentFactory, collectionFactory,
-        accessorFactory, extensionFactory);
+  public ControllerAwareComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor,
+      IComponentFactory inlineComponentFactory, IComponentCollectionFactory<IComponent> collectionFactory,
+      IAccessorFactory accessorFactory, IComponentExtensionFactory extensionFactory) {
+    super(componentDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
   }
 
   /**
@@ -88,18 +83,14 @@ public class ControllerAwareComponentInvocationHandler extends
     super.configureExtension(extension);
     if (getBackendController() != null) {
       if (extension instanceof ISubjectAware) {
-        ((ISubjectAware) extension).setSubject(getBackendController()
-            .getApplicationSession().getSubject());
+        ((ISubjectAware) extension).setSubject(getBackendController().getApplicationSession().getSubject());
       }
       if (extension instanceof IApplicationSessionAware) {
-        ((IApplicationSessionAware) extension)
-            .setApplicationSession(getBackendController()
-                .getApplicationSession());
+        ((IApplicationSessionAware) extension).setApplicationSession(getBackendController().getApplicationSession());
       }
     }
     if (extension instanceof IEntityLifecycleHandlerAware) {
-      ((IEntityLifecycleHandlerAware) extension)
-          .setEntityLifecycleHandler(getBackendController());
+      ((IEntityLifecycleHandlerAware) extension).setEntityLifecycleHandler(getBackendController());
     }
   }
 
@@ -118,8 +109,7 @@ public class ControllerAwareComponentInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
-    getBackendController().initializePropertyIfNeeded((IComponent) proxy,
-        propertyDescriptor.getName());
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 
@@ -127,15 +117,12 @@ public class ControllerAwareComponentInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object getReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+  protected Object getReferenceProperty(Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     String propertyName = propertyDescriptor.getName();
-    getBackendController().initializePropertyIfNeeded((IComponent) proxy,
-        propertyName);
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyName);
     Object reference = straightGetProperty(proxy, propertyName);
     if (reference instanceof IPropertyChangeCapable) {
-      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference,
-          propertyName);
+      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference, propertyName);
     }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
@@ -152,29 +139,21 @@ public class ControllerAwareComponentInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void storeReferenceProperty(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
-      Object oldPropertyValue, Object newPropertyValue) {
-    if (newPropertyValue != null
-        && isInlineComponentReference(propertyDescriptor)) {
+  protected void storeReferenceProperty(IReferencePropertyDescriptor<?> propertyDescriptor, Object oldPropertyValue,
+      Object newPropertyValue) {
+    if (newPropertyValue != null && isInlineComponentReference(propertyDescriptor)) {
       if (Proxy.isProxyClass(newPropertyValue.getClass())
           && Proxy.getInvocationHandler(newPropertyValue) instanceof BasicComponentInvocationHandler
           && !(Proxy.getInvocationHandler(newPropertyValue) instanceof ControllerAwareComponentInvocationHandler)) {
-        IComponent sessionAwareComponent = getInlineComponentFactory()
-            .createComponentInstance(
-                ((IComponent) newPropertyValue).getComponentContract());
-        sessionAwareComponent
-            .straightSetProperties(((IComponent) newPropertyValue)
-                .straightGetProperties());
-        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
-            sessionAwareComponent);
+        IComponent sessionAwareComponent = getInlineComponentFactory().createComponentInstance(
+            ((IComponent) newPropertyValue).getComponentContract());
+        sessionAwareComponent.straightSetProperties(((IComponent) newPropertyValue).straightGetProperties());
+        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue, sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
-            newPropertyValue);
+        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue, newPropertyValue);
       }
     } else {
-      super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
-          newPropertyValue);
+      super.storeReferenceProperty(propertyDescriptor, oldPropertyValue, newPropertyValue);
     }
   }
 
@@ -193,9 +172,7 @@ public class ControllerAwareComponentInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object sanitizeModifierParam(Object target,
-      IPropertyDescriptor propertyDescriptor, Object param) {
-    return getBackendController().sanitizeModifierParam(target,
-        propertyDescriptor, param);
+  protected Object sanitizeModifierParam(Object target, IPropertyDescriptor propertyDescriptor, Object param) {
+    return getBackendController().sanitizeModifierParam(target, propertyDescriptor, param);
   }
 }
