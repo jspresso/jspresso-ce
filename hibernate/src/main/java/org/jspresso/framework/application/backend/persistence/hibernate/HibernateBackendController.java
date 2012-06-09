@@ -287,7 +287,7 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     String filterLogin = null;
     if (getApplicationSession().getPrincipal() != null) {
-      filterLogin = getApplicationSession().getPrincipal().getName();
+      filterLogin = getApplicationSession().getUsername();
     }
     if (filterLogin == null) {
       filterLogin = "";

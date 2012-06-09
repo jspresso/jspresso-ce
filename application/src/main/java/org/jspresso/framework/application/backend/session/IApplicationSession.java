@@ -105,6 +105,13 @@ public interface IApplicationSession {
   String getId();
 
   /**
+   * Gets the session logged in user.
+   * 
+   * @return the session logged in user.
+   */
+  String getUsername();
+
+  /**
    * Clears the application session.
    */
   void clear();

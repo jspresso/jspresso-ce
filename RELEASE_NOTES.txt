@@ -1,5 +1,9 @@
 3.5.13
 ======
+- In order to garantee that async action always execute in a brand new context (e.g. using a slave backend controller),
+  the backend controller is always retrieved from the BackendControllerHolder, i.e. the Frontend controller does not hold any
+  direct reference to it anymore.
+ 
 - A subclass of ResourceProviderServlet has been created in order to take care of resources cleaning after
   the download of an active resource in order to avoid JDBC connection leaks. The original ResourceProviderServlet
   has been made abstract to force the migration. Please replace in your existing web.xml :

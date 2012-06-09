@@ -267,6 +267,10 @@
   <bean id="iconFactoryBase" parent="abstractIconFactory" abstract="true" />
 
 
+  <bean id="backendControllerFactory" class="org.jspresso.framework.application.backend.ApplicationContextAwareBackendControllerFactory">
+    <property name="backendControllerBeanName" value="applicationBackController"/>
+  </bean>
+
 
   <bean abstract="true" id="abstractBackControllerBase" class="org.jspresso.framework.application.backend.AbstractBackendController">
     <property name="entityFactory" ref="controllerAwareEntityFactory" />
@@ -288,10 +292,11 @@
     <property name="customTranslationPlugin" ref="customTranslationPlugin" />
     <property name="customExceptionHandler" ref="customExceptionHandler" />
     <property name="userPreferencesStore" ref="userPreferencesStore" />
+    <property name="slaveControllerFactory" ref="backendControllerFactory"/>
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
-
+  
   <!-- Utility beans for model. -->
   <bean id="BasicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">

@@ -164,6 +164,17 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   @Override
+  public String getUsername() {
+    if (getPrincipal() != null) {
+      return getPrincipal().getName();
+    }
+    return "Unknown user";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void clear() {
     if (customValues != null) {
       customValues.clear();

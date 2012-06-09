@@ -43,8 +43,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class BackendAction extends AbstractAction {
 
-  private static final Logger LOG                      = LoggerFactory
-                                                           .getLogger(BackendAction.class);
+  private static final Logger LOG                      = LoggerFactory.getLogger(BackendAction.class);
 
   private static final String WARN_BAD_ACCESS_DISABLED = "WARN_BAD_ACCESS_DISABLED";
 
@@ -56,19 +55,23 @@ public class BackendAction extends AbstractAction {
   public static final String  SELECTED_MODEL           = "SELECTED_MODEL";
 
   /**
-   * <code>SELECTED_MODELS</code> is a static context key to inject into the test
-   * context in order to bypass the query to the view to retrieve the selected
-   * models.
+   * <code>SELECTED_MODELS</code> is a static context key to inject into the
+   * test context in order to bypass the query to the view to retrieve the
+   * selected models.
    */
-  public static final String  SELECTED_MODELS           = "SELECTED_MODELS";
+  public static final String  SELECTED_MODELS          = "SELECTED_MODELS";
 
   private boolean             badFrontendAccessChecked;
+  private boolean             asynchronous;
+  private boolean             transactional;
 
   /**
    * Constructs a new <code>BackendAction</code> instance.
    */
   public BackendAction() {
     setBadFrontendAccessChecked(true);
+    setAsynchronous(false);
+    setTransactional(false);
   }
 
   /**
@@ -97,8 +100,7 @@ public class BackendAction extends AbstractAction {
    *          the action context.
    * @return the current application session.
    */
-  protected IApplicationSession getApplicationSession(
-      Map<String, Object> context) {
+  protected IApplicationSession getApplicationSession(Map<String, Object> context) {
     return getController(context).getApplicationSession();
   }
 
@@ -132,8 +134,7 @@ public class BackendAction extends AbstractAction {
    *          the action context.
    * @return the transactionTemplate.
    */
-  protected TransactionTemplate getTransactionTemplate(
-      Map<String, Object> context) {
+  protected TransactionTemplate getTransactionTemplate(Map<String, Object> context) {
     return getController(context).getTransactionTemplate();
   }
 
@@ -160,13 +161,12 @@ public class BackendAction extends AbstractAction {
       }
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
-  protected List<?> getSelectedModels(int[] viewPath,
-      Map<String, Object> context) {
+  protected List<?> getSelectedModels(int[] viewPath, Map<String, Object> context) {
     boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
     try {
       if (viewPath == null) {
@@ -199,8 +199,7 @@ public class BackendAction extends AbstractAction {
    * {@inheritDoc}
    */
   @Override
-  protected IValueConnector getViewConnector(int[] viewPath,
-      Map<String, Object> context) {
+  protected IValueConnector getViewConnector(int[] viewPath, Map<String, Object> context) {
     warnBadFrontendAccess(context);
     return super.getViewConnector(viewPath, context);
   }
@@ -228,12 +227,49 @@ public class BackendAction extends AbstractAction {
   }
 
   private void warnBadFrontendAccess(Map<String, Object> context) {
-    if (isBadFrontendAccessChecked()
-        && !context.containsKey(WARN_BAD_ACCESS_DISABLED)) {
-      LOG.warn(
-          "Access to frontend context detected from a backend action which is strongly discouraged. "
-              + "{} should use either the action parameter or a specific variable.",
-          getClass().getName());
+    if (isBadFrontendAccessChecked() && !context.containsKey(WARN_BAD_ACCESS_DISABLED)) {
+      LOG.warn("Access to frontend context detected from a backend action which is strongly discouraged. "
+          + "{} should use either the action parameter or a specific variable.", getClass().getName());
     }
+  }
+
+  /**
+   * Gets the asynchronous.
+   * 
+   * @return the asynchronous.
+   */
+  @Override
+  public boolean isAsynchronous() {
+    return asynchronous || getClass().isAnnotationPresent(Asynchronous.class);
+  }
+
+  /**
+   * Sets the asynchronous.
+   * 
+   * @param asynchronous
+   *          the asynchronous to set.
+   */
+  public void setAsynchronous(boolean asynchronous) {
+    this.asynchronous = asynchronous;
+  }
+
+  /**
+   * Gets the transactional.
+   * 
+   * @return the transactional.
+   */
+  @Override
+  public boolean isTransactional() {
+    return transactional || getClass().isAnnotationPresent(Transactional.class);
+  }
+
+  /**
+   * Sets the transactional.
+   * 
+   * @param transactional
+   *          the transactional to set.
+   */
+  public void setTransactional(boolean transactional) {
+    this.transactional = transactional;
   }
 }
