@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
+import org.jspresso.framework.application.backend.async.AsyncActionExecutor;
 import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
@@ -143,6 +145,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   private IEntityRegistry                                  entitiesExcludedFromSessionSanityChecks;
 
   private IBackendControllerFactory                        slaveControllerFactory;
+  private ThreadGroup                                      asyncActionsThreadGroup;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -154,6 +157,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     securityContextBuilder = new SecurityContextBuilder();
     entitiesExcludedFromSessionSanityChecks = new BasicEntityRegistry();
     throwExceptionOnBadUsage = true;
+    asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
   }
 
   /**
@@ -302,46 +306,17 @@ public abstract class AbstractBackendController extends AbstractController imple
    *          the context
    * @return the slave thread executing the action.
    */
-  protected Thread executeAsynchronously(final IAction action, final Map<String, Object> context) {
-    Thread slaveThread = new Thread("Jspresso Asynchronous Action Runner [" + action.getClass().getSimpleName() + "]["
-        + getApplicationSession().getId() + "][" + getApplicationSession().getUsername() + "]") {
-
-      @Override
-      public void run() {
-        AbstractBackendController slaveBackendController = (AbstractBackendController) getSlaveControllerFactory()
-            .createBackendController();
-        // Start the slave controller
-        slaveBackendController.start(getLocale(), getClientTimeZone());
-        // Use the same application session
-        slaveBackendController.setApplicationSession(getApplicationSession());
-        // The following ill not store the slave backend controller in the HTTP
-        // session since we are in a new thread.
-        BackendControllerHolder.setCurrentBackendController(slaveBackendController);
-
-        // Clone the context to ensure the outer one is not modified.
-        final Map<String, Object> slaveContext = new HashMap<String, Object>();
-        slaveContext.putAll(context);
-        // Ensure the action will be executing in the context of the slave
-        // backend controller.
-        slaveContext.putAll(slaveBackendController.getInitialActionContext());
-        // Make sure front controller cannot be referenced.
-        slaveContext.remove(ActionContextConstants.FRONT_CONTROLLER);
-
-        try {
-          if (action.isTransactional()) {
-            slaveBackendController.executeTransactionally(action, slaveContext);
-          } else {
-            action.execute(slaveBackendController, slaveContext);
-          }
-        } finally {
-          slaveBackendController.cleanupRequestResources();
-          slaveBackendController.stop();
-          BackendControllerHolder.setCurrentBackendController(null);
-        }
-      }
-    };
-    slaveThread.start();
-    return slaveThread;
+  public AsyncActionExecutor executeAsynchronously(IAction action, Map<String, Object> context) {
+    AbstractBackendController slaveBackendController = (AbstractBackendController) getSlaveControllerFactory()
+        .createBackendController();
+    // Start the slave controller
+    slaveBackendController.start(getLocale(), getClientTimeZone());
+    // Use the same application session
+    slaveBackendController.setApplicationSession(getApplicationSession());
+    AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action, context, asyncActionsThreadGroup,
+        slaveBackendController);
+    slaveExecutor.start();
+    return slaveExecutor;
   }
 
   /**
@@ -354,7 +329,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    *          the context
    * @return the action outcome
    */
-  protected boolean executeTransactionally(final IAction action, final Map<String, Object> context) {
+  public boolean executeTransactionally(final IAction action, final Map<String, Object> context) {
     Boolean ret = getTransactionTemplate().execute(new TransactionCallback<Boolean>() {
 
       @Override
@@ -2008,5 +1983,16 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   public void setSlaveControllerFactory(IBackendControllerFactory slaveControllerFactory) {
     this.slaveControllerFactory = slaveControllerFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<AsyncActionExecutor> getRunningExecutors() {
+    int activeCount = asyncActionsThreadGroup.activeCount();
+    AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
+    asyncActionsThreadGroup.enumerate(activeExecutors);
+    return Arrays.asList(activeExecutors);
   }
 }

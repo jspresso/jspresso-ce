@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.async.AsyncActionExecutor;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -271,5 +272,17 @@ public class BackendAction extends AbstractAction {
    */
   public void setTransactional(boolean transactional) {
     this.transactional = transactional;
+  }
+
+  /**
+   * Iform about the action progress.
+   * 
+   * @param progress
+   *          the action progress.
+   */
+  protected void setProgress(float progress) {
+    if (Thread.currentThread() instanceof AsyncActionExecutor) {
+      ((AsyncActionExecutor) Thread.currentThread()).setProgress(progress);
+    }
   }
 }
