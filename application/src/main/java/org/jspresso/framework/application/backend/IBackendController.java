@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.jspresso.framework.application.IController;
@@ -430,5 +431,5 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    * 
    * @return the list of currently active asynchronous action executors.
    */
-  List<AsyncActionExecutor> getRunningExecutors();
+  Set<AsyncActionExecutor> getRunningExecutors();
 }

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.async;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public class AsyncActionExecutor extends Thread {
   private IAction                   action;
   private Map<String, Object>       context;
   private AbstractBackendController slaveBackendController;
+
+  private Date                      startedTimestamp;
   private double                    progress;
 
   /**
@@ -69,6 +72,7 @@ public class AsyncActionExecutor extends Thread {
    */
   @Override
   public void run() {
+    startedTimestamp = new Date();
     // The following ill not store the slave backend controller in the HTTP
     // session since we are in a new thread.
     BackendControllerHolder.setCurrentBackendController(slaveBackendController);
@@ -115,5 +119,14 @@ public class AsyncActionExecutor extends Thread {
    */
   public void setProgress(double progress) {
     this.progress = progress;
+  }
+
+  /**
+   * Gets the startedTimestamp.
+   * 
+   * @return the startedTimestamp.
+   */
+  public Date getStartedTimestamp() {
+    return startedTimestamp;
   }
 }

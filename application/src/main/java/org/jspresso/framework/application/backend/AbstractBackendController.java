@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1997,10 +1998,10 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public List<AsyncActionExecutor> getRunningExecutors() {
+  public Set<AsyncActionExecutor> getRunningExecutors() {
     int activeCount = asyncActionsThreadGroup.activeCount();
     AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
     asyncActionsThreadGroup.enumerate(activeExecutors);
-    return Arrays.asList(activeExecutors);
+    return new LinkedHashSet<AsyncActionExecutor>(Arrays.asList(activeExecutors));
   }
 }
