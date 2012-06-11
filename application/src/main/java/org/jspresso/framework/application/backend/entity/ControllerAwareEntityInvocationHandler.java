@@ -27,7 +27,6 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.component.ControllerAwareComponentInvocationHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSessionAware;
-import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtension;
@@ -114,18 +113,23 @@ public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocatio
    * {@inheritDoc}
    */
   @Override
-  protected void entityDetached(IEntity parent, IEntity child, IRelationshipEndPropertyDescriptor propertyDescriptor) {
+  protected void entityDetached(@SuppressWarnings("unused") IEntity parent, IEntity child,
+      @SuppressWarnings("unused") IRelationshipEndPropertyDescriptor propertyDescriptor) {
     if (detachedEntities == null) {
       detachedEntities = new LinkedHashSet<IEntity>();
     }
-    if (propertyDescriptor.isComposition()) {
-      try {
-        getBackendController().cleanRelationshipsOnDeletion(child, false);
-      } catch (Exception ex) {
-        throw new ComponentException(ex, "An error occured when detaching the entity [" + child + "] from its parent ["
-            + parent + "]. The updated property is " + propertyDescriptor.getName());
-      }
-    }
+    // Dangerous since default composition is true for 1-N relationships.
+    // When changing the "father" of an entity through a LOV leads to deleting the entity...
+    // if (propertyDescriptor.isComposition()) {
+    // try {
+    // getBackendController().cleanRelationshipsOnDeletion(child, false);
+    // } catch (Exception ex) {
+    // throw new ComponentException(ex,
+    // "An error occured when detaching the entity [" + child +
+    // "] from its parent ["
+    // + parent + "]. The updated property is " + propertyDescriptor.getName());
+    // }
+    // }
     detachedEntities.add(child);
   }
 
