@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
@@ -149,7 +148,7 @@ public class RefQueryComponentDescriptor<E> extends AbstractComponentDescriptor<
       }
       refinedPropertyDescriptor = propertyDescriptor;
     } else if (propertyDescriptor instanceof AbstractEnumerationPropertyDescriptor
-        && propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+        && ((AbstractEnumerationPropertyDescriptor) propertyDescriptor).isQueryMultiselect()) {
       refinedPropertyDescriptor = new EnumerationQueryStructureDescriptor(
           (AbstractEnumerationPropertyDescriptor) propertyDescriptor);
     } else {

@@ -133,7 +133,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
             lineCount = 4;
           }
           propertyViewDescriptor.setPreferredHeight(new Integer(
-              25 * (lineCount + 1)));
+              25 * lineCount));
           propertyViewDescriptor.setPreferredWidth(new Integer(250));
         }
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);

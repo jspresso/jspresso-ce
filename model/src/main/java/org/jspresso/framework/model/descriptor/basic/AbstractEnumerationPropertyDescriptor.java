@@ -30,20 +30,19 @@ import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractEnumerationPropertyDescriptor extends
-    BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
+public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarPropertyDescriptor implements
+    IEnumerationPropertyDescriptor {
 
   private String  enumerationName;
   private Integer maxLength;
+  private boolean queryMultiselect = false;
 
   /**
    * {@inheritDoc}
    */
   @Override
   public AbstractEnumerationPropertyDescriptor clone() {
-    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super
-        .clone();
-
+    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super.clone();
     return clonedDescriptor;
   }
 
@@ -108,4 +107,28 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
   }
+
+  /**
+   * Should this enumeration be transformed into a list when building a filter
+   * screen ? This will allow to place disjunctions on enumeration value.
+   * 
+   * @return <code>true</code> if this enumeration be transformed into a list
+   *         when building a filter screen.
+   */
+  public boolean isQueryMultiselect() {
+    return queryMultiselect;
+  }
+
+  /**
+   * This property allows to control if the enumeration property view should be
+   * transformed into a multi-selectable property view in order to allow for
+   * value disjunctions in filters. Default value is <code>false</code>.
+   * 
+   * @param queryMultiselect
+   *          the queryMultiselect to set.
+   */
+  public void setQueryMultiselect(boolean queryMultiselect) {
+    this.queryMultiselect = queryMultiselect;
+  }
+
 }
