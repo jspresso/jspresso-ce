@@ -293,6 +293,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           command.actionEvent = actionEvent;
           actionEvent.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
           actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
+          blockUI(false);
           registerCommand(command);
         }
       }
@@ -882,7 +883,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function dispatchCommands():void {
-      blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(HANDLE_COMMANDS_METHOD);
       operation.send(_commandsQueue);
       _commandsQueue.removeAll();
