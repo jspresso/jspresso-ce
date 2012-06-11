@@ -5,7 +5,8 @@
 
   <!-- Hibernate root application context for the Jspresso framework. -->
 
-  <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
+  <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+    lazy-init="false">
     <property name="targetClass"
       value="org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer" />
     <property name="targetMethod" value="setInlineComponentFactory" />
@@ -16,8 +17,8 @@
     </property>
   </bean>
 
-  <bean id="entityInterceptor" class ="org.jspresso.framework.application.backend.persistence.hibernate.ControllerAwareEntityProxyInterceptor">
-    <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+  <bean id="entityInterceptor" class="org.jspresso.framework.application.backend.persistence.hibernate.ControllerAwareEntityProxyInterceptor">
+    <property name="entityFactory" ref="controllerAwareEntityFactory" />
   </bean>
 
   <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -27,7 +28,7 @@
         <value>classpath*:**/*.hbm.xml</value>
       </list>
     </property>
-    <property name="entityInterceptor" ref="entityInterceptor"/>
+    <property name="entityInterceptor" ref="entityInterceptor" />
     <property name="eventListeners">
       <map>
         <entry key="post-load">
@@ -41,11 +42,11 @@
     <property name="filterDefinitions">
       <list>
         <bean class="org.springframework.orm.hibernate3.FilterDefinitionFactoryBean">
-          <property name="filterName" value="JspressoSessionGlobals"/>
+          <property name="filterName" value="JspressoSessionGlobals" />
           <property name="parameterTypes">
             <map>
-              <entry key="login" value="string"/>
-              <entry key="language" value="string"/>
+              <entry key="login" value="string" />
+              <entry key="language" value="string" />
             </map>
           </property>
         </bean>
@@ -55,24 +56,25 @@
 
   <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
-    <property name="entityInterceptor" ref="entityInterceptor"/>
+    <property name="entityInterceptor" ref="entityInterceptor" />
   </bean>
 
   <bean id="transactionTemplate" class="org.jspresso.framework.application.backend.ControllerAwareTransactionTemplate">
-    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionManager" ref="transactionManager" />
   </bean>
 
   <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
-    <property name="flushModeName" value="FLUSH_COMMIT"/>
-    <property name="entityInterceptor" ref="entityInterceptor"/>
+    <property name="flushModeName" value="FLUSH_COMMIT" />
+    <property name="entityInterceptor" ref="entityInterceptor" />
   </bean>
 
   <!-- Hibernate root action beans. -->
   <bean abstract="true" id="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
-  <bean id="criteriaFactoryBase" abstract = "true" class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
+  <bean id="criteriaFactoryBase" abstract="true"
+    class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
     <property name="triStateBooleanSupported" ref="triStateBooleanSupported" />
   </bean>
 
@@ -80,11 +82,13 @@
 
   <bean id="applicationCriteriaRefiner" class="org.jspresso.framework.application.backend.action.persistence.hibernate.MockCriteriaRefiner" />
 
-  <bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
+  <bean id="queryEntitiesBackActionBase" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction">
     <property name="criteriaFactory" ref="criteriaFactory" />
-    <property name="criteriaRefiner" ref="applicationCriteriaRefiner"/>
+    <property name="criteriaRefiner" ref="applicationCriteriaRefiner" />
   </bean>
+
+  <bean id="queryEntitiesBackAction" parent="queryEntitiesBackActionBase" />
 
   <bean id="removeCollectionFromMasterBackAction" parent="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction" />
@@ -109,17 +113,17 @@
 
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController">
-    <property name="hibernateSessionFactory" ref="hibernateSessionFactory"/>
+    <property name="hibernateSessionFactory" ref="hibernateSessionFactory" />
     <property name="hibernateTemplate" ref="hibernateTemplate" />
-    <property name="defaultTxFlushMode" value="COMMIT"/>
+    <property name="defaultTxFlushMode" value="COMMIT" />
   </bean>
 
   <bean id="smartEntityCloneFactoryBase" class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
     depends-on="componentTuplizerInit">
     <property name="accessorFactory" ref="accessorFactory" />
   </bean>
-  
-  <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase"/>
+
+  <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase" />
 
   <bean id="applicationBackController" parent="abstractHibernateBackController" scope="prototype" />
 </beans>
