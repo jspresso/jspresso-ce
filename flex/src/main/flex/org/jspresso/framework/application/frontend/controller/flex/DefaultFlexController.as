@@ -370,7 +370,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
         var dialogButtons:Array = new Array();
         for each(var action:RAction in dialogCommand.actions) {
-          dialogButtons.push(getViewFactory().createDialogAction(action));
+          if(action != null) {
+            dialogButtons.push(getViewFactory().createDialogAction(action));
+          }
         }
         var dialogView:UIComponent = null;
         var icon:RIcon = null;
