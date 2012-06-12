@@ -36,6 +36,13 @@ public interface IQueryViewDescriptorFactory {
    *          the component descriptor provider to create query descriptor for.
    * @return the created view descriptor.
    */
-  IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider);
+  IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider);
+
+  /**
+   * Performs necessary adapations to an existing view descriptor in order to make it support query component model.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor to adapt.
+   */
+  void adaptExistingViewDescriptor(IViewDescriptor viewDescriptor);
 }

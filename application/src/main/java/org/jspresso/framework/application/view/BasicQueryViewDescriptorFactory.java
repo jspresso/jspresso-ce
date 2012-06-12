@@ -33,7 +33,9 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
+import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -190,11 +192,11 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
   }
 
   /**
-   * Gets the enumLovAction.
+   * Creates the enumSelectAction.
    * 
    * @param enumPropertyDescriptor
    *          the enumeration property descriptor to create the LOV action for.
-   * @return the enumLovAction.
+   * @return the enumSelectAction.
    */
   protected IDisplayableAction createEnumSelectAction(final EnumQueryStructureDescriptor enumPropertyDescriptor) {
     EditComponentAction<E, F, G> enumSelectAction = new EditComponentAction<E, F, G>();
@@ -274,5 +276,62 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    */
   public void setDefaultFindIconImageUrl(String defaultFindIconImageUrl) {
     this.defaultFindIconImageUrl = defaultFindIconImageUrl;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void adaptExistingViewDescriptor(IViewDescriptor viewDescriptor) {
+    if (viewDescriptor instanceof BasicComponentViewDescriptor) {
+      List<IPropertyViewDescriptor> propertyViews = ((BasicComponentViewDescriptor) viewDescriptor)
+          .getPropertyViewDescriptors();
+      for (int i = 0; i < propertyViews.size(); i++) {
+        IPropertyViewDescriptor propertyView = propertyViews.get(i);
+        if (propertyView.getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
+          if (!(propertyView instanceof BasicReferencePropertyViewDescriptor)) {
+            BasicReferencePropertyViewDescriptor refPropertyView = new BasicReferencePropertyViewDescriptor();
+            refPropertyView.setAction(propertyView.getAction());
+            refPropertyView.setBackground(propertyView.getBackground());
+            refPropertyView.setBorderType(propertyView.getBorderType());
+            refPropertyView.setDescription(propertyView.getDescription());
+            refPropertyView.setFont(propertyView.getFont());
+            refPropertyView.setForeground(propertyView.getForeground());
+            refPropertyView.setGrantedRoles(propertyView.getGrantedRoles());
+            refPropertyView.setHorizontalAlignment(propertyView.getHorizontalAlignment());
+            if (propertyView instanceof DefaultDescriptor) {
+              refPropertyView.setI18nNameKey(((DefaultDescriptor) propertyView).getI18nNameKey());
+            }
+            refPropertyView.setIcon(propertyView.getIcon());
+            refPropertyView.setLabelBackground(propertyView.getLabelBackground());
+            refPropertyView.setLabelFont(propertyView.getLabelFont());
+            refPropertyView.setLabelForeground(propertyView.getLabelForeground());
+            refPropertyView.setModelDescriptor(propertyView.getModelDescriptor());
+            refPropertyView.setName(propertyView.getName());
+            refPropertyView.setPermId(propertyView.getPermId());
+            refPropertyView.setPreferredSize(propertyView.getPreferredSize());
+            refPropertyView.setReadabilityGates(propertyView.getReadabilityGates());
+            refPropertyView.setReadOnly(propertyView.isReadOnly());
+            refPropertyView.setWritabilityGates(propertyView.getWritabilityGates());
+            refPropertyView.setWidth(propertyView.getWidth());
+            propertyView = refPropertyView;
+            propertyViews.set(i, propertyView);
+          }
+          if (((BasicReferencePropertyViewDescriptor) propertyView).getLovAction() == null) {
+            ((BasicReferencePropertyViewDescriptor) propertyView)
+                .setLovAction(createEnumSelectAction((EnumQueryStructureDescriptor) propertyView.getModelDescriptor()));
+          }
+        }
+      }
+      ((BasicComponentViewDescriptor) viewDescriptor).setPropertyViewDescriptors(propertyViews);
+    }
+    if (viewDescriptor instanceof ICompositeViewDescriptor) {
+      List<IViewDescriptor> children = ((ICompositeViewDescriptor) viewDescriptor).getChildViewDescriptors();
+      if (children != null) {
+        for (IViewDescriptor childViewDesc : children) {
+          adaptExistingViewDescriptor(childViewDesc);
+        }
+      }
+    }
   }
 }

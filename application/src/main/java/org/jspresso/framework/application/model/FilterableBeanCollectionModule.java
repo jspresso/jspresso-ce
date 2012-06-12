@@ -52,8 +52,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class FilterableBeanCollectionModule extends BeanCollectionModule
-    implements IPageable {
+public class FilterableBeanCollectionModule extends BeanCollectionModule implements IPageable {
 
   private IQueryComponent                  filter;
   private IComponentDescriptor<IComponent> filterComponentDescriptor;
@@ -136,14 +135,12 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor superViewDescriptor = super.getViewDescriptor();
 
-    IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor
-        .getModelDescriptor();
+    IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor.getModelDescriptor();
 
     IComponentDescriptor<IComponent> filterComponentDesc = getFilterComponentDescriptor();
     IViewDescriptor filterViewDesc = getFilterViewDescriptor();
     if (filterViewDesc == null) {
-      filterViewDesc = queryViewDescriptorFactory
-          .createQueryViewDescriptor(filterComponentDesc);
+      filterViewDesc = queryViewDescriptorFactory.createQueryViewDescriptor(filterComponentDesc);
     } else {
       // Deeply clean model descriptors on filter views
       cleanupFilterViewDescriptor(filterViewDesc);
@@ -151,17 +148,16 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
     }
-    ((BasicViewDescriptor) filterViewDesc)
-        .setModelDescriptor(moduleDescriptor
-            .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+    ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(moduleDescriptor
+        .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+    queryViewDescriptorFactory.adaptExistingViewDescriptor(filterViewDesc);
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
 
     BasicCollectionViewDescriptor moduleObjectsView = extractMainCollectionView(getProjectedViewDescriptor());
     if (getPageSize() != null && getPageSize().intValue() >= 0) {
-      if (moduleObjectsView != null
-          && moduleObjectsView.getPaginationViewDescriptor() == null) {
+      if (moduleObjectsView != null && moduleObjectsView.getPaginationViewDescriptor() == null) {
         moduleObjectsView.setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
@@ -170,12 +166,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   private void cleanupFilterViewDescriptor(IViewDescriptor filterViewDesc) {
-    if (filterViewDescriptor instanceof BasicViewDescriptor) {
+    if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(null);
     }
     if (filterViewDesc instanceof ICompositeViewDescriptor) {
-      List<IViewDescriptor> children = ((ICompositeViewDescriptor) filterViewDesc)
-          .getChildViewDescriptors();
+      List<IViewDescriptor> children = ((ICompositeViewDescriptor) filterViewDesc).getChildViewDescriptors();
       if (children != null) {
         for (IViewDescriptor childViewDesc : children) {
           cleanupFilterViewDescriptor(childViewDesc);
@@ -200,8 +195,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     }
     Object oldValue = getFilter();
     if (oldValue instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) oldValue)
-          .removePropertyChangeListener(filterComponentTracker);
+      ((IPropertyChangeCapable) oldValue).removePropertyChangeListener(filterComponentTracker);
     }
     this.filter = filter;
     if (filter != null) {
@@ -209,8 +203,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
       filter.setDefaultOrderingProperties(getOrderingProperties());
       filter.addPropertyChangeListener(filterComponentTracker);
     }
-    firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER,
-        oldValue, getFilter());
+    firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER, oldValue, getFilter());
   }
 
   /**
@@ -221,8 +214,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * @param filterComponentDescriptor
    *          the filterComponentDescriptor to set.
    */
-  public void setFilterComponentDescriptor(
-      IComponentDescriptor<IComponent> filterComponentDescriptor) {
+  public void setFilterComponentDescriptor(IComponentDescriptor<IComponent> filterComponentDescriptor) {
     this.filterComponentDescriptor = filterComponentDescriptor;
   }
 
@@ -280,8 +272,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * @param queryViewDescriptorFactory
    *          the queryViewDescriptorFactory to set.
    */
-  public void setQueryViewDescriptorFactory(
-      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+  public void setQueryViewDescriptorFactory(IQueryViewDescriptorFactory queryViewDescriptorFactory) {
     this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 
@@ -292,9 +283,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    */
   @Override
   protected BeanCollectionModuleDescriptor getDescriptor() {
-    return new FilterableBeanCollectionModuleDescriptor(
-        getElementComponentDescriptor(), getQueryComponentDescriptorFactory()
-            .createQueryComponentDescriptor(getFilterComponentDescriptor()));
+    return new FilterableBeanCollectionModuleDescriptor(getElementComponentDescriptor(),
+        getQueryComponentDescriptorFactory().createQueryComponentDescriptor(getFilterComponentDescriptor()));
   }
 
   /**
@@ -332,18 +322,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      target.firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER
-          + "." + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+      target.firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "." + evt.getPropertyName(),
+          evt.getOldValue(), evt.getNewValue());
       if (IPageable.DISPLAY_PAGE_INDEX.equals(evt.getPropertyName())
-          || IPageable.NEXT_PAGE_ENABLED.equals(evt.getPropertyName())
-          || IPageable.PAGE.equals(evt.getPropertyName())
-          || IPageable.PAGE_COUNT.equals(evt.getPropertyName())
-          || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
+          || IPageable.NEXT_PAGE_ENABLED.equals(evt.getPropertyName()) || IPageable.PAGE.equals(evt.getPropertyName())
+          || IPageable.PAGE_COUNT.equals(evt.getPropertyName()) || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
           || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.RECORD_COUNT.equals(evt.getPropertyName())
           || IPageable.PAGE_NAVIGATION_ENABLED.equals(evt.getPropertyName())) {
-        target.firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
-            evt.getNewValue());
+        target.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
       }
     }
   }
@@ -354,8 +341,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * @param paginationViewDescriptor
    *          the paginationViewDescriptor to set.
    */
-  public void setPaginationViewDescriptor(
-      BasicViewDescriptor paginationViewDescriptor) {
+  public void setPaginationViewDescriptor(BasicViewDescriptor paginationViewDescriptor) {
     this.paginationViewDescriptor = paginationViewDescriptor;
   }
 
@@ -491,8 +477,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    */
   @Override
   public FilterableBeanCollectionModule clone() {
-    FilterableBeanCollectionModule clone = (FilterableBeanCollectionModule) super
-        .clone();
+    FilterableBeanCollectionModule clone = (FilterableBeanCollectionModule) super.clone();
     clone.filterComponentTracker = new FilterComponentTracker(clone);
     if (filter != null) {
       clone.setFilter(filter.clone());

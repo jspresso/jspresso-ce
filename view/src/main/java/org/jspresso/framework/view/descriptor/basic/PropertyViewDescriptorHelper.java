@@ -25,6 +25,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
@@ -68,16 +69,17 @@ public final class PropertyViewDescriptorHelper {
      * custom LOV action
      */
     boolean toExplode = (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
-            || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
-            .getLovAction() == null);
+        || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+        .getLovAction() == null);
 
     /*
      * Include inlined component reference
      */
     toExplode = toExplode
-        && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-            .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
-                .getComponentContract())));
+        && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+            && !IEntity.class.isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                .getReferencedDescriptor().getComponentContract())
+            && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
 
     if (toExplode) {
       IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
