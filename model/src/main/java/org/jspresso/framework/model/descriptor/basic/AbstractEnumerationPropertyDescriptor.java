@@ -38,7 +38,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarP
 
   private String  enumerationName;
   private Integer maxLength;
-  private boolean queryMultiselect = false;
+  private boolean queryMultiselect = true;
 
   /**
    * {@inheritDoc}
@@ -125,7 +125,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarP
   /**
    * This property allows to control if the enumeration property view should be
    * transformed into a multi-selectable property view in order to allow for
-   * value disjunctions in filters. Default value is <code>false</code>.
+   * value disjunctions in filters. Default value is <code>true</code>.
    * 
    * @param queryMultiselect
    *          the queryMultiselect to set.
