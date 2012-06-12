@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -68,8 +67,7 @@ public final class PropertyViewDescriptorHelper {
      * Exlude explicitely configured reference property view filled with a
      * custom LOV action
      */
-    boolean toExplode = !(propertyViewDescriptor instanceof ICollectionPropertyDescriptor<?>)
-        && (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
+    boolean toExplode = (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
             || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
             .getLovAction() == null);
 
