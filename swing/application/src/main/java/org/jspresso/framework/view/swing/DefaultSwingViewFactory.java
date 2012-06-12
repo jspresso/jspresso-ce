@@ -889,8 +889,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
         for (String enumElement : enumerationValues) {
           JRadioButton subViewComponent = new JRadioButton();
-          subViewComponent.setText(actionHandler.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(), enumElement), locale));
+          subViewComponent.setText(propertyDescriptor.getI18nValue(enumElement, actionHandler, locale));
           JRadioButtonConnector subConnector = new JRadioButtonConnector(propertyDescriptor.getName(),
               subViewComponent, enumElement);
           adjustSizes(propertyViewDescriptor, subViewComponent, null,
@@ -2968,8 +2967,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       label.setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String.valueOf(value)),
           getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
-        label.setText(translationProvider.getTranslation(
-            computeEnumerationKey(propertyDescriptor.getEnumerationName(), value), locale));
+        label.setText(propertyDescriptor.getI18nValue((String) value, translationProvider, locale));
       } else {
         if (value == null) {
           label.setText(" ");
@@ -3028,8 +3026,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          super.setValue(translationProvider.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(), connectorValue), locale));
+          super.setValue(propertyDescriptor.getI18nValue((String) connectorValue, translationProvider, locale));
         } else {
           if (connectorValue == null) {
             super.setValue("");
@@ -3039,8 +3036,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
-          super.setValue(translationProvider.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(), value), locale));
+          super.setValue(propertyDescriptor.getI18nValue((String) value, translationProvider, locale));
         } else {
           if (value == null) {
             super.setValue("");

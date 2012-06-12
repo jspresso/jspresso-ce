@@ -35,7 +35,7 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
-import org.jspresso.framework.model.descriptor.query.EnumerationQueryStructureDescriptor;
+import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 
 /**
  * An implementation used for query components.
@@ -130,7 +130,11 @@ public class RefQueryComponentDescriptor<E> extends AbstractComponentDescriptor<
       return propertyDescriptor;
     }
     IPropertyDescriptor refinedPropertyDescriptor;
-    if (propertyDescriptor instanceof BasicPropertyDescriptor && isPropertyFilterComparable(propertyDescriptor)) {
+    if (propertyDescriptor instanceof AbstractEnumerationPropertyDescriptor
+        && ((AbstractEnumerationPropertyDescriptor) propertyDescriptor).isQueryMultiselect()) {
+      refinedPropertyDescriptor = new EnumQueryStructureDescriptor(
+          (AbstractEnumerationPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof BasicPropertyDescriptor && isPropertyFilterComparable(propertyDescriptor)) {
       refinedPropertyDescriptor = new ComparableQueryStructureDescriptor(
           ((BasicPropertyDescriptor) propertyDescriptor).createQueryDescriptor());
     } else if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>)) {
@@ -147,10 +151,6 @@ public class RefQueryComponentDescriptor<E> extends AbstractComponentDescriptor<
         // basicRefPropDesc.setRenderedProperties(savedRenderedProperties);
       }
       refinedPropertyDescriptor = propertyDescriptor;
-    } else if (propertyDescriptor instanceof AbstractEnumerationPropertyDescriptor
-        && ((AbstractEnumerationPropertyDescriptor) propertyDescriptor).isQueryMultiselect()) {
-      refinedPropertyDescriptor = new EnumerationQueryStructureDescriptor(
-          (AbstractEnumerationPropertyDescriptor) propertyDescriptor);
     } else {
       refinedPropertyDescriptor = propertyDescriptor;
     }

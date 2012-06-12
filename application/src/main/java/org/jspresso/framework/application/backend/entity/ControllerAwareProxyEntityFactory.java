@@ -24,6 +24,7 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.component.ControllerAwareComponentInvocationHandler;
 import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -106,4 +107,15 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
     return new ControllerAwareComponentInvocationHandler(componentDescriptor, this, getComponentCollectionFactory(),
         getAccessorFactory(), getComponentExtensionFactory());
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IQueryComponent createQueryComponentInstance(Class<? extends IComponent> componentContract) {
+    IQueryComponent queryComponent = super.createQueryComponentInstance(componentContract);
+    queryComponent.translate(getBackendController(), getBackendController().getLocale());
+    return queryComponent;
+  }
+
 }

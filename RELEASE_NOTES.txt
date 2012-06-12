@@ -1,5 +1,9 @@
 3.5.13
 ======
+- BasicQueryViewDescriptorFactory has changed package
+  from : org.jspresso.framework.view.descriptor.basic
+  to   : org.jspresso.framework.application.view
+
 - In order to garantee that async action always execute in a brand new context (e.g. using a slave backend controller),
   the backend controller is always retrieved from the BackendControllerHolder, i.e. the Frontend controller does not hold any
   direct reference to it anymore.

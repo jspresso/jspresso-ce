@@ -18,7 +18,10 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.Locale;
+
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * Abstract base descriptor for properties whose values are enumerated strings.
@@ -131,4 +134,25 @@ public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarP
     this.queryMultiselect = queryMultiselect;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nValue(String value, ITranslationProvider translationProvider, Locale locale) {
+    if (isTranslated()) {
+      return translationProvider.getTranslation(computeEnumerationKey(value), locale);
+    }
+    return value;
+  }
+
+  /**
+   * Computes an enumeration key.
+   * 
+   * @param value
+   *          the enumeration value.
+   * @return the enumeration key.
+   */
+  protected String computeEnumerationKey(Object value) {
+    return getEnumerationName() + "." + value;
+  }
 }

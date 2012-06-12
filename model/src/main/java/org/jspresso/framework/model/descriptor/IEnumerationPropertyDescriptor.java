@@ -19,6 +19,9 @@
 package org.jspresso.framework.model.descriptor;
 
 import java.util.List;
+import java.util.Locale;
+
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * This interface is implemented by descriptors of enumeration properties. This
@@ -28,8 +31,7 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEnumerationPropertyDescriptor extends
-    IScalarPropertyDescriptor {
+public interface IEnumerationPropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
    * Gets the name of the enumeration (like GENDER for a MALE/FEMALE
@@ -50,7 +52,7 @@ public interface IEnumerationPropertyDescriptor extends
    * Gets the icon image url to use to render a enumeration value.
    * 
    * @param value
-   *            the value to render.
+   *          the value to render.
    * @return the image url to use.
    */
   String getIconImageURL(String value);
@@ -69,5 +71,20 @@ public interface IEnumerationPropertyDescriptor extends
    * @return true if the enumeration values should be presented translated.
    */
   boolean isTranslated();
+
+  /**
+   * Gets the internationalized value of an enumeration element.
+   * 
+   * @param value
+   *          the enum value to translate.
+   * @param translationProvider
+   *          the translation provider which can be used by the descriptor to
+   *          compute its internationalized name.
+   * @param locale
+   *          the locale in which the descriptor must compute its
+   *          internationalized name.
+   * @return The internationalized value.
+   */
+  String getI18nValue(String value, ITranslationProvider translationProvider, Locale locale);
 
 }

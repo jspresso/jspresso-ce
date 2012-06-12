@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.component;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -26,6 +27,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.collection.ISortable;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;
 
 /**
@@ -36,8 +38,7 @@ import org.jspresso.framework.util.lang.ICloneable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IQueryComponent extends Map<String, Object>, IPageable,
-    ISortable, ICloneable, IPropertyChangeCapable {
+public interface IQueryComponent extends Map<String, Object>, IPageable, ISortable, ICloneable, IPropertyChangeCapable {
 
   /**
    * Ordering properties action constant.
@@ -140,5 +141,15 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * @return the distinctEnforced.
    */
   boolean isDistinctEnforced();
+
+  /**
+   * Performs any I18N dependent initialization on the query component.
+   * 
+   * @param translationProvider
+   *          the translation provider.
+   * @param locale
+   *          the session locale.
+   */
+  void translate(ITranslationProvider translationProvider, Locale locale);
 
 }

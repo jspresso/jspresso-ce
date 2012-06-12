@@ -907,9 +907,7 @@ public class DefaultRemoteViewFactory extends
           if ("".equals(value)) {
             translations.add(" ");
           } else {
-            translations.add(actionHandler.getTranslation(
-                computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                    value), locale));
+            translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
           }
         } else {
           if (value == null) {

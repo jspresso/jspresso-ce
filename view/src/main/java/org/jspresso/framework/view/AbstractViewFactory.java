@@ -685,19 +685,6 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Computes an enumeration key.
-   * 
-   * @param keyPrefix
-   *          the prefix to use.
-   * @param value
-   *          the enumeration value.
-   * @return the enumeration key.
-   */
-  protected String computeEnumerationKey(String keyPrefix, Object value) {
-    return keyPrefix + "." + value;
-  }
-
-  /**
    * Computes a size in pixels based on a number of characters and a component.
    * It should use component font do do so.
    * 
@@ -1295,8 +1282,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     if (propertyDescriptor.isTranslated()) {
       translations = new HashMap<Object, String>();
       for (String value : propertyDescriptor.getEnumerationValues()) {
-        translations.put(value, translationProvider.getTranslation(
-            computeEnumerationKey(propertyDescriptor.getEnumerationName(), value), locale));
+        translations.put(value, propertyDescriptor.getI18nValue(value, translationProvider, locale));
       }
     }
     IFormatter formatter = new EnumerationFormatter(translations);
@@ -2204,9 +2190,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       ITranslationProvider translationProvider, Locale locale) {
     int maxTranslationLength = -1;
     if (translationProvider != null && propertyDescriptor.isTranslated()) {
-      for (Object enumerationValue : propertyDescriptor.getEnumerationValues()) {
-        String translation = translationProvider.getTranslation(
-            computeEnumerationKey(propertyDescriptor.getEnumerationName(), enumerationValue), locale);
+      for (String enumerationValue : propertyDescriptor.getEnumerationValues()) {
+        String translation = propertyDescriptor.getI18nValue(enumerationValue, translationProvider, locale);
         if (translation.length() > maxTranslationLength) {
           maxTranslationLength = translation.length();
         }

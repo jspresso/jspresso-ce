@@ -19,7 +19,6 @@
 package org.jspresso.framework.model.persistence.hibernate.criterion;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +35,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
+import org.jspresso.framework.model.component.query.EnumQueryStructure;
 import org.jspresso.framework.model.component.query.EnumValueQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
@@ -219,6 +219,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
               }
             } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
               currentCriteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+            } else if (property.getValue() instanceof EnumQueryStructure) {
+              completeWithEnumQueryStructure(currentCriteria, prefixedProperty,
+                  ((EnumQueryStructure) property.getValue()));
             } else if (property.getValue() instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
@@ -260,39 +263,6 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                   }
                 }
               }
-            } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor
-                && property.getValue() instanceof Collection<?>) {
-              Set<String> inListValues = new HashSet<String>();
-              boolean nullAllowed = false;
-              for (Object inListValue : ((Collection<?>) property.getValue())) {
-                if (inListValue instanceof EnumValueQueryStructure) {
-                  if (((EnumValueQueryStructure) inListValue).isSelected()) {
-                    if (((EnumValueQueryStructure) inListValue).getValue() == null
-                        || "".equals(((EnumValueQueryStructure) inListValue).getValue())) {
-                      nullAllowed = true;
-                    } else {
-                      inListValues.add(((EnumValueQueryStructure) inListValue).getValue());
-                    }
-                  }
-                } else if (inListValue == null || inListValue instanceof String) {
-                  if (inListValue == null || "".equals(inListValue)) {
-                    nullAllowed = true;
-                  } else {
-                    inListValues.add((String) inListValue);
-                  }
-                }
-              }
-              if (!inListValues.isEmpty()) {
-                Criterion inListCriterion = Restrictions.in(prefixedProperty, inListValues);
-                if (nullAllowed) {
-                  Junction disjunction = Restrictions.disjunction();
-                  disjunction.add(inListCriterion);
-                  disjunction.add(Restrictions.isNull(prefixedProperty));
-                  currentCriteria.add(disjunction);
-                } else {
-                  currentCriteria.add(inListCriterion);
-                }
-              }
             } else if (property.getValue() != null) {
               // Unknown property type. Assume equals.
               currentCriteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
@@ -302,6 +272,40 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
       }
     }
     return abort;
+  }
+
+  /**
+   * Complements a criteria by processing an enumeration query structure.
+   * 
+   * @param currentCriteria
+   *          the current criteria that is being built.
+   * @param path
+   *          the path to the comparable property.
+   * @param enumQueryStructure
+   *          the collection of checked / unchecked enumeration values.
+   */
+  protected void completeWithEnumQueryStructure(DetachedCriteria currentCriteria, String path,
+      EnumQueryStructure enumQueryStructure) {
+    Set<String> inListValues = new HashSet<String>();
+    boolean nullAllowed = false;
+    for (EnumValueQueryStructure inListValue : enumQueryStructure.getSelectedEnumerationValues()) {
+      if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
+        nullAllowed = true;
+      } else {
+        inListValues.add(inListValue.getValue());
+      }
+    }
+    if (!inListValues.isEmpty()) {
+      Criterion inListCriterion = Restrictions.in(path, inListValues);
+      if (nullAllowed) {
+        Junction disjunction = Restrictions.disjunction();
+        disjunction.add(inListCriterion);
+        disjunction.add(Restrictions.isNull(path));
+        currentCriteria.add(disjunction);
+      } else {
+        currentCriteria.add(inListCriterion);
+      }
+    }
   }
 
   /**

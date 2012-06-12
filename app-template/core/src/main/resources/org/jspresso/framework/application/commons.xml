@@ -138,10 +138,16 @@
 
   <!-- The scriptHandler. -->
   <bean id="scriptHandler" class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
-
-  <!-- The query view descriptor factory. -->
-  <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory">
+ 
+  <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.application.view.BasicQueryViewDescriptorFactory">
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
+    <property name="okCloseDialogAction" ref="okDialogFrontAction"/>
+    <property name="modalDialogAction" ref="modalDialogAction"/>
+    <property name="defaultFindIconImageUrl">
+      <bean parent="abstractFwIconImageURL" >
+        <constructor-arg index="0" value="find" />
+      </bean>
+    </property>
   </bean>
 
   <!-- Custom exception handler -->

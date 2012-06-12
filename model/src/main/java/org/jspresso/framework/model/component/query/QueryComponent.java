@@ -23,10 +23,9 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
@@ -42,6 +41,7 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * The default implementation of a query component.
@@ -80,23 +80,30 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (!ComparableQueryStructure.class.isAssignableFrom(queryDescriptor.getComponentContract())) {
       for (IPropertyDescriptor propertyDescriptor : queryDescriptor.getPropertyDescriptors()) {
         if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          Set<EnumValueQueryStructure> enumValues = new LinkedHashSet<EnumValueQueryStructure>();
-          if (!propertyDescriptor.isMandatory()) {
-            EnumValueQueryStructure nullValueQueryStructure = new EnumValueQueryStructure();
-            nullValueQueryStructure.setValue(null);
-            enumValues.add(nullValueQueryStructure);
-          }
-          for (String value : ((IEnumerationPropertyDescriptor) propertyDescriptor).getEnumerationValues()) {
-            EnumValueQueryStructure enumValueQueryStructure = new EnumValueQueryStructure();
-            enumValueQueryStructure.setValue(value);
-            enumValues.add(enumValueQueryStructure);
-          }
-          put(propertyDescriptor.getName(), enumValues);
+          EnumQueryStructure enumQueryStructure = new EnumQueryStructure(
+              (IEnumerationPropertyDescriptor) propertyDescriptor);
+          put(propertyDescriptor.getName(), enumQueryStructure);
         }
       }
     }
     this.componentFactory = componentFactory;
     this.distinctEnforced = false;
+  }
+
+  /**
+   * Assigns translation provider as well as session locale to enumeration query
+   * structures.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void translate(ITranslationProvider translationProvider, Locale locale) {
+    for (Object value : values()) {
+      if (value instanceof EnumQueryStructure) {
+        ((EnumQueryStructure) value).setTranslationProvider(translationProvider);
+        ((EnumQueryStructure) value).setLocale(locale);
+      }
+    }
   }
 
   /**
