@@ -462,6 +462,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
             if (!isQueryComponentEmpty((IQueryComponent) property.getValue(), propertyDescriptor)) {
               return false;
             }
+          } else if (property.getValue() instanceof EnumQueryStructure) {
+            if (!((EnumQueryStructure) property.getValue()).getSelectedEnumerationValues().isEmpty()) {
+              return false;
+            }
           } else {
             Map<String, Object> initializationMapping = null;
             if (holdingPropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
