@@ -147,6 +147,13 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
   }
 
   /**
+   * Force a notification of the toString().
+   */
+  public void refreshToString() {
+    firePropertyChange(EnumQueryStructureDescriptor.TO_STRING, null, getToString());
+  }
+
+  /**
    * Gets the translationProvider.
    * 
    * @return the translationProvider.
