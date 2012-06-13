@@ -147,6 +147,17 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
   }
 
   /**
+   * Returns <code>true</code> if this query structure does not have any
+   * selected value.
+   * 
+   * @return <code>true</code> if this query structure does not have any
+   *         selected value.
+   */
+  public boolean isEmpty() {
+    return getSelectedEnumerationValues().isEmpty();
+  }
+
+  /**
    * Force a notification of the toString().
    */
   public void refreshToString() {
