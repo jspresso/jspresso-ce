@@ -38,7 +38,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarP
 
   private String  enumerationName;
   private Integer maxLength;
-  private boolean queryMultiselect = true;
+  private boolean queryMultiselect = false;
 
   /**
    * {@inheritDoc}
