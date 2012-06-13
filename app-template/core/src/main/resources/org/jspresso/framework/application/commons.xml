@@ -140,7 +140,6 @@
   <bean id="scriptHandler" class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
  
   <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.application.view.BasicQueryViewDescriptorFactory">
-    <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
     <property name="okCloseDialogAction" ref="okDialogFrontAction"/>
     <property name="modalDialogAction" ref="modalDialogAction"/>
     <property name="defaultFindIconImageUrl">

@@ -1,5 +1,11 @@
 3.5.13
 ======
+- In order to lower coupling between IQueryViewDescriptorFactory and IQueryComponentDescriptorFactory, the signature
+  of createQueryViewDescriptor has changed to :
+      createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+        IComponentDescriptor<IQueryComponent> queryComponentDescriptor);
+  Instead of having the responsibility to create the actual query filter descriptor, it is now passed as parameter.
+
 - BasicQueryViewDescriptorFactory has changed package
   from : org.jspresso.framework.view.descriptor.basic
   to   : org.jspresso.framework.application.view

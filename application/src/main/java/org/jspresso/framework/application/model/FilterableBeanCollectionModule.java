@@ -29,8 +29,8 @@ import org.jspresso.framework.application.model.descriptor.FilterableBeanCollect
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
-import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
@@ -61,9 +61,20 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
 
   private Map<String, ESort>               orderingProperties;
   private Integer                          pageSize;
+  private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
   private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
-  private IViewDescriptor                  paginationViewDescriptor;
-  private BackendAction                    pagingAction;
+
+  /**
+   * Gets the queryViewDescriptorFactory.
+   * 
+   * @return the queryViewDescriptorFactory.
+   */
+  protected IQueryViewDescriptorFactory getQueryViewDescriptorFactory() {
+    return queryViewDescriptorFactory;
+  }
+
+  private IViewDescriptor paginationViewDescriptor;
+  private BackendAction   pagingAction;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -131,16 +142,21 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor superViewDescriptor = super.getViewDescriptor();
 
     IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor.getModelDescriptor();
 
-    IComponentDescriptor<IComponent> filterComponentDesc = getFilterComponentDescriptor();
+    IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
     IViewDescriptor filterViewDesc = getFilterViewDescriptor();
+    IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider =
+        (IComponentDescriptorProvider<IQueryComponent>) moduleDescriptor
+          .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
     if (filterViewDesc == null) {
-      filterViewDesc = queryViewDescriptorFactory.createQueryViewDescriptor(filterComponentDesc);
+      filterViewDesc = getQueryViewDescriptorFactory().createQueryViewDescriptor(realComponentDesc,
+          filterModelDescriptorProvider.getComponentDescriptor());
     } else {
       // Deeply clean model descriptors on filter views
       cleanupFilterViewDescriptor(filterViewDesc);
@@ -148,9 +164,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
     if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
     }
-    ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(moduleDescriptor
-        .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
-    queryViewDescriptorFactory.adaptExistingViewDescriptor(filterViewDesc);
+    ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(filterModelDescriptorProvider);
+    getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterViewDesc);
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
@@ -295,10 +310,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    *         model descriptor.
    */
   protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
-    if (queryViewDescriptorFactory instanceof IQueryComponentDescriptorFactory) {
-      return (IQueryComponentDescriptorFactory) queryViewDescriptorFactory;
-    }
-    return new BasicQueryComponentDescriptorFactory();
+    return queryComponentDescriptorFactory;
   }
 
   private static class FilterComponentTracker implements PropertyChangeListener {
@@ -525,5 +537,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
       return filter.getStickyResults();
     }
     return null;
+  }
+
+  /**
+   * Sets the queryComponentDescriptorFactory.
+   * 
+   * @param queryComponentDescriptorFactory
+   *          the queryComponentDescriptorFactory to set.
+   */
+  public void setQueryComponentDescriptorFactory(IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+    this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }

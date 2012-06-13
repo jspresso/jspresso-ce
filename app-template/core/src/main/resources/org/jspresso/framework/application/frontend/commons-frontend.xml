@@ -12,6 +12,7 @@
   
 
   <bean id="lovViewDescriptorFactoryBase" class="org.jspresso.framework.application.frontend.action.lov.BasicLovViewDescriptorFactory">
+    <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="resultViewDescriptorFactory" ref="lovResultViewDescriptorFactory" />
     <property name="sortingAction">
@@ -1009,6 +1010,7 @@
   </bean>
 
   <bean abstract="true" id="abstractFilterableBeanCollectionModule" class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
+    <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="paginationViewDescriptor" ref="pagingNavigationView" />
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />

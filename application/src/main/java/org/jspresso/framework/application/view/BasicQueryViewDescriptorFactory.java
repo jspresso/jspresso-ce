@@ -28,9 +28,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
@@ -57,15 +55,13 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * @param <G>
  *          the actual action type used.
  */
-public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescriptorFactory,
-    IQueryComponentDescriptorFactory {
+public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescriptorFactory {
 
-  private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
-  private boolean                          horizontallyResizable;
+  private boolean            horizontallyResizable;
 
-  private IDisplayableAction               okCloseDialogAction;
-  private IDisplayableAction               modalDialogAction;
-  private String                           defaultFindIconImageUrl;
+  private IDisplayableAction okCloseDialogAction;
+  private IDisplayableAction modalDialogAction;
+  private String             defaultFindIconImageUrl;
 
   /**
    * Constructs a new <code>BasicQueryViewDescriptorFactory</code> instance.
@@ -78,9 +74,9 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    * {@inheritDoc}
    */
   @Override
-  public IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
-    IComponentDescriptor<IQueryComponent> actualModelDescriptor = getQueryComponentDescriptorFactory()
-        .createQueryComponentDescriptor(componentDescriptorProvider);
+  public IViewDescriptor createQueryViewDescriptor(
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     if (componentDescriptorProvider instanceof IReferencePropertyDescriptor) {
       Map<String, Object> initializationMapping = ((IReferencePropertyDescriptor<?>) componentDescriptorProvider)
@@ -89,7 +85,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
         // we must refine the rendered properties of the filter view to get rid
         // of pre-initialized properties.
         List<String> filterableProperties = new ArrayList<String>();
-        for (String renderedProperty : actualModelDescriptor.getRenderedProperties()) {
+        for (String renderedProperty : queryComponentDescriptor.getRenderedProperties()) {
           if (!initializationMapping.containsKey(renderedProperty)) {
             filterableProperties.add(renderedProperty);
           }
@@ -99,7 +95,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
     }
     List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (String queriableProperty : componentDescriptorProvider.getQueryableProperties()) {
-      IPropertyDescriptor actualPropertyDescriptor = actualModelDescriptor.getPropertyDescriptor(queriableProperty);
+      IPropertyDescriptor actualPropertyDescriptor = queryComponentDescriptor.getPropertyDescriptor(queriableProperty);
       // To preserve col spans for query structures.
       if (actualPropertyDescriptor instanceof ComparableQueryStructureDescriptor) {
         BasicPropertyViewDescriptor propertyView;
@@ -136,12 +132,12 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
 
     IViewDescriptor queryViewDescriptor;
     if (horizontallyResizable) {
-      queryComponentViewDescriptor.setModelDescriptor(actualModelDescriptor);
+      queryComponentViewDescriptor.setModelDescriptor(queryComponentDescriptor);
       queryViewDescriptor = queryComponentViewDescriptor;
     } else {
       BasicBorderViewDescriptor borderViewDescriptor = new BasicBorderViewDescriptor();
       borderViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
-      borderViewDescriptor.setModelDescriptor(actualModelDescriptor);
+      borderViewDescriptor.setModelDescriptor(queryComponentDescriptor);
       queryViewDescriptor = borderViewDescriptor;
     }
 
@@ -156,39 +152,6 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    */
   public void setHorizontallyResizable(boolean horizontallyResizable) {
     this.horizontallyResizable = horizontallyResizable;
-  }
-
-  /**
-   * Delegates to the configured query componentDescriptorFactory.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
-    return getQueryComponentDescriptorFactory().createQueryComponentDescriptor(componentDescriptorProvider);
-  }
-
-  /**
-   * Gets the queryComponentDescriptorFactory.
-   * 
-   * @return the queryComponentDescriptorFactory.
-   */
-  public IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
-    if (queryComponentDescriptorFactory == null) {
-      queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
-    }
-    return queryComponentDescriptorFactory;
-  }
-
-  /**
-   * Sets the queryComponentDescriptorFactory.
-   * 
-   * @param queryComponentDescriptorFactory
-   *          the queryComponentDescriptorFactory to set.
-   */
-  public void setQueryComponentDescriptorFactory(IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
-    this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 
   /**
