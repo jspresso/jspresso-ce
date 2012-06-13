@@ -38,7 +38,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionCallback;
 
 /**
  * This action is used to Hibernate query entities by example. It is used behind
@@ -95,31 +95,33 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
+    IQueryComponent queryComponent = getQueryComponent(context);
+    Set<Object> queriedComponents;
+
     if (getController(context).isUnitOfWorkActive()) {
-      // Ignore merge mode since we are in a TX 
-      doQuery(context, null);
+      // Ignore merge mode since we are in a TX
+      queriedComponents = doQuery(context, null);
     } else {
-      getTransactionTemplate(context).execute(
-          new TransactionCallbackWithoutResult() {
+      queriedComponents = getTransactionTemplate(context).execute(new TransactionCallback<Set<Object>>() {
 
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-              doQuery(context, getMergeMode());
-              status.setRollbackOnly();
-            }
-          });
+        @Override
+        public Set<Object> doInTransaction(TransactionStatus status) {
+          Set<Object> txQueriedComponents = doQuery(context, getMergeMode());
+          status.setRollbackOnly();
+          return txQueriedComponents;
+        }
+      });
     }
-
+    queryComponent.setQueriedComponents(new ArrayList<Object>(queriedComponents));
     return super.execute(actionHandler, context);
   }
 
-  private void doQuery(final Map<String, Object> context, EMergeMode localMergeMode) {
+  private Set<Object> doQuery(final Map<String, Object> context, EMergeMode localMergeMode) {
+
     IQueryComponent queryComponent = getQueryComponent(context);
 
-    IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent
-        .get(COMPONENT_REFINER);
+    IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent.get(COMPONENT_REFINER);
 
     if (compRefiner == null && queryComponentRefiner != null) {
       queryComponent.put(COMPONENT_REFINER, queryComponentRefiner);
@@ -144,8 +146,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       if (nextComponent instanceof IEntity) {
         if (!controller.isEntityRegisteredForDeletion((IEntity) nextComponent)) {
           if (localMergeMode != null) {
-            mergedComponents.add(controller.merge((IEntity) nextComponent,
-                localMergeMode));
+            mergedComponents.add(controller.merge((IEntity) nextComponent, localMergeMode));
           } else {
             mergedComponents.add(nextComponent);
           }
@@ -154,8 +155,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         mergedComponents.add(nextComponent);
       }
     }
-    queryComponent
-        .setQueriedComponents(new ArrayList<Object>(mergedComponents));
+    return mergedComponents;
   }
 
   /**
@@ -168,24 +168,20 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    *          the action context
    * @return the liste of retrieved components.
    */
-  protected List<?> performQuery(final IQueryComponent queryComponent,
-      final Map<String, Object> context) {
+  protected List<?> performQuery(final IQueryComponent queryComponent, final Map<String, Object> context) {
     Session hibernateSession = getHibernateSession(context);
-    ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
-        .get(CRITERIA_FACTORY);
+    ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent.get(CRITERIA_FACTORY);
     if (critFactory == null) {
       queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
       critFactory = getCriteriaFactory();
     }
-    EnhancedDetachedCriteria criteria = critFactory.createCriteria(
-        queryComponent, context);
+    EnhancedDetachedCriteria criteria = critFactory.createCriteria(queryComponent, context);
     List<?> entities;
     if (criteria == null) {
       entities = new ArrayList<IEntity>();
       queryComponent.setRecordCount(new Integer(0));
     } else {
-      ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
-          .get(CRITERIA_REFINER);
+      ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent.get(CRITERIA_REFINER);
       if (critRefiner == null && criteriaRefiner != null) {
         queryComponent.put(CRITERIA_REFINER, criteriaRefiner);
         critRefiner = criteriaRefiner;
@@ -197,8 +193,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       Integer pageSize = queryComponent.getPageSize();
       Integer page = queryComponent.getPage();
 
-      ResultTransformer refinerResultTransformer = criteria
-          .getResultTransformer();
+      ResultTransformer refinerResultTransformer = criteria.getResultTransformer();
       List<Order> refinerOrders = criteria.getOrders();
       if (refinerOrders != null) {
         criteria.removeAllOrders();
@@ -206,8 +201,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
       if (queryComponent.isDistinctEnforced()) {
         criteria.setProjection(Projections.distinct(Projections.id()));
-        EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
-            .forEntityName(queryComponent.getQueryContract().getName());
+        EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria.forEntityName(queryComponent
+            .getQueryContract().getName());
         outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
         criteria = outerCriteria;
       }
@@ -219,31 +214,26 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         }
         if (queryComponent.getRecordCount() == null) {
           criteria.setProjection(Projections.rowCount());
-          totalCount = new Integer(
-              ((Number) criteria.getExecutableCriteria(hibernateSession).list()
-                  .get(0)).intValue());
+          totalCount = new Integer(((Number) criteria.getExecutableCriteria(hibernateSession).list().get(0)).intValue());
         }
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
             criteria.addOrder(order);
           }
         }
-        critFactory.completeCriteriaWithOrdering(criteria, queryComponent,
-            context);
+        critFactory.completeCriteriaWithOrdering(criteria, queryComponent, context);
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
         entities = criteria.getExecutableCriteria(hibernateSession)
-            .setFirstResult(page.intValue() * pageSize.intValue())
-            .setMaxResults(pageSize.intValue()).list();
+            .setFirstResult(page.intValue() * pageSize.intValue()).setMaxResults(pageSize.intValue()).list();
       } else {
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
             criteria.addOrder(order);
           }
         }
-        critFactory.completeCriteriaWithOrdering(criteria, queryComponent,
-            context);
+        critFactory.completeCriteriaWithOrdering(criteria, queryComponent, context);
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
@@ -288,8 +278,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * @param queryComponentRefiner
    *          the queryComponentRefiner to set.
    */
-  public void setQueryComponentRefiner(
-      IQueryComponentRefiner queryComponentRefiner) {
+  public void setQueryComponentRefiner(IQueryComponentRefiner queryComponentRefiner) {
     this.queryComponentRefiner = queryComponentRefiner;
   }
 
@@ -310,8 +299,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * @return the query component.
    */
   protected IQueryComponent getQueryComponent(Map<String, Object> context) {
-    IQueryComponent queryComponent = (IQueryComponent) context
-        .get(IQueryComponent.QUERY_COMPONENT);
+    IQueryComponent queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
     return queryComponent;
   }
 
