@@ -102,18 +102,33 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     if (getController(context).isUnitOfWorkActive()) {
       // Ignore merge mode since we are in a TX
       queriedComponents = doQuery(queryComponent, context, null);
+      // The queried components are assigned to the query component inside the
+      // TX since they are not merged.
+      queryComponent.setQueriedComponents(new ArrayList<Object>(queriedComponents));
     } else {
+      final EMergeMode localMergeMode = getMergeMode();
       queriedComponents = getTransactionTemplate(context).execute(new TransactionCallback<Set<Object>>() {
 
         @Override
         public Set<Object> doInTransaction(TransactionStatus status) {
-          Set<Object> txQueriedComponents = doQuery(queryComponent, context, getMergeMode());
+          Set<Object> txQueriedComponents = doQuery(queryComponent, context, localMergeMode);
           status.setRollbackOnly();
+          if (localMergeMode == null) {
+            // The queried components are assigned to the query component inside
+            // the
+            // TX since they are not merged.
+            queryComponent.setQueriedComponents(new ArrayList<Object>(txQueriedComponents));
+          }
           return txQueriedComponents;
         }
       });
+      if (localMergeMode != null) {
+        // The queried components are assigned to the query component outside of
+        // the
+        // TX since they have been merged into the session.
+        queryComponent.setQueriedComponents(new ArrayList<Object>(queriedComponents));
+      }
     }
-    queryComponent.setQueriedComponents(new ArrayList<Object>(queriedComponents));
     return super.execute(actionHandler, context);
   }
 
