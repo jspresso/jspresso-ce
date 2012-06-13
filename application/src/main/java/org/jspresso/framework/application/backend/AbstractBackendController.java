@@ -1251,7 +1251,7 @@ public abstract class AbstractBackendController extends AbstractController imple
             getComponentContract(entity));
         Map<String, Object> entityProperties = entity.straightGetProperties();
         Map<String, Object> registeredEntityProperties = registeredEntity.straightGetProperties();
-        Map<String, Object> mergedProperties = new HashMap<String, Object>();
+        Map<String, Object> mergedProperties = new LinkedHashMap<String, Object>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           String propertyName = property.getKey();
           Object propertyValue = property.getValue();
