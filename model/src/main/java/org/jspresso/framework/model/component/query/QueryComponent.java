@@ -37,6 +37,7 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.AbstractEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
+import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
@@ -74,6 +75,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   public QueryComponent(IComponentDescriptor<?> componentDescriptor, IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
+    this.componentFactory = componentFactory;
     this.queryDescriptor = componentFactory.getComponentDescriptor(getQueryContract());
     if (queryDescriptor == null) {
       queryDescriptor = componentDescriptor;
@@ -88,7 +90,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         }
       }
     }
-    this.componentFactory = componentFactory;
     this.distinctEnforced = false;
   }
 
@@ -123,7 +124,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
     IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor((String) key);
     Object actualValue = super.get(key);
-    if (actualValue == null && propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+    if (actualValue == null && propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+        && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor, getComponentFactory());
@@ -227,6 +229,17 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
             }
           }
           return actualValue;
+        }
+      } else if (propertyDescriptor instanceof EnumQueryStructureDescriptor) {
+        Object actualValue = /* super. */get(key);
+        if (actualValue instanceof EnumQueryStructure) {
+          if (value == null) {
+            ((EnumQueryStructure) actualValue).clear();
+          }
+          // Never nullify an EnumQueryStructure
+          return null;
+        } else if (!(value instanceof EnumQueryStructure)) {
+          return null;
         }
       }
     }

@@ -138,6 +138,15 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
   }
 
   /**
+   * Clears all selection.
+   */
+  public void clear() {
+    for (EnumValueQueryStructure value : getEnumerationValues()) {
+      value.setSelected(false);
+    }
+  }
+
+  /**
    * Gets the translationProvider.
    * 
    * @return the translationProvider.

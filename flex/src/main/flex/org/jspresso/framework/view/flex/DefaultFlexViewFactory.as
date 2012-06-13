@@ -736,8 +736,10 @@ package org.jspresso.framework.view.flex {
         var triggerAction:Function = function (event:Event):void {
           var tf:TextInput = (event.currentTarget as TextInput);
           var inputText:String = tf.text;
-          if(!inputText || inputText.length == 0) {
-            remoteState.value = null;
+          if(inputText == null || inputText.length == 0) {
+            if(remoteState.value != null && remoteState.value.toString().length > 0) {
+              remoteState.value = null;
+            }
           } else if(inputText != remoteState.value) {
             if(remoteState.value == null) {
               tf.text = null;
