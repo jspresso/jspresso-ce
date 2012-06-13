@@ -463,7 +463,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
               return false;
             }
           } else if (property.getValue() instanceof EnumQueryStructure) {
-            if (!((EnumQueryStructure) property.getValue()).getSelectedEnumerationValues().isEmpty()) {
+            if (!((EnumQueryStructure) property.getValue()).isEmpty()) {
               return false;
             }
           } else {
