@@ -137,11 +137,16 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             }
             
             status.setRollbackOnly();
+            if(getMergeMode() == null) {
+              queryComponent.setQueriedComponents(queriedComponents);
+            }
             return mergedComponents;
           }
         });
 
-    queryComponent.setQueriedComponents(queriedComponents);
+    if(getMergeMode() != null) {
+      queryComponent.setQueriedComponents(queriedComponents);
+    }
     return super.execute(actionHandler, context);
   }
 
