@@ -37,7 +37,7 @@ import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFac
 import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionCallback;
 
 /**
  * This action is used to Hibernate query entities by example. It is used behind
@@ -96,12 +96,15 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
-    getTransactionTemplate(context).execute(
-        new TransactionCallbackWithoutResult() {
+
+    final IQueryComponent queryComponent = getQueryComponent(context);
+    List<Object> queriedComponents;
+
+    queriedComponents = getTransactionTemplate(context).execute(
+        new TransactionCallback<List<Object>>() {
 
           @Override
-          protected void doInTransactionWithoutResult(TransactionStatus status) {
-            IQueryComponent queryComponent = getQueryComponent(context);
+          public List<Object> doInTransaction(TransactionStatus status) {
 
             IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent
                 .get(COMPONENT_REFINER);
@@ -134,12 +137,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 mergedComponents.add(nextComponent);
               }
             }
-            queryComponent.setQueriedComponents(mergedComponents);
-
             status.setRollbackOnly();
+            return mergedComponents;
           }
         });
 
+    queryComponent.setQueriedComponents(queriedComponents);
     return super.execute(actionHandler, context);
   }
 
