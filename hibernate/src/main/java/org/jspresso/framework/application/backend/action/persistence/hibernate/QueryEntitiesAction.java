@@ -96,18 +96,18 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   @Override
   public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
-    IQueryComponent queryComponent = getQueryComponent(context);
+    final IQueryComponent queryComponent = getQueryComponent(context);
     Set<Object> queriedComponents;
 
     if (getController(context).isUnitOfWorkActive()) {
       // Ignore merge mode since we are in a TX
-      queriedComponents = doQuery(context, null);
+      queriedComponents = doQuery(queryComponent, context, null);
     } else {
       queriedComponents = getTransactionTemplate(context).execute(new TransactionCallback<Set<Object>>() {
 
         @Override
         public Set<Object> doInTransaction(TransactionStatus status) {
-          Set<Object> txQueriedComponents = doQuery(context, getMergeMode());
+          Set<Object> txQueriedComponents = doQuery(queryComponent, context, getMergeMode());
           status.setRollbackOnly();
           return txQueriedComponents;
         }
@@ -117,9 +117,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     return super.execute(actionHandler, context);
   }
 
-  private Set<Object> doQuery(final Map<String, Object> context, EMergeMode localMergeMode) {
-
-    IQueryComponent queryComponent = getQueryComponent(context);
+  private Set<Object> doQuery(IQueryComponent queryComponent, Map<String, Object> context, EMergeMode localMergeMode) {
 
     IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent.get(COMPONENT_REFINER);
 
