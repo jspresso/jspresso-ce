@@ -182,7 +182,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
           registeredEntity = (IEntity) li.getImplementation();
         }
 
-        HibernateBackendController.clearPersistentCollectionDirtyState(registeredEntity);
+        HibernateBackendController.clearPersistentCollectionDirtyState(registeredEntity, null);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
         LOG.error("Class for entity {} was not found", entityName, ex);
