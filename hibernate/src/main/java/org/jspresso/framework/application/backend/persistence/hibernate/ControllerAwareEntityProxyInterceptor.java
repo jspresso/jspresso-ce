@@ -195,7 +195,9 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
    * {@inheritDoc}
    */
   @Override
-  public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+  public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
+      @SuppressWarnings("unused") Type[] types) {
+    boolean updated = false;
     if (!getBackendController().isUnitOfWorkActive()) {
       if (entity instanceof IEntity
           && getBackendController().getRegisteredEntity(((IEntity) entity).getComponentContract(), id) == null) {
@@ -204,6 +206,15 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
           if (state[i] != null) {
             String propertyName = propertyNames[i];
             if (!isHibernateInternal(propertyName)) {
+              if (state[i] instanceof IEntity) {
+                IEntity refEntity = (IEntity) state[i];
+                IEntity mergedEntity = getBackendController().getRegisteredEntity(
+                    HibernateUtils.getComponentContract(refEntity), refEntity.getId());
+                if (mergedEntity != null && mergedEntity != refEntity) {
+                  state[i] = mergedEntity;
+                  updated = true;
+                }
+              }
               properties.put(propertyName, state[i]);
             }
           }
@@ -212,7 +223,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
         getBackendController().registerEntity((IEntity) entity, false);
       }
     }
-    return super.onLoad(entity, id, state, propertyNames, types);
+    return updated;
   }
 
   /**

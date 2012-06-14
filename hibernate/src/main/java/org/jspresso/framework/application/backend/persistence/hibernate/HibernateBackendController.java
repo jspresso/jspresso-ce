@@ -1067,36 +1067,15 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected boolean objectEquals(IEntity e1, IEntity e2) {
-    IEntity actualE1 = e1;
-    IEntity actualE2 = e2;
-
-    if (actualE1 instanceof HibernateProxy) {
-      actualE1 = (IEntity) ((HibernateProxy) actualE1).getHibernateLazyInitializer().getImplementation();
-    }
-    if (actualE2 instanceof HibernateProxy) {
-      actualE2 = (IEntity) ((HibernateProxy) actualE2).getHibernateLazyInitializer().getImplementation();
-    }
-    return super.objectEquals(actualE1, actualE2);
+    return HibernateUtils.objectEquals(e1, e2);
   }
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected <E extends IComponent> Class<? extends E> getComponentContract(E component) {
-    if (!isInitialized(component)) {
-      if (component instanceof HibernateProxy) {
-        try {
-          return (Class<? extends E>) Class.forName(((HibernateProxy) component).getHibernateLazyInitializer()
-              .getEntityName());
-        } catch (ClassNotFoundException ex) {
-          LOG.error("Can not retrieve entity class {} without initializing entity.", ((HibernateProxy) component)
-              .getHibernateLazyInitializer().getEntityName());
-        }
-      }
-    }
-    return super.getComponentContract(component);
+    return HibernateUtils.getComponentContract(component);
   }
 
 }
