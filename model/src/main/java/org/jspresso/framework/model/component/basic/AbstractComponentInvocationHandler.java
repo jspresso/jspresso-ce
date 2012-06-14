@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1324,7 +1325,7 @@ public abstract class AbstractComponentInvocationHandler implements
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
           // It's a 'many' relation end
           Collection<Object> oldPropertyElementsToRemove = new HashSet<Object>();
-          Collection<Object> newPropertyElementsToAdd = new HashSet<Object>();
+          Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<Object>();
           Collection<Object> propertyElementsToKeep = new HashSet<Object>();
 
           if (oldProperty != null) {
