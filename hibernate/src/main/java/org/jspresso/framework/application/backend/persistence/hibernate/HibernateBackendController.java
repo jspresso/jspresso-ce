@@ -102,7 +102,7 @@ public class HibernateBackendController extends AbstractBackendController {
    * @param componentOrEntity
    *          the entity to clean the collections dirty state of.
    */
-  static void clearPersistentCollectionDirtyState(IComponent componentOrEntity) {
+  static void clearPersistentCollectionDirtyState(IComponent componentOrEntity, Session targetSession) {
     if (componentOrEntity != null) {
       // Whenever the entity has dirty persistent collection, make them
       // clean to workaround a "bug" with hibernate since hibernate cannot
@@ -113,7 +113,8 @@ public class HibernateBackendController extends AbstractBackendController {
           if (Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
             (persistentCollection).clearDirty();
           }
-          if (persistentCollection instanceof AbstractPersistentCollection) {
+          if (persistentCollection instanceof AbstractPersistentCollection
+              && targetSession != ((AbstractPersistentCollection) persistentCollection).getSession()) {
             // The following is to avoid to avoid Hibernate exceptions due to
             // reassociating a collection that is already associated with the
             // session.
@@ -630,7 +631,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // Get performs a DB query.
       try {
         if (isInitialized(entity)) {
-          clearPersistentCollectionDirtyState(entity);
+          clearPersistentCollectionDirtyState(entity, hibernateSession);
           resetUninitializedHibernateProxyProperties(entity, hibernateSession, new HashSet<IComponent>());
         }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);

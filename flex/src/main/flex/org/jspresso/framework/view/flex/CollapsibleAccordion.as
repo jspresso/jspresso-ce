@@ -26,6 +26,8 @@ package org.jspresso.framework.view.flex
   import flash.display.DisplayObject;
   import flash.events.Event;
   import flash.events.MouseEvent;
+  import flash.events.TimerEvent;
+  import flash.utils.Timer;
   
   import mx.collections.ArrayCollection;
   import mx.containers.Accordion;
@@ -108,32 +110,36 @@ package org.jspresso.framework.view.flex
     public function CollapsibleAccordion()
     {
       super();
-      var delayedOpening:Function = function(event : FlexEvent):void {
-        callLater(onCreateComplete, [event]);
-      };
-      addEventListener( FlexEvent.CREATION_COMPLETE, delayedOpening );
+    //      var delayedOpening:Function = function(event : FlexEvent):void {
+    //        callLater(onCreateComplete, [event]);
+    //      };
+    //      addEventListener( FlexEvent.CREATION_COMPLETE, delayedOpening );
       buttonDict = new ArrayCollection();
       verticalScrollPolicy = ScrollPolicy.OFF;
       horizontalScrollPolicy = ScrollPolicy.OFF;
       _drawerOpAllowed = true;
     }
     
-    private function onCreateComplete( event : FlexEvent ) : void
-    {
-      currentWidth=barSize;
-      if ( close )
-      {
-        if(orientation == "right"){
-          accordionVBox.x = -1 * openSize;
-        }else{
-          accordionVBox.x = openSize;
-        }  
-      } 
-      else
-      {
-        accordionVBox.x = 0;  
-      } 
-    }
+    //    private function onCreateComplete( event : FlexEvent ) : void
+    //    {
+    //      var t:Timer = new Timer(10000, 1);
+    //      t.addEventListener(TimerEvent.TIMER_COMPLETE, function(event:TimerEvent):void {
+    //        currentWidth = barSize;
+    //        if ( close )
+    //        {
+    //          if(orientation == "right"){
+    //            accordionVBox.x = -1 * openSize;
+    //          }else{
+    //            accordionVBox.x = openSize;
+    //          }  
+    //        } 
+    //        else
+    //        {
+    //          accordionVBox.x = 0;  
+    //        } 
+    //      });
+    //      t.start();
+    //    }
     
     public function set content(value:Array):void 
     {
