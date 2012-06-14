@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,8 +51,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.util.bean.MissingPropertyException;
-import org.jspresso.framework.util.bean.PropertyHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -94,64 +91,6 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private static final Logger LOG                               = LoggerFactory
                                                                     .getLogger(HibernateBackendController.class);
-
-  /**
-   * Whenever the entity has dirty persistent collection, make them clean to
-   * workaround a "bug" with hibernate since hibernate cannot re-attach a
-   * "dirty" detached collection.
-   * 
-   * @param componentOrEntity
-   *          the entity to clean the collections dirty state of.
-   */
-  static void clearPersistentCollectionDirtyState(IComponent componentOrEntity, Session targetSession) {
-    if (componentOrEntity != null) {
-      // Whenever the entity has dirty persistent collection, make them
-      // clean to workaround a "bug" with hibernate since hibernate cannot
-      // re-attach a "dirty" detached collection.
-      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity.straightGetProperties().entrySet()) {
-        if (registeredPropertyEntry.getValue() instanceof PersistentCollection) {
-          PersistentCollection persistentCollection = (PersistentCollection) registeredPropertyEntry.getValue();
-          if (Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
-            (persistentCollection).clearDirty();
-          }
-          if (persistentCollection instanceof AbstractPersistentCollection
-              && targetSession != ((AbstractPersistentCollection) persistentCollection).getSession()) {
-            // The following is to avoid to avoid Hibernate exceptions due to
-            // reassociating a collection that is already associated with the
-            // session.
-            persistentCollection.unsetSession(((AbstractPersistentCollection) persistentCollection).getSession());
-          }
-        }
-      }
-    }
-  }
-
-  private static String getHibernateRoleName(Class<?> entityContract, String property) {
-    // have to find the highest entity class declaring the collection role.
-    PropertyDescriptor roleDescriptor;
-    try {
-      roleDescriptor = PropertyHelper.getPropertyDescriptor(entityContract, property);
-    } catch (MissingPropertyException ex) {
-      return null;
-    }
-    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod().getDeclaringClass();
-    Class<?> roleClass;
-    if (IEntity.class.isAssignableFrom(propertyDeclaringClass)) {
-      roleClass = propertyDeclaringClass;
-    } else {
-      roleClass = getHighestEntityClassInRole(entityContract, propertyDeclaringClass);
-    }
-    return roleClass.getName() + "." + property;
-  }
-
-  private static Class<?> getHighestEntityClassInRole(Class<?> entityContract, Class<?> propertyDeclaringClass) {
-    for (Class<?> superInterface : entityContract.getInterfaces()) {
-      if (IEntity.class.isAssignableFrom(superInterface) && propertyDeclaringClass.isAssignableFrom(superInterface)) {
-        return getHighestEntityClassInRole(superInterface, propertyDeclaringClass);
-      }
-    }
-    return entityContract;
-  }
 
   /**
    * Allows for a new run of performPendingOperations.
@@ -587,7 +526,7 @@ public class HibernateBackendController extends AbstractBackendController {
       Collection<IComponent> snapshotCollection, String role) {
     Collection<IComponent> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
-      String collectionRoleName = getHibernateRoleName(getComponentContract(owner), role);
+      String collectionRoleName = HibernateHelper.getHibernateRoleName(getComponentContract(owner), role);
       if (collectionRoleName == null) {
         // it is not an hibernate managed collection (e.g. "detachedEntities")
         return super.wrapDetachedCollection(owner, transientCollection, snapshotCollection, role);
@@ -645,7 +584,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // Get performs a DB query.
       try {
         if (isInitialized(entity)) {
-          clearPersistentCollectionDirtyState(entity, hibernateSession);
+          HibernateHelper.clearPersistentCollectionDirtyState(entity, hibernateSession);
           resetUninitializedHibernateProxyProperties(entity, hibernateSession, new HashSet<IComponent>());
         }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
@@ -1068,7 +1007,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected boolean objectEquals(IEntity e1, IEntity e2) {
-    return HibernateUtils.objectEquals(e1, e2);
+    return HibernateHelper.objectEquals(e1, e2);
   }
 
   /**
@@ -1076,7 +1015,7 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected <E extends IComponent> Class<? extends E> getComponentContract(E component) {
-    return HibernateUtils.getComponentContract(component);
+    return HibernateHelper.getComponentContract(component);
   }
 
 }

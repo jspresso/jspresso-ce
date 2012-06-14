@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,6 +39,7 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.jspresso.framework.util.reflect.ReflectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,30 +92,19 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       // This is a hack to check that we are not committing a wrongly enlisted
       // noTxSession.
       Object transactionContext = null;
-      Field[] fields = JTATransaction.class.getDeclaredFields();
-      for (int i = 0; i < fields.length && transactionContext == null; i++) {
-        if ("transactionContext".equals(fields[i].getName())) {
-          fields[i].setAccessible(true);
-          try {
-            transactionContext = fields[i].get(tx);
-          } catch (Exception ex) {
-            // Should never happen, but in case, let the userTransaction null.
-          }
-        }
+      try {
+        transactionContext = ReflectHelper.getPrivateFieldValue(JTATransaction.class, "transactionContext", tx);
+      } catch (Exception ex) {
+        LOG.warn("An unexpected exception occurred when accessing private field transactionContext from "
+            + "JTATransaction.class to avoid double afterTransactionCompletion call", ex);
       }
       Object noTxSession = null;
-      if (backendController instanceof HibernateBackendController) {
-        fields = HibernateBackendController.class.getDeclaredFields();
-        for (int i = 0; i < fields.length && noTxSession == null; i++) {
-          if ("noTxSession".equals(fields[i].getName())) {
-            fields[i].setAccessible(true);
-            try {
-              noTxSession = fields[i].get(backendController);
-            } catch (Exception ex) {
-              // Should never happen, but in case, let the noTxSession null.
-            }
-          }
-        }
+      try {
+        noTxSession = ReflectHelper.getPrivateFieldValue(HibernateBackendController.class, "noTxSession",
+            backendController);
+      } catch (Exception ex) {
+        LOG.warn("An unexpected exception occurred when accessing private field noTxSession from "
+            + "HibernateBackendController.class to avoid double afterTransactionCompletion call", ex);
       }
       if (noTxSession != null && noTxSession == transactionContext) {
         return false;
@@ -182,7 +171,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
           registeredEntity = (IEntity) li.getImplementation();
         }
 
-        HibernateBackendController.clearPersistentCollectionDirtyState(registeredEntity, null);
+        HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity, null);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
         LOG.error("Class for entity {} was not found", entityName, ex);
@@ -209,7 +198,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
               if (state[i] instanceof IEntity) {
                 IEntity refEntity = (IEntity) state[i];
                 IEntity mergedEntity = getBackendController().getRegisteredEntity(
-                    HibernateUtils.getComponentContract(refEntity), refEntity.getId());
+                    HibernateHelper.getComponentContract(refEntity), refEntity.getId());
                 if (mergedEntity != null && mergedEntity != refEntity) {
                   state[i] = mergedEntity;
                   updated = true;
