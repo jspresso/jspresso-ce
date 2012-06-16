@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
-  <version>3.5.10-SNAPSHOT</version>
+  <version>3.5.10.9</version>
   <name>Jspresso Root POM</name>
   <url>http://www.jspresso.org</url>
   <properties>
@@ -13,7 +13,7 @@
     
     <!-- Dependencies versions -->
 
-    <jspresso.version>3.5.10-SNAPSHOT</jspresso.version>
+    <jspresso.version>3.5.10.9</jspresso.version>
     <sjs.version>1.0.10</sjs.version>
 
     <junit.version>3.8.1</junit.version>
