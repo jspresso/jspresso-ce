@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>3.5-SNAPSHOT</version>
+    <version>3.5.13</version>
     <relativePath>../root/pom.xml</relativePath>
   </parent>
   <artifactId>jspresso-documentation</artifactId>
@@ -151,7 +151,7 @@
                     <include name="**/*.*" />
                   </fileset>
                 </copy>
-                <delete dir="target/reference/html-chunked/en/reference-guide"/>
+                <delete dir="target/reference/html-chunked/en/reference-guide" />
               </postProcess>
             </configuration>
           </execution>
@@ -232,11 +232,7 @@
                 <exclude name="**/generated/**/*.xml" />
               </fileset>
             </copy>
-            <xslt style="src/main/docbook/xsl/titlepage.xsl"
-                  extension=".xsl"
-                  basedir="src/main/docbook/xsl"
-                  destdir="target/staging/xsl"
-                  includes="**/fo-titlepages.xml **/html-titlepages.xml"/>
+            <xslt style="src/main/docbook/xsl/titlepage.xsl" extension=".xsl" basedir="src/main/docbook/xsl" destdir="target/staging/xsl" includes="**/fo-titlepages.xml **/html-titlepages.xml" />
           </preProcess>
         </configuration>
         <dependencies>
