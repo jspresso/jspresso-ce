@@ -1,6 +1,66 @@
 Jspresso CE - Change Log
 
 
+Jspresso CE - 3.5.13 (Released 2012-06-18) [ View Issues ]
+==========================================
+- 0000651: [Model] ByteArray keys can generate AIOOB exceptions when being compared with each other (vvandens) - closed.
+- 0000649: [Model] When setting an entire collections postProcessAdders should be triggered in order (vvandens) - closed.
+- 0000648: [View] Sometimes the collapsible accordion does not open correctly (vvandens) - closed.
+- 0000645: [Backend] LOV / Filter modules query can lead to badly merged entities under certain circumstances (vvandens) - closed.
+- 0000641: [View] Multiple choice into enumeration (vvandens) - closed.
+- 0000454: [Backend] action backend asynchronous (vvandens) - closed.
+- 0000636: [Frontend] Block the UI when there's an on going action (vvandens) - closed.
+- 0000637: [Frontend] Display an error message dialog whenever a network error is detected dusing client server communication (vvandens) - closed.
+- 0000574: [View] Adding multi selection on Enum dropDown boxes in filter views (vvandens) - closed.
+- 0000638: [Backend] Cloning of uninitialized Hibernate proxies is not actually creating a clone (vvandens) - closed.
+- 0000634: [Backend] BackendActionStartup should cleanup backend controller after execution (vvandens) - closed.
+- 0000633: [Backend] The ResourceProviderServlet should call IBackendController.cleanupRequestResources after having served a dynamic active resource (vvandens) - closed.
+- 0000632: [Backend] BackendController UOW can be committed twice when using a JTA transaction (vvandens) - closed.
+- 0000619: [Backend] Make the AbstractActionContextAware frontend methods more versatile to extend testability (vvandens) - closed.
+- 0000629: [Backend] Negative number validation gives funny error message (vvandens) - closed.
+- 0000611: [View] Problem with double clic on action in propertyView in Flex (vvandens) - closed.
+- 0000628: [View] Allow to specify an icon size everywhere an icon is useable (vvandens) - closed.
+- 0000627: [Model] Allow to define an icon on a property (vvandens) - closed.
+- 0000603: [View] Images in a form and as column headers (vvandens) - closed.
+- 0000617: [View] Icons are not cached in flex interface (vvandens) - closed.
+- 0000626: [Backend] Make QueryEntitiesAction compatible with pre-existing transaction (vvandens) - closed.
+- 0000550: [View] To put in grey the fields of a component form when it is disabled by a booleanWritabilityGates (vvandens) - closed.
+- 0000624: [Build & tools] Hibernate "any" type mapping does not respect entity ID type of the application (vvandens) - closed.
+- 0000623: [Frontend] Lov result view in filters display the queryable properties instead of the rendered properties as table columns (vvandens) - closed.
+- 0000622: [Backend] Re-enable support for in-memory only UOW (vvandens) - closed.
+- 0000614: [View] Numerical fields lose a digit is some conditions (vvandens) - closed.
+- 0000621: [Persistence] Improve MYSQL Jspresso dialect o use varbinary instead of tinyblob for binary columns until 64 length (vvandens) - closed.
+- 0000618: [Backend] onLoad should not be called during entity cloning (vvandens) - closed.
+- 0000616: [View] Allow to assign a style name to all view / action descriptors (vvandens) - closed.
+- 0000615: [Backend] Entity reloading does not respect lazy initialization boundaries (vvandens) - closed.
+- 0000613: [Backend] IComponentExtensionFactory should not have a reference to IComponentFactory (vvandens) - closed.
+- 0000612: [Backend] Two different instances of the JVM string GUID generator may generate 2 identical GUIDs (vvandens) - closed.
+- 0000609: [View] View tester is broken due to the introduction of BackendControllerHolder (vvandens) - closed.
+- 0000580: [View] Handling of empty line in HTML field (vvandens) - closed.
+- 0000608: [Frontend] Some translations are still in local resource bundles (vvandens) - closed.
+- 0000607: [View] Swing tree view is incorrectly refreshed when elements are removed (vvandens) - closed.
+- 0000586: [Backend] Clear all backend/frontend violations on standard actions (vvandens) - closed.
+- 0000596: [Frontend] Retrieving the property on which an action was triggered from a table. (vvandens) - closed.
+- 0000606: [Backend] Improve duplicate session detection with a yes/no question to force the launch (vvandens) - closed.
+- 0000602: [Backend] Make backend controller retrieval more robust in all startup classes (vvandens) - closed.
+- 0000570: [Frontend] Evolution : keep selected entity in filter view (vvandens) - closed.
+- 0000598: [Backend] HibernateException might be thrown when re-attaching uninitialized properties ("illegally attempted to associate a proxy with tw (vvandens) - closed.
+- 0000594: [Backend] batch action can't be launch (vvandens) - closed.
+- 0000597: [View] Lov Action does not manage Integer, Dates when used inside Filter (vvandens) - closed.
+- 0000593: [Backend] ResourceProviderServlet should use 404 status when a local or image URL throws an IOException (vvandens) - closed.
+- 0000581: [View] Entities detected as modified when clickin in a text area that is in read only (vvandens) - closed.
+- 0000589: [Frontend] Improve the behaviour when detecting that an instance is already running in the same HTTP session. (vvandens) - closed.
+- 0000587: [Backend] Get rid of all ex.printStackTrace in favor of proper logging (vvandens) - closed.
+- 0000569: [Build & tools] Configure the maven archiver to include jar versions as well as other module infos in manifests (vvandens) - closed.
+- 0000584: [View] Card views cannot have an action map in swing (vvandens) - closed.
+- 0000578: [Backend] Hibernate lazy initialization exception when checking for dirty properties (vvandens) - closed.
+- 0000583: [Backend] Make standard SaveAction usable inside a transaction (vvandens) - closed.
+- 0000577: [Backend] Sanity checks report false positive when comparing entity with its Javassist proxy (vvandens) - closed.
+- 0000575: [Backend] OkLovAction does not respect UOW isolation (vvandens) - closed.
+- 0000572: [View] Allow form to be vertically scrollable (vvandens) - closed.
+- 0000564: [Frontend] Be able to add parameters to the MessageFormat in StaticInfoAction (vvandens) - closed.
+[56 issues]
+
 Jspresso CE - 3.5.12 (Released 2012-03-30) [ View Issues ]
 ==========================================
 - 0000562: [View] Limit the number of digits entered for an Integer (vvandens) - closed.
