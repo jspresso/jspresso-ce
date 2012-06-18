@@ -531,8 +531,8 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the (IView) property view.
    */
-  protected String getPropertyView(Map<String, Object> context) {
-    return (String) context.get(ActionContextConstants.PROPERTY_VIEW);
+  protected IView<?> getPropertyView(Map<String, Object> context) {
+    return (IView<?>) context.get(ActionContextConstants.PROPERTY_VIEW);
   }
 
   /**
