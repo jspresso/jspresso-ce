@@ -26,7 +26,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 
@@ -55,14 +55,18 @@ public final class PropertyViewDescriptorHelper {
    * @return the list of potentially exploded property view descriptors.
    */
   public static List<IPropertyViewDescriptor> explodeComponentReferences(
-      IPropertyViewDescriptor propertyViewDescriptor, IComponentDescriptorProvider<?> componentDescriptorProvider) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IComponentDescriptorProvider<?> componentDescriptorProvider) {
     List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
-    IComponentDescriptor<?> rootComponentDescriptor = componentDescriptorProvider.getComponentDescriptor();
+    IComponentDescriptor<?> rootComponentDescriptor = componentDescriptorProvider
+        .getComponentDescriptor();
     IPropertyDescriptor propertyDescriptor;
     if (propertyViewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
-      propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+      propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
     } else {
-      propertyDescriptor = rootComponentDescriptor.getPropertyDescriptor(propertyViewDescriptor.getName());
+      propertyDescriptor = rootComponentDescriptor
+          .getPropertyDescriptor(propertyViewDescriptor.getName());
     }
     /*
      * Exlude explicitely configured reference property view filled with a
@@ -77,33 +81,45 @@ public final class PropertyViewDescriptorHelper {
      */
     toExplode = toExplode
         && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>
-            && !IEntity.class.isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                .getReferencedDescriptor().getComponentContract())
+            && EntityHelper
+                .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)
             && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
 
     if (toExplode) {
       IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
-      for (String nestedRenderedProperty : referencedComponentDescriptor.getRenderedProperties()) {
+      for (String nestedRenderedProperty : referencedComponentDescriptor
+          .getRenderedProperties()) {
         BasicPropertyViewDescriptor nestedPropertyViewDescriptor = new BasicPropertyViewDescriptor();
-        nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "." + nestedRenderedProperty);
+        nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "."
+            + nestedRenderedProperty);
         nestedPropertyViewDescriptor.setModelDescriptor(rootComponentDescriptor
             .getPropertyDescriptor(nestedPropertyViewDescriptor.getName()));
-        nestedPropertyViewDescriptor.setReadOnly(propertyViewDescriptor.isReadOnly());
-        nestedPropertyViewDescriptor.setWritabilityGates(propertyViewDescriptor.getWritabilityGates());
-        nestedPropertyViewDescriptor.setReadabilityGates(propertyViewDescriptor.getReadabilityGates());
-        nestedPropertyViewDescriptor.setLabelBackground(propertyViewDescriptor.getLabelBackground());
-        nestedPropertyViewDescriptor.setLabelForeground(propertyViewDescriptor.getLabelForeground());
-        nestedPropertyViewDescriptor.setLabelFont(propertyViewDescriptor.getLabelFont());
-        nestedPropertyViewDescriptor.setBackground(propertyViewDescriptor.getBackground());
-        nestedPropertyViewDescriptor.setForeground(propertyViewDescriptor.getForeground());
+        nestedPropertyViewDescriptor.setReadOnly(propertyViewDescriptor
+            .isReadOnly());
+        nestedPropertyViewDescriptor.setWritabilityGates(propertyViewDescriptor
+            .getWritabilityGates());
+        nestedPropertyViewDescriptor.setReadabilityGates(propertyViewDescriptor
+            .getReadabilityGates());
+        nestedPropertyViewDescriptor.setLabelBackground(propertyViewDescriptor
+            .getLabelBackground());
+        nestedPropertyViewDescriptor.setLabelForeground(propertyViewDescriptor
+            .getLabelForeground());
+        nestedPropertyViewDescriptor.setLabelFont(propertyViewDescriptor
+            .getLabelFont());
+        nestedPropertyViewDescriptor.setBackground(propertyViewDescriptor
+            .getBackground());
+        nestedPropertyViewDescriptor.setForeground(propertyViewDescriptor
+            .getForeground());
         nestedPropertyViewDescriptor.setFont(propertyViewDescriptor.getFont());
-        returnedList.addAll(explodeComponentReferences(nestedPropertyViewDescriptor, componentDescriptorProvider));
+        returnedList.addAll(explodeComponentReferences(
+            nestedPropertyViewDescriptor, componentDescriptorProvider));
       }
     } else {
       if (propertyViewDescriptor.getModelDescriptor() == null
           && propertyViewDescriptor instanceof BasicPropertyViewDescriptor) {
-        ((BasicPropertyViewDescriptor) propertyViewDescriptor).setModelDescriptor(propertyDescriptor);
+        ((BasicPropertyViewDescriptor) propertyViewDescriptor)
+            .setModelDescriptor(propertyDescriptor);
       }
       returnedList.add(propertyViewDescriptor);
     }
@@ -121,16 +137,19 @@ public final class PropertyViewDescriptorHelper {
    *          the (potentially nested) property name.
    * @return true if the (potentially nested) property is computed.
    */
-  public static boolean isComputed(IComponentDescriptor<?> componentDescriptor, String propertyName) {
+  public static boolean isComputed(IComponentDescriptor<?> componentDescriptor,
+      String propertyName) {
     String[] propElts = propertyName.split("\\.");
     IComponentDescriptor<?> currentCompDesc = componentDescriptor;
     for (int i = 0; i < propElts.length; i++) {
-      IPropertyDescriptor propDesc = currentCompDesc.getPropertyDescriptor(propElts[i]);
+      IPropertyDescriptor propDesc = currentCompDesc
+          .getPropertyDescriptor(propElts[i]);
       if (propDesc.isComputed()) {
         return true;
       }
       if (i < propElts.length - 1) {
-        currentCompDesc = ((IReferencePropertyDescriptor<?>) propDesc).getReferencedDescriptor();
+        currentCompDesc = ((IReferencePropertyDescriptor<?>) propDesc)
+            .getReferencedDescriptor();
       }
     }
     return false;

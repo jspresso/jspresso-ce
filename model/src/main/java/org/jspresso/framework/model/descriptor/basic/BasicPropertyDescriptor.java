@@ -273,6 +273,15 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
     if (mandatory != null) {
       return mandatory.booleanValue();
     }
+    return getDefaultMandatory();
+  }
+
+  /**
+   * Gets the default value of the mandatory attribute.
+   * 
+   * @return <code>false</code>.
+   */
+  protected boolean getDefaultMandatory() {
     return false;
   }
 

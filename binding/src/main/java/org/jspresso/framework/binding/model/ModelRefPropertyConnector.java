@@ -35,6 +35,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -104,25 +105,11 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     // nested properties editable unless they are made delegateWritable= true.
     // return true /* isWritable() */;
     if (getModelDescriptor() instanceof IReferencePropertyDescriptor<?>
-        && isInlineComponentReference((IReferencePropertyDescriptor<?>) getModelDescriptor())) {
+        && EntityHelper
+            .isInlineComponentReference((IReferencePropertyDescriptor<?>) getModelDescriptor())) {
       return isWritable();
     }
     return true;
-  }
-
-  /**
-   * Gets wether this reference descriptor points to an inline component.
-   * 
-   * @param propertyDescriptor
-   *          the reference descriptor to test.
-   * @return true if this reference descriptor points to an inline component.
-   */
-  protected boolean isInlineComponentReference(
-      IReferencePropertyDescriptor<?> propertyDescriptor) {
-    return !IEntity.class.isAssignableFrom(propertyDescriptor
-        .getReferencedDescriptor().getComponentContract())
-        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract()
-        && !propertyDescriptor.isComputed();
   }
 
   /**
@@ -173,14 +160,15 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       if (componentDescriptor != null) {
         try {
           getSecurityHandler().pushToSecurityContext(componentDescriptor);
-          IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(actualKey);
+          IPropertyDescriptor propertyDescriptor = componentDescriptor
+              .getPropertyDescriptor(actualKey);
           if (propertyDescriptor == null) {
-            throw new ConnectorBindingException("Property ["
-                + actualKey + "] does not exist on {" + componentDescriptor.getName() + "}.");
+            throw new ConnectorBindingException("Property [" + actualKey
+                + "] does not exist on {" + componentDescriptor.getName()
+                + "}.");
           }
           connector = modelConnectorFactory.createModelConnector(actualKey,
-              propertyDescriptor,
-              getSecurityHandler());
+              propertyDescriptor, getSecurityHandler());
         } finally {
           getSecurityHandler().restoreLastSecurityContextSnapshot();
         }

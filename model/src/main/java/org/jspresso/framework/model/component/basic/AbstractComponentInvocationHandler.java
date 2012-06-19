@@ -52,6 +52,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -80,8 +81,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  private static final Logger       LOG              = LoggerFactory
-                                                         .getLogger(AbstractComponentInvocationHandler.class);
+  private static final Logger         LOG              = LoggerFactory
+                                                           .getLogger(AbstractComponentInvocationHandler.class);
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
@@ -546,7 +547,8 @@ public abstract class AbstractComponentInvocationHandler implements
       final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     IComponent property = (IComponent) straightGetProperty(proxy,
         propertyDescriptor.getName());
-    if (property == null && isInlineComponentReference(propertyDescriptor)) {
+    if (property == null && EntityHelper.isInlineComponentReference(propertyDescriptor)
+        && !propertyDescriptor.isComputed() && propertyDescriptor.isMandatory()) {
       property = inlineComponentFactory
           .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
               .getComponentContract());
@@ -610,21 +612,6 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected boolean isInitialized(Object objectOrProxy) {
     return true;
-  }
-
-  /**
-   * Gets wether this reference descriptor points to an inline component.
-   * 
-   * @param propertyDescriptor
-   *          the reference descriptor to test.
-   * @return true if this reference descriptor points to an inline component.
-   */
-  protected boolean isInlineComponentReference(
-      IReferencePropertyDescriptor<?> propertyDescriptor) {
-    return !IEntity.class.isAssignableFrom(propertyDescriptor
-        .getReferencedDescriptor().getComponentContract())
-        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract()
-        && !propertyDescriptor.isComputed();
   }
 
   /**
@@ -692,7 +679,7 @@ public abstract class AbstractComponentInvocationHandler implements
     storeProperty(propertyName, newPropertyValue);
     if (newPropertyValue instanceof IPropertyChangeCapable) {
       InlineReferenceTracker newTracker = new InlineReferenceTracker(
-          propertyName, isInlineComponentReference(propertyDescriptor));
+          propertyName, EntityHelper.isInlineComponentReference(propertyDescriptor) && !propertyDescriptor.isComputed() );
       referenceTrackers.put(propertyName, newTracker);
       initializeInlineTrackerIfNeeded(
           (IPropertyChangeCapable) newPropertyValue, propertyName);
@@ -1094,7 +1081,8 @@ public abstract class AbstractComponentInvocationHandler implements
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
-          && isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)) {
+          && EntityHelper.isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
+          && !propertyDescriptor.isComputed()) {
         Object inlineComponent = getProperty(proxy, propertyDescriptor);
         if (inlineComponent instanceof ILifecycleCapable) {
           try {

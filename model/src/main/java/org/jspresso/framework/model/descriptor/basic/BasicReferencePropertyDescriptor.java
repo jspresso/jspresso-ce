@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.util.lang.StringUtils;
 
 /**
@@ -314,5 +315,13 @@ public class BasicReferencePropertyDescriptor<E> extends
     return AbstractComponentDescriptor.explodeComponentReferences(
         getReferencedDescriptor(), renderedProperties);
     // return renderedProperties;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultMandatory() {
+    return EntityHelper.isInlineComponentReference(this);
   }
 }

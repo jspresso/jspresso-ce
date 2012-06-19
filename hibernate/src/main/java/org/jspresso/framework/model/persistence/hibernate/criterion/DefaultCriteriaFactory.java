@@ -43,6 +43,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
@@ -92,11 +93,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                 .getPropertyDescriptor(propElts[i]));
             if (refPropDescriptor != null) {
               sortable = sortable && isSortable(refPropDescriptor);
-              IComponentDescriptor<?> referencedDesc = refPropDescriptor.getReferencedDescriptor();
-              if (!IEntity.class.isAssignableFrom(referencedDesc.getComponentContract())
-                  && !referencedDesc.isPurelyAbstract()) {
+              if (EntityHelper.isInlineComponentReference(refPropDescriptor)) {
                 break;
               }
+              IComponentDescriptor<?> referencedDesc = refPropDescriptor.getReferencedDescriptor();
               currentCompDesc = referencedDesc;
               path.add(propElts[i]);
             } else {
