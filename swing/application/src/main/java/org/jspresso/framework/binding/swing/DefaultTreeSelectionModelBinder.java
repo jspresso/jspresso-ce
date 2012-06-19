@@ -34,9 +34,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
-import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.swing.SwingUtil;
 
@@ -189,7 +187,6 @@ public class DefaultTreeSelectionModelBinder implements
         }
       }
       // 2nd pass to set
-      boolean atLeastOneSelected = false;
       for (Map.Entry<ICollectionConnector, int[]> connectorIndicesPair : connectorSelection
           .entrySet()) {
         if (connectorIndicesPair.getValue() != null
@@ -197,16 +194,6 @@ public class DefaultTreeSelectionModelBinder implements
           ICollectionConnector connector = connectorIndicesPair.getKey();
           int[] indices = connectorIndicesPair.getValue();
           connector.setSelectedIndices(indices);
-          atLeastOneSelected = true;
-        }
-      }
-      if (!atLeastOneSelected) {
-        IValueConnector rootConnector = (IValueConnector) treePaths[0]
-            .getPath()[0];
-        if ((rootConnector instanceof IItemSelectable)) {
-          ((IItemSelectable) rootConnector)
-              .fireSelectedItemChange(new ItemSelectionEvent(rootConnector,
-                  rootConnector));
         }
       }
     }

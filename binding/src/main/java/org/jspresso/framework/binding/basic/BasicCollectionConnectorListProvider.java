@@ -102,6 +102,10 @@ public class BasicCollectionConnectorListProvider extends
   @Override
   public void fireSelectedItemChange(ItemSelectionEvent evt) {
     implFireSelectedItemChange(evt);
+    if (evt.getSelectedItem() == null) {
+      evt.setSelectedItem(this);
+    }
+    implFireSelectedItemChange(evt);
   }
 
   /**
