@@ -98,10 +98,6 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   @Override
   public void fireSelectedItemChange(ItemSelectionEvent evt) {
     implFireSelectedItemChange(evt);
-    if (evt.getSelectedItem() == null) {
-      evt.setSelectedItem(this);
-    }
-    implFireSelectedItemChange(evt);
   }
 
   /**

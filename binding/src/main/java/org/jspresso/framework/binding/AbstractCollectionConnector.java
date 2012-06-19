@@ -255,8 +255,16 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   @Override
-  public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
+  public void setSelectedIndices(int[] selectedIndices, int leadingIndex) {
+    int[] newSelectedIndices = selectedIndices;
+    if (newSelectedIndices != null && newSelectedIndices.length == 0) {
+      newSelectedIndices = null;
+    }
     int[] oldSelectedIndices = getSelectedIndices();
+    if (oldSelectedIndices != null && oldSelectedIndices.length == 0) {
+      oldSelectedIndices = null;
+    }
+
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
 
     if ((oldSelectedIndices == null && newSelectedIndices != null)
