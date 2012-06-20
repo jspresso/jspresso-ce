@@ -629,77 +629,79 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the composite view to bind.
    */
   protected void bindCompositeView(ICompositeView<E> view) {
-    if (view != null
-        && view.getDescriptor() instanceof ICompositeViewDescriptor) {
-      ICompositeViewDescriptor viewDescriptor = (ICompositeViewDescriptor) view
-          .getDescriptor();
-      if (viewDescriptor.isCascadingModels()) {
-        IView<E> masterView = view.getChildren().get(0);
-        IValueConnector viewConnector;
-        if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-          IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
-              .createConfigurableCollectionConnectorProvider(
-                  ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector().getId(),
-              masterView.getConnector());
-          if (masterView.getConnector() instanceof ICollectionConnector) {
-            mainConnector
-                .setCollectionConnectorProvider((ICollectionConnector) masterView
-                    .getConnector());
-          }
-          viewConnector = mainConnector;
-        } else {
-          ICompositeValueConnector mainConnector = getConnectorFactory()
-              .createCompositeValueConnector(
-                  ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector().getId(),
-              masterView.getConnector());
-          viewConnector = mainConnector;
-        }
-        view.setConnector(viewConnector);
-        for (int i = 1; i < view.getChildren().size(); i++) {
-          IView<E> detailView = view.getChildren().get(i);
-
-          IValueConnector detailConnector = null;
-          if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
+    if (view != null) {
+      if (view.getDescriptor() instanceof ICompositeViewDescriptor) {
+        ICompositeViewDescriptor viewDescriptor = (ICompositeViewDescriptor) view
+            .getDescriptor();
+        if (viewDescriptor.isCascadingModels()) {
+          IView<E> masterView = view.getChildren().get(0);
+          IValueConnector viewConnector;
+          if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
+            IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
-            wrapper.addChildConnector(detailView.getConnector().getId(),
-                detailView.getConnector());
-            if (detailView.getConnector() instanceof ICollectionConnector) {
-              wrapper
-                  .setCollectionConnectorProvider((ICollectionConnector) detailView
+            mainConnector.addChildConnector(masterView.getConnector().getId(),
+                masterView.getConnector());
+            if (masterView.getConnector() instanceof ICollectionConnector) {
+              mainConnector
+                  .setCollectionConnectorProvider((ICollectionConnector) masterView
                       .getConnector());
             }
-            detailConnector = wrapper;
+            viewConnector = mainConnector;
           } else {
-            detailConnector = detailView.getConnector();
+            ICompositeValueConnector mainConnector = getConnectorFactory()
+                .createCompositeValueConnector(
+                    ModelRefPropertyConnector.THIS_PROPERTY, null);
+            mainConnector.addChildConnector(masterView.getConnector().getId(),
+                masterView.getConnector());
+            viewConnector = mainConnector;
           }
+          view.setConnector(viewConnector);
+          for (int i = 1; i < view.getChildren().size(); i++) {
+            IView<E> detailView = view.getChildren().get(i);
 
-          // We must dig into the composite structure to find the 1st non
-          // composite view
-          // to cascade the model
-          while (masterView instanceof ICompositeView<?>) {
-            masterView = ((ICompositeView<E>) masterView).getChildren().get(0);
+            IValueConnector detailConnector = null;
+            if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
+              IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
+                  .createConfigurableCollectionConnectorProvider(
+                      ModelRefPropertyConnector.THIS_PROPERTY, null);
+              wrapper.addChildConnector(detailView.getConnector().getId(),
+                  detailView.getConnector());
+              if (detailView.getConnector() instanceof ICollectionConnector) {
+                wrapper
+                    .setCollectionConnectorProvider((ICollectionConnector) detailView
+                        .getConnector());
+              }
+              detailConnector = wrapper;
+            } else {
+              detailConnector = detailView.getConnector();
+            }
+
+            // We must dig into the composite structure to find the 1st non
+            // composite view
+            // to cascade the model
+            while (masterView instanceof ICompositeView<?>) {
+              masterView = ((ICompositeView<E>) masterView).getChildren()
+                  .get(0);
+            }
+            getModelCascadingBinder().bind(masterView.getConnector(),
+                detailConnector);
+            masterView = detailView;
           }
-          getModelCascadingBinder().bind(masterView.getConnector(),
-              detailConnector);
-          masterView = detailView;
-        }
-      } else {
-        String connectorId;
-        if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
-          connectorId = viewDescriptor.getModelDescriptor().getName();
         } else {
-          connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
-        }
-        ICompositeValueConnector connector = getConnectorFactory()
-            .createCompositeValueConnector(connectorId, null);
-        view.setConnector(connector);
-        for (IView<E> childView : view.getChildren()) {
-          connector.addChildConnector(childView.getConnector().getId(),
-              childView.getConnector());
+          String connectorId;
+          if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+            connectorId = viewDescriptor.getModelDescriptor().getName();
+          } else {
+            connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
+          }
+          ICompositeValueConnector connector = getConnectorFactory()
+              .createCompositeValueConnector(connectorId, null);
+          view.setConnector(connector);
+          for (IView<E> childView : view.getChildren()) {
+            connector.addChildConnector(childView.getConnector().getId(),
+                childView.getConnector());
+          }
         }
       }
     }
@@ -828,10 +830,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
        */
       @Override
       public List<IView<E>> getChildren() {
-        if (descriptor.isLazy()) {
+        List<IView<E>> superChildren = super.getChildren();
+        if (superChildren != null && !superChildren.isEmpty()
+            && descriptor.isLazy()) {
           return Collections.singletonList(getChildView(getCurrentViewIndex()));
         }
-        return super.getChildren();
+        return superChildren;
       }
     };
     indexedView.setDescriptor(descriptor);
