@@ -106,6 +106,7 @@
     <groovy.version>1.7.10</groovy.version>
     <jetty-plugin.version>7.4.2.v20110526</jetty-plugin.version>
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
+    <dependency-plugin.version>2.4</dependency-plugin.version>
   </properties>
   <distributionManagement>
     <repository>
@@ -1069,6 +1070,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
           <version>${shade-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${dependency-plugin.version}</version>
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
