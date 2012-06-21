@@ -1,3 +1,10 @@
+3.5.14
+======
+- Now, Jspresso managed components are only auto-created when referenced by an entity if the property descriptor referencing them is mandatory.
+  Since a reference property to a Jspresso component has been made mandatory by default, there is nothing to do in order to migrate, but
+  explicitely setting mandatory:false will disable component auto-creation thus allowing the developper to have full control on the component
+  reference. 
+
 3.5.13
 ======
 - In order to lower coupling between IQueryViewDescriptorFactory and IQueryComponentDescriptorFactory, the signature
@@ -5,6 +12,8 @@
       createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
         IComponentDescriptor<IQueryComponent> queryComponentDescriptor);
   Instead of having the responsibility to create the actual query filter descriptor, it is now passed as parameter.
+  Whenever you need to create a query view descriptor, 1st create a component descriptor using an (injected) query
+  component descriptor factory, then pass the created query component descriptor as parameter.
 
 - BasicQueryViewDescriptorFactory has changed package
   from : org.jspresso.framework.view.descriptor.basic
@@ -31,7 +40,7 @@ set using setIconWidth(int) and setIconHeight(int).
 
 - [get|set]Selected[Models|Index] now directly synchs the selection on the corresponding views. ModuleSelectionAction
   and ConnectorSelectionAction that were only meant to be chained to apply selection have been suppressed since they
-  are now useless.
+  are now useless and should simply be removed from your applications.
 
 - for Jspresso EE users, whenever you use web services, you should update your web.xml by changing. This will ensure
 that the new resource cleanup interceptor gets registered at startup and that JDBC connections are correctly returned
