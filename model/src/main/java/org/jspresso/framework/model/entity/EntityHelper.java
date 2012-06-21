@@ -46,8 +46,7 @@ public final class EntityHelper {
    */
   public static boolean isInlineComponentReference(
       IReferencePropertyDescriptor<?> propertyDescriptor) {
-    return !(propertyDescriptor
-        .getReferencedDescriptor().isEntity())
+    return !propertyDescriptor.getReferencedDescriptor().isEntity()
         && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
   }
 }
