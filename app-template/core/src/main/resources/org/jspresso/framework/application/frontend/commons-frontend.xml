@@ -991,9 +991,11 @@
     <property name="actionMap" ref="beanCollectionModuleActionMap" />
   </bean>
 
-  <bean abstract="true" id="abstractBeanCollectionModule" class="org.jspresso.framework.application.model.BeanCollectionModule">
+  <bean abstract="true" id="abstractBeanCollectionModuleBase" class="org.jspresso.framework.application.model.BeanCollectionModule">
     <property name="projectedViewDescriptor" ref="beanCollectionModuleView" />
   </bean>
+
+  <bean abstract="true" id="abstractBeanCollectionModule" parent="abstractBeanCollectionModuleBase"/>
 
   <bean id="filterableBeanCollectionModuleView" parent="decoratedView"
     class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor" scope="prototype">
