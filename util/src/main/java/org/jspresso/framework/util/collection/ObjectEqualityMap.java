@@ -3,20 +3,16 @@
  */
 package org.jspresso.framework.util.collection;
 
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
-import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
-import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
+import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
- * a map which equality is based on object identity.
+ * A map which equality is based on object identity.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -25,20 +21,16 @@ import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
  * @param <V>
  *          the value class.
  */
-public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
-    IPropertyChangeCapable {
+public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
+    implements Map<K, V> {
 
-  private static final long                         serialVersionUID = 8981204989863563244L;
-
-  private transient SinglePropertyChangeSupport     propertyChangeSupport;
-  private transient SingleWeakPropertyChangeSupport weakPropertyChangeSupport;
+  private HashMap<K, V> delegate;
 
   /**
    * Constructs a new <code>ObjectEqualityMap</code> instance.
    */
   public ObjectEqualityMap() {
-    super();
-    initPcSupports();
+    delegate = new HashMap<K, V>();
   }
 
   /**
@@ -48,8 +40,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    *          initialCapacity.
    */
   public ObjectEqualityMap(int initialCapacity) {
-    super(initialCapacity);
-    initPcSupports();
+    delegate = new HashMap<K, V>(initialCapacity);
   }
 
   /**
@@ -61,8 +52,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    *          loadFactor.
    */
   public ObjectEqualityMap(int initialCapacity, float loadFactor) {
-    super(initialCapacity, loadFactor);
-    initPcSupports();
+    delegate = new HashMap<K, V>(initialCapacity, loadFactor);
   }
 
   /**
@@ -72,83 +62,15 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    *          map.
    */
   public ObjectEqualityMap(Map<? extends K, ? extends V> m) {
-    super(m);
-    initPcSupports();
-  }
-
-  private void initPcSupports() {
-    propertyChangeSupport = new SinglePropertyChangeSupport(this);
-    weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(this);
+    delegate = new HashMap<K, V>(m);
   }
 
   /**
    * {@inheritDoc}
-   */
-  @Override
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addWeakPropertyChangeListener(PropertyChangeListener listener) {
-    weakPropertyChangeSupport.addPropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addWeakPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    weakPropertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * Solely based on object's equality.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals(Object o) {
-    return this == o;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return super.hashCode();
-  }
-
-  /**
-   * Associates the specified value with the specified key in this map. If the
-   * map previously contained a mapping for the key, the old value is replaced.
-   * 
-   * @param key
-   *          key with which the specified value is to be associated
-   * @param value
-   *          value to be associated with the specified key
-   * @return the previous value associated with <tt>key</tt>, or <tt>null</tt>
-   *         if there was no mapping for <tt>key</tt>. (A <tt>null</tt> return
-   *         can also indicate that the map previously associated <tt>null</tt>
-   *         with <tt>key</tt>.)
    */
   @Override
   public V put(K key, V value) {
-    V putVal = super.put(key, value);
+    V putVal = delegate.put(key, value);
     Object oldValue = putVal;
     if (oldValue instanceof Collection<?>) {
       oldValue = new ArrayList<Object>((Collection<?>) oldValue) {
@@ -172,28 +94,17 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
         }
       };
     }
-    propertyChangeSupport.firePropertyChange(key.toString(), oldValue, value);
-    weakPropertyChangeSupport.firePropertyChange(key.toString(), oldValue,
-        value);
+    firePropertyChange(key.toString(), oldValue, value);
     return putVal;
   }
 
   /**
-   * Removes the mapping for this key from this map if present.
-   * 
-   * @param key
-   *          key whose mapping is to be removed from the map.
-   * @return previous value associated with specified key, or <tt>null</tt> if
-   *         there was no mapping for key. A <tt>null</tt> return can also
-   *         indicate that the map previously associated <tt>null</tt> with the
-   *         specified key.
+   * {@inheritDoc}
    */
   @Override
   public V remove(Object key) {
-    V oldValue = super.remove(key);
-    propertyChangeSupport.firePropertyChange(key.toString(), oldValue, null);
-    weakPropertyChangeSupport
-        .firePropertyChange(key.toString(), oldValue, null);
+    V oldValue = delegate.remove(key);
+    firePropertyChange(key.toString(), oldValue, null);
     return oldValue;
   }
 
@@ -201,55 +112,90 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    * {@inheritDoc}
    */
   @Override
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
-    weakPropertyChangeSupport.removePropertyChangeListener(listener);
+  public int size() {
+    return delegate.size();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
-    weakPropertyChangeSupport.removePropertyChangeListener(propertyName,
-        listener);
-  }
-
-  /**
-   * @param propertyName
-   *          the property name.
-   * @param oldValue
-   *          the old value.
-   * @param newValue
-   *          the new value.
-   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
-   *      java.lang.Object, java.lang.Object)
-   */
-  protected void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-    weakPropertyChangeSupport.firePropertyChange(propertyName, oldValue,
-        newValue);
-  }
-
-  private void readObject(ObjectInputStream in) throws IOException,
-      ClassNotFoundException {
-    in.defaultReadObject();
-    propertyChangeSupport = new SinglePropertyChangeSupport(this);
-    weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(this);
+  public boolean isEmpty() {
+    return delegate.isEmpty();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
+  public boolean containsKey(Object key) {
+    return delegate.containsKey(key);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean containsValue(Object value) {
+    return delegate.containsValue(value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public V get(Object key) {
+    return delegate.get(key);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void putAll(Map<? extends K, ? extends V> m) {
+    delegate.putAll(m);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    delegate.clear();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Set<K> keySet() {
+    return delegate.keySet();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection<V> values() {
+    return delegate.values();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Set<java.util.Map.Entry<K, V>> entrySet() {
+    return delegate.entrySet();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("unchecked")
   public ObjectEqualityMap<K, V> clone() {
-    @SuppressWarnings("unchecked")
     ObjectEqualityMap<K, V> clone = (ObjectEqualityMap<K, V>) super.clone();
-    clone.propertyChangeSupport = new SinglePropertyChangeSupport(this);
-    clone.weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(this);
+    clone.delegate = (HashMap<K, V>) delegate.clone();
     return clone;
   }
 }

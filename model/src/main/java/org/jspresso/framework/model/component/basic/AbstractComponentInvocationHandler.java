@@ -81,14 +81,17 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  private static final Logger         LOG              = LoggerFactory
-                                                           .getLogger(AbstractComponentInvocationHandler.class);
+  private static final Logger   LOG              = LoggerFactory
+                                                     .getLogger(AbstractComponentInvocationHandler.class);
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
   private IAccessorFactory                                                             accessorFactory;
-  private SinglePropertyChangeSupport                                                  changeSupport;
-  private SingleWeakPropertyChangeSupport                                              weakChangeSupport;
+
+  private SinglePropertyChangeSupport                                                  propertyChangeSupport;
+  private SingleWeakPropertyChangeSupport                                              weakPropertyChangeSupport;
+  private List<PropertyChangeEvent>                                                    delayedEvents;
+
   private IComponentCollectionFactory<IComponent>                                      collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
@@ -185,6 +188,12 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else if ("firePropertyChange".equals(methodName)) {
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
+      return null;
+    } else if ("blockEvents".equals(methodName)) {
+      blockEvents();
+      return null;
+    } else if ("releaseEvents".equals(methodName)) {
+      releaseEvents();
       return null;
     } else if ("straightSetProperty".equals(methodName)) {
       straightSetProperty(proxy, (String) args[0], args[1]);
@@ -547,12 +556,13 @@ public abstract class AbstractComponentInvocationHandler implements
       final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     IComponent property = (IComponent) straightGetProperty(proxy,
         propertyDescriptor.getName());
-    if (property == null && EntityHelper.isInlineComponentReference(propertyDescriptor)
+    if (property == null
+        && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && !propertyDescriptor.isComputed() && propertyDescriptor.isMandatory()) {
       property = inlineComponentFactory
           .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
               .getComponentContract());
-      storeReferenceProperty(propertyDescriptor, null, property);
+      storeReferenceProperty(proxy, propertyDescriptor, null, property);
     }
     return decorateReferent(property,
         propertyDescriptor.getReferencedDescriptor());
@@ -656,6 +666,8 @@ public abstract class AbstractComponentInvocationHandler implements
    * Performs necessary registration on inline components before actually
    * storing them.
    * 
+   * @param proxy
+   *          the proxy to store the reference property for.
    * @param propertyDescriptor
    *          the reference property descriptor.
    * @param oldPropertyValue
@@ -663,7 +675,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param newPropertyValue
    *          the new reference property value.
    */
-  protected void storeReferenceProperty(
+  protected void storeReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
@@ -678,8 +690,10 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     storeProperty(propertyName, newPropertyValue);
     if (newPropertyValue instanceof IPropertyChangeCapable) {
-      InlineReferenceTracker newTracker = new InlineReferenceTracker(
-          propertyName, EntityHelper.isInlineComponentReference(propertyDescriptor) && !propertyDescriptor.isComputed() );
+      InlineReferenceTracker newTracker = new InlineReferenceTracker(proxy,
+          propertyName,
+          EntityHelper.isInlineComponentReference(propertyDescriptor)
+              && !propertyDescriptor.isComputed());
       referenceTrackers.put(propertyName, newTracker);
       initializeInlineTrackerIfNeeded(
           (IPropertyChangeCapable) newPropertyValue, propertyName);
@@ -796,7 +810,7 @@ public abstract class AbstractComponentInvocationHandler implements
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       // reference must change sometimes even if entities are equal.
       if (/* !ObjectUtils.equals(currentPropertyValue, newPropertyValue) */currentPropertyValue != newPropertyValue) {
-        storeReferenceProperty(
+        storeReferenceProperty(proxy,
             (IReferencePropertyDescriptor<?>) propertyDescriptor,
             currentPropertyValue, newPropertyValue);
       }
@@ -817,7 +831,8 @@ public abstract class AbstractComponentInvocationHandler implements
                 .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
-    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
+    doFirePropertyChange(proxy, propertyName, currentPropertyValue,
+        newPropertyValue);
   }
 
   private synchronized void addPropertyChangeListener(Object proxy,
@@ -825,10 +840,10 @@ public abstract class AbstractComponentInvocationHandler implements
     if (listener == null) {
       return;
     }
-    if (changeSupport == null) {
-      changeSupport = new SinglePropertyChangeSupport(proxy);
+    if (propertyChangeSupport == null) {
+      propertyChangeSupport = new SinglePropertyChangeSupport(proxy);
     }
-    changeSupport.addPropertyChangeListener(listener);
+    propertyChangeSupport.addPropertyChangeListener(listener);
   }
 
   private synchronized void addWeakPropertyChangeListener(Object proxy,
@@ -836,10 +851,10 @@ public abstract class AbstractComponentInvocationHandler implements
     if (listener == null) {
       return;
     }
-    if (weakChangeSupport == null) {
-      weakChangeSupport = new SingleWeakPropertyChangeSupport(proxy);
+    if (weakPropertyChangeSupport == null) {
+      weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(proxy);
     }
-    weakChangeSupport.addPropertyChangeListener(listener);
+    weakPropertyChangeSupport.addPropertyChangeListener(listener);
   }
 
   private synchronized void addPropertyChangeListener(Object proxy,
@@ -847,10 +862,10 @@ public abstract class AbstractComponentInvocationHandler implements
     if (listener == null) {
       return;
     }
-    if (changeSupport == null) {
-      changeSupport = new SinglePropertyChangeSupport(proxy);
+    if (propertyChangeSupport == null) {
+      propertyChangeSupport = new SinglePropertyChangeSupport(proxy);
     }
-    changeSupport.addPropertyChangeListener(propertyName, listener);
+    propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
   private synchronized void addWeakPropertyChangeListener(Object proxy,
@@ -858,10 +873,10 @@ public abstract class AbstractComponentInvocationHandler implements
     if (listener == null) {
       return;
     }
-    if (weakChangeSupport == null) {
-      weakChangeSupport = new SingleWeakPropertyChangeSupport(proxy);
+    if (weakPropertyChangeSupport == null) {
+      weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(proxy);
     }
-    weakChangeSupport.addPropertyChangeListener(propertyName, listener);
+    weakPropertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
   @SuppressWarnings("unchecked")
@@ -926,7 +941,7 @@ public abstract class AbstractComponentInvocationHandler implements
       if (inserted) {
         inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
             propertyName);
-        firePropertyChange(propertyName, oldCollectionSnapshot,
+        doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
             collectionProperty);
         if (propertyProcessorsEnabled) {
           propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
@@ -967,7 +982,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void firePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
-    firePropertyChange(propertyName, oldValue, newValue);
+    doFirePropertyChange(proxy, propertyName, oldValue, newValue);
     // This method supports firing nested property changes
     if (propertyName != null) {
       int lastIndexOfDelim = propertyName.lastIndexOf(IAccessor.NESTED_DELIM);
@@ -996,24 +1011,46 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
+  private void doFirePropertyChange(Object proxy, String propertyName,
+      Object oldValue, Object newValue) {
     if ((oldValue == null && newValue == null) || (oldValue == newValue)) {
       return;
     }
     if (!isInitialized(oldValue) || !isInitialized(newValue)) {
-      if (changeSupport != null) {
-        changeSupport.firePropertyChange(propertyName, null, newValue);
-      }
-      if (weakChangeSupport != null) {
-        weakChangeSupport.firePropertyChange(propertyName, null, newValue);
-      }
+      doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName, null,
+          newValue));
     } else {
-      if (changeSupport != null) {
-        changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+      doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
+          oldValue, newValue));
+    }
+  }
+
+  private void doFirePropertyChange(PropertyChangeEvent evt) {
+    if (delayedEvents != null) {
+      delayedEvents.add(evt);
+    } else {
+      if (propertyChangeSupport != null) {
+        propertyChangeSupport.firePropertyChange(evt);
       }
-      if (weakChangeSupport != null) {
-        weakChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+      if (weakPropertyChangeSupport != null) {
+        weakPropertyChangeSupport.firePropertyChange(evt);
+      }
+    }
+  }
+
+  private void blockEvents() {
+    if (delayedEvents == null) {
+      delayedEvents = new ArrayList<PropertyChangeEvent>();
+    }
+  }
+
+  private void releaseEvents() {
+    if (delayedEvents != null) {
+      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<PropertyChangeEvent>(
+          delayedEvents);
+      delayedEvents = null;
+      for (PropertyChangeEvent evt : delayedEventsCopy) {
+        doFirePropertyChange(evt);
       }
     }
   }
@@ -1081,7 +1118,8 @@ public abstract class AbstractComponentInvocationHandler implements
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
-          && EntityHelper.isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
+          && EntityHelper
+              .isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
           && !propertyDescriptor.isComputed()) {
         Object inlineComponent = getProperty(proxy, propertyDescriptor);
         if (inlineComponent instanceof ILifecycleCapable) {
@@ -1169,7 +1207,7 @@ public abstract class AbstractComponentInvocationHandler implements
         Collection<?> oldCollectionSnapshot = CollectionHelper
             .cloneCollection((Collection<?>) collectionProperty);
         if (collectionProperty.remove(value)) {
-          firePropertyChange(propertyName, oldCollectionSnapshot,
+          doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
               collectionProperty);
           if (propertyProcessorsEnabled) {
             propertyDescriptor.postprocessRemover(proxy, collectionProperty,
@@ -1201,11 +1239,11 @@ public abstract class AbstractComponentInvocationHandler implements
     if (listener == null) {
       return;
     }
-    if (changeSupport != null) {
-      changeSupport.removePropertyChangeListener(listener);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport.removePropertyChangeListener(listener);
     }
-    if (weakChangeSupport != null) {
-      weakChangeSupport.removePropertyChangeListener(listener);
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.removePropertyChangeListener(listener);
     }
   }
 
@@ -1214,11 +1252,13 @@ public abstract class AbstractComponentInvocationHandler implements
     if (listener == null) {
       return;
     }
-    if (changeSupport != null) {
-      changeSupport.removePropertyChangeListener(propertyName, listener);
+    if (propertyChangeSupport != null) {
+      propertyChangeSupport
+          .removePropertyChangeListener(propertyName, listener);
     }
-    if (weakChangeSupport != null) {
-      weakChangeSupport.removePropertyChangeListener(propertyName, listener);
+    if (weakPropertyChangeSupport != null) {
+      weakPropertyChangeSupport.removePropertyChangeListener(propertyName,
+          listener);
     }
   }
 
@@ -1273,7 +1313,7 @@ public abstract class AbstractComponentInvocationHandler implements
       try {
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
           // It's a 'one' relation end
-          storeReferenceProperty(
+          storeReferenceProperty(proxy,
               (IReferencePropertyDescriptor<?>) propertyDescriptor,
               oldProperty, actualNewProperty);
           if (reversePropertyDescriptor != null) {
@@ -1377,7 +1417,7 @@ public abstract class AbstractComponentInvocationHandler implements
     } else {
       storeProperty(propertyName, actualNewProperty);
     }
-    firePropertyChange(propertyName, oldProperty, actualNewProperty);
+    doFirePropertyChange(proxy, propertyName, oldProperty, actualNewProperty);
     if (propertyProcessorsEnabled) {
       propertyDescriptor.postprocessSetter(proxy, oldProperty,
           actualNewProperty);
@@ -1416,6 +1456,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private class InlineReferenceTracker implements PropertyChangeListener {
 
+    private Object  proxy;
     private String  componentName;
     private boolean enabled;
     private boolean initialized;
@@ -1424,12 +1465,16 @@ public abstract class AbstractComponentInvocationHandler implements
     /**
      * Constructs a new <code>InnerComponentTracker</code> instance.
      * 
+     * @param proxy
+     *          the proxy holding the reference tracker.
      * @param componentName
      *          the name of the component to track the properties.
      * @param inlinedComponent
      *          is it tracking an inlined component or an entity ref ?
      */
-    public InlineReferenceTracker(String componentName, boolean inlinedComponent) {
+    public InlineReferenceTracker(Object proxy, String componentName,
+        boolean inlinedComponent) {
+      this.proxy = proxy;
       this.componentName = componentName;
       this.inlinedComponent = inlinedComponent;
       this.enabled = true;
@@ -1448,14 +1493,14 @@ public abstract class AbstractComponentInvocationHandler implements
           enabled = false;
           if (inlinedComponent) {
             // for dirtyness notification
-            firePropertyChange(componentName, null, evt.getSource());
+            doFirePropertyChange(proxy, componentName, null, evt.getSource());
           }
           // for ui notification
-          if ((changeSupport != null && changeSupport
+          if ((propertyChangeSupport != null && propertyChangeSupport
               .hasListeners(nestedPropertyName))
-              || (weakChangeSupport != null && weakChangeSupport
+              || (weakPropertyChangeSupport != null && weakPropertyChangeSupport
                   .hasListeners(nestedPropertyName))) {
-            firePropertyChange(nestedPropertyName, evt.getOldValue(),
+            doFirePropertyChange(proxy, nestedPropertyName, evt.getOldValue(),
                 evt.getNewValue());
           }
         } finally {

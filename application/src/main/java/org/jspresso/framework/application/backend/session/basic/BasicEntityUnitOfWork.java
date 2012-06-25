@@ -123,10 +123,12 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities() {
-    Map<Class<?>, Map<Serializable, IEntity>> registeredEntities = new HashMap<Class<?>, Map<Serializable, IEntity>>();
+  public Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities() {
+    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities
+        = new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>();
     for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
-      Class<?> entityContract = ((IEntity) entity).getComponentContract();
+      Class<? extends IEntity> entityContract = ((IEntity) entity)
+          .getComponentContract();
       Map<Serializable, IEntity> contractBuffer = registeredEntities
           .get(entityContract);
       if (contractBuffer == null) {
@@ -237,9 +239,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public void cleanRelationshipsOnDeletion(@SuppressWarnings("unused")
-  IComponent component, @SuppressWarnings("unused")
-  boolean dryRun) {
+  public void cleanRelationshipsOnDeletion(
+      @SuppressWarnings("unused") IComponent component,
+      @SuppressWarnings("unused") boolean dryRun) {
     throw new UnsupportedOperationException(
         "entity unit of work does not support cleanRelationshipsOnDeletion.");
   }
@@ -250,8 +252,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public void reload(@SuppressWarnings("unused")
-  IEntity entity) {
+  public void reload(@SuppressWarnings("unused") IEntity entity) {
     throw new UnsupportedOperationException(
         "entity unit of work does not support reload of an entity.");
   }

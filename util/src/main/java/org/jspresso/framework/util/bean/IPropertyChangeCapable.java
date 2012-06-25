@@ -104,4 +104,14 @@ public interface IPropertyChangeCapable {
   void removePropertyChangeListener(String propertyName,
       PropertyChangeListener listener);
 
+  /**
+   * Delays events propagation by buffering them. When events are unblocked,
+   * they get fired in the order they were recorded.
+   */
+  void blockEvents();
+
+  /**
+   * Unblocks event propagation. All events that were bufferred are fired.
+   */
+  void releaseEvents();
 }

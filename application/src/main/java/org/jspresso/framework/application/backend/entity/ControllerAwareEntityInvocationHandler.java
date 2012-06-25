@@ -219,7 +219,7 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void storeReferenceProperty(
+  protected void storeReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     if (newPropertyValue != null
@@ -234,14 +234,14 @@ public class ControllerAwareEntityInvocationHandler extends
         sessionAwareComponent
             .straightSetProperties(((IComponent) newPropertyValue)
                 .straightGetProperties());
-        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
+        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
             sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
+        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
             newPropertyValue);
       }
     } else {
-      super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
+      super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
           newPropertyValue);
     }
   }

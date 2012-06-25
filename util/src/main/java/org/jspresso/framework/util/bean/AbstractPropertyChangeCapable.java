@@ -7,6 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.lang.ICloneable;
@@ -23,6 +24,7 @@ public abstract class AbstractPropertyChangeCapable implements
 
   private transient SinglePropertyChangeSupport     propertyChangeSupport;
   private transient SingleWeakPropertyChangeSupport weakPropertyChangeSupport;
+  private List<PropertyChangeEvent>                 delayedEvents;
 
   private synchronized void initializePropertyChangeSupportIfNeeded() {
     if (propertyChangeSupport == null) {
@@ -84,6 +86,7 @@ public abstract class AbstractPropertyChangeCapable implements
           .clone();
       clonedBean.propertyChangeSupport = null;
       clonedBean.weakPropertyChangeSupport = null;
+      clonedBean.delayedEvents = null;
       return clonedBean;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);
@@ -125,11 +128,15 @@ public abstract class AbstractPropertyChangeCapable implements
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.beans.PropertyChangeEvent)
    */
   protected void firePropertyChange(PropertyChangeEvent evt) {
-    if (propertyChangeSupport != null) {
-      propertyChangeSupport.firePropertyChange(evt);
-    }
-    if (weakPropertyChangeSupport != null) {
-      weakPropertyChangeSupport.firePropertyChange(evt);
+    if (delayedEvents != null) {
+      delayedEvents.add(evt);
+    } else {
+      if (propertyChangeSupport != null) {
+        propertyChangeSupport.firePropertyChange(evt);
+      }
+      if (weakPropertyChangeSupport != null) {
+        weakPropertyChangeSupport.firePropertyChange(evt);
+      }
     }
   }
 
@@ -145,14 +152,8 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, boolean oldValue,
       boolean newValue) {
-    if (propertyChangeSupport != null) {
-      propertyChangeSupport
-          .firePropertyChange(propertyName, oldValue, newValue);
-    }
-    if (weakPropertyChangeSupport != null) {
-      weakPropertyChangeSupport.firePropertyChange(propertyName, oldValue,
-          newValue);
-    }
+    firePropertyChange(new PropertyChangeEvent(this, propertyName,
+        Boolean.valueOf(oldValue), Boolean.valueOf(newValue)));
   }
 
   /**
@@ -167,14 +168,8 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, int oldValue,
       int newValue) {
-    if (propertyChangeSupport != null) {
-      propertyChangeSupport
-          .firePropertyChange(propertyName, oldValue, newValue);
-    }
-    if (weakPropertyChangeSupport != null) {
-      weakPropertyChangeSupport.firePropertyChange(propertyName, oldValue,
-          newValue);
-    }
+    firePropertyChange(new PropertyChangeEvent(this, propertyName,
+        Integer.valueOf(oldValue), Integer.valueOf(newValue)));
   }
 
   /**
@@ -189,14 +184,8 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, long oldValue,
       long newValue) {
-    if (propertyChangeSupport != null) {
-      propertyChangeSupport.firePropertyChange(propertyName,
-          new Long(oldValue), new Long(newValue));
-    }
-    if (weakPropertyChangeSupport != null) {
-      weakPropertyChangeSupport.firePropertyChange(propertyName, new Long(
-          oldValue), new Long(newValue));
-    }
+    firePropertyChange(new PropertyChangeEvent(this, propertyName,
+        Long.valueOf(oldValue), Long.valueOf(newValue)));
   }
 
   /**
@@ -211,10 +200,8 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
-    if (propertyChangeSupport != null) {
-      propertyChangeSupport
-          .firePropertyChange(propertyName, oldValue, newValue);
-    }
+    firePropertyChange(new PropertyChangeEvent(this, propertyName, oldValue,
+        newValue));
   }
 
   /**
@@ -273,5 +260,31 @@ public abstract class AbstractPropertyChangeCapable implements
       return true;
     }
     return false;
+  }
+
+  /**
+   * Delays events propagation by buffering them. When events are unblocked,
+   * they get fired in the order they were recorded.
+   */
+  @Override
+  public void blockEvents() {
+    if (delayedEvents == null) {
+      delayedEvents = new ArrayList<PropertyChangeEvent>();
+    }
+  }
+
+  /**
+   * Unblocks event propagation. All events that were bufferred are fired.
+   */
+  @Override
+  public void releaseEvents() {
+    if (delayedEvents != null) {
+      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<PropertyChangeEvent>(
+          delayedEvents);
+      delayedEvents = null;
+      for (PropertyChangeEvent evt : delayedEventsCopy) {
+        firePropertyChange(evt);
+      }
+    }
   }
 }

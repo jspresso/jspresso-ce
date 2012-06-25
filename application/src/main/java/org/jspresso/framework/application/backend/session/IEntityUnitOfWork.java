@@ -84,7 +84,7 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    * 
    * @return a map of entities already part of the unit of work
    */
-  Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities();
+  Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities();
 
   /**
    * Gets the entitiesToMergeBack.

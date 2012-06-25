@@ -53,8 +53,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public class QueryComponent extends ObjectEqualityMap<String, Object> implements IQueryComponent {
 
-  private static final long       serialVersionUID = 4271673164192796253L;
-
   private IComponentDescriptor<?> componentDescriptor;
   private IComponentDescriptor<?> queryDescriptor;
   private IComponentFactory       componentFactory;
