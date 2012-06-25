@@ -1,9 +1,14 @@
 3.5.14
 ======
-- Now, Jspresso managed components are only auto-created when referenced by an entity if the property descriptor referencing them is mandatory.
-  Since a reference property to a Jspresso component has been made mandatory by default, there is nothing to do in order to migrate, but
-  explicitely setting mandatory:false will disable component auto-creation thus allowing the developper to have full control on the component
-  reference. 
+- In order to fulfill feature request #664, the signature of the method contained in ILovViewDescriptorFactory
+  has been augmented with a new ESelectionMode parameter that allows to force a selection mode for the LOV result view.
+  The LovAction can now be parameterized with a selectionMode to force the selection mode of the LOV result view.
+  Default (legacy) behaviour is obtained by passing null as value for the new parameter.
+
+- Now, Jspresso managed components are only auto-created when referenced by an entity if the property
+  descriptor referencing them is mandatory. Since a reference property to a Jspresso component has been made mandatory
+  by default, there is nothing to do in order to migrate, but explicitely setting mandatory:false will disable
+  component auto-creation thus allowing the developper to have full control on the component reference.
 
 3.5.13
 ======

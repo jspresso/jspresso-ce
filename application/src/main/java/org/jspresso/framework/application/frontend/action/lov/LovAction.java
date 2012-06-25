@@ -53,6 +53,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +105,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction                         findAction;
   private Map<String, Object>                        initializationMapping;
   private ILovViewDescriptorFactory                  lovViewDescriptorFactory;
+  private ESelectionMode                             selectionMode;
   private IDisplayableAction                         okAction;
   private IAction                                    pagingAction;
 
@@ -200,7 +202,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     // the transaction.
     IView<E> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
-            okAction, context), actionHandler, getLocale(context));
+            getSelectionMode(context), okAction, context), actionHandler,
+        getLocale(context));
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
@@ -230,7 +233,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
               }
             } catch (Exception ex) {
               LOG.warn("Could not retrieve {} on {}", new Object[] {
-                  autoCompletePropertyName, firstItem, ex});
+                  autoCompletePropertyName, firstItem, ex
+              });
             }
           }
           if (selectedItem != null) {
@@ -254,7 +258,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
                 .getConnector())
                 .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
             if (resultConnector != null) {
-              resultConnector.setSelectedIndices(new int[] {i});
+              resultConnector.setSelectedIndices(new int[] {
+                i
+              });
             }
             break;
           }
@@ -323,8 +329,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -340,8 +347,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getName() == null) {
       if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
+            new Object[] {
+              entityDescriptor.getI18nName(translationProvider, locale)
+            }, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
@@ -503,5 +511,45 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setPagingAction(IAction pagingAction) {
     this.pagingAction = pagingAction;
+  }
+
+  /**
+   * Gets the selectionMode of the result view.
+   * 
+   * @param lovContext
+   *          the LOV action context.
+   * @return the selectionMode.
+   */
+  protected ESelectionMode getSelectionMode(Map<String, Object> lovContext) {
+    if (selectionMode != null) {
+      return selectionMode;
+    }
+    return getDefaultSelectionMode(lovContext);
+  }
+
+  /**
+   * Allows to force the result view selection mode.
+   * 
+   * @param selectionMode
+   *          the result view selection mode. When <code>null</code>, the
+   *          default selection mode is applied.
+   */
+  public void setSelectionMode(ESelectionMode selectionMode) {
+    this.selectionMode = selectionMode;
+  }
+
+  /**
+   * Determines the default selection mode for the result view.
+   * 
+   * @param lovContext
+   *          the LOV context.
+   * @return the default selection mode for the result view.
+   */
+  private ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
+    if (getModel(lovContext) instanceof IQueryComponent) {
+      // We are on a filter view that suppports multi selection
+      return ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION;
+    }
+    return ESelectionMode.SINGLE_SELECTION;
   }
 }

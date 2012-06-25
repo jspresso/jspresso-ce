@@ -23,6 +23,7 @@ import java.util.Map;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -38,6 +39,9 @@ public interface ILovViewDescriptorFactory {
    * 
    * @param entityRefDescriptor
    *          the entity reference descriptor.
+   * @param selectionMode
+   *          allows to force the result view selection mode. When
+   *          <code>null</code>, the default selection mode is applied.
    * @param okAction
    *          the action used to select the entity in the LOV.
    * @param lovContext
@@ -46,5 +50,6 @@ public interface ILovViewDescriptorFactory {
    */
   IViewDescriptor createLovViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
-      IDisplayableAction okAction, Map<String, Object> lovContext);
+      ESelectionMode selectionMode, IDisplayableAction okAction,
+      Map<String, Object> lovContext);
 }

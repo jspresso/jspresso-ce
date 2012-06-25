@@ -28,6 +28,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
@@ -41,7 +42,8 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
-public class BasicLovViewDescriptorFactory extends AbstractActionContextAware implements ILovViewDescriptorFactory {
+public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
+    implements ILovViewDescriptorFactory {
 
   private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
@@ -54,24 +56,32 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware im
    * {@inheritDoc}
    */
   @Override
-  public IViewDescriptor createLovViewDescriptor(IComponentDescriptorProvider<IComponent> entityRefDescriptor,
-      IDisplayableAction okAction, Map<String, Object> lovContext) {
+  public IViewDescriptor createLovViewDescriptor(
+      IComponentDescriptorProvider<IComponent> entityRefDescriptor,
+      ESelectionMode selectionMode, IDisplayableAction okAction,
+      Map<String, Object> lovContext) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IComponentDescriptor<IQueryComponent> filterModelDescriptor = getQueryComponentDescriptorFactory()
         .createQueryComponentDescriptor(entityRefDescriptor);
-    IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory.createQueryViewDescriptor(entityRefDescriptor,
-        filterModelDescriptor);
+    IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
+        .createQueryViewDescriptor(entityRefDescriptor, filterModelDescriptor);
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
-    lovViewDescriptor.setModelDescriptor(filterViewDescriptor.getModelDescriptor());
-    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor, lovContext);
+    lovViewDescriptor.setModelDescriptor(filterViewDescriptor
+        .getModelDescriptor());
+    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(
+        entityRefDescriptor, lovContext);
+    resultViewDescriptor.setSelectionMode(selectionMode);
     if (resultViewDescriptor instanceof BasicTableViewDescriptor) {
-      ((BasicTableViewDescriptor) resultViewDescriptor).setSortingAction(sortingAction);
+      ((BasicTableViewDescriptor) resultViewDescriptor)
+          .setSortingAction(sortingAction);
     }
     resultViewDescriptor.setRowAction(okAction);
     if (entityRefDescriptor.getComponentDescriptor().getPageSize() != null
-        && entityRefDescriptor.getComponentDescriptor().getPageSize().intValue() >= 0) {
+        && entityRefDescriptor.getComponentDescriptor().getPageSize()
+            .intValue() >= 0) {
       if (paginationViewDescriptor != null) {
-        resultViewDescriptor.setPaginationViewDescriptor(paginationViewDescriptor);
+        resultViewDescriptor
+            .setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
     if (resultViewActionMap != null) {
@@ -88,7 +98,8 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware im
    * @param queryViewDescriptorFactory
    *          the queryViewDescriptorFactory to set.
    */
-  public void setQueryViewDescriptorFactory(IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+  public void setQueryViewDescriptorFactory(
+      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
     this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 
@@ -122,8 +133,10 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware im
    * @return a result collection view.
    */
   protected BasicCollectionViewDescriptor createResultViewDescriptor(
-      IComponentDescriptorProvider<IComponent> entityRefDescriptor, Map<String, Object> lovContext) {
-    return getResultViewDescriptorFactory().createResultViewDescriptor(entityRefDescriptor, lovContext);
+      IComponentDescriptorProvider<IComponent> entityRefDescriptor,
+      Map<String, Object> lovContext) {
+    return getResultViewDescriptorFactory().createResultViewDescriptor(
+        entityRefDescriptor, lovContext);
   }
 
   /**
@@ -132,7 +145,8 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware im
    * @param paginationViewDescriptor
    *          the paginationViewDescriptor to set.
    */
-  public void setPaginationViewDescriptor(BasicViewDescriptor paginationViewDescriptor) {
+  public void setPaginationViewDescriptor(
+      BasicViewDescriptor paginationViewDescriptor) {
     this.paginationViewDescriptor = paginationViewDescriptor;
   }
 
@@ -151,7 +165,8 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware im
    * @param resultViewDescriptorFactory
    *          the resultViewDescriptorFactory to set.
    */
-  public void setResultViewDescriptorFactory(ILovResultViewDescriptorFactory resultViewDescriptorFactory) {
+  public void setResultViewDescriptorFactory(
+      ILovResultViewDescriptorFactory resultViewDescriptorFactory) {
     this.resultViewDescriptorFactory = resultViewDescriptorFactory;
   }
 
@@ -179,7 +194,8 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware im
    * @param queryComponentDescriptorFactory
    *          the queryComponentDescriptorFactory to set.
    */
-  public void setQueryComponentDescriptorFactory(IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+  public void setQueryComponentDescriptorFactory(
+      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
     this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }
