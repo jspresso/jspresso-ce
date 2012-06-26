@@ -50,4 +50,13 @@ public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
     super.registerNumericTypeMappings();
     registerColumnType(Types.INTEGER, "number($p,0)");
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void registerCharacterTypeMappings() {
+    super.registerCharacterTypeMappings();
+    registerColumnType(Types.VARCHAR, "clob");
+  }
 }
