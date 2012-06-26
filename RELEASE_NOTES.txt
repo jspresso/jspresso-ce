@@ -1,5 +1,7 @@
 3.5.14
 ======
+- autoSelectFistRows has been made configurable on charts. Previously, it was always false. Default value is true.
+
 - 2 methods have been added to the IPropertyChangeCapable interface that allow to delay property change notifications.
   void blockEvents();
   void releaseEvents();
