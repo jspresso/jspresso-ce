@@ -480,9 +480,9 @@ package org.jspresso.framework.view.flex {
           (numericComponent as TextInput).maxChars = maxChars;
         }
       }
-      if(maxChars > 0) {
+      if(maxChars >= 0) {
         sizeMaxComponentWidth(numericComponent,remoteNumericComponent,
-          maxChars,
+          maxChars + 2,
           NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
         sizeMaxComponentWidth(numericComponent,remoteNumericComponent,
@@ -871,7 +871,7 @@ package org.jspresso.framework.view.flex {
             width = tr.length;
           }
         }
-        sizeMaxComponentWidth(comboBox, remoteComboBox, width);
+        sizeMaxComponentWidth(comboBox, remoteComboBox, width +2);
         if(hasIcon) {
           comboBox.maxWidth += 45;
         } else {
@@ -1288,7 +1288,9 @@ package org.jspresso.framework.view.flex {
         
         if(remoteForm.labelsPosition != "NONE") {
           componentLabel = createComponent(rComponentLabel, false);
-          componentLabel.maxWidth = NaN;
+          if(componentLabel.maxWidth > 0) {
+            componentLabel.maxWidth = NaN;
+          }
           labelCell = new GridItem();
           labelCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
           labelCell.verticalScrollPolicy  = ScrollPolicy.OFF;
@@ -1330,8 +1332,10 @@ package org.jspresso.framework.view.flex {
         }
 
         if(remoteForm.labelsPosition != "NONE") {
+          //labelCell.setStyle("borderStyle","solid");
+          //labelCell.setStyle("borderColor","0x00FF00");
           labelsRow.addChild(labelCell);
-          if((rComponentLabel.label && rComponentLabel.label.length > 0) || rComponentLabel.icon) {
+          if((rComponentLabel.label) || rComponentLabel.icon) {
             labelCell.addChild(componentLabel);
             // makes alignment wrong
             //if(remoteForm.labelsPosition == "ASIDE") {
@@ -1339,7 +1343,7 @@ package org.jspresso.framework.view.flex {
             //}
           } else {
             if(remoteForm.labelsPosition == "ASIDE") {
-              labelCell.maxWidth = NaN;
+              labelCell.maxWidth = 0;
             }
           }
         }
@@ -1359,17 +1363,19 @@ package org.jspresso.framework.view.flex {
             componentCell.maxWidth = NaN;
             component.maxWidth = NaN;
           }
-        } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
+        } else if(component.maxWidth >= 0 && component.maxWidth < 1000) {
           component.percentWidth = 100.0;
           if(elementWidth == 1 && ((col + elementWidth < remoteForm.columnCount)
             || !(rComponent is RComboBox))) {
             componentCell.maxWidth = component.maxWidth;
             componentCell.width = component.maxWidth;
-//            componentCell.setStyle("borderStyle","solid");
-//            componentCell.setStyle("borderColor","0xFF0000");
+            //componentCell.setStyle("borderStyle","solid");
+            //componentCell.setStyle("borderColor","0xFF0000");
+            //component.setStyle("borderStyle","solid");
+            //component.setStyle("borderColor","0x0000FF");
           } else {
             //Allow last cell to grow if it's a ComboBox
-            component.percentWidth = 100.0;
+            componentCell.percentWidth = 100.0;
           }
         }
         if(component.minWidth > 0) {
@@ -1579,7 +1585,7 @@ package org.jspresso.framework.view.flex {
       dateField.formatString = datePattern;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
-      sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT);
+      sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT +2);
       bindDateField(dateField, remoteDateField);
       return dateField;
     }
@@ -1693,7 +1699,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
       var timeField:TextInput = createTextInputComponent();
-      sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
+      sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT +2);
       bindTextInput(timeField, remoteTimeField.state,
         createFormatter(remoteTimeField), createParser(remoteTimeField));
       return timeField;
@@ -1835,7 +1841,12 @@ package org.jspresso.framework.view.flex {
       }
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
-      sizeMaxComponentWidth(passwordField, remotePasswordField);
+      if(remotePasswordField.maxLength >= 0) {
+        passwordField.maxChars = remotePasswordField.maxLength;
+        sizeMaxComponentWidth(passwordField, remotePasswordField, remotePasswordField.maxLength +2);
+      } else {
+        sizeMaxComponentWidth(passwordField, remotePasswordField);
+      }
       return passwordField;
     }
 
@@ -2225,9 +2236,15 @@ package org.jspresso.framework.view.flex {
       return true;
     }
 
+    /**
+     * 
+     * @param remoteTextArea
+     * @return 
+     * 
+     */
     protected function createTextArea(remoteTextArea:RTextArea):UIComponent {
       var textArea:TextArea = new TextArea();
-      if(remoteTextArea.maxLength > 0) {
+      if(remoteTextArea.maxLength >= 0) {
         textArea.maxChars = remoteTextArea.maxLength;
       }
       bindTextArea(textArea, remoteTextArea.state);
@@ -2320,20 +2337,29 @@ package org.jspresso.framework.view.flex {
       if(remoteLabel.state) {
         label.selectable = true;
       }
-      if(!remoteLabel.state && remoteLabel.label) {
-        if(HtmlUtil.isHtml(remoteLabel.label)) {
-          label.text = null;
-          label.htmlText = HtmlUtil.convertHtmlEntities(remoteLabel.label);
-        } else {
-          label.htmlText = null;
-          label.text = remoteLabel.label;
-          if(label.text != null) {
-            sizeMaxComponentWidth(label, remoteLabel, label.text.length + 5);
+      if(!remoteLabel.state) {
+        if(remoteLabel.label != null) {
+          if(HtmlUtil.isHtml(remoteLabel.label)) {
+            label.text = null;
+            label.htmlText = HtmlUtil.convertHtmlEntities(remoteLabel.label);
+          } else {
+            label.htmlText = null;
+            label.text = remoteLabel.label;
           }
+        }
+        if(label.text != null && label.text.length > 0) {
+          sizeMaxComponentWidth(label, remoteLabel, label.text.length +5);
+        } else {
+          sizeMaxComponentWidth(label, remoteLabel, 0);
         }
       }
       configureHorizontalAlignment(label, remoteLabel.horizontalAlignment);
       if(remoteLabel.state) {
+        if(remoteLabel.maxLength >= 0) {
+          sizeMaxComponentWidth(label, remoteLabel, remoteLabel.maxLength);
+        } else {
+          sizeMaxComponentWidth(label, remoteLabel);
+        }
         bindLabel(label, remoteLabel);
       }
       if(remoteLabel.icon) {
@@ -2393,7 +2419,7 @@ package org.jspresso.framework.view.flex {
     
     protected function createTextField(remoteTextField:RTextField):UIComponent {
       var textField:TextInput = createTextInputComponent();
-      if(remoteTextField.maxLength > 0) {
+      if(remoteTextField.maxLength >= 0) {
         textField.maxChars = remoteTextField.maxLength;
         sizeMaxComponentWidth(textField, remoteTextField, remoteTextField.maxLength +2);
       } else {
@@ -2629,7 +2655,6 @@ package org.jspresso.framework.view.flex {
       if(expectedCharCount < charCount) {
         charCount = expectedCharCount;
       }
-      charCount += 2;
       w = component.measureText(TEMPLATE_CHAR).width * charCount;
       if(remoteComponent.preferredSize && remoteComponent.preferredSize.width > w) {
         w = remoteComponent.preferredSize.width;
