@@ -1,5 +1,8 @@
 3.5.14
 ======
+- onUpdate() was triggered on an entity even if only computed (transient) properties were detected to be modified.
+  This is not the case anymore. see request #676.
+
 - autoSelectFistRows has been made configurable on charts. Previously, it was always false. Default value is true.
 
 - 2 methods have been added to the IPropertyChangeCapable interface that allow to delay property change notifications.

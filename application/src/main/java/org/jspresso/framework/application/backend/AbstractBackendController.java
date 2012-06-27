@@ -397,6 +397,15 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public Map<String, Object> getDirtyProperties(IEntity entity) {
+    return getDirtyProperties(entity, true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> getDirtyProperties(IEntity entity,
+      boolean includeComputed) {
     Map<String, Object> dirtyProperties;
     if (isUnitOfWorkActive()) {
       dirtyProperties = unitOfWork.getDirtyProperties(entity);
@@ -407,18 +416,32 @@ public abstract class AbstractBackendController extends AbstractController
       for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet()
           .iterator(); ite.hasNext();) {
         Map.Entry<String, Object> property = ite.next();
-        Object propertyValue = property.getValue();
-        Object currentProperty = entity.straightGetProperty(property.getKey());
-        if ((currentProperty != null
-            && !(currentProperty instanceof Collection) && areEqualWithoutInitializing(
-              currentProperty, property.getValue()))
-            || (currentProperty == null && propertyValue == null)) {
-          // Unfortunately, we cannot ignore collections that have been
-          // changed but reset to their original state. This prevents the entity
-          // to be merged back into the session while the session state might be
-          // wrong.
-          clearPropertyDirtyState(currentProperty);
-          ite.remove(); // actually removes the mapping from the map.
+        boolean include = true;
+        if (!includeComputed) {
+          IComponentDescriptor<?> entityDescriptor = getEntityFactory()
+              .getComponentDescriptor(getComponentContract(entity));
+          IPropertyDescriptor propertyDescriptor = entityDescriptor
+              .getPropertyDescriptor(property.getKey());
+          include = (propertyDescriptor != null && !propertyDescriptor
+              .isComputed());
+        }
+        if (include) {
+          Object propertyValue = property.getValue();
+          Object currentProperty = entity
+              .straightGetProperty(property.getKey());
+          if ((currentProperty != null
+              && !(currentProperty instanceof Collection) && areEqualWithoutInitializing(
+                currentProperty, property.getValue()))
+              || (currentProperty == null && propertyValue == null)) {
+            // Unfortunately, we cannot ignore collections that have been
+            // changed but reset to their original state. This prevents the
+            // entity to be merged back into the session while the session state
+            // might be wrong.
+            clearPropertyDirtyState(currentProperty);
+            ite.remove(); // actually removes the mapping from the map.
+          }
+        } else {
+          ite.remove();
         }
       }
     }
@@ -587,11 +610,21 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isAnyDirtyInDepth(Collection<?> elements) {
+    return isAnyDirtyInDepth(elements, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isAnyDirtyInDepth(Collection<?> elements,
+      boolean includeComputed) {
     Set<IEntity> alreadyTraversed = new HashSet<IEntity>();
     if (elements != null) {
       for (Object element : elements) {
         if (element instanceof IEntity) {
-          if (isDirtyInDepth((IEntity) element, alreadyTraversed)) {
+          if (isDirtyInDepth((IEntity) element, includeComputed,
+              alreadyTraversed)) {
             return true;
           }
         }
@@ -605,7 +638,15 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isDirtyInDepth(IEntity entity) {
-    return isAnyDirtyInDepth(Collections.singleton(entity));
+    return isDirtyInDepth(entity, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isDirtyInDepth(IEntity entity, boolean includeComputed) {
+    return isAnyDirtyInDepth(Collections.singleton(entity), includeComputed);
   }
 
   /**
@@ -988,34 +1029,27 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Gets wether the entity is dirty (has changes that need to be updated to the
-   * persistent store).
-   * 
-   * @param entity
-   *          the entity to test.
-   * @return true if the entity is dirty.
+   * {@inheritDoc}
    */
   @Override
   public boolean isDirty(IEntity entity) {
+    return isDirty(entity, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isDirty(IEntity entity, boolean includeComputed) {
     if (entity == null) {
       return false;
     }
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
-        .getComponentDescriptor(getComponentContract(entity));
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity,
+        includeComputed);
     if (entityDirtyProperties != null) {
       entityDirtyProperties.remove(IEntity.VERSION);
-      for (Map.Entry<String, Object> property : entityDirtyProperties
-          .entrySet()) {
-        String propertyName = property.getKey();
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
-            .getPropertyDescriptor(propertyName);
-        if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
-          return true;
-        }
-      }
     }
-    return false;
+    return entityDirtyProperties != null && !entityDirtyProperties.isEmpty();
   }
 
   /**
@@ -1237,9 +1271,10 @@ public abstract class AbstractBackendController extends AbstractController
     return uowEntity;
   }
 
-  private boolean isDirtyInDepth(IEntity entity, Set<IEntity> alreadyTraversed) {
+  private boolean isDirtyInDepth(IEntity entity, boolean includeComputed,
+      Set<IEntity> alreadyTraversed) {
     alreadyTraversed.add(entity);
-    if (isDirty(entity)) {
+    if (isDirty(entity, includeComputed)) {
       return true;
     }
     Map<String, Object> entityProps = entity.straightGetProperties();
@@ -1248,7 +1283,8 @@ public abstract class AbstractBackendController extends AbstractController
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)
             && !alreadyTraversed.contains(propertyValue)) {
-          if (isDirtyInDepth((IEntity) propertyValue, alreadyTraversed)) {
+          if (isDirtyInDepth((IEntity) propertyValue, includeComputed,
+              alreadyTraversed)) {
             return true;
           }
         }
@@ -1256,7 +1292,8 @@ public abstract class AbstractBackendController extends AbstractController
         if (isInitialized(propertyValue)) {
           for (Object elt : ((Collection<?>) propertyValue)) {
             if (elt instanceof IEntity && !alreadyTraversed.contains(elt)) {
-              if (isDirtyInDepth((IEntity) elt, alreadyTraversed)) {
+              if (isDirtyInDepth((IEntity) elt, includeComputed,
+                  alreadyTraversed)) {
                 return true;
               }
             }

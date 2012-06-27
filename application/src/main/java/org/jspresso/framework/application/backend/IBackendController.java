@@ -50,7 +50,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IBackendController extends IController, IEntityLifecycleHandler {
+public interface IBackendController extends IController,
+    IEntityLifecycleHandler {
 
   /**
    * Begins the current unit of work.
@@ -99,7 +100,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    * @return the entity (clone of the original one) actually registered in the
    *         unit of work.
    */
-  <E extends IEntity> E cloneInUnitOfWork(E entity, boolean allowOuterScopeUpdate);
+  <E extends IEntity> E cloneInUnitOfWork(E entity,
+      boolean allowOuterScopeUpdate);
 
   /**
    * Registers an list of entities (actually a clone of it) and all their graphs
@@ -134,7 +136,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    * @return the entity (clone of the original one) actually registered in the
    *         unit of work.
    */
-  <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities, boolean allowOuterScopeUpdate);
+  <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities,
+      boolean allowOuterScopeUpdate);
 
   /**
    * Commits the current unit of work.
@@ -154,7 +157,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    *          the model descriptor to create the connector for.
    * @return the created model connector.
    */
-  IValueConnector createModelConnector(String id, IModelDescriptor modelDescriptor);
+  IValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor);
 
   /**
    * Gets the appropriate accessor factory based on the targetted object.
@@ -179,7 +183,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    *          the identifier of the looked-up entity.
    * @return the registered entity or null.
    */
-  IEntity getRegisteredEntity(Class<? extends IEntity> entityContract, Serializable entityId);
+  IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Serializable entityId);
 
   /**
    * Gets the transactionTemplate.
@@ -216,7 +221,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    * @param propertyName
    *          the name of the property to initialize.
    */
-  void initializePropertyIfNeeded(IComponent componentOrEntity, String propertyName);
+  void initializePropertyIfNeeded(IComponent componentOrEntity,
+      String propertyName);
 
   /**
    * Installs the passed in workspaces into the backend controller.
@@ -229,6 +235,7 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
   /**
    * Gets wether any of the entities or if any of the entities they can reach
    * are dirty (has changes that need to be updated to the persistent store).
+   * Computed properties are also scanned for modification.
    * 
    * @param elements
    *          the elements to test. Only entities are actually tested.
@@ -238,7 +245,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
 
   /**
    * Gets wether the entity or if one of the entities it can reach is dirty (has
-   * changes that need to be updated to the persistent store).
+   * changes that need to be updated to the persistent store). Computed
+   * properties are also scanned for modification.
    * 
    * @param entity
    *          the entity to test.
@@ -248,13 +256,49 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
 
   /**
    * Gets wether the entity is dirty (has changes that need to be updated to the
-   * persistent store).
+   * persistent store). Computed properties are also scanned for modification.
    * 
    * @param entity
    *          the entity to test.
    * @return true if the entity is dirty.
    */
   boolean isDirty(IEntity entity);
+
+  /**
+   * Gets wether any of the entities or if any of the entities they can reach
+   * are dirty (has changes that need to be updated to the persistent store).
+   * 
+   * @param elements
+   *          the elements to test. Only entities are actually tested.
+   * @param includeComputed
+   *          are computed properties also scanned ?
+   * @return true if any of the entities is dirty in depth.
+   */
+  boolean isAnyDirtyInDepth(Collection<?> elements, boolean includeComputed);
+
+  /**
+   * Gets wether the entity or if one of the entities it can reach is dirty (has
+   * changes that need to be updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @param includeComputed
+   *          are computed properties also scanned ?
+   * @return true if the entity is dirty in depth.
+   */
+  boolean isDirtyInDepth(IEntity entity, boolean includeComputed);
+
+  /**
+   * Gets wether the entity is dirty (has changes that need to be updated to the
+   * persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @param includeComputed
+   *          are computed properties also scanned ?
+   * @return true if the entity is dirty.
+   */
+  boolean isDirty(IEntity entity, boolean includeComputed);
 
   /**
    * Gets wether the entity property is dirty (has changes that need to be
@@ -394,7 +438,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    * @param components
    *          the component transfer structure to store.
    */
-  void storeComponents(ComponentTransferStructure<? extends IComponent> components);
+  void storeComponents(
+      ComponentTransferStructure<? extends IComponent> components);
 
   /**
    * Cleans-up request-scoped resources.
@@ -424,7 +469,8 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    *          the modifier parameter.
    * @return the parameter to actually pass to the modifier
    */
-  Object sanitizeModifierParam(Object target, IPropertyDescriptor propertyDescriptor, Object param);
+  Object sanitizeModifierParam(Object target,
+      IPropertyDescriptor propertyDescriptor, Object param);
 
   /**
    * Returns the list of currently active asynchronous action executors.
@@ -432,4 +478,19 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
    * @return the list of currently active asynchronous action executors.
    */
   Set<AsyncActionExecutor> getRunningExecutors();
+
+  /**
+   * Gets the entity dirty properties (changed properties that need to be
+   * updated to the persistent store as well as computed properties if
+   * includeComputed is set to <code>true</code>).
+   * 
+   * @param entity
+   *          the entity to get the dirty properties of.
+   * @param includeComputed
+   *          are computed properties also returned ?
+   * @return null or an empty map if the entity is not dirty. The collection of
+   *         dirty properties with their original values.
+   */
+  Map<String, Object> getDirtyProperties(IEntity entity, boolean includeComputed);
+
 }

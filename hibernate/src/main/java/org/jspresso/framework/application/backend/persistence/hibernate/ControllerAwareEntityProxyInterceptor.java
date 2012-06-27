@@ -270,7 +270,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
         if (entity instanceof IEntity) {
           if (((IEntity) entity).isPersistent()) {
             boolean isClean = false;
-            Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity);
+            Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
             if (dirtyProperties != null) {
               dirtyProperties.remove(IEntity.VERSION);
             }

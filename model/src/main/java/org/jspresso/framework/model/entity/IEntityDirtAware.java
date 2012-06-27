@@ -30,7 +30,7 @@ public interface IEntityDirtAware {
 
   /**
    * Gets the entity dirty properties (changed properties that need to be
-   * updated to the persistent store).
+   * updated to the persistent store as well as computed properties).
    * 
    * @param entity
    *          the entity to get the dirty properties of.
