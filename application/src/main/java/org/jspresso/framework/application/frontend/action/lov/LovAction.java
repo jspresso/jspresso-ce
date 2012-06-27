@@ -220,15 +220,23 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           if (queryComponent.getQueriedComponents().size() == 1) {
             selectedItem = firstItem;
           } else if (autoCompletePropertyName != null) {
+            Object secondItem = queryComponent.getQueriedComponents().get(1);
             try {
-              // Determine if it is an exact match.
+              // Determine if it is a single exact match.
               String firstItemPropertyValue = (String) getBackendController(
                   context)
                   .getAccessorFactory()
                   .createPropertyAccessor(autoCompletePropertyName,
                       firstItem.getClass()).getValue(firstItem);
+              String secondItemPropertyValue = (String) getBackendController(
+                  context)
+                  .getAccessorFactory()
+                  .createPropertyAccessor(autoCompletePropertyName,
+                      firstItem.getClass()).getValue(secondItem);
               if (autoCompletePropertyValue
-                  .equalsIgnoreCase(firstItemPropertyValue)) {
+                  .equalsIgnoreCase(firstItemPropertyValue)
+                  && !autoCompletePropertyValue
+                      .equalsIgnoreCase(secondItemPropertyValue)) {
                 selectedItem = firstItem;
               }
             } catch (Exception ex) {
