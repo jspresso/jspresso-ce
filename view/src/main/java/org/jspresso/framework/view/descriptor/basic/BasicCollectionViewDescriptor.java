@@ -187,7 +187,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   /**
    * Configures the default selection that gets applied when the content of the
    * collection view changes. Whenever set to <code>true</code>, the 1st row
-   * will be automatically selected, whereas nothing happens whe set to false.
+   * will be automatically selected, whereas nothing happens when set to false.
    * <p>
    * The default value depends on the selection mode of the collection view.
    * When a cumulative selection mode is used, <code>autoSelectFirstRow</code>
