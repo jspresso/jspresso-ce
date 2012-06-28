@@ -276,7 +276,9 @@
     <property name="applicationSession" ref="applicationSession" />
     <property name="collectionFactory" ref="componentCollectionFactory" />
     <property name="entityRegistry">
-      <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry" />
+      <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry">
+        <constructor-arg value="sessionEntityRegistry"/>
+      </bean>
     </property>
     <property name="unitOfWork">
       <bean class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork" />

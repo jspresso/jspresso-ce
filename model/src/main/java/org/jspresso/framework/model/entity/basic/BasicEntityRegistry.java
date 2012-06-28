@@ -37,12 +37,17 @@ import org.jspresso.framework.model.entity.IEntityRegistry;
  */
 public class BasicEntityRegistry implements IEntityRegistry {
 
+  private String                                                    name;
   private Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore;
 
   /**
    * Constructs a new <code>BasicEntityRegistry</code> instance.
+   * 
+   * @param name
+   *          the name of the registry;
    */
-  public BasicEntityRegistry() {
+  public BasicEntityRegistry(String name) {
+    this.name = name;
     backingStore = new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>();
   }
 
@@ -65,8 +70,8 @@ public class BasicEntityRegistry implements IEntityRegistry {
           .entrySet()) {
         Class<? extends IEntity> suberClass = suberclassContractStore.getKey();
         if (suberClass != entityContract
-            && (entityContract.isAssignableFrom(suberClass)
-            || suberClass.isAssignableFrom(entityContract))) {
+            && (entityContract.isAssignableFrom(suberClass) || suberClass
+                .isAssignableFrom(entityContract))) {
           contractStore = suberclassContractStore.getValue();
           if (contractStore != null) {
             registeredEntity = contractStore.get(id);
@@ -117,5 +122,14 @@ public class BasicEntityRegistry implements IEntityRegistry {
     if (backingStore != null) {
       backingStore.clear();
     }
+  }
+
+  /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
   }
 }

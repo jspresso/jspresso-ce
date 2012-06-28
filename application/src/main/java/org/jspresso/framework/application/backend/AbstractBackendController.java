@@ -159,7 +159,8 @@ public abstract class AbstractBackendController extends AbstractController
     // moduleConnectors = new HashMap<Module, IValueConnector>();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
-    entitiesExcludedFromSessionSanityChecks = new BasicEntityRegistry();
+    entitiesExcludedFromSessionSanityChecks = new BasicEntityRegistry(
+        "entitiesExcludedFromSessionSanityChecks");
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
   }
@@ -235,7 +236,7 @@ public abstract class AbstractBackendController extends AbstractController
     List<E> uowEntities = new ArrayList<E>();
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork
         .getRegisteredEntities();
-    IEntityRegistry alreadyCloned = new BasicEntityRegistry();
+    IEntityRegistry alreadyCloned = new BasicEntityRegistry("cloneInUnitOfWork");
     for (Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> contractStore : uowExistingEntities
         .entrySet()) {
       for (Entry<Serializable, IEntity> entityEntry : contractStore.getValue()
@@ -264,11 +265,9 @@ public abstract class AbstractBackendController extends AbstractController
     }
     try {
       committingUow = true;
-      IEntityRegistry alreadyMerged = new BasicEntityRegistry();
       if (unitOfWork.getUpdatedEntities() != null) {
-        for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
-          merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
-        }
+        merge(new ArrayList<IEntity>(unitOfWork.getUpdatedEntities()),
+            EMergeMode.MERGE_CLEAN_LAZY);
       }
     } finally {
       committingUow = false;
@@ -619,7 +618,8 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public boolean isAnyDirtyInDepth(Collection<?> elements,
       boolean includeComputed) {
-    Set<IEntity> alreadyTraversed = new HashSet<IEntity>();
+    IEntityRegistry alreadyTraversed = new BasicEntityRegistry(
+        "isAnyDirtyInDepth");
     if (elements != null) {
       for (Object element : elements) {
         if (element instanceof IEntity) {
@@ -697,7 +697,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public <E extends IEntity> E merge(E entity, EMergeMode mergeMode) {
-    return merge(entity, mergeMode, new BasicEntityRegistry());
+    return merge(entity, mergeMode, new BasicEntityRegistry("merge"));
   }
 
   /**
@@ -706,7 +706,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public <E extends IEntity> List<E> merge(List<E> entities,
       EMergeMode mergeMode) {
-    IEntityRegistry alreadyMerged = new BasicEntityRegistry();
+    IEntityRegistry alreadyMerged = new BasicEntityRegistry("merge");
     List<E> mergedList = new ArrayList<E>();
     for (E entity : entities) {
       mergedList.add(merge(entity, mergeMode, alreadyMerged));
@@ -1242,6 +1242,9 @@ public abstract class AbstractBackendController extends AbstractController
                   allowOuterScopeUpdate, alreadyCloned));
         }
       }
+      if (uowEntity != null && isInitialized(uowEntity)) {
+        uowEntity.releaseEvents();
+      }
       unitOfWork.register(uowEntity, new HashMap<String, Object>(
           dirtyProperties));
       if (uowEntity instanceof ILifecycleCapable) {
@@ -1272,8 +1275,9 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   private boolean isDirtyInDepth(IEntity entity, boolean includeComputed,
-      Set<IEntity> alreadyTraversed) {
-    alreadyTraversed.add(entity);
+      IEntityRegistry alreadyTraversed) {
+    alreadyTraversed.register(getComponentContract(entity), entity.getId(),
+        entity);
     if (isDirty(entity, includeComputed)) {
       return true;
     }
@@ -1282,7 +1286,9 @@ public abstract class AbstractBackendController extends AbstractController
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)
-            && !alreadyTraversed.contains(propertyValue)) {
+            && alreadyTraversed.get(
+                getComponentContract((IEntity) propertyValue),
+                ((IEntity) propertyValue).getId()) == null) {
           if (isDirtyInDepth((IEntity) propertyValue, includeComputed,
               alreadyTraversed)) {
             return true;
@@ -1291,7 +1297,9 @@ public abstract class AbstractBackendController extends AbstractController
       } else if (propertyValue instanceof Collection<?>) {
         if (isInitialized(propertyValue)) {
           for (Object elt : ((Collection<?>) propertyValue)) {
-            if (elt instanceof IEntity && !alreadyTraversed.contains(elt)) {
+            if (elt instanceof IEntity
+                && alreadyTraversed.get(getComponentContract((IEntity) elt),
+                    ((IEntity) elt).getId()) == null) {
               if (isDirtyInDepth((IEntity) elt, includeComputed,
                   alreadyTraversed)) {
                 return true;
