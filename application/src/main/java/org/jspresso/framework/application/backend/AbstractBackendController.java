@@ -1397,6 +1397,7 @@ public abstract class AbstractBackendController extends AbstractController
         Map<String, Object> registeredEntityProperties = registeredEntity
             .straightGetProperties();
         Map<String, Object> mergedProperties = new LinkedHashMap<String, Object>();
+        Set<String> propertiesToSort = new HashSet<String>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           String propertyName = property.getKey();
           Object propertyValue = property.getValue();
@@ -1475,6 +1476,9 @@ public abstract class AbstractBackendController extends AbstractController
                 } else {
                   mergedProperties.put(propertyName, registeredCollection);
                 }
+                if (isInitialized(registeredCollection)) {
+                  propertiesToSort.add(propertyName);
+                }
               }
             }
           } else if (propertyValue instanceof IComponent) {
@@ -1489,6 +1493,10 @@ public abstract class AbstractBackendController extends AbstractController
           }
         }
         registeredEntity.straightSetProperties(mergedProperties);
+        for (String propertyToSort : propertiesToSort) {
+          getEntityFactory().sortCollectionProperty(registeredEntity,
+              propertyToSort);
+        }
       } else if (mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
         // version has not evolved but we must still reset dirty properties in
         // case only versionControl false properties have changed.
