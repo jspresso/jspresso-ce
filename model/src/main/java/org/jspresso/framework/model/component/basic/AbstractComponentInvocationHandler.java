@@ -81,8 +81,10 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  private static final Logger   LOG              = LoggerFactory
-                                                     .getLogger(AbstractComponentInvocationHandler.class);
+  //@formatter:off
+  private static final Logger  LOG              = LoggerFactory
+                                                    .getLogger(AbstractComponentInvocationHandler.class);
+  //@formatter:on
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
@@ -101,6 +103,8 @@ public abstract class AbstractComponentInvocationHandler implements
   private boolean                                                                      propertyProcessorsEnabled;
 
   private Map<String, InlineReferenceTracker>                                          referenceTrackers;
+
+  private static final String                                                          DOT              = ".";
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -1488,12 +1492,32 @@ public abstract class AbstractComponentInvocationHandler implements
     public void propertyChange(PropertyChangeEvent evt) {
       if (enabled) {
         boolean wasEnabled = enabled;
-        String nestedPropertyName = componentName + "." + evt.getPropertyName();
+        String nestedPropertyName = componentName + DOT + evt.getPropertyName();
         try {
           enabled = false;
           if (inlinedComponent) {
-            // for dirtyness notification
-            doFirePropertyChange(proxy, componentName, null, evt.getSource());
+            // for dirtyness notification.
+            // must check if the actual property change does not come from a
+            // nested entity. In that case, the persistent state has not
+            // changed.
+            boolean chainHasEntity = false;
+            String[] chain = evt.getPropertyName().split("\\.");
+            if (chain.length > 1) {
+              StringBuffer chainPart = new StringBuffer();
+              for (int i = 0; i < chain.length - 1 && !chainHasEntity; i++) {
+                if (chainPart.length() > 0) {
+                  chainPart.append(DOT);
+                }
+                chainPart.append(chain[i]);
+                if (((IComponent) evt.getSource())
+                    .straightGetProperty(chainPart.toString()) instanceof IEntity) {
+                  chainHasEntity = true;
+                }
+              }
+            }
+            if (!chainHasEntity) {
+              doFirePropertyChange(proxy, componentName, null, evt.getSource());
+            }
           }
           // for ui notification
           if ((propertyChangeSupport != null && propertyChangeSupport
