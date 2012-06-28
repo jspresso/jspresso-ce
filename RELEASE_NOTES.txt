@@ -1,5 +1,7 @@
 3.5.14
 ======
+- Migrated to Qooxdoo 2.0
+
 - onUpdate() was triggered on an entity even if only computed (transient) properties were detected to be modified.
   This is not the case anymore. see request #676.
 

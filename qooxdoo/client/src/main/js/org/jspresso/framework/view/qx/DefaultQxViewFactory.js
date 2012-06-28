@@ -54,8 +54,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _qxColorToHexColor : function(qxColor) {
       if (qxColor) {
         var rgbColor = qx.util.ColorUtil.stringToRgb(qxColor);
-        return "0x" + "FF" + qx.util.ColorUtil.rgbToHexString(rgbColor); // ignore
-        // alpha
+        return "0x" + "FF" + qx.util.ColorUtil.rgbToHexString(rgbColor).substring(1);
+        // ignore alpha
       }
       return qxColor;
     }
