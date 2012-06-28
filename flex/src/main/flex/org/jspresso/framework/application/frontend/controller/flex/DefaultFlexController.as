@@ -293,8 +293,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
           command.actionEvent = actionEvent;
           actionEvent.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
           actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
-          blockUI(false);
           registerCommand(command);
+          // delays the UI to the next repaint so that if an action needs to perform immediately
+          // after, it can. see Bug #674
+          (Application.application as Application).callLater(blockUI, [false]);
         }
       }
     }
@@ -1173,12 +1175,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       if((Application.application as Application).controlBar) {
         (Application.application as Application).controlBar.enabled = true;
       }
-      //      var appChildren:Array = (Application.application as Application).getChildren();
-      //      if(appChildren) {
-      //        for(var i:int = 0; i < appChildren.length; i++) {
-      //          (appChildren[i] as UIComponent).enabled = value;
-      //        }
-      //      }
     }
     
     protected function getKeysToTranslate():Array {
