@@ -28,7 +28,48 @@ public class RemoteStartCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -8122101348450476262L;
 
+  private String            language;
+  private int               timezoneOffset;
   private String[]          keysToTranslate;
+  private String            version;
+
+  /**
+   * Gets the language.
+   * 
+   * @return the language.
+   */
+  public String getLanguage() {
+    return language;
+  }
+
+  /**
+   * Sets the language.
+   * 
+   * @param language
+   *          the language to set.
+   */
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
+  /**
+   * Gets the timezoneOffset.
+   * 
+   * @return the timezoneOffset.
+   */
+  public int getTimezoneOffset() {
+    return timezoneOffset;
+  }
+
+  /**
+   * Sets the timezoneOffset.
+   * 
+   * @param timezoneOffset
+   *          the timezoneOffset to set.
+   */
+  public void setTimezoneOffset(int timezoneOffset) {
+    this.timezoneOffset = timezoneOffset;
+  }
 
   /**
    * Gets the keysToTranslate.
@@ -47,6 +88,25 @@ public class RemoteStartCommand extends RemoteCommand {
    */
   public void setKeysToTranslate(String[] keysToTranslate) {
     this.keysToTranslate = keysToTranslate;
+  }
+
+  /**
+   * Gets the version.
+   * 
+   * @return the version.
+   */
+  public String getVersion() {
+    return version;
+  }
+
+  /**
+   * Sets the version.
+   * 
+   * @param version
+   *          the version to set.
+   */
+  public void setVersion(String version) {
+    this.version = version;
   }
 
 }

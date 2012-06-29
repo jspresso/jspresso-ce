@@ -16,21 +16,47 @@
 package org.jspresso.framework.application.frontend.command.remote {
 
 		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand")]
-    public class RemoteStartCommand extends RemoteCommand {
-      
-        private var _clientKeysToTranslate:Array;
-
-        public function RemoteStartCommand() {
-          //default constructor.
-        }
-
-        public function get clientKeysToTranslate():Array {
-          return _clientKeysToTranslate;
-        }
-        public function set clientKeysToTranslate(value:Array):void {
-          _clientKeysToTranslate = value;
-        }
-
+  [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand")]
+  public class RemoteStartCommand extends RemoteCommand {
+    
+    private var _language:String;
+    private var _timezoneOffset:int;
+    private var _keysToTranslate:Array;
+    private var _version:String;
+  
+    public function RemoteStartCommand() {
+      //default constructor.
     }
+  
+    public function get language():String {
+      return _language;
+    }
+    public function set language(value:String):void {
+      _language = value;
+    }
+    
+    public function get timezoneOffset():int {
+      return _timezoneOffset;
+    }
+    public function set timezoneOffset(value:int):void {
+      _timezoneOffset = value;
+    }
+
+    public function get keysToTranslate():Array {
+      return _keysToTranslate;
+    }
+
+    public function set keysToTranslate(value:Array):void {
+      _keysToTranslate = value;
+    }
+
+    public function get version():String {
+      return _version;
+    }
+
+    public function set version(value:String):void {
+      _version = value;
+    }
+    
+  }
 }

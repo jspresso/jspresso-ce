@@ -21,6 +21,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
   
   statics :
   {
+    __JSPRESSO_VERSION : "${jspresso.version}",
     __HANDLE_COMMANDS_METHOD : "handleCommands",
     __START_METHOD : "start",
     __STOP_METHOD : "stop"
@@ -782,10 +783,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     start : function() {
       this.__application.getRoot().setGlobalCursor("wait");
+      var startCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand();
+      startCommand.setLanguage(this.__userLanguage);
+      startCommand.setKeysToTranslate(this._getKeysToTranslate());
+      startCommand.setTimezoneOffset(new Date().getTimezoneOffset() * (-60000));
+      startCommand.setVersion(org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__JSPRESSO_VERSION);
       this.__remoteController.callAsyncListeners(true,
                                                  org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__START_METHOD,
-                                                 this.__userLanguage, this._getKeysToTranslate(),
-                                                 new Date().getTimezoneOffset() * (-60000));
+                                                 org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(startCommand));
     },
     
     /**

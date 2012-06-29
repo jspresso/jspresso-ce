@@ -12,15 +12,17 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Interface.define("org.jspresso.framework.action.IActionHandler",
-{    
-  members :
-	{
-    execute : function (action, actionEvent){},
-    
-    setCurrentViewStateGuid : function(viewStateGuid, viewStatePermId){},
-    
-    translate : function(key){}
-    
-  }
-});
+qx.Interface.define("org.jspresso.framework.action.IActionHandler", {
+			members : {
+				execute : function(action, actionEvent) {
+				},
+
+				setCurrentViewStateGuid : function(viewStateGuid,
+						viewStatePermId) {
+				},
+
+				translate : function(key) {
+				}
+
+			}
+		});

@@ -12,29 +12,27 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class
+		.define(
+				"org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand",
+				{
+					extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    cancelCallbackAction :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction",
-      nullable : true
-    },
-    fileFilter :
-    {
-      check : "Object",
-      nullable : true
-    },
-    fileUrl :
-    {
-      check : "String"
-    }
-  }
-});
+					construct : function() {
+						this.base(arguments);
+					},
+
+					properties : {
+						cancelCallbackAction : {
+							check : "org.jspresso.framework.gui.remote.RAction",
+							nullable : true
+						},
+						fileFilter : {
+							check : "Object",
+							nullable : true
+						},
+						fileUrl : {
+							check : "String"
+						}
+					}
+				});

@@ -55,7 +55,13 @@
               <goal>compile-swc</goal>
             </goals>
             <configuration>
-             <targetPlayer>10.0.0</targetPlayer>
+              <targetPlayer>10.0.0</targetPlayer>
+              <definesDeclaration>
+                <property>
+                  <name>VERSIONS::jspresso_version</name>
+                  <value>'${jspresso.version}'</value>
+                </property>
+              </definesDeclaration>
             </configuration>
           </execution>
         </executions>

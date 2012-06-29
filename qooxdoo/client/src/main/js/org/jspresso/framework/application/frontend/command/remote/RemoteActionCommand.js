@@ -12,20 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class
+		.define(
+				"org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand",
+				{
+					extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    actionEvent :
-    {
-      check : "org.jspresso.framework.gui.remote.RActionEvent",
-      nullable : false
-    }
-  }
-});
+					construct : function() {
+						this.base(arguments);
+					},
+
+					properties : {
+						actionEvent : {
+							check : "org.jspresso.framework.gui.remote.RActionEvent",
+							nullable : false
+						}
+					}
+				});

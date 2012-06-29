@@ -15,6 +15,17 @@
         <include>**/translations/**</include>
         <include>Manifest.json</include>
       </includes>
+      <excludes>
+        <exclude>**/js/**/DefaultQxController.js</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <filtered>true</filtered>
+      <directory>src/main</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>**/js/**/DefaultQxController.js</include>
+      </includes>
     </fileSet>
   </fileSets>
 </assembly>

@@ -37,9 +37,12 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.qooxdoo.rpc.Remote;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
+import org.jspresso.framework.util.Build;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.view.IIconFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default remote startup class.
@@ -51,9 +54,12 @@ public abstract class RemoteStartup extends
     AbstractFrontendStartup<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, Remote {
 
-  private Locale   startupLocale;
-  private TimeZone clientTimeZone;
-  private boolean  dupSessionNotifiedOnce;
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(AbstractFrontendStartup.class);
+
+  private Locale              startupLocale;
+  private TimeZone            clientTimeZone;
+  private boolean             dupSessionNotifiedOnce;
 
   /**
    * Constructs a new <code>RemoteStartup</code> instance.
@@ -118,61 +124,82 @@ public abstract class RemoteStartup extends
   /**
    * Starts the remote application passing it the client locale.
    * 
-   * @param startupLanguage
-   *          the client language.
-   * @param clientKeysToTranslate
-   *          the array of client keys to translate.
-   * @param timeZoneOffset
-   *          the client timeZone offset in milliseconds.
+   * @param startCommand
+   *          the start command wrapping the various client start parameters.
    * @return the commands to be executed by the client peer on startup.
    */
-  public List<RemoteCommand> start(String startupLanguage,
-      String[] clientKeysToTranslate, int timeZoneOffset) {
-    Locale locale = new Locale(startupLanguage);
-    IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
-    if (!dupSessionNotifiedOnce && controller != null && controller.isStarted()) {
-      dupSessionNotifiedOnce = true;
+  public List<RemoteCommand> start(RemoteStartCommand startCommand) {
+    try {
+      Locale locale = new Locale(startCommand.getLanguage());
+      IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
+      if (!dupSessionNotifiedOnce && controller != null
+          && controller.isStarted()) {
+        dupSessionNotifiedOnce = true;
+        RemoteMessageCommand errorMessage = createErrorMessageCommand();
+        errorMessage.setMessage(controller.getTranslation("session.dup",
+            new Object[] {
+              controller.getI18nName(controller, locale)
+            }, locale));
+        return Collections.singletonList((RemoteCommand) errorMessage);
+      }
+      dupSessionNotifiedOnce = false;
+      setStartupLocale(locale);
+      TimeZone serverTimeZone = TimeZone.getDefault();
+      int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
+      TimeZone clientTz = null;
+      if (currentOffset == startCommand.getTimezoneOffset()) {
+        clientTz = serverTimeZone;
+      } else {
+        String[] availableIds = TimeZone.getAvailableIDs(startCommand
+            .getTimezoneOffset());
+        if (availableIds != null && availableIds.length > 0) {
+          for (int i = 0; i < availableIds.length && clientTz == null; i++) {
+            TimeZone tz = TimeZone.getTimeZone(availableIds[i]);
+            if (tz.useDaylightTime() == serverTimeZone.useDaylightTime()) {
+              clientTz = tz;
+            }
+          }
+          if (clientTz == null) {
+            clientTz = TimeZone.getTimeZone(availableIds[0]);
+          }
+        } else {
+          clientTz = TimeZone.getDefault();
+        }
+      }
+      setClientTimeZone(clientTz);
+      start();
+      controller = getFrontendController();
+      if (startCommand.getVersion() != null
+          && !isClientVersionCompatible(startCommand.getVersion())) {
+        RemoteMessageCommand errorMessage = createErrorMessageCommand();
+        errorMessage.setMessage(controller.getTranslation(
+            "incompatible.client.version", new Object[] {
+                startCommand.getVersion(), Build.getJspressoVersion()
+            }, locale));
+        return Collections.singletonList((RemoteCommand) errorMessage);
+      }
+      try {
+        return handleCommands(Collections
+            .singletonList((RemoteCommand) startCommand));
+      } catch (Throwable ex) {
+        if (controller != null) {
+          controller.traceUnexpectedException(ex);
+        }
+        return Collections.emptyList();
+      }
+    } catch (RuntimeException ex) {
+      LOG.error("An unexpected error occured while starting the server.", ex);
       RemoteMessageCommand errorMessage = createErrorMessageCommand();
-      errorMessage.setMessage(controller.getTranslation("session.dup",
-          new Object[] {controller.getI18nName(controller, locale)}, locale));
+      errorMessage
+          .setMessage("An unexpected error occured while starting the server. Please contact the application manager.");
       return Collections.singletonList((RemoteCommand) errorMessage);
     }
-    dupSessionNotifiedOnce = false;
-    setStartupLocale(locale);
-    TimeZone serverTimeZone = TimeZone.getDefault();
-    int currentOffset = serverTimeZone.getOffset(System.currentTimeMillis());
-    TimeZone clientTz = null;
-    if (currentOffset == timeZoneOffset) {
-      clientTz = serverTimeZone;
-    } else {
-      String[] availableIds = TimeZone.getAvailableIDs(timeZoneOffset);
-      if (availableIds != null && availableIds.length > 0) {
-        for (int i = 0; i < availableIds.length && clientTz == null; i++) {
-          TimeZone tz = TimeZone.getTimeZone(availableIds[i]);
-          if (tz.useDaylightTime() == serverTimeZone.useDaylightTime()) {
-            clientTz = tz;
-          }
-        }
-        if (clientTz == null) {
-          clientTz = TimeZone.getTimeZone(availableIds[0]);
-        }
-      } else {
-        clientTz = TimeZone.getDefault();
-      }
-    }
-    setClientTimeZone(clientTz);
-    start();
-    try {
-      RemoteStartCommand startCommand = new RemoteStartCommand();
-      startCommand.setKeysToTranslate(clientKeysToTranslate);
-      return handleCommands(Collections
-          .singletonList((RemoteCommand) startCommand));
-    } catch (Throwable ex) {
-      if (controller != null) {
-        controller.traceUnexpectedException(ex);
-      }
-      return Collections.emptyList();
-    }
+  }
+
+  private boolean isClientVersionCompatible(String clientVersion) {
+    return Build.getJspressoVersion() == null
+        || Build.UNKNOWN.equals(Build.getJspressoVersion())
+        || Build.getJspressoVersion().equals(clientVersion);
   }
 
   /**

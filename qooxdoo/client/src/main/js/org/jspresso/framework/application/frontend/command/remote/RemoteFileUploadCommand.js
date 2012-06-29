@@ -12,20 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class
+		.define(
+				"org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand",
+				{
+					extend : org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand,
 
-  properties :
-  {
-    successCallbackAction :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction",
-      nullable : true
-    }
-  }
-});
+					construct : function() {
+						this.base(arguments);
+					},
+
+					properties : {
+						successCallbackAction : {
+							check : "org.jspresso.framework.gui.remote.RAction",
+							nullable : true
+						}
+					}
+				});

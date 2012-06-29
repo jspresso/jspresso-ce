@@ -22,12 +22,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
   
   properties :
   {
-    clientKeysToTranslate :
+    language :
+    {
+      check : "String"
+    },
+    timezoneOffset :
+    {
+      check : "Integer"
+    },
+    keysToTranslate :
     {
       check : "Array",
       nullable : true
+    },
+    version : {
+      check : "String",
+      nullable : true
     }
-
   }
   
 });

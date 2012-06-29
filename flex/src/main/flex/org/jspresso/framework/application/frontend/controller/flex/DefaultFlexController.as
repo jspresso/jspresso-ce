@@ -102,6 +102,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
@@ -163,6 +164,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler, IRemoteCommandHandler {
     
+    private static const JSPRESSO_VERSION:String = VERSIONS::jspresso_version;
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
     private static const START_METHOD:String = "start";
     private static const STOP_METHOD:String = "stop";
@@ -1165,7 +1167,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
     public function start():void {
       blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(START_METHOD);
-      operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
+      var startCommand:RemoteStartCommand = new RemoteStartCommand();
+      startCommand.language = _userLanguage;
+      startCommand.keysToTranslate = getKeysToTranslate();
+      startCommand.timezoneOffset = new Date().timezoneOffset * (-60000);
+      startCommand.version = JSPRESSO_VERSION;
+      operation.send(startCommand);
     }
     
     private function disableUI(value:Boolean):void {
