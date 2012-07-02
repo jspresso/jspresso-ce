@@ -2050,8 +2050,6 @@ public class DefaultRemoteViewFactory extends
       if (propertyDescriptor.getMaxLength() != null) {
         ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor
             .getMaxLength().intValue());
-      } else {
-        ((RTextComponent) view.getPeer()).setMaxLength(-1);
       }
     }
     return view;

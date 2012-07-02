@@ -28,7 +28,7 @@ public abstract class RTextComponent extends RComponent {
 
   private static final long serialVersionUID = 2668241040260840359L;
 
-  private int               maxLength;
+  private int               maxLength = -1;
 
   /**
    * Constructs a new <code>RTextField</code> instance.
