@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.events.Event;
   import flash.events.IOErrorEvent;
   import flash.events.MouseEvent;
-  import flash.external.ExternalInterface;
   import flash.net.FileFilter;
   import flash.net.FileReference;
   import flash.net.URLRequest;
@@ -199,9 +198,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
       _fakeDialog = getViewFactory().createPanelComponent();
-      if (ExternalInterface.available) {
-        ExternalInterface.addCallback("stop", stop);
-      }
       registerRemoteClasses();
       initRemoteController();
     }

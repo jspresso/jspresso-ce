@@ -117,6 +117,7 @@ public abstract class RemoteStartup extends
       if (session != null) {
         session.setAttribute(RemotePeerRegistryServlet.PEER_REGISTRY,
             getFrontendController());
+        session.setAttribute(RemoteUtilServlet.REMOTE_STARTUP, this);
       }
     }
   }

@@ -43,7 +43,7 @@ var requiredRevision = 0;
 </script>
 </head>
 
-<body scroll="no" onBeforeUnload="stop()" onLoad="window.document['${rootArtifactId}-startup-flex-client'].focus()">
+<body scroll="no" onBeforeUnload="stop()" onLoad="focusFlex()">
 <script language="JavaScript" type="text/javascript">
 <!--
 // Version check based upon the values entered above in "Globals"
@@ -76,16 +76,28 @@ if (hasRequestedVersion) {  // if we've detected an acceptable version
 // -->
 </script>
 <script langugage='javascript' type="text/javascript">
-  function getRootURL()
-  {
-      return location.href.substring(0,location.href.indexOf("/flex")); ;
+  function getRootURL() {
+    return location.href.substring(0,location.href.indexOf("/flex"));
   }
 
-  function stop()
-  {
-      // Here you'll need to provide the id of your Flex swf
-      document.getElementById("${rootArtifactId}-startup-flex-client").stop();
-      //alert("Disconnected!");
+  function stop() {
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+      var xmlhttp = new XMLHttpRequest();
+    } else {// code for IE6, IE5
+      var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.open("GET", getRootURL()+"/util/stop",false);
+    xmlhttp.onreadystatechange = function() {
+    };
+    xmlhttp.send();
+  }
+  
+  function focusFlex() {
+    var flexApp = document.getElementById("${rootArtifactId}-startup-flex-client");
+    if(flexApp) {
+      flexApp.tabIndex = 0;
+      flexApp.focus();
+    }
   }
 </script>
 <noscript>

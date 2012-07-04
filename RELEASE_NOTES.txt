@@ -1,5 +1,67 @@
 3.5.14
 ======
+- in webapp/flex/index.html, replace :
+  
+  onLoad="window.document['hrsample-startup-flex-client'].focus()"
+  
+  by
+  
+  onLoad="focusFlex()"
+
+- in webapp/flex/index.html, replace the whole section (replace ${application} by your application name):
+	
+	<script langugage='javascript' type="text/javascript">
+	  function getRootURL()
+	  {
+	      return location.href.substring(0,location.href.indexOf("/flex")); ;
+	  }
+	  
+	  function stop()
+	  {
+	      // Here you'll need to provide the id of your Flex swf
+	      document.getElementById("hrsample-startup-flex-client").stop();
+	      //alert("Disconnected!");
+	  }
+	</script>
+	
+  by
+  
+  <script langugage='javascript' type="text/javascript">
+	  function getRootURL() {
+	    return location.href.substring(0,location.href.indexOf("/flex"));
+	  }
+	
+	  function stop() {
+	    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+	      var xmlhttp = new XMLHttpRequest();
+	    } else {// code for IE6, IE5
+	      var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    }
+	    xmlhttp.open("GET", getRootURL()+"/util/stop",false);
+	    xmlhttp.onreadystatechange = function() {
+	    };
+	    xmlhttp.send();
+	  }
+	  
+	  function focusFlex() {
+	    var flexApp = document.getElementById("${application}-startup-flex-client");
+	    if(flexApp) {
+	      flexApp.tabIndex = 0;
+	      flexApp.focus();
+	    }
+	  }
+	</script>
+
+- Add the following servlet definition to your web.xml :
+  <servlet>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.application.startup.remote.RemoteUtilServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <url-pattern>/util/*</url-pattern>
+  </servlet-mapping>
+
 - Migrated to Qooxdoo 2.0
 
 - onUpdate() was triggered on an entity even if only computed (transient) properties were detected to be modified.

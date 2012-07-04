@@ -49,6 +49,15 @@
     <url-pattern>/registry</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.application.startup.remote.RemoteUtilServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <url-pattern>/util/*</url-pattern>
+  </servlet-mapping>
+
   <listener>
     <listener-class>${package}.webapp.TestDataContextListener</listener-class>
   </listener>
