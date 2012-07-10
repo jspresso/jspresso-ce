@@ -89,7 +89,7 @@ public final class SecurityHelper {
 
     grantedRoles = new HashSet<String>(grantedRoles);
     Collection<String> ungrantedRoles = new HashSet<String>();
-    for (String role : grantedRoles) {
+    for (String role : new HashSet<String>(grantedRoles)) {
       if (role.startsWith("!")) {
         grantedRoles.remove(role);
         ungrantedRoles.add(role.substring(1));
