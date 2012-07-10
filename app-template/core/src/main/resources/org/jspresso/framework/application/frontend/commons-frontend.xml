@@ -56,12 +56,15 @@
               </bean>
             </list>
           </property>
+          <property name="horizontalAlignment" value="LEFT"/>
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="pageCount" />
+          <property name="horizontalAlignment" value="LEFT"/>
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="recordCount" />
+          <property name="horizontalAlignment" value="LEFT"/>
         </bean>
       </list>
     </property>
