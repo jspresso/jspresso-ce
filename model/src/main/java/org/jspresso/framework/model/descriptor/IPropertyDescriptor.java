@@ -165,10 +165,19 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   String getPersistenceFormula();
 
   /**
-   * Gets whether this property can be used for sorting, in a tabular view for
+   * Gets wether this property can be used for sorting, in a tabular view for
    * instance.
    * 
    * @return <code>true</code> if this property can be used for sorting.
    */
   boolean isSortable();
+
+  /**
+   * Gets wether this property can be cached. This is only used for computed
+   * properties. Note that the cached value will be reset whenever a
+   * firePropertyChange regarding this property is detected to be fired.
+   * 
+   * @return <code>true</code> if this property is cacheable.
+   */
+  boolean isCacheable();
 }

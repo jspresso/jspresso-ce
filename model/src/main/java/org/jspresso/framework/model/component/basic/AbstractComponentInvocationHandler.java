@@ -84,6 +84,12 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -106,6 +112,8 @@ public abstract class AbstractComponentInvocationHandler implements
   private boolean                                                                      propertyProcessorsEnabled;
 
   private Map<String, InlineReferenceTracker>                                          referenceTrackers;
+
+  private Map<String, Object>                                                          computedPropertiesCache;
 
   private static final String                                                          DOT              = ".";
   private static final Collection<String>                                              LIFECYCLE_METHOD_NAMES;
@@ -146,6 +154,7 @@ public abstract class AbstractComponentInvocationHandler implements
     this.extensionFactory = extensionFactory;
     this.propertyProcessorsEnabled = true;
     this.referenceTrackers = new HashMap<String, InlineReferenceTracker>();
+    this.computedPropertiesCache = new HashMap<String, Object>();
   }
 
   /**
@@ -241,9 +250,8 @@ public abstract class AbstractComponentInvocationHandler implements
         Class<IComponentExtension<IComponent>> extensionClass = (Class<IComponentExtension<IComponent>>) propertyDescriptor
             .getDelegateClass();
         if (extensionClass != null) {
-          IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
-              extensionClass, (IComponent) proxy);
-          return invokeExtensionMethod(extensionDelegate, method, args);
+          return getComputedProperty(propertyDescriptor, extensionClass, proxy,
+              method, args);
         } else if (!propertyDescriptor.isComputed()) {
           if (accessorInfo.isModifier()) {
             if (modifierMonitors != null
@@ -1014,7 +1022,12 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void firePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
-    doFirePropertyChange(proxy, propertyName, oldValue, newValue);
+    Object actualNewValue = newValue;
+    if (computedPropertiesCache.containsKey(propertyName)) {
+      computedPropertiesCache.remove(propertyName);
+      actualNewValue = IPropertyChangeCapable.UNKNOWN;
+    }
+    doFirePropertyChange(proxy, propertyName, oldValue, actualNewValue);
     // This method supports firing nested property changes
     if (propertyName != null) {
       int lastIndexOfDelim = propertyName.lastIndexOf(IAccessor.NESTED_DELIM);
@@ -1027,7 +1040,7 @@ public abstract class AbstractComponentInvocationHandler implements
           if (propertyHolder != null && propertyHolder instanceof IComponent) {
             ((IComponent) propertyHolder).firePropertyChange(
                 propertyName.substring(lastIndexOfDelim + 1), oldValue,
-                newValue);
+                actualNewValue);
           }
         } catch (IllegalAccessException ex) {
           throw new ComponentException(ex);
@@ -1085,6 +1098,28 @@ public abstract class AbstractComponentInvocationHandler implements
         doFirePropertyChange(evt);
       }
     }
+  }
+
+  private synchronized Object getComputedProperty(
+      IPropertyDescriptor propertyDescriptor,
+      Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
+      Method method, Object[] args) {
+    String propertyName = propertyDescriptor.getName();
+    Object computedPropertyValue;
+    if (propertyDescriptor.isCacheable()) {
+      if (computedPropertiesCache.containsKey(propertyName)) {
+        computedPropertyValue = computedPropertiesCache.get(propertyName);
+        return computedPropertyValue;
+      }
+    }
+    IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
+        extensionClass, (IComponent) proxy);
+    computedPropertyValue = invokeExtensionMethod(extensionDelegate, method,
+        args);
+    if (propertyDescriptor.isCacheable()) {
+      computedPropertiesCache.put(propertyName, computedPropertyValue);
+    }
+    return computedPropertyValue;
   }
 
   private Object invokeExtensionMethod(

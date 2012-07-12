@@ -73,6 +73,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
 
   private Boolean                        readOnly;
   private Boolean                        sortable;
+  private boolean                        cacheable;
   private String                         sqlName;
 
   private String                         unicityScope;
@@ -86,6 +87,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   public BasicPropertyDescriptor() {
     computed = false;
     versionControl = true;
+    cacheable = false;
   }
 
   /**
@@ -771,8 +773,31 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused")
-  String permId) {
+  public void setPermId(@SuppressWarnings("unused") String permId) {
     throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Gets the cacheable.
+   * 
+   * @return the cacheable.
+   */
+  @Override
+  public boolean isCacheable() {
+    return cacheable;
+  }
+
+  /**
+   * Configures the fact that this property can be cached. This is only used for
+   * computed properties. Note that the cached value will be reset whenever a
+   * firePropertyChange regarding this property is detected to be fired.
+   * <p>
+   * Default value is <code>false</code> in order to prevent un-desired
+   * side-effects if computed property change notification is not correctly
+   * wired.
+   * @param cacheable the cacheable to set.
+   */
+  public void setCacheable(boolean cacheable) {
+    this.cacheable = cacheable;
   }
 }
