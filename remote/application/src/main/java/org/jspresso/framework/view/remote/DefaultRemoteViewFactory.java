@@ -669,6 +669,8 @@ public class DefaultRemoteViewFactory extends
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
       }
+      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter,
+          getDateTemplateValue(propertyDescriptor)));
     } else {
       if (isDateServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
@@ -790,6 +792,8 @@ public class DefaultRemoteViewFactory extends
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
       }
+      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter,
+          getDecimalTemplateValue(propertyDescriptor)));
     } else {
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
@@ -835,6 +839,8 @@ public class DefaultRemoteViewFactory extends
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
       }
+      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter,
+          getDurationTemplateValue(propertyDescriptor)));
     } else {
       if (isDurationServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
@@ -886,6 +892,11 @@ public class DefaultRemoteViewFactory extends
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
       viewComponent = createRLink(propertyViewDescriptor, false);
+      ((RLabel) viewComponent)
+          .setMaxLength(getFormatLength(
+              formatter,
+              getEnumerationTemplateValue(propertyDescriptor, actionHandler,
+                  locale)));
     } else {
       connector = getConnectorFactory().createValueConnector(
           propertyDescriptor.getName());
@@ -1064,6 +1075,8 @@ public class DefaultRemoteViewFactory extends
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
       }
+      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter,
+          getIntegerTemplateValue(propertyDescriptor)));
     } else {
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
@@ -1200,6 +1213,8 @@ public class DefaultRemoteViewFactory extends
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
       }
+      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter,
+          getPercentTemplateValue(propertyDescriptor)));
     } else {
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
@@ -2076,6 +2091,8 @@ public class DefaultRemoteViewFactory extends
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
       }
+      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter,
+          getTimeTemplateValue(propertyDescriptor)));
     } else {
       if (isDateServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(

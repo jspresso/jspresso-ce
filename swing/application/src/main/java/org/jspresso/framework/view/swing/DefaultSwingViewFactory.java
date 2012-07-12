@@ -221,9 +221,11 @@ import chrriis.dj.swingsuite.LinkListener;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JComponent, Icon, Action> {
+public class DefaultSwingViewFactory extends
+    ControllerAwareViewFactory<JComponent, Icon, Action> {
 
-  private static final Dimension    TREE_PREFERRED_SIZE = new Dimension(128, 128);
+  private static final Dimension    TREE_PREFERRED_SIZE = new Dimension(128,
+                                                            128);
   private IListSelectionModelBinder listSelectionModelBinder;
 
   private ITreeSelectionModelBinder treeSelectionModelBinder;
@@ -234,7 +236,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * @param listSelectionModelBinder
    *          the listSelectionModelBinder to set.
    */
-  public void setListSelectionModelBinder(IListSelectionModelBinder listSelectionModelBinder) {
+  public void setListSelectionModelBinder(
+      IListSelectionModelBinder listSelectionModelBinder) {
     this.listSelectionModelBinder = listSelectionModelBinder;
   }
 
@@ -244,7 +247,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * @param treeSelectionModelBinder
    *          the treeSelectionModelBinder to set.
    */
-  public void setTreeSelectionModelBinder(ITreeSelectionModelBinder treeSelectionModelBinder) {
+  public void setTreeSelectionModelBinder(
+      ITreeSelectionModelBinder treeSelectionModelBinder) {
     this.treeSelectionModelBinder = treeSelectionModelBinder;
   }
 
@@ -252,7 +256,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void addCard(IMapView<JComponent> cardView, IView<JComponent> card, String cardName) {
+  protected void addCard(IMapView<JComponent> cardView, IView<JComponent> card,
+      String cardName) {
     Container cardPanel = findFirstCardPanel(cardView.getPeer());
     if (cardPanel != null) {
       cardPanel.add(card.getPeer(), cardName);
@@ -268,7 +273,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * @return the 1st found card panel or null if none.
    */
   protected JComponent findFirstCardPanel(Component root) {
-    if (root instanceof JComponent && ((JComponent) root).getLayout() instanceof CardLayout) {
+    if (root instanceof JComponent
+        && ((JComponent) root).getLayout() instanceof CardLayout) {
       return (JComponent) root;
     }
     if (root instanceof Container) {
@@ -286,14 +292,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(IViewDescriptor viewDescriptor, JComponent component, IFormatter formatter,
-      Object templateValue, int extraWidth) {
+  protected void adjustSizes(IViewDescriptor viewDescriptor,
+      JComponent component, IFormatter formatter, Object templateValue,
+      int extraWidth) {
     if (viewDescriptor.getFont() != null) {
       // must set font before computing size.
-      component.setFont(createFont(viewDescriptor.getFont(), component.getFont()));
+      component.setFont(createFont(viewDescriptor.getFont(),
+          component.getFont()));
     }
-    int preferredWidth = computePixelWidth(component, getFormatLength(formatter, templateValue)) + extraWidth;
-    Dimension size = new Dimension(preferredWidth, component.getPreferredSize().height);
+    int preferredWidth = computePixelWidth(component,
+        getFormatLength(formatter, templateValue))
+        + extraWidth;
+    Dimension size = new Dimension(preferredWidth,
+        component.getPreferredSize().height);
     component.setMinimumSize(size);
     component.setPreferredSize(size);
     component.setMaximumSize(size);
@@ -303,7 +314,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void applyPreferredSize(JComponent component, org.jspresso.framework.util.gui.Dimension preferredSize) {
+  protected void applyPreferredSize(JComponent component,
+      org.jspresso.framework.util.gui.Dimension preferredSize) {
     if (preferredSize != null) {
       int pW = preferredSize.getWidth();
       if (pW <= 0) {
@@ -333,14 +345,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createActionView(IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected IView<JComponent> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JButton viewComponent = createJButton();
-    IValueConnector connector = getConnectorFactory().createValueConnector(ModelRefPropertyConnector.THIS_PROPERTY);
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
-    viewComponent.setAction(getActionFactory().createAction(viewDescriptor.getAction(),
-        viewDescriptor.getPreferredSize(), actionHandler, view, locale));
+    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    viewComponent.setAction(getActionFactory().createAction(
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
+        actionHandler, view, locale));
     viewComponent.setBorderPainted(false);
     switch (viewDescriptor.getRenderingOptions()) {
       case ICON:
@@ -359,15 +375,20 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createBinaryPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createBinaryPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IBinaryPropertyDescriptor propertyDescriptor = (IBinaryPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JActionField viewComponent = createJActionField(propertyViewDescriptor, false);
-    JActionFieldConnector connector = new JActionFieldConnector(propertyDescriptor.getName(), viewComponent);
+    JActionField viewComponent = createJActionField(propertyViewDescriptor,
+        false);
+    JActionFieldConnector connector = new JActionFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> propertyView = constructView(viewComponent, propertyViewDescriptor, connector);
-    viewComponent.setActions(createBinaryActions(propertyView, actionHandler, locale));
+    IView<JComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    viewComponent.setActions(createBinaryActions(propertyView, actionHandler,
+        locale));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
     return propertyView;
   }
@@ -376,7 +397,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createBooleanPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createBooleanPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
@@ -384,10 +406,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     IValueConnector connector;
     if (propertyDescriptor.isMandatory()) {
       viewComponent = createJCheckBox(propertyViewDescriptor);
-      connector = new JToggleButtonConnector<JCheckBox>(propertyDescriptor.getName(), (JCheckBox) viewComponent);
+      connector = new JToggleButtonConnector<JCheckBox>(
+          propertyDescriptor.getName(), (JCheckBox) viewComponent);
     } else {
       viewComponent = createJTriStateCheckBox(propertyViewDescriptor);
-      connector = new JTriStateCheckBoxConnector(propertyDescriptor.getName(), (JTriStateCheckBox) viewComponent);
+      connector = new JTriStateCheckBoxConnector(propertyDescriptor.getName(),
+          (JTriStateCheckBox) viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
@@ -397,37 +421,44 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<JComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected ICompositeView<JComponent> createBorderView(
+      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     JPanel viewComponent = createJPanel();
-    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     BorderLayout layout = new BorderLayout();
     viewComponent.setLayout(layout);
 
     if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<JComponent> northView = createView(viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
+      IView<JComponent> northView = createView(
+          viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), BorderLayout.NORTH);
       childrenViews.add(northView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<JComponent> westView = createView(viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
+      IView<JComponent> westView = createView(
+          viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
       viewComponent.add(westView.getPeer(), BorderLayout.WEST);
       childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<JComponent> centerView = createView(viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
+      IView<JComponent> centerView = createView(
+          viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
       viewComponent.add(centerView.getPeer(), BorderLayout.CENTER);
       childrenViews.add(centerView);
     }
     if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<JComponent> eastView = createView(viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
+      IView<JComponent> eastView = createView(
+          viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
       viewComponent.add(eastView.getPeer(), BorderLayout.EAST);
       childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<JComponent> southView = createView(viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
+      IView<JComponent> southView = createView(
+          viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
       viewComponent.add(southView.getPeer(), BorderLayout.SOUTH);
       childrenViews.add(southView);
     }
@@ -439,15 +470,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IMapView<JComponent> createCardView(ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected IMapView<JComponent> createCardView(
+      ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JPanel viewComponent = createJPanel();
     CardLayout layout = new CardLayout();
     viewComponent.setLayout(layout);
-    BasicMapView<JComponent> view = constructMapView(viewComponent, viewDescriptor);
+    BasicMapView<JComponent> view = constructMapView(viewComponent,
+        viewDescriptor);
 
     viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(),
+        ICardViewDescriptor.SECURITY_CARD);
 
     view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
@@ -468,16 +502,20 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createColorPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createColorPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JColorPicker viewComponent = createJColorPicker(propertyViewDescriptor);
     if (propertyDescriptor.getDefaultValue() != null) {
-      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor.getDefaultValue());
-      viewComponent.setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
+          .getDefaultValue());
+      viewComponent
+          .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
     }
-    JColorPickerConnector connector = new JColorPickerConnector(propertyDescriptor.getName(), viewComponent);
+    JColorPickerConnector connector = new JColorPickerConnector(
+        propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -487,24 +525,28 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected IView<JComponent> createComponentView(IComponentViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
-        .getComponentDescriptor();
+  protected IView<JComponent> createComponentView(
+      IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor()).getComponentDescriptor();
     // Dynamic toolTips
     String toolTipProperty = null;
     if (viewDescriptor.getDescription() != null) {
-      IPropertyDescriptor descriptionProperty = modelDescriptor.getPropertyDescriptor(viewDescriptor.getDescription());
+      IPropertyDescriptor descriptionProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getDescription());
       if (descriptionProperty != null) {
         toolTipProperty = viewDescriptor.getDescription();
       }
     } else {
       toolTipProperty = modelDescriptor.getToHtmlProperty();
     }
-    IRenderableCompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
-        getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
+    IRenderableCompositeValueConnector connector = getConnectorFactory()
+        .createCompositeValueConnector(
+            getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     final JPanel viewComponent = createJPanel();
-    IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
 
     GridBagLayout layout = new GridBagLayout();
     viewComponent.setLayout(layout);
@@ -512,28 +554,35 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     int currentY = 0;
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
-    for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor.getPropertyViewDescriptors().iterator(); ite.hasNext();) {
+    for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
+        .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
-      String propertyName = propertyViewDescriptor.getModelDescriptor().getName();
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
-          .getComponentDescriptor().getPropertyDescriptor(propertyName);
+      String propertyName = propertyViewDescriptor.getModelDescriptor()
+          .getName();
+      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+          .getModelDescriptor()).getComponentDescriptor()
+          .getPropertyDescriptor(propertyName);
       if (propertyDescriptor == null) {
-        throw new ViewException("Property descriptor [" + propertyName + "] does not exist for model descriptor "
+        throw new ViewException("Property descriptor [" + propertyName
+            + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<JComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
+      IView<JComponent> propertyView = createView(propertyViewDescriptor,
+          actionHandler, locale);
       propertyView.setParent(view);
 
-      boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+      boolean forbidden = !actionHandler
+          .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
       }
-      connector.addChildConnector(propertyView.getConnector().getId(), propertyView.getConnector());
+      connector.addChildConnector(propertyView.getConnector().getId(),
+          propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
       // if (propertyViewDescriptor.getWritabilityGates() != null) {
-      JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale, propertyViewDescriptor, propertyDescriptor,
-          propertyView, forbidden);
+      JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale,
+          propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
       int propertyWidth = propertyViewDescriptor.getWidth().intValue();
       if (propertyWidth > viewDescriptor.getColumnCount()) {
         propertyWidth = viewDescriptor.getColumnCount();
@@ -568,7 +617,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         default:
           break;
       }
-      if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE && propertyLabel.getText() != null
+      if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE
+          && propertyLabel.getText() != null
           && propertyLabel.getText().length() > 0) {
         viewComponent.add(propertyLabel, constraints);
       }
@@ -612,14 +662,16 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         constraints.fill = GridBagConstraints.NONE;
       }
       viewComponent.add(propertyView.getPeer(), constraints);
-      if (propertyView.getPeer() instanceof JLink<?> && propertyViewDescriptor.getAction() != null) {
+      if (propertyView.getPeer() instanceof JLink<?>
+          && propertyViewDescriptor.getAction() != null) {
         IView<JComponent> targetView;
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           targetView = propertyView;
         } else {
           targetView = view;
         }
-        Action action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, targetView,
+        Action action = getActionFactory().createAction(
+            propertyViewDescriptor.getAction(), actionHandler, targetView,
             locale);
         Map<String, Object> staticContext = new HashMap<String, Object>();
         staticContext.put(ActionContextConstants.PROPERTY_VIEW, propertyView);
@@ -662,11 +714,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       JScrollPane scrollPane = createJScrollPane();
       scrollPane.setBorder(BorderFactory.createEmptyBorder());
       if (viewComponent instanceof JScrollablePanel) {
-        ((JScrollablePanel) viewComponent).setScrollableTracksViewportWidth(true);
+        ((JScrollablePanel) viewComponent)
+            .setScrollableTracksViewportWidth(true);
       }
       scrollPane.setViewportView(viewComponent);
-      scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-      scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+      scrollPane
+          .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      scrollPane
+          .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
       view.setPeer(scrollPane);
     }
     return view;
@@ -680,32 +735,39 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * @param connector
    *          the view connector.
    */
-  protected void attachTooltipListener(final JComponent viewComponent, IRenderableCompositeValueConnector connector) {
+  protected void attachTooltipListener(final JComponent viewComponent,
+      IRenderableCompositeValueConnector connector) {
     // Special toolTip handling
     if (connector.getRenderingConnector() != null) {
-      connector.getRenderingConnector().addValueChangeListener(new IValueChangeListener() {
+      connector.getRenderingConnector().addValueChangeListener(
+          new IValueChangeListener() {
 
-        @Override
-        public void valueChange(ValueChangeEvent evt) {
-          if (evt.getNewValue() != null) {
-            viewComponent.setToolTipText(evt.getNewValue().toString());
-          } else {
-            viewComponent.setToolTipText(null);
-          }
-        }
-      });
+            @Override
+            public void valueChange(ValueChangeEvent evt) {
+              if (evt.getNewValue() != null) {
+                viewComponent.setToolTipText(evt.getNewValue().toString());
+              } else {
+                viewComponent.setToolTipText(null);
+              }
+            }
+          });
     }
   }
 
-  private JLabel createFormPropertyLabel(IActionHandler actionHandler, Locale locale,
-      IPropertyViewDescriptor propertyViewDescriptor, IPropertyDescriptor propertyDescriptor,
-      IView<JComponent> propertyView, boolean forbidden) {
-    JLabel propertyLabel = createPropertyLabel(propertyViewDescriptor, propertyView.getPeer(), actionHandler, locale);
-    if (propertyDescriptor.isMandatory() && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
+  private JLabel createFormPropertyLabel(IActionHandler actionHandler,
+      Locale locale, IPropertyViewDescriptor propertyViewDescriptor,
+      IPropertyDescriptor propertyDescriptor, IView<JComponent> propertyView,
+      boolean forbidden) {
+    JLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
+        propertyView.getPeer(), actionHandler, locale);
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       if (propertyViewDescriptor.getLabelForeground() == null) {
-        propertyLabel.setForeground(createColor(getFormLabelMandatoryPropertyColorHex()));
+        propertyLabel
+            .setForeground(createColor(getFormLabelMandatoryPropertyColorHex()));
       }
-      propertyLabel.setText(decorateMandatoryPropertyLabel(propertyLabel.getText()));
+      propertyLabel.setText(decorateMandatoryPropertyLabel(propertyLabel
+          .getText()));
     }
     if (forbidden) {
       propertyLabel.setText(" ");
@@ -718,19 +780,24 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<JComponent> createConstrainedGridView(IConstrainedGridViewDescriptor viewDescriptor,
+  protected ICompositeView<JComponent> createConstrainedGridView(
+      IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JPanel viewComponent = createJPanel();
-    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     GridBagLayout layout = new GridBagLayout();
     viewComponent.setLayout(layout);
 
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
-      IView<JComponent> childView = createView(childViewDescriptor, actionHandler, locale);
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<JComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
       viewComponent.add(childView.getPeer(),
-          createGridBagConstraints(viewDescriptor.getCellConstraints(childViewDescriptor)));
+          createGridBagConstraints(viewDescriptor
+              .getCellConstraints(childViewDescriptor)));
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
@@ -741,12 +808,15 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createDatePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createDatePropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    DateFormat format = createDateFormat(propertyDescriptor, actionHandler.getClientTimeZone(), actionHandler, locale);
+    DateFormat format = createDateFormat(propertyDescriptor,
+        actionHandler.getClientTimeZone(), actionHandler, locale);
     IFormatter formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
@@ -754,18 +824,22 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
     } else {
       viewComponent = createJDateField(propertyViewDescriptor, locale);
       ((JDateField) viewComponent).getFormattedTextField().setFormatterFactory(
           new DefaultFormatterFactory(new DateFormatter(format)));
-      connector = new JDateFieldConnector(propertyDescriptor.getName(), (JDateField) viewComponent);
-      adjustSizes(propertyViewDescriptor, viewComponent, formatter, getDateTemplateValue(propertyDescriptor), Toolkit
-          .getDefaultToolkit().getScreenResolution() / 3);
+      connector = new JDateFieldConnector(propertyDescriptor.getName(),
+          (JDateField) viewComponent);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+        getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
+            .getScreenResolution() / 3);
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -773,12 +847,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createDecimalPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createDecimalPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IDecimalPropertyDescriptor propertyDescriptor = (IDecimalPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentPropertyView(propertyViewDescriptor, actionHandler, locale);
+      return createPercentPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     }
     IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
     JComponent viewComponent;
@@ -789,15 +865,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
     } else {
       viewComponent = createJTextField(propertyViewDescriptor);
-      connector = new JFormattedFieldConnector(propertyDescriptor.getName(), (JTextField) viewComponent, formatter);
-      adjustSizes(propertyViewDescriptor, viewComponent, formatter, getDecimalTemplateValue(propertyDescriptor));
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+        getDecimalTemplateValue(propertyDescriptor));
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -805,28 +885,34 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createDurationPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createDurationPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    IFormatter formatter = createDurationFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter formatter = createDurationFormatter(propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
     } else {
       viewComponent = createJTextField(propertyViewDescriptor);
-      connector = new JFormattedFieldConnector(propertyDescriptor.getName(), (JTextField) viewComponent, formatter);
-      adjustSizes(propertyViewDescriptor, viewComponent, formatter, getDurationTemplateValue(propertyDescriptor));
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+        getDurationTemplateValue(propertyDescriptor));
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -842,42 +928,56 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createEnumerationPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createEnumerationPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     final IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IView<JComponent> view;
     if (propertyViewDescriptor.isReadOnly()) {
-      IFormatter formatter = createEnumerationFormatter(propertyDescriptor, actionHandler, locale);
+      IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
+          actionHandler, locale);
       final JLabel viewComponent;
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      IValueConnector connector = new JLabelConnector(propertyDescriptor.getName(), viewComponent);
+      IValueConnector connector = new JLabelConnector(
+          propertyDescriptor.getName(), viewComponent);
       connector.addValueChangeListener(new IValueChangeListener() {
 
         @Override
         public void valueChange(ValueChangeEvent evt) {
-          viewComponent.setIcon(getIconFactory()
-              .getIcon(propertyDescriptor.getIconImageURL(String.valueOf(evt.getNewValue())),
-                  getIconFactory().getTinyIconSize()));
+          viewComponent.setIcon(getIconFactory().getIcon(
+              propertyDescriptor.getIconImageURL(String.valueOf(evt
+                  .getNewValue())), getIconFactory().getTinyIconSize()));
         }
       });
       ((JLabelConnector) connector).setFormatter(formatter);
+      adjustSizes(
+          propertyViewDescriptor,
+          viewComponent,
+          null,
+          getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale),
+          Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
       connector.setExceptionHandler(actionHandler);
       view = constructView(viewComponent, propertyViewDescriptor, connector);
     } else {
-      List<String> enumerationValues = new ArrayList<String>(propertyDescriptor.getEnumerationValues());
+      List<String> enumerationValues = new ArrayList<String>(
+          propertyDescriptor.getEnumerationValues());
       filterEnumerationValues(enumerationValues, propertyViewDescriptor);
       if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
-          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
-        IRenderableCompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
-            ModelRefPropertyConnector.THIS_PROPERTY, propertyDescriptor.getName());
+          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+              .isRadio()) {
+        IRenderableCompositeValueConnector connector = getConnectorFactory()
+            .createCompositeValueConnector(
+                ModelRefPropertyConnector.THIS_PROPERTY,
+                propertyDescriptor.getName());
         JPanel viewComponent = createJPanel();
         GridLayout layout;
-        switch (((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getOrientation()) {
+        switch (((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+            .getOrientation()) {
           case HORIZONTAL:
             layout = new GridLayout(1, 0);
             break;
@@ -889,15 +989,21 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
         for (String enumElement : enumerationValues) {
           JRadioButton subViewComponent = new JRadioButton();
-          subViewComponent.setText(propertyDescriptor.getI18nValue(enumElement, actionHandler, locale));
-          JRadioButtonConnector subConnector = new JRadioButtonConnector(propertyDescriptor.getName(),
-              subViewComponent, enumElement);
-          adjustSizes(propertyViewDescriptor, subViewComponent, null,
-              getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale), Toolkit.getDefaultToolkit()
-                  .getScreenResolution() * 2 / 6);
+          subViewComponent.setText(propertyDescriptor.getI18nValue(enumElement,
+              actionHandler, locale));
+          JRadioButtonConnector subConnector = new JRadioButtonConnector(
+              propertyDescriptor.getName(), subViewComponent, enumElement);
+          adjustSizes(
+              propertyViewDescriptor,
+              subViewComponent,
+              null,
+              getEnumerationTemplateValue(propertyDescriptor, actionHandler,
+                  locale),
+              Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
           viewComponent.add(subViewComponent);
           subConnector.setExceptionHandler(actionHandler);
-          IView<JComponent> subView = constructView(subViewComponent, propertyViewDescriptor, subConnector);
+          IView<JComponent> subView = constructView(subViewComponent,
+              propertyViewDescriptor, subConnector);
           connector.addChildConnector(subConnector);
           childrenViews.add(subView);
         }
@@ -913,11 +1019,17 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         for (Object enumElement : enumerationValues) {
           viewComponent.addItem(enumElement);
         }
-        viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(propertyDescriptor, actionHandler, locale));
-        adjustSizes(propertyViewDescriptor, viewComponent, null,
-            getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale), Toolkit.getDefaultToolkit()
-                .getScreenResolution() * 2 / 6);
-        IValueConnector connector = new JComboBoxConnector(propertyDescriptor.getName(), viewComponent);
+        viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
+            propertyDescriptor, actionHandler, locale));
+        adjustSizes(
+            propertyViewDescriptor,
+            viewComponent,
+            null,
+            getEnumerationTemplateValue(propertyDescriptor, actionHandler,
+                locale),
+            Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
+        IValueConnector connector = new JComboBoxConnector(
+            propertyDescriptor.getName(), viewComponent);
         connector.setExceptionHandler(actionHandler);
         view = constructView(viewComponent, propertyViewDescriptor, connector);
       }
@@ -929,10 +1041,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<JComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected ICompositeView<JComponent> createEvenGridView(
+      IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     JPanel viewComponent = createJPanel();
-    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     GridLayout layout = new GridLayout();
@@ -952,8 +1066,10 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     layout.setVgap(5);
     viewComponent.setLayout(layout);
 
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
-      IView<JComponent> childView = createView(childViewDescriptor, actionHandler, locale);
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<JComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
       viewComponent.add(childView.getPeer());
       childrenViews.add(childView);
     }
@@ -965,21 +1081,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createHtmlPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
       JScrollPane scrollPane = createJScrollPane();
       JTextPane htmlPane = createJTextPane(propertyViewDescriptor);
-      JTextPaneConnector textPaneConnector = new JTextPaneConnector(propertyDescriptor.getName(), htmlPane);
+      JTextPaneConnector textPaneConnector = new JTextPaneConnector(
+          propertyDescriptor.getName(), htmlPane);
       scrollPane.setViewportView(htmlPane);
       viewComponent = scrollPane;
       connector = textPaneConnector;
     } else {
       JHTMLEditor htmlEditor = createJHTMLEditor(propertyViewDescriptor, locale);
-      JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(propertyDescriptor.getName(), htmlEditor);
+      JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(
+          propertyDescriptor.getName(), htmlEditor);
       viewComponent = htmlEditor;
       connector = htmlEditorConnector;
     }
@@ -992,7 +1112,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected IView<JComponent> createImagePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createImagePropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JLabel imageLabel;
     if (propertyViewDescriptor.getAction() != null) {
@@ -1000,12 +1121,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     } else {
       imageLabel = createJLabel(propertyViewDescriptor, false);
     }
-    JImageConnector connector = new JImageConnector(propertyViewDescriptor.getModelDescriptor().getName(), imageLabel);
+    JImageConnector connector = new JImageConnector(propertyViewDescriptor
+        .getModelDescriptor().getName(), imageLabel);
     connector.setExceptionHandler(actionHandler);
     JPanel viewComponent = createJPanel();
     BorderLayout layout = new BorderLayout();
     viewComponent.setLayout(layout);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     if ((propertyViewDescriptor instanceof IImageViewDescriptor)
         && ((IImageViewDescriptor) propertyViewDescriptor).isScrollable()) {
       imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -1019,8 +1142,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       viewComponent.add(imageLabel, BorderLayout.CENTER);
     }
     if (imageLabel instanceof JLink<?>) {
-      ((JLink<Action>) imageLabel).setTarget(getActionFactory().createAction(propertyViewDescriptor.getAction(),
-          actionHandler, view, locale));
+      ((JLink<Action>) imageLabel).setTarget(getActionFactory().createAction(
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -1029,7 +1152,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createIntegerPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createIntegerPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
@@ -1042,15 +1166,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
     } else {
       viewComponent = createJTextField(propertyViewDescriptor);
-      connector = new JFormattedFieldConnector(propertyDescriptor.getName(), (JTextField) viewComponent, formatter);
-      adjustSizes(propertyViewDescriptor, viewComponent, formatter, getIntegerTemplateValue(propertyDescriptor));
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+        getIntegerTemplateValue(propertyDescriptor));
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1063,7 +1191,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          is the text field visible to the user.
    * @return the created action field.
    */
-  protected JActionField createJActionField(IPropertyViewDescriptor viewDescriptor, boolean showTextField) {
+  protected JActionField createJActionField(
+      IPropertyViewDescriptor viewDescriptor, boolean showTextField) {
     return new JActionField(showTextField);
   }
 
@@ -1107,7 +1236,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the component view descriptor.
    * @return the created radio button.
    */
-  protected JRadioButton createJRadioButton(IPropertyViewDescriptor viewDescriptor) {
+  protected JRadioButton createJRadioButton(
+      IPropertyViewDescriptor viewDescriptor) {
     return new JRadioButton();
   }
 
@@ -1118,7 +1248,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the component view descriptor.
    * @return the created tri-state check box.
    */
-  protected JCheckBox createJTriStateCheckBox(IPropertyViewDescriptor viewDescriptor) {
+  protected JCheckBox createJTriStateCheckBox(
+      IPropertyViewDescriptor viewDescriptor) {
     return new JTriStateCheckBox();
   }
 
@@ -1129,7 +1260,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the component view descriptor.
    * @return the created color picker.
    */
-  protected JColorPicker createJColorPicker(IPropertyViewDescriptor viewDescriptor) {
+  protected JColorPicker createJColorPicker(
+      IPropertyViewDescriptor viewDescriptor) {
     return new JColorPicker();
   }
 
@@ -1153,7 +1285,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the user locale.
    * @return the created date field.
    */
-  protected JDateField createJDateField(IPropertyViewDescriptor viewDescriptor, Locale locale) {
+  protected JDateField createJDateField(IPropertyViewDescriptor viewDescriptor,
+      Locale locale) {
     JDateField dateField = new JDateField(locale);
     return dateField;
   }
@@ -1167,10 +1300,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the language to add syntax highlighting for.
    * @return the created text area.
    */
-  protected JEditTextArea createJEditTextArea(IPropertyViewDescriptor viewDescriptor, String language) {
+  protected JEditTextArea createJEditTextArea(
+      IPropertyViewDescriptor viewDescriptor, String language) {
     JEditTextArea textArea = new JEditTextArea();
     try {
-      textArea.setTokenMarker((TokenMarker) Class.forName("org.syntax.jedit.tokenmarker." + language + "TokenMarker")
+      textArea.setTokenMarker((TokenMarker) Class.forName(
+          "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
           .newInstance());
     } catch (InstantiationException ex) {
       // Nothing to do. just don't colorize.
@@ -1191,7 +1326,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the locale to create the HTML editor for.
    * @return the created HTML editor.
    */
-  protected JHTMLEditor createJHTMLEditor(IPropertyViewDescriptor viewDescriptor, Locale locale) {
+  protected JHTMLEditor createJHTMLEditor(
+      IPropertyViewDescriptor viewDescriptor, Locale locale) {
     JHTMLEditor htmlEditor = new JHTMLEditor(locale);
     return htmlEditor;
   }
@@ -1205,7 +1341,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          make it bold ?
    * @return the created label.
    */
-  protected JLabel createJLabel(IPropertyViewDescriptor viewDescriptor, boolean bold) {
+  protected JLabel createJLabel(IPropertyViewDescriptor viewDescriptor,
+      boolean bold) {
     // To have preferred height computed.
     JLabel label = new JLabel(" ");
     if (bold) {
@@ -1230,7 +1367,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       public boolean linkActivated(JLink<Action> link, Action target) {
         if (target != null) {
           if (target.isEnabled()) {
-            ActionEvent ae = new ActionEvent(link, ActionEvent.ACTION_PERFORMED, null);
+            ActionEvent ae = new ActionEvent(link,
+                ActionEvent.ACTION_PERFORMED, null);
             target.actionPerformed(ae);
           }
         }
@@ -1279,7 +1417,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the component view descriptor.
    * @return the created password field.
    */
-  protected JPasswordField createJPasswordField(IPropertyViewDescriptor viewDescriptor) {
+  protected JPasswordField createJPasswordField(
+      IPropertyViewDescriptor viewDescriptor) {
     JPasswordField passwordField = new JPasswordField();
     return passwordField;
   }
@@ -1345,7 +1484,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
        * start editing when a mnuemonic key or function key is pressed.
        */
       @Override
-      protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
+      protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
+          int condition, boolean pressed) {
         if (SwingUtilities.getUIInputMap(this, condition) != null
             && SwingUtilities.getUIInputMap(this, condition).get(ks) != null) {
           return super.processKeyBinding(ks, e, condition, pressed);
@@ -1362,7 +1502,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
           parent = (JComponent) getParent();
         }
         while (!foundInAncestors && parent != null) {
-          if (parent.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).get(ks) != null) {
+          if (parent.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+              .get(ks) != null) {
             foundInAncestors = true;
           }
           if (parent.getParent() instanceof JComponent) {
@@ -1455,43 +1596,54 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected IView<JComponent> createListView(
+      IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
-        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToHtmlProperty());
     if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setDisplayIcon(viewDescriptor.getIcon());
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setIconImageURLProvider(viewDescriptor
-          .getIconImageURLProvider());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setDisplayIcon(viewDescriptor.getIcon());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
-    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
-        getMvcBinder(), rowConnectorPrototype);
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
+            rowConnectorPrototype);
     JList viewComponent = createJList(viewDescriptor);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
-    IView<JComponent> view = constructView(scrollPane, viewDescriptor, connector);
+    IView<JComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor.getRenderedProperty(), rowDescriptor);
-      rowConnectorPrototype.addChildConnector(viewDescriptor.getRenderedProperty(), cellConnector);
+      IValueConnector cellConnector = createListConnector(
+          viewDescriptor.getRenderedProperty(), rowDescriptor);
+      rowConnectorPrototype.addChildConnector(
+          viewDescriptor.getRenderedProperty(), cellConnector);
     }
-    viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory(), viewDescriptor.getRenderedProperty()));
+    viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory(),
+        viewDescriptor.getRenderedProperty()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(viewComponent, connector, viewComponent.getSelectionModel(), null);
+    listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
+        viewComponent.getSelectionModel(), null);
     if (viewDescriptor.getRowAction() != null) {
-      final Action rowAction = getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale);
+      final Action rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
       viewComponent.addMouseListener(new MouseAdapter() {
 
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            ActionEvent ae = new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
-                .getModifiers());
+            ActionEvent ae = new ActionEvent(e.getSource(),
+                ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+                    .getModifiers());
             rowAction.actionPerformed(ae);
           }
         }
@@ -1504,14 +1656,17 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createPasswordPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createPasswordPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JPasswordField viewComponent = createJPasswordField(propertyViewDescriptor);
-    JPasswordFieldConnector connector = new JPasswordFieldConnector(propertyDescriptor.getName(), viewComponent);
+    JPasswordFieldConnector connector = new JPasswordFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1519,7 +1674,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createPercentPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createPercentPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
@@ -1532,15 +1688,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
     } else {
       viewComponent = createJTextField(propertyViewDescriptor);
-      connector = new JPercentFieldConnector(propertyDescriptor.getName(), (JTextField) viewComponent, formatter);
-      adjustSizes(propertyViewDescriptor, viewComponent, formatter, getPercentTemplateValue(propertyDescriptor));
+      connector = new JPercentFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+        getPercentTemplateValue(propertyDescriptor));
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1557,29 +1717,37 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the locale.
    * @return the created property label.
    */
-  protected JLabel createPropertyLabel(IPropertyViewDescriptor propertyViewDescriptor, JComponent propertyComponent,
-      ITranslationProvider translationProvider, Locale locale) {
+  protected JLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      JComponent propertyComponent, ITranslationProvider translationProvider,
+      Locale locale) {
     JLabel propertyLabel = createJLabel(propertyViewDescriptor, false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor.getI18nName(translationProvider, locale));
+    StringBuffer labelText = new StringBuffer(
+        propertyViewDescriptor.getI18nName(translationProvider, locale));
     propertyLabel.setText(labelText.toString());
     propertyLabel.setLabelFor(propertyComponent);
     configurePropertyLabel(propertyLabel, propertyViewDescriptor);
     return propertyLabel;
   }
 
-  private void configurePropertyLabel(JLabel propertyLabel, IPropertyViewDescriptor propertyViewDescriptor) {
+  private void configurePropertyLabel(JLabel propertyLabel,
+      IPropertyViewDescriptor propertyViewDescriptor) {
     if (propertyViewDescriptor.getLabelFont() != null) {
-      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(), propertyLabel.getFont()));
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
+          propertyLabel.getFont()));
     }
     if (propertyViewDescriptor.getLabelForeground() != null) {
-      propertyLabel.setForeground(createColor(propertyViewDescriptor.getLabelForeground()));
+      propertyLabel.setForeground(createColor(propertyViewDescriptor
+          .getLabelForeground()));
     }
     if (propertyViewDescriptor.getLabelBackground() != null) {
-      propertyLabel.setBackground(createColor(propertyViewDescriptor.getLabelBackground()));
+      propertyLabel.setBackground(createColor(propertyViewDescriptor
+          .getLabelBackground()));
     }
     if (propertyViewDescriptor.getIcon() != null) {
-      propertyLabel.setIcon(getIconFactory().getIcon(propertyViewDescriptor.getIcon(),
-          getIconFactory().getTinyIconSize()));
+      propertyLabel
+          .setIcon(getIconFactory().getIcon(propertyViewDescriptor.getIcon(),
+              getIconFactory().getTinyIconSize()));
     }
   }
 
@@ -1587,7 +1755,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createReferencePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createReferencePropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
         .getModelDescriptor();
@@ -1600,14 +1769,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName() + "." + renderedProperty, (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName() + "."
+          + renderedProperty, (JLabel) viewComponent);
     } else {
       viewComponent = createJActionField(propertyViewDescriptor, true);
-      connector = new JReferenceFieldConnector(propertyDescriptor.getName(), (JActionField) viewComponent);
-      ((JReferenceFieldConnector) connector).setRenderingConnector(new BasicValueConnector(renderedProperty));
+      connector = new JReferenceFieldConnector(propertyDescriptor.getName(),
+          (JActionField) viewComponent);
+      ((JReferenceFieldConnector) connector)
+          .setRenderingConnector(new BasicValueConnector(renderedProperty));
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, null, null);
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     if (viewComponent instanceof JActionField) {
       Action lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.putValue(Action.NAME,
@@ -1615,18 +1789,24 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       // "lov.element.name",
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // actionHandler, locale)}, locale));
-      lovAction.putValue(Action.SHORT_DESCRIPTION,
-          actionHandler.getTranslation("lov.element.description", new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(actionHandler, locale)
-          }, locale) + IActionFactory.TOOLTIP_ELLIPSIS);
+      lovAction.putValue(
+          Action.SHORT_DESCRIPTION,
+          actionHandler.getTranslation(
+              "lov.element.description",
+              new Object[] {
+                propertyDescriptor.getReferencedDescriptor().getI18nName(
+                    actionHandler, locale)
+              }, locale)
+              + IActionFactory.TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
         lovAction.putValue(
             Action.SMALL_ICON,
-            getIconFactory().getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(),
+            getIconFactory().getIcon(
+                propertyDescriptor.getReferencedDescriptor().getIcon(),
                 getIconFactory().getTinyIconSize()));
       }
-      ((JActionField) viewComponent).setActions(Collections.singletonList(lovAction));
-      adjustSizes(propertyViewDescriptor, viewComponent, null, null);
+      ((JActionField) viewComponent).setActions(Collections
+          .singletonList(lovAction));
     }
     return view;
   }
@@ -1652,12 +1832,15 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createSourceCodePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createSourceCodePropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ISourceCodePropertyDescriptor propertyDescriptor = (ISourceCodePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JEditTextArea viewComponent = createJEditTextArea(propertyViewDescriptor, propertyDescriptor.getLanguage());
-    JEditTextAreaConnector connector = new JEditTextAreaConnector(propertyDescriptor.getName(), viewComponent);
+    JEditTextArea viewComponent = createJEditTextArea(propertyViewDescriptor,
+        propertyDescriptor.getLanguage());
+    JEditTextAreaConnector connector = new JEditTextAreaConnector(
+        propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -1666,10 +1849,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<JComponent> createSplitView(ISplitViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected ICompositeView<JComponent> createSplitView(
+      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     JSplitPane viewComponent = createJSplitPane(viewDescriptor);
-    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     switch (viewDescriptor.getOrientation()) {
@@ -1684,13 +1869,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-      IView<JComponent> leftTopView = createView(viewDescriptor.getLeftTopViewDescriptor(), actionHandler, locale);
+      IView<JComponent> leftTopView = createView(
+          viewDescriptor.getLeftTopViewDescriptor(), actionHandler, locale);
       viewComponent.setLeftComponent(leftTopView.getPeer());
       childrenViews.add(leftTopView);
     }
     if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-      IView<JComponent> rightBottomView = createView(viewDescriptor.getRightBottomViewDescriptor(), actionHandler,
-          locale);
+      IView<JComponent> rightBottomView = createView(
+          viewDescriptor.getRightBottomViewDescriptor(), actionHandler, locale);
       viewComponent.setRightComponent(rightBottomView.getPeer());
       rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
       childrenViews.add(rightBottomView);
@@ -1703,7 +1889,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createStringPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createStringPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
@@ -1715,14 +1902,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
     } else {
       viewComponent = createJTextField(propertyViewDescriptor);
-      connector = new JTextFieldConnector(propertyDescriptor.getName(), (JTextField) viewComponent);
-      adjustSizes(propertyViewDescriptor, viewComponent, null, getStringTemplateValue(propertyDescriptor));
+      connector = new JTextFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getStringTemplateValue(propertyDescriptor));
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1737,33 +1928,42 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the locale.
    * @return the created table cell renderer.
    */
-  protected TableCellRenderer createTableCellRenderer(IPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected TableCellRenderer createTableCellRenderer(
+      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
-      cellRenderer = createBooleanTableCellRenderer((IBooleanPropertyDescriptor) propertyDescriptor, locale);
+      cellRenderer = createBooleanTableCellRenderer(
+          (IBooleanPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      cellRenderer = createDateTableCellRenderer((IDatePropertyDescriptor) propertyDescriptor,
+      cellRenderer = createDateTableCellRenderer(
+          (IDatePropertyDescriptor) propertyDescriptor,
           actionHandler.getClientTimeZone(), actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      cellRenderer = createTimeTableCellRenderer((ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      cellRenderer = createTimeTableCellRenderer(
+          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      cellRenderer = createDurationTableCellRenderer((IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
+      cellRenderer = createDurationTableCellRenderer(
+          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      cellRenderer = createEnumerationTableCellRenderer((IEnumerationPropertyDescriptor) propertyDescriptor,
-          actionHandler, locale);
-    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      cellRenderer = createNumberTableCellRenderer((INumberPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-      cellRenderer = createRelationshipEndTableCellRenderer((IRelationshipEndPropertyDescriptor) propertyDescriptor,
+      cellRenderer = createEnumerationTableCellRenderer(
+          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
+    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
+      cellRenderer = createNumberTableCellRenderer(
+          (INumberPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+      cellRenderer = createRelationshipEndTableCellRenderer(
+          (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
       cellRenderer = createBinaryTableCellRenderer((IBinaryPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      cellRenderer = createStringTableCellRenderer((IStringPropertyDescriptor) propertyDescriptor, locale);
+      cellRenderer = createStringTableCellRenderer(
+          (IStringPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
-      cellRenderer = createColorTableCellRenderer((IColorPropertyDescriptor) propertyDescriptor, locale);
+      cellRenderer = createColorTableCellRenderer(
+          (IColorPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
@@ -1772,7 +1972,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected JComponent decorateWithPaginationView(JComponent viewPeer, JComponent paginationViewPeer) {
+  protected JComponent decorateWithPaginationView(JComponent viewPeer,
+      JComponent paginationViewPeer) {
     JPanel decorator = new JPanel(new BorderLayout());
     decorator.add(viewPeer, BorderLayout.CENTER);
     decorator.add(paginationViewPeer, BorderLayout.SOUTH);
@@ -1783,49 +1984,65 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createTableView(ITableViewDescriptor viewDescriptor, final IActionHandler actionHandler,
+  protected IView<JComponent> createTableView(
+      ITableViewDescriptor viewDescriptor, final IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
-        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
-    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
-        getMvcBinder(), rowConnectorPrototype);
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToHtmlProperty());
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
+            rowConnectorPrototype);
     JTable viewComponent = createJTable(viewDescriptor);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = new JLabel();
-    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIcon(), getIconFactory().getTinyIconSize()));
+    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIcon(),
+        getIconFactory().getTinyIconSize()));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
-    IView<JComponent> view = constructView(scrollPane, viewDescriptor, connector);
+    IView<JComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
     if (viewDescriptor.isHorizontallyScrollable()) {
       viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     } else {
-      scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      scrollPane
+          .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     List<Class<?>> columnClasses = new ArrayList<Class<?>>();
     Set<String> forbiddenColumns = new HashSet<String>();
-    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(viewDescriptor,
-        actionHandler);
-    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
-      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
+    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
+        viewDescriptor, actionHandler);
+    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
+        .entrySet()) {
+      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry
+          .getKey();
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         try {
           actionHandler.pushToSecurityContext(columnViewDescriptor);
-          IValueConnector columnConnector = createColumnConnector(columnViewDescriptor, rowDescriptor, actionHandler);
-          if (columnViewDescriptor.getAction() != null && !columnViewDescriptor.isReadOnly()) {
+          IValueConnector columnConnector = createColumnConnector(
+              columnViewDescriptor, rowDescriptor, actionHandler);
+          if (columnViewDescriptor.getAction() != null
+              && !columnViewDescriptor.isReadOnly()) {
             // We must listen for incoming connector value change to trigger the
             // action.
-            columnConnector.addValueChangeListener(new ConnectorActionAdapter<JComponent, Action>(columnViewDescriptor
-                .getAction(), getActionFactory(), actionHandler, view));
+            columnConnector
+                .addValueChangeListener(new ConnectorActionAdapter<JComponent, Action>(
+                    columnViewDescriptor.getAction(), getActionFactory(),
+                    actionHandler, view));
           }
-          String propertyName = columnViewDescriptor.getModelDescriptor().getName();
-          rowConnectorPrototype.addChildConnector(propertyName, columnConnector);
-          columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId).getModelType());
+          String propertyName = columnViewDescriptor.getModelDescriptor()
+              .getName();
+          rowConnectorPrototype
+              .addChildConnector(propertyName, columnConnector);
+          columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
+              .getModelType());
           // already handled in createColumnConnector
           // if (columnViewDescriptor.getReadabilityGates() != null) {
           // if (columnViewDescriptor.getWritabilityGates() != null) {
@@ -1837,42 +2054,55 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         forbiddenColumns.add(columnId);
       }
     }
-    List<String> columnConnectorKeys = new ArrayList<String>(rowConnectorPrototype.getChildConnectorKeys());
+    List<String> columnConnectorKeys = new ArrayList<String>(
+        rowConnectorPrototype.getChildConnectorKeys());
     // remove row rendering connector id
     columnConnectorKeys.remove(0);
-    CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(connector, columnConnectorKeys,
-        columnClasses);
+    CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
+        connector, columnConnectorKeys, columnClasses);
     tableModel.setExceptionHandler(actionHandler);
-    setupTableModel(viewDescriptor, actionHandler, connector, viewComponent, tableModel);
+    setupTableModel(viewDescriptor, actionHandler, connector, viewComponent,
+        tableModel);
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    int maxColumnSize = computePixelWidth(viewComponent, getMaxColumnCharacterLength());
+    int maxColumnSize = computePixelWidth(viewComponent,
+        getMaxColumnCharacterLength());
     int columnIndex = 0;
-    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
-      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
+    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
+        .entrySet()) {
+      IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry
+          .getKey();
       String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
-        configureTableColumn(actionHandler, locale, rowDescriptor, connector, viewComponent, view, maxColumnSize,
-            columnIndex, columnViewDescriptorEntry, columnViewDescriptor, propertyName, viewComponent.getModel());
+        configureTableColumn(actionHandler, locale, rowDescriptor, connector,
+            viewComponent, view, maxColumnSize, columnIndex,
+            columnViewDescriptorEntry, columnViewDescriptor, propertyName,
+            viewComponent.getModel());
         columnIndex++;
       }
     }
-    viewComponent.addMouseListener(new PopupListener(viewComponent, view, actionHandler, locale));
+    viewComponent.addMouseListener(new PopupListener(viewComponent, view,
+        actionHandler, locale));
     int minimumWidth = 0;
-    for (int i = 0; i < 1 && i < viewComponent.getColumnModel().getColumnCount(); i++) {
-      minimumWidth += viewComponent.getColumnModel().getColumn(i).getPreferredWidth();
+    for (int i = 0; i < 1
+        && i < viewComponent.getColumnModel().getColumnCount(); i++) {
+      minimumWidth += viewComponent.getColumnModel().getColumn(i)
+          .getPreferredWidth();
     }
-    scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent.getRowHeight() * 6
+    scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
+        .getRowHeight()
+        * 6
         + viewComponent.getTableHeader().getPreferredSize().height));
     if (viewDescriptor.getRowAction() != null) {
-      final Action rowAction = getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale);
+      final Action rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
       viewComponent.addMouseListener(new MouseAdapter() {
 
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            ActionEvent ae = new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
-                .getModifiers());
+            ActionEvent ae = new ActionEvent(e.getSource(),
+                ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+                    .getModifiers());
             rowAction.actionPerformed(ae);
           }
         }
@@ -1880,30 +2110,38 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     if (viewDescriptor.getPermId() != null) {
       viewComponent.getColumnModel().addColumnModelListener(
-          new ColumnPreferencesListener(viewComponent, viewDescriptor.getPermId(), actionHandler));
+          new ColumnPreferencesListener(viewComponent, viewDescriptor
+              .getPermId(), actionHandler));
     }
     return view;
   }
 
-  private void configureTableColumn(final IActionHandler actionHandler, Locale locale,
-      IComponentDescriptor<?> rowDescriptor, ICollectionConnector connector, JTable viewComponent,
+  private void configureTableColumn(final IActionHandler actionHandler,
+      Locale locale, IComponentDescriptor<?> rowDescriptor,
+      ICollectionConnector connector, JTable viewComponent,
       IView<JComponent> view, int maxColumnSize, int columnIndex,
       Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry,
-      IPropertyViewDescriptor columnViewDescriptor, String propertyName, TableModel tableModel) {
+      IPropertyViewDescriptor columnViewDescriptor, String propertyName,
+      TableModel tableModel) {
     TableColumn column = viewComponent.getColumnModel().getColumn(columnIndex);
-    column.setIdentifier(computeColumnIdentifier(rowDescriptor, columnViewDescriptor));
-    IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(propertyName);
+    column.setIdentifier(computeColumnIdentifier(rowDescriptor,
+        columnViewDescriptor));
+    IPropertyDescriptor propertyDescriptor = rowDescriptor
+        .getPropertyDescriptor(propertyName);
     String columnName = columnViewDescriptor.getI18nName(actionHandler, locale);
-    if (propertyDescriptor.isMandatory() && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       columnName = decorateMandatoryPropertyLabel(columnName);
     }
     column.setHeaderValue(columnName);
 
-    IView<JComponent> editorView = createView(columnViewDescriptor, actionHandler, locale);
+    IView<JComponent> editorView = createView(columnViewDescriptor,
+        actionHandler, locale);
     editorView.setParent(view);
     editorView.getConnector().resetReadabilityGates();
     editorView.getConnector().resetWritabilityGates();
-    for (IValueChangeListener listener : editorView.getConnector().getValueChangeListeners()) {
+    for (IValueChangeListener listener : editorView.getConnector()
+        .getValueChangeListeners()) {
       if (listener instanceof ConnectorActionAdapter) {
         // to avoid the action to be fired by the editor.
         editorView.getConnector().removeValueChangeListener(listener);
@@ -1913,67 +2151,85 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       editorView.getConnector().setParentConnector(connector);
     }
     column.setCellEditor(createTableCellEditor(editorView, actionHandler));
-    TableCellRenderer cellRenderer = createTableCellRenderer(propertyDescriptor, actionHandler, locale);
+    TableCellRenderer cellRenderer = createTableCellRenderer(
+        propertyDescriptor, actionHandler, locale);
     if (cellRenderer == null) {
       cellRenderer = new EvenOddTableCellRenderer();
     }
     if (cellRenderer instanceof JLabel) {
-      configureHorizontalAlignment((JLabel) cellRenderer, columnViewDescriptor.getHorizontalAlignment());
+      configureHorizontalAlignment((JLabel) cellRenderer,
+          columnViewDescriptor.getHorizontalAlignment());
     }
     if (cellRenderer instanceof JComponent) {
-      configureComponent(columnViewDescriptor, actionHandler, locale, (JComponent) cellRenderer);
+      configureComponent(columnViewDescriptor, actionHandler, locale,
+          (JComponent) cellRenderer);
       if (cellRenderer instanceof EvenOddTableCellRenderer) {
         // To preserve font that has been set and avoid Jtable changing it.
-        ((EvenOddTableCellRenderer) cellRenderer).setCustomFont(((JComponent) cellRenderer).getFont());
+        ((EvenOddTableCellRenderer) cellRenderer)
+            .setCustomFont(((JComponent) cellRenderer).getFont());
       }
     }
-    if (columnViewDescriptor.getAction() != null && columnViewDescriptor.isReadOnly()) {
-      Action colAction = getActionFactory().createAction(columnViewDescriptor.getAction(), actionHandler, view, locale);
+    if (columnViewDescriptor.getAction() != null
+        && columnViewDescriptor.isReadOnly()) {
+      Action colAction = getActionFactory().createAction(
+          columnViewDescriptor.getAction(), actionHandler, view, locale);
       Map<String, Object> staticContext = new HashMap<String, Object>();
       staticContext.put(ActionContextConstants.PROPERTY_VIEW, editorView);
       colAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
-      cellRenderer = new HyperlinkTableCellRenderer(cellRenderer, colAction, columnIndex);
+      cellRenderer = new HyperlinkTableCellRenderer(cellRenderer, colAction,
+          columnIndex);
       viewComponent.addMouseListener((MouseListener) cellRenderer);
     }
     column.setCellRenderer(cellRenderer);
     EvenOddTableCellRenderer headerRenderer = new EvenOddTableCellRenderer();
     configurePropertyLabel(headerRenderer, columnViewDescriptor);
-    if (propertyDescriptor.isMandatory() && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       if (columnViewDescriptor.getLabelForeground() == null) {
-        headerRenderer.setForeground(createColor(getTableHeaderMandatoryPropertyColorHex()));
+        headerRenderer
+            .setForeground(createColor(getTableHeaderMandatoryPropertyColorHex()));
       }
-      headerRenderer.setText(decorateMandatoryPropertyLabel(headerRenderer.getText()));
+      headerRenderer.setText(decorateMandatoryPropertyLabel(headerRenderer
+          .getText()));
     }
     // To preserve font that has been set and avoid Jtable changing it.
     headerRenderer.setCustomFont(headerRenderer.getFont());
     if (tableModel instanceof AbstractTableSorter) {
-      column.setHeaderRenderer(new AbstractTableSorter.SortableHeaderRenderer((AbstractTableSorter) tableModel,
-          headerRenderer));
+      column.setHeaderRenderer(new AbstractTableSorter.SortableHeaderRenderer(
+          (AbstractTableSorter) tableModel, headerRenderer));
     } else {
       column.setHeaderRenderer(headerRenderer);
     }
     if (columnViewDescriptorEntry.getValue() != null) {
       column.setPreferredWidth(columnViewDescriptorEntry.getValue().intValue());
     } else {
-      if (columnViewDescriptor.getPreferredSize() != null && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
-        column.setPreferredWidth(columnViewDescriptor.getPreferredSize().getWidth());
+      if (columnViewDescriptor.getPreferredSize() != null
+          && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+        column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
+            .getWidth());
       } else {
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
+        int minHeaderWidth = computePixelWidth(viewComponent,
+            columnName.length());
         if (propertyDescriptor instanceof IBooleanPropertyDescriptor
             || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent, 2), minHeaderWidth));
+          column.setPreferredWidth(Math.max(
+              computePixelWidth(viewComponent, 2), minHeaderWidth));
         } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
           column.setPreferredWidth(Math.max(
               computePixelWidth(
                   viewComponent,
-                  getEnumerationTemplateValue((IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
-                      locale).length() + 4), minHeaderWidth));
+                  getEnumerationTemplateValue(
+                      (IEnumerationPropertyDescriptor) propertyDescriptor,
+                      actionHandler, locale).length() + 4), minHeaderWidth));
         } else {
-          column.setPreferredWidth(Math.max(Math.min(
-              computePixelWidth(
-                  viewComponent,
-                  getFormatLength(createFormatter(propertyDescriptor, actionHandler, locale),
-                      getTemplateValue(propertyDescriptor))), maxColumnSize), minHeaderWidth));
+          column.setPreferredWidth(Math.max(Math
+              .min(
+                  computePixelWidth(
+                      viewComponent,
+                      getFormatLength(
+                          createFormatter(propertyDescriptor, actionHandler,
+                              locale), getTemplateValue(propertyDescriptor))),
+                  maxColumnSize), minHeaderWidth));
         }
       }
     }
@@ -1993,7 +2249,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * @param tableId
      * @param actionHandler
      */
-    public ColumnPreferencesListener(JTable table, String tableId, IActionHandler actionHandler) {
+    public ColumnPreferencesListener(JTable table, String tableId,
+        IActionHandler actionHandler) {
       this.columnModel = table.getColumnModel();
       this.tableId = tableId;
       this.actionHandler = actionHandler;
@@ -2016,7 +2273,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
 
     @Override
-    public void columnRemoved(@SuppressWarnings("unused") TableColumnModelEvent e) {
+    public void columnRemoved(
+        @SuppressWarnings("unused") TableColumnModelEvent e) {
       // NO-OP.
     }
 
@@ -2041,7 +2299,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         Object[][] columnPrefs = new Object[columnModel.getColumnCount()][2];
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
-              columnModel.getColumn(i).getIdentifier(), new Integer(columnModel.getColumn(i).getWidth())
+              columnModel.getColumn(i).getIdentifier(),
+              new Integer(columnModel.getColumn(i).getWidth())
           };
           columnPrefs[i] = columnPref;
         }
@@ -2050,27 +2309,33 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private void setupTableModel(ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      ICollectionConnector connector, JTable viewComponent, TableModel tableModel) {
+  private void setupTableModel(ITableViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, ICollectionConnector connector,
+      JTable viewComponent, TableModel tableModel) {
     if (viewDescriptor.isSortable()) {
       AbstractTableSorter sorterDecorator;
       if (viewDescriptor.getSortingAction() != null) {
-        sorterDecorator = new ActionTableSorter(tableModel, viewComponent.getTableHeader(), actionHandler,
+        sorterDecorator = new ActionTableSorter(tableModel,
+            viewComponent.getTableHeader(), actionHandler,
             viewDescriptor.getSortingAction());
       } else {
-        sorterDecorator = new TableSorter(tableModel, viewComponent.getTableHeader());
-        ((TableSorter) sorterDecorator).setColumnComparator(String.class, String.CASE_INSENSITIVE_ORDER);
+        sorterDecorator = new TableSorter(tableModel,
+            viewComponent.getTableHeader());
+        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+            String.CASE_INSENSITIVE_ORDER);
       }
-      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(viewComponent
-          .getTableHeader().getFont().getSize(), viewComponent.getTableHeader().getFont().getSize());
+      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+          viewComponent.getTableHeader().getFont().getSize(), viewComponent
+              .getTableHeader().getFont().getSize());
       sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
       sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
       viewComponent.setModel(sorterDecorator);
-      listSelectionModelBinder.bindSelectionModel(viewComponent, connector, viewComponent.getSelectionModel(),
-          sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
+          viewComponent.getSelectionModel(), sorterDecorator);
     } else {
       viewComponent.setModel(tableModel);
-      listSelectionModelBinder.bindSelectionModel(viewComponent, connector, viewComponent.getSelectionModel(), null);
+      listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
+          viewComponent.getSelectionModel(), null);
     }
   }
 
@@ -2078,10 +2343,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<JComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected ICompositeView<JComponent> createTabView(
+      ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     final JTabbedPane viewComponent = createJTabbedPane(viewDescriptor);
-    final BasicIndexedView<JComponent> view = constructIndexedView(viewComponent, viewDescriptor);
+    final BasicIndexedView<JComponent> view = constructIndexedView(
+        viewComponent, viewDescriptor);
     viewComponent.addChangeListener(new ChangeListener() {
 
       @Override
@@ -2092,10 +2359,13 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     });
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
       if (actionHandler.isAccessGranted(childViewDescriptor)) {
-        IView<JComponent> childView = createView(childViewDescriptor, actionHandler, locale);
-        Icon childIcon = getIconFactory().getIcon(childViewDescriptor.getIcon(), getIconFactory().getSmallIconSize());
+        IView<JComponent> childView = createView(childViewDescriptor,
+            actionHandler, locale);
+        Icon childIcon = getIconFactory().getIcon(
+            childViewDescriptor.getIcon(), getIconFactory().getSmallIconSize());
         String tabText = childViewDescriptor.getI18nName(actionHandler, locale);
         switch (viewDescriptor.getRenderingOptions()) {
           case ICON:
@@ -2134,16 +2404,20 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createTextPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createTextPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     IValueConnector connector;
     JScrollPane scrollPane = createJScrollPane();
     JTextArea viewComponent = createJTextArea(propertyViewDescriptor);
     viewComponent.setLineWrap(true);
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    connector = new JTextAreaConnector(propertyDescriptor.getName(), viewComponent);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    connector = new JTextAreaConnector(propertyDescriptor.getName(),
+        viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, propertyViewDescriptor, connector);
   }
@@ -2152,28 +2426,35 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createTimePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createTimePropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
 
-    ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    IFormatter formatter = createTimeFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter formatter = createTimeFormatter(propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      connector = new JLabelConnector(propertyDescriptor.getName(), (JLabel) viewComponent);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
     } else {
       viewComponent = createJTextField(propertyViewDescriptor);
-      connector = new JFormattedFieldConnector(propertyDescriptor.getName(), (JTextField) viewComponent, formatter);
-      adjustSizes(propertyViewDescriptor, viewComponent, formatter, getTimeTemplateValue(propertyDescriptor));
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
     }
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+        getTimeTemplateValue(propertyDescriptor));
     connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -2181,14 +2462,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected IView<JComponent> createTreeView(
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
-    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, actionHandler, locale);
+    ICompositeValueConnector connector = createTreeViewConnector(
+        viewDescriptor, actionHandler, locale);
 
     final JTree viewComponent = createJTree(viewDescriptor);
-    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(connector);
-    viewComponent.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
+        connector);
+    viewComponent.getSelectionModel().setSelectionMode(
+        TreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);
     viewComponent.setCellRenderer(new ConnectorTreeCellRenderer());
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
@@ -2196,7 +2481,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
 
         @Override
-        public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent e) {
+        public void treeNodesChanged(
+            @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
         }
 
@@ -2206,7 +2492,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         }
 
         @Override
-        public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent e) {
+        public void treeNodesRemoved(
+            @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
         }
 
@@ -2218,19 +2505,22 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
-    IView<JComponent> view = constructView(scrollPane, viewDescriptor, connector);
-    viewComponent.addMouseListener(new PopupListener(viewComponent, view, actionHandler, locale));
+    IView<JComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
+    viewComponent.addMouseListener(new PopupListener(viewComponent, view,
+        actionHandler, locale));
     scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
     if (viewDescriptor.getRowAction() != null) {
-      final Action rowAction = getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale);
+      final Action rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
       viewComponent.addMouseListener(new MouseAdapter() {
 
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            ActionEvent ae = new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
-                .getModifiers());
+            ActionEvent ae = new ActionEvent(e.getSource(),
+                ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+                    .getModifiers());
             rowAction.actionPerformed(ae);
           }
         }
@@ -2243,8 +2533,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithActions(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale,
-      IView<JComponent> view) {
+  protected void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<JComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
     if (actionMap != null || secondaryActionMap != null) {
@@ -2255,16 +2545,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
         try {
           actionHandler.pushToSecurityContext(actionMap);
-          JToolBar toolBar = createViewToolBar(actionMap, view, actionHandler, locale);
+          JToolBar toolBar = createViewToolBar(actionMap, view, actionHandler,
+              locale);
           viewPanel.add(toolBar, BorderLayout.NORTH);
         } finally {
           actionHandler.restoreLastSecurityContextSnapshot();
         }
       }
-      if (secondaryActionMap != null && actionHandler.isAccessGranted(secondaryActionMap)) {
+      if (secondaryActionMap != null
+          && actionHandler.isAccessGranted(secondaryActionMap)) {
         try {
           actionHandler.pushToSecurityContext(secondaryActionMap);
-          JToolBar toolBar = createViewToolBar(secondaryActionMap, view, actionHandler, locale);
+          JToolBar toolBar = createViewToolBar(secondaryActionMap, view,
+              actionHandler, locale);
           viewPanel.add(toolBar, BorderLayout.SOUTH);
         } finally {
           actionHandler.restoreLastSecurityContextSnapshot();
@@ -2288,10 +2581,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the locale used.
    * @return the created tool bar.
    */
-  protected JToolBar createViewToolBar(ActionMap actionMap, IView<JComponent> view, IActionHandler actionHandler,
-      Locale locale) {
+  protected JToolBar createViewToolBar(ActionMap actionMap,
+      IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
     JToolBar toolBar = createJToolBar();
-    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler).iterator(); iter.hasNext();) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
+        .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
         try {
@@ -2317,7 +2611,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                 actionButton = createJButton();
               }
               IDisplayableAction mainAction = actions.get(0);
-              Action swingAction = getActionFactory().createAction(mainAction, actionHandler, view, locale);
+              Action swingAction = getActionFactory().createAction(mainAction,
+                  actionHandler, view, locale);
               actionButton.setAction(swingAction);
               switch (renderingOptions) {
                 case ICON:
@@ -2330,19 +2625,27 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                   break;
               }
               if (mainAction.getAcceleratorAsString() != null) {
-                KeyStroke ks = KeyStroke.getKeyStroke(mainAction.getAcceleratorAsString());
-                view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
-                view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                KeyStroke ks = KeyStroke.getKeyStroke(mainAction
+                    .getAcceleratorAsString());
+                view.getPeer().getActionMap()
+                    .put(swingAction.getValue(Action.NAME), swingAction);
+                view.getPeer()
+                    .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                     .put(ks, swingAction.getValue(Action.NAME));
-                String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-"
+                String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                    .getModifiers())
+                    + "-"
                     + KeyEvent.getKeyText(ks.getKeyCode());
-                actionButton.setToolTipText("<HTML>" + actionButton.getToolTipText()
-                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString + "</FONT></HTML>");
+                actionButton.setToolTipText("<HTML>"
+                    + actionButton.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
               }
               if (actions.size() > 1) {
                 JPopupMenu popupMenu = new JPopupMenu();
                 for (IDisplayableAction menuAction : actions) {
-                  JMenuItem actionItem = createMenuItem(menuAction, view, actionHandler, locale);
+                  JMenuItem actionItem = createMenuItem(menuAction, view,
+                      actionHandler, locale);
                   switch (renderingOptions) {
                     case ICON:
                       actionItem.setText("");
@@ -2354,14 +2657,22 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                       break;
                   }
                   if (menuAction.getAcceleratorAsString() != null) {
-                    KeyStroke ks = KeyStroke.getKeyStroke(menuAction.getAcceleratorAsString());
-                    view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
-                    view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                    KeyStroke ks = KeyStroke.getKeyStroke(menuAction
+                        .getAcceleratorAsString());
+                    view.getPeer().getActionMap()
+                        .put(swingAction.getValue(Action.NAME), swingAction);
+                    view.getPeer()
+                        .getInputMap(
+                            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                         .put(ks, swingAction.getValue(Action.NAME));
-                    String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-"
+                    String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                        .getModifiers())
+                        + "-"
                         + KeyEvent.getKeyText(ks.getKeyCode());
-                    actionItem.setToolTipText("<HTML>" + actionItem.getToolTipText()
-                        + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString + "</FONT></HTML>");
+                    actionItem.setToolTipText("<HTML>"
+                        + actionItem.getToolTipText()
+                        + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                        + acceleratorString + "</FONT></HTML>");
                   }
                   popupMenu.add(actionItem);
                 }
@@ -2372,18 +2683,27 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
           } else {
             for (IDisplayableAction action : nextActionList.getActions()) {
               if (actionHandler.isAccessGranted(action)) {
-                Action swingAction = getActionFactory().createAction(action, actionHandler, view, locale);
+                Action swingAction = getActionFactory().createAction(action,
+                    actionHandler, view, locale);
                 JButton actionButton = createJButton();
                 actionButton.setAction(swingAction);
                 if (action.getAcceleratorAsString() != null) {
-                  KeyStroke ks = KeyStroke.getKeyStroke(action.getAcceleratorAsString());
-                  view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
-                  view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                  KeyStroke ks = KeyStroke.getKeyStroke(action
+                      .getAcceleratorAsString());
+                  view.getPeer().getActionMap()
+                      .put(swingAction.getValue(Action.NAME), swingAction);
+                  view.getPeer()
+                      .getInputMap(
+                          JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                       .put(ks, swingAction.getValue(Action.NAME));
-                  String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-"
+                  String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                      .getModifiers())
+                      + "-"
                       + KeyEvent.getKeyText(ks.getKeyCode());
-                  actionButton.setToolTipText("<HTML>" + actionButton.getToolTipText()
-                      + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString + "</FONT></HTML>");
+                  actionButton.setToolTipText("<HTML>"
+                      + actionButton.getToolTipText()
+                      + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                      + acceleratorString + "</FONT></HTML>");
                 }
                 switch (renderingOptions) {
                   case ICON:
@@ -2419,7 +2739,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *          the locale to use.
    */
   @Override
-  protected void decorateWithBorder(IView<JComponent> view, ITranslationProvider translationProvider, Locale locale) {
+  protected void decorateWithBorder(IView<JComponent> view,
+      ITranslationProvider translationProvider, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
@@ -2436,14 +2757,16 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-      Locale locale, IView<JComponent> view) {
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      ITranslationProvider translationProvider, Locale locale,
+      IView<JComponent> view) {
     JComponent viewPeer = view.getPeer();
     configureComponent(viewDescriptor, translationProvider, locale, viewPeer);
   }
 
-  private void configureComponent(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-      Locale locale, JComponent viewPeer) {
+  private void configureComponent(IViewDescriptor viewDescriptor,
+      ITranslationProvider translationProvider, Locale locale,
+      JComponent viewPeer) {
     if (viewDescriptor.getForeground() != null) {
       viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -2451,9 +2774,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       viewPeer.setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      viewPeer.setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
+      viewPeer
+          .setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
-    String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
+    String viewDescription = viewDescriptor.getI18nDescription(
+        translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTipText(viewDescription);
     }
@@ -2491,39 +2816,50 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   private TableCellRenderer createColorTableCellRenderer(
-      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
     return new ColorTableCellRenderer();
   }
 
-  private TableCellRenderer createDateTableCellRenderer(IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+  private TableCellRenderer createDateTableCellRenderer(
+      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
       ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(
-        createDateFormatter(propertyDescriptor, timeZone, translationProvider, locale));
+    return new FormattedTableCellRenderer(createDateFormatter(
+        propertyDescriptor, timeZone, translationProvider, locale));
   }
 
-  private TableCellRenderer createDecimalTableCellRenderer(IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+  private TableCellRenderer createDecimalTableCellRenderer(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentTableCellRenderer((IPercentPropertyDescriptor) propertyDescriptor, locale);
+      return createPercentTableCellRenderer(
+          (IPercentPropertyDescriptor) propertyDescriptor, locale);
     }
-    return new FormattedTableCellRenderer(createDecimalFormatter(propertyDescriptor, locale));
+    return new FormattedTableCellRenderer(createDecimalFormatter(
+        propertyDescriptor, locale));
   }
 
-  private TableCellRenderer createDurationTableCellRenderer(IDurationPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createDurationTableCellRenderer(
+      IDurationPropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createDurationFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createDurationFormatter(
+        propertyDescriptor, translationProvider, locale));
   }
 
-  private TableCellRenderer createEnumerationTableCellRenderer(IEnumerationPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createEnumerationTableCellRenderer(
+      IEnumerationPropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor, translationProvider, locale);
+    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
+        translationProvider, locale);
   }
 
-  private TableCellRenderer createImageTableCellRenderer(IPropertyDescriptor propertyDescriptor) {
+  private TableCellRenderer createImageTableCellRenderer(
+      IPropertyDescriptor propertyDescriptor) {
     return new ImageTableCellRenderer(propertyDescriptor);
   }
 
   private Font createFont(String fontString, Font defaultFont) {
-    org.jspresso.framework.util.gui.Font font = FontHelper.fromString(fontString);
+    org.jspresso.framework.util.gui.Font font = FontHelper
+        .fromString(fontString);
     int fontStyle;
     if (font.isBold() && font.isItalic()) {
       fontStyle = Font.BOLD | Font.ITALIC;
@@ -2543,7 +2879,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return new Font(font.getName(), fontStyle, font.getSize());
   }
 
-  private GridBagConstraints createGridBagConstraints(CellConstraints viewConstraints) {
+  private GridBagConstraints createGridBagConstraints(
+      CellConstraints viewConstraints) {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = viewConstraints.getColumn();
     constraints.gridy = viewConstraints.getRow();
@@ -2568,22 +2905,26 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return constraints;
   }
 
-  private TableCellRenderer createIntegerTableCellRenderer(IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createIntegerFormatter(propertyDescriptor, locale));
+  private TableCellRenderer createIntegerTableCellRenderer(
+      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createIntegerFormatter(
+        propertyDescriptor, locale));
   }
 
-  private JPopupMenu createJPopupMenu(IView<JComponent> view, ActionMap actionMap, IActionHandler actionHandler,
-      Locale locale) {
+  private JPopupMenu createJPopupMenu(IView<JComponent> view,
+      ActionMap actionMap, IActionHandler actionHandler, Locale locale) {
     IViewDescriptor viewDescriptor = view.getDescriptor();
     JPopupMenu popupMenu = createJPopupMenu();
     JLabel titleLabel = new JLabel();
     titleLabel.setText(viewDescriptor.getI18nName(actionHandler, locale));
-    titleLabel.setIcon(getIconFactory().getIcon(viewDescriptor.getIcon(), getIconFactory().getTinyIconSize()));
+    titleLabel.setIcon(getIconFactory().getIcon(viewDescriptor.getIcon(),
+        getIconFactory().getTinyIconSize()));
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     popupMenu.add(titleLabel);
     popupMenu.addSeparator();
-    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler).iterator(); iter.hasNext();) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
+        .iterator(); iter.hasNext();) {
       ActionList nextActionList = iter.next();
       if (actionHandler.isAccessGranted(nextActionList)) {
         try {
@@ -2592,7 +2933,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
             if (actionHandler.isAccessGranted(action)) {
               try {
                 actionHandler.pushToSecurityContext(action);
-                JMenuItem actionItem = createMenuItem(action, view, actionHandler, locale);
+                JMenuItem actionItem = createMenuItem(action, view,
+                    actionHandler, locale);
                 popupMenu.add(actionItem);
               } finally {
                 actionHandler.restoreLastSecurityContextSnapshot();
@@ -2610,26 +2952,32 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return popupMenu;
   }
 
-  private JMenuItem createMenuItem(IDisplayableAction action, IView<JComponent> view, IActionHandler actionHandler,
-      Locale locale) {
-    Action swingAction = getActionFactory().createAction(action, actionHandler, view, locale);
+  private JMenuItem createMenuItem(IDisplayableAction action,
+      IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
+    Action swingAction = getActionFactory().createAction(action, actionHandler,
+        view, locale);
     JMenuItem actionItem = createJMenuItem();
     actionItem.setAction(swingAction);
     return actionItem;
   }
 
-  private TableCellRenderer createNumberTableCellRenderer(INumberPropertyDescriptor propertyDescriptor, Locale locale) {
+  private TableCellRenderer createNumberTableCellRenderer(
+      INumberPropertyDescriptor propertyDescriptor, Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      cellRenderer = createIntegerTableCellRenderer((IIntegerPropertyDescriptor) propertyDescriptor, locale);
+      cellRenderer = createIntegerTableCellRenderer(
+          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      cellRenderer = createDecimalTableCellRenderer((IDecimalPropertyDescriptor) propertyDescriptor, locale);
+      cellRenderer = createDecimalTableCellRenderer(
+          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
 
-  private TableCellRenderer createPercentTableCellRenderer(IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createPercentFormatter(propertyDescriptor, locale));
+  private TableCellRenderer createPercentTableCellRenderer(
+      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createPercentFormatter(
+        propertyDescriptor, locale));
   }
 
   private TableCellRenderer createReferenceTableCellRenderer(
@@ -2643,21 +2991,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     TableCellRenderer cellRenderer = null;
 
     if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-      cellRenderer = createReferenceTableCellRenderer((IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
+      cellRenderer = createReferenceTableCellRenderer(
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-      cellRenderer = createCollectionTableCellRenderer((ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
+      cellRenderer = createCollectionTableCellRenderer(
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
 
-  private TableCellRenderer createBinaryTableCellRenderer(IBinaryPropertyDescriptor propertyDescriptor) {
+  private TableCellRenderer createBinaryTableCellRenderer(
+      IBinaryPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof IImageBinaryPropertyDescriptor) {
       return createImageTableCellRenderer(propertyDescriptor);
     }
     return new BinaryTableCellRenderer(propertyDescriptor);
   }
 
-  private TableCellRenderer createStringTableCellRenderer(IStringPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createStringTableCellRenderer(
+      IStringPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
       return new FormattedTableCellRenderer(new PasswordFormatter());
@@ -2667,10 +3019,13 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return new FormattedTableCellRenderer(null);
   }
 
-  private TableCellEditor createTableCellEditor(IView<JComponent> editorView, IActionHandler actionHandler) {
+  private TableCellEditor createTableCellEditor(IView<JComponent> editorView,
+      IActionHandler actionHandler) {
     SwingViewCellEditorAdapter editor;
-    if (editorView.getPeer() instanceof JActionField && ((JActionField) editorView.getPeer()).isShowingTextField()) {
-      editor = new SwingViewCellEditorAdapter(editorView, getModelConnectorFactory(), getMvcBinder(), actionHandler) {
+    if (editorView.getPeer() instanceof JActionField
+        && ((JActionField) editorView.getPeer()).isShowingTextField()) {
+      editor = new SwingViewCellEditorAdapter(editorView,
+          getModelConnectorFactory(), getMvcBinder(), actionHandler) {
 
         private static final long serialVersionUID = -1551909997448473681L;
 
@@ -2680,22 +3035,27 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
             fireEditingStopped();
             return true;
           }
-          ((JActionFieldConnector) getEditorView().getConnector()).performActionIfNeeded();
+          ((JActionFieldConnector) getEditorView().getConnector())
+              .performActionIfNeeded();
           return false;
         }
       };
     } else {
-      editor = new SwingViewCellEditorAdapter(editorView, getModelConnectorFactory(), getMvcBinder(), actionHandler);
+      editor = new SwingViewCellEditorAdapter(editorView,
+          getModelConnectorFactory(), getMvcBinder(), actionHandler);
     }
     return editor;
   }
 
-  private TableCellRenderer createTimeTableCellRenderer(ITimePropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createTimeTableCellRenderer(
+      ITimePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createTimeFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createTimeFormatter(
+        propertyDescriptor, translationProvider, locale));
   }
 
-  private void decorateWithTitle(IView<JComponent> view, ITranslationProvider translationProvider, Locale locale) {
+  private void decorateWithTitle(IView<JComponent> view,
+      ITranslationProvider translationProvider, Locale locale) {
     view.getPeer().setBorder(
         BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
             view.getDescriptor().getI18nName(translationProvider, locale)));
@@ -2721,7 +3081,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     });
   }
 
-  private List<String> getDescriptorPathFromConnectorTreePath(TreePath connectorTreePath) {
+  private List<String> getDescriptorPathFromConnectorTreePath(
+      TreePath connectorTreePath) {
     List<String> descriptorPath = new ArrayList<String>();
     if (connectorTreePath != null) {
       Object[] connectors = connectorTreePath.getPath();
@@ -2754,8 +3115,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return selectionMode;
   }
 
-  private void showJTablePopupMenu(JTable table, IView<JComponent> tableView, MouseEvent evt,
-      IActionHandler actionHandler, Locale locale) {
+  private void showJTablePopupMenu(JTable table, IView<JComponent> tableView,
+      MouseEvent evt, IActionHandler actionHandler, Locale locale) {
     int row = table.rowAtPoint(evt.getPoint());
     if (row < 0) {
       return;
@@ -2765,12 +3126,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       table.setRowSelectionInterval(row, row);
     }
 
-    ActionMap actionMap = ((ICollectionViewDescriptor) tableView.getDescriptor()).getActionMap();
+    ActionMap actionMap = ((ICollectionViewDescriptor) tableView
+        .getDescriptor()).getActionMap();
 
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       try {
         actionHandler.pushToSecurityContext(actionMap);
-        JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap, actionHandler, locale);
+        JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap,
+            actionHandler, locale);
         popupMenu.show(table, evt.getX(), evt.getY());
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
@@ -2778,8 +3141,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private void showJTreePopupMenu(JTree tree, IView<JComponent> treeView, MouseEvent evt, IActionHandler actionHandler,
-      Locale locale) {
+  private void showJTreePopupMenu(JTree tree, IView<JComponent> treeView,
+      MouseEvent evt, IActionHandler actionHandler, Locale locale) {
     TreePath path = tree.getPathForLocation(evt.getX(), evt.getY());
     if (path == null) {
       return;
@@ -2789,24 +3152,28 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       tree.setSelectionPath(path);
     }
     if (path.getLastPathComponent() instanceof ICollectionConnector) {
-      TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path.getLastPathComponent())
-          .getChildConnectorCount()];
+      TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
+          .getLastPathComponent()).getChildConnectorCount()];
       for (int i = 0; i < allNodePaths.length; i++) {
-        allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path.getLastPathComponent())
-            .getChildConnector(i));
+        allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
+            .getLastPathComponent()).getChildConnector(i));
       }
       tree.addSelectionPaths(allNodePaths);
     }
 
-    IValueConnector viewConnector = (IValueConnector) path.getLastPathComponent();
+    IValueConnector viewConnector = (IValueConnector) path
+        .getLastPathComponent();
     ActionMap actionMap;
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
       viewDescriptor = treeView.getDescriptor();
     } else {
-      viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
-          ((ITreeViewDescriptor) treeView.getDescriptor()).getRootSubtreeDescriptor(),
-          getDescriptorPathFromConnectorTreePath(path)).getNodeGroupDescriptor();
+      viewDescriptor = TreeDescriptorHelper
+          .getSubtreeDescriptorFromPath(
+              ((ITreeViewDescriptor) treeView.getDescriptor())
+                  .getRootSubtreeDescriptor(),
+              getDescriptorPathFromConnectorTreePath(path))
+          .getNodeGroupDescriptor();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }
@@ -2819,7 +3186,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         BasicView<JComponent> treeLevelView = new BasicView<JComponent>(tree);
         treeLevelView.setConnector(viewConnector);
         treeLevelView.setDescriptor(viewDescriptor);
-        JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap, actionHandler, locale);
+        JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap,
+            actionHandler, locale);
         popupMenu.show(tree, evt.getX(), evt.getY());
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
@@ -2827,12 +3195,15 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private void showPopupMenu(JComponent sourceComponent, IView<JComponent> view, MouseEvent evt,
-      IActionHandler actionHandler, Locale locale) {
+  private void showPopupMenu(JComponent sourceComponent,
+      IView<JComponent> view, MouseEvent evt, IActionHandler actionHandler,
+      Locale locale) {
     if (sourceComponent instanceof JTree) {
-      showJTreePopupMenu((JTree) sourceComponent, view, evt, actionHandler, locale);
+      showJTreePopupMenu((JTree) sourceComponent, view, evt, actionHandler,
+          locale);
     } else if (sourceComponent instanceof JTable) {
-      showJTablePopupMenu((JTable) sourceComponent, view, evt, actionHandler, locale);
+      showJTablePopupMenu((JTable) sourceComponent, view, evt, actionHandler,
+          locale);
     }
   }
 
@@ -2844,15 +3215,16 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * {@inheritDoc}
      */
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-        int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
       if (value != null) {
         int[] rgba = ColorHelper.fromHexString((String) value);
         setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
       } else {
         setBackground(null);
       }
-      return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
     }
   }
 
@@ -2864,16 +3236,20 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * {@inheritDoc}
      */
     @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-        boolean leaf, int row, boolean nodeHasFocus) {
-      JLabel renderer = (JLabel) super
-          .getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, nodeHasFocus);
+    public Component getTreeCellRendererComponent(JTree tree, Object value,
+        boolean sel, boolean expanded, boolean leaf, int row,
+        boolean nodeHasFocus) {
+      JLabel renderer = (JLabel) super.getTreeCellRendererComponent(tree,
+          value, sel, expanded, leaf, row, nodeHasFocus);
       if (value instanceof IValueConnector) {
         if (value instanceof IRenderableCompositeValueConnector) {
-          renderer.setText(((IRenderableCompositeValueConnector) value).getDisplayValue());
-          renderer.setIcon(getIconFactory().getIcon(((IRenderableCompositeValueConnector) value).getDisplayIcon(),
+          renderer.setText(((IRenderableCompositeValueConnector) value)
+              .getDisplayValue());
+          renderer.setIcon(getIconFactory().getIcon(
+              ((IRenderableCompositeValueConnector) value).getDisplayIcon(),
               getIconFactory().getSmallIconSize()));
-          String displayDescription = ((IRenderableCompositeValueConnector) value).getDisplayDescription();
+          String displayDescription = ((IRenderableCompositeValueConnector) value)
+              .getDisplayDescription();
           if (displayDescription != null && displayDescription.length() > 0) {
             ToolTipManager.sharedInstance().registerComponent(tree);
             renderer.setToolTipText(displayDescription);
@@ -2901,7 +3277,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * @param actionHandler
      * @param locale
      */
-    public PopupListener(JComponent sourceComponent, IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
+    public PopupListener(JComponent sourceComponent, IView<JComponent> view,
+        IActionHandler actionHandler, Locale locale) {
       this.sourceComponent = sourceComponent;
       this.view = view;
       this.actionHandler = actionHandler;
@@ -2931,7 +3308,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private final class TranslatedEnumerationListCellRenderer extends DefaultListCellRenderer {
+  private final class TranslatedEnumerationListCellRenderer extends
+      DefaultListCellRenderer {
 
     private static final long              serialVersionUID = -5694559709701757582L;
     private ITranslationProvider           translationProvider;
@@ -2950,7 +3328,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationListCellRenderer(IEnumerationPropertyDescriptor propertyDescriptor,
+    public TranslatedEnumerationListCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor,
         ITranslationProvider translationProvider, Locale locale) {
       this.propertyDescriptor = propertyDescriptor;
       this.translationProvider = translationProvider;
@@ -2961,13 +3340,16 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * {@inheritDoc}
      */
     @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-        boolean cellHasFocus) {
-      JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-      label.setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String.valueOf(value)),
+    public Component getListCellRendererComponent(JList list, Object value,
+        int index, boolean isSelected, boolean cellHasFocus) {
+      JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
+          index, isSelected, cellHasFocus);
+      label.setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(String.valueOf(value)),
           getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
-        label.setText(propertyDescriptor.getI18nValue((String) value, translationProvider, locale));
+        label.setText(propertyDescriptor.getI18nValue((String) value,
+            translationProvider, locale));
       } else {
         if (value == null) {
           label.setText(" ");
@@ -2979,7 +3361,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private final class TranslatedEnumerationTableCellRenderer extends EvenOddTableCellRenderer {
+  private final class TranslatedEnumerationTableCellRenderer extends
+      EvenOddTableCellRenderer {
 
     private static final long              serialVersionUID = -4500472602998482756L;
     private ITranslationProvider           translationProvider;
@@ -2999,7 +3382,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationTableCellRenderer(IEnumerationPropertyDescriptor propertyDescriptor,
+    public TranslatedEnumerationTableCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor,
         ITranslationProvider translationProvider, Locale locale) {
       super();
       this.propertyDescriptor = propertyDescriptor;
@@ -3011,11 +3395,13 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * {@inheritDoc}
      */
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-        int row, int column) {
-      setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String.valueOf(value)),
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(String.valueOf(value)),
           getIconFactory().getTinyIconSize()));
-      return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
     }
 
     /**
@@ -3026,7 +3412,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          super.setValue(propertyDescriptor.getI18nValue((String) connectorValue, translationProvider, locale));
+          super.setValue(propertyDescriptor.getI18nValue(
+              (String) connectorValue, translationProvider, locale));
         } else {
           if (connectorValue == null) {
             super.setValue("");
@@ -3036,7 +3423,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
-          super.setValue(propertyDescriptor.getI18nValue((String) value, translationProvider, locale));
+          super.setValue(propertyDescriptor.getI18nValue((String) value,
+              translationProvider, locale));
         } else {
           if (value == null) {
             super.setValue("");
@@ -3072,8 +3460,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * {@inheritDoc}
      */
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-        int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
       if (value instanceof byte[]) {
         setIcon(new ImageIcon((byte[]) value));
       } else if (value instanceof String) {
@@ -3081,7 +3469,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       } else {
         setIcon(null);
       }
-      return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
     }
 
     /**
@@ -3123,7 +3512,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private void configureHorizontalAlignment(JTextField textField, EHorizontalAlignment horizontalAlignment) {
+  private void configureHorizontalAlignment(JTextField textField,
+      EHorizontalAlignment horizontalAlignment) {
     switch (horizontalAlignment) {
       case LEFT:
         textField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -3140,7 +3530,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private void configureHorizontalAlignment(JLabel label, EHorizontalAlignment horizontalAlignment) {
+  private void configureHorizontalAlignment(JLabel label,
+      EHorizontalAlignment horizontalAlignment) {
     switch (horizontalAlignment) {
       case LEFT:
         label.setHorizontalAlignment(SwingConstants.LEFT);
@@ -3161,13 +3552,17 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<JComponent> createPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IView<JComponent> propertyView = super.createPropertyView(propertyViewDescriptor, actionHandler, locale);
+    IView<JComponent> propertyView = super.createPropertyView(
+        propertyViewDescriptor, actionHandler, locale);
     if (propertyView.getPeer() instanceof JLabel) {
-      configureHorizontalAlignment((JLabel) propertyView.getPeer(), propertyViewDescriptor.getHorizontalAlignment());
+      configureHorizontalAlignment((JLabel) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
     } else if (propertyView.getPeer() instanceof JTextField) {
-      configureHorizontalAlignment((JTextField) propertyView.getPeer(), propertyViewDescriptor.getHorizontalAlignment());
+      configureHorizontalAlignment((JTextField) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
     }
     return propertyView;
   }
@@ -3180,8 +3575,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * @return the first focusable component or null if none.
    */
   protected JComponent findFirstFocusableComponent(Component root) {
-    if (root instanceof JTextComponent || root instanceof JCheckBox || root instanceof JComboBox
-        || root instanceof JDateField || root instanceof JTable) {
+    if (root instanceof JTextComponent || root instanceof JCheckBox
+        || root instanceof JComboBox || root instanceof JDateField
+        || root instanceof JTable) {
 
       return (JComponent) root;
     }
