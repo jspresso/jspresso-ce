@@ -97,8 +97,8 @@ import org.springframework.dao.DataIntegrityViolationException;
  * @param <G>
  *          the actual action type used.
  */
-public abstract class AbstractFrontendController<E, F, G> extends AbstractController implements
-    IFrontendController<E, F, G> {
+public abstract class AbstractFrontendController<E, F, G> extends
+    AbstractController implements IFrontendController<E, F, G> {
 
   /**
    * <code>MAX_LOGIN_RETRIES</code>.
@@ -189,14 +189,15 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     Module currentModule = getSelectedModule(getSelectedWorkspaceName());
     // Test same workspace and same module. important when module is null and
     // selected module also to avoid stack overflows.
-    if (((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils.equals(
-        getSelectedWorkspaceName(), workspaceName))
-        && ((currentModule == null && module == null) || ObjectUtils.equals(currentModule, module))) {
+    if (((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils
+        .equals(getSelectedWorkspaceName(), workspaceName))
+        && ((currentModule == null && module == null) || ObjectUtils.equals(
+            currentModule, module))) {
       return;
     }
     if (currentModule != null) {
       pinModule(getSelectedWorkspaceName(), currentModule);
-      Map<String, Object> navigationContext = new HashMap<String, Object>();
+      Map<String, Object> navigationContext = getModuleActionContext(getSelectedWorkspaceName());
       navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       navigationContext.put(ActionContextConstants.TO_MODULE, module);
       execute(currentModule.getExitAction(), navigationContext);
@@ -215,17 +216,19 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       // oldModuleModelConnector.setConnectorValue(null);
       // }
 
-      IValueConnector moduleModelConnector = getBackendController().getModuleConnector(module);
+      IValueConnector moduleModelConnector = getBackendController()
+          .getModuleConnector(module);
       mvcBinder.bind(moduleAreaView.getConnector(), moduleModelConnector);
     }
     selectedModules.put(workspaceName, module);
     if (module != null) {
       if (!module.isStarted() && module.getStartupAction() != null) {
-        execute(module.getStartupAction(), new HashMap<String, Object>());
+        execute(module.getStartupAction(),
+            getModuleActionContext(workspaceName));
       }
       module.setStarted(true);
       pinModule(getSelectedWorkspaceName(), module);
-      Map<String, Object> navigationContext = new HashMap<String, Object>();
+      Map<String, Object> navigationContext = getModuleActionContext(workspaceName);
       navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       navigationContext.put(ActionContextConstants.TO_MODULE, module);
       execute(module.getEntryAction(), new HashMap<String, Object>());
@@ -234,10 +237,12 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
     try {
       tracksWorkspaceNavigator = false;
-      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors.get(workspaceName);
+      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
+          .get(workspaceName);
       if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
         Object[] result = synchWorkspaceNavigatorSelection(
-            (ICollectionConnectorListProvider) workspaceNavigatorConnector, module);
+            (ICollectionConnectorListProvider) workspaceNavigatorConnector,
+            module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
           ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
@@ -248,6 +253,18 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     } finally {
       tracksWorkspaceNavigator = wasTracksWorkspaceNavigator;
     }
+  }
+
+  private Map<String, Object> getModuleActionContext(String workspaceName) {
+    IMapView<E> moduleAreaView = workspaceViews.get(workspaceName);
+    if (moduleAreaView != null) {
+      IView<E> moduleView = moduleAreaView.getCurrentView();
+      if (moduleView != null) {
+        return getViewFactory().getActionFactory().createActionContext(this,
+            moduleView, moduleView.getConnector(), null, null);
+      }
+    }
+    return new HashMap<String, Object>();
   }
 
   /**
@@ -265,7 +282,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
         if (nextWorkspaceName != null && nextModule != null) {
           backwardHistoryEntries.add(nextEntry);
           if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
-              && ObjectUtils.equals(nextModule, getSelectedModule(getSelectedWorkspaceName()))) {
+              && ObjectUtils.equals(nextModule,
+                  getSelectedModule(getSelectedWorkspaceName()))) {
             displayNextPinnedModule();
           } else {
             displayModule(nextWorkspaceName, nextModule);
@@ -288,13 +306,16 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     try {
       moduleAutoPinEnabled = false;
       if (backwardHistoryEntries.size() > 0) {
-        ModuleHistoryEntry previousEntry = backwardHistoryEntries.remove(backwardHistoryEntries.size() - 1);
+        ModuleHistoryEntry previousEntry = backwardHistoryEntries
+            .remove(backwardHistoryEntries.size() - 1);
         String previousWorkspaceName = previousEntry.getWorkspaceName();
         Module previousModule = previousEntry.getModule();
         if (previousWorkspaceName != null && previousModule != null) {
           forwardHistoryEntries.add(0, previousEntry);
-          if (ObjectUtils.equals(previousWorkspaceName, getSelectedWorkspaceName())
-              && ObjectUtils.equals(previousModule, getSelectedModule(getSelectedWorkspaceName()))) {
+          if (ObjectUtils.equals(previousWorkspaceName,
+              getSelectedWorkspaceName())
+              && ObjectUtils.equals(previousModule,
+                  getSelectedModule(getSelectedWorkspaceName()))) {
             displayPreviousPinnedModule();
           } else {
             displayModule(previousWorkspaceName, previousModule);
@@ -324,7 +345,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * @param bypassModuleBoundaryActions
    *          should we bypass module onEnter/Exit actions ?
    */
-  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
+  protected void displayWorkspace(String workspaceName,
+      boolean bypassModuleBoundaryActions) {
     if ((getSelectedWorkspaceName() == null && workspaceName == null)
         || ObjectUtils.equals(getSelectedWorkspaceName(), workspaceName)) {
       return;
@@ -354,7 +376,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget, Map<String, Object> context) {
+  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
+      Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
@@ -383,7 +406,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     context.putAll(actionContext);
     // This is handled here since the selected module might have changed during
     // the action chain.
-    context.put(ActionContextConstants.CURRENT_MODULE, getSelectedModule(getSelectedWorkspaceName()));
+    context.put(ActionContextConstants.CURRENT_MODULE,
+        getSelectedModule(getSelectedWorkspaceName()));
     try {
       // Should be handled before getting there.
       // checkAccess(action);
@@ -455,7 +479,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * {@inheritDoc}
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
     return controllerDescriptor.getI18nDescription(translationProvider, locale);
   }
 
@@ -463,7 +488,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * {@inheritDoc}
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
     return controllerDescriptor.getI18nName(translationProvider, locale);
   }
 
@@ -483,14 +509,16 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   @Override
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    initialActionContext.putAll(getBackendController().getInitialActionContext());
+    initialActionContext.putAll(getBackendController()
+        .getInitialActionContext());
     if (dialogContextStack != null) {
       for (int i = dialogContextStack.size() - 1; i >= 0; i--) {
         initialActionContext.putAll(dialogContextStack.get(i));
       }
     }
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
-    initialActionContext.put(ActionContextConstants.MODULE, selectedModules.get(getSelectedWorkspaceName()));
+    initialActionContext.put(ActionContextConstants.MODULE,
+        selectedModules.get(getSelectedWorkspaceName()));
     return initialActionContext;
   }
 
@@ -500,7 +528,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   @Override
   public Locale getLocale() {
     if (getBackendController() != null) {
-      Locale sessionLocale = getBackendController().getApplicationSession().getLocale();
+      Locale sessionLocale = getBackendController().getApplicationSession()
+          .getLocale();
       if (sessionLocale != null) {
         return sessionLocale;
       }
@@ -893,7 +922,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController peerController, Locale theClientLocale, TimeZone theClientTimeZone) {
+  public boolean start(IBackendController peerController,
+      Locale theClientLocale, TimeZone theClientTimeZone) {
     this.clientLocale = theClientLocale;
     Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
@@ -918,8 +948,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   @Override
   public boolean stop() {
     if (getApplicationSession().getPrincipal() != null) {
-      LOG.info("User {} logged out for session {}.", getApplicationSession().getUsername(), getApplicationSession()
-          .getId());
+      LOG.info("User {} logged out for session {}.", getApplicationSession()
+          .getUsername(), getApplicationSession().getId());
     }
     if (selectedModules != null) {
       selectedModules.clear();
@@ -954,7 +984,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   protected UsernamePasswordHandler createLoginCallbackHandler() {
     UsernamePasswordHandler uph = createUsernamePasswordHandler();
     String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
-    if (savedUserPass != null && savedUserPass.length == 2 && savedUserPass[0] != null) {
+    if (savedUserPass != null && savedUserPass.length == 2
+        && savedUserPass[0] != null) {
       uph.setUsername(savedUserPass[0]);
       uph.setPassword(savedUserPass[1]);
       uph.setRememberMe(true);
@@ -1025,9 +1056,11 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * @return the login view
    */
   protected IView<E> createLoginView() {
-    IView<E> loginView = getViewFactory().createView(getLoginViewDescriptor(), this, getLocale());
-    IValueConnector loginModelConnector = getBackendController().createModelConnector("login",
-        getLoginViewDescriptor().getModelDescriptor());
+    IView<E> loginView = getViewFactory().createView(getLoginViewDescriptor(),
+        this, getLocale());
+    IValueConnector loginModelConnector = getBackendController()
+        .createModelConnector("login",
+            getLoginViewDescriptor().getModelDescriptor());
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
     loginModelConnector.setConnectorValue(getLoginCallbackHandler());
     return loginView;
@@ -1041,8 +1074,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * @return the the module area view to display the modules content.
    */
   protected IView<E> createModuleAreaView(String workspaceName) {
-    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(new WorkspaceCardViewDescriptor(), this,
-        getLocale());
+    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(
+        new WorkspaceCardViewDescriptor(), this, getLocale());
     workspaceViews.put(workspaceName, moduleAreaView);
     return moduleAreaView;
   }
@@ -1055,7 +1088,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   protected ActionList createWorkspaceActionList() {
     ActionList workspaceSelectionActionList = new ActionList();
     workspaceSelectionActionList.setName("workspaces");
-    workspaceSelectionActionList.setIconImageURL(getWorkspacesMenuIconImageUrl());
+    workspaceSelectionActionList
+        .setIconImageURL(getWorkspacesMenuIconImageUrl());
     List<IDisplayableAction> workspaceSelectionActions = new ArrayList<IDisplayableAction>();
     for (String workspaceName : getWorkspaceNames()) {
       Workspace workspace = getWorkspace(workspaceName);
@@ -1063,10 +1097,12 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
         try {
           pushToSecurityContext(workspace);
           WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
-          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+              .getViewDescriptor();
           workspaceSelectionAction.setWorkspaceName(workspaceName);
           workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
-          workspaceSelectionAction.setDescription(workspaceViewDescriptor.getDescription());
+          workspaceSelectionAction.setDescription(workspaceViewDescriptor
+              .getDescription());
           workspaceSelectionAction.setIcon(workspaceViewDescriptor.getIcon());
           workspaceSelectionActions.add(workspaceSelectionAction);
         } finally {
@@ -1113,22 +1149,27 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    */
   protected IView<E> createWorkspaceNavigator(final String workspaceName,
       IViewDescriptor workspaceNavigatorViewDescriptor) {
-    IView<E> workspaceNavigatorView = viewFactory.createView(workspaceNavigatorViewDescriptor, this, getLocale());
+    IView<E> workspaceNavigatorView = viewFactory.createView(
+        workspaceNavigatorViewDescriptor, this, getLocale());
     IItemSelectable workspaceNavigator;
     if (workspaceNavigatorView.getConnector() instanceof IItemSelectable) {
-      workspaceNavigator = (IItemSelectable) workspaceNavigatorView.getConnector();
+      workspaceNavigator = (IItemSelectable) workspaceNavigatorView
+          .getConnector();
     } else {
-      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceNavigatorView.getConnector())
+      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceNavigatorView
+          .getConnector())
           .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     }
     workspaceNavigator.addItemSelectionListener(new IItemSelectionListener() {
 
       @Override
       public void selectedItemChange(ItemSelectionEvent event) {
-        navigatorSelectionChanged(workspaceName, (ICompositeValueConnector) event.getSelectedItem());
+        navigatorSelectionChanged(workspaceName,
+            (ICompositeValueConnector) event.getSelectedItem());
       }
     });
-    workspaceNavigatorConnectors.put(workspaceName, (ICompositeValueConnector) workspaceNavigatorView.getConnector());
+    workspaceNavigatorConnectors.put(workspaceName,
+        (ICompositeValueConnector) workspaceNavigatorView.getConnector());
     return workspaceNavigatorView;
   }
 
@@ -1140,7 +1181,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * @param reuseCurrent
    *          set to true to reuse an existing modal dialog.
    */
-  protected void displayModalDialog(Map<String, Object> context, boolean reuseCurrent) {
+  protected void displayModalDialog(Map<String, Object> context,
+      boolean reuseCurrent) {
     if (!reuseCurrent || dialogContextStack.size() == 0) {
       LOG.debug("Popping-up modal dialog.");
       dialogContextStack.add(0, context);
@@ -1193,7 +1235,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       ExitAction<E, F, G> action = new ExitAction<E, F, G>();
       action.setName("quit.name");
       action.setDescription("quit.description");
-      action.setIconImageURL(getViewFactory().getIconFactory().getCancelIconImageURL());
+      action.setIconImageURL(getViewFactory().getIconFactory()
+          .getCancelIconImageURL());
       exitAction = action;
     }
     return exitAction;
@@ -1303,7 +1346,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   public void loggedIn(Subject subject) {
     UsernamePasswordHandler uph = getLoginCallbackHandler();
     if (uph.isRememberMe()) {
-      putClientPreference(UP_KEY, encodeUserPass(uph.getUsername(), uph.getPassword()));
+      putClientPreference(UP_KEY,
+          encodeUserPass(uph.getUsername(), uph.getPassword()));
     } else {
       removeClientPreference(UP_KEY);
     }
@@ -1319,7 +1363,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
             pushToSecurityContext(workspace);
             workspace.setSecurityHandler(this);
             translateWorkspace(workspace);
-            filteredWorkspaces.put(workspaceEntry.getKey(), workspaceEntry.getValue());
+            filteredWorkspaces.put(workspaceEntry.getKey(),
+                workspaceEntry.getValue());
           } finally {
             restoreLastSecurityContextSnapshot();
           }
@@ -1373,10 +1418,12 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
         loggedIn(lc.getSubject());
       } catch (LoginException le) {
         if (le.getCause() != null) {
-          LOG.error("A technical exception occurred on login module.", le.getCause());
+          LOG.error("A technical exception occurred on login module.",
+              le.getCause());
         }
         if (lch instanceof UsernamePasswordHandler) {
-          LOG.info("User {} failed to log in for session {}.", ((UsernamePasswordHandler) lch).getUsername(),
+          LOG.info("User {} failed to log in for session {}.",
+              ((UsernamePasswordHandler) lch).getUsername(),
               getApplicationSession().getId());
         }
         return false;
@@ -1384,8 +1431,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     } else {
       loggedIn(getAnonymousSubject());
     }
-    LOG.info("User {} logged in  for session {}.", getApplicationSession().getUsername(), getApplicationSession()
-        .getId());
+    LOG.info("User {} logged in  for session {}.", getApplicationSession()
+        .getUsername(), getApplicationSession().getId());
     return true;
   }
 
@@ -1413,9 +1460,11 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    *          the DataIntegrityViolationException.
    * @return the translation key to use.
    */
-  protected String refineIntegrityViolationTranslationKey(DataIntegrityViolationException exception) {
+  protected String refineIntegrityViolationTranslationKey(
+      DataIntegrityViolationException exception) {
     if (exception.getCause() instanceof ConstraintViolationException) {
-      ConstraintViolationException cve = (ConstraintViolationException) exception.getCause();
+      ConstraintViolationException cve = (ConstraintViolationException) exception
+          .getCause();
       if (cve.getSQL() != null && cve.getSQL().toUpperCase().contains("DELETE")) {
         return "error.fk.delete";
       } else if (cve.getConstraintName() != null) {
@@ -1429,9 +1478,11 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     return "error.integrity";
   }
 
-  private void navigatorSelectionChanged(String workspaceName, ICompositeValueConnector selectedConnector) {
+  private void navigatorSelectionChanged(String workspaceName,
+      ICompositeValueConnector selectedConnector) {
     if (tracksWorkspaceNavigator) {
-      if (selectedConnector != null && selectedConnector.getConnectorValue() instanceof Module) {
+      if (selectedConnector != null
+          && selectedConnector.getConnectorValue() instanceof Module) {
         Module selectedModule = (Module) selectedConnector.getConnectorValue();
         displayModule(workspaceName, selectedModule);
         // We do not reset displayed module on navigator selection anymore.
@@ -1449,18 +1500,21 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     }
   }
 
-  private Object[] synchWorkspaceNavigatorSelection(ICollectionConnectorListProvider navigatorConnector, Module module) {
+  private Object[] synchWorkspaceNavigatorSelection(
+      ICollectionConnectorListProvider navigatorConnector, Module module) {
     Object[] result = null;
     int moduleModelIndex = -1;
-    for (ICollectionConnector childCollectionConnector : navigatorConnector.getCollectionConnectors()) {
+    for (ICollectionConnector childCollectionConnector : navigatorConnector
+        .getCollectionConnectors()) {
       for (int i = 0; i < childCollectionConnector.getChildConnectorCount(); i++) {
-        IValueConnector childConnector = childCollectionConnector.getChildConnector(i);
+        IValueConnector childConnector = childCollectionConnector
+            .getChildConnector(i);
         if (module != null && module.equals(childConnector.getConnectorValue())) {
           moduleModelIndex = i;
         }
         if (childConnector instanceof ICollectionConnectorListProvider) {
-          Object[] subResult = synchWorkspaceNavigatorSelection((ICollectionConnectorListProvider) childConnector,
-              module);
+          Object[] subResult = synchWorkspaceNavigatorSelection(
+              (ICollectionConnectorListProvider) childConnector, module);
           if (subResult != null) {
             result = subResult;
           }
@@ -1479,7 +1533,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
 
   private void translateModule(Module module) {
     module.setI18nName(getTranslation(module.getName(), getLocale()));
-    module.setI18nDescription(getTranslation(module.getDescription(), getLocale()));
+    module.setI18nDescription(getTranslation(module.getDescription(),
+        getLocale()));
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {
         translateModule(subModule);
@@ -1489,7 +1544,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
 
   private void translateWorkspace(Workspace workspace) {
     workspace.setI18nName(getTranslation(workspace.getName(), getLocale()));
-    workspace.setI18nDescription(getTranslation(workspace.getDescription(), "", getLocale()));
+    workspace.setI18nDescription(getTranslation(workspace.getDescription(), "",
+        getLocale()));
     if (workspace.getModules() != null) {
       for (Module module : workspace.getModules()) {
         translateModule(module);
@@ -1713,8 +1769,10 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * {@inheritDoc}
    */
   @Override
-  public String getTranslation(String key, Object[] args, String defaultMessage, Locale locale) {
-    return getBackendController().getTranslation(key, args, defaultMessage, locale);
+  public String getTranslation(String key, Object[] args,
+      String defaultMessage, Locale locale) {
+    return getBackendController().getTranslation(key, args, defaultMessage,
+        locale);
   }
 
   /**
@@ -1725,11 +1783,13 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     Map<String, Object> currentSecurityContext = getSecurityContext();
     int snapshotsToRestore = 0;
     try {
-      if (!currentSecurityContext.containsKey(SecurityContextConstants.WORKSPACE)) {
+      if (!currentSecurityContext
+          .containsKey(SecurityContextConstants.WORKSPACE)) {
         pushToSecurityContext(getWorkspace(getSelectedWorkspaceName()));
         snapshotsToRestore++;
       }
-      if (!currentSecurityContext.containsKey(SecurityContextConstants.MODULE_CHAIN)) {
+      if (!currentSecurityContext
+          .containsKey(SecurityContextConstants.MODULE_CHAIN)) {
         pushToSecurityContext(getSelectedModule(getSelectedWorkspaceName()));
         snapshotsToRestore++;
       }
@@ -1801,8 +1861,9 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       sessionId = getApplicationSession().getId();
       userId = getApplicationSession().getUsername();
     }
-    LOG.error("An unexpected error occurred for user {} on session {}.", new Object[] {
-        userId, sessionId, ex
-    });
+    LOG.error("An unexpected error occurred for user {} on session {}.",
+        new Object[] {
+            userId, sessionId, ex
+        });
   }
 }
