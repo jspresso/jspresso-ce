@@ -73,6 +73,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   private String                                                digestAlgorithm;
   private String                                                hashEncoding;
+  private boolean                                               allowEmptyPasswords      = true;
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
@@ -111,14 +112,32 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
           "Typed and retyped passwords are different.",
           "password.typed.retyped.different");
     }
+    checkPasswordValidity(typedPasswd);
     UserPrincipal principal = getApplicationSession(context).getPrincipal();
     if (changePassword(principal, (String) actionParam.get(PASSWD_CURRENT),
         typedPasswd)) {
-      setActionParameter(getTranslationProvider(context).getTranslation(
-          "password.change.success", getLocale(context)), context);
+      setActionParameter(
+          getTranslationProvider(context).getTranslation(
+              "password.change.success", getLocale(context)), context);
       return super.execute(actionHandler, context);
     }
     return false;
+  }
+
+  /**
+   * Gives the opportunity to check the new password validity against some
+   * business rule. Buy default, it only checks that the password is not empty
+   * if <code>allowEmptyPassword</code> is <code>false</code>.
+   * 
+   * @param typedPasswd
+   *          the password to check.
+   */
+  protected void checkPasswordValidity(String typedPasswd) {
+    if (!isAllowEmptyPasswords()
+        && (typedPasswd == null || typedPasswd.length() == 0)) {
+      throw new ActionBusinessException("Empty passwords are not allowed.",
+          "password.empty.disallowed");
+    }
   }
 
   /**
@@ -234,5 +253,26 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   protected String getPasswordStorePrefix() {
     return "";
+  }
+
+  /**
+   * Gets the allowEmptyPasswords.
+   * 
+   * @return the allowEmptyPasswords.
+   */
+  public boolean isAllowEmptyPasswords() {
+    return allowEmptyPasswords;
+  }
+
+  /**
+   * Configures the possibility to choose an empty password.
+   * <p>
+   * Default value is <code>true</code>, i.e. allow for empty passwords.
+   * 
+   * @param allowEmptyPasswords
+   *          the allowEmptyPasswords to set.
+   */
+  public void setAllowEmptyPasswords(boolean allowEmptyPasswords) {
+    this.allowEmptyPasswords = allowEmptyPasswords;
   }
 }
