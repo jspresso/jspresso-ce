@@ -81,10 +81,13 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  //@formatter:off
-  private static final Logger  LOG              = LoggerFactory
-                                                    .getLogger(AbstractComponentInvocationHandler.class);
-  //@formatter:on
+
+
+
+  // @formatter:off
+  private static final Logger LOG              = LoggerFactory
+                                                  .getLogger(AbstractComponentInvocationHandler.class);
+  // @formatter:on
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
@@ -105,6 +108,14 @@ public abstract class AbstractComponentInvocationHandler implements
   private Map<String, InlineReferenceTracker>                                          referenceTrackers;
 
   private static final String                                                          DOT              = ".";
+  private static final Collection<String>                                              LIFECYCLE_METHOD_NAMES;
+  static {
+    Collection<String> methodNames = new HashSet<String>();
+    for (Method m : ILifecycleCapable.class.getMethods()) {
+      methodNames.add(m.getName());
+    }
+    LIFECYCLE_METHOD_NAMES = methodNames;
+  }
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -213,17 +224,10 @@ public abstract class AbstractComponentInvocationHandler implements
       propertyProcessorsEnabled = ((Boolean) args[0]).booleanValue();
       return null;
     } else {
-      boolean isLifecycleMethod = false;
-      try {
-        isLifecycleMethod = ILifecycleCapable.class.getMethod(methodName,
-            method.getParameterTypes()) != null;
-      } catch (NoSuchMethodException ignored) {
-        // this is certainly normal.
-      }
-      if (isLifecycleMethod) {
+      if (isLifecycleMethod(method)) {
         return new Boolean(invokeLifecycleInterceptors(proxy, method, args));
       }
-      AccessorInfo accessorInfo = new AccessorInfo(method);
+      AccessorInfo accessorInfo = getAccessorInfo(method);
       EAccessorType accessorType = accessorInfo.getAccessorType();
       IPropertyDescriptor propertyDescriptor = null;
       if (accessorType != EAccessorType.NONE) {
@@ -315,6 +319,30 @@ public abstract class AbstractComponentInvocationHandler implements
     throw new ComponentException(method.toString()
         + " is not supported on the component "
         + componentDescriptor.getComponentContract().getName());
+  }
+
+  private Map<Method, AccessorInfo> accessorInfoCache = new HashMap<Method, AccessorInfo>();
+
+  private synchronized AccessorInfo getAccessorInfo(Method method) {
+    AccessorInfo info = accessorInfoCache.get(method);
+    if (info == null) {
+      info = new AccessorInfo(method);
+      accessorInfoCache.put(method, info);
+    }
+    return info;
+  }
+
+  private boolean isLifecycleMethod(Method method) {
+    String methodName = method.getName();
+    if (LIFECYCLE_METHOD_NAMES.contains(methodName)) {
+      try {
+        return ILifecycleCapable.class.getMethod(methodName,
+            method.getParameterTypes()) != null;
+      } catch (NoSuchMethodException ignored) {
+        // this is certainly normal.
+      }
+    }
+    return false;
   }
 
   /**
