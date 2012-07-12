@@ -48,7 +48,8 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public abstract class AbstractEditComponentAction<E, F, G> extends
     FrontendAction<E, F, G> {
 
-  private IViewDescriptor viewDescriptor;
+  private IViewDescriptor                    viewDescriptor;
+  private List<? extends IDisplayableAction> complementaryActions;
 
   /**
    * {@inheritDoc}
@@ -56,16 +57,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
-
-    Object component = getComponentToEdit(context);
-
-    if (getOkAction() != null) {
-      actions.add(getOkAction());
-    }
-    if (getCancelAction() != null) {
-      actions.add(getCancelAction());
-    }
+    List<IDisplayableAction> actions = getDialogActions();
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
 
     IViewDescriptor editViewDescriptor = getViewDescriptor(context);
@@ -79,6 +71,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
     }
     context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
+    Object component = getComponentToEdit(context);
     IModelDescriptor modelDescriptor = getEditModelDescriptor(context);
     if (modelDescriptor == null
         && editViewDescriptor instanceof ICardViewDescriptor) {
@@ -97,6 +90,25 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
         .bind(componentView.getConnector(), componentConnector);
 
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Constructs the list of actions that will be installed on the dalog toolbar.
+   * 
+   * @return the list of actions that will be installed on the dalog toolbar.
+   */
+  protected List<IDisplayableAction> getDialogActions() {
+    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    if (getOkAction() != null) {
+      actions.add(getOkAction());
+    }
+    if (getComplementaryActions() != null) {
+      actions.addAll(getComplementaryActions());
+    }
+    if (getCancelAction() != null) {
+      actions.add(getCancelAction());
+    }
+    return actions;
   }
 
   /**
@@ -154,4 +166,26 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
   protected IModelDescriptor getEditModelDescriptor(Map<String, Object> context) {
     return getViewDescriptor(context).getModelDescriptor();
   }
+
+  /**
+   * Gets the complementaryActions.
+   * 
+   * @return the complementaryActions.
+   */
+  public List<? extends IDisplayableAction> getComplementaryActions() {
+    return complementaryActions;
+  }
+
+  /**
+   * Installs a list of complementary actions to install between the ok and
+   * cancel actions.
+   * 
+   * @param complementaryActions
+   *          the complementaryActions to set.
+   */
+  public void setComplementaryActions(
+      List<? extends IDisplayableAction> complementaryActions) {
+    this.complementaryActions = complementaryActions;
+  }
+
 }
