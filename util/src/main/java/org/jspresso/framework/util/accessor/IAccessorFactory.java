@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.util.accessor;
 
+import java.lang.reflect.Method;
+
+import org.jspresso.framework.util.bean.AccessorInfo;
+
 /**
  * This interface specify the contract of property accessor factories.
  * 
@@ -30,11 +34,11 @@ public interface IAccessorFactory {
    * Creates a new java bean collection property accessor.
    * 
    * @param property
-   *            the property to be accessed.
+   *          the property to be accessed.
    * @param beanClass
-   *            the java bean class.
+   *          the java bean class.
    * @param elementClass
-   *            the collection element class.
+   *          the collection element class.
    * @return the collection property accessor.
    */
   ICollectionAccessor createCollectionPropertyAccessor(String property,
@@ -44,10 +48,19 @@ public interface IAccessorFactory {
    * Creates a new java bean property accessor .
    * 
    * @param property
-   *            the property to be accessed.
+   *          the property to be accessed.
    * @param beanClass
-   *            the java bean class.
+   *          the java bean class.
    * @return the property accessor.
    */
   IAccessor createPropertyAccessor(String property, Class<?> beanClass);
+
+  /**
+   * Retrieves accessor information from a method.
+   * 
+   * @param method
+   *          the method to retrieve infos for.
+   * @return the accessor infos.
+   */
+  AccessorInfo getAccessorInfo(Method method);
 }

@@ -236,7 +236,7 @@ public abstract class AbstractComponentInvocationHandler implements
       if (isLifecycleMethod(method)) {
         return new Boolean(invokeLifecycleInterceptors(proxy, method, args));
       }
-      AccessorInfo accessorInfo = getAccessorInfo(method);
+      AccessorInfo accessorInfo = getAccessorFactory().getAccessorInfo(method);
       EAccessorType accessorType = accessorInfo.getAccessorType();
       IPropertyDescriptor propertyDescriptor = null;
       if (accessorType != EAccessorType.NONE) {
@@ -327,17 +327,6 @@ public abstract class AbstractComponentInvocationHandler implements
     throw new ComponentException(method.toString()
         + " is not supported on the component "
         + componentDescriptor.getComponentContract().getName());
-  }
-
-  private Map<Method, AccessorInfo> accessorInfoCache = new HashMap<Method, AccessorInfo>();
-
-  private synchronized AccessorInfo getAccessorInfo(Method method) {
-    AccessorInfo info = accessorInfoCache.get(method);
-    if (info == null) {
-      info = new AccessorInfo(method);
-      accessorInfoCache.put(method, info);
-    }
-    return info;
   }
 
   private boolean isLifecycleMethod(Method method) {

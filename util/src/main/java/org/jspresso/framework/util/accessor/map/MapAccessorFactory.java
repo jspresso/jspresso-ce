@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.util.accessor.map;
 
+import org.jspresso.framework.util.accessor.AbstractAccessorFactory;
 import org.jspresso.framework.util.accessor.IAccessor;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MapAccessorFactory implements IAccessorFactory {
+public class MapAccessorFactory extends AbstractAccessorFactory {
 
   /**
    * Creates a new <code>MapCollectionAccessor</code> on the collection
@@ -38,9 +38,8 @@ public class MapAccessorFactory implements IAccessorFactory {
    */
   @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
-      @SuppressWarnings("unused")
-      Class<?> beanClass, @SuppressWarnings("unused")
-      Class<?> elementClass) {
+      @SuppressWarnings("unused") Class<?> beanClass,
+      @SuppressWarnings("unused") Class<?> elementClass) {
     return new MapCollectionAccessor(property);
   }
 
@@ -51,8 +50,7 @@ public class MapAccessorFactory implements IAccessorFactory {
    */
   @Override
   public IAccessor createPropertyAccessor(String property,
-      @SuppressWarnings("unused")
-      Class<?> beanClass) {
+      @SuppressWarnings("unused") Class<?> beanClass) {
     return new MapPropertyAccessor(property);
   }
 }

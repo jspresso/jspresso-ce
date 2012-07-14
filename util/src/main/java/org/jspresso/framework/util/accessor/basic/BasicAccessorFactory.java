@@ -20,6 +20,7 @@ package org.jspresso.framework.util.accessor.basic;
 
 import java.util.Map;
 
+import org.jspresso.framework.util.accessor.AbstractAccessorFactory;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
@@ -31,7 +32,7 @@ import org.jspresso.framework.util.bean.MissingPropertyException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicAccessorFactory implements IAccessorFactory {
+public class BasicAccessorFactory extends AbstractAccessorFactory {
 
   private IAccessorFactory beanAccessorFactory;
   private IAccessorFactory mapAccessorFactory;
