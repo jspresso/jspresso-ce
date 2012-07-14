@@ -20,11 +20,10 @@ package org.jspresso.framework.util.accessor.bean;
 
 import java.util.List;
 
+import org.jspresso.framework.util.accessor.AbstractAccessorFactory;
 import org.jspresso.framework.util.accessor.IAccessor;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.PropertyHelper;
-
 
 /**
  * This is the default implementation of the accessor factory.
@@ -32,7 +31,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanAccessorFactory implements IAccessorFactory {
+public class BeanAccessorFactory extends AbstractAccessorFactory {
 
   /**
    * Creates a new <code>BeanCollectionAccessor</code> on the collection

@@ -3,8 +3,8 @@
  */
 package org.jspresso.framework.model.map;
 
+import org.jspresso.framework.util.accessor.AbstractAccessorFactory;
 import org.jspresso.framework.util.accessor.IAccessor;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
@@ -14,7 +14,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
+public class DescriptorAwareMapAccessorFactory extends AbstractAccessorFactory {
 
   /**
    * Creates a new <code>DescriptorAwareMapCollectionAccessor</code> on the
@@ -24,9 +24,8 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
    */
   @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
-      @SuppressWarnings("unused")
-      Class<?> beanClass, @SuppressWarnings("unused")
-      Class<?> elementClass) {
+      @SuppressWarnings("unused") Class<?> beanClass,
+      @SuppressWarnings("unused") Class<?> elementClass) {
     return new DescriptorAwareMapCollectionAccessor(property);
   }
 
@@ -38,8 +37,7 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
    */
   @Override
   public IAccessor createPropertyAccessor(String property,
-      @SuppressWarnings("unused")
-      Class<?> beanClass) {
+      @SuppressWarnings("unused") Class<?> beanClass) {
     return new DescriptorAwareMapPropertyAccessor(property);
   }
 
