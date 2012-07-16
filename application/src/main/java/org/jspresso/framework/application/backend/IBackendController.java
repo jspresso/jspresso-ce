@@ -480,6 +480,18 @@ public interface IBackendController extends IController,
   Set<AsyncActionExecutor> getRunningExecutors();
 
   /**
+   * Returns the list of completed asynchronous action executors.
+   * 
+   * @return the list of completed asynchronous action executors.
+   */
+  Set<AsyncActionExecutor> getCompletedExecutors();
+
+  /**
+   * Purges completed asynchronous action executors.
+   */
+  void purgeCompletedExecutors();
+
+  /**
    * Gets the entity dirty properties (changed properties that need to be
    * updated to the persistent store as well as computed properties if
    * includeComputed is set to <code>true</code>).

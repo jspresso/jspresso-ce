@@ -40,6 +40,7 @@ import java.util.TimeZone;
 import javax.security.auth.Subject;
 
 import org.apache.commons.collections.map.LRUMap;
+import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
@@ -150,6 +151,8 @@ public abstract class AbstractBackendController extends AbstractController
 
   private IBackendControllerFactory                        slaveControllerFactory;
   private ThreadGroup                                      asyncActionsThreadGroup;
+  private Set<AsyncActionExecutor>                         asyncExecutors;
+  private int                                              asyncExecutorsMaxCount;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -163,6 +166,8 @@ public abstract class AbstractBackendController extends AbstractController
         "entitiesExcludedFromSessionSanityChecks");
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
+    asyncExecutors = new LinkedHashSet<AsyncActionExecutor>();
+    setAsyncExecutorsMaxCount(10);
   }
 
   /**
@@ -308,6 +313,15 @@ public abstract class AbstractBackendController extends AbstractController
       context.putAll(actionContext);
     }
     if (action.isAsynchronous()) {
+      int currentExecutorsCount = getRunningExecutors().size();
+      int maxExecutorsCount = getAsyncExecutorsMaxCount(context);
+      if (maxExecutorsCount >= 0 && currentExecutorsCount >= maxExecutorsCount) {
+        throw new ActionBusinessException(
+            "The number of concurrent asynchronous actions has exceeded the allowed max value : "
+                + currentExecutorsCount, "async.count.exceeded", new Object[] {
+              new Integer(currentExecutorsCount)
+            });
+      }
       executeAsynchronously(action, context);
       return true;
     } else if (action.isTransactional()) {
@@ -336,6 +350,11 @@ public abstract class AbstractBackendController extends AbstractController
     slaveBackendController.setApplicationSession(getApplicationSession());
     AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action,
         context, asyncActionsThreadGroup, slaveBackendController);
+    asyncExecutors.add(slaveExecutor);
+    Set<AsyncActionExecutor> oldRunningExecutors = new LinkedHashSet<AsyncActionExecutor>(
+        getRunningExecutors());
+    firePropertyChange("runningExecutors", oldRunningExecutors,
+        getRunningExecutors());
     slaveExecutor.start();
     if (LOG.isDebugEnabled()) {
       LOG.debug("List of running executors :");
@@ -2262,5 +2281,49 @@ public abstract class AbstractBackendController extends AbstractController
     asyncActionsThreadGroup.enumerate(activeExecutors);
     return new LinkedHashSet<AsyncActionExecutor>(
         Arrays.asList(activeExecutors));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Set<AsyncActionExecutor> getCompletedExecutors() {
+    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<AsyncActionExecutor>(
+        asyncExecutors);
+    completedExecutors.removeAll(getRunningExecutors());
+    return completedExecutors;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void purgeCompletedExecutors() {
+    Set<AsyncActionExecutor> oldValue = new LinkedHashSet<AsyncActionExecutor>(
+        getCompletedExecutors());
+    asyncExecutors.removeAll(getCompletedExecutors());
+    firePropertyChange("completedExecutors", oldValue, getCompletedExecutors());
+  }
+
+  /**
+   * Gets the asyncExecutorsMaxCount.
+   * 
+   * @param context
+   *          the action context.
+   * @return the asyncExecutorsMaxCount.
+   */
+  protected int getAsyncExecutorsMaxCount(Map<String, Object> context) {
+    return asyncExecutorsMaxCount;
+  }
+
+  /**
+   * Configures the maximum count of concurrent asynchronous action executors.
+   * It defaults to <code>10</code>.
+   * 
+   * @param asyncExecutorsMaxCount
+   *          the asyncExecutorsMaxCount to set.
+   */
+  public void setAsyncExecutorsMaxCount(int asyncExecutorsMaxCount) {
+    this.asyncExecutorsMaxCount = asyncExecutorsMaxCount;
   }
 }

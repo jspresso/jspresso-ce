@@ -25,6 +25,7 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -35,7 +36,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IController extends IActionHandler {
+public interface IController extends IActionHandler, IPropertyChangeCapable {
 
   /**
    * This method gets executed when a user succesfully logs in.

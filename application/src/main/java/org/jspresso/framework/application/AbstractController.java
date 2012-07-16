@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
@@ -40,7 +41,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractController implements IController {
+public abstract class AbstractController extends AbstractPropertyChangeCapable implements IController {
 
   private IExceptionHandler customExceptionHandler;
 
