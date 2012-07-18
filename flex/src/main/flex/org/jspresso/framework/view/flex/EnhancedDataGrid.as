@@ -173,17 +173,19 @@ package org.jspresso.framework.view.flex {
     }
     
     override protected function keyDownHandler(event:KeyboardEvent):void {
-      switch (event.keyCode) {
-        case Keyboard.LEFT:
-          if(horizontalScrollPosition > 0) {
-            horizontalScrollPosition -= 1;
-          }
-          break;
-        case Keyboard.RIGHT:
-          if(horizontalScrollPosition < columnCount -1) {
-            horizontalScrollPosition += 1;
-          }
-          break;
+      if(editedItemPosition == null) {
+        switch (event.keyCode) {
+          case Keyboard.LEFT:
+            if(horizontalScrollPosition > 0) {
+              horizontalScrollPosition -= 1;
+            }
+            break;
+          case Keyboard.RIGHT:
+            if(horizontalScrollPosition < columnCount -1) {
+              horizontalScrollPosition += 1;
+            }
+            break;
+        }
       }
       super.keyDownHandler(event);
     }
