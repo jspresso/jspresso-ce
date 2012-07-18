@@ -36,6 +36,7 @@ package org.jspresso.framework.gui.remote {
         private var _label:String;
         private var _state:RemoteValueState;
         private var _toolTip:String;
+        private var _toolTipState:RemoteValueState;
         private var _preferredSize:Dimension;
         private var _styleName:String;
         
@@ -108,6 +109,13 @@ package org.jspresso.framework.gui.remote {
             return _toolTip;
         }
 
+        public function get toolTipState():RemoteValueState {
+          return _toolTipState;
+        }
+        public function set toolTipState(value:RemoteValueState):void {
+          _toolTipState = value;
+        }
+        
         public function set preferredSize(value:Dimension):void {
             _preferredSize = value;
         }

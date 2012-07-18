@@ -24,6 +24,7 @@ package org.jspresso.framework.view.flex {
     
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remoteComponent:RComponent;
+    private var _toolTipIndex:int;
 
     private var _valueChangeListener:ChangeWatcher;
     
@@ -47,6 +48,13 @@ package org.jspresso.framework.view.flex {
       return _remoteComponent;
     }
     
+    public function set toolTipIndex(value:int):void {
+      _toolTipIndex = value;
+    }
+    public function get toolTipIndex():int {
+      return _toolTipIndex;
+    }
+
     private function updateComponents():void {
       if(viewFactory != null && remoteComponent != null) {
         if(state == null || editor == null) {
@@ -76,5 +84,17 @@ package org.jspresso.framework.view.flex {
   	protected function refresh(value:Object):void {
       state.value = value;
   	}
+
+    protected override function commitProperties():void {
+      super.commitProperties();
+      if(remoteComponent && toolTipIndex >= 0) {
+        var toolTipValue:Object = ((data as RemoteCompositeValueState).children[toolTipIndex] as RemoteValueState).value;
+        if(toolTipValue != null) {
+          toolTip = toolTipValue.toString();
+        } else {
+          toolTip = null;
+        }
+      }
+    }
   }
 }

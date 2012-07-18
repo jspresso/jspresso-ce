@@ -74,6 +74,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
       check : "String",
       nullable : true
     },
+    toolTipState :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable : true
+    },
     preferredSize :
     {
       check : "org.jspresso.framework.util.gui.Dimension",

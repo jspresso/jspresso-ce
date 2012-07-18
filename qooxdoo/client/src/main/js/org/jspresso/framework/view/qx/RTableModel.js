@@ -97,6 +97,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     __sortedRows : null,
     /**@type Boolean*/
     __editable : true,
+    /**@type Array*/
+    __dynamicToolTipIndices : null,
     
     // overridden
     getRowCount : function() {
@@ -118,6 +120,11 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
       cellState.setValue(value);
     },
     
+    // overridden
+    setDynamicToolTipIndices : function(value) {
+      this.__dynamicToolTipIndices = value;
+    },
+
     // overridden
     getRowData : function(rowIndex) {
       if(this.__sortedRows) {
@@ -283,11 +290,20 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     getToolTip: function(column, row) {
       if (row >= 0) {
         if(column > 0) {
-          var v = this.getValue(column, row);
-          if(v != null && (v instanceof String || typeof(v) === 'string')) {
-            return v;
+          if(this.__dynamicToolTipIndices[column] >= 0) {
+            var v = this.getRowData(row)
+                        .getChildren().getItem(this.__dynamicToolTipIndices[column]).getValue();
+            if(v != null && (v instanceof String || typeof(v) === 'string')) {
+              return v;
+            }
+            return null;
+          } else {
+            var v = this.getValue(column, row);
+            if(v != null && (v instanceof String || typeof(v) === 'string')) {
+              return v;
+            }
+            return null;
           }
-          return null;
         }
         return this.getRowData(row).getValue();
       }

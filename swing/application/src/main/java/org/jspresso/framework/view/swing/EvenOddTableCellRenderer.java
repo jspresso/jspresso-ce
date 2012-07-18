@@ -45,6 +45,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
 
   private Color             backgroundBase;
   private Font              customFont;
+  private String            toolTipProperty;
 
   /**
    * {@inheritDoc}
@@ -62,19 +63,22 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
           isSelected, row));
       FontMetrics fm = getFontMetrics(getFont());
       if (table.convertColumnIndexToModel(column) == 0) {
-        TableModel tm = table.getModel();
-        if (tm instanceof AbstractTableSorter) {
-          tm = ((AbstractTableSorter) tm).getTableModel();
-        }
+        TableModel tm = getActualTableModel(table);
         if (tm instanceof CollectionConnectorTableModel) {
           setToolTipText(((CollectionConnectorTableModel) tm)
               .getRowToolTip(row));
         }
+      } else if (getToolTipProperty() != null) {
+        TableModel tm = getActualTableModel(table);
+        setToolTipText(((CollectionConnectorTableModel) tm).getCellToolTip(row,
+            getToolTipProperty()));
       } else {
         if (HtmlHelper.isHtml(getText())
             || fm.stringWidth(getText()) > table.getColumnModel()
                 .getColumn(column).getWidth()) {
           setToolTipText(getText());
+        } else {
+          setToolTipText(null);
         }
       }
     }
@@ -89,6 +93,14 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
       table.setRowHeight(row, ps.height);
     }
     return c;
+  }
+
+  private TableModel getActualTableModel(JTable table) {
+    TableModel tm = table.getModel();
+    if (tm instanceof AbstractTableSorter) {
+      tm = ((AbstractTableSorter) tm).getTableModel();
+    }
+    return tm;
   }
 
   /**
@@ -117,5 +129,24 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    */
   public void setCustomFont(Font customFont) {
     this.customFont = customFont;
+  }
+
+  /**
+   * Gets the toolTipProperty.
+   * 
+   * @return the toolTipProperty.
+   */
+  protected String getToolTipProperty() {
+    return toolTipProperty;
+  }
+
+  /**
+   * Sets the toolTipProperty.
+   * 
+   * @param toolTipProperty
+   *          the toolTipProperty to set.
+   */
+  public void setToolTipProperty(String toolTipProperty) {
+    this.toolTipProperty = toolTipProperty;
   }
 }

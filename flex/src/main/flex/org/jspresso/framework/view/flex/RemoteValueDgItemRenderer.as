@@ -37,12 +37,14 @@ package org.jspresso.framework.view.flex {
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
+    private var _toolTipIndex:int;
     private var _selectable:Boolean;
     private var _action:RAction;
     private var _actionHandler:IActionHandler;
     
     public function RemoteValueDgItemRenderer() {
       _index = -1;
+      _toolTipIndex = -1;
       addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
         label.selectable = _selectable;
       });
@@ -73,6 +75,13 @@ package org.jspresso.framework.view.flex {
     }
     public function get index():int {
       return _index;
+    }
+
+    public function set toolTipIndex(value:int):void {
+      _toolTipIndex = value;
+    }
+    public function get toolTipIndex():int {
+      return _toolTipIndex;
     }
     
     public function set selectable(value:Boolean):void {
@@ -167,14 +176,23 @@ package org.jspresso.framework.view.flex {
           toolTip = null;
         }
       } else {
-        if(HtmlUtil.isHtml(cellText)) {
-          // unconditional
-          toolTip = cellText;
-        } else {
-          if(toolTip) {
-            toolTip = cellText;
+        if(toolTipIndex >= 0) {
+          var toolTipValue:Object = ((data as RemoteCompositeValueState).children[toolTipIndex] as RemoteValueState).value;
+          if(toolTipValue != null) {
+            toolTip = toolTipValue.toString();
           } else {
             toolTip = null;
+          }
+        } else {
+          if(HtmlUtil.isHtml(cellText)) {
+            // unconditional
+            toolTip = cellText;
+          } else {
+            if(toolTip) {
+              toolTip = cellText;
+            } else {
+              toolTip = null;
+            }
           }
         }
       }

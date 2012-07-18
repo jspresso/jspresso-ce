@@ -19,7 +19,7 @@
 	  function stop()
 	  {
 	      // Here you'll need to provide the id of your Flex swf
-	      document.getElementById("hrsample-startup-flex-client").stop();
+	      document.getElementById("${application}-startup-flex-client").stop();
 	      //alert("Disconnected!");
 	  }
 	</script>

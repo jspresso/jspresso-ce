@@ -318,6 +318,25 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     return collectionConnector.getChildConnector(rowIndex).toString();
   }
 
+  /**
+   * Gets the value to display as cell toolTip.
+   * 
+   * @param rowIndex
+   *          the row index to compute the toolTip for.
+   * @param toolTipProperty
+   *          the tooltip property used to compute the tooltip.
+   * @return the row toolTip or null.
+   */
+  public String getCellToolTip(int rowIndex, String toolTipProperty) {
+    IValueConnector toolTipConnector = ((ICompositeValueConnector) collectionConnector
+        .getChildConnector(rowIndex)).getChildConnector(toolTipProperty);
+    if (toolTipConnector != null
+        && toolTipConnector.getConnectorValue() != null) {
+      return toolTipConnector.getConnectorValue().toString();
+    }
+    return null;
+  }
+
   private class TableConnectorListener implements IValueChangeListener {
 
     /**

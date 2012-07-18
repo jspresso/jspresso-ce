@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+
 /**
  * A tabular component.
  * 
@@ -26,14 +28,15 @@ package org.jspresso.framework.gui.remote;
  */
 public class RTable extends RCollectionComponent {
 
-  private static final long serialVersionUID = 4825156764599864408L;
+  private static final long         serialVersionUID = 4825156764599864408L;
 
-  private String[]          columnIds;
-  private RComponent[]      columns;
-  private RComponent[]      columnHeaders;
-  private boolean           horizontallyScrollable;
-  private boolean           sortable;
-  private RAction           sortingAction;
+  private String[]                  columnIds;
+  private RComponent[]              columns;
+  private RComponent[]              columnHeaders;
+  private RemoteCompositeValueState rowPrototype;
+  private boolean                   horizontallyScrollable;
+  private boolean                   sortable;
+  private RAction                   sortingAction;
 
   /**
    * Constructs a new <code>RTable</code> instance.
@@ -165,5 +168,24 @@ public class RTable extends RCollectionComponent {
    */
   public void setColumnHeaders(RComponent[] columnHeaders) {
     this.columnHeaders = columnHeaders;
+  }
+
+  /**
+   * Gets the rowPrototype.
+   * 
+   * @return the rowPrototype.
+   */
+  public RemoteCompositeValueState getRowPrototype() {
+    return rowPrototype;
+  }
+
+  /**
+   * Sets the rowPrototype.
+   * 
+   * @param rowPrototype
+   *          the rowPrototype to set.
+   */
+  public void setRowPrototype(RemoteCompositeValueState rowPrototype) {
+    this.rowPrototype = rowPrototype;
   }
 }

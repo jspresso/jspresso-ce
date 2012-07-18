@@ -34,6 +34,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable",
     {
       check : "Array"
     },
+    rowPrototype :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteCompositeValueState"
+    },
     sortingAction :
     {
       check : "org.jspresso.framework.gui.remote.RAction",

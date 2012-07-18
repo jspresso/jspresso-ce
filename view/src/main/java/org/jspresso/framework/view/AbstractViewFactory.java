@@ -1227,6 +1227,69 @@ public abstract class AbstractViewFactory<E, F, G> implements
       Locale locale);
 
   /**
+   * Computes the property name used to compute a property view dynamic tooltip
+   * or null if none or if the tooltip is a static one.
+   * 
+   * @param modelDescriptor
+   *          the component model descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the property name used to compute a property view dynamic tooltip
+   *         or null if none or if the tooltip is a static one.
+   */
+  protected String computePropertyDynamicToolTip(
+      IComponentDescriptor<?> modelDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IPropertyDescriptor propertyDescriptor) {
+    // Property dynamic tooltips
+    String propertyToolTipProperty = null;
+    String descriptionKey = null;
+    if (propertyViewDescriptor.getDescription() != null) {
+      descriptionKey = propertyViewDescriptor.getDescription();
+    } else {
+      descriptionKey = propertyDescriptor.getDescription();
+    }
+    if (descriptionKey != null) {
+      IPropertyDescriptor descriptionProperty = modelDescriptor
+          .getPropertyDescriptor(descriptionKey);
+      if (descriptionProperty != null) {
+        propertyToolTipProperty = descriptionProperty.getName();
+      }
+    }
+    return propertyToolTipProperty;
+  }
+
+  /**
+   * Computes the property name used to compute a component view dynamic tooltip
+   * or null if none or if the tooltip is a static one.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @param modelDescriptor
+   *          the model descriptor.
+   * @return the property name used to compute a component view dynamic tooltip
+   *         or null if none or if the tooltip is a static one.
+   */
+  protected String computeComponentDynamicToolTip(
+      IComponentViewDescriptor viewDescriptor,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Dynamic tooltips
+    String toolTipProperty = null;
+    if (viewDescriptor.getDescription() != null) {
+      IPropertyDescriptor descriptionProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getDescription());
+      if (descriptionProperty != null) {
+        toolTipProperty = descriptionProperty.getName();
+      }
+    } else {
+      toolTipProperty = modelDescriptor.getToHtmlProperty();
+    }
+    return toolTipProperty;
+  }
+
+  /**
    * Creates a composite view.
    * 
    * @param viewDescriptor

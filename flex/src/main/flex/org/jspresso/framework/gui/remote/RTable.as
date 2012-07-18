@@ -14,6 +14,7 @@
 
 
 package org.jspresso.framework.gui.remote {
+  import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 
 		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTable")]
@@ -22,6 +23,7 @@ package org.jspresso.framework.gui.remote {
         private var _columns:Array;
         private var _columnHeaders:Array;
         private var _columnIds:Array;
+        private var _rowPrototype:RemoteCompositeValueState;
         private var _sortingAction:RAction;
         private var _horizontallyScrollable:Boolean;
         private var _sortable:Boolean;
@@ -70,6 +72,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get sortable():Boolean {
             return _sortable;
+        }
+
+        public function get rowPrototype():RemoteCompositeValueState {
+          return _rowPrototype;
+        }
+        public function set rowPrototype(value:RemoteCompositeValueState):void {
+          _rowPrototype = value;
         }
     }
 }

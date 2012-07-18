@@ -528,23 +528,15 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
+    final JPanel viewComponent = createJPanel();
     IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor()).getComponentDescriptor();
-    // Dynamic toolTips
-    String toolTipProperty = null;
-    if (viewDescriptor.getDescription() != null) {
-      IPropertyDescriptor descriptionProperty = modelDescriptor
-          .getPropertyDescriptor(viewDescriptor.getDescription());
-      if (descriptionProperty != null) {
-        toolTipProperty = viewDescriptor.getDescription();
-      }
-    } else {
-      toolTipProperty = modelDescriptor.getToHtmlProperty();
-    }
+    String toolTipProperty = computeComponentDynamicToolTip(viewDescriptor,
+        modelDescriptor);
     IRenderableCompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
-    final JPanel viewComponent = createJPanel();
+    attachTooltipListener(viewComponent, connector.getRenderingConnector());
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -554,6 +546,7 @@ public class DefaultSwingViewFactory extends
     int currentY = 0;
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
+    List<IView<JComponent>> propertyViews = new ArrayList<IView<JComponent>>();
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
@@ -575,6 +568,8 @@ public class DefaultSwingViewFactory extends
           .isAccessGranted(propertyViewDescriptor);
       if (forbidden) {
         propertyView.setPeer(createSecurityComponent());
+      } else {
+        propertyViews.add(propertyView);
       }
       connector.addChildConnector(propertyView.getConnector().getId(),
           propertyView.getConnector());
@@ -709,7 +704,41 @@ public class DefaultSwingViewFactory extends
       }
       viewComponent.add(filler, constraints);
     }
-    attachTooltipListener(viewComponent, connector);
+    completePropertyViewsWithDynamicTooltips(connector, propertyViews, modelDescriptor);
+    applyComponentViewScrollability(viewDescriptor, viewComponent, view);
+    return view;
+  }
+
+  private void completePropertyViewsWithDynamicTooltips(
+      ICompositeValueConnector connector,
+      List<IView<JComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic tooltips
+    for (IView<JComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String propertyToolTipProperty = computePropertyDynamicToolTip(
+          modelDescriptor, propertyViewDescriptor, propertyDescriptor);
+      // Dynamic tooltip
+      if (propertyToolTipProperty != null) {
+        IValueConnector tooltipConnector = connector
+            .getChildConnector(propertyToolTipProperty);
+        if (tooltipConnector == null) {
+          tooltipConnector = getConnectorFactory().createValueConnector(
+              propertyToolTipProperty);
+          connector.addChildConnector(propertyToolTipProperty,
+              tooltipConnector);
+        }
+        attachTooltipListener(propertyView.getPeer(), tooltipConnector);
+      }
+    }
+  }
+
+  private void applyComponentViewScrollability(
+      IComponentViewDescriptor viewDescriptor, final JPanel viewComponent,
+      IView<JComponent> view) {
     if (viewDescriptor.isVerticallyScrollable()) {
       JScrollPane scrollPane = createJScrollPane();
       scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -724,7 +753,6 @@ public class DefaultSwingViewFactory extends
           .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
       view.setPeer(scrollPane);
     }
-    return view;
   }
 
   /**
@@ -733,24 +761,23 @@ public class DefaultSwingViewFactory extends
    * @param viewComponent
    *          the view component to attach the tooltip to
    * @param connector
-   *          the view connector.
+   *          the view connector resonsible for the tooltip.
    */
   protected void attachTooltipListener(final JComponent viewComponent,
-      IRenderableCompositeValueConnector connector) {
+      IValueConnector connector) {
     // Special toolTip handling
-    if (connector.getRenderingConnector() != null) {
-      connector.getRenderingConnector().addValueChangeListener(
-          new IValueChangeListener() {
+    if (connector != null) {
+      connector.addValueChangeListener(new IValueChangeListener() {
 
-            @Override
-            public void valueChange(ValueChangeEvent evt) {
-              if (evt.getNewValue() != null) {
-                viewComponent.setToolTipText(evt.getNewValue().toString());
-              } else {
-                viewComponent.setToolTipText(null);
-              }
-            }
-          });
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          if (evt.getNewValue() != null) {
+            viewComponent.setToolTipText(evt.getNewValue().toString());
+          } else {
+            viewComponent.setToolTipText(null);
+          }
+        }
+      });
     }
   }
 
@@ -2074,9 +2101,9 @@ public class DefaultSwingViewFactory extends
       String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
         configureTableColumn(actionHandler, locale, rowDescriptor, connector,
-            viewComponent, view, maxColumnSize, columnIndex,
-            columnViewDescriptorEntry, columnViewDescriptor, propertyName,
-            viewComponent.getModel());
+            rowConnectorPrototype, viewComponent, view, maxColumnSize,
+            columnIndex, columnViewDescriptorEntry, columnViewDescriptor,
+            propertyName, viewComponent.getModel());
         columnIndex++;
       }
     }
@@ -2118,7 +2145,8 @@ public class DefaultSwingViewFactory extends
 
   private void configureTableColumn(final IActionHandler actionHandler,
       Locale locale, IComponentDescriptor<?> rowDescriptor,
-      ICollectionConnector connector, JTable viewComponent,
+      ICollectionConnector connector,
+      ICompositeValueConnector rowConnectorPrototype, JTable viewComponent,
       IView<JComponent> view, int maxColumnSize, int columnIndex,
       Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry,
       IPropertyViewDescriptor columnViewDescriptor, String propertyName,
@@ -2168,6 +2196,22 @@ public class DefaultSwingViewFactory extends
         ((EvenOddTableCellRenderer) cellRenderer)
             .setCustomFont(((JComponent) cellRenderer).getFont());
       }
+    }
+    if (cellRenderer instanceof EvenOddTableCellRenderer) {
+      String propertyToolTipProperty = computePropertyDynamicToolTip(
+          rowDescriptor, columnViewDescriptor, propertyDescriptor);
+      if (propertyToolTipProperty != null) {
+        IValueConnector tooltipConnector = rowConnectorPrototype
+            .getChildConnector(propertyToolTipProperty);
+        if (tooltipConnector == null) {
+          tooltipConnector = getConnectorFactory().createValueConnector(
+              propertyToolTipProperty);
+          rowConnectorPrototype.addChildConnector(propertyToolTipProperty,
+              tooltipConnector);
+        }
+      }
+      ((EvenOddTableCellRenderer) cellRenderer)
+          .setToolTipProperty(propertyToolTipProperty);
     }
     if (columnViewDescriptor.getAction() != null
         && columnViewDescriptor.isReadOnly()) {

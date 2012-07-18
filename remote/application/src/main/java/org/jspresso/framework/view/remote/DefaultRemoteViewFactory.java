@@ -506,16 +506,8 @@ public class DefaultRemoteViewFactory extends
     IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor()).getComponentDescriptor();
     // Dynamic toolTips
-    String toolTipProperty = null;
-    if (viewDescriptor.getDescription() != null) {
-      IPropertyDescriptor descriptionProperty = modelDescriptor
-          .getPropertyDescriptor(viewDescriptor.getDescription());
-      if (descriptionProperty != null) {
-        toolTipProperty = viewDescriptor.getDescription();
-      }
-    } else {
-      toolTipProperty = modelDescriptor.getToHtmlProperty();
-    }
+    String toolTipProperty = computeComponentDynamicToolTip(viewDescriptor,
+        modelDescriptor);
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
@@ -528,6 +520,7 @@ public class DefaultRemoteViewFactory extends
     List<Integer> elementWidths = new ArrayList<Integer>();
     List<RComponent> elements = new ArrayList<RComponent>();
     List<RComponent> elementLabels = new ArrayList<RComponent>();
+    List<IView<RComponent>> propertyViews = new ArrayList<IView<RComponent>>();
 
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -554,6 +547,8 @@ public class DefaultRemoteViewFactory extends
         RComponent securityComponent = createSecurityComponent();
         securityComponent.setPreferredSize(new Dimension(1, 1));
         propertyView.setPeer(securityComponent);
+      } else {
+        propertyViews.add(propertyView);
       }
       elements.add(propertyView.getPeer());
       RLabel propertyLabel = createFormPropertyLabel(actionHandler, locale,
@@ -563,15 +558,7 @@ public class DefaultRemoteViewFactory extends
       connector.addChildConnector(propertyName, propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
-      // for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-      // propertyView.getConnector().addReadabilityGate(gate.clone());
-      // }
-      // }
       // if (propertyViewDescriptor.getWritabilityGates() != null) {
-      // for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-      // propertyView.getConnector().addWritabilityGate(gate.clone());
-      // }
-      // }
       // propertyView.getConnector().setLocallyWritable(
       // !propertyViewDescriptor.isReadOnly());
       if (propertyView.getPeer() instanceof RActionable
@@ -591,6 +578,8 @@ public class DefaultRemoteViewFactory extends
         ((RActionable) propertyView.getPeer()).setAction(action);
       }
     }
+    completePropertyViewsWithDynamicTooltips(connector, propertyViews,
+        modelDescriptor);
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));
     viewComponent.setElements(elements.toArray(new RComponent[0]));
     viewComponent.setElementLabels(elementLabels.toArray(new RComponent[0]));
@@ -1876,6 +1865,7 @@ public class DefaultRemoteViewFactory extends
     List<RComponent> columns = new ArrayList<RComponent>();
     List<RComponent> columnHeaders = new ArrayList<RComponent>();
     List<String> columnIds = new ArrayList<String>();
+    List<IView<RComponent>> propertyViews = new ArrayList<IView<RComponent>>();
     Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
         viewDescriptor, actionHandler);
     for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
@@ -1953,17 +1943,55 @@ public class DefaultRemoteViewFactory extends
                   new Dimension(
                       columnViewDescriptorEntry.getValue().intValue(), -1));
         }
+        propertyViews.add(column);
       }
     }
+    completePropertyViewsWithDynamicTooltips(rowConnectorPrototype,
+        propertyViews, rowDescriptor);
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
     viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
     viewComponent.setColumnIds(columnIds.toArray(new String[0]));
+    if (rowConnectorPrototype instanceof IRemoteStateOwner) {
+      viewComponent
+          .setRowPrototype((RemoteCompositeValueState) ((IRemoteStateOwner) rowConnectorPrototype)
+              .getState());
+    }
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
     return view;
+  }
+
+  private void completePropertyViewsWithDynamicTooltips(
+      ICompositeValueConnector connector,
+      List<IView<RComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic tooltips
+    for (IView<RComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String propertyToolTipProperty = computePropertyDynamicToolTip(
+          modelDescriptor, propertyViewDescriptor, propertyDescriptor);
+      // Dynamic tooltip
+      if (propertyToolTipProperty != null) {
+        IValueConnector tooltipConnector = connector
+            .getChildConnector(propertyToolTipProperty);
+        if (tooltipConnector == null) {
+          tooltipConnector = getConnectorFactory().createValueConnector(
+              propertyToolTipProperty);
+          connector.addChildConnector(propertyToolTipProperty,
+              tooltipConnector);
+        }
+        if (tooltipConnector instanceof IRemoteStateOwner) {
+          propertyView.getPeer().setToolTipState(
+              ((IRemoteStateOwner) tooltipConnector).getState());
+        }
+      }
+    }
   }
 
   /**

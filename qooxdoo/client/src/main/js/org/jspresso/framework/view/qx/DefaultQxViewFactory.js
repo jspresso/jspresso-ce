@@ -488,6 +488,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           .addTarget(tableModel, "editable", "writable", false);
       var columnIds = remoteTable.getColumnIds();
       var columnNames = new Array();
+      var columnToolTips = new Array();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         columnNames[i] = remoteTable.getColumns()[i].getLabel();
       }
@@ -632,7 +633,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           columnModel.getBehavior().setWidth(i, columnWidth,
               columnWidth < 50 ? 0 : columnWidth);
         }
+        columnToolTips[i] = -1;
+        if(rColumn.getToolTipState()) {
+          //indexof does not work from Json serialization
+          var ttsGuid = rColumn.getToolTipState().getGuid();
+          for (var j = 0; j < remoteTable.getRowPrototype().getChildren().length; j++) {
+            var colState = remoteTable.getRowPrototype().getChildren().getItem(j);
+            if(ttsGuid == colState.getGuid()) {
+              columnToolTips[i] = j;
+            }
+          }
+        }
       }
+      tableModel.setDynamicToolTipIndices(columnToolTips);
       table.addListener("cellClick", function(e) {
         var col = e.getColumn();
         var renderer = table.getTableColumnModel()
@@ -1656,6 +1669,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var compRow;
         var compCol;
         var compColSpan;
+        
+        this._bindDynamicTooltip(component, rComponent);
 
         if (remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = this.createComponent(remoteForm
@@ -1777,6 +1792,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return decoratedForm;
     },
 
+    _bindDynamicTooltip : function(component, rComponent) {
+      var toolTipState = rComponent.getToolTipState();
+      if(toolTipState) {
+        // de-dup state
+        if(this._getRemotePeerRegistry().isRegistered(toolTipState.getGuid())) {
+          toolTipState = this._getRemotePeerRegistry().getRegistered(toolTipState.getGuid());
+        } else {
+          this._getRemotePeerRegistry().register(rComponent.getToolTipState());
+        }
+        var modelController = new qx.data.controller.Object(toolTipState);
+        var toolTip = new qx.ui.tooltip.ToolTip();
+        toolTip.setRich(true);
+        modelController.addTarget(toolTip, "label", "value", false, {
+              converter : this._modelToViewFieldConverter
+            });
+        component.setToolTip(toolTip);
+      }
+    },
+    
     /**
      * @param {org.jspresso.framework.gui.remote.RSplitContainer}
      *            remoteSplitContainer

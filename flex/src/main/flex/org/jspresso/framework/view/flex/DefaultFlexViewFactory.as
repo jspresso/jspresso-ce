@@ -1284,6 +1284,8 @@ package org.jspresso.framework.view.flex {
         
         if(rComponent is RSecurityComponent) {
           sizeMaxComponentWidth(component, rComponent);
+        } else {
+          bindDynamicTooltip(component, rComponent);
         }
         
         if(remoteForm.labelsPosition != "NONE") {
@@ -1427,6 +1429,16 @@ package org.jspresso.framework.view.flex {
         decoratedForm = scroller;
       }
       return decoratedForm;
+    }
+    
+    protected function bindDynamicTooltip(component:UIComponent, rComponent:RComponent):void {
+      if(rComponent.toolTipState) {
+        getRemotePeerRegistry().register(rComponent.toolTipState);
+        var updateToolTip:Function = function (value:Object):void {
+          component.toolTip = value as String;
+        };
+        BindingUtils.bindSetter(updateToolTip, rComponent.toolTipState, "value", true);
+      }
     }
 
     protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
@@ -1898,6 +1910,10 @@ package org.jspresso.framework.view.flex {
         column.headerText = rColumnHeader.label;
         applyComponentStyle(column, rColumn);
         var itemRenderer:ClassFactory;
+        var ttIndex:int = -1;
+        if(rColumn.toolTipState != null) {
+          ttIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.toolTipState);
+        }
         if(rColumn is RComboBox) {
           var hasIcon:Boolean = false;
           for each(var icon:RIcon in (rColumn as RComboBox).icons) {
@@ -1912,14 +1928,16 @@ package org.jspresso.framework.view.flex {
                                      icons :(rColumn as RComboBox).icons,
                                      iconTemplate:_iconTemplate,
                                      showIcon:hasIcon,
-                                     index:i+1};
+                                     index:i+1,
+                                     toolTipIndex:ttIndex};
         } else if( rColumn is RCheckBox
                || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
                ||  rColumn is RImageComponent) {
           itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
           itemRenderer.properties = {viewFactory:this,
                                      remoteComponent:rColumn,
-                                     index:i+1};
+                                     index:i+1,
+                                     toolTipIndex:ttIndex};
         } else {
           var readOnly:Boolean = false;
           var columnAction:RAction = null;
@@ -1947,10 +1965,11 @@ package org.jspresso.framework.view.flex {
           column.setStyle("textAlign", alignment);
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
           itemRenderer.properties = {formatter:createFormatter(rColumn),
-                                     index:i+1,
                                      action:columnAction,
                                      actionHandler:getActionHandler(),
-                                     selectable:readOnly};
+                                     selectable:readOnly,
+                                     index:i+1,
+                                     toolTipIndex:ttIndex};
           column.editable = !readOnly;
         }
         column.itemRenderer = itemRenderer

@@ -46,6 +46,7 @@ public abstract class RComponent extends RemotePeer implements
   private Dimension         preferredSize;
   private RemoteValueState  state;
   private String            toolTip;
+  private RemoteValueState  toolTipState;
   private String            styleName;
 
   /**
@@ -266,6 +267,25 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * Gets the toolTipState.
+   * 
+   * @return the toolTipState.
+   */
+  public RemoteValueState getToolTipState() {
+    return toolTipState;
+  }
+
+  /**
+   * Sets the toolTipState.
+   * 
+   * @param toolTipState
+   *          the toolTipState to set.
+   */
+  public void setToolTipState(RemoteValueState toolTipState) {
+    this.toolTipState = toolTipState;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -312,7 +332,8 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * Sets the styleName.
    * 
-   * @param styleName the styleName to set.
+   * @param styleName
+   *          the styleName to set.
    */
   public void setStyleName(String styleName) {
     this.styleName = styleName;
