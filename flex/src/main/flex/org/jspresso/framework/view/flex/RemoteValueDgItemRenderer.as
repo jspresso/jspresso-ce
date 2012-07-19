@@ -34,10 +34,12 @@ package org.jspresso.framework.view.flex {
   public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
     
     private var _valueChangeListener:ChangeWatcher;
+    private var _writabilityChangeListener:ChangeWatcher;
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
     private var _toolTipIndex:int;
+    private var _forceSelectable:Boolean;
     private var _selectable:Boolean;
     private var _action:RAction;
     private var _actionHandler:IActionHandler;
@@ -46,7 +48,7 @@ package org.jspresso.framework.view.flex {
       _index = -1;
       _toolTipIndex = -1;
       addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-        label.selectable = _selectable;
+        selectable = _selectable;
       });
     }
     
@@ -87,7 +89,7 @@ package org.jspresso.framework.view.flex {
     public function set selectable(value:Boolean):void {
       _selectable = value;
       if(label) {
-        label.selectable = true;
+        label.selectable = value;
       }
     }
     public function get selectable():Boolean {
@@ -120,15 +122,22 @@ package org.jspresso.framework.view.flex {
   	  if(rendererData && rendererListData) {
   	    var cellValueState:RemoteValueState;
   	    if(rendererListData.owner is DataGrid) {
-  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[index] as RemoteValueState); 
+  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[index] as RemoteValueState);
+          _forceSelectable = !(rendererListData.owner as DataGrid).editable;
   	    } else {
   	      cellValueState = ((rendererData as RemoteCompositeValueState).children[1] as RemoteValueState);
   	    }
-  	    if(_valueChangeListener != null) {
+        if(_valueChangeListener != null) {
           _valueChangeListener.reset(cellValueState);
           refresh(cellValueState.value);
         } else {
           _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+        }
+        if(_writabilityChangeListener != null) {
+          _writabilityChangeListener.reset(cellValueState);
+          refreshSelectability(cellValueState.writable);
+        } else {
+          _writabilityChangeListener = BindingUtils.bindSetter(refreshSelectability, cellValueState, "writable", true);
         }
     	  rendererListData.label = computeLabel(cellValueState.value);
   	  }
@@ -156,7 +165,11 @@ package org.jspresso.framework.view.flex {
       invalidateProperties();
   	}
   	
-  	protected override function commitProperties():void {
+    protected function refreshSelectability(writable:Boolean):void {
+      selectable = _forceSelectable || !writable;
+    }
+
+    protected override function commitProperties():void {
   	  super.commitProperties();
   	  var cellText:String = label.text;
       if(_action != null) {

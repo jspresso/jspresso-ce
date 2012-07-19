@@ -1593,7 +1593,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createDateField(remoteDateField:RDateField):UIComponent {
-      var dateField:DateField = new DateField();
+      var dateField:DateField = new EnhancedDateField();
       dateField.formatString = datePattern;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
@@ -1939,7 +1939,7 @@ package org.jspresso.framework.view.flex {
                                      index:i+1,
                                      toolTipIndex:ttIndex};
         } else {
-          var readOnly:Boolean = false;
+          var readOnly:Boolean = !remoteTable.state.writable;
           var columnAction:RAction = null;
           if(rColumn is RLink) {
             readOnly = true;
