@@ -4,8 +4,7 @@
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
   <version>3.5-SNAPSHOT</version>
-  <name>Jspresso Root POM</name>
-  <url>http://www.jspresso.org</url>
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <generator.templateResourcePath>/org/jspresso/framework/tools/entitygenerator</generator.templateResourcePath>
@@ -15,7 +14,6 @@
     <java.version>1.6</java.version>
     
     <!-- Dependencies versions -->
-
     <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
 
@@ -108,6 +106,9 @@
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
     <dependency-plugin.version>2.4</dependency-plugin.version>
   </properties>
+  
+  <name>Jspresso Root POM</name>
+  <url>http://www.jspresso.org</url>
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
