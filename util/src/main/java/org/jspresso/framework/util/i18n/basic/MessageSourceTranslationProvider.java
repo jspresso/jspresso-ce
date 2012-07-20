@@ -70,6 +70,9 @@ public class MessageSourceTranslationProvider extends
       }
       return message.toString();
     }
+    if (translation != null) {
+      translation = translation.trim();
+    }
     return translation;
   }
 
