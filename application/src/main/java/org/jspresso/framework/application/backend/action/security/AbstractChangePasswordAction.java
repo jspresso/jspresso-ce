@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
@@ -58,6 +60,10 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   public static final IComponentDescriptor<Map<String, String>> PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
   /**
+   * <code>TO_STRING</code>.
+   */
+  public static final String                                    TO_STRING                = "to_string";
+  /**
    * <code>PASSWD_CURRENT</code>.
    */
   public static final String                                    PASSWD_CURRENT           = "password_current";
@@ -77,21 +83,24 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
+    BasicStringPropertyDescriptor toString = new BasicStringPropertyDescriptor();
+    toString.setName(TO_STRING);
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
     currentPassword.setName(PASSWD_CURRENT);
-    currentPassword.setMaxLength(new Integer(32));
     BasicPasswordPropertyDescriptor typedPassword = new BasicPasswordPropertyDescriptor();
     typedPassword.setName(PASSWD_TYPED);
-    typedPassword.setMaxLength(new Integer(32));
     BasicPasswordPropertyDescriptor retypedPassword = new BasicPasswordPropertyDescriptor();
     retypedPassword.setName(PASSWD_RETYPED);
-    retypedPassword.setMaxLength(new Integer(32));
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    propertyDescriptors.add(toString);
     propertyDescriptors.add(currentPassword);
     propertyDescriptors.add(typedPassword);
     propertyDescriptors.add(retypedPassword);
     passwordChangeModel.setPropertyDescriptors(propertyDescriptors);
+    passwordChangeModel.setToStringProperty(TO_STRING);
+    passwordChangeModel.setRenderedProperties(Arrays.asList(PASSWD_CURRENT,
+        PASSWD_TYPED, PASSWD_RETYPED));
 
     return passwordChangeModel;
   }

@@ -402,7 +402,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     return explodeComponentReferences(this, queryableProperties);
   }
-  
+
   /**
    * Gets the readabilityGates.
    * 
