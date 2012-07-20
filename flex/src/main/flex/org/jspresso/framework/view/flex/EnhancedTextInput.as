@@ -2,6 +2,7 @@ package org.jspresso.framework.view.flex
 {
   import flash.events.FocusEvent;
   
+  import mx.containers.GridItem;
   import mx.controls.TextInput;
   import mx.core.IFlexDisplayObject;
   import mx.core.mx_internal;
@@ -43,6 +44,18 @@ package org.jspresso.framework.view.flex
     public function set preventDefaultButton(value:Boolean):void
     {
       _preventDefaultButton = value;
+    }
+    
+    override public function set measuredWidth(value:Number):void {
+      if(  measuredWidth == 0
+        && value == DEFAULT_MEASURED_WIDTH
+        && maxWidth > 0 && maxWidth < (DEFAULT_MAX_WIDTH/2)
+        && parent is GridItem
+        && (parent as GridItem).colSpan == 1) {
+        super.measuredWidth = maxWidth;
+      } else {
+        super.measuredWidth = value;
+      }
     }
 
   }

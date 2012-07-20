@@ -1337,7 +1337,7 @@ package org.jspresso.framework.view.flex {
           //labelCell.setStyle("borderStyle","solid");
           //labelCell.setStyle("borderColor","0x00FF00");
           labelsRow.addChild(labelCell);
-          if((rComponentLabel.label) || rComponentLabel.icon) {
+          if(rComponentLabel.label || rComponentLabel.icon) {
             labelCell.addChild(componentLabel);
             // makes alignment wrong
             //if(remoteForm.labelsPosition == "ASIDE") {
@@ -1365,20 +1365,19 @@ package org.jspresso.framework.view.flex {
             componentCell.maxWidth = NaN;
             component.maxWidth = NaN;
           }
-        } else if(component.maxWidth >= 0 && component.maxWidth < 1000) {
+        } else if(component.maxWidth >= 0 && component.maxWidth < (UIComponent.DEFAULT_MAX_WIDTH / 2)) {
           component.percentWidth = 100.0;
-          if(elementWidth == 1 && ((col + elementWidth < remoteForm.columnCount)
-            || !(rComponent is RComboBox))) {
+          if(elementWidth == 1 && (col + elementWidth < remoteForm.columnCount)) {
             componentCell.maxWidth = component.maxWidth;
             componentCell.width = component.maxWidth;
-            //componentCell.setStyle("borderStyle","solid");
-            //componentCell.setStyle("borderColor","0xFF0000");
-            //component.setStyle("borderStyle","solid");
-            //component.setStyle("borderColor","0x0000FF");
           } else {
-            //Allow last cell to grow if it's a ComboBox
+            //Allow last cell and span > 1 cells to grow
             componentCell.percentWidth = 100.0;
           }
+          //componentCell.setStyle("borderStyle","solid");
+          //componentCell.setStyle("borderColor","0xFF0000");
+          //component.setStyle("borderStyle","solid");
+          //component.setStyle("borderColor","0x0000FF");
         }
         if(component.minWidth > 0) {
           componentCell.minWidth = component.minWidth;
