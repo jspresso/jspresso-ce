@@ -39,6 +39,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
       check : "String",
       nullable : true
     },
+    backgroundState :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable : true
+    },
     borderType :
     {
       check : "String",
@@ -52,6 +57,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
     foreground :
     {
       check : "String",
+      nullable : true
+    },
+    foregroundState :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteValueState",
       nullable : true
     },
     icon :

@@ -14,11 +14,13 @@
 
 package org.jspresso.framework.view.flex {
 
+  import flash.display.Graphics;
   import flash.events.TextEvent;
   
   import mx.binding.utils.BindingUtils;
   import mx.binding.utils.ChangeWatcher;
   import mx.controls.DataGrid;
+  import mx.controls.dataGridClasses.DataGridListData;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
   import mx.controls.listClasses.ListItemRenderer;
@@ -39,6 +41,8 @@ package org.jspresso.framework.view.flex {
     private var _formatter:Formatter;
     private var _index:int;
     private var _toolTipIndex:int;
+    private var _backgroundIndex:int;
+    private var _foregroundIndex:int;
     private var _forceSelectable:Boolean;
     private var _selectable:Boolean;
     private var _action:RAction;
@@ -47,6 +51,8 @@ package org.jspresso.framework.view.flex {
     public function RemoteValueDgItemRenderer() {
       _index = -1;
       _toolTipIndex = -1;
+      _backgroundIndex = -1;
+      _foregroundIndex = -1;
       addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
         selectable = _selectable;
       });
@@ -224,11 +230,52 @@ package org.jspresso.framework.view.flex {
       }
     }
     
-    public function set actionHandler(value:IActionHandler):void
-    {
+    public function set actionHandler(value:IActionHandler):void {
       _actionHandler = value;
     }
 
+    public function get backgroundIndex():int {
+      return _backgroundIndex;
+    }
 
+    public function set backgroundIndex(value:int):void {
+      _backgroundIndex = value;
+    }
+
+    public function get foregroundIndex():int {
+      return _foregroundIndex;
+    }
+
+    public function set foregroundIndex(value:int):void {
+      _foregroundIndex = value;
+    }
+    
+    override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+      if(listData.owner is DataGrid) {
+        var dg:DataGrid = listData.owner as DataGrid;
+        if (true/*!(dg.isItemSelected(data) || dg.isItemHighlighted(data))*/) {
+          if(backgroundIndex >= 0) {
+            var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+            var alpha:uint = DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String);
+            var g:Graphics = graphics;
+            g.clear();
+            g.beginFill(new uint(backgroundValue), alpha);
+            g.drawRect(0, 0, unscaledWidth, unscaledHeight);
+            g.endFill();
+          }
+          if(foregroundIndex >= 0) {
+            var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+            if(foregroundValue) {
+              setStyle("color", foregroundValue);
+              alpha = DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String);
+            } else {
+              setStyle("color", null);
+              alpha = 1.0;
+            }
+          }
+        }
+      }
+      super.updateDisplayList(unscaledWidth, unscaledHeight);
+    }  
   }
 }

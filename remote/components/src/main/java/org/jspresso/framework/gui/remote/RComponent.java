@@ -38,9 +38,11 @@ public abstract class RComponent extends RemotePeer implements
   private RActionList[]     actionLists;
   private RActionList[]     secondaryActionLists;
   private String            background;
+  private RemoteValueState  backgroundState;
   private String            borderType;
   private Font              font;
   private String            foreground;
+  private RemoteValueState  foregroundState;
   private RIcon             icon;
   private String            label;
   private Dimension         preferredSize;
@@ -337,5 +339,43 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setStyleName(String styleName) {
     this.styleName = styleName;
+  }
+
+  /**
+   * Gets the backgroundState.
+   * 
+   * @return the backgroundState.
+   */
+  public RemoteValueState getBackgroundState() {
+    return backgroundState;
+  }
+
+  /**
+   * Sets the backgroundState.
+   * 
+   * @param backgroundState
+   *          the backgroundState to set.
+   */
+  public void setBackgroundState(RemoteValueState backgroundState) {
+    this.backgroundState = backgroundState;
+  }
+
+  /**
+   * Gets the foregroundState.
+   * 
+   * @return the foregroundState.
+   */
+  public RemoteValueState getForegroundState() {
+    return foregroundState;
+  }
+
+  /**
+   * Sets the foregroundState.
+   * 
+   * @param foregroundState
+   *          the foregroundState to set.
+   */
+  public void setForegroundState(RemoteValueState foregroundState) {
+    this.foregroundState = foregroundState;
   }
 }

@@ -57,6 +57,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private List<Class<?>>         columnClasses;
   private List<String>           columnConnectorKeys;
 
+  private String                 rowBackgroundProperty;
+  private String                 rowForegroundProperty;
+
   private IExceptionHandler      exceptionHandler;
 
   /**
@@ -324,8 +327,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * @param rowIndex
    *          the row index to compute the toolTip for.
    * @param toolTipProperty
-   *          the tooltip property used to compute the tooltip.
-   * @return the row toolTip or null.
+   *          the property used to compute the tooltip.
+   * @return the cell toolTip or null.
    */
   public String getCellToolTip(int rowIndex, String toolTipProperty) {
     IValueConnector toolTipConnector = ((ICompositeValueConnector) collectionConnector
@@ -333,6 +336,84 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     if (toolTipConnector != null
         && toolTipConnector.getConnectorValue() != null) {
       return toolTipConnector.getConnectorValue().toString();
+    }
+    return null;
+  }
+
+  /**
+   * Gets the value to display as cell background.
+   * 
+   * @param rowIndex
+   *          the row index to compute the background for.
+   * @param backgroundProperty
+   *          the property used to compute the background.
+   * @return the cell background or null.
+   */
+  public String getCellBackground(int rowIndex, String backgroundProperty) {
+    IValueConnector backgroundConnector = ((ICompositeValueConnector) collectionConnector
+        .getChildConnector(rowIndex)).getChildConnector(backgroundProperty);
+    if (backgroundConnector != null
+        && backgroundConnector.getConnectorValue() != null) {
+      return backgroundConnector.getConnectorValue().toString();
+    }
+    return null;
+  }
+
+  /**
+   * Gets the value to display as cell foreground.
+   * 
+   * @param rowIndex
+   *          the row index to compute the foreground for.
+   * @param foregroundProperty
+   *          the property used to compute the foreground.
+   * @return the cell foreground or null.
+   */
+  public String getCellForeground(int rowIndex, String foregroundProperty) {
+    IValueConnector foregroundConnector = ((ICompositeValueConnector) collectionConnector
+        .getChildConnector(rowIndex)).getChildConnector(foregroundProperty);
+    if (foregroundConnector != null
+        && foregroundConnector.getConnectorValue() != null) {
+      return foregroundConnector.getConnectorValue().toString();
+    }
+    return null;
+  }
+
+  /**
+   * Gets the value to display as row background.
+   * 
+   * @param rowIndex
+   *          the row index to compute the background for.
+   * @return the row background or null.
+   */
+  public String getRowBackground(int rowIndex) {
+    if (getRowBackgroundProperty() != null) {
+      IValueConnector backgroundConnector = ((ICompositeValueConnector) collectionConnector
+          .getChildConnector(rowIndex))
+          .getChildConnector(getRowBackgroundProperty());
+      if (backgroundConnector != null
+          && backgroundConnector.getConnectorValue() != null) {
+        return backgroundConnector.getConnectorValue().toString();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Gets the value to display as row foreground.
+   * 
+   * @param rowIndex
+   *          the row index to compute the foreground for.
+   * @return the row foreground or null.
+   */
+  public String getRowForeground(int rowIndex) {
+    if (getRowForegroundProperty() != null) {
+      IValueConnector foregroundConnector = ((ICompositeValueConnector) collectionConnector
+          .getChildConnector(rowIndex))
+          .getChildConnector(getRowForegroundProperty());
+      if (foregroundConnector != null
+          && foregroundConnector.getConnectorValue() != null) {
+        return foregroundConnector.getConnectorValue().toString();
+      }
     }
     return null;
   }
@@ -381,5 +462,43 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         }
       });
     }
+  }
+
+  /**
+   * Gets the rowBackgroundProperty.
+   * 
+   * @return the rowBackgroundProperty.
+   */
+  protected String getRowBackgroundProperty() {
+    return rowBackgroundProperty;
+  }
+
+  /**
+   * Sets the rowBackgroundProperty.
+   * 
+   * @param rowBackgroundProperty
+   *          the rowBackgroundProperty to set.
+   */
+  public void setRowBackgroundProperty(String rowBackgroundProperty) {
+    this.rowBackgroundProperty = rowBackgroundProperty;
+  }
+
+  /**
+   * Gets the rowForegroundProperty.
+   * 
+   * @return the rowForegroundProperty.
+   */
+  protected String getRowForegroundProperty() {
+    return rowForegroundProperty;
+  }
+
+  /**
+   * Sets the rowForegroundProperty.
+   * 
+   * @param rowForegroundProperty
+   *          the rowForegroundProperty to set.
+   */
+  public void setRowForegroundProperty(String rowForegroundProperty) {
+    this.rowForegroundProperty = rowForegroundProperty;
   }
 }

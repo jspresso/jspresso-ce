@@ -15,16 +15,22 @@
 package org.jspresso.framework.view.flex {
   import mx.binding.utils.BindingUtils;
   import mx.binding.utils.ChangeWatcher;
+  import mx.controls.DataGrid;
+  import mx.controls.listClasses.BaseListData;
+  import mx.controls.listClasses.IDropInListItemRenderer;
   
   import org.jspresso.framework.gui.remote.RComponent;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
 
-  public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor {
+  public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implements IDropInListItemRenderer {
     
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remoteComponent:RComponent;
     private var _toolTipIndex:int;
+    private var _backgroundIndex:int;
+    private var _foregroundIndex:int;
+    private var _listData:BaseListData;
 
     private var _valueChangeListener:ChangeWatcher;
     
@@ -79,14 +85,6 @@ package org.jspresso.framework.view.flex {
       } else {
         _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
       }
-    }
-    
-  	protected function refresh(value:Object):void {
-      state.value = value;
-  	}
-
-    protected override function commitProperties():void {
-      super.commitProperties();
       if(remoteComponent && toolTipIndex >= 0) {
         var toolTipValue:Object = ((data as RemoteCompositeValueState).children[toolTipIndex] as RemoteValueState).value;
         if(toolTipValue != null) {
@@ -95,6 +93,61 @@ package org.jspresso.framework.view.flex {
           toolTip = null;
         }
       }
+      
+      if(listData.owner is DataGrid) {
+        var dg:DataGrid = listData.owner as DataGrid;
+        if (true/*!(dg.isItemSelected(data) || dg.isItemHighlighted(data))*/) {
+          if(backgroundIndex >= 0) {
+            var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+            if(backgroundValue) {
+              setStyle("backgroundColor", backgroundValue);
+              setStyle("backgroundAlpha", DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
+            } else {
+              setStyle("backgroundColor", null);
+              setStyle("backgroundAlpha", null);
+            }
+          }
+          if(foregroundIndex >= 0) {
+            var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+            if(foregroundValue) {
+              setStyle("color", foregroundValue);
+              setStyle("alpha", DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String));
+            } else {
+              setStyle("color", null);
+              setStyle("alpha", null);
+            }
+          }
+        }
+      }
+    }
+    
+  	protected function refresh(value:Object):void {
+      state.value = value;
+  	}
+
+    public function get listData():BaseListData {
+      return _listData;
+    }
+    
+    public function set listData(value:BaseListData):void {
+      _listData = value;
+      invalidateProperties();
+    }
+
+    public function get backgroundIndex():int {
+      return _backgroundIndex;
+    }
+    
+    public function set backgroundIndex(value:int):void {
+      _backgroundIndex = value;
+    }
+    
+    public function get foregroundIndex():int {
+      return _foregroundIndex;
+    }
+    
+    public function set foregroundIndex(value:int):void {
+      _foregroundIndex = value;
     }
   }
 }

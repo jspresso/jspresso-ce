@@ -1243,8 +1243,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IComponentDescriptor<?> modelDescriptor,
       IPropertyViewDescriptor propertyViewDescriptor,
       IPropertyDescriptor propertyDescriptor) {
-    // Property dynamic tooltips
-    String propertyToolTipProperty = null;
+    String dynamicToolTipProperty = null;
     String descriptionKey = null;
     if (propertyViewDescriptor.getDescription() != null) {
       descriptionKey = propertyViewDescriptor.getDescription();
@@ -1255,10 +1254,74 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IPropertyDescriptor descriptionProperty = modelDescriptor
           .getPropertyDescriptor(descriptionKey);
       if (descriptionProperty != null) {
-        propertyToolTipProperty = descriptionProperty.getName();
+        dynamicToolTipProperty = descriptionProperty.getName();
       }
     }
-    return propertyToolTipProperty;
+    return dynamicToolTipProperty;
+  }
+
+  /**
+   * Computes the property name used to compute a property view dynamic
+   * background or null if none or if the background is a static one.
+   * 
+   * @param modelDescriptor
+   *          the component model descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the property name used to compute a property view dynamic
+   *         background or null if none or if the background is a static one.
+   */
+  protected String computePropertyDynamicBackground(
+      IComponentDescriptor<?> modelDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IPropertyDescriptor propertyDescriptor) {
+    String dynamicBackgroundProperty = null;
+    String backgroundKey = null;
+    if (propertyViewDescriptor.getBackground() != null) {
+      backgroundKey = propertyViewDescriptor.getBackground();
+    }
+    if (backgroundKey != null) {
+      IPropertyDescriptor backgroundProperty = modelDescriptor
+          .getPropertyDescriptor(backgroundKey);
+      if (backgroundProperty != null) {
+        dynamicBackgroundProperty = backgroundProperty.getName();
+      }
+    }
+    return dynamicBackgroundProperty;
+  }
+
+  /**
+   * Computes the property name used to compute a property view dynamic
+   * foreground or null if none or if the foreground is a static one.
+   * 
+   * @param modelDescriptor
+   *          the component model descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the property name used to compute a property view dynamic
+   *         foreground or null if none or if the foreground is a static one.
+   */
+  protected String computePropertyDynamicForeground(
+      IComponentDescriptor<?> modelDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IPropertyDescriptor propertyDescriptor) {
+    String dynamicForegroundProperty = null;
+    String foregroundKey = null;
+    if (propertyViewDescriptor.getForeground() != null) {
+      foregroundKey = propertyViewDescriptor.getForeground();
+    }
+    if (foregroundKey != null) {
+      IPropertyDescriptor foregroundProperty = modelDescriptor
+          .getPropertyDescriptor(foregroundKey);
+      if (foregroundProperty != null) {
+        dynamicForegroundProperty = foregroundProperty.getName();
+      }
+    }
+    return dynamicForegroundProperty;
   }
 
   /**
@@ -1273,20 +1336,66 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *         or null if none or if the tooltip is a static one.
    */
   protected String computeComponentDynamicToolTip(
-      IComponentViewDescriptor viewDescriptor,
-      IComponentDescriptor<?> modelDescriptor) {
-    // Dynamic tooltips
-    String toolTipProperty = null;
+      IViewDescriptor viewDescriptor, IComponentDescriptor<?> modelDescriptor) {
+    String dynamicToolTipProperty = null;
     if (viewDescriptor.getDescription() != null) {
       IPropertyDescriptor descriptionProperty = modelDescriptor
           .getPropertyDescriptor(viewDescriptor.getDescription());
       if (descriptionProperty != null) {
-        toolTipProperty = descriptionProperty.getName();
+        dynamicToolTipProperty = descriptionProperty.getName();
       }
     } else {
-      toolTipProperty = modelDescriptor.getToHtmlProperty();
+      dynamicToolTipProperty = modelDescriptor.getToHtmlProperty();
     }
-    return toolTipProperty;
+    return dynamicToolTipProperty;
+  }
+
+  /**
+   * Computes the property name used to compute a component view background or
+   * null if none or if the background is a static one.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @param modelDescriptor
+   *          the model descriptor.
+   * @return the property name used to compute a component view dynamic
+   *         background or null if none or if the background is a static one.
+   */
+  protected String computeComponentDynamicBackground(
+      IViewDescriptor viewDescriptor, IComponentDescriptor<?> modelDescriptor) {
+    String dynamicBackgroundProperty = null;
+    if (viewDescriptor.getBackground() != null) {
+      IPropertyDescriptor backgroundProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getBackground());
+      if (backgroundProperty != null) {
+        dynamicBackgroundProperty = backgroundProperty.getName();
+      }
+    }
+    return dynamicBackgroundProperty;
+  }
+
+  /**
+   * Computes the property name used to compute a component view foreground or
+   * null if none or if the foreground is a static one.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @param modelDescriptor
+   *          the model descriptor.
+   * @return the property name used to compute a component view dynamic
+   *         foreground or null if none or if the foreground is a static one.
+   */
+  protected String computeComponentDynamicForeground(
+      IViewDescriptor viewDescriptor, IComponentDescriptor<?> modelDescriptor) {
+    String dynamicForegroundProperty = null;
+    if (viewDescriptor.getForeground() != null) {
+      IPropertyDescriptor foregroundProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getForeground());
+      if (foregroundProperty != null) {
+        dynamicForegroundProperty = foregroundProperty.getName();
+      }
+    }
+    return dynamicForegroundProperty;
   }
 
   /**

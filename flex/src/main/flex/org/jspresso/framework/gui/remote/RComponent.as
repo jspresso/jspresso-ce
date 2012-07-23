@@ -29,9 +29,11 @@ package org.jspresso.framework.gui.remote {
         private var _actionLists:Array;
         private var _secondaryActionLists:Array;
         private var _background:String;
+        private var _backgroundState:RemoteValueState;
         private var _borderType:String;
         private var _font:Font;
         private var _foreground:String;
+        private var _foregroundState:RemoteValueState;
         private var _icon:RIcon;
         private var _label:String;
         private var _state:RemoteValueState;
@@ -147,6 +149,23 @@ package org.jspresso.framework.gui.remote {
         public function set styleName(value:String):void {
           _styleName = value;
         }
+
+        public function get backgroundState():RemoteValueState {
+          return _backgroundState;
+        }
+
+        public function set backgroundState(value:RemoteValueState):void {
+          _backgroundState = value;
+        }
+
+        public function get foregroundState():RemoteValueState {
+          return _foregroundState;
+        }
+
+        public function set foregroundState(value:RemoteValueState):void {
+          _foregroundState = value;
+        }
+
 
     }
 }

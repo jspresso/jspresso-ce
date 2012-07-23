@@ -322,7 +322,7 @@ package org.jspresso.framework.view.flex {
       return new SolidColor(color, getAlphaFromArgb(argb));
     }
 
-    protected function getAlphaFromArgb(argb:String):Number {
+    public static function getAlphaFromArgb(argb:String):Number {
       if(argb && argb.length == 10) {
         var alpha:Number = parseInt(argb.substr(2,2), 16);
         return alpha / 255; 
@@ -1285,7 +1285,9 @@ package org.jspresso.framework.view.flex {
         if(rComponent is RSecurityComponent) {
           sizeMaxComponentWidth(component, rComponent);
         } else {
-          bindDynamicTooltip(component, rComponent);
+          bindDynamicToolTip(component, rComponent);
+          bindDynamicBackground(component, rComponent);
+          bindDynamicForeground(component, rComponent);
         }
         
         if(remoteForm.labelsPosition != "NONE") {
@@ -1430,13 +1432,45 @@ package org.jspresso.framework.view.flex {
       return decoratedForm;
     }
     
-    protected function bindDynamicTooltip(component:UIComponent, rComponent:RComponent):void {
+    protected function bindDynamicToolTip(component:UIComponent, rComponent:RComponent):void {
       if(rComponent.toolTipState) {
         getRemotePeerRegistry().register(rComponent.toolTipState);
         var updateToolTip:Function = function (value:Object):void {
           component.toolTip = value as String;
         };
         BindingUtils.bindSetter(updateToolTip, rComponent.toolTipState, "value", true);
+      }
+    }
+
+    protected function bindDynamicBackground(component:UIComponent, rComponent:RComponent):void {
+      if(rComponent.backgroundState) {
+        getRemotePeerRegistry().register(rComponent.backgroundState);
+        var updateBackground:Function = function (value:Object):void {
+          if(value) {
+            component.setStyle("backgroundColor", value);
+            component.setStyle("backgroundAlpha", getAlphaFromArgb(value as String));
+          } else {
+            component.setStyle("backgroundColor", null);
+            component.setStyle("backgroundAlpha", null);
+          }
+        };
+        BindingUtils.bindSetter(updateBackground, rComponent.backgroundState, "value", true);
+      }
+    }
+
+    protected function bindDynamicForeground(component:UIComponent, rComponent:RComponent):void {
+      if(rComponent.foregroundState) {
+        getRemotePeerRegistry().register(rComponent.foregroundState);
+        var updateForeground:Function = function (value:Object):void {
+          if(value) {
+            component.setStyle("color", value);
+            component.setStyle("alpha", getAlphaFromArgb(value as String));
+          } else {
+            component.setStyle("color", null);
+            component.setStyle("alpha", null);
+          }
+        };
+        BindingUtils.bindSetter(updateForeground, rComponent.foregroundState, "value", true);
       }
     }
 
@@ -1910,8 +1944,20 @@ package org.jspresso.framework.view.flex {
         applyComponentStyle(column, rColumn);
         var itemRenderer:ClassFactory;
         var ttIndex:int = -1;
+        var bgIndex:int = -1;
+        var fgIndex:int = -1;
         if(rColumn.toolTipState != null) {
           ttIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.toolTipState);
+        }
+        if(rColumn.backgroundState != null) {
+          bgIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.backgroundState);
+        } else if(remoteTable.backgroundState != null) {
+          bgIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), remoteTable.backgroundState);
+        }
+        if(rColumn.foregroundState != null) {
+          fgIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.foregroundState);
+        } else if(remoteTable.foregroundState != null) {
+          fgIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), remoteTable.foregroundState);
         }
         if(rColumn is RComboBox) {
           var hasIcon:Boolean = false;
@@ -1928,7 +1974,9 @@ package org.jspresso.framework.view.flex {
                                      iconTemplate:_iconTemplate,
                                      showIcon:hasIcon,
                                      index:i+1,
-                                     toolTipIndex:ttIndex};
+                                     toolTipIndex:ttIndex,
+                                     backgroundIndex:bgIndex,
+                                     foregroundIndex:fgIndex};
         } else if( rColumn is RCheckBox
                || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
                ||  rColumn is RImageComponent) {
@@ -1936,7 +1984,9 @@ package org.jspresso.framework.view.flex {
           itemRenderer.properties = {viewFactory:this,
                                      remoteComponent:rColumn,
                                      index:i+1,
-                                     toolTipIndex:ttIndex};
+                                     toolTipIndex:ttIndex,
+                                     backgroundIndex:bgIndex,
+                                     foregroundIndex:fgIndex};
         } else {
           var readOnly:Boolean = !remoteTable.state.writable;
           var columnAction:RAction = null;
@@ -1968,7 +2018,9 @@ package org.jspresso.framework.view.flex {
                                      actionHandler:getActionHandler(),
                                      selectable:readOnly,
                                      index:i+1,
-                                     toolTipIndex:ttIndex};
+                                     toolTipIndex:ttIndex,
+                                     backgroundIndex:bgIndex,
+                                     foregroundIndex:fgIndex};
           column.editable = !readOnly;
         }
         column.itemRenderer = itemRenderer

@@ -578,7 +578,11 @@ public class DefaultRemoteViewFactory extends
         ((RActionable) propertyView.getPeer()).setAction(action);
       }
     }
-    completePropertyViewsWithDynamicTooltips(connector, propertyViews,
+    completePropertyViewsWithDynamicToolTips(connector, propertyViews,
+        modelDescriptor);
+    completePropertyViewsWithDynamicBackgrounds(connector, propertyViews,
+        modelDescriptor);
+    completePropertyViewsWithDynamicForegrounds(connector, propertyViews,
         modelDescriptor);
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));
     viewComponent.setElements(elements.toArray(new RComponent[0]));
@@ -1946,7 +1950,11 @@ public class DefaultRemoteViewFactory extends
         propertyViews.add(column);
       }
     }
-    completePropertyViewsWithDynamicTooltips(rowConnectorPrototype,
+    completePropertyViewsWithDynamicToolTips(rowConnectorPrototype,
+        propertyViews, rowDescriptor);
+    completePropertyViewsWithDynamicBackgrounds(rowConnectorPrototype,
+        propertyViews, rowDescriptor);
+    completePropertyViewsWithDynamicForegrounds(rowConnectorPrototype,
         propertyViews, rowDescriptor);
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
     viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
@@ -1961,10 +1969,45 @@ public class DefaultRemoteViewFactory extends
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
+    String dynamicBackgroundProperty = computeComponentDynamicBackground(
+        viewDescriptor, rowDescriptor);
+    if (dynamicBackgroundProperty != null) {
+      IValueConnector backgroundConnector = rowConnectorPrototype
+          .getChildConnector(dynamicBackgroundProperty);
+      if (backgroundConnector == null) {
+        backgroundConnector = getConnectorFactory().createValueConnector(
+            dynamicBackgroundProperty);
+        rowConnectorPrototype.addChildConnector(dynamicBackgroundProperty,
+            backgroundConnector);
+      }
+      if (backgroundConnector instanceof IRemoteStateOwner) {
+        viewComponent
+            .setBackgroundState(((IRemoteStateOwner) backgroundConnector)
+                .getState());
+      }
+    }
+
+    String dynamicForegroundProperty = computeComponentDynamicForeground(
+        viewDescriptor, rowDescriptor);
+    if (dynamicForegroundProperty != null) {
+      IValueConnector foregroundConnector = rowConnectorPrototype
+          .getChildConnector(dynamicForegroundProperty);
+      if (foregroundConnector == null) {
+        foregroundConnector = getConnectorFactory().createValueConnector(
+            dynamicForegroundProperty);
+        rowConnectorPrototype.addChildConnector(dynamicForegroundProperty,
+            foregroundConnector);
+      }
+      if (foregroundConnector instanceof IRemoteStateOwner) {
+        viewComponent
+            .setForegroundState(((IRemoteStateOwner) foregroundConnector)
+                .getState());
+      }
+    }
     return view;
   }
 
-  private void completePropertyViewsWithDynamicTooltips(
+  private void completePropertyViewsWithDynamicToolTips(
       ICompositeValueConnector connector,
       List<IView<RComponent>> propertyViews,
       IComponentDescriptor<?> modelDescriptor) {
@@ -1974,21 +2017,80 @@ public class DefaultRemoteViewFactory extends
           .getDescriptor();
       IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
           .getModelDescriptor();
-      String propertyToolTipProperty = computePropertyDynamicToolTip(
+      String dynamicToolTipProperty = computePropertyDynamicToolTip(
           modelDescriptor, propertyViewDescriptor, propertyDescriptor);
       // Dynamic tooltip
-      if (propertyToolTipProperty != null) {
+      if (dynamicToolTipProperty != null) {
         IValueConnector tooltipConnector = connector
-            .getChildConnector(propertyToolTipProperty);
+            .getChildConnector(dynamicToolTipProperty);
         if (tooltipConnector == null) {
           tooltipConnector = getConnectorFactory().createValueConnector(
-              propertyToolTipProperty);
-          connector.addChildConnector(propertyToolTipProperty,
-              tooltipConnector);
+              dynamicToolTipProperty);
+          connector.addChildConnector(dynamicToolTipProperty, tooltipConnector);
         }
         if (tooltipConnector instanceof IRemoteStateOwner) {
           propertyView.getPeer().setToolTipState(
               ((IRemoteStateOwner) tooltipConnector).getState());
+        }
+      }
+    }
+  }
+
+  private void completePropertyViewsWithDynamicBackgrounds(
+      ICompositeValueConnector connector,
+      List<IView<RComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic background
+    for (IView<RComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String dynamicBackgroundProperty = computePropertyDynamicBackground(
+          modelDescriptor, propertyViewDescriptor, propertyDescriptor);
+      // Dynamic background
+      if (dynamicBackgroundProperty != null) {
+        IValueConnector backgroundConnector = connector
+            .getChildConnector(dynamicBackgroundProperty);
+        if (backgroundConnector == null) {
+          backgroundConnector = getConnectorFactory().createValueConnector(
+              dynamicBackgroundProperty);
+          connector.addChildConnector(dynamicBackgroundProperty,
+              backgroundConnector);
+        }
+        if (backgroundConnector instanceof IRemoteStateOwner) {
+          propertyView.getPeer().setBackgroundState(
+              ((IRemoteStateOwner) backgroundConnector).getState());
+        }
+      }
+    }
+  }
+
+  private void completePropertyViewsWithDynamicForegrounds(
+      ICompositeValueConnector connector,
+      List<IView<RComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic foreground
+    for (IView<RComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String dynamicForegroundProperty = computePropertyDynamicForeground(
+          modelDescriptor, propertyViewDescriptor, propertyDescriptor);
+      // Dynamic foreground
+      if (dynamicForegroundProperty != null) {
+        IValueConnector foregroundConnector = connector
+            .getChildConnector(dynamicForegroundProperty);
+        if (foregroundConnector == null) {
+          foregroundConnector = getConnectorFactory().createValueConnector(
+              dynamicForegroundProperty);
+          connector.addChildConnector(dynamicForegroundProperty,
+              foregroundConnector);
+        }
+        if (foregroundConnector instanceof IRemoteStateOwner) {
+          propertyView.getPeer().setForegroundState(
+              ((IRemoteStateOwner) foregroundConnector).getState());
         }
       }
     }
@@ -2330,10 +2432,12 @@ public class DefaultRemoteViewFactory extends
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTip(viewDescription);
     }
-    if (viewDescriptor.getForeground() != null) {
+    if (viewDescriptor.getForeground() != null
+        && viewDescriptor.getForeground().toLowerCase().startsWith("0x")) {
       viewPeer.setForeground(viewDescriptor.getForeground());
     }
-    if (viewDescriptor.getBackground() != null) {
+    if (viewDescriptor.getBackground() != null
+        && viewDescriptor.getBackground().toLowerCase().startsWith("0x")) {
       viewPeer.setBackground(viewDescriptor.getBackground());
     }
     if (viewDescriptor.getFont() != null) {

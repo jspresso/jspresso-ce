@@ -536,7 +536,7 @@ public class DefaultSwingViewFactory extends
     IRenderableCompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
-    attachTooltipListener(viewComponent, connector.getRenderingConnector());
+    attachToolTipListener(viewComponent, connector.getRenderingConnector());
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -704,12 +704,17 @@ public class DefaultSwingViewFactory extends
       }
       viewComponent.add(filler, constraints);
     }
-    completePropertyViewsWithDynamicTooltips(connector, propertyViews, modelDescriptor);
+    completePropertyViewsWithDynamicToolTips(connector, propertyViews,
+        modelDescriptor);
+    completePropertyViewsWithDynamicBackgrounds(connector, propertyViews,
+        modelDescriptor);
+    completePropertyViewsWithDynamicForegrounds(connector, propertyViews,
+        modelDescriptor);
     applyComponentViewScrollability(viewDescriptor, viewComponent, view);
     return view;
   }
 
-  private void completePropertyViewsWithDynamicTooltips(
+  private void completePropertyViewsWithDynamicToolTips(
       ICompositeValueConnector connector,
       List<IView<JComponent>> propertyViews,
       IComponentDescriptor<?> modelDescriptor) {
@@ -719,19 +724,72 @@ public class DefaultSwingViewFactory extends
           .getDescriptor();
       IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
           .getModelDescriptor();
-      String propertyToolTipProperty = computePropertyDynamicToolTip(
+      String dynamicToolTipProperty = computePropertyDynamicToolTip(
           modelDescriptor, propertyViewDescriptor, propertyDescriptor);
       // Dynamic tooltip
-      if (propertyToolTipProperty != null) {
+      if (dynamicToolTipProperty != null) {
         IValueConnector tooltipConnector = connector
-            .getChildConnector(propertyToolTipProperty);
+            .getChildConnector(dynamicToolTipProperty);
         if (tooltipConnector == null) {
           tooltipConnector = getConnectorFactory().createValueConnector(
-              propertyToolTipProperty);
-          connector.addChildConnector(propertyToolTipProperty,
-              tooltipConnector);
+              dynamicToolTipProperty);
+          connector.addChildConnector(dynamicToolTipProperty, tooltipConnector);
         }
-        attachTooltipListener(propertyView.getPeer(), tooltipConnector);
+        attachToolTipListener(propertyView.getPeer(), tooltipConnector);
+      }
+    }
+  }
+
+  private void completePropertyViewsWithDynamicBackgrounds(
+      ICompositeValueConnector connector,
+      List<IView<JComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic background
+    for (IView<JComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String dynamicBackgroundProperty = computePropertyDynamicBackground(
+          modelDescriptor, propertyViewDescriptor, propertyDescriptor);
+      // Dynamic background
+      if (dynamicBackgroundProperty != null) {
+        IValueConnector backgroundConnector = connector
+            .getChildConnector(dynamicBackgroundProperty);
+        if (backgroundConnector == null) {
+          backgroundConnector = getConnectorFactory().createValueConnector(
+              dynamicBackgroundProperty);
+          connector.addChildConnector(dynamicBackgroundProperty,
+              backgroundConnector);
+        }
+        attachBackgroundListener(propertyView.getPeer(), backgroundConnector);
+      }
+    }
+  }
+
+  private void completePropertyViewsWithDynamicForegrounds(
+      ICompositeValueConnector connector,
+      List<IView<JComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic foreground
+    for (IView<JComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String dynamicForegroundProperty = computePropertyDynamicForeground(
+          modelDescriptor, propertyViewDescriptor, propertyDescriptor);
+      // Dynamic foreground
+      if (dynamicForegroundProperty != null) {
+        IValueConnector foregroundConnector = connector
+            .getChildConnector(dynamicForegroundProperty);
+        if (foregroundConnector == null) {
+          foregroundConnector = getConnectorFactory().createValueConnector(
+              dynamicForegroundProperty);
+          connector.addChildConnector(dynamicForegroundProperty,
+              foregroundConnector);
+        }
+        attachForegroundListener(propertyView.getPeer(), foregroundConnector);
       }
     }
   }
@@ -761,9 +819,9 @@ public class DefaultSwingViewFactory extends
    * @param viewComponent
    *          the view component to attach the tooltip to
    * @param connector
-   *          the view connector resonsible for the tooltip.
+   *          the view connector responsible for the tooltip.
    */
-  protected void attachTooltipListener(final JComponent viewComponent,
+  protected void attachToolTipListener(final JComponent viewComponent,
       IValueConnector connector) {
     // Special toolTip handling
     if (connector != null) {
@@ -775,6 +833,58 @@ public class DefaultSwingViewFactory extends
             viewComponent.setToolTipText(evt.getNewValue().toString());
           } else {
             viewComponent.setToolTipText(null);
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Attaches a dynamic background listener.
+   * 
+   * @param viewComponent
+   *          the view component to attach the background to
+   * @param connector
+   *          the view connector responsible for the background.
+   */
+  protected void attachBackgroundListener(final JComponent viewComponent,
+      IValueConnector connector) {
+    if (connector != null) {
+      connector.addValueChangeListener(new IValueChangeListener() {
+
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          if (evt.getNewValue() != null) {
+            viewComponent.setBackground(createColor(evt.getNewValue()
+                .toString()));
+          } else {
+            viewComponent.setBackground(null);
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Attaches a dynamic foreground listener.
+   * 
+   * @param viewComponent
+   *          the view component to attach the foreground to
+   * @param connector
+   *          the view connector responsible for the foreground.
+   */
+  protected void attachForegroundListener(final JComponent viewComponent,
+      IValueConnector connector) {
+    if (connector != null) {
+      connector.addValueChangeListener(new IValueChangeListener() {
+
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          if (evt.getNewValue() != null) {
+            viewComponent.setForeground(createColor(evt.getNewValue()
+                .toString()));
+          } else {
+            viewComponent.setForeground(null);
           }
         }
       });
@@ -2140,6 +2250,35 @@ public class DefaultSwingViewFactory extends
           new ColumnPreferencesListener(viewComponent, viewDescriptor
               .getPermId(), actionHandler));
     }
+
+    String dynamicBackgroundProperty = computeComponentDynamicBackground(
+        viewDescriptor, rowDescriptor);
+    if (dynamicBackgroundProperty != null) {
+      IValueConnector backgroundConnector = rowConnectorPrototype
+          .getChildConnector(dynamicBackgroundProperty);
+      if (backgroundConnector == null) {
+        backgroundConnector = getConnectorFactory().createValueConnector(
+            dynamicBackgroundProperty);
+        rowConnectorPrototype.addChildConnector(dynamicBackgroundProperty,
+            backgroundConnector);
+      }
+    }
+    tableModel.setRowBackgroundProperty(dynamicBackgroundProperty);
+
+    String dynamicForegroundProperty = computeComponentDynamicForeground(
+        viewDescriptor, rowDescriptor);
+    if (dynamicForegroundProperty != null) {
+      IValueConnector backgroundConnector = rowConnectorPrototype
+          .getChildConnector(dynamicForegroundProperty);
+      if (backgroundConnector == null) {
+        backgroundConnector = getConnectorFactory().createValueConnector(
+            dynamicForegroundProperty);
+        rowConnectorPrototype.addChildConnector(dynamicForegroundProperty,
+            backgroundConnector);
+      }
+    }
+    tableModel.setRowForegroundProperty(dynamicForegroundProperty);
+
     return view;
   }
 
@@ -2198,20 +2337,51 @@ public class DefaultSwingViewFactory extends
       }
     }
     if (cellRenderer instanceof EvenOddTableCellRenderer) {
-      String propertyToolTipProperty = computePropertyDynamicToolTip(
+      String dynamicToolTipProperty = computePropertyDynamicToolTip(
           rowDescriptor, columnViewDescriptor, propertyDescriptor);
-      if (propertyToolTipProperty != null) {
-        IValueConnector tooltipConnector = rowConnectorPrototype
-            .getChildConnector(propertyToolTipProperty);
-        if (tooltipConnector == null) {
-          tooltipConnector = getConnectorFactory().createValueConnector(
-              propertyToolTipProperty);
-          rowConnectorPrototype.addChildConnector(propertyToolTipProperty,
-              tooltipConnector);
+      if (dynamicToolTipProperty != null) {
+        IValueConnector toolTipConnector = rowConnectorPrototype
+            .getChildConnector(dynamicToolTipProperty);
+        if (toolTipConnector == null) {
+          toolTipConnector = getConnectorFactory().createValueConnector(
+              dynamicToolTipProperty);
+          rowConnectorPrototype.addChildConnector(dynamicToolTipProperty,
+              toolTipConnector);
         }
       }
       ((EvenOddTableCellRenderer) cellRenderer)
-          .setToolTipProperty(propertyToolTipProperty);
+          .setToolTipProperty(dynamicToolTipProperty);
+
+      String dynamicBackgroundProperty = computePropertyDynamicBackground(
+          rowDescriptor, columnViewDescriptor, propertyDescriptor);
+      if (dynamicBackgroundProperty != null) {
+        IValueConnector backgroundConnector = rowConnectorPrototype
+            .getChildConnector(dynamicBackgroundProperty);
+        if (backgroundConnector == null) {
+          backgroundConnector = getConnectorFactory().createValueConnector(
+              dynamicBackgroundProperty);
+          rowConnectorPrototype.addChildConnector(dynamicBackgroundProperty,
+              backgroundConnector);
+        }
+      }
+      ((EvenOddTableCellRenderer) cellRenderer)
+          .setBackgroundProperty(dynamicBackgroundProperty);
+
+      String dynamicForegroundProperty = computePropertyDynamicForeground(
+          rowDescriptor, columnViewDescriptor, propertyDescriptor);
+      if (dynamicForegroundProperty != null) {
+        IValueConnector foregroundConnector = rowConnectorPrototype
+            .getChildConnector(dynamicForegroundProperty);
+        if (foregroundConnector == null) {
+          foregroundConnector = getConnectorFactory().createValueConnector(
+              dynamicForegroundProperty);
+          rowConnectorPrototype.addChildConnector(dynamicForegroundProperty,
+              foregroundConnector);
+        }
+      }
+      ((EvenOddTableCellRenderer) cellRenderer)
+          .setForegroundProperty(dynamicForegroundProperty);
+
     }
     if (columnViewDescriptor.getAction() != null
         && columnViewDescriptor.isReadOnly()) {
@@ -2851,8 +3021,9 @@ public class DefaultSwingViewFactory extends
     return null;
   }
 
-  private Color createColor(String colorAsHexString) {
-    if (colorAsHexString != null) {
+  static Color createColor(String colorAsHexString) {
+    if (colorAsHexString != null
+        && colorAsHexString.toLowerCase().startsWith("0x")) {
       int[] rgba = ColorHelper.fromHexString(colorAsHexString);
       return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
     }

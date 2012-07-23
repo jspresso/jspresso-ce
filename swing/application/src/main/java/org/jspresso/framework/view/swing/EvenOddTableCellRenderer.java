@@ -46,6 +46,8 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
   private Color             backgroundBase;
   private Font              customFont;
   private String            toolTipProperty;
+  private String            backgroundProperty;
+  private String            foregroundProperty;
 
   /**
    * {@inheritDoc}
@@ -62,16 +64,11 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
       super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
           isSelected, row));
       FontMetrics fm = getFontMetrics(getFont());
+      CollectionConnectorTableModel tm = getActualTableModel(table);
       if (table.convertColumnIndexToModel(column) == 0) {
-        TableModel tm = getActualTableModel(table);
-        if (tm instanceof CollectionConnectorTableModel) {
-          setToolTipText(((CollectionConnectorTableModel) tm)
-              .getRowToolTip(row));
-        }
+        setToolTipText(tm.getRowToolTip(row));
       } else if (getToolTipProperty() != null) {
-        TableModel tm = getActualTableModel(table);
-        setToolTipText(((CollectionConnectorTableModel) tm).getCellToolTip(row,
-            getToolTipProperty()));
+        setToolTipText(tm.getCellToolTip(row, getToolTipProperty()));
       } else {
         if (HtmlHelper.isHtml(getText())
             || fm.stringWidth(getText()) > table.getColumnModel()
@@ -80,6 +77,20 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
         } else {
           setToolTipText(null);
         }
+      }
+      if (getBackgroundProperty() != null) {
+        setBackground(DefaultSwingViewFactory.createColor(tm.getCellBackground(
+            row, getBackgroundProperty())));
+      } else {
+        setBackground(DefaultSwingViewFactory.createColor(tm
+            .getRowBackground(row)));
+      }
+      if (getForegroundProperty() != null) {
+        setForeground(DefaultSwingViewFactory.createColor(tm.getCellForeground(
+            row, getForegroundProperty())));
+      } else {
+        setForeground(DefaultSwingViewFactory.createColor(tm
+            .getRowForeground(row)));
       }
     }
     Component c = super.getTableCellRendererComponent(table, value, isSelected,
@@ -95,12 +106,12 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
     return c;
   }
 
-  private TableModel getActualTableModel(JTable table) {
+  private CollectionConnectorTableModel getActualTableModel(JTable table) {
     TableModel tm = table.getModel();
     if (tm instanceof AbstractTableSorter) {
       tm = ((AbstractTableSorter) tm).getTableModel();
     }
-    return tm;
+    return (CollectionConnectorTableModel) tm;
   }
 
   /**
@@ -148,5 +159,43 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    */
   public void setToolTipProperty(String toolTipProperty) {
     this.toolTipProperty = toolTipProperty;
+  }
+
+  /**
+   * Gets the backgroundProperty.
+   * 
+   * @return the backgroundProperty.
+   */
+  protected String getBackgroundProperty() {
+    return backgroundProperty;
+  }
+
+  /**
+   * Sets the backgroundProperty.
+   * 
+   * @param backgroundProperty
+   *          the backgroundProperty to set.
+   */
+  public void setBackgroundProperty(String backgroundProperty) {
+    this.backgroundProperty = backgroundProperty;
+  }
+
+  /**
+   * Gets the foregroundProperty.
+   * 
+   * @return the foregroundProperty.
+   */
+  protected String getForegroundProperty() {
+    return foregroundProperty;
+  }
+
+  /**
+   * Sets the foregroundProperty.
+   * 
+   * @param foregroundProperty
+   *          the foregroundProperty to set.
+   */
+  public void setForegroundProperty(String foregroundProperty) {
+    this.foregroundProperty = foregroundProperty;
   }
 }
