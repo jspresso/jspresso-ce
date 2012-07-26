@@ -96,26 +96,24 @@ package org.jspresso.framework.view.flex {
       
       if(listData.owner is DataGrid) {
         var dg:DataGrid = listData.owner as DataGrid;
-        if (true/*!(dg.isItemSelected(data) || dg.isItemHighlighted(data))*/) {
-          if(backgroundIndex >= 0) {
-            var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
-            if(backgroundValue) {
-              setStyle("backgroundColor", backgroundValue);
-              setStyle("backgroundAlpha", DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
-            } else {
-              setStyle("backgroundColor", null);
-              setStyle("backgroundAlpha", null);
-            }
+        if(backgroundIndex >= 0) {
+          var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+          if(backgroundValue) {
+            setStyle("backgroundColor", backgroundValue);
+            setStyle("backgroundAlpha", DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
+          } else {
+            setStyle("backgroundColor", null);
+            setStyle("backgroundAlpha", null);
           }
-          if(foregroundIndex >= 0) {
-            var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
-            if(foregroundValue) {
-              setStyle("color", foregroundValue);
-              setStyle("alpha", DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String));
-            } else {
-              setStyle("color", null);
-              setStyle("alpha", null);
-            }
+        }
+        if(foregroundIndex >= 0) {
+          var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+          if(foregroundValue) {
+            setStyle("color", foregroundValue);
+            setStyle("alpha", DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String));
+          } else {
+            setStyle("color", null);
+            setStyle("alpha", null);
           }
         }
       }

@@ -20,11 +20,12 @@ qx.Class.define("org.jspresso.framework.util.remote.registry.BasicRemotePeerRegi
   
   construct : function() {
     this.base(arguments);
+    this.__backingStore = new Object();
   },
 
   members :
   {
-    __backingStore : {},
+    __backingStore : null,
     
     register : function(remotePeer){
       if(remotePeer && remotePeer.getGuid()) {

@@ -193,6 +193,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                     .getForeground()));
       }
       if (remoteComponent.getBackground()) {
+        component.setDecorator("main");
         component
             .setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory
                 ._hexColorToQxColor(remoteComponent
@@ -518,6 +519,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(
             this, rColumn, this.__actionHandler);
         columnModel.setCellEditorFactory(i, editor);
+        var bgIndex = -1;
+        var fgIndex = -1;
+        if(rColumn.getBackgroundState()) {
+          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getBackgroundState());
+        } else if(remoteTable.getBackgroundState()) {
+          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getBackgroundState());
+        }
+        if(rColumn.getForegroundState()) {
+          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getForegroundState());
+        } else if(remoteTable.getForegroundState()) {
+          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getForegroundState());
+        }
         var cellRenderer = null;
         if (rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
           cellRenderer = new org.jspresso.framework.view.qx.BooleanTableCellRenderer();
@@ -565,15 +578,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             alignment = "right";
           }
 
-          var additionalAttributes = {};
+          var additionalAttributes = new Object();
           if (alignment) {
             additionalAttributes["text-align"] = alignment;
           }
-          if (rColumn.getForeground()) {
+          if(fgIndex >= 0) {
+            additionalAttributes["foregroundIndex"] = fgIndex;
+          } else if (rColumn.getForeground()) {
             additionalAttributes["color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory
                 ._hexColorToQxColor(rColumn.getForeground());
           }
-          if (rColumn.getBackground()) {
+          if(bgIndex >= 0) {
+            additionalAttributes["backgroundIndex"] = bgIndex;
+          } else if (rColumn.getBackground()) {
             additionalAttributes["background-color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory
                 ._hexColorToQxColor(rColumn.getBackground());
           }
@@ -635,14 +652,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         columnToolTips[i] = -1;
         if(rColumn.getToolTipState()) {
-          //indexof does not work from Json serialization
-          var ttsGuid = rColumn.getToolTipState().getGuid();
-          for (var j = 0; j < remoteTable.getRowPrototype().getChildren().length; j++) {
-            var colState = remoteTable.getRowPrototype().getChildren().getItem(j);
-            if(ttsGuid == colState.getGuid()) {
-              columnToolTips[i] = j;
-            }
-          }
+          columnToolTips[i] = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getToolTipState());
         }
       }
       tableModel.setDynamicToolTipIndices(columnToolTips);
@@ -1670,7 +1680,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var compCol;
         var compColSpan;
         
-        this._bindDynamicTooltip(component, rComponent);
+        this._bindDynamicToolTip(component, rComponent);
+        this._bindDynamicBackground(component, rComponent);
+        this._bindDynamicForeground(component, rComponent);
 
         if (remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = this.createComponent(remoteForm
@@ -1792,15 +1804,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return decoratedForm;
     },
 
-    _bindDynamicTooltip : function(component, rComponent) {
+    _bindDynamicToolTip : function(component, rComponent) {
       var toolTipState = rComponent.getToolTipState();
       if(toolTipState) {
-        // de-dup state
-        if(this._getRemotePeerRegistry().isRegistered(toolTipState.getGuid())) {
-          toolTipState = this._getRemotePeerRegistry().getRegistered(toolTipState.getGuid());
-        } else {
-          this._getRemotePeerRegistry().register(rComponent.getToolTipState());
-        }
+        this._getRemotePeerRegistry().register(toolTipState);
         var modelController = new qx.data.controller.Object(toolTipState);
         var toolTip = new qx.ui.tooltip.ToolTip();
         toolTip.setRich(true);
@@ -1811,6 +1818,38 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
     },
     
+    _bindDynamicBackground : function(component, rComponent) {
+      var backgroundState = rComponent.getBackgroundState();
+      if(backgroundState) {
+        // To allow for having the background color displayed instead of the decorator.
+        component.setDecorator("main");
+        this._getRemotePeerRegistry().register(backgroundState);
+        var modelController = new qx.data.controller.Object(backgroundState);
+        modelController.addTarget(component, "backgroundColor", "value",
+            false, {
+              converter : function(modelValue, model) {
+                return org.jspresso.framework.view.qx.DefaultQxViewFactory
+                    ._hexColorToQxColor(modelValue);
+              }
+            });
+      }
+    },
+
+    _bindDynamicForeground : function(component, rComponent) {
+      var foregroundState = rComponent.getForegroundState();
+      if(foregroundState) {
+        this._getRemotePeerRegistry().register(foregroundState);
+        var modelController = new qx.data.controller.Object(foregroundState);
+        modelController.addTarget(component, "textColor", "value",
+            false, {
+              converter : function(modelValue, model) {
+                return org.jspresso.framework.view.qx.DefaultQxViewFactory
+                    ._hexColorToQxColor(modelValue);
+              }
+            });
+      }
+    },
+
     /**
      * @param {org.jspresso.framework.gui.remote.RSplitContainer}
      *            remoteSplitContainer

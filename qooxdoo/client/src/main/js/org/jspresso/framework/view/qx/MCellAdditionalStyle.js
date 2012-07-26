@@ -27,7 +27,17 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle",
       if(this.__attributes) {
         var styleString = [];
         for(var key in this.__attributes) {
-          if (this.__attributes[key]) {
+          if(key == "backgroundIndex" || key == "foregroundIndex") {
+            var color = org.jspresso.framework.view.qx.DefaultQxViewFactory
+                ._hexColorToQxColor(cellInfo.rowData.getChildren().getItem(this.__attributes[key]).getValue());
+            if(color) {
+              if(key == "backgroundIndex") {
+                styleString.push("background-color", ":", color, ";");
+              } else {
+                styleString.push("color", ":", color, ";");
+              }
+            }
+          } else if (this.__attributes[key]) {
             if(!cellInfo.selected ||
               ( cellInfo.selected && !("background-color" == key || "color" == key))) {
               styleString.push(key, ":", this.__attributes[key], ";");

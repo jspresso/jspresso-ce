@@ -34,7 +34,7 @@ qx.Class.define("org.jspresso.framework.view.qx.ColorTableCellRenderer",
       var superStyle = this.base(arguments, cellInfo);
       if(cellInfo.value) {
         var bgStyle = "color: #" + cellInfo.value.substring(4) + ";";
-        return superStyle = (superStyle || "") + bgStyle;
+        superStyle = (superStyle || "") + bgStyle;
       }
       return superStyle + this._getAdditionalCellStyle(cellInfo);
     }

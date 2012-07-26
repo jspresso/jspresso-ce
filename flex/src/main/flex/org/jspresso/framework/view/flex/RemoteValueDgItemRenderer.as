@@ -253,25 +253,23 @@ package org.jspresso.framework.view.flex {
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
       if(listData.owner is DataGrid) {
         var dg:DataGrid = listData.owner as DataGrid;
-        if (true/*!(dg.isItemSelected(data) || dg.isItemHighlighted(data))*/) {
-          if(backgroundIndex >= 0) {
-            var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
-            var alpha:uint = DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String);
-            var g:Graphics = graphics;
-            g.clear();
-            g.beginFill(new uint(backgroundValue), alpha);
-            g.drawRect(0, 0, unscaledWidth, unscaledHeight);
-            g.endFill();
-          }
-          if(foregroundIndex >= 0) {
-            var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
-            if(foregroundValue) {
-              setStyle("color", foregroundValue);
-              alpha = DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String);
-            } else {
-              setStyle("color", null);
-              alpha = 1.0;
-            }
+        if(backgroundIndex >= 0) {
+          var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+          var alpha:uint = DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String);
+          var g:Graphics = graphics;
+          g.clear();
+          g.beginFill(new uint(backgroundValue), alpha);
+          g.drawRect(0, 0, unscaledWidth, unscaledHeight);
+          g.endFill();
+        }
+        if(foregroundIndex >= 0) {
+          var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+          if(foregroundValue) {
+            setStyle("color", foregroundValue);
+            alpha = DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String);
+          } else {
+            setStyle("color", null);
+            alpha = 1.0;
           }
         }
       }
