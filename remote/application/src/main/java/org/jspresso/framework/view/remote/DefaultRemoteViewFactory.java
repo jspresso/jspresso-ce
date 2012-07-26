@@ -1959,16 +1959,29 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
     viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
     viewComponent.setColumnIds(columnIds.toArray(new String[0]));
-    if (rowConnectorPrototype instanceof IRemoteStateOwner) {
-      viewComponent
-          .setRowPrototype((RemoteCompositeValueState) ((IRemoteStateOwner) rowConnectorPrototype)
-              .getState());
-    }
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
+
+    completeViewWithDynamicBackground(viewComponent, viewDescriptor,
+        rowDescriptor, rowConnectorPrototype);
+    completeViewWithDynamicForeground(viewComponent, viewDescriptor,
+        rowDescriptor, rowConnectorPrototype);
+
+    if (rowConnectorPrototype instanceof IRemoteStateOwner) {
+      viewComponent
+          .setRowPrototype((RemoteCompositeValueState) ((IRemoteStateOwner) rowConnectorPrototype)
+              .getState());
+    }
+    return view;
+  }
+
+  private void completeViewWithDynamicBackground(RTable viewComponent,
+      ITableViewDescriptor viewDescriptor,
+      IComponentDescriptor<?> rowDescriptor,
+      ICompositeValueConnector rowConnectorPrototype) {
     String dynamicBackgroundProperty = computeComponentDynamicBackground(
         viewDescriptor, rowDescriptor);
     if (dynamicBackgroundProperty != null) {
@@ -1986,7 +1999,12 @@ public class DefaultRemoteViewFactory extends
                 .getState());
       }
     }
+  }
 
+  private void completeViewWithDynamicForeground(RTable viewComponent,
+      ITableViewDescriptor viewDescriptor,
+      IComponentDescriptor<?> rowDescriptor,
+      ICompositeValueConnector rowConnectorPrototype) {
     String dynamicForegroundProperty = computeComponentDynamicForeground(
         viewDescriptor, rowDescriptor);
     if (dynamicForegroundProperty != null) {
@@ -2004,7 +2022,6 @@ public class DefaultRemoteViewFactory extends
                 .getState());
       }
     }
-    return view;
   }
 
   private void completePropertyViewsWithDynamicToolTips(

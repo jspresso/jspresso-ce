@@ -29,8 +29,10 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.swing.CollectionConnectorTableModel;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
@@ -47,6 +49,10 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   private Color               unselectedForeground;
   private Color               unselectedBackground;
+
+  private String              toolTipProperty;
+  private String              backgroundProperty;
+  private String              foregroundProperty;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -116,13 +122,36 @@ public class BooleanTableCellRenderer extends JCheckBox implements
     } else {
       setBorder(NO_FOCUS_BORDER);
     }
+    if (row >= 0) {
+      CollectionConnectorTableModel tm = getActualTableModel(table);
+      if (table.convertColumnIndexToModel(column) == 0) {
+        setToolTipText(tm.getRowToolTip(row));
+      } else if (getToolTipProperty() != null) {
+        setToolTipText(tm.getCellToolTip(row, getToolTipProperty()));
+      }
+      if (getBackgroundProperty() != null) {
+        setBackground(DefaultSwingViewFactory.createColor(tm.getCellBackground(
+            row, getBackgroundProperty())));
+      } else {
+        setBackground(DefaultSwingViewFactory.createColor(tm
+            .getRowBackground(row)));
+      }
+      if (getForegroundProperty() != null) {
+        setForeground(DefaultSwingViewFactory.createColor(tm.getCellForeground(
+            row, getForegroundProperty())));
+      } else {
+        setForeground(DefaultSwingViewFactory.createColor(tm
+            .getRowForeground(row)));
+      }
+    }
     return this;
   }
 
   /**
    * Sets the renderer value.
    * 
-   * @param value the model value.
+   * @param value
+   *          the model value.
    */
   protected void setValue(Object value) {
     if (value instanceof IValueConnector) {
@@ -245,6 +274,14 @@ public class BooleanTableCellRenderer extends JCheckBox implements
     // NO-OP
   }
 
+  private CollectionConnectorTableModel getActualTableModel(JTable table) {
+    TableModel tm = table.getModel();
+    if (tm instanceof AbstractTableSorter) {
+      tm = ((AbstractTableSorter) tm).getTableModel();
+    }
+    return (CollectionConnectorTableModel) tm;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -261,5 +298,62 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   public void setBackground(Color bg) {
     super.setBackground(bg);
     unselectedBackground = bg;
+  }
+
+  /**
+   * Gets the toolTipProperty.
+   * 
+   * @return the toolTipProperty.
+   */
+  protected String getToolTipProperty() {
+    return toolTipProperty;
+  }
+
+  /**
+   * Sets the toolTipProperty.
+   * 
+   * @param toolTipProperty
+   *          the toolTipProperty to set.
+   */
+  public void setToolTipProperty(String toolTipProperty) {
+    this.toolTipProperty = toolTipProperty;
+  }
+
+  /**
+   * Gets the backgroundProperty.
+   * 
+   * @return the backgroundProperty.
+   */
+  protected String getBackgroundProperty() {
+    return backgroundProperty;
+  }
+
+  /**
+   * Sets the backgroundProperty.
+   * 
+   * @param backgroundProperty
+   *          the backgroundProperty to set.
+   */
+  public void setBackgroundProperty(String backgroundProperty) {
+    this.backgroundProperty = backgroundProperty;
+  }
+
+  /**
+   * Gets the foregroundProperty.
+   * 
+   * @return the foregroundProperty.
+   */
+  protected String getForegroundProperty() {
+    return foregroundProperty;
+  }
+
+  /**
+   * Sets the foregroundProperty.
+   * 
+   * @param foregroundProperty
+   *          the foregroundProperty to set.
+   */
+  public void setForegroundProperty(String foregroundProperty) {
+    this.foregroundProperty = foregroundProperty;
   }
 }
