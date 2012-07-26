@@ -54,6 +54,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
       check : "org.jspresso.framework.util.gui.Font",
       nullable : true
     },
+    fontState :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable : true
+    },
     foreground :
     {
       check : "String",

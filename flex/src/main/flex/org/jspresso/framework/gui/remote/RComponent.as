@@ -32,6 +32,7 @@ package org.jspresso.framework.gui.remote {
         private var _backgroundState:RemoteValueState;
         private var _borderType:String;
         private var _font:Font;
+        private var _fontState:RemoteValueState;
         private var _foreground:String;
         private var _foregroundState:RemoteValueState;
         private var _icon:RIcon;
@@ -164,6 +165,14 @@ package org.jspresso.framework.gui.remote {
 
         public function set foregroundState(value:RemoteValueState):void {
           _foregroundState = value;
+        }
+
+        public function get fontState():RemoteValueState {
+          return _fontState;
+        }
+
+        public function set fontState(value:RemoteValueState):void {
+          _fontState = value;
         }
 
 

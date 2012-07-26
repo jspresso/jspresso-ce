@@ -41,6 +41,7 @@ public abstract class RComponent extends RemotePeer implements
   private RemoteValueState  backgroundState;
   private String            borderType;
   private Font              font;
+  private RemoteValueState  fontState;
   private String            foreground;
   private RemoteValueState  foregroundState;
   private RIcon             icon;
@@ -377,5 +378,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setForegroundState(RemoteValueState foregroundState) {
     this.foregroundState = foregroundState;
+  }
+
+  /**
+   * Gets the fontState.
+   * 
+   * @return the fontState.
+   */
+  public RemoteValueState getFontState() {
+    return fontState;
+  }
+
+  /**
+   * Sets the fontState.
+   * 
+   * @param fontState
+   *          the fontState to set.
+   */
+  public void setFontState(RemoteValueState fontState) {
+    this.fontState = fontState;
   }
 }

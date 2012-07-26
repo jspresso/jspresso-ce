@@ -3107,8 +3107,7 @@ public class DefaultSwingViewFactory extends
   }
 
   static Color createColor(String colorAsHexString) {
-    if (colorAsHexString != null
-        && colorAsHexString.toLowerCase().startsWith("0x")) {
+    if (colorAsHexString != null && ColorHelper.isColorSpec(colorAsHexString)) {
       int[] rgba = ColorHelper.fromHexString(colorAsHexString);
       return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
     }

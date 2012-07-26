@@ -34,7 +34,7 @@ public final class ColorHelper {
    * Transforms a color rgba hex string representation to its rgba components.
    * 
    * @param hexString
-   *            the Hex string representation argb coded.
+   *          the Hex string representation argb coded.
    * @return the rgba components of the color once parsed in an array.
    */
   public static int[] fromHexString(String hexString) {
@@ -54,16 +54,17 @@ public final class ColorHelper {
   }
 
   /**
-   * Transforms a color rgba components to their hex string representation argb coded.
+   * Transforms a color rgba components to their hex string representation argb
+   * coded.
    * 
    * @param r
-   *            the red component.
+   *          the red component.
    * @param g
-   *            the green component.
+   *          the green component.
    * @param b
-   *            the blue component.
+   *          the blue component.
    * @param a
-   *            the alpha (transparency) component.
+   *          the alpha (transparency) component.
    * @return the Hex string representation.
    */
   public static String toHexString(int r, int g, int b, int a) {
@@ -81,5 +82,16 @@ public final class ColorHelper {
       hex.insert(0, "0");
     }
     return hex.toString();
+  }
+
+  /**
+   * Tests wether the parameter string is a color specification.
+   * 
+   * @param colorString
+   *          the string to test.
+   * @return <code>true</code> if the string can be parsed as a color.
+   */
+  public static boolean isColorSpec(String colorString) {
+    return colorString != null && colorString.toLowerCase().startsWith("0x");
   }
 }
