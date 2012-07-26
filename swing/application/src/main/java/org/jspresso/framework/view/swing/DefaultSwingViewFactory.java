@@ -2406,7 +2406,7 @@ public class DefaultSwingViewFactory extends
             .setCustomFont(((JComponent) cellRenderer).getFont());
       }
     }
-    if (cellRenderer instanceof EvenOddTableCellRenderer) {
+    if (cellRenderer instanceof DynamicStyleRenderer) {
       String dynamicToolTipProperty = computePropertyDynamicToolTip(
           rowDescriptor, columnViewDescriptor, propertyDescriptor);
       if (dynamicToolTipProperty != null) {
@@ -2419,7 +2419,7 @@ public class DefaultSwingViewFactory extends
               toolTipConnector);
         }
       }
-      ((EvenOddTableCellRenderer) cellRenderer)
+      ((DynamicStyleRenderer) cellRenderer)
           .setToolTipProperty(dynamicToolTipProperty);
 
       String dynamicBackgroundProperty = computePropertyDynamicBackground(
@@ -2434,7 +2434,7 @@ public class DefaultSwingViewFactory extends
               backgroundConnector);
         }
       }
-      ((EvenOddTableCellRenderer) cellRenderer)
+      ((DynamicStyleRenderer) cellRenderer)
           .setBackgroundProperty(dynamicBackgroundProperty);
 
       String dynamicForegroundProperty = computePropertyDynamicForeground(
@@ -2449,7 +2449,7 @@ public class DefaultSwingViewFactory extends
               foregroundConnector);
         }
       }
-      ((EvenOddTableCellRenderer) cellRenderer)
+      ((DynamicStyleRenderer) cellRenderer)
           .setForegroundProperty(dynamicForegroundProperty);
 
       String dynamicFontProperty = computePropertyDynamicFont(rowDescriptor,
@@ -2464,7 +2464,7 @@ public class DefaultSwingViewFactory extends
               fontConnector);
         }
       }
-      ((EvenOddTableCellRenderer) cellRenderer)
+      ((DynamicStyleRenderer) cellRenderer)
           .setFontProperty(dynamicFontProperty);
     }
     if (columnViewDescriptor.getAction() != null

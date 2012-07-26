@@ -42,7 +42,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * @author Vincent Vandenschrick
  */
 public class BooleanTableCellRenderer extends JCheckBox implements
-    TableCellRenderer {
+    TableCellRenderer, DynamicStyleRenderer {
 
   private static final long   serialVersionUID = 5944792695339009139L;
   private static final Border NO_FOCUS_BORDER  = new EmptyBorder(1, 1, 1, 1);
@@ -133,23 +133,16 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       if (getBackgroundProperty() != null) {
         setBackground(DefaultSwingViewFactory.createColor(tm.getCellBackground(
             row, getBackgroundProperty())));
-      } else {
+      } else if (tm.getRowBackground(row) != null) {
         setBackground(DefaultSwingViewFactory.createColor(tm
             .getRowBackground(row)));
       }
       if (getForegroundProperty() != null) {
         setForeground(DefaultSwingViewFactory.createColor(tm.getCellForeground(
             row, getForegroundProperty())));
-      } else {
+      } else if (tm.getRowBackground(row) != null) {
         setForeground(DefaultSwingViewFactory.createColor(tm
             .getRowForeground(row)));
-      }
-      if (getFontProperty() != null) {
-        setFont(DefaultSwingViewFactory.createFont(
-            tm.getCellFont(row, getFontProperty()), getFont()));
-      } else if (tm.getRowFont(row) != null) {
-        setFont(DefaultSwingViewFactory.createFont(tm.getRowFont(row),
-            getFont()));
       }
     }
     return this;
@@ -323,6 +316,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * @param toolTipProperty
    *          the toolTipProperty to set.
    */
+  @Override
   public void setToolTipProperty(String toolTipProperty) {
     this.toolTipProperty = toolTipProperty;
   }
@@ -342,6 +336,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * @param backgroundProperty
    *          the backgroundProperty to set.
    */
+  @Override
   public void setBackgroundProperty(String backgroundProperty) {
     this.backgroundProperty = backgroundProperty;
   }
@@ -361,6 +356,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * @param foregroundProperty
    *          the foregroundProperty to set.
    */
+  @Override
   public void setForegroundProperty(String foregroundProperty) {
     this.foregroundProperty = foregroundProperty;
   }
@@ -380,6 +376,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * @param fontProperty
    *          the fontProperty to set.
    */
+  @Override
   public void setFontProperty(String fontProperty) {
     this.fontProperty = fontProperty;
   }

@@ -39,7 +39,8 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
+public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
+    implements DynamicStyleRenderer {
 
   private static final long serialVersionUID = -635326662239616998L;
 
@@ -174,6 +175,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    * @param toolTipProperty
    *          the toolTipProperty to set.
    */
+  @Override
   public void setToolTipProperty(String toolTipProperty) {
     this.toolTipProperty = toolTipProperty;
   }
@@ -193,6 +195,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    * @param backgroundProperty
    *          the backgroundProperty to set.
    */
+  @Override
   public void setBackgroundProperty(String backgroundProperty) {
     this.backgroundProperty = backgroundProperty;
   }
@@ -212,6 +215,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    * @param foregroundProperty
    *          the foregroundProperty to set.
    */
+  @Override
   public void setForegroundProperty(String foregroundProperty) {
     this.foregroundProperty = foregroundProperty;
   }
@@ -231,6 +235,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    * @param fontProperty
    *          the fontProperty to set.
    */
+  @Override
   public void setFontProperty(String fontProperty) {
     this.fontProperty = fontProperty;
   }
