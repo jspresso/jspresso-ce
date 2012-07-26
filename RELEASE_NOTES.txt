@@ -1,5 +1,12 @@
 3.5.14
 ======
+- controller onModuleEnter action executes now before the module entry action. This makes the order
+  of actions executions more coherent, i.e. :
+    controller.onModuleEnter
+    module.entry
+    module.exit
+    controller.onModuleExit
+  
 - in webapp/flex/index.html, replace :
   
   onLoad="window.document['hrsample-startup-flex-client'].focus()"
