@@ -59,6 +59,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   private String                 rowBackgroundProperty;
   private String                 rowForegroundProperty;
+  private String                 rowFontProperty;
 
   private IExceptionHandler      exceptionHandler;
 
@@ -379,6 +380,24 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   }
 
   /**
+   * Gets the value to display as cell font.
+   * 
+   * @param rowIndex
+   *          the row index to compute the font for.
+   * @param fontProperty
+   *          the property used to compute the font.
+   * @return the cell font or null.
+   */
+  public String getCellFont(int rowIndex, String fontProperty) {
+    IValueConnector fontConnector = ((ICompositeValueConnector) collectionConnector
+        .getChildConnector(rowIndex)).getChildConnector(fontProperty);
+    if (fontConnector != null && fontConnector.getConnectorValue() != null) {
+      return fontConnector.getConnectorValue().toString();
+    }
+    return null;
+  }
+
+  /**
    * Gets the value to display as row background.
    * 
    * @param rowIndex
@@ -413,6 +432,24 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       if (foregroundConnector != null
           && foregroundConnector.getConnectorValue() != null) {
         return foregroundConnector.getConnectorValue().toString();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Gets the value to display as row font.
+   * 
+   * @param rowIndex
+   *          the row index to compute the font for.
+   * @return the row font or null.
+   */
+  public String getRowFont(int rowIndex) {
+    if (getRowFontProperty() != null) {
+      IValueConnector fontConnector = ((ICompositeValueConnector) collectionConnector
+          .getChildConnector(rowIndex)).getChildConnector(getRowFontProperty());
+      if (fontConnector != null && fontConnector.getConnectorValue() != null) {
+        return fontConnector.getConnectorValue().toString();
       }
     }
     return null;
@@ -500,5 +537,24 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   public void setRowForegroundProperty(String rowForegroundProperty) {
     this.rowForegroundProperty = rowForegroundProperty;
+  }
+
+  /**
+   * Gets the rowFontProperty.
+   * 
+   * @return the rowFontProperty.
+   */
+  protected String getRowFontProperty() {
+    return rowFontProperty;
+  }
+
+  /**
+   * Sets the rowFontProperty.
+   * 
+   * @param rowFontProperty
+   *          the rowFontProperty to set.
+   */
+  public void setRowFontProperty(String rowFontProperty) {
+    this.rowFontProperty = rowFontProperty;
   }
 }

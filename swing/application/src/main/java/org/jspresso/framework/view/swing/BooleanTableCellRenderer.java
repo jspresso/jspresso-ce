@@ -53,6 +53,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   private String              toolTipProperty;
   private String              backgroundProperty;
   private String              foregroundProperty;
+  private String              fontProperty;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -142,6 +143,13 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       } else {
         setForeground(DefaultSwingViewFactory.createColor(tm
             .getRowForeground(row)));
+      }
+      if (getFontProperty() != null) {
+        setFont(DefaultSwingViewFactory.createFont(
+            tm.getCellFont(row, getFontProperty()), getFont()));
+      } else if (tm.getRowFont(row) != null) {
+        setFont(DefaultSwingViewFactory.createFont(tm.getRowFont(row),
+            getFont()));
       }
     }
     return this;
@@ -355,5 +363,24 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    */
   public void setForegroundProperty(String foregroundProperty) {
     this.foregroundProperty = foregroundProperty;
+  }
+
+  /**
+   * Gets the fontProperty.
+   * 
+   * @return the fontProperty.
+   */
+  protected String getFontProperty() {
+    return fontProperty;
+  }
+
+  /**
+   * Sets the fontProperty.
+   * 
+   * @param fontProperty
+   *          the fontProperty to set.
+   */
+  public void setFontProperty(String fontProperty) {
+    this.fontProperty = fontProperty;
   }
 }

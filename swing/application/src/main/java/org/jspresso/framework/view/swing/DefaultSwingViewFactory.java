@@ -295,7 +295,8 @@ public class DefaultSwingViewFactory extends
   protected void adjustSizes(IViewDescriptor viewDescriptor,
       JComponent component, IFormatter formatter, Object templateValue,
       int extraWidth) {
-    if (viewDescriptor.getFont() != null) {
+    if (viewDescriptor.getFont() != null
+        && FontHelper.isFontSpec(viewDescriptor.getFont())) {
       // must set font before computing size.
       component.setFont(createFont(viewDescriptor.getFont(),
           component.getFont()));
@@ -710,6 +711,8 @@ public class DefaultSwingViewFactory extends
         modelDescriptor);
     completePropertyViewsWithDynamicForegrounds(connector, propertyViews,
         modelDescriptor);
+    completePropertyViewsWithDynamicFonts(connector, propertyViews,
+        modelDescriptor);
     applyComponentViewScrollability(viewDescriptor, viewComponent, view);
     return view;
   }
@@ -790,6 +793,32 @@ public class DefaultSwingViewFactory extends
               foregroundConnector);
         }
         attachForegroundListener(propertyView.getPeer(), foregroundConnector);
+      }
+    }
+  }
+
+  private void completePropertyViewsWithDynamicFonts(
+      ICompositeValueConnector connector,
+      List<IView<JComponent>> propertyViews,
+      IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic font
+    for (IView<JComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+          .getDescriptor();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      String dynamicFontProperty = computePropertyDynamicFont(modelDescriptor,
+          propertyViewDescriptor, propertyDescriptor);
+      // Dynamic font
+      if (dynamicFontProperty != null) {
+        IValueConnector fontConnector = connector
+            .getChildConnector(dynamicFontProperty);
+        if (fontConnector == null) {
+          fontConnector = getConnectorFactory().createValueConnector(
+              dynamicFontProperty);
+          connector.addChildConnector(dynamicFontProperty, fontConnector);
+        }
+        attachFontListener(propertyView.getPeer(), fontConnector);
       }
     }
   }
@@ -885,6 +914,33 @@ public class DefaultSwingViewFactory extends
                 .toString()));
           } else {
             viewComponent.setForeground(null);
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Attaches a dynamic font listener.
+   * 
+   * @param viewComponent
+   *          the view component to attach the font to
+   * @param connector
+   *          the view connector responsible for the font.
+   */
+  protected void attachFontListener(final JComponent viewComponent,
+      IValueConnector connector) {
+    final Font defaultFont = viewComponent.getFont();
+    if (connector != null) {
+      connector.addValueChangeListener(new IValueChangeListener() {
+
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          if (evt.getNewValue() != null) {
+            viewComponent.setFont(createFont(evt.getNewValue().toString(),
+                defaultFont));
+          } else {
+            viewComponent.setFont(defaultFont);
           }
         }
       });
@@ -2279,6 +2335,20 @@ public class DefaultSwingViewFactory extends
     }
     tableModel.setRowForegroundProperty(dynamicForegroundProperty);
 
+    String dynamicFontProperty = computeComponentDynamicFont(viewDescriptor,
+        rowDescriptor);
+    if (dynamicFontProperty != null) {
+      IValueConnector backgroundConnector = rowConnectorPrototype
+          .getChildConnector(dynamicFontProperty);
+      if (backgroundConnector == null) {
+        backgroundConnector = getConnectorFactory().createValueConnector(
+            dynamicFontProperty);
+        rowConnectorPrototype.addChildConnector(dynamicFontProperty,
+            backgroundConnector);
+      }
+    }
+    tableModel.setRowFontProperty(dynamicFontProperty);
+
     return view;
   }
 
@@ -2382,6 +2452,20 @@ public class DefaultSwingViewFactory extends
       ((EvenOddTableCellRenderer) cellRenderer)
           .setForegroundProperty(dynamicForegroundProperty);
 
+      String dynamicFontProperty = computePropertyDynamicFont(rowDescriptor,
+          columnViewDescriptor, propertyDescriptor);
+      if (dynamicFontProperty != null) {
+        IValueConnector fontConnector = rowConnectorPrototype
+            .getChildConnector(dynamicFontProperty);
+        if (fontConnector == null) {
+          fontConnector = getConnectorFactory().createValueConnector(
+              dynamicFontProperty);
+          rowConnectorPrototype.addChildConnector(dynamicFontProperty,
+              fontConnector);
+        }
+      }
+      ((EvenOddTableCellRenderer) cellRenderer)
+          .setFontProperty(dynamicFontProperty);
     }
     if (columnViewDescriptor.getAction() != null
         && columnViewDescriptor.isReadOnly()) {
@@ -2987,7 +3071,8 @@ public class DefaultSwingViewFactory extends
     if (viewDescriptor.getBackground() != null) {
       viewPeer.setBackground(createColor(viewDescriptor.getBackground()));
     }
-    if (viewDescriptor.getFont() != null) {
+    if (viewDescriptor.getFont() != null
+        && FontHelper.isFontSpec(viewDescriptor.getFont())) {
       viewPeer
           .setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
@@ -3072,7 +3157,7 @@ public class DefaultSwingViewFactory extends
     return new ImageTableCellRenderer(propertyDescriptor);
   }
 
-  private Font createFont(String fontString, Font defaultFont) {
+  static Font createFont(String fontString, Font defaultFont) {
     org.jspresso.framework.util.gui.Font font = FontHelper
         .fromString(fontString);
     int fontStyle;

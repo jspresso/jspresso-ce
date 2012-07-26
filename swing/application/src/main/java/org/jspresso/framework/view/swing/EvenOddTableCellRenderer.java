@@ -45,9 +45,11 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
 
   private Color             backgroundBase;
   private Font              customFont;
+  private Font              dynamicFont;
   private String            toolTipProperty;
   private String            backgroundProperty;
   private String            foregroundProperty;
+  private String            fontProperty;
 
   /**
    * {@inheritDoc}
@@ -92,12 +94,27 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
         setForeground(DefaultSwingViewFactory.createColor(tm
             .getRowForeground(row)));
       }
+      if (getFontProperty() != null) {
+        setDynamicFont(DefaultSwingViewFactory.createFont(
+            tm.getCellFont(row, getFontProperty()), getFont()));
+      } else {
+        if (tm.getRowFont(row) != null) {
+          setDynamicFont(DefaultSwingViewFactory.createFont(tm.getRowFont(row),
+              getFont()));
+        } else {
+          setDynamicFont(null);
+        }
+      }
     }
     Component c = super.getTableCellRendererComponent(table, value, isSelected,
         hasFocus, row, column);
-    if (getCustomFont() != null) {
+    Font font = getDynamicFont();
+    if (font == null) {
+      font = getCustomFont();
+    }
+    if (font != null) {
       // to override default font mgt of JTable
-      c.setFont(getCustomFont());
+      c.setFont(font);
     }
     Dimension ps = c.getPreferredSize();
     if (row >= 0 && ps.height > table.getRowHeight(row)) {
@@ -197,5 +214,43 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    */
   public void setForegroundProperty(String foregroundProperty) {
     this.foregroundProperty = foregroundProperty;
+  }
+
+  /**
+   * Gets the fontProperty.
+   * 
+   * @return the fontProperty.
+   */
+  protected String getFontProperty() {
+    return fontProperty;
+  }
+
+  /**
+   * Sets the fontProperty.
+   * 
+   * @param fontProperty
+   *          the fontProperty to set.
+   */
+  public void setFontProperty(String fontProperty) {
+    this.fontProperty = fontProperty;
+  }
+
+  /**
+   * Gets the dynamicFont.
+   * 
+   * @return the dynamicFont.
+   */
+  protected Font getDynamicFont() {
+    return dynamicFont;
+  }
+
+  /**
+   * Sets the dynamicFont.
+   * 
+   * @param dynamicFont
+   *          the dynamicFont to set.
+   */
+  public void setDynamicFont(Font dynamicFont) {
+    this.dynamicFont = dynamicFont;
   }
 }

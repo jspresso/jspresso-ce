@@ -98,4 +98,15 @@ public final class FontHelper {
     return fontString.toString();
   }
 
+  /**
+   * Tests wether the parameter string is a font specification.
+   * 
+   * @param fontString
+   *          the string to test.
+   * @return <code>true</code> if the string can be parsed as a font.
+   */
+  public static boolean isFontSpec(String fontString) {
+    return fontString != null && fontString.split(SEP, -1).length == 3;
+  }
+
 }

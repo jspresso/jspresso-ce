@@ -1325,6 +1325,38 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Computes the property name used to compute a property view dynamic font or
+   * null if none or if the font is a static one.
+   * 
+   * @param modelDescriptor
+   *          the component model descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the property name used to compute a property view dynamic font or
+   *         null if none or if the font is a static one.
+   */
+  protected String computePropertyDynamicFont(
+      IComponentDescriptor<?> modelDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IPropertyDescriptor propertyDescriptor) {
+    String dynamicFontProperty = null;
+    String fontKey = null;
+    if (propertyViewDescriptor.getFont() != null) {
+      fontKey = propertyViewDescriptor.getFont();
+    }
+    if (fontKey != null) {
+      IPropertyDescriptor fontProperty = modelDescriptor
+          .getPropertyDescriptor(fontKey);
+      if (fontProperty != null) {
+        dynamicFontProperty = fontProperty.getName();
+      }
+    }
+    return dynamicFontProperty;
+  }
+
+  /**
    * Computes the property name used to compute a component view dynamic tooltip
    * or null if none or if the tooltip is a static one.
    * 
@@ -1396,6 +1428,30 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
     }
     return dynamicForegroundProperty;
+  }
+
+  /**
+   * Computes the property name used to compute a component view font or null if
+   * none or if the font is a static one.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @param modelDescriptor
+   *          the model descriptor.
+   * @return the property name used to compute a component view dynamic font or
+   *         null if none or if the font is a static one.
+   */
+  protected String computeComponentDynamicFont(IViewDescriptor viewDescriptor,
+      IComponentDescriptor<?> modelDescriptor) {
+    String dynamicFontProperty = null;
+    if (viewDescriptor.getFont() != null) {
+      IPropertyDescriptor fontProperty = modelDescriptor
+          .getPropertyDescriptor(viewDescriptor.getFont());
+      if (fontProperty != null) {
+        dynamicFontProperty = fontProperty.getName();
+      }
+    }
+    return dynamicFontProperty;
   }
 
   /**
