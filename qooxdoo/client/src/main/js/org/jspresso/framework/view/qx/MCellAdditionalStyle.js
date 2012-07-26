@@ -32,9 +32,25 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle",
                 ._hexColorToQxColor(cellInfo.rowData.getChildren().getItem(this.__attributes[key]).getValue());
             if(color) {
               if(key == "backgroundIndex") {
-                styleString.push("background-color", ":", color, ";");
+                styleString.push("background-color:", color, ";");
               } else {
-                styleString.push("color", ":", color, ";");
+                styleString.push("color:", color, ";");
+              }
+            }
+          } else if(key == "fontIndex") {
+            var rFont = cellInfo.rowData.getChildren().getItem(this.__attributes[key]).getValue();
+            if(rFont) {
+              if (rFont.isItalic()) {
+                styleString.push("font-style:italic;");
+              }
+              if (rFont.isBold()) {
+                styleString.push("font-weight:bold;");
+              }
+              if (rFont.getName()) {
+                styleString.push("font-family:",rFont.getName(),";");
+              }
+              if (rFont.getSize() > 0) {
+                styleString.push("font-size:",rFont.getSize(),"px;");
               }
             }
           } else if (this.__attributes[key]) {

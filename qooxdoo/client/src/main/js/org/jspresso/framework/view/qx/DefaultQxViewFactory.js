@@ -58,7 +58,36 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         // ignore alpha
       }
       return qxColor;
+    },
+    
+    _fontToQxFont : function(rFont, defaultFont) {
+      var font = new qx.bom.Font();
+      if (!defaultFont) {
+        defaultFont = qx.theme.manager.Font.getInstance()
+            .resolve("default");
+      }
+      if(!rFont) {
+        return defaultFont;
+      }
+      if (rFont.getName()) {
+        font.setFamily([rFont.getName()]);
+      } else if (defaultFont) {
+        font.setFamily(defaultFont.getFamily());
+      }
+      if (rFont.getSize() > 0) {
+        font.setSize(rFont.getSize());
+      } else if (defaultFont) {
+        font.setSize(defaultFont.getSize());
+      }
+      if (rFont.isItalic()) {
+        font.setItalic(true);
+      }
+      if (rFont.isBold()) {
+        font.setBold(true);
+      }
+      return font;
     }
+
   },
 
   construct : function(remotePeerRegistry, actionHandler, commandHandler) {
@@ -201,29 +230,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       var rFont = remoteComponent.getFont();
       if (rFont) {
-        var font = new qx.bom.Font();
         var compFont = component.getFont();
-        if (!compFont) {
-          compFont = qx.theme.manager.Font.getInstance()
-              .resolve("default");
-        }
-        if (rFont.getName()) {
-          font.setFamily([rFont.getName()]);
-        } else if (compFont) {
-          font.setFamily(compFont.getFamily());
-        }
-        if (rFont.getSize() > 0) {
-          font.setSize(rFont.getSize());
-        } else if (compFont) {
-          font.setSize(compFont.getSize());
-        }
-        if (rFont.isItalic()) {
-          font.setItalic(true);
-        }
-        if (rFont.isBold()) {
-          font.setBold(true);
-        }
-        component.setFont(font);
+        component.setFont(org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(rFont, compFont));
       }
       if(remoteComponent.getStyleName()) {
         component.setAppearance(remoteComponent.getStyleName());
@@ -521,15 +529,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         columnModel.setCellEditorFactory(i, editor);
         var bgIndex = -1;
         var fgIndex = -1;
+        var foIndex = -1;
         if(rColumn.getBackgroundState()) {
           bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getBackgroundState());
         } else if(remoteTable.getBackgroundState()) {
           bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getBackgroundState());
         }
         if(rColumn.getForegroundState()) {
-          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getForegroundState());
+          fgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getForegroundState());
         } else if(remoteTable.getForegroundState()) {
-          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getForegroundState());
+          fgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getForegroundState());
+        }
+        if(rColumn.getFontState()) {
+          foIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getFontState());
+        } else if(remoteTable.getFontState()) {
+          foIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getFontState());
         }
         var cellRenderer = null;
         if (rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
@@ -582,34 +596,38 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (alignment) {
             additionalAttributes["text-align"] = alignment;
           }
-          if(fgIndex >= 0) {
-            additionalAttributes["foregroundIndex"] = fgIndex;
-          } else if (rColumn.getForeground()) {
-            additionalAttributes["color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory
-                ._hexColorToQxColor(rColumn.getForeground());
-          }
           if(bgIndex >= 0) {
             additionalAttributes["backgroundIndex"] = bgIndex;
           } else if (rColumn.getBackground()) {
             additionalAttributes["background-color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory
                 ._hexColorToQxColor(rColumn.getBackground());
           }
-          var rFont = rColumn.getFont();
-          if (rFont) {
-            if (rFont.isItalic()) {
-              additionalAttributes["font-style"] = "italic";
-            }
-            if (rFont.isBold()) {
-              additionalAttributes["font-weight"] = "bold";
-            }
-            if (rFont.getName()) {
-              additionalAttributes["font-family"] = rFont
-                  .getName();
-            }
-            if (rFont.getSize() > 0) {
-              additionalAttributes["font-size"] = rFont.getSize()
-                  + "px";
-            }
+          if(fgIndex >= 0) {
+            additionalAttributes["foregroundIndex"] = fgIndex;
+          } else if (rColumn.getForeground()) {
+            additionalAttributes["color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory
+                ._hexColorToQxColor(rColumn.getForeground());
+          }
+          if(foIndex >= 0) {
+            additionalAttributes["fontIndex"] = foIndex;
+          } else {
+	          var rFont = rColumn.getFont();
+	          if (rFont) {
+	            if (rFont.isItalic()) {
+	              additionalAttributes["font-style"] = "italic";
+	            }
+	            if (rFont.isBold()) {
+	              additionalAttributes["font-weight"] = "bold";
+	            }
+	            if (rFont.getName()) {
+	              additionalAttributes["font-family"] = rFont
+	                  .getName();
+	            }
+	            if (rFont.getSize() > 0) {
+	              additionalAttributes["font-size"] = rFont.getSize()
+	                  + "px";
+	            }
+	          }
           }
 
           cellRenderer.setAdditionalAttributes(additionalAttributes);
@@ -1683,6 +1701,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         this._bindDynamicToolTip(component, rComponent);
         this._bindDynamicBackground(component, rComponent);
         this._bindDynamicForeground(component, rComponent);
+        this._bindDynamicFont(component, rComponent);
 
         if (remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = this.createComponent(remoteForm
@@ -1845,6 +1864,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               converter : function(modelValue, model) {
                 return org.jspresso.framework.view.qx.DefaultQxViewFactory
                     ._hexColorToQxColor(modelValue);
+              }
+            });
+      }
+    },
+
+    _bindDynamicFont : function(component, rComponent) {
+      var fontState = rComponent.getFontState();
+      if(fontState) {
+        this._getRemotePeerRegistry().register(fontState);
+        var modelController = new qx.data.controller.Object(fontState);
+        modelController.addTarget(component, "font", "value",
+            false, {
+              converter : function(modelValue, model) {
+                return org.jspresso.framework.view.qx.DefaultQxViewFactory
+                    ._fontToQxFont(modelValue);
               }
             });
       }
