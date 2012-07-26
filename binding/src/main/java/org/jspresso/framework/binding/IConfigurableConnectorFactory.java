@@ -90,7 +90,7 @@ public interface IConfigurableConnectorFactory {
    * @return the created connector.
    */
   IFormattedValueConnector createFormattedValueConnector(String id,
-      IFormatter formatter);
+      IFormatter<?, ?> formatter);
 
   /**
    * Creates a <code>IValueConnector</code>.

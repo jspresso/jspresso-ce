@@ -25,26 +25,31 @@ import java.text.ParseException;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the source type.
+ * @param <F>
+ *          the destination type.
  */
-public interface IFormatter {
+public interface IFormatter<E, F> {
 
   /**
-   * Formats an object to it's userfriendly string representation.
+   * Formats an object to another representation, generally a string.
    * 
    * @param value
-   *            the object to format.
+   *          the object to format.
    * @return The formatted string representation.
    */
-  String format(Object value);
+  F format(E value);
 
   /**
-   * Parses a string and transform it to an Object value.
+   * Parses an external representation (generally a string) and transform it to
+   * an Object value.
    * 
    * @param source
-   *            the string representation to parse.
+   *          the string representation to parse.
    * @return the parsed object.
    * @throws ParseException
-   *             thrown whenever a parsing error ocurred.
+   *           thrown whenever a parsing error ocurred.
    */
-  Object parse(String source) throws ParseException;
+  E parse(F source) throws ParseException;
 }

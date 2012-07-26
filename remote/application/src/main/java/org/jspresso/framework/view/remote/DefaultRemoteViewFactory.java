@@ -168,14 +168,38 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteViewFactory extends
     ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
-  private boolean                dateServerParse;
+  private boolean                              dateServerParse;
 
-  private boolean                durationServerParse;
-  private IGUIDGenerator<String> guidGenerator;
-  private boolean                numberServerParse;
+  private boolean                              durationServerParse;
+  private IGUIDGenerator<String>               guidGenerator;
+  private boolean                              numberServerParse;
 
-  private IRemoteCommandHandler  remoteCommandHandler;
-  private IRemotePeerRegistry    remotePeerRegistry;
+  private IRemoteCommandHandler                remoteCommandHandler;
+  private IRemotePeerRegistry                  remotePeerRegistry;
+  private static final IRemoteStateValueMapper FONT_MAPPER = new IRemoteStateValueMapper() {
+
+                                                             @Override
+                                                             public Object getValueFromState(
+                                                                 Object originalValue) {
+                                                               if (originalValue instanceof Font) {
+                                                                 return FontHelper
+                                                                     .toString((Font) originalValue);
+                                                               }
+                                                               return null;
+                                                             }
+
+                                                             @Override
+                                                             public Object getValueForState(
+                                                                 Object originalValue) {
+                                                               if (originalValue instanceof String
+                                                                   && FontHelper
+                                                                       .isFontSpec((String) originalValue)) {
+                                                                 return FontHelper
+                                                                     .fromString((String) originalValue);
+                                                               }
+                                                               return null;
+                                                             }
+                                                           };
 
   /**
    * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
@@ -275,7 +299,7 @@ public class DefaultRemoteViewFactory extends
   protected void adjustSizes(
       @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") RComponent component,
-      @SuppressWarnings("unused") IFormatter formatter,
+      @SuppressWarnings("unused") IFormatter<?, String> formatter,
       @SuppressWarnings("unused") Object templateValue,
       @SuppressWarnings("unused") int extraWidth) {
     // Empty as of now.
@@ -655,7 +679,7 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createDateFormatter(propertyDescriptor,
+    IFormatter<?, String> formatter = createDateFormatter(propertyDescriptor,
         actionHandler.getClientTimeZone(), actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
@@ -779,7 +803,8 @@ public class DefaultRemoteViewFactory extends
     }
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(
+        propertyDescriptor, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -825,8 +850,8 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createDurationFormatter(propertyDescriptor,
-        actionHandler, locale);
+    IFormatter<?, String> formatter = createDurationFormatter(
+        propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -881,8 +906,8 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
-        actionHandler, locale);
+    IFormatter<Object, String> formatter = createEnumerationFormatter(
+        propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()
         && propertyViewDescriptor.getAction() != null) {
       connector = getConnectorFactory().createFormattedValueConnector(
@@ -1062,7 +1087,8 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createIntegerFormatter(
+        propertyDescriptor, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -1198,7 +1224,8 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createPercentFormatter(
+        propertyDescriptor, locale);
     IValueConnector connector;
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -2043,6 +2070,8 @@ public class DefaultRemoteViewFactory extends
       if (fontConnector == null) {
         fontConnector = getConnectorFactory().createValueConnector(
             dynamicFontProperty);
+        ((RemoteValueConnector) fontConnector)
+            .setRemoteStateValueMapper(FONT_MAPPER);
         rowConnectorPrototype.addChildConnector(dynamicFontProperty,
             fontConnector);
       }
@@ -2161,6 +2190,8 @@ public class DefaultRemoteViewFactory extends
         if (fontConnector == null) {
           fontConnector = getConnectorFactory().createValueConnector(
               dynamicFontProperty);
+          ((RemoteValueConnector) fontConnector)
+              .setRemoteStateValueMapper(FONT_MAPPER);
           connector.addChildConnector(dynamicFontProperty, fontConnector);
         }
         if (fontConnector instanceof IRemoteStateOwner) {
@@ -2286,7 +2317,7 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter formatter = createTimeFormatter(propertyDescriptor,
+    IFormatter<?, String> formatter = createTimeFormatter(propertyDescriptor,
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(

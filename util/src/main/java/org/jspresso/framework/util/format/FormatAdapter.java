@@ -27,7 +27,7 @@ import java.text.ParseException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class FormatAdapter implements IFormatter {
+public class FormatAdapter implements IFormatter<Object, String> {
 
   private Format format;
 
@@ -35,7 +35,7 @@ public class FormatAdapter implements IFormatter {
    * Constructs a new <code>FormatAdapter</code> instance.
    * 
    * @param format
-   *            the format to adapt.
+   *          the format to adapt.
    */
   public FormatAdapter(Format format) {
     super();

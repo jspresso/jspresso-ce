@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 
-
 /**
  * Automatically adds a '%' character at the end of the pased string if needed.
  * 
@@ -40,11 +39,11 @@ public class JPercentFieldConnector extends JFormattedFieldConnector {
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param textField
-   *            the connected JTextField.
+   *          the connected JTextField.
    * @param format
-   *            the j2se format to use to extract the object value.
+   *          the j2se format to use to extract the object value.
    */
   public JPercentFieldConnector(String id, JTextField textField, Format format) {
     this(id, textField, new FormatAdapter(format));
@@ -54,14 +53,14 @@ public class JPercentFieldConnector extends JFormattedFieldConnector {
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param textField
-   *            the connected JTextField.
+   *          the connected JTextField.
    * @param formatter
-   *            the formatter to use to extract the object value.
+   *          the formatter to use to extract the object value.
    */
   public JPercentFieldConnector(String id, JTextField textField,
-      IFormatter formatter) {
+      IFormatter<?, String> formatter) {
     super(id, textField, formatter);
   }
 

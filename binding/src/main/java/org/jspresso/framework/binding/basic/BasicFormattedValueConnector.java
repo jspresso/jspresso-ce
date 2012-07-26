@@ -35,7 +35,7 @@ import org.jspresso.framework.util.format.ParsingException;
 public class BasicFormattedValueConnector extends BasicValueConnector implements
     IFormattedValueConnector {
 
-  private IFormatter formatter;
+  private IFormatter<Object, Object> formatter;
 
   /**
    * Constructs a new <code>BasicFormattedValueConnector</code> instance.
@@ -45,10 +45,10 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
    * @param formatter
    *          the format used to parse and format connector value object.
    */
-  public BasicFormattedValueConnector(String id, 
-      IFormatter formatter) {
+  @SuppressWarnings("unchecked")
+  public BasicFormattedValueConnector(String id, IFormatter<?, ?> formatter) {
     super(id);
-    this.formatter = formatter;
+    this.formatter = (IFormatter<Object, Object>) formatter;
   }
 
   /**
@@ -75,26 +75,32 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
    * @return the connector value as a string representation.
    */
   @Override
-  public String getConnectorValueAsString() {
-    return getFormatter().format(getConnectorValue());
+  public Object getFormattedValue() {
+    Object formattedValue = getFormatter().format(getConnectorValue());
+    return formattedValue;
   }
 
   /**
-   * Sets the connector value as a string representation.
+   * Sets the connector value using the formatted value representation.
    * 
-   * @param valueAsString
-   *          the connector value as a string representation.
+   * @param formattedValue
+   *          the formatted value, generally the string representation string
+   *          representation.
    */
   @Override
-  public void setConnectorValueAsString(String valueAsString) {
+  public void setFormattedValue(Object formattedValue) {
     try {
-      Object parsedValue = getFormatter().parse(valueAsString);
+      Object parsedValue = getFormatter().parse(formattedValue);
       setConnectorValue(parsedValue);
     } catch (ParseException ex) {
-      //To force resetting the view
-      fireValueChange(new ValueChangeEvent(this, new Object(), getConnecteeValue()));
-      Object[] i18nParams = {valueAsString};
-      handleException(new ParsingException(valueAsString + " cannot be parsed.", "error.parsing", i18nParams));
+      // To force resetting the view
+      fireValueChange(new ValueChangeEvent(this, new Object(),
+          getConnecteeValue()));
+      Object[] i18nParams = {
+        formattedValue
+      };
+      handleException(new ParsingException(formattedValue
+          + " cannot be parsed.", "error.parsing", i18nParams));
     }
   }
 
@@ -103,7 +109,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
    * 
    * @return the formatter.
    */
-  protected IFormatter getFormatter() {
+  protected IFormatter<Object, Object> getFormatter() {
     return formatter;
   }
 

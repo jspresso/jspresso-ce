@@ -365,7 +365,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    */
   @Override
   public IFormattedValueConnector createFormattedValueConnector(String id,
-      IFormatter formatter) {
+      IFormatter<?, ?> formatter) {
     RemoteFormattedValueConnector connector = new RemoteFormattedValueConnector(
         id, this, formatter);
     attachListeners(connector);

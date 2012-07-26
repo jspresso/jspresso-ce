@@ -53,7 +53,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    *          the format used to parse and format connector value object.
    */
   public RemoteFormattedValueConnector(String id,
-      RemoteConnectorFactory connectorFactory, IFormatter formatter) {
+      RemoteConnectorFactory connectorFactory, IFormatter<?, ?> formatter) {
     super(id, formatter);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -156,7 +156,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   @Override
   public void synchRemoteState() {
     RemoteFormattedValueState currentState = getState();
-    currentState.setValue(getConnectorValueAsString());
+    currentState.setValue(getFormattedValue());
     currentState.setValueAsObject(getValueForState());
     currentState.setReadable(isReadable());
     currentState.setWritable(isWritable());

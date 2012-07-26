@@ -24,7 +24,7 @@ package org.jspresso.framework.util.format;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class PasswordFormatter implements IFormatter {
+public class PasswordFormatter implements IFormatter<String, String> {
 
   /**
    * Echoes star char.
@@ -32,7 +32,7 @@ public class PasswordFormatter implements IFormatter {
    * {@inheritDoc}
    */
   @Override
-  public String format(Object value) {
+  public String format(String value) {
     if (value == null) {
       return "";
     }
@@ -43,7 +43,7 @@ public class PasswordFormatter implements IFormatter {
    * {@inheritDoc}
    */
   @Override
-  public Object parse(String source) {
+  public String parse(String source) {
     return source;
   }
 

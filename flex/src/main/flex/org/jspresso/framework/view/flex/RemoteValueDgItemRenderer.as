@@ -31,6 +31,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.gui.Font;
   import org.jspresso.framework.util.html.HtmlUtil;
 
   public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
@@ -43,6 +44,7 @@ package org.jspresso.framework.view.flex {
     private var _toolTipIndex:int;
     private var _backgroundIndex:int;
     private var _foregroundIndex:int;
+    private var _fontIndex:int;
     private var _forceSelectable:Boolean;
     private var _selectable:Boolean;
     private var _action:RAction;
@@ -250,6 +252,14 @@ package org.jspresso.framework.view.flex {
       _foregroundIndex = value;
     }
     
+    public function get fontIndex():int {
+      return _fontIndex;
+    }
+    
+    public function set fontIndex(value:int):void {
+      _fontIndex = value;
+    }
+    
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
       if(listData.owner is DataGrid) {
         var dg:DataGrid = listData.owner as DataGrid;
@@ -270,6 +280,28 @@ package org.jspresso.framework.view.flex {
           } else {
             setStyle("color", null);
             alpha = 1.0;
+          }
+        }
+        if(fontIndex >= 0) {
+          var fontValue:Object = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+          if(fontValue is Font) {
+            if((fontValue as Font).name) {
+              setStyle("fontFamily", (fontValue as Font).name);
+            }
+            if((fontValue as Font).size > 0) {
+              setStyle("fontSize", (fontValue as Font).size);
+            }
+            if((fontValue as Font).italic) {
+              setStyle("fontStyle", "italic");
+            }
+            if((fontValue as Font).bold) {
+              setStyle("fontWeight", "bold");
+            }
+          } else {
+            setStyle("fontFamily", null);
+            setStyle("fontSize", null);
+            setStyle("fontStyle", null);
+            setStyle("fontWeight", null);
           }
         }
       }

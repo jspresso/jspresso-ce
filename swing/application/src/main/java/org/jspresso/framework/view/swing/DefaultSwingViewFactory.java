@@ -293,8 +293,8 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected void adjustSizes(IViewDescriptor viewDescriptor,
-      JComponent component, IFormatter formatter, Object templateValue,
-      int extraWidth) {
+      JComponent component, IFormatter<?, String> formatter,
+      Object templateValue, int extraWidth) {
     if (viewDescriptor.getFont() != null
         && FontHelper.isFontSpec(viewDescriptor.getFont())) {
       // must set font before computing size.
@@ -1010,7 +1010,7 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     DateFormat format = createDateFormat(propertyDescriptor,
         actionHandler.getClientTimeZone(), actionHandler, locale);
-    IFormatter formatter = createFormatter(format);
+    IFormatter<?, String> formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -1049,7 +1049,8 @@ public class DefaultSwingViewFactory extends
       return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(
+        propertyDescriptor, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1085,8 +1086,8 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    IFormatter formatter = createDurationFormatter(propertyDescriptor,
-        actionHandler, locale);
+    IFormatter<?, String> formatter = createDurationFormatter(
+        propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -1128,8 +1129,8 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     IView<JComponent> view;
     if (propertyViewDescriptor.isReadOnly()) {
-      IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
-          actionHandler, locale);
+      IFormatter<?, String> formatter = createEnumerationFormatter(
+          propertyDescriptor, actionHandler, locale);
       final JLabel viewComponent;
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -1350,7 +1351,8 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
+    IFormatter<?, String> formatter = createIntegerFormatter(
+        propertyDescriptor, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1872,7 +1874,8 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
+    IFormatter<?, String> formatter = createPercentFormatter(
+        propertyDescriptor, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -2732,7 +2735,7 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    IFormatter formatter = createTimeFormatter(propertyDescriptor,
+    IFormatter<?, String> formatter = createTimeFormatter(propertyDescriptor,
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {

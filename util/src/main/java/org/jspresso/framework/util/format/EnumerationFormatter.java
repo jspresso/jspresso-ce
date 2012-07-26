@@ -26,7 +26,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EnumerationFormatter implements IFormatter {
+public class EnumerationFormatter implements IFormatter<Object, String> {
 
   private Map<Object, String> values;
 

@@ -141,6 +141,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.format.TimeParser;
   import org.jspresso.framework.util.gui.CellConstraints;
   import org.jspresso.framework.util.gui.Dimension;
+  import org.jspresso.framework.util.gui.Font;
   import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.lang.DateDto;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -1288,6 +1289,7 @@ package org.jspresso.framework.view.flex {
           bindDynamicToolTip(component, rComponent);
           bindDynamicBackground(component, rComponent);
           bindDynamicForeground(component, rComponent);
+          bindDynamicFont(component, rComponent);
         }
         
         if(remoteForm.labelsPosition != "NONE") {
@@ -1473,7 +1475,35 @@ package org.jspresso.framework.view.flex {
         BindingUtils.bindSetter(updateForeground, rComponent.foregroundState, "value", true);
       }
     }
-
+    
+    protected function bindDynamicFont(component:UIComponent, rComponent:RComponent):void {
+      if(rComponent.fontState) {
+        getRemotePeerRegistry().register(rComponent.fontState);
+        var updateFont:Function = function (value:Object):void {
+          if(value is Font) {
+            if((value as Font).name) {
+              component.setStyle("fontFamily", (value as Font).name);
+            }
+            if((value as Font).size > 0) {
+              component.setStyle("fontSize", (value as Font).size);
+            }
+            if((value as Font).italic) {
+              component.setStyle("fontStyle", "italic");
+            }
+            if((value as Font).bold) {
+              component.setStyle("fontWeight", "bold");
+            }
+          } else {
+            component.setStyle("fontFamily", null);
+            component.setStyle("fontSize", null);
+            component.setStyle("fontStyle", null);
+            component.setStyle("fontWeight", null);
+          }
+        };
+        BindingUtils.bindSetter(updateFont, rComponent.fontState, "value", true);
+      }
+    }
+    
     protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
       var splitContainer:DividedBox = new DividedBox();
       if(remoteSplitContainer.preferredSize != null &&
@@ -1946,6 +1976,7 @@ package org.jspresso.framework.view.flex {
         var ttIndex:int = -1;
         var bgIndex:int = -1;
         var fgIndex:int = -1;
+        var foIndex:int = -1;
         if(rColumn.toolTipState != null) {
           ttIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.toolTipState);
         }
@@ -1958,6 +1989,11 @@ package org.jspresso.framework.view.flex {
           fgIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.foregroundState);
         } else if(remoteTable.foregroundState != null) {
           fgIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), remoteTable.foregroundState);
+        }
+        if(rColumn.fontState != null) {
+          foIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), rColumn.fontState);
+        } else if(remoteTable.fontState != null) {
+          foIndex = ArrayUtil.arrayIndexOf(remoteTable.rowPrototype.children.toArray(), remoteTable.fontState);
         }
         if(rColumn is RComboBox) {
           var hasIcon:Boolean = false;
@@ -1976,7 +2012,8 @@ package org.jspresso.framework.view.flex {
                                      index:i+1,
                                      toolTipIndex:ttIndex,
                                      backgroundIndex:bgIndex,
-                                     foregroundIndex:fgIndex};
+                                     foregroundIndex:fgIndex,
+                                     fontIndex:foIndex};
         } else if( rColumn is RCheckBox
                || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
                ||  rColumn is RImageComponent) {
@@ -1986,7 +2023,8 @@ package org.jspresso.framework.view.flex {
                                      index:i+1,
                                      toolTipIndex:ttIndex,
                                      backgroundIndex:bgIndex,
-                                     foregroundIndex:fgIndex};
+                                     foregroundIndex:fgIndex,
+                                     fontIndex:foIndex};
         } else {
           var readOnly:Boolean = !remoteTable.state.writable;
           var columnAction:RAction = null;
@@ -2020,7 +2058,8 @@ package org.jspresso.framework.view.flex {
                                      index:i+1,
                                      toolTipIndex:ttIndex,
                                      backgroundIndex:bgIndex,
-                                     foregroundIndex:fgIndex};
+                                     foregroundIndex:fgIndex,
+                                     fontIndex:foIndex};
           column.editable = !readOnly;
         }
         column.itemRenderer = itemRenderer

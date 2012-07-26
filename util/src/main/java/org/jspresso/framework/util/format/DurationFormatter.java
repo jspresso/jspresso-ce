@@ -33,31 +33,36 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DurationFormatter implements IFormatter {
+public class DurationFormatter implements IFormatter<Number, String> {
 
   private PeriodFormatter formatter;
 
   /**
    * Constructs a new <code>DurationFormatter</code> instance.
-   * @param translationProvider the translation provider for uration labels.
    * 
+   * @param translationProvider
+   *          the translation provider for uration labels.
    * @param locale
-   *            the locale the formatter must be constructed in.
+   *          the locale the formatter must be constructed in.
    */
-  public DurationFormatter(ITranslationProvider translationProvider, Locale locale) {
+  public DurationFormatter(ITranslationProvider translationProvider,
+      Locale locale) {
     super();
     PeriodFormatterBuilder builder = new PeriodFormatterBuilder();
     builder.appendDays();
-    builder.appendSuffix(" " + translationProvider.getTranslation("day", locale), " "
-        + translationProvider.getTranslation("days", locale));
+    builder.appendSuffix(
+        " " + translationProvider.getTranslation("day", locale), " "
+            + translationProvider.getTranslation("days", locale));
     builder.appendSeparator(" ");
     builder.appendHours();
-    builder.appendSuffix(" " + translationProvider.getTranslation("hour", locale), " "
-        + translationProvider.getTranslation("hours", locale));
+    builder.appendSuffix(
+        " " + translationProvider.getTranslation("hour", locale), " "
+            + translationProvider.getTranslation("hours", locale));
     builder.appendSeparator(" ");
     builder.appendMinutes();
-    builder.appendSuffix(" " + translationProvider.getTranslation("minute", locale), " "
-        + translationProvider.getTranslation("minutes", locale));
+    builder.appendSuffix(
+        " " + translationProvider.getTranslation("minute", locale), " "
+            + translationProvider.getTranslation("minutes", locale));
     this.formatter = builder.toFormatter().withLocale(locale);
   }
 
@@ -65,12 +70,12 @@ public class DurationFormatter implements IFormatter {
    * {@inheritDoc}
    */
   @Override
-  public String format(Object value) {
+  public String format(Number value) {
     if (value == null) {
       return null;
     }
     try {
-      return formatter.print(new Period(0, ((Number) value).longValue()));
+      return formatter.print(new Period(0, value.longValue()));
     } catch (Throwable t) {
       return null;
     }
@@ -80,13 +85,13 @@ public class DurationFormatter implements IFormatter {
    * {@inheritDoc}
    */
   @Override
-  public Object parse(String source) throws ParseException {
+  public Number parse(String source) throws ParseException {
     if (source == null || source.length() == 0) {
       return null;
     }
     try {
-      return new Long(formatter.parsePeriod(source).toDurationFrom(
-          new Instant(0)).getMillis());
+      return new Long(formatter.parsePeriod(source)
+          .toDurationFrom(new Instant(0)).getMillis());
     } catch (Throwable t) {
       throw new ParseException(t.getMessage(), 0);
     }

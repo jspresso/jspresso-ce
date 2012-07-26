@@ -23,6 +23,9 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.Font;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.RemotePeer;
 
@@ -125,6 +128,9 @@ public class RemoteValueState extends RemotePeer {
     } else if (incomingValue instanceof Date || incomingValue instanceof String
         || incomingValue instanceof Boolean || incomingValue instanceof Number) {
       // if (value instanceof Serializable) {
+      transformedValue = (Serializable) incomingValue;
+    } else if (incomingValue instanceof Font
+        || incomingValue instanceof Dimension || incomingValue instanceof Icon) {
       transformedValue = (Serializable) incomingValue;
     } else if (incomingValue != null) {
       transformedValue = incomingValue.toString();

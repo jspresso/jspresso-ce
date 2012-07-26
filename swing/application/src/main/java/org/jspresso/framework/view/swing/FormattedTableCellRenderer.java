@@ -30,8 +30,8 @@ import org.jspresso.framework.util.html.HtmlHelper;
  */
 public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
 
-  private static final long serialVersionUID = 1994281654419286376L;
-  private IFormatter        formatter;
+  private static final long     serialVersionUID = 1994281654419286376L;
+  private IFormatter<?, String> formatter;
 
   /**
    * Constructs a new <code>FormattedTableCellRenderer</code> instance.
@@ -39,7 +39,7 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
    * @param formatter
    *          the formatter used to format object values.
    */
-  public FormattedTableCellRenderer(IFormatter formatter) {
+  public FormattedTableCellRenderer(IFormatter<?, String> formatter) {
     super();
     this.formatter = formatter;
   }
@@ -47,19 +47,21 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected void setValue(Object value) {
     Object valueToSet = null;
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
       if (formatter != null) {
-        valueToSet = formatter.format(connectorValue);
+        valueToSet = ((IFormatter<Object, String>) formatter)
+            .format(connectorValue);
       } else {
         valueToSet = connectorValue;
       }
     } else {
       if (formatter != null) {
-        valueToSet = formatter.format(value);
+        valueToSet = ((IFormatter<Object, String>) formatter).format(value);
       } else {
         valueToSet = value;
       }

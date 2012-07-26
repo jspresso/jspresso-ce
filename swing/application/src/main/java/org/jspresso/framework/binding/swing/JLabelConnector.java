@@ -31,10 +31,10 @@ import org.jspresso.framework.util.html.HtmlHelper;
  */
 public class JLabelConnector extends JComponentConnector<JLabel> {
 
-  private boolean    forceHtml;
-  private IFormatter formatter;
+  private boolean               forceHtml;
+  private IFormatter<?, String> formatter;
 
-  private Object     connecteeValue;
+  private Object                connecteeValue;
 
   /**
    * Constructs a new <code>JLabelConnector</code> instance.
@@ -64,7 +64,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
    * @param formatter
    *          the formatter to set.
    */
-  public void setFormatter(IFormatter formatter) {
+  public void setFormatter(IFormatter<?, String> formatter) {
     this.formatter = formatter;
   }
 
@@ -87,6 +87,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
     connecteeValue = aValue;
@@ -94,7 +95,8 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
       getConnectedJComponent().setText(null);
     } else {
       if (formatter != null) {
-        getConnectedJComponent().setText(formatter.format(aValue));
+        getConnectedJComponent().setText(
+            ((IFormatter<Object, String>) formatter).format(aValue));
       } else if (forceHtml) {
         if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
           getConnectedJComponent().setText(

@@ -22,6 +22,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RComponent;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.gui.Font;
 
   public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implements IDropInListItemRenderer {
     
@@ -30,6 +31,7 @@ package org.jspresso.framework.view.flex {
     private var _toolTipIndex:int;
     private var _backgroundIndex:int;
     private var _foregroundIndex:int;
+    private var _fontIndex:int;
     private var _listData:BaseListData;
 
     private var _valueChangeListener:ChangeWatcher;
@@ -116,6 +118,28 @@ package org.jspresso.framework.view.flex {
             setStyle("alpha", null);
           }
         }
+        if(fontIndex >= 0) {
+          var fontValue:Object = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+          if(fontValue is Font) {
+            if((fontValue as Font).name) {
+              setStyle("fontFamily", (fontValue as Font).name);
+            }
+            if((fontValue as Font).size > 0) {
+              setStyle("fontSize", (fontValue as Font).size);
+            }
+            if((fontValue as Font).italic) {
+              setStyle("fontStyle", "italic");
+            }
+            if((fontValue as Font).bold) {
+              setStyle("fontWeight", "bold");
+            }
+          } else {
+            setStyle("fontFamily", null);
+            setStyle("fontSize", null);
+            setStyle("fontStyle", null);
+            setStyle("fontWeight", null);
+          }
+        }
       }
     }
     
@@ -147,5 +171,14 @@ package org.jspresso.framework.view.flex {
     public function set foregroundIndex(value:int):void {
       _foregroundIndex = value;
     }
+
+    public function get fontIndex():int {
+      return _fontIndex;
+    }
+    
+    public function set fontIndex(value:int):void {
+      _fontIndex = value;
+    }
+    
   }
 }

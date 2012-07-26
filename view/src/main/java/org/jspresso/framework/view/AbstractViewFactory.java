@@ -577,7 +577,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the underlying view descriptor.
    */
   protected void adjustSizes(IViewDescriptor viewDescriptor, E component,
-      IFormatter formatter, Object templateValue) {
+      IFormatter<?, String> formatter, Object templateValue) {
     adjustSizes(viewDescriptor, component, formatter, templateValue, 32);
   }
 
@@ -597,7 +597,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the extra size to be added.
    */
   protected abstract void adjustSizes(IViewDescriptor viewDescriptor,
-      E component, IFormatter formatter, Object templateValue, int extraWidth);
+      E component, IFormatter<?, String> formatter, Object templateValue,
+      int extraWidth);
 
   /**
    * Applies a component preferred size.
@@ -1602,7 +1603,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the date formatter.
    */
-  protected IFormatter createDateFormatter(
+  protected IFormatter<?, String> createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
       ITranslationProvider translationProvider, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, timeZone,
@@ -1621,7 +1622,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale to create the formatter for.
    * @return the fomrmatter.
    */
-  protected IFormatter createEnumerationFormatter(
+  protected IFormatter<Object, String> createEnumerationFormatter(
       IEnumerationPropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
     Map<Object, String> translations = null;
@@ -1633,7 +1634,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
                 translationProvider, locale));
       }
     }
-    IFormatter formatter = new EnumerationFormatter(translations);
+    IFormatter<Object, String> formatter = new EnumerationFormatter(
+        translations);
     return formatter;
   }
 
@@ -1687,7 +1689,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the decimal formatter.
    */
-  protected IFormatter createDecimalFormatter(
+  protected IFormatter<Object, String> createDecimalFormatter(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
   }
@@ -1718,7 +1720,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the duration formatter.
    */
-  protected IFormatter createDurationFormatter(
+  protected IFormatter<Number, String> createDurationFormatter(
       IDurationPropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
     return new DurationFormatter(translationProvider, locale);
@@ -1783,7 +1785,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the format to wrap.
    * @return the resulting formatter.
    */
-  protected IFormatter createFormatter(Format format) {
+  protected IFormatter<?, String> createFormatter(Format format) {
     return new FormatAdapter(format);
   }
 
@@ -1798,8 +1800,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the formatter.
    */
-  protected IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected IFormatter<?, String> createFormatter(
+      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
           actionHandler.getClientTimeZone(), actionHandler, locale);
@@ -1902,7 +1905,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the integer formatter.
    */
-  protected IFormatter createIntegerFormatter(
+  protected IFormatter<Object, String> createIntegerFormatter(
       IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormatAdapter(createIntegerFormat(propertyDescriptor, locale));
   }
@@ -2075,7 +2078,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the percent formatter.
    */
-  protected IFormatter createPercentFormatter(
+  protected IFormatter<Object, String> createPercentFormatter(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
   }
@@ -2371,7 +2374,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the time formatter.
    */
-  protected IFormatter createTimeFormatter(
+  protected IFormatter<?, String> createTimeFormatter(
       ITimePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
     return createFormatter(createTimeFormat(propertyDescriptor,
@@ -2687,10 +2690,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the template value.
    * @return the number of characters used to represent the template value.
    */
-  protected int getFormatLength(IFormatter formatter, Object templateValue) {
+  @SuppressWarnings("unchecked")
+  protected int getFormatLength(IFormatter<?, String> formatter,
+      Object templateValue) {
     int formatLength;
     if (formatter != null) {
-      formatLength = formatter.format(templateValue).length();
+      formatLength = ((IFormatter<Object, String>) formatter).format(
+          templateValue).length();
     } else {
       if (templateValue != null) {
         formatLength = templateValue.toString().length();

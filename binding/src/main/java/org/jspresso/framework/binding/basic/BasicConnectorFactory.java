@@ -87,7 +87,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
    */
   @Override
   public IFormattedValueConnector createFormattedValueConnector(String id,
-      IFormatter formatter) {
+      IFormatter<?, ?> formatter) {
     return new BasicFormattedValueConnector(id, formatter);
   }
 
