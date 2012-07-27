@@ -135,7 +135,7 @@ public abstract class AbstractQbeAction extends BackendAction {
    * 
    * @return the queryAction.
    */
-  protected IAction getQueryAction() {
+  public IAction getQueryAction() {
     return queryAction;
   }
 

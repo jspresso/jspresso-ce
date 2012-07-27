@@ -217,7 +217,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * @return the next action to execute.
    * @see #setNextAction(IAction)
    */
-  protected IAction getNextAction(Map<String, Object> context) {
+  public IAction getNextAction(Map<String, Object> context) {
     return nextAction;
   }
 
@@ -231,7 +231,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * @return the wrapped action to execute.
    * @see #setWrappedAction(IAction)
    */
-  protected IAction getWrappedAction(Map<String, Object> context) {
+  public IAction getWrappedAction(Map<String, Object> context) {
     return wrappedAction;
   }
 }
