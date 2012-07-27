@@ -1,5 +1,8 @@
 3.5.14
 ======
+- A new regex has been introduced in order to secure more strongly local resources downlmoad :
+  (classpath|http):[A-Za-z0-9_\-/ ]*\.(png|jpg|jpeg|gif|pdf|swf.?)
+
 - getNext/WrappedAction have been made public in order to allow exploring the action chain programmatically.
   If you've overridden those methods in subclasses, please align visibility.
   
