@@ -1,5 +1,8 @@
 3.5.14
 ======
+- getNext/WrappedAction have been made public in order to allow exploring the action chain programmatically.
+  If you've overridden those methods in subclasses, please align visibility.
+  
 - controller onModuleEnter action executes now before the module entry action. This makes the order
   of actions executions more coherent, i.e. :
     controller.onModuleEnter
