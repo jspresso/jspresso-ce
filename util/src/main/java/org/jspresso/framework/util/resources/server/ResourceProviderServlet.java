@@ -66,60 +66,63 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ResourceProviderServlet extends HttpServlet {
 
-  private static final long   serialVersionUID                = 5253634459280974738L;
+  private static final long   serialVersionUID             = 5253634459280974738L;
 
   /**
    * the url pattern to activate a resource download.
    */
-  private static final String DOWNLOAD_SERVLET_URL_PATTERN    = "/download";
+  private static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
 
   /**
    * id.
    */
-  private static final String ID_PARAMETER                    = "id";
+  private static final String ID_PARAMETER                 = "id";
 
   /**
    * height.
    */
-  private static final String IMAGE_HEIGHT_PARAMETER          = "height";
+  private static final String IMAGE_HEIGHT_PARAMETER       = "height";
 
   /**
    * imageUrl.
    */
-  private static final String IMAGE_URL_PARAMETER             = "imageUrl";
+  private static final String IMAGE_URL_PARAMETER          = "imageUrl";
 
   /**
    * width.
    */
-  private static final String IMAGE_WIDTH_PARAMETER           = "width";
+  private static final String IMAGE_WIDTH_PARAMETER        = "width";
 
   /**
    * localUrl.
    */
-  private static final String LOCAL_URL_PARAMETER             = "localUrl";
+  private static final String LOCAL_URL_PARAMETER          = "localUrl";
 
   /**
    * ommitFileName.
    */
-  private static final String OMMIT_FILE_NAME_PARAMETER       = "ommitFileName";
+  private static final String OMMIT_FILE_NAME_PARAMETER    = "ommitFileName";
 
   /**
    * the url pattern to activate a resource upload.
    */
-  private static final String UPLOAD_SERVLET_URL_PATTERN      = "/upload";
+  private static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
 
   /**
    * the regex pattern to match in order to allow the download of a local
    * resource.
    */
-  private static final String DEFAULT_ALLOWED_LOCAL_URL_REGEX = "(classpath|http):.*\\.(png|jpg|jpeg|gif|pdf|swf.?)";
+  private static final String DEFAULT_LOCAL_URL_REGEX      = "(classpath|http):[A-Za-z0-9_\\-/ ]*\\.(png|jpg|jpeg|gif|pdf|swf.?)";
 
-  private static final String ALLOWED_LOCAL_URL_REGEX_KEY     = "allowedLocalUrlRegex";
+  private static final String ALLOWED_LOCAL_URL_REGEX_KEY  = "allowedLocalUrlRegex";
 
-  private Pattern             allowedLocalUrlPattern          = Pattern.compile(DEFAULT_ALLOWED_LOCAL_URL_REGEX,
-                                                                  Pattern.CASE_INSENSITIVE);
+  private Pattern             allowedLocalUrlPattern       = Pattern
+                                                               .compile(
+                                                                   DEFAULT_LOCAL_URL_REGEX,
+                                                                   Pattern.CASE_INSENSITIVE);
 
-  private static final Logger LOG                             = LoggerFactory.getLogger(ResourceProviderServlet.class);
+  private static final Logger LOG                          = LoggerFactory
+                                                               .getLogger(ResourceProviderServlet.class);
 
   /**
    * {@inheritDoc}
@@ -128,7 +131,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   public void init() {
     String allowedLocalUrlRegex = getInitParameter(ALLOWED_LOCAL_URL_REGEX_KEY);
     if (allowedLocalUrlRegex != null && allowedLocalUrlRegex.length() > 0) {
-      allowedLocalUrlPattern = Pattern.compile(allowedLocalUrlRegex, Pattern.CASE_INSENSITIVE);
+      allowedLocalUrlPattern = Pattern.compile(allowedLocalUrlRegex,
+          Pattern.CASE_INSENSITIVE);
     }
   }
 
@@ -154,7 +158,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    *          set.
    * @return the resource url.
    */
-  public static String computeImageResourceDownloadUrl(Icon icon, Dimension dimension) {
+  public static String computeImageResourceDownloadUrl(Icon icon,
+      Dimension dimension) {
     if (icon == null) {
       return null;
     }
@@ -162,7 +167,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
     if (icon.getDimension() != null) {
       actualIconSize = icon.getDimension();
     }
-    return computeImageResourceDownloadUrl(icon.getIconImageURL(), actualIconSize);
+    return computeImageResourceDownloadUrl(icon.getIconImageURL(),
+        actualIconSize);
   }
 
   /**
@@ -174,10 +180,12 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    *          the requested dimension for the image.
    * @return the resource url.
    */
-  public static String computeImageResourceDownloadUrl(String localImageUrl, Dimension dimension) {
+  public static String computeImageResourceDownloadUrl(String localImageUrl,
+      Dimension dimension) {
     if (localImageUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      StringBuffer buf = new StringBuffer("?" + IMAGE_URL_PARAMETER + "=" + localImageUrl);
+      StringBuffer buf = new StringBuffer("?" + IMAGE_URL_PARAMETER + "="
+          + localImageUrl);
       if (dimension != null) {
         buf.append("&" + IMAGE_WIDTH_PARAMETER + "=" + dimension.getWidth());
         buf.append("&" + IMAGE_HEIGHT_PARAMETER + "=" + dimension.getHeight());
@@ -209,11 +217,12 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    *          workaround scurity issues in flash SWFLoader.
    * @return the resource url.
    */
-  public static String computeLocalResourceDownloadUrl(String localUrl, boolean ommitFileName) {
+  public static String computeLocalResourceDownloadUrl(String localUrl,
+      boolean ommitFileName) {
     if (localUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      return computeUrl(request, "?" + OMMIT_FILE_NAME_PARAMETER + "=" + ommitFileName + "&" + LOCAL_URL_PARAMETER
-          + "=" + localUrl);
+      return computeUrl(request, "?" + OMMIT_FILE_NAME_PARAMETER + "="
+          + ommitFileName + "&" + LOCAL_URL_PARAMETER + "=" + localUrl);
     }
     return null;
   }
@@ -261,9 +270,11 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    *          the relative path.
    * @return the absolute static URL.
    */
-  private static String computeStaticUrl(HttpServletRequest request, String relativePath) {
-    return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-        + request.getContextPath() + "/" + relativePath;
+  private static String computeStaticUrl(HttpServletRequest request,
+      String relativePath) {
+    return request.getScheme() + "://" + request.getServerName() + ":"
+        + request.getServerPort() + request.getContextPath() + "/"
+        + relativePath;
   }
 
   /**
@@ -274,14 +285,17 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * @return the resource url.
    */
   private static String computeUploadUrl(HttpServletRequest request) {
-    String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-        + request.getContextPath() + UPLOAD_SERVLET_URL_PATTERN;
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + UPLOAD_SERVLET_URL_PATTERN;
     return baseUrl;
   }
 
-  private static String computeUrl(HttpServletRequest request, String getParameters) {
-    String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-        + request.getContextPath() + DOWNLOAD_SERVLET_URL_PATTERN;
+  private static String computeUrl(HttpServletRequest request,
+      String getParameters) {
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + DOWNLOAD_SERVLET_URL_PATTERN;
     return baseUrl + getParameters;
   }
 
@@ -305,8 +319,10 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       for (FileItem item : items) {
         if (!item.isFormField()) {
           out.print("<resource");
-          IResourceBase uploadResource = new UploadResourceAdapter("application/octet-stream", item);
-          String resourceId = ResourceManager.getInstance().register(uploadResource);
+          IResourceBase uploadResource = new UploadResourceAdapter(
+              "application/octet-stream", item);
+          String resourceId = ResourceManager.getInstance().register(
+              uploadResource);
           out.print(" id=\"" + resourceId);
           out.print("\" name=\"" + HtmlHelper.escapeForHTML(item.getName()));
           out.println("\" />");
@@ -331,7 +347,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       String localUrlSpec = request.getParameter(LOCAL_URL_PARAMETER);
       String imageUrlSpec = request.getParameter(IMAGE_URL_PARAMETER);
       String id = request.getParameter(ID_PARAMETER);
-      boolean ommitFileName = Boolean.parseBoolean(request.getParameter(OMMIT_FILE_NAME_PARAMETER));
+      boolean ommitFileName = Boolean.parseBoolean(request
+          .getParameter(OMMIT_FILE_NAME_PARAMETER));
 
       if (id == null && localUrlSpec == null && imageUrlSpec == null) {
         throw new ServletException("No resource id nor local URL specified.");
@@ -339,7 +356,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
       BufferedInputStream inputStream = null;
       if (id != null) {
-        IResourceBase resource = ResourceManager.getInstance().getRegistered(id);
+        IResourceBase resource = ResourceManager.getInstance()
+            .getRegistered(id);
         if (resource == null) {
           throw new ServletException("Bad resource id : " + id);
         }
@@ -354,7 +372,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         }
 
         if (resource instanceof IResource) {
-          inputStream = new BufferedInputStream(((IResource) resource).getContent());
+          inputStream = new BufferedInputStream(
+              ((IResource) resource).getContent());
         } else if (resource instanceof IActiveResource) {
           writeActiveResource((IActiveResource) resource, response);
         }
@@ -363,8 +382,9 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           // we must append parameters that are passed AFTER the localUrl
           // parameter as they must be considered as part of the localUrl.
           String queryString = request.getQueryString();
-          localUrlSpec = queryString.substring(queryString.indexOf(LOCAL_URL_PARAMETER) + LOCAL_URL_PARAMETER.length()
-              + 1, queryString.length());
+          localUrlSpec = queryString.substring(
+              queryString.indexOf(LOCAL_URL_PARAMETER)
+                  + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
         }
         if (isLocalUrlAllowed(localUrlSpec)) {
           URL localUrl = UrlHelper.createURL(localUrlSpec);
@@ -378,9 +398,10 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         } else {
           LOG.warn(
               "The resource provider servlet filtered a forbidden local URL request ({}). You can adapt the regex "
-                  + "security filtering options by modifying the [{}] init parameter on the servlet.", localUrlSpec,
-              ALLOWED_LOCAL_URL_REGEX_KEY);
-          LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY, allowedLocalUrlPattern.pattern());
+                  + "security filtering options by modifying the [{}] init parameter on the servlet.",
+              localUrlSpec, ALLOWED_LOCAL_URL_REGEX_KEY);
+          LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY,
+              allowedLocalUrlPattern.pattern());
           response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
       } else if (imageUrlSpec != null) {
@@ -395,21 +416,24 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
           String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
           if (width != null && height != null) {
-            inputStream = scaleImage(imageUrl, Integer.parseInt(width), Integer.parseInt(height));
+            inputStream = scaleImage(imageUrl, Integer.parseInt(width),
+                Integer.parseInt(height));
           } else {
             inputStream = new BufferedInputStream(imageUrl.openStream());
           }
         } else {
           LOG.warn(
               "The resource provider servlet filtered a forbidden image URL request ({}). You can adapt the regex "
-                  + "security filtering options by modifying the [{}] init parameter on the servlet.", imageUrlSpec,
-              ALLOWED_LOCAL_URL_REGEX_KEY);
-          LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY, allowedLocalUrlPattern.pattern());
+                  + "security filtering options by modifying the [{}] init parameter on the servlet.",
+              imageUrlSpec, ALLOWED_LOCAL_URL_REGEX_KEY);
+          LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY,
+              allowedLocalUrlPattern.pattern());
           response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
       }
       if (inputStream != null) {
-        BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+        BufferedOutputStream outputStream = new BufferedOutputStream(
+            response.getOutputStream());
 
         IoHelper.copyStream(inputStream, outputStream);
 
@@ -417,10 +441,14 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         outputStream.close();
       }
     } catch (ServletException sex) {
-      LOG.error("An exception occurred when dealing with the following request : [{}]", request.getRequestURL(), sex);
+      LOG.error(
+          "An exception occurred when dealing with the following request : [{}]",
+          request.getRequestURL(), sex);
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     } catch (IOException ioex) {
-      LOG.error("An exception occurred when dealing with the following request : [{}]", request.getRequestURL(), ioex);
+      LOG.error(
+          "An exception occurred when dealing with the following request : [{}]",
+          request.getRequestURL(), ioex);
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     } finally {
       HttpRequestHolder.setServletRequest(null);
@@ -437,7 +465,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * @throws IOException
    *           whenever an IO exception occurs.
    */
-  protected void writeActiveResource(IActiveResource resource, HttpServletResponse response) throws IOException {
+  protected void writeActiveResource(IActiveResource resource,
+      HttpServletResponse response) throws IOException {
     OutputStream outputStream = response.getOutputStream();
     resource.writeToContent(outputStream);
     outputStream.flush();
@@ -451,14 +480,16 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       if (pathIndex > 0) {
         actualFileName = fileName.substring(pathIndex + 1);
       }
-      response.setHeader("Content-Disposition", "attachment; filename=" + actualFileName);
+      response.setHeader("Content-Disposition", "attachment; filename="
+          + actualFileName);
     }
   }
 
-  private BufferedInputStream scaleImage(URL originalImageUrl, int width, int height) throws IOException {
+  private BufferedInputStream scaleImage(URL originalImageUrl, int width,
+      int height) throws IOException {
     BufferedImage image = ImageIO.read(originalImageUrl);
-    BufferedImage scaledImage = getScaledInstance(image, width, height, RenderingHints.VALUE_INTERPOLATION_BILINEAR,
-        true);
+    BufferedImage scaledImage = getScaledInstance(image, width, height,
+        RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     ImageIO.write(scaledImage, "PNG", baos);
     return new BufferedInputStream(new ByteArrayInputStream(baos.toByteArray()));
@@ -488,8 +519,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    *          generally only when the {@code BILINEAR} hint is specified)
    * @return a scaled version of the original {@code BufferedImage}
    */
-  public BufferedImage getScaledInstance(BufferedImage img, int targetWidth, int targetHeight, Object hint,
-      boolean higherQuality) {
+  public BufferedImage getScaledInstance(BufferedImage img, int targetWidth,
+      int targetHeight, Object hint, boolean higherQuality) {
     int type = BufferedImage.TYPE_INT_ARGB;
     if (img.getTransparency() == Transparency.OPAQUE) {
       type = BufferedImage.TYPE_INT_RGB;
@@ -537,7 +568,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   }
 
   private boolean isLocalUrlAllowed(String localUrl) {
-    return localUrl == null || allowedLocalUrlPattern.matcher(localUrl).matches();
+    return localUrl == null
+        || allowedLocalUrlPattern.matcher(localUrl).matches();
   }
 
   private static class UploadResourceAdapter extends AbstractResource {
