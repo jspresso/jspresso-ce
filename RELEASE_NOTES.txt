@@ -1,5 +1,8 @@
 3.5.14
 ======
+- in order to workaround an Hibernate bug (see bug #716), the N-M join table column name algorithm
+  has changed. Please align your existing schemas by renaming columns.
+
 - A new regex has been introduced in order to secure more strongly local resources downlmoad :
   (classpath|http):[A-Za-z0-9_\-/ ]*\.(png|jpg|jpeg|gif|pdf|swf.?)
 

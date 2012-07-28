@@ -372,6 +372,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#local joinTableName=compSqlName+"_"+propSqlName/>
    *           table = "${joinTableName}"
       </#if>
+      <#local dedupAliasPrefix=compactString(joinTableName)/>
     </#if>
     <#if inverse>
    *           inverse = "true"
@@ -387,14 +388,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.key
       <#if componentName=elementName>
         <#if inverse>
-   *           column = "${compSqlName}_ID2"
+   *           column = "2${dedupAliasPrefix}${compSqlName}_ID2"
           <#if fkName?exists>
    *           foreign-key = "${fkName}"
           <#else>
    *           foreign-key = "${joinTableName}_${compSqlName}_FK2"
           </#if>
         <#else>
-   *           column = "${compSqlName}_ID1"
+   *           column = "1${dedupAliasPrefix}${compSqlName}_ID1"
           <#if fkName?exists>
    *           foreign-key = "${fkName}"
           <#else>
@@ -402,7 +403,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           </#if>
         </#if>
       <#else>
-   *           column = "${compSqlName}_ID"
+   *           column = "${dedupAliasPrefix}${compSqlName}_ID"
         <#if fkName?exists>
    *           foreign-key = "${fkName}"
         <#else>
@@ -413,14 +414,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           class = "${elementType}"
       <#if componentName=elementName>
         <#if inverse>
-   *           column = "${eltSqlName}_ID1"
+   *           column = "1${dedupAliasPrefix}${eltSqlName}_ID1"
           <#if reverseFkName?exists>
    *           foreign-key = "${reverseFkName}"
           <#else>
    *           foreign-key = "${joinTableName}_${eltSqlName}_FK1"
           </#if>
         <#else>
-   *           column = "${eltSqlName}_ID2"
+   *           column = "2${dedupAliasPrefix}${eltSqlName}_ID2"
           <#if reverseFkName?exists>
    *           foreign-key = "${reverseFkName}"
           <#else>
@@ -428,7 +429,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           </#if>
         </#if>
       <#else>
-   *           column = "${eltSqlName}_ID"
+   *           column = "${dedupAliasPrefix}${eltSqlName}_ID"
         <#if reverseFkName?exists>
    *           foreign-key = "${reverseFkName}"
         <#else>
