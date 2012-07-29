@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.type.Type;
@@ -180,10 +179,9 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       }
     }
   }
-  
+
   /**
-   * Eliminates duplicate aliases.
-   * See bug #716
+   * Eliminates duplicate aliases. See bug #716
    * <p>
    * {@inheritDoc}
    */
@@ -191,35 +189,28 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   public String onPrepareStatement(String sql) {
     return eliminateDuplicateColumnAliases(sql);
   }
-  
+
   private String eliminateDuplicateColumnAliases(String sql) {
     Set<String> usedAliases = new HashSet<String>();
-    StringBuffer sb = new StringBuffer();
-
-    String selectFragment = StringUtils.substringBetween(sql, "select", "from");
-    StringTokenizer st = new StringTokenizer(selectFragment, ",");
-
-    sb.append("select ");
-
-    while (st.hasMoreTokens()) {
-      String token = st.nextToken();
-      String column = StringUtils.substringBefore(token, "as").trim();
-      String alias = StringUtils.substringAfter(token, "as").trim();
-
-      while (usedAliases.contains(alias)) {
-        alias = alias.substring(0, alias.length() - 2)
-            + RandomStringUtils.randomAlphanumeric(1).toLowerCase() + "_";
-      }
-      usedAliases.add(alias);
-
-      sb.append(column + " as " + alias);
-      if (st.hasMoreTokens()) {
-        sb.append(", ");
+    String[] aliasesSplit = sql.split(" as ");
+    StringBuffer buff = new StringBuffer(aliasesSplit[0]);
+    if (aliasesSplit.length > 1) {
+      for (int i = 1; i < aliasesSplit.length; i++) {
+        StringTokenizer aliasTokenizer = new StringTokenizer(aliasesSplit[i],
+            ", ", true);
+        String alias = aliasTokenizer.nextToken();
+        int offset = aliasesSplit[i].indexOf(alias) + alias.length();
+        while (usedAliases.contains(alias)) {
+          alias = alias.substring(0, alias.length() - 2)
+              + RandomStringUtils.randomAlphanumeric(1).toLowerCase() + "_";
+        }
+        usedAliases.add(alias);
+        buff.append(" as ");
+        buff.append(alias);
+        buff.append(aliasesSplit[i].substring(offset));
       }
     }
-    sb.append(" from");
-    sb.append(StringUtils.substringAfter(sql, "from"));
-    return sb.toString();
+    return buff.toString();
   }
 
 }

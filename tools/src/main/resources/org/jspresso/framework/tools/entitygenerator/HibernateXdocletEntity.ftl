@@ -372,7 +372,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#local joinTableName=compSqlName+"_"+propSqlName/>
    *           table = "${joinTableName}"
       </#if>
-      <#local dedupAliasPrefix=compactString(joinTableName)/>
+      <#--<#local dedupAliasPrefix=compactString(joinTableName)/>-->
+      <#local dedupAliasPrefix=""/>
     </#if>
     <#if inverse>
    *           inverse = "true"
