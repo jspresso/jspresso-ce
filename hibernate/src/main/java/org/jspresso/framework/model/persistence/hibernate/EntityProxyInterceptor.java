@@ -20,7 +20,12 @@ package org.jspresso.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.type.Type;
@@ -175,4 +180,46 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       }
     }
   }
+  
+  /**
+   * Eliminates duplicate aliases.
+   * See bug #716
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String onPrepareStatement(String sql) {
+    return eliminateDuplicateColumnAliases(sql);
+  }
+  
+  private String eliminateDuplicateColumnAliases(String sql) {
+    Set<String> usedAliases = new HashSet<String>();
+    StringBuffer sb = new StringBuffer();
+
+    String selectFragment = StringUtils.substringBetween(sql, "select", "from");
+    StringTokenizer st = new StringTokenizer(selectFragment, ",");
+
+    sb.append("select ");
+
+    while (st.hasMoreTokens()) {
+      String token = st.nextToken();
+      String column = StringUtils.substringBefore(token, "as").trim();
+      String alias = StringUtils.substringAfter(token, "as").trim();
+
+      while (usedAliases.contains(alias)) {
+        alias = alias.substring(0, alias.length() - 2)
+            + RandomStringUtils.randomAlphanumeric(1).toLowerCase() + "_";
+      }
+      usedAliases.add(alias);
+
+      sb.append(column + " as " + alias);
+      if (st.hasMoreTokens()) {
+        sb.append(", ");
+      }
+    }
+    sb.append(" from");
+    sb.append(StringUtils.substringAfter(sql, "from"));
+    return sb.toString();
+  }
+
 }
