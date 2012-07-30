@@ -19,6 +19,11 @@
 package org.jspresso.framework.model.persistence.hibernate.dialect;
 
 import java.sql.Types;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.apache.commons.lang.RandomStringUtils;
 
 /**
  * Customized Oracle 10g dialect.
@@ -58,5 +63,38 @@ public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
   protected void registerCharacterTypeMappings() {
     super.registerCharacterTypeMappings();
     registerColumnType(Types.VARCHAR, "clob");
+  }
+
+  /**
+   * Eliminates duplicate aliases.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String transformSelectString(String select) {
+    return eliminateDuplicateColumnAliases(select);
+  }
+
+  private String eliminateDuplicateColumnAliases(String sql) {
+    Set<String> usedAliases = new HashSet<String>();
+    String[] aliasesSplit = sql.split(" as ");
+    StringBuffer buff = new StringBuffer(aliasesSplit[0]);
+    if (aliasesSplit.length > 1) {
+      for (int i = 1; i < aliasesSplit.length; i++) {
+        StringTokenizer aliasTokenizer = new StringTokenizer(aliasesSplit[i],
+            ", ", true);
+        String alias = aliasTokenizer.nextToken();
+        int offset = aliasesSplit[i].indexOf(alias) + alias.length();
+        while (usedAliases.contains(alias)) {
+          alias = alias.substring(0, alias.length() - 2)
+              + RandomStringUtils.randomAlphanumeric(1).toLowerCase() + "_";
+        }
+        usedAliases.add(alias);
+        buff.append(" as ");
+        buff.append(alias);
+        buff.append(aliasesSplit[i].substring(offset));
+      }
+    }
+    return buff.toString();
   }
 }
