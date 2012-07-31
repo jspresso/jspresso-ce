@@ -125,9 +125,9 @@
     org.jspresso.framework.application.backend.resources.server.ControllerAwareResourceProviderServlet
   
 - The API has been changed to include the Icon class that is a wrapper around an iconImageUrl and a dimension  properties.
-This was necessary to fulfill evolution #628. Setters for dependency injection remain unchanged but the getIconImageUrl() getters
-have been removed in favor of a getIcon() getter. The view factory will respect as much as possible the overriden dimension
-set using setIconWidth(int) and setIconHeight(int).
+  This was necessary to fulfill evolution #628. Setters for dependency injection remain unchanged but the getIconImageUrl() getters
+  have been removed in favor of a getIcon() getter. The view factory will respect as much as possible the overriden dimension
+  set using setIconWidth(int) and setIconHeight(int).
 
 - The onLoad() lifecycle interceptor was incorectly triggered during entity technical cloning. From now on,
   only the onClone(IEntity sourceEntity) method is called.
@@ -137,8 +137,8 @@ set using setIconWidth(int) and setIconHeight(int).
   are now useless and should simply be removed from your applications.
 
 - for Jspresso EE users, whenever you use web services, you should update your web.xml by changing. This will ensure
-that the new resource cleanup interceptor gets registered at startup and that JDBC connections are correctly returned
-to the pool after execution of the web service :
+  that the new resource cleanup interceptor gets registered at startup and that JDBC connections are correctly returned
+  to the pool after execution of the web service :
     <context-param>
       <param-name>resteasy.scan.resources</param-name>
       <param-value>true</param-value>
@@ -165,9 +165,9 @@ to the pool after execution of the web service :
     http://mantis.jspresso.org/view.php?id=557
 
 - Fixing the bug http://mantis.jspresso.org/view.php?id=541 , SJS does not change the case of
-the workspaces names and descriptions. It was lowering the case of the 1st char but does not do it anymore.
-This change might result in missing translations so change your resource bundles property files
-accordingly.
+  the workspaces names and descriptions. It was lowering the case of the 1st char but does not do it anymore.
+  This change might result in missing translations so change your resource bundles property files
+  accordingly.
 
 - New locale : DE
 In order to use the new translation locales in existing projects : 
