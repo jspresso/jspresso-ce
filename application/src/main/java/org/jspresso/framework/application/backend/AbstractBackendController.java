@@ -926,6 +926,12 @@ public abstract class AbstractBackendController extends AbstractController
       throw new IllegalArgumentException(
           "Spring transaction template can only be configured once.");
     }
+    if (!(transactionTemplate instanceof ControllerAwareTransactionTemplate)) {
+      throw new IllegalArgumentException(
+          "You have configured a transaction template that is not a controller "
+              + "aware transaction template. This is not legal since this prevents "
+              + "the Unit of Work to be synchronized with the current transaction.");
+    }
     this.transactionTemplate = transactionTemplate;
   }
 
