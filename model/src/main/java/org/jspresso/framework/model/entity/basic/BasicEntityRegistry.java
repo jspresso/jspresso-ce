@@ -98,7 +98,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
     if (existingRegisteredEntity != null) {
       if (entity != existingRegisteredEntity) {
         throw new EntityRegistryException(
-            "This entity was previously registered with a different instance"
+            "This entity was previously registered with a different instance : "
                 + entity);
       }
       // do nothing since the entity is already registered.
