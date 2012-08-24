@@ -20,11 +20,7 @@ package org.jspresso.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.type.Type;
