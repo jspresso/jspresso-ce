@@ -1168,7 +1168,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
     }
     
-    private function disableUI(value:Boolean):void {
+    private var _stillDisable:Boolean  = false;
+    private function setUIEnabled(value:Boolean):void {
+      // Protect from lightning actions that would falsely disable the UI.
+      // Fixes bug #718
+      if(!value && !_stillDisable) {
+        return;
+      }
       (Application.application as Application).enabled = value;
       if((Application.application as Application).controlBar) {
         (Application.application as Application).controlBar.enabled = true;
@@ -1176,10 +1182,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function blockUI(value:Boolean):void {
-      // delays the UI to the next repaint so that if an action needs to perform immediately
-      // after, it can. see Bug #674
-      (Application.application as Application).callLater(disableUI, [value]);
-      //disableUI(value);
+      _stillDisable = !value;
+      if(value) {
+        setUIEnabled(true);
+      } else {
+        // Delays the UI to the next repaint so that if an action needs to perform immediately
+        // after, it can. see Bug #674
+        (Application.application as Application).callLater(setUIEnabled, [value]);
+      }
     }
     
     protected function getKeysToTranslate():Array {
