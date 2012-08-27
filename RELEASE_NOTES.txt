@@ -1,5 +1,9 @@
 3.5.14
 ======
+- The instance used as session entity registry by the backend controller is now directly created by the controller instead
+  of being injected by the DI container. The setter has been removed. In the (rather unexpected) eventuality you have overriden the
+  "entityRegistry" property on a specific backend controller definition, you should get rid of it.
+
 - A new regex has been introduced in order to secure more strongly local resources downlmoad :
   (classpath|http):[A-Za-z0-9_\-/ ]*\.(png|jpg|jpeg|gif|pdf|swf.?)
 

@@ -162,7 +162,8 @@ public abstract class AbstractBackendController extends AbstractController
     // moduleConnectors = new HashMap<Module, IValueConnector>();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
-    entitiesExcludedFromSessionSanityChecks = new BasicEntityRegistry(
+    entityRegistry = createEntityRegistry("sessionEntityRegistry");
+    entitiesExcludedFromSessionSanityChecks = createEntityRegistry(
         "entitiesExcludedFromSessionSanityChecks");
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
@@ -241,7 +242,7 @@ public abstract class AbstractBackendController extends AbstractController
     List<E> uowEntities = new ArrayList<E>();
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork
         .getRegisteredEntities();
-    IEntityRegistry alreadyCloned = new BasicEntityRegistry("cloneInUnitOfWork");
+    IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork");
     for (Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> contractStore : uowExistingEntities
         .entrySet()) {
       for (Entry<Serializable, IEntity> entityEntry : contractStore.getValue()
@@ -637,7 +638,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public boolean isAnyDirtyInDepth(Collection<?> elements,
       boolean includeComputed) {
-    IEntityRegistry alreadyTraversed = new BasicEntityRegistry(
+    IEntityRegistry alreadyTraversed = createEntityRegistry(
         "isAnyDirtyInDepth");
     if (elements != null) {
       for (Object element : elements) {
@@ -716,7 +717,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public <E extends IEntity> E merge(E entity, EMergeMode mergeMode) {
-    return merge(entity, mergeMode, new BasicEntityRegistry("merge"));
+    return merge(entity, mergeMode, createEntityRegistry("merge"));
   }
 
   /**
@@ -725,7 +726,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public <E extends IEntity> List<E> merge(List<E> entities,
       EMergeMode mergeMode) {
-    IEntityRegistry alreadyMerged = new BasicEntityRegistry("merge");
+    IEntityRegistry alreadyMerged = createEntityRegistry("merge");
     List<E> mergedList = new ArrayList<E>();
     for (E entity : entities) {
       mergedList.add(merge(entity, mergeMode, alreadyMerged));
@@ -874,25 +875,6 @@ public abstract class AbstractBackendController extends AbstractController
           "entityFactory must be a ControllerAwareProxyEntityFactory.");
     }
     this.entityFactory = entityFactory;
-  }
-
-  /**
-   * Configures the entity registry to be used in this controller. The role of
-   * the entity registry is to garantee that an entity will be represented by at
-   * most 1 instance in the user application session. This property can only be
-   * set once and should only be used by the DI container. It will rarely be
-   * changed from built-in defaults unless you need to specify a custom
-   * implementation instance to be used.
-   * 
-   * @param entityRegistry
-   *          the entityRegistry to set.
-   */
-  public void setEntityRegistry(IEntityRegistry entityRegistry) {
-    if (this.entityRegistry != null) {
-      throw new IllegalArgumentException(
-          "entityRegistry session can only be configured once.");
-    }
-    this.entityRegistry = entityRegistry;
   }
 
   /**
@@ -2331,5 +2313,16 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setAsyncExecutorsMaxCount(int asyncExecutorsMaxCount) {
     this.asyncExecutorsMaxCount = asyncExecutorsMaxCount;
+  }
+
+  /**
+   * Creates an entity registry.
+   * 
+   * @param name
+   *          the entity registry name.
+   * @return a new entity registry.
+   */
+  protected IEntityRegistry createEntityRegistry(String name) {
+    return new BasicEntityRegistry(name);
   }
 }

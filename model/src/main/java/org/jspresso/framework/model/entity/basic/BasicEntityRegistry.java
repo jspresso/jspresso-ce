@@ -96,7 +96,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
       Serializable id, IEntity entity) {
     IEntity existingRegisteredEntity = get(entityContract, id);
     if (existingRegisteredEntity != null) {
-      if (entity != existingRegisteredEntity) {
+      if (!checkUnicity(entity, existingRegisteredEntity)) {
         throw new EntityRegistryException(
             "This entity was previously registered with a different instance : "
                 + entity);
@@ -112,6 +112,22 @@ public class BasicEntityRegistry implements IEntityRegistry {
       }
       contractStore.put(id, entity);
     }
+  }
+
+  /**
+   * Checks that the entity being registered is the &quot;same&quot; that the
+   * already registered entity.
+   * 
+   * @param entity
+   *          the entity to test.
+   * @param existingRegisteredEntity
+   *          the entity with same contract and id being already rehgistered.
+   * @return true if both entity are &quot;same&quot;. Default implementation is
+   *         based on object equality.
+   */
+  protected boolean checkUnicity(IEntity entity,
+      IEntity existingRegisteredEntity) {
+    return entity == existingRegisteredEntity;
   }
 
   /**

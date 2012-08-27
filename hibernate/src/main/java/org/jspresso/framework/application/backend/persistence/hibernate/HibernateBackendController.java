@@ -51,6 +51,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -1016,6 +1018,14 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   protected <E extends IComponent> Class<? extends E> getComponentContract(E component) {
     return HibernateHelper.getComponentContract(component);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IEntityRegistry createEntityRegistry(String name) {
+    return new HibernateEntityRegistry(name);
   }
 
 }
