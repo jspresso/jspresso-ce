@@ -28,6 +28,8 @@ import org.jspresso.framework.model.entity.EntityRegistryException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 
+import org.hibernate.proxy.HibernateProxy;
+
 /**
  * Basic implementation of an entity registry backed by an HashMap of weak
  * reference values.
@@ -91,7 +93,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
       Serializable id, IEntity entity) {
     IEntity existingRegisteredEntity = get(entityContract, id);
     if (existingRegisteredEntity != null) {
-      if (entity != existingRegisteredEntity) {
+      if (!checkUnicity(entity, existingRegisteredEntity)) {
         throw new EntityRegistryException(
             "This entity was previously registered with a different instance"
                 + entity);
@@ -117,5 +119,24 @@ public class BasicEntityRegistry implements IEntityRegistry {
     if (backingStore != null) {
       backingStore.clear();
     }
+  }
+
+  /**
+   * Knows how to deal with hibernate proxies.
+   * <p>
+   * {@inheritDoc}
+   */
+  private boolean checkUnicity(IEntity e1,
+      IEntity e2) {
+    IEntity actualE1 = e1;
+    IEntity actualE2 = e2;
+
+    if (actualE1 instanceof HibernateProxy) {
+      actualE1 = (IEntity) ((HibernateProxy) actualE1).getHibernateLazyInitializer().getImplementation();
+    }
+    if (actualE2 instanceof HibernateProxy) {
+      actualE2 = (IEntity) ((HibernateProxy) actualE2).getHibernateLazyInitializer().getImplementation();
+    }
+    return actualE1 == actualE2;
   }
 }
