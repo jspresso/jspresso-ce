@@ -69,6 +69,8 @@ package org.jspresso.framework.view.flex {
           value["label"] = "";
         }
         label.toolTip = value["description"];
+        _image.toolTip = value["description"];
+        toolTip = value["description"];
       }
     }
 
