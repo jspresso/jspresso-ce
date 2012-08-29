@@ -379,12 +379,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
       Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
-    Map<String, Object> savedContext = dialogContextStack.remove(0);
-    if (context != null && savedContext != null) {
-      // preserve action param
-      Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
-      context.putAll(savedContext);
-      context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+    if (dialogContextStack.size() > 0) {
+      Map<String, Object> savedContext = dialogContextStack.remove(0);
+      if (context != null && savedContext != null) {
+        // preserve action param
+        Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
+        context.putAll(savedContext);
+        context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+      }
+    } else {
+      LOG.debug("Trying to dispose a modal dialog while there is no dialog left.");
     }
   }
 

@@ -41,6 +41,10 @@ Panel
   borderThicknessBottom: 2;
 }
 
+ResizablePanel {
+  disabledOverlayAlpha: 0;
+}
+
 PopUpButton {
   textAlign: left;
 }
