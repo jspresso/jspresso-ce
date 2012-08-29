@@ -403,7 +403,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         popupDialog(dialogCommand.title, null, dialogView, icon, dialogButtons, dialogCommand.useCurrent, dialogCommand.dimension);
       } else if(command is RemoteCloseDialogCommand) {
         if(_dialogStack && _dialogStack.length > 1) {
-          PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as IFlexDisplayObject);
+          PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
         }
       } else if(command is RemoteInitCommand) {
         var initCommand:RemoteInitCommand = command as RemoteInitCommand;
@@ -823,7 +823,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var applicationFrame:Application = Application.application as Application;
       applicationFrame.removeAllChildren();
       while(_dialogStack.length > 1) {
-        PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as IFlexDisplayObject);
+        PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
       }
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _lastFiredActions = new Object();
@@ -1174,6 +1174,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       // Fixes bug #718
       if(!value && !_stillDisable) {
         return;
+      }
+      if(_dialogStack && _dialogStack.length > 1) {
+        ((_dialogStack[_dialogStack.length - 1] as Array)[0] as UIComponent).enabled = value;
       }
       (Application.application as Application).enabled = value;
       if((Application.application as Application).controlBar) {
