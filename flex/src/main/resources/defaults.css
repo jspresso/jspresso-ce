@@ -41,6 +41,10 @@ Panel
   borderThicknessBottom: 2;
 }
 
+PopUpButton {
+  textAlign: left;
+}
+
 ApplicationControlBar
 {
   fillAlphas: 0.5, 0.5;

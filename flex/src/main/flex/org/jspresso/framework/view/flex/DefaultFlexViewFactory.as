@@ -2805,6 +2805,7 @@ package org.jspresso.framework.view.flex {
       }
       var dp:Object = createMenuItems(actionList, component);
       var menu:Menu = new Menu();
+      menu.showDataTips = true;
       menu.dataProvider = dp;
       menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
       var popupButton:PopUpButton = createPopUpButtonComponent(topApplicationButton);
