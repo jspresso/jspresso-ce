@@ -2026,7 +2026,9 @@ package org.jspresso.framework.view.flex {
                                      foregroundIndex:fgIndex,
                                      fontIndex:foIndex};
         } else {
-          var readOnly:Boolean = !remoteTable.state.writable;
+          //Breaks boolean writability gates by making all columns always read only.
+          //var readOnly:Boolean = !remoteTable.state.writable;
+          var readOnly:Boolean = false;
           var columnAction:RAction = null;
           if(rColumn is RLink) {
             readOnly = true;
