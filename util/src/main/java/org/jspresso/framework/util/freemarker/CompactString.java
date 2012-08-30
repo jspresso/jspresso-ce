@@ -50,7 +50,7 @@ public class CompactString implements TemplateMethodModelEx {
   }
 
   /**
-   * Compares two strings using java rules.
+   * Compacts an input string.
    * <p>
    * {@inheritDoc}
    */
@@ -63,8 +63,7 @@ public class CompactString implements TemplateMethodModelEx {
         return new SimpleScalar("");
       }
       StringBuffer result = new StringBuffer();
-      result.append(Character.toUpperCase(toCompact
-          .charAt(0)));
+      result.append(Character.toUpperCase(toCompact.charAt(0)));
       for (int i = 1; i < toCompact.length(); i++) {
         char prev = toCompact.charAt(i - 1);
         char curr = toCompact.charAt(i);
@@ -79,8 +78,17 @@ public class CompactString implements TemplateMethodModelEx {
           ex);
     }
   }
-  
+
+  /**
+   * Test main method.
+   * 
+   * @param args
+   *          main args. unused.
+   * @throws TemplateModelException
+   *           whenever an unexpected exception occurs.
+   */
   public static void main(String[] args) throws TemplateModelException {
-    new CompactString().exec(Arrays.asList(new SimpleScalar("TEAM_TEAM_MEMBERS")));
+    new CompactString().exec(Arrays
+        .asList(new SimpleScalar("TEAM_TEAM_MEMBERS")));
   }
 }

@@ -1,5 +1,31 @@
 3.5.14
 ======
+- Due to bug #743, the following standard action definitions have been refactored in order to avoid registering a backend action
+  with "Front" in it's name. You should take care of this change if and only if you have overriden these action definitions
+  in your project :
+
+    <bean id="addAnyToMasterFrontAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
+  changed to :
+    <bean id="addAnyToMasterBackAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
+    <bean id="addAnyToMasterFrontAction" parent="addToMasterFrontAction">
+      <property name="wrappedAction" ref="addAnyToMasterBackAction"/>
+    </bean>
+    
+    <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
+  changed to :
+	  <bean id="checkAllModulesDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
+	  <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+	    <property name="wrappedAction" ref="checkAllModulesDirtyStateBackAction" />
+	  </bean>
+
+    <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
+  changed to :
+	  <bean id="checkModuleDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
+	  <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+	    <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
+	  </bean>
+
+  
 - The instance used as session entity registry by the backend controller is now directly created by the controller instead
   of being injected by the DI container. The setter has been removed. In the (rather unexpected) eventuality you have overriden the
   "entityRegistry" property on a specific backend controller definition, you should get rid of it.
