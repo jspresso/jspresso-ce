@@ -39,7 +39,9 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
+import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections.map.ReferenceMap;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -147,7 +149,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   private boolean                                          throwExceptionOnBadUsage;
 
-  private IEntityRegistry                                  entitiesExcludedFromSessionSanityChecks;
+  private Map<Serializable, IEntity>                       entitiesExcludedFromSessionSanityChecks;
 
   private IBackendControllerFactory                        slaveControllerFactory;
   private ThreadGroup                                      asyncActionsThreadGroup;
@@ -157,13 +159,15 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
    */
+  @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
     dirtRecorder = new BeanPropertyChangeRecorder();
     // moduleConnectors = new HashMap<Module, IValueConnector>();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
     entityRegistry = createEntityRegistry("sessionEntityRegistry");
-    entitiesExcludedFromSessionSanityChecks = createEntityRegistry("entitiesExcludedFromSessionSanityChecks");
+    entitiesExcludedFromSessionSanityChecks = new ReferenceMap(
+        AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
     asyncExecutors = new LinkedHashSet<AsyncActionExecutor>();
@@ -189,7 +193,6 @@ public abstract class AbstractBackendController extends AbstractController
       throw new BackendException(
           "Cannot begin a new unit of work. Another one is already active.");
     }
-    entitiesExcludedFromSessionSanityChecks.clear();
     unitOfWork.begin();
   }
 
@@ -1148,8 +1151,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (uowEntity != null) {
       if (allowOuterScopeUpdate) {
         // Make sure that the entity is correctly ignored
-        entitiesExcludedFromSessionSanityChecks.register(entityContract,
-            entity.getId(), uowEntity);
+        excludeFromSanityChecks(uowEntity);
       }
       return uowEntity;
     }
@@ -1159,8 +1161,7 @@ public abstract class AbstractBackendController extends AbstractController
         uowEntity.blockEvents();
       }
       if (allowOuterScopeUpdate) {
-        entitiesExcludedFromSessionSanityChecks.register(entityContract,
-            entity.getId(), uowEntity);
+        excludeFromSanityChecks(uowEntity);
       }
       Map<String, Object> dirtyProperties = dirtRecorder
           .getChangedProperties(entity);
@@ -1267,6 +1268,10 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return uowEntity;
+  }
+
+  private <E extends IEntity> void excludeFromSanityChecks(E entity) {
+    entitiesExcludedFromSessionSanityChecks.put(entity.getId(), entity);
   }
 
   /**
@@ -2172,8 +2177,7 @@ public abstract class AbstractBackendController extends AbstractController
         // We are working on an entity that has not been registered in the
         // session. This is not legal unless this entity has explitely been
         // excluded from sanity checks.
-        IEntity excludedEntity = entitiesExcludedFromSessionSanityChecks.get(
-            getComponentContract(targetEntity), targetEntity.getId());
+        IEntity excludedEntity = getExcludedFromSanityChecks(targetEntity);
         if (excludedEntity == null
             || !objectEquals(targetEntity, excludedEntity)) {
           LOG.error(
@@ -2213,6 +2217,10 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return param;
+  }
+
+  private IEntity getExcludedFromSanityChecks(IEntity entity) {
+    return entitiesExcludedFromSessionSanityChecks.get(entity.getId());
   }
 
   /**
