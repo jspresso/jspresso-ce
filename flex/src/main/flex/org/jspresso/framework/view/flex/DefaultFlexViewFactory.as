@@ -907,6 +907,8 @@ package org.jspresso.framework.view.flex {
         rb.group = radioGroup;
         sizeMaxComponentWidth(rb, remoteRadioBox, rb.label.length + 5);
         radioBox.addChild(rb);
+        // enabled state is not correctly reflected initially without this line.
+        rb.enabled = remoteRadioBox.state.writable;
       }
       bindRadioGroup(radioGroup, remoteRadioBox);
       return radioBox;
