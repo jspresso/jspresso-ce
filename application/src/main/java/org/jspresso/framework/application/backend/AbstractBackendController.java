@@ -190,6 +190,7 @@ public abstract class AbstractBackendController extends AbstractController
       throw new BackendException(
           "Cannot begin a new unit of work. Another one is already active.");
     }
+    entitiesExcludedFromSessionSanityChecks.clear();
     unitOfWork.begin();
   }
 
