@@ -62,7 +62,17 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
     return clonedEntity;
   }
 
-  private void carbonCopyComponent(IComponent componentToClone,
+  /**
+   * Carbon copies all scalar properties.
+   * 
+   * @param componentToClone
+   *          the source.
+   * @param clonedComponent
+   *          the copy.
+   * @param entityFactory
+   *          the entity factory to use.
+   */
+  public static void carbonCopyComponent(IComponent componentToClone,
       IComponent clonedComponent, IEntityFactory entityFactory) {
     IComponentDescriptor<?> componentDescriptor = entityFactory
         .getComponentDescriptor(componentToClone.getComponentContract());
