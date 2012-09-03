@@ -162,14 +162,14 @@ public abstract class AbstractCompositeValueConnector extends
       }
       return "";
     }
-    if (displayValue != null) {
-      return displayValue;
-    }
-    Object value = getConnectorValue();
-    if (value != null) {
-      return value.toString();
-    }
-    return "";
+//    if (displayValue != null) {
+//      return displayValue;
+//    }
+//    Object value = getConnectorValue();
+//    if (value != null) {
+//      return value.toString();
+//    }
+    return displayValue;
   }
 
   /**
