@@ -163,8 +163,7 @@ public abstract class AbstractBackendController extends AbstractController
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
     entityRegistry = createEntityRegistry("sessionEntityRegistry");
-    entitiesExcludedFromSessionSanityChecks = createEntityRegistry(
-        "entitiesExcludedFromSessionSanityChecks");
+    entitiesExcludedFromSessionSanityChecks = createEntityRegistry("entitiesExcludedFromSessionSanityChecks");
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
     asyncExecutors = new LinkedHashSet<AsyncActionExecutor>();
@@ -639,8 +638,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public boolean isAnyDirtyInDepth(Collection<?> elements,
       boolean includeComputed) {
-    IEntityRegistry alreadyTraversed = createEntityRegistry(
-        "isAnyDirtyInDepth");
+    IEntityRegistry alreadyTraversed = createEntityRegistry("isAnyDirtyInDepth");
     if (elements != null) {
       for (Object element : elements) {
         if (element instanceof IEntity) {
@@ -1148,6 +1146,11 @@ public abstract class AbstractBackendController extends AbstractController
         .getComponentDescriptor(entityContract);
     E uowEntity = (E) alreadyCloned.get(entityContract, entity.getId());
     if (uowEntity != null) {
+      if (allowOuterScopeUpdate) {
+        // Make sure that the entity is correctly ignored
+        entitiesExcludedFromSessionSanityChecks.register(entityContract,
+            entity.getId(), uowEntity);
+      }
       return uowEntity;
     }
     uowEntity = performUowEntityCloning(entity);
