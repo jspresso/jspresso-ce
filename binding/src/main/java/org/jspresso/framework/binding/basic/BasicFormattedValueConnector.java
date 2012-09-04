@@ -21,6 +21,7 @@ package org.jspresso.framework.binding.basic;
 import java.text.ParseException;
 
 import org.jspresso.framework.binding.IFormattedValueConnector;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.ParsingException;
@@ -94,7 +95,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
       setConnectorValue(parsedValue);
     } catch (ParseException ex) {
       // To force resetting the view
-      fireValueChange(new ValueChangeEvent(this, new Object(),
+      fireValueChange(new ValueChangeEvent(this, IPropertyChangeCapable.UNKNOWN,
           getConnecteeValue()));
       Object[] i18nParams = {
         formattedValue

@@ -124,8 +124,8 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                       .createPropertyAccessor(prop,
                           getComponent().getComponentContract())
                       .getValue(getComponent());
-                  getComponent().firePropertyChange(prop, new Object(),
-                      newValue);
+                  getComponent().firePropertyChange(prop,
+                      IPropertyChangeCapable.UNKNOWN, newValue);
                 }
               } catch (IllegalAccessException ex) {
                 throw new NestedRuntimeException(ex);
