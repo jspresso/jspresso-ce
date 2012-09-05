@@ -2078,7 +2078,6 @@ public abstract class AbstractBackendController extends AbstractController
    * 
    * @return the throwExceptionOnBadUsage.
    */
-  @Override
   public boolean isThrowExceptionOnBadUsage() {
     return throwExceptionOnBadUsage;
   }

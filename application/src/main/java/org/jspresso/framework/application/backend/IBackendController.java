@@ -447,15 +447,6 @@ public interface IBackendController extends IController,
   void cleanupRequestResources();
 
   /**
-   * Wether the backend controller should throw or not an exception whenever a
-   * bad usage is detected like manually merging a dirty entity from an ongoing
-   * UOW.
-   * 
-   * @return true if an exception should be thrown.
-   */
-  boolean isThrowExceptionOnBadUsage();
-
-  /**
    * Gives chance to implementors to perform sanity checks and eventually
    * substitute the passed param by an other one when it's technically
    * necessary. This is here tat all sanity checks are made regarding UOW

@@ -18,11 +18,14 @@
  */
 package org.jspresso.framework.application;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -41,7 +44,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractController extends AbstractPropertyChangeCapable implements IController {
+public abstract class AbstractController extends AbstractPropertyChangeCapable
+    implements IController {
 
   private IExceptionHandler customExceptionHandler;
 
@@ -130,4 +134,42 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
   public String getShortTimePattern(Locale locale) {
     return getTranslation(TIME_FORMAT_SHORT_KEY, locale);
   }
+
+  /**
+   * Utility method used to extact (recursively through the action chain) the
+   * internal state of an action. This state should be used (using equals) in
+   * order guarantee that the internal state of an action has not changed during
+   * it's execution since actions are meant to be singletons this would violate
+   * thread-safety.
+   * 
+   * @param action
+   *          the action to extract the internal state for.
+   * @return the internal action chain state.
+   * @throws IllegalAccessException
+   *           whenever an exception occurs accessing the internal private state
+   *           of the action through reflection.
+   */
+  public static Object extractInternalActionState(IAction action)
+      throws IllegalAccessException {
+    HashMap<String, Object> state = new HashMap<String, Object>();
+    appendToInternalActionState(action.getClass(), action, state);
+    return state;
+  }
+
+  private static void appendToInternalActionState(Class<?> clazz,
+      IAction action, Map<String, Object> state) throws IllegalAccessException {
+    for (Field field : clazz.getDeclaredFields()) {
+      field.setAccessible(true);
+      Object fieldValue = field.get(action);
+      if (fieldValue instanceof IAction) {
+        fieldValue = extractInternalActionState((IAction) fieldValue);
+      }
+      state.put(clazz.getName() + "." + field.getName(), fieldValue);
+    }
+    Class<?> superClazz = clazz.getSuperclass();
+    if (superClazz != null && !Object.class.equals(superClazz)) {
+      appendToInternalActionState(superClazz, action, state);
+    }
+  }
+
 }

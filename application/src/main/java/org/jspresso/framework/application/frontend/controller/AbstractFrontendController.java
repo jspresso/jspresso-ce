@@ -35,6 +35,7 @@ import javax.security.auth.login.LoginException;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
@@ -157,6 +158,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private IPreferencesStore                     clientPreferencesStore;
 
+  private boolean                               checkActionThreadSafety;
+
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
@@ -171,6 +174,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     moduleAutoPinEnabled = true;
     tracksWorkspaceNavigator = true;
+    checkActionThreadSafety = true;
   }
 
   /**
@@ -392,6 +396,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
+  private boolean actionChainChecked = false;
+
   /**
    * Executes frontend actions and delegates backend actions execution to its
    * peer backend controller.
@@ -412,17 +418,49 @@ public abstract class AbstractFrontendController<E, F, G> extends
     // the action chain.
     context.put(ActionContextConstants.CURRENT_MODULE,
         getSelectedModule(getSelectedWorkspaceName()));
+    boolean result;
+    Object initialActionState = null;
     try {
+      if (isCheckActionThreadSafety() && !actionChainChecked) {
+        try {
+          initialActionState = extractInternalActionState(action);
+        } catch (IllegalAccessException ex) {
+          throw new ActionException(
+              ex,
+              "Unable to extract internal action state for thread-safety checking of action : "
+                  + action);
+        }
+        actionChainChecked = true;
+      }
       // Should be handled before getting there.
       // checkAccess(action);
       if (action.isBackend()) {
-        return executeBackend(action, context);
+        result = executeBackend(action, context);
       }
-      return executeFrontend(action, context);
+      result = executeFrontend(action, context);
     } catch (Throwable ex) {
       handleException(ex, context);
-      return false;
+      result = false;
+    } finally {
+      if (initialActionState != null) {
+        Object finalActionState;
+        try {
+          finalActionState = extractInternalActionState(action);
+        } catch (IllegalAccessException ex) {
+          throw new ActionException(
+              ex,
+              "Unable to extract internal action state for thread-safety checking of action : "
+                  + action);
+        }
+        if (!initialActionState.equals(finalActionState)) {
+          throw new ActionException(
+              "A coding probem has been detected that breaks action thread-safety."
+                  + "The action internal state has been modified during its execution which is strictly forbidden.");
+        }
+        actionChainChecked = false;
+      }
     }
+    return result;
   }
 
   /**
@@ -1869,5 +1907,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
         new Object[] {
             userId, sessionId, ex
         });
+  }
+
+  /**
+   * Gets the checkActionThreadSafety.
+   * 
+   * @return the checkActionThreadSafety.
+   */
+  public boolean isCheckActionThreadSafety() {
+    return checkActionThreadSafety;
+  }
+
+  /**
+   * Sets the checkActionThreadSafety.
+   * 
+   * @param checkActionThreadSafety
+   *          the checkActionThreadSafety to set.
+   */
+  public void setCheckActionThreadSafety(boolean checkActionThreadSafety) {
+    this.checkActionThreadSafety = checkActionThreadSafety;
   }
 }
