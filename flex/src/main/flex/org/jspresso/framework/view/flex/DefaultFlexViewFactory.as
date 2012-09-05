@@ -798,6 +798,7 @@ package org.jspresso.framework.view.flex {
         checkBox = new CheckBox();
         bindCheckBox(checkBox as CheckBox, remoteCheckBox.state);
       }
+      sizeMaxComponentWidth(checkBox, remoteCheckBox, 1);
       return checkBox;
     }
 
@@ -1359,6 +1360,10 @@ package org.jspresso.framework.view.flex {
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
         componentCell.minWidth = 0;
+        //        componentCell.setStyle("borderStyle","solid");
+        //        componentCell.setStyle("borderColor","0xFF0000");
+        //        component.setStyle("borderStyle","solid");
+        //        component.setStyle("borderColor","0x0000FF");
         if(  rComponent is RTable
           || rComponent is RTextArea
           || rComponent is RList
@@ -1380,10 +1385,6 @@ package org.jspresso.framework.view.flex {
             //Allow last cell and span > 1 cells to grow
             componentCell.percentWidth = 100.0;
           }
-          //componentCell.setStyle("borderStyle","solid");
-          //componentCell.setStyle("borderColor","0xFF0000");
-          //component.setStyle("borderStyle","solid");
-          //component.setStyle("borderColor","0x0000FF");
         }
         if(component.minWidth > 0) {
           componentCell.minWidth = component.minWidth;
