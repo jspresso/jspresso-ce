@@ -250,7 +250,8 @@ public abstract class AbstractPropertyChangeCapable implements
    * @return true if there are one or more listeners for the given property.
    * @see java.beans.PropertyChangeSupport#hasListeners(java.lang.String)
    */
-  protected boolean hasListeners(String propertyName) {
+  @Override
+  public boolean hasListeners(String propertyName) {
     if (propertyChangeSupport != null
         && propertyChangeSupport.hasListeners(propertyName)) {
       return true;

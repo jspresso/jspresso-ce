@@ -20,6 +20,7 @@ package org.jspresso.framework.model.component.basic;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeListenerProxy;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -61,6 +62,7 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.AccessorInfo;
+import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.bean.EAccessorType;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
@@ -80,6 +82,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
+
+
+
+
 
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
@@ -201,6 +207,8 @@ public abstract class AbstractComponentInvocationHandler implements
       removePropertyChangeListener((String) args[0],
           (PropertyChangeListener) args[1]);
       return null;
+    } else if ("hasListeners".equals(methodName)) {
+      return new Boolean(hasListeners(proxy, (String) args[0]));
     } else if ("firePropertyChange".equals(methodName)) {
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
@@ -998,6 +1006,29 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
     }
+  }
+
+  private boolean hasListeners(@SuppressWarnings("unused") Object proxy,
+      String propertyName) {
+    if (propertyChangeSupport != null
+        && propertyChangeSupport.hasListeners(propertyName)) {
+      PropertyChangeListener[] listeners = propertyChangeSupport
+          .getPropertyChangeListeners(propertyName);
+      if (listeners != null && listeners.length > 0) {
+        return true;
+      }
+      listeners = propertyChangeSupport.getPropertyChangeListeners();
+      for (PropertyChangeListener listener : listeners) {
+        if (!(listener instanceof PropertyChangeListenerProxy || listener instanceof BeanPropertyChangeRecorder)) {
+          return true;
+        }
+      }
+    }
+    if (weakPropertyChangeSupport != null
+        && weakPropertyChangeSupport.hasListeners(propertyName)) {
+      return true;
+    }
+    return false;
   }
 
   private void firePropertyChange(Object proxy, String propertyName,

@@ -119,13 +119,15 @@ public abstract class AbstractComponentExtension<T extends IComponent>
             if (getComponentFactory().getAccessorFactory() != null) {
               try {
                 for (String prop : forwardedProperty) {
-                  Object newValue = getComponentFactory()
-                      .getAccessorFactory()
-                      .createPropertyAccessor(prop,
-                          getComponent().getComponentContract())
-                      .getValue(getComponent());
-                  getComponent().firePropertyChange(prop,
-                      IPropertyChangeCapable.UNKNOWN, newValue);
+                  if (getComponent().hasListeners(prop)) {
+                    Object newValue = getComponentFactory()
+                        .getAccessorFactory()
+                        .createPropertyAccessor(prop,
+                            getComponent().getComponentContract())
+                        .getValue(getComponent());
+                    getComponent().firePropertyChange(prop,
+                        IPropertyChangeCapable.UNKNOWN, newValue);
+                  }
                 }
               } catch (IllegalAccessException ex) {
                 throw new NestedRuntimeException(ex);

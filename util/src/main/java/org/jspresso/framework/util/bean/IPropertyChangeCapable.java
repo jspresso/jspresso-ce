@@ -105,6 +105,17 @@ public interface IPropertyChangeCapable {
       PropertyChangeListener listener);
 
   /**
+   * Gets wether this property has at least a property change listener attached
+   * to it.
+   * 
+   * @param propertyName
+   *          The listened property.
+   * @return <code>true</code> if there is a property change listener attached
+   *         to this property.
+   */
+  boolean hasListeners(String propertyName);
+
+  /**
    * Delays events propagation by buffering them. When events are unblocked,
    * they get fired in the order they were recorded.
    */
