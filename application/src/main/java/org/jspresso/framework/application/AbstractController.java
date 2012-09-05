@@ -159,12 +159,14 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
   private static void appendToInternalActionState(Class<?> clazz,
       IAction action, Map<String, Object> state) throws IllegalAccessException {
     for (Field field : clazz.getDeclaredFields()) {
-      field.setAccessible(true);
-      Object fieldValue = field.get(action);
-      if (fieldValue instanceof IAction) {
-        fieldValue = extractInternalActionState((IAction) fieldValue);
+      if (!field.isSynthetic()) {
+        field.setAccessible(true);
+        Object fieldValue = field.get(action);
+        if (fieldValue instanceof IAction) {
+          fieldValue = extractInternalActionState((IAction) fieldValue);
+        }
+        state.put(clazz.getName() + "." + field.getName(), fieldValue);
       }
-      state.put(clazz.getName() + "." + field.getName(), fieldValue);
     }
     Class<?> superClazz = clazz.getSuperclass();
     if (superClazz != null && !Object.class.equals(superClazz)) {
