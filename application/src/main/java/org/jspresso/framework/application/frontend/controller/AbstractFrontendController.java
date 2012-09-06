@@ -436,8 +436,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       // checkAccess(action);
       if (action.isBackend()) {
         result = executeBackend(action, context);
+      } else {
+        result = executeFrontend(action, context);
       }
-      result = executeFrontend(action, context);
     } catch (Throwable ex) {
       handleException(ex, context);
       result = false;
