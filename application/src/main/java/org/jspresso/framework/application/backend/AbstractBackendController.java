@@ -1211,14 +1211,18 @@ public abstract class AbstractBackendController extends AbstractController
               if (snapshotCollection != null) {
                 Collection<IComponent> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
                 for (IComponent snapshotCollectionElement : snapshotCollection) {
-                  if (snapshotCollectionElement instanceof IEntity) {
-                    clonedSnapshotCollection.add(cloneInUnitOfWork(
-                        (IEntity) snapshotCollectionElement,
-                        allowOuterScopeUpdate, alreadyCloned));
+                  if (snapshotCollectionElement != null) {
+                    if (snapshotCollectionElement instanceof IEntity) {
+                      clonedSnapshotCollection.add(cloneInUnitOfWork(
+                          (IEntity) snapshotCollectionElement,
+                          allowOuterScopeUpdate, alreadyCloned));
+                    } else {
+                      clonedSnapshotCollection.add(cloneComponentInUnitOfWork(
+                          snapshotCollectionElement, allowOuterScopeUpdate,
+                          alreadyCloned));
+                    }
                   } else {
-                    clonedSnapshotCollection.add(cloneComponentInUnitOfWork(
-                        snapshotCollectionElement, allowOuterScopeUpdate,
-                        alreadyCloned));
+                    clonedSnapshotCollection.add(null);
                   }
                 }
                 snapshotCollection = clonedSnapshotCollection;
