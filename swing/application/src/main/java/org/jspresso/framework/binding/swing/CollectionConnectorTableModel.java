@@ -195,11 +195,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     try {
       getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
     } catch (RuntimeException ex) {
-      if (exceptionHandler != null) {
-        exceptionHandler.handleException(ex, null);
-      } else {
-        throw ex;
+      if (exceptionHandler != null
+          && exceptionHandler.handleException(ex, null)) {
+        return;
       }
+      throw ex;
     }
   }
 

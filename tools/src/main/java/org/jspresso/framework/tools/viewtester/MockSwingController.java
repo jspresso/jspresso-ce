@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.IOException;
 import java.util.List;
@@ -43,15 +44,13 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.security.UsernamePasswordHandler;
-import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
-import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
@@ -174,8 +173,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public Workspace getWorkspace(@SuppressWarnings("unused")
-  String workspaceName) {
+  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
     return null;
   }
 
@@ -187,40 +185,29 @@ public class MockSwingController extends
     if (super.handleException(ex, context)) {
       return true;
     }
+    String userFriendlyExceptionMessage = computeUserFriendlyExceptionMessage(ex);
     Component sourceComponent = null;
-    if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent,
-          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
-              .getMessage()))), getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
-    } else if (ex instanceof BusinessException) {
+    if (userFriendlyExceptionMessage != null) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
-              .escapeForHTML(((BusinessException) ex).getI18nMessage(this,
-                  getLocale())))), getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
-    } else if (ex instanceof DataIntegrityViolationException) {
-      JOptionPane
-          .showMessageDialog(
-              sourceComponent,
-              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(this
-                  .getTranslation(
-                      refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                      getLocale())))), this
-                  .getTranslation("error", getLocale()),
-              JOptionPane.ERROR_MESSAGE,
-              getIconFactory()
-                  .getErrorIcon(getIconFactory().getLargeIconSize()));
-    } else if (ex instanceof ConcurrencyFailureException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(getTranslation(
-              "concurrency.error.description", getLocale())))),
+              .escapeForHTML(userFriendlyExceptionMessage))),
           getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
-      ex.printStackTrace();
+      traceUnexpectedException(ex);
+      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent, this,
+          getLocale());
+      dialog.setMessageIcon(getIconFactory().getErrorIcon(
+          getIconFactory().getMediumIconSize()));
+      dialog.setTitle(getTranslation("error", getLocale()));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+          .escapeForHTML(ex.getLocalizedMessage()))));
+      dialog.setDetails(ex);
+      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      dialog.pack();
+      dialog.setSize(8 * screenRes, 3 * screenRes);
+      SwingUtil.centerOnScreen(dialog);
+      dialog.setVisible(true);
     }
     return true;
   }

@@ -33,6 +33,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -62,6 +63,7 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
+import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
@@ -76,7 +78,9 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
 /**
  * Base class for frontend application controllers. Frontend controllers are
@@ -440,7 +444,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
         result = executeFrontend(action, context);
       }
     } catch (Throwable ex) {
-      handleException(ex, context);
+      Throwable refinedException = ex;
+      if (ex instanceof HibernateException) {
+        refinedException = SessionFactoryUtils
+            .convertHibernateAccessException((HibernateException) ex);
+      }
+      handleException(refinedException, context);
       result = false;
     } finally {
       if (initialActionState != null) {
@@ -1519,6 +1528,43 @@ public abstract class AbstractFrontendController<E, F, G> extends
       return "error.integrity";
     }
     return "error.integrity";
+  }
+
+  /**
+   * Computes a user friendly exception message if this exception is known and
+   * can be cleanly handled by the framework.
+   * 
+   * @param exception
+   *          the exception to compute the message for.
+   * @return the user friendly message or null if this exception is unexpected.
+   */
+  protected String computeUserFriendlyExceptionMessage(Throwable exception) {
+    if (exception instanceof SecurityException) {
+      return exception.getMessage();
+    } else if (exception instanceof BusinessException) {
+      return ((BusinessException) exception).getI18nMessage(this, getLocale());
+    } else if (exception instanceof DataIntegrityViolationException) {
+      String constraintTranslation = null;
+      if (exception.getCause() instanceof ConstraintViolationException) {
+        ConstraintViolationException cve = ((ConstraintViolationException) exception
+            .getCause());
+        if (cve.getConstraintName() != null) {
+          constraintTranslation = getTranslation(cve.getConstraintName(),
+              getLocale());
+        }
+      }
+      if (constraintTranslation == null) {
+        constraintTranslation = getTranslation("unknown", getLocale());
+      }
+      return getTranslation(
+          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) exception),
+          new Object[] {
+            constraintTranslation
+          }, getLocale());
+    } else if (exception instanceof ConcurrencyFailureException) {
+      return getTranslation("concurrency.error.description", getLocale());
+    }
+    return null;
   }
 
   private void navigatorSelectionChanged(String workspaceName,

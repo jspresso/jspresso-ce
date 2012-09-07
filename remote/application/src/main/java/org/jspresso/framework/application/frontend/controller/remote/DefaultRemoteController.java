@@ -79,7 +79,6 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
-import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
 import org.jspresso.framework.util.http.HttpRequestHolder;
@@ -103,8 +102,6 @@ import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  * This is is the default implementation of a &quot;remotable&quot; frontend
@@ -290,21 +287,10 @@ public class DefaultRemoteController extends
     if (super.handleException(ex, context)) {
       return true;
     }
+    String userFriendlyExceptionMessage = computeUserFriendlyExceptionMessage(ex);
     RemoteMessageCommand messageCommand = createErrorMessageCommand();
-    if (ex instanceof SecurityException) {
-      messageCommand.setMessage(ex.getMessage());
-    } else if (ex instanceof BusinessException) {
-      messageCommand.setMessage(((BusinessException) ex).getI18nMessage(this,
-          getLocale()));
-    } else if (ex instanceof DataIntegrityViolationException) {
-      messageCommand
-          .setMessage(this
-              .getTranslation(
-                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                  getLocale()));
-    } else if (ex instanceof ConcurrencyFailureException) {
-      messageCommand.setMessage(getTranslation("concurrency.error.description",
-          getLocale()));
+    if (userFriendlyExceptionMessage != null) {
+      messageCommand.setMessage(userFriendlyExceptionMessage);
     } else {
       traceUnexpectedException(ex);
       messageCommand.setMessage(ex.getLocalizedMessage());

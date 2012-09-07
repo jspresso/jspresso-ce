@@ -338,8 +338,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(@SuppressWarnings("unused")
-        PropertyChangeEvent evt) {
+        public void propertyChange(
+            @SuppressWarnings("unused") PropertyChangeEvent evt) {
           readabilityChange();
         }
       };
@@ -357,8 +357,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(@SuppressWarnings("unused")
-        PropertyChangeEvent evt) {
+        public void propertyChange(
+            @SuppressWarnings("unused") PropertyChangeEvent evt) {
           writabilityChange();
         }
       };
@@ -476,9 +476,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
             stringValue = aValue.toString();
           }
           try {
-            Object adaptedValue = expectedType.getConstructor(
-                new Class<?>[] {String.class}).newInstance(
-                new Object[] {stringValue});
+            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
+              String.class
+            }).newInstance(new Object[] {
+              stringValue
+            });
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorInputException(ex, stringValue);
@@ -570,8 +572,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelReadabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             readabilityChange();
           }
         };
@@ -580,8 +582,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelWritabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             writabilityChange();
           }
         };
@@ -760,18 +762,18 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Handles a runtime exception, trying to delegeta it to the exception handler
+   * Handles a runtime exception, trying to delegete it to the exception handler
    * if any.
    * 
    * @param ex
    *          the runtime exception.
    */
   protected void handleException(RuntimeException ex) {
-    if (getExceptionHandler() != null) {
-      getExceptionHandler().handleException(ex, null);
-    } else {
-      throw ex;
+    if (getExceptionHandler() != null
+        && getExceptionHandler().handleException(ex, null)) {
+      return;
     }
+    throw ex;
   }
 
   /**
