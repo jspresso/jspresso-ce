@@ -217,6 +217,7 @@ package org.jspresso.framework.view.flex {
           }
         }
       }
+      invalidateSize();
   	}
 
     public function set action(value:RAction):void {
