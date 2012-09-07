@@ -25,7 +25,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteFileUplo
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
-import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * This action lets the user browse his local file system and choose a file to
@@ -37,7 +36,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  */
 public class OpenFileAction extends ChooseFileAction {
 
-  private IFileOpenCallback      fileOpenCallback;
   private FileOpenCallbackAction fileOpenCallbackAction;
 
   /**
@@ -50,12 +48,12 @@ public class OpenFileAction extends ChooseFileAction {
     fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
     RAction successCallbackAction = getActionFactory(context).createAction(
-        createSuccessCallbackAction(), actionHandler,
-        getView(context), getLocale(context));
+        getFileOpenCallbackAction(), actionHandler, getView(context),
+        getLocale(context));
     fileUploadCommand.setSuccessCallbackAction(successCallbackAction);
     RAction cancelCallbackAction = getActionFactory(context).createAction(
-        createCancelCallbackAction(fileOpenCallback), actionHandler,
-        getView(context), getLocale(context));
+        getFileCancelCallbackAction(), actionHandler, getView(context),
+        getLocale(context));
     fileUploadCommand.setCancelCallbackAction(cancelCallbackAction);
     fileUploadCommand.setFileUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);
@@ -80,13 +78,25 @@ public class OpenFileAction extends ChooseFileAction {
    *          the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
-    this.fileOpenCallback = fileOpenCallback;
+    super.setFileCallback(fileOpenCallback);
+    fileOpenCallbackAction = new FileOpenCallbackAction(fileOpenCallback);
   }
 
-  private IDisplayableAction createSuccessCallbackAction() {
-    if (fileOpenCallbackAction == null) {
-      fileOpenCallbackAction = new FileOpenCallbackAction(fileOpenCallback);
-    }
+  /**
+   * Gets the file save callback.
+   * 
+   * @return the file save callback.
+   */
+  protected IFileOpenCallback getFileOpenCallback() {
+    return (IFileOpenCallback) super.getFileCallback();
+  }
+
+  /**
+   * Gets the fileCancelCallbackAction.
+   * 
+   * @return the fileCancelCallbackAction.
+   */
+  protected FileOpenCallbackAction getFileOpenCallbackAction() {
     return fileOpenCallbackAction;
   }
 }

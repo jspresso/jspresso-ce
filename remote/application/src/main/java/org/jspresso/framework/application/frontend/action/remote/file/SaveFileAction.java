@@ -41,8 +41,7 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  */
 public class SaveFileAction extends ChooseFileAction {
 
-  private String            contentType;
-  private IFileSaveCallback fileSaveCallback;
+  private String contentType;
 
   /**
    * Constructs a new <code>SaveFileAction</code> instance.
@@ -62,15 +61,16 @@ public class SaveFileAction extends ChooseFileAction {
         context));
     String fileName = getFileName(context);
     fileDownloadCommand.setDefaultFileName(fileName);
+    IFileSaveCallback callback = getFileSaveCallback();
     String resourceId = ResourceManager.getInstance().register(
-        new ResourceAdapter(fileName, getContentType(), fileSaveCallback,
+        new ResourceAdapter(fileName, getContentType(), callback,
             actionHandler, context));
     fileDownloadCommand.setResourceId(resourceId);
     fileDownloadCommand.setFileUrl(ResourceProviderServlet
         .computeDownloadUrl(resourceId));
     RAction cancelCallbackAction = getActionFactory(context).createAction(
-        createCancelCallbackAction(fileSaveCallback), actionHandler,
-        getView(context), getLocale(context));
+        getFileCancelCallbackAction(), actionHandler, getView(context),
+        getLocale(context));
     fileDownloadCommand.setCancelCallbackAction(cancelCallbackAction);
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);
@@ -120,7 +120,16 @@ public class SaveFileAction extends ChooseFileAction {
    *          the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
-    this.fileSaveCallback = fileSaveCallback;
+    super.setFileCallback(fileSaveCallback);
+  }
+
+  /**
+   * Gets the file save callback.
+   * 
+   * @return the file save callback.
+   */
+  protected IFileSaveCallback getFileSaveCallback() {
+    return (IFileSaveCallback) super.getFileCallback();
   }
 
   /**
@@ -133,8 +142,9 @@ public class SaveFileAction extends ChooseFileAction {
    */
   @Override
   protected String getFileName(Map<String, Object> context) {
-    if (fileSaveCallback != null) {
-      String fileName = fileSaveCallback.getFileName(context);
+    IFileSaveCallback callback = getFileSaveCallback();
+    if (callback != null) {
+      String fileName = callback.getFileName(context);
       if (fileName != null && fileName.length() > 0) {
         return fileName;
       }

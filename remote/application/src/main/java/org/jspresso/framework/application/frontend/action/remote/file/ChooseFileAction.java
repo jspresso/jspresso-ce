@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
 import org.jspresso.framework.application.frontend.file.IFileCallback;
-import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * This is the abstract base class for actions dealing with client file system
@@ -46,6 +45,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   private String                    defaultFileName;
   private FileCancelCallbackAction  fileCancelCallbackAction;
   private Map<String, List<String>> fileFilter;
+  private IFileCallback             fileCallback;
 
   /**
    * Configures a default file name to be used whenever a file needs to be
@@ -80,18 +80,14 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   }
 
   /**
-   * Creates a cancel callback action.
+   * Sets the file callback and performs necessary initializations.
    * 
    * @param fileCallback
-   *          the file callback to cancel.
-   * @return the cancel callback action.
+   *          the file callback.
    */
-  protected IDisplayableAction createCancelCallbackAction(
-      IFileCallback fileCallback) {
-    if (fileCancelCallbackAction == null) {
-      fileCancelCallbackAction = new FileCancelCallbackAction(fileCallback);
-    }
-    return fileCancelCallbackAction;
+  protected void setFileCallback(IFileCallback fileCallback) {
+    this.fileCallback = fileCallback;
+    fileCancelCallbackAction = new FileCancelCallbackAction(fileCallback);
   }
 
   /**
@@ -143,10 +139,29 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
     Map<String, String[]> translatedFileFilter = new HashMap<String, String[]>();
     for (Map.Entry<String, List<String>> filterEntry : executionFileFilter
         .entrySet()) {
-      translatedFileFilter.put(getTranslationProvider(context).getTranslation(
-          filterEntry.getKey(), getLocale(context)), filterEntry.getValue()
-          .toArray(new String[0]));
+      translatedFileFilter.put(
+          getTranslationProvider(context).getTranslation(filterEntry.getKey(),
+              getLocale(context)), filterEntry.getValue()
+              .toArray(new String[0]));
     }
     return translatedFileFilter;
+  }
+
+  /**
+   * Gets the fileCancelCallbackAction.
+   * 
+   * @return the fileCancelCallbackAction.
+   */
+  protected FileCancelCallbackAction getFileCancelCallbackAction() {
+    return fileCancelCallbackAction;
+  }
+
+  /**
+   * Gets the fileCallback.
+   * 
+   * @return the fileCallback.
+   */
+  protected IFileCallback getFileCallback() {
+    return fileCallback;
   }
 }
