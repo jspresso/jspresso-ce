@@ -463,9 +463,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
                   + action);
         }
         if (!initialActionState.equals(finalActionState)) {
+          LOG.error(
+              "A coding probem has been detected that breaks action thread-safety.\n"
+                  + "The action internal state has been modified during its execution which is strictly forbidden.\n"
+                  + "The action chain started with : {}", action);
           throw new ActionException(
-              "A coding probem has been detected that breaks action thread-safety."
-                  + "The action internal state has been modified during its execution which is strictly forbidden.");
+              "A coding probem has been detected that breaks action thread-safety.\n"
+                  + "The action internal state has been modified during its execution which is strictly forbidden.\n"
+                  + "The action chain started with : " + action);
         }
         actionChainChecked = false;
       }
