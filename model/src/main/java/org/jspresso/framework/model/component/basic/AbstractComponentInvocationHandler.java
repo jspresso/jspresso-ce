@@ -87,6 +87,11 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -926,6 +931,11 @@ public abstract class AbstractComponentInvocationHandler implements
       throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
+    }
+    if (collectionProperty != null && collectionProperty.contains(value)) {
+      throw new ComponentException(
+          "Collection property does not allow duplicates : "
+              + componentDescriptor.getComponentContract() + "." + propertyName);
     }
     try {
       if (propertyProcessorsEnabled) {
