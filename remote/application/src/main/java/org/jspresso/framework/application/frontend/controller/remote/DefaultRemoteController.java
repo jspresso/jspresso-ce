@@ -736,6 +736,7 @@ public class DefaultRemoteController extends
           displayWorkspace(getWorkspaceNames().get(0));
         }
         execute(getStartupAction(), getStartupActionContext());
+        clearRequestParams();
       } else {
         loginFailed();
       }

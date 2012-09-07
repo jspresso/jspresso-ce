@@ -39,6 +39,7 @@ import org.jspresso.framework.qooxdoo.rpc.Remote;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.Build;
 import org.jspresso.framework.util.http.HttpRequestHolder;
+import org.jspresso.framework.util.http.RequestParamsHttpFilter;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.view.IIconFactory;
 import org.slf4j.Logger;
@@ -59,12 +60,14 @@ public abstract class RemoteStartup extends
 
   private Locale              startupLocale;
   private TimeZone            clientTimeZone;
+  private boolean             dupSessionDetectionEnabled;
   private boolean             dupSessionNotifiedOnce;
 
   /**
    * Constructs a new <code>RemoteStartup</code> instance.
    */
   public RemoteStartup() {
+    dupSessionDetectionEnabled = true;
     dupSessionNotifiedOnce = false;
   }
 
@@ -133,8 +136,8 @@ public abstract class RemoteStartup extends
     try {
       Locale locale = new Locale(startCommand.getLanguage());
       IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
-      if (!dupSessionNotifiedOnce && controller != null
-          && controller.isStarted()) {
+      if (!dupSessionNotifiedOnce && isDupSessionDetectionEnabled()
+          && controller != null && controller.isStarted()) {
         dupSessionNotifiedOnce = true;
         RemoteMessageCommand errorMessage = createErrorMessageCommand();
         errorMessage.setMessage(controller.getTranslation("session.dup",
@@ -254,5 +257,32 @@ public abstract class RemoteStartup extends
     messageCommand.setMessageIcon(iconFactory.getErrorIcon(iconFactory
         .getLargeIconSize()));
     return messageCommand;
+  }
+
+  /**
+   * Gets the dupSessionDetectionEnabled.
+   * 
+   * @return the dupSessionDetectionEnabled.
+   */
+  public boolean isDupSessionDetectionEnabled() {
+    boolean isPermalink = false;
+    if (HttpRequestHolder.isAvailable()) {
+      HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+      if (session != null
+          && session.getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY) != null) {
+        isPermalink = true;
+      }
+    }
+    return dupSessionDetectionEnabled && !isPermalink;
+  }
+
+  /**
+   * Sets the dupSessionDetectionEnabled.
+   * 
+   * @param dupSessionDetectionEnabled
+   *          the dupSessionDetectionEnabled to set.
+   */
+  public void setDupSessionDetectionEnabled(boolean dupSessionDetectionEnabled) {
+    this.dupSessionDetectionEnabled = dupSessionDetectionEnabled;
   }
 }
