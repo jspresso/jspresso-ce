@@ -1961,6 +1961,7 @@ package org.jspresso.framework.view.flex {
         selectionColumn.draggable = false;
         selectionColumn.dataField = "guid";
         selectionColumn.headerText = " ";
+        selectionColumn.headerRenderer = new ClassFactory(SelectionHeaderRenderer);
         columns.push(selectionColumn);
       }
       
