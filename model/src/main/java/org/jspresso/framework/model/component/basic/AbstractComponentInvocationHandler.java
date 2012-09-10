@@ -83,15 +83,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-
-
-
-
-
-
-
-
-
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -932,7 +923,8 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
-    if (collectionProperty != null && collectionProperty.contains(value)) {
+    if (value instanceof IEntity
+        && collectionProperty.contains(value)) {
       throw new ComponentException(
           "Collection property does not allow duplicates : "
               + componentDescriptor.getComponentContract() + "." + propertyName);

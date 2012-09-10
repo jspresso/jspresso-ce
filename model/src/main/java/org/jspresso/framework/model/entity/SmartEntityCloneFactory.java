@@ -109,7 +109,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           if (propertyEntry.getValue() instanceof IComponent
               && !(propertyEntry.getValue() instanceof IEntity)) {
-            clonedComponent.straightSetProperty(propertyEntry.getKey(),
+            clonedComponent.straightSetProperty(
+                propertyEntry.getKey(),
                 cloneComponent((IComponent) propertyEntry.getValue(),
                     entityFactory));
           } else {
@@ -119,7 +120,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
               if (!(reverseDescriptor instanceof IReferencePropertyDescriptor<?>)) {
                 if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
                     .isComposition()) {
-                  clonedComponent.straightSetProperty(propertyEntry.getKey(),
+                  clonedComponent.straightSetProperty(
+                      propertyEntry.getKey(),
                       cloneEntity((IEntity) propertyEntry.getValue(),
                           entityFactory));
                 } else {
@@ -189,8 +191,14 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
             .setModelDescriptor(collectionDescriptor);
       }
       try {
-        collectionAccessor
-            .addToValue(collectionEntry.getKey(), clonedComponent);
+        Collection<?> existingCollection = collectionAccessor
+            .getValue(collectionEntry.getKey());
+        if (!existingCollection.contains(clonedComponent)) {
+          // it could already be there through lifecycle handlers / property
+          // processors.
+          collectionAccessor.addToValue(collectionEntry.getKey(),
+              clonedComponent);
+        }
       } catch (IllegalAccessException ex) {
         throw new EntityException(ex);
       } catch (InvocationTargetException ex) {
