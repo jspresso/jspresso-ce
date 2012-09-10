@@ -182,9 +182,8 @@ public class CreateQueryComponentAction extends BackendAction {
                   LOG.debug("Init value computed from session : " + initValue);
                 }
               } catch (MissingPropertyException ex) {
-                // the value in the initialization mapping is not a sesion
-                // value.
-                // Handle it as null.
+                // the value in the initialization mapping is not a session
+                // value. Handle it as null.
                 initValue = null;
                 if (LOG.isDebugEnabled()) {
                   LOG.debug(
@@ -238,7 +237,8 @@ public class CreateQueryComponentAction extends BackendAction {
             }
           }
           if (initValue != null) {
-            if ("null".equals(initValue)) {
+            if ("null".equals(initValue)
+                || IQueryComponent.NULL_VAL.equals(initValue)) {
               initValue = IQueryComponent.NULL_VAL;
               if (LOG.isDebugEnabled()) {
                 LOG.debug("Init value set to null");
