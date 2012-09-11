@@ -119,7 +119,10 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    */
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof IPropertyDescriptor) {
+    if (obj != null && obj.getClass().equals(getClass())) {
+      if (getName() == null) {
+        return ((IPropertyDescriptor) obj).getName() == null;
+      }
       return getName().equals(((IPropertyDescriptor) obj).getName());
     }
     return false;
@@ -795,7 +798,9 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * Default value is <code>false</code> in order to prevent un-desired
    * side-effects if computed property change notification is not correctly
    * wired.
-   * @param cacheable the cacheable to set.
+   * 
+   * @param cacheable
+   *          the cacheable to set.
    */
   public void setCacheable(boolean cacheable) {
     this.cacheable = cacheable;

@@ -149,7 +149,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    *           whenever an exception occurs accessing the internal private state
    *           of the action through reflection.
    */
-  public static Object extractInternalActionState(IAction action)
+  public static Map<String, Object> extractInternalActionState(IAction action)
       throws IllegalAccessException {
     HashMap<String, Object> state = new HashMap<String, Object>();
     appendToInternalActionState(action.getClass(), action, state);
