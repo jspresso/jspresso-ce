@@ -42,8 +42,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  */
 public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
 
-  private IAccessorFactory accessorFactory;
-
   /**
    * {@inheritDoc}
    */
@@ -76,9 +74,12 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
    * 
    * @param accessorFactory
    *          the accessorFactory to set.
+   * @deprecated accessor factory is now retrieved from the entity factory
+   *             passed as parameter of the methods.
    */
+  @Deprecated
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
+    // NO-OP
   }
 
   /**
@@ -139,10 +140,11 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
               if (reverseDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                 // We must force initialization of the collection. So do a get.
                 try {
-                  accessorFactory.createPropertyAccessor(
-                      propertyEntry.getKey(),
-                      componentToClone.getComponentContract()).getValue(
-                      componentToClone);
+                  entityFactory
+                      .getAccessorFactory()
+                      .createPropertyAccessor(propertyEntry.getKey(),
+                          componentToClone.getComponentContract())
+                      .getValue(componentToClone);
                 } catch (IllegalAccessException ex) {
                   throw new EntityException(ex);
                 } catch (InvocationTargetException ex) {
@@ -183,9 +185,10 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
             .getReverseRelationEnd()).getReferencedDescriptor()
             .getElementDescriptor().getComponentContract();
       }
-      ICollectionAccessor collectionAccessor = accessorFactory
-          .createCollectionPropertyAccessor(collectionDescriptor.getName(),
-              masterContract, clonedComponent.getComponentContract());
+      ICollectionAccessor collectionAccessor = entityFactory
+          .getAccessorFactory().createCollectionPropertyAccessor(
+              collectionDescriptor.getName(), masterContract,
+              clonedComponent.getComponentContract());
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(collectionDescriptor);

@@ -120,7 +120,6 @@
 
   <bean id="smartEntityCloneFactoryBase" class="org.jspresso.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
     depends-on="componentTuplizerInit">
-    <property name="accessorFactory" ref="accessorFactory" />
   </bean>
 
   <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase" />

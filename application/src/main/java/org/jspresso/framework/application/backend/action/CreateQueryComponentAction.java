@@ -237,11 +237,19 @@ public class CreateQueryComponentAction extends BackendAction {
             }
           }
           if (initValue != null) {
-            if ("null".equals(initValue)
-                || IQueryComponent.NULL_VAL.equals(initValue)) {
-              initValue = IQueryComponent.NULL_VAL;
-              if (LOG.isDebugEnabled()) {
-                LOG.debug("Init value set to null");
+            if (initValue instanceof String
+                && (((String) initValue).endsWith("null") || ((String) initValue)
+                    .endsWith(IQueryComponent.NULL_VAL))) {
+              if (((String) initValue).startsWith(IQueryComponent.NOT_VAL)) {
+                initValue = IQueryComponent.NULL_VAL + IQueryComponent.NULL_VAL;
+                if (LOG.isDebugEnabled()) {
+                  LOG.debug("Init value set to not null");
+                }
+              } else {
+                initValue = IQueryComponent.NULL_VAL;
+                if (LOG.isDebugEnabled()) {
+                  LOG.debug("Init value set to null");
+                }
               }
             } else {
               IPropertyDescriptor initializedPropertyDescriptor = queryComponent
@@ -288,6 +296,11 @@ public class CreateQueryComponentAction extends BackendAction {
                   }
                 }
               }
+            }
+          } else {
+            initValue = IQueryComponent.NULL_VAL;
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Init value set to null");
             }
           }
           qCompAccessor.setValue(queryComponent, initValue);
