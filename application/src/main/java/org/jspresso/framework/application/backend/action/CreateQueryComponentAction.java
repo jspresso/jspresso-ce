@@ -297,11 +297,11 @@ public class CreateQueryComponentAction extends BackendAction {
                 }
               }
             }
-          } else {
-            initValue = IQueryComponent.NULL_VAL;
-            if (LOG.isDebugEnabled()) {
-              LOG.debug("Init value set to null");
-            }
+            // } else {
+            // initValue = IQueryComponent.NULL_VAL;
+            // if (LOG.isDebugEnabled()) {
+            // LOG.debug("Init value set to null");
+            // }
           }
           qCompAccessor.setValue(queryComponent, initValue);
           if (LOG.isDebugEnabled()) {
