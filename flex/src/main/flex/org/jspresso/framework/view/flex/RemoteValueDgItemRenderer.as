@@ -37,7 +37,11 @@ package org.jspresso.framework.view.flex {
   public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
     
     private var _valueChangeListener:ChangeWatcher;
+    private var _toolTipChangeListener:ChangeWatcher;
     private var _writabilityChangeListener:ChangeWatcher;
+    private var _backgroundChangeListener:ChangeWatcher;
+    private var _foregroundChangeListener:ChangeWatcher;
+    private var _fontChangeListener:ChangeWatcher;
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
@@ -118,12 +122,57 @@ package org.jspresso.framework.view.flex {
   	  _formatter = value;
   	}
 
+    private function redraw(value:Object):void {
+      invalidateDisplayList();
+    };
+    
   	override public function set data(value:Object):void	{
   	  updateLabel(value, listData);
   	  if(listData && super.listData) {
   	    super.listData.label = listData.label;
   	  }
   	  super.data = value;
+      var toolTipState:RemoteValueState;
+      if(index == 1 || index == -1) {
+        toolTipState = data as RemoteCompositeValueState;
+      } else if(toolTipIndex >= 0) {
+        toolTipState = ((data as RemoteCompositeValueState).children[toolTipIndex] as RemoteValueState);
+      }
+      if(toolTipState) {
+        if(_toolTipChangeListener != null) {
+          _toolTipChangeListener.reset(toolTipState);
+          refreshToolTip(toolTipState.value);
+        } else {
+          _toolTipChangeListener = BindingUtils.bindSetter(refreshToolTip, toolTipState, "value", true);
+        }
+      }
+      if(backgroundIndex >= 0) {
+        var backgroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState);
+        if(_backgroundChangeListener != null) {
+          _backgroundChangeListener.reset(backgroundState);
+          redraw(backgroundState.value);
+        } else {
+          _backgroundChangeListener = BindingUtils.bindSetter(redraw, backgroundState, "value", true);
+        }
+      }
+      if(foregroundIndex >= 0) {
+        var foregroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState);
+        if(_foregroundChangeListener != null) {
+          _foregroundChangeListener.reset(foregroundState);
+          redraw(foregroundState.value);
+        } else {
+          _foregroundChangeListener = BindingUtils.bindSetter(redraw, foregroundState, "value", true);
+        }
+      }
+      if(fontIndex >= 0) {
+        var fontState:RemoteValueState = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState);
+        if(_fontChangeListener != null) {
+          _fontChangeListener.reset(fontState);
+          redraw(fontState.value);
+        } else {
+          _fontChangeListener = BindingUtils.bindSetter(redraw, fontState, "value", true);
+        }
+      }
   	}
 
   	protected function updateLabel(rendererData:Object, rendererListData:BaseListData):void {
@@ -173,6 +222,14 @@ package org.jspresso.framework.view.flex {
       invalidateProperties();
   	}
   	
+    protected function refreshToolTip(toolTipValue:Object):void {
+      if(toolTipValue != null) {
+        toolTip = toolTipValue.toString();
+      } else {
+        toolTip = null;
+      }
+    }
+
     protected function refreshSelectability(writable:Boolean):void {
       selectable = _forceSelectable || !writable;
     }
@@ -190,32 +247,20 @@ package org.jspresso.framework.view.flex {
           label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
         }
       }
-      if(index == 1 || index == -1) {
-        if(data) {
-          toolTip = (data as RemoteCompositeValueState).value as String;
+      if(index != -1 && index != 1 && toolTipIndex < 0) {
+        //in that case tool tip is based on the cell text.
+        if(HtmlUtil.isHtml(cellText)) {
+          // unconditional
+          toolTip = cellText;
         } else {
-          toolTip = null;
-        }
-      } else {
-        if(toolTipIndex >= 0) {
-          var toolTipValue:Object = ((data as RemoteCompositeValueState).children[toolTipIndex] as RemoteValueState).value;
-          if(toolTipValue != null) {
-            toolTip = toolTipValue.toString();
+          if(toolTip) {
+            toolTip = cellText;
           } else {
             toolTip = null;
           }
-        } else {
-          if(HtmlUtil.isHtml(cellText)) {
-            // unconditional
-            toolTip = cellText;
-          } else {
-            if(toolTip) {
-              toolTip = cellText;
-            } else {
-              toolTip = null;
-            }
-          }
         }
+      } else if(_toolTipChangeListener != null) {
+        refreshToolTip(_toolTipChangeListener.getValue());
       }
       invalidateSize();
   	}
