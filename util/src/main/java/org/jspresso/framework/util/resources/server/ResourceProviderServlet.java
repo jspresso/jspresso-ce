@@ -44,6 +44,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.html.HtmlHelper;
@@ -402,7 +403,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
               localUrlSpec, ALLOWED_LOCAL_URL_REGEX_KEY);
           LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY,
               allowedLocalUrlPattern.pattern());
-          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+          response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
       } else if (imageUrlSpec != null) {
         if (isLocalUrlAllowed(imageUrlSpec)) {
@@ -428,7 +429,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
               imageUrlSpec, ALLOWED_LOCAL_URL_REGEX_KEY);
           LOG.warn("Current value is {} = {}", ALLOWED_LOCAL_URL_REGEX_KEY,
               allowedLocalUrlPattern.pattern());
-          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+          response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
       }
       if (inputStream != null) {
@@ -444,12 +445,24 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       LOG.error(
           "An exception occurred when dealing with the following request : [{}]",
           request.getRequestURL(), sex);
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      try {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      } catch (IOException ex) {
+        throw new NestedRuntimeException(ex,
+            "An exception occured while sending back a "
+                + HttpServletResponse.SC_NOT_FOUND + "error.");
+      }
     } catch (IOException ioex) {
       LOG.error(
           "An exception occurred when dealing with the following request : [{}]",
           request.getRequestURL(), ioex);
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      try {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      } catch (IOException ex) {
+        throw new NestedRuntimeException(ex,
+            "An exception occured while sending back a "
+                + HttpServletResponse.SC_NOT_FOUND + "error.");
+      }
     } finally {
       HttpRequestHolder.setServletRequest(null);
     }
