@@ -1260,7 +1260,8 @@ public abstract class AbstractBackendController extends AbstractController imple
             if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER && mergeMode != EMergeMode.MERGE_EAGER
                 && !isInitialized(propertyValue)) {
               if (registeredEntityProperties.get(propertyName) == null) {
-                mergedProperties.put(propertyName, propertyValue);
+                mergedProperties.put(propertyName,
+                    merge((IEntity) propertyValue, mergeMode, alreadyMerged));
               }
             } else {
               Object registeredProperty = registeredEntityProperties.get(propertyName);
