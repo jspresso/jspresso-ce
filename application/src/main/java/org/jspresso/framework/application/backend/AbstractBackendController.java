@@ -1428,7 +1428,8 @@ public abstract class AbstractBackendController extends AbstractController
                 && mergeMode != EMergeMode.MERGE_EAGER
                 && !isInitialized(propertyValue)) {
               if (registeredEntityProperties.get(propertyName) == null) {
-                mergedProperties.put(propertyName, propertyValue);
+                mergedProperties.put(propertyName,
+                    merge((IEntity) propertyValue, mergeMode, alreadyMerged));
               }
             } else {
               Object registeredProperty = registeredEntityProperties
