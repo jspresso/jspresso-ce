@@ -1358,20 +1358,6 @@ public abstract class AbstractBackendController extends AbstractController
                   + "This is certainly an application coding problem. Please check the logs.");
         }
       }
-    } else {
-      // The following does not work for OkLovAction...
-      // LOG.error(
-      // "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
-      // +
-      // "Where does your entity come from ? Please merge it while the UOW is active so that any"
-      // + " extra lazy initialization access can be performed.", entity,
-      // getEntityContract(entity).getSimpleName());
-      // if (isThrowExceptionOnBadUsage()) {
-      // throw new BackendException(
-      // "A bad usage has been detected on the backend controller."
-      // +
-      // "This is certainly an application coding problem. Please check the logs.");
-      // }
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     E registeredEntity = null;
@@ -1434,9 +1420,12 @@ public abstract class AbstractBackendController extends AbstractController
             } else {
               Object registeredProperty = registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER
-                  && isInitialized(propertyValue)) {
-                initializePropertyIfNeeded(registeredEntity, propertyName);
+              if (mergeMode == EMergeMode.MERGE_EAGER) {
+                if (isInitialized(propertyValue)) {
+                  initializePropertyIfNeeded(registeredEntity, propertyName);
+                } else if (isInitialized(registeredProperty)) {
+                  initializePropertyIfNeeded(entity, propertyName);
+                }
               }
               if (isInitialized(registeredProperty)) {
                 mergedProperties.put(propertyName,
@@ -1455,9 +1444,12 @@ public abstract class AbstractBackendController extends AbstractController
             } else {
               Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER
-                  && isInitialized(propertyValue)) {
-                initializePropertyIfNeeded(registeredEntity, propertyName);
+              if (mergeMode == EMergeMode.MERGE_EAGER) {
+                if (isInitialized(propertyValue)) {
+                  initializePropertyIfNeeded(registeredEntity, propertyName);
+                } else if (isInitialized(registeredCollection)) {
+                  initializePropertyIfNeeded(entity, propertyName);
+                }
               }
               if (isInitialized(registeredCollection)) {
                 if (newlyRegistered && !isInitialized(propertyValue)) {
@@ -1567,9 +1559,12 @@ public abstract class AbstractBackendController extends AbstractController
         } else {
           Object registeredProperty = registeredComponentProperties
               .get(propertyName);
-          if (mergeMode == EMergeMode.MERGE_EAGER
-              && isInitialized(propertyValue)) {
-            initializePropertyIfNeeded(registeredComponent, propertyName);
+          if (mergeMode == EMergeMode.MERGE_EAGER) {
+            if (isInitialized(propertyValue)) {
+              initializePropertyIfNeeded(registeredComponent, propertyName);
+            } else if (isInitialized(registeredProperty)) {
+              initializePropertyIfNeeded(componentToMerge, propertyName);
+            }
           }
           if (isInitialized(registeredProperty)) {
             mergedProperties.put(propertyName,
