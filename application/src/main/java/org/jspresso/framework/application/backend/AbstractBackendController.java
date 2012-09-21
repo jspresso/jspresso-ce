@@ -1360,7 +1360,6 @@ public abstract class AbstractBackendController extends AbstractController
       }
     } else {
       // The following does not work for OkLovAction...
-
       // LOG.error(
       // "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
       // +
@@ -1393,7 +1392,8 @@ public abstract class AbstractBackendController extends AbstractController
             registeredEntity);
         dirtRecorder.register(registeredEntity, null);
         newlyRegistered = true;
-      } else if (mergeMode == EMergeMode.MERGE_KEEP) {
+      } else if (mergeMode == EMergeMode.MERGE_KEEP
+          || (mergeMode == EMergeMode.MERGE_LAZY && !isInitialized(entity))) {
         alreadyMerged
             .register(entityContract, entity.getId(), registeredEntity);
         return registeredEntity;
