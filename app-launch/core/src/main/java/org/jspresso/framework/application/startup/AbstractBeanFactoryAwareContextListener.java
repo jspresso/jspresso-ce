@@ -41,8 +41,9 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    */
   @Override
   public void contextDestroyed(
-      @SuppressWarnings("unused") ServletContextEvent event) {
-    // No-op
+      ServletContextEvent event) {
+    BeanFactory beanFactory = getBeanFactory(event);
+    contextDestroyed(beanFactory, event);
   }
 
   /**
@@ -50,13 +51,18 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    */
   @Override
   public void contextInitialized(ServletContextEvent event) {
+    BeanFactory beanFactory = getBeanFactory(event);
+    contextInitialized(beanFactory, event);
+  }
+
+  private BeanFactory getBeanFactory(ServletContextEvent event) {
     String beanFactorySelector = getBeanFactorySelector(event);
     String applicationContextKey = getApplicationContextKey(event);
     BeanFactoryLocator bfl = SingletonBeanFactoryLocator
         .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     BeanFactory beanFactory = bf.getFactory();
-    contextInitialized(beanFactory, event);
+    return beanFactory;
   }
 
   /**
@@ -90,6 +96,18 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    *          the bean factory to use.
    * @param event the servlet context initialization event.
    */
-  public abstract void contextInitialized(BeanFactory beanFactory, ServletContextEvent event);
+  public void contextInitialized(BeanFactory beanFactory, ServletContextEvent event) {
+    // NO-OP
+  }
 
+  /**
+   * Callback method that is executed when the webapp context has been destroyed.
+   * 
+   * @param beanFactory
+   *          the bean factory to use.
+   * @param event the servlet context destroy event.
+   */
+  public void contextDestroyed(BeanFactory beanFactory, ServletContextEvent event) {
+    // NO-OP
+  }
 }
