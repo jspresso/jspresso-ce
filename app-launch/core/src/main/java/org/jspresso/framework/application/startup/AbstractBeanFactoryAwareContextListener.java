@@ -50,7 +50,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    * {@inheritDoc}
    */
   @Override
-  public void contextInitialized(ServletContextEvent event) {
+  public final void contextInitialized(ServletContextEvent event) {
     BeanFactory beanFactory = getBeanFactory(event);
     contextInitialized(beanFactory, event);
   }
