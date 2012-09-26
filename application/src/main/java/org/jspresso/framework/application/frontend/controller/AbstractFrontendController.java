@@ -503,14 +503,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
               path);
         } else if (initialValue != null && finalValue != null
             && !initialValue.equals(finalValue)) {
-          LOG.error(
-              ">> [{}] is different in the initial action state and in the final one.",
-              prefix, leaf);
           if (initialValue instanceof Map<?, ?>
               && finalValue instanceof Map<?, ?>) {
             logInternalStateDifferences(path,
                 (Map<String, Object>) initialValue,
                 (Map<String, Object>) finalValue);
+          } else {
+            LOG.error(
+                ">> [{}] is different in the initial action state and in the final one.",
+                path);
           }
         }
       } else {
@@ -520,7 +521,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     for (Map.Entry<String, Object> finalEntry : finalActionState.entrySet()) {
-      if (initialActionState.containsKey(finalEntry.getKey())) {
+      if (!initialActionState.containsKey(finalEntry.getKey())) {
         String leaf = finalEntry.getKey();
         if (leaf.indexOf('.') >= 0) {
           leaf = leaf.substring(leaf.lastIndexOf('.') + 1);
