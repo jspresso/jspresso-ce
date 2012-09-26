@@ -27,6 +27,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * Abstract class for application startup.
@@ -54,6 +55,10 @@ public abstract class AbstractStartup implements IStartup {
         BeanFactoryReference bf = bfl
             .useBeanFactory(getApplicationContextKey());
         applicationContext = bf.getFactory();
+        if (applicationContext instanceof ConfigurableApplicationContext) {
+          ((ConfigurableApplicationContext) applicationContext)
+              .registerShutdownHook();
+        }
       }
       return applicationContext;
     } catch (RuntimeException ex) {

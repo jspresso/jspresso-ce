@@ -25,6 +25,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * A simple listener to hook in webapp startup that can provide the application
@@ -62,6 +63,10 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
         .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     BeanFactory beanFactory = bf.getFactory();
+    if (beanFactory instanceof ConfigurableApplicationContext) {
+      ((ConfigurableApplicationContext) beanFactory)
+          .registerShutdownHook();
+    }
     return beanFactory;
   }
 
