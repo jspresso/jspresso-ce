@@ -1098,6 +1098,8 @@
                     <versionRange>[3.6,)</versionRange>
                     <goals>
                       <goal>test-compile</goal>
+                      <goal>compile-swf</goal>
+                      <goal>compile-swc</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>

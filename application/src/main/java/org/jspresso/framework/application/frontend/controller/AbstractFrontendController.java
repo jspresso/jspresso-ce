@@ -467,7 +467,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
               "A coding probem has been detected that breaks action thread-safety.\n"
                   + "The action internal state has been modified during its execution which is strictly forbidden.\n"
                   + "The action chain started with : {}", action);
-          logInternalStateDifferences(1, initialActionState, finalActionState);
+          logInternalStateDifferences("root", initialActionState,
+              finalActionState);
           throw new ActionException(
               "A coding probem has been detected that breaks action thread-safety.\n"
                   + "The action internal state has been modified during its execution which is strictly forbidden.\n"
@@ -480,53 +481,54 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   @SuppressWarnings("unchecked")
-  private void logInternalStateDifferences(int offset,
+  private void logInternalStateDifferences(String prefix,
       Map<String, Object> initialActionState,
       Map<String, Object> finalActionState) {
-    String offsetString = "";
-    for (int i = 0; i < offset; i++) {
-      offsetString += "  ";
-    }
     for (Map.Entry<String, Object> initialEntry : initialActionState.entrySet()) {
+      String leaf = initialEntry.getKey();
+      if (leaf.indexOf('.') >= 0) {
+        leaf = leaf.substring(leaf.lastIndexOf('.') + 1);
+      }
+      String path = prefix + "|" + leaf;
       if (finalActionState.containsKey(initialEntry.getKey())) {
         Object initialValue = initialEntry.getValue();
         Object finalValue = finalActionState.get(initialEntry.getKey());
         if (initialValue != null && finalValue == null) {
           LOG.error(
-              offsetString
-                  + "  >> Entry {} is not null in the initial action state but null in the final one.",
-              initialEntry.getKey());
+              ">> [{}] is not null in the initial action state but null in the final one.",
+              path);
         } else if (initialValue == null && finalValue != null) {
           LOG.error(
-              offsetString
-                  + "  >> Entry {} is null in the initial action state but not null in the final one.",
-              initialEntry.getKey());
+              ">> [{}] is null in the initial action state but not null in the final one.",
+              path);
         } else if (initialValue != null && finalValue != null
             && !initialValue.equals(finalValue)) {
           LOG.error(
-              offsetString
-                  + "  >> Entry {} is different in the initial action state and in the final one.",
-              initialEntry.getKey());
+              ">> [{}] is different in the initial action state and in the final one.",
+              prefix, leaf);
           if (initialValue instanceof Map<?, ?>
               && finalValue instanceof Map<?, ?>) {
-            logInternalStateDifferences(offset + 1,
+            logInternalStateDifferences(path,
                 (Map<String, Object>) initialValue,
                 (Map<String, Object>) finalValue);
           }
         }
       } else {
         LOG.error(
-            offsetString
-                + "  >> Entry {} is present in the final action state but not in the initial one.",
-            initialEntry.getKey());
+            ">> [{}] is present in the final action state but not in the initial one.",
+            path);
       }
     }
     for (Map.Entry<String, Object> finalEntry : finalActionState.entrySet()) {
       if (initialActionState.containsKey(finalEntry.getKey())) {
+        String leaf = finalEntry.getKey();
+        if (leaf.indexOf('.') >= 0) {
+          leaf = leaf.substring(leaf.lastIndexOf('.') + 1);
+        }
+        String path = prefix + "|" + leaf;
         LOG.error(
-            offsetString
-                + "  >> Entry {} is present in the initial action state but not in the final one.",
-            finalEntry.getKey());
+            ">> [{}] is present in the initial action state but not in the final one.",
+            path);
       }
     }
   }
