@@ -147,14 +147,14 @@ public class JHTMLEditor extends JPanel {
 
   private Action createDisplayableAction(Map<String, Action> editorActions,
       String actionName, String iconImage) {
-    Action actionAdapter = new DisplayableActionAdapter(editorActions
-        .get(actionName));
+    Action actionAdapter = new DisplayableActionAdapter(
+        editorActions.get(actionName));
     if (iconImage != null) {
       actionAdapter.putValue(Action.SMALL_ICON, new ImageIcon(getClass()
           .getResource(iconImage)));
     }
-    actionAdapter.putValue(Action.SHORT_DESCRIPTION, bundle
-        .getString(actionName));
+    actionAdapter.putValue(Action.SHORT_DESCRIPTION,
+        bundle.getString(actionName));
     return actionAdapter;
   }
 
@@ -163,9 +163,7 @@ public class JHTMLEditor extends JPanel {
 
     tb.add(createActionButton(editorActions, "font-bold", "bold.gif"));
     tb.add(createActionButton(editorActions, "font-italic", "italic.gif"));
-    tb
-        .add(createActionButton(editorActions, "font-underline",
-            "underline.gif"));
+    tb.add(createActionButton(editorActions, "font-underline", "underline.gif"));
 
     tb.addSeparator();
 

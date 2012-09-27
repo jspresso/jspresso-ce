@@ -34,7 +34,6 @@ public class MockSecurityPlugin implements ISecurityPlugin {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public boolean isAccessGranted(ISecurable securable,
       Map<String, Object> context) {
     return true;

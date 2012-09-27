@@ -27,9 +27,9 @@ import java.util.Collection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The type of the target.
+ *          The type of the target.
  * @param <F>
- *            The type of the property (a subclass of collection).
+ *          The type of the property (a subclass of collection).
  */
 public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
     extends IPropertyProcessor<E, F> {
@@ -41,11 +41,11 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * valid.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param collection
-   *            the actual value of the collection property accessed.
+   *          the actual value of the collection property accessed.
    * @param addedValue
-   *            the value added in the collection.
+   *          the value added in the collection.
    */
   void postprocessAdder(E target, F collection, Object addedValue);
 
@@ -56,11 +56,11 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * valid.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param collection
-   *            the actual value of the collection property accessed.
+   *          the actual value of the collection property accessed.
    * @param removedValue
-   *            the value removed from the collection.
+   *          the value removed from the collection.
    */
   void postprocessRemover(E target, F collection, Object removedValue);
 
@@ -71,11 +71,11 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * are not valid.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param collection
-   *            the actual value of the collection property accessed.
+   *          the actual value of the collection property accessed.
    * @param addedValue
-   *            the value added in the collection.
+   *          the value added in the collection.
    */
   void preprocessAdder(E target, F collection, Object addedValue);
 
@@ -86,11 +86,11 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * are not valid.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param collection
-   *            the actual value of the collection property accessed.
+   *          the actual value of the collection property accessed.
    * @param removedValue
-   *            the value removed from the collection.
+   *          the value removed from the collection.
    */
   void preprocessRemover(E target, F collection, Object removedValue);
 }

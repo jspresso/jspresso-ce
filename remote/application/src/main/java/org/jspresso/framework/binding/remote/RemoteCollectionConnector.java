@@ -161,8 +161,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     currentState.setWritable(isWritable());
     currentState.setDescription(getDisplayDescription());
     currentState.setIconImageUrl(ResourceProviderServlet
-        .computeImageResourceDownloadUrl(getDisplayIcon(),
-            RIcon.DEFAULT_DIM));
+        .computeImageResourceDownloadUrl(getDisplayIcon(), RIcon.DEFAULT_DIM));
   }
 
   /**
@@ -184,7 +183,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     createdState.setChildren(children);
     return createdState;
   }
-  
+
   /**
    * {@inheritDoc}
    */

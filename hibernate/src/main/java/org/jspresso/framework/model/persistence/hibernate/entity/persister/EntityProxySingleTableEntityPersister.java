@@ -27,7 +27,6 @@ import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.jspresso.framework.model.entity.IEntity;
 
-
 /**
  * Subclassed the hibernate default persister for subclasses to workaround a
  * problem with determination of the subclass entity name when using dynamic
@@ -52,8 +51,7 @@ public class EntityProxySingleTableEntityPersister extends
    * @param mapping
    *          the mapping.
    */
-  public EntityProxySingleTableEntityPersister(
-      PersistentClass persistentClass,
+  public EntityProxySingleTableEntityPersister(PersistentClass persistentClass,
       EntityRegionAccessStrategy cacheAccessStrategy,
       SessionFactoryImplementor factory, Mapping mapping) {
     super(persistentClass, cacheAccessStrategy, factory, mapping);
@@ -69,8 +67,8 @@ public class EntityProxySingleTableEntityPersister extends
   public EntityPersister getSubclassEntityPersister(Object instance,
       SessionFactoryImplementor factory, EntityMode entityMode) {
     if (instance instanceof IEntity) {
-      return factory.getEntityPersister(((IEntity) instance).getComponentContract()
-          .getName());
+      return factory.getEntityPersister(((IEntity) instance)
+          .getComponentContract().getName());
     }
     return super.getSubclassEntityPersister(instance, factory, entityMode);
   }
@@ -79,8 +77,7 @@ public class EntityProxySingleTableEntityPersister extends
    * {@inheritDoc}
    */
   @Override
-  public EntityMode guessEntityMode(@SuppressWarnings("unused")
-  Object object) {
+  public EntityMode guessEntityMode(Object object) {
     return EntityMode.POJO;
   }
 }

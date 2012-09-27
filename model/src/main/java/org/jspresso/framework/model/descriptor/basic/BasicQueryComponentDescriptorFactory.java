@@ -43,8 +43,8 @@ public class BasicQueryComponentDescriptorFactory implements
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
     IComponentDescriptorProvider<? extends IComponent> realComponentDescriptorProvider;
     if (componentDescriptorProvider.getComponentDescriptor() instanceof RefQueryComponentDescriptor<?>) {
-      realComponentDescriptorProvider = ((RefQueryComponentDescriptor<?>) componentDescriptorProvider.getComponentDescriptor())
-          .getQueriedComponentsDescriptor();
+      realComponentDescriptorProvider = ((RefQueryComponentDescriptor<?>) componentDescriptorProvider
+          .getComponentDescriptor()).getQueriedComponentsDescriptor();
     } else {
       realComponentDescriptorProvider = componentDescriptorProvider;
     }

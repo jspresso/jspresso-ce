@@ -30,7 +30,7 @@ import java.util.Set;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the type of collection elements.
+ *          the type of collection elements.
  */
 public class DefaultComponentCollectionFactory<E> implements
     IComponentCollectionFactory<E> {

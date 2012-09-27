@@ -41,8 +41,7 @@ public class MockTranslationProvider extends MessageSourceTranslationProvider {
    * {@inheritDoc}
    */
   @Override
-  public String getDatePattern(@SuppressWarnings("unused")
-  Locale locale) {
+  public String getDatePattern(Locale locale) {
     return "dd/MM/yyyy";
   }
 
@@ -50,8 +49,7 @@ public class MockTranslationProvider extends MessageSourceTranslationProvider {
    * {@inheritDoc}
    */
   @Override
-  public String getTimePattern(@SuppressWarnings("unused")
-  Locale locale) {
+  public String getTimePattern(Locale locale) {
     return "HH:mm:ss";
   }
 
@@ -59,8 +57,7 @@ public class MockTranslationProvider extends MessageSourceTranslationProvider {
    * {@inheritDoc}
    */
   @Override
-  public String getShortTimePattern(@SuppressWarnings("unused")
-  Locale locale) {
+  public String getShortTimePattern(Locale locale) {
     return "HH:mm";
   }
 }

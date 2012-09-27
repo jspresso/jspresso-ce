@@ -83,7 +83,7 @@ public final class PropertyViewDescriptorHelper {
         && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>
             && EntityHelper
                 .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
+                && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
 
     if (toExplode) {
       IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)

@@ -21,7 +21,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * Constructs a new <code>EmbeddedModelProvider</code> instance.
    * 
    * @param modelDescriptor
-   *            the model descriptor of this model provider.
+   *          the model descriptor of this model provider.
    */
   public EmbeddedModelProvider(IComponentDescriptorProvider<?> modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
@@ -76,7 +76,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * <code>ModelConnector</code>.
    * 
    * @param newModel
-   *            the new model instance.
+   *          the new model instance.
    */
   public void setModel(Object newModel) {
     Object oldModel = model;

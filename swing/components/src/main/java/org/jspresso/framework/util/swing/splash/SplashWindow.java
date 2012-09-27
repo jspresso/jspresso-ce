@@ -24,7 +24,6 @@ import java.net.URL;
 
 import org.jspresso.framework.util.swing.SwingUtil;
 
-
 /**
  * A Splash window.
  * <p>
@@ -36,6 +35,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * screen, the faster it will appear.
  * 
  * <pre>
+ * 
  * class Splasher {
  * 
  *   public static void main(String[] args) {
@@ -80,9 +80,9 @@ public final class SplashWindow extends Window {
    * Creates a new instance.
    * 
    * @param parent
-   *            the parent of the window.
+   *          the parent of the window.
    * @param image
-   *            the splash image.
+   *          the splash image.
    */
   private SplashWindow(Frame parent, Image image) {
     super(parent);
@@ -112,8 +112,7 @@ public final class SplashWindow extends Window {
        * {@inheritDoc}
        */
       @Override
-      public void mouseClicked(@SuppressWarnings("unused")
-      MouseEvent evt) {
+      public void mouseClicked(MouseEvent evt) {
         // Note: To avoid that method splash hangs, we
         // must set paintCalled to true and call notifyAll.
         // This is necessary because the mouse click may
@@ -143,7 +142,7 @@ public final class SplashWindow extends Window {
    * Open's a splash window using the specified image.
    * 
    * @param image
-   *            The splash image.
+   *          The splash image.
    */
   public static void splash(Image image) {
     if (instance == null && image != null) {
@@ -179,7 +178,7 @@ public final class SplashWindow extends Window {
    * Open's a splash window using the specified image.
    * 
    * @param imageURL
-   *            The url of the splash image.
+   *          The url of the splash image.
    */
   public static void splash(URL imageURL) {
     if (imageURL != null) {

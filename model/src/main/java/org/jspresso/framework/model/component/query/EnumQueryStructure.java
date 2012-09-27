@@ -56,8 +56,9 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
     PropertyChangeListener selectedListener = new PropertyChangeListener() {
 
       @Override
-      public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
-        firePropertyChange(EnumQueryStructureDescriptor.TO_STRING, null, getToString());
+      public void propertyChange(PropertyChangeEvent evt) {
+        firePropertyChange(EnumQueryStructureDescriptor.TO_STRING, null,
+            getToString());
       }
     };
     this.enumerationValues = new LinkedHashSet<EnumValueQueryStructure>();
@@ -90,7 +91,8 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    * @param enumerationValues
    *          the enumerationValues to set.
    */
-  protected void setEnumerationValues(Set<EnumValueQueryStructure> enumerationValues) {
+  protected void setEnumerationValues(
+      Set<EnumValueQueryStructure> enumerationValues) {
     this.enumerationValues = enumerationValues;
   }
 
@@ -123,10 +125,12 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
     }
     String sep = ", ";
     StringBuffer buf = new StringBuffer();
-    for (Iterator<EnumValueQueryStructure> ite = selectedEnumerationValues.iterator(); ite.hasNext();) {
+    for (Iterator<EnumValueQueryStructure> ite = selectedEnumerationValues
+        .iterator(); ite.hasNext();) {
       EnumValueQueryStructure enumValue = ite.next();
       if (getTranslationProvider() != null && getLocale() != null) {
-        buf.append(sourceDescriptor.getI18nValue(enumValue.getValue(), getTranslationProvider(), getLocale()));
+        buf.append(sourceDescriptor.getI18nValue(enumValue.getValue(),
+            getTranslationProvider(), getLocale()));
       } else {
         buf.append(enumValue.getValue());
       }
@@ -161,7 +165,8 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    * Force a notification of the toString().
    */
   public void refreshToString() {
-    firePropertyChange(EnumQueryStructureDescriptor.TO_STRING, null, getToString());
+    firePropertyChange(EnumQueryStructureDescriptor.TO_STRING, null,
+        getToString());
   }
 
   /**

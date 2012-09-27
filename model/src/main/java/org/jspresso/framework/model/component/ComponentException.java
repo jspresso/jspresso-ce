@@ -35,7 +35,7 @@ public class ComponentException extends NestedRuntimeException {
    * Constructs a new <code>ComponentException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ComponentException(String message) {
     super(message);
@@ -45,7 +45,7 @@ public class ComponentException extends NestedRuntimeException {
    * Constructs a new <code>ComponentException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public ComponentException(Throwable nestedException) {
     super(nestedException);
@@ -55,9 +55,9 @@ public class ComponentException extends NestedRuntimeException {
    * Constructs a new <code>ComponentException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ComponentException(Throwable nestedException, String message) {
     super(nestedException, message);

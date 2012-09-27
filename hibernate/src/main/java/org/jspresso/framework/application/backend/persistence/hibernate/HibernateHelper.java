@@ -41,7 +41,8 @@ import org.slf4j.LoggerFactory;
  */
 public final class HibernateHelper {
 
-  private static final Logger LOG = LoggerFactory.getLogger(HibernateHelper.class);
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(HibernateHelper.class);
 
   /**
    * Constructs a new <code>HibernateUtils</code> instance.
@@ -58,15 +59,19 @@ public final class HibernateHelper {
    * @return the component contract.
    */
   @SuppressWarnings("unchecked")
-  public static <E extends IComponent> Class<? extends E> getComponentContract(E component) {
+  public static <E extends IComponent> Class<? extends E> getComponentContract(
+      E component) {
     if (!Hibernate.isInitialized(component)) {
       if (component instanceof HibernateProxy) {
         try {
-          return (Class<? extends E>) Class.forName(((HibernateProxy) component).getHibernateLazyInitializer()
-              .getEntityName());
+          return (Class<? extends E>) Class
+              .forName(((HibernateProxy) component)
+                  .getHibernateLazyInitializer().getEntityName());
         } catch (ClassNotFoundException ex) {
-          LOG.warn("Can not retrieve entity class {} without initializing entity.", ((HibernateProxy) component)
-              .getHibernateLazyInitializer().getEntityName());
+          LOG.warn(
+              "Can not retrieve entity class {} without initializing entity.",
+              ((HibernateProxy) component).getHibernateLazyInitializer()
+                  .getEntityName());
         }
       }
     }
@@ -87,10 +92,12 @@ public final class HibernateHelper {
     IEntity actualE2 = e2;
 
     if (actualE1 instanceof HibernateProxy) {
-      actualE1 = (IEntity) ((HibernateProxy) actualE1).getHibernateLazyInitializer().getImplementation();
+      actualE1 = (IEntity) ((HibernateProxy) actualE1)
+          .getHibernateLazyInitializer().getImplementation();
     }
     if (actualE2 instanceof HibernateProxy) {
-      actualE2 = (IEntity) ((HibernateProxy) actualE2).getHibernateLazyInitializer().getImplementation();
+      actualE2 = (IEntity) ((HibernateProxy) actualE2)
+          .getHibernateLazyInitializer().getImplementation();
     }
     return actualE1 == actualE2;
   }
@@ -106,23 +113,29 @@ public final class HibernateHelper {
    *          the session that is targetted to after the dirty states have been
    *          reset or null if none.
    */
-  public static void clearPersistentCollectionDirtyState(IComponent componentOrEntity, Session targetSession) {
+  public static void clearPersistentCollectionDirtyState(
+      IComponent componentOrEntity, Session targetSession) {
     if (componentOrEntity != null) {
       // Whenever the entity has dirty persistent collection, make them
       // clean to workaround a "bug" with hibernate since hibernate cannot
       // re-attach a "dirty" detached collection.
-      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity.straightGetProperties().entrySet()) {
+      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
+          .straightGetProperties().entrySet()) {
         if (registeredPropertyEntry.getValue() instanceof PersistentCollection) {
-          PersistentCollection persistentCollection = (PersistentCollection) registeredPropertyEntry.getValue();
+          PersistentCollection persistentCollection = (PersistentCollection) registeredPropertyEntry
+              .getValue();
           if (Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
             (persistentCollection).clearDirty();
           }
           if (persistentCollection instanceof AbstractPersistentCollection
-              && targetSession != ((AbstractPersistentCollection) persistentCollection).getSession()) {
+              && targetSession != ((AbstractPersistentCollection) persistentCollection)
+                  .getSession()) {
             // The following is to avoid to avoid Hibernate exceptions due to
             // reassociating a collection that is already associated with the
             // session.
-            persistentCollection.unsetSession(((AbstractPersistentCollection) persistentCollection).getSession());
+            persistentCollection
+                .unsetSession(((AbstractPersistentCollection) persistentCollection)
+                    .getSession());
           }
         }
       }
@@ -138,28 +151,35 @@ public final class HibernateHelper {
    *          the property name to compute the role name for.
    * @return the Hibernate role name of the persistent collection.
    */
-  public static String getHibernateRoleName(Class<?> entityContract, String property) {
+  public static String getHibernateRoleName(Class<?> entityContract,
+      String property) {
     // have to find the highest entity class declaring the collection role.
     PropertyDescriptor roleDescriptor;
     try {
-      roleDescriptor = PropertyHelper.getPropertyDescriptor(entityContract, property);
+      roleDescriptor = PropertyHelper.getPropertyDescriptor(entityContract,
+          property);
     } catch (MissingPropertyException ex) {
       return null;
     }
-    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod().getDeclaringClass();
+    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod()
+        .getDeclaringClass();
     Class<?> roleClass;
     if (IEntity.class.isAssignableFrom(propertyDeclaringClass)) {
       roleClass = propertyDeclaringClass;
     } else {
-      roleClass = getHighestEntityClassInRole(entityContract, propertyDeclaringClass);
+      roleClass = getHighestEntityClassInRole(entityContract,
+          propertyDeclaringClass);
     }
     return roleClass.getName() + "." + property;
   }
 
-  private static Class<?> getHighestEntityClassInRole(Class<?> entityContract, Class<?> propertyDeclaringClass) {
+  private static Class<?> getHighestEntityClassInRole(Class<?> entityContract,
+      Class<?> propertyDeclaringClass) {
     for (Class<?> superInterface : entityContract.getInterfaces()) {
-      if (IEntity.class.isAssignableFrom(superInterface) && propertyDeclaringClass.isAssignableFrom(superInterface)) {
-        return getHighestEntityClassInRole(superInterface, propertyDeclaringClass);
+      if (IEntity.class.isAssignableFrom(superInterface)
+          && propertyDeclaringClass.isAssignableFrom(superInterface)) {
+        return getHighestEntityClassInRole(superInterface,
+            propertyDeclaringClass);
       }
     }
     return entityContract;

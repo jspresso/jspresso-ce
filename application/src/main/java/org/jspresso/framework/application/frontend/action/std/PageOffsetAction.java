@@ -58,7 +58,9 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
     /*
      * we are on the pagination button view.
      */
-    int[] collectionViewPath = new int[] {-1, -1};
+    int[] collectionViewPath = new int[] {
+        -1, -1
+    };
     List<?> stickyResults = null;
     IView<E> collectionView = getView(collectionViewPath, context);
     if (collectionView.getDescriptor() instanceof ICollectionViewDescriptor

@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.security;
 
-
 /**
  * Implemented by classes that can be injected with a Jsopresso security
  * handler.

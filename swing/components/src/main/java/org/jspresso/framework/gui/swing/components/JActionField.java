@@ -77,8 +77,7 @@ public class JActionField extends JPanel {
       super.addFocusListener(new FocusAdapter() {
 
         @Override
-        public void focusGained(@SuppressWarnings("unused")
-        FocusEvent e) {
+        public void focusGained(FocusEvent e) {
           textField.requestFocusInWindow();
         }
       });

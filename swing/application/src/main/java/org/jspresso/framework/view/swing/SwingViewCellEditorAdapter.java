@@ -94,8 +94,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
           new IValueChangeListener() {
 
             @Override
-            public void valueChange(
-                @SuppressWarnings("unused") ValueChangeEvent evt) {
+            public void valueChange(ValueChangeEvent evt) {
               stopCellEditing();
             }
           });
@@ -135,7 +134,6 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public Component getTableCellEditorComponent(JTable table, Object value,
       boolean isSelected, int row, int column) {
     IValueConnector editorConnector = editorView.getConnector();
@@ -176,7 +174,6 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public Component getTreeCellEditorComponent(JTree tree, Object value,
       boolean isSelected, boolean expanded, boolean leaf, int row) {
     return editorView.getPeer();

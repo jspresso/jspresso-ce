@@ -30,10 +30,10 @@ public interface IEvenGridViewDescriptor extends IGridViewDescriptor {
 
   /**
    * Gets the dimension identifier driving the distribution of the contained
-   * components. If <code>LINE</code>, the grid has an unlimited number of
-   * lines but lines have a maximum number of cells. If <code>COLUMN</code>,
-   * the grid has an unlimited number of columns but columns have a maximum
-   * number of cells.
+   * components. If <code>LINE</code>, the grid has an unlimited number of lines
+   * but lines have a maximum number of cells. If <code>COLUMN</code>, the grid
+   * has an unlimited number of columns but columns have a maximum number of
+   * cells.
    * 
    * @return the driving dimension constant.
    */

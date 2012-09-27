@@ -68,9 +68,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings({
-      "unused", "unchecked"
-  })
+  @SuppressWarnings("unchecked")
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {
@@ -84,7 +82,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
@@ -97,7 +95,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {

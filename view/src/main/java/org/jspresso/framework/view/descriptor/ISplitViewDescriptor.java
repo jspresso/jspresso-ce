@@ -39,9 +39,8 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
   /**
    * Gets the orientation of the split described view.
    * 
-   * @return the split orientation. The admissible values are :
-   *         <li>Orientation.VERTICAL
-   *         <li>Orientation.HORIZONTAL
+   * @return the split orientation. The admissible values are : <li>
+   *         Orientation.VERTICAL <li>Orientation.HORIZONTAL
    */
   EOrientation getOrientation();
 

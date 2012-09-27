@@ -42,8 +42,8 @@ public class RTree extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTree</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RTree</code> instance. Only used for serialization
+   * support.
    */
   public RTree() {
     // For serialization support

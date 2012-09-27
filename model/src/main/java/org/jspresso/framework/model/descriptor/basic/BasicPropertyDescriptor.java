@@ -776,7 +776,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused") String permId) {
+  public void setPermId(String permId) {
     throw new UnsupportedOperationException();
   }
 

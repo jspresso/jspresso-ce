@@ -27,7 +27,7 @@ package org.jspresso.framework.gui.remote;
 public class RCheckBox extends RComponent {
 
   private static final long serialVersionUID = -5911137476479351628L;
-  private boolean triState;
+  private boolean           triState;
 
   /**
    * Constructs a new <code>RCheckBox</code> instance.
@@ -47,7 +47,6 @@ public class RCheckBox extends RComponent {
     // For serialization support
   }
 
-  
   /**
    * Gets the triState.
    * 
@@ -57,15 +56,14 @@ public class RCheckBox extends RComponent {
     return triState;
   }
 
-  
   /**
    * Sets the triState.
    * 
-   * @param triState the triState to set.
+   * @param triState
+   *          the triState to set.
    */
   public void setTriState(boolean triState) {
     this.triState = triState;
   }
-  
-  
+
 }

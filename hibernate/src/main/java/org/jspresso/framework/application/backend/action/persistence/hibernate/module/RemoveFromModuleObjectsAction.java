@@ -47,11 +47,9 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  */
 public class RemoveFromModuleObjectsAction extends
     AbstractHibernateCollectionAction {
-  
-  
+
   /**
    * Constructs a new <code>RemoveFromModuleObjectsAction</code> instance.
-   * 
    */
   public RemoveFromModuleObjectsAction() {
     // Disable bad frontend access checks.
@@ -104,8 +102,7 @@ public class RemoveFromModuleObjectsAction extends
         new TransactionCallbackWithoutResult() {
 
           @Override
-          protected void doInTransactionWithoutResult(
-              @SuppressWarnings("unused") TransactionStatus status) {
+          protected void doInTransactionWithoutResult(TransactionStatus status) {
             try {
               getController(context).performPendingOperations();
             } catch (RuntimeException ex) {

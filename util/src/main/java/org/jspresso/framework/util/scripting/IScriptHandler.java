@@ -32,9 +32,9 @@ public interface IScriptHandler {
    * Evaluates a scripted expression.
    * 
    * @param script
-   *            the script to evaluate.
+   *          the script to evaluate.
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the evaluation result.
    */
   Object evaluate(IScript script, Map<String, Object> context);
@@ -43,9 +43,9 @@ public interface IScriptHandler {
    * Executes a script.
    * 
    * @param script
-   *            the script to execute.
+   *          the script to execute.
    * @param context
-   *            the action context.
+   *          the action context.
    */
   void execute(IScript script, Map<String, Object> context);
 }

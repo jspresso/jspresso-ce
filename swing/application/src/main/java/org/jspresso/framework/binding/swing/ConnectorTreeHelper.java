@@ -28,7 +28,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 
-
 /**
  * This is a utility class to help connector tree management.
  * 
@@ -45,10 +44,10 @@ public final class ConnectorTreeHelper {
    * Retrieves a connector tree path following the parent/child relationship.
    * 
    * @param rootConnector
-   *            the root connector of the hierarchy. The returned tree path will
-   *            start from this connector.
+   *          the root connector of the hierarchy. The returned tree path will
+   *          start from this connector.
    * @param connector
-   *            the connector to look the tree path for.
+   *          the connector to look the tree path for.
    * @return the connector's tree path.
    */
   public static TreePath getTreePathForConnector(IValueConnector rootConnector,

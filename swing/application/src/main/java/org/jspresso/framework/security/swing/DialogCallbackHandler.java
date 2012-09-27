@@ -309,8 +309,7 @@ public class DialogCallbackHandler implements CallbackHandler {
       optionButton.addActionListener(new ActionListener() {
 
         @Override
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           cc.setSelectedIndex(option);
           callbackDialog.dispose();
         }
@@ -358,8 +357,7 @@ public class DialogCallbackHandler implements CallbackHandler {
         optionButton.addActionListener(new ActionListener() {
 
           @Override
-          public void actionPerformed(@SuppressWarnings("unused")
-          ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
             callbackDialog.dispose();
           }
@@ -443,8 +441,7 @@ public class DialogCallbackHandler implements CallbackHandler {
     proceedActions.add(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         nc.setName(nameTextField.getText());
       }
     });
@@ -478,8 +475,7 @@ public class DialogCallbackHandler implements CallbackHandler {
     proceedActions.add(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         pc.setPassword(passwordField.getPassword());
       }
     });

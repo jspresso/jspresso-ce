@@ -88,8 +88,8 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
   @Override
   public List<ITreeLevelDescriptor> getChildrenDescriptors() {
     if (childrenDescriptorsMap != null) {
-      return new ArrayList<ITreeLevelDescriptor>(childrenDescriptorsMap
-          .values());
+      return new ArrayList<ITreeLevelDescriptor>(
+          childrenDescriptorsMap.values());
     }
     return null;
   }

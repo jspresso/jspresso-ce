@@ -107,8 +107,8 @@ public class EditSelectedComponentAction<E, F, G> extends
     IBackendController c = getBackendController(context);
     try {
       c.beginUnitOfWork();
-      IEntity uowEntity = c
-          .cloneInUnitOfWork((IEntity) getSelectedModel(context), true);
+      IEntity uowEntity = c.cloneInUnitOfWork(
+          (IEntity) getSelectedModel(context), true);
       return uowEntity;
     } finally {
       c.rollbackUnitOfWork();

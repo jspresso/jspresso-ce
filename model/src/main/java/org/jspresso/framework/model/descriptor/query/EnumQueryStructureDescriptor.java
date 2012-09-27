@@ -41,7 +41,8 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EnumQueryStructureDescriptor extends BasicReferencePropertyDescriptor<EnumQueryStructure> {
+public class EnumQueryStructureDescriptor extends
+    BasicReferencePropertyDescriptor<EnumQueryStructure> {
 
   /**
    * <code>TO_STRING</code> value.
@@ -69,7 +70,8 @@ public class EnumQueryStructureDescriptor extends BasicReferencePropertyDescript
    * @param propertyDescriptor
    *          the actual enumeration property descriptor to wrap.
    */
-  public EnumQueryStructureDescriptor(AbstractEnumerationPropertyDescriptor propertyDescriptor) {
+  public EnumQueryStructureDescriptor(
+      AbstractEnumerationPropertyDescriptor propertyDescriptor) {
 
     super();
 
@@ -88,10 +90,12 @@ public class EnumQueryStructureDescriptor extends BasicReferencePropertyDescript
     selectedPropertyDescriptor.setName(SELECTED);
     selectedPropertyDescriptor.setI18nNameKey("enumValue.selected");
     selectedPropertyDescriptor.setPreferredWidth(new Integer(30));
-    BasicPropertyDescriptor valuePropertyDescriptor = propertyDescriptor.clone();
+    BasicPropertyDescriptor valuePropertyDescriptor = propertyDescriptor
+        .clone();
     valuePropertyDescriptor.setName(VALUE);
     if (propertyDescriptor.getI18nNameKey() != null) {
-      valuePropertyDescriptor.setI18nNameKey(propertyDescriptor.getI18nNameKey());
+      valuePropertyDescriptor.setI18nNameKey(propertyDescriptor
+          .getI18nNameKey());
     } else {
       valuePropertyDescriptor.setI18nNameKey(propertyDescriptor.getName());
     }
@@ -111,11 +115,12 @@ public class EnumQueryStructureDescriptor extends BasicReferencePropertyDescript
     BasicCollectionPropertyDescriptor<EnumValueQueryStructure> enumerationValuesPropertyDescriptor;
     enumerationValuesPropertyDescriptor = new BasicCollectionPropertyDescriptor<EnumValueQueryStructure>();
     enumerationValuesPropertyDescriptor.setName(ENUMERATION_VALUES);
-    enumerationValuesPropertyDescriptor.setReferencedDescriptor(enumValuesReferencedDescriptor);
-    
+    enumerationValuesPropertyDescriptor
+        .setReferencedDescriptor(enumValuesReferencedDescriptor);
+
     BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
     toStringPropertyDescriptor.setName(TO_STRING);
-    
+
     List<IPropertyDescriptor> enumPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
     enumPropertyDescriptors.add(enumerationValuesPropertyDescriptor);
     enumPropertyDescriptors.add(toStringPropertyDescriptor);

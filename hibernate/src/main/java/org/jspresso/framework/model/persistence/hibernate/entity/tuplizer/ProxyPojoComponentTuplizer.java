@@ -27,7 +27,6 @@ import org.hibernate.tuple.component.PojoComponentTuplizer;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
 
-
 /**
  * A specialized hibernate tuplizer to handle proxy components.
  * 
@@ -43,7 +42,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
    * Constructs a new <code>ProxyPojoComponentTuplizer</code> instance.
    * 
    * @param component
-   *            the component to build the proxy for.
+   *          the component to build the proxy for.
    */
   public ProxyPojoComponentTuplizer(Component component) {
     super(component);
@@ -53,7 +52,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
    * Sets the inlineComponentFactory.
    * 
    * @param inlineComponentFactory
-   *            the inlineComponentFactory to set.
+   *          the inlineComponentFactory to set.
    */
   public static void setInlineComponentFactory(
       IComponentFactory inlineComponentFactory) {
@@ -77,7 +76,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
      * Constructs a new <code>ProxyInstantiator</code> instance.
      * 
      * @param component
-     *            the hibernate component to build this instanciator for.
+     *          the hibernate component to build this instanciator for.
      */
     @SuppressWarnings("unchecked")
     public ProxyInstantiator(Component component) {
@@ -96,8 +95,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
      * {@inheritDoc}
      */
     @Override
-    public Object instantiate(@SuppressWarnings("unused")
-    Serializable id) {
+    public Object instantiate(Serializable id) {
       throw new AssertionFailure(
           "ProxyInstantiator can only be used to instantiate component");
     }

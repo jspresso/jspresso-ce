@@ -35,7 +35,7 @@ public interface ICompositeViewDescriptor extends IViewDescriptor {
    * @return the list of contained view descriptors.
    */
   List<IViewDescriptor> getChildViewDescriptors();
-  
+
   /**
    * Gets wether this composite view is a master / detail view. When such a
    * master / detail composite view is built, each added child is bound to the

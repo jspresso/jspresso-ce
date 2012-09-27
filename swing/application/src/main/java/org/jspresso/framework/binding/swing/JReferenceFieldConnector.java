@@ -70,7 +70,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   public void addChildConnector(String storageKey,
       IValueConnector childConnector) {
@@ -83,7 +82,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   public void removeChildConnector(String storageKey) {
     throw new UnsupportedOperationException(
@@ -232,8 +230,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(@SuppressWarnings("unused")
-    ValueChangeEvent evt) {
+    public void valueChange(ValueChangeEvent evt) {
       protectedSetConnecteeValue(getConnecteeValue());
     }
   }

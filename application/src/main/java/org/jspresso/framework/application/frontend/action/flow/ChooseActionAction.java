@@ -111,8 +111,9 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction createActionProxy(IDisplayableAction delegate,
       ITranslationProvider translationProvider, Locale locale) {
     return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
-        .getClassLoader(), new Class[] {IDisplayableAction.class},
-        new I18nActionInvocationHandler(delegate, translationProvider, locale));
+        .getClassLoader(), new Class[] {
+      IDisplayableAction.class
+    }, new I18nActionInvocationHandler(delegate, translationProvider, locale));
   }
 
   private static final class I18nActionInvocationHandler implements
@@ -133,8 +134,8 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
      * {@inheritDoc}
      */
     @Override
-    public Object invoke(@SuppressWarnings("unused") Object proxy,
-        Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args)
+        throws Throwable {
       if (method.getName().equals("getName")) {
         return delegate.getI18nName(translationProvider, locale);
       } else if (method.getName().equals("getDescription")) {

@@ -22,14 +22,13 @@ import java.util.EventObject;
 
 /**
  * A "ModelChangeEvent" event gets delivered whenever a
- * <code>IModelProvider</code> detects a change of its model. A
- * ModelChangeEvent object is sent as an argument to the
- * <code>IModelChangeListener</code> methods. Normally
- * ValueChangeEvent are accompanied by the old and new value of the
- * changed value. If the new value is a primitive type (such as int or boolean)
- * it must be wrapped as the corresponding java.lang.* Object type (such as
- * Integer or Boolean). Null values may be provided for the old and the new
- * values if their true values are not known.
+ * <code>IModelProvider</code> detects a change of its model. A ModelChangeEvent
+ * object is sent as an argument to the <code>IModelChangeListener</code>
+ * methods. Normally ValueChangeEvent are accompanied by the old and new value
+ * of the changed value. If the new value is a primitive type (such as int or
+ * boolean) it must be wrapped as the corresponding java.lang.* Object type
+ * (such as Integer or Boolean). Null values may be provided for the old and the
+ * new values if their true values are not known.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -52,11 +51,11 @@ public class ModelChangeEvent extends EventObject {
    * Constructs a new <code>ModelChangeEvent</code>.
    * 
    * @param source
-   *            The model provider that initiated the event.
+   *          The model provider that initiated the event.
    * @param oldValue
-   *            The old value of the model.
+   *          The old value of the model.
    * @param newValue
-   *            The new value of the model.
+   *          The new value of the model.
    */
   public ModelChangeEvent(IModelProvider source, Object oldValue,
       Object newValue) {

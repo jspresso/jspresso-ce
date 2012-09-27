@@ -72,13 +72,14 @@ public class LdapLoginModule extends LdapExtLoginModule {
       if (option.getKey().startsWith(CUSTOM_PROPERTY_OPT)) {
         String attributeId = option.getValue();
         if (option.getValue().contains(SLICE_START)) {
-          String attributeIdBase = attributeId.substring(0, attributeId
-              .indexOf(SLICE_START));
+          String attributeIdBase = attributeId.substring(0,
+              attributeId.indexOf(SLICE_START));
 
-          String[] indices = option.getValue().substring(
-              option.getValue().indexOf(SLICE_START) + 1,
-              option.getValue().indexOf(SLICE_END)).split(
-              SLICE_START + "," + SLICE_END);
+          String[] indices = option
+              .getValue()
+              .substring(option.getValue().indexOf(SLICE_START) + 1,
+                  option.getValue().indexOf(SLICE_END))
+              .split(SLICE_START + "," + SLICE_END);
           int startIndex = Integer.parseInt(indices[0]);
           int endIndex = Integer.parseInt(indices[1]);
 
@@ -92,57 +93,66 @@ public class LdapLoginModule extends LdapExtLoginModule {
                   .substring(dotIndex + 1));
               if (attr != null && attr.size() > 0) {
                 if (attr.size() == 1) {
-                  userPrincipal.putCustomProperty(option.getKey().substring(
-                      CUSTOM_PROPERTY_OPT.length()), attr.get());
+                  userPrincipal.putCustomProperty(
+                      option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                      attr.get());
                 } else {
                   List<Object> values = new ArrayList<Object>();
                   for (NamingEnumeration<?> avne = attr.getAll(); avne
                       .hasMore();) {
                     values.add(avne.next());
                   }
-                  userPrincipal.putCustomProperty(option.getKey().substring(
-                      CUSTOM_PROPERTY_OPT.length()), values);
+                  userPrincipal.putCustomProperty(
+                      option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                      values);
                 }
               }
             } else {
-              userPrincipal.putCustomProperty(option.getKey().substring(
-                  CUSTOM_PROPERTY_OPT.length()), dnSlice);
+              userPrincipal.putCustomProperty(
+                  option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                  dnSlice);
             }
           } else {
             Attribute attr = attrs.get(attributeId);
             if (attr != null && attr.size() > 0) {
               if (attr.size() == 1) {
-                userPrincipal.putCustomProperty(option.getKey().substring(
-                    CUSTOM_PROPERTY_OPT.length()), extractSlice((String) attr
-                    .get(), nameParser, startIndex, endIndex));
+                userPrincipal.putCustomProperty(
+                    option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                    extractSlice((String) attr.get(), nameParser, startIndex,
+                        endIndex));
               } else {
                 List<Object> values = new ArrayList<Object>();
                 for (NamingEnumeration<?> avne = attr.getAll(); avne.hasMore();) {
                   values.add(extractSlice((String) avne.next(), nameParser,
                       startIndex, endIndex));
                 }
-                userPrincipal.putCustomProperty(option.getKey().substring(
-                    CUSTOM_PROPERTY_OPT.length()), values);
+                userPrincipal.putCustomProperty(
+                    option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                    values);
               }
             }
           }
         } else {
           if ("DN".equalsIgnoreCase(attributeId)) {
-            userPrincipal.putCustomProperty(option.getKey().substring(
-                CUSTOM_PROPERTY_OPT.length()), userDN);
+            userPrincipal
+                .putCustomProperty(
+                    option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                    userDN);
           } else {
             Attribute attr = attrs.get(attributeId);
             if (attr != null && attr.size() > 0) {
               if (attr.size() == 1) {
-                userPrincipal.putCustomProperty(option.getKey().substring(
-                    CUSTOM_PROPERTY_OPT.length()), attr.get());
+                userPrincipal.putCustomProperty(
+                    option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                    attr.get());
               } else {
                 List<Object> values = new ArrayList<Object>();
                 for (NamingEnumeration<?> avne = attr.getAll(); avne.hasMore();) {
                   values.add(avne.next());
                 }
-                userPrincipal.putCustomProperty(option.getKey().substring(
-                    CUSTOM_PROPERTY_OPT.length()), values);
+                userPrincipal.putCustomProperty(
+                    option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
+                    values);
               }
             }
           }

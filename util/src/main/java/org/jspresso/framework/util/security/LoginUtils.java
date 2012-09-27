@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.security;
 
-
 /**
  * Some i18n utils for login.
  * 

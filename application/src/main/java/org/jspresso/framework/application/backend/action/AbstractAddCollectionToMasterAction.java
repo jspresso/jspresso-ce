@@ -48,11 +48,9 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  */
 public abstract class AbstractAddCollectionToMasterAction extends
     AbstractCollectionAction {
-  
-  
+
   /**
    * Constructs a new <code>AbstractAddCollectionToMasterAction</code> instance.
-   * 
    */
   public AbstractAddCollectionToMasterAction() {
     // Disable bad frontend access checks.

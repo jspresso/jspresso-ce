@@ -320,7 +320,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public void addChildConnector(String storageKey,
       IValueConnector childConnector) {
@@ -332,7 +332,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public void removeChildConnector(String storageKey) {
     throw new UnsupportedOperationException();

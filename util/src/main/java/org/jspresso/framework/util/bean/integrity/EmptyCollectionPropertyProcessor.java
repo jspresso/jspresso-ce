@@ -26,9 +26,9 @@ import java.util.Collection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The type of the target.
+ *          The type of the target.
  * @param <F>
- *            The type of the property (a subclass of collection).
+ *          The type of the property (a subclass of collection).
  */
 public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
     extends EmptyPropertyProcessor<E, F> implements
@@ -40,9 +40,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
-  public void postprocessAdder(E target, F collection,
-      Object addedValue) {
+  public void postprocessAdder(E target, F collection, Object addedValue) {
     // NO-OP
   }
 
@@ -52,9 +50,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
-  public void postprocessRemover(E target, F collection,
-      Object removedValue) {
+  public void postprocessRemover(E target, F collection, Object removedValue) {
     // NO-OP
   }
 
@@ -64,9 +60,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
-  public void preprocessAdder(E target, F collection,
-      Object addedValue) {
+  public void preprocessAdder(E target, F collection, Object addedValue) {
     // NO-OP
   }
 
@@ -76,9 +70,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
-  public void preprocessRemover(E target, F collection,
-      Object removedValue) {
+  public void preprocessRemover(E target, F collection, Object removedValue) {
     // NO-OP
   }
 

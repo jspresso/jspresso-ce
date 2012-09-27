@@ -71,8 +71,8 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
       mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
           new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
               digestAndEncode(newPassword.toCharArray()))));
-      ldapTemplate.modifyAttributes(userDn, mods
-          .toArray(new ModificationItem[0]));
+      ldapTemplate.modifyAttributes(userDn,
+          mods.toArray(new ModificationItem[0]));
     } catch (NoSuchAlgorithmException ex) {
       throw new ActionException(ex);
     } catch (UnsupportedEncodingException ex) {

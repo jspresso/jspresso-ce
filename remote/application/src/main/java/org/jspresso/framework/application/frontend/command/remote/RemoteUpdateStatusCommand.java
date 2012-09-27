@@ -28,12 +28,13 @@ public class RemoteUpdateStatusCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -5258269933081414873L;
 
-  private String status;
+  private String            status;
 
   /**
    * Sets the status.
    * 
-   * @param status the status to set.
+   * @param status
+   *          the status to set.
    */
   public void setStatus(String status) {
     this.status = status;
@@ -47,5 +48,5 @@ public class RemoteUpdateStatusCommand extends RemoteCommand {
   public String getStatus() {
     return status;
   }
-  
+
 }

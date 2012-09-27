@@ -26,7 +26,7 @@ package org.jspresso.framework.model.component;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <T>
- *            The class of the extended component.
+ *          The class of the extended component.
  */
 public interface IComponentExtension<T extends IComponent> {
 

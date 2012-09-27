@@ -34,7 +34,6 @@ public class MockChangePasswordAction extends AbstractChangePasswordAction {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   protected boolean changePassword(UserPrincipal userPrincipal,
       String currentPassword, String newPassword) {

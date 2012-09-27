@@ -691,7 +691,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
+  public boolean isInitialized(Object objectOrProxy) {
     return true;
   }
 

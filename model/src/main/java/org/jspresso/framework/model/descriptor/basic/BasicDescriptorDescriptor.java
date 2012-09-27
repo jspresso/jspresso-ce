@@ -25,7 +25,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 
-
 /**
  * Basic implementation of an action descriptor.
  * 

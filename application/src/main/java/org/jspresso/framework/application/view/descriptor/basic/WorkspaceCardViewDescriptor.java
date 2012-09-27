@@ -38,8 +38,7 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
    * {@inheritDoc}
    */
   @Override
-  public String getCardNameForModel(Object model,
-      @SuppressWarnings("unused") Subject subject) {
+  public String getCardNameForModel(Object model, Subject subject) {
     if (model instanceof Module) {
       IViewDescriptor pvd = ((Module) model).getProjectedViewDescriptor();
       if (pvd != null) {

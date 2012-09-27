@@ -45,8 +45,7 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * {@inheritDoc}
    */
   @Override
-  public String getCardNameForModel(Object model,
-      @SuppressWarnings("unused") Subject subject) {
+  public String getCardNameForModel(Object model, Subject subject) {
     if (model != null) {
       if (model instanceof IComponent) {
         return ((IComponent) model).getComponentContract().getName();

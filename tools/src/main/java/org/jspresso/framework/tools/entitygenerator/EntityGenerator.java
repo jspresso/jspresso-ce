@@ -188,7 +188,9 @@ public class EntityGenerator {
   /**
    * Generates the component java source files.
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({
+      "rawtypes", "resource"
+  })
   public void generateComponents() {
     ListableBeanFactory appContext = getListableBeanFactory();
     Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
@@ -376,22 +378,22 @@ public class EntityGenerator {
   public void setOutputDir(String outputDir) {
     this.outputDir = outputDir;
   }
-  
-  
+
   /**
    * Sets the classnamePrefix.
    * 
-   * @param classnamePrefix the classnamePrefix to set.
+   * @param classnamePrefix
+   *          the classnamePrefix to set.
    */
   public void setClassnamePrefix(String classnamePrefix) {
     this.classnamePrefix = classnamePrefix;
   }
-  
-  
+
   /**
    * Sets the classnameSuffix.
    * 
-   * @param classnameSuffix the classnameSuffix to set.
+   * @param classnameSuffix
+   *          the classnameSuffix to set.
    */
   public void setClassnameSuffix(String classnameSuffix) {
     this.classnameSuffix = classnameSuffix;

@@ -114,8 +114,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
         new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {
               try {
                 for (String prop : forwardedProperty) {

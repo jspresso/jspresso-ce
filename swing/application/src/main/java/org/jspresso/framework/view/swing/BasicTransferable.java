@@ -321,7 +321,6 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   public void lostOwnership(Clipboard clipboard, Transferable contents) {
     // Don't do anything

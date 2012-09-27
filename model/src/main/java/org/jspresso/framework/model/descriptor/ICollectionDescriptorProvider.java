@@ -24,7 +24,7 @@ package org.jspresso.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete collection component type.
+ *          the concrete collection component type.
  */
 public interface ICollectionDescriptorProvider<E> extends IModelDescriptor {
 

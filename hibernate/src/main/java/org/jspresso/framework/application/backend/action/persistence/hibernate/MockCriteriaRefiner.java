@@ -36,7 +36,7 @@ public class MockCriteriaRefiner implements ICriteriaRefiner {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public void refineCriteria(EnhancedDetachedCriteria criteria,
       IQueryComponent queryComponent, Map<String, Object> context) {

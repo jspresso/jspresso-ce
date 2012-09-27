@@ -64,7 +64,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @param <G>
  *          the actual action type used.
  */
-public class FrontendAction<E, F, G> extends AbstractAction implements IDisplayableAction {
+public class FrontendAction<E, F, G> extends AbstractAction implements
+    IDisplayableAction {
 
   private String                acceleratorAsString;
   private Collection<IGate>     actionabilityGates;
@@ -136,7 +137,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
    * {@inheritDoc}
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
     if (getDescription() != null) {
       return translationProvider.getTranslation(getDescription(), "", locale);
     }
@@ -147,7 +149,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
    * {@inheritDoc}
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
     return translationProvider.getTranslation(getName(), locale);
   }
 
@@ -406,7 +409,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
    */
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("name", getName()).append("description", getDescription())
+    return new ToStringBuilder(this).append("name", getName())
+        .append("description", getDescription())
         .append("iconImageURL", getIcon()).toString();
   }
 
@@ -418,7 +422,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
       actionabilityGates.remove(ModelTrackingGate.INSTANCE);
       actionabilityGates.add(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
     } else {
-      actionabilityGates.remove(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates
+          .remove(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
       actionabilityGates.add(ModelTrackingGate.INSTANCE);
     }
     if (isMultiSelectionEnabled()) {
@@ -483,7 +488,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
    * @return the frontend controller.
    */
   @Override
-  protected IFrontendController<E, F, G> getController(Map<String, Object> context) {
+  protected IFrontendController<E, F, G> getController(
+      Map<String, Object> context) {
     return getFrontendController(context);
   }
 
@@ -561,7 +567,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected IFrontendController<E, F, G> getFrontendController(Map<String, Object> context) {
+  protected IFrontendController<E, F, G> getFrontendController(
+      Map<String, Object> context) {
     return (IFrontendController<E, F, G>) super.getFrontendController(context);
   }
 

@@ -79,8 +79,8 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
           renderer.setText("");
         }
         renderer.setIcon(iconFactory.getIcon(
-            ((IRenderableCompositeValueConnector) value)
-                .getDisplayIcon(), iconFactory.getSmallIconSize()));
+            ((IRenderableCompositeValueConnector) value).getDisplayIcon(),
+            iconFactory.getSmallIconSize()));
         ListModel lm = list.getModel();
         if (lm instanceof CollectionConnectorListModel) {
           setToolTipText(((CollectionConnectorListModel) lm)

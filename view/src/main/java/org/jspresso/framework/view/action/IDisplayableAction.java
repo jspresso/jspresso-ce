@@ -25,7 +25,6 @@ import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.descriptor.IStylable;
 import org.jspresso.framework.util.gate.IGate;
 
-
 /**
  * This interface must be implemented by any displayable action of the
  * application.

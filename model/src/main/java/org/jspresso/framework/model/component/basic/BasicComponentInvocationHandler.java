@@ -38,7 +38,8 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicComponentInvocationHandler extends AbstractComponentInvocationHandler {
+public class BasicComponentInvocationHandler extends
+    AbstractComponentInvocationHandler {
 
   private static final long   serialVersionUID = -3178070064423598514L;
 
@@ -60,10 +61,14 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
    *          The factory used to create component extensions based on their
    *          classes.
    */
-  public BasicComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor,
-      IComponentFactory inlineComponentFactory, IComponentCollectionFactory<IComponent> collectionFactory,
-      IAccessorFactory accessorFactory, IComponentExtensionFactory extensionFactory) {
-    super(componentDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
+  public BasicComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor,
+      IComponentFactory inlineComponentFactory,
+      IComponentCollectionFactory<IComponent> collectionFactory,
+      IAccessorFactory accessorFactory,
+      IComponentExtensionFactory extensionFactory) {
+    super(componentDescriptor, inlineComponentFactory, collectionFactory,
+        accessorFactory, extensionFactory);
     this.properties = createPropertyMap();
   }
 
@@ -78,8 +83,11 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
     if (proxy == another) {
       return true;
     }
-    return new EqualsBuilder().append(proxy.getComponentContract(), ((IComponent) another).getComponentContract())
-        .append(proxy.straightGetProperties(), ((IComponent) another).straightGetProperties()).isEquals();
+    return new EqualsBuilder()
+        .append(proxy.getComponentContract(),
+            ((IComponent) another).getComponentContract())
+        .append(proxy.straightGetProperties(),
+            ((IComponent) another).straightGetProperties()).isEquals();
   }
 
   /**
@@ -87,8 +95,8 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
    */
   @Override
   protected int computeHashCode(IComponent proxy) {
-    return new HashCodeBuilder(7, 13).append(proxy.getComponentContract()).append(proxy.straightGetProperties())
-        .toHashCode();
+    return new HashCodeBuilder(7, 13).append(proxy.getComponentContract())
+        .append(proxy.straightGetProperties()).toHashCode();
   }
 
   /**
@@ -96,7 +104,7 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
    */
   @Override
   protected IComponent decorateReferent(IComponent referent,
-      @SuppressWarnings("unused") IComponentDescriptor<? extends IComponent> referentDescriptor) {
+      IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
   }
 

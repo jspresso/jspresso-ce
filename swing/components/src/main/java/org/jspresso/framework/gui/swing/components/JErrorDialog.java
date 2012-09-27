@@ -46,7 +46,6 @@ import javax.swing.plaf.basic.BasicHTML;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
 
-
 /**
  * Dialog used for reporting detailed messages (and errors).
  * 
@@ -82,11 +81,11 @@ public final class JErrorDialog extends JDialog {
    * Factory method for error dialog.
    * 
    * @param sourceComponent
-   *            one of the components insinde the owning window.
+   *          one of the components insinde the owning window.
    * @param translationProvider
-   *            the translationProvider for labels.
+   *          the translationProvider for labels.
    * @param locale
-   *            the locale used.
+   *          the locale used.
    * @return the created error dialog instance.
    */
   public static JErrorDialog createInstance(Component sourceComponent,
@@ -110,9 +109,9 @@ public final class JErrorDialog extends JDialog {
    * scroll pane. Otherwise, just set the detailsPane section.
    * 
    * @param details
-   *            Details to be shown in the detail section of the dialog. This
-   *            can be null if you do not want to display the details section of
-   *            the dialog.
+   *          Details to be shown in the detail section of the dialog. This can
+   *          be null if you do not want to display the details section of the
+   *          dialog.
    */
   public void setDetails(String details) {
     if (details == null || details.equals("")) {
@@ -131,9 +130,9 @@ public final class JErrorDialog extends JDialog {
    * scroll pane. Otherwise, just set the detailsPane section.
    * 
    * @param details
-   *            Details to be shown in the detail section of the dialog. This
-   *            can be null if you do not want to display the details section of
-   *            the dialog.
+   *          Details to be shown in the detail section of the dialog. This can
+   *          be null if you do not want to display the details section of the
+   *          dialog.
    */
   public void setDetails(Throwable details) {
     String exceptionAsDetails = null;
@@ -145,10 +144,8 @@ public final class JErrorDialog extends JDialog {
       html.append("    " + details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html
-          .append("<b>"
-              + translationProvider.getTranslation("stacktrace", locale)
-              + " :</b>");
+      html.append("<b>"
+          + translationProvider.getTranslation("stacktrace", locale) + " :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
         html.append("    " + el.toString() + "\n");
@@ -163,7 +160,7 @@ public final class JErrorDialog extends JDialog {
    * Set the error message for the dialog box.
    * 
    * @param message
-   *            Message for the error dialog
+   *          Message for the error dialog
    */
   public void setMessage(String message) {
     if (BasicHTML.isHTMLString(message)) {
@@ -178,7 +175,7 @@ public final class JErrorDialog extends JDialog {
    * Specifies the icon to use.
    * 
    * @param messageIcon
-   *            the Icon to use. If null, the default error icon will be used
+   *          the Icon to use. If null, the default error icon will be used
    */
   public void setMessageIcon(Icon messageIcon) {
     iconLabel.setIcon(messageIcon);
@@ -265,8 +262,7 @@ public final class JErrorDialog extends JDialog {
     button.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent ae) {
+      public void actionPerformed(ActionEvent ae) {
         detailsPane.copy();
       }
     });
@@ -284,8 +280,7 @@ public final class JErrorDialog extends JDialog {
     okButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         setVisible(false);
         dispose();
       }
@@ -293,8 +288,7 @@ public final class JErrorDialog extends JDialog {
     detailsButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         setDetailsVisible(!detailsPanel.isVisible());
       }
     });
@@ -305,7 +299,7 @@ public final class JErrorDialog extends JDialog {
    * of the Details button accordingly.
    * 
    * @param b
-   *            if true detailsPane section will be visible
+   *          if true detailsPane section will be visible
    */
   private void setDetailsVisible(boolean b) {
     if (b) {
@@ -318,8 +312,7 @@ public final class JErrorDialog extends JDialog {
       }
       detailsPanel.setVisible(true);
       detailsButton.setText(translationProvider.getTranslation("details",
-          locale)
-          + "<<");
+          locale) + "<<");
       detailsPanel.applyComponentOrientation(detailsButton
           .getComponentOrientation());
       detailsPane.setCaretPosition(0);
@@ -328,8 +321,7 @@ public final class JErrorDialog extends JDialog {
       expandedHeight = getHeight();
       detailsPanel.setVisible(false);
       detailsButton.setText(translationProvider.getTranslation("details",
-          locale)
-          + ">>");
+          locale) + ">>");
       messagePane.setSize(0, 0);
       messagePane.setSize(messagePane.getPreferredSize());
       setSize(getWidth(), collapsedHeight);
@@ -346,8 +338,7 @@ public final class JErrorDialog extends JDialog {
      * {@inheritDoc}
      */
     @Override
-    public int getSourceActions(@SuppressWarnings("unused")
-    JComponent c) {
+    public int getSourceActions(JComponent c) {
       return TransferHandler.COPY;
     }
 
@@ -355,8 +346,7 @@ public final class JErrorDialog extends JDialog {
      * {@inheritDoc}
      */
     @Override
-    protected Transferable createTransferable(@SuppressWarnings("unused")
-    JComponent c) {
+    protected Transferable createTransferable(JComponent c) {
       String text = detailsPane.getSelectedText();
       if (text == null || text.equals("")) {
         detailsPane.selectAll();

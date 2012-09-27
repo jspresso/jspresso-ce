@@ -49,7 +49,6 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Constructs a new <code>JdbcPreferenceStore</code> instance.
-   * 
    */
   public JdbcPreferencesStore() {
     this.storePath = "";
@@ -58,8 +57,8 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   /**
    * Sets the path of this store.
    * 
-    * @param storePath
-    *          the preferences store path.
+   * @param storePath
+   *          the preferences store path.
    */
   @Override
   public void setStorePath(String[] storePath) {
@@ -73,7 +72,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
       this.storePath = "";
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -170,8 +169,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     if (existing != null) {
       StringBuffer sql = new StringBuffer("DELETE FROM ")
           .append(getTableName()).append(" WHERE ").append(getKeyColumnName())
-          .append(" = ? AND ").append(getPathColumnName())
-          .append(" = ?");
+          .append(" = ? AND ").append(getPathColumnName()).append(" = ?");
 
       String[] restrictionsValues;
       int[] restrictionsTypes;

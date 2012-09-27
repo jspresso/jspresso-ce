@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.model.descriptor;
 
-
 /**
  * Duration constants.
  * 
@@ -26,38 +25,38 @@ package org.jspresso.framework.model.descriptor;
  * @author Vincent Vandenschrick
  */
 public enum EDuration {
-  
+
   /**
    * <code>ONE_DAY</code>.
    */
   ONE_DAY(24 * 60 * 60 * 1000),
-  
+
   /**
    * <code>ONE_HOUR</code>.
    */
   ONE_HOUR(60 * 60 * 1000),
-  
+
   /**
    * <code>ONE_MINUTE</code>.
    */
   ONE_MINUTE(60 * 1000),
-  
+
   /**
    * <code>ONE_SECOND</code>.
    */
   ONE_SECOND(1000),
-  
+
   /**
    * <code>ONE_WEEK</code>.
    */
   ONE_WEEK(7 * 24 * 60 * 60 * 1000);
-  
+
   private int millis;
-  
+
   private EDuration(int millis) {
     this.millis = millis;
   }
-  
+
   /**
    * get milliseconds value.
    * 

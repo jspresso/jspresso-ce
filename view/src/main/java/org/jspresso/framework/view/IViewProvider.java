@@ -24,7 +24,7 @@ package org.jspresso.framework.view;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The root class of the view peers.
+ *          The root class of the view peers.
  */
 public interface IViewProvider<E> {
 

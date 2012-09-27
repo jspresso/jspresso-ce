@@ -22,7 +22,8 @@ import org.jspresso.framework.application.frontend.action.std.EditComponentActio
  * @param <G>
  *          the actual action type used.
  */
-public class EditBackendControllerAction<E, F, G> extends EditComponentAction<E, F, G> {
+public class EditBackendControllerAction<E, F, G> extends
+    EditComponentAction<E, F, G> {
 
   /**
    * Constructs a new <code>ChangePasswordAction</code> instance.
@@ -35,7 +36,8 @@ public class EditBackendControllerAction<E, F, G> extends EditComponentAction<E,
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     setActionParameter(getBackendController(context), context);
     return super.execute(actionHandler, context);
   }

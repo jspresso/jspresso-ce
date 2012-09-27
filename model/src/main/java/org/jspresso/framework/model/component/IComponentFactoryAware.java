@@ -15,7 +15,7 @@ public interface IComponentFactoryAware {
    * Sets the component factory.
    * 
    * @param componentFactory
-   *            the component factory to set.
+   *          the component factory to set.
    */
   void setComponentFactory(IComponentFactory componentFactory);
 }

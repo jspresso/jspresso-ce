@@ -124,6 +124,7 @@ public class ViewTester {
     tester.setViewId(cmd.getOptionValue(VIEW_ID));
     tester.setLanguage(cmd.getOptionValue(LANGUAGE));
     SwingUtilities.invokeLater(new Runnable() {
+
       @Override
       public void run() {
         tester.displayView();

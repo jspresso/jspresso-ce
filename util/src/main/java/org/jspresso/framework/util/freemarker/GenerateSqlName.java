@@ -67,8 +67,10 @@ public class GenerateSqlName implements TemplateMethodModel {
 
       @Override
       public List<String> run() {
-        return Arrays.asList(new String[] {"BEGIN", "END", "GROUP", "FUNCTION",
-      "ACTION", "ARRAY", "DATE", "DATA", "DAY", "MONTH", "YEAR", "FROM", "TO"});
+        return Arrays.asList(new String[] {
+      "BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
+      "DAY", "MONTH", "YEAR", "FROM", "TO"
+        });
       }
     };
   }
@@ -90,8 +92,8 @@ public class GenerateSqlName implements TemplateMethodModel {
    * {@inheritDoc}
    */
   @Override
-  public TemplateModel exec(@SuppressWarnings("rawtypes")
-  List arguments) throws TemplateModelException {
+  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+      throws TemplateModelException {
 
     String sqlColumnName = formatter.run(arguments.get(0).toString());
     if (isReserved(sqlColumnName)) {

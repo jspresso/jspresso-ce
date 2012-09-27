@@ -67,8 +67,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public Object toJava(Object obj, @SuppressWarnings("rawtypes")
-  Class targetType) {
+  public Object toJava(Object obj,
+      @SuppressWarnings("rawtypes") Class targetType) {
     if (obj instanceof JSONObject) {
       JSONObject jsonObject = (JSONObject) obj;
       String requestedTypeName = jsonObject.optString("class", null);
@@ -104,7 +104,9 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({
+      "unchecked", "rawtypes"
+  })
   @Override
   protected Map filter(Object obj, Map map) {
     Map filteredMap = super.filter(obj, map);
@@ -117,8 +119,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    */
   @Override
   protected Class<?> resolveClassHint(String requestedTypeName,
-      @SuppressWarnings("rawtypes")
-      Class targetType) throws Exception {
+      @SuppressWarnings("rawtypes") Class targetType) throws Exception {
     Class<?> clazz = super.resolveClassHint(requestedTypeName, targetType);
     if (clazz == null) {
       return Class.forName(requestedTypeName);
@@ -132,7 +133,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   protected boolean throwsExpectedException(Method method) {
     // Removes the exception constraints on method signature.

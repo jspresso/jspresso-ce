@@ -35,7 +35,7 @@ public interface IModelProvider {
    * Adds a new bean listener to this model provider.
    * 
    * @param listener
-   *            The added listener
+   *          The added listener
    */
   void addModelChangeListener(IModelChangeListener listener);
 
@@ -57,7 +57,7 @@ public interface IModelProvider {
    * Removes a bean listener from this model provider.
    * 
    * @param listener
-   *            The added listener
+   *          The added listener
    */
   void removeModelChangeListener(IModelChangeListener listener);
 }

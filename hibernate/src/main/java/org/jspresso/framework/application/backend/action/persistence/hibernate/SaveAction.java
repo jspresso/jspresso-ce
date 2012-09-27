@@ -60,8 +60,7 @@ public class SaveAction extends AbstractHibernateAction {
         new TransactionCallbackWithoutResult() {
 
           @Override
-          protected void doInTransactionWithoutResult(
-              @SuppressWarnings("unused") TransactionStatus status) {
+          protected void doInTransactionWithoutResult(TransactionStatus status) {
             getController(context).performPendingOperations();
           }
         });

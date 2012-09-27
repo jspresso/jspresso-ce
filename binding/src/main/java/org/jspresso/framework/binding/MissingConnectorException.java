@@ -43,7 +43,7 @@ public class MissingConnectorException extends RuntimeException {
    * message.
    * 
    * @param message
-   *            the detail message.
+   *          the detail message.
    */
   public MissingConnectorException(String message) {
     super(message);

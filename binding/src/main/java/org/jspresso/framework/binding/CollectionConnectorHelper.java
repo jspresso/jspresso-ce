@@ -45,9 +45,9 @@ public final class CollectionConnectorHelper {
    * connector ids in collection connectors. As of now it returns "baseId[i]"
    * 
    * @param baseId
-   *            the base identifier to be used to compose the new connector id.
+   *          the base identifier to be used to compose the new connector id.
    * @param i
-   *            the index used.
+   *          the index used.
    * @return the created connector id.
    */
   public static String computeStorageKey(String baseId, int i) {
@@ -58,9 +58,9 @@ public final class CollectionConnectorHelper {
    * Computes the array of element indices which where added to a collection.
    * 
    * @param smallCollection
-   *            the original collection.
+   *          the original collection.
    * @param bigCollection
-   *            the collection with added elements.
+   *          the collection with added elements.
    * @return the the array of element indices which where added to tyhe original
    *         collection
    */

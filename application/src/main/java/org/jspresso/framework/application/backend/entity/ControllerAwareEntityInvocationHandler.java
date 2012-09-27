@@ -123,10 +123,8 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void entityDetached(
-      @SuppressWarnings("unused") IEntity parent,
-      IEntity child,
-      @SuppressWarnings("unused") IRelationshipEndPropertyDescriptor propertyDescriptor) {
+  protected void entityDetached(IEntity parent, IEntity child,
+      IRelationshipEndPropertyDescriptor propertyDescriptor) {
     if (detachedEntities == null) {
       detachedEntities = new LinkedHashSet<IEntity>();
     }
@@ -234,11 +232,11 @@ public class ControllerAwareEntityInvocationHandler extends
         sessionAwareComponent
             .straightSetProperties(((IComponent) newPropertyValue)
                 .straightGetProperties());
-        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
-            sessionAwareComponent);
+        super.storeReferenceProperty(proxy, propertyDescriptor,
+            oldPropertyValue, sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
-            newPropertyValue);
+        super.storeReferenceProperty(proxy, propertyDescriptor,
+            oldPropertyValue, newPropertyValue);
       }
     } else {
       super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,

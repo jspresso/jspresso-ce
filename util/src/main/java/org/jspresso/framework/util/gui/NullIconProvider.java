@@ -30,8 +30,7 @@ public class NullIconProvider implements IconProvider {
    * {@inheritDoc}
    */
   @Override
-  public Icon getIconForObject(@SuppressWarnings("unused")
-  Object userObject) {
+  public Icon getIconForObject(Object userObject) {
     return null;
   }
 

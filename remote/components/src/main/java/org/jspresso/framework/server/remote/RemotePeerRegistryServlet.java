@@ -49,7 +49,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   /**
    * PeerRegistry.
    */
-  public static final String PEER_REGISTRY                = "peerRegistry";
+  public static final String  PEER_REGISTRY                = "peerRegistry";
 
   /**
    * the url pattern to activate a resource download.
@@ -114,8 +114,8 @@ public class RemotePeerRegistryServlet extends HttpServlet {
     inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue));
     response.setContentLength(stateValue.length);
 
-    BufferedOutputStream outputStream = new BufferedOutputStream(response
-        .getOutputStream());
+    BufferedOutputStream outputStream = new BufferedOutputStream(
+        response.getOutputStream());
 
     IoHelper.copyStream(inputStream, outputStream);
 

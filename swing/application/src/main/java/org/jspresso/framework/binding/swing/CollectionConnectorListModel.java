@@ -136,8 +136,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
      * {@inheritDoc}
      */
     @Override
-    public void valueChange(@SuppressWarnings("unused")
-    final ValueChangeEvent evt) {
+    public void valueChange(final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         @Override

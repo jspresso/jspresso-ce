@@ -39,13 +39,13 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
    * Constructs a new instance of BasicCollectionConnector.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param binder
-   *            the IMvcBinder used to bind the dynamically created connectors
-   *            of the collection.
+   *          the IMvcBinder used to bind the dynamically created connectors of
+   *          the collection.
    * @param childConnectorPrototype
-   *            the connector prototype used to create new instances of child
-   *            connectors.
+   *          the connector prototype used to create new instances of child
+   *          connectors.
    */
   public BasicCollectionConnector(String id, IMvcBinder binder,
       ICompositeValueConnector childConnectorPrototype) {
@@ -85,7 +85,7 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
    * Sets the self-hosted value.
    * 
    * @param connecteeValue
-   *            the value to host
+   *          the value to host
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {

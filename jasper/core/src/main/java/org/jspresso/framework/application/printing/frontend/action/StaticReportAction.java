@@ -64,8 +64,8 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
         actionHandler, context);
     Object model = getSelectedModel(context);
     if (model instanceof IEntity) {
-      initialReportContext.put(IReportDescriptor.ENTITY_ID, ((IEntity) model)
-          .getId());
+      initialReportContext.put(IReportDescriptor.ENTITY_ID,
+          ((IEntity) model).getId());
     }
     return initialReportContext;
   }
@@ -76,8 +76,7 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  protected IReport getReportToExecute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  protected IReport getReportToExecute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IReport report = getReportFactory().createReportInstance(reportDescriptor,
         getTranslationProvider(context), getLocale(context));

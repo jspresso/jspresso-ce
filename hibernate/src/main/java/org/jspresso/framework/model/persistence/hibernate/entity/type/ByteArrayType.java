@@ -40,7 +40,9 @@ public class ByteArrayType implements UserType {
    */
   @Override
   public int[] sqlTypes() {
-    return new int[] {Types.VARBINARY};
+    return new int[] {
+      Types.VARBINARY
+    };
   }
 
   /**
@@ -90,7 +92,7 @@ public class ByteArrayType implements UserType {
    * 
    * @deprecated
    */
-  @SuppressWarnings("unused")
+
   @Deprecated
   @Override
   public Object nullSafeGet(ResultSet rs, String[] names, Object owner)
@@ -141,7 +143,7 @@ public class ByteArrayType implements UserType {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public Object assemble(Serializable cached, Object owner) {
     return cached;
@@ -150,7 +152,7 @@ public class ByteArrayType implements UserType {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public Object replace(Object original, Object target, Object owner) {
     return original;

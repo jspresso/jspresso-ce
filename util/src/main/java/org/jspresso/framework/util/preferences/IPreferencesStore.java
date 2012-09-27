@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.preferences;
 
-
 /**
  * The generic contract for a preferences store.
  * 
@@ -26,11 +25,12 @@ package org.jspresso.framework.util.preferences;
  * @author Vincent Vandenschrick
  */
 public interface IPreferencesStore {
-  
+
   /**
    * Sets the path of this store.
    * 
-   * @param storePath the path identifying this store.
+   * @param storePath
+   *          the path identifying this store.
    */
   void setStorePath(String[] storePath);
 

@@ -37,9 +37,9 @@ public final class TreeDescriptorHelper {
    * the node collection.
    * 
    * @param treeLevelDescriptor
-   *            the tree level descriptor to start from.
+   *          the tree level descriptor to start from.
    * @param treePath
-   *            a tree path of descriptor names.
+   *          a tree path of descriptor names.
    * @return the node group list descriptor.
    */
   public static ITreeLevelDescriptor getSubtreeDescriptorFromPath(
@@ -51,16 +51,16 @@ public final class TreeDescriptorHelper {
         if (treePath.size() == 1) {
           return nextSubtreeDescriptor;
         }
-        return getSubtreeDescriptorFromPath(nextSubtreeDescriptor, treePath
-            .subList(1, treePath.size()));
+        return getSubtreeDescriptorFromPath(nextSubtreeDescriptor,
+            treePath.subList(1, treePath.size()));
       } else if (treeLevelDescriptor instanceof ISimpleTreeLevelDescriptor) {
         if (treePath.size() == 1) {
           return treeLevelDescriptor;
         }
         ITreeLevelDescriptor nextSubtreeDescriptor = ((ISimpleTreeLevelDescriptor) treeLevelDescriptor)
             .getChildDescriptor();
-        return getSubtreeDescriptorFromPath(nextSubtreeDescriptor, treePath
-            .subList(1, treePath.size()));
+        return getSubtreeDescriptorFromPath(nextSubtreeDescriptor,
+            treePath.subList(1, treePath.size()));
       }
     }
     return null;

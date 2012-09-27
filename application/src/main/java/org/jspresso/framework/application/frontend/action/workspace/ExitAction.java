@@ -54,8 +54,7 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
     actualExitAction = new FrontendAction<E, F, G>() {
 
       @Override
-      public boolean execute(
-          @SuppressWarnings("unused") IActionHandler actionHandler,
+      public boolean execute(IActionHandler actionHandler,
           Map<String, Object> context) {
         return getController(context).stop();
       }

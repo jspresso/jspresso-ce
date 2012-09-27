@@ -87,9 +87,11 @@ public interface IDescriptor {
   String getName();
 
   /**
-   * Gets the timestamp of the last update of this descriptor or -1 if no information is available.
+   * Gets the timestamp of the last update of this descriptor or -1 if no
+   * information is available.
    * 
-   * @return the timestamp of the last update of this descriptor or -1 if no information is available.
+   * @return the timestamp of the last update of this descriptor or -1 if no
+   *         information is available.
    */
   long getLastUpdated();
 }

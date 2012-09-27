@@ -300,7 +300,7 @@ public abstract class RComponent extends RemotePeer implements
    * {@inheritDoc}
    */
   @Override
-  public void setValueFromState(@SuppressWarnings("unused") Object stateValue) {
+  public void setValueFromState(Object stateValue) {
     // Empty implementation.
   }
 

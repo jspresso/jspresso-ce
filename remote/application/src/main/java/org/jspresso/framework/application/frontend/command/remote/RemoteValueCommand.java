@@ -92,7 +92,6 @@ public class RemoteValueCommand extends RemoteCommand {
     this.value = (Serializable) value;
   }
 
-  
   /**
    * Gets the valueAsObject.
    * 
@@ -102,11 +101,11 @@ public class RemoteValueCommand extends RemoteCommand {
     return valueAsObject;
   }
 
-  
   /**
    * Sets the valueAsObject.
    * 
-   * @param valueAsObject the valueAsObject to set.
+   * @param valueAsObject
+   *          the valueAsObject to set.
    */
   public void setValueAsObject(Object valueAsObject) {
     this.valueAsObject = (Serializable) valueAsObject;

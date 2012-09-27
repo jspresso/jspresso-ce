@@ -36,7 +36,7 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
    * Constructs a new <code>SinglePropertyChangeSupport</code> instance.
    * 
    * @param sourceBean
-   *            the source bean.
+   *          the source bean.
    */
   public SinglePropertyChangeSupport(Object sourceBean) {
     super(sourceBean);

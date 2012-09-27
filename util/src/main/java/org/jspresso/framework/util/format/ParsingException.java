@@ -20,7 +20,6 @@ package org.jspresso.framework.util.format;
 
 import org.jspresso.framework.util.exception.BusinessException;
 
-
 /**
  * A parsing exception.
  * 

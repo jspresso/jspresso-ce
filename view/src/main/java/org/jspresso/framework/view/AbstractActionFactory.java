@@ -150,6 +150,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * @param uiAction
    *          the created ui specific action.
    */
+
   protected void attachActionGates(IDisplayableAction action,
       IActionHandler actionHandler, IView<F> view, E uiAction) {
     try {
@@ -395,8 +396,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
      * {@inheritDoc}
      */
     @Override
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
+    public void propertyChange(PropertyChangeEvent evt) {
       setActionEnabled(action, GateHelper.areGatesOpen(gates));
     }
   }

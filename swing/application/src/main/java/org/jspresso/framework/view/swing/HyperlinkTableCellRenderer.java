@@ -120,7 +120,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
    * {@inheritDoc}
    */
   @Override
-  public void mouseDragged(@SuppressWarnings("unused") MouseEvent e) {
+  public void mouseDragged(MouseEvent e) {
     // NO-OP
   }
 
@@ -128,7 +128,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
    * {@inheritDoc}
    */
   @Override
-  public void mouseEntered(@SuppressWarnings("unused") MouseEvent e) {
+  public void mouseEntered(MouseEvent e) {
     // NO-OP
   }
 
@@ -136,7 +136,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
    * {@inheritDoc}
    */
   @Override
-  public void mousePressed(@SuppressWarnings("unused") MouseEvent e) {
+  public void mousePressed(MouseEvent e) {
     // NO-OP
   }
 
@@ -144,7 +144,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
    * {@inheritDoc}
    */
   @Override
-  public void mouseReleased(@SuppressWarnings("unused") MouseEvent e) {
+  public void mouseReleased(MouseEvent e) {
     // NO-OP
   }
 }

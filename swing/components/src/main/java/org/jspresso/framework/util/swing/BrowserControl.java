@@ -40,10 +40,10 @@ public final class BrowserControl {
    * must include the absolute path name.
    * 
    * @param url
-   *            the file's url (the url must start with either "http://" or
-   *            "file://").
+   *          the file's url (the url must start with either "http://" or
+   *          "file://").
    * @throws IOException
-   *             whenever an I/O exception occurs.
+   *           whenever an I/O exception occurs.
    */
   public static void displayURL(String url) throws IOException {
     boolean windows = isWindowsPlatform();

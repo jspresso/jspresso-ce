@@ -38,7 +38,7 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
  * @param <G>
  *          the actual action type used.
  */
-@SuppressWarnings("unused")
+
 public class MockFrontendController<E, F, G> extends
     AbstractFrontendController<E, F, G> {
 

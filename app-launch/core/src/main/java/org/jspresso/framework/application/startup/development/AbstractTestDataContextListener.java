@@ -37,7 +37,7 @@ public abstract class AbstractTestDataContextListener extends
    */
   @Override
   public void contextInitialized(BeanFactory beanFactory,
-      @SuppressWarnings("unused") ServletContextEvent event) {
+      ServletContextEvent event) {
     if (beanFactory != null) {
       persistTestData(beanFactory);
     }

@@ -56,9 +56,11 @@ import org.slf4j.LoggerFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultCriteriaFactory extends AbstractActionContextAware implements ICriteriaFactory {
+public class DefaultCriteriaFactory extends AbstractActionContextAware
+    implements ICriteriaFactory {
 
-  private static final Logger LOG = LoggerFactory.getLogger(DefaultCriteriaFactory.class);
+  private static final Logger LOG = LoggerFactory
+                                      .getLogger(DefaultCriteriaFactory.class);
 
   private boolean             triStateBooleanSupported;
 
@@ -73,19 +75,21 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    * {@inheritDoc}
    */
   @Override
-  public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria, IQueryComponent queryComponent,
-      @SuppressWarnings("unused") Map<String, Object> context) {
+  public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
+      IQueryComponent queryComponent, Map<String, Object> context) {
     criteria.setProjection(null);
     criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
     // complete sorting properties
     if (queryComponent.getOrderingProperties() != null) {
-      for (Map.Entry<String, ESort> orderingProperty : queryComponent.getOrderingProperties().entrySet()) {
+      for (Map.Entry<String, ESort> orderingProperty : queryComponent
+          .getOrderingProperties().entrySet()) {
         String propertyName = orderingProperty.getKey();
         String[] propElts = propertyName.split("\\.");
         DetachedCriteria orderingCriteria = criteria;
         boolean sortable = true;
         if (propElts.length > 1) {
-          IComponentDescriptor<?> currentCompDesc = queryComponent.getQueryDescriptor();
+          IComponentDescriptor<?> currentCompDesc = queryComponent
+              .getQueryDescriptor();
           int i = 0;
           List<String> path = new ArrayList<String>();
           for (; sortable && i < propElts.length - 1; i++) {
@@ -96,22 +100,25 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
               if (EntityHelper.isInlineComponentReference(refPropDescriptor)) {
                 break;
               }
-              IComponentDescriptor<?> referencedDesc = refPropDescriptor.getReferencedDescriptor();
+              IComponentDescriptor<?> referencedDesc = refPropDescriptor
+                  .getReferencedDescriptor();
               currentCompDesc = referencedDesc;
               path.add(propElts[i]);
             } else {
-              LOG.error("Ordering property {} not found on {}", propElts[i], currentCompDesc.getComponentContract()
-                  .getName());
+              LOG.error("Ordering property {} not found on {}", propElts[i],
+                  currentCompDesc.getComponentContract().getName());
               sortable = false;
             }
           }
           if (sortable) {
             StringBuffer name = new StringBuffer();
             for (int j = i; sortable && j < propElts.length; j++) {
-              IPropertyDescriptor propDescriptor = currentCompDesc.getPropertyDescriptor(propElts[j]);
+              IPropertyDescriptor propDescriptor = currentCompDesc
+                  .getPropertyDescriptor(propElts[j]);
               sortable = sortable && isSortable(propDescriptor);
               if (j < propElts.length - 1) {
-                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor).getReferencedDescriptor();
+                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
+                    .getReferencedDescriptor();
               }
               if (j > i) {
                 name.append(".");
@@ -120,20 +127,21 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
             }
             if (sortable) {
               for (String pathElt : path) {
-                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt,
-                    CriteriaSpecification.LEFT_JOIN);
+                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria,
+                    pathElt, CriteriaSpecification.LEFT_JOIN);
               }
               propertyName = name.toString();
             }
           }
         } else {
-          IPropertyDescriptor propertyDescriptor = queryComponent.getQueryDescriptor().getPropertyDescriptor(
-              propertyName);
+          IPropertyDescriptor propertyDescriptor = queryComponent
+              .getQueryDescriptor().getPropertyDescriptor(propertyName);
           if (propertyDescriptor != null) {
             sortable = isSortable(propertyDescriptor);
           } else {
-            LOG.error("Ordering property {} not found on {}", propertyName, queryComponent.getQueryDescriptor()
-                .getComponentContract().getName());
+            LOG.error("Ordering property {} not found on {}", propertyName,
+                queryComponent.getQueryDescriptor().getComponentContract()
+                    .getName());
             sortable = false;
           }
         }
@@ -157,17 +165,18 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
 
   private boolean isSortable(IPropertyDescriptor propertyDescriptor) {
     return propertyDescriptor != null
-        && (!propertyDescriptor.isComputed() || propertyDescriptor.getPersistenceFormula() != null);
+        && (!propertyDescriptor.isComputed() || propertyDescriptor
+            .getPersistenceFormula() != null);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent,
-      @SuppressWarnings("unused") Map<String, Object> context) {
-    EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria.forEntityName(queryComponent.getQueryContract()
-        .getName());
+  public EnhancedDetachedCriteria createCriteria(
+      IQueryComponent queryComponent, Map<String, Object> context) {
+    EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria
+        .forEntityName(queryComponent.getQueryContract().getName());
     boolean abort = completeCriteria(criteria, criteria, null, queryComponent);
     if (abort) {
       return null;
@@ -175,25 +184,35 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
     return criteria;
   }
 
-  private boolean completeCriteria(EnhancedDetachedCriteria rootCriteria, DetachedCriteria currentCriteria,
-      String path, IQueryComponent aQueryComponent) {
+  private boolean completeCriteria(EnhancedDetachedCriteria rootCriteria,
+      DetachedCriteria currentCriteria, String path,
+      IQueryComponent aQueryComponent) {
     boolean abort = false;
-    if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent.getQueryContract())) {
-      String comparator = (String) aQueryComponent.get(ComparableQueryStructureDescriptor.COMPARATOR);
-      Object infValue = aQueryComponent.get(ComparableQueryStructureDescriptor.INF_VALUE);
-      Object supValue = aQueryComponent.get(ComparableQueryStructureDescriptor.SUP_VALUE);
-      completeWithComparableQueryStructure(currentCriteria, path, comparator, infValue, supValue);
+    if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
+        .getQueryContract())) {
+      String comparator = (String) aQueryComponent
+          .get(ComparableQueryStructureDescriptor.COMPARATOR);
+      Object infValue = aQueryComponent
+          .get(ComparableQueryStructureDescriptor.INF_VALUE);
+      Object supValue = aQueryComponent
+          .get(ComparableQueryStructureDescriptor.SUP_VALUE);
+      completeWithComparableQueryStructure(currentCriteria, path, comparator,
+          infValue, supValue);
     } else {
-      IComponentDescriptor<?> componentDescriptor = aQueryComponent.getQueryDescriptor();
+      IComponentDescriptor<?> componentDescriptor = aQueryComponent
+          .getQueryDescriptor();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+        IPropertyDescriptor propertyDescriptor = componentDescriptor
+            .getPropertyDescriptor(property.getKey());
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
-          if (IEntity.class.isAssignableFrom(componentDescriptor.getComponentContract())
+          if (IEntity.class.isAssignableFrom(componentDescriptor
+              .getComponentContract())
               && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if (!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey())
+          if (!PropertyViewDescriptorHelper.isComputed(componentDescriptor,
+              property.getKey())
               && (!isEntityRef || IEntity.ID.equals(property.getKey()))) {
             String prefixedProperty;
             if (path != null) {
@@ -205,41 +224,51 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
               if (!((IEntity) property.getValue()).isPersistent()) {
                 abort = true;
               } else {
-                currentCriteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+                currentCriteria.add(Restrictions.eq(prefixedProperty,
+                    property.getValue()));
               }
             } else if (property.getValue() instanceof Boolean
-                && (isTriStateBooleanSupported() || ((Boolean) property.getValue()).booleanValue())) {
-              currentCriteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+                && (isTriStateBooleanSupported() || ((Boolean) property
+                    .getValue()).booleanValue())) {
+              currentCriteria.add(Restrictions.eq(prefixedProperty,
+                  property.getValue()));
             } else if (property.getValue() instanceof String) {
               if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
-                createIdRestriction(propertyDescriptor, currentCriteria, property.getValue(), prefixedProperty);
+                createIdRestriction(propertyDescriptor, currentCriteria,
+                    property.getValue(), prefixedProperty);
               } else {
-                createStringRestriction(propertyDescriptor, currentCriteria, (String) property.getValue(),
-                    prefixedProperty);
+                createStringRestriction(propertyDescriptor, currentCriteria,
+                    (String) property.getValue(), prefixedProperty);
               }
-            } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
-              currentCriteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+            } else if (property.getValue() instanceof Number
+                || property.getValue() instanceof Date) {
+              currentCriteria.add(Restrictions.eq(prefixedProperty,
+                  property.getValue()));
             } else if (property.getValue() instanceof EnumQueryStructure) {
               completeWithEnumQueryStructure(currentCriteria, prefixedProperty,
                   ((EnumQueryStructure) property.getValue()));
             } else if (property.getValue() instanceof IQueryComponent) {
-              IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
+              IQueryComponent joinedComponent = ((IQueryComponent) property
+                  .getValue());
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inlined component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
                   abort = abort
-                      || completeCriteria(rootCriteria, currentCriteria, prefixedProperty,
+                      || completeCriteria(rootCriteria, currentCriteria,
+                          prefixedProperty,
                           (IQueryComponent) property.getValue());
                 } else {
                   // the joined component is an entity so we must use
                   // nested criteria; unless the autoComplete property
                   // is a special char.
                   boolean digDeeper = true;
-                  String autoCompleteProperty = joinedComponent.getQueryDescriptor().getAutoCompleteProperty();
+                  String autoCompleteProperty = joinedComponent
+                      .getQueryDescriptor().getAutoCompleteProperty();
                   if (autoCompleteProperty != null) {
-                    String val = (String) joinedComponent.get(autoCompleteProperty);
+                    String val = (String) joinedComponent
+                        .get(autoCompleteProperty);
                     if (val != null) {
                       boolean negate = false;
                       if (val.startsWith(IQueryComponent.NOT_VAL)) {
@@ -257,15 +286,19 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                     }
                   }
                   if (digDeeper) {
-                    DetachedCriteria joinCriteria = rootCriteria.getSubCriteriaFor(currentCriteria, prefixedProperty,
-                        CriteriaSpecification.INNER_JOIN);
-                    abort = abort || completeCriteria(rootCriteria, joinCriteria, null, joinedComponent);
+                    DetachedCriteria joinCriteria = rootCriteria
+                        .getSubCriteriaFor(currentCriteria, prefixedProperty,
+                            CriteriaSpecification.INNER_JOIN);
+                    abort = abort
+                        || completeCriteria(rootCriteria, joinCriteria, null,
+                            joinedComponent);
                   }
                 }
               }
             } else if (property.getValue() != null) {
               // Unknown property type. Assume equals.
-              currentCriteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+              currentCriteria.add(Restrictions.eq(prefixedProperty,
+                  property.getValue()));
             }
           }
         }
@@ -284,11 +317,13 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    * @param enumQueryStructure
    *          the collection of checked / unchecked enumeration values.
    */
-  protected void completeWithEnumQueryStructure(DetachedCriteria currentCriteria, String path,
+  protected void completeWithEnumQueryStructure(
+      DetachedCriteria currentCriteria, String path,
       EnumQueryStructure enumQueryStructure) {
     Set<String> inListValues = new HashSet<String>();
     boolean nullAllowed = false;
-    for (EnumValueQueryStructure inListValue : enumQueryStructure.getSelectedEnumerationValues()) {
+    for (EnumValueQueryStructure inListValue : enumQueryStructure
+        .getSelectedEnumerationValues()) {
       if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
         nullAllowed = true;
       } else {
@@ -320,10 +355,12 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    * @param prefixedProperty
    *          the full path of the property.
    */
-  protected void createIdRestriction(IPropertyDescriptor propertyDescriptor, DetachedCriteria currentCriteria,
-      Object propertyValue, String prefixedProperty) {
+  protected void createIdRestriction(IPropertyDescriptor propertyDescriptor,
+      DetachedCriteria currentCriteria, Object propertyValue,
+      String prefixedProperty) {
     if (propertyValue instanceof String) {
-      createStringRestriction(propertyDescriptor, currentCriteria, (String) propertyValue, prefixedProperty);
+      createStringRestriction(propertyDescriptor, currentCriteria,
+          (String) propertyValue, prefixedProperty);
     } else {
       currentCriteria.add(Restrictions.eq(prefixedProperty, propertyValue));
     }
@@ -341,7 +378,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    * @param prefixedProperty
    *          the full path of the property.
    */
-  protected void createStringRestriction(IPropertyDescriptor propertyDescriptor, DetachedCriteria currentCriteria,
+  protected void createStringRestriction(
+      IPropertyDescriptor propertyDescriptor, DetachedCriteria currentCriteria,
       String propertyValue, String prefixedProperty) {
     if (propertyValue.length() > 0) {
       String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
@@ -363,7 +401,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                 || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
               crit = Restrictions.eq(prefixedProperty, val);
             } else {
-              crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val);
+              crit = createLikeRestriction(propertyDescriptor,
+                  prefixedProperty, val);
             }
           }
           if (negate) {
@@ -386,13 +425,17 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    *          the value to create the like restriction for
    * @return the like criterion;
    */
-  protected Criterion createLikeRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty, String val) {
+  protected Criterion createLikeRestriction(
+      IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+      String val) {
     if (propertyDescriptor instanceof IStringPropertyDescriptor
         && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
       // don't use ignoreCase() to be able to leverage indices.
-      return Restrictions.like(prefixedProperty, val.toUpperCase(), MatchMode.START);
+      return Restrictions.like(prefixedProperty, val.toUpperCase(),
+          MatchMode.START);
     }
-    return Restrictions.like(prefixedProperty, val, MatchMode.START).ignoreCase();
+    return Restrictions.like(prefixedProperty, val, MatchMode.START)
+        .ignoreCase();
   }
 
   /**
@@ -410,7 +453,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    * @param supValue
    *          the sup value to compare to.
    */
-  protected void completeWithComparableQueryStructure(DetachedCriteria currentCriteria, String path, String comparator,
+  protected void completeWithComparableQueryStructure(
+      DetachedCriteria currentCriteria, String path, String comparator,
       Object infValue, Object supValue) {
     if (infValue != null || supValue != null) {
       Object compareValue = infValue;
@@ -449,17 +493,21 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    *          the holding property descriptor or null if none.
    * @return true, if the query component does not generate any restriction.
    */
-  protected boolean isQueryComponentEmpty(IQueryComponent queryComponent, IPropertyDescriptor holdingPropertyDescriptor) {
+  protected boolean isQueryComponentEmpty(IQueryComponent queryComponent,
+      IPropertyDescriptor holdingPropertyDescriptor) {
     if (queryComponent == null || queryComponent.isEmpty()) {
       return true;
     }
-    IComponentDescriptor<?> componentDescriptor = queryComponent.getQueryDescriptor();
+    IComponentDescriptor<?> componentDescriptor = queryComponent
+        .getQueryDescriptor();
     for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
-      IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+      IPropertyDescriptor propertyDescriptor = componentDescriptor
+          .getPropertyDescriptor(property.getKey());
       if (propertyDescriptor != null) {
         if (property.getValue() != null) {
           if (property.getValue() instanceof IQueryComponent) {
-            if (!isQueryComponentEmpty((IQueryComponent) property.getValue(), propertyDescriptor)) {
+            if (!isQueryComponentEmpty((IQueryComponent) property.getValue(),
+                propertyDescriptor)) {
               return false;
             }
           } else if (property.getValue() instanceof EnumQueryStructure) {
@@ -472,7 +520,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
               initializationMapping = ((IReferencePropertyDescriptor<?>) holdingPropertyDescriptor)
                   .getInitializationMapping();
             }
-            if (initializationMapping == null || !initializationMapping.containsKey(property.getKey())) {
+            if (initializationMapping == null
+                || !initializationMapping.containsKey(property.getKey())) {
               return false;
             }
           }

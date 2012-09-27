@@ -100,7 +100,8 @@ public class BasicDurationPropertyDescriptor extends
           return translationProvider.getTranslation(
               "integrity.property.toobig", new Object[] {
                   getI18nName(translationProvider, locale), boundsSpec,
-                  component}, locale);
+                  component
+              }, locale);
         }
 
       };

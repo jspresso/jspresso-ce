@@ -35,7 +35,7 @@ public class EntityException extends ComponentException {
    * Constructs a new <code>EntityException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public EntityException(String message) {
     super(message);
@@ -45,7 +45,7 @@ public class EntityException extends ComponentException {
    * Constructs a new <code>EntityException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public EntityException(Throwable nestedException) {
     super(nestedException);
@@ -55,9 +55,9 @@ public class EntityException extends ComponentException {
    * Constructs a new <code>EntityException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public EntityException(Throwable nestedException, String message) {
     super(nestedException, message);

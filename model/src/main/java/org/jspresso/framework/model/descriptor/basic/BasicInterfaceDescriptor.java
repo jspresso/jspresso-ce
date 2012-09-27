@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
-
 /**
  * This descriptor is a mean of factorizing state/behaviour among components,
  * entities or even sub-interfaces. This is a much less coupling mecanism than

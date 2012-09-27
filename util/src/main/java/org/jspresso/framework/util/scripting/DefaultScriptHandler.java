@@ -47,8 +47,8 @@ public class DefaultScriptHandler implements IScriptHandler {
     BSFManager enginesManager = new BSFManager();
     if (context != null) {
       enginesManager.registerBean(IScript.CONTEXT, context);
-      enginesManager.registerBean(IScript.SCRIPTED_OBJECT, scriptable
-          .getScriptedObject());
+      enginesManager.registerBean(IScript.SCRIPTED_OBJECT,
+          scriptable.getScriptedObject());
     }
     try {
       return enginesManager.eval(scriptable.getLanguage(), null, 0, 0,
@@ -66,12 +66,12 @@ public class DefaultScriptHandler implements IScriptHandler {
     BSFManager enginesManager = new BSFManager();
     if (context != null) {
       enginesManager.registerBean(IScript.CONTEXT, scriptable);
-      enginesManager.registerBean(IScript.SCRIPTED_OBJECT, scriptable
-          .getScriptedObject());
+      enginesManager.registerBean(IScript.SCRIPTED_OBJECT,
+          scriptable.getScriptedObject());
     }
     try {
-      enginesManager.exec(scriptable.getLanguage(), null, 0, 0, scriptable
-          .getScript());
+      enginesManager.exec(scriptable.getLanguage(), null, 0, 0,
+          scriptable.getScript());
     } catch (BSFException ex) {
       throw new ScriptException(ex);
     }

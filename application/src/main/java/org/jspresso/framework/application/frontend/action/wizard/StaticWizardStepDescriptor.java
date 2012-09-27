@@ -97,9 +97,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * {@inheritDoc}
    */
   @Override
-  public IWizardStepDescriptor getNextStepDescriptor(
-      @SuppressWarnings("unused")
-      Map<String, Object> context) {
+  public IWizardStepDescriptor getNextStepDescriptor(Map<String, Object> context) {
     return nextStepDescriptor;
   }
 
@@ -138,8 +136,8 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   @Override
   public IWizardStepDescriptor getPreviousStepDescriptor(
-      @SuppressWarnings("unused")
-      Map<String, Object> context) {
+
+  Map<String, Object> context) {
     return previousStepDescriptor;
   }
 

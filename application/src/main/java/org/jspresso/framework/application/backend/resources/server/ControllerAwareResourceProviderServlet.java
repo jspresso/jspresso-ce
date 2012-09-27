@@ -34,7 +34,8 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ControllerAwareResourceProviderServlet extends ResourceProviderServlet {
+public class ControllerAwareResourceProviderServlet extends
+    ResourceProviderServlet {
 
   private static final long serialVersionUID = 2970338035826498738L;
 
@@ -42,11 +43,13 @@ public class ControllerAwareResourceProviderServlet extends ResourceProviderServ
    * {@inheritDoc}
    */
   @Override
-  protected void writeActiveResource(IActiveResource resource, HttpServletResponse response) throws IOException {
+  protected void writeActiveResource(IActiveResource resource,
+      HttpServletResponse response) throws IOException {
     try {
       super.writeActiveResource(resource, response);
     } finally {
-      IBackendController backendController = BackendControllerHolder.getCurrentBackendController();
+      IBackendController backendController = BackendControllerHolder
+          .getCurrentBackendController();
       if (backendController != null) {
         backendController.cleanupRequestResources();
       }

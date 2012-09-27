@@ -173,7 +173,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
+  public Workspace getWorkspace(String workspaceName) {
     return null;
   }
 
@@ -319,7 +319,6 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public void setStatusInfo(String statusInfo) {
     // NO-OP
   }
@@ -337,7 +336,6 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   public void setClipboardContent(String plainContent, String htmlContent) {
     // NO-OP

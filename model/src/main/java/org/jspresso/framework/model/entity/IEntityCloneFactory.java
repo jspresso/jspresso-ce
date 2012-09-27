@@ -32,11 +32,11 @@ public interface IEntityCloneFactory {
    * Clones a component.
    * 
    * @param <E>
-   *            the component contract (class or interface) to clone.
+   *          the component contract (class or interface) to clone.
    * @param componentToClone
-   *            the component to clone.
+   *          the component to clone.
    * @param entityFactory
-   *            the entity factory to use to create new entities.
+   *          the entity factory to use to create new entities.
    * @return the cloned component.
    */
   <E extends IComponent> E cloneComponent(E componentToClone,
@@ -46,11 +46,11 @@ public interface IEntityCloneFactory {
    * Clones an entity.
    * 
    * @param <E>
-   *            the entity contract (class or interface) to clone.
+   *          the entity contract (class or interface) to clone.
    * @param entityToClone
-   *            the entity to clone.
+   *          the entity to clone.
    * @param entityFactory
-   *            the entity factory to use to create the new entities.
+   *          the entity factory to use to create the new entities.
    * @return the cloned entity.
    */
   <E extends IEntity> E cloneEntity(E entityToClone,

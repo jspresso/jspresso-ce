@@ -21,7 +21,6 @@ package org.jspresso.framework.model.persistence.hibernate.entity;
 import org.hibernate.Hibernate;
 import org.jspresso.framework.model.entity.SmartEntityCloneFactory;
 
-
 /**
  * A smart entity clone factory that uses hibernate to determine if an antity or
  * collection is initialized.

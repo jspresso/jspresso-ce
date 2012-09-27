@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.security;
 
-
 /**
  * This interface is implemented by Jspresso security handlers.
  * 

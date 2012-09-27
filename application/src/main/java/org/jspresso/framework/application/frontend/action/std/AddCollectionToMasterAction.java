@@ -94,8 +94,9 @@ public class AddCollectionToMasterAction<E, F, G> extends
       Locale locale) {
     if (elementEntityDescriptor != null) {
       return translationProvider.getTranslation("add.element.description",
-          new String[] {elementEntityDescriptor.getI18nName(
-              translationProvider, locale)}, locale);
+          new String[] {
+            elementEntityDescriptor.getI18nName(translationProvider, locale)
+          }, locale);
     }
     return super.getI18nDescription(translationProvider, locale);
   }
@@ -108,8 +109,9 @@ public class AddCollectionToMasterAction<E, F, G> extends
       Locale locale) {
     if (elementEntityDescriptor != null) {
       return translationProvider.getTranslation("add.element.name",
-          new String[] {elementEntityDescriptor.getI18nName(
-              translationProvider, locale)}, locale);
+          new String[] {
+            elementEntityDescriptor.getI18nName(translationProvider, locale)
+          }, locale);
     }
     return super.getI18nName(translationProvider, locale);
   }

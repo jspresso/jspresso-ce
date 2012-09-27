@@ -33,7 +33,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The actual class of the subclass of <code>JTextComponent</code>.
+ *          The actual class of the subclass of <code>JTextComponent</code>.
  */
 public abstract class JTextComponentConnector<E extends JTextComponent> extends
     JComponentConnector<E> {
@@ -46,9 +46,9 @@ public abstract class JTextComponentConnector<E extends JTextComponent> extends
    * need to listen to other unhandled events if necessary.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param textComponent
-   *            the connected JTextComponent.
+   *          the connected JTextComponent.
    */
   public JTextComponentConnector(String id, E textComponent) {
     super(id, textComponent);

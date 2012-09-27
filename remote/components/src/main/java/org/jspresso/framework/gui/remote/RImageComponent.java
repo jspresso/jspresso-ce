@@ -68,7 +68,6 @@ public class RImageComponent extends RComponent implements RActionable {
     this.scrollable = scrollable;
   }
 
-  
   /**
    * Gets the action.
    * 
@@ -78,11 +77,11 @@ public class RImageComponent extends RComponent implements RActionable {
     return action;
   }
 
-  
   /**
    * Sets the action.
    * 
-   * @param action the action to set.
+   * @param action
+   *          the action to set.
    */
   @Override
   public void setAction(RAction action) {

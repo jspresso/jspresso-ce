@@ -106,8 +106,7 @@ public class HttpRequestHolder implements Filter {
    * {@inheritDoc}
    */
   @Override
-  public void init(@SuppressWarnings("unused")
-  FilterConfig config) {
+  public void init(FilterConfig config) {
     // Nothing to init.
   }
 

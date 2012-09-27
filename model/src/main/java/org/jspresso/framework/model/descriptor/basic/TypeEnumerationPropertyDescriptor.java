@@ -34,14 +34,16 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class TypeEnumerationPropertyDescriptor extends BasicEnumerationPropertyDescriptor {
+public class TypeEnumerationPropertyDescriptor extends
+    BasicEnumerationPropertyDescriptor {
 
   /**
    * {@inheritDoc}
    */
   @Override
   public TypeEnumerationPropertyDescriptor clone() {
-    TypeEnumerationPropertyDescriptor clonedDescriptor = (TypeEnumerationPropertyDescriptor) super.clone();
+    TypeEnumerationPropertyDescriptor clonedDescriptor = (TypeEnumerationPropertyDescriptor) super
+        .clone();
 
     return clonedDescriptor;
   }
@@ -53,14 +55,16 @@ public class TypeEnumerationPropertyDescriptor extends BasicEnumerationPropertyD
    * @param componentDescriptorList
    *          the componentDescriptorList to set.
    */
-  public void setComponentDescriptors(List<IComponentDescriptor<?>> componentDescriptorList) {
+  public void setComponentDescriptors(
+      List<IComponentDescriptor<?>> componentDescriptorList) {
     Map<String, String> componentDescriptorImages = new LinkedHashMap<String, String>();
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptorList) {
       String componentIconImageUrl = null;
       if (componentDescriptor.getIcon() != null) {
         componentIconImageUrl = componentDescriptor.getIcon().getIconImageURL();
       }
-      componentDescriptorImages.put(componentDescriptor.getName(), componentIconImageUrl);
+      componentDescriptorImages.put(componentDescriptor.getName(),
+          componentIconImageUrl);
     }
     setValuesAndIconImageUrls(componentDescriptorImages);
   }

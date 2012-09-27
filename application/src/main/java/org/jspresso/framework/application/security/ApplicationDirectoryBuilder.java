@@ -200,7 +200,7 @@ public class ApplicationDirectoryBuilder {
     if (viewDescriptor instanceof ICompositeViewDescriptor) {
       for (IViewDescriptor childViewDescriptor : ((ICompositeViewDescriptor) viewDescriptor)
           .getChildViewDescriptors()) {
-        process(childViewDescriptor, /*viewPermId*/null);
+        process(childViewDescriptor, /* viewPermId */null);
       }
     } else if (viewDescriptor instanceof ITableViewDescriptor
         && viewPermId != null) {
@@ -238,7 +238,6 @@ public class ApplicationDirectoryBuilder {
           }
 
           @Override
-          @SuppressWarnings("unused")
           public ISecurityContextBuilder pushToSecurityContext(
               Object contextElement) {
             return this;
@@ -250,7 +249,6 @@ public class ApplicationDirectoryBuilder {
           }
 
           @Override
-          @SuppressWarnings("unused")
           public boolean isAccessGranted(ISecurable securable) {
             return true;
           }

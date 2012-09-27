@@ -61,7 +61,7 @@ public class EnumerationFormatter implements IFormatter<Object, String> {
    * {@inheritDoc}
    */
   @Override
-  public Object parse(@SuppressWarnings("unused") String source) {
+  public Object parse(String source) {
     throw new UnsupportedOperationException(
         "EnumFormatter is a 1-way formatter");
   }

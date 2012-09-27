@@ -20,9 +20,9 @@ package org.jspresso.framework.view.descriptor;
 
 /**
  * This public interface is implemented by container view descriptors which are
- * organizing their contained view descriptors in a north / south / east / west /
- * center manner. This kind of described view can typically be implemented using
- * a swing JPanel with a BorderLayout.
+ * organizing their contained view descriptors in a north / south / east / west
+ * / center manner. This kind of described view can typically be implemented
+ * using a swing JPanel with a BorderLayout.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

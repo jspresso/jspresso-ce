@@ -70,9 +70,11 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
             getLocale(context));
       }
     }
-    setActionParameter(getTranslationProvider(context).getTranslation(
-        "binary.info.message", new Object[] {size, unit}, getLocale(context)),
-        context);
+    setActionParameter(
+        getTranslationProvider(context).getTranslation("binary.info.message",
+            new Object[] {
+                size, unit
+            }, getLocale(context)), context);
     return super.execute(actionHandler, context);
   }
 

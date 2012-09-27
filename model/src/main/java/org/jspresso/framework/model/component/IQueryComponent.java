@@ -38,7 +38,8 @@ import org.jspresso.framework.util.lang.ICloneable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IQueryComponent extends Map<String, Object>, IPageable, ISortable, ICloneable, IPropertyChangeCapable {
+public interface IQueryComponent extends Map<String, Object>, IPageable,
+    ISortable, ICloneable, IPropertyChangeCapable {
 
   /**
    * Ordering properties action constant.

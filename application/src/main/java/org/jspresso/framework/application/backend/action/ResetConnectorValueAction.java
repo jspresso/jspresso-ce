@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 
-
 /**
  * Resets the model connector value to null.
  * 
@@ -37,7 +36,8 @@ public class ResetConnectorValueAction extends BackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     getModelConnector(context).setConnectorValue(null);
     return super.execute(actionHandler, context);
   }

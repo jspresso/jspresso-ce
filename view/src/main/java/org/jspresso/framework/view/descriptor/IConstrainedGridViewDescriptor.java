@@ -34,7 +34,7 @@ public interface IConstrainedGridViewDescriptor extends IGridViewDescriptor {
    * Gets the constraint applied to a contained view descriptor.
    * 
    * @param viewDescriptor
-   *            the contained view descriptor.
+   *          the contained view descriptor.
    * @return the constraints applied to the contained view or null if none.
    */
   CellConstraints getCellConstraints(IViewDescriptor viewDescriptor);

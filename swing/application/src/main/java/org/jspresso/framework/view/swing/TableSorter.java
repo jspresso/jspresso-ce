@@ -81,7 +81,7 @@ public class TableSorter extends AbstractTableSorter {
   public static final Comparator<Object> COMPARABLE_COMPARATOR = new Comparator<Object>() {
 
                                                                  @Override
-                                                                @SuppressWarnings("unchecked")
+                                                                 @SuppressWarnings("unchecked")
                                                                  public int compare(
                                                                      Object o1,
                                                                      Object o2) {
@@ -96,7 +96,7 @@ public class TableSorter extends AbstractTableSorter {
   public static final Comparator<Object> LEXICAL_COMPARATOR    = new Comparator<Object>() {
 
                                                                  @Override
-                                                                public int compare(
+                                                                 public int compare(
                                                                      Object o1,
                                                                      Object o2) {
                                                                    return o1

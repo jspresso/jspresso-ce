@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-
 /**
  * Enumeration for orientation constants.
  * 
@@ -26,12 +25,12 @@ package org.jspresso.framework.view.descriptor;
  * @author Vincent Vandenschrick
  */
 public enum EOrientation {
-  
+
   /**
    * <code>HORIZONTAL</code>.
    */
   HORIZONTAL,
-  
+
   /**
    * <code>VERTICAL</code>.
    */

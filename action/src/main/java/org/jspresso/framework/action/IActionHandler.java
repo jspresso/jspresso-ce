@@ -35,7 +35,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IActionHandler extends IExceptionHandler, ISecurityHandler, ITranslationProvider {
+public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
+    ITranslationProvider {
 
   /**
    * Executes an action. Implementors should delegate the execution to the

@@ -232,7 +232,8 @@ public class RAction extends RemotePeer {
   /**
    * Sets the styleName.
    * 
-   * @param styleName the styleName to set.
+   * @param styleName
+   *          the styleName to set.
    */
   public void setStyleName(String styleName) {
     this.styleName = styleName;

@@ -50,7 +50,8 @@ public class RTextField extends RTextComponent {
   /**
    * Sets the horizontalAlignment.
    * 
-   * @param horizontalAlignment the horizontalAlignment to set.
+   * @param horizontalAlignment
+   *          the horizontalAlignment to set.
    */
   public void setHorizontalAlignment(String horizontalAlignment) {
     this.horizontalAlignment = horizontalAlignment;

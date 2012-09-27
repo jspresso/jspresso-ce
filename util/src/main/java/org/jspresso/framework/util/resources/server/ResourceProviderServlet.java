@@ -307,8 +307,6 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-    ServletOutputStream out = null;
-
     try {
       HttpRequestHolder.setServletRequest(request);
       FileItemFactory factory = new DiskFileItemFactory();
@@ -316,7 +314,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
       List<FileItem> items = upload.parseRequest(request);
       response.setContentType("text/xml");
-      out = response.getOutputStream();
+      ServletOutputStream out = response.getOutputStream();
       for (FileItem item : items) {
         if (!item.isFormField()) {
           out.print("<resource");

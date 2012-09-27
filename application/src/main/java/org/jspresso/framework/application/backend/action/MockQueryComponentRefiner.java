@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.jspresso.framework.model.component.IQueryComponent;
 
-
 /**
  * Empty refiner.
  * 
@@ -37,7 +36,6 @@ public class MockQueryComponentRefiner implements IQueryComponentRefiner {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public void refineQueryComponent(IQueryComponent queryComponent,
       Map<String, Object> context) {
     // NO-OP.

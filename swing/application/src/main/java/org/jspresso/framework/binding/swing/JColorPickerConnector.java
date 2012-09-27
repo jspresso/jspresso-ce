@@ -26,7 +26,6 @@ import javax.swing.event.ChangeListener;
 import org.jspresso.framework.gui.swing.components.JColorPicker;
 import org.jspresso.framework.util.gui.ColorHelper;
 
-
 /**
  * JColorPickerConnector connector.
  * 
@@ -39,9 +38,9 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
    * Constructs a new <code>JColorPickerConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param colorPicker
-   *            the connected JColorPicker.
+   *          the connected JColorPicker.
    */
   public JColorPickerConnector(String id, JColorPicker colorPicker) {
     super(id, colorPicker);
@@ -59,8 +58,7 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
        * {@inheritDoc}
        */
       @Override
-      public void stateChanged(@SuppressWarnings("unused")
-      ChangeEvent e) {
+      public void stateChanged(ChangeEvent e) {
         fireConnectorValueChange();
       }
     });
@@ -73,8 +71,8 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
   protected Object getConnecteeValue() {
     Color value = getConnectedJComponent().getValue();
     if (value != null) {
-      return ColorHelper.toHexString(value.getRed(), value.getGreen(), value
-          .getBlue(), value.getAlpha());
+      return ColorHelper.toHexString(value.getRed(), value.getGreen(),
+          value.getBlue(), value.getAlpha());
     }
     return null;
   }

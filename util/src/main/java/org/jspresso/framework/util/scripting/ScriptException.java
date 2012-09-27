@@ -34,7 +34,7 @@ public class ScriptException extends NestedRuntimeException {
    * Constructs a new <code>ScriptException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ScriptException(String message) {
     super(message);
@@ -44,7 +44,7 @@ public class ScriptException extends NestedRuntimeException {
    * Constructs a new <code>ScriptException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public ScriptException(Throwable nestedException) {
     super(nestedException);
@@ -54,9 +54,9 @@ public class ScriptException extends NestedRuntimeException {
    * Constructs a new <code>ScriptException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ScriptException(Throwable nestedException, String message) {
     super(nestedException, message);

@@ -45,8 +45,7 @@ public class DisplayUrlAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     StringBuffer urlSpec = new StringBuffer();
     if (baseUrl != null) {

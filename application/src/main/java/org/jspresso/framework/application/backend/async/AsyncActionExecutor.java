@@ -55,10 +55,11 @@ public class AsyncActionExecutor extends Thread {
    * @param slaveBackendController
    *          the slave backend controller used to execute the action.
    */
-  public AsyncActionExecutor(IAction action, Map<String, Object> context, ThreadGroup group,
-      AbstractBackendController slaveBackendController) {
+  public AsyncActionExecutor(IAction action, Map<String, Object> context,
+      ThreadGroup group, AbstractBackendController slaveBackendController) {
     super(group, /* "Jspresso Asynchronous Action Runner " + */
-    action.getClass().getSimpleName() + "[" + slaveBackendController.getApplicationSession().getId() + "]["
+    action.getClass().getSimpleName() + "["
+        + slaveBackendController.getApplicationSession().getId() + "]["
         + slaveBackendController.getApplicationSession().getUsername() + "]");
     this.action = action;
     this.context = context;

@@ -40,7 +40,8 @@ public interface IQueryViewDescriptorFactory {
    *          the actual query component descriptor that will be used as model.
    * @return the created view descriptor.
    */
-  IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+  IViewDescriptor createQueryViewDescriptor(
+      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
       IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor);
 
   /**

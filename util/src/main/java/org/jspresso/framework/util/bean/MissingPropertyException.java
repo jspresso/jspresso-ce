@@ -34,7 +34,7 @@ public class MissingPropertyException extends NestedRuntimeException {
    * Constructs a new <code>MissingPropertyException</code>.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public MissingPropertyException(String message) {
     super(message);

@@ -67,9 +67,11 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    * {@inheritDoc}
    */
   @Override
-  protected InvocationHandler createEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor) {
-    return new ControllerAwareEntityInvocationHandler(entityDescriptor, this, getComponentCollectionFactory(),
-        getAccessorFactory(), getComponentExtensionFactory());
+  protected InvocationHandler createEntityInvocationHandler(
+      IComponentDescriptor<IEntity> entityDescriptor) {
+    return new ControllerAwareEntityInvocationHandler(entityDescriptor, this,
+        getComponentCollectionFactory(), getAccessorFactory(),
+        getComponentExtensionFactory());
   }
 
   /**
@@ -103,18 +105,23 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    * {@inheritDoc}
    */
   @Override
-  protected InvocationHandler createComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor) {
-    return new ControllerAwareComponentInvocationHandler(componentDescriptor, this, getComponentCollectionFactory(),
-        getAccessorFactory(), getComponentExtensionFactory());
+  protected InvocationHandler createComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor) {
+    return new ControllerAwareComponentInvocationHandler(componentDescriptor,
+        this, getComponentCollectionFactory(), getAccessorFactory(),
+        getComponentExtensionFactory());
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public IQueryComponent createQueryComponentInstance(Class<? extends IComponent> componentContract) {
-    IQueryComponent queryComponent = super.createQueryComponentInstance(componentContract);
-    queryComponent.translate(getBackendController(), getBackendController().getLocale());
+  public IQueryComponent createQueryComponentInstance(
+      Class<? extends IComponent> componentContract) {
+    IQueryComponent queryComponent = super
+        .createQueryComponentInstance(componentContract);
+    queryComponent.translate(getBackendController(), getBackendController()
+        .getLocale());
     return queryComponent;
   }
 

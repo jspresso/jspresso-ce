@@ -34,8 +34,8 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor implements
-    IImageViewDescriptor {
+public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
+    implements IImageViewDescriptor {
 
   private boolean scrollable;
 

@@ -60,7 +60,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   private Object                                                   source;
 
-  private transient ReferenceQueue<PropertyChangeListener>         queue = new ReferenceQueue<PropertyChangeListener>();
+  private transient ReferenceQueue<PropertyChangeListener> queue = new ReferenceQueue<PropertyChangeListener>();
 
   /**
    * Constructs a <code>WeakPropertyChangeSupport</code> object.

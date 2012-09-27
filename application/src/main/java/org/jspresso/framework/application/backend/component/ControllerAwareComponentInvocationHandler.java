@@ -168,11 +168,11 @@ public class ControllerAwareComponentInvocationHandler extends
         sessionAwareComponent
             .straightSetProperties(((IComponent) newPropertyValue)
                 .straightGetProperties());
-        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
-            sessionAwareComponent);
+        super.storeReferenceProperty(proxy, propertyDescriptor,
+            oldPropertyValue, sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
-            newPropertyValue);
+        super.storeReferenceProperty(proxy, propertyDescriptor,
+            oldPropertyValue, newPropertyValue);
       }
     } else {
       super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,

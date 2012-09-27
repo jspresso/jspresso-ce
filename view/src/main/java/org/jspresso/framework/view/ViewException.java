@@ -34,7 +34,7 @@ public class ViewException extends NestedRuntimeException {
    * Constructs a new <code>ViewException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ViewException(String message) {
     super(message);
@@ -44,7 +44,7 @@ public class ViewException extends NestedRuntimeException {
    * Constructs a new <code>ViewException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public ViewException(Throwable nestedException) {
     super(nestedException);
@@ -54,9 +54,9 @@ public class ViewException extends NestedRuntimeException {
    * Constructs a new <code>ViewException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ViewException(Throwable nestedException, String message) {
     super(nestedException, message);

@@ -86,14 +86,14 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
         .isRequired().withDescription("use given Spring application context.")
         .create(APP_CONTEXT));
     options.addOption(OptionBuilder.withArgName(LOCALE).hasArg()
-        .withDescription("use given language (defaults to 'en').").create(
-            LOCALE));
+        .withDescription("use given language (defaults to 'en').")
+        .create(LOCALE));
     options.addOption(OptionBuilder.withArgName(ACTION_ID).hasArg()
         .isRequired().withDescription("use the specified backend action.")
         .create(ACTION_ID));
     options.addOption(OptionBuilder.withArgName(BATCH_USER_NAME).hasArg()
-        .withDescription("use the specified batch user name.").create(
-            BATCH_USER_NAME));
+        .withDescription("use the specified batch user name.")
+        .create(BATCH_USER_NAME));
     return options;
   }
 

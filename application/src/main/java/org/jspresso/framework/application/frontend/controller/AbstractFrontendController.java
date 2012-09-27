@@ -384,8 +384,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
-      Map<String, Object> context) {
+  public void disposeModalDialog(E sourceWidget, Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
     if (dialogContextStack.size() > 0) {
       Map<String, Object> savedContext = dialogContextStack.remove(0);

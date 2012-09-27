@@ -50,8 +50,8 @@ public final class ReflectHelper {
    * @throws NoSuchFieldException
    *           if the field does not exist.
    */
-  public static Object getPrivateFieldValue(Class<?> clazz, String fieldName, Object target)
-      throws IllegalAccessException, NoSuchFieldException {
+  public static Object getPrivateFieldValue(Class<?> clazz, String fieldName,
+      Object target) throws IllegalAccessException, NoSuchFieldException {
     Field field = clazz.getDeclaredField(fieldName);
     field.setAccessible(true);
     return field.get(target);
@@ -73,8 +73,9 @@ public final class ReflectHelper {
    * @throws NoSuchFieldException
    *           if the field does not exist.
    */
-  public static void setPrivateFieldValue(Class<?> clazz, String fieldName, Object target, Object fieldValue)
-      throws IllegalAccessException, NoSuchFieldException {
+  public static void setPrivateFieldValue(Class<?> clazz, String fieldName,
+      Object target, Object fieldValue) throws IllegalAccessException,
+      NoSuchFieldException {
     Field field = clazz.getDeclaredField(fieldName);
     field.setAccessible(true);
     field.set(target, fieldValue);

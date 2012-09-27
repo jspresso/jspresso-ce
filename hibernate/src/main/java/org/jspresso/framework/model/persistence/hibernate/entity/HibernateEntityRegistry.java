@@ -22,7 +22,6 @@ import org.jspresso.framework.application.backend.persistence.hibernate.Hibernat
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 
-
 /**
  * An entity registru that knows how to deal with Hibernate proxies.
  * 
@@ -34,12 +33,13 @@ public class HibernateEntityRegistry extends BasicEntityRegistry {
   /**
    * Constructs a new <code>HibernateEntityRegistry</code> instance.
    * 
-   * @param name the name of the registry.
+   * @param name
+   *          the name of the registry.
    */
   public HibernateEntityRegistry(String name) {
     super(name);
   }
-  
+
   /**
    * Knows how to deal with hibernate proxies.
    * <p>

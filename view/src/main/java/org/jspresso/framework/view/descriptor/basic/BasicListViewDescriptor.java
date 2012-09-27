@@ -43,7 +43,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
     implements IListViewDescriptor {
 
   private IconProvider iconImageURLProvider;
-  private String                renderedProperty;
+  private String       renderedProperty;
 
   /**
    * Gets the iconImageURLProvider.

@@ -108,7 +108,8 @@ public class UsernamePasswordHandler implements CallbackHandler {
   /**
    * Sets the rememberMe.
    * 
-   * @param rememberMe the rememberMe to set.
+   * @param rememberMe
+   *          the rememberMe to set.
    */
   public void setRememberMe(boolean rememberMe) {
     this.rememberMe = rememberMe;

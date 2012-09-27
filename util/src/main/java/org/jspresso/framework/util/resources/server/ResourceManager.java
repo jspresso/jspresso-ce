@@ -56,7 +56,7 @@ public final class ResourceManager {
   private static final ResourceManager INSTANCE = new ResourceManager();
 
   private SecureRandom                 random;
-  private Map<String, IResourceBase>       resources;
+  private Map<String, IResourceBase>   resources;
 
   @SuppressWarnings("unchecked")
   private ResourceManager() {

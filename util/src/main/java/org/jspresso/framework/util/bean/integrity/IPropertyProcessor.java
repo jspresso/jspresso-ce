@@ -25,9 +25,9 @@ package org.jspresso.framework.util.bean.integrity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The type of the target.
+ *          The type of the target.
  * @param <F>
- *            The type of the property.
+ *          The type of the property.
  */
 public interface IPropertyProcessor<E, F> {
 
@@ -37,9 +37,9 @@ public interface IPropertyProcessor<E, F> {
    * set to the bean.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param newPropertyValue
-   *            the new value of the property accessed.
+   *          the new value of the property accessed.
    * @return the actual value to set on the bean (it may be unchanged of
    *         course).
    */
@@ -50,11 +50,11 @@ public interface IPropertyProcessor<E, F> {
    * which this processor is registered.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param oldPropertyValue
-   *            the old value of the property accessed.
+   *          the old value of the property accessed.
    * @param newPropertyValue
-   *            the new value of the property accessed.
+   *          the new value of the property accessed.
    */
   void postprocessSetter(E target, F oldPropertyValue, F newPropertyValue);
 
@@ -64,9 +64,9 @@ public interface IPropertyProcessor<E, F> {
    * an <code>IntegrityException</code> if pre-checks are not valid.
    * 
    * @param target
-   *            the component the processor is ran on.
+   *          the component the processor is ran on.
    * @param newPropertyValue
-   *            the new value of the property accessed.
+   *          the new value of the property accessed.
    */
   void preprocessSetter(E target, F newPropertyValue);
 }

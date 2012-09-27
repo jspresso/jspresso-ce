@@ -39,8 +39,8 @@ public class RList extends RCollectionComponent {
   }
 
   /**
-   * Constructs a new <code>RList</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RList</code> instance. Only used for serialization
+   * support.
    */
   public RList() {
     // For serialization support

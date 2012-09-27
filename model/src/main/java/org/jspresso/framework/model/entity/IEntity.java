@@ -22,7 +22,6 @@ import java.io.Serializable;
 
 import org.jspresso.framework.model.component.IComponent;
 
-
 /**
  * This interface must be implemented by all persistent entities in the
  * application domain. It establishes the minimal contract of an entity which is
@@ -36,12 +35,12 @@ public interface IEntity extends IComponent {
   /**
    * constant for identifier property <code>ID</code>.
    */
-  String ID      = "id";
+  String ID         = "id";
 
   /**
    * constant for version property <code>VERSION</code>.
    */
-  String VERSION = "version";
+  String VERSION    = "version";
 
   /**
    * constant for version property <code>PERSISTENT</code>.
@@ -53,7 +52,7 @@ public interface IEntity extends IComponent {
    * detects it has to delegate to the underlying instance when proxiing.
    * 
    * @param o
-   *            the instance to compare to.
+   *          the instance to compare to.
    * @return true if both instances are equal.
    */
   @Override

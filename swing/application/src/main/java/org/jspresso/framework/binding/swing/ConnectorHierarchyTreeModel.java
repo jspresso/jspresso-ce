@@ -144,7 +144,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   @Override
-  public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent event) {
+  public void treeNodesChanged(TreeModelEvent event) {
     // NO-OP as of now.
   }
 
@@ -162,7 +162,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   @Override
-  public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent event) {
+  public void treeNodesRemoved(TreeModelEvent event) {
     // NO-OP as of now.
   }
 
@@ -180,8 +180,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   @Override
-  public void valueForPathChanged(@SuppressWarnings("unused") TreePath path,
-      @SuppressWarnings("unused") Object newValue) {
+  public void valueForPathChanged(TreePath path, Object newValue) {
     // NO-OP. Not used (yet!)
   }
 

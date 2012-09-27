@@ -40,9 +40,9 @@ public final class ConnectorHelper {
    * target connector from the connector parent/child tree.
    * 
    * @param rootConnector
-   *            the connector t start from.
+   *          the connector t start from.
    * @param connectorPath
-   *            the path to the looked-up connector
+   *          the path to the looked-up connector
    * @return the looked-up connector.
    */
   public static IValueConnector getConnectorFromPath(
@@ -64,9 +64,9 @@ public final class ConnectorHelper {
    * contain one of the values, the value is simply ignored.
    * 
    * @param collectionConnector
-   *            the connector to retrieve the indices of.
+   *          the connector to retrieve the indices of.
    * @param values
-   *            the searched connector values.
+   *          the searched connector values.
    * @return the array of values indices.
    */
   public static int[] getIndicesOf(ICollectionConnector collectionConnector,
@@ -96,7 +96,7 @@ public final class ConnectorHelper {
    * relationship.
    * 
    * @param connector
-   *            the connector to look the tree path for.
+   *          the connector to look the tree path for.
    * @return the list of connector identifiers from the root connector to the
    *         looked-up connector.
    */
@@ -119,7 +119,7 @@ public final class ConnectorHelper {
    * relationship to determine the first connector of the hierarchy.
    * 
    * @param connector
-   *            the connector to look the root parent connector for.
+   *          the connector to look the root parent connector for.
    * @return the root parent connector.
    */
   public static IValueConnector getRootConnector(IValueConnector connector) {

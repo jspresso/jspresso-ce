@@ -42,7 +42,7 @@ public class MockBackController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void reload(@SuppressWarnings("unused") IEntity entity) {
+  public void reload(IEntity entity) {
     // NO-OP
   }
 }

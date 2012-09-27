@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-
 /**
  * View border type constants.
  * 
@@ -30,12 +29,12 @@ public enum EBorderType {
    * <code>NONE</code>.
    */
   NONE,
-  
+
   /**
    * <code>SIMPLE</code>.
    */
   SIMPLE,
-  
+
   /**
    * <code>TITLED</code>.
    */

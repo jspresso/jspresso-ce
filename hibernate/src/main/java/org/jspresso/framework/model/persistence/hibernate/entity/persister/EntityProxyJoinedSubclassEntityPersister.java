@@ -68,8 +68,8 @@ public class EntityProxyJoinedSubclassEntityPersister extends
   public EntityPersister getSubclassEntityPersister(Object instance,
       SessionFactoryImplementor factory, EntityMode entityMode) {
     if (instance instanceof IEntity) {
-      return factory.getEntityPersister(((IEntity) instance).getComponentContract()
-          .getName());
+      return factory.getEntityPersister(((IEntity) instance)
+          .getComponentContract().getName());
     }
     return super.getSubclassEntityPersister(instance, factory, entityMode);
   }
@@ -78,7 +78,7 @@ public class EntityProxyJoinedSubclassEntityPersister extends
    * {@inheritDoc}
    */
   @Override
-  public EntityMode guessEntityMode(@SuppressWarnings("unused") Object object) {
+  public EntityMode guessEntityMode(Object object) {
     return EntityMode.POJO;
   }
 }

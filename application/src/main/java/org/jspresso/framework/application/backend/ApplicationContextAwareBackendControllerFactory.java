@@ -28,8 +28,8 @@ import org.springframework.context.ApplicationContextAware;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ApplicationContextAwareBackendControllerFactory implements IBackendControllerFactory,
-    ApplicationContextAware {
+public class ApplicationContextAwareBackendControllerFactory implements
+    IBackendControllerFactory, ApplicationContextAware {
 
   private ApplicationContext applicationContext;
   private String             backendControllerBeanName;
@@ -41,7 +41,8 @@ public class ApplicationContextAwareBackendControllerFactory implements IBackend
    */
   @Override
   public IBackendController createBackendController() {
-    return applicationContext.getBean(backendControllerBeanName, IBackendController.class);
+    return applicationContext.getBean(backendControllerBeanName,
+        IBackendController.class);
   }
 
   /**

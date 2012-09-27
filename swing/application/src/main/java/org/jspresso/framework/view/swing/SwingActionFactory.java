@@ -117,8 +117,8 @@ public class SwingActionFactory extends
         }
         putValue(
             Action.SMALL_ICON,
-            getIconFactory().getIcon(
-                ((IDisplayableAction) action).getIcon(), dimension));
+            getIconFactory().getIcon(((IDisplayableAction) action).getIcon(),
+                dimension));
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
           putValue(
               Action.MNEMONIC_KEY,

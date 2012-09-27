@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.remote;
 
-
 /**
  * Interface for remote server peers.
  * 

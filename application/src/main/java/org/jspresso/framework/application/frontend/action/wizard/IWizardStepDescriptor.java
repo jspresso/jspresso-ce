@@ -9,7 +9,6 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * The descriptor contract for a wizard view step.
  * 
@@ -31,13 +30,13 @@ public interface IWizardStepDescriptor extends IDescriptor {
    * <code>INITIAL_WIZARD_MODEL</code> is a context entry used to store the
    * initial wizard model.
    */
-  String  INITIAL_WIZARD_MODEL = "INITIAL_WIZARD_MODEL";
+  String INITIAL_WIZARD_MODEL = "INITIAL_WIZARD_MODEL";
 
   /**
    * Gets wether this wizard step descriptor can finish the wizard.
    * 
    * @param context
-   *            the current value of the context.
+   *          the current value of the context.
    * @return wether this wizard step descriptor can finish the wizard.
    */
   boolean canFinish(Map<String, Object> context);
@@ -53,7 +52,7 @@ public interface IWizardStepDescriptor extends IDescriptor {
    * Gets the next wizard step descriptor if any.
    * 
    * @param context
-   *            the current value of the context.
+   *          the current value of the context.
    * @return the next wizard step descriptor if any.
    */
   IWizardStepDescriptor getNextStepDescriptor(Map<String, Object> context);
@@ -84,7 +83,7 @@ public interface IWizardStepDescriptor extends IDescriptor {
    * Gets the previous wizard step descriptor if any.
    * 
    * @param context
-   *            the current value of the context.
+   *          the current value of the context.
    * @return the previous wizard step descriptor if any.
    */
   IWizardStepDescriptor getPreviousStepDescriptor(Map<String, Object> context);

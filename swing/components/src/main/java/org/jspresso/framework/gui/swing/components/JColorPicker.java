@@ -76,8 +76,7 @@ public class JColorPicker extends JPanel {
     chooseButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         Color chosenColor = JColorChooser.showDialog(chooseButton, "",
             getValue());
         if (chosenColor != null) {
@@ -91,8 +90,7 @@ public class JColorPicker extends JPanel {
     resetButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         setValue(resetValue);
       }
     });

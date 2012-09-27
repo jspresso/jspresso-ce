@@ -35,7 +35,7 @@ public class EntityRegistryException extends NestedRuntimeException {
    * Constructs a new <code>EntityRegistryException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public EntityRegistryException(String message) {
     super(message);
@@ -45,7 +45,7 @@ public class EntityRegistryException extends NestedRuntimeException {
    * Constructs a new <code>EntityRegistryException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public EntityRegistryException(Throwable nestedException) {
     super(nestedException);
@@ -55,9 +55,9 @@ public class EntityRegistryException extends NestedRuntimeException {
    * Constructs a new <code>EntityRegistryException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public EntityRegistryException(Throwable nestedException, String message) {
     super(nestedException, message);

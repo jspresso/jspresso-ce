@@ -24,7 +24,8 @@ package org.jspresso.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor, ITimeAwarePropertyDescriptor {
+public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor,
+    ITimeAwarePropertyDescriptor {
 
   /**
    * Gets the date type. Values are among : <li> <code>DATE</code> <li>

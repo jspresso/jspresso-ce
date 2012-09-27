@@ -50,8 +50,8 @@ public class RIcon extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RIcon</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RIcon</code> instance. Only used for serialization
+   * support.
    */
   public RIcon() {
     // For serialization support

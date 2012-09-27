@@ -40,7 +40,8 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
 
   private IFrontendController<E, F, G> frontendController;
 
-  private static final Logger          LOG = LoggerFactory.getLogger(AbstractFrontendStartup.class);
+  private static final Logger          LOG = LoggerFactory
+                                               .getLogger(AbstractFrontendStartup.class);
 
   /**
    * Both front and back controllers are retrieved from the spring context,
@@ -55,18 +56,21 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     stop();
     IBackendController backendController;
     try {
-      backendController = (IBackendController) getApplicationContext().getBean("applicationBackController");
+      backendController = (IBackendController) getApplicationContext().getBean(
+          "applicationBackController");
     } catch (RuntimeException ex) {
       LOG.error("applicationBackController could not be instanciated.", ex);
       throw ex;
     }
     try {
-      frontendController = (IFrontendController<E, F, G>) getApplicationContext().getBean("applicationFrontController");
+      frontendController = (IFrontendController<E, F, G>) getApplicationContext()
+          .getBean("applicationFrontController");
     } catch (RuntimeException ex) {
       LOG.error("applicationFrontController could not be instanciated.", ex);
       throw ex;
     }
-    frontendController.start(backendController, getStartupLocale(), getClientTimeZone());
+    frontendController.start(backendController, getStartupLocale(),
+        getClientTimeZone());
     BackendControllerHolder.setCurrentBackendController(backendController);
   }
 

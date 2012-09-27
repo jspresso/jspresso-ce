@@ -330,8 +330,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   @Override
-  public void setTracksChildrenSelection(@SuppressWarnings("unused")
-  boolean tracksChildrenSelection) {
+  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
     throw new UnsupportedOperationException();
   }
 

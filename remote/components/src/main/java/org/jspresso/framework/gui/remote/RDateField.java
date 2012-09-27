@@ -69,7 +69,6 @@ public class RDateField extends RComponent {
     this.type = type;
   }
 
-  
   /**
    * Gets the timezoneAware.
    * 
@@ -79,11 +78,11 @@ public class RDateField extends RComponent {
     return timezoneAware;
   }
 
-  
   /**
    * Sets the timezoneAware.
    * 
-   * @param timezoneAware the timezoneAware to set.
+   * @param timezoneAware
+   *          the timezoneAware to set.
    */
   public void setTimezoneAware(boolean timezoneAware) {
     this.timezoneAware = timezoneAware;
@@ -101,7 +100,8 @@ public class RDateField extends RComponent {
   /**
    * Sets the secondsAware.
    * 
-   * @param secondsAware the secondsAware to set.
+   * @param secondsAware
+   *          the secondsAware to set.
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;

@@ -64,11 +64,15 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     if (adderMethod == null) {
       adderMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {getElementClass()});
+          new Class[] {
+            getElementClass()
+          });
     }
     try {
       adderMethod.invoke(getLastNestedTarget(target, getProperty()),
-          new Object[] {value});
+          new Object[] {
+            value
+          });
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
@@ -99,11 +103,15 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     if (removerMethod == null) {
       removerMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {getElementClass()});
+          new Class[] {
+            getElementClass()
+          });
     }
     try {
       removerMethod.invoke(getLastNestedTarget(target, getProperty()),
-          new Object[] {value});
+          new Object[] {
+            value
+          });
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();

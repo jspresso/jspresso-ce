@@ -47,8 +47,7 @@ public class ReloadAction extends AbstractHibernateAction {
     getController(context).clearPendingOperations();
     List<IEntity> entitiesToReload = getEntitiesToReload(context);
     Exception deletedObjectEx = null;
-    for (Iterator<IEntity> ite = entitiesToReload.iterator(); ite
-        .hasNext();) {
+    for (Iterator<IEntity> ite = entitiesToReload.iterator(); ite.hasNext();) {
       IEntity entity = ite.next();
       try {
         reloadEntity(entity, context);
@@ -58,8 +57,8 @@ public class ReloadAction extends AbstractHibernateAction {
       }
     }
     if (deletedObjectEx != null) {
-      throw new ConcurrencyFailureException(deletedObjectEx
-          .getMessage(), deletedObjectEx);
+      throw new ConcurrencyFailureException(deletedObjectEx.getMessage(),
+          deletedObjectEx);
     }
     return super.execute(actionHandler, context);
   }

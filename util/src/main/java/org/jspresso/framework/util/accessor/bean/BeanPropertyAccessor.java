@@ -79,10 +79,10 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
     if (indexOfNestedDelim < 0) {
       return beanClazz;
     }
-    Class<?> rootClass = PropertyHelper.getPropertyType(beanClazz, prop
-        .substring(0, indexOfNestedDelim));
-    return computeTargetBeanClass(rootClass, prop
-        .substring(indexOfNestedDelim + 1));
+    Class<?> rootClass = PropertyHelper.getPropertyType(beanClazz,
+        prop.substring(0, indexOfNestedDelim));
+    return computeTargetBeanClass(rootClass,
+        prop.substring(indexOfNestedDelim + 1));
   }
 
 }

@@ -27,8 +27,7 @@ public class SelectEntityPropertyAction extends BackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IEntity model = (IEntity) getModelConnector(context).getConnectorValue();
     if (model != null) {

@@ -30,10 +30,10 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
  */
 public class RTabContainer extends RContainer {
 
-  private static final long     serialVersionUID = 8976562094649779477L;
+  private static final long           serialVersionUID = 8976562094649779477L;
 
-  private RComponent[]          tabs;
-  private int                   selectedIndex;
+  private RComponent[]                tabs;
+  private int                         selectedIndex;
   private SinglePropertyChangeSupport propertyChangeSupport;
 
   /**

@@ -34,8 +34,9 @@ public class PathBasedIconSet implements IIconSet {
   private static final String JPEG_EXTENSION      = ".jpeg";
 
   private String              rootPath;
-  private String[]            supportedExtensions = {PNG_EXTENSION,
-      GIF_EXTENSION, JPG_EXTENSION, JPEG_EXTENSION};
+  private String[]            supportedExtensions = {
+      PNG_EXTENSION, GIF_EXTENSION, JPG_EXTENSION, JPEG_EXTENSION
+                                                  };
   private String              defaultExtension    = PNG_EXTENSION;
 
   /**
@@ -74,10 +75,13 @@ public class PathBasedIconSet implements IIconSet {
         return new String[] {
             iconName.substring(0,
                 iconName.length() - supportedExtension.length()),
-            iconName.substring(iconName.length() - supportedExtension.length())};
+            iconName.substring(iconName.length() - supportedExtension.length())
+        };
       }
     }
-    return new String[] {iconName, getDefaultExtension()};
+    return new String[] {
+        iconName, getDefaultExtension()
+    };
   }
 
   /**

@@ -48,7 +48,7 @@ public interface ILifecycleCapable {
   /**
    * <code>ON_CLONE_METHOD_NAME</code>.
    */
-  String ON_CLONE_METHOD_NAME    = "onClone";
+  String ON_CLONE_METHOD_NAME   = "onClone";
 
   /**
    * <code>ON_PERSIST_METHOD_NAME</code>.

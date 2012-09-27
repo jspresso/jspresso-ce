@@ -222,7 +222,7 @@ public class DefaultTreeSelectionModelBinder implements
      * {@inheritDoc}
      */
     @Override
-    public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent e) {
+    public void treeNodesChanged(TreeModelEvent e) {
       // NO-OP as of now.
     }
 
@@ -239,7 +239,7 @@ public class DefaultTreeSelectionModelBinder implements
      * {@inheritDoc}
      */
     @Override
-    public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent e) {
+    public void treeNodesRemoved(TreeModelEvent e) {
       // NO-OP as of now.
     }
 

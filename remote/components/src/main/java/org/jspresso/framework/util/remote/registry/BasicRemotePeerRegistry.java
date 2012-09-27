@@ -352,7 +352,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    *          the removed remote peer guid.
    */
   protected void fireRemotePeerRemoved(String guid) {
-    LOG.trace("Notifying listeners that GUID {} has been removed from the registry.", guid);
+    LOG.trace(
+        "Notifying listeners that GUID {} has been removed from the registry.",
+        guid);
     if (rprListeners != null) {
       for (IRemotePeerRegistryListener listener : rprListeners) {
         listener.remotePeerRemoved(guid);

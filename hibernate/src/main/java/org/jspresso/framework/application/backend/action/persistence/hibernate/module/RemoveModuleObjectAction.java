@@ -72,8 +72,7 @@ public class RemoveModuleObjectAction extends AbstractHibernateCollectionAction 
         new TransactionCallbackWithoutResult() {
 
           @Override
-          protected void doInTransactionWithoutResult(
-              @SuppressWarnings("unused") TransactionStatus status) {
+          protected void doInTransactionWithoutResult(TransactionStatus status) {
             IEntity entityClone = getController(context).cloneInUnitOfWork(
                 entityToRemove);
             try {

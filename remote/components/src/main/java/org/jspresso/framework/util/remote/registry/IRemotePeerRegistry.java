@@ -74,10 +74,10 @@ public interface IRemotePeerRegistry {
    * Generates and registers a permanent Id.
    * 
    * @param permId
-   *          the  permanent seed to use.
+   *          the permanent seed to use.
    * @param guid
-   *          the guid to associate the generated  permanent id to.
-   * @return the generated  permanent id.
+   *          the guid to associate the generated permanent id to.
+   * @return the generated permanent id.
    */
   String registerPermId(String permId, String guid);
 

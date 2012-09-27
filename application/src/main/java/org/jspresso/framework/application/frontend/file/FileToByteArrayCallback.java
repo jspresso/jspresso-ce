@@ -43,8 +43,7 @@ public class FileToByteArrayCallback extends AbstractActionContextAware
    * {@inheritDoc}
    */
   @Override
-  public void cancel(@SuppressWarnings("unused") IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public void cancel(IActionHandler actionHandler, Map<String, Object> context) {
     context.remove(ActionContextConstants.ACTION_PARAM);
   }
 
@@ -52,9 +51,8 @@ public class FileToByteArrayCallback extends AbstractActionContextAware
    * {@inheritDoc}
    */
   @Override
-  public void fileChosen(@SuppressWarnings("unused") String name,
-      InputStream in, @SuppressWarnings("unused") IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public void fileChosen(String name, InputStream in,
+      IActionHandler actionHandler, Map<String, Object> context) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       InputStream is = new BufferedInputStream(in);

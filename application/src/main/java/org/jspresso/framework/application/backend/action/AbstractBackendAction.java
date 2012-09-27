@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-
 /**
  * This class should serve as base class for implementing a action which
  * executes on the backend (domain model) of the application. It provides

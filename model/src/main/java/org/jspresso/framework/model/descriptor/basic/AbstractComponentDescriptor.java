@@ -1192,7 +1192,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public void setPermId(@SuppressWarnings("unused") String permId) {
+  public void setPermId(String permId) {
     throw new UnsupportedOperationException();
   }
 

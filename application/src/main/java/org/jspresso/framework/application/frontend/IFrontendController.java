@@ -331,7 +331,7 @@ public interface IFrontendController<E, F, G> extends IController,
    */
   boolean start(IBackendController backendController, Locale clientLocale,
       TimeZone clientTimeZone);
-  
+
   /**
    * Gets wether this controller has been started and not stopped.
    * 

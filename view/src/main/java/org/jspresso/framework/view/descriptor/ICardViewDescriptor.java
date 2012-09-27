@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-
 /**
  * This public interface is implemented by "Card" view descriptors. A typical
  * implementation of the described view could be a swing JPanel using a card

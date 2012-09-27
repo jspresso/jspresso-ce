@@ -67,9 +67,12 @@ public class SaveFileAction extends ChooseFileAction {
           }
         }
         if (file.exists()) {
-          if (JOptionPane.showConfirmDialog(null,
-              getTranslationProvider(context).getTranslation("confirm.override.description", getLocale(context)),
-              getTranslationProvider(context).getTranslation("confirm.override.name", getLocale(context)),
+          if (JOptionPane.showConfirmDialog(
+              null,
+              getTranslationProvider(context).getTranslation(
+                  "confirm.override.description", getLocale(context)),
+              getTranslationProvider(context).getTranslation(
+                  "confirm.override.name", getLocale(context)),
               JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
             file = null;
           }

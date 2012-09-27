@@ -161,8 +161,8 @@ public class DefaultRemoteController extends
   @Override
   public void displayFlashObject(String swfUrl,
       Map<String, String> flashContext, List<RAction> actions, String title,
-      @SuppressWarnings("unused") RComponent sourceComponent,
-      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+      RComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
@@ -186,8 +186,8 @@ public class DefaultRemoteController extends
    */
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, @SuppressWarnings("unused") RComponent sourceComponent,
-      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+      String title, RComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
@@ -311,8 +311,8 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
-      String title, String iconImageUrl, String message) {
+  public void popupInfo(RComponent sourceComponent, String title,
+      String iconImageUrl, String message) {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(title);
     messageCommand.setMessage(message);
@@ -332,8 +332,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupOkCancel(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+  public void popupOkCancel(RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction okAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
@@ -362,8 +361,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNo(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+  public void popupYesNo(RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
@@ -392,8 +390,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void popupYesNoCancel(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+  public void popupYesNoCancel(RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
@@ -993,7 +990,7 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
+  public void remotePeerAdded(IRemotePeer peer) {
     // No-op
   }
 

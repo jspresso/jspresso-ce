@@ -19,7 +19,7 @@ public abstract class AbstractLdapDao {
    * Sets the ldapTemplate.
    * 
    * @param ldapTemplate
-   *            the ldapTemplate to set.
+   *          the ldapTemplate to set.
    */
   public void setLdapTemplate(LdapTemplate ldapTemplate) {
     this.ldapTemplate = ldapTemplate;

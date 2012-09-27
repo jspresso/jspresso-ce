@@ -41,8 +41,8 @@ public class RLink extends RLabel implements RActionable {
   }
 
   /**
-   * Constructs a new <code>RLink</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RLink</code> instance. Only used for serialization
+   * support.
    */
   public RLink() {
     // For serialization support

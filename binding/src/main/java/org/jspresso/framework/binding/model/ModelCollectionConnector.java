@@ -23,7 +23,6 @@ import java.util.Collection;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
-
 /**
  * A connector on an independent model collection.
  * 
@@ -38,11 +37,11 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
    * Constructs a new <code>ModelCollectionConnector</code> instance.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param modelDescriptor
-   *            the model descriptor backing this connector.
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *            the factory used to create the collection model connectors.
+   *          the factory used to create the collection model connectors.
    */
   ModelCollectionConnector(String id,
       ICollectionDescriptorProvider<?> modelDescriptor,

@@ -36,7 +36,7 @@ public final class GateHelper {
    * Returns true if and only if gates are null, empty or all open.
    * 
    * @param gates
-   *            the gates collection.
+   *          the gates collection.
    * @return gates status.
    */
   public static boolean areGatesOpen(Collection<IGate> gates) {

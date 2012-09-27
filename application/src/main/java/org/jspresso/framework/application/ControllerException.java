@@ -34,7 +34,7 @@ public class ControllerException extends NestedRuntimeException {
    * Constructs a new <code>ControllerException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ControllerException(String message) {
     super(message);
@@ -44,7 +44,7 @@ public class ControllerException extends NestedRuntimeException {
    * Constructs a new <code>ControllerException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public ControllerException(Throwable nestedException) {
     super(nestedException);
@@ -54,9 +54,9 @@ public class ControllerException extends NestedRuntimeException {
    * Constructs a new <code>ControllerException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ControllerException(Throwable nestedException, String message) {
     super(nestedException, message);

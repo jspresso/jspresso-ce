@@ -41,7 +41,8 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class BasicViewDescriptor extends DefaultIconDescriptor implements IViewDescriptor {
+public abstract class BasicViewDescriptor extends DefaultIconDescriptor
+    implements IViewDescriptor {
 
   private ActionMap          actionMap;
   private ActionMap          secondaryActionMap;
@@ -131,10 +132,12 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    * {@inheritDoc}
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
     if (getDescription() == null) {
       if (getModelDescriptor() != null) {
-        return getModelDescriptor().getI18nDescription(translationProvider, locale);
+        return getModelDescriptor().getI18nDescription(translationProvider,
+            locale);
       }
     }
     return super.getI18nDescription(translationProvider, locale);
@@ -144,10 +147,12 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    * {@inheritDoc}
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
     if (getI18nNameKey() == null) {
       if (getModelDescriptor() != null) {
-        if (getName() == null || getName().equals(getModelDescriptor().getName())) {
+        if (getName() == null
+            || getName().equals(getModelDescriptor().getName())) {
           return getModelDescriptor().getI18nName(translationProvider, locale);
         }
       }

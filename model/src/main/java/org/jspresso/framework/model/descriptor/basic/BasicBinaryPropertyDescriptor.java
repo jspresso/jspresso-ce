@@ -147,9 +147,10 @@ public class BasicBinaryPropertyDescriptor extends
               boundsSpec.append(" <= ").append(getMaxLength());
             }
             return translationProvider.getTranslation(
-                "integrity.property.toolong",
-                new Object[] {getI18nName(translationProvider, locale),
-                    boundsSpec, component}, locale);
+                "integrity.property.toolong", new Object[] {
+                    getI18nName(translationProvider, locale), boundsSpec,
+                    component
+                }, locale);
           }
 
         };

@@ -31,7 +31,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEnumerationPropertyDescriptor extends IScalarPropertyDescriptor {
+public interface IEnumerationPropertyDescriptor extends
+    IScalarPropertyDescriptor {
 
   /**
    * Gets the name of the enumeration (like GENDER for a MALE/FEMALE
@@ -85,6 +86,7 @@ public interface IEnumerationPropertyDescriptor extends IScalarPropertyDescripto
    *          internationalized name.
    * @return The internationalized value.
    */
-  String getI18nValue(String value, ITranslationProvider translationProvider, Locale locale);
+  String getI18nValue(String value, ITranslationProvider translationProvider,
+      Locale locale);
 
 }

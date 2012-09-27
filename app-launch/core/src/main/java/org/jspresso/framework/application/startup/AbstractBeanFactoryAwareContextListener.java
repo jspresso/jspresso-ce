@@ -41,8 +41,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    * {@inheritDoc}
    */
   @Override
-  public void contextDestroyed(
-      ServletContextEvent event) {
+  public void contextDestroyed(ServletContextEvent event) {
     BeanFactory beanFactory = getBeanFactory(event);
     contextDestroyed(beanFactory, event);
   }
@@ -64,8 +63,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     BeanFactory beanFactory = bf.getFactory();
     if (beanFactory instanceof ConfigurableApplicationContext) {
-      ((ConfigurableApplicationContext) beanFactory)
-          .registerShutdownHook();
+      ((ConfigurableApplicationContext) beanFactory).registerShutdownHook();
     }
     return beanFactory;
   }
@@ -95,24 +93,30 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
   }
 
   /**
-   * Callback method that is executed when the webapp context has been initialized.
+   * Callback method that is executed when the webapp context has been
+   * initialized.
    * 
    * @param beanFactory
    *          the bean factory to use.
-   * @param event the servlet context initialization event.
+   * @param event
+   *          the servlet context initialization event.
    */
-  public void contextInitialized(BeanFactory beanFactory, ServletContextEvent event) {
+  public void contextInitialized(BeanFactory beanFactory,
+      ServletContextEvent event) {
     // NO-OP
   }
 
   /**
-   * Callback method that is executed when the webapp context has been destroyed.
+   * Callback method that is executed when the webapp context has been
+   * destroyed.
    * 
    * @param beanFactory
    *          the bean factory to use.
-   * @param event the servlet context destroy event.
+   * @param event
+   *          the servlet context destroy event.
    */
-  public void contextDestroyed(BeanFactory beanFactory, ServletContextEvent event) {
+  public void contextDestroyed(BeanFactory beanFactory,
+      ServletContextEvent event) {
     // NO-OP
   }
 }

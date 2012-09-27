@@ -42,8 +42,7 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
    * {@inheritDoc}
    */
   @Override
-  public void cancel(@SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Map<String, Object> context) {
+  public void cancel(IActionHandler actionHandler, Map<String, Object> context) {
     // NO-OP
   }
 
@@ -51,10 +50,9 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
    * {@inheritDoc}
    */
   @Override
-  public void fileChosen(@SuppressWarnings("unused") String name,
-      OutputStream out,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      Map<String, Object> context) throws IOException {
+  public void fileChosen(String name, OutputStream out,
+      IActionHandler actionHandler, Map<String, Object> context)
+      throws IOException {
     OutputStream os = new BufferedOutputStream(out);
     // Do not use getSelectedModel() since it will return
     // the component holding the binary property

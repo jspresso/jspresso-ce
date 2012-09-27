@@ -33,11 +33,10 @@ public interface IModelChangeListener {
    * fire when <code>oldValue</code> differs from <code>newValue</code>.
    * 
    * @param evt
-   *            The event representing the change. This event will have :
-   *            <li><code>source</code> set to the bean provider which first
-   *            initiated the event.
-   *            <li><code>oldValue</code> set to the new source's model.
-   *            <li><code>newValue</code> set to the old source's model.
+   *          The event representing the change. This event will have : <li>
+   *          <code>source</code> set to the bean provider which first initiated
+   *          the event. <li><code>oldValue</code> set to the new source's
+   *          model. <li><code>newValue</code> set to the old source's model.
    */
   void modelChange(ModelChangeEvent evt);
 

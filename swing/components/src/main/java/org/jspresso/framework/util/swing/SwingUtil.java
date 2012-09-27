@@ -312,8 +312,7 @@ public final class SwingUtil {
              * {@inheritDoc}
              */
             @Override
-            public TabOverviewKind getOverviewKind(
-                @SuppressWarnings("unused") JTabbedPane tabPane) {
+            public TabOverviewKind getOverviewKind(JTabbedPane tabPane) {
               return TabOverviewKind.ROUND_CAROUSEL;
               // return TabOverviewKind.MENU_CAROUSEL;
             }
@@ -464,7 +463,7 @@ public final class SwingUtil {
      * {@inheritDoc}
      */
     @Override
-    public void changedUpdate(@SuppressWarnings("unused") DocumentEvent e) {
+    public void changedUpdate(DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
       }
@@ -474,7 +473,7 @@ public final class SwingUtil {
      * {@inheritDoc}
      */
     @Override
-    public void insertUpdate(@SuppressWarnings("unused") DocumentEvent e) {
+    public void insertUpdate(DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
       }
@@ -484,7 +483,7 @@ public final class SwingUtil {
      * {@inheritDoc}
      */
     @Override
-    public void removeUpdate(@SuppressWarnings("unused") DocumentEvent e) {
+    public void removeUpdate(DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
       }

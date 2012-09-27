@@ -27,7 +27,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.bean.AccessorInfo;
 import org.jspresso.framework.util.bean.EAccessorType;
 
-
 /**
  * This is the core implementation of all query components in the application.
  * Instances of this class serve as handlers for proxies representing the query
@@ -47,23 +46,22 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
    * Constructs a new <code>QueryComponentInvocationHandler</code> instance.
    * 
    * @param componentDelegate
-   *            The component this delegate forwards the method calls to.
+   *          The component this delegate forwards the method calls to.
    */
   public QueryComponentInvocationHandler(IComponent componentDelegate) {
     this.componentDelegate = componentDelegate;
   }
 
   /**
-   * Handles methods invocations on the entity proxy. Either :
-   * <li>delegates to the wrapped entity straightSet method in case of a
-   * setter.
-   * <li>delegates to the normal method in any other case.
+   * Handles methods invocations on the entity proxy. Either : <li>delegates to
+   * the wrapped entity straightSet method in case of a setter. <li>delegates to
+   * the normal method in any other case.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public synchronized Object invoke(@SuppressWarnings("unused")
-  Object proxy, Method method, Object[] args) throws Throwable {
+  public synchronized Object invoke(Object proxy, Method method, Object[] args)
+      throws Throwable {
     if ("getComponentContract".equals(method.getName())) {
       return componentDelegate.getComponentContract();
     }

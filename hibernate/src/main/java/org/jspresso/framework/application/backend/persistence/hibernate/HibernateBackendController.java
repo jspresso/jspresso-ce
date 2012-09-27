@@ -147,7 +147,8 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       }
       if (sessionEntity != null) {
-        CarbonEntityCloneFactory.carbonCopyComponent(entity, sessionEntity, getEntityFactory());
+        CarbonEntityCloneFactory.carbonCopyComponent(entity, sessionEntity,
+            getEntityFactory());
         return sessionEntity;
       }
     }
@@ -850,8 +851,7 @@ public class HibernateBackendController extends AbstractBackendController {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @Override
-      public List<T> doInTransaction(
-          @SuppressWarnings("unused") TransactionStatus status) {
+      public List<T> doInTransaction(TransactionStatus status) {
         Criteria executableCriteria = criteria
             .getExecutableCriteria(getHibernateSession());
         if (firstResult >= 0) {

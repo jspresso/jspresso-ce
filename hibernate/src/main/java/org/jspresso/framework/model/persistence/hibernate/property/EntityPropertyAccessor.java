@@ -110,7 +110,6 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unused")
     public Object getForInsert(Object target,
         @SuppressWarnings("rawtypes") Map mergeMap, SessionImplementor session) {
       return get(target);
@@ -212,7 +211,6 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unused")
     public void set(Object target, Object value,
         SessionFactoryImplementor factory) {
       ((IComponent) target).straightSetProperty(propertyName, value);

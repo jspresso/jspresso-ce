@@ -27,7 +27,6 @@ import javax.swing.event.ChangeListener;
 import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.gui.swing.components.JDateField;
 
-
 /**
  * JDateField connector.
  * 
@@ -42,9 +41,9 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
    * Constructs a new <code>JDateField</code> instance.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param dateField
-   *            the connected JDateField.
+   *          the connected JDateField.
    */
   public JDateFieldConnector(String id, JDateField dateField) {
     super(id, dateField);
@@ -58,8 +57,7 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
     getConnectedJComponent().addChangeListener(new ChangeListener() {
 
       @Override
-      public void stateChanged(@SuppressWarnings("unused")
-      ChangeEvent e) {
+      public void stateChanged(ChangeEvent e) {
         fireConnectorValueChange();
       }
 
@@ -83,7 +81,9 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
               .length() == 0) {
         return null;
       }
-      return getConnectedJComponent().getFormattedTextField().getFormatter()
+      return getConnectedJComponent()
+          .getFormattedTextField()
+          .getFormatter()
           .stringToValue(
               getConnectedJComponent().getFormattedTextField().getText());
     } catch (ParseException ex) {

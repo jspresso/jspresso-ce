@@ -60,8 +60,7 @@ public class QueryModuleFilterAction extends AbstractQbeAction {
   @SuppressWarnings("unchecked")
   @Override
   protected List<? extends IComponent> getExistingResultList(
-      @SuppressWarnings("unused") IQueryComponent queryComponent,
-      Map<String, Object> context) {
+      IQueryComponent queryComponent, Map<String, Object> context) {
     FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
     return (List<? extends IComponent>) module.getModuleObjects();
   }

@@ -31,9 +31,9 @@ public interface IMvcBinder {
    * Binds two connectors altogether.
    * 
    * @param viewConnector
-   *            The connector for the view
+   *          The connector for the view
    * @param modelConnector
-   *            The connector for the model
+   *          The connector for the model
    */
   void bind(IValueConnector viewConnector, IValueConnector modelConnector);
 }

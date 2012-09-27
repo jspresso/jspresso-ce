@@ -53,11 +53,13 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * @return the property view descriptors.
    */
   List<IPropertyViewDescriptor> getPropertyViewDescriptors();
-  
+
   /**
-   * Gets wether this component view will install a vertical scroll when height is not enough.
+   * Gets wether this component view will install a vertical scroll when height
+   * is not enough.
    * 
-   * @return wether this component view will install a vertical scroll when height is not enough.
+   * @return wether this component view will install a vertical scroll when
+   *         height is not enough.
    */
   boolean isVerticallyScrollable();
 }

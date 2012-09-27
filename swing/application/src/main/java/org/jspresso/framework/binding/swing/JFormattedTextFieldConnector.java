@@ -28,7 +28,6 @@ import javax.swing.JFormattedTextField;
 
 import org.jspresso.framework.binding.ConnectorBindingException;
 
-
 /**
  * JFormattedTextFieldConnector connector.
  * 
@@ -42,9 +41,9 @@ public class JFormattedTextFieldConnector extends
    * Constructs a new <code>JFormattedTextFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param textField
-   *            the connected JTextField.
+   *          the connected JTextField.
    */
   public JFormattedTextFieldConnector(String id, JFormattedTextField textField) {
     super(id, textField);
@@ -62,8 +61,7 @@ public class JFormattedTextFieldConnector extends
        * {@inheritDoc}
        */
       @Override
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(ActionEvent e) {
         fireConnectorValueChange();
       }
     });
@@ -71,8 +69,7 @@ public class JFormattedTextFieldConnector extends
         new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(PropertyChangeEvent evt) {
             fireConnectorValueChange();
           }
         });

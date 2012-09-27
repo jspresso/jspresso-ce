@@ -27,8 +27,8 @@ package org.jspresso.framework.gui.remote;
 public class RTimeField extends RComponent {
 
   private static final long serialVersionUID = 2384664561321144507L;
-  
-  private boolean secondsAware;
+
+  private boolean           secondsAware;
 
   /**
    * Constructs a new <code>RDateField</code> instance.
@@ -60,7 +60,8 @@ public class RTimeField extends RComponent {
   /**
    * Sets the secondsAware.
    * 
-   * @param secondsAware the secondsAware to set.
+   * @param secondsAware
+   *          the secondsAware to set.
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;

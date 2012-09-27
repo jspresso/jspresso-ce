@@ -38,11 +38,11 @@ public final class IoHelper {
    * Copies the content of an input stream to an output stream.
    * 
    * @param inputStream
-   *            the input stream to read the bytes from.
+   *          the input stream to read the bytes from.
    * @param outputStream
-   *            the output stream to read the bytes from.
+   *          the output stream to read the bytes from.
    * @throws IOException
-   *             whenever an exception occurs during I/O operation.
+   *           whenever an exception occurs during I/O operation.
    */
   public static void copyStream(InputStream inputStream,
       OutputStream outputStream) throws IOException {

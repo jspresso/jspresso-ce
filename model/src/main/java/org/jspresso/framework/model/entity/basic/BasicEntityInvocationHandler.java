@@ -141,9 +141,8 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected IComponent decorateReferent(
-      IComponent referent,
-      @SuppressWarnings("unused") IComponentDescriptor<? extends IComponent> referentDescriptor) {
+  protected IComponent decorateReferent(IComponent referent,
+      IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
   }
 

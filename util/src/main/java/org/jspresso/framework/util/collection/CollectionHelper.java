@@ -27,7 +27,6 @@ import java.util.Set;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
-
 /**
  * Helper class for collections management.
  * 
@@ -46,9 +45,9 @@ public final class CollectionHelper {
    * and an ArrayList for a List.
    * 
    * @param <E>
-   *            the type the collection element
+   *          the type the collection element
    * @param collection
-   *            the original collection
+   *          the original collection
    * @return the cloned collection.
    */
   @SuppressWarnings("unchecked")
@@ -60,8 +59,9 @@ public final class CollectionHelper {
     if (collection instanceof Cloneable) {
       // try to invoke the clone method reflectively
       try {
-        clonedCollection = (Collection<E>) collection.getClass().getMethod(
-            "clone", (Class[]) null).invoke(collection, (Object[]) null);
+        clonedCollection = (Collection<E>) collection.getClass()
+            .getMethod("clone", (Class[]) null)
+            .invoke(collection, (Object[]) null);
       } catch (IllegalArgumentException ex) {
         throw new NestedRuntimeException(ex);
       } catch (SecurityException ex) {

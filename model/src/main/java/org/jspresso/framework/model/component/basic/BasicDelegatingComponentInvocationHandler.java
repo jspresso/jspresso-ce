@@ -38,7 +38,8 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicDelegatingComponentInvocationHandler extends AbstractComponentInvocationHandler {
+public class BasicDelegatingComponentInvocationHandler extends
+    AbstractComponentInvocationHandler {
 
   private static final long serialVersionUID = 4064763209800159366L;
 
@@ -63,10 +64,14 @@ public class BasicDelegatingComponentInvocationHandler extends AbstractComponent
    *          The factory used to create component extensions based on their
    *          classes.
    */
-  public BasicDelegatingComponentInvocationHandler(Object delegate, IComponentFactory componentFactory,
-      IComponentDescriptor<IComponent> componentDescriptor, IComponentCollectionFactory<IComponent> collectionFactory,
-      IAccessorFactory accessorFactory, IComponentExtensionFactory extensionFactory) {
-    super(componentDescriptor, componentFactory, collectionFactory, accessorFactory, extensionFactory);
+  public BasicDelegatingComponentInvocationHandler(Object delegate,
+      IComponentFactory componentFactory,
+      IComponentDescriptor<IComponent> componentDescriptor,
+      IComponentCollectionFactory<IComponent> collectionFactory,
+      IAccessorFactory accessorFactory,
+      IComponentExtensionFactory extensionFactory) {
+    super(componentDescriptor, componentFactory, collectionFactory,
+        accessorFactory, extensionFactory);
     this.delegate = delegate;
     this.componentFactory = componentFactory;
   }
@@ -95,7 +100,7 @@ public class BasicDelegatingComponentInvocationHandler extends AbstractComponent
    * {@inheritDoc}
    */
   @Override
-  protected int computeHashCode(@SuppressWarnings("unused") IComponent proxy) {
+  protected int computeHashCode(IComponent proxy) {
     return delegate.hashCode();
   }
 
@@ -109,7 +114,8 @@ public class BasicDelegatingComponentInvocationHandler extends AbstractComponent
         && Proxy.getInvocationHandler(referent) instanceof AbstractComponentInvocationHandler) {
       return referent;
     }
-    return componentFactory.createComponentInstance(referentDescriptor.getComponentContract(), delegate);
+    return componentFactory.createComponentInstance(
+        referentDescriptor.getComponentContract(), delegate);
   }
 
   /**
@@ -118,16 +124,21 @@ public class BasicDelegatingComponentInvocationHandler extends AbstractComponent
    * {@inheritDoc}
    */
   @Override
-  protected Object invokeServiceMethod(Object proxy, Method method, Object[] args) throws NoSuchMethodException {
+  protected Object invokeServiceMethod(Object proxy, Method method,
+      Object[] args) throws NoSuchMethodException {
     try {
       return super.invokeServiceMethod(proxy, method, args);
     } catch (NoSuchMethodException ex) {
       try {
-        return delegate.getClass().getMethod(method.getName(), method.getParameterTypes()).invoke(delegate, args);
+        return delegate.getClass()
+            .getMethod(method.getName(), method.getParameterTypes())
+            .invoke(delegate, args);
       } catch (IllegalArgumentException ex1) {
-        throw new ComponentException(method.toString() + " is not supported on the component " + getComponentContract());
+        throw new ComponentException(method.toString()
+            + " is not supported on the component " + getComponentContract());
       } catch (IllegalAccessException ex1) {
-        throw new ComponentException(method.toString() + " is not supported on the component " + getComponentContract());
+        throw new ComponentException(method.toString()
+            + " is not supported on the component " + getComponentContract());
       } catch (InvocationTargetException ex1) {
         if (ex1.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex1.getCause();
@@ -143,7 +154,8 @@ public class BasicDelegatingComponentInvocationHandler extends AbstractComponent
   @Override
   protected Object retrievePropertyValue(String propertyName) {
     try {
-      return getAccessorFactory().createPropertyAccessor(propertyName, getComponentContract()).getValue(delegate);
+      return getAccessorFactory().createPropertyAccessor(propertyName,
+          getComponentContract()).getValue(delegate);
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
@@ -162,8 +174,8 @@ public class BasicDelegatingComponentInvocationHandler extends AbstractComponent
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
     try {
-      getAccessorFactory().createPropertyAccessor(propertyName, getComponentContract()).setValue(delegate,
-          propertyValue);
+      getAccessorFactory().createPropertyAccessor(propertyName,
+          getComponentContract()).setValue(delegate, propertyValue);
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {

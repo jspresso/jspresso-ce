@@ -41,7 +41,7 @@ public abstract class AbstractTreeModel implements TreeModel {
    * 
    * @see #removeTreeModelListener
    * @param l
-   *            the listener to add
+   *          the listener to add
    */
   @Override
   public void addTreeModelListener(TreeModelListener l) {
@@ -55,11 +55,12 @@ public abstract class AbstractTreeModel implements TreeModel {
    * <code>add<em>Foo</em>Listener</code> method.
    * <p>
    * You can specify the <code>listenerType</code> argument with a class
-   * literal, such as <code><em>Foo</em>Listener.class</code>. For
-   * example, you can query a <code>DefaultTreeModel</code> <code>m</code>
-   * for its tree model listeners with the following code:
+   * literal, such as <code><em>Foo</em>Listener.class</code>. For example, you
+   * can query a <code>DefaultTreeModel</code> <code>m</code> for its tree model
+   * listeners with the following code:
    * 
    * <pre>
+   * 
    * TreeModelListener[] tmls = (TreeModelListener[]) (m
    *                              .getListeners(TreeModelListener.class));
    * </pre>
@@ -67,14 +68,13 @@ public abstract class AbstractTreeModel implements TreeModel {
    * If no such listeners exist, this method returns an empty array.
    * 
    * @param <T>
-   *            The type of EventListener.
+   *          The type of EventListener.
    * @param listenerType
-   *            the type of listeners requested; this parameter should specify
-   *            an interface that descends from
-   *            <code>java.util.EventListener</code>
+   *          the type of listeners requested; this parameter should specify an
+   *          interface that descends from <code>java.util.EventListener</code>
    * @return an array of all objects registered as
-   *         <code><em>Foo</em>Listener</code>s on this component, or an
-   *         empty array if no such listeners have been added
+   *         <code><em>Foo</em>Listener</code>s on this component, or an empty
+   *         array if no such listeners have been added
    * @see #getTreeModelListeners
    */
   public <T extends EventListener> T[] getListeners(Class<T> listenerType) {
@@ -98,7 +98,7 @@ public abstract class AbstractTreeModel implements TreeModel {
    * 
    * @see #addTreeModelListener
    * @param l
-   *            the listener to remove
+   *          the listener to remove
    */
   @Override
   public void removeTreeModelListener(TreeModelListener l) {
@@ -111,13 +111,13 @@ public abstract class AbstractTreeModel implements TreeModel {
    * passed into the fire method.
    * 
    * @param source
-   *            the node being changed
+   *          the node being changed
    * @param path
-   *            the path to the root node
+   *          the path to the root node
    * @param childIndices
-   *            the indices of the changed elements
+   *          the indices of the changed elements
    * @param children
-   *            the changed elements
+   *          the changed elements
    * @see EventListenerList
    */
   protected void fireTreeNodesChanged(Object source, Object[] path,
@@ -144,13 +144,13 @@ public abstract class AbstractTreeModel implements TreeModel {
    * passed into the fire method.
    * 
    * @param source
-   *            the node where new elements are being inserted
+   *          the node where new elements are being inserted
    * @param path
-   *            the path to the root node
+   *          the path to the root node
    * @param childIndices
-   *            the indices of the new elements
+   *          the indices of the new elements
    * @param children
-   *            the new elements
+   *          the new elements
    * @see EventListenerList
    */
   protected void fireTreeNodesInserted(Object source, Object[] path,
@@ -177,13 +177,13 @@ public abstract class AbstractTreeModel implements TreeModel {
    * passed into the fire method.
    * 
    * @param source
-   *            the node where elements are being removed
+   *          the node where elements are being removed
    * @param path
-   *            the path to the root node
+   *          the path to the root node
    * @param childIndices
-   *            the indices of the removed elements
+   *          the indices of the removed elements
    * @param children
-   *            the removed elements
+   *          the removed elements
    * @see EventListenerList
    */
   protected void fireTreeNodesRemoved(Object source, Object[] path,
@@ -210,13 +210,13 @@ public abstract class AbstractTreeModel implements TreeModel {
    * passed into the fire method.
    * 
    * @param source
-   *            the node where the tree model has changed
+   *          the node where the tree model has changed
    * @param path
-   *            the path to the root node
+   *          the path to the root node
    * @param childIndices
-   *            the indices of the affected elements
+   *          the indices of the affected elements
    * @param children
-   *            the affected elements
+   *          the affected elements
    * @see EventListenerList
    */
   protected void fireTreeStructureChanged(Object source, Object[] path,
@@ -243,9 +243,9 @@ public abstract class AbstractTreeModel implements TreeModel {
    * passed into the fire method.
    * 
    * @param source
-   *            the node where the tree model has changed
+   *          the node where the tree model has changed
    * @param path
-   *            the path to the root node
+   *          the path to the root node
    * @see EventListenerList
    */
   protected void fireTreeStructureChanged(Object source, TreePath path) {

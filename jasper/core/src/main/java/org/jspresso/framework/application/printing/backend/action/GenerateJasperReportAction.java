@@ -89,7 +89,7 @@ public class GenerateJasperReportAction extends BackendAction {
           return false;
         }
       }
-      JasperPrint jasperPrint =  jdbcTemplate
+      JasperPrint jasperPrint = jdbcTemplate
           .execute(new ConnectionCallback<JasperPrint>() {
 
             @Override

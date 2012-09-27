@@ -55,7 +55,8 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicProxyEntityFactory extends AbstractComponentFactory implements IEntityFactory {
+public class BasicProxyEntityFactory extends AbstractComponentFactory implements
+    IEntityFactory {
 
   private IComponentCollectionFactory<IComponent> componentCollectionFactory;
   private IComponentExtensionFactory              componentExtensionFactory;
@@ -68,7 +69,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    */
   @Override
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator.generateGUID());
+    T createdEntity = createEntityInstance(entityContract,
+        entityGUIDGenerator.generateGUID());
     return initializeEntity(createdEntity);
   }
 
@@ -82,11 +84,17 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @return the entity instance ready to be used.
    */
   protected <T extends IEntity> T initializeEntity(T entity) {
-    IComponentDescriptor<?> entityDescriptor = getComponentDescriptor(entity.getComponentContract());
-    for (IPropertyDescriptor propertyDescriptor : entityDescriptor.getPropertyDescriptors()) {
+    IComponentDescriptor<?> entityDescriptor = getComponentDescriptor(entity
+        .getComponentContract());
+    for (IPropertyDescriptor propertyDescriptor : entityDescriptor
+        .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-        entity.straightSetProperty(propertyDescriptor.getName(), componentCollectionFactory
-            .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor).getModelType()));
+        entity
+            .straightSetProperty(
+                propertyDescriptor.getName(),
+                componentCollectionFactory
+                    .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                        .getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
           && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
         entity.straightSetProperty(propertyDescriptor.getName(),
@@ -94,7 +102,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       }
     }
     if (entity instanceof ILifecycleCapable) {
-      ((ILifecycleCapable) entity).onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+      ((ILifecycleCapable) entity).onCreate(this, getPrincipal(),
+          getEntityLifecycleHandler());
     }
     return entity;
   }
@@ -103,19 +112,23 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   @Override
-  public <T extends IEntity> T createEntityInstance(Class<T> entityContract, Serializable id) {
+  public <T extends IEntity> T createEntityInstance(Class<T> entityContract,
+      Serializable id) {
     final T createdEntity = createEntityInstance(entityContract, id, null);
-    createdEntity.addPropertyChangeListener(IEntity.VERSION, new PropertyChangeListener() {
+    createdEntity.addPropertyChangeListener(IEntity.VERSION,
+        new PropertyChangeListener() {
 
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getOldValue() == null && evt.getNewValue() != null) {
-          createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(false), new Boolean(true));
-        } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-          createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(true), new Boolean(false));
-        }
-      }
-    });
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getOldValue() == null && evt.getNewValue() != null) {
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
+                  false), new Boolean(true));
+            } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
+                  true), new Boolean(false));
+            }
+          }
+        });
     return createdEntity;
   }
 
@@ -136,8 +149,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    *          the entity descriptor.
    * @return the entity proxy invocation handler.
    */
-  protected InvocationHandler createEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor) {
-    return new BasicEntityInvocationHandler(entityDescriptor, this, componentCollectionFactory, getAccessorFactory(),
+  protected InvocationHandler createEntityInvocationHandler(
+      IComponentDescriptor<IEntity> entityDescriptor) {
+    return new BasicEntityInvocationHandler(entityDescriptor, this,
+        componentCollectionFactory, getAccessorFactory(),
         componentExtensionFactory);
   }
 
@@ -151,13 +166,14 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends IEntity> T createEntityInstance(Class<T> entityContract, Serializable id,
-      Class<?>[] extraInterfaces) {
+  private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
+      Serializable id, Class<?>[] extraInterfaces) {
     T entity;
     if (entityContract.isInterface()) {
       IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) getComponentDescriptor(entityContract);
       if (entityDescriptor.isPurelyAbstract()) {
-        throw new EntityException(entityDescriptor.getName() + " is purely abstract. It cannot be instanciated.");
+        throw new EntityException(entityDescriptor.getName()
+            + " is purely abstract. It cannot be instanciated.");
       }
       InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
       Class<?>[] implementedClasses;
@@ -173,15 +189,17 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
         implementedClasses[0] = entityDescriptor.getComponentContract();
         implementedClasses[1] = ILifecycleCapable.class;
       }
-      entity = (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), implementedClasses,
-          entityHandler);
+      entity = (T) Proxy.newProxyInstance(Thread.currentThread()
+          .getContextClassLoader(), implementedClasses, entityHandler);
     } else {
       try {
         entity = entityContract.newInstance();
       } catch (InstantiationException ex) {
-        throw new EntityException(ex, "Could not instanciate entity " + entityContract.getName());
+        throw new EntityException(ex, "Could not instanciate entity "
+            + entityContract.getName());
       } catch (IllegalAccessException ex) {
-        throw new EntityException(ex, "Could not instanciate entity " + entityContract.getName());
+        throw new EntityException(ex, "Could not instanciate entity "
+            + entityContract.getName());
       }
     }
     entity.straightSetProperty(IEntity.ID, id);
@@ -201,7 +219,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   @Override
-  public <T extends IComponent> T createComponentInstance(Class<T> componentContract) {
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract) {
     return createComponentInstance(componentContract, null);
   }
 
@@ -209,8 +228,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   @Override
-  public <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate) {
-    T createdComponent = createComponentInstance(componentContract, delegate, null);
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract, Object delegate) {
+    T createdComponent = createComponentInstance(componentContract, delegate,
+        null);
     return initializeComponent(createdComponent);
   }
 
@@ -224,11 +245,17 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @return the component instance ready to be used.
    */
   protected <T extends IComponent> T initializeComponent(T component) {
-    IComponentDescriptor<?> componentDescriptor = getComponentDescriptor(component.getComponentContract());
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
+    IComponentDescriptor<?> componentDescriptor = getComponentDescriptor(component
+        .getComponentContract());
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-        component.straightSetProperty(propertyDescriptor.getName(), componentCollectionFactory
-            .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor).getModelType()));
+        component
+            .straightSetProperty(
+                propertyDescriptor.getName(),
+                componentCollectionFactory
+                    .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                        .getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
           && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
         component.straightSetProperty(propertyDescriptor.getName(),
@@ -236,7 +263,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       }
     }
     if (component instanceof ILifecycleCapable) {
-      ((ILifecycleCapable) component).onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+      ((ILifecycleCapable) component).onCreate(this, getPrincipal(),
+          getEntityLifecycleHandler());
     }
     return component;
   }
@@ -246,17 +274,23 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    */
   @Override
   @SuppressWarnings("unchecked")
-  public IQueryComponent createQueryComponentInstance(Class<? extends IComponent> componentContract) {
-    return new QueryComponent(getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
-        (IComponentDescriptor<IComponent>) getComponentDescriptor(componentContract)), this);
+  public IQueryComponent createQueryComponentInstance(
+      Class<? extends IComponent> componentContract) {
+    return new QueryComponent(
+        getQueryComponentDescriptorFactory()
+            .createQueryComponentDescriptor(
+                (IComponentDescriptor<IComponent>) getComponentDescriptor(componentContract)),
+        this);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public IComponentDescriptor<?> getComponentDescriptor(Class<?> componentContract) {
-    return componentDescriptorRegistry.getComponentDescriptor(componentContract);
+  public IComponentDescriptor<?> getComponentDescriptor(
+      Class<?> componentContract) {
+    return componentDescriptorRegistry
+        .getComponentDescriptor(componentContract);
   }
 
   /**
@@ -273,7 +307,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @param componentCollectionFactory
    *          the componentCollectionFactory to set.
    */
-  public void setComponentCollectionFactory(IComponentCollectionFactory<IComponent> componentCollectionFactory) {
+  public void setComponentCollectionFactory(
+      IComponentCollectionFactory<IComponent> componentCollectionFactory) {
     this.componentCollectionFactory = componentCollectionFactory;
   }
 
@@ -283,7 +318,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @param componentDescriptorRegistry
    *          the componentDescriptorRegistry to set.
    */
-  public void setComponentDescriptorRegistry(IComponentDescriptorRegistry componentDescriptorRegistry) {
+  public void setComponentDescriptorRegistry(
+      IComponentDescriptorRegistry componentDescriptorRegistry) {
     this.componentDescriptorRegistry = componentDescriptorRegistry;
   }
 
@@ -293,7 +329,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @param componentExtensionFactory
    *          the componentCollectionFactory to set.
    */
-  public void setComponentExtensionFactory(IComponentExtensionFactory componentExtensionFactory) {
+  public void setComponentExtensionFactory(
+      IComponentExtensionFactory componentExtensionFactory) {
     this.componentExtensionFactory = componentExtensionFactory;
   }
 
@@ -304,9 +341,11 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    *          the component descriptor.
    * @return the component proxy invocation handler.
    */
-  protected InvocationHandler createComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor) {
-    return new BasicComponentInvocationHandler(componentDescriptor, this, componentCollectionFactory,
-        getAccessorFactory(), componentExtensionFactory);
+  protected InvocationHandler createComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor) {
+    return new BasicComponentInvocationHandler(componentDescriptor, this,
+        componentCollectionFactory, getAccessorFactory(),
+        componentExtensionFactory);
   }
 
   /**
@@ -337,13 +376,14 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate,
-      Class<?>[] extraInterfaces) {
+  private <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract, Object delegate, Class<?>[] extraInterfaces) {
     IComponentDescriptor<IComponent> componentDescriptor = (IComponentDescriptor<IComponent>) componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
     InvocationHandler componentHandler;
     if (delegate != null) {
-      componentHandler = createDelegatingComponentInvocationHandler(componentDescriptor, delegate);
+      componentHandler = createDelegatingComponentInvocationHandler(
+          componentDescriptor, delegate);
     } else {
       componentHandler = createComponentInvocationHandler(componentDescriptor);
     }
@@ -360,15 +400,16 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       implementedClasses[0] = componentDescriptor.getComponentContract();
       implementedClasses[1] = ILifecycleCapable.class;
     }
-    T component = (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), implementedClasses,
-        componentHandler);
+    T component = (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), implementedClasses, componentHandler);
     return component;
   }
 
   private InvocationHandler createDelegatingComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
-    return new BasicDelegatingComponentInvocationHandler(delegate, this, componentDescriptor,
-        componentCollectionFactory, getAccessorFactory(), componentExtensionFactory);
+    return new BasicDelegatingComponentInvocationHandler(delegate, this,
+        componentDescriptor, componentCollectionFactory, getAccessorFactory(),
+        componentExtensionFactory);
   }
 
   /**
@@ -389,7 +430,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @param queryComponentDescriptorFactory
    *          the queryComponentDescriptorFactory to set.
    */
-  public void setQueryComponentDescriptorFactory(IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+  public void setQueryComponentDescriptorFactory(
+      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
     this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }

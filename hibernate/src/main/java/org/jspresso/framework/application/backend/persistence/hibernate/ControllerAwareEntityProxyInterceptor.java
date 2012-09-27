@@ -50,11 +50,13 @@ import org.slf4j.LoggerFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ControllerAwareEntityProxyInterceptor extends EntityProxyInterceptor {
+public class ControllerAwareEntityProxyInterceptor extends
+    EntityProxyInterceptor {
 
   private static final long   serialVersionUID = -6834992000307471098L;
 
-  private static final Logger LOG              = LoggerFactory.getLogger(ControllerAwareEntityProxyInterceptor.class);
+  private static final Logger LOG              = LoggerFactory
+                                                   .getLogger(ControllerAwareEntityProxyInterceptor.class);
 
   // Not usefull anymore since the new transaction template takes care of that
   // in every situation including JTA, when this interceptor is not called.
@@ -87,24 +89,30 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     super.afterTransactionCompletion(tx);
   }
 
-  private synchronized boolean registerCompletion(Transaction tx, IBackendController backendController) {
+  private synchronized boolean registerCompletion(Transaction tx,
+      IBackendController backendController) {
     if (tx instanceof JTATransaction) {
       // This is a hack to check that we are not committing a wrongly enlisted
       // noTxSession.
       Object transactionContext = null;
       try {
-        transactionContext = ReflectHelper.getPrivateFieldValue(JTATransaction.class, "transactionContext", tx);
+        transactionContext = ReflectHelper.getPrivateFieldValue(
+            JTATransaction.class, "transactionContext", tx);
       } catch (Exception ex) {
-        LOG.warn("An unexpected exception occurred when accessing private field transactionContext from "
-            + "JTATransaction.class to avoid double afterTransactionCompletion call", ex);
+        LOG.warn(
+            "An unexpected exception occurred when accessing private field transactionContext from "
+                + "JTATransaction.class to avoid double afterTransactionCompletion call",
+            ex);
       }
       Object noTxSession = null;
       try {
-        noTxSession = ReflectHelper.getPrivateFieldValue(HibernateBackendController.class, "noTxSession",
-            backendController);
+        noTxSession = ReflectHelper.getPrivateFieldValue(
+            HibernateBackendController.class, "noTxSession", backendController);
       } catch (Exception ex) {
-        LOG.warn("An unexpected exception occurred when accessing private field noTxSession from "
-            + "HibernateBackendController.class to avoid double afterTransactionCompletion call", ex);
+        LOG.warn(
+            "An unexpected exception occurred when accessing private field noTxSession from "
+                + "HibernateBackendController.class to avoid double afterTransactionCompletion call",
+            ex);
       }
       if (noTxSession != null && noTxSession == transactionContext) {
         return false;
@@ -119,10 +127,11 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
    * {@inheritDoc}
    */
   @Override
-  public int[] findDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState,
-      String[] propertyNames, Type[] types) {
+  public int[] findDirty(Object entity, Serializable id, Object[] currentState,
+      Object[] previousState, String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity);
+      Map<String, Object> dirtyProperties = getBackendController()
+          .getDirtyProperties((IEntity) entity);
       if (dirtyProperties != null) {
         dirtyProperties.remove(IEntity.VERSION);
       }
@@ -142,7 +151,8 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       int[] indices = new int[propertyNames.length];
       int n = 0;
       for (int i = 0; i < propertyNames.length; i++) {
-        String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
+        String propertyName = AbstractPropertyAccessor
+            .fromJavaBeanPropertyName(propertyNames[i]);
         if (dirtyProperties.containsKey(propertyName)) {
           indices[n] = i;
           n++;
@@ -152,7 +162,8 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       System.arraycopy(indices, 0, shrinkedArray, 0, n);
       return shrinkedArray;
     }
-    return super.findDirty(entity, id, currentState, previousState, propertyNames, types);
+    return super.findDirty(entity, id, currentState, previousState,
+        propertyNames, types);
   }
 
   /**
@@ -171,7 +182,8 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
           registeredEntity = (IEntity) li.getImplementation();
         }
 
-        HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity, null);
+        HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity,
+            null);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
         LOG.error("Class for entity {} was not found", entityName, ex);
@@ -184,12 +196,13 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
    * {@inheritDoc}
    */
   @Override
-  public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
-      @SuppressWarnings("unused") Type[] types) {
+  public boolean onLoad(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
     boolean updated = false;
     if (!getBackendController().isUnitOfWorkActive()) {
       if (entity instanceof IEntity
-          && getBackendController().getRegisteredEntity(((IEntity) entity).getComponentContract(), id) == null) {
+          && getBackendController().getRegisteredEntity(
+              ((IEntity) entity).getComponentContract(), id) == null) {
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
           if (state[i] != null) {
@@ -197,8 +210,10 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
             if (!isHibernateInternal(propertyName)) {
               if (state[i] instanceof IEntity) {
                 IEntity refEntity = (IEntity) state[i];
-                IEntity mergedEntity = getBackendController().getRegisteredEntity(
-                    HibernateHelper.getComponentContract(refEntity), refEntity.getId());
+                IEntity mergedEntity = getBackendController()
+                    .getRegisteredEntity(
+                        HibernateHelper.getComponentContract(refEntity),
+                        refEntity.getId());
                 if (mergedEntity != null && mergedEntity != refEntity) {
                   state[i] = mergedEntity;
                   updated = true;
@@ -256,21 +271,25 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       preFlushedEntities.add(entities.next());
     }
     Set<Object> onUpdatedEntities = new HashSet<Object>();
-    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
+    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities,
+        onUpdatedEntities);
     while (onUpdateTriggered) {
       // Until the state is stable.
       onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
     }
   }
 
-  private boolean triggerOnUpdate(Set<Object> preFlushedEntities, Set<Object> onUpdatedEntities) {
+  private boolean triggerOnUpdate(Set<Object> preFlushedEntities,
+      Set<Object> onUpdatedEntities) {
     boolean onUpdateTriggered = false;
     for (Object entity : preFlushedEntities) {
-      if (entity instanceof ILifecycleCapable && !onUpdatedEntities.contains(entity)) {
+      if (entity instanceof ILifecycleCapable
+          && !onUpdatedEntities.contains(entity)) {
         if (entity instanceof IEntity) {
           if (((IEntity) entity).isPersistent()) {
             boolean isClean = false;
-            Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
+            Map<String, Object> dirtyProperties = getBackendController()
+                .getDirtyProperties((IEntity) entity, false);
             if (dirtyProperties != null) {
               dirtyProperties.remove(IEntity.VERSION);
             }
@@ -286,10 +305,13 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
               // considered dirty.
               isClean = true;
             }
-            if (!onUpdatedEntities.contains(entity) && !isClean
-                && !getBackendController().isEntityRegisteredForDeletion((IEntity) entity)) {
+            if (!onUpdatedEntities.contains(entity)
+                && !isClean
+                && !getBackendController().isEntityRegisteredForDeletion(
+                    (IEntity) entity)) {
               // the entity is dirty and is going to be flushed.
-              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(),
+                  getPrincipal(), getEntityLifecycleHandler());
               onUpdatedEntities.add(entity);
               onUpdateTriggered = true;
             }

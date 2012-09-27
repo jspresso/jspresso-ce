@@ -70,7 +70,7 @@ public class FindAction extends AbstractQbeAction {
    */
   @Override
   protected List<?> getExistingResultList(IQueryComponent queryComponent,
-      @SuppressWarnings("unused") Map<String, Object> context) {
+      Map<String, Object> context) {
     return queryComponent.getQueriedComponents();
   }
 
@@ -78,9 +78,8 @@ public class FindAction extends AbstractQbeAction {
    * {@inheritDoc}
    */
   @Override
-  protected void queryPerformed(
-      @SuppressWarnings("unused") IQueryComponent queryComponent,
-      @SuppressWarnings("unused") Map<String, Object> context) {
+  protected void queryPerformed(IQueryComponent queryComponent,
+      Map<String, Object> context) {
     // NO-OP.
   }
 }

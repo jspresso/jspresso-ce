@@ -21,7 +21,6 @@ package org.jspresso.framework.binding.model;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * This connector is a simple java model property connector. "Simple" means not
  * a model reference and not a collection.

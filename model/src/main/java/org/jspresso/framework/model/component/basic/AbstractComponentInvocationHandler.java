@@ -87,6 +87,8 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -1655,8 +1657,8 @@ public abstract class AbstractComponentInvocationHandler implements
      * {@inheritDoc}
      */
     @Override
-    public Object invoke(@SuppressWarnings("unused") Object proxy,
-        Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args)
+        throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
         return new Boolean(false);
       }

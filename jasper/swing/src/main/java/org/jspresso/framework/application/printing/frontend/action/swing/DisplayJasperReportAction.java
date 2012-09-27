@@ -38,8 +38,7 @@ public class DisplayJasperReportAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     JasperPrint report = (JasperPrint) getActionParameter(context);
     if (report != null) {

@@ -44,7 +44,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class BackendAction extends AbstractAction {
 
-  private static final Logger LOG                      = LoggerFactory.getLogger(BackendAction.class);
+  private static final Logger LOG                      = LoggerFactory
+                                                           .getLogger(BackendAction.class);
 
   private static final String WARN_BAD_ACCESS_DISABLED = "WARN_BAD_ACCESS_DISABLED";
 
@@ -101,7 +102,8 @@ public class BackendAction extends AbstractAction {
    *          the action context.
    * @return the current application session.
    */
-  protected IApplicationSession getApplicationSession(Map<String, Object> context) {
+  protected IApplicationSession getApplicationSession(
+      Map<String, Object> context) {
     return getController(context).getApplicationSession();
   }
 
@@ -135,7 +137,8 @@ public class BackendAction extends AbstractAction {
    *          the action context.
    * @return the transactionTemplate.
    */
-  protected TransactionTemplate getTransactionTemplate(Map<String, Object> context) {
+  protected TransactionTemplate getTransactionTemplate(
+      Map<String, Object> context) {
     return getController(context).getTransactionTemplate();
   }
 
@@ -167,7 +170,8 @@ public class BackendAction extends AbstractAction {
    * {@inheritDoc}
    */
   @Override
-  protected List<?> getSelectedModels(int[] viewPath, Map<String, Object> context) {
+  protected List<?> getSelectedModels(int[] viewPath,
+      Map<String, Object> context) {
     boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
     try {
       if (viewPath == null) {
@@ -200,7 +204,8 @@ public class BackendAction extends AbstractAction {
    * {@inheritDoc}
    */
   @Override
-  protected IValueConnector getViewConnector(int[] viewPath, Map<String, Object> context) {
+  protected IValueConnector getViewConnector(int[] viewPath,
+      Map<String, Object> context) {
     warnBadFrontendAccess(context);
     return super.getViewConnector(viewPath, context);
   }
@@ -228,9 +233,12 @@ public class BackendAction extends AbstractAction {
   }
 
   private void warnBadFrontendAccess(Map<String, Object> context) {
-    if (isBadFrontendAccessChecked() && !context.containsKey(WARN_BAD_ACCESS_DISABLED)) {
-      LOG.warn("Access to frontend context detected from a backend action which is strongly discouraged. "
-          + "{} should use either the action parameter or a specific variable.", getClass().getName());
+    if (isBadFrontendAccessChecked()
+        && !context.containsKey(WARN_BAD_ACCESS_DISABLED)) {
+      LOG.warn(
+          "Access to frontend context detected from a backend action which is strongly discouraged. "
+              + "{} should use either the action parameter or a specific variable.",
+          getClass().getName());
     }
   }
 

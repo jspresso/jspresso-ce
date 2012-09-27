@@ -48,7 +48,6 @@ public class JScrollablePanel extends JPanel implements Scrollable {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation,
       int direction) {
@@ -58,7 +57,6 @@ public class JScrollablePanel extends JPanel implements Scrollable {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
   @Override
   public int getScrollableBlockIncrement(Rectangle visibleRect,
       int orientation, int direction) {

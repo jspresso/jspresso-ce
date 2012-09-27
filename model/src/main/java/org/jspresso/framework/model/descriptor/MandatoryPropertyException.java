@@ -62,7 +62,9 @@ public class MandatoryPropertyException extends IntegrityException {
   public String getI18nMessage(ITranslationProvider translationProvider,
       Locale locale) {
     return translationProvider.getTranslation("integrity.property.mandatory",
-        new Object[] {descriptor.getI18nName(translationProvider, locale),
-            targetComponent}, locale);
+        new Object[] {
+            descriptor.getI18nName(translationProvider, locale),
+            targetComponent
+        }, locale);
   }
 }

@@ -21,7 +21,8 @@ package org.jspresso.framework.application.frontend.command.remote;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
- * This exception is thrown whenever an unexpected exception occurs when handling a command.
+ * This exception is thrown whenever an unexpected exception occurs when
+ * handling a command.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -34,7 +35,7 @@ public class CommandException extends NestedRuntimeException {
    * Constructs a new <code>CommandException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public CommandException(String message) {
     super(message);
@@ -44,7 +45,7 @@ public class CommandException extends NestedRuntimeException {
    * Constructs a new <code>CommandException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
   public CommandException(Throwable nestedException) {
     super(nestedException);
@@ -54,9 +55,9 @@ public class CommandException extends NestedRuntimeException {
    * Constructs a new <code>CommandException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public CommandException(Throwable nestedException, String message) {
     super(nestedException, message);

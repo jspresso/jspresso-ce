@@ -95,8 +95,8 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
       setConnectorValue(parsedValue);
     } catch (ParseException ex) {
       // To force resetting the view
-      fireValueChange(new ValueChangeEvent(this, IPropertyChangeCapable.UNKNOWN,
-          getConnecteeValue()));
+      fireValueChange(new ValueChangeEvent(this,
+          IPropertyChangeCapable.UNKNOWN, getConnecteeValue()));
       Object[] i18nParams = {
         formattedValue
       };

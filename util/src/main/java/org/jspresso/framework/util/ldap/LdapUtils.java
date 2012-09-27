@@ -38,7 +38,7 @@ public final class LdapUtils {
    * Formats an boolean attribute.
    * 
    * @param value
-   *            the boolean value.
+   *          the boolean value.
    * @return the parsed boolean.
    */
   public static String formatBoolean(boolean value) {
@@ -49,7 +49,7 @@ public final class LdapUtils {
    * Formats an integer attribute.
    * 
    * @param value
-   *            the integer value.
+   *          the integer value.
    * @return the parsed integer or null.
    */
   public static String formatInteger(Integer value) {
@@ -63,7 +63,7 @@ public final class LdapUtils {
    * Parses an boolean attribute.
    * 
    * @param booleanAsString
-   *            the string representation of the boolean.
+   *          the string representation of the boolean.
    * @return the parsed boolean or null.
    */
   public static boolean parseBoolean(String booleanAsString) {
@@ -77,11 +77,11 @@ public final class LdapUtils {
    * Parses a generalized time as a date ignoring hour minute seconds.
    * 
    * @param generalizedTime
-   *            the string representation of the date/time in the format
-   *            YYYYMMDDHHMMSS.
+   *          the string representation of the date/time in the format
+   *          YYYYMMDDHHMMSS.
    * @return the parsed date or null.
    * @throws ParseException
-   *             Whenever a parse exception occurs.
+   *           Whenever a parse exception occurs.
    */
   public static Date parseGeneralizedTimeAsDate(String generalizedTime)
       throws ParseException {
@@ -96,11 +96,11 @@ public final class LdapUtils {
    * Parses a generalized time as a date and time.
    * 
    * @param generalizedTime
-   *            the string representation of the date/time in the format
-   *            YYYYMMDDHHMMSS.
+   *          the string representation of the date/time in the format
+   *          YYYYMMDDHHMMSS.
    * @return the parsed date or null.
    * @throws ParseException
-   *             Whenever a parse exception occurs.
+   *           Whenever a parse exception occurs.
    */
   public static Date parseGeneralizedTimeAsDateTime(String generalizedTime)
       throws ParseException {
@@ -115,7 +115,7 @@ public final class LdapUtils {
    * Parses an integer attribute.
    * 
    * @param integerAsString
-   *            the string representation of the integer.
+   *          the string representation of the integer.
    * @return the parsed integer or null.
    */
   public static Integer parseInteger(String integerAsString) {

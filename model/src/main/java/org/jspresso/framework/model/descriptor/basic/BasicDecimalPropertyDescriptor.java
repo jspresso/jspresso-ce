@@ -129,7 +129,7 @@ public class BasicDecimalPropertyDescriptor extends
     }
     return max;
   }
-  
+
   /**
    * {@inheritDoc}
    */

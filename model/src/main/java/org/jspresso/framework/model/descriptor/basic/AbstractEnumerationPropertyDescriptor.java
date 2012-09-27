@@ -33,8 +33,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarPropertyDescriptor implements
-    IEnumerationPropertyDescriptor {
+public abstract class AbstractEnumerationPropertyDescriptor extends
+    BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
 
   private String  enumerationName;
   private Integer maxLength;
@@ -45,7 +45,8 @@ public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarP
    */
   @Override
   public AbstractEnumerationPropertyDescriptor clone() {
-    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super.clone();
+    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super
+        .clone();
     return clonedDescriptor;
   }
 
@@ -138,9 +139,11 @@ public abstract class AbstractEnumerationPropertyDescriptor extends BasicScalarP
    * {@inheritDoc}
    */
   @Override
-  public String getI18nValue(String value, ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nValue(String value,
+      ITranslationProvider translationProvider, Locale locale) {
     if (isTranslated()) {
-      return translationProvider.getTranslation(computeEnumerationKey(value), locale);
+      return translationProvider.getTranslation(computeEnumerationKey(value),
+          locale);
     }
     return value;
   }

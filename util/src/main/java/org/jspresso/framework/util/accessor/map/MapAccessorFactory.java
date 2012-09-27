@@ -38,8 +38,7 @@ public class MapAccessorFactory extends AbstractAccessorFactory {
    */
   @Override
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
-      @SuppressWarnings("unused") Class<?> beanClass,
-      @SuppressWarnings("unused") Class<?> elementClass) {
+      Class<?> beanClass, Class<?> elementClass) {
     return new MapCollectionAccessor(property);
   }
 
@@ -49,8 +48,7 @@ public class MapAccessorFactory extends AbstractAccessorFactory {
    * {@inheritDoc}
    */
   @Override
-  public IAccessor createPropertyAccessor(String property,
-      @SuppressWarnings("unused") Class<?> beanClass) {
+  public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
     return new MapPropertyAccessor(property);
   }
 }

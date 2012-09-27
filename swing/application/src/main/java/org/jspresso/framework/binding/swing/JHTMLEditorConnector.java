@@ -81,8 +81,8 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
       }
     });
 
-    getConnectedJComponent().getEditorPane().getDocument().addDocumentListener(
-        new DocumentListener() {
+    getConnectedJComponent().getEditorPane().getDocument()
+        .addDocumentListener(new DocumentListener() {
 
           @Override
           public void changedUpdate(DocumentEvent e) {
@@ -99,8 +99,7 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
             documentChanged(e);
           }
 
-          private void documentChanged(
-              @SuppressWarnings("unused") DocumentEvent e) {
+          private void documentChanged(@SuppressWarnings("unused") DocumentEvent e) {
             if (isUserAction
                 && !getConnectedJComponent().getEditorPane().hasFocus()) {
               fireConnectorValueChange();

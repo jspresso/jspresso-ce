@@ -47,8 +47,8 @@ public class RForm extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RForm</code> instance. Only used for
-   * serialization support.
+   * Constructs a new <code>RForm</code> instance. Only used for serialization
+   * support.
    */
   public RForm() {
     // For serialization support
@@ -161,7 +161,8 @@ public class RForm extends RComponent {
   /**
    * Sets the verticallyScrollable.
    * 
-   * @param verticallyScrollable the verticallyScrollable to set.
+   * @param verticallyScrollable
+   *          the verticallyScrollable to set.
    */
   public void setVerticallyScrollable(boolean verticallyScrollable) {
     this.verticallyScrollable = verticallyScrollable;

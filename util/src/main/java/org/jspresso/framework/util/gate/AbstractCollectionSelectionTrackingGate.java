@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.gate;
 
-
 /**
  * Base class for all collection based selection tracking gates.
  * 
@@ -26,10 +25,12 @@ package org.jspresso.framework.util.gate;
  * @author Vincent Vandenschrick
  * @internal
  */
-public abstract class AbstractCollectionSelectionTrackingGate extends AbstractModelGate {
+public abstract class AbstractCollectionSelectionTrackingGate extends
+    AbstractModelGate {
 
   /**
-   * Constructs a new <code>AbstractCollectionSelectionTrackingGate</code> instance.
+   * Constructs a new <code>AbstractCollectionSelectionTrackingGate</code>
+   * instance.
    */
   public AbstractCollectionSelectionTrackingGate() {
     setCollectionBased(true);

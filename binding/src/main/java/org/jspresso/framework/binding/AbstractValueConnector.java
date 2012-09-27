@@ -338,8 +338,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(
-            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+        public void propertyChange(PropertyChangeEvent evt) {
           readabilityChange();
         }
       };
@@ -357,8 +356,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGatesListener = new PropertyChangeListener() {
 
         @Override
-        public void propertyChange(
-            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+        public void propertyChange(PropertyChangeEvent evt) {
           writabilityChange();
         }
       };
@@ -572,8 +570,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelReadabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(PropertyChangeEvent evt) {
             readabilityChange();
           }
         };
@@ -582,8 +579,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
         modelWritabilityListener = new PropertyChangeListener() {
 
           @Override
-          public void propertyChange(
-              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          public void propertyChange(PropertyChangeEvent evt) {
             writabilityChange();
           }
         };

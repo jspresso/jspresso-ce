@@ -27,7 +27,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-
 /**
  * Default implementation based on spring application context.
  * 
@@ -37,7 +36,7 @@ import org.springframework.context.ApplicationContextAware;
 public class BasicComponentDescriptorRegistry implements
     IComponentDescriptorRegistry, ApplicationContextAware {
 
-  private ApplicationContext  componentApplicationContext;
+  private ApplicationContext                   componentApplicationContext;
   private Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
 
   /**
@@ -49,7 +48,8 @@ public class BasicComponentDescriptorRegistry implements
     if (contractNameToComponentDescriptorMap == null) {
       buildContractNameIdMap();
     }
-    return contractNameToComponentDescriptorMap.get(componentContract.getName());
+    return contractNameToComponentDescriptorMap
+        .get(componentContract.getName());
   }
 
   /**
@@ -68,8 +68,8 @@ public class BasicComponentDescriptorRegistry implements
    * definitions.
    * 
    * @param applicationContext
-   *            the application context holding the component descriptor bean
-   *            definitions.
+   *          the application context holding the component descriptor bean
+   *          definitions.
    */
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
@@ -84,8 +84,8 @@ public class BasicComponentDescriptorRegistry implements
     for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
       if (descriptorEntry.getValue().getComponentContract() != null) {
-        contractNameToComponentDescriptorMap.put(descriptorEntry.getValue().getComponentContract()
-            .getName(), descriptorEntry.getValue());
+        contractNameToComponentDescriptorMap.put(descriptorEntry.getValue()
+            .getComponentContract().getName(), descriptorEntry.getValue());
       }
     }
   }

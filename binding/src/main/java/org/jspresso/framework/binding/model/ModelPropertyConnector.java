@@ -169,8 +169,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * {@inheritDoc}
    */
   @Override
-  public void propertyChange(@SuppressWarnings("unused")
-  PropertyChangeEvent evt) {
+  public void propertyChange(PropertyChangeEvent evt) {
     fireConnectorValueChange();
   }
 
@@ -241,8 +240,10 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       } catch (Exception ex) {
         LOG.error(
             "An error occured when creating the accessor for the {} property on {} class.",
-            new Object[] {getId(),
-                getModelProvider().getModelDescriptor().getModelType(), ex});
+            new Object[] {
+                getId(),
+                getModelProvider().getModelDescriptor().getModelType(), ex
+            });
       }
       if (accessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) accessor)

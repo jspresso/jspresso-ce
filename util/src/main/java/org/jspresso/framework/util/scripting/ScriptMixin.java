@@ -34,7 +34,7 @@ public class ScriptMixin implements IScript {
    * Constructs a new <code>ScriptMixin</code> instance.
    * 
    * @param scriptedObject
-   *            the object this mixin is introduced in.
+   *          the object this mixin is introduced in.
    */
   public ScriptMixin(Object scriptedObject) {
     this.scriptedObject = scriptedObject;
@@ -74,7 +74,7 @@ public class ScriptMixin implements IScript {
    * Sets the language.
    * 
    * @param language
-   *            the language to set.
+   *          the language to set.
    */
   public void setLanguage(String language) {
     this.language = language;
@@ -84,7 +84,7 @@ public class ScriptMixin implements IScript {
    * Sets the script.
    * 
    * @param script
-   *            the script to set.
+   *          the script to set.
    */
   public void setScript(String script) {
     this.script = script;

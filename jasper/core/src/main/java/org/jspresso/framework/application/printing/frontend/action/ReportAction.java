@@ -49,8 +49,7 @@ public class ReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  protected IReport getReportToExecute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  protected IReport getReportToExecute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ICollectionConnector viewConnector = (ICollectionConnector) getViewConnector(context);
     int[] selectedIndices = viewConnector.getSelectedIndices();

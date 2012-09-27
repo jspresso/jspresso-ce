@@ -30,7 +30,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.splash.SplashWindow;
 import org.jspresso.framework.util.url.UrlHelper;
 
-
 /**
  * Swing launcher.
  * 
@@ -47,13 +46,15 @@ public final class SwingLauncher {
    * Main method.
    * 
    * @param args
-   *            arguments.
+   *          arguments.
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
     SwingUtil.installDefaults();
     Options options = new Options();
-    options.addOption(OptionBuilder.withArgName("splash").hasArg()
+    options.addOption(OptionBuilder
+        .withArgName("splash")
+        .hasArg()
         .withDescription(
             "use given image URL for splash (Supports classpath: pseudo URLs)")
         .create("splash"));

@@ -50,8 +50,9 @@ public class DisplayStaticUrlAction<E, F, G> extends DisplayUrlAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(getTranslationProvider(context).getTranslation(urlKey,
-        getLocale(context)), context);
+    setActionParameter(
+        getTranslationProvider(context).getTranslation(urlKey,
+            getLocale(context)), context);
     return super.execute(actionHandler, context);
   }
 

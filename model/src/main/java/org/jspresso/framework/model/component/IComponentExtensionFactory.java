@@ -35,17 +35,17 @@ public interface IComponentExtensionFactory {
    * <code>public ComponentExtension(ComponentContract component)</code>.
    * 
    * @param <E>
-   *            the real component type.
+   *          the real component type.
    * @param extensionClass
-   *            The class of the component extension.
+   *          The class of the component extension.
    * @param componentContract
-   *            The interface of the component.
+   *          The interface of the component.
    * @param component
-   *            the component instance this extension will be attached to.
+   *          the component instance this extension will be attached to.
    * @return The constructed component extension.
    */
   <E extends IComponent> IComponentExtension<E> createComponentExtension(
       Class<IComponentExtension<E>> extensionClass,
       Class<? extends E> componentContract, E component);
-  
+
 }

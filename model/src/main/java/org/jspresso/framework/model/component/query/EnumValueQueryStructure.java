@@ -39,7 +39,6 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
     this.selected = false;
   }
 
-  
   /**
    * Gets the selected.
    * 
@@ -49,11 +48,11 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
     return selected;
   }
 
-  
   /**
    * Sets the selected.
    * 
-   * @param selected the selected to set.
+   * @param selected
+   *          the selected to set.
    */
   public void setSelected(boolean selected) {
     boolean oldSelected = this.selected;
@@ -61,7 +60,6 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
     firePropertyChange("selected", oldSelected, selected);
   }
 
-  
   /**
    * Gets the value.
    * 
@@ -71,11 +69,11 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
     return value;
   }
 
-  
   /**
    * Sets the value.
    * 
-   * @param value the value to set.
+   * @param value
+   *          the value to set.
    */
   public void setValue(String value) {
     String oldValue = this.value;

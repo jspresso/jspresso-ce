@@ -79,7 +79,7 @@ public class RequestParamsHttpFilter implements Filter {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
     // NO-OP

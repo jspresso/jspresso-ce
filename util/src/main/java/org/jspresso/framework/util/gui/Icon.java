@@ -32,8 +32,8 @@ public class Icon implements Serializable, ICloneable {
 
   private static final long serialVersionUID = -3867258316686740976L;
 
-  private String    iconImageURL;
-  private Dimension dimension;
+  private String            iconImageURL;
+  private Dimension         dimension;
 
   /**
    * Constructs a new <code>Icon</code> instance.

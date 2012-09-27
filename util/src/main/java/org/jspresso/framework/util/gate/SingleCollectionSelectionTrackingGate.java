@@ -28,7 +28,8 @@ import java.util.Collection;
  * @author Vincent Vandenschrick
  * @internal
  */
-public class SingleCollectionSelectionTrackingGate extends AbstractCollectionSelectionTrackingGate {
+public class SingleCollectionSelectionTrackingGate extends
+    AbstractCollectionSelectionTrackingGate {
 
   /**
    * <code>INSTANCE</code> is a singleton instance of a gate whose state depends

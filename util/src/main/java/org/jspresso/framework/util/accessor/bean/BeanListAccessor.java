@@ -61,11 +61,15 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
     if (adderAtMethod == null) {
       adderAtMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {Integer.TYPE, getElementClass()});
+          new Class[] {
+              Integer.TYPE, getElementClass()
+          });
     }
     try {
       adderAtMethod.invoke(getLastNestedTarget(target, getProperty()),
-          new Object[] {new Integer(index), value});
+          new Object[] {
+              new Integer(index), value
+          });
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();

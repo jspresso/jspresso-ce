@@ -24,9 +24,9 @@ package org.jspresso.framework.util.bean.integrity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The type of the target.
+ *          The type of the target.
  * @param <F>
- *            The type of the property.
+ *          The type of the property.
  */
 public abstract class EmptyPropertyProcessor<E, F> implements
     IPropertyProcessor<E, F> {
@@ -37,7 +37,6 @@ public abstract class EmptyPropertyProcessor<E, F> implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public F interceptSetter(E target, F newPropertyValue) {
     return newPropertyValue;
   }
@@ -48,7 +47,6 @@ public abstract class EmptyPropertyProcessor<E, F> implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public void postprocessSetter(E target, F oldPropertyValue, F newPropertyValue) {
     // NO-OP
   }
@@ -59,7 +57,6 @@ public abstract class EmptyPropertyProcessor<E, F> implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public void preprocessSetter(E target, F newPropertyValue) {
     // NO-OP
   }

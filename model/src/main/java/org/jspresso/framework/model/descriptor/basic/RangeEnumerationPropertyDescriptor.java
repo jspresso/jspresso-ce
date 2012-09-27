@@ -79,7 +79,7 @@ public class RangeEnumerationPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public String getIconImageURL(@SuppressWarnings("unused") String value) {
+  public String getIconImageURL(String value) {
     return null;
   }
 

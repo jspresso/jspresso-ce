@@ -126,7 +126,7 @@ public class Dimension implements Serializable, ICloneable {
     return new StringBuilder().append(getClass().getName()).append(" : width=")
         .append(width).append(", height=").append(height).toString();
   }
-  
+
   /**
    * {@inheritDoc}
    */

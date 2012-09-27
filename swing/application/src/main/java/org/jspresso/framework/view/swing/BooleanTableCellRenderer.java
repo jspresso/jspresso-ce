@@ -70,10 +70,8 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void firePropertyChange(
-      @SuppressWarnings("unused") String propertyName,
-      @SuppressWarnings("unused") boolean oldValue,
-      @SuppressWarnings("unused") boolean newValue) {
+  public void firePropertyChange(String propertyName, boolean oldValue,
+      boolean newValue) {
     // NO-OP
   }
 
@@ -213,10 +211,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void repaint(@SuppressWarnings("unused") long tm,
-      @SuppressWarnings("unused") int x, @SuppressWarnings("unused") int y,
-      @SuppressWarnings("unused") int width,
-      @SuppressWarnings("unused") int height) {
+  public void repaint(long tm, int x, int y, int width, int height) {
     // NO-OP
   }
 
@@ -226,7 +221,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void repaint(@SuppressWarnings("unused") Rectangle r) {
+  public void repaint(Rectangle r) {
     // NO-OP
   }
 
@@ -268,10 +263,8 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  protected void firePropertyChange(
-      @SuppressWarnings("unused") String propertyName,
-      @SuppressWarnings("unused") Object oldValue,
-      @SuppressWarnings("unused") Object newValue) {
+  protected void firePropertyChange(String propertyName, Object oldValue,
+      Object newValue) {
     // NO-OP
   }
 
