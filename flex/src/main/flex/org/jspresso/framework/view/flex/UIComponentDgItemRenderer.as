@@ -40,6 +40,8 @@ package org.jspresso.framework.view.flex {
     private var _fontChangeListener:ChangeWatcher;
     private var _toolTipListener:ChangeWatcher;
     
+    private var _writabilityListener:ChangeWatcher;
+    
     public function UIComponentDgItemRenderer() {
       //default constructor.
     }
@@ -73,6 +75,7 @@ package org.jspresso.framework.view.flex {
           state = new RemoteValueState();
           remoteComponent.state = state;
           editor = viewFactory.createComponent(remoteComponent, false);
+          BindingUtils.bindSetter(apply, state, "value", true);
         }
       }
     }
@@ -83,17 +86,18 @@ package org.jspresso.framework.view.flex {
 
     override public function set data(value:Object):void {
       super.data = value;
-      var cellValueState:RemoteValueState;
-      if(index != -1 && value is RemoteCompositeValueState) {
-        cellValueState = (value as RemoteCompositeValueState).children[index] as RemoteValueState;
-      } else if(value is RemoteValueState) {
-        cellValueState = value as RemoteValueState;
-      }
-	    if(_valueChangeListener != null) {
+      var cellValueState:RemoteValueState = getCellValueState();
+      if(_valueChangeListener != null) {
         _valueChangeListener.reset(cellValueState);
         refresh(cellValueState.value);
       } else {
         _valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
+      }
+      if(_writabilityListener != null) {
+        _writabilityListener.reset(cellValueState);
+        refreshWritability(cellValueState.writable);
+      } else {
+        _writabilityListener = BindingUtils.bindSetter(refreshWritability, cellValueState, "writable", true);
       }
       if(toolTipIndex >= 0) {
         var toolTipState:RemoteValueState = ((data as RemoteCompositeValueState).children[toolTipIndex] as RemoteValueState);
@@ -131,6 +135,17 @@ package org.jspresso.framework.view.flex {
           _fontChangeListener = BindingUtils.bindSetter(redraw, fontState, "value", true);
         }
       }
+    }
+    
+    protected function getCellValueState():RemoteValueState {
+      var cellValueState:RemoteValueState;
+      var value:Object = data;
+      if(index != -1 && value is RemoteCompositeValueState) {
+        cellValueState = (value as RemoteCompositeValueState).children[index] as RemoteValueState;
+      } else if(value is RemoteValueState) {
+        cellValueState = value as RemoteValueState;
+      }
+      return cellValueState;
     }
     
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
@@ -186,6 +201,17 @@ package org.jspresso.framework.view.flex {
     protected function refresh(value:Object):void {
       state.value = value;
   	}
+    
+    protected function apply(value:Object):void {
+      var cellValueState:RemoteValueState = getCellValueState();
+      if(cellValueState) {
+        cellValueState.value = value;
+      }
+    }
+
+    protected function refreshWritability(value:Boolean):void {
+      state.writable = value;
+    }
 
     protected function refreshToolTip(toolTipValue:Object):void {
       if(toolTipValue != null) {

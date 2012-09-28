@@ -2029,6 +2029,7 @@ package org.jspresso.framework.view.flex {
                                      backgroundIndex:bgIndex,
                                      foregroundIndex:fgIndex,
                                      fontIndex:foIndex};
+          column.rendererIsEditor = true;
         } else {
           //Breaks boolean writability gates by making all columns always read only.
           //var readOnly:Boolean = !remoteTable.state.writable;
@@ -2070,12 +2071,14 @@ package org.jspresso.framework.view.flex {
         }
         column.itemRenderer = itemRenderer
         
-        var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
-        rColumn.state.writable = true;
-        itemEditor.properties = {editor:editorComponent,
-          state:rColumn.state,
-            index:i+1};
-        column.itemEditor = itemEditor;
+        if(!column.rendererIsEditor) {
+          var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
+          rColumn.state.writable = true;
+          itemEditor.properties = {editor:editorComponent,
+            state:rColumn.state,
+              index:i+1};
+          column.itemEditor = itemEditor;
+        }
 
         var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
         headerRenderer.properties = { index:i+1,
