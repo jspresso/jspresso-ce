@@ -283,6 +283,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
   <#local collectionType=propertyDescriptor.modelType.name/>
   <#local elementDescriptor=propertyDescriptor.referencedDescriptor.elementDescriptor/>
+  <#local elementIsEntity=elementDescriptor.entity/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local elementName=elementType[elementType?last_index_of(".")+1..]/>
@@ -380,9 +381,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     </#if>
 <#--
   The following replaces the previous block wich makes hibernate fail... Ordering is now handled in the entity itself.
-  But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set.
+  But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set but if
+  and only if the referenced collection conains entites.
 -->
-    <#if (!manyToMany && !(hibernateCollectionType="list"))>
+    <#if (elementIsEntity && !manyToMany && !(hibernateCollectionType="list"))>
    *           order-by="ID"
     </#if>
     <#if manyToMany>
