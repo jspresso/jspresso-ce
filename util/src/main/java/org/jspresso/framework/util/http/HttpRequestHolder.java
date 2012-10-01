@@ -38,8 +38,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class HttpRequestHolder implements Filter {
 
-  private static final ThreadLocal<HttpServletRequest>  CURRENT_HTTP_REQUEST  = new ThreadLocal<HttpServletRequest>();
-  private static final ThreadLocal<HttpServletResponse> CURRENT_HTTP_RESPONSE = new ThreadLocal<HttpServletResponse>();
+  private static final ThreadLocal<HttpServletRequest>  CURRENT_HTTP_REQUEST  = new InheritableThreadLocal<HttpServletRequest>();
+  private static final ThreadLocal<HttpServletResponse> CURRENT_HTTP_RESPONSE = new InheritableThreadLocal<HttpServletResponse>();
 
   /**
    * Gets the current servlet request.

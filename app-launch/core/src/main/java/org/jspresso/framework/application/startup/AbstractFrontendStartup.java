@@ -71,7 +71,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     }
     frontendController.start(backendController, getStartupLocale(),
         getClientTimeZone());
-    BackendControllerHolder.setCurrentBackendController(backendController);
+    BackendControllerHolder.setSessionBackendController(backendController);
   }
 
   /**
@@ -92,6 +92,6 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
     // frontendController.stop();
     // }
     frontendController = null;
-    BackendControllerHolder.setCurrentBackendController(null);
+    BackendControllerHolder.setSessionBackendController(null);
   }
 }

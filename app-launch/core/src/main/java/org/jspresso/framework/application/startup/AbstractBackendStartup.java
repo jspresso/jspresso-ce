@@ -65,7 +65,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
       // start on brand new instance.
       IBackendController backendController = (IBackendController) getApplicationContext()
           .getBean("applicationBackController");
-      BackendControllerHolder.setCurrentBackendController(backendController);
+      BackendControllerHolder.setThreadBackendController(backendController);
       backendController.start(getStartupLocale(), getClientTimeZone());
     } catch (RuntimeException ex) {
       LOG.error("applicationBackController could not be instanciated.", ex);

@@ -76,7 +76,7 @@ public class AsyncActionExecutor extends Thread {
     startedTimestamp = new Date();
     // The following ill not store the slave backend controller in the HTTP
     // session since we are in a new thread.
-    BackendControllerHolder.setCurrentBackendController(slaveBackendController);
+    BackendControllerHolder.setThreadBackendController(slaveBackendController);
 
     // Clone the context to ensure the outer one is not modified.
     final Map<String, Object> slaveContext = new HashMap<String, Object>();
@@ -96,7 +96,7 @@ public class AsyncActionExecutor extends Thread {
     } finally {
       slaveBackendController.cleanupRequestResources();
       slaveBackendController.stop();
-      BackendControllerHolder.setCurrentBackendController(null);
+      BackendControllerHolder.setThreadBackendController(null);
       action = null;
       context = null;
       slaveBackendController = null;

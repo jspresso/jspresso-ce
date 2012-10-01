@@ -554,7 +554,7 @@ public class DefaultSwingController extends
         public void run() {
           // To register the backend controller in the event dispatch thread
           BackendControllerHolder
-              .setCurrentBackendController(backendController);
+              .setSessionBackendController(backendController);
           initLoginProcess();
         }
       });

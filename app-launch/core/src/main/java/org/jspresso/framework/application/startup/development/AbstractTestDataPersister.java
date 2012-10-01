@@ -49,7 +49,7 @@ public abstract class AbstractTestDataPersister {
   public AbstractTestDataPersister(BeanFactory beanFactory) {
     HibernateBackendController hbc = (HibernateBackendController) beanFactory
         .getBean("applicationBackController");
-    BackendControllerHolder.setCurrentBackendController(hbc);
+    BackendControllerHolder.setThreadBackendController(hbc);
     hibernateSession = hbc.getHibernateSession();
     entityFactory = hbc.getEntityFactory();
   }

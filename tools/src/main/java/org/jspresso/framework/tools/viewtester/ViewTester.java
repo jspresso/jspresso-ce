@@ -152,7 +152,7 @@ public class ViewTester {
         .getBean("applicationFrontController");
     IBackendController mockBackController = (IBackendController) appContext
         .getBean("applicationBackController");
-    BackendControllerHolder.setCurrentBackendController(mockBackController);
+    BackendControllerHolder.setSessionBackendController(mockBackController);
 
     mockFrontController
         .start(mockBackController, locale, TimeZone.getDefault());

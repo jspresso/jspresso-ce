@@ -35,7 +35,8 @@ public final class BackendControllerHolder {
    * <code>CURRENT_BACKEND_CONTROLLER_KEY</code>.
    */
   public static final String                           CURRENT_BACKEND_CONTROLLER_KEY = "CURRENT_BACKEND_CONTROLLER";
-  private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER = new ThreadLocal<IBackendController>();
+  private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER
+                                                        = new InheritableThreadLocal<IBackendController>();
   static {
     try {
       Class.forName("org.jspresso.framework.util.http.HttpRequestHolder");
@@ -50,12 +51,12 @@ public final class BackendControllerHolder {
   }
 
   /**
-   * Sets the tread-bound backend controller.
+   * Sets the session-bound backend controller.
    * 
    * @param controller
    *          the tread-bound backend controller.
    */
-  public static void setCurrentBackendController(IBackendController controller) {
+  public static void setSessionBackendController(IBackendController controller) {
     // First try to bind to the HttpSession
     if (isWebContext && HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
@@ -63,8 +64,18 @@ public final class BackendControllerHolder {
         session.setAttribute(CURRENT_BACKEND_CONTROLLER_KEY, controller);
       }
     } else {
-      THREADBOUND_BACKEND_CONTROLLER.set(controller);
+      setThreadBackendController(controller);
     }
+  }
+
+  /**
+   * Sets the tread-bound backend controller.
+   * 
+   * @param controller
+   *          the tread-bound backend controller.
+   */
+  public static void setThreadBackendController(IBackendController controller) {
+    THREADBOUND_BACKEND_CONTROLLER.set(controller);
   }
 
   /**
@@ -74,15 +85,15 @@ public final class BackendControllerHolder {
    */
   public static IBackendController getCurrentBackendController() {
     IBackendController controller = null;
-    // First lookup into the HTTP session
-    if (isWebContext && HttpRequestHolder.isAvailable()) {
+    // First lookup into the current thread
+    controller = THREADBOUND_BACKEND_CONTROLLER.get();
+    // If none is set, then query the session.
+    if (controller == null && isWebContext && HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
       if (session != null) {
         controller = (IBackendController) session
             .getAttribute(CURRENT_BACKEND_CONTROLLER_KEY);
       }
-    } else {
-      controller = THREADBOUND_BACKEND_CONTROLLER.get();
     }
     return controller;
   }
