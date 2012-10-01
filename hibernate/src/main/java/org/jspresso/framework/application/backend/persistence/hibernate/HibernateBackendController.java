@@ -354,24 +354,24 @@ public class HibernateBackendController extends AbstractBackendController {
 
       Hibernate.initialize(propertyValue);
       if (propertyValue instanceof Collection<?>) {
-        relinkAfterInitialization((Collection<IEntity>) propertyValue,
+        relinkAfterInitialization((Collection<IComponent>) propertyValue,
             componentOrEntity);
       } else {
         relinkAfterInitialization(
-            Collections.singleton((IEntity) propertyValue), componentOrEntity);
+            Collections.singleton((IComponent) propertyValue), componentOrEntity);
       }
       super.initializePropertyIfNeeded(componentOrEntity, propertyName);
       clearPropertyDirtyState(propertyValue);
     }
   }
 
-  private void relinkAfterInitialization(Collection<IEntity> entities,
+  private void relinkAfterInitialization(Collection<IComponent> elements,
       Object owner) {
-    for (IEntity entity : entities) {
+    for (IComponent element : elements) {
       // Should always be the case but there might be problems with lists
       // containing holes.
-      if (entity != null) {
-        for (Map.Entry<String, Object> property : entity
+      if (element != null) {
+        for (Map.Entry<String, Object> property : element
             .straightGetProperties().entrySet()) {
           if (property.getValue() instanceof IEntity
               && owner instanceof IEntity) {
@@ -381,7 +381,7 @@ public class HibernateBackendController extends AbstractBackendController {
                 // To avoid bug #548
                 && Hibernate.getClass(owner) == Hibernate.getClass(property
                     .getValue())) {
-              entity.straightSetProperty(property.getKey(), owner);
+              element.straightSetProperty(property.getKey(), owner);
             }
           }
         }
