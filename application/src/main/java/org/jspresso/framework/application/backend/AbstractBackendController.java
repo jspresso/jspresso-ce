@@ -1205,21 +1205,6 @@ public abstract class AbstractBackendController extends AbstractController imple
               + "This is certainly an application coding problem. Please check the logs.");
         }
       }
-    } else {
-      // The following does not work for OkLovAction...
-
-      // LOG.error(
-      // "*BAD MERGE USAGE* An attempt is made to merge an entity ({})[{}] without having a UOW active.\n"
-      // +
-      // "Where does your entity come from ? Please merge it while the UOW is active so that any"
-      // + " extra lazy initialization access can be performed.", entity,
-      // getEntityContract(entity).getSimpleName());
-      // if (isThrowExceptionOnBadUsage()) {
-      // throw new BackendException(
-      // "A bad usage has been detected on the backend controller."
-      // +
-      // "This is certainly an application coding problem. Please check the logs.");
-      // }
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
@@ -1236,7 +1221,8 @@ public abstract class AbstractBackendController extends AbstractController imple
         entityRegistry.register(entityContract, entity.getId(), registeredEntity);
         dirtRecorder.register(registeredEntity, null);
         newlyRegistered = true;
-      } else if (mergeMode == EMergeMode.MERGE_KEEP) {
+      } else if (mergeMode == EMergeMode.MERGE_KEEP
+          || ((mergeMode == EMergeMode.MERGE_LAZY || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) && !isInitialized(entity))) {
         alreadyMerged.register(entityContract, entity.getId(), registeredEntity);
         return registeredEntity;
       }
@@ -1264,9 +1250,14 @@ public abstract class AbstractBackendController extends AbstractController imple
                     merge((IEntity) propertyValue, mergeMode, alreadyMerged));
               }
             } else {
-              Object registeredProperty = registeredEntityProperties.get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER && isInitialized(propertyValue)) {
-                initializePropertyIfNeeded(registeredEntity, propertyName);
+              Object registeredProperty = registeredEntityProperties
+                  .get(propertyName);
+              if (mergeMode == EMergeMode.MERGE_EAGER) {
+                if (isInitialized(propertyValue)) {
+                  initializePropertyIfNeeded(registeredEntity, propertyName);
+                } else if (isInitialized(registeredProperty)) {
+                  initializePropertyIfNeeded(entity, propertyName);
+                }
               }
               if (isInitialized(registeredProperty)) {
                 mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
@@ -1283,8 +1274,12 @@ public abstract class AbstractBackendController extends AbstractController imple
             } else {
               Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER && isInitialized(propertyValue)) {
-                initializePropertyIfNeeded(registeredEntity, propertyName);
+              if (mergeMode == EMergeMode.MERGE_EAGER) {
+                if (isInitialized(propertyValue)) {
+                  initializePropertyIfNeeded(registeredEntity, propertyName);
+                } else if (isInitialized(registeredCollection)) {
+                  initializePropertyIfNeeded(entity, propertyName);
+                }
               }
               if (isInitialized(registeredCollection)) {
                 if (newlyRegistered && !isInitialized(propertyValue)) {
@@ -1364,9 +1359,14 @@ public abstract class AbstractBackendController extends AbstractController imple
             mergedProperties.put(propertyName, propertyValue);
           }
         } else {
-          Object registeredProperty = registeredComponentProperties.get(propertyName);
-          if (mergeMode == EMergeMode.MERGE_EAGER && isInitialized(propertyValue)) {
-            initializePropertyIfNeeded(registeredComponent, propertyName);
+          Object registeredProperty = registeredComponentProperties
+              .get(propertyName);
+          if (mergeMode == EMergeMode.MERGE_EAGER) {
+            if (isInitialized(propertyValue)) {
+              initializePropertyIfNeeded(registeredComponent, propertyName);
+            } else if (isInitialized(registeredProperty)) {
+              initializePropertyIfNeeded(componentToMerge, propertyName);
+            }
           }
           if (isInitialized(registeredProperty)) {
             mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
