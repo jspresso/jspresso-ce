@@ -1379,7 +1379,7 @@ public abstract class AbstractBackendController extends AbstractController
         dirtRecorder.register(registeredEntity, null);
         newlyRegistered = true;
       } else if (mergeMode == EMergeMode.MERGE_KEEP
-          || (mergeMode == EMergeMode.MERGE_LAZY && !isInitialized(entity))) {
+          || ((mergeMode == EMergeMode.MERGE_LAZY || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) && !isInitialized(entity))) {
         alreadyMerged
             .register(entityContract, entity.getId(), registeredEntity);
         return registeredEntity;
