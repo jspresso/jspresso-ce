@@ -1,5 +1,9 @@
 3.5.14
 ======
+- BackendControllerHolder.setCurrentBackendController() has been splitted in two :
+   - setSessionBackendController : that should be used by the frontend controller to set the session-wide backend controller
+   - setThreadBackendController : that should be used by (sub)threads in order to override the session-wide backend controller. 
+
 - A new sanity check has been introduced in order to check that an action chain does not modify its internal state during its execution.
   Doing so would break the action chain thread-safety and thus produce very undesirable effects in multi-user environments. As a reminder
   all dynamic state depending on a certain execution has to transit through the action context that belongs to the execution and thus
