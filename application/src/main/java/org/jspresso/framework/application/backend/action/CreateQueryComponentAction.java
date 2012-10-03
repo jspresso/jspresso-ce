@@ -74,6 +74,14 @@ public class CreateQueryComponentAction extends BackendAction {
 
   private static final Logger              LOG                      = LoggerFactory
                                                                         .getLogger(CreateQueryComponentAction.class);
+  
+  
+  /**
+   * Constructs a new <code>CreateQueryComponentAction</code> instance.
+   */
+  public CreateQueryComponentAction() {
+    queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
+  }
 
   /**
    * Creates a query component using the model descriptor passed in the context.
@@ -337,9 +345,6 @@ public class CreateQueryComponentAction extends BackendAction {
    * @return the queryComponentDescriptorFactory.
    */
   protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
-    if (queryComponentDescriptorFactory == null) {
-      queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
-    }
     return queryComponentDescriptorFactory;
   }
 
