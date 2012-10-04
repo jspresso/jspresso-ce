@@ -47,9 +47,13 @@ public abstract class AbstractTestDataPersister {
    *          the spring bean factory to use.
    */
   public AbstractTestDataPersister(BeanFactory beanFactory) {
-    HibernateBackendController hbc = (HibernateBackendController) beanFactory
-        .getBean("applicationBackController");
-    BackendControllerHolder.setThreadBackendController(hbc);
+    HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder
+        .getCurrentBackendController();
+    if (hbc == null) {
+      hbc = (HibernateBackendController) beanFactory
+          .getBean("applicationBackController");
+      BackendControllerHolder.setThreadBackendController(hbc);
+    }
     hibernateSession = hbc.getHibernateSession();
     entityFactory = hbc.getEntityFactory();
   }

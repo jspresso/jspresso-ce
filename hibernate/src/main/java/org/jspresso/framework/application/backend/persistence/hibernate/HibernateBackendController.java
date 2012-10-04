@@ -280,7 +280,7 @@ public class HibernateBackendController extends AbstractBackendController {
             try {
               Hibernate.initialize(propertyValue);
               if (propertyValue instanceof Collection<?>) {
-                relinkAfterInitialization((Collection<IEntity>) propertyValue,
+                relinkAfterInitialization((Collection<IComponent>) propertyValue,
                     componentOrEntity);
               }
               return;
