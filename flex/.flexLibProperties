@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="1">
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="1">
   <includeClasses>
     <classEntry path="org.jspresso.framework.action.IActionHandler"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler"/>
@@ -110,6 +110,7 @@
     <classEntry path="org.jspresso.framework.view.flex.DgHeaderItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedButton"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedDataGrid"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedDateField"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedList"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedRichTextEditor"/>
     <classEntry path="org.jspresso.framework.view.flex.EnhancedTabNavigator"/>
@@ -130,6 +131,7 @@
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueSorter"/>
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueTreeItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.SelectionCheckBoxRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.SelectionHeaderRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.SelectionTrackingTree"/>
     <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
   </includeClasses>
