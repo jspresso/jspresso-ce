@@ -176,16 +176,16 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   public synchronized Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable {
-    String methodName = method.getName();
-    if ("hashCode".equals(methodName)) {
+    String methodName = method.getName().intern();
+    if ("hashCode" == methodName) {
       return new Integer(computeHashCode((IComponent) proxy));
-    } else if ("equals".equals(methodName)) {
+    } else if ("equals" == methodName) {
       return new Boolean(computeEquals((IComponent) proxy, args[0]));
-    } else if ("toString".equals(methodName)) {
+    } else if ("toString" == methodName) {
       return toString(proxy);
-    } else if ("getComponentContract".equals(methodName)) {
+    } else if ("getComponentContract" == methodName) {
       return componentDescriptor.getComponentContract();
-    } else if ("addPropertyChangeListener".equals(methodName)) {
+    } else if ("addPropertyChangeListener" == methodName) {
       if (args.length == 1) {
         addPropertyChangeListener(proxy, (PropertyChangeListener) args[0]);
         return null;
@@ -193,7 +193,7 @@ public abstract class AbstractComponentInvocationHandler implements
       addPropertyChangeListener(proxy, (String) args[0],
           (PropertyChangeListener) args[1]);
       return null;
-    } else if ("addWeakPropertyChangeListener".equals(methodName)) {
+    } else if ("addWeakPropertyChangeListener" == methodName) {
       if (args.length == 1) {
         addWeakPropertyChangeListener(proxy, (PropertyChangeListener) args[0]);
         return null;
@@ -201,7 +201,7 @@ public abstract class AbstractComponentInvocationHandler implements
       addWeakPropertyChangeListener(proxy, (String) args[0],
           (PropertyChangeListener) args[1]);
       return null;
-    } else if ("removePropertyChangeListener".equals(methodName)) {
+    } else if ("removePropertyChangeListener" == methodName) {
       if (args.length == 1) {
         removePropertyChangeListener((PropertyChangeListener) args[0]);
         return null;
@@ -209,28 +209,28 @@ public abstract class AbstractComponentInvocationHandler implements
       removePropertyChangeListener((String) args[0],
           (PropertyChangeListener) args[1]);
       return null;
-    } else if ("hasListeners".equals(methodName)) {
+    } else if ("hasListeners" == methodName) {
       return new Boolean(hasListeners(proxy, (String) args[0]));
-    } else if ("firePropertyChange".equals(methodName)) {
+    } else if ("firePropertyChange" == methodName) {
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
-    } else if ("blockEvents".equals(methodName)) {
+    } else if ("blockEvents" == methodName) {
       blockEvents();
       return null;
-    } else if ("releaseEvents".equals(methodName)) {
+    } else if ("releaseEvents" == methodName) {
       releaseEvents();
       return null;
-    } else if ("straightSetProperty".equals(methodName)) {
+    } else if ("straightSetProperty" == methodName) {
       straightSetProperty(proxy, (String) args[0], args[1]);
       return null;
-    } else if ("straightGetProperty".equals(methodName)) {
+    } else if ("straightGetProperty" == methodName) {
       return straightGetProperty(proxy, (String) args[0]);
-    } else if ("straightSetProperties".equals(methodName)) {
+    } else if ("straightSetProperties" == methodName) {
       straightSetProperties(proxy, (Map<String, Object>) args[0]);
       return null;
-    } else if ("straightGetProperties".equals(methodName)) {
+    } else if ("straightGetProperties" == methodName) {
       return straightGetProperties(proxy);
-    } else if ("setPropertyProcessorsEnabled".equals(methodName)) {
+    } else if ("setPropertyProcessorsEnabled" == methodName) {
       propertyProcessorsEnabled = ((Boolean) args[0]).booleanValue();
       return null;
     } else {
@@ -1169,8 +1169,8 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
-    if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
-        .getName())) {
+    String methodName = lifecycleMethod.getName().intern();
+    if (ILifecycleCapable.ON_UPDATE_METHOD_NAME == methodName) {
       onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
           (IEntityLifecycleHandler) args[2]);
     }
@@ -1190,7 +1190,7 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       try {
         Object interceptorResult = MethodUtils.invokeMethod(
-            lifecycleInterceptor, lifecycleMethod.getName(), parameters,
+            lifecycleInterceptor,  methodName, parameters,
             parameterTypes);
         if (interceptorResult instanceof Boolean) {
           interceptorResults = interceptorResults
@@ -1218,7 +1218,7 @@ public abstract class AbstractComponentInvocationHandler implements
         if (inlineComponent instanceof ILifecycleCapable) {
           try {
             Object interceptorResult = MethodUtils.invokeMethod(
-                inlineComponent, lifecycleMethod.getName(), args,
+                inlineComponent, methodName, args,
                 lifecycleMethod.getParameterTypes());
             if (interceptorResult instanceof Boolean) {
               interceptorResults = interceptorResults
@@ -1237,8 +1237,7 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
     }
-    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
-        .getName())) {
+    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME == methodName) {
       // Important to check for not null values.
       checkIntegrity(proxy);
     }
