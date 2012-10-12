@@ -355,7 +355,7 @@
   <bean id="rootEntityVersion" class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
     <property name="name" value="version" />
   </bean>
-
+  
   <bean id="rootEntityDescriptor" class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor">
     <constructor-arg value="org.jspresso.framework.model.entity.IEntity" />
     <property name="propertyDescriptors">
@@ -380,6 +380,8 @@
       <list />
     </property>
   </bean>
+  
+  <alias name="rootEntityDescriptor" alias="IEntity"/>
 
   <bean id="EnityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
     <property name="targetClass" value="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor" />
