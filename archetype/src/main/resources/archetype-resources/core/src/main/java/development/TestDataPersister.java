@@ -22,7 +22,7 @@ public class TestDataPersister extends AbstractTestDataPersister {
    * Creates some test data using the passed in Spring application context.
    */
   @Override
-  public void persistTestData() {
+  public void createAndPersistTestData() {
     
     // Create some entities...
     // MyEntity myEntity = createEntityInstance(MyEntity.class);

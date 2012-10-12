@@ -1,5 +1,9 @@
 3.5.14
 ======
+- AbstractTestDataPersister now implements with a final method createTestData(). This is because it has to perform some
+  mandatory operations around the actual creation of data. The method to override is now called createAndPersistTestData().
+  You have to rename the existing createTestData method to createAndPersistTestData.
+  
 - BackendControllerHolder.setCurrentBackendController() has been splitted in two :
    - setSessionBackendController : that should be used by the frontend controller to set the session-wide backend controller
    - setThreadBackendController : that should be used by (sub)threads in order to override the session-wide backend controller. 

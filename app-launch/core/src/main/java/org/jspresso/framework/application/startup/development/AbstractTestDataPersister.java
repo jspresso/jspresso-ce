@@ -37,8 +37,7 @@ import org.springframework.beans.factory.BeanFactory;
  */
 public abstract class AbstractTestDataPersister {
 
-  private IEntityFactory entityFactory;
-  private Session        hibernateSession;
+  private BeanFactory beanFactory;
 
   /**
    * Constructs a new <code>AbstractTestDataPersister</code> instance.
@@ -47,21 +46,36 @@ public abstract class AbstractTestDataPersister {
    *          the spring bean factory to use.
    */
   public AbstractTestDataPersister(BeanFactory beanFactory) {
-    HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder
-        .getCurrentBackendController();
-    if (hbc == null) {
-      hbc = (HibernateBackendController) beanFactory
-          .getBean("applicationBackController");
-      BackendControllerHolder.setThreadBackendController(hbc);
-    }
-    hibernateSession = hbc.getHibernateSession();
-    entityFactory = hbc.getEntityFactory();
+    this.beanFactory = beanFactory;
   }
 
   /**
    * Creates and persist the test data.
    */
-  public abstract void persistTestData();
+  public final void persistTestData() {
+    HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder
+        .getCurrentBackendController();
+    boolean wasNull = false;
+    if (hbc == null) {
+      wasNull = true;
+      hbc = (HibernateBackendController) beanFactory
+          .getBean("applicationBackController");
+      BackendControllerHolder.setThreadBackendController(hbc);
+    }
+    try {
+      createAndPersistTestData();
+    } finally {
+      if (wasNull) {
+        BackendControllerHolder.setThreadBackendController(null);
+      }
+    }
+  }
+
+  /**
+   * Creates and persist the test data. Tjhis method must be overriden in
+   * subclasses.
+   */
+  protected abstract void createAndPersistTestData();
 
   /**
    * Creates a component instance.
@@ -74,7 +88,7 @@ public abstract class AbstractTestDataPersister {
    */
   protected <T extends IComponent> T createComponentInstance(
       Class<T> componentContract) {
-    return entityFactory.createComponentInstance(componentContract);
+    return getEntityFactory().createComponentInstance(componentContract);
   }
 
   /**
@@ -87,7 +101,7 @@ public abstract class AbstractTestDataPersister {
    * @return the created entity.
    */
   protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    return entityFactory.createEntityInstance(entityContract);
+    return getEntityFactory().createEntityInstance(entityContract);
   }
 
   /**
@@ -97,8 +111,8 @@ public abstract class AbstractTestDataPersister {
    *          the entity to persist or update.
    */
   protected void saveOrUpdate(IEntity entity) {
-    hibernateSession.saveOrUpdate(entity);
-    hibernateSession.flush();
+    getHibernateSession().saveOrUpdate(entity);
+    getHibernateSession().flush();
   }
 
   /**
@@ -109,7 +123,7 @@ public abstract class AbstractTestDataPersister {
    * @return the entity list.
    */
   protected List<?> find(String queryString) {
-    return hibernateSession.createQuery(queryString).list();
+    return getHibernateSession().createQuery(queryString).list();
   }
 
   /**
@@ -120,7 +134,17 @@ public abstract class AbstractTestDataPersister {
    * @return the entity list.
    */
   protected List<?> findByCriteria(DetachedCriteria criteria) {
-    return criteria.getExecutableCriteria(hibernateSession).list();
+    return criteria.getExecutableCriteria(getHibernateSession()).list();
+  }
+
+  /**
+   * Gets the backend controller.
+   * 
+   * @return the backend controller.
+   */
+  protected HibernateBackendController getBackendController() {
+    return (HibernateBackendController) BackendControllerHolder
+        .getCurrentBackendController();
   }
 
   /**
@@ -129,7 +153,7 @@ public abstract class AbstractTestDataPersister {
    * @return the entityFactory.
    */
   protected IEntityFactory getEntityFactory() {
-    return entityFactory;
+    return getBackendController().getEntityFactory();
   }
 
   /**
@@ -138,6 +162,6 @@ public abstract class AbstractTestDataPersister {
    * @return the hibernateSession.
    */
   protected Session getHibernateSession() {
-    return hibernateSession;
+    return getBackendController().getHibernateSession();
   }
 }
