@@ -36,6 +36,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
@@ -134,11 +135,13 @@ public class DefaultRemoteController extends
   private IView<RComponent>      loginView;
   private String[]               clientKeysToTranslate;
 
+  private int                    commandLowPriorityOffset;
+
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
    */
   public DefaultRemoteController() {
-    // commandLowPriorityOffset = 0;
+    commandLowPriorityOffset = 0;
     commandRegistrationEnabled = false;
   }
 
@@ -254,7 +257,7 @@ public class DefaultRemoteController extends
     try {
       commandRegistrationEnabled = true;
       commandQueue = new ArrayList<RemoteCommand>();
-      // commandLowPriorityOffset = 0;
+      commandLowPriorityOffset = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
           handleCommand(command);
@@ -465,14 +468,13 @@ public class DefaultRemoteController extends
   @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
-      // if (command instanceof RemoteChildrenCommand) {
-      // // The remote children commands, that may create and register
-      // // remote server peers on client side must be handled first.
-      // commandQueue.add(commandLowPriorityOffset, command);
-      // commandLowPriorityOffset++;
-      // } else {
-      commandQueue.add(command);
-      // }
+//      if (command instanceof RemoteChildrenCommand
+//          && ((RemoteChildrenCommand) command).isRemove()) {
+//        commandQueue.add(commandLowPriorityOffset, command);
+//        commandLowPriorityOffset++;
+//      } else {
+        commandQueue.add(command);
+//      }
     }
   }
 

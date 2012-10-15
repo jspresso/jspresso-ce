@@ -14,7 +14,7 @@
 
 qx.Interface.define("org.jspresso.framework.action.IActionHandler", {
 			members : {
-				execute : function(action, actionEvent) {
+				execute : function(action, actionEvent, actionCallback) {
 				},
 
 				setCurrentViewStateGuid : function(viewStateGuid,

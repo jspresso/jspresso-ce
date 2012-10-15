@@ -22,7 +22,7 @@ package org.jspresso.framework.action {
   
   public interface IActionHandler extends ITranslationProvider {
     
-    function execute(action:RAction, actionEvent:RActionEvent=null):void;
+    function execute(action:RAction, actionEvent:RActionEvent=null, actionCallback:Function=null):void;
     
     function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void;
     

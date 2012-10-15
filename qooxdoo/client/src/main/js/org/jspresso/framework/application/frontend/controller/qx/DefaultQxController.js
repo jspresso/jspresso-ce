@@ -83,6 +83,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**@type Object*/
     __translations : null,
     
+    __nextActionCallback : null,
+    
     /**
      * @param {org.jspresso.framework.gui.remote.RComponent} remoteComponent
      * @return {qx.ui.core.Widget}
@@ -200,8 +202,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {String} param
      * @return void
      */
-    execute : function(action, actionEvent) {
+    execute : function(action, actionEvent, actionCallback) {
       actionEvent = (typeof actionEvent == 'undefined') ? null : actionEvent;
+      actionCallback = (typeof actionCallback == 'undefined') ? null : actionCallback;
       if(action && action.isEnabled()) {
         //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
@@ -213,6 +216,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         command.setActionEvent(actionEvent);
         actionEvent.setViewStateGuid(this.__dialogStack[this.__dialogStack.length -1][1]);
         actionEvent.setViewStatePermId(this.__dialogStack[this.__dialogStack.length -1][2]);
+        this.__nextActionCallback = actionCallback;
         this.registerCommand(command);
       }
     },
@@ -381,36 +385,47 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           /**@type Array*/
           var commandChildren = command.getChildren().toArray();
 
-          var oldLength = childrenContent.length;
-          var newLength = commandChildren.length;
-          
-          for(var i = 0; i < commandChildren.length; i++) {
-            /**@type org.jspresso.framework.state.remote.RemoteValueState */
-            var child = commandChildren[i];
-            if(this.isRegistered(child.getGuid())) {
-              child = this.getRegistered(child.getGuid());
-            } else {
-              this.register(child);
+          if(command.isRemove()) {
+            for(var i = 0; i < commandChildren.length; i++) {
+              /**@type org.jspresso.framework.state.remote.RemoteValueState */
+              var child = commandChildren[i];
+              if(this.isRegistered(child.getGuid())) {
+                child = this.getRegistered(child.getGuid());
+                children.remove(child);
+              }
             }
-            var existingChild = null;
-            if(i < childrenContent.length) {
-              existingChild = childrenContent[i];
+          } else {
+            var oldLength = childrenContent.length;
+            var newLength = commandChildren.length;
+            
+            for(var i = 0; i < commandChildren.length; i++) {
+              /**@type org.jspresso.framework.state.remote.RemoteValueState */
+              var child = commandChildren[i];
+              if(this.isRegistered(child.getGuid())) {
+                child = this.getRegistered(child.getGuid());
+              } else {
+                this.register(child);
+              }
+              var existingChild = null;
+              if(i < childrenContent.length) {
+                existingChild = childrenContent[i];
+              }
+              if(existingChild != child) {
+                childrenContent[i] = child;
+              }
             }
-            if(existingChild != child) {
-              childrenContent[i] = child;
-            }
+            childrenContent.length = newLength;
+            children.length = newLength;
+            children.fireDataEvent("changeLength", oldLength, newLength);
+            children.fireDataEvent("change",
+              {
+                start: 0,
+                end: newLength,
+                type: "add",
+                items: childrenContent
+              }, null
+            );
           }
-          childrenContent.length = newLength;
-          children.length = newLength;
-          children.fireDataEvent("changeLength", oldLength, newLength);
-          children.fireDataEvent("change",
-            {
-              start: 0,
-              end: newLength,
-              type: "add",
-              items: childrenContent
-            }, null
-          );
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
           this.__viewFactory.addCard(targetPeer.retrievePeer(), command.getCard(), command.getCardName());
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
@@ -977,6 +992,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
           this.__postponedNotificationBuffer = null;
+          if(this.__nextActionCallback != null) {
+            try {
+              this.__nextActionCallback();
+            } finally {
+              this.__nextActionCallback = null;
+            }  
+          }
           if(this.__commandsBacklog.length > 0) {
             for(var i = 0; i < this.__commandsBacklog.length; i++) {
               this.__commandsQueue.push(this.__commandsBacklog[i]);

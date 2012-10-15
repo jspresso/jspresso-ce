@@ -33,6 +33,7 @@ public class RemoteChildrenCommand extends RemoteCommand {
   private static final long      serialVersionUID = 5963387363740451053L;
 
   private List<RemoteValueState> children;
+  private boolean                remove;
 
   /**
    * Gets the children.
@@ -51,6 +52,24 @@ public class RemoteChildrenCommand extends RemoteCommand {
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
+  }
+
+  /**
+   * Gets the remove.
+   * 
+   * @return the remove.
+   */
+  public boolean isRemove() {
+    return remove;
+  }
+
+  /**
+   * Sets the remove.
+   * 
+   * @param remove the remove to set.
+   */
+  public void setRemove(boolean remove) {
+    this.remove = remove;
   }
 
 }

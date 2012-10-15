@@ -30,6 +30,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteSelectio
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
+import org.jspresso.framework.binding.CollectionConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -191,6 +192,20 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             children.add(((IRemoteStateOwner) childConnector).getState());
           }
         }
+
+        List<RemoteValueState> removedChildren = new ArrayList<RemoteValueState>();
+        if (evt instanceof CollectionConnectorValueChangeEvent) {
+          if (((CollectionConnectorValueChangeEvent) evt)
+              .getRemovedChildrenConnectors() != null) {
+            for (IValueConnector removedChildConnector : ((CollectionConnectorValueChangeEvent) evt)
+                .getRemovedChildrenConnectors()) {
+              if (removedChildConnector instanceof IRemoteStateOwner) {
+                removedChildren.add(((IRemoteStateOwner) removedChildConnector)
+                    .getState());
+              }
+            }
+          }
+        }
         if (parentConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) parentConnector)
                 .getCollectionConnector() == connector
@@ -200,6 +215,15 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
               .getState());
           parentState.setChildren(new ArrayList<RemoteValueState>(children));
+
+          if (!removedChildren.isEmpty()) {
+            RemoteChildrenCommand parentRemoveCommand = new RemoteChildrenCommand();
+            parentRemoveCommand.setTargetPeerGuid(parentState.getGuid());
+            parentRemoveCommand.setChildren(removedChildren);
+            parentRemoveCommand.setRemove(true);
+            remoteCommandHandler.registerCommand(parentRemoveCommand);
+          }
+
           RemoteChildrenCommand parentCommand = new RemoteChildrenCommand();
           parentCommand.setTargetPeerGuid(parentState.getGuid());
           if (parentState.getChildren() != null) {
@@ -208,11 +232,22 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           } else {
             parentCommand.setChildren(null);
           }
+          parentCommand.setRemove(false);
           remoteCommandHandler.registerCommand(parentCommand);
+
         } else {
           RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
               .getState());
           compositeValueState.setChildren(children);
+
+          if (!removedChildren.isEmpty()) {
+            RemoteChildrenCommand removeCommand = new RemoteChildrenCommand();
+            removeCommand.setTargetPeerGuid(compositeValueState.getGuid());
+            removeCommand.setChildren(removedChildren);
+            removeCommand.setRemove(true);
+            remoteCommandHandler.registerCommand(removeCommand);
+          }
+
           RemoteChildrenCommand command = new RemoteChildrenCommand();
           command.setTargetPeerGuid(compositeValueState.getGuid());
           if (compositeValueState.getChildren() != null) {

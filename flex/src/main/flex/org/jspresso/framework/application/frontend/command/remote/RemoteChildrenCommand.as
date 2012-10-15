@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteChildrenCommand extends RemoteCommand {
 
         private var _children:ListCollectionView;
+        private var _remove:Boolean;
 
         public function RemoteChildrenCommand() {
           //default constructor.
@@ -32,5 +33,16 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function get children():ListCollectionView {
             return _children;
         }
+
+        public function get remove():Boolean
+        {
+          return _remove;
+        }
+
+        public function set remove(value:Boolean):void
+        {
+          _remove = value;
+        }
+
     }
 }

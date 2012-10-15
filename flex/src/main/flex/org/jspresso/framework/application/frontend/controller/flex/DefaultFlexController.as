@@ -176,6 +176,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _initialLocaleChain:Array;
     private var _fakeDialog:Panel;
     private var _translations:Object;
+    private var _nextActionCallback:Function;
 
     private var _postponedNotificationBuffer:Object;
     
@@ -268,7 +269,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
 
-    public function execute(action:RAction, actionEvent:RActionEvent = null):void {
+    public function execute(action:RAction, actionEvent:RActionEvent = null, actionCallback:Function=null):void {
       //trace(">>> Execute <<< " + action.name + " param = " + param);
       if(action && action.enabled) {
         var ts:Number = getTimer();
@@ -284,6 +285,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           command.actionEvent = actionEvent;
           actionEvent.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
           actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
+          _nextActionCallback = actionCallback;
           registerCommand(command);
           blockUI(false);
         }
@@ -472,34 +474,46 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else if(command is RemoteChildrenCommand) {
           var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
           _postponedNotificationBuffer[targetPeer.guid] = null;
-          if((command as RemoteChildrenCommand).children != null) {
-            var newChildren:ArrayCollection = new ArrayCollection();
-            for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
-              if(isRegistered(child.guid)) {
-                child = getRegistered(child.guid) as RemoteValueState;
-              } else {
-                register(child);
-              }
-              newChildren.addItem(child);
-            }
-            for(var toRemove:int = children.length - 1; toRemove >= 0; toRemove--) {
-              if(newChildren.getItemIndex(children.getItemAt(toRemove)) < 0) {
-                children.removeItemAt(toRemove);
-              }
-            }
-            var index:int = 0;
-            for each(var newChild:RemoteValueState in newChildren) {
-              var existingIndex:int = children.getItemIndex(newChild);
-              if(existingIndex != index) {
-                if(existingIndex >=0) {
-                  children.removeItemAt(existingIndex);
+          if((command as RemoteChildrenCommand).remove) {
+            for each(var removedChild:RemoteValueState in (command as RemoteChildrenCommand).children) {
+              if(isRegistered(removedChild.guid)) {
+                removedChild = getRegistered(removedChild.guid) as RemoteValueState;
+                var removedIndex:int = children.getItemIndex(removedChild);
+                if(removedIndex >= 0) {
+                  children.removeItemAt(removedIndex);
                 }
-                children.addItemAt(newChild, index);
               }
-              index++;
             }
           } else {
-            children.removeAll();
+            if((command as RemoteChildrenCommand).children != null) {
+              var newChildren:ArrayCollection = new ArrayCollection();
+              for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
+                if(isRegistered(child.guid)) {
+                  child = getRegistered(child.guid) as RemoteValueState;
+                } else {
+                  register(child);
+                }
+                newChildren.addItem(child);
+              }
+              for(var toRemove:int = children.length - 1; toRemove >= 0; toRemove--) {
+                if(newChildren.getItemIndex(children.getItemAt(toRemove)) < 0) {
+                  children.removeItemAt(toRemove);
+                }
+              }
+              var index:int = 0;
+              for each(var newChild:RemoteValueState in newChildren) {
+                var existingIndex:int = children.getItemIndex(newChild);
+                if(existingIndex != index) {
+                  if(existingIndex >=0) {
+                    children.removeItemAt(existingIndex);
+                  }
+                  children.addItemAt(newChild, index);
+                }
+                index++;
+              }
+            } else {
+              children.removeAll();
+            }
           }
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(
@@ -893,6 +907,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
           checkPostponedCommandsCompletion();
           _postponedCommands = null;
           _postponedNotificationBuffer = null;
+          if(_nextActionCallback != null) {
+            try {
+              _nextActionCallback();
+            } finally {
+              _nextActionCallback = null;
+            }
+          }
         }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {

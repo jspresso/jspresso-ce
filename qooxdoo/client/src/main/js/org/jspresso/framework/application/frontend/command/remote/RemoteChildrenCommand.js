@@ -26,6 +26,9 @@ qx.Class
 						children : {
 							check : "qx.data.Array",
 							nullable : true
-						}
+						},
+            remove : {
+              check : "Boolean"
+            }
 					}
 				});
