@@ -72,7 +72,7 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
 
     try {
       if (pageableModel.getPage() != null) {
-        pageableModel.setPage(new Integer(pageableModel.getPage().intValue()
+        pageableModel.setPage(Integer.valueOf(pageableModel.getPage().intValue()
             + pageOffset.intValue()));
       } else {
         pageableModel.setPage(pageOffset);

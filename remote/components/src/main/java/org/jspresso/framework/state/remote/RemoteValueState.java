@@ -122,7 +122,7 @@ public class RemoteValueState extends RemotePeer {
     } else if (incomingValue instanceof java.sql.Date) {
       transformedValue = new Date(((java.sql.Date) incomingValue).getTime());
     } else if (incomingValue instanceof BigDecimal) {
-      transformedValue = new Double(((BigDecimal) incomingValue).doubleValue());
+      transformedValue = Double.valueOf(((BigDecimal) incomingValue).doubleValue());
     } else if (incomingValue instanceof DateDto) {
       transformedValue = (DateDto) incomingValue;
     } else if (incomingValue instanceof Date || incomingValue instanceof String

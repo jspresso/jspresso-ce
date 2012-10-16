@@ -61,7 +61,7 @@ public class InstanceOf implements TemplateMethodModelEx {
           .getAdaptedObject(Object.class);
       Class<?> clazz = Class.forName(((TemplateScalarModel) arguments.get(1))
           .getAsString());
-      return new BooleanModel(new Boolean(clazz.isAssignableFrom(target
+      return new BooleanModel(Boolean.valueOf(clazz.isAssignableFrom(target
           .getClass())), wrapper);
     } catch (Exception ex) {
       throw new TemplateModelException("Could execute instanceof method.", ex);

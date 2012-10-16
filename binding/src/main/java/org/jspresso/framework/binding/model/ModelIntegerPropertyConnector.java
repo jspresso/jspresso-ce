@@ -51,7 +51,7 @@ public class ModelIntegerPropertyConnector extends ModelScalarPropertyConnector 
       if (aValue instanceof Long) {
         super.setConnecteeValue(aValue);
       } else if (aValue instanceof Number) {
-        super.setConnecteeValue(new Long(((Number) aValue).longValue()));
+        super.setConnecteeValue(Long.valueOf(((Number) aValue).longValue()));
       } else {
         super.setConnecteeValue(aValue);
       }
@@ -59,7 +59,7 @@ public class ModelIntegerPropertyConnector extends ModelScalarPropertyConnector 
       if (aValue instanceof Integer) {
         super.setConnecteeValue(aValue);
       } else if (aValue instanceof Number) {
-        super.setConnecteeValue(new Integer(((Number) aValue).intValue()));
+        super.setConnecteeValue(Integer.valueOf(((Number) aValue).intValue()));
       } else {
         super.setConnecteeValue(aValue);
       }

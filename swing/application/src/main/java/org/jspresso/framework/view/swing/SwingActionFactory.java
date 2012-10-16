@@ -122,7 +122,7 @@ public class SwingActionFactory extends
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
           putValue(
               Action.MNEMONIC_KEY,
-              new Integer(KeyStroke.getKeyStroke(
+              Integer.valueOf(KeyStroke.getKeyStroke(
                   ((IDisplayableAction) action).getMnemonicAsString())
                   .getKeyCode()));
         }

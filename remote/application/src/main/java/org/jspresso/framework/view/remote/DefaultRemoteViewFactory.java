@@ -1176,9 +1176,9 @@ public class DefaultRemoteViewFactory extends
         @Override
         public Object getValueForState(Object originalValue) {
           if (originalValue instanceof BigDecimal) {
-            return new Double(((BigDecimal) originalValue).doubleValue());
+            return Double.valueOf(((BigDecimal) originalValue).doubleValue());
           } else if (originalValue instanceof BigInteger) {
-            return new Long(((BigInteger) originalValue).longValue());
+            return Long.valueOf(((BigInteger) originalValue).longValue());
           }
           return originalValue;
         }

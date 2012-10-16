@@ -126,7 +126,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     if (width != null) {
       return width;
     }
-    return new Integer(1);
+    return Integer.valueOf(1);
   }
 
   /**
@@ -324,7 +324,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    *          the sortable to set.
    */
   public void setSortable(boolean sortable) {
-    this.sortable = new Boolean(sortable);
+    this.sortable = Boolean.valueOf(sortable);
   }
 
   /**

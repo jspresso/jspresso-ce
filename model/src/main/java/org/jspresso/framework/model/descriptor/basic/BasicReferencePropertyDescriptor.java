@@ -211,7 +211,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    *          the oneToOne to set.
    */
   public void setOneToOne(boolean oneToOne) {
-    this.oneToOne = new Boolean(oneToOne);
+    this.oneToOne = Boolean.valueOf(oneToOne);
   }
 
   /**

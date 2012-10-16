@@ -217,7 +217,7 @@ public class WeakPropertyChangeSupport implements Serializable {
     if (oldValue == newValue) {
       return;
     }
-    firePropertyChange(propertyName, new Integer(oldValue), new Integer(
+    firePropertyChange(propertyName, Integer.valueOf(oldValue), Integer.valueOf(
         newValue));
   }
 

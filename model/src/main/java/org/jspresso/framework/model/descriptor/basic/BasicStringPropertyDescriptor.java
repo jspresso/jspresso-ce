@@ -220,7 +220,7 @@ public class BasicStringPropertyDescriptor extends
    *          the upperCase to set.
    */
   public void setUpperCase(boolean upperCase) {
-    this.upperCase = new Boolean(upperCase);
+    this.upperCase = Boolean.valueOf(upperCase);
   }
 
   /**

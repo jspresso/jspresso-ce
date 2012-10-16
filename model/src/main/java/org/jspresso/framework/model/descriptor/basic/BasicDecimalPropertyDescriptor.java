@@ -99,7 +99,7 @@ public class BasicDecimalPropertyDescriptor extends
    *          the usingBigDecimal to set.
    */
   public void setUsingBigDecimal(boolean usingBigDecimal) {
-    this.usingBigDecimal = new Boolean(usingBigDecimal);
+    this.usingBigDecimal = Boolean.valueOf(usingBigDecimal);
   }
 
   /**

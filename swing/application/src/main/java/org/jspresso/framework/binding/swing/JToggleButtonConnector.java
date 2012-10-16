@@ -70,7 +70,7 @@ public class JToggleButtonConnector<E extends JToggleButton> extends
    */
   @Override
   protected Object getConnecteeValue() {
-    return new Boolean(getConnectedJComponent().isSelected());
+    return Boolean.valueOf(getConnectedJComponent().isSelected());
   }
 
   /**

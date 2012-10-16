@@ -175,7 +175,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * <code>TEMPLATE_DURATION</code>.
    */
-  protected static final Long           TEMPLATE_DURATION                    = new Long(
+  protected static final Long           TEMPLATE_DURATION                    = Long.valueOf(
                                                                                  EDuration.ONE_SECOND
                                                                                      .getMillis()
                                                                                      + EDuration.ONE_MINUTE
@@ -2622,7 +2622,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
-    return new Double(templateValue);
+    return Double.valueOf(templateValue);
   }
 
   /**
@@ -2677,7 +2677,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         || maxTranslationLength > getMaxCharacterLength()) {
       maxTranslationLength = getMaxCharacterLength();
     }
-    return getStringTemplateValue(new Integer(maxTranslationLength));
+    return getStringTemplateValue(Integer.valueOf(maxTranslationLength));
   }
 
   /**
@@ -2720,7 +2720,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor.getMaxValue() != null) {
       templateValue = propertyDescriptor.getMaxValue().doubleValue();
     }
-    return new Integer((int) templateValue);
+    return Integer.valueOf((int) templateValue);
   }
 
   /**
@@ -2799,7 +2799,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
-    return new Double(templateValue / 100.0D);
+    return Double.valueOf(templateValue / 100.0D);
   }
 
   /**
@@ -3323,7 +3323,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
           columnPrefs[i] = new Object[] {
-              column[0], new Integer(column[1])
+              column[0], Integer.valueOf(column[1])
           };
         }
       }

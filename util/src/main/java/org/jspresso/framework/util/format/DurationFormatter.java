@@ -90,7 +90,7 @@ public class DurationFormatter implements IFormatter<Number, String> {
       return null;
     }
     try {
-      return new Long(formatter.parsePeriod(source)
+      return Long.valueOf(formatter.parsePeriod(source)
           .toDurationFrom(new Instant(0)).getMillis());
     } catch (Throwable t) {
       throw new ParseException(t.getMessage(), 0);

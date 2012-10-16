@@ -87,7 +87,7 @@ public class BasicEntityInvocationHandler extends
       throws Throwable {
     String methodName = method.getName();
     if ("isPersistent".equals(methodName)) {
-      return new Boolean(((IEntity) proxy).getVersion() != null);
+      return Boolean.valueOf(((IEntity) proxy).getVersion() != null);
     }
     return super.invoke(proxy, method, args);
   }

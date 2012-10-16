@@ -121,11 +121,11 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getOldValue() == null && evt.getNewValue() != null) {
-              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
-                  false), new Boolean(true));
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, Boolean.valueOf(
+                  false), Boolean.valueOf(true));
             } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(
-                  true), new Boolean(false));
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, Boolean.valueOf(
+                  true), Boolean.valueOf(false));
             }
           }
         });

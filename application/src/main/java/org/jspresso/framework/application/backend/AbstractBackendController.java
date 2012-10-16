@@ -323,7 +323,7 @@ public abstract class AbstractBackendController extends AbstractController
         throw new ActionBusinessException(
             "The number of concurrent asynchronous actions has exceeded the allowed max value : "
                 + currentExecutorsCount, "async.count.exceeded", new Object[] {
-              new Integer(currentExecutorsCount)
+              Integer.valueOf(currentExecutorsCount)
             });
       }
       executeAsynchronously(action, context);
@@ -392,7 +392,7 @@ public abstract class AbstractBackendController extends AbstractController
             if (!executionStatus) {
               status.setRollbackOnly();
             }
-            return new Boolean(executionStatus);
+            return Boolean.valueOf(executionStatus);
           }
         });
     return ret.booleanValue();

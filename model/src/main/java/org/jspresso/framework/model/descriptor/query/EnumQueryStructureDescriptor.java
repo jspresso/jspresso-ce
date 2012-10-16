@@ -89,7 +89,7 @@ public class EnumQueryStructureDescriptor extends
     BasicBooleanPropertyDescriptor selectedPropertyDescriptor = new BasicBooleanPropertyDescriptor();
     selectedPropertyDescriptor.setName(SELECTED);
     selectedPropertyDescriptor.setI18nNameKey("enumValue.selected");
-    selectedPropertyDescriptor.setPreferredWidth(new Integer(30));
+    selectedPropertyDescriptor.setPreferredWidth(Integer.valueOf(30));
     BasicPropertyDescriptor valuePropertyDescriptor = propertyDescriptor
         .clone();
     valuePropertyDescriptor.setName(VALUE);

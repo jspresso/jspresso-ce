@@ -206,7 +206,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    *          the manyToMany to set.
    */
   public void setManyToMany(boolean manyToMany) {
-    this.manyToMany = new Boolean(manyToMany);
+    this.manyToMany = Boolean.valueOf(manyToMany);
   }
 
   /**

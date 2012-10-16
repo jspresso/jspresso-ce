@@ -145,7 +145,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
       } else {
         width = 4;
       }
-      ((BasicPropertyViewDescriptor) propertyView).setWidth(new Integer(width));
+      ((BasicPropertyViewDescriptor) propertyView).setWidth(Integer.valueOf(width));
     }
     queryComponentViewDescriptor
         .setPropertyViewDescriptors(propertyViewDescriptors);

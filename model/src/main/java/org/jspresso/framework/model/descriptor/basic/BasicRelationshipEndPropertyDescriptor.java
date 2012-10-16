@@ -116,7 +116,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    *          the composition to set.
    */
   public void setComposition(boolean composition) {
-    this.composition = new Boolean(composition);
+    this.composition = Boolean.valueOf(composition);
   }
 
   /**

@@ -204,7 +204,7 @@ public class EntityGenerator {
       LOG.debug("Retrieving components from Spring context.");
       Map<String, IComponentDescriptor> allComponents = appContext
           .getBeansOfType(IComponentDescriptor.class);
-      LOG.debug("{} components retrieved.", new Integer(allComponents.size()));
+      LOG.debug("{} components retrieved.", Integer.valueOf(allComponents.size()));
       LOG.debug("Filtering components to generate.");
       for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
           .entrySet()) {
@@ -242,7 +242,7 @@ public class EntityGenerator {
             .getBean(componentId));
       }
     }
-    LOG.debug("{} components filtered.", new Integer(componentDescriptors.size()));
+    LOG.debug("{} components filtered.", Integer.valueOf(componentDescriptors.size()));
     LOG.debug("Initializing Freemarker template");
     Configuration cfg = new Configuration();
     cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
@@ -261,7 +261,7 @@ public class EntityGenerator {
     rootContext.put("instanceof", new InstanceOf(wrapper));
     rootContext.put("compareStrings", new CompareStrings(wrapper));
     rootContext.put("compactString", new CompactString());
-    rootContext.put("generateAnnotations", new Boolean(generateAnnotations));
+    rootContext.put("generateAnnotations", Boolean.valueOf(generateAnnotations));
     rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
     if (classnamePrefix == null) {
       classnamePrefix = "";

@@ -2598,7 +2598,7 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              new Integer(columnModel.getColumn(i).getWidth())
+              Integer.valueOf(columnModel.getColumn(i).getWidth())
           };
           columnPrefs[i] = columnPref;
         }

@@ -1671,7 +1671,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
       if (moduleModelIndex >= 0) {
         result = new Object[] {
-            childCollectionConnector, new Integer(moduleModelIndex)
+            childCollectionConnector, Integer.valueOf(moduleModelIndex)
         };
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);

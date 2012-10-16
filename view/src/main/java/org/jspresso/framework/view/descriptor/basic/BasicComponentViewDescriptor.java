@@ -132,9 +132,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
         // if (lineCount > 4) {
         // lineCount = 4;
         // }
-        // propertyViewDescriptor.setPreferredHeight(new Integer(25 *
+        // propertyViewDescriptor.setPreferredHeight(Integer.valueOf(25 *
         // lineCount));
-        // propertyViewDescriptor.setPreferredWidth(new Integer(250));
+        // propertyViewDescriptor.setPreferredWidth(Integer.valueOf(250));
         // }
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);
       }
@@ -148,7 +148,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
         if (propertyViewDescriptor.getWidth() != null
             && propertyViewDescriptor.getWidth().intValue() > exploded.size()) {
           ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1))
-              .setWidth(new Integer(propertyViewDescriptor.getWidth()
+              .setWidth(Integer.valueOf(propertyViewDescriptor.getWidth()
                   .intValue() - exploded.size() + 1));
         }
         actualPropertyViewDescriptors.addAll(exploded);
@@ -292,10 +292,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     this.propertyWidths = new HashMap<String, Integer>();
     for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
       if (propertyWidth.getValue() instanceof String) {
-        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+        this.propertyWidths.put(propertyWidth.getKey(), Integer.valueOf(
             (String) propertyWidth.getValue()));
       } else {
-        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+        this.propertyWidths.put(propertyWidth.getKey(), Integer.valueOf(
             ((Number) propertyWidth.getValue()).intValue()));
       }
     }
@@ -355,7 +355,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     if (propertyWidths != null) {
       return propertyWidths.get(propertyName);
     }
-    return new Integer(1);
+    return Integer.valueOf(1);
   }
 
   private List<String> computeDefaultRenderedChildProperties(String propertyName) {

@@ -105,10 +105,10 @@ public class CollectionConnectorListModel extends AbstractListModel {
       cachedListeners = new HashMap<Integer, IValueChangeListener>();
     }
     IValueChangeListener cachedListener = cachedListeners
-        .get(new Integer(index));
+        .get(Integer.valueOf(index));
     if (cachedListener == null) {
       cachedListener = new CellConnectorListener(index);
-      cachedListeners.put(new Integer(index), cachedListener);
+      cachedListeners.put(Integer.valueOf(index), cachedListener);
     }
     return cachedListener;
   }

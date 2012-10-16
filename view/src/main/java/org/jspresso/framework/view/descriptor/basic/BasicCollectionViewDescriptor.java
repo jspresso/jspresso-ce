@@ -197,7 +197,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    *          the autoSelectFirstRow to set.
    */
   public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
-    this.autoSelectFirstRow = new Boolean(autoSelectFirstRow);
+    this.autoSelectFirstRow = Boolean.valueOf(autoSelectFirstRow);
   }
 
   /**

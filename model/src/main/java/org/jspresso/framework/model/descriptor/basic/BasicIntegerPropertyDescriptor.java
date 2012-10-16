@@ -79,7 +79,7 @@ public class BasicIntegerPropertyDescriptor extends
    *          the usingLong to set.
    */
   public void setUsingLong(boolean usingLong) {
-    this.usingLong = new Boolean(usingLong);
+    this.usingLong = Boolean.valueOf(usingLong);
   }
 
   /**

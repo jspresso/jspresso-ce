@@ -472,7 +472,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    *          the delegateWritable to set.
    */
   public void setDelegateWritable(boolean delegateWritable) {
-    this.delegateWritable = new Boolean(delegateWritable);
+    this.delegateWritable = Boolean.valueOf(delegateWritable);
   }
 
   /**
@@ -571,7 +571,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    *          the mandatory to set.
    */
   public void setMandatory(boolean mandatory) {
-    this.mandatory = new Boolean(mandatory);
+    this.mandatory = Boolean.valueOf(mandatory);
   }
 
   /**
@@ -610,7 +610,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    *          the readOnly to set.
    */
   public void setReadOnly(boolean readOnly) {
-    this.readOnly = new Boolean(readOnly);
+    this.readOnly = Boolean.valueOf(readOnly);
   }
 
   /**
@@ -621,7 +621,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    *          the sortable to set.
    */
   public void setSortable(boolean sortable) {
-    this.sortable = new Boolean(sortable);
+    this.sortable = Boolean.valueOf(sortable);
   }
 
   /**

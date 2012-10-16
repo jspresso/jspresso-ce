@@ -178,9 +178,9 @@ public abstract class AbstractComponentInvocationHandler implements
       throws Throwable {
     String methodName = method.getName().intern();
     if ("hashCode" == methodName) {
-      return new Integer(computeHashCode((IComponent) proxy));
+      return Integer.valueOf(computeHashCode((IComponent) proxy));
     } else if ("equals" == methodName) {
-      return new Boolean(computeEquals((IComponent) proxy, args[0]));
+      return Boolean.valueOf(computeEquals((IComponent) proxy, args[0]));
     } else if ("toString" == methodName) {
       return toString(proxy);
     } else if ("getComponentContract" == methodName) {
@@ -210,7 +210,7 @@ public abstract class AbstractComponentInvocationHandler implements
           (PropertyChangeListener) args[1]);
       return null;
     } else if ("hasListeners" == methodName) {
-      return new Boolean(hasListeners(proxy, (String) args[0]));
+      return Boolean.valueOf(hasListeners(proxy, (String) args[0]));
     } else if ("firePropertyChange" == methodName) {
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
@@ -235,7 +235,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else {
       if (isLifecycleMethod(method)) {
-        return new Boolean(invokeLifecycleInterceptors(proxy, method, args));
+        return Boolean.valueOf(invokeLifecycleInterceptors(proxy, method, args));
       }
       AccessorInfo accessorInfo = getAccessorFactory().getAccessorInfo(method);
       EAccessorType accessorType = accessorInfo.getAccessorType();
@@ -1659,7 +1659,7 @@ public abstract class AbstractComponentInvocationHandler implements
     public Object invoke(Object proxy, Method method, Object[] args)
         throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
-        return new Boolean(false);
+        return Boolean.valueOf(false);
       }
       return method.invoke(delegate, args);
     }

@@ -411,7 +411,7 @@ public class DefaultSwingController extends
   // */
   // @Override
   // public Object run() {
-  // return new Boolean(protectedExecuteBackend(action, context));
+  // return Boolean.valueOf(protectedExecuteBackend(action, context));
   // }
   // });
   // return success.booleanValue();

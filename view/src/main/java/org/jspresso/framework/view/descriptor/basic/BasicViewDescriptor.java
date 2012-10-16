@@ -213,8 +213,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
       setPreferredWidth(null);
       setPreferredHeight(null);
     } else {
-      setPreferredWidth(new Integer(preferredSize.getWidth()));
-      setPreferredHeight(new Integer(preferredSize.getHeight()));
+      setPreferredWidth(Integer.valueOf(preferredSize.getWidth()));
+      setPreferredHeight(Integer.valueOf(preferredSize.getHeight()));
     }
   }
 

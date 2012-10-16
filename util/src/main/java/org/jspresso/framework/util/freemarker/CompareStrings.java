@@ -58,7 +58,7 @@ public class CompareStrings implements TemplateMethodModelEx {
     try {
       String first = ((TemplateScalarModel) arguments.get(0)).getAsString();
       String second = ((TemplateScalarModel) arguments.get(1)).getAsString();
-      return new NumberModel(new Integer(first.compareTo(second)), wrapper);
+      return new NumberModel(Integer.valueOf(first.compareTo(second)), wrapper);
     } catch (Exception ex) {
       throw new TemplateModelException("Could execute compareStrings method.",
           ex);

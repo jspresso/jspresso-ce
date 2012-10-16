@@ -73,7 +73,7 @@ public final class CollectionConnectorHelper {
         if (smallCollection == null) {
           ite.next();
         }
-        addedIndices.add(new Integer(index));
+        addedIndices.add(Integer.valueOf(index));
       }
     }
     int[] result = new int[addedIndices.size()];

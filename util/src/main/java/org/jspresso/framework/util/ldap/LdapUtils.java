@@ -42,7 +42,7 @@ public final class LdapUtils {
    * @return the parsed boolean.
    */
   public static String formatBoolean(boolean value) {
-    return new Boolean(value).toString().toUpperCase();
+    return Boolean.valueOf(value).toString().toUpperCase();
   }
 
   /**
@@ -120,7 +120,7 @@ public final class LdapUtils {
    */
   public static Integer parseInteger(String integerAsString) {
     if (integerAsString != null) {
-      return new Integer(integerAsString);
+      return Integer.valueOf(integerAsString);
     }
     return null;
   }

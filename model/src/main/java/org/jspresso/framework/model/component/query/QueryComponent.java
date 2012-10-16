@@ -368,13 +368,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       pc = getPageCount().intValue();
     }
     if (pc == 0) {
-      return new Integer(0);
+      return Integer.valueOf(0);
     }
     int p = 0;
     if (getPage() != null) {
       p = getPage().intValue();
     }
-    return new Integer(p + 1);
+    return Integer.valueOf(p + 1);
   }
 
   /**
@@ -383,7 +383,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public void setDisplayPageIndex(Integer displayPageIndex) {
     if (displayPageIndex != null) {
-      setPage(new Integer(displayPageIndex.intValue() - 1));
+      setPage(Integer.valueOf(displayPageIndex.intValue() - 1));
     } else {
       setPage(null);
     }
@@ -398,14 +398,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       return null;
     }
     if (getPageSize() == null || getPageSize().intValue() <= 0) {
-      return new Integer(1);
+      return Integer.valueOf(1);
     }
     int remainder = getRecordCount().intValue() % getPageSize().intValue();
     int lastIncompletePage = 0;
     if (remainder > 0) {
       lastIncompletePage = 1;
     }
-    return new Integer(getRecordCount().intValue() / getPageSize().intValue()
+    return Integer.valueOf(getRecordCount().intValue() / getPageSize().intValue()
         + lastIncompletePage);
   }
 
@@ -519,9 +519,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
     if (pc > 0) {
       if (page == null || page.intValue() < 0) {
-        this.page = new Integer(0);
+        this.page = Integer.valueOf(0);
       } else if (page.intValue() >= pc) {
-        this.page = new Integer(pc - 1);
+        this.page = Integer.valueOf(pc - 1);
       } else {
         this.page = page;
       }
@@ -532,10 +532,10 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     firePropertyChange(PAGE, oldValue, getPage());
     firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
         getDisplayPageIndex());
-    firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED, new Boolean(
-        oldPreviousPageEnabled), new Boolean(isPreviousPageEnabled()));
-    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, new Boolean(
-        oldNextPageEnabled), new Boolean(isNextPageEnabled()));
+    firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED, Boolean.valueOf(
+        oldPreviousPageEnabled), Boolean.valueOf(isPreviousPageEnabled()));
+    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, Boolean.valueOf(
+        oldNextPageEnabled), Boolean.valueOf(isNextPageEnabled()));
   }
 
   /**
@@ -549,8 +549,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.pageSize = pageSize;
     firePropertyChange(PAGE_SIZE, oldValue, getPageSize());
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
-    firePropertyChange(PAGE_NAVIGATION_ENABLED, new Boolean(
-        oldPageNavigationEnabled), new Boolean(isPageNavigationEnabled()));
+    firePropertyChange(PAGE_NAVIGATION_ENABLED, Boolean.valueOf(
+        oldPageNavigationEnabled), Boolean.valueOf(isPageNavigationEnabled()));
   }
 
   /**
@@ -579,10 +579,10 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
     firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
         getDisplayPageIndex());
-    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, new Boolean(
-        oldNextPageEnabled), new Boolean(isNextPageEnabled()));
-    firePropertyChange(IPageable.PAGE_NAVIGATION_ENABLED, new Boolean(
-        oldPageNavigationEnabled), new Boolean(isPageNavigationEnabled()));
+    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, Boolean.valueOf(
+        oldNextPageEnabled), Boolean.valueOf(isNextPageEnabled()));
+    firePropertyChange(IPageable.PAGE_NAVIGATION_ENABLED, Boolean.valueOf(
+        oldPageNavigationEnabled), Boolean.valueOf(isPageNavigationEnabled()));
   }
 
   private class InlinedComponentTracker implements PropertyChangeListener {
