@@ -14,6 +14,7 @@
     <module name="JavadocMethod">
       <property name="severity" value="ignore"/>
       <property name="scope" value="protected"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="JavadocType">
       <property name="scope" value="protected"/>
@@ -46,11 +47,13 @@
     </module>
     <module name="ParameterNumber">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
     <module name="NoWhitespaceAfter">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="NoWhitespaceBefore"/>
     <module name="OperatorWrap"/>
@@ -65,6 +68,7 @@
     <module name="AvoidNestedBlocks"/>
     <module name="EmptyBlock">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="LeftCurly"/>
     <module name="NeedBraces"/>
@@ -80,6 +84,7 @@
     <module name="InnerAssignment"/>
     <module name="MagicNumber">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="MissingSwitchDefault"/>
     <module name="RedundantThrows"/>
@@ -87,6 +92,7 @@
     <module name="SimplifyBooleanReturn"/>
     <module name="DesignForExtension">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
@@ -95,21 +101,24 @@
     <module name="ArrayTypeStyle"/>
     <module name="FinalParameters">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="GenericIllegalRegexp">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="TodoComment"/>
     <module name="UpperEll"/>
     <module name="PackageHtml">
       <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
-  </module>
-  <module name="NewlineAtEndOfFile">
-    <property name="lineSeparator" value="lf"/>
   </module>
   <module name="Translation"/>
   <module name="FileLength">
     <property name="max" value="4000"/>
+  </module>
+  <module name="NewlineAtEndOfFile">
+    <property name="fileExtensions" value="java, xml, js, as, mxml, py, properties, txt"/>
   </module>
 </module>
