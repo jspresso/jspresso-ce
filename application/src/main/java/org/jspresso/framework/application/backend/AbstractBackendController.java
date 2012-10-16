@@ -1561,7 +1561,7 @@ public abstract class AbstractBackendController extends AbstractController
               .get(propertyName);
           if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
             if (isInitialized(propertyValue)) {
-              initializePropertyIfNeeded(registeredComponent, propertyName);
+              initializePropertyIfNeeded(varRegisteredComponent, propertyName);
             } else if (isInitialized(registeredProperty)) {
               initializePropertyIfNeeded(componentToMerge, propertyName);
             }
