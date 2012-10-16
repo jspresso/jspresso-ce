@@ -42,6 +42,8 @@ import org.jspresso.framework.util.freemarker.CompactString;
 import org.jspresso.framework.util.freemarker.CompareStrings;
 import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.freemarker.InstanceOf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
@@ -60,6 +62,8 @@ import freemarker.template.TemplateException;
  * @author Vincent Vandenschrick
  */
 public class EntityGenerator {
+  
+  private static final Logger LOG = LoggerFactory.getLogger(EntityGenerator.class);
 
   private static final String BEAN_FACTORY_SELECTOR   = "beanFactorySelector";
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
@@ -192,11 +196,16 @@ public class EntityGenerator {
       "rawtypes", "resource"
   })
   public void generateComponents() {
+    LOG.debug("Loading Spring context {}.", applicationContextKey);
     ListableBeanFactory appContext = getListableBeanFactory();
+    LOG.debug("Spring context {} loaded.", applicationContextKey);
     Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
     if (componentIds == null) {
+      LOG.debug("Retrieving components from Spring context.");
       Map<String, IComponentDescriptor> allComponents = appContext
           .getBeansOfType(IComponentDescriptor.class);
+      LOG.debug("{} components retrieved.", new Integer(allComponents.size()));
+      LOG.debug("Filtering components to generate.");
       for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
           .entrySet()) {
         String className = componentEntry.getValue().getName();
@@ -233,6 +242,8 @@ public class EntityGenerator {
             .getBean(componentId));
       }
     }
+    LOG.debug("{} components filtered.", new Integer(componentDescriptors.size()));
+    LOG.debug("Initializing Freemarker template");
     Configuration cfg = new Configuration();
     cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
     BeansWrapper wrapper = new DefaultObjectWrapper();
@@ -258,7 +269,9 @@ public class EntityGenerator {
     if (classnameSuffix == null) {
       classnameSuffix = "";
     }
+    LOG.debug("Freemarker template initialized");
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
+      LOG.debug("Generating Source code for {}.", componentDescriptor.getName());
       OutputStream out = null;
       if (outputDir != null) {
         String cDescName = componentDescriptor.getName();
@@ -306,6 +319,7 @@ public class EntityGenerator {
           return;
         }
       }
+      LOG.debug("Finished generating Source code for {}.", componentDescriptor.getName());
     }
   }
 
