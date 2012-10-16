@@ -73,15 +73,6 @@
             <include>**/*.xml</include>
             <include>**/*.properties</include>
           </includes>
-          <excludes>
-            <exclude>log4j.properties</exclude>
-          </excludes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-          <directory>src/main/resources</directory>
-          <includes>
-            <include>log4j.properties</include>
-          </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/jasperreports</directory>
@@ -141,13 +132,24 @@
               </includes>
             </fileSet>
             <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <excludes>
+                <exclude>ehcache.xml</exclude>
+                <exclude>log4j.properties</exclude>
+              </excludes>
+            </fileSet>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>ehcache.xml</include>
+                <include>log4j.properties</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
               <directory>src/main/java</directory>
               <includes>
                 <include>**/*.java</include>
               </includes>
-            </fileSet>
-            <fileSet filtered="true" packaged="true" encoding="UTF-8">
-              <directory>src/main/resources</directory>
             </fileSet>
           </fileSets>
         </module>
@@ -268,18 +270,16 @@
         </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">
           <directory>src/main/resources</directory>
-          <includes>
-            <include>**/*.xml</include>
-          </includes>
           <excludes>
             <exclude>ehcache.xml</exclude>
+            <exclude>log4j.properties</exclude>
           </excludes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
             <include>ehcache.xml</include>
-            <include>**/*.properties</include>
+            <include>log4j.properties</include>
           </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">

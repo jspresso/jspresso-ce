@@ -73,6 +73,7 @@
         <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
         <value>${packageInPathFormat}/frontend/frontend.xml</value>
         <value>${packageInPathFormat}/core-config.xml</value>
+        <value>${packageInPathFormat}/config.xml</value>
       </list>
     </constructor-arg>
   </bean>
@@ -95,6 +96,7 @@
         <value>${packageInPathFormat}/view/view.xml</value>
         <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
         <value>${packageInPathFormat}/frontend/frontend.xml</value>
+        <value>${packageInPathFormat}/core-config.xml</value>
         <value>${packageInPathFormat}/config.xml</value>
       </list>
     </constructor-arg>

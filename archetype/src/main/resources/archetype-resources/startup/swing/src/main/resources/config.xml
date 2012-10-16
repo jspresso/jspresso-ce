@@ -5,9 +5,4 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
   default-lazy-init="true">
 
-  <!--
-    In order to support Cloudfoundry auto-reconfiguration when deployed to the cloud
-  -->
-  <import resource="classpath*:META-INF/cloud/cloudfoundry-auto-reconfiguration-context.xml"/>
-
 </beans>
