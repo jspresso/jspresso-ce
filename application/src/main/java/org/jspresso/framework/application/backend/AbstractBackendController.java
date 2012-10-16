@@ -1252,7 +1252,7 @@ public abstract class AbstractBackendController extends AbstractController imple
             } else {
               Object registeredProperty = registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER) {
+              if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
                 if (isInitialized(propertyValue)) {
                   initializePropertyIfNeeded(registeredEntity, propertyName);
                 } else if (isInitialized(registeredProperty)) {
@@ -1274,7 +1274,7 @@ public abstract class AbstractBackendController extends AbstractController imple
             } else {
               Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER) {
+              if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
                 if (isInitialized(propertyValue)) {
                   initializePropertyIfNeeded(registeredEntity, propertyName);
                 } else if (isInitialized(registeredCollection)) {
@@ -1361,9 +1361,9 @@ public abstract class AbstractBackendController extends AbstractController imple
         } else {
           Object registeredProperty = registeredComponentProperties
               .get(propertyName);
-          if (mergeMode == EMergeMode.MERGE_EAGER) {
+          if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
             if (isInitialized(propertyValue)) {
-              initializePropertyIfNeeded(registeredComponent, propertyName);
+              initializePropertyIfNeeded(varRegisteredComponent, propertyName);
             } else if (isInitialized(registeredProperty)) {
               initializePropertyIfNeeded(componentToMerge, propertyName);
             }
