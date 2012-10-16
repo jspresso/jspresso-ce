@@ -102,8 +102,8 @@
     <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
     <flexmojos-plugin.version>3.8</flexmojos-plugin.version>
     <exec-plugin.version>1.2.1</exec-plugin.version>
-    <gmaven-plugin.version>1.3</gmaven-plugin.version>
-    <groovy.version>1.7.10</groovy.version>
+    <gmaven-plugin.version>1.4</gmaven-plugin.version>
+    <groovy.version>2.0.4</groovy.version>
     <jetty-plugin.version>7.4.2.v20110526</jetty-plugin.version>
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
     <dependency-plugin.version>2.4</dependency-plugin.version>
