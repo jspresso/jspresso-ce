@@ -62,8 +62,9 @@ import freemarker.template.TemplateException;
  * @author Vincent Vandenschrick
  */
 public class EntityGenerator {
-  
-  private static final Logger LOG = LoggerFactory.getLogger(EntityGenerator.class);
+
+  private static final Logger LOG                     = LoggerFactory
+                                                          .getLogger(EntityGenerator.class);
 
   private static final String BEAN_FACTORY_SELECTOR   = "beanFactorySelector";
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
@@ -72,6 +73,7 @@ public class EntityGenerator {
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
   private static final String INCLUDE_PACKAGES        = "includePackages";
   private static final String OUTPUT_DIR              = "outputDir";
+  private static final String FILE_EXTENSION          = "fileExtension";
   private static final String CLASSNAME_PREFIX        = "classnamePrefix";
   private static final String CLASSNAME_SUFFIX        = "classnameSuffix";
   private static final String TEMPLATE_NAME           = "templateName";
@@ -84,6 +86,7 @@ public class EntityGenerator {
   private boolean             generateAnnotations;
   private String[]            includePackages;
   private String              outputDir;
+  private String              fileExtension;
   private String              classnamePrefix;
   private String              classnameSuffix;
   private String              templateName;
@@ -126,6 +129,9 @@ public class EntityGenerator {
     options.addOption(OptionBuilder.withArgName(OUTPUT_DIR).hasArg()
         .withDescription("sets the output directory for generated source.")
         .create(OUTPUT_DIR));
+    options.addOption(OptionBuilder.withArgName(FILE_EXTENSION).hasArg()
+        .withDescription("sets the file extension for generated source.")
+        .create(FILE_EXTENSION));
     options.addOption(OptionBuilder.withArgName(CLASSNAME_PREFIX).hasArg()
         .withDescription("appends a prefix to generated class names.")
         .create(CLASSNAME_PREFIX));
@@ -179,7 +185,8 @@ public class EntityGenerator {
     generator.setTemplateResourcePath(cmd
         .getOptionValue(TEMPLATE_RESOURCE_PATH));
     generator.setTemplateName(cmd.getOptionValue(TEMPLATE_NAME));
-    generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR));
+    generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR, "."));
+    generator.setFileExtension(cmd.getOptionValue(FILE_EXTENSION, "java"));
     generator.setClassnamePrefix(cmd.getOptionValue(CLASSNAME_PREFIX));
     generator.setClassnameSuffix(cmd.getOptionValue(CLASSNAME_SUFFIX));
     generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
@@ -204,7 +211,8 @@ public class EntityGenerator {
       LOG.debug("Retrieving components from Spring context.");
       Map<String, IComponentDescriptor> allComponents = appContext
           .getBeansOfType(IComponentDescriptor.class);
-      LOG.debug("{} components retrieved.", Integer.valueOf(allComponents.size()));
+      LOG.debug("{} components retrieved.",
+          Integer.valueOf(allComponents.size()));
       LOG.debug("Filtering components to generate.");
       for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
           .entrySet()) {
@@ -242,7 +250,8 @@ public class EntityGenerator {
             .getBean(componentId));
       }
     }
-    LOG.debug("{} components filtered.", Integer.valueOf(componentDescriptors.size()));
+    LOG.debug("{} components filtered.",
+        Integer.valueOf(componentDescriptors.size()));
     LOG.debug("Initializing Freemarker template");
     Configuration cfg = new Configuration();
     cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
@@ -261,7 +270,8 @@ public class EntityGenerator {
     rootContext.put("instanceof", new InstanceOf(wrapper));
     rootContext.put("compareStrings", new CompareStrings(wrapper));
     rootContext.put("compactString", new CompactString());
-    rootContext.put("generateAnnotations", Boolean.valueOf(generateAnnotations));
+    rootContext
+        .put("generateAnnotations", Boolean.valueOf(generateAnnotations));
     rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
     if (classnamePrefix == null) {
       classnamePrefix = "";
@@ -285,7 +295,7 @@ public class EntityGenerator {
         cDescName = cDescName + classnameSuffix;
         try {
           File outFile = new File(outputDir + "/" + cDescName.replace('.', '/')
-              + ".java");
+              + "." + fileExtension);
           if (!outFile.exists()) {
             if (!outFile.getParentFile().exists()) {
               outFile.getParentFile().mkdirs();
@@ -319,7 +329,8 @@ public class EntityGenerator {
           return;
         }
       }
-      LOG.debug("Finished generating Source code for {}.", componentDescriptor.getName());
+      LOG.debug("Finished generating Source code for {}.",
+          componentDescriptor.getName());
     }
   }
 
@@ -438,5 +449,14 @@ public class EntityGenerator {
         .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     return (ListableBeanFactory) bf.getFactory();
+  }
+
+  /**
+   * Sets the fileExtension.
+   * 
+   * @param fileExtension the fileExtension to set.
+   */
+  public void setFileExtension(String fileExtension) {
+    this.fileExtension = fileExtension;
   }
 }
