@@ -87,7 +87,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
   }
 
   /**
-   * Sets the icon preferred hidth.
+   * Sets the icon preferred height.
    * 
    * @param iconPreferredHeight
    *          the iconPreferredHeight to set.

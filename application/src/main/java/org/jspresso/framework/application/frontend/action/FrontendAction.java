@@ -623,4 +623,26 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
     this.styleName = styleName;
   }
 
+  /**
+   * Sets the icon preferred width.
+   * 
+   * @param iconPreferredWidth
+   *          the iconPreferredWidth to set.
+   * @see org.jspresso.framework.util.descriptor.DefaultIconDescriptor#setIconPreferredWidth(int)
+   */
+  public void setIconPreferredWidth(int iconPreferredWidth) {
+    actionDescriptor.setIconPreferredWidth(iconPreferredWidth);
+  }
+
+  /**
+   * Sets the icon preferred height.
+   * 
+   * @param iconPreferredHeight
+   *          the iconPreferredHeight to set.
+   * @see org.jspresso.framework.util.descriptor.DefaultIconDescriptor#setIconPreferredHeight(int)
+   */
+  public void setIconPreferredHeight(int iconPreferredHeight) {
+    actionDescriptor.setIconPreferredHeight(iconPreferredHeight);
+  }
+
 }
