@@ -468,13 +468,13 @@ public class DefaultRemoteController extends
   @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
-//      if (command instanceof RemoteChildrenCommand
-//          && ((RemoteChildrenCommand) command).isRemove()) {
-//        commandQueue.add(commandLowPriorityOffset, command);
-//        commandLowPriorityOffset++;
-//      } else {
+      if (command instanceof RemoteChildrenCommand
+          && ((RemoteChildrenCommand) command).isRemove()) {
+        commandQueue.add(commandLowPriorityOffset, command);
+        commandLowPriorityOffset++;
+      } else {
         commandQueue.add(command);
-//      }
+      }
     }
   }
 
