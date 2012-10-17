@@ -201,46 +201,51 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>pre-process-resources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
         <executions>
           <execution>
             <id>generate-entities</id>
             <phase>generate-sources</phase>
             <goals>
-              <goal>run</goal>
+              <goal>java</goal>
             </goals>
-            <configuration>
-              <tasks>
-                <path id="spring.beans.classpath">
-                  <dirset dir="${symbol_dollar}{basedir}">
-                    <include name="**/src/main/resources" />
-                    <include name="**/target/generated-resources/dsl" />
-                  </dirset>
-                  <path refid="maven.compile.classpath"/>
-                  <path refid="maven.plugin.classpath"/>
-                </path>
-                <property name="generator.dest" value="${symbol_dollar}{project.build.directory}/generated-sources/entitygenerator"/>
-                <mkdir dir="${symbol_dollar}{generator.dest}"/>
-                <java classname="org.jspresso.framework.tools.entitygenerator.EntityGenerator"
-                      classpathref="spring.beans.classpath"
-                      failonerror="true">
-                  <arg value="-beanFactorySelector" />
-                  <arg value="${packageInPathFormat}/beanRefFactory.xml" />
-                  <arg value="-applicationContextKey" />
-                  <arg value="${rootArtifactId}-model-context" />
-                  <arg value="-templateResourcePath" />
-                  <arg value="${symbol_dollar}{generator.templateResourcePath}" />
-                  <arg value="-templateName" />
-                  <arg value="${symbol_dollar}{generator.templateName}" />
-                  <arg value="-outputDir" />
-                  <arg value="${symbol_dollar}{generator.dest}" />
-                  <arg value="-includePackages" />
-                  <arg value="${package}.model" />
-                </java>
-              </tasks>
-            </configuration>
           </execution>
+        </executions>
+        <configuration>
+          <mainClass>org.jspresso.framework.tools.entitygenerator.EntityGenerator</mainClass>
+          <arguments>
+            <argument>-beanFactorySelector</argument>
+            <argument>${packageInPathFormat}/beanRefFactory.xml</argument>
+            <argument>-applicationContextKey</argument>
+            <argument>${rootArtifactId}-model-context</argument>
+            <argument>-templateResourcePath</argument>
+            <argument>${symbol_dollar}{generator.templateResourcePath}</argument>
+            <argument>-templateName</argument>
+            <argument>${symbol_dollar}{generator.templateName}</argument>
+            <argument>-outputDir</argument>
+            <argument>${symbol_dollar}{project.build.directory}/generated-sources/entitygenerator</argument>
+            <argument>-includePackages</argument>
+            <argument>${package}.model</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
           <execution>
             <id>hibernate-descriptors-fix</id>
             <phase>generate-resources</phase>
