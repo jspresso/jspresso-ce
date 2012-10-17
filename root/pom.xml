@@ -84,7 +84,8 @@
     <javadoc-plugin.version>2.8</javadoc-plugin.version>
     <deploy-plugin.version>2.6</deploy-plugin.version>
     <site-plugin.version>3.0-beta-3</site-plugin.version>
-    <release-plugin.version>2.1</release-plugin.version>
+    <install-plugin.version>2.4</install-plugin.version>
+    <release-plugin.version>2.3.2</release-plugin.version>
     <clean-plugin.version>2.4.1</clean-plugin.version>
     <archetype-plugin.version>2.0</archetype-plugin.version>
     <source-plugin.version>2.1.1</source-plugin.version>
@@ -825,6 +826,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${resources-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>${jar-plugin.version}</version>
           <configuration>
@@ -878,6 +884,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-archetype-plugin</artifactId>
           <version>${archetype-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${install-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
