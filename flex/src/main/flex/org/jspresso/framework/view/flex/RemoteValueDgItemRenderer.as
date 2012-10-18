@@ -20,7 +20,6 @@ package org.jspresso.framework.view.flex {
   import mx.binding.utils.BindingUtils;
   import mx.binding.utils.ChangeWatcher;
   import mx.controls.DataGrid;
-  import mx.controls.dataGridClasses.DataGridListData;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
   import mx.controls.listClasses.ListItemRenderer;
@@ -314,9 +313,11 @@ package org.jspresso.framework.view.flex {
           var alpha:uint = DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String);
           var g:Graphics = graphics;
           g.clear();
-          g.beginFill(new uint(backgroundValue), alpha);
-          g.drawRect(0, 0, unscaledWidth, unscaledHeight);
-          g.endFill();
+          if(backgroundValue != null) {
+            g.beginFill(new uint(backgroundValue), alpha);
+            g.drawRect(0, 0, unscaledWidth, unscaledHeight);
+            g.endFill();
+          }
         }
         if(foregroundIndex >= 0) {
           var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
