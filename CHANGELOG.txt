@@ -1,6 +1,93 @@
 Jspresso CE - Change Log
 
 
+Jspresso CE - 3.5.14 (Released 2012-10-18) [ View Issues ]
+==========================================
+- 0000812: [View] Enhance lovActions to be able to use a custom view for the resultView part (vvandens) - closed.
+- 0000786: [View] maxFractionDigit + usingBigDecimal:true limits the number of figures for the whole number (vvandens) - closed.
+- 0000775: [View] backgroundColor attribut with null value on a table cell is set to "black" (vvandens) - closed.
+- 0000814: [Build & tools] EntityGenerator file extension (vvandens) - closed.
+- 0000795: [View] iconWidth and iconHeight don't work anymore (vvandens) - closed.
+- 0000800: [Frontend] Allow to register an action callback that is triggered once the next roundtrip is complete (vvandens) - closed.
+- 0000811: [Build & tools] Replace antrun plugin by exec plugin to speedup compilation in M2E (vvandens) - closed.
+- 0000810: [Build & tools] The archetype should generate symetric projects for swing and webapp modules (vvandens) - closed.
+- 0000803: [Backend] Merging back an entity with MERGE_LAZY mode fails to refresh updated collections (vvandens) - closed.
+- 0000801: [Backend] TestDataPersister should assign a thread backend controller when creating and persisting data (vvandens) - closed.
+- 0000799: [Backend] Use String.intern() to avoid String.equals() in InvocationHandler in order to improve performance (vvandens) - closed.
+- 0000792: [Persistence] Component collection loading fails in classcast exception (vvandens) - closed.
+- 0000778: [Backend] Lazy loading exceptions can occur when using merge with various merge modes (vvandens) - closed.
+- 0000789: [Backend] Subthreads should inherit the current backend controller unless otherwise specified (vvandens) - closed.
+- 0000788: [View] CHECK BOX : We must click 3 times to check on a table (vvandens) - closed.
+- 0000784: [Backend] Add a JVM shutdown hook for the instanciated Spring contexts. (vvandens) - closed.
+- 0000783: [Backend] Allow to hook up to servlet destroyed event in AbstractBeanFactoryContextListener (vvandens) - closed.
+- 0000773: [Backend] Entity merging in session incorrectly resolves uninitialized reference properties from application session (vvandens) - closed.
+- 0000772: [Frontend] Ressource servlets does not correctly display http error pages set up in web.xml (vvandens) - closed.
+- 0000767: [View] foreground value isn't updated on propertyView when using a computed property as the foreground value (vvandens) - closed.
+- 0000762: [Backend] Support "#" as "null" and "!#", "!null" in initialization mappings (vvandens) - closed.
+- 0000763: [Backend] Support "null" and "#" on reference properties initialization mapping (vvandens) - closed.
+- 0000761: [Frontend] LovAction is not thread-safe as detected by the new sanity check (vvandens) - closed.
+- 0000760: [Frontend] Remote Open / Save file actions are not thread-safe as detected by the new sanity check (vvandens) - closed.
+- 0000758: [Persistence] Unable to add an entity twice in a List (vvandens) - closed.
+- 0000757: [Backend] NPE when cloning / merging entities containing lists with holes (vvandens) - closed.
+- 0000734: [Frontend] Incorrect display of tables rows when having multi lines cells. (vvandens) - closed.
+- 0000733: [Frontend] Error message while saving a duplicated entity (regarding unicityScope) (vvandens) - closed.
+- 0000732: [Frontend] Action on table column to select/unselect all lines (vvandens) - closed.
+- 0000698: [Frontend] Do not consider sessions "application already started" when using a permalink (vvandens) - closed.
+- 0000756: [Build & tools] Archetype should include all suuported locales. de, pt and es are missing. (vvandens) - closed.
+- 0000703: [View] Navigation with arrows in Datagrid is active even when the table is editting (vvandens) - closed.
+- 0000754: [View] CheckBox cells are incorrectly sized in forms (vvandens) - closed.
+- 0000585: [Frontend] Find a way to detect invalid attributes assignments during actions execution (vvandens) - closed.
+- 0000708: [Backend] RegisterNotificationForwarding should only fire property changes if there are listeners attached. (vvandens) - closed.
+- 0000751: [View] No tool tip parameter (vvandens) - closed.
+- 0000719: [View] Radio buttons do not respect enabled /disabled state (vvandens) - closed.
+- 0000749: [Backend] An entitity created inside a UOW cannot be excluded from sanity checks (vvandens) - closed.
+- 0000746: [Backend] Make sure cloneInUnitOfWork is able to retrieve pre-existing Hibernate entities (vvandens) - closed.
+- 0000745: [View] The property booleanWritabilityGates is not working properly for tables (vvandens) - closed.
+- 0000743: [Frontend] Wrong action definition (vvandens) - closed.
+- 0000737: [View] UI isn't disabled when clicking a buton in a ModalWindow (vvandens) - closed.
+- 0000741: [Frontend] No description / tooltip for the buttons from the drop down list (vvandens) - closed.
+- 0000738: [Backend] BasicEntityRegistry must deal with Hibernate proxies (vvandens) - closed.
+- 0000718: [Frontend] Crazy UI focus behavior while using a modalDialog startup action on frontController (vvandens) - closed.
+- 0000720: [Backend] Make sure the installed transaction template is controller aware (vvandens) - closed.
+- 0000716: [Persistence] Hibernate generates 2 identical aliases when 2 many to many joins are used in the same criteria (vvandens) - closed.
+- 0000712: [Backend] Make download servlet default regex more secure (prevent using %00 end of string char) (vvandens) - closed.
+- 0000714: [Frontend] Release some access in order to allow identifying module query actions (vvandens) - closed.
+- 0000713: [Frontend] Make Controller onModuleEnter action execute before module onEnter action (vvandens) - closed.
+- 0000559: [View] Something to dynamicaly change background/font/color for an entire row in a table (vvandens) - closed.
+- 0000670: [View] Tooltips for entity fields (vvandens) - closed.
+- 0000706: [View] Password fields display a tooltip with the field content (vvandens) - closed.
+- 0000705: [View] Forms last in a row properties should fill available space (vvandens) - closed.
+- 0000704: [Frontend] Translation should be trimmed (vvandens) - closed.
+- 0000672: [View] Impossible to select text in UI (specific conditions) (vvandens) - closed.
+- 0000701: [Backend] Allow to limit the number of // async tasks for a user (vvandens) - closed.
+- 0000702: [Backend] Keep finished async tasks for reporting and allow to purge. (vvandens) - closed.
+- 0000694: [Frontend] Add one more action in AbstractEditComponentAction (vvandens) - closed.
+- 0000695: [View] Give the possibility to the application that the password is mandatory or not (vvandens) - closed.
+- 0000689: [Frontend] Get view connector during module's startup/entry/exit action execution (vvandens) - closed.
+- 0000690: [Backend] Adding computed field cache mechanism (vvandens) - closed.
+- 0000687: [Model] Getters are slow (vvandens) - closed.
+- 0000682: [View] Read only property labels (or links) should be applied the property max value top determine max length (vvandens) - closed.
+- 0000693: [Build & tools] XDoclet plugin should support M2E workspace resolution for when using SJS modules (vvandens) - closed.
+- 0000664: [Frontend] lovAction to select multiple occurences (vvandens) - closed.
+- 0000691: [View] Pagination R/O fields should be left aligned (vvandens) - closed.
+- 0000674: [View] Make a search just after completing a reference field has no result (vvandens) - closed.
+- 0000685: [View] Bug Jspresso GrantedRoles: ConcurrentModificationException (vvandens) - closed.
+- 0000684: [Frontend] Browser closing / reload detection fails on IE and Chrome (vvandens) - closed.
+- 0000600: [Frontend] Check compatibility version between server and client (vvandens) - closed.
+- 0000677: [Backend] Collection properties are not correctly ordered after a reload (vvandens) - closed.
+- 0000676: [Persistence] Dirty computed property causing entity update in datastore (vvandens) - closed.
+- 0000673: [Frontend] AutoComplete behavior with lovActions and same returned by entities autoComplete property value (vvandens) - closed.
+- 0000668: [Frontend] autoSelectFirstRow does not work on charts (vvandens) - closed.
+- 0000671: [Persistence] Update the type LONG in CLOB for VARCHAR > 4000 (vvandens) - closed.
+- 0000669: [View] Problem with layout alignement in forms (vvandens) - closed.
+- 0000644: [Persistence] Changing Merge behavior (vvandens) - closed.
+- 0000663: [Frontend] LOV popup do not display integer and double values correctly (vvandens) - closed.
+- 0000658: [View] NPE when tab view contains no tab due to security reasons (vvandens) - closed.
+- 0000652: [Frontend] Component refering another component is never null ! (vvandens) - closed.
+- 0000653: [Frontend] Tree root node selection context (vvandens) - closed.
+- 0000657: [Frontend] AbstractActionContextAware.getPropertyView doesn't have the correct return type (vvandens) - closed.
+[83 issues]
+
 Jspresso CE - 3.5.13 (Released 2012-06-18) [ View Issues ]
 ==========================================
 - 0000651: [Model] ByteArray keys can generate AIOOB exceptions when being compared with each other (vvandens) - closed.
