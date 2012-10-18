@@ -109,9 +109,7 @@ public class BasicDecimalPropertyDescriptor extends
   public BigDecimal getMinValue() {
     BigDecimal min = super.getMinValue();
     if (min == null) {
-      if (!isUsingBigDecimal()) {
-        min = new BigDecimal(-Double.MAX_VALUE);
-      }
+      min = new BigDecimal(-Double.MAX_VALUE);
     }
     return min;
   }
@@ -123,9 +121,7 @@ public class BasicDecimalPropertyDescriptor extends
   public BigDecimal getMaxValue() {
     BigDecimal max = super.getMaxValue();
     if (max == null) {
-      if (!isUsingBigDecimal()) {
-        max = new BigDecimal(Double.MAX_VALUE);
-      }
+      max = new BigDecimal(Double.MAX_VALUE);
     }
     return max;
   }
@@ -136,10 +132,8 @@ public class BasicDecimalPropertyDescriptor extends
   @Override
   protected boolean isDefault(BigDecimal boundValue) {
     if (boundValue != null) {
-      if (!isUsingBigDecimal()) {
-        return boundValue.doubleValue() == Double.MAX_VALUE
-            || boundValue.doubleValue() == -Double.MAX_VALUE;
-      }
+      return boundValue.doubleValue() == Double.MAX_VALUE
+          || boundValue.doubleValue() == -Double.MAX_VALUE;
     }
     return super.isDefault(boundValue);
   }
