@@ -1,5 +1,10 @@
 3.5.14
 ======
+- Due to RFE #812 we have changed the return type of ILovResultViewDescriptorFactory in order to be able to return
+  an arbitrary view (that must at least be led by a collection view to bind the results). The method createResultViewDescriptor
+  now returns a more generic BasicViewDescriptor that is dig to find the leading collection view. This allows to implement
+  LOVs with master-detail result views for instance.
+
 - AbstractTestDataPersister now implements with a final method createTestData(). This is because it has to perform some
   mandatory operations around the actual creation of data. The method to override is now called createAndPersistTestData().
   You have to rename the existing createTestData method to createAndPersistTestData.

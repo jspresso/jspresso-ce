@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
@@ -172,7 +171,8 @@ public class BeanCollectionModule extends Module {
   @Override
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
-    IViewDescriptor moduleObjectsView = extractMainCollectionView(projectedViewDescriptor);
+    IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor
+        .extractMainCollectionView(projectedViewDescriptor);
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
     ((BasicViewDescriptor) moduleObjectsView)
         .setModelDescriptor(moduleDescriptor
@@ -182,31 +182,6 @@ public class BeanCollectionModule extends Module {
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 
     return moduleViewDescriptor;
-  }
-
-  /**
-   * Dig the view descriptor to extract the main collection view.
-   * 
-   * @param viewDescriptor
-   *          the module projected view descriptor.
-   * @return the main collection view descriptor.
-   */
-  protected BasicCollectionViewDescriptor extractMainCollectionView(
-      IViewDescriptor viewDescriptor) {
-    BasicCollectionViewDescriptor mainCollectionView = null;
-    if (viewDescriptor instanceof BasicCollectionViewDescriptor) {
-      mainCollectionView = (BasicCollectionViewDescriptor) viewDescriptor;
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor
-        && ((ICompositeViewDescriptor) viewDescriptor)
-            .getChildViewDescriptors() != null) {
-      for (int i = 0; mainCollectionView == null
-          && i < ((ICompositeViewDescriptor) viewDescriptor)
-              .getChildViewDescriptors().size(); i++) {
-        mainCollectionView = extractMainCollectionView(((ICompositeViewDescriptor) viewDescriptor)
-            .getChildViewDescriptors().get(i));
-      }
-    }
-    return mainCollectionView;
   }
 
   /**

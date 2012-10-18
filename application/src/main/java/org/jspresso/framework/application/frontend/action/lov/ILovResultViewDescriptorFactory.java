@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * Factory interface for LOV result view factories.
@@ -41,7 +41,7 @@ public interface ILovResultViewDescriptorFactory {
    *          the LOV action context.
    * @return the created result view descriptor.
    */
-  BasicCollectionViewDescriptor createResultViewDescriptor(
+  BasicViewDescriptor createResultViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext);
 }

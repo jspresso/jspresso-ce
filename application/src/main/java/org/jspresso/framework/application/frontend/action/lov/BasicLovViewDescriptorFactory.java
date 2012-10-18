@@ -68,19 +68,21 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());
-    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(
+    BasicViewDescriptor resultViewDescriptor = createResultViewDescriptor(
         entityRefDescriptor, lovContext);
-    resultViewDescriptor.setSelectionMode(selectionMode);
-    if (resultViewDescriptor instanceof BasicTableViewDescriptor) {
-      ((BasicTableViewDescriptor) resultViewDescriptor)
+    BasicCollectionViewDescriptor resultCollectionViewDescriptor = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor
+        .extractMainCollectionView(resultViewDescriptor);
+    resultCollectionViewDescriptor.setSelectionMode(selectionMode);
+    if (resultCollectionViewDescriptor instanceof BasicTableViewDescriptor) {
+      ((BasicTableViewDescriptor) resultCollectionViewDescriptor)
           .setSortingAction(sortingAction);
     }
-    resultViewDescriptor.setRowAction(okAction);
+    resultCollectionViewDescriptor.setRowAction(okAction);
     if (entityRefDescriptor.getComponentDescriptor().getPageSize() != null
         && entityRefDescriptor.getComponentDescriptor().getPageSize()
             .intValue() >= 0) {
       if (paginationViewDescriptor != null) {
-        resultViewDescriptor
+        resultCollectionViewDescriptor
             .setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
@@ -132,7 +134,7 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
    *          the action context the LOV was triggered on.
    * @return a result collection view.
    */
-  protected BasicCollectionViewDescriptor createResultViewDescriptor(
+  protected BasicViewDescriptor createResultViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
     return getResultViewDescriptorFactory().createResultViewDescriptor(
