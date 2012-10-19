@@ -82,4 +82,28 @@ public final class CollectionConnectorHelper {
     }
     return result;
   }
+
+  /**
+   * Extracts the main collection connector from a connector hierarchy.
+   * 
+   * @param rootConnector
+   *          the root connector.
+   * @return the the main collection connector.
+   */
+  public static ICollectionConnector extractMainCollectionConnector(
+      IValueConnector rootConnector) {
+    if (rootConnector instanceof ICollectionConnector) {
+      return (ICollectionConnector) rootConnector;
+    } else if (rootConnector instanceof ICompositeValueConnector) {
+      for (String childName : ((ICompositeValueConnector) rootConnector)
+          .getChildConnectorKeys()) {
+        IValueConnector childCollectionConnector = extractMainCollectionConnector(((ICompositeValueConnector) rootConnector)
+            .getChildConnector(childName));
+        if (childCollectionConnector != null) {
+          return (ICollectionConnector) childCollectionConnector;
+        }
+      }
+    }
+    return null;
+  }
 }

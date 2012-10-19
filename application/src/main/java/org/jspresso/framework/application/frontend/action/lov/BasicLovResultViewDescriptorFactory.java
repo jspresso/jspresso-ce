@@ -27,8 +27,8 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
-import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A default implementation for lov result view factories.
@@ -46,7 +46,7 @@ public class BasicLovResultViewDescriptorFactory extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  public BasicCollectionViewDescriptor createResultViewDescriptor(
+  public BasicViewDescriptor createResultViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
