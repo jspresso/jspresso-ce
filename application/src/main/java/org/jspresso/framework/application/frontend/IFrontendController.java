@@ -101,6 +101,31 @@ public interface IFrontendController<E, F, G> extends IController,
       boolean reuseCurrent);
 
   /**
+   * Displays a modal dialog.
+   * 
+   * @param mainView
+   *          the view to install in the modal dialog.
+   * @param actions
+   *          the actions available in the dialog.
+   * @param title
+   *          the dialog title.
+   * @param sourceComponent
+   *          the source component.
+   * @param context
+   *          the context to store on the context stack.
+   * @param dimension
+   *          the dimension to set the dialog to. If null, the dialog will be
+   *          sized to the preferred size of the contained view.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
+   * @param modal
+   *          wether the dialog is modal.
+   */
+  void displayDialog(E mainView, List<G> actions, String title,
+      E sourceComponent, Map<String, Object> context, Dimension dimension,
+      boolean reuseCurrent, boolean modal);
+
+  /**
    * Sets the selected module in the current workspace.
    * 
    * @param module

@@ -32,6 +32,8 @@ public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
   private RComponent        view;
 
+  private boolean           modal;
+
   /**
    * Gets the view.
    * 
@@ -49,6 +51,24 @@ public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
    */
   public void setView(RComponent view) {
     this.view = view;
+  }
+
+  /**
+   * Gets the modal.
+   * 
+   * @return the modal.
+   */
+  public boolean isModal() {
+    return modal;
+  }
+
+  /**
+   * Sets the modal.
+   * 
+   * @param modal the modal to set.
+   */
+  public void setModal(boolean modal) {
+    this.modal = modal;
   }
 
 }

@@ -25,6 +25,9 @@ qx.Class
 					properties : {
 						view : {
 							check : "org.jspresso.framework.gui.remote.RComponent"
-						}
+						},
+            modal : {
+              check : "Boolean"
+            }
 					}
 				});

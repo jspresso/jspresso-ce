@@ -87,9 +87,9 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(JComponent mainView, List<Action> actions,
+  public void displayDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent, boolean modal) {
     super.displayModalDialog(context, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
@@ -100,10 +100,10 @@ public class MockSwingController extends
         dialog.getContentPane().removeAll();
         newDialog = false;
       } else {
-        dialog = new JDialog((JDialog) window, title, true);
+        dialog = new JDialog((JDialog) window, title, modal);
       }
     } else {
-      dialog = new JDialog((Frame) window, title, true);
+      dialog = new JDialog((Frame) window, title, modal);
     }
 
     Box buttonBox = new Box(BoxLayout.LINE_AXIS);

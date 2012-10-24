@@ -64,6 +64,7 @@ import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
@@ -2033,5 +2034,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setCheckActionThreadSafety(boolean checkActionThreadSafety) {
     this.checkActionThreadSafety = checkActionThreadSafety;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public final void displayModalDialog(E mainView, final List<G> actions,
+      final String title, final E sourceComponent,
+      final Map<String, Object> context, final Dimension dimension,
+      boolean reuseCurrent) {
+    displayDialog(mainView, actions, title, sourceComponent, context,
+        dimension, reuseCurrent, true);
   }
 }

@@ -57,9 +57,9 @@ public class MockFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(E mainView, List<G> actions, String title,
+  public void displayDialog(E mainView, List<G> actions, String title,
       E sourceComponent, Map<String, Object> context, Dimension dimension,
-      boolean reuseCurrent) {
+      boolean reuseCurrent, boolean modal) {
     // NO-OP
   }
 

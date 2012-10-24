@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
         private var _view:RComponent;
+        private var _modal:Boolean;
 
         public function RemoteDialogCommand() {
           //default constructor.
@@ -32,5 +33,16 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function get view():RComponent {
             return _view;
         }
+
+        public function get modal():Boolean
+        {
+          return _modal;
+        }
+
+        public function set modal(value:Boolean):void
+        {
+          _modal = value;
+        }
+
     }
 }

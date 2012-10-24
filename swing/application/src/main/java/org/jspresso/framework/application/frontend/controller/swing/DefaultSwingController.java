@@ -138,35 +138,6 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(final JComponent mainView,
-      final List<Action> actions, final String title,
-      final JComponent sourceComponent, final Map<String, Object> context,
-      final Dimension dimension, final boolean reuseCurrent) {
-    displayDialog(mainView, actions, title, sourceComponent, context,
-        dimension, reuseCurrent, true);
-  }
-
-  /**
-   * Displays a modal dialog.
-   * 
-   * @param mainView
-   *          the view to install in the modal dialog.
-   * @param actions
-   *          the actions available in the dialog.
-   * @param title
-   *          the dialog title.
-   * @param sourceComponent
-   *          the source component.
-   * @param context
-   *          the context to store on the context stack.
-   * @param dimension
-   *          the dimension to set the dialog to. If null, the dialog will be
-   *          sized to the preferred size of the contained view.
-   * @param reuseCurrent
-   *          set to true to reuse an existing modal dialog.
-   * @param modal
-   *          wether the dialog is modal.
-   */
   public void displayDialog(final JComponent mainView,
       final List<Action> actions, final String title,
       final JComponent sourceComponent, final Map<String, Object> context,

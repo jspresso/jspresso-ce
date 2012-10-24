@@ -188,9 +188,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(RComponent mainView, List<RAction> actions,
+  public void displayDialog(RComponent mainView, List<RAction> actions,
       String title, RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent, boolean modal) {
     super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
