@@ -92,7 +92,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.swing.BasicTransferable;
 
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
 import chrriis.dj.swingsuite.JComboButton;
@@ -131,8 +130,8 @@ public class DefaultSwingController extends
     flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true),
         options);
 
-    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
-        dimension, reuseCurrent);
+    displayDialog(flashPlayer, actions, title, sourceComponent, context,
+        dimension, reuseCurrent, false);
   }
 
   /**
@@ -143,6 +142,35 @@ public class DefaultSwingController extends
       final List<Action> actions, final String title,
       final JComponent sourceComponent, final Map<String, Object> context,
       final Dimension dimension, final boolean reuseCurrent) {
+    displayDialog(mainView, actions, title, sourceComponent, context,
+        dimension, reuseCurrent, true);
+  }
+
+  /**
+   * Displays a modal dialog.
+   * 
+   * @param mainView
+   *          the view to install in the modal dialog.
+   * @param actions
+   *          the actions available in the dialog.
+   * @param title
+   *          the dialog title.
+   * @param sourceComponent
+   *          the source component.
+   * @param context
+   *          the context to store on the context stack.
+   * @param dimension
+   *          the dimension to set the dialog to. If null, the dialog will be
+   *          sized to the preferred size of the contained view.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
+   * @param modal
+   *          wether the dialog is modal.
+   */
+  public void displayDialog(final JComponent mainView,
+      final List<Action> actions, final String title,
+      final JComponent sourceComponent, final Map<String, Object> context,
+      final Dimension dimension, final boolean reuseCurrent, final boolean modal) {
     super.displayModalDialog(context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {
 
@@ -162,10 +190,10 @@ public class DefaultSwingController extends
             dialog.getContentPane().removeAll();
             newDialog = false;
           } else {
-            dialog = new JDialog((JDialog) window, title, true);
+            dialog = new JDialog((JDialog) window, title, modal);
           }
         } else {
-          dialog = new JDialog((Frame) window, title, true);
+          dialog = new JDialog((Frame) window, title, modal);
         }
 
         Box buttonBox = new Box(BoxLayout.LINE_AXIS);
@@ -547,7 +575,6 @@ public class DefaultSwingController extends
       Toolkit.getDefaultToolkit().getSystemEventQueue()
           .push(new WaitCursorEventQueue(500));
       Toolkit.getDefaultToolkit().setDynamicLayout(true);
-      NativeInterface.open();
       SwingUtilities.invokeLater(new Runnable() {
 
         @Override
@@ -558,7 +585,6 @@ public class DefaultSwingController extends
           initLoginProcess();
         }
       });
-      NativeInterface.runEventPump();
       return true;
     }
     return false;

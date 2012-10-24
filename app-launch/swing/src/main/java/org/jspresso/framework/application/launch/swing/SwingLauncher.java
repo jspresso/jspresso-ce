@@ -30,6 +30,8 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.splash.SplashWindow;
 import org.jspresso.framework.util.url.UrlHelper;
 
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+
 /**
  * Swing launcher.
  * 
@@ -50,6 +52,7 @@ public final class SwingLauncher {
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
+    NativeInterface.open();
     SwingUtil.installDefaults();
     Options options = new Options();
     options.addOption(OptionBuilder
@@ -72,6 +75,7 @@ public final class SwingLauncher {
         splashed = true;
       }
       startup.start();
+      NativeInterface.runEventPump();
     } catch (ParseException ex) {
       System.err.println(ex.getLocalizedMessage());
       HelpFormatter formatter = new HelpFormatter();
