@@ -135,7 +135,6 @@ public class ViewTester {
   /**
    * Generates the component java source files.
    */
-  @SuppressWarnings("unchecked")
   public void displayView() {
     Locale locale;
     if (language != null) {
