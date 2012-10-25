@@ -55,7 +55,7 @@ public class CompactString implements TemplateMethodModelEx {
    * {@inheritDoc}
    */
   @Override
-  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+  public TemplateModel exec(List arguments)
       throws TemplateModelException {
     try {
       String toCompact = ((TemplateScalarModel) arguments.get(0)).getAsString();

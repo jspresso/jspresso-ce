@@ -44,7 +44,6 @@ public class BasicLovResultViewDescriptorFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public BasicViewDescriptor createResultViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,

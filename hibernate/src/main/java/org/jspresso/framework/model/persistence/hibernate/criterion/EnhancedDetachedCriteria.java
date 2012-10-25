@@ -302,7 +302,6 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     }
   }
 
-  @SuppressWarnings("unchecked")
   private List<Order> privateGetOrders() throws IllegalAccessException,
       NoSuchFieldException {
     CriteriaImpl critImpl = (CriteriaImpl) ReflectHelper.getPrivateFieldValue(

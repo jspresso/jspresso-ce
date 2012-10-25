@@ -53,7 +53,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * {@inheritDoc}
    */
   @Override
-  public Getter getGetter(@SuppressWarnings("rawtypes") Class theClass,
+  public Getter getGetter(Class theClass,
       String propertyName) {
     return new EntityPropertyGetter(theClass, propertyName);
   }
@@ -62,7 +62,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * {@inheritDoc}
    */
   @Override
-  public Setter getSetter(@SuppressWarnings("rawtypes") Class theClass,
+  public Setter getSetter(Class theClass,
       String propertyName) {
     return new EntityPropertySetter(theClass, propertyName);
   }
@@ -111,7 +111,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      */
     @Override
     public Object getForInsert(Object target,
-        @SuppressWarnings("rawtypes") Map mergeMap, SessionImplementor session) {
+        Map mergeMap, SessionImplementor session) {
       return get(target);
     }
 

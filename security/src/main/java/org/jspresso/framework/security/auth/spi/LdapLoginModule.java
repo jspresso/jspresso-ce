@@ -53,7 +53,6 @@ public class LdapLoginModule extends LdapExtLoginModule {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected String bindDNAuthentication(InitialLdapContext ctx, String user,
       Object credential, String searchBaseDN, String filter)

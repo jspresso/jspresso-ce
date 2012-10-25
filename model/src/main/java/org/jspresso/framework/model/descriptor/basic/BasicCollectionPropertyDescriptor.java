@@ -50,7 +50,6 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public BasicCollectionPropertyDescriptor<E> clone() {
     BasicCollectionPropertyDescriptor<E> clonedDescriptor = (BasicCollectionPropertyDescriptor<E>) super

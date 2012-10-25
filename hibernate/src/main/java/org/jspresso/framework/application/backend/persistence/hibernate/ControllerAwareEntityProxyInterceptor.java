@@ -169,7 +169,6 @@ public class ControllerAwareEntityProxyInterceptor extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public Object getEntity(String entityName, Serializable id) {
     if (!getBackendController().isUnitOfWorkActive()) {
@@ -237,7 +236,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+  public void postFlush(Iterator entities) {
     while (entities.hasNext()) {
       Object entity = entities.next();
       if (entity instanceof IEntity) {
@@ -257,7 +256,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
+  public void preFlush(Iterator entities) {
 
     if (!getBackendController().isUnitOfWorkActive() && entities.hasNext()) {
       // throw new BackendException(

@@ -74,7 +74,6 @@ public class SaveAction extends AbstractHibernateAction {
    *          the action context.
    * @return the list of entities to save.
    */
-  @SuppressWarnings("unchecked")
   protected List<IEntity> getEntitiesToSave(Map<String, Object> context) {
     return (List<IEntity>) getActionParameter(context);
   }

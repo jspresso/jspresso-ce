@@ -142,7 +142,6 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
     return this;
   }
 
-  @SuppressWarnings("unchecked")
   private void appendToViewChain(String permId) {
     if (permId != null) {
       List<String> viewChain = (List<String>) currentSecurityContext

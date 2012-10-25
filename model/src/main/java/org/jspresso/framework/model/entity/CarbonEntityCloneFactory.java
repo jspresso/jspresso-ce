@@ -38,7 +38,6 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public <E extends IComponent> E cloneComponent(E componentToClone,
       IEntityFactory entityFactory) {
     E clonedComponent = (E) entityFactory
@@ -51,7 +50,6 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
     E clonedEntity = (E) entityFactory.createEntityInstance(

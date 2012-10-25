@@ -3216,7 +3216,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
     public ConnectorActionAdapter<E, F> clone() {
       try {

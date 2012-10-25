@@ -92,7 +92,7 @@ public class GenerateSqlName implements TemplateMethodModel {
    * {@inheritDoc}
    */
   @Override
-  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+  public TemplateModel exec(List arguments)
       throws TemplateModelException {
 
     String sqlColumnName = formatter.run(arguments.get(0).toString());

@@ -54,7 +54,7 @@ public class InstanceOf implements TemplateMethodModelEx {
    * {@inheritDoc}
    */
   @Override
-  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+  public TemplateModel exec(List arguments)
       throws TemplateModelException {
     try {
       Object target = ((AdapterTemplateModel) arguments.get(0))

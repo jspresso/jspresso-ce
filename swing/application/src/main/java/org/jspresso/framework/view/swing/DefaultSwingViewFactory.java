@@ -524,7 +524,6 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,

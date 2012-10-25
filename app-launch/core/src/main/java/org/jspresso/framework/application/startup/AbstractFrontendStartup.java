@@ -49,7 +49,6 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void start() {
     // start on brand new instances.

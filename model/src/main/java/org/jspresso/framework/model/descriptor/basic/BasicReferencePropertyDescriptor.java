@@ -49,7 +49,6 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public BasicReferencePropertyDescriptor<E> clone() {
     BasicReferencePropertyDescriptor<E> clonedDescriptor = (BasicReferencePropertyDescriptor<E>) super
@@ -61,7 +60,6 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
     BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super

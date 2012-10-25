@@ -57,7 +57,6 @@ public class QueryModuleFilterAction extends AbstractQbeAction {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected List<? extends IComponent> getExistingResultList(
       IQueryComponent queryComponent, Map<String, Object> context) {

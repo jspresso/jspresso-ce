@@ -49,7 +49,6 @@ public abstract class AbstractQbeAction extends BackendAction {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {

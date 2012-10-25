@@ -375,7 +375,6 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     return null;
   }
 
-  @SuppressWarnings("unchecked")
   private <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate, Class<?>[] extraInterfaces) {
     IComponentDescriptor<IComponent> componentDescriptor = (IComponentDescriptor<IComponent>) componentDescriptorRegistry

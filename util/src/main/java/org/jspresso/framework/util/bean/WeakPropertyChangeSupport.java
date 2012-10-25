@@ -162,7 +162,6 @@ public class WeakPropertyChangeSupport implements Serializable {
    * @param newValue
    *          The new value of the property.
    */
-  @SuppressWarnings("unchecked")
   public void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
     if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
@@ -251,7 +250,6 @@ public class WeakPropertyChangeSupport implements Serializable {
    * @param evt
    *          The PropertyChangeEvent object.
    */
-  @SuppressWarnings("unchecked")
   public void firePropertyChange(PropertyChangeEvent evt) {
     Object oldValue = evt.getOldValue();
     Object newValue = evt.getNewValue();
@@ -357,7 +355,6 @@ public class WeakPropertyChangeSupport implements Serializable {
    * accessors because that can lead to surprising
    * ConcurrentModificationExceptions.
    */
-  @SuppressWarnings("unchecked")
   private void processQueue() {
     WeakEntry<PropertyChangeListener> wk;
     while ((wk = (WeakEntry<PropertyChangeListener>) queue.poll()) != null) {

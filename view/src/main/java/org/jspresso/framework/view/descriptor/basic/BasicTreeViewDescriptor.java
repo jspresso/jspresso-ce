@@ -104,7 +104,6 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public ITreeLevelDescriptor getRootSubtreeDescriptor() {
     if (rootSubtreeDescriptor == null) {
       BasicListDescriptor<Object> fakeCollDescriptor = new BasicListDescriptor<Object>();

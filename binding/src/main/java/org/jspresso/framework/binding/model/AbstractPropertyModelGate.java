@@ -59,7 +59,6 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public AbstractPropertyModelGate<E> clone() {
     AbstractPropertyModelGate<E> clonedGate = (AbstractPropertyModelGate<E>) super
@@ -90,7 +89,6 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public void propertyChange(PropertyChangeEvent evt) {
     try {
       boolean oldOpen = isOpen();
@@ -142,7 +140,6 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    * 
    * @internal
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void setModel(Object model) {
     Object oldModel = getModel();
@@ -235,7 +232,6 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    */
   protected abstract boolean shouldOpen(E propertyValue);
 
-  @SuppressWarnings("unchecked")
   private boolean computeCollectionOpenState(Collection<?> model)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {

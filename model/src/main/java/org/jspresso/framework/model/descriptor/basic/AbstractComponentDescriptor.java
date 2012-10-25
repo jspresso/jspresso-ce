@@ -142,7 +142,6 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public IComponentDescriptor<E> createQueryDescriptor() {
     if (queryDescriptor == null) {
       queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();

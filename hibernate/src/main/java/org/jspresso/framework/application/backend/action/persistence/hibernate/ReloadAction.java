@@ -70,7 +70,6 @@ public class ReloadAction extends AbstractHibernateAction {
    *          the action context.
    * @return the list of entities to save.
    */
-  @SuppressWarnings("unchecked")
   protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
     return (List<IEntity>) getActionParameter(context);
   }

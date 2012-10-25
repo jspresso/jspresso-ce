@@ -50,7 +50,6 @@ public final class CollectionHelper {
    *          the original collection
    * @return the cloned collection.
    */
-  @SuppressWarnings("unchecked")
   public static <E> Collection<E> cloneCollection(Collection<E> collection) {
     if (collection == null) {
       return null;

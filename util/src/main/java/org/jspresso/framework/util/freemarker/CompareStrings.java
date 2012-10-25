@@ -53,7 +53,7 @@ public class CompareStrings implements TemplateMethodModelEx {
    * {@inheritDoc}
    */
   @Override
-  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+  public TemplateModel exec(List arguments)
       throws TemplateModelException {
     try {
       String first = ((TemplateScalarModel) arguments.get(0)).getAsString();

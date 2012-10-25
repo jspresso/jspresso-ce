@@ -894,7 +894,6 @@ public class DefaultRemoteController extends
     return messageCommand;
   }
 
-  @SuppressWarnings("unchecked")
   private RAction createRAction(IAction action, Map<String, Object> context) {
     return getViewFactory().getActionFactory().createAction(
         wrapAction(action, context), this,
@@ -1063,7 +1062,7 @@ public class DefaultRemoteController extends
       Map<String, Object> actionContext) {
     if (HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-      @SuppressWarnings("unchecked") Map<String, Object> requestParams = (Map<String, Object>) session
+      Map<String, Object> requestParams = (Map<String, Object>) session
           .getAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
       if (requestParams != null) {
         actionContext.putAll(requestParams);

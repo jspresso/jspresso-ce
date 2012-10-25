@@ -131,7 +131,6 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the source entity.
    * @return the cloned entity.
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected <E extends IEntity> E performUowEntityCloning(final E entity) {
     if (entity.isPersistent()) {
@@ -737,7 +736,6 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void evictFromHibernateInDepth(IComponent component,
       Session hibernateSession, Set<IEntity> alreadyEvicted) {
     boolean isEntity = component instanceof IEntity;
@@ -827,7 +825,6 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the first found entity or null;
    */
-  @SuppressWarnings("unchecked")
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, int firstResult, int maxResults,
       EMergeMode mergeMode, Class<? extends T> clazz) {
@@ -844,7 +841,6 @@ public class HibernateBackendController extends AbstractBackendController {
     return res;
   }
 
-  @SuppressWarnings("unchecked")
   private <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, final int firstResult,
       final int maxResults, final EMergeMode mergeMode) {

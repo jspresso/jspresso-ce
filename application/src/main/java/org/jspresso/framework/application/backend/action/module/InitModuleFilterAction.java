@@ -51,7 +51,6 @@ public class InitModuleFilterAction extends BackendAction {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {

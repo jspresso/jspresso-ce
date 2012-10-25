@@ -60,7 +60,6 @@ public class AddComponentCollectionToMasterAction extends
    * @return the entity to add to the collection.
    */
   @Override
-  @SuppressWarnings("unchecked")
   protected List<?> getAddedComponents(Map<String, Object> context) {
     IComponentDescriptor<?> elementDescriptor = (IComponentDescriptor<?>) context
         .get(ELEMENT_DESCRIPTOR);

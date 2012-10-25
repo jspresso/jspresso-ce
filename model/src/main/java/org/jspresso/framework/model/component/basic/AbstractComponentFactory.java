@@ -67,7 +67,6 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public void sortCollectionProperty(IComponent component, String propertyName) {
     Collection<Object> propertyValue = (Collection<Object>) component
         .straightGetProperty(propertyName);

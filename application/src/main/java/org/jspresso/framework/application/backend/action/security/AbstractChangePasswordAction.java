@@ -109,7 +109,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     Map<String, Object> actionParam = (Map<String, Object>) getModelConnector(

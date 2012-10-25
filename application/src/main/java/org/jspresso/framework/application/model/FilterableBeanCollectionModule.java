@@ -98,7 +98,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * 
    * @return the filterComponentDescriptor.
    */
-  @SuppressWarnings("unchecked")
   public IComponentDescriptor<IComponent> getFilterComponentDescriptor() {
     if (filterComponentDescriptor == null) {
       return (IComponentDescriptor<IComponent>) getElementComponentDescriptor();
@@ -143,7 +142,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor superViewDescriptor = super.getViewDescriptor();

@@ -132,7 +132,6 @@ public class SwingActionFactory extends
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {

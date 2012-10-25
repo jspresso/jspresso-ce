@@ -451,7 +451,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *          the action context.
    * @return the widget which triggered the action.
    */
-  @SuppressWarnings("unchecked")
   protected E getActionWidget(Map<String, Object> context) {
     return (E) context.get(ActionContextConstants.ACTION_WIDGET);
   }
@@ -464,7 +463,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *          the action context.
    * @return the concrete action that was triggered.
    */
-  @SuppressWarnings("unchecked")
   protected G getUiAction(Map<String, Object> context) {
     return (G) context.get(ActionContextConstants.UI_ACTION);
   }
@@ -525,7 +523,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *          the action context.
    * @return the source widget this action was triggered from.
    */
-  @SuppressWarnings("unchecked")
   protected E getSourceComponent(Map<String, Object> context) {
     return (E) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }
@@ -565,7 +562,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IFrontendController<E, F, G> getFrontendController(
       Map<String, Object> context) {
@@ -575,7 +571,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<E> getView(int[] viewPath, Map<String, Object> context) {
     return (IView<E>) super.getView(viewPath, context);
@@ -584,7 +579,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<E> getView(Map<String, Object> context) {
     return (IView<E>) super.getView(context);
@@ -593,7 +587,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<E> navigate(IView<?> fromView, int[] viewPath) {
     return (IView<E>) super.navigate(fromView, viewPath);

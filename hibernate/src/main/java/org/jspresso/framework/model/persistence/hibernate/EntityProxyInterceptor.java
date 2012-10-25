@@ -68,7 +68,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {

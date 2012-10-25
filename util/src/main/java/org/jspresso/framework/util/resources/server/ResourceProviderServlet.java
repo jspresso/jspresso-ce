@@ -303,7 +303,6 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
 

@@ -192,7 +192,6 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public ObjectEqualityMap<K, V> clone() {
     ObjectEqualityMap<K, V> clone = (ObjectEqualityMap<K, V>) super.clone();
     clone.delegate = (HashMap<K, V>) delegate.clone();

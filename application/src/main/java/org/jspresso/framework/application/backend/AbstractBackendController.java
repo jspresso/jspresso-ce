@@ -1141,7 +1141,6 @@ public abstract class AbstractBackendController extends AbstractController
     return uowComponent;
   }
 
-  @SuppressWarnings("unchecked")
   private <E extends IEntity> E cloneInUnitOfWork(E entity,
       boolean allowOuterScopeUpdate, IEntityRegistry alreadyCloned) {
     Class<? extends IEntity> entityContract = getComponentContract(entity);
@@ -2244,7 +2243,6 @@ public abstract class AbstractBackendController extends AbstractController
    *          the component to get the component contract for.
    * @return the component contract.
    */
-  @SuppressWarnings("unchecked")
   protected <E extends IComponent> Class<? extends E> getComponentContract(
       E component) {
     return (Class<? extends E>) component.getComponentContract();

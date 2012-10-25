@@ -103,7 +103,6 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IValueConnector modelConnector = getBackendController(context)
@@ -308,7 +307,6 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
     return wizardStepActions;
   }
 
-  @SuppressWarnings("unchecked")
   private void displayWizardStep(IWizardStepDescriptor wizardStep,
       IValueConnector modelConnector, IActionHandler actionHandler,
       Map<String, Object> context, boolean reuseCurrent) {
