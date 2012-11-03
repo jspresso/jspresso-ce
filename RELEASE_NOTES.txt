@@ -1,5 +1,11 @@
 3.5.15
 ======
+- Starting from Jspresso 3.5.15, there is no need to augment the service delegates implementation signature with the target
+  component/entity as first parameter. Jspresso will inject it in the implementation instance in a thread-safe manner so that
+  it is now accessible using the getComponent() method, exactly like an extension. This way, service delegates implementation classes
+  can implement the service interface and everything is cleaner regarding IDE suppport as well as compile-time checks. Note that the old
+  legacy service delegates are still supported seamlessly.
+
 - In order to introduce support for nested transactions, we have augmented the signature of all TX synchronization methods
   on the backend controller in order to pass the underlying transaction as parameter. It is legal to call those methods
   with a null parameter when artificially beginnig / committing / rollbacking a UOW in order to manage in-memory only transactions.
