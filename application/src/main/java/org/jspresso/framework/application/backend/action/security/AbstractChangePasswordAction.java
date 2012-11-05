@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.security.Util;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -76,6 +77,19 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * <code>PASSWD_TYPED</code>.
    */
   public static final String                                    PASSWD_TYPED             = "password_typed";
+
+  /**
+   * <code>BASE64_ENCODING</code> is &quot;BASE64&quot;.
+   */
+  public static final String                                    BASE64_ENCODING          = "BASE64";
+  /**
+   * <code>BASE16_ENCODING</code> is &quot;HEX&quot;.
+   */
+  public static final String                                    BASE16_ENCODING          = "BASE16";
+  /**
+   * <code>HEX_ENCODING</code> is &quot;HEX&quot;.
+   */
+  public static final String                                    HEX_ENCODING             = "HEX";
 
   private String                                                digestAlgorithm;
   private String                                                hashEncoding;
@@ -165,7 +179,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * <ul>
    * <li><code>BASE64</code> for base 64 encoding.</li>
    * <li><code>HEX</code> for base 16 encoding.</li>
-   * <li><code>RFC2617</code> for RFC 2617 encoding.</li>
    * </ul>
    * Default encoding is <code>BASE64</code>.
    * 
@@ -216,7 +229,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
    * Encodes the password hash based on the hash encoding parameter (either
-   * Base64, Base16 or RFC2617). Defaults to Base64.
+   * Base64, Base16). Defaults to Base64.
    * 
    * @param source
    *          the byte array (hash) to encode.
@@ -224,15 +237,14 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   protected String encode(byte[] source) {
     String he = getHashEncoding();
-    if (Util.BASE64_ENCODING.equalsIgnoreCase(he)) {
-      return Util.encodeBase64(source);
-    } else if (Util.BASE16_ENCODING.equalsIgnoreCase(he)) {
-      return Util.encodeBase16(source);
-    } else if (Util.RFC2617_ENCODING.equalsIgnoreCase(he)) {
-      return Util.encodeRFC2617(source);
+    if (BASE64_ENCODING.equalsIgnoreCase(he)) {
+      return Base64.encodeBase64String(source);
+    } else if (BASE16_ENCODING.equalsIgnoreCase(he)
+        || HEX_ENCODING.equalsIgnoreCase(he)) {
+      return Hex.encodeHexString(source);
     }
     // defaults to Base64
-    return Util.encodeBase64(source);
+    return Base64.encodeBase64String(source);
   }
 
   /**
