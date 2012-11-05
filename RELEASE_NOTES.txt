@@ -2,7 +2,8 @@
 ======
 - Starting from Jspresso 3.5.15, there is no need to augment the service delegates implementation signature with the target
   component/entity as first parameter. Jspresso will inject it in the implementation instance in a thread-safe manner so that
-  it is now accessible using the getComponent() method, exactly like an extension. This way, service delegates implementation classes
+  it is now accessible using the getComponent() method, exactly like an extension. All you have to do is inherit the abstract class 
+  org.jspresso.framework.model.component.service.AbstractComponentServiceDelegate. This way, service delegates implementation classes
   can implement the service interface and everything is cleaner regarding IDE suppport as well as compile-time checks. Note that the old
   legacy service delegates are still supported seamlessly.
 
