@@ -48,6 +48,7 @@ import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEnt
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
+import org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork;
 import org.jspresso.framework.application.i18n.ITranslationPlugin;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
@@ -128,6 +129,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   private TransactionTemplate                              transactionTemplate;
   private ComponentTransferStructure<? extends IComponent> transferStructure;
   private IEntityUnitOfWork                                unitOfWork;
+  private Object                                           unitOfWorkTransaction;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
   private LRUMap                                           moduleConnectors;
@@ -154,6 +156,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   protected AbstractBackendController() {
     dirtRecorder = new BeanPropertyChangeRecorder();
+    unitOfWork = createUnitOfWork();
     // moduleConnectors = new HashMap<Module, IValueConnector>();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
@@ -166,9 +169,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public void joinTransaction() {
+  public void joinTransaction(Object transaction) {
     if (!isUnitOfWorkActive()) {
-      beginUnitOfWork();
+      beginUnitOfWork(transaction);
     }
   }
 
@@ -176,10 +179,32 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public void beginUnitOfWork() {
+  public final void beginUnitOfWork(Object transaction) {
     if (isUnitOfWorkActive()) {
       throw new BackendException("Cannot begin a new unit of work. Another one is already active.");
     }
+    doBeginUnitOfWork(transaction);
+    unitOfWorkTransaction = extractActualTransaction(transaction);
+  }
+
+  /**
+   * Extracts the actual transaction from the passed in transaction object.
+   * 
+   * @param transaction
+   *          the transaction object that is potentially a wrapper.
+   * @return the actual transaction object that will be stored.
+   */
+  protected Object extractActualTransaction(Object transaction) {
+    return transaction;
+  }
+
+  /**
+   * Performs actual UOW begin.
+   * 
+   * @param transaction
+   *          the underlying transaction.
+   */
+  protected void doBeginUnitOfWork(Object transaction) {
     unitOfWork.begin();
   }
 
@@ -241,10 +266,39 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public void commitUnitOfWork() {
+  public final void commitUnitOfWork(Object transaction) {
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot commit a unit of work that has not begun.");
     }
+    if (isUnitOfWorkTransaction(transaction)) {
+      doCommitUnitOfWork(transaction);
+    }
+  }
+
+  /**
+   * Determines if this is the transaction that initiated the current UOW.
+   * 
+   * @param transaction
+   *          the transaction to test.
+   * @return <code>true</code> if the transaction is the UOW one.
+   */
+  protected boolean isUnitOfWorkTransaction(Object transaction) {
+    boolean perform;
+    if (unitOfWorkTransaction == null) {
+      perform = (transaction == null);
+    } else {
+      perform = unitOfWorkTransaction.equals(transaction);
+    }
+    return perform;
+  }
+
+  /**
+   * Performs actual UOW commit.
+   * 
+   * @param transaction
+   *          the underlying transaction.
+   */
+  protected void doCommitUnitOfWork(Object transaction) {
     try {
       committingUow = true;
       IEntityRegistry alreadyMerged = new BasicEntityRegistry();
@@ -708,10 +762,22 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public void rollbackUnitOfWork() {
+  public final void rollbackUnitOfWork(Object transaction) {
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot rollback a unit of work that has not begun.");
     }
+    if (isUnitOfWorkTransaction(transaction)) {
+      doRollbackUnitOfWork(transaction);
+    }
+  }
+
+  /**
+   * Performs actual UOW rollback.
+   * 
+   * @param transaction
+   *          the underlying transaction.
+   */
+  protected void doRollbackUnitOfWork(Object transaction) {
     unitOfWork.rollback();
   }
 
@@ -827,20 +893,12 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   /**
-   * Configures the &quot;Unit of Work&quot; implementation to be used by this
-   * controller. The same UOW instance is reused (started, cleared) all along
-   * the session. This property can only be set once and should only be used by
-   * the DI container. It will rarely be changed from built-in defaults unless
-   * you need to specify a custom implementation instance to be used.
+   * Creates a &quot;Unit of Work&quot; to be used by this controller.
    * 
-   * @param unitOfWork
-   *          the unitOfWork to set.
+   * @return the created UOW.
    */
-  public void setUnitOfWork(IEntityUnitOfWork unitOfWork) {
-    if (this.unitOfWork != null) {
-      throw new IllegalArgumentException("unitOfWork can only be configured once.");
-    }
-    this.unitOfWork = unitOfWork;
+  protected IEntityUnitOfWork createUnitOfWork() {
+    return new BasicEntityUnitOfWork();
   }
 
   /**
@@ -1252,7 +1310,8 @@ public abstract class AbstractBackendController extends AbstractController imple
             } else {
               Object registeredProperty = registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
+              if (mergeMode == EMergeMode.MERGE_EAGER
+                  || mergeMode == EMergeMode.MERGE_LAZY) {
                 if (isInitialized(propertyValue)) {
                   initializePropertyIfNeeded(registeredEntity, propertyName);
                 } else if (isInitialized(registeredProperty)) {
@@ -1274,7 +1333,8 @@ public abstract class AbstractBackendController extends AbstractController imple
             } else {
               Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
+              if (mergeMode == EMergeMode.MERGE_EAGER
+                  || mergeMode == EMergeMode.MERGE_LAZY) {
                 if (isInitialized(propertyValue)) {
                   initializePropertyIfNeeded(registeredEntity, propertyName);
                 } else if (isInitialized(registeredCollection)) {
@@ -1361,7 +1421,8 @@ public abstract class AbstractBackendController extends AbstractController imple
         } else {
           Object registeredProperty = registeredComponentProperties
               .get(propertyName);
-          if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
+          if (mergeMode == EMergeMode.MERGE_EAGER
+              || mergeMode == EMergeMode.MERGE_LAZY) {
             if (isInitialized(propertyValue)) {
               initializePropertyIfNeeded(varRegisteredComponent, propertyName);
             } else if (isInitialized(registeredProperty)) {

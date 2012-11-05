@@ -278,9 +278,6 @@
     <property name="entityRegistry">
       <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry" />
     </property>
-    <property name="unitOfWork">
-      <bean class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
-    </property>
     <property name="carbonEntityCloneFactory">
       <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
     </property>

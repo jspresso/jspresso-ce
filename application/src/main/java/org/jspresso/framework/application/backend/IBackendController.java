@@ -55,16 +55,20 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
   /**
    * Begins the current unit of work.
    * 
+   * @param transaction
+   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
    */
-  void beginUnitOfWork();
+  void beginUnitOfWork(Object transaction);
 
   /**
    * Joins the transaction, beginning unit of work if not already begun.
    * 
+   * @param transaction
+   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
    */
-  void joinTransaction();
+  void joinTransaction(Object transaction);
 
   /**
    * Registers an entity (actually a clone of it) and all its graph as taking
@@ -139,9 +143,11 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
   /**
    * Commits the current unit of work.
    * 
+   * @param transaction
+   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#commit()
    */
-  void commitUnitOfWork();
+  void commitUnitOfWork(Object transaction);
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a
@@ -370,9 +376,11 @@ public interface IBackendController extends IController, IEntityLifecycleHandler
   /**
    * Rollbacks the current unit of work.
    * 
+   * @param transaction
+   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#rollback()
    */
-  void rollbackUnitOfWork();
+  void rollbackUnitOfWork(Object transaction);
 
   /**
    * Asks this backend controller to perform any necessary action upon startup.

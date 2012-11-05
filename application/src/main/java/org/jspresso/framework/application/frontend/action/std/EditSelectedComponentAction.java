@@ -106,12 +106,12 @@ public class EditSelectedComponentAction<E, F, G> extends
   protected Object getComponentToEdit(Map<String, Object> context) {
     IBackendController c = getBackendController(context);
     try {
-      c.beginUnitOfWork();
-      IEntity uowEntity = c
-          .cloneInUnitOfWork((IEntity) getSelectedModel(context), true);
+      c.beginUnitOfWork(null);
+      IEntity uowEntity = c.cloneInUnitOfWork(
+          (IEntity) getSelectedModel(context), true);
       return uowEntity;
     } finally {
-      c.rollbackUnitOfWork();
+      c.rollbackUnitOfWork(null);
     }
   }
 }

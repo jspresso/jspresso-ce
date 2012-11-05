@@ -143,7 +143,7 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void beginUnitOfWork() {
+  public void doBeginUnitOfWork(Object transaction) {
     // This is to avoid having entities attached to 2 open sessions
     // and to periodically clear the noTxSession cache.
     if (noTxSession != null) {
@@ -151,14 +151,14 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     updatedEntities = new HashSet<IEntity>();
     deletedEntities = new HashSet<IEntity>();
-    super.beginUnitOfWork();
+    super.doBeginUnitOfWork(transaction);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void commitUnitOfWork() {
+  public void doCommitUnitOfWork(Object transaction) {
     updatedEntities = null;
     deletedEntities = null;
     if (traversedPendingOperations) {
@@ -166,7 +166,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // successful commit.
       clearPendingOperations();
     }
-    super.commitUnitOfWork();
+    super.doCommitUnitOfWork(transaction);
   }
 
   /**
@@ -489,11 +489,11 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void rollbackUnitOfWork() {
+  public void doRollbackUnitOfWork(Object transaction) {
     updatedEntities = null;
     deletedEntities = null;
     try {
-      super.rollbackUnitOfWork();
+      super.doRollbackUnitOfWork(transaction);
     } finally {
       traversedPendingOperations = false;
     }
@@ -1018,4 +1018,14 @@ public class HibernateBackendController extends AbstractBackendController {
     return HibernateHelper.getComponentContract(component);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object extractActualTransaction(Object transaction) {
+    if (transaction == null) {
+      return null;
+    }
+    return getHibernateSession().getTransaction();
+  }
 }

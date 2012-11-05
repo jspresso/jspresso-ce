@@ -79,9 +79,9 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     IBackendController backendController = getBackendController();
     if (registerCompletion(tx, backendController)) {
       if (tx.wasCommitted()) {
-        backendController.commitUnitOfWork();
+        backendController.commitUnitOfWork(tx);
       } else {
-        backendController.rollbackUnitOfWork();
+        backendController.rollbackUnitOfWork(tx);
       }
     }
     super.afterTransactionCompletion(tx);
