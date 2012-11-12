@@ -35,8 +35,11 @@ public final class BackendControllerHolder {
    * <code>CURRENT_BACKEND_CONTROLLER_KEY</code>.
    */
   public static final String                           CURRENT_BACKEND_CONTROLLER_KEY = "CURRENT_BACKEND_CONTROLLER";
-  private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER
-                                                        = new InheritableThreadLocal<IBackendController>();
+  private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER =
+      new InheritableThreadLocal<IBackendController>();
+  private static final ThreadLocal<IBackendController> THREADLOCAL_BACKEND_CONTROLLER =
+      new ThreadLocal<IBackendController>();
+
   static {
     try {
       Class.forName("org.jspresso.framework.util.http.HttpRequestHolder");
@@ -76,6 +79,18 @@ public final class BackendControllerHolder {
    */
   public static void setThreadBackendController(IBackendController controller) {
     THREADBOUND_BACKEND_CONTROLLER.set(controller);
+    THREADLOCAL_BACKEND_CONTROLLER.set(controller);
+  }
+
+  /**
+   * Gets the backend controller belonging to this thread without getting the
+   * parent thread value.
+   * 
+   * @return the backend controller belonging to this thread without getting the
+   *         parent thread value.
+   */
+  public static IBackendController getThreadBackendController() {
+    return THREADLOCAL_BACKEND_CONTROLLER.get();
   }
 
   /**
