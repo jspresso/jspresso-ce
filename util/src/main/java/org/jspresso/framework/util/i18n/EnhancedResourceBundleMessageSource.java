@@ -194,8 +194,8 @@ public class EnhancedResourceBundleMessageSource extends
           @Override
           public Locale getFallbackLocale(String baseName, Locale forLocale) {
             if (EnhancedResourceBundleMessageSource.this.getFallbackLocale() != null) {
-              return super.getFallbackLocale(baseName,
-                  EnhancedResourceBundleMessageSource.this.getFallbackLocale());
+              return EnhancedResourceBundleMessageSource.this
+                  .getFallbackLocale();
             }
             return super.getFallbackLocale(baseName, forLocale);
           }
