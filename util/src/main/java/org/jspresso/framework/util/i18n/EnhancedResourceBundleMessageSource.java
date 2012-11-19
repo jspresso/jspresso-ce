@@ -20,6 +20,7 @@ package org.jspresso.framework.util.i18n;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -44,6 +45,7 @@ public class EnhancedResourceBundleMessageSource extends
 
   private static final char  DOT            = '.';
   private boolean            resolveNested  = true;
+  private Locale             fallbackLocale;
 
   /**
    * Sets the resolveNested.
@@ -171,5 +173,68 @@ public class EnhancedResourceBundleMessageSource extends
   @Override
   protected String getDefaultMessage(String code) {
     return DEFAULT_MARKER + code;
+  }
+
+  /**
+   * Allows to override the falback locale for resource bundle default
+   * implementation.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected ResourceBundle doGetBundle(String basename, Locale locale) {
+    return ResourceBundle.getBundle(basename, locale, getBundleClassLoader(),
+        new ResourceBundle.Control() {
+
+          /**
+           * Falls back to parameterized locale if specified.
+           * <p>
+           * {@inheritDoc}
+           */
+          @Override
+          public Locale getFallbackLocale(String baseName, Locale forLocale) {
+            if (EnhancedResourceBundleMessageSource.this.getFallbackLocale() != null) {
+              return super.getFallbackLocale(baseName,
+                  EnhancedResourceBundleMessageSource.this.getFallbackLocale());
+            }
+            return super.getFallbackLocale(baseName, forLocale);
+          }
+        });
+  }
+
+  /**
+   * Sets the fallbackLocale.
+   * 
+   * @param fallbackLocale
+   *          the fallbackLocale to set.
+   */
+  public void setFallbackLocale(Locale fallbackLocale) {
+    this.fallbackLocale = fallbackLocale;
+    syncFallbackLocale();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setParentMessageSource(MessageSource parent) {
+    super.setParentMessageSource(parent);
+    syncFallbackLocale();
+  }
+
+  private void syncFallbackLocale() {
+    if (getParentMessageSource() instanceof EnhancedResourceBundleMessageSource) {
+      ((EnhancedResourceBundleMessageSource) getParentMessageSource())
+          .setFallbackLocale(getFallbackLocale());
+    }
+  }
+
+  /**
+   * Gets the fallbackLocale.
+   * 
+   * @return the fallbackLocale.
+   */
+  protected Locale getFallbackLocale() {
+    return fallbackLocale;
   }
 }
