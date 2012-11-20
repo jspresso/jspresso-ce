@@ -104,7 +104,7 @@
     <flexmojos-plugin.version>3.8</flexmojos-plugin.version>
     <exec-plugin.version>1.2.1</exec-plugin.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
-    <groovy.version>2.0.4</groovy.version>
+    <groovy.version>2.0.5</groovy.version>
     <jetty-plugin.version>7.4.2.v20110526</jetty-plugin.version>
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
     <dependency-plugin.version>2.4</dependency-plugin.version>
@@ -1072,7 +1072,7 @@
           <version>${gmaven-plugin.version}</version>
           <configuration>
             <sourceEncoding>UTF-8</sourceEncoding>
-            <providerSelection>1.7</providerSelection> 
+            <providerSelection>2.0</providerSelection> 
           </configuration>
         </plugin>
         <plugin>
