@@ -26,6 +26,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -230,8 +231,8 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   public static ICollectionViewDescriptor extractMainCollectionView(
       IViewDescriptor viewDescriptor) {
     ICollectionViewDescriptor mainCollectionView = null;
-    if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      mainCollectionView = (ICollectionViewDescriptor) viewDescriptor;
+    if (viewDescriptor instanceof ICollectionViewDescriptorProvider) {
+      mainCollectionView = ((ICollectionViewDescriptorProvider) viewDescriptor).getCollectionViewDescriptor();
     } else if (viewDescriptor instanceof ICompositeViewDescriptor
         && ((ICompositeViewDescriptor) viewDescriptor)
             .getChildViewDescriptors() != null) {
@@ -243,5 +244,13 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
       }
     }
     return mainCollectionView;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ICollectionViewDescriptor getCollectionViewDescriptor() {
+    return this;
   }
 }

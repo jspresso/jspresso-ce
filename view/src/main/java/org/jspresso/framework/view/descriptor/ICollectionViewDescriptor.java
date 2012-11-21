@@ -27,7 +27,8 @@ import org.jspresso.framework.action.IAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICollectionViewDescriptor extends IViewDescriptor {
+public interface ICollectionViewDescriptor extends IViewDescriptor,
+    ICollectionViewDescriptorProvider {
 
   /**
    * Gets the item selection action that will be attached to the created
