@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.model.component.query;
 
+import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
-import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
  * A simple query structure which holds a comparator, and inf value and a sup
@@ -28,17 +29,20 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
-
-  private String comparator;
-  private Object infValue;
-  private Object supValue;
+public class ComparableQueryStructure extends QueryComponent {
 
   /**
    * Constructs a new <code>ComparableQueryStructure</code> instance.
+   * 
+   * @param componentDescriptor
+   *          the query componentDescriptor.
+   * @param componentFactory
+   *          the component factory.
    */
-  public ComparableQueryStructure() {
-    this.comparator = ComparableQueryStructureDescriptor.EQ;
+  public ComparableQueryStructure(IComponentDescriptor<?> componentDescriptor,
+      IComponentFactory componentFactory) {
+    super(componentDescriptor, componentFactory);
+    setComparator(ComparableQueryStructureDescriptor.EQ);
   }
 
   /**
@@ -47,7 +51,7 @@ public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
    * @return the comparator.
    */
   public String getComparator() {
-    return comparator;
+    return (String) get(ComparableQueryStructureDescriptor.COMPARATOR);
   }
 
   /**
@@ -56,7 +60,7 @@ public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
    * @return the infValue.
    */
   public Object getInfValue() {
-    return infValue;
+    return get(ComparableQueryStructureDescriptor.INF_VALUE);
   }
 
   /**
@@ -65,7 +69,7 @@ public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
    * @return the supValue.
    */
   public Object getSupValue() {
-    return supValue;
+    return get(ComparableQueryStructureDescriptor.SUP_VALUE);
   }
 
   /**
@@ -75,9 +79,7 @@ public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
    *          the comparator to set.
    */
   public void setComparator(String comparator) {
-    String oldComparator = this.comparator;
-    this.comparator = comparator;
-    firePropertyChange("comparator", oldComparator, this.comparator);
+    put(ComparableQueryStructureDescriptor.COMPARATOR, comparator);
   }
 
   /**
@@ -87,9 +89,7 @@ public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
    *          the infValue to set.
    */
   public void setInfValue(Object infValue) {
-    Object oldInfValue = this.infValue;
-    this.infValue = infValue;
-    firePropertyChange("infValue", oldInfValue, this.infValue);
+    put(ComparableQueryStructureDescriptor.INF_VALUE, infValue);
   }
 
   /**
@@ -99,8 +99,28 @@ public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
    *          the supValue to set.
    */
   public void setSupValue(Object supValue) {
-    Object oldSupValue = this.supValue;
-    this.supValue = supValue;
-    firePropertyChange("supValue", oldSupValue, this.supValue);
+    put(ComparableQueryStructureDescriptor.INF_VALUE, supValue);
+  }
+
+  /**
+   * Wether the comparable query structure actually holds a restriction.
+   * 
+   * @return <code>true</code> if the comparable query structure actually holds
+   *         a restriction.
+   */
+  public boolean isRestricting() {
+    return getInfValue() != null || getSupValue() != null;
+  }
+
+  /**
+   * Wether the value passed as parameter matches the query structure.
+   * 
+   * @param value
+   *          the value to test.
+   * @return <code>true</code> if the value passed as parameter matches the
+   *         query structure.
+   */
+  public boolean matches(Object value) {
+    return true;
   }
 }
