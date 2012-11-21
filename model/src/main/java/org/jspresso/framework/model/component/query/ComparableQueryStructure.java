@@ -99,7 +99,7 @@ public class ComparableQueryStructure extends QueryComponent {
    *          the supValue to set.
    */
   public void setSupValue(Object supValue) {
-    put(ComparableQueryStructureDescriptor.INF_VALUE, supValue);
+    put(ComparableQueryStructureDescriptor.SUP_VALUE, supValue);
   }
 
   /**
@@ -120,7 +120,39 @@ public class ComparableQueryStructure extends QueryComponent {
    * @return <code>true</code> if the value passed as parameter matches the
    *         query structure.
    */
-  public boolean matches(Object value) {
+  public boolean matches(Comparable<Object> value) {
+    if (isRestricting()) {
+      if (value == null) {
+        return false;
+      }
+      String comparator = getComparator();
+      Object infValue = getInfValue();
+      Object supValue = getSupValue();
+      Object compareValue = infValue;
+      if (compareValue == null) {
+        compareValue = supValue;
+      }
+      if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
+        return value.compareTo(compareValue) == 0;
+      } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
+        return value.compareTo(compareValue) > 0;
+      } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
+        return value.compareTo(compareValue) >= 0;
+      } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
+        return value.compareTo(compareValue) < 0;
+      } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
+        return value.compareTo(compareValue) <= 0;
+      } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
+        if (infValue != null && supValue != null) {
+          return value.compareTo(infValue) >= 0
+              && value.compareTo(supValue) <= 0;
+        } else if (infValue != null) {
+          return value.compareTo(infValue) >= 0;
+        } else {
+          return value.compareTo(supValue) <= 0;
+        }
+      }
+    }
     return true;
   }
 }
