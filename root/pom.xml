@@ -750,6 +750,16 @@
         <artifactId>stax-api</artifactId>
         <version>${stax-api.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy</artifactId>
+        <version>${groovy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+        <version>${groovy.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
