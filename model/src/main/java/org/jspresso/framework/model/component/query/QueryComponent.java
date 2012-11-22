@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -62,6 +61,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private Integer                 pageSize;
   private Integer                 recordCount;
   private boolean                 distinctEnforced;
+  private List<?>                 queriedComponents;
 
   /**
    * Constructs a new <code>QueryComponent</code> instance.
@@ -424,9 +424,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
-  public List<? extends IComponent> getQueriedComponents() {
-    return (List<? extends IComponent>) get(QUERIED_COMPONENTS);
+  public List<?> getQueriedComponents() {
+    return queriedComponents;
   }
 
   /**
@@ -561,7 +560,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public void setQueriedComponents(List<?> queriedComponents) {
-    put(QUERIED_COMPONENTS, queriedComponents);
+    List<?> oldQueriedComponents = getQueriedComponents();
+    this.queriedComponents = queriedComponents;
+    firePropertyChange(QUERIED_COMPONENTS, oldQueriedComponents, getQueriedComponents());
   }
 
   /**
