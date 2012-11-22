@@ -188,16 +188,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       DetachedCriteria currentCriteria, String path,
       IQueryComponent aQueryComponent) {
     boolean abort = false;
-    if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
-        .getQueryContract())) {
-      String comparator = (String) aQueryComponent
-          .get(ComparableQueryStructureDescriptor.COMPARATOR);
-      Object infValue = aQueryComponent
-          .get(ComparableQueryStructureDescriptor.INF_VALUE);
-      Object supValue = aQueryComponent
-          .get(ComparableQueryStructureDescriptor.SUP_VALUE);
-      completeWithComparableQueryStructure(currentCriteria, path, comparator,
-          infValue, supValue);
+    if (aQueryComponent instanceof ComparableQueryStructure) {
+      completeWithComparableQueryStructure(currentCriteria, path,
+          (ComparableQueryStructure) aQueryComponent);
     } else {
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
           .getQueryDescriptor();
@@ -445,18 +438,15 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *          the current criteria that is being built.
    * @param path
    *          the path to the comparable property.
-   * @param comparator
-   *          the comparator value from ComparableQueryStructureDescriptor
-   *          constants.
-   * @param infValue
-   *          the inf value to compare to.
-   * @param supValue
-   *          the sup value to compare to.
+   * @param queryStructure
+   *          the comparable query structure.
    */
   protected void completeWithComparableQueryStructure(
-      DetachedCriteria currentCriteria, String path, String comparator,
-      Object infValue, Object supValue) {
-    if (infValue != null || supValue != null) {
+      DetachedCriteria currentCriteria, String path, ComparableQueryStructure queryStructure) {
+    if (queryStructure.isRestricting()) {
+      String comparator = queryStructure.getComparator();
+      Object infValue = queryStructure.getInfValue();
+      Object supValue = queryStructure.getSupValue();
       Object compareValue = infValue;
       if (compareValue == null) {
         compareValue = supValue;

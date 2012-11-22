@@ -36,7 +36,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.AbstractEnumerationPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
@@ -136,13 +135,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
-      QueryComponent referencedQueryComponent = new QueryComponent(
-          referencedDescriptor, getComponentFactory());
-      if (ComparableQueryStructure.class
-          .isAssignableFrom(referencedQueryComponent.getQueryContract())) {
-        referencedQueryComponent.put(
-            ComparableQueryStructureDescriptor.COMPARATOR,
-            ComparableQueryStructureDescriptor.EQ);
+      QueryComponent referencedQueryComponent;
+      if (ComparableQueryStructure.class.isAssignableFrom(referencedDescriptor
+          .getComponentContract())) {
+        referencedQueryComponent = new ComparableQueryStructure(
+            referencedDescriptor, getComponentFactory());
+      } else {
+        referencedQueryComponent = new QueryComponent(referencedDescriptor,
+            getComponentFactory());
       }
       referencedQueryComponent
           .addPropertyChangeListener(new InlinedComponentTracker(
@@ -405,8 +405,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (remainder > 0) {
       lastIncompletePage = 1;
     }
-    return Integer.valueOf(getRecordCount().intValue() / getPageSize().intValue()
-        + lastIncompletePage);
+    return Integer.valueOf(getRecordCount().intValue()
+        / getPageSize().intValue() + lastIncompletePage);
   }
 
   /**
@@ -532,10 +532,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     firePropertyChange(PAGE, oldValue, getPage());
     firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
         getDisplayPageIndex());
-    firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED, Boolean.valueOf(
-        oldPreviousPageEnabled), Boolean.valueOf(isPreviousPageEnabled()));
-    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, Boolean.valueOf(
-        oldNextPageEnabled), Boolean.valueOf(isNextPageEnabled()));
+    firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED,
+        Boolean.valueOf(oldPreviousPageEnabled),
+        Boolean.valueOf(isPreviousPageEnabled()));
+    firePropertyChange(IPageable.NEXT_PAGE_ENABLED,
+        Boolean.valueOf(oldNextPageEnabled),
+        Boolean.valueOf(isNextPageEnabled()));
   }
 
   /**
@@ -549,8 +551,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.pageSize = pageSize;
     firePropertyChange(PAGE_SIZE, oldValue, getPageSize());
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
-    firePropertyChange(PAGE_NAVIGATION_ENABLED, Boolean.valueOf(
-        oldPageNavigationEnabled), Boolean.valueOf(isPageNavigationEnabled()));
+    firePropertyChange(PAGE_NAVIGATION_ENABLED,
+        Boolean.valueOf(oldPageNavigationEnabled),
+        Boolean.valueOf(isPageNavigationEnabled()));
   }
 
   /**
@@ -579,10 +582,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
     firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
         getDisplayPageIndex());
-    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, Boolean.valueOf(
-        oldNextPageEnabled), Boolean.valueOf(isNextPageEnabled()));
-    firePropertyChange(IPageable.PAGE_NAVIGATION_ENABLED, Boolean.valueOf(
-        oldPageNavigationEnabled), Boolean.valueOf(isPageNavigationEnabled()));
+    firePropertyChange(IPageable.NEXT_PAGE_ENABLED,
+        Boolean.valueOf(oldNextPageEnabled),
+        Boolean.valueOf(isNextPageEnabled()));
+    firePropertyChange(IPageable.PAGE_NAVIGATION_ENABLED,
+        Boolean.valueOf(oldPageNavigationEnabled),
+        Boolean.valueOf(isPageNavigationEnabled()));
   }
 
   private class InlinedComponentTracker implements PropertyChangeListener {

@@ -206,7 +206,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private void bindChildRowConnector(int row) {
     ICompositeValueConnector rowConnector = (ICompositeValueConnector) collectionConnector
         .getChildConnector(row);
-    if (!rowConnector.getValueChangeListeners().contains(rowListener)) {
+    if (rowConnector != null && !rowConnector.getValueChangeListeners().contains(rowListener)) {
       rowConnector.addValueChangeListener(rowListener);
       for (int col = 0; col < columnConnectorKeys.size(); col++) {
         IValueConnector cellConnector = rowConnector
