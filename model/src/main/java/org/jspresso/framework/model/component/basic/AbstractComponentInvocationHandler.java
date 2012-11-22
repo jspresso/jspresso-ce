@@ -44,6 +44,7 @@ import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IComponentFactoryAware;
 import org.jspresso.framework.model.component.ILifecycleCapable;
+import org.jspresso.framework.model.component.service.AbstractComponentServiceDelegate;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
@@ -82,6 +83,9 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
+
+
+
 
 
 
@@ -235,7 +239,8 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else {
       if (isLifecycleMethod(method)) {
-        return Boolean.valueOf(invokeLifecycleInterceptors(proxy, method, args));
+        return Boolean
+            .valueOf(invokeLifecycleInterceptors(proxy, method, args));
       }
       AccessorInfo accessorInfo = getAccessorFactory().getAccessorInfo(method);
       EAccessorType accessorType = accessorInfo.getAccessorType();
@@ -611,22 +616,29 @@ public abstract class AbstractComponentInvocationHandler implements
    * @throws NoSuchMethodException
    *           if no mean could be found to service the method.
    */
+  @SuppressWarnings("unchecked")
   protected Object invokeServiceMethod(Object proxy, Method method,
       Object[] args) throws NoSuchMethodException {
     IComponentService service = componentDescriptor.getServiceDelegate(method);
     if (service != null) {
-      int signatureSize = method.getParameterTypes().length + 1;
-      Class<?>[] parameterTypes = new Class[signatureSize];
-      Object[] parameters = new Object[signatureSize];
-
-      parameterTypes[0] = componentDescriptor.getComponentContract();
-      parameters[0] = proxy;
-
-      for (int i = 1; i < signatureSize; i++) {
-        parameterTypes[i] = method.getParameterTypes()[i - 1];
-        parameters[i] = args[i - 1];
-      }
       try {
+        if (service instanceof AbstractComponentServiceDelegate<?>
+            && service.getClass().getMethod(method.getName(),
+                method.getParameterTypes()) != null) {
+          return ((AbstractComponentServiceDelegate<Object>) service)
+              .executeWith(proxy, method, args);
+        }
+        int signatureSize = method.getParameterTypes().length + 1;
+        Class<?>[] parameterTypes = new Class[signatureSize];
+        Object[] parameters = new Object[signatureSize];
+
+        parameterTypes[0] = componentDescriptor.getComponentContract();
+        parameters[0] = proxy;
+
+        for (int i = 1; i < signatureSize; i++) {
+          parameterTypes[i] = method.getParameterTypes()[i - 1];
+          parameters[i] = args[i - 1];
+        }
         return MethodUtils.invokeMethod(service, method.getName(), parameters,
             parameterTypes);
       } catch (IllegalAccessException ex) {
@@ -1190,8 +1202,7 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       try {
         Object interceptorResult = MethodUtils.invokeMethod(
-            lifecycleInterceptor,  methodName, parameters,
-            parameterTypes);
+            lifecycleInterceptor, methodName, parameters, parameterTypes);
         if (interceptorResult instanceof Boolean) {
           interceptorResults = interceptorResults
               || ((Boolean) interceptorResult).booleanValue();
