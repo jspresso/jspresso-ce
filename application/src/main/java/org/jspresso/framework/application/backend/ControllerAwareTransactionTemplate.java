@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.application.backend;
 
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -30,6 +34,35 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
+  /**
+   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
+   */
+  public ControllerAwareTransactionTemplate() {
+    super();
+  }
+
+  /**
+   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
+   * 
+   * @param transactionManager
+   * @param transactionDefinition
+   */
+  public ControllerAwareTransactionTemplate(
+      PlatformTransactionManager transactionManager,
+      TransactionDefinition transactionDefinition) {
+    super(transactionManager, transactionDefinition);
+  }
+
+  /**
+   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
+   * 
+   * @param transactionManager
+   */
+  public ControllerAwareTransactionTemplate(
+      PlatformTransactionManager transactionManager) {
+    super(transactionManager);
+  }
+
   private static final long serialVersionUID = 7416468234402124464L;
 
   /**
@@ -39,9 +72,21 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
    * {@inheritDoc}
    */
   @Override
-  public <T> T execute(TransactionCallback<T> action) {
-    BackendControllerHolder.getCurrentBackendController().joinTransaction();
-    return super.execute(action);
+  public <T> T execute(final TransactionCallback<T> action) {
+    TransactionCallback<T> wrapper = new TransactionCallback<T>() {
+
+      @Override
+      public T doInTransaction(TransactionStatus status) {
+        Object transaction = null;
+        if (status instanceof DefaultTransactionStatus) {
+          transaction = ((DefaultTransactionStatus) status).getTransaction();
+        }
+        BackendControllerHolder.getCurrentBackendController().joinTransaction(
+            transaction);
+        return action.doInTransaction(status);
+      }
+    };
+    return super.execute(wrapper);
   }
 
 }

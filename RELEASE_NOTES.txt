@@ -1,3 +1,10 @@
+3.5.15
+======
+- In order to introduce support for nested transactions, we have augmented the signature of all TX synchronization methods
+  on the backend controller in order to pass the underlying transaction as parameter. It is legal to call those methods
+  with a null parameter when artificially beginnig / committing / rollbacking a UOW in order to manage in-memory only transactions.
+  So all application code like beginUnitOfWork() can safely be changed to beginUnitOfWork(null)
+
 3.5.14
 ======
 - Due to RFE #812 we have changed the return type of ILovResultViewDescriptorFactory in order to be able to return

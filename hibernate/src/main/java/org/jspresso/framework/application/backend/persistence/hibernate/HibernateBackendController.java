@@ -160,7 +160,7 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void beginUnitOfWork() {
+  public void doBeginUnitOfWork(Object transaction) {
     // This is to avoid having entities attached to 2 open sessions
     // and to periodically clear the noTxSession cache.
     if (noTxSession != null) {
@@ -168,14 +168,14 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     updatedEntities = new HashSet<IEntity>();
     deletedEntities = new HashSet<IEntity>();
-    super.beginUnitOfWork();
+    super.doBeginUnitOfWork(transaction);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void commitUnitOfWork() {
+  public void doCommitUnitOfWork(Object transaction) {
     updatedEntities = null;
     deletedEntities = null;
     if (traversedPendingOperations) {
@@ -183,7 +183,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // successful commit.
       clearPendingOperations();
     }
-    super.commitUnitOfWork();
+    super.doCommitUnitOfWork(transaction);
   }
 
   /**
@@ -280,8 +280,8 @@ public class HibernateBackendController extends AbstractBackendController {
             try {
               Hibernate.initialize(propertyValue);
               if (propertyValue instanceof Collection<?>) {
-                relinkAfterInitialization((Collection<IComponent>) propertyValue,
-                    componentOrEntity);
+                relinkAfterInitialization(
+                    (Collection<IComponent>) propertyValue, componentOrEntity);
               }
               return;
             } catch (Exception ex) {
@@ -358,7 +358,8 @@ public class HibernateBackendController extends AbstractBackendController {
             componentOrEntity);
       } else {
         relinkAfterInitialization(
-            Collections.singleton((IComponent) propertyValue), componentOrEntity);
+            Collections.singleton((IComponent) propertyValue),
+            componentOrEntity);
       }
       super.initializePropertyIfNeeded(componentOrEntity, propertyName);
       clearPropertyDirtyState(propertyValue);
@@ -527,11 +528,11 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void rollbackUnitOfWork() {
+  public void doRollbackUnitOfWork(Object transaction) {
     updatedEntities = null;
     deletedEntities = null;
     try {
-      super.rollbackUnitOfWork();
+      super.doRollbackUnitOfWork(transaction);
     } finally {
       traversedPendingOperations = false;
     }
@@ -1112,5 +1113,12 @@ public class HibernateBackendController extends AbstractBackendController {
   protected IEntityRegistry createEntityRegistry(String name) {
     return new HibernateEntityRegistry(name);
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object extractActualTransaction(Object transaction) {
+    return getHibernateSession().getTransaction();
+  }
 }
