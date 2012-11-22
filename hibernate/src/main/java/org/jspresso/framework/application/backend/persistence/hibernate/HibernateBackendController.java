@@ -1119,6 +1119,9 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected Object extractActualTransaction(Object transaction) {
+    if (transaction == null) {
+      return null;
+    }
     return getHibernateSession().getTransaction();
   }
 }

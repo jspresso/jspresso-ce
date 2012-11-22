@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
  * @param <T>
  *          the actual target component type.
  */
-public class AbstractComponentServiceDelegate<T> {
+public class AbstractComponentServiceDelegate<T> implements IComponentService {
 
   private final ThreadLocal<T> targetStore = new ThreadLocal<T>();
 
