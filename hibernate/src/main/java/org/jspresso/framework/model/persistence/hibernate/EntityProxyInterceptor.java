@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
+import org.hibernate.Hibernate;
 import org.hibernate.type.Type;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.EntityException;
@@ -108,6 +109,17 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       }
     }
     return stateUpdated;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Boolean isTransient(Object entity) {
+    if (!Hibernate.isInitialized(entity)) {
+      return Boolean.FALSE;
+    }
+    return super.isTransient(entity);
   }
 
   /**
