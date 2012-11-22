@@ -41,6 +41,7 @@ import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.engine.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.jspresso.framework.application.backend.AbstractBackendController;
@@ -352,6 +353,20 @@ public class HibernateBackendController extends AbstractBackendController {
         lockInHibernate((IEntity) propertyValue, hibernateSession);
       }
 
+      if (propertyValue instanceof HibernateProxy) {
+        HibernateProxy proxy = (HibernateProxy) propertyValue;
+        LazyInitializer li = proxy.getHibernateLazyInitializer();
+        if (li.getSession() == null) {
+          try {
+            li.setSession((SessionImplementor) hibernateSession);
+          } catch (Exception ex) {
+            LOG.error(
+                "An internal error occurred when reassociating Hibernate session for {} reference initialization.",
+                propertyName);
+            LOG.error("Source exception", ex);
+          }
+        }
+      }
       Hibernate.initialize(propertyValue);
       if (propertyValue instanceof Collection<?>) {
         relinkAfterInitialization((Collection<IComponent>) propertyValue,

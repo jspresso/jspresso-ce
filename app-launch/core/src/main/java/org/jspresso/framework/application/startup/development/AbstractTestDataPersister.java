@@ -54,7 +54,7 @@ public abstract class AbstractTestDataPersister {
    */
   public final void persistTestData() {
     HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder
-        .getCurrentBackendController();
+        .getThreadBackendController();
     boolean wasNull = false;
     if (hbc == null) {
       wasNull = true;
