@@ -26,6 +26,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.binding.CollectionConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -64,6 +65,9 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
         // this is from the dialog.
         resultConnector = (ICollectionConnector) ((ICompositeValueConnector) viewConnector)
             .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+        if (resultConnector == null) {
+          resultConnector = CollectionConnectorHelper.extractMainCollectionConnector(viewConnector);
+        }
       }
       if (resultConnector != null) {
         int[] resultSelectedIndices = resultConnector.getSelectedIndices();
