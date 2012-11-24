@@ -52,11 +52,6 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   String QUERIED_COMPONENTS  = "queriedComponents";
 
   /**
-   * sticky results action constant.
-   */
-  String STICKY_RESULTS      = "STICKY_RESULTS";
-
-  /**
    * Query component action constant.
    */
   String QUERY_COMPONENT     = "QUERY_COMPONENT";
@@ -153,4 +148,12 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    */
   void translate(ITranslationProvider translationProvider, Locale locale);
 
+  /**
+   * Hydrates a query component with a hierarchical map holding bare filter
+   * values.
+   * 
+   * @param state
+   *          the hierarchical map holding bare filter values.
+   */
+  void hydrate(Map<String, Object> state);
 }

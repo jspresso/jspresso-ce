@@ -70,8 +70,7 @@ public class RefQueryComponentDescriptor<E> extends
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
       Class<? extends E> componentContract,
       Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
-    super(componentDescriptorProvider.getComponentDescriptor()
-        .getComponentContract().getName());
+    super(componentDescriptorProvider.getComponentDescriptor().getName());
     this.registry = registry;
     this.queryComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;

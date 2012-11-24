@@ -62,6 +62,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private Integer                 recordCount;
   private boolean                 distinctEnforced;
   private List<?>                 queriedComponents;
+  private List<?>                 stickyResults;
 
   /**
    * Constructs a new <code>QueryComponent</code> instance.
@@ -562,7 +563,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public void setQueriedComponents(List<?> queriedComponents) {
     List<?> oldQueriedComponents = getQueriedComponents();
     this.queriedComponents = queriedComponents;
-    firePropertyChange(QUERIED_COMPONENTS, oldQueriedComponents, getQueriedComponents());
+    firePropertyChange(QUERIED_COMPONENTS, oldQueriedComponents,
+        getQueriedComponents());
   }
 
   /**
@@ -667,15 +669,37 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public void setStickyResults(List<?> stickyResults) {
-    put(STICKY_RESULTS, stickyResults);
+    this.stickyResults = stickyResults;
   }
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public List<?> getStickyResults() {
-    return (List<Object>) get(STICKY_RESULTS);
+    return stickyResults;
+  }
+
+  /**
+   * Hydrates a query component with a hierarchical map holding bare filter
+   * values.
+   * 
+   * @param state
+   *          the hierarchical map holding bare filter values.
+   */
+  @Override
+  public void hydrate(Map<String, Object> state) {
+    if (state != null) {
+      for (Map.Entry<String, Object> stateEntry : state.entrySet()) {
+        Object value = get(stateEntry.getKey());
+        if (value instanceof IQueryComponent
+            && stateEntry.getValue() instanceof Map<?, ?>) {
+          ((IQueryComponent) value).hydrate((Map<String, Object>) stateEntry
+              .getValue());
+        } else {
+          put(stateEntry.getKey(), stateEntry.getValue());
+        }
+      }
+    }
   }
 }
