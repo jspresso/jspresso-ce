@@ -432,19 +432,36 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public void setEntityDescriptor(
       IComponentDescriptor<? extends IComponent> entityDescriptor) {
     this.entityDescriptor = entityDescriptor;
-    computeEntityRefQueryDescriptor();
+    this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(
+        entityDescriptor, initializationMapping);
   }
 
-  private void computeEntityRefQueryDescriptor() {
-    if (entityDescriptor != null) {
-      entityRefQueryDescriptor = new BasicReferencePropertyDescriptor<IComponent>();
-      ((BasicReferencePropertyDescriptor<IComponent>) entityRefQueryDescriptor)
-          .setReferencedDescriptor(entityDescriptor);
-      ((BasicReferencePropertyDescriptor<IComponent>) entityRefQueryDescriptor)
-          .setInitializationMapping(initializationMapping);
-    } else {
-      entityRefQueryDescriptor = null;
+  /**
+   * Gets the entity descriptor to execute the LOV action for from the context.
+   * It allows sub classes to override in order to define the descriptor at
+   * runtime.
+   * 
+   * @param context
+   *          the action context.
+   * @return the entity descriptor to execute the LOV action for.
+   */
+  protected IComponentDescriptor<? extends IComponent> getEntityDescriptor(
+      Map<String, Object> context) {
+    return entityDescriptor;
+  }
+
+  private IReferencePropertyDescriptor<IComponent> createEntityRefQueryDescriptor(
+      IComponentDescriptor<? extends IComponent> descriptor,
+      Map<String, Object> initMapping) {
+    IReferencePropertyDescriptor<IComponent> refQueryDescriptor = null;
+    if (descriptor != null) {
+      refQueryDescriptor = new BasicReferencePropertyDescriptor<IComponent>();
+      ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor)
+          .setReferencedDescriptor(descriptor);
+      ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor)
+          .setInitializationMapping(initMapping);
     }
+    return refQueryDescriptor;
   }
 
   /**
@@ -472,7 +489,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setInitializationMapping(Map<String, Object> initializationMapping) {
     this.initializationMapping = initializationMapping;
-    computeEntityRefQueryDescriptor();
+    this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(
+        entityDescriptor, initializationMapping);
   }
 
   /**
@@ -510,6 +528,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> context) {
     if (entityRefQueryDescriptor != null) {
       return entityRefQueryDescriptor;
+    }
+    IComponentDescriptor<? extends IComponent> descriptor = getEntityDescriptor(context);
+    if (descriptor != null) {
+      return createEntityRefQueryDescriptor(descriptor, initializationMapping);
     }
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
