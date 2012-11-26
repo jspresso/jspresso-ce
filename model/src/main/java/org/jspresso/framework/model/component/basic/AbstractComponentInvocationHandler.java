@@ -1037,6 +1037,10 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private boolean hasListeners(@SuppressWarnings("unused") Object proxy,
       String propertyName) {
+    if (computedPropertiesCache.containsKey(propertyName)) {
+      // this is necessary in order to force cache recomputation
+      computedPropertiesCache.remove(propertyName);
+    }
     if (propertyChangeSupport != null
         && propertyChangeSupport.hasListeners(propertyName)) {
       PropertyChangeListener[] listeners = propertyChangeSupport
