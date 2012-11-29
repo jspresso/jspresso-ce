@@ -104,4 +104,19 @@ public interface IViewFactory<E, F, G> {
    */
   void edit(E component);
 
+  /**
+   * Forces the refresh of a card view, potentially changing its vsible card.
+   * 
+   * @param cardView
+   *          the card view to re-compute the visible card for.
+   * @param unbindPrevious
+   *          Should current view be unbound ?
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   */
+  void refreshCardView(IMapView<E> cardView, boolean unbindPrevious, IActionHandler actionHandler,
+      Locale locale);
+
 }
