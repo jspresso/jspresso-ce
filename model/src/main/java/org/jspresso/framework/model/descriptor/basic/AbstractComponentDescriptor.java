@@ -38,6 +38,7 @@ import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
@@ -439,7 +440,8 @@ public abstract class AbstractComponentDescriptor<E> extends
       if (declaredPropertyDescriptors != null) {
         for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
           if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
-              && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
+              && !(propertyDescriptor instanceof ITextPropertyDescriptor)
+              && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
             renderedPropertiesSet.add(propertyDescriptor.getName());
           }
         }
