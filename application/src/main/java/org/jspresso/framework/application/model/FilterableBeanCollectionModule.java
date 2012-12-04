@@ -64,6 +64,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   private Integer                          pageSize;
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
   private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
+  private IViewDescriptor paginationViewDescriptor;
+  private BackendAction   pagingAction;
 
   /**
    * Gets the queryViewDescriptorFactory.
@@ -73,9 +75,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   protected IQueryViewDescriptorFactory getQueryViewDescriptorFactory() {
     return queryViewDescriptorFactory;
   }
-
-  private IViewDescriptor paginationViewDescriptor;
-  private BackendAction   pagingAction;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.

@@ -71,11 +71,13 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
     pageableModel.setStickyResults(stickyResults);
 
     try {
-      if (pageableModel.getPage() != null) {
-        pageableModel.setPage(Integer.valueOf(pageableModel.getPage().intValue()
-            + pageOffset.intValue()));
-      } else {
-        pageableModel.setPage(pageOffset);
+      if (pageOffset != null) {
+        if (pageableModel.getPage() != null) {
+          pageableModel.setPage(Integer.valueOf(pageableModel.getPage()
+              .intValue() + pageOffset.intValue()));
+        } else {
+          pageableModel.setPage(pageOffset);
+        }
       }
       return super.execute(actionHandler, context);
     } finally {
