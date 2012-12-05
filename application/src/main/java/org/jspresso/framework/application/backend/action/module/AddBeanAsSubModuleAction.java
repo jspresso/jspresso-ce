@@ -18,15 +18,16 @@
  */
 package org.jspresso.framework.application.backend.action.module;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -53,7 +54,16 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class AddBeanAsSubModuleAction extends BackendAction {
 
-  private IViewDescriptor childModuleProjectedViewDescriptor;
+  /**
+   * <code>PARENT_WORKSPACE</code> is &quot;PARENT_WORKSPACE&quot;.
+   */
+  public static final String PARENT_WORKSPACE   = "PARENT_WORKSPACE";
+  /**
+   * <code>PARENT_MODULE_NAME</code> is &quot;PARENT_MODULE_NAME&quot;.
+   */
+  public static final String PARENT_MODULE_NAME = "PARENT_MODULE_NAME";
+
+  private IViewDescriptor    childModuleProjectedViewDescriptor;
 
   /**
    * Adds the selected objects as child modules.
@@ -68,9 +78,6 @@ public class AddBeanAsSubModuleAction extends BackendAction {
       selectedModels = getSelectedModels(context);
     }
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
-    Module parentModule = getModule(context);
-    List<Module> childModules = parentModule.getSubModules();
-    List<Module> newSubModules = new ArrayList<Module>();
 
     IComponentDescriptor<?> childComponentDescriptor;
     if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
@@ -83,6 +90,14 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
     Module moduleToSelect = null;
     for (Object nextSelectedModuleObject : selectedModels) {
+
+      preSelectModuleObject(nextSelectedModuleObject, context);
+
+      Module parentModule = findDestinationModule(nextSelectedModuleObject,
+          context);
+      List<Module> childModules = parentModule.getSubModules();
+      Module newSubModule = null;
+
       Module nextSubModule = createChildModule(parentModule,
           childComponentDescriptor, nextSelectedModuleObject, context);
       int nextSubModuleIndex = -1;
@@ -90,15 +105,21 @@ public class AddBeanAsSubModuleAction extends BackendAction {
         nextSubModuleIndex = childModules.indexOf(nextSubModule);
       }
       if (nextSubModuleIndex < 0) {
-        newSubModules.add(nextSubModule);
+        newSubModule = nextSubModule;
         if (moduleToSelect == null) {
           moduleToSelect = nextSubModule;
         }
       } else if (moduleToSelect == null && childModules != null) {
         moduleToSelect = childModules.get(nextSubModuleIndex);
       }
+
+      if (newSubModule != null) {
+        parentModule.addSubModule(newSubModule);
+      }
+
+      postSelectModuleObject(nextSelectedModuleObject, context);
     }
-    parentModule.addSubModules(newSubModules);
+
     setActionParameter(moduleToSelect, context);
     return super.execute(actionHandler, context);
   }
@@ -157,6 +178,153 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   protected IViewDescriptor getChildModuleProjectedViewDescriptor(
       Map<String, Object> context) {
     return childModuleProjectedViewDescriptor;
+  }
+
+  /**
+   * Gets the parent workspace if found in context using key
+   * {@link AddBeanAsSubModuleAction#PARENT_WORKSPACE}.
+   * 
+   * @param context
+   *          the action context.
+   * @return the target workspace name.
+   */
+  protected Workspace getParentWorkspace(Map<String, Object> context) {
+    return (Workspace) context.get(PARENT_WORKSPACE);
+  }
+
+  /**
+   * Gets parent module name if found in context using key
+   * {@link AddBeanAsSubModuleAction#PARENT_MODULE_NAME}.
+   * 
+   * @param context
+   *          the action context.
+   * @return the target parent module name.
+   */
+  public static String getParentModuleName(Map<String, Object> context) {
+    return (String) context.get(PARENT_MODULE_NAME);
+  }
+
+  /**
+   * Finds the parent module where to add the selected component.
+   * 
+   * @param component
+   *          the component to add as module object.
+   * @param context
+   *          the action context.
+   * @return the parent module to add the new module to.
+   */
+  protected Module findDestinationModule(Object component,
+      Map<String, Object> context) {
+    Workspace workspace = getParentWorkspace(context);
+    if (workspace == null) {
+      return getCurrentModule(context);
+    }
+    String moduleName = getParentModuleName(context);
+    for (Module m : workspace.getModules()) {
+      Module m2 = findModule(m, moduleName, null);
+      if (m2 != null) {
+        return m2;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Notifies that a module object is going to been selected. Does nothing by
+   * default. Override if needed.
+   * 
+   * @param moduleObject
+   *          the module object that will been selected.
+   * @param context
+   *          the action context.
+   */
+  protected void preSelectModuleObject(Object moduleObject,
+      Map<String, Object> context) {
+    // Empty implementation by default.
+  }
+
+  /**
+   * Notifies that a module object has been selected. Does nothing by default.
+   * Override if needed.
+   * 
+   * @param moduleObject
+   *          the module object that has been selected.
+   * @param context
+   *          the action context.
+   */
+  protected void postSelectModuleObject(Object moduleObject,
+      Map<String, Object> context) {
+    // Empty implementation by default.
+  }
+
+  /**
+   * Finds the existing module for a module object.
+   * 
+   * @param rootModule
+   *          the root module to start the search from.
+   * @param moduleObject
+   *          the module object.
+   * @param context
+   *          the action context.
+   * @return the stack of modules containing the found module.
+   */
+  public Stack<Module> findCurrentModule(Module rootModule,
+      Object moduleObject, Map<String, Object> context) {
+    Stack<Module> stack = new Stack<Module>();
+    findCurrentModule(rootModule, moduleObject, stack);
+    return stack;
+  }
+
+  private Module findCurrentModule(Module rootModule,
+      Object nextSelectedModuleObject, Stack<Module> stack) {
+    stack.push(rootModule);
+    if (rootModule instanceof BeanModule
+        && nextSelectedModuleObject.equals(((BeanModule) rootModule)
+            .getModuleObject())) {
+      return rootModule;
+    }
+    if (rootModule.getSubModules() != null) {
+      for (Module sub : rootModule.getSubModules()) {
+        Module parentModule = findCurrentModule(sub, nextSelectedModuleObject,
+            stack);
+        if (parentModule != null) {
+          return parentModule;
+        }
+      }
+    }
+    stack.pop();
+    return null;
+  }
+
+  /**
+   * Finds the existing module for a module object or name.
+   * 
+   * @param rootModule
+   *          the root module to start the search from.
+   * @param moduleObject
+   *          the module object.
+   * @param moduleName
+   *          the module name.
+   * @return the stack of modules containing the found module.
+   */
+  protected Module findModule(Module rootModule, String moduleName,
+      Object moduleObject) {
+    if (moduleName != null && moduleName.equals(rootModule.getName())) {
+      return rootModule;
+    }
+    if (moduleObject != null && (rootModule instanceof BeanModule)
+        && moduleObject.equals(((BeanModule) rootModule).getModuleObject())) {
+      return rootModule;
+    }
+    if (rootModule.getSubModules() != null) {
+      for (Module sub : rootModule.getSubModules()) {
+        Module parentModule = findModule(sub, moduleName, moduleObject);
+        if (parentModule != null) {
+          return parentModule;
+        }
+      }
+    }
+    return null;
   }
 
 }
