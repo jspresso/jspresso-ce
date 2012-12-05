@@ -57,11 +57,17 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   /**
    * <code>PARENT_WORKSPACE</code> is &quot;PARENT_WORKSPACE&quot;.
    */
-  public static final String PARENT_WORKSPACE   = "PARENT_WORKSPACE";
+  public static final String PARENT_WORKSPACE          = "PARENT_WORKSPACE";
   /**
    * <code>PARENT_MODULE_NAME</code> is &quot;PARENT_MODULE_NAME&quot;.
    */
-  public static final String PARENT_MODULE_NAME = "PARENT_MODULE_NAME";
+  public static final String PARENT_MODULE_NAME        = "PARENT_MODULE_NAME";
+
+  /**
+   * <code>PROJECTED_VIEW_DESCRIPTOR</code> is
+   * &quot;PROJECTED_VIEW_DESCRIPTOR&quot;.
+   */
+  public static final String PROJECTED_VIEW_DESCRIPTOR = "PROJECTED_VIEW_DESCRIPTOR";
 
   private IViewDescriptor    childModuleProjectedViewDescriptor;
 
@@ -177,7 +183,10 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    */
   protected IViewDescriptor getChildModuleProjectedViewDescriptor(
       Map<String, Object> context) {
-    return childModuleProjectedViewDescriptor;
+    if (childModuleProjectedViewDescriptor != null) {
+      return childModuleProjectedViewDescriptor;
+    }
+    return (IViewDescriptor) context.get(PROJECTED_VIEW_DESCRIPTOR);
   }
 
   /**

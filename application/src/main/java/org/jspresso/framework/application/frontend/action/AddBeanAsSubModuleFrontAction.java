@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This action can be installed on any collection view and will take the
@@ -42,13 +43,15 @@ import org.jspresso.framework.application.backend.action.module.AddBeanAsSubModu
 public class AddBeanAsSubModuleFrontAction<E, F, G> extends
     FrontendAction<E, F, G> {
 
-  private String parentWorkspaceName;
-  private String parentModuleName;
+  private String          parentWorkspaceName;
+  private String          parentModuleName;
+  private IViewDescriptor childModuleProjectedViewDescriptor;
 
   /**
    * Sets the WorkspaceName where to add components to.
    * 
-   * @param parentWorkspaceName the parent workspace name.
+   * @param parentWorkspaceName
+   *          the parent workspace name.
    */
   public void setParentWorkspaceName(String parentWorkspaceName) {
     this.parentWorkspaceName = parentWorkspaceName;
@@ -68,7 +71,8 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
   /**
    * Sets the parent module where to add components to.
    * 
-   * @param parentModuleName the parent module name.
+   * @param parentModuleName
+   *          the parent module name.
    */
   public void setParentModuleName(String parentModuleName) {
     this.parentModuleName = parentModuleName;
@@ -102,6 +106,11 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
     if (moduleName != null) {
       context.put(AddBeanAsSubModuleAction.PARENT_MODULE_NAME, moduleName);
     }
+    
+    IViewDescriptor projectedViewDescriptor = getChildModuleProjectedViewDescriptor(context);
+    if (projectedViewDescriptor != null) {
+      context.put(AddBeanAsSubModuleAction.PROJECTED_VIEW_DESCRIPTOR, projectedViewDescriptor);
+    }
 
     setActionParameter(getComponentsToAdd(context), context);
 
@@ -109,13 +118,38 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
   }
 
   /**
-   * Gets the components to add as child modules. Defaults to the view selected models.
+   * Gets the components to add as child modules. Defaults to the view selected
+   * models.
    * 
-   * @param context tha action context.
+   * @param context
+   *          tha action context.
    * @return the components to add as child modules.
    */
   protected List<?> getComponentsToAdd(Map<String, Object> context) {
     return getSelectedModels(context);
+  }
+
+  /**
+   * Gets the childModuleProjectedViewDescriptor.
+   * 
+   * @param context
+   *          the action context.
+   * @return the childModuleProjectedViewDescriptor.
+   */
+  protected IViewDescriptor getChildModuleProjectedViewDescriptor(
+      Map<String, Object> context) {
+    return childModuleProjectedViewDescriptor;
+  }
+
+  /**
+   * Sets the childModuleProjectedViewDescriptor.
+   * 
+   * @param childModuleProjectedViewDescriptor
+   *          the childModuleProjectedViewDescriptor to set.
+   */
+  public void setChildModuleProjectedViewDescriptor(
+      IViewDescriptor childModuleProjectedViewDescriptor) {
+    this.childModuleProjectedViewDescriptor = childModuleProjectedViewDescriptor;
   }
 
 }
