@@ -236,12 +236,10 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public void modelChange(ModelChangeEvent evt) {
-    // preserve the old value before it gets changed.
-    Object oldValue = getOldConnectorValue();
+    // notify the listeners
+    fireModelChange(getOldConnectorValue(), getConnecteeValue());
     // handle the change normally
     super.modelChange(evt);
-    // then notify the listeners
-    fireModelChange(oldValue, getConnecteeValue());
   }
 
   /**
