@@ -187,7 +187,55 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public void displayModule(Module module) {
-    displayModule(getSelectedWorkspaceName(), module);
+    displayModule(getModuleWorkspace(module), module);
+  }
+
+  /**
+   * Determines the workspace name of the parameter module.
+   * 
+   * @param module
+   *          the module to detremine the workspace of.
+   * @return the module workspace name. If no workspace already contains this
+   *         module, defaults to the curent one.
+   */
+  protected String getModuleWorkspace(Module module) {
+    String selectedWsName = getSelectedWorkspaceName();
+    // Look first in the current WS
+    if (belongsTo(getWorkspace(selectedWsName), module)) {
+      return selectedWsName;
+    }
+    // Then on the others
+    for (String wsName : getWorkspaceNames()) {
+      if (!wsName.equals(selectedWsName)
+          && belongsTo(getWorkspace(wsName), module)) {
+        return wsName;
+      }
+    }
+    return selectedWsName;
+  }
+
+  private boolean belongsTo(Workspace owner, Module module) {
+    for (Module child : owner.getModules()) {
+      if (belongsTo(child, module)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean belongsTo(Module owner, Module module) {
+    if (owner == module) {
+      return true;
+    }
+    List<Module> subModules = owner.getSubModules();
+    if (subModules != null) {
+      for (Module child : subModules) {
+        if (belongsTo(child, module)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
