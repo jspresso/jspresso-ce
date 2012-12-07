@@ -80,7 +80,7 @@
     <resources-plugin.version>2.6</resources-plugin.version>
     <jar-plugin.version>2.3.1</jar-plugin.version>
     <surefire-plugin.version>2.4.3</surefire-plugin.version>
-    <assembly-plugin.version>2.2.1</assembly-plugin.version>
+    <assembly-plugin.version>2.4</assembly-plugin.version>
     <javadoc-plugin.version>2.8</javadoc-plugin.version>
     <deploy-plugin.version>2.6</deploy-plugin.version>
     <site-plugin.version>3.0-beta-3</site-plugin.version>
