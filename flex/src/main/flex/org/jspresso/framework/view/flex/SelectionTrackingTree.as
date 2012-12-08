@@ -27,7 +27,6 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.array.ArrayUtil;
   import org.jspresso.framework.util.remote.IRemotePeer;
-  import org.jspresso.framework.util.remote.RemotePeer;
   
     
   public class SelectionTrackingTree extends Tree {
