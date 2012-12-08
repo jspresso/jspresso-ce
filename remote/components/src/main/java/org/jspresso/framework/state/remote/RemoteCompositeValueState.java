@@ -108,6 +108,11 @@ public class RemoteCompositeValueState extends RemoteValueState {
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
+    if (children != null) {
+      for (RemoteValueState child : children) {
+        child.setParent(this);
+      }
+    }
   }
 
   /**

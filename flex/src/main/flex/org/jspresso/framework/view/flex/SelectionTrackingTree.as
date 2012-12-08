@@ -24,7 +24,10 @@ package org.jspresso.framework.view.flex {
   import mx.events.PropertyChangeEventKind;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+  import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.array.ArrayUtil;
+  import org.jspresso.framework.util.remote.IRemotePeer;
+  import org.jspresso.framework.util.remote.RemotePeer;
   
     
   public class SelectionTrackingTree extends Tree {
@@ -62,8 +65,8 @@ package org.jspresso.framework.view.flex {
                       }
                     }
                     if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
-                      if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
-                        expandItem(changedState, true);
+                      if(newlySelectedItems.length > 0) {
+                        expandTo(changedState);
                       }
                       selectedItems = newlySelectedItems;
                     }
@@ -74,6 +77,20 @@ package org.jspresso.framework.view.flex {
           }
         }
       }
+    }
+    
+    protected function expandTo(item:RemoteValueState):void {
+      if(item.parent) {
+        expandTo(item.parent);
+      }
+      expandItem(item, true);
+    }
+    
+    protected override function itemToUID(data:Object):String {
+      if(data is IRemotePeer) {
+        return (data as IRemotePeer).guid;
+      }
+      return super.itemToUID(data);
     }
     
     public function fixListeners(nestedCollection:ICollectionView):void {
