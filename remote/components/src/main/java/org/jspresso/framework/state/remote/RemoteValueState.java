@@ -37,11 +37,12 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RemoteValueState extends RemotePeer {
 
-  private static final long serialVersionUID = 8957401466928527268L;
+  private static final long         serialVersionUID = 8957401466928527268L;
 
-  private boolean           readable;
-  private Serializable      value;
-  private boolean           writable;
+  private boolean                   readable;
+  private Serializable              value;
+  private boolean                   writable;
+  private RemoteCompositeValueState parent;
 
   /**
    * Constructs a new <code>RemoteValueState</code> instance.
@@ -122,7 +123,8 @@ public class RemoteValueState extends RemotePeer {
     } else if (incomingValue instanceof java.sql.Date) {
       transformedValue = new Date(((java.sql.Date) incomingValue).getTime());
     } else if (incomingValue instanceof BigDecimal) {
-      transformedValue = Double.valueOf(((BigDecimal) incomingValue).doubleValue());
+      transformedValue = Double.valueOf(((BigDecimal) incomingValue)
+          .doubleValue());
     } else if (incomingValue instanceof DateDto) {
       transformedValue = (DateDto) incomingValue;
     } else if (incomingValue instanceof Date || incomingValue instanceof String
@@ -146,6 +148,24 @@ public class RemoteValueState extends RemotePeer {
    */
   public void setWritable(boolean writable) {
     this.writable = writable;
+  }
+
+  /**
+   * Gets the parent.
+   * 
+   * @return the parent.
+   */
+  public RemoteCompositeValueState getParent() {
+    return parent;
+  }
+
+  /**
+   * Sets the parent.
+   * 
+   * @param parent the parent to set.
+   */
+  public void setParent(RemoteCompositeValueState parent) {
+    this.parent = parent;
   }
 
 }

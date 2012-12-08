@@ -24,6 +24,7 @@ package org.jspresso.framework.state.remote {
         private var _readable:Boolean;
         private var _value:Object;
         private var _writable:Boolean;
+        private var _parent:RemoteCompositeValueState;
 
         public function RemoteValueState() {
           //default constructor.
@@ -49,5 +50,16 @@ package org.jspresso.framework.state.remote {
         public function get writable():Boolean {
             return _writable;
         }
+
+        public function get parent():RemoteCompositeValueState
+        {
+          return _parent;
+        }
+
+        public function set parent(value:RemoteCompositeValueState):void
+        {
+          _parent = value;
+        }
+
     }
 }

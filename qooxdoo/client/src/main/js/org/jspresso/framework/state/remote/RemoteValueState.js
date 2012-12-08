@@ -36,6 +36,11 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteValueState",
     {
       check : "Boolean",
       event : "changeWritable"
+    },
+    parent :
+    {
+      check : "org.jspresso.framework.state.remote.RemoteCompositeValueState",
+      event : "changeParent"
     }
   }
 });
