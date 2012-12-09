@@ -20,7 +20,9 @@ package org.jspresso.framework.util.array {
   public class ArrayUtil {
     
     public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
-      if((a1 && !a2) || (a2 && !a1)) {
+      if (!a1 && !a2) {
+        return true;
+      } else   if((a1 && !a2) || (a2 && !a1)) {
         return false;
       } else if(a1.length != a2.length) {
         return false;

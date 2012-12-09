@@ -178,7 +178,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _translations:Object;
     private var _nextActionCallback:Function;
 
-    private var _postponedNotificationBuffer:Object;
+    private var _postponedChildrenNotificationBuffer:Array;
+    private var _postponedSelectionCommands:Object;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -463,17 +464,21 @@ package org.jspresso.framework.application.frontend.controller.flex {
             (targetPeer as RTabContainer).selectedIndex =
               (command as RemoteSelectionCommand).leadingIndex;
           } else {
-            (targetPeer as RemoteCompositeValueState).leadingIndex =
-              (command as RemoteSelectionCommand).leadingIndex;
-            (targetPeer as RemoteCompositeValueState).selectedIndices =
-              (command as RemoteSelectionCommand).selectedIndices;
+            if(_postponedChildrenNotificationBuffer.indexOf(targetPeer.guid) >= 0) {
+              _postponedSelectionCommands[targetPeer.guid] = command;
+            } else {
+              (targetPeer as RemoteCompositeValueState).leadingIndex =
+                (command as RemoteSelectionCommand).leadingIndex;
+              (targetPeer as RemoteCompositeValueState).selectedIndices =
+                (command as RemoteSelectionCommand).selectedIndices;
+            }
           }
         } else if(command is RemoteEnablementCommand) {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;
         } else if(command is RemoteChildrenCommand) {
           var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
-          _postponedNotificationBuffer[targetPeer.guid] = null;
+          _postponedChildrenNotificationBuffer.push(targetPeer.guid);
           if((command as RemoteChildrenCommand).remove) {
             for each(var removedChild:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if(isRegistered(removedChild.guid)) {
@@ -900,13 +905,15 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
         blockUI(true);
         _postponedCommands = new Object();
-        _postponedNotificationBuffer = new Object();
+        _postponedChildrenNotificationBuffer = new Array();
+        _postponedSelectionCommands = new Object();
         try {
           handleCommands(resultEvent.result as IList);
         } finally {
           checkPostponedCommandsCompletion();
           _postponedCommands = null;
-          _postponedNotificationBuffer = null;
+          _postponedChildrenNotificationBuffer = null;
+          _postponedSelectionCommands = null;
           if(_nextActionCallback != null) {
             try {
               _nextActionCallback();
@@ -947,10 +954,25 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         }
       }
-      for(guid in _postponedNotificationBuffer) {
-        var peer:IRemotePeer = getRegistered(guid);
+      var i:int;
+      var peer:IRemotePeer;
+      var delayedSelectionCommand:RemoteSelectionCommand;
+      for(i = 0; i < _postponedChildrenNotificationBuffer.length; i++) {
+        peer = getRegistered(_postponedChildrenNotificationBuffer[i]);
         if(peer is RemoteCompositeValueState) {
           (peer as RemoteCompositeValueState).notifyChildrenChanged();
+          if(_postponedSelectionCommands.hasOwnProperty(peer.guid)) {
+            delayedSelectionCommand = _postponedSelectionCommands[peer.guid] as RemoteSelectionCommand;
+            if(ArrayUtil.areUnorderedArraysEqual(delayedSelectionCommand.selectedIndices,
+                                                 (peer as RemoteCompositeValueState).selectedIndices)) {
+              (peer as RemoteCompositeValueState).notifySelectionChanged();
+            } else {
+              (peer as RemoteCompositeValueState).leadingIndex =
+                delayedSelectionCommand.leadingIndex;
+              (peer as RemoteCompositeValueState).selectedIndices =
+                delayedSelectionCommand.selectedIndices;
+            }
+          }
         }
       }
     }

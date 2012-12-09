@@ -74,5 +74,12 @@ package org.jspresso.framework.state.remote {
             PropertyChangeEventKind.UPDATE,
             "children", null, _children, this));
         }
+
+        public function notifySelectionChanged():void {
+          this.dispatchEvent(new PropertyChangeEvent(
+            "propertyChange", true, true, 
+            PropertyChangeEventKind.UPDATE,
+            "selectedIndices", null, selectedIndices, this));
+        }
     }
 }
