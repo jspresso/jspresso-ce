@@ -250,7 +250,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
         .equals(getSelectedWorkspaceName(), workspaceName))
         && ((currentModule == null && module == null) || ObjectUtils.equals(
             currentModule, module))) {
-      return;
+      if (currentModule != null && module != null
+          && ObjectUtils.equals(currentModule.getParent(), module.getParent())) {
+        return;
+      }
     }
     if (currentModule != null) {
       pinModule(getSelectedWorkspaceName(), currentModule);
