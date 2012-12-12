@@ -210,7 +210,7 @@ package org.jspresso.framework.view.flex {
   	  } else {
   	    cellLabel = null;
   	  }
-      return cellLabel
+      return cellLabel;
   	}
   	
   	protected function refresh(cellValue:Object):void {
@@ -307,7 +307,6 @@ package org.jspresso.framework.view.flex {
     
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
       if(listData.owner is DataGrid) {
-        var dg:DataGrid = listData.owner as DataGrid;
         if(backgroundIndex >= 0) {
           var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
           var alpha:uint = DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String);

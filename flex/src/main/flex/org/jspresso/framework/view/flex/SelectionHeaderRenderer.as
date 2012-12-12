@@ -1,9 +1,5 @@
 package org.jspresso.framework.view.flex {
-  import flash.events.Event;
-  import flash.events.MouseEvent;
-  
   import mx.binding.utils.BindingUtils;
-  import mx.collections.ArrayCollection;
   import mx.collections.ListCollectionView;
   import mx.containers.Canvas;
   import mx.controls.CheckBox;
@@ -11,6 +7,9 @@ package org.jspresso.framework.view.flex {
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.core.ScrollPolicy;
+
+  import flash.events.Event;
+  import flash.events.MouseEvent;
 
   public class SelectionHeaderRenderer extends Canvas implements IDropInListItemRenderer {
     
@@ -38,7 +37,7 @@ package org.jspresso.framework.view.flex {
       _listData = value;
       _dataGrid = value.owner as DataGrid;
       BindingUtils.bindSetter(function(selectedItems:Array):void {
-        _cb.selected = (selectedItems.length == (_dataGrid.dataProvider as ListCollectionView).length)
+        _cb.selected = (selectedItems.length == (_dataGrid.dataProvider as ListCollectionView).length);
       }, _dataGrid, "selectedItems", true);
     }
     

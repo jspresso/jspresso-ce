@@ -21,14 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ***********************************************************************/
-package org.jspresso.framework.view.flex
-{
-  import flash.display.DisplayObject;
-  import flash.events.Event;
-  import flash.events.MouseEvent;
-  import flash.events.TimerEvent;
-  import flash.utils.Timer;
-  
+package org.jspresso.framework.view.flex {
   import mx.collections.ArrayCollection;
   import mx.containers.Accordion;
   import mx.containers.Canvas;
@@ -42,8 +35,11 @@ package org.jspresso.framework.view.flex
   import mx.effects.Sequence;
   import mx.effects.easing.Quintic;
   import mx.events.EffectEvent;
-  import mx.events.FlexEvent;
   import mx.events.IndexChangedEvent;
+
+  import flash.display.DisplayObject;
+  import flash.events.Event;
+  import flash.events.MouseEvent;
   
   // Default property
   [DefaultProperty("content")]
@@ -98,10 +94,10 @@ package org.jspresso.framework.view.flex
     private var _selectedIndex : Number=1;
     private var selectedIndexChanged : Boolean=false;
     //Icons - default 
-    [Embed(source="/assets/images/close.png")]
+    [Embed(source="../../../../../../resources/assets/images/close.png")]
     private var rightCloseIcon : Class;
     
-    [Embed(source="/assets/images/closeleft.png")]
+    [Embed(source="../../../../../../resources/assets/images/closeleft.png")]
     private var leftCloseIcon : Class;
     
     private var _historyManagementEnabled:Boolean = false;

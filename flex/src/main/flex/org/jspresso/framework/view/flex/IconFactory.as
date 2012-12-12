@@ -66,7 +66,7 @@ package org.jspresso.framework.view.flex
 		 * @private
 		 */
 		public function IconFactory():void {
-			addEventListener(Event.ADDED, addedHandler, false, 0, true)
+			addEventListener(Event.ADDED, addedHandler, false, 0, true);
 		}
 		
 		private function addedHandler(event:Event):void {

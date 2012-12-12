@@ -155,8 +155,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
   
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler, IRemoteCommandHandler {
-    
-    private static const JSPRESSO_VERSION:String = VERSIONS::jspresso_version;
+    private static const JSPRESSO_VERSION : String = VERSIONS::jspresso_version;
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
     private static const START_METHOD:String = "start";
     private static const STOP_METHOD:String = "stop";
@@ -376,10 +375,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else if(dialogCommand is RemoteFlashDisplayCommand) {
           var url:String = new String((dialogCommand as RemoteFlashDisplayCommand).swfUrl);
           if((dialogCommand as RemoteFlashDisplayCommand).paramNames.length > 0) {
-            url = url+"?&"
+            url = url+"?&";
             for(var i:int = 0; i < (dialogCommand as RemoteFlashDisplayCommand).paramNames.length; i++) {
               if(i > 0) {
-                url  = url+"&"
+                url  = url+"&";
               }
               url = url+(dialogCommand as RemoteFlashDisplayCommand).paramNames[i]+"="+ 
                 (dialogCommand as RemoteFlashDisplayCommand).paramValues[i];
@@ -841,7 +840,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
       _dialogStack.push([null, null, null]);
-      start()
+      start();
     }
 
     protected function stop():void {
@@ -860,7 +859,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         messageHeader = translate("error.unexpected");
       } catch(e:Error) {
         title = "Error";
-        messageHeader = "An unexpected error occured"
+        messageHeader = "An unexpected error occured";
       }
       if(message && message.length > 1200) {
         var buff:String = message.substr(0, 600);
@@ -1385,7 +1384,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       });
       var focusInit:Function = function():void {
         getViewFactory().focus(dialogView);
-      }
+      };
       dialog.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
         dialog.callLater(focusInit);
       });

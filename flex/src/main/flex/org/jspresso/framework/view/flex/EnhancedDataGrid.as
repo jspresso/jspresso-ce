@@ -13,17 +13,16 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import flash.events.Event;
-  import flash.events.KeyboardEvent;
-  import flash.events.MouseEvent;
-  import flash.ui.Keyboard;
-  
   import mx.controls.DataGrid;
-  import mx.controls.dataGridClasses.DataGridColumn;
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.controls.listClasses.IListItemRenderer;
   import mx.core.mx_internal;
   import mx.events.DataGridEvent;
+
+  import flash.events.Event;
+  import flash.events.KeyboardEvent;
+  import flash.events.MouseEvent;
+  import flash.ui.Keyboard;
   
   use namespace mx_internal;
   
@@ -40,7 +39,6 @@ package org.jspresso.framework.view.flex {
     private var _savedSortDirection:String;
     private var _customSort:Boolean;
     private var _cbMultiSelection:Boolean;
-    private var _preventCumulativeSelection:Boolean;
     
     public function EnhancedDataGrid()	{
       super();

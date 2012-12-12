@@ -1,13 +1,12 @@
 package org.jspresso.framework.view.flex {
+  import org.jspresso.framework.gui.remote.RComponent;
+  import org.jspresso.framework.util.html.HtmlUtil;
+
   import mx.containers.HBox;
   import mx.controls.Image;
-  import mx.controls.Text;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.core.ScrollPolicy;
-  
-  import org.jspresso.framework.gui.remote.RComponent;
-  import org.jspresso.framework.util.html.HtmlUtil;
   
   
 
@@ -83,7 +82,6 @@ package org.jspresso.framework.view.flex {
     }
   }
 }
-
 import mx.controls.Text;
 
 internal class HeaderText extends Text {

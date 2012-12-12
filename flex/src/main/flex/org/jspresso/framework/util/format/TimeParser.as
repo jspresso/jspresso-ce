@@ -13,8 +13,6 @@
  */
 
 package org.jspresso.framework.util.format {
-  import flexlib.scheduling.util.DateUtil;
-  
   import org.jspresso.framework.util.lang.DateDto;
   
   public class TimeParser extends Parser {

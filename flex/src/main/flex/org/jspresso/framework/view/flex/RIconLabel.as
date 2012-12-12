@@ -13,14 +13,12 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import mx.collections.ArrayCollection;
+  import org.jspresso.framework.gui.remote.RIcon;
+
   import mx.containers.HBox;
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.core.ScrollPolicy;
-  
-  import org.jspresso.framework.gui.remote.RIcon;
-  import org.jspresso.framework.view.flex.CachedImage;
     
   public class RIconLabel extends HBox {
       

@@ -13,12 +13,10 @@
  */
 
 package org.jspresso.framework.view.flex {
+  import org.jspresso.framework.gui.remote.RIcon;
+
   import mx.controls.Image;
   import mx.controls.menuClasses.MenuBarItem;
-  import mx.core.IFlexDisplayObject;
-  
-  import org.jspresso.framework.gui.remote.RIcon;
-  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RIconMenuBarItem extends MenuBarItem {
 

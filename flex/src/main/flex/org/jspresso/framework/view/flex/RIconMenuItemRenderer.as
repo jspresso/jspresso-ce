@@ -13,16 +13,13 @@
  */
 
 package org.jspresso.framework.view.flex {
+  import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RIcon;
+
   import mx.binding.utils.BindingUtils;
   import mx.binding.utils.ChangeWatcher;
   import mx.controls.Image;
-  import mx.controls.listClasses.BaseListData;
-  import mx.controls.listClasses.ListData;
   import mx.controls.menuClasses.MenuItemRenderer;
-  
-  import org.jspresso.framework.gui.remote.RAction;
-  import org.jspresso.framework.gui.remote.RIcon;
-  import org.jspresso.framework.view.flex.CachedImage;
 
   public class RIconMenuItemRenderer extends MenuItemRenderer {
 

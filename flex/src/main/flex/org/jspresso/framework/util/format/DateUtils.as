@@ -75,7 +75,7 @@ package org.jspresso.framework.util.format
         return parseDate(value, "DD");
       }
       
-      var mask:String
+      var mask:String;
       var temp:String;
       var dateString:String = "";
       var monthString:String = "";

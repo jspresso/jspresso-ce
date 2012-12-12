@@ -1,8 +1,6 @@
-package org.jspresso.framework.view.flex
-{
+package org.jspresso.framework.view.flex {
   import mx.controls.DateField;
   import mx.controls.TextInput;
-  import mx.core.IFlexDisplayObject;
   import mx.core.mx_internal;
   import mx.events.FlexEvent;
 

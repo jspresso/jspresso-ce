@@ -12,10 +12,6 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.view.flex {
-  import flash.display.Sprite;
-  import flash.events.KeyboardEvent;
-  
-  import mx.controls.CheckBox;
   import mx.controls.List;
   import mx.controls.listClasses.IListItemRenderer;
   

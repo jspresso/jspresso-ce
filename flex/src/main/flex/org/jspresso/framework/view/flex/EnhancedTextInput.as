@@ -1,12 +1,10 @@
-package org.jspresso.framework.view.flex
-{
-  import flash.events.FocusEvent;
-  
+package org.jspresso.framework.view.flex {
   import mx.containers.GridItem;
   import mx.controls.TextInput;
-  import mx.core.IFlexDisplayObject;
   import mx.core.mx_internal;
   import mx.managers.IFocusManager;
+
+  import flash.events.FocusEvent;
 
   use namespace mx_internal;
 

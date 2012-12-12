@@ -14,7 +14,6 @@
 
 package org.jspresso.framework.util.format {
   import mx.formatters.NumberBase;
-  import mx.formatters.NumberFormatter;
   
 
   public class NumberParser extends Parser {

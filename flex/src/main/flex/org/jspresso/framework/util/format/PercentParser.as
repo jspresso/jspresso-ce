@@ -13,7 +13,6 @@
  */
 
 package org.jspresso.framework.util.format {
-  import mx.utils.StringUtil;
   
 
   public class PercentParser extends NumberParser {

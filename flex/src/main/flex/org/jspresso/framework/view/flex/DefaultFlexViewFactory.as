@@ -150,10 +150,10 @@ package org.jspresso.framework.view.flex {
   
   public class DefaultFlexViewFactory {
 
-    [Embed(source="mx/controls/Image.png")]
+    [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
     private var _iconTemplate:Class;
 
-    [Embed(source="/assets/images/reset-16x16.png")]
+    [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
     private var _resetIcon:Class;
 
     private static const TEMPLATE_CHAR:String = "O";
@@ -183,9 +183,9 @@ package org.jspresso.framework.view.flex {
       _remoteValueSorter = new RemoteValueSorter();
       _passwordFormatter = new PasswordFormatter();
       _timeFormatter = new DateFormatter();
-      _timeFormatter.formatString = "JJ:NN:SS"
+      _timeFormatter.formatString = "JJ:NN:SS";
       _shortTimeFormatter = new DateFormatter();
-      _shortTimeFormatter.formatString = "JJ:NN"
+      _shortTimeFormatter.formatString = "JJ:NN";
       ToolTipManager.toolTipClass = HtmlToolTip;
     }
     
@@ -585,7 +585,7 @@ package org.jspresso.framework.view.flex {
           node = selectedItems[i];
           parentNode = tree.getParentItem(node);
           if(parentNode == null && !tree.showRoot) {
-            parentNode = rootState
+            parentNode = rootState;
           }
           if(parentNode != null && parentsOfSelectedNodes.indexOf(parentNode) == -1) {
             parentsOfSelectedNodes.push(parentNode);
@@ -599,7 +599,7 @@ package org.jspresso.framework.view.flex {
             node = selectedItems[i];
             parentNode = tree.getParentItem(node);
             if(parentNode == null && !tree.showRoot) {
-              parentNode = rootState
+              parentNode = rootState;
             }
             if(parentNode != null) {
               var selectedIndices:Array = new Array();
@@ -624,7 +624,7 @@ package org.jspresso.framework.view.flex {
     protected function clearStateSelection(remoteState:RemoteCompositeValueState, excludedNodes:Array):void {
       if(excludedNodes.indexOf(remoteState) == -1) {
         remoteState.leadingIndex = -1;
-        remoteState.selectedIndices = null
+        remoteState.selectedIndices = null;
       }
       if(remoteState.children != null) {
         for(var i:int = 0; i < remoteState.children.length; i++) {
@@ -673,7 +673,6 @@ package org.jspresso.framework.view.flex {
       var actionField:HBox = new HBox();
       actionField.styleName = "actionField";
       actionField.regenerateStyleCache(false);
-      var hGap:int = actionField.getStyle("horizontalGap");
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
       actionField.verticalScrollPolicy = ScrollPolicy.OFF;
       var textField:TextInput;
@@ -921,7 +920,6 @@ package org.jspresso.framework.view.flex {
 
     protected function bindRadioGroup(radioGroup:RadioButtonGroup, remoteRadioBox:RRadioBox):void {
       var remoteState:RemoteValueState = remoteRadioBox.state;
-      var values:Array = remoteRadioBox.values;
       radioGroup.addEventListener(ItemClickEvent.ITEM_CLICK, function(event:ItemClickEvent):void {
         remoteState.value = (event.relatedObject as RadioButton).value;
       });
@@ -1209,14 +1207,14 @@ package org.jspresso.framework.view.flex {
       if(remoteEvenGridContainer.drivingDimension == "ROW") {
         nbRows = remoteEvenGridContainer.cells.length / remoteEvenGridContainer.drivingDimensionCellCount;
         if(remoteEvenGridContainer.cells.length % remoteEvenGridContainer.drivingDimensionCellCount > 0) {
-          nbRows += 1
+          nbRows += 1;
         }
         nbCols = remoteEvenGridContainer.drivingDimensionCellCount;
       } else {
         nbRows = remoteEvenGridContainer.drivingDimensionCellCount;
         nbCols = remoteEvenGridContainer.cells.length / remoteEvenGridContainer.drivingDimensionCellCount;
         if(remoteEvenGridContainer.cells.length % remoteEvenGridContainer.drivingDimensionCellCount > 0) {
-          nbCols += 1
+          nbCols += 1;
         }
       }
       for(i = 0; i < nbRows; i++) {
@@ -1750,7 +1748,7 @@ package org.jspresso.framework.view.flex {
       dateTimeField.horizontalScrollPolicy = ScrollPolicy.OFF;
       dateTimeField.verticalScrollPolicy = ScrollPolicy.OFF;
 
-      var dateField:UIComponent = createDateField(remoteDateField)
+      var dateField:UIComponent = createDateField(remoteDateField);
       dateField.percentWidth = 100.0;
       
       var remoteTimeField:RTimeField = new RTimeField();
@@ -2069,7 +2067,7 @@ package org.jspresso.framework.view.flex {
                                      fontIndex:foIndex};
           column.editable = !readOnly;
         }
-        column.itemRenderer = itemRenderer
+        column.itemRenderer = itemRenderer;
         
         if(!column.rendererIsEditor) {
           var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
@@ -2722,7 +2720,7 @@ package org.jspresso.framework.view.flex {
       } else if(remoteComponent is RPasswordField) {
         return _passwordFormatter;
       } else if(remoteComponent is RNumericComponent) {
-        var numberFormatter:NumberFormatter
+        var numberFormatter:NumberFormatter;
         if(remoteComponent is RPercentField) {
           numberFormatter = new PercentFormatter();
         } else {
