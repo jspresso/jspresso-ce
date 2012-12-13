@@ -10,4 +10,5 @@
     <AS3Classpath generateProblems="false" sdkBased="true" type="lib" useAsSharedCode="false">frameworks/libs/rpc.swc</AS3Classpath>
     <AS3Classpath generateProblems="false" sdkBased="true" type="lib" useAsSharedCode="false">frameworks/libs/utilities.swc</AS3Classpath>
     <AS3Classpath generateProblems="false" sdkBased="true" type="lib" useAsSharedCode="false">frameworks/libs/flex.swc</AS3Classpath>
+    <AS3Classpath generateProblems="true" sdkBased="false" type="source" useAsSharedCode="false">src/main/resources</AS3Classpath>
 </AS3Classpath>
