@@ -179,6 +179,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     private var _postponedChildrenNotificationBuffer:Array;
     private var _postponedSelectionCommands:Object;
+    private var _postponedEditionCommands:Object;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -519,15 +520,22 @@ package org.jspresso.framework.application.frontend.controller.flex {
               children.removeAll();
             }
           }
-        } else if(command is RemoteAddCardCommand) {
-          getViewFactory().addCard(
-            (targetPeer as RComponent).retrievePeer() as ViewStack,
-            (command as RemoteAddCardCommand).card,
-            (command as RemoteAddCardCommand).cardName);
-        } else if(command is RemoteFocusCommand) {
-          getViewFactory().focus((targetPeer as RComponent).retrievePeer());
-        } else if(command is RemoteEditCommand) {
-          getViewFactory().edit((targetPeer as RComponent).retrievePeer());
+        } else {
+          var targetComponent:RComponent = targetPeer as RComponent;
+          if(command is RemoteAddCardCommand) {
+            getViewFactory().addCard(
+              targetComponent.retrievePeer() as ViewStack,
+              (command as RemoteAddCardCommand).card,
+              (command as RemoteAddCardCommand).cardName);
+          } else if(command is RemoteFocusCommand) {
+            getViewFactory().focus(targetComponent.retrievePeer());
+          } else if(command is RemoteEditCommand) {
+            if(_postponedSelectionCommands.hasOwnProperty(targetComponent.state.guid)) {
+              _postponedEditionCommands[targetComponent.state.guid] = command;
+            } else {
+              getViewFactory().edit(targetComponent.retrievePeer());
+            }
+          }
         }
       }
     }
@@ -906,6 +914,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         _postponedCommands = new Object();
         _postponedChildrenNotificationBuffer = new Array();
         _postponedSelectionCommands = new Object();
+        _postponedEditionCommands = new Object();
         try {
           handleCommands(resultEvent.result as IList);
         } finally {
@@ -913,6 +922,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           _postponedCommands = null;
           _postponedChildrenNotificationBuffer = null;
           _postponedSelectionCommands = null;
+          _postponedEditionCommands = null;
           if(_nextActionCallback != null) {
             try {
               _nextActionCallback();
@@ -954,14 +964,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       }
       var i:int;
-      var peer:IRemotePeer;
-      var delayedSelectionCommand:RemoteSelectionCommand;
       for(i = 0; i < _postponedChildrenNotificationBuffer.length; i++) {
-        peer = getRegistered(_postponedChildrenNotificationBuffer[i]);
+        var peer:IRemotePeer = getRegistered(_postponedChildrenNotificationBuffer[i]);
         if(peer is RemoteCompositeValueState) {
           (peer as RemoteCompositeValueState).notifyChildrenChanged();
           if(_postponedSelectionCommands.hasOwnProperty(peer.guid)) {
-            delayedSelectionCommand = _postponedSelectionCommands[peer.guid] as RemoteSelectionCommand;
+            var delayedSelectionCommand:RemoteSelectionCommand = _postponedSelectionCommands[peer.guid] as RemoteSelectionCommand;
             if(ArrayUtil.areUnorderedArraysEqual(delayedSelectionCommand.selectedIndices,
                                                  (peer as RemoteCompositeValueState).selectedIndices)) {
               (peer as RemoteCompositeValueState).notifySelectionChanged();
@@ -970,6 +978,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
                 delayedSelectionCommand.leadingIndex;
               (peer as RemoteCompositeValueState).selectedIndices =
                 delayedSelectionCommand.selectedIndices;
+            }
+            if(_postponedEditionCommands.hasOwnProperty(peer.guid)) {
+              var delayedEditionCommand:RemoteEditCommand = _postponedEditionCommands[peer.guid] as RemoteEditCommand;
+              getViewFactory().edit((getRegistered(delayedEditionCommand.targetPeerGuid) as RComponent).retrievePeer());
             }
           }
         }
