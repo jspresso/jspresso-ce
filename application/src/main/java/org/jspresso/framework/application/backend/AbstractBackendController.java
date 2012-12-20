@@ -1467,16 +1467,12 @@ public abstract class AbstractBackendController extends AbstractController
           IPropertyDescriptor propertyDescriptor = entityDescriptor
               .getPropertyDescriptor(propertyName);
           if (propertyValue instanceof IEntity) {
-            if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
-                && mergeMode != EMergeMode.MERGE_EAGER
-                && !isInitialized(propertyValue)) {
-              if (registeredEntityProperties.get(propertyName) == null) {
-                mergedProperties.put(propertyName,
-                    merge((IEntity) propertyValue, mergeMode, alreadyMerged));
-              }
+            Object registeredProperty = registeredEntityProperties
+                .get(propertyName);
+            if (registeredProperty == null) {
+              mergedProperties.put(propertyName,
+                  merge((IEntity) propertyValue, mergeMode, alreadyMerged));
             } else {
-              Object registeredProperty = registeredEntityProperties
-                  .get(propertyName);
               if (mergeMode == EMergeMode.MERGE_EAGER
                   || mergeMode == EMergeMode.MERGE_LAZY) {
                 if (isInitialized(propertyValue)) {
@@ -1493,64 +1489,56 @@ public abstract class AbstractBackendController extends AbstractController
           } else if (propertyValue instanceof Collection
           // to support collections stored as java serializable blob.
               && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-            if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
-                && mergeMode != EMergeMode.MERGE_EAGER
-                && !isInitialized(propertyValue)) {
-              if (registeredEntityProperties.get(propertyName) == null) {
-                mergedProperties.put(propertyName, propertyValue);
+            Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
+                .get(propertyName);
+            if (!newlyRegistered
+                && (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY)) {
+              if (isInitialized(propertyValue)) {
+                initializePropertyIfNeeded(registeredEntity, propertyName);
+              } else if (isInitialized(registeredCollection)) {
+                initializePropertyIfNeeded(entity, propertyName);
               }
-            } else {
-              Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
-                  .get(propertyName);
-              if (mergeMode == EMergeMode.MERGE_EAGER
-                  || mergeMode == EMergeMode.MERGE_LAZY) {
-                if (isInitialized(propertyValue)) {
-                  initializePropertyIfNeeded(registeredEntity, propertyName);
-                } else if (isInitialized(registeredCollection)) {
-                  initializePropertyIfNeeded(entity, propertyName);
+            }
+            if (isInitialized(registeredCollection)) {
+              if (newlyRegistered && !isInitialized(propertyValue)) {
+                registeredCollection = (Collection<IComponent>) propertyValue;
+              } else {
+                if (propertyValue instanceof List) {
+                  registeredCollection = collectionFactory
+                      .createComponentCollection(List.class);
+                } else {
+                  registeredCollection = collectionFactory
+                      .createComponentCollection(Set.class);
                 }
+                initializePropertyIfNeeded(entity, propertyName);
+                for (IComponent collectionElement : (Collection<IComponent>) propertyValue) {
+                  if (collectionElement instanceof IEntity) {
+                    registeredCollection.add(merge((IEntity) collectionElement,
+                        mergeMode, alreadyMerged));
+                  } else {
+                    registeredCollection.add(mergeComponent(collectionElement,
+                        null, mergeMode, alreadyMerged));
+                  }
+                }
+              }
+              if (registeredEntity.isPersistent()) {
+                Collection<IComponent> snapshotCollection = null;
+                Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+                if (dirtyProperties != null) {
+                  snapshotCollection = (Collection<IComponent>) dirtyProperties
+                      .get(propertyName);
+                }
+                mergedProperties
+                    .put(
+                        propertyName,
+                        wrapDetachedCollection(registeredEntity,
+                            registeredCollection, snapshotCollection,
+                            propertyName));
+              } else {
+                mergedProperties.put(propertyName, registeredCollection);
               }
               if (isInitialized(registeredCollection)) {
-                if (newlyRegistered && !isInitialized(propertyValue)) {
-                  registeredCollection = (Collection<IComponent>) propertyValue;
-                } else {
-                  if (propertyValue instanceof Set) {
-                    registeredCollection = collectionFactory
-                        .createComponentCollection(Set.class);
-                  } else if (propertyValue instanceof List) {
-                    registeredCollection = collectionFactory
-                        .createComponentCollection(List.class);
-                  }
-                  initializePropertyIfNeeded(entity, propertyName);
-                  for (IComponent collectionElement : (Collection<IComponent>) propertyValue) {
-                    if (collectionElement instanceof IEntity) {
-                      registeredCollection
-                          .add(merge((IEntity) collectionElement, mergeMode,
-                              alreadyMerged));
-                    } else {
-                      registeredCollection.add(mergeComponent(
-                          collectionElement, null, mergeMode, alreadyMerged));
-                    }
-                  }
-                }
-                if (registeredEntity.isPersistent()) {
-                  Collection<IComponent> snapshotCollection = null;
-                  Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
-                  if (dirtyProperties != null) {
-                    snapshotCollection = (Collection<IComponent>) dirtyProperties
-                        .get(propertyName);
-                  }
-                  mergedProperties.put(
-                      propertyName,
-                      wrapDetachedCollection(registeredEntity,
-                          registeredCollection, snapshotCollection,
-                          propertyName));
-                } else {
-                  mergedProperties.put(propertyName, registeredCollection);
-                }
-                if (isInitialized(registeredCollection)) {
-                  propertiesToSort.add(propertyName);
-                }
+                propertiesToSort.add(propertyName);
               }
             }
           } else if (propertyValue instanceof IComponent) {
@@ -1609,15 +1597,12 @@ public abstract class AbstractBackendController extends AbstractController
       String propertyName = property.getKey();
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
-        if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
-            && mergeMode != EMergeMode.MERGE_EAGER
-            && !isInitialized(propertyValue)) {
-          if (registeredComponentProperties.get(propertyName) == null) {
-            mergedProperties.put(propertyName, propertyValue);
-          }
+        Object registeredProperty = registeredComponentProperties
+            .get(propertyName);
+        if (registeredProperty == null) {
+          mergedProperties.put(propertyName,
+              merge((IEntity) propertyValue, mergeMode, alreadyMerged));
         } else {
-          Object registeredProperty = registeredComponentProperties
-              .get(propertyName);
           if (mergeMode == EMergeMode.MERGE_EAGER
               || mergeMode == EMergeMode.MERGE_LAZY) {
             if (isInitialized(propertyValue)) {
