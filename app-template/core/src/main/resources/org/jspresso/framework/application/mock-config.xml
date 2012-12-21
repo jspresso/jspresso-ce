@@ -4,8 +4,7 @@
   default-lazy-init="true">
 
   <!-- Mock configuration. -->
-  <!-- class="org.apache.commons.dbcp.BasicDataSource" -->
-  <bean id="dataSource" class="java.lang.Object" />
+  <bean id="dataSource" class="org.jspresso.framework.mockups.DataSourceMock" />
 
   <bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory" />
 
