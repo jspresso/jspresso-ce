@@ -69,6 +69,8 @@
             <locale>es_ES</locale>
             <locale>pt_BR</locale>
             <locale>de_DE</locale>
+            <locale>it_IT</locale>
+            <locale>pl_PL</locale>
           </locales>
           <mergeResourceBundle>true</mergeResourceBundle>
           <parameters>
