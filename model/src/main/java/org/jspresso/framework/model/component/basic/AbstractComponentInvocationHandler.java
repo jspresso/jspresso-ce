@@ -84,15 +84,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-
-
-
-
-
-
-
-
-
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -460,13 +451,14 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
+    String propertyName = propertyDescriptor.getName();
     try {
-      Object property = straightGetProperty(proxy, propertyDescriptor.getName());
+      Object property = straightGetProperty(proxy, propertyName);
       if (property == null) {
         property = collectionFactory
             .createComponentCollection(propertyDescriptor
                 .getReferencedDescriptor().getCollectionInterface());
-        storeProperty(propertyDescriptor.getName(), property);
+        storeProperty(propertyName, property);
       }
       if (property instanceof List) {
         List<IComponent> propertyAsList = (List<IComponent>) property;
@@ -481,7 +473,7 @@ public abstract class AbstractComponentInvocationHandler implements
           if (referent == null) {
             LOG.warn(
                 "A null element was detected in [{}] indexed list on {} at index "
-                    + i + ".", propertyDescriptor.getName(), proxy);
+                    + i + ".", propertyName, proxy);
             LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
           }
         }
@@ -498,12 +490,12 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       if (isCollectionSortOnReadEnabled()) {
         inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
-            propertyDescriptor.getName());
+            propertyName);
       }
       return property;
     } catch (RuntimeException re) {
       LOG.error("Error when retrieving [{}] collection property on {}",
-          propertyDescriptor.getName(), proxy);
+          propertyName, proxy);
       throw (re);
     }
   }
