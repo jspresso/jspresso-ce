@@ -442,7 +442,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *          the comparable query structure.
    */
   protected void completeWithComparableQueryStructure(
-      DetachedCriteria currentCriteria, String path, ComparableQueryStructure queryStructure) {
+      DetachedCriteria currentCriteria, String path,
+      ComparableQueryStructure queryStructure) {
     if (queryStructure.isRestricting()) {
       String comparator = queryStructure.getComparator();
       Object infValue = queryStructure.getInfValue();
@@ -495,13 +496,17 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
           .getPropertyDescriptor(property.getKey());
       if (propertyDescriptor != null) {
         if (property.getValue() != null) {
-          if (property.getValue() instanceof IQueryComponent) {
-            if (!isQueryComponentEmpty((IQueryComponent) property.getValue(),
-                propertyDescriptor)) {
+          if (property.getValue() instanceof ComparableQueryStructure) {
+            if (((ComparableQueryStructure) property.getValue()).isRestricting()) {
               return false;
             }
           } else if (property.getValue() instanceof EnumQueryStructure) {
             if (!((EnumQueryStructure) property.getValue()).isEmpty()) {
+              return false;
+            }
+          } else if (property.getValue() instanceof IQueryComponent) {
+            if (!isQueryComponentEmpty((IQueryComponent) property.getValue(),
+                propertyDescriptor)) {
               return false;
             }
           } else {
