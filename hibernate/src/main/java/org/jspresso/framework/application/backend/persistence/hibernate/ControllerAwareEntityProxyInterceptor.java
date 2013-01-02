@@ -132,7 +132,10 @@ public class ControllerAwareEntityProxyInterceptor extends
     if (entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = getBackendController()
           .getDirtyProperties((IEntity) entity);
+      boolean hasJustBeenSaved = false;
       if (dirtyProperties != null) {
+        hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION)
+            && dirtyProperties.get(IEntity.VERSION) == null;
         dirtyProperties.remove(IEntity.VERSION);
       }
       if (dirtyProperties == null) {
@@ -140,7 +143,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       } else if (dirtyProperties.isEmpty()) {
         return new int[0];
       }
-      if (dirtyProperties.containsKey(IEntity.ID)) {
+      if (hasJustBeenSaved) {
         // whenever an entity has just been saved, its state is in the dirty
         // store. Hibernate might ask to check dirtyness especially for
         // collection members. Those just saved entities must not be considered
@@ -289,18 +292,20 @@ public class ControllerAwareEntityProxyInterceptor extends
             boolean isClean = false;
             Map<String, Object> dirtyProperties = getBackendController()
                 .getDirtyProperties((IEntity) entity, false);
+            boolean hasJustBeenSaved = false;
             if (dirtyProperties != null) {
+              hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION)
+                  && dirtyProperties.get(IEntity.VERSION) == null;
               dirtyProperties.remove(IEntity.VERSION);
             }
             if (dirtyProperties == null) {
               isClean = true;
             } else if (dirtyProperties.isEmpty()) {
               isClean = true;
-            } else if (dirtyProperties.containsKey(IEntity.ID)) {
+            } else if (hasJustBeenSaved) {
               // whenever an entity has just been saved, its state is in the
-              // dirty
-              // store. Hibernate might ask to check dirtyness especially for
-              // collection members. Those just saved entities must not be
+              // dirty store. Hibernate might ask to check dirtyness especially
+              // for collection members. Those just saved entities must not be
               // considered dirty.
               isClean = true;
             }
