@@ -1,6 +1,29 @@
 Jspresso CE - Change Log
 
 
+Jspresso CE - 3.5.15 (Released 2013-01-03) [ View Issues ]
+==========================================
+- 0000883: [Backend] Nested filters on comparables (date, etc, ...) creates unecessary inners joins. (vvandens) - closed.
+- 0000882: [Persistence] In-transaction created and saved entities get inserted and updated immediately after (vvandens) - closed.
+- 0000872: [Frontend] Add the Language "POLISH" in jspresso application (vvandens) - closed.
+- 0000880: [Frontend] Add the Language "ITALIAN" in jspresso application (vvandens) - closed.
+- 0000834: [Backend] JDS reports wrong bean type due to Mock-config.xml in HR Sample (vvandens) - closed.
+- 0000864: [Frontend] Jspresso navigation tree do not select node if node moves from one parent module to another one (vvandens) - closed.
+- 0000863: [Frontend] Jspresso navigation tree do not select new added module (vvandens) - closed.
+- 0000855: [View] Focus lost when navigating between reference fields (vvandens) - closed.
+- 0000868: [Frontend] displayModule should be able to determine the workspace automatically when not expliitely set (vvandens) - closed.
+- 0000859: [Model] Default rendered properties should not include arbitrary object properties (vvandens) - closed.
+- 0000856: [View] Provide a way to refresh a card view without resetting to null the model (vvandens) - closed.
+- 0000852: [Model] Computed property cache might not be reset when needed (vvandens) - closed.
+- 0000851: [Frontend] LOV : Allow to extract the Entity descriptor for the LOV from the action context (vvandens) - closed.
+- 0000844: [Frontend] Allow to define a fallback locale in case the user language is not covered by a resource bundle (vvandens) - closed.
+- 0000840: [Persistence] LazyInitializationException can occur when trying to initialize an Hibernate proxy that has a null session (vvandens) - closed.
+- 0000831: [Backend] Remove JBoss libs dependencies in core Jspresso code calculating binary encodings (vvandens) - closed.
+- 0000825: [Backend] Support nested REQUIRES_NEW propagation transactions (vvandens) - closed.
+- 0000821: [Model] Find a way to have service delegates implement the service interface (vvandens) - closed.
+[18 issues]
+
+
 Jspresso CE - 3.5.14 (Released 2012-10-18) [ View Issues ]
 ==========================================
 - 0000812: [View] Enhance lovActions to be able to use a custom view for the resultView part (vvandens) - closed.
