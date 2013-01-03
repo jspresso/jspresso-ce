@@ -3,11 +3,11 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>3.5.15</version>
+  <version>3.5-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jspresso.version>3.5.15</jspresso.version>
+    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0.15</sjs.version>
     
     <ant-contrib.version>1.0b3</ant-contrib.version>
@@ -50,7 +50,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/tags/jspresso-framework-3.5.15</connection>
+    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
   </scm>
   <issueManagement>
     <system>Jspresso Tracker</system>
