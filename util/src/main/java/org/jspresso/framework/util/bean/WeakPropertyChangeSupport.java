@@ -323,7 +323,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
-  protected PropertyChangeListener[] getPropertyChangeListeners() {
+  public PropertyChangeListener[] getPropertyChangeListeners() {
     return getPropertyChangeListenersList().toArray(
         new PropertyChangeListener[0]);
   }
@@ -336,7 +336,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    *         <code>propertyName</code> is null, an empty array is returned.
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
    */
-  protected synchronized PropertyChangeListener[] getPropertyChangeListeners(
+  public synchronized PropertyChangeListener[] getPropertyChangeListeners(
       String propertyName) {
     ArrayList<PropertyChangeListener> targets = getPropertyChangeListenersList();
     if (children != null && propertyName != null) {

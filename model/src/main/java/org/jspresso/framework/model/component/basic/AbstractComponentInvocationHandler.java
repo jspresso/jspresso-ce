@@ -84,6 +84,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -1049,7 +1052,27 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     if (weakPropertyChangeSupport != null
         && weakPropertyChangeSupport.hasListeners(propertyName)) {
-      return true;
+      PropertyChangeListener[] listeners = weakPropertyChangeSupport
+          .getPropertyChangeListeners(propertyName);
+      for (PropertyChangeListener listener : listeners) {
+        if (listener instanceof InlineReferenceTracker
+            && ((InlineReferenceTracker) listener).proxy instanceof IComponent) {
+          return ((IComponent) ((InlineReferenceTracker) listener).proxy)
+              .hasListeners(((InlineReferenceTracker) listener).componentName
+                  + "." + propertyName);
+        }
+        return true;
+      }
+      listeners = weakPropertyChangeSupport.getPropertyChangeListeners();
+      for (PropertyChangeListener listener : listeners) {
+        if (listener instanceof InlineReferenceTracker
+            && ((InlineReferenceTracker) listener).proxy instanceof IComponent) {
+          return ((IComponent) ((InlineReferenceTracker) listener).proxy)
+              .hasListeners(((InlineReferenceTracker) listener).componentName
+                  + "." + propertyName);
+        }
+        return true;
+      }
     }
     return false;
   }
