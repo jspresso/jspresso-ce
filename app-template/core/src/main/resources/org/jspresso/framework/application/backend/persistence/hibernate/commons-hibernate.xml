@@ -73,6 +73,10 @@
   <bean abstract="true" id="abstractHibernateBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
+  <bean id="triStateBooleanSupported" class="java.lang.Boolean">
+    <constructor-arg value="true"/>
+  </bean>
+
   <bean id="criteriaFactoryBase" abstract="true"
     class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
     <property name="triStateBooleanSupported" ref="triStateBooleanSupported" />

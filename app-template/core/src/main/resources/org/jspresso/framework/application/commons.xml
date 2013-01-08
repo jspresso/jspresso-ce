@@ -139,16 +139,6 @@
   <!-- The scriptHandler. -->
   <bean id="scriptHandler" class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
  
-  <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.application.view.BasicQueryViewDescriptorFactory">
-    <property name="okCloseDialogAction" ref="okDialogFrontAction"/>
-    <property name="modalDialogAction" ref="modalDialogAction"/>
-    <property name="defaultFindIconImageUrl">
-      <bean parent="abstractFwIconImageURL" >
-        <constructor-arg index="0" value="find" />
-      </bean>
-    </property>
-  </bean>
-
   <!-- Custom exception handler -->
   <bean id="customExceptionHandler" class="org.jspresso.framework.util.exception.MockExceptionHandler" />
 

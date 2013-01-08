@@ -4,6 +4,16 @@
   default-lazy-init="true">
 
   <!-- View factories -->
+  <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.application.view.BasicQueryViewDescriptorFactory">
+    <property name="okCloseDialogAction" ref="okDialogFrontAction"/>
+    <property name="modalDialogAction" ref="modalDialogAction"/>
+    <property name="defaultFindIconImageUrl">
+      <bean parent="abstractFwIconImageURL" >
+        <constructor-arg index="0" value="find" />
+      </bean>
+    </property>
+  </bean>
+  
   <bean id="lovResultViewDescriptorFactoryBase" class="org.jspresso.framework.application.frontend.action.lov.BasicLovResultViewDescriptorFactory">
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
   </bean>
