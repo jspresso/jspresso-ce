@@ -380,7 +380,7 @@
   
   <alias name="rootEntityDescriptor" alias="IEntity"/>
 
-  <bean id="EnityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
+  <bean id="EntityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
     <property name="targetClass" value="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor" />
     <property name="targetMethod" value="setRootEntityDescriptor" />
     <property name="arguments">
