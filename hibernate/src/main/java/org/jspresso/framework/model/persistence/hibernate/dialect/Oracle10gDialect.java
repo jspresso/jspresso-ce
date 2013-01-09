@@ -33,17 +33,17 @@ import org.apache.commons.lang.RandomStringUtils;
  */
 public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
 
-  /**
-   * Maps dates differently.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void registerDateTimeTypeMappings() {
-    registerColumnType(Types.DATE, "date");
-    registerColumnType(Types.TIME, "date");
-    registerColumnType(Types.TIMESTAMP, "date");
-  }
+  // /**
+  // * Maps dates differently.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // protected void registerDateTimeTypeMappings() {
+  // registerColumnType(Types.DATE, "date");
+  // registerColumnType(Types.TIME, "date");
+  // registerColumnType(Types.TIMESTAMP, "date");
+  // }
 
   /**
    * Maps integers differently.
@@ -63,6 +63,15 @@ public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
   protected void registerCharacterTypeMappings() {
     super.registerCharacterTypeMappings();
     registerColumnType(Types.VARCHAR, "clob");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void registerLargeObjectTypeMappings() {
+    super.registerLargeObjectTypeMappings();
+    registerColumnType(Types.VARBINARY, "blob");
   }
 
   /**
