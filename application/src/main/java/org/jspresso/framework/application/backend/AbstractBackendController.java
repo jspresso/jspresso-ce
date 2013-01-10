@@ -1470,8 +1470,18 @@ public abstract class AbstractBackendController extends AbstractController
             Object registeredProperty = registeredEntityProperties
                 .get(propertyName);
             if (registeredProperty == null) {
-              mergedProperties.put(propertyName,
-                  merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+              if (isInitialized(propertyValue)) {
+                mergedProperties.put(propertyName,
+                    merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+              } else {
+                // Force MERGE_KEEP mode to prevent lazy initialization
+                // exception. The uninitialized proxy will be copied as is. See
+                // bug #887.
+                mergedProperties.put(
+                    propertyName,
+                    merge((IEntity) propertyValue, EMergeMode.MERGE_KEEP,
+                        alreadyMerged));
+              }
             } else {
               if (mergeMode == EMergeMode.MERGE_EAGER
                   || mergeMode == EMergeMode.MERGE_LAZY) {
@@ -1600,8 +1610,18 @@ public abstract class AbstractBackendController extends AbstractController
         Object registeredProperty = registeredComponentProperties
             .get(propertyName);
         if (registeredProperty == null) {
-          mergedProperties.put(propertyName,
-              merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+          if (isInitialized(propertyValue)) {
+            mergedProperties.put(propertyName,
+                merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+          } else {
+            // Force MERGE_KEEP mode to prevent lazy initialization
+            // exception. The uninitialized proxy will be copied as is. See
+            // bug #887.
+            mergedProperties.put(
+                propertyName,
+                merge((IEntity) propertyValue, EMergeMode.MERGE_KEEP,
+                    alreadyMerged));
+          }
         } else {
           if (mergeMode == EMergeMode.MERGE_EAGER
               || mergeMode == EMergeMode.MERGE_LAZY) {
