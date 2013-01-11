@@ -36,8 +36,9 @@ import org.springframework.context.ApplicationContextAware;
 public class BasicComponentDescriptorRegistry implements
     IComponentDescriptorRegistry, ApplicationContextAware {
 
-  private ApplicationContext                   componentApplicationContext;
-  private Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
+  private ApplicationContext                            componentApplicationContext;
+  private volatile Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
+  private Object                                        lock = new Object();
 
   /**
    * {@inheritDoc}
@@ -46,7 +47,11 @@ public class BasicComponentDescriptorRegistry implements
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<?> componentContract) {
     if (contractNameToComponentDescriptorMap == null) {
-      buildContractNameIdMap();
+      synchronized (lock) {
+        if (contractNameToComponentDescriptorMap == null) {
+          buildContractNameIdMap();
+        }
+      }
     }
     return contractNameToComponentDescriptorMap
         .get(componentContract.getName());
