@@ -240,8 +240,9 @@ public abstract class AbstractComponentDescriptor<E> extends
   @Override
   public List<ILifecycleInterceptor<?>> getLifecycleInterceptors() {
     List<ILifecycleInterceptor<?>> allInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+    List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+    if (ancestorDescs != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
         allInterceptors.addAll(ancestorDescriptor.getLifecycleInterceptors());
       }
     }
@@ -270,8 +271,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (orderingProperties != null) {
       properties.putAll(orderingProperties);
     }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+    List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+    if (ancestorDescs != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
         if (ancestorDescriptor.getOrderingProperties() != null) {
           properties.putAll(ancestorDescriptor.getOrderingProperties());
         }
@@ -329,10 +331,12 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
     } else {
       descriptor = getDeclaredPropertyDescriptor(propertyName);
-      if (descriptor == null && getAncestorDescriptors() != null) {
-        for (Iterator<IComponentDescriptor<?>> ite = getAncestorDescriptors()
-            .iterator(); descriptor == null && ite.hasNext();) {
-          IComponentDescriptor<?> ancestorDescriptor = ite.next();
+      List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+      // Ancestor descriptors must be walked the reverse order
+      // in order to match the getPropertyDescriptors() method.
+      if (descriptor == null && ancestorDescs != null) {
+        for (int i = ancestorDescs.size() - 1; i >= 0 && descriptor == null; i--) {
+          IComponentDescriptor<?> ancestorDescriptor = ancestorDescs.get(i);
           descriptor = ancestorDescriptor.getPropertyDescriptor(propertyName);
         }
       }
