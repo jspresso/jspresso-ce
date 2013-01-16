@@ -21,6 +21,7 @@ package org.jspresso.framework.application.startup.remote;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * A simple servlet to recieve browser disconnect commands.
@@ -50,14 +51,16 @@ public class RemoteUtilServlet extends HttpServlet {
     resp.setHeader("Cache-control", "no-cache, no-store");
     resp.setHeader("Pragma", "no-cache");
     resp.setHeader("Expires", "-1");
+    HttpSession session = req.getSession();
     if (req.getPathInfo() != null
         && req.getPathInfo().endsWith(STOP_SERVLET_URL_PATTERN)
-        && req.getSession() != null) {
-      RemoteStartup startup = (RemoteStartup) req.getSession().getAttribute(
+        && session != null) {
+      RemoteStartup startup = (RemoteStartup) session.getAttribute(
           REMOTE_STARTUP);
       if (startup != null) {
         startup.stop();
       }
+      session.invalidate();
     }
   }
 }
