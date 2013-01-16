@@ -1200,6 +1200,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   private <E extends IEntity> E cloneInUnitOfWork(E entity,
       boolean allowOuterScopeUpdate, IEntityRegistry alreadyCloned) {
+    if (entity == null) {
+      return null;
+    }
     Class<? extends IEntity> entityContract = getComponentContract(entity);
     IComponentDescriptor<?> entityDescriptor = getEntityFactory()
         .getComponentDescriptor(entityContract);
