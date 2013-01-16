@@ -99,7 +99,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
       if (!checkUnicity(entity, existingRegisteredEntity)) {
         throw new EntityRegistryException(
             "This entity was previously registered with a different instance : "
-                + entity);
+                + entityContract.getName() + " [" + entity + "]");
       }
       // do nothing since the entity is already registered.
     } else {
