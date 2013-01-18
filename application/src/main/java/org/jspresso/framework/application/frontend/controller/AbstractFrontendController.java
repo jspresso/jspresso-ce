@@ -790,9 +790,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public Workspace getWorkspace(String workspaceName, boolean bypassSecurity) {
-    if (workspaces != null) {
+    if (workspaceName != null && workspaces != null) {
       Workspace workspace = workspaces.get(workspaceName);
-      if (bypassSecurity || isAccessGranted(workspace)) {
+      if (bypassSecurity || workspaceName.equals(getSelectedWorkspaceName())
+          || isAccessGranted(workspace)) {
         try {
           pushToSecurityContext(workspace);
           return workspace;
