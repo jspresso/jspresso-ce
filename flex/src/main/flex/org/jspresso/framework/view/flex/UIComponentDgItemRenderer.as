@@ -150,48 +150,46 @@ package org.jspresso.framework.view.flex {
     
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
       if(listData.owner is DataGrid) {
-        if(listData.owner is DataGrid) {
-          if(backgroundIndex >= 0) {
-            var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
-            if(backgroundValue) {
-              setStyle("backgroundColor", backgroundValue);
-              setStyle("backgroundAlpha", DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
-            } else {
-              setStyle("backgroundColor", null);
-              setStyle("backgroundAlpha", null);
-            }
+        if(backgroundIndex >= 0) {
+          var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+          if(backgroundValue) {
+            setStyle("backgroundColor", backgroundValue);
+            setStyle("backgroundAlpha", DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
+          } else {
+            setStyle("backgroundColor", null);
+            setStyle("backgroundAlpha", null);
           }
-          if(foregroundIndex >= 0) {
-            var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
-            if(foregroundValue) {
-              setStyle("color", foregroundValue);
-              setStyle("alpha", DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String));
-            } else {
-              setStyle("color", null);
-              setStyle("alpha", null);
-            }
+        }
+        if(foregroundIndex >= 0) {
+          var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+          if(foregroundValue) {
+            setStyle("color", foregroundValue);
+            setStyle("alpha", DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String));
+          } else {
+            setStyle("color", null);
+            setStyle("alpha", null);
           }
-          if(fontIndex >= 0) {
-            var fontValue:Object = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
-            if(fontValue is Font) {
-              if((fontValue as Font).name) {
-                setStyle("fontFamily", (fontValue as Font).name);
-              }
-              if((fontValue as Font).size > 0) {
-                setStyle("fontSize", (fontValue as Font).size);
-              }
-              if((fontValue as Font).italic) {
-                setStyle("fontStyle", "italic");
-              }
-              if((fontValue as Font).bold) {
-                setStyle("fontWeight", "bold");
-              }
-            } else {
-              setStyle("fontFamily", null);
-              setStyle("fontSize", null);
-              setStyle("fontStyle", null);
-              setStyle("fontWeight", null);
+        }
+        if(fontIndex >= 0) {
+          var fontValue:Object = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+          if(fontValue is Font) {
+            if((fontValue as Font).name) {
+              setStyle("fontFamily", (fontValue as Font).name);
             }
+            if((fontValue as Font).size > 0) {
+              setStyle("fontSize", (fontValue as Font).size);
+            }
+            if((fontValue as Font).italic) {
+              setStyle("fontStyle", "italic");
+            }
+            if((fontValue as Font).bold) {
+              setStyle("fontWeight", "bold");
+            }
+          } else {
+            setStyle("fontFamily", null);
+            setStyle("fontSize", null);
+            setStyle("fontStyle", null);
+            setStyle("fontWeight", null);
           }
         }
       }
@@ -210,7 +208,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function refreshWritability(value:Boolean):void {
-      state.writable = value;
+      state.writable = value && (!(listData.owner is DataGrid) || (listData.owner as DataGrid).editable);
     }
 
     protected function refreshToolTip(toolTipValue:Object):void {
