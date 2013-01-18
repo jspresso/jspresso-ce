@@ -87,6 +87,10 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -121,6 +125,7 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     LIFECYCLE_METHOD_NAMES = methodNames;
   }
+  private IComponent                                                                   owningComponent;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -230,6 +235,11 @@ public abstract class AbstractComponentInvocationHandler implements
       return straightGetProperties(proxy);
     } else if ("setPropertyProcessorsEnabled".equals(methodName)) {
       propertyProcessorsEnabled = ((Boolean) args[0]).booleanValue();
+      return null;
+    } else if ("getOwningComponent".equals(methodName)) {
+      return owningComponent;
+    } else if ("setOwningComponent".equals(methodName)) {
+      owningComponent = (IComponent) args[0];
       return null;
     } else {
       if (isLifecycleMethod(method)) {
@@ -717,6 +727,19 @@ public abstract class AbstractComponentInvocationHandler implements
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
     InlineReferenceTracker oldTracker = null;
+
+    // Handle owning component.
+    if (oldPropertyValue instanceof IComponent
+        && EntityHelper.isInlineComponentReference(propertyDescriptor)
+        && isInitialized(oldPropertyValue)) {
+      ((IComponent) oldPropertyValue).setOwningComponent(null);
+    }
+    if (newPropertyValue instanceof IComponent
+        && EntityHelper.isInlineComponentReference(propertyDescriptor)
+        && isInitialized(newPropertyValue)) {
+      ((IComponent) newPropertyValue).setOwningComponent((IComponent) proxy);
+    }
+
     if (oldPropertyValue != null) {
       oldTracker = referenceTrackers.get(propertyName);
       if (oldTracker != null && isInitialized(oldPropertyValue)) {

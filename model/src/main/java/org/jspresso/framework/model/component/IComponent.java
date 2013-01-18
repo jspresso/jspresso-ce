@@ -100,4 +100,19 @@ public interface IComponent extends IPropertyChangeCapable {
    *          the value to set the property with.
    */
   void straightSetProperty(String propertyName, Object backendPropertyValue);
+
+  /**
+   * Gets the owning component or null.
+   * 
+   * @return the owning component or null.
+   */
+  IComponent getOwningComponent();
+
+  /**
+   * Sets the owning component or null.
+   * 
+   * @param owningComponent
+   *          the owning component or null.
+   */
+  void setOwningComponent(IComponent owningComponent);
 }
