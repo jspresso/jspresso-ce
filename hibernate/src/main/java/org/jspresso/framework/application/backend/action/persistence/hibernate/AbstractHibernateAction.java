@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.hibernate.Session;
-import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.model.component.IComponent;

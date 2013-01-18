@@ -200,7 +200,7 @@ public class EntityGenerator {
    * Generates the component java source files.
    */
   @SuppressWarnings({
-      "rawtypes", "resource"
+    "rawtypes"
   })
   public void generateComponents() {
     LOG.debug("Loading Spring context {}.", applicationContextKey);
@@ -454,7 +454,8 @@ public class EntityGenerator {
   /**
    * Sets the fileExtension.
    * 
-   * @param fileExtension the fileExtension to set.
+   * @param fileExtension
+   *          the fileExtension to set.
    */
   public void setFileExtension(String fileExtension) {
     this.fileExtension = fileExtension;

@@ -77,6 +77,9 @@ public class RequestParamsHttpFilter implements Filter {
 
   /**
    * {@inheritDoc}
+   * 
+   * @throws ServletException
+   *           used in superclass.
    */
 
   @Override
