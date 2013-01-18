@@ -5,15 +5,15 @@
 
   <!-- View factories -->
   <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.application.view.BasicQueryViewDescriptorFactory">
-    <property name="okCloseDialogAction" ref="okDialogFrontAction"/>
-    <property name="modalDialogAction" ref="modalDialogAction"/>
+    <property name="okCloseDialogAction" ref="okDialogFrontAction" />
+    <property name="modalDialogAction" ref="modalDialogAction" />
     <property name="defaultFindIconImageUrl">
-      <bean parent="abstractFwIconImageURL" >
+      <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="find" />
       </bean>
     </property>
   </bean>
-  
+
   <bean id="lovResultViewDescriptorFactoryBase" class="org.jspresso.framework.application.frontend.action.lov.BasicLovResultViewDescriptorFactory">
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
   </bean>
@@ -135,6 +135,11 @@
     <property name="findAction" ref="lovFindFrontAction" />
     <property name="pagingAction" ref="lovFindBackAction" />
     <property name="nextAction" ref="modalDialogAction" />
+    <property name="defaultIconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="find" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="lovAction" parent="lovActionBase" />
@@ -307,14 +312,37 @@
     </property>
   </bean>
 
-  <bean id="editSelectedComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditSelectedComponentAction">
+  <bean id="editSelectedComponentActionBase" class="org.jspresso.framework.application.frontend.action.std.EditSelectedComponentAction">
     <property name="nextAction" ref="modalDialogAction" />
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="view" />
       </bean>
     </property>
+    <property name="okAction">
+      <bean class="org.jspresso.framework.application.frontend.action.std.EditSelectedComponentAction$DefaultOkAction">
+        <property name="name" value="ok" />
+        <property name="iconImageURL">
+          <bean parent="abstractFwIconImageURL">
+            <constructor-arg index="0" value="ok" />
+          </bean>
+        </property>
+      </bean>
+    </property>
+    <property name="cancelAction">
+      <bean class="org.jspresso.framework.application.frontend.action.CloseDialogAction">
+        <property name="name" value="cancel" />
+        <property name="iconImageURL">
+          <bean parent="abstractFwIconImageURL">
+            <constructor-arg index="0" value="cancel" />
+          </bean>
+        </property>
+      </bean>
+    </property>
+    <property name="collectionBased" value="true"/>
   </bean>
+
+  <bean id="editSelectedComponentAction" parent="editSelectedComponentActionBase"/>
 
   <bean id="editComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
     <property name="cancelAction" ref="cancelDialogFrontAction" />
@@ -416,7 +444,7 @@
 
   <bean id="addAnyToMasterBackAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
   <bean id="addAnyToMasterFrontAction" parent="addToMasterFrontAction">
-    <property name="wrappedAction" ref="addAnyToMasterBackAction"/>
+    <property name="wrappedAction" ref="addAnyToMasterBackAction" />
   </bean>
 
   <bean id="addMapToMasterFrontAction" parent="addToMasterFrontAction">
@@ -1125,7 +1153,7 @@
                             </bean>
                           </property>
                           <property name="wrappedAction">
-                            <bean class="org.jspresso.framework.application.backend.action.PurgeCompletedAsynExecutorsAction"/>
+                            <bean class="org.jspresso.framework.application.backend.action.PurgeCompletedAsynExecutorsAction" />
                           </property>
                         </bean>
                       </property>

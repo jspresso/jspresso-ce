@@ -49,33 +49,6 @@ public class EditSelectedComponentAction<E, F, G> extends
   private FrontendAction<E, F, G> okAction;
 
   /**
-   * Constructs a new <code>EditSelectedComponentAction</code> instance.
-   */
-  public EditSelectedComponentAction() {
-    okAction = new CloseDialogAction<E, F, G>() {
-
-      @Override
-      public boolean execute(IActionHandler actionHandler,
-          Map<String, Object> context) {
-        IEntity entityClone = (IEntity) getModel(context);
-        getBackendController(context)
-            .merge(entityClone, EMergeMode.MERGE_EAGER);
-        return super.execute(actionHandler, context);
-      }
-    };
-    okAction.setName("ok");
-    okAction
-        .setIconImageURL("classpath:org/jspresso/framework/application/images/ok-48x48.png");
-
-    cancelAction = new CloseDialogAction<E, F, G>();
-    cancelAction.setName("cancel");
-    cancelAction
-        .setIconImageURL("classpath:org/jspresso/framework/application/images/cancel-48x48.png");
-
-    setCollectionBased(true);
-  }
-
-  /**
    * Gets the cancelAction.
    * 
    * @return the cancelAction.
@@ -112,6 +85,55 @@ public class EditSelectedComponentAction<E, F, G> extends
       return uowEntity;
     } finally {
       c.rollbackUnitOfWork(null);
+    }
+  }
+
+  /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
+   */
+  public void setCancelAction(FrontendAction<E, F, G> cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction
+   *          the okAction to set.
+   */
+  public void setOkAction(FrontendAction<E, F, G> okAction) {
+    this.okAction = okAction;
+  }
+
+  /**
+   * Default OK action.
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   * @param <E>
+   *          the actual gui component type used.
+   * @param <F>
+   *          the actual icon type used.
+   * @param <G>
+   *          the actual action type used.
+   */
+  public static class DefaultOkAction<E, F, G> extends
+      CloseDialogAction<E, F, G> {
+
+    /**
+     * Merges eagerly the edited entity.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean execute(IActionHandler actionHandler,
+        Map<String, Object> context) {
+      IEntity entityClone = (IEntity) getModel(context);
+      getBackendController(context).merge(entityClone, EMergeMode.MERGE_EAGER);
+      return super.execute(actionHandler, context);
     }
   }
 }

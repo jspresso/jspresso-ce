@@ -108,6 +108,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private ESelectionMode                             selectionMode;
   private IDisplayableAction                         okAction;
   private IAction                                    pagingAction;
+  private String                                     defaultIconImageURL;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -375,9 +376,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         icon = entityDescriptor.getIcon();
       }
       if (icon == null) {
-        icon = new Icon(
-            "classpath:org/jspresso/framework/application/images/find-48x48.png",
-            null);
+        icon = new Icon(getDefaultIconImageURL(), null);
       }
     }
     return icon;
@@ -588,5 +587,24 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       return ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION;
     }
     return ESelectionMode.SINGLE_SELECTION;
+  }
+
+  /**
+   * Gets the defaultIconImageURL.
+   * 
+   * @return the defaultIconImageURL.
+   */
+  protected String getDefaultIconImageURL() {
+    return defaultIconImageURL;
+  }
+
+  /**
+   * Sets the defaultIconImageURL.
+   * 
+   * @param defaultIconImageURL
+   *          the defaultIconImageURL to set.
+   */
+  public void setDefaultIconImageURL(String defaultIconImageURL) {
+    this.defaultIconImageURL = defaultIconImageURL;
   }
 }
