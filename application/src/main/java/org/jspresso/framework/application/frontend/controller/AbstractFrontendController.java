@@ -1540,6 +1540,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       Map<String, Workspace> filteredWorkspaces = new HashMap<String, Workspace>();
       for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
         Workspace workspace = workspaceEntry.getValue();
+        // Must be put here so that ws that are not accessible
+        // due to security restrictions are still translated.
+        translateWorkspace(workspace);
         if (isAccessGranted(workspace)) {
           try {
             pushToSecurityContext(workspace);
