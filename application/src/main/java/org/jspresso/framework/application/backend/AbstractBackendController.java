@@ -1510,7 +1510,10 @@ public abstract class AbstractBackendController extends AbstractController
             }
             if (isInitialized(registeredCollection)) {
               if (newlyRegistered && !isInitialized(propertyValue)) {
-                registeredCollection = (Collection<IComponent>) propertyValue;
+                // Must have another collection instance.
+                // See bug #902
+                registeredCollection = (Collection<IComponent>) cloneUninitializedProperty(
+                    registeredEntity, propertyValue);
               } else {
                 if (propertyValue instanceof List) {
                   registeredCollection = collectionFactory
