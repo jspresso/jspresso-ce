@@ -1046,10 +1046,14 @@ public class HibernateBackendController extends AbstractBackendController {
         if (unwrapProxy((((PersistentCollection) propertyValue).getOwner())) != unwrapProxy(owner)) {
           if (propertyValue instanceof PersistentSet) {
             clonedPropertyValue = new PersistentSet(
-                ((PersistentSet) propertyValue).getSession());
+            // Must reset the session.
+            // See bug #902
+                /* ((PersistentSet) propertyValue).getSession() */null);
           } else if (propertyValue instanceof PersistentList) {
             clonedPropertyValue = new PersistentList(
-                ((PersistentList) propertyValue).getSession());
+            // Must reset the session.
+            // See bug #902
+                /* ((PersistentList) propertyValue).getSession() */null);
           }
           changeCollectionOwner((Collection<?>) clonedPropertyValue, owner);
           ((PersistentCollection) clonedPropertyValue).setSnapshot(
