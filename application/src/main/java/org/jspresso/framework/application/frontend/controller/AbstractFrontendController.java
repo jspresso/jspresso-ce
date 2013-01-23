@@ -778,33 +778,51 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Given a workspace name, this method returns the associated workspace.
-   * 
-   * @param workspaceName
-   *          the name of the workspace.
-   * @return the selected workspace.
+   * {@inheritDoc}
    */
   @Override
   public Workspace getWorkspace(String workspaceName) {
-    if (workspaces != null) {
-      return workspaces.get(workspaceName);
+    return getWorkspace(workspaceName, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Workspace getWorkspace(String workspaceName, boolean bypassSecurity) {
+    if (workspaceName != null && workspaces != null) {
+      Workspace workspace = workspaces.get(workspaceName);
+      if (bypassSecurity || workspaceName.equals(getSelectedWorkspaceName())
+          || isAccessGranted(workspace)) {
+        try {
+          pushToSecurityContext(workspace);
+          return workspace;
+        } finally {
+          restoreLastSecurityContextSnapshot();
+        }
+      }
     }
     return null;
   }
 
   /**
-   * Returns the list of workspace names. This list defines the set of
-   * workspaces the user has access to.
-   * 
-   * @return the list of workspace names.
+   * {@inheritDoc}
    */
   @Override
   public List<String> getWorkspaceNames() {
+    return getWorkspaceNames(false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<String> getWorkspaceNames(boolean bypassSecurity) {
     if (workspaces != null) {
       List<String> workspaceNames = new ArrayList<String>();
       for (Map.Entry<String, Workspace> wsEntry : workspaces.entrySet()) {
         Workspace workspace = wsEntry.getValue();
-        if (isAccessGranted(workspace)) {
+        if (bypassSecurity || isAccessGranted(workspace)) {
           try {
             pushToSecurityContext(workspace);
             workspaceNames.add(wsEntry.getKey());

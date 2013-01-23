@@ -193,6 +193,17 @@ public class Workspace implements ISecurable, IPermIdSource {
    * @return the list of modules belonging to this workspace.
    */
   public List<Module> getModules() {
+    return getModules(false);
+  }
+
+  /**
+   * Gets the modules modules.
+   * 
+   * @param bypassSecurity
+   *          bypasses security restrictions imposed to the user.
+   * @return the list of modules belonging to this workspace.
+   */
+  public List<Module> getModules(boolean bypassSecurity) {
     if (modules == null) {
       return null;
     }
@@ -200,7 +211,7 @@ public class Workspace implements ISecurable, IPermIdSource {
     if (sh != null) {
       for (Iterator<Module> ite = modules.iterator(); ite.hasNext();) {
         Module nextModule = ite.next();
-        if (!sh.isAccessGranted(nextModule)) {
+        if (!bypassSecurity && !sh.isAccessGranted(nextModule)) {
           try {
             sh.pushToSecurityContext(nextModule);
             ite.remove();

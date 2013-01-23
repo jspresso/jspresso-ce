@@ -231,7 +231,8 @@ public interface IFrontendController<E, F, G> extends IController,
   IViewFactory<E, F, G> getViewFactory();
 
   /**
-   * Given a workspace name, this method returns the associated workspace.
+   * Given a workspace name, this method returns the associated workspace. If
+   * the access is not granted, then null is returned.
    * 
    * @param workspaceName
    *          the name of the workspace.
@@ -240,12 +241,34 @@ public interface IFrontendController<E, F, G> extends IController,
   Workspace getWorkspace(String workspaceName);
 
   /**
+   * Given a workspace name, this method returns the associated workspace. If
+   * the access is not granted, then null is returned.
+   * 
+   * @param workspaceName
+   *          the name of the workspace.
+   * @param bypassSecurity
+   *          bypasses security restrictions imposed to the user.
+   * @return the selected workspace.
+   */
+  Workspace getWorkspace(String workspaceName, boolean bypassSecurity);
+
+  /**
    * Returns the list of workspace names. This list defines the set of
    * workspaces the user has access to.
    * 
    * @return the list of workspace names.
    */
   List<String> getWorkspaceNames();
+
+  /**
+   * Returns the list of workspace names. This list defines the set of
+   * workspaces the user has access to.
+   * 
+   * @param bypassSecurity
+   *          bypasses security restrictions imposed to the user.
+   * @return the list of workspace names.
+   */
+  List<String> getWorkspaceNames(boolean bypassSecurity);
 
   /**
    * Pins a module in the history navigation thus allowing the user to navigate

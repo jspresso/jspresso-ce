@@ -276,11 +276,22 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Gets the modules modules.
+   * Gets the modules sub-modules.
    * 
    * @return the list of modules modules.
    */
   public List<Module> getSubModules() {
+    return getSubModules(false);
+  }
+
+  /**
+   * Gets the modules sub-modules.
+   * 
+   * @param bypassSecurity
+   *          bypasses security restrictions imposed to the user.
+   * @return the list of modules modules.
+   */
+  public List<Module> getSubModules(boolean bypassSecurity) {
     if (subModules == null) {
       return null;
     }
@@ -288,7 +299,7 @@ public class Module extends AbstractPropertyChangeCapable implements
     if (sh != null) {
       for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
         Module nextModule = ite.next();
-        if (!sh.isAccessGranted(nextModule)) {
+        if (!bypassSecurity && !sh.isAccessGranted(nextModule)) {
           try {
             sh.pushToSecurityContext(nextModule);
             ite.remove();
