@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -781,6 +782,39 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
+   * Finds an entity by ID.
+   * 
+   * @param <T>
+   *          the entity type to return
+   * @param id
+   *          the entity ID.
+   * @param mergeMode
+   *          the merge mode to use when merging back retrieved entities or null
+   *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
+   * @return the found entity
+   */
+  public <T extends IEntity> T findById(final Serializable id,
+      final EMergeMode mergeMode, final Class<? extends T> clazz) {
+    T res;
+    if (isUnitOfWorkActive()) {
+      // merge mode must be ignored if a transaction is pre-existing.
+      res = cloneInUnitOfWork((T) getHibernateSession().get(clazz, id));
+    } else {
+      // merge mode is used for merge to occur inside the transaction.
+      res = getTransactionTemplate().execute(new TransactionCallback<T>() {
+
+        @Override
+        public T doInTransaction(TransactionStatus status) {
+          return merge((T) getHibernateSession().get(clazz, id), mergeMode);
+        }
+      });
+    }
+    return res;
+  }
+
+  /**
    * Search Hibernate using criteria. The result is then merged into session.
    * 
    * @param <T>
@@ -792,7 +826,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          if no merge is requested.
    * @param clazz
    *          the type of the entity.
-   * @return the first found entity or null;
+   * @return the first found entity or null
    */
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
       EMergeMode mergeMode, Class<? extends T> clazz) {
@@ -815,7 +849,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          if no merge is requested.
    * @param clazz
    *          the type of the entity.
-   * @return the first found entity or null;
+   * @return the first found entity or null
    */
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, EMergeMode mergeMode,
@@ -839,7 +873,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          if no merge is requested.
    * @param clazz
    *          the type of the entity.
-   * @return the first found entity or null;
+   * @return the first found entity or null
    */
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, int firstResult, int maxResults,
@@ -1128,7 +1162,7 @@ public class HibernateBackendController extends AbstractBackendController {
   protected IEntityRegistry createEntityRegistry(String name) {
     return new HibernateEntityRegistry(name);
   }
-  
+
   /**
    * {@inheritDoc}
    */
