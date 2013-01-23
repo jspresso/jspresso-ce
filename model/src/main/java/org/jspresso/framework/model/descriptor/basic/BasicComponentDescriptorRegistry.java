@@ -38,7 +38,7 @@ public class BasicComponentDescriptorRegistry implements
 
   private ApplicationContext                            componentApplicationContext;
   private volatile Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
-  private Object                                        lock = new Object();
+  private Object                                        mutex = new Object();
 
   /**
    * {@inheritDoc}
@@ -47,7 +47,7 @@ public class BasicComponentDescriptorRegistry implements
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<?> componentContract) {
     if (contractNameToComponentDescriptorMap == null) {
-      synchronized (lock) {
+      synchronized (mutex) {
         if (contractNameToComponentDescriptorMap == null) {
           buildContractNameIdMap();
         }
@@ -63,7 +63,11 @@ public class BasicComponentDescriptorRegistry implements
   @Override
   public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
     if (contractNameToComponentDescriptorMap == null) {
-      buildContractNameIdMap();
+      synchronized (mutex) {
+        if (contractNameToComponentDescriptorMap == null) {
+          buildContractNameIdMap();
+        }
+      }
     }
     return contractNameToComponentDescriptorMap.values();
   }
@@ -83,15 +87,16 @@ public class BasicComponentDescriptorRegistry implements
 
   @SuppressWarnings("rawtypes")
   private void buildContractNameIdMap() {
-    contractNameToComponentDescriptorMap = new HashMap<String, IComponentDescriptor<?>>();
+    Map<String, IComponentDescriptor<?>> map = new HashMap<String, IComponentDescriptor<?>>();
     Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext
         .getBeansOfType(IComponentDescriptor.class, false, false);
     for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
       if (descriptorEntry.getValue().getComponentContract() != null) {
-        contractNameToComponentDescriptorMap.put(descriptorEntry.getValue()
+        map.put(descriptorEntry.getValue()
             .getComponentContract().getName(), descriptorEntry.getValue());
       }
     }
+    contractNameToComponentDescriptorMap = map;
   }
 }
