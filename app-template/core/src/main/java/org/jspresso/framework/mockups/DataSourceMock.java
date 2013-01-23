@@ -20,6 +20,7 @@ package org.jspresso.framework.mockups;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -108,6 +109,16 @@ public class DataSourceMock implements DataSource {
    */
   @Override
   public Connection getConnection(String username, String password) {
+    return null;
+  }
+  
+  /**
+   * Mock method.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("javadoc")
+  public Logger getParentLogger() {
     return null;
   }
 
