@@ -1671,6 +1671,9 @@ package org.jspresso.framework.view.flex {
       var updateView:Function = function (value:Object):void {
         if(value == null) {
           dateField.selectedDate = null;
+          if(dateField.dropdown) {
+            dateField.dropdown.selectedDate = new Date();
+          }
         } else {
           if(value is DateDto) {
             dateField.selectedDate = DateUtils.fromDateDto(value as DateDto);
