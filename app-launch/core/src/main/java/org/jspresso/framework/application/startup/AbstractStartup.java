@@ -39,8 +39,10 @@ public abstract class AbstractStartup implements IStartup {
 
   private BeanFactory         applicationContext;
 
-  private static final Logger LOG = LoggerFactory
-                                      .getLogger(AbstractStartup.class);
+  private static final Logger LOG  = LoggerFactory
+                                       .getLogger(AbstractStartup.class);
+
+  private static final Object LOCK = new Object();
 
   /**
    * Gets the applicationContext.
@@ -50,14 +52,16 @@ public abstract class AbstractStartup implements IStartup {
   protected BeanFactory getApplicationContext() {
     try {
       if (applicationContext == null) {
-        BeanFactoryLocator bfl = SingletonBeanFactoryLocator
-            .getInstance(getBeanFactorySelector());
-        BeanFactoryReference bf = bfl
-            .useBeanFactory(getApplicationContextKey());
-        applicationContext = bf.getFactory();
-        if (applicationContext instanceof ConfigurableApplicationContext) {
-          ((ConfigurableApplicationContext) applicationContext)
-              .registerShutdownHook();
+        synchronized (LOCK) {
+          BeanFactoryLocator bfl = SingletonBeanFactoryLocator
+              .getInstance(getBeanFactorySelector());
+          BeanFactoryReference bf = bfl
+              .useBeanFactory(getApplicationContextKey());
+          applicationContext = bf.getFactory();
+          if (applicationContext instanceof ConfigurableApplicationContext) {
+            ((ConfigurableApplicationContext) applicationContext)
+                .registerShutdownHook();
+          }
         }
       }
       return applicationContext;
