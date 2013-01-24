@@ -105,7 +105,10 @@ package org.jspresso.framework.util.format
         }
         else if (mask == "Y")
         {
-          yearString += temp;
+          if (isNaN(Number(temp)) || temp == " ")
+            j--;
+          else
+            yearString += temp;
         }
         else if (isNaN(Number(mask)) && !isNaN(Number(temp)) && temp != " ") {
           j--;
