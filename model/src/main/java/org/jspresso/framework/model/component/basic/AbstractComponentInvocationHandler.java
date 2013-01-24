@@ -86,11 +86,6 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
-
-
-
-
-
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -126,6 +121,7 @@ public abstract class AbstractComponentInvocationHandler implements
     LIFECYCLE_METHOD_NAMES = methodNames;
   }
   private IComponent                                                                   owningComponent;
+  private IPropertyDescriptor                                                          owningPropertyDescriptor;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -238,8 +234,11 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else if ("getOwningComponent".equals(methodName)) {
       return owningComponent;
+    } else if ("getOwningPropertyDescriptor".equals(methodName)) {
+      return owningPropertyDescriptor;
     } else if ("setOwningComponent".equals(methodName)) {
       owningComponent = (IComponent) args[0];
+      owningPropertyDescriptor = (IPropertyDescriptor) args[1];
       return null;
     } else {
       if (isLifecycleMethod(method)) {
@@ -732,12 +731,13 @@ public abstract class AbstractComponentInvocationHandler implements
     if (oldPropertyValue instanceof IComponent
         && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && isInitialized(oldPropertyValue)) {
-      ((IComponent) oldPropertyValue).setOwningComponent(null);
+      ((IComponent) oldPropertyValue).setOwningComponent(null, null);
     }
     if (newPropertyValue instanceof IComponent
         && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && isInitialized(newPropertyValue)) {
-      ((IComponent) newPropertyValue).setOwningComponent((IComponent) proxy);
+      ((IComponent) newPropertyValue).setOwningComponent((IComponent) proxy,
+          propertyDescriptor);
     }
 
     if (oldPropertyValue != null) {

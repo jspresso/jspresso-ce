@@ -20,6 +20,7 @@ package org.jspresso.framework.model.component;
 
 import java.util.Map;
 
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
@@ -109,10 +110,20 @@ public interface IComponent extends IPropertyChangeCapable {
   IComponent getOwningComponent();
 
   /**
+   * Gets the owning property descriptor or null.
+   * 
+   * @return the owning property descriptor or null.
+   */
+  IPropertyDescriptor getOwningPropertyDescriptor();
+
+  /**
    * Sets the owning component or null.
    * 
    * @param owningComponent
    *          the owning component or null.
+   * @param owningPropertyDescriptor
+   *          the owning property descriptor or null.
    */
-  void setOwningComponent(IComponent owningComponent);
+  void setOwningComponent(IComponent owningComponent,
+      IPropertyDescriptor owningPropertyDescriptor);
 }

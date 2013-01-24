@@ -2186,22 +2186,27 @@ public abstract class AbstractBackendController extends AbstractController
     IEntity sessionTargetEntity = null;
     IEntity paramEntity = null;
     IEntity sessionParamEntity = null;
-    if (target instanceof IEntity) {
-      targetEntity = (IEntity) target;
-      sessionTargetEntity = getRegisteredEntity(
-          getComponentContract(targetEntity), targetEntity.getId());
+    if (target instanceof IComponent) {
+      targetEntity = refineEntity((IComponent) target);
+      if (targetEntity != null) {
+        sessionTargetEntity = getRegisteredEntity(
+            getComponentContract(targetEntity), targetEntity.getId());
+      }
     }
+    if (param instanceof IComponent) {
+      paramEntity = refineEntity((IComponent) param);
+      if (paramEntity != null) {
+        sessionParamEntity = getRegisteredEntity(
+            getComponentContract(paramEntity), paramEntity.getId());
+      }
+    }
+
     if (target instanceof IComponent) {
       targetClass = getComponentContract(((IComponent) target));
     } else {
       targetClass = target.getClass();
     }
 
-    if (param instanceof IEntity) {
-      paramEntity = (IEntity) param;
-      sessionParamEntity = getRegisteredEntity(
-          getComponentContract(paramEntity), paramEntity.getId());
-    }
     if (isUnitOfWorkActive()) {
       if (targetEntity != null
           && objectEquals(targetEntity, sessionTargetEntity)) {
@@ -2286,6 +2291,15 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return param;
+  }
+
+  private IEntity refineEntity(IComponent target) {
+    if (target instanceof IEntity) {
+      return (IEntity) target;
+    } else if (target != null) {
+      return refineEntity(target.getOwningComponent());
+    }
+    return null;
   }
 
   private IEntity getExcludedFromSanityChecks(IEntity entity) {
