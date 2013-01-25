@@ -52,6 +52,27 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
  * can be refined using either the simple <code>renderedProperties</code> or the
  * more advanced yet lot more powerful <code>columnViewDescriptors</code>
  * properties.
+ * <p>
+ * The description property is used to compute view tooltips and support the
+ * following rules :
+ * <ol>
+ * <li>if the description is a property name of the underlying model, this
+ * property will be used to compute the (dynamic) tooltip (depending on the
+ * actual model).</li>
+ * <li>if the description is not a property name of the underlying model, the
+ * the tooltip is considered static and the translation will searched in the
+ * application resource bundles.</li>
+ * <li>if the description is the empty string (''), the tooltip is de-activated.
+ * </li>
+ * <li>if the description is not set, then the toHtml property (see toHtoml
+ * property on entities / components definition) is used as dynamic property.
+ * And the toHtml falls back to the toString if not set, which falls back to the
+ * 1st string rendered property if not set.</li>
+ * </ol>
+ * Note that on every case above, HTML is supported. This way, you can have
+ * really useful tooltips (event multi-line), in order to detail some synthetic
+ * data. Moreover, this rule is available for the table rows tooltip, but also
+ * for each individual column (property view) in the table.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

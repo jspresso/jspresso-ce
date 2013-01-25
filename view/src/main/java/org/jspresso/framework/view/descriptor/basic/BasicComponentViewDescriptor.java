@@ -49,6 +49,27 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * straightforward customizations, but the most advanced and prowerful one is
  * definitely the <code>propertyViewDescriptors</code> property tat allows to
  * fine-tune each component UI field individually.
+ * <p>
+ * The description property is used to compute view tooltips and support the
+ * following rules :
+ * <ol>
+ * <li>if the description is a property name of the underlying model, this
+ * property will be used to compute the (dynamic) tooltip (depending on the
+ * actual model).</li>
+ * <li>if the description is not a property name of the underlying model, the
+ * the tooltip is considered static and the translation will searched in the
+ * application resource bundles.</li>
+ * <li>if the description is the empty string (''), the tooltip is de-activated.
+ * </li>
+ * <li>if the description is not set, then the toHtml property (see toHtoml
+ * property on entities / components definition) is used as dynamic property.
+ * And the toHtml falls back to the toString if not set, which falls back to the
+ * 1st string rendered property if not set.</li>
+ * </ol>
+ * Note that on every case above, HTML is supported. This way, you can have
+ * really useful tooltips (event multi-line), in order to detail some synthetic
+ * data. Moreover, this rule is available for the form tooltip, but also for
+ * each individual field (property view) in the form.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -292,11 +313,11 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     this.propertyWidths = new HashMap<String, Integer>();
     for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
       if (propertyWidth.getValue() instanceof String) {
-        this.propertyWidths.put(propertyWidth.getKey(), Integer.valueOf(
-            (String) propertyWidth.getValue()));
+        this.propertyWidths.put(propertyWidth.getKey(),
+            Integer.valueOf((String) propertyWidth.getValue()));
       } else {
-        this.propertyWidths.put(propertyWidth.getKey(), Integer.valueOf(
-            ((Number) propertyWidth.getValue()).intValue()));
+        this.propertyWidths.put(propertyWidth.getKey(),
+            Integer.valueOf(((Number) propertyWidth.getValue()).intValue()));
       }
     }
   }
