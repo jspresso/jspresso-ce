@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2012 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser

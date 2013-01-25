@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2012 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.framework.util.swing;
 
