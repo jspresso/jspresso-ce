@@ -48,7 +48,8 @@ public class GrantedRolesGate extends AbstractGate implements
 
   /**
    * Configures the roles for which the gate is open. It supports
-   * &quot;<b>!</b>&quot; prefix to negate the role(s).
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). If at least one of the
+   * role is satisfied, then the gate is open.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
