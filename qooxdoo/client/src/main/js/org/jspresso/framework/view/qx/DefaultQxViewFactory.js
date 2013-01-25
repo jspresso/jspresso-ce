@@ -1326,6 +1326,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       try {
         remoteDateField.setType("DATE");
         dateTimeField.add(this._createDateField(remoteDateField));
+      } catch(e){
+      	throw e;
       } finally {
         remoteDateField.setType(oldType);
       }

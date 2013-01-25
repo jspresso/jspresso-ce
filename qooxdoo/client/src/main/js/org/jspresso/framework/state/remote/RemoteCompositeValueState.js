@@ -57,10 +57,13 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
   
   members :
   {
-    //TODO remove once tree controller accepts null values. 
     __bindChildrenArray : function(value, old) {
       if(value == null) {
         this.setChildren(new qx.data.Array());
+      } else {
+        for(var i = 0; i < value.length; i++) {
+          value.getItem(i).setParent(this);
+        }
       }
     },
     

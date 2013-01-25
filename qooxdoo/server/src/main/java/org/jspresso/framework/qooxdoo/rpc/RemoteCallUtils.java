@@ -111,6 +111,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   protected Map filter(Object obj, Map map) {
     Map filteredMap = super.filter(obj, map);
     filteredMap.put("class", obj.getClass().getName());
+    // Prevents recursion on JSON serialization
+    filteredMap.remove("parent");
     return filteredMap;
   }
 

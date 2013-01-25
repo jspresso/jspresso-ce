@@ -155,8 +155,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         if(remoteValueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
           remoteValueState.addListener("changeSelectedIndices", this._selectedIndicesUpdated, this);
         }
-//      } catch(err) {
-//        this.error(err);
+      } catch(e){
+        throw e;
       } finally {
         this.__changeNotificationsEnabled = wasEnabled;
       }
@@ -249,8 +249,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             this._handleCommand(commands[i]);
           }
         }
-//      } catch(err) {
-//        this.error(err);
+      } catch(e){
+        throw e;
       } finally {
         this.__changeNotificationsEnabled = wasEnabled;
       }
@@ -984,8 +984,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         try {
           var data = result.getData();
           this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
-//        } catch(err) {
-//          this.error(err);
+        } catch(e){
+          throw e;
         } finally {
           this.__application.getRoot().setGlobalCursor("default");
           this.__roundTrip = false;
@@ -995,6 +995,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           if(this.__nextActionCallback != null) {
             try {
               this.__nextActionCallback();
+            } catch(e){
+              throw e;
             } finally {
               this.__nextActionCallback = null;
             }  
