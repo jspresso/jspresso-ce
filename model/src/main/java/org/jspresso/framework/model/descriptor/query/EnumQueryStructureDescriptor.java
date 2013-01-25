@@ -130,6 +130,7 @@ public class EnumQueryStructureDescriptor extends
     setReferencedDescriptor(refDescriptor);
     setComputed(propertyDescriptor.isComputed());
     setSqlName(propertyDescriptor.getSqlName());
+    setMandatory(false);
   }
 
   /**
