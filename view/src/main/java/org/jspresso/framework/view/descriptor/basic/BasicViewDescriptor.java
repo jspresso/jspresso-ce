@@ -557,4 +557,14 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   public void setStyleName(String styleName) {
     this.styleName = styleName;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicViewDescriptor clone() {
+    BasicViewDescriptor clone = (BasicViewDescriptor) super.clone();
+    clone.permId = null;
+    return clone;
+  }
 }
