@@ -4,6 +4,8 @@
   default-lazy-init="true">
 
   <!-- Root application context for the Jspresso framework. -->
+  
+  <bean id="null" class="org.jspresso.framework.util.spring.NullFactoryBean"/>
 
   <bean id="mockMessageSource" class="org.jspresso.framework.util.i18n.mock.MockMessageSource" />
 
