@@ -74,4 +74,14 @@ public interface IAccessor {
    */
   void setValue(Object target, Object value) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
+
+  /**
+   * Tests wether the accessor applies to the parameter target.
+   * 
+   * @param target
+   *          the target to test the accessor for.
+   * @return <code>true</code> if the accessor can be used to access the
+   *         parameter target.
+   */
+  boolean appliesTo(Object target);
 }

@@ -170,8 +170,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
               getLastNestedProperty())) {
             // We are explicitely on a bean property. Do not use
             // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
-            // target
-            // is a Map and access its properties as such.
+            // target is a Map and access its properties as such.
             PROPERTY_UTILS_BEAN.setSimpleProperty(finalTarget,
                 getLastNestedProperty(), value);
           } else {

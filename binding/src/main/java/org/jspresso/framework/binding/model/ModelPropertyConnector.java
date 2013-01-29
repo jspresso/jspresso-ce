@@ -128,37 +128,65 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    */
   @Override
   public void modelChange(ModelChangeEvent evt) {
+    // It's important to recompute the accessor each time the model actually
+    // changes since we may have, at run-time, a map model.
+    Object newModel = evt.getNewValue();
+    Object oldModel = evt.getOldValue();
+    recomputeAccessor(newModel);
 
     if (!(getParentConnector() instanceof ICollectionConnector)) {
-      if (evt.getOldValue() != null
-          && evt.getOldValue() instanceof IPropertyChangeCapable) {
-        ((IPropertyChangeCapable) evt.getOldValue())
-            .removePropertyChangeListener(getId(), this);
-      }
-      if (evt.getNewValue() != null
-          && evt.getNewValue() instanceof IPropertyChangeCapable) {
-        ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
+      if (oldModel != null && oldModel instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(
             getId(), this);
+      }
+      if (newModel != null && newModel instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) newModel).addPropertyChangeListener(getId(),
+            this);
       }
     }
 
     if (getReadabilityGates() != null) {
       for (IGate gate : getReadabilityGates()) {
         if (gate instanceof IModelAware) {
-          ((IModelAware) gate).setModel(evt.getNewValue());
+          ((IModelAware) gate).setModel(newModel);
         }
       }
     }
     if (getWritabilityGates() != null) {
       for (IGate gate : getWritabilityGates()) {
         if (gate instanceof IModelAware) {
-          ((IModelAware) gate).setModel(evt.getNewValue());
+          ((IModelAware) gate).setModel(newModel);
         }
       }
     }
     writabilityChange();
     readabilityChange();
     fireConnectorValueChange();
+  }
+
+  private void recomputeAccessor(Object newModel) {
+    if (isValueAccessedAsProperty() && getModelProvider() != null
+        && accessorFactory != null && (accessor == null || !accessor.appliesTo(newModel))) {
+      Class<?> modelType = null;
+      try {
+        if (newModel != null) {
+          modelType = newModel.getClass();
+        } else {
+          modelType = getModelProvider().getModelDescriptor().getModelType();
+        }
+        accessor = accessorFactory.createPropertyAccessor(getId(), modelType);
+      } catch (Exception ex) {
+        LOG.error(
+            "An error occured when creating the accessor for the {} property on {} class.",
+            new Object[] {
+                getId(), modelType, ex
+            });
+      }
+      if (accessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) accessor)
+            .setModelDescriptor(getModelDescriptor());
+      }
+    }
   }
 
   /**
@@ -231,25 +259,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   protected void modelProviderChanged(IModelProvider oldModelProvider) {
     Object oldModel = null;
     Object newModel = null;
-
-    if (isValueAccessedAsProperty() && getModelProvider() != null
-        && accessor == null && accessorFactory != null) {
-      try {
-        accessor = accessorFactory.createPropertyAccessor(getId(),
-            getModelProvider().getModelDescriptor().getModelType());
-      } catch (Exception ex) {
-        LOG.error(
-            "An error occured when creating the accessor for the {} property on {} class.",
-            new Object[] {
-                getId(),
-                getModelProvider().getModelDescriptor().getModelType(), ex
-            });
-      }
-      if (accessor instanceof IModelDescriptorAware) {
-        ((IModelDescriptorAware) accessor)
-            .setModelDescriptor(getModelDescriptor());
-      }
-    }
     if (oldModelProvider != null) {
       oldModel = oldModelProvider.getModel();
       oldModelProvider.removeModelChangeListener(this);
@@ -275,6 +284,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
     // it
     // fails if the current connector is a collection connector.
     // setConnectorValue(getConnecteeValue());
+    recomputeAccessor(newModel);
     modelChange(new ModelChangeEvent(getModelProvider(), oldModel, newModel));
   }
 

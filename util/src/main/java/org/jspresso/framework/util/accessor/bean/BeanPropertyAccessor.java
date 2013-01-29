@@ -19,6 +19,7 @@
 package org.jspresso.framework.util.accessor.bean;
 
 import java.beans.PropertyDescriptor;
+import java.util.Map;
 
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.jspresso.framework.util.accessor.IAccessor;
@@ -85,4 +86,11 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
         prop.substring(indexOfNestedDelim + 1));
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean appliesTo(Object target) {
+    return target == null || !(target instanceof Map<?, ?>);
+  }
 }

@@ -4,6 +4,7 @@
 package org.jspresso.framework.model.map;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
@@ -49,12 +50,16 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
       NoSuchMethodException {
     Object oldValue = getValue(target);
     Object actualNewValue = value;
-    if (getModelDescriptor() != null) {
+    // target instance must be tested to avoid triggering twice the property
+    // processors if the map contains a non-map model.
+    if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       actualNewValue = getModelDescriptor().interceptSetter(target, value);
       getModelDescriptor().preprocessSetter(target, actualNewValue);
     }
     super.setValue(target, actualNewValue);
-    if (getModelDescriptor() != null) {
+    // target instance must be tested to avoid triggering twice the property
+    // processors if the map contains a non-map model.
+    if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       getModelDescriptor().postprocessSetter(target, oldValue, actualNewValue);
     }
   }

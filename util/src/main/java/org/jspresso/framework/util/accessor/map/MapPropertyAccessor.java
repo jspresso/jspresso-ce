@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.accessor.map;
 
+import java.util.Map;
+
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 
 /**
@@ -47,5 +49,13 @@ public class MapPropertyAccessor extends AbstractPropertyAccessor {
   @Override
   public boolean isWritable() {
     return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean appliesTo(Object target) {
+    return target == null || (target instanceof Map<?, ?>);
   }
 }

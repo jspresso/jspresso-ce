@@ -6,6 +6,7 @@ package org.jspresso.framework.model.map;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
@@ -43,13 +44,17 @@ public class DescriptorAwareMapCollectionAccessor extends
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
     }
-    if (getModelDescriptor() != null) {
+    // target instance must be tested to avoid triggering twice the property
+    // processors if the map contains a non-map model.
+    if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       getModelDescriptor().preprocessAdder(this, mapValue, value);
     }
     ((Collection<Object>) mapValue).add(value);
     // to trigger a propertyChange.
     setValue(target, mapValue);
-    if (getModelDescriptor() != null) {
+    // target instance must be tested to avoid triggering twice the property
+    // processors if the map contains a non-map model.
+    if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       getModelDescriptor().postprocessAdder(this, mapValue, value);
     }
   }
@@ -71,7 +76,9 @@ public class DescriptorAwareMapCollectionAccessor extends
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
     Collection<?> mapValue = getValue(target);
-    if (getModelDescriptor() != null) {
+    // target instance must be tested to avoid triggering twice the property
+    // processors if the map contains a non-map model.
+    if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       getModelDescriptor().preprocessRemover(this, mapValue, value);
     }
     if (mapValue != null) {
@@ -79,7 +86,9 @@ public class DescriptorAwareMapCollectionAccessor extends
       // to trigger a propertyChange.
       setValue(target, mapValue);
     }
-    if (getModelDescriptor() != null) {
+    // target instance must be tested to avoid triggering twice the property
+    // processors if the map contains a non-map model.
+    if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       getModelDescriptor().postprocessRemover(this, mapValue, value);
     }
   }
