@@ -1917,7 +1917,7 @@ public class DefaultSwingViewFactory extends
       JComponent propertyComponent, ITranslationProvider translationProvider,
       Locale locale) {
     JLabel propertyLabel = createJLabel(propertyViewDescriptor, false);
-    StringBuffer labelText = new StringBuffer(
+    StringBuilder labelText = new StringBuilder(
         propertyViewDescriptor.getI18nName(translationProvider, locale));
     propertyLabel.setText(labelText.toString());
     propertyLabel.setLabelFor(propertyComponent);

@@ -46,7 +46,7 @@ public class GenerateSqlName implements TemplateMethodModel {
 
       @Override
       public String run(String name) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
           if (i > 0 && Character.isLowerCase(name.charAt(i - 1))
               && Character.isUpperCase(name.charAt(i))) {

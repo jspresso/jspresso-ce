@@ -81,7 +81,7 @@ public final class FontHelper {
    * @return the font string representation.
    */
   public static String toString(Font font) {
-    StringBuffer fontString = new StringBuffer();
+    StringBuilder fontString = new StringBuilder();
     fontString.append(font.getName());
     fontString.append(SEP);
     if (font.isBold() && font.isItalic()) {

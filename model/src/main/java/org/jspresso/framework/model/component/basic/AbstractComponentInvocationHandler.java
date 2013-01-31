@@ -1644,7 +1644,7 @@ public abstract class AbstractComponentInvocationHandler implements
             boolean chainHasEntity = false;
             String[] chain = evt.getPropertyName().split("\\.");
             if (chain.length > 1) {
-              StringBuffer chainPart = new StringBuffer();
+              StringBuilder chainPart = new StringBuilder();
               for (int i = 0; i < chain.length - 1 && !chainHasEntity; i++) {
                 if (chainPart.length() > 0) {
                   chainPart.append(DOT);

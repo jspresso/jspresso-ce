@@ -137,7 +137,7 @@ public final class JErrorDialog extends JDialog {
   public void setDetails(Throwable details) {
     String exceptionAsDetails = null;
     if (details != null) {
-      StringBuffer html = new StringBuffer("<html>");
+      StringBuilder html = new StringBuilder("<html>");
       html.append("<b>" + translationProvider.getTranslation("details", locale)
           + " :</b>");
       html.append("<pre>");

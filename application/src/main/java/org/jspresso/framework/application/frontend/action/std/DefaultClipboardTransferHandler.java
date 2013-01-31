@@ -37,7 +37,7 @@ public class DefaultClipboardTransferHandler implements
   @Override
   public String toPlainText(List<?> transferedComponents) {
     if (transferedComponents != null && transferedComponents.size() > 0) {
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       for (Object component : transferedComponents) {
         if (component != null) {
           buf.append(component.toString()).append("\n");
@@ -54,7 +54,7 @@ public class DefaultClipboardTransferHandler implements
   @Override
   public String toHtml(List<?> transferedComponents) {
     if (transferedComponents != null && transferedComponents.size() > 0) {
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       for (Object component : transferedComponents) {
         if (component != null) {
           buf.append(component.toString()).append("<br>");

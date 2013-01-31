@@ -65,7 +65,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
     if (prop != null && prop.length() >= 2) {
       if (Character.isLowerCase(prop.charAt(0))
           && Character.isUpperCase(prop.charAt(1))) {
-        StringBuffer fixedProp = new StringBuffer(prop.substring(0, 1)
+        StringBuilder fixedProp = new StringBuilder(prop.substring(0, 1)
             .toUpperCase());
         fixedProp.append(prop.substring(1));
         return fixedProp.toString();
@@ -86,7 +86,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
     if (prop != null && prop.length() >= 2) {
       if (Character.isUpperCase(prop.charAt(0))
           && Character.isUpperCase(prop.charAt(1))) {
-        StringBuffer fixedProp = new StringBuffer(prop.substring(0, 1)
+        StringBuilder fixedProp = new StringBuilder(prop.substring(0, 1)
             .toLowerCase());
         fixedProp.append(prop.substring(1));
         return fixedProp.toString();

@@ -185,7 +185,7 @@ public class RandomGUID extends Object {
   @Override
   public String toString() {
     String raw = valueAfterMD5.toUpperCase();
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append(raw.substring(0, 8));
     if (separator != null) {
       sb.append(separator);
@@ -212,7 +212,7 @@ public class RandomGUID extends Object {
    */
   private void getRandomGUID(boolean secure) {
     try {
-      StringBuffer sbValueBeforeMD5 = new StringBuffer();
+      StringBuilder sbValueBeforeMD5 = new StringBuilder();
       MessageDigest md5 = MessageDigest.getInstance("MD5");
       long time = System.currentTimeMillis();
       long rand = 0;
@@ -223,7 +223,7 @@ public class RandomGUID extends Object {
         rand = myRand.nextLong();
       }
 
-      // This StringBuffer can be a long as you need; the MD5
+      // This StringBuilder can be a long as you need; the MD5
       // hash will always return 128 bits. You can change
       // the seed to include anything you want here.
       // You could even stream a file through the MD5 making
@@ -239,7 +239,7 @@ public class RandomGUID extends Object {
       md5.update(valueBeforeMD5.getBytes());
 
       byte[] array = md5.digest();
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       for (int j = 0; j < array.length; ++j) {
         int b = array[j] & 0xFF;
         if (b < 0x10) {

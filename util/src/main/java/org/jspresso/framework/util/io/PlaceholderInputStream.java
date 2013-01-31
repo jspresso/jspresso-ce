@@ -68,7 +68,7 @@ public class PlaceholderInputStream extends FilterInputStream {
     if ('$' == first) {
       int second = super.read();
       if ('{' == second) {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
         int next = super.read();
         while (next > 0 && next != '}') {
           temp.append((char) next);

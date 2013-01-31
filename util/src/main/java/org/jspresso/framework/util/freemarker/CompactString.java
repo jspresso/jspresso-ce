@@ -62,7 +62,7 @@ public class CompactString implements TemplateMethodModelEx {
       if (toCompact == null || toCompact.length() == 0) {
         return new SimpleScalar("");
       }
-      StringBuffer result = new StringBuffer();
+      StringBuilder result = new StringBuilder();
       result.append(Character.toUpperCase(toCompact.charAt(0)));
       for (int i = 1; i < toCompact.length(); i++) {
         char prev = toCompact.charAt(i - 1);

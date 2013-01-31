@@ -58,7 +58,7 @@ public class MessageSourceTranslationProvider extends
       if (LOG.isWarnEnabled()) {
         LOG.warn(key + "=/*TO_REPLACE*/");
       }
-      StringBuffer message = new StringBuffer("[" + locale.getLanguage() + ":"
+      StringBuilder message = new StringBuilder("[" + locale.getLanguage() + ":"
           + key + "]");
       if (args != null && args.length > 0) {
         message.append(" { ");

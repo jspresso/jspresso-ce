@@ -94,7 +94,7 @@ public abstract class BasicNumberPropertyDescriptor extends
           @Override
           public String getI18nMessage(
               ITranslationProvider translationProvider, Locale locale) {
-            StringBuffer boundsSpec = new StringBuffer();
+            StringBuilder boundsSpec = new StringBuilder();
             if (getMinValue() != null && !isDefault(getMinValue())) {
               boundsSpec.append(getMinValue()).append(" <= ");
             }

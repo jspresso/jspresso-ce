@@ -76,7 +76,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
     if (executionFileFilter != null) {
       for (Map.Entry<String, List<String>> fileTypeEntry : executionFileFilter
           .entrySet()) {
-        StringBuffer extensionsDescription = new StringBuffer(" (");
+        StringBuilder extensionsDescription = new StringBuilder(" (");
         for (String fileExtension : fileTypeEntry.getValue()) {
           extensionsDescription.append("*").append(fileExtension).append(" ");
         }

@@ -65,7 +65,7 @@ public final class AppTemplateContextLister {
   }
 
   private static void outputLine(String beanName, Class<?> beanType) {
-    StringBuffer line = new StringBuffer(beanName);
+    StringBuilder line = new StringBuilder(beanName);
     if (beanType != null) {
       line.append(":" + beanType.getName());
     }

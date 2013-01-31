@@ -185,7 +185,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       Dimension dimension) {
     if (localImageUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      StringBuffer buf = new StringBuffer("?" + IMAGE_URL_PARAMETER + "="
+      StringBuilder buf = new StringBuilder("?" + IMAGE_URL_PARAMETER + "="
           + localImageUrl);
       if (dimension != null) {
         buf.append("&" + IMAGE_WIDTH_PARAMETER + "=" + dimension.getWidth());

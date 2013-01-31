@@ -63,7 +63,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   @Override
   public void setStorePath(String[] storePath) {
     if (storePath != null && storePath.length > 0) {
-      StringBuffer buff = new StringBuffer();
+      StringBuilder buff = new StringBuilder();
       for (int i = 0; i < storePath.length; i++) {
         buff.append(storePath[i]).append('.');
       }
@@ -95,7 +95,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     }
     initIfNecessary();
     String existing = preferences.put(key, value);
-    StringBuffer sql = new StringBuffer();
+    StringBuilder sql = new StringBuilder();
     String[] restrictionsColumns;
     String[] restrictionsValues;
     int[] restrictionsTypes;
@@ -167,7 +167,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     initIfNecessary();
     String existing = preferences.remove(key);
     if (existing != null) {
-      StringBuffer sql = new StringBuffer("DELETE FROM ")
+      StringBuilder sql = new StringBuilder("DELETE FROM ")
           .append(getTableName()).append(" WHERE ").append(getKeyColumnName())
           .append(" = ? AND ").append(getPathColumnName()).append(" = ?");
 
@@ -201,7 +201,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     if (preferences == null) {
       preferences = new HashMap<String, String>();
 
-      StringBuffer sql = new StringBuffer("SELECT ").append(getKeyColumnName())
+      StringBuilder sql = new StringBuilder("SELECT ").append(getKeyColumnName())
           .append(", ").append(getValueColumnName()).append(" FROM ")
           .append(getTableName()).append(" WHERE ").append(getPathColumnName())
           .append(" = ?");

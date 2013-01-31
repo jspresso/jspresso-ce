@@ -124,7 +124,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
       return "***";
     }
     String sep = ", ";
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for (Iterator<EnumValueQueryStructure> ite = selectedEnumerationValues
         .iterator(); ite.hasNext();) {
       EnumValueQueryStructure enumValue = ite.next();

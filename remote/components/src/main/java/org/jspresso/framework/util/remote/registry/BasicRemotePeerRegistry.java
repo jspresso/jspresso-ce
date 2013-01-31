@@ -173,7 +173,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     }
     automationIndices.put(seed, Integer.valueOf(idIndex));
     if (idIndex > 0) {
-      return new StringBuffer(seed).append("#").append(idIndex).toString();
+      return new StringBuilder(seed).append("#").append(idIndex).toString();
     }
     return seed;
   }

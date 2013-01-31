@@ -1848,7 +1848,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the encoded username/password string.
    */
   protected String encodeUserPass(String username, String password) {
-    StringBuffer buff = new StringBuffer();
+    StringBuilder buff = new StringBuilder();
     if (username != null) {
       buff.append(username);
     }

@@ -68,7 +68,7 @@ public final class ColorHelper {
    * @return the Hex string representation.
    */
   public static String toHexString(int r, int g, int b, int a) {
-    StringBuffer hexString = new StringBuffer("0x");
+    StringBuilder hexString = new StringBuilder("0x");
     hexString.append(formatByteToPaddedHex(a, 2));
     hexString.append(formatByteToPaddedHex(r, 2));
     hexString.append(formatByteToPaddedHex(g, 2));
@@ -77,7 +77,7 @@ public final class ColorHelper {
   }
 
   private static String formatByteToPaddedHex(int i, int l) {
-    StringBuffer hex = new StringBuffer(Integer.toString(i, 16).toUpperCase());
+    StringBuilder hex = new StringBuilder(Integer.toString(i, 16).toUpperCase());
     while (hex.length() < l) {
       hex.insert(0, "0");
     }

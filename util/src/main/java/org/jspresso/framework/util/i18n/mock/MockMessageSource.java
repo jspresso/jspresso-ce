@@ -57,7 +57,7 @@ public class MockMessageSource implements MessageSource {
     if (defaultMessage != null) {
       return defaultMessage;
     }
-    StringBuffer message = new StringBuffer("[" + locale.getLanguage() + ":"
+    StringBuilder message = new StringBuilder("[" + locale.getLanguage() + ":"
         + key + "]");
     if (args != null && args.length > 0) {
       message.append(" { ");

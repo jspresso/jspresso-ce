@@ -2822,7 +2822,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the string template value.
    */
   protected String getStringTemplateValue(Integer maxLength) {
-    StringBuffer templateValue = new StringBuffer();
+    StringBuilder templateValue = new StringBuilder();
     int fieldLength = getMaxCharacterLength();
     if (maxLength != null) {
       fieldLength = maxLength.intValue();
@@ -3302,7 +3302,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   @Override
   public void storeTablePreferences(String tableId, Object[][] columnPrefs,
       IActionHandler actionHandler) {
-    StringBuffer buff = new StringBuffer();
+    StringBuilder buff = new StringBuilder();
     for (int i = 0; i < columnPrefs.length; i++) {
       if (i > 0) {
         buff.append("!");

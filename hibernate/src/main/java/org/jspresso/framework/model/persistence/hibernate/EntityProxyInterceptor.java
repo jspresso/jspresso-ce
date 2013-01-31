@@ -199,7 +199,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   // private String eliminateDuplicateColumnAliases(String sql) {
   // Set<String> usedAliases = new HashSet<String>();
   // String[] aliasesSplit = sql.split(" as ");
-  // StringBuffer buff = new StringBuffer(aliasesSplit[0]);
+  // StringBuilder buff = new StringBuilder(aliasesSplit[0]);
   // if (aliasesSplit.length > 1) {
   // for (int i = 1; i < aliasesSplit.length; i++) {
   // StringTokenizer aliasTokenizer = new StringTokenizer(aliasesSplit[i],

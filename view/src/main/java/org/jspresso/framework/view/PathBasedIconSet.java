@@ -45,7 +45,7 @@ public class PathBasedIconSet implements IIconSet {
   @Override
   public String getIconImageURL(String iconName, Dimension dim) {
     String[] imageNameParts = splitIconNameParts(iconName);
-    StringBuffer url = new StringBuffer();
+    StringBuilder url = new StringBuilder();
     if (getRootPath() != null) {
       url.append(getRootPath()).append("/");
     }

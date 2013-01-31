@@ -192,16 +192,16 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
               if (((Collection<?>) value).size() == 1) {
                 return put(key, ((Collection<?>) value).iterator().next());
               }
-              StringBuffer idValue = null;
-              StringBuffer tsValue = null;
-              StringBuffer acValue = null;
+              StringBuilder idValue = null;
+              StringBuilder tsValue = null;
+              StringBuilder acValue = null;
               for (Object element : (Collection<?>) value) {
                 if (element instanceof IEntity) {
                   Serializable[] queryPropertyValues = extractQueryPropertyValues(
                       (IEntity) element, acProp);
                   if (queryPropertyValues[0] instanceof CharSequence) {
                     if (idValue == null) {
-                      idValue = new StringBuffer(
+                      idValue = new StringBuilder(
                           queryPropertyValues[0].toString());
                     } else {
                       idValue.append(IQueryComponent.DISJUNCT).append(
@@ -210,7 +210,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
                   }
                   if (queryPropertyValues[1] instanceof CharSequence) {
                     if (tsValue == null) {
-                      tsValue = new StringBuffer(
+                      tsValue = new StringBuilder(
                           queryPropertyValues[1].toString());
                     } else {
                       tsValue.append(IQueryComponent.DISJUNCT).append(
@@ -220,7 +220,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
                   if (acProp != null
                       && queryPropertyValues[2] instanceof CharSequence) {
                     if (acValue == null) {
-                      acValue = new StringBuffer(
+                      acValue = new StringBuilder(
                           queryPropertyValues[2].toString());
                     } else {
                       acValue.append(IQueryComponent.DISJUNCT).append(

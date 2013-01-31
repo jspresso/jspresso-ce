@@ -92,7 +92,7 @@ public class BasicDurationPropertyDescriptor extends
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          StringBuffer boundsSpec = new StringBuffer();
+          StringBuilder boundsSpec = new StringBuilder();
           boundsSpec.append("x");
           if (getMaxMillis() != null) {
             boundsSpec.append(" <= ").append(getMaxMillis());

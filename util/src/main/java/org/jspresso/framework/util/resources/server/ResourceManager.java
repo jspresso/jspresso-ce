@@ -136,7 +136,7 @@ public final class ResourceManager {
     random.nextBytes(bytes);
     bytes = MessageDigest.getInstance("MD5").digest(bytes);
 
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     for (int i = 0; i < bytes.length; i++) {
       byte b1 = (byte) ((bytes[i] & 0xf0) >> 4);
       byte b2 = (byte) (bytes[i] & 0x0f);

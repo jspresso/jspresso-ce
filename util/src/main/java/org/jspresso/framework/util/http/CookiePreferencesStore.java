@@ -48,7 +48,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
   @Override
   public void setStorePath(String[] storePath) {
     if (storePath != null && storePath.length > 0) {
-      StringBuffer buff = new StringBuffer();
+      StringBuilder buff = new StringBuilder();
       for (int i = 0; i < storePath.length; i++) {
         buff.append(storePath[i]).append('.');
       }

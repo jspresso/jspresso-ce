@@ -1274,7 +1274,7 @@ public class DefaultRemoteViewFactory extends
       RComponent propertyComponent, ITranslationProvider translationProvider,
       Locale locale) {
     RLabel propertyLabel = createRLabel(null, false);
-    StringBuffer labelText = new StringBuffer(
+    StringBuilder labelText = new StringBuilder(
         propertyViewDescriptor.getI18nName(translationProvider, locale));
     propertyLabel.setLabel(labelText.toString());
     configurePropertyLabel(propertyLabel, propertyViewDescriptor);

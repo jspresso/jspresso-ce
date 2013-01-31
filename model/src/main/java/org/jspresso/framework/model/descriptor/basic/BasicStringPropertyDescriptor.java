@@ -139,7 +139,7 @@ public class BasicStringPropertyDescriptor extends
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          StringBuffer boundsSpec = new StringBuffer("l");
+          StringBuilder boundsSpec = new StringBuilder("l");
           if (getMaxLength() != null) {
             boundsSpec.append(" <= ").append(getMaxLength());
           }

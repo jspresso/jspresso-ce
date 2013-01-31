@@ -111,7 +111,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
             }
           }
           if (sortable) {
-            StringBuffer name = new StringBuffer();
+            StringBuilder name = new StringBuilder();
             for (int j = i; sortable && j < propElts.length; j++) {
               IPropertyDescriptor propDescriptor = currentCompDesc
                   .getPropertyDescriptor(propElts[j]);
