@@ -1955,7 +1955,7 @@ public class DefaultRemoteViewFactory extends
           headerLabel.setLabel(decorateMandatoryPropertyLabel(headerLabel
               .getLabel()));
         }
-        columnIds.add(computeColumnIdentifier(rowDescriptor,
+        columnIds.add(computeColumnIdentifier(viewDescriptor,
             columnViewDescriptor));
         if (column.getPeer() instanceof RActionable
             && columnViewDescriptor.getAction() != null) {

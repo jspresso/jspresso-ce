@@ -711,15 +711,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes a table column identifer that is used for sorting.
    * 
-   * @param rowDescriptor
-   *          the row component descriptor.
+   * @param viewDescriptor
+   *          the table view descriptor.
    * @param columnDescriptor
    *          the column descriptor behind the column.
    * @return the column identifier.
    */
-  protected String computeColumnIdentifier(
-      IComponentDescriptor<?> rowDescriptor,
+  protected String computeColumnIdentifier(ITableViewDescriptor viewDescriptor,
       IPropertyViewDescriptor columnDescriptor) {
+    IComponentDescriptor<?> rowDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor();
     String propertyName = columnDescriptor.getModelDescriptor().getName();
     String identifier = propertyName;
     String renderedProperty = computeRenderedProperty(columnDescriptor);
@@ -730,13 +731,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
     boolean sortable = columnDescriptor.isSortable();
     if (sortable
         && PropertyViewDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
-      // if (propertyName.indexOf('.') < 0) {
-      // // not a nested property.
-      sortable = rowDescriptor.getPropertyDescriptor(propertyName)
-          .getPersistenceFormula() != null;
-      // } else {
-      // sortable = false;
-      // }
+      if (viewDescriptor.getPaginationViewDescriptor() != null) {
+        // disable sort only if the table is not paginated
+        sortable = rowDescriptor.getPropertyDescriptor(propertyName)
+            .getPersistenceFormula() != null;
+      }
     }
     if (!sortable) {
       return "#" + identifier;
@@ -3347,14 +3346,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
     } else {
       Map<String, IPropertyViewDescriptor> columnsDirectory = new LinkedHashMap<String, IPropertyViewDescriptor>();
-      ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
-          .getModelDescriptor());
-      IComponentDescriptor<?> rowDescriptor = modelDescriptor
-          .getCollectionDescriptor().getElementDescriptor();
       for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
           .getColumnViewDescriptors()) {
         columnsDirectory.put(
-            computeColumnIdentifier(rowDescriptor, columnViewDescriptor),
+            computeColumnIdentifier(viewDescriptor, columnViewDescriptor),
             columnViewDescriptor);
       }
       for (int i = 0; i < columnPrefs.length; i++) {

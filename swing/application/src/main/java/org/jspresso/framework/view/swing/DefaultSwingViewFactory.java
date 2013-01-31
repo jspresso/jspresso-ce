@@ -2268,7 +2268,7 @@ public class DefaultSwingViewFactory extends
           .getKey();
       String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
-        configureTableColumn(actionHandler, locale, rowDescriptor, connector,
+        configureTableColumn(actionHandler, locale, viewDescriptor, connector,
             rowConnectorPrototype, viewComponent, view, maxColumnSize,
             columnIndex, columnViewDescriptorEntry, columnViewDescriptor,
             propertyName, viewComponent.getModel());
@@ -2355,15 +2355,17 @@ public class DefaultSwingViewFactory extends
   }
 
   private void configureTableColumn(final IActionHandler actionHandler,
-      Locale locale, IComponentDescriptor<?> rowDescriptor,
+      Locale locale, ITableViewDescriptor viewDescriptor,
       ICollectionConnector connector,
       ICompositeValueConnector rowConnectorPrototype, JTable viewComponent,
       IView<JComponent> view, int maxColumnSize, int columnIndex,
       Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry,
       IPropertyViewDescriptor columnViewDescriptor, String propertyName,
       TableModel tableModel) {
+    IComponentDescriptor<?> rowDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor();
     TableColumn column = viewComponent.getColumnModel().getColumn(columnIndex);
-    column.setIdentifier(computeColumnIdentifier(rowDescriptor,
+    column.setIdentifier(computeColumnIdentifier(viewDescriptor,
         columnViewDescriptor));
     IPropertyDescriptor propertyDescriptor = rowDescriptor
         .getPropertyDescriptor(propertyName);
