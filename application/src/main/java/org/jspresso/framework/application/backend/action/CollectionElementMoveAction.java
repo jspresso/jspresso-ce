@@ -39,7 +39,18 @@ import org.jspresso.framework.model.component.IComponent;
  */
 public class CollectionElementMoveAction extends AbstractCollectionAction {
 
-  private int offset;
+  private boolean toTop;
+  private boolean toBottom;
+  private int     offset;
+
+  /**
+   * Constructs a new <code>CollectionElementMoveAction</code> instance.
+   */
+  public CollectionElementMoveAction() {
+    toTop = false;
+    toBottom = false;
+    offset = 0;
+  }
 
   /**
    * Retrieves the master and its managed collection from the model connector
@@ -50,6 +61,11 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
+
+    if (toTop && toBottom) {
+      throw new ActionException(
+          "Illegal use of toTop AND toBottom at the same time");
+    }
 
     if (!List.class.isAssignableFrom(getModelDescriptor(context)
         .getCollectionDescriptor().getCollectionInterface())) {
@@ -71,45 +87,64 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       return false;
     }
 
-    List<?> originalList = (List<?>) collectionConnector.getConnectorValue();
-    List<Object> targetList = new ArrayList<Object>(originalList);
+    List<Object> targetList = new ArrayList<Object>(
+        (List<?>) collectionConnector.getConnectorValue());
+    int size = targetList.size();
+    List<Object> headList = new ArrayList<Object>();
+    List<Object> tailList = new ArrayList<Object>();
+
+    int executeOffset = offset;
+    if (toTop) {
+      executeOffset = -size;
+    } else if (toBottom) {
+      executeOffset = size;
+    }
 
     int[] targetIndices = new int[indicesToMove.length];
     for (int i = indicesToMove.length - 1; i >= 0; i--) {
-      targetIndices[i] = indicesToMove[i] + offset;
+      targetIndices[i] = indicesToMove[i] + executeOffset;
     }
-    if (targetIndices[0] >= 0
-        && targetIndices[targetIndices.length - 1] < targetList.size()) {
-      for (int i = indicesToMove.length - 1; i >= 0; i--) {
-        targetList.remove(indicesToMove[i]);
-      }
-      for (int i = 0; i < indicesToMove.length; i++) {
+
+    for (int i = indicesToMove.length - 1; i >= 0; i--) {
+      targetList.remove(indicesToMove[i]);
+    }
+    for (int i = 0; i < indicesToMove.length; i++) {
+      if (targetIndices[i] < 0) {
+        headList.add(elementsToMove.get(i));
+      } else if (targetIndices[i] > size - 1) {
+        tailList.add(elementsToMove.get(i));
+      } else {
         targetList.add(targetIndices[i], elementsToMove.get(i));
       }
-      Object master = collectionConnector.getParentConnector()
-          .getConnectorValue();
-      Class<?> targetContract;
-      if (master instanceof IComponent) {
-        targetContract = ((IComponent) master).getComponentContract();
-      } else {
-        targetContract = master.getClass();
-      }
-      try {
-        getAccessorFactory(context).createPropertyAccessor(
-            collectionConnector.getId(), targetContract).setValue(master,
-            targetList);
-      } catch (IllegalAccessException ex) {
-        throw new ActionException(ex);
-      } catch (InvocationTargetException ex) {
-        if (ex.getTargetException() instanceof RuntimeException) {
-          throw (RuntimeException) ex.getTargetException();
-        }
-        throw new ActionException(ex);
-      } catch (NoSuchMethodException ex) {
-        throw new ActionException(ex);
-      }
-      setSelectedModels(elementsToMove, context);
     }
+
+    targetList.addAll(0, headList);
+    targetList.addAll(tailList);
+
+    Object master = collectionConnector.getParentConnector()
+        .getConnectorValue();
+    Class<?> targetContract;
+    if (master instanceof IComponent) {
+      targetContract = ((IComponent) master).getComponentContract();
+    } else {
+      targetContract = master.getClass();
+    }
+    try {
+      getAccessorFactory(context).createPropertyAccessor(
+          collectionConnector.getId(), targetContract).setValue(master,
+          targetList);
+    } catch (IllegalAccessException ex) {
+      throw new ActionException(ex);
+    } catch (InvocationTargetException ex) {
+      if (ex.getTargetException() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getTargetException();
+      }
+      throw new ActionException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new ActionException(ex);
+    }
+    setSelectedModels(elementsToMove, context);
+
     return super.execute(actionHandler, context);
   }
 
@@ -124,5 +159,39 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    */
   public void setOffset(int offset) {
     this.offset = offset;
+    if (offset != 0) {
+      this.toTop = false;
+      this.toBottom = false;
+    }
+  }
+
+  /**
+   * Configures this action to move the selected elements to the top of the
+   * list.
+   * 
+   * @param toTop
+   *          the toTop to set.
+   */
+  public void setToTop(boolean toTop) {
+    this.toTop = toTop;
+    if (toTop) {
+      this.toBottom = false;
+      this.offset = 0;
+    }
+  }
+
+  /**
+   * Configures this action to move the selected elements to the bottom of the
+   * list.
+   * 
+   * @param toBottom
+   *          the toBottom to set.
+   */
+  public void setToBottom(boolean toBottom) {
+    this.toBottom = toBottom;
+    if (toBottom) {
+      this.toTop = false;
+      this.offset = 0;
+    }
   }
 }

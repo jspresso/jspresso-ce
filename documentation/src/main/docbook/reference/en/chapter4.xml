@@ -257,6 +257,15 @@
           </row>
 
           <row>
+            <entry>moveBottomFrontAction</entry>
+
+            <entry>front.any.bottom</entry>
+
+            <entry>Moves bottom the selected objects contained in an ordered
+            collection.</entry>
+          </row>
+
+          <row>
             <entry>removeAnyCollectionFromMasterFrontAction</entry>
 
             <entry>front.any.remove</entry>
@@ -272,6 +281,15 @@
             <entry>front.any.up</entry>
 
             <entry>Moves upward the selected objects contained in an ordered
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>moveTopFrontAction</entry>
+
+            <entry>front.any.top</entry>
+
+            <entry>Moves top the selected objects contained in an ordered
             collection.</entry>
           </row>
 

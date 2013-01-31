@@ -616,7 +616,7 @@
   <bean id="moveUpFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="up" />
+        <constructor-arg index="0" value="1uparrow" />
       </bean>
     </property>
     <property name="name" value="moveUp.name" />
@@ -632,7 +632,7 @@
   <bean id="moveDownFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="down" />
+        <constructor-arg index="0" value="1downarrow" />
       </bean>
     </property>
     <property name="name" value="moveDown.name" />
@@ -641,6 +641,38 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property name="offset" value="1" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="moveTopFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="2uparrow" />
+      </bean>
+    </property>
+    <property name="name" value="moveTop.name" />
+    <property name="description" value="moveTop.description" />
+    <property name="collectionBased" value="true" />
+    <property name="wrappedAction">
+      <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
+        <property name="toTop" value="true" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="moveBottomFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="2downarrow" />
+      </bean>
+    </property>
+    <property name="name" value="moveBottom.name" />
+    <property name="description" value="moveBottom.description" />
+    <property name="collectionBased" value="true" />
+    <property name="wrappedAction">
+      <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
+        <property name="toBottom" value="true" />
       </bean>
     </property>
   </bean>
