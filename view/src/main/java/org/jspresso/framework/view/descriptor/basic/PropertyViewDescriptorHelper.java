@@ -72,8 +72,7 @@ public final class PropertyViewDescriptorHelper {
      * Exlude explicitely configured reference property view filled with a
      * custom LOV action
      */
-    boolean toExplode = (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
-        || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+    boolean toExplode = (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor) || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
         .getLovAction() == null);
 
     /*
@@ -82,8 +81,7 @@ public final class PropertyViewDescriptorHelper {
     toExplode = toExplode
         && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>
             && EntityHelper
-                .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
+                .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor) && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
 
     if (toExplode) {
       IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
@@ -97,6 +95,8 @@ public final class PropertyViewDescriptorHelper {
             .getPropertyDescriptor(nestedPropertyViewDescriptor.getName()));
         nestedPropertyViewDescriptor.setReadOnly(propertyViewDescriptor
             .isReadOnly());
+        nestedPropertyViewDescriptor.setGrantedRoles(propertyViewDescriptor
+            .getGrantedRoles());
         nestedPropertyViewDescriptor.setWritabilityGates(propertyViewDescriptor
             .getWritabilityGates());
         nestedPropertyViewDescriptor.setReadabilityGates(propertyViewDescriptor
