@@ -191,7 +191,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    *          the action context
    * @return the liste of retrieved components.
    */
-  protected List<?> performQuery(final IQueryComponent queryComponent,
+  public List<?> performQuery(final IQueryComponent queryComponent,
       final Map<String, Object> context) {
     Session hibernateSession = getHibernateSession(context);
     ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
@@ -242,9 +242,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         }
         if (queryComponent.getRecordCount() == null) {
           criteria.setProjection(Projections.rowCount());
-          totalCount = Integer.valueOf(
-              ((Number) criteria.getExecutableCriteria(hibernateSession).list()
-                  .get(0)).intValue());
+          totalCount = Integer.valueOf(((Number) criteria
+              .getExecutableCriteria(hibernateSession).list().get(0))
+              .intValue());
         }
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
