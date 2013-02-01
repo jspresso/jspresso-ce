@@ -67,7 +67,7 @@ public class BasicDelegatingComponentInvocationHandler extends
   public BasicDelegatingComponentInvocationHandler(Object delegate,
       IComponentFactory componentFactory,
       IComponentDescriptor<IComponent> componentDescriptor,
-      IComponentCollectionFactory<IComponent> collectionFactory,
+      IComponentCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
     super(componentDescriptor, componentFactory, collectionFactory,

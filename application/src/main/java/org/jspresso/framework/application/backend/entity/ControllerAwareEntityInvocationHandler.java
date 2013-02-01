@@ -86,7 +86,7 @@ public class ControllerAwareEntityInvocationHandler extends
   public ControllerAwareEntityInvocationHandler(
       IComponentDescriptor<IEntity> entityDescriptor,
       IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory<IComponent> collectionFactory,
+      IComponentCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
     super(entityDescriptor, inlineComponentFactory, collectionFactory,

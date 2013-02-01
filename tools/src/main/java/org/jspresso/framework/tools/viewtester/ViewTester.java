@@ -161,7 +161,7 @@ public class ViewTester {
 
     if (viewDescriptor.getModelDescriptor() != null) {
       IValueConnector modelConnector = mockBackController.createModelConnector(
-          "modelConnector", viewDescriptor.getModelDescriptor());
+          IValueConnector.MODEL_CONNECTOR_PROPERTY, viewDescriptor.getModelDescriptor());
 
       IEntityFactory entityFactory = mockBackController.getEntityFactory();
 

@@ -124,7 +124,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   private IApplicationSession                              applicationSession;
   private IEntityCloneFactory                              carbonEntityCloneFactory;
-  private IComponentCollectionFactory<IComponent>          collectionFactory;
+  private IComponentCollectionFactory                      collectionFactory;
   private BeanPropertyChangeRecorder                       dirtRecorder;
 
   private IEntityFactory                                   entityFactory;
@@ -921,8 +921,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @param collectionFactory
    *          the collectionFactory to set.
    */
-  public void setCollectionFactory(
-      IComponentCollectionFactory<IComponent> collectionFactory) {
+  public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
   }
 

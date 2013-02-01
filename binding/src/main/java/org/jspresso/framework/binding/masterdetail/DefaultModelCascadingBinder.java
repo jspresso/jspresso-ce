@@ -54,7 +54,8 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
       // ((ICompositeValueConnector) masterConnector)
       // .addChildConnector(detailConnector);
       mvcBinder.bind(detailConnector, masterConnector.getModelConnector());
-      masterConnector.addPropertyChangeListener("modelConnector",
+      masterConnector.addPropertyChangeListener(
+          IValueConnector.MODEL_CONNECTOR_PROPERTY,
           new BoundConnectorModelListener(detailConnector));
     }
   }

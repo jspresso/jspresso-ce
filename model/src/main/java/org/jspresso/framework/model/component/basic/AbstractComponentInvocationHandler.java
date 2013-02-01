@@ -86,6 +86,12 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -99,7 +105,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private SingleWeakPropertyChangeSupport                                              weakPropertyChangeSupport;
   private List<PropertyChangeEvent>                                                    delayedEvents;
 
-  private IComponentCollectionFactory<IComponent>                                      collectionFactory;
+  private IComponentCollectionFactory                                                  collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
   private IComponentExtensionFactory                                                   extensionFactory;
@@ -142,7 +148,7 @@ public abstract class AbstractComponentInvocationHandler implements
   protected AbstractComponentInvocationHandler(
       IComponentDescriptor<? extends IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory<IComponent> collectionFactory,
+      IComponentCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
     this.componentDescriptor = componentDescriptor;
@@ -375,8 +381,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param collectionFactory
    *          the collectionFactory to set.
    */
-  public void setCollectionFactory(
-      IComponentCollectionFactory<IComponent> collectionFactory) {
+  public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
   }
 

@@ -58,11 +58,11 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     IEntityFactory {
 
-  private IComponentCollectionFactory<IComponent> componentCollectionFactory;
-  private IComponentExtensionFactory              componentExtensionFactory;
-  private IComponentDescriptorRegistry            componentDescriptorRegistry;
-  private IQueryComponentDescriptorFactory        queryComponentDescriptorFactory;
-  private IGUIDGenerator<?>                       entityGUIDGenerator;
+  private IComponentCollectionFactory      componentCollectionFactory;
+  private IComponentExtensionFactory       componentExtensionFactory;
+  private IComponentDescriptorRegistry     componentDescriptorRegistry;
+  private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
+  private IGUIDGenerator<?>                entityGUIDGenerator;
 
   /**
    * {@inheritDoc}
@@ -121,11 +121,11 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getOldValue() == null && evt.getNewValue() != null) {
-              createdEntity.firePropertyChange(IEntity.PERSISTENT, Boolean.valueOf(
-                  false), Boolean.valueOf(true));
+              createdEntity.firePropertyChange(IEntity.PERSISTENT,
+                  Boolean.valueOf(false), Boolean.valueOf(true));
             } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-              createdEntity.firePropertyChange(IEntity.PERSISTENT, Boolean.valueOf(
-                  true), Boolean.valueOf(false));
+              createdEntity.firePropertyChange(IEntity.PERSISTENT,
+                  Boolean.valueOf(true), Boolean.valueOf(false));
             }
           }
         });
@@ -308,7 +308,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    *          the componentCollectionFactory to set.
    */
   public void setComponentCollectionFactory(
-      IComponentCollectionFactory<IComponent> componentCollectionFactory) {
+      IComponentCollectionFactory componentCollectionFactory) {
     this.componentCollectionFactory = componentCollectionFactory;
   }
 
@@ -353,7 +353,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * 
    * @return the componentCollectionFactory.
    */
-  protected IComponentCollectionFactory<IComponent> getComponentCollectionFactory() {
+  protected IComponentCollectionFactory getComponentCollectionFactory() {
     return componentCollectionFactory;
   }
 

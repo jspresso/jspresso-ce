@@ -42,12 +42,17 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * <code>READABLE_PROPERTY</code>.
    */
-  String READABLE_PROPERTY = "readable";
+  String READABLE_PROPERTY        = "readable";
 
   /**
    * <code>WRITABLE_PROPERTY</code>.
    */
-  String WRITABLE_PROPERTY = "writable";
+  String WRITABLE_PROPERTY        = "writable";
+
+  /**
+   * <code>MODEL_CONNECTOR_PROPERTY</code>.
+   */
+  String MODEL_CONNECTOR_PROPERTY = "modelConnector";
 
   /**
    * Adds a readability gate. Whenever one of the gate is not open, the

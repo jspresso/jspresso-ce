@@ -29,11 +29,9 @@ import java.util.Set;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
- * @param <E>
- *          the type of collection elements.
  */
-public class DefaultComponentCollectionFactory<E> implements
-    IComponentCollectionFactory<E> {
+public class DefaultComponentCollectionFactory implements
+    IComponentCollectionFactory {
 
   /**
    * Creates concrete empty collections based on standard java collections.
@@ -41,7 +39,8 @@ public class DefaultComponentCollectionFactory<E> implements
    * {@inheritDoc}
    */
   @Override
-  public Collection<E> createComponentCollection(Class<?> collectionInterface) {
+  public <E> Collection<E> createComponentCollection(
+      Class<?> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
       return new LinkedHashSet<E>();
     } else if (List.class.isAssignableFrom(collectionInterface)) {

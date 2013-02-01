@@ -41,6 +41,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.action.IActionHandlerAware;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
+import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -54,6 +55,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
@@ -88,9 +90,11 @@ import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.IValueChangeSource;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
+import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.EnumerationFormatter;
@@ -199,6 +203,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private ERenderingOptions             defaultActionMapRenderingOptions     = ERenderingOptions.ICON;
   private IValueChangeListener          firstRowSelector;
   private IIconFactory<F>               iconFactory;
+  private IComponentCollectionFactory   componentCollectionFactory;
 
   private IDisplayableAction            lovAction;
   private int                           maxCharacterLength                   = 32;
@@ -349,8 +354,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IActionHandler actionHandler, Locale locale) {
     final IView<E> paginationView = createView(paginationViewDescriptor,
         actionHandler, locale);
-    (view.getConnector()).addPropertyChangeListener("modelConnector",
-        new PropertyChangeListener() {
+    (view.getConnector()).addPropertyChangeListener(
+        IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
 
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
@@ -2987,6 +2992,57 @@ public abstract class AbstractViewFactory<E, F, G> implements
     return view;
   }
 
+  private void bindSelectionConnector(
+      final ICollectionConnectorProvider viewConnector,
+      final ICollectionConnector viewSelectionConnector) {
+    viewSelectionConnector.addValueChangeListener(new IValueChangeListener() {
+
+      @Override
+      public void valueChange(ValueChangeEvent evt) {
+        viewConnector.setSelectedIndices(ConnectorHelper.getIndicesOf(
+            viewConnector.getCollectionConnector(),
+            (Collection<?>) evt.getNewValue()));
+      }
+    });
+    viewSelectionConnector.addPropertyChangeListener(
+        IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
+
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            IValueConnector oldModelConnector = (IValueConnector) evt
+                .getOldValue();
+            if (oldModelConnector != null) {
+              oldModelConnector.setConnectorValue(null);
+            }
+          }
+        });
+    viewConnector.addSelectionChangeListener(new ISelectionChangeListener() {
+
+      @Override
+      public void selectionChange(SelectionChangeEvent evt) {
+        int[] selectedIndices = evt.getNewSelection();
+        Collection<?> elements = (Collection<?>) viewConnector
+            .getConnectorValue();
+        Collection<Object> selectedElements = null;
+        if (selectedIndices != null && selectedIndices.length > 0
+            && elements != null && elements.size() > 0) {
+          selectedElements = getComponentCollectionFactory()
+              .createComponentCollection(
+                  ((ICollectionDescriptorProvider<?>) viewSelectionConnector
+                      .getModelDescriptor()).getCollectionDescriptor()
+                      .getCollectionInterface());
+          List<?> elementsList = new ArrayList<Object>(elements);
+          for (int iselectedIndex : selectedIndices) {
+            if (iselectedIndex >= 0 && iselectedIndex < elementsList.size()) {
+              selectedElements.add(elementsList.get(iselectedIndex));
+            }
+          }
+        }
+        viewSelectionConnector.setConnectorValue(selectedElements);
+      }
+    });
+  }
+
   /**
    * Binds the item selection action and decorates with the pagination view.
    * 
@@ -3003,6 +3059,29 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     if (view != null) {
+      if (viewDescriptor.getSelectionModelDescriptor() != null) {
+        ICollectionDescriptorProvider<?> selectionModelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+            .getSelectionModelDescriptor());
+        IComponentDescriptor<?> rowDescriptor = selectionModelDescriptor
+            .getCollectionDescriptor().getElementDescriptor();
+        ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
+            .createCompositeValueConnector(
+                selectionModelDescriptor.getName() + "Element",
+                rowDescriptor.getToHtmlProperty());
+        ICollectionConnector viewSelectionConnector = getConnectorFactory()
+            .createCollectionConnector(selectionModelDescriptor.getName(),
+                getMvcBinder(), rowConnectorPrototype);
+        ICollectionConnectorProvider viewConnector = (ICollectionConnectorProvider) view
+            .getConnector();
+        bindSelectionConnector(viewConnector, viewSelectionConnector);
+        IConfigurableCollectionConnectorProvider wrapperConnector = getConnectorFactory()
+            .createConfigurableCollectionConnectorProvider(
+                ModelRefPropertyConnector.THIS_PROPERTY, null);
+        wrapperConnector.addChildConnector(viewSelectionConnector);
+        wrapperConnector.addChildConnector(viewConnector);
+        wrapperConnector.setCollectionConnectorProvider(viewConnector);
+        view.setConnector(wrapperConnector);
+      }
       if (viewDescriptor.getItemSelectionAction() != null) {
         ((IItemSelectable) view.getConnector())
             .addItemSelectionListener(new ConnectorActionAdapter<E, G>(
@@ -3018,8 +3097,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
             paginationView.getPeer()));
       }
       if (viewDescriptor.isAutoSelectFirstRow()) {
-        attachDefaultCollectionListener((ICollectionConnector) view
-            .getConnector());
+        attachDefaultCollectionListener(((ICollectionConnectorProvider) view
+            .getConnector()).getCollectionConnector());
       }
     }
   }
@@ -3459,5 +3538,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
   public void setTableHeaderMandatoryPropertyColorHex(
       String tableHeaderMandatoryPropertyColorHex) {
     this.tableHeaderMandatoryPropertyColorHex = tableHeaderMandatoryPropertyColorHex;
+  }
+
+  /**
+   * Gets the componentCollectionFactory.
+   * 
+   * @return the componentCollectionFactory.
+   */
+  public IComponentCollectionFactory getComponentCollectionFactory() {
+    return componentCollectionFactory;
+  }
+
+  /**
+   * Sets the componentCollectionFactory.
+   * 
+   * @param componentCollectionFactory
+   *          the componentCollectionFactory to set.
+   */
+  public void setComponentCollectionFactory(
+      IComponentCollectionFactory componentCollectionFactory) {
+    this.componentCollectionFactory = componentCollectionFactory;
   }
 }

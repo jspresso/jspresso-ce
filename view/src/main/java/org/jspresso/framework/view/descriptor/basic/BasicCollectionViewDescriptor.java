@@ -43,11 +43,12 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
 
-  private IAction         itemSelectionAction;
-  private IAction         rowAction;
-  private ESelectionMode  selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
-  private IViewDescriptor paginationViewDescriptor;
-  private Boolean         autoSelectFirstRow;
+  private IAction          itemSelectionAction;
+  private IAction          rowAction;
+  private ESelectionMode   selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private IViewDescriptor  paginationViewDescriptor;
+  private Boolean          autoSelectFirstRow;
+  private IModelDescriptor selectionModelDescriptor;
 
   /**
    * {@inheritDoc}
@@ -232,7 +233,8 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
       IViewDescriptor viewDescriptor) {
     ICollectionViewDescriptor mainCollectionView = null;
     if (viewDescriptor instanceof ICollectionViewDescriptorProvider) {
-      mainCollectionView = ((ICollectionViewDescriptorProvider) viewDescriptor).getCollectionViewDescriptor();
+      mainCollectionView = ((ICollectionViewDescriptorProvider) viewDescriptor)
+          .getCollectionViewDescriptor();
     } else if (viewDescriptor instanceof ICompositeViewDescriptor
         && ((ICompositeViewDescriptor) viewDescriptor)
             .getChildViewDescriptors() != null) {
@@ -245,12 +247,33 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     }
     return mainCollectionView;
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
   public ICollectionViewDescriptor getCollectionViewDescriptor() {
     return this;
+  }
+
+  /**
+   * Gets the selectionModelDescriptor.
+   * 
+   * @return the selectionModelDescriptor.
+   */
+  @Override
+  public IModelDescriptor getSelectionModelDescriptor() {
+    return selectionModelDescriptor;
+  }
+
+  /**
+   * Sets the selectionModelDescriptor.
+   * 
+   * @param selectionModelDescriptor
+   *          the selectionModelDescriptor to set.
+   */
+  public void setSelectionModelDescriptor(
+      IModelDescriptor selectionModelDescriptor) {
+    this.selectionModelDescriptor = selectionModelDescriptor;
   }
 }

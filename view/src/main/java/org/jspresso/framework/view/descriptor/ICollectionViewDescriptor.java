@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 
 /**
  * This public interface is implemented by any collection view descriptor. For
@@ -68,4 +69,11 @@ public interface ICollectionViewDescriptor extends IViewDescriptor,
    * @return true if this collection view should autoselect 1st row.
    */
   boolean isAutoSelectFirstRow();
+
+  /**
+   * Gets the model descriptor this view selection descriptor acts on.
+   * 
+   * @return the view selection model descriptor.
+   */
+  IModelDescriptor getSelectionModelDescriptor();
 }

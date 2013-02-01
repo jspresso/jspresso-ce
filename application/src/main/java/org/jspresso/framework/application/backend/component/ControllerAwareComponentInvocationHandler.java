@@ -72,7 +72,7 @@ public class ControllerAwareComponentInvocationHandler extends
   public ControllerAwareComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory<IComponent> collectionFactory,
+      IComponentCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
     super(componentDescriptor, inlineComponentFactory, collectionFactory,

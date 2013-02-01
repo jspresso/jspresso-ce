@@ -64,7 +64,7 @@ public class BasicComponentInvocationHandler extends
   public BasicComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory<IComponent> collectionFactory,
+      IComponentCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
     super(componentDescriptor, inlineComponentFactory, collectionFactory,

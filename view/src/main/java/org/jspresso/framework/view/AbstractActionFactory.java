@@ -288,7 +288,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
           ((IModelGate) gate).setModel(evt.getNewValue());
         }
       };
-      viewConnector.addPropertyChangeListener("modelConnector",
+      viewConnector.addPropertyChangeListener(
+          IValueConnector.MODEL_CONNECTOR_PROPERTY,
           new PropertyChangeListener() {
 
             @Override

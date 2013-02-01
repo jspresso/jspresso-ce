@@ -25,10 +25,8 @@ import java.util.Collection;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
- * @param <E>
- *          the type of collection elements.
  */
-public interface IComponentCollectionFactory<E> {
+public interface IComponentCollectionFactory {
 
   /**
    * Given a collection interface (i.e. <code>Set</code>,<code>List</code>, ...)
@@ -38,5 +36,5 @@ public interface IComponentCollectionFactory<E> {
    *          the interface which must be implemented by the created collection.
    * @return an empty instance of a concrete collection.
    */
-  Collection<E> createComponentCollection(Class<?> collectionInterface);
+  <E> Collection<E> createComponentCollection(Class<?> collectionInterface);
 }

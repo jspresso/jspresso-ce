@@ -593,7 +593,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     }
     readabilityChange();
     writabilityChange();
-    firePropertyChange("modelConnector", oldModelConnector, getModelConnector());
+    firePropertyChange(IValueConnector.MODEL_CONNECTOR_PROPERTY,
+        oldModelConnector, getModelConnector());
   }
 
   /**
