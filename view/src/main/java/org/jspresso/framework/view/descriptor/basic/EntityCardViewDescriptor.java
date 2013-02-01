@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This card view provides a simple card determination strategy that is based on
@@ -38,6 +41,11 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
+
+  private final static Logger LOG = LoggerFactory
+                                      .getLogger(EntityCardViewDescriptor.class);
+
+  private List<Class<?>>      registeredTypes;
 
   /**
    * Uses the component contract name as card name.
@@ -66,17 +74,43 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    */
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
+    registeredTypes = new ArrayList<Class<?>>();
     for (IViewDescriptor componentViewDescriptor : viewDescriptors) {
       if (!(componentViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>)) {
         throw new ViewException(
             "Entity card view does not support cards without model"
                 + " descriptor or with a model descriptor that is not a component descriptor.");
       }
-      classCardMapping.put(((IComponentDescriptor<?>) componentViewDescriptor
-          .getModelDescriptor()).getComponentContract().getName(),
-          componentViewDescriptor);
+      Class<?> componentContract = ((IComponentDescriptor<?>) componentViewDescriptor
+          .getModelDescriptor()).getComponentContract();
+      registeredTypes.add(componentContract);
+      classCardMapping
+          .put(componentContract.getName(), componentViewDescriptor);
     }
     setCardViewDescriptors(classCardMapping);
   }
 
+  /**
+   * We have to take care of cards that have been registered through a
+   * superclass or interface of the model entity.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getCardViewDescriptor(String cardName) {
+    Class<?> modelType = null;
+    try {
+      modelType = Class.forName(cardName);
+    } catch (ClassNotFoundException ex) {
+      LOG.warn("Unsupported entity card name {}", cardName);
+    }
+    if (modelType != null) {
+      for (Class<?> registeredType : registeredTypes) {
+        if (registeredType.isAssignableFrom(modelType)) {
+          return super.getCardViewDescriptor(registeredType.getName());
+        }
+      }
+    }
+    return super.getCardViewDescriptor(cardName);
+  }
 }
