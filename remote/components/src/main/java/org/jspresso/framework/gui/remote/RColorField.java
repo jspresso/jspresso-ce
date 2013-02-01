@@ -29,6 +29,7 @@ public class RColorField extends RComponent {
   private static final long serialVersionUID = 3234693770672598145L;
 
   private String            defaultColor;
+  private boolean           resetEnabled;
 
   /**
    * Constructs a new <code>RColorField</code> instance.
@@ -38,6 +39,7 @@ public class RColorField extends RComponent {
    */
   public RColorField(String guid) {
     super(guid);
+    setResetEnabled(true);
   }
 
   /**
@@ -65,5 +67,23 @@ public class RColorField extends RComponent {
    */
   public void setDefaultColor(String defaultColor) {
     this.defaultColor = defaultColor;
+  }
+
+  /**
+   * Gets the resetEnabled.
+   * 
+   * @return the resetEnabled.
+   */
+  public boolean isResetEnabled() {
+    return resetEnabled;
+  }
+
+  /**
+   * Sets the resetEnabled.
+   * 
+   * @param resetEnabled the resetEnabled to set.
+   */
+  public void setResetEnabled(boolean resetEnabled) {
+    this.resetEnabled = resetEnabled;
   }
 }

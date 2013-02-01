@@ -53,10 +53,13 @@ public class JColorPicker extends JPanel {
   private Color                 resetValue;
   private Color                 value;
 
+  private boolean               resetEnabled;
+
   /**
    * Constructs a new <code>JColorPicker</code> instance.
    */
   public JColorPicker() {
+    resetEnabled = true;
     setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     chooseButton = new JButton(" ") {
 
@@ -202,5 +205,25 @@ public class JColorPicker extends JPanel {
         ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
       }
     }
+  }
+
+  /**
+   * Enables / disable the reset button.
+   * 
+   * @param enabled
+   *          should the reset button be enabled ?
+   */
+  public void setResetEnabled(boolean enabled) {
+    resetEnabled = enabled;
+    resetButton.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+    resetButton.setEnabled(resetEnabled);
   }
 }

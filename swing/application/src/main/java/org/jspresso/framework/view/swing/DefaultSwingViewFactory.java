@@ -514,6 +514,10 @@ public class DefaultSwingViewFactory extends
           .getDefaultValue());
       viewComponent
           .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+    } else {
+      if (propertyDescriptor.isMandatory()) {
+        viewComponent.setResetEnabled(false);
+      }
     }
     JColorPickerConnector connector = new JColorPickerConnector(
         propertyDescriptor.getName(), viewComponent);

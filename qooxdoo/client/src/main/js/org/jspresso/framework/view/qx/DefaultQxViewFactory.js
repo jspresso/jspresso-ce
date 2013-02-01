@@ -1037,6 +1037,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       var resetButton = new qx.ui.form.Button();
       resetButton.setIcon("qx/icon/Oxygen/16/actions/dialog-close.png");
+      if(!remoteColorField.isResetEnabled()) {
+        resetButton.setEnabled(false);
+      }
       resetButton.addListener("execute", function(e) {
             colorWidget.setBackgroundColor(this
                 .getBackgroundColor());

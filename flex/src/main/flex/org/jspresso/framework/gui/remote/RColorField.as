@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RColorField extends RComponent {
 
         private var _defaultColor:String;
+        private var _resetEnabled:Boolean;
 
         public function RColorField() {
           //default constructor.
@@ -31,5 +32,16 @@ package org.jspresso.framework.gui.remote {
         public function get defaultColor():String {
             return _defaultColor;
         }
+
+        public function get resetEnabled():Boolean
+        {
+          return _resetEnabled;
+        }
+
+        public function set resetEnabled(value:Boolean):void
+        {
+          _resetEnabled = value;
+        }
+
     }
 }

@@ -12,20 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RColorField",
-{
-  extend : org.jspresso.framework.gui.remote.RComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RColorField", {
+			extend : org.jspresso.framework.gui.remote.RComponent,
 
-  properties :
-  {
-    defaultColor :
-    {
-      check : "String",
-      nullable : true
-    }
-  }
-});
+			construct : function() {
+				this.base(arguments);
+			},
+
+			properties : {
+				defaultColor : {
+					check : "String",
+					nullable : true
+				},
+				resetEnabled : {
+					check : "Boolean"
+				}
+			}
+		});

@@ -774,6 +774,9 @@ package org.jspresso.framework.view.flex {
       colorField.addChild(colorPicker);
       var resetButton:Button = createButtonComponent();
       resetButton.setStyle("icon", _resetIcon);
+      if(!remoteColorField.resetEnabled) {
+        resetButton.enabled = false;
+      }
       colorField.addChild(resetButton);
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
         remoteColorField.state.value = remoteColorField.defaultColor;

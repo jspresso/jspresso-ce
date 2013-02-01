@@ -509,8 +509,11 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RColorField viewComponent = createRColorField(propertyViewDescriptor);
-    viewComponent
-        .setDefaultColor((String) propertyDescriptor.getDefaultValue());
+    String defaultColor = (String) propertyDescriptor.getDefaultValue();
+    viewComponent.setDefaultColor(defaultColor);
+    if (defaultColor == null && propertyDescriptor.isMandatory()) {
+      viewComponent.setResetEnabled(false);
+    }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;
