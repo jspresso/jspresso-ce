@@ -18,9 +18,11 @@
  */
 package org.jspresso.framework.model.component.basic;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,7 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanComparator;
+import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.collection.ESort;
 
 /**
@@ -95,11 +98,19 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
               orderingProperty.getKey(), collectionElementContract));
           orderingDirections.add(orderingProperty.getValue());
         }
-        BeanComparator comparator = new BeanComparator(orderingAccessors,
-            orderingDirections);
+
         List<Object> collectionOrigin = new ArrayList<Object>(propertyValue);
-        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
-        Collections.sort(collectionCopy, comparator);
+        List<ComparableProperties> listToSort = new ArrayList<ComparableProperties>();
+        for (Object sourceObject : propertyValue) {
+          listToSort.add(new ComparableProperties(sourceObject,
+              orderingAccessors));
+        }
+        Collections.sort(listToSort, new ComparablePropertiesComparator(
+            orderingDirections));
+        List<Object> collectionCopy = new ArrayList<Object>();
+        for (ComparableProperties comparableProperties : listToSort) {
+          collectionCopy.add(comparableProperties.getSourceObject());
+        }
         if (!collectionCopy.equals(collectionOrigin)) {
           Collection<Object> collectionProperty = propertyValue;
           collectionProperty.clear();
@@ -109,6 +120,106 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           }
         }
       }
+    }
+  }
+
+  private static class ComparableProperties {
+
+    private Object[] valuesToCompare;
+    private Object   sourceObject;
+
+    /**
+     * Constructs a new <code>ComparableProperties</code> instance.
+     * 
+     * @param sourceObject
+     *          the source object to compare properties.
+     * @param orderingAccessors
+     *          the accessors to extract properties to compare.
+     */
+    public ComparableProperties(Object sourceObject,
+        List<IAccessor> orderingAccessors) {
+      this.sourceObject = sourceObject;
+      if (sourceObject != null) {
+        valuesToCompare = new Object[orderingAccessors.size()];
+        for (int i = 0; i < valuesToCompare.length; i++) {
+          try {
+            valuesToCompare[i] = orderingAccessors.get(i)
+                .getValue(sourceObject);
+          } catch (IllegalAccessException ex) {
+            throw new MissingPropertyException(ex.getMessage());
+          } catch (InvocationTargetException ex) {
+            if (ex.getCause() instanceof RuntimeException) {
+              throw (RuntimeException) ex.getCause();
+            }
+            throw new RuntimeException(ex.getCause());
+          } catch (NoSuchMethodException ex) {
+            throw new MissingPropertyException(ex.getMessage());
+          }
+        }
+      }
+    }
+
+    /**
+     * Gets the sourceObject.
+     * 
+     * @return the sourceObject.
+     */
+    public Object getSourceObject() {
+      return sourceObject;
+    }
+
+    /**
+     * Gets the valuesToCompare.
+     * 
+     * @return the valuesToCompare.
+     */
+    public Object[] getValuesToCompare() {
+      return valuesToCompare;
+    }
+  }
+
+  private static class ComparablePropertiesComparator implements
+      Comparator<ComparableProperties> {
+
+    private List<ESort> orderingDirections;
+
+    /**
+     * Constructs a new <code>ComparablePropertiesComparator</code> instance.
+     * 
+     * @param orderingDirections
+     *          the ordering directions.
+     */
+    public ComparablePropertiesComparator(List<ESort> orderingDirections) {
+      this.orderingDirections = orderingDirections;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int compare(ComparableProperties o1, ComparableProperties o2) {
+      if (o1 == o2) {
+        return 0;
+      }
+      if (o1 == null) {
+        return -1;
+      }
+      if (o2 == null) {
+        return 1;
+      }
+      for (int i = 0; i < o1.getValuesToCompare().length; i++) {
+        ESort direction = orderingDirections.get(i);
+        Object o1Val = o1.getValuesToCompare()[i];
+        Object o2Val = o2.getValuesToCompare()[i];
+        int result = BeanComparator.NATURAL_COMPARATOR.compare(o1Val, o2Val);
+        if (result != 0) {
+          if (direction == ESort.DESCENDING) {
+            result *= (-1);
+          }
+          return result;
+        }
+      }
+      return 0;
     }
   }
 }

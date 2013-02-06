@@ -37,9 +37,12 @@ import org.jspresso.framework.util.collection.ESort;
  */
 public class BeanComparator implements Comparator<Object> {
 
-  private static final Comparator<Object> NATURAL_COMPARATOR = new NaturalComparator();
-  private List<IAccessor>                 orderingAccessors;
-  private List<ESort>                     orderingDirections;
+  /**
+   * <code>NATURAL_COMPARATOR</code>.
+   */
+  public static final Comparator<Object> NATURAL_COMPARATOR = new NaturalComparator();
+  private List<IAccessor>                orderingAccessors;
+  private List<ESort>                    orderingDirections;
 
   /**
    * Constructs a new <code>BeanComparator</code> instance.

@@ -47,6 +47,7 @@ public class BasicEntityInvocationHandler extends
   private static final long   serialVersionUID = 6078989823404409653L;
 
   private Map<String, Object> properties;
+  private int                 hashCode;
 
   /**
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
@@ -73,6 +74,7 @@ public class BasicEntityInvocationHandler extends
     super(entityDescriptor, inlineComponentFactory, collectionFactory,
         accessorFactory, extensionFactory);
     this.properties = createPropertyMap();
+    this.hashCode = -1;
   }
 
   /**
@@ -129,12 +131,15 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected int computeHashCode(IComponent proxy) {
-    Object id = straightGetProperty(proxy, IEntity.ID);
-    if (id == null) {
-      throw new NullPointerException(
-          "Id must be assigned on the entity before its hashcode can be used.");
+    if (hashCode == -1) {
+      Object id = straightGetProperty(proxy, IEntity.ID);
+      if (id == null) {
+        throw new NullPointerException(
+            "Id must be assigned on the entity before its hashcode can be used.");
+      }
+      hashCode = new HashCodeBuilder(3, 17).append(id).toHashCode();
     }
-    return new HashCodeBuilder(3, 17).append(id).toHashCode();
+    return hashCode;
   }
 
   /**

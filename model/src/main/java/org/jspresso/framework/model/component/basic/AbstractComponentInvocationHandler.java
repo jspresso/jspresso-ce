@@ -91,7 +91,6 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
-
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -111,7 +110,10 @@ public abstract class AbstractComponentInvocationHandler implements
   private IComponentExtensionFactory                                                   extensionFactory;
   private IComponentFactory                                                            inlineComponentFactory;
   private Set<String>                                                                  modifierMonitors;
+
   private boolean                                                                      propertyProcessorsEnabled;
+  private boolean                                                                      propertyChangeEnabled;
+  private boolean                                                                      collectionSortEnabled;
 
   private Map<String, InlineReferenceTracker>                                          referenceTrackers;
 
@@ -157,6 +159,9 @@ public abstract class AbstractComponentInvocationHandler implements
     this.accessorFactory = accessorFactory;
     this.extensionFactory = extensionFactory;
     this.propertyProcessorsEnabled = true;
+    this.propertyChangeEnabled = true;
+    this.collectionSortEnabled = true;
+
     this.referenceTrackers = new HashMap<String, InlineReferenceTracker>();
     this.computedPropertiesCache = new HashMap<String, Object>();
   }
@@ -181,7 +186,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   public synchronized Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable {
-    String methodName = method.getName().intern();
+    String methodName = method.getName()/* .intern() */;
     if ("hashCode".equals(methodName)) {
       return Integer.valueOf(computeHashCode((IComponent) proxy));
     } else if ("equals".equals(methodName)) {
@@ -505,7 +510,7 @@ public abstract class AbstractComponentInvocationHandler implements
           }
         }
       }
-      if (isCollectionSortOnReadEnabled()) {
+      if (isCollectionSortOnReadEnabled() && collectionSortEnabled) {
         inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
             propertyName);
       }
@@ -1017,8 +1022,10 @@ public abstract class AbstractComponentInvocationHandler implements
         inserted = ((Collection<Object>) collectionProperty).add(value);
       }
       if (inserted) {
-        inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
-            propertyName);
+        if (collectionSortEnabled) {
+          inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
+              propertyName);
+        }
         doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
             collectionProperty);
         if (propertyProcessorsEnabled) {
@@ -1143,27 +1150,31 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void doFirePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
-    if ((oldValue == null && newValue == null) || (oldValue == newValue)) {
-      return;
-    }
-    if (!isInitialized(oldValue) || !isInitialized(newValue)) {
-      doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName, null,
-          newValue));
-    } else {
-      doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
-          oldValue, newValue));
+    if (propertyChangeEnabled) {
+      if ((oldValue == null && newValue == null) || (oldValue == newValue)) {
+        return;
+      }
+      if (!isInitialized(oldValue) || !isInitialized(newValue)) {
+        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName, null,
+            newValue));
+      } else {
+        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
+            oldValue, newValue));
+      }
     }
   }
 
   private void doFirePropertyChange(PropertyChangeEvent evt) {
-    if (delayedEvents != null) {
-      delayedEvents.add(evt);
-    } else {
-      if (propertyChangeSupport != null) {
-        propertyChangeSupport.firePropertyChange(evt);
-      }
-      if (weakPropertyChangeSupport != null) {
-        weakPropertyChangeSupport.firePropertyChange(evt);
+    if (propertyChangeEnabled) {
+      if (delayedEvents != null) {
+        delayedEvents.add(evt);
+      } else {
+        if (propertyChangeSupport != null) {
+          propertyChangeSupport.firePropertyChange(evt);
+        }
+        if (weakPropertyChangeSupport != null) {
+          weakPropertyChangeSupport.firePropertyChange(evt);
+        }
       }
     }
   }
@@ -1228,7 +1239,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
-    String methodName = lifecycleMethod.getName().intern();
+    String methodName = lifecycleMethod.getName()/* .intern() */;
     if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
       onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
           (IEntityLifecycleHandler) args[2]);
@@ -1523,16 +1534,33 @@ public abstract class AbstractComponentInvocationHandler implements
           oldPropertyElementsToRemove.removeAll(propertyElementsToKeep);
           newPropertyElementsToAdd.removeAll(propertyElementsToKeep);
           ICollectionAccessor propertyAccessor = accessorFactory
-              .createCollectionPropertyAccessor(propertyDescriptor.getName(),
+              .createCollectionPropertyAccessor(propertyName,
                   componentDescriptor.getComponentContract(),
                   ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                       .getCollectionDescriptor().getElementDescriptor()
                       .getComponentContract());
-          for (Object element : oldPropertyElementsToRemove) {
-            propertyAccessor.removeFromValue(proxy, element);
-          }
-          for (Object element : newPropertyElementsToAdd) {
-            propertyAccessor.addToValue(proxy, element);
+          boolean oldCollectionSortEnabled = collectionSortEnabled;
+          boolean oldPropertyChangeEnabled = propertyChangeEnabled;
+          boolean oldPropertyProcessorsEnabled = propertyChangeEnabled;
+          try {
+            // Delay sorting for performance reasons.
+            collectionSortEnabled = false;
+            // Block property changes for performance reasons;
+            propertyChangeEnabled = false;
+            // Block property processors
+            propertyProcessorsEnabled = false;
+            for (Object element : oldPropertyElementsToRemove) {
+              propertyAccessor.removeFromValue(proxy, element);
+            }
+            for (Object element : newPropertyElementsToAdd) {
+              propertyAccessor.addToValue(proxy, element);
+            }
+            inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
+                propertyName);
+          } finally {
+            collectionSortEnabled = oldCollectionSortEnabled;
+            propertyChangeEnabled = oldPropertyChangeEnabled;
+            propertyProcessorsEnabled = oldPropertyProcessorsEnabled;
           }
           // if the property is a list we may restore the element order and be
           // careful not to miss one...
