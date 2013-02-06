@@ -347,7 +347,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if propertyDescriptor.reverseRelationEnd?exists>
 	  <#if propertyDescriptor.reverseRelationEnd.sqlName?exists>
 	    <#local revSqlName=propertyDescriptor.reverseRelationEnd.sqlName/>
-      <#local revSqlNameGenerated = false/>
+        <#local revSqlNameGenerated = false/>
 	  <#else>  
 	    <#local revSqlName=generateSQLName(reversePropertyName)/>
 	  </#if>
