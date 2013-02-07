@@ -29,8 +29,8 @@ package org.jspresso.framework.util.format {
       if(value == null || value.length == 0) {
         return null;
       }
-      var prepared:String = value.replace(_parser.thousandsSeparatorTo, _parser.thousandsSeparatorFrom);
-      prepared = prepared.replace(_parser.decimalSeparatorTo, _parser.decimalSeparatorFrom);
+      var prepared:String = value.replace(new RegExp(_parser.thousandsSeparatorTo,"g"), _parser.thousandsSeparatorFrom);
+      prepared = prepared.replace(new RegExp(_parser.decimalSeparatorTo, "g"), _parser.decimalSeparatorFrom);
 	    var parsedNumber:Number = new Number(_parser.parseNumberString(prepared));
 	    parsedNumber.toFixed(_precision);
 	    return parsedNumber;
