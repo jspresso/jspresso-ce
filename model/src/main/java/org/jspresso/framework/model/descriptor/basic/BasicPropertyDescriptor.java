@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
@@ -375,11 +374,12 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   @Override
   @SuppressWarnings("unchecked")
   public void preprocessSetter(final Object component, Object newValue) {
-    if (isMandatory()
-        && (newValue == null || newValue instanceof Collection<?>
-            && ((Collection<?>) newValue).isEmpty())) {
-      throw new MandatoryPropertyException(this, component);
-    }
+    // Mandatory checking should only happen on save. See bug #776.
+    // if (isMandatory()
+    // && (newValue == null || newValue instanceof Collection<?>
+    // && ((Collection<?>) newValue).isEmpty())) {
+    // throw new MandatoryPropertyException(this, component);
+    // }
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;

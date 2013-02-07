@@ -54,6 +54,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -83,6 +84,18 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1054,12 +1067,31 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   private void checkIntegrity(Object proxy) {
+    checkMandatoryProperties(proxy);
     if (propertyProcessorsEnabled) {
       for (IPropertyDescriptor propertyDescriptor : componentDescriptor
           .getPropertyDescriptors()) {
         if (!propertyDescriptor.isComputed()) {
           propertyDescriptor.preprocessSetter(proxy,
               straightGetProperty(proxy, propertyDescriptor.getName()));
+        }
+      }
+    }
+  }
+
+  private void checkMandatoryProperties(Object proxy) {
+    if (propertyProcessorsEnabled) {
+      for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+          .getPropertyDescriptors()) {
+        if (!propertyDescriptor.isComputed()
+            && propertyDescriptor.isMandatory()) {
+          Object newValue = straightGetProperty(proxy,
+              propertyDescriptor.getName());
+          if (newValue == null
+              || (isInitialized(newValue) && newValue instanceof Collection<?> && ((Collection<?>) newValue)
+                  .isEmpty())) {
+            throw new MandatoryPropertyException(propertyDescriptor, proxy);
+          }
         }
       }
     }
@@ -1309,6 +1341,11 @@ public abstract class AbstractComponentInvocationHandler implements
     if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
       // Important to check for not null values.
       checkIntegrity(proxy);
+    } else if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
+      // Important to check for not null values
+      // since the checking has been delayed until persistence.
+      checkMandatoryProperties(proxy);
+
     }
     return interceptorResults;
   }

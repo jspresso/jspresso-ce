@@ -1,5 +1,8 @@
 3.5.16
 ======
+- Mandatory property checks are now only performed at save / update time. This allows for having temporarilly null values on
+  mandatory properties until the save is actually performed. Other value integrity pre-processing are kept at set-time.
+
 - EditSelectedComponentAction does not have default hardcoded values anymore. They are now injected through Spring using the bean
   "editSelectedComponentActionBase". So whenever you use this class directly in your application, make sure to inherit this parent bean
   in order to benefit from the defaults.
