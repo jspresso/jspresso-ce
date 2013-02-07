@@ -21,10 +21,6 @@ package org.jspresso.framework.view.flex {
   import flash.events.MouseEvent;
   import flash.events.TextEvent;
   
-  import flex.utils.ui.resize.ResizablePanel;
-  
-  import flexlib.containers.ButtonScrollingCanvas;
-  
   import mx.binding.utils.BindingUtils;
   import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
@@ -82,6 +78,10 @@ package org.jspresso.framework.view.flex {
   import mx.managers.PopUpManager;
   import mx.managers.ToolTipManager;
   import mx.utils.ObjectUtil;
+  
+  import flex.utils.ui.resize.ResizablePanel;
+  
+  import flexlib.containers.ButtonScrollingCanvas;
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -2410,6 +2410,18 @@ package org.jspresso.framework.view.flex {
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
       var htmlEditor:EnhancedRichTextEditor = createRichTextEditorComponent();
       htmlEditor.styleName = "htmlEditor";
+      if(remoteHtmlArea.verticallyScrollable) {
+        htmlEditor.verticalScrollPolicy = ScrollPolicy.AUTO;
+      } else {
+        htmlEditor.verticalScrollPolicy = ScrollPolicy.OFF;
+      }
+      if(remoteHtmlArea.horizontallyScrollable) {
+        htmlEditor.textArea.wordWrap = false;
+        htmlEditor.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      } else {
+        htmlEditor.textArea.wordWrap = true;
+        htmlEditor.horizontalScrollPolicy = ScrollPolicy.OFF;
+      }
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
     }
@@ -2439,6 +2451,18 @@ package org.jspresso.framework.view.flex {
       var htmlText:TextArea = new TextArea();
       htmlText.styleName = "htmlText";
       htmlText.editable = false;
+      if(remoteHtmlArea.verticallyScrollable) {
+        htmlText.verticalScrollPolicy = ScrollPolicy.AUTO;
+      } else {
+        htmlText.verticalScrollPolicy = ScrollPolicy.OFF;
+      }
+      if(remoteHtmlArea.horizontallyScrollable) {
+        htmlText.wordWrap = false;
+        htmlText.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      } else {
+        htmlText.wordWrap = true;
+        htmlText.horizontalScrollPolicy = ScrollPolicy.OFF;
+      }
       bindHtmlText(htmlText, remoteHtmlArea.state);
       return htmlText;
     }

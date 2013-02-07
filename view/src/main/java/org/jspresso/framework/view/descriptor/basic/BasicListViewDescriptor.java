@@ -97,4 +97,32 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
   public void setRenderedProperty(String renderedProperty) {
     this.renderedProperty = renderedProperty;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isScrollable() {
+    return isVerticallyScrollable() || isHorizontallyScrollable();
+  }
+
+  /**
+   * Returns <code>true</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isVerticallyScrollable() {
+    return true;
+  }
+
+  /**
+   * Returns <code>true</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isHorizontallyScrollable() {
+    return true;
+  }
 }

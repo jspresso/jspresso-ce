@@ -120,6 +120,7 @@ import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -2131,10 +2132,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IView<E> view = null;
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    // First of all, test for Image property view before deciding based on the
-    // model.
     if (propertyViewDescriptor instanceof IImageViewDescriptor) {
+      // First of all, test for Image property view before deciding based on the
+      // model.
       view = createImagePropertyView(propertyViewDescriptor, actionHandler,
+          locale);
+    } else if (propertyViewDescriptor instanceof IHtmlViewDescriptor) {
+      // Then, test for Html property view before deciding based on the
+      // model.
+      view = createHtmlPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       view = createBooleanPropertyView(propertyViewDescriptor, actionHandler,

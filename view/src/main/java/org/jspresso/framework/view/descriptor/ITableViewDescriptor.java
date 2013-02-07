@@ -49,15 +49,6 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
   IDisplayableAction getSortingAction();
 
   /**
-   * Gets wether this table will adapt it width according the available
-   * horizontal space or install a scrollbar.
-   * 
-   * @return wether this table will adapt it width according the available
-   *         horizontal space or install a scrollbar.
-   */
-  boolean isHorizontallyScrollable();
-
-  /**
    * Gets wether this table rows should be sorted manually.
    * 
    * @return wether this table rows should be sorted manually.

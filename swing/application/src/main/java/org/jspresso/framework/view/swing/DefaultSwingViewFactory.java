@@ -198,9 +198,9 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -1286,17 +1286,67 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      JScrollPane scrollPane = createJScrollPane();
       JTextPane htmlPane = createJTextPane(propertyViewDescriptor);
       JTextPaneConnector textPaneConnector = new JTextPaneConnector(
           propertyDescriptor.getName(), htmlPane);
+      JScrollPane scrollPane = createJScrollPane();
       scrollPane.setViewportView(htmlPane);
+      if (propertyViewDescriptor instanceof IScrollableViewDescriptor) {
+        if (((IScrollableViewDescriptor) propertyViewDescriptor)
+            .isHorizontallyScrollable()) {
+          JPanel noWrapPanel = createJPanel();
+          noWrapPanel.setLayout(new BorderLayout());
+          noWrapPanel.add(htmlPane, BorderLayout.CENTER);
+          scrollPane.setViewportView(noWrapPanel);
+          scrollPane
+              .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        } else {
+          scrollPane
+              .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        }
+        if (((IScrollableViewDescriptor) propertyViewDescriptor)
+            .isVerticallyScrollable()) {
+          scrollPane
+              .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        } else {
+          scrollPane
+              .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        }
+      } else {
+        scrollPane
+            .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane
+            .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+      }
       viewComponent = scrollPane;
       connector = textPaneConnector;
     } else {
       JHTMLEditor htmlEditor = createJHTMLEditor(propertyViewDescriptor, locale);
       JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(
           propertyDescriptor.getName(), htmlEditor);
+      if (propertyViewDescriptor instanceof IScrollableViewDescriptor) {
+        if (((IScrollableViewDescriptor) propertyViewDescriptor)
+            .isHorizontallyScrollable()) {
+          htmlEditor
+              .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        } else {
+          htmlEditor
+              .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        }
+        if (((IScrollableViewDescriptor) propertyViewDescriptor)
+            .isVerticallyScrollable()) {
+          htmlEditor
+              .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        } else {
+          htmlEditor
+              .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        }
+      } else {
+        htmlEditor
+            .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        htmlEditor
+            .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+      }
       viewComponent = htmlEditor;
       connector = htmlEditorConnector;
     }
@@ -1326,8 +1376,8 @@ public class DefaultSwingViewFactory extends
     viewComponent.setLayout(layout);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if ((propertyViewDescriptor instanceof IImageViewDescriptor)
-        && ((IImageViewDescriptor) propertyViewDescriptor).isScrollable()) {
+    if ((propertyViewDescriptor instanceof IScrollableViewDescriptor)
+        && ((IScrollableViewDescriptor) propertyViewDescriptor).isScrollable()) {
       imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
       imageLabel.setVerticalAlignment(SwingConstants.TOP);
       JScrollPane scrollPane = createJScrollPane();

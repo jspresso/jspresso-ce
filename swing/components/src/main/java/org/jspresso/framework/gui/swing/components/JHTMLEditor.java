@@ -53,6 +53,7 @@ public class JHTMLEditor extends JPanel {
   private ResourceBundle    bundle;
   private JTextPane         editorPane;
   private JToolBar          toolBar;
+  private JScrollPane       scrollPane;
 
   /**
    * Constructs a new <code>JHTMLEditor</code> instance.
@@ -75,7 +76,7 @@ public class JHTMLEditor extends JPanel {
 
     toolBar = createToolBar(editorActions);
 
-    JScrollPane scrollPane = new JScrollPane();
+    scrollPane = new JScrollPane();
     scrollPane.setViewportView(editorPane);
     add(scrollPane, BorderLayout.CENTER);
     add(toolBar, BorderLayout.SOUTH);
@@ -299,5 +300,21 @@ public class JHTMLEditor extends JPanel {
     public String toString() {
       return (String) getValue(Action.SHORT_DESCRIPTION);
     }
+  }
+
+  /**
+   * @param policy
+   * @see javax.swing.JScrollPane#setVerticalScrollBarPolicy(int)
+   */
+  public void setVerticalScrollBarPolicy(int policy) {
+    scrollPane.setVerticalScrollBarPolicy(policy);
+  }
+
+  /**
+   * @param policy
+   * @see javax.swing.JScrollPane#setHorizontalScrollBarPolicy(int)
+   */
+  public void setHorizontalScrollBarPolicy(int policy) {
+    scrollPane.setHorizontalScrollBarPolicy(policy);
   }
 }

@@ -150,9 +150,9 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -1016,6 +1016,17 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RHtmlArea viewComponent = createRHtmlArea(propertyViewDescriptor);
     viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
+    if (propertyViewDescriptor instanceof IScrollableViewDescriptor) {
+      viewComponent
+          .setVerticallyScrollable(((IScrollableViewDescriptor) propertyViewDescriptor)
+              .isVerticallyScrollable());
+      viewComponent
+          .setHorizontallyScrollable(((IScrollableViewDescriptor) propertyViewDescriptor)
+              .isHorizontallyScrollable());
+    } else {
+      viewComponent.setVerticallyScrollable(true);
+      viewComponent.setHorizontallyScrollable(false);
+    }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;
@@ -1062,9 +1073,9 @@ public class DefaultRemoteViewFactory extends
       });
     }
     RImageComponent viewComponent = createRImageComponent(propertyViewDescriptor);
-    if (propertyViewDescriptor instanceof IImageViewDescriptor) {
+    if (propertyViewDescriptor instanceof IScrollableViewDescriptor) {
       viewComponent
-          .setScrollable(((IImageViewDescriptor) propertyViewDescriptor)
+          .setScrollable(((IScrollableViewDescriptor) propertyViewDescriptor)
               .isScrollable());
     } else {
       viewComponent.setScrollable(false);

@@ -18,39 +18,36 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-import java.util.List;
-
 /**
- * This public interface is implemented by view descriptors which are used to
- * display a model in a formular way. A form view will typically display a
- * subset of a bean simple properties. For instance, this might be implemented
- * by a swing JPanel containing a set of arranged label/widget pairs.
+ * This public interface is implemented by view descriptors which are
+ * scrollable.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
+public interface IScrollableViewDescriptor extends IViewDescriptor {
 
   /**
-   * Gets the number of properties displayed in a row. This is actually a
-   * maximum value since a property might span multiple columns.
+   * Configures the view to be either scaled or scrollable when the display area
+   * is too small to display it.
    * 
-   * @return the number of properties displayed in a row of this view.
+   * @return true if scrollable.
    */
-  int getColumnCount();
+  boolean isScrollable();
 
   /**
-   * Gets the position of the labels naming the displayed properties.
+   * Configures the view to be either vertically scaled or scrollable when the
+   * display area is too small to display it.
    * 
-   * @return the relative position of the labels (<code>ABOVE</code> or
-   *         <code>ASIDE</code>).
+   * @return true if vertically scrollable.
    */
-  ELabelPosition getLabelsPosition();
+  boolean isVerticallyScrollable();
 
   /**
-   * Gets the property view descriptors.
+   * Configures the view to be either horizontally scaled or scrollable when the
+   * display area is too small to display it.
    * 
-   * @return the property view descriptors.
+   * @return true if horizontally scrollable.
    */
-  List<IPropertyViewDescriptor> getPropertyViewDescriptors();
+  boolean isHorizontallyScrollable();
 }

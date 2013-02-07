@@ -25,6 +25,14 @@ qx.Class.define("org.jspresso.framework.gui.remote.RHtmlArea",
     readOnly :
     {
       check : "Boolean"
+    },
+    verticallyScrollable :
+    {
+      check : "Boolean"
+    },
+    horizontallyScrollable :
+    {
+      check : "Boolean"
     }
   }
   

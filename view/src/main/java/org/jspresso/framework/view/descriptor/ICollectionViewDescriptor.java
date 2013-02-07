@@ -28,7 +28,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICollectionViewDescriptor extends IViewDescriptor,
+public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
     ICollectionViewDescriptorProvider {
 
   /**

@@ -29,6 +29,8 @@ public class RHtmlArea extends RTextComponent {
   private static final long serialVersionUID = 5482012658466216934L;
 
   private boolean           readOnly;
+  private boolean           verticallyScrollable;
+  private boolean           horizontallyScrollable;
 
   /**
    * Constructs a new <code>RHtmlArea</code> instance.
@@ -65,5 +67,43 @@ public class RHtmlArea extends RTextComponent {
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = readOnly;
+  }
+
+  /**
+   * Gets the verticallyScrollable.
+   * 
+   * @return the verticallyScrollable.
+   */
+  public boolean isVerticallyScrollable() {
+    return verticallyScrollable;
+  }
+
+  /**
+   * Sets the verticallyScrollable.
+   * 
+   * @param verticallyScrollable
+   *          the verticallyScrollable to set.
+   */
+  public void setVerticallyScrollable(boolean verticallyScrollable) {
+    this.verticallyScrollable = verticallyScrollable;
+  }
+
+  /**
+   * Gets the horizontallyScrollable.
+   * 
+   * @return the horizontallyScrollable.
+   */
+  public boolean isHorizontallyScrollable() {
+    return horizontallyScrollable;
+  }
+
+  /**
+   * Sets the horizontallyScrollable.
+   * 
+   * @param horizontallyScrollable
+   *          the horizontallyScrollable to set.
+   */
+  public void setHorizontallyScrollable(boolean horizontallyScrollable) {
+    this.horizontallyScrollable = horizontallyScrollable;
   }
 }

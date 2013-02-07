@@ -454,4 +454,20 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public void setVerticallyScrollable(boolean verticallyScrollable) {
     this.verticallyScrollable = verticallyScrollable;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isHorizontallyScrollable() {
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isScrollable() {
+    return isVerticallyScrollable() || isHorizontallyScrollable();
+  }
 }

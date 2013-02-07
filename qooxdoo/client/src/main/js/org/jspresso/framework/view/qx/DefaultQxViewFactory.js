@@ -2299,8 +2299,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             converter : this._modelToViewFieldConverter
           });
       var scrollPane = new qx.ui.container.Scroll();
-      scrollPane.setWidth(10000);
       scrollPane.add(htmlText);
+      if(remoteHtmlArea.isHorizontallyScrollable()) {
+        htmlText.setAllowStretchX(false, false);
+        htmlText.setWrap(false);
+        scrollPane.setScrollbarX("on");
+      } else {
+        htmlText.setWrap(true);
+        scrollPane.setScrollbarX("off");
+      }
+      if(remoteHtmlArea.isVerticallyScrollable()) {
+        scrollPane.setScrollbarY("auto");
+      } else {
+        scrollPane.setScrollbarY("off");
+      }
       return scrollPane;
     },
 

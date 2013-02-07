@@ -57,6 +57,26 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
+   * Returns <code>true</code> if scrollable.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isHorizontallyScrollable() {
+    return isScrollable();
+  }
+
+  /**
+   * Returns <code>true</code> if scrollable.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isVerticallyScrollable() {
+    return isScrollable();
+  }
+
+  /**
    * Configures the image view to be either croped or scrollable when the
    * display area is too small to display it. A value of <code>true</code>
    * (default) means that the image view will be made scrollable.

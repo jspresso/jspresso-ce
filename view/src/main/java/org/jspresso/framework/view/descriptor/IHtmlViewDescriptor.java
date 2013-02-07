@@ -19,11 +19,11 @@
 package org.jspresso.framework.view.descriptor;
 
 /**
- * This public interface is implemented by any image view descriptor.
+ * This public interface is implemented by any html view descriptor.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 7163 $
  * @author Vincent Vandenschrick
  */
-public interface IImageViewDescriptor extends IScrollableViewDescriptor {
+public interface IHtmlViewDescriptor extends IScrollableViewDescriptor {
   // This is just a marker interface as of now.
 }

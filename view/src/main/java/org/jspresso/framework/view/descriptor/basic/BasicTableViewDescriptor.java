@@ -163,6 +163,24 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
+   * Returns <code>true</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isVerticallyScrollable() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isScrollable() {
+    return isVerticallyScrollable() || isHorizontallyScrollable();
+  }
+
+  /**
    * Gets the sortable.
    * 
    * @return the sortable.
