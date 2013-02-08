@@ -200,7 +200,7 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
-    boolean updated = false;
+    boolean updated = super.onLoad(entity, id, state, propertyNames, types);
     if (!getBackendController().isUnitOfWorkActive()) {
       if (entity instanceof IEntity
           && getBackendController().getRegisteredEntity(

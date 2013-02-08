@@ -54,6 +54,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.CarbonEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.slf4j.Logger;
@@ -1172,5 +1173,22 @@ public class HibernateBackendController extends AbstractBackendController {
       return null;
     }
     return getHibernateSession().getTransaction();
+  }
+
+  /**
+   * Configures the entity factory to use to create new entities. Backend
+   * controllers only accept instances of
+   * <code>HibernateControllerAwareProxyEntityFactory</code> or a subclass.
+   * 
+   * @param entityFactory
+   *          the entityFactory to set.
+   */
+  @Override
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    if (!(entityFactory instanceof HibernateControllerAwareProxyEntityFactory)) {
+      throw new IllegalArgumentException("entityFactory must be a "
+          + HibernateControllerAwareProxyEntityFactory.class.getSimpleName());
+}
+    super.setEntityFactory(entityFactory);
   }
 }
