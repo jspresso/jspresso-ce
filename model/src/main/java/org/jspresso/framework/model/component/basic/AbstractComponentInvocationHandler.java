@@ -85,25 +85,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);

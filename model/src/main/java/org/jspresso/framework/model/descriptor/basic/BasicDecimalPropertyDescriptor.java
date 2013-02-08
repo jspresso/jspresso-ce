@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 
@@ -43,7 +44,6 @@ public class BasicDecimalPropertyDescriptor extends
   public BasicDecimalPropertyDescriptor clone() {
     BasicDecimalPropertyDescriptor clonedDescriptor = (BasicDecimalPropertyDescriptor) super
         .clone();
-
     return clonedDescriptor;
   }
 
@@ -52,6 +52,9 @@ public class BasicDecimalPropertyDescriptor extends
    */
   @Override
   public Integer getMaxFractionDigit() {
+    if (maxFractionDigit == null) {
+      return DEFAULT_MAX_FRACTION_DIGIT;
+    }
     return maxFractionDigit;
   }
 
@@ -81,7 +84,7 @@ public class BasicDecimalPropertyDescriptor extends
 
   /**
    * Configures the precision of the decimal property. Default value is
-   * <code>null</code> which means unlimited.
+   * <code>2</code>.
    * 
    * @param maxFractionDigit
    *          the maxFractionDigit to set.
@@ -136,6 +139,27 @@ public class BasicDecimalPropertyDescriptor extends
           || boundValue.doubleValue() == -Double.MAX_VALUE;
     }
     return super.isDefault(boundValue);
+  }
+
+  /**
+   * Handle BigDecimal precision.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Object interceptSetter(Object component, Object newValue) {
+    Object actualNewValue = newValue;
+    if (getMaxFractionDigit() != null) {
+      if (actualNewValue instanceof Double) {
+        actualNewValue = new Double(new BigDecimal(actualNewValue.toString())
+            .setScale(getMaxFractionDigit().intValue(), RoundingMode.HALF_EVEN)
+            .doubleValue());
+      } else if (actualNewValue instanceof BigDecimal) {
+        actualNewValue = ((BigDecimal) actualNewValue).setScale(
+            getMaxFractionDigit().intValue(), RoundingMode.HALF_EVEN);
+      }
+    }
+    return super.interceptSetter(component, actualNewValue);
   }
 
 }

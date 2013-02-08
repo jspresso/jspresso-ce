@@ -823,13 +823,9 @@ public class DefaultRemoteViewFactory extends
       }
       connector.setExceptionHandler(actionHandler);
       viewComponent = createRDecimalField(propertyViewDescriptor);
-      if (propertyDescriptor.getMaxFractionDigit() != null) {
-        ((RDecimalComponent) viewComponent)
-            .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
-                .intValue());
-      } else {
-        ((RDecimalComponent) viewComponent).setMaxFractionDigit(2);
-      }
+      ((RDecimalComponent) viewComponent)
+          .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
+              .intValue());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -1257,12 +1253,8 @@ public class DefaultRemoteViewFactory extends
       }
       connector.setExceptionHandler(actionHandler);
       viewComponent = createRPercentField(propertyViewDescriptor);
-      if (propertyDescriptor.getMaxFractionDigit() != null) {
-        ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor
-            .getMaxFractionDigit().intValue());
-      } else {
-        ((RPercentField) viewComponent).setMaxFractionDigit(2);
-      }
+      ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor
+          .getMaxFractionDigit().intValue());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,

@@ -27,8 +27,14 @@ package org.jspresso.framework.model.descriptor;
 public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {
 
   /**
+   * <code>DEFAULT_MAX_FRACTION_DIGIT</code> is 2.
+   */
+  Integer DEFAULT_MAX_FRACTION_DIGIT = new Integer(2);
+
+  /**
    * Returns the maximum number of fraction digits allowed in this decimal
-   * property.
+   * property. It is guatranteed to return a non-null value which defaults to
+   * <code>2</code>.
    * 
    * @return the number of fraction digits
    */

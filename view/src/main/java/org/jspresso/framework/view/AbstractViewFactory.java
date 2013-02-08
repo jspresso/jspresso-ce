@@ -157,10 +157,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected static final String         BOLD_FONT                            = ";BOLD;";
   /**
-   * <code>DEF_DISP_MAX_FRACTION_DIGIT</code>.
-   */
-  protected static final int            DEF_DISP_MAX_FRACTION_DIGIT          = 2;
-  /**
    * <code>DEF_DISP_MAX_VALUE</code>.
    */
   protected static final double         DEF_DISP_MAX_VALUE                   = 1000;
@@ -1683,12 +1679,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected NumberFormat createDecimalFormat(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getNumberInstance(locale);
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
-          .intValue());
-    } else {
-      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
-    }
+    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
+        .intValue());
     if (propertyDescriptor.isUsingBigDecimal()
         && (format instanceof DecimalFormat)) {
       ((DecimalFormat) format).setParseBigDecimal(true);
@@ -2072,12 +2064,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected NumberFormat createPercentFormat(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getPercentInstance(locale);
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
-          .intValue());
-    } else {
-      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
-    }
+    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
+        .intValue());
     if (propertyDescriptor.isUsingBigDecimal()
         && (format instanceof DecimalFormat)) {
       ((DecimalFormat) format).setParseBigDecimal(true);
@@ -2635,10 +2623,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor.getMaxValue() != null) {
       templateValue = propertyDescriptor.getMaxValue().doubleValue();
     }
-    int maxFractionDigit = DEF_DISP_MAX_FRACTION_DIGIT;
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
-    }
+    int maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
     double decimalPart = 0;
     for (int i = 1; i <= maxFractionDigit; i++) {
       decimalPart += Math.pow(10.0D, -i);
@@ -2812,10 +2797,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor.getMaxValue() != null) {
       templateValue = propertyDescriptor.getMaxValue().doubleValue();
     }
-    int maxFractionDigit = DEF_DISP_MAX_FRACTION_DIGIT;
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
-    }
+    int maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
     double decimalPart = 0;
     for (int i = 1; i <= maxFractionDigit; i++) {
       decimalPart += Math.pow(10.0D, -i);
