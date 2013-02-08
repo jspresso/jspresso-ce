@@ -19,17 +19,22 @@
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.beans.PropertyDescriptor;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.collection.PersistentCollection;
+import org.hibernate.collection.PersistentSet;
 import org.hibernate.proxy.HibernateProxy;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
+import org.jspresso.framework.util.reflect.ReflectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,6 +187,28 @@ public final class HibernateHelper {
       }
     }
     return entityContract;
+  }
+
+  /**
+   * Ensures that the collection held by a Persistent Set is actually a
+   * LinkedHashSet.
+   * 
+   * @param collection
+   *          the collection to ensure implementation of.
+   */
+  public static void ensureInnerLinkedHashSet(Collection<?> collection) {
+    if (collection instanceof PersistentSet) {
+      try {
+        Set<?> innerSet = (Set<?>) ReflectHelper.getPrivateFieldValue(
+            PersistentSet.class, "set", collection);
+        if (innerSet != null && !(innerSet instanceof LinkedHashSet<?>)) {
+          ReflectHelper.setPrivateFieldValue(PersistentSet.class, "set",
+              collection, new LinkedHashSet<Object>(innerSet));
+        }
+      } catch (Exception ex) {
+        LOG.error("Failed to replace internal Hibernate set implementation");
+      }
+    }
   }
 
 }

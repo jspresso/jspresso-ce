@@ -938,8 +938,8 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     if (!(entityFactory instanceof ControllerAwareProxyEntityFactory)) {
-      throw new IllegalArgumentException(
-          "entityFactory must be a ControllerAwareProxyEntityFactory.");
+      throw new IllegalArgumentException("entityFactory must be a "
+          + ControllerAwareProxyEntityFactory.class.getSimpleName());
     }
     this.entityFactory = entityFactory;
   }

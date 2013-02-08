@@ -74,7 +74,7 @@
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
-    <constructor-arg value="true"/>
+    <constructor-arg value="true" />
   </bean>
 
   <bean id="criteriaFactoryBase" abstract="true"
@@ -114,6 +114,12 @@
 
   <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.ReloadModuleObjectAction" />
+
+  <bean id="hibernateControllerAwareProxyEntityFactory" parent="controllerAwareEntityFactory"
+    class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateControllerAwareProxyEntityFactory" />
+
+  <bean name="controllerAwareEntityFactory" parent="basicEntityFactory"
+    class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateControllerAwareProxyEntityFactory" />
 
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController">

@@ -71,22 +71,22 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
    */
   @Override
   public void sortCollectionProperty(IComponent component, String propertyName) {
-    Collection<Object> propertyValue = (Collection<Object>) component
-        .straightGetProperty(propertyName);
-    boolean wasClean = false;
-    if (propertyValue instanceof PersistentCollection
-        && !((PersistentCollection) propertyValue).isDirty()) {
-      wasClean = true;
-    }
     ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) getComponentDescriptor(
         component.getComponentContract()).getPropertyDescriptor(propertyName);
-    if (propertyValue != null
-        && !propertyValue.isEmpty()
-        && !List.class.isAssignableFrom(propertyDescriptor
-            .getCollectionDescriptor().getCollectionInterface())) {
-      Map<String, ESort> orderingProperties = propertyDescriptor
-          .getOrderingProperties();
-      if (orderingProperties != null && !orderingProperties.isEmpty()) {
+    Map<String, ESort> orderingProperties = propertyDescriptor
+        .getOrderingProperties();
+    if (orderingProperties != null && !orderingProperties.isEmpty()) {
+      Collection<Object> propertyValue = (Collection<Object>) component
+          .straightGetProperty(propertyName);
+      boolean wasClean = false;
+      if (propertyValue instanceof PersistentCollection
+          && !((PersistentCollection) propertyValue).isDirty()) {
+        wasClean = true;
+      }
+      if (propertyValue != null
+          && !propertyValue.isEmpty()
+          && !List.class.isAssignableFrom(propertyDescriptor
+              .getCollectionDescriptor().getCollectionInterface())) {
         List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
         List<ESort> orderingDirections = new ArrayList<ESort>();
         Class<?> collectionElementContract = propertyDescriptor
