@@ -2416,10 +2416,14 @@ package org.jspresso.framework.view.flex {
         htmlEditor.verticalScrollPolicy = ScrollPolicy.OFF;
       }
       if(remoteHtmlArea.horizontallyScrollable) {
-        htmlEditor.textArea.wordWrap = false;
+        htmlEditor.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
+          htmlEditor.textArea.wordWrap = false;
+        });
         htmlEditor.horizontalScrollPolicy = ScrollPolicy.AUTO;
       } else {
-        htmlEditor.textArea.wordWrap = true;
+        htmlEditor.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
+          htmlEditor.textArea.wordWrap = true;
+        });
         htmlEditor.horizontalScrollPolicy = ScrollPolicy.OFF;
       }
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
