@@ -28,6 +28,7 @@ qx.Class.define("org.jspresso.framework.util.browser.ClipboardHelper", {
 		 * user_pref("signed.applets.codebase_principal_support", true); or
 		 * change the setting from within the browser with calling the
 		 * "about:config" page
+		 * @lint ignoreDeprecated(alert)
 		 */
     copyToSystemClipboard : function(dataTransfers) {
       if (window.clipboardData) {
