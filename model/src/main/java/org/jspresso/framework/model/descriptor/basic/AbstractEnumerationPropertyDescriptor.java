@@ -126,7 +126,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * This property allows to control if the enumeration property view should be
    * transformed into a multi-selectable property view in order to allow for
-   * value disjunctions in filters. Default value is <code>true</code>.
+   * value disjunctions in filters. Default value is <code>false</code>.
    * 
    * @param queryMultiselect
    *          the queryMultiselect to set.

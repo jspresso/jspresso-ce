@@ -37,6 +37,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   private Map<String, List<String>> fileFilter;
   private String                    fileName;
   private String                    contentType;
+  private boolean                   queryMultiline = false;
 
   /**
    * {@inheritDoc}
@@ -58,6 +59,9 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   public BasicStringPropertyDescriptor createQueryDescriptor() {
     BasicStringPropertyDescriptor defaultQueryDecriptor = super
         .createQueryDescriptor();
+    if (isQueryMultiline()) {
+      return defaultQueryDecriptor;
+    }
 
     BasicStringPropertyDescriptor queryDescriptor = new BasicStringPropertyDescriptor();
     queryDescriptor.setName(defaultQueryDecriptor.getName());
@@ -161,5 +165,27 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    */
   public void setContentType(String contentType) {
     this.contentType = contentType;
+  }
+
+  /**
+   * Should this text be kept multi-line when building a filter screen ?
+   * 
+   * @return <code>true</code> if this text should be transformed into a
+   *         multi-line text area when building a filter screen.
+   */
+  protected boolean isQueryMultiline() {
+    return queryMultiline;
+  }
+
+  /**
+   * This property allows to control if the text property view should be
+   * transformed into a multi-line text view in order to allow for multi-line
+   * text in filters. Default value is <code>false</code>.
+   * 
+   * @param queryMultiline
+   *          the queryMultiline to set.
+   */
+  public void setQueryMultiline(boolean queryMultiline) {
+    this.queryMultiline = queryMultiline;
   }
 }
