@@ -34,5 +34,10 @@ public enum EFetchType {
   /**
    * <code>SELECT</code> fetch type.
    */
-  SELECT
+  SELECT,
+
+  /**
+   * <code>SUBSELECT</code> fetch type.
+   */
+  SUBSELECT
 }

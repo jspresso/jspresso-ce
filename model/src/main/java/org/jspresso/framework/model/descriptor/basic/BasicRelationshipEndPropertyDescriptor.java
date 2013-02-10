@@ -44,6 +44,9 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   private IRelationshipEndPropertyDescriptor reverseRelationEnd;
   private IRelationshipEndPropertyDescriptor tempReverseRelationEnd;
 
+  private EFetchType                         fetchType          = EFetchType.SELECT;
+  private Integer                            batchSize;
+
   /**
    * {@inheritDoc}
    */
@@ -225,4 +228,55 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * @return the default composition of a relationship end.
    */
   protected abstract boolean getDefaultComposition();
+
+  /**
+   * Gets the fetchType.
+   * 
+   * @return the fetchType.
+   */
+  public EFetchType getFetchType() {
+    return fetchType;
+  }
+
+  /**
+   * This property allows to finely tune fetching strategy of the ORM on this
+   * relationship end. This is either a value of the <code>EFetchType</code>
+   * enum or its equivalent string representation :
+   * <ul>
+   * <li><code>SELECT</code> for default 2nd select strategy (lazy)</li>
+   * <li><code>SUBSELECT</code> for default 2nd select strategy (lazy) using an
+   * IN clause</li>
+   * <li><code>JOIN</code> for a join select strategy (not lazy)</li>
+   * </ul>
+   * <p>
+   * Default value is <code>EFetchType.SELECT</code>, i.e. 2nd select strategy.
+   * 
+   * @param fetchType
+   *          the fetchType to set.
+   */
+  public void setFetchType(EFetchType fetchType) {
+    this.fetchType = fetchType;
+  }
+
+  /**
+   * Gets the batchSize.
+   * 
+   * @return the batchSize.
+   */
+  public Integer getBatchSize() {
+    return batchSize;
+  }
+
+  /**
+   * This property allows to finely tune batching strategy of the ORM on this
+   * relationship end. Whenever possible, the ORM will use a IN clause in order
+   * to fetch multiple instances relationships at once. The batch size
+   * determines the size of th IN clause.
+   * 
+   * @param batchSize
+   *          the batchSize to set.
+   */
+  public void setBatchSize(Integer batchSize) {
+    this.batchSize = batchSize;
+  }
 }

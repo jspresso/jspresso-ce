@@ -359,6 +359,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *
   <#if !propertyDescriptor.computed>
    * @hibernate.${hibernateCollectionType}
+    <#if propertyDescriptor.fetchType?exists>
+      <#if propertyDescriptor.fetchType.toString() = "JOIN">
+   *           fetch = "join"
+      <#elseif propertyDescriptor.fetchType.toString() = "SUBSELECT">
+   *           fetch = "subselect"
+      </#if>
+    </#if>
+    <#if propertyDescriptor.batchSize?exists>
+   *           batch-size = "${propertyDescriptor.batchSize?c}"
+    </#if>
     <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
     </#if>
@@ -566,8 +576,15 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
         </#if>
-        <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
+        <#if propertyDescriptor.fetchType?exists>
+          <#if propertyDescriptor.fetchType.toString() = "JOIN">
    *           fetch = "join"
+          <#elseif propertyDescriptor.fetchType.toString() = "SUBSELECT">
+   *           fetch = "subselect"
+          </#if>
+        </#if>
+        <#if propertyDescriptor.batchSize?exists>
+   *           batch-size = "${propertyDescriptor.batchSize?c}"
         </#if>
       <#else>
    * @hibernate.many-to-one
@@ -593,8 +610,15 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           cascade = "none"
           </#if>
         </#if>
-        <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
+        <#if propertyDescriptor.fetchType?exists>
+          <#if propertyDescriptor.fetchType.toString() = "JOIN">
    *           fetch = "join"
+          <#elseif propertyDescriptor.fetchType.toString() = "SUBSELECT">
+   *           fetch = "subselect"
+          </#if>
+        </#if>
+        <#if propertyDescriptor.batchSize?exists>
+   *           batch-size = "${propertyDescriptor.batchSize?c}"
         </#if>
         <#if isEntity>
           <#if fkName?exists>
