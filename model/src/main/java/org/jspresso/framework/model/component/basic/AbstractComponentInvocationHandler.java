@@ -264,7 +264,7 @@ public abstract class AbstractComponentInvocationHandler implements
         Class<IComponentExtension<IComponent>> extensionClass = (Class<IComponentExtension<IComponent>>) propertyDescriptor
             .getDelegateClass();
         if (extensionClass != null) {
-          return getComputedProperty(propertyDescriptor, extensionClass, proxy,
+          return accessComputedProperty(propertyDescriptor, accessorInfo, extensionClass, proxy,
               method, args);
         } else if (!propertyDescriptor.isComputed()) {
           if (accessorInfo.isModifier()) {
@@ -1209,13 +1209,13 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private synchronized Object getComputedProperty(
-      IPropertyDescriptor propertyDescriptor,
+  private synchronized Object accessComputedProperty(
+      IPropertyDescriptor propertyDescriptor, AccessorInfo accessorInfo,
       Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
       Method method, Object[] args) {
     String propertyName = propertyDescriptor.getName();
     Object computedPropertyValue;
-    if (propertyDescriptor.isCacheable()) {
+    if (!accessorInfo.isModifier() && propertyDescriptor.isCacheable()) {
       if (computedPropertiesCache.containsKey(propertyName)) {
         computedPropertyValue = computedPropertiesCache.get(propertyName);
         return computedPropertyValue;
@@ -1225,7 +1225,7 @@ public abstract class AbstractComponentInvocationHandler implements
         extensionClass, (IComponent) proxy);
     computedPropertyValue = invokeExtensionMethod(extensionDelegate, method,
         args);
-    if (propertyDescriptor.isCacheable()) {
+    if (!accessorInfo.isModifier() && propertyDescriptor.isCacheable()) {
       computedPropertiesCache.put(propertyName, computedPropertyValue);
     }
     return computedPropertyValue;
