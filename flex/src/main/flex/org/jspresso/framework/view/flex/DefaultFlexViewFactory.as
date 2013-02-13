@@ -1290,10 +1290,7 @@ package org.jspresso.framework.view.flex {
         if(rComponent is RSecurityComponent) {
           sizeMaxComponentWidth(component, rComponent);
         } else {
-          bindDynamicToolTip(component, rComponent);
-          bindDynamicBackground(component, rComponent);
-          bindDynamicForeground(component, rComponent);
-          bindDynamicFont(component, rComponent);
+          bindDynamicAspects(component, rComponent);
         }
         
         if(remoteForm.labelsPosition != "NONE") {
@@ -1436,6 +1433,19 @@ package org.jspresso.framework.view.flex {
         decoratedForm = scroller;
       }
       return decoratedForm;
+    }
+
+    private function bindDynamicAspects(component : UIComponent, rComponent : RComponent) : void {
+      if(component is Container) {
+        for each(var child:UIComponent in (component as Container).getChildren()) {
+          bindDynamicAspects(child, rComponent);
+        }
+      } else {
+        bindDynamicToolTip(component, rComponent);
+        bindDynamicBackground(component, rComponent);
+        bindDynamicForeground(component, rComponent);
+        bindDynamicFont(component, rComponent);
+      }
     }
     
     protected function bindDynamicToolTip(component:UIComponent, rComponent:RComponent):void {
