@@ -22,16 +22,28 @@ package org.jspresso.framework.view.flex {
       if(mx_internal::ComboDownArrowButton) {
         mx_internal::ComboDownArrowButton.enabled = value;
       }
-      var ti:TextInput = mx_internal::getTextInput();
-      if(ti) {
+      var ti : TextInput = mx_internal::getTextInput();
+      if (ti) {
         ti.enabled = true;
-        if(value) {
-          ti.setStyle("backgroundColor", null);
+        ti.editable = enabled;
+      }
+    }
+
+    private function syncTextInputBackground() : void {
+      var ti : TextInput = mx_internal::getTextInput();
+      if (ti) {
+        if (enabled) {
+          ti.setStyle("backgroundColor", getStyle("backgroundColor"));
         } else {
           ti.setStyle("backgroundColor", ti.getStyle("backgroundDisabledColor"));
         }
-        ti.editable = value;
       }
     }
+    
+    override protected function updateDisplayList(unscaledWidth : Number, unscaledHeight : Number) : void {
+      syncTextInputBackground();
+      super.updateDisplayList(unscaledWidth, unscaledHeight);
+    }
+
   }
 }

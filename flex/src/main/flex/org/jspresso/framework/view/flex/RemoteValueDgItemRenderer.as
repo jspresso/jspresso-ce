@@ -309,11 +309,10 @@ package org.jspresso.framework.view.flex {
       if(listData.owner is DataGrid) {
         if(backgroundIndex >= 0) {
           var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
-          var alpha:uint = DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String);
           var g:Graphics = graphics;
           g.clear();
           if(backgroundValue != null) {
-            g.beginFill(new uint(backgroundValue), alpha);
+            g.beginFill(new uint(backgroundValue), DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
             g.drawRect(0, 0, unscaledWidth, unscaledHeight);
             g.endFill();
           }
