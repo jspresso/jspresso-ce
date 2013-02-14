@@ -140,8 +140,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private IMvcBinder                            mvcBinder;
   private IAction                               onModuleEnterAction;
-
   private IAction                               onModuleExitAction;
+  private IAction                               onModuleStartupAction;
 
   private Map<String, Module>                   selectedModules;
 
@@ -282,9 +282,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     selectedModules.put(workspaceName, module);
     if (module != null) {
-      if (!module.isStarted() && module.getStartupAction() != null) {
-        execute(module.getStartupAction(),
-            getModuleActionContext(workspaceName));
+      if (!module.isStarted()) {
+        if (getOnModuleStartupAction() != null) {
+          execute(getOnModuleStartupAction(),
+              getModuleActionContext(workspaceName));
+        }
+        if (module.getStartupAction() != null) {
+          execute(module.getStartupAction(),
+              getModuleActionContext(workspaceName));
+        }
       }
       module.setStarted(true);
       pinModule(getSelectedWorkspaceName(), module);
@@ -1015,6 +1021,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Configures an action to be executed each time a module of the application
+   * is started. The action is executed in the context of the module the user
+   * starts.
+   * 
+   * @param onModuleStartupAction
+   *          the onModuleStartupAction to set.
+   */
+  public void setOnModuleStartupAction(IAction onModuleStartupAction) {
+    this.onModuleStartupAction = onModuleStartupAction;
+  }
+
+  /**
+   * Configures an action to be executed each time a module of the application
    * is exited. The action is executed in the context of the module the user
    * exits. Default frontend controller configuration installs an action that
    * checks current module dirty state.
@@ -1490,6 +1508,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected IAction getOnModuleEnterAction() {
     return onModuleEnterAction;
+  }
+
+  /**
+   * Gets the onModuleStartupAction.
+   * 
+   * @return the onModuleStartupAction.
+   */
+  protected IAction getOnModuleStartupAction() {
+    return onModuleStartupAction;
   }
 
   /**
