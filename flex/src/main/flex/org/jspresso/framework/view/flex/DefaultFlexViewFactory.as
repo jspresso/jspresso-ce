@@ -2634,16 +2634,23 @@ package org.jspresso.framework.view.flex {
       };
       BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
       getRemotePeerRegistry().register(remoteAction);
-      button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-        if ((new Date()).time - _lastActionTimestamp.time < 400) {
-          return;
-        }
-        _lastActionTimestamp = new Date();
+      var listener:Function = function(event:MouseEvent):void {
         _actionHandler.execute(remoteAction);
-      });
+      };
+      addButtonEventListenerWithTimeout(button, listener);
       if(remoteAction.styleName) {
         button.styleName = remoteAction.styleName;
       }
+    }
+    
+    public function addButtonEventListenerWithTimeout(button:Button, listener:Function, timeout:int = 400):void {
+      button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+        if ((new Date()).time - _lastActionTimestamp.time < timeout) {
+          return;
+        }
+        _lastActionTimestamp = new Date();
+        listener(event);
+      });
     }
     
     public function createButton(label:String, toolTip:String, icon:RIcon, topApplicationButton:Boolean=false):Button {

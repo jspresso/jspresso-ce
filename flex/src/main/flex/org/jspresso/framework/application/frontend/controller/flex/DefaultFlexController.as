@@ -345,9 +345,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = getViewFactory().createDialogButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
-        loginButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+        var listener:Function = function(event:MouseEvent):void {
           performLogin();
-        });
+        };
+        getViewFactory().addButtonEventListenerWithTimeout(loginButton, listener, 1000);
         var loginButtons:Array = new Array();
         loginButtons.push(loginButton);
         var loginView:UIComponent = getViewFactory().createComponent(initLoginCommand.loginView);
@@ -1304,6 +1305,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function performLogin():void {
+      blockUI(false);
       var loginCommand:RemoteLoginCommand = new RemoteLoginCommand();
       registerCommand(loginCommand);
     }
