@@ -19,23 +19,21 @@
 package org.jspresso.framework.view.descriptor;
 
 /**
- * This public interface is implemented by "Card" view descriptors. A typical
- * implementation of the described view could be a swing JPanel using a card
- * layout.
+ * This interface is implemented by strategies providing card descriptors based
+ * on their names.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 7120 $
  * @author Vincent Vandenschrick
  */
-public interface ICardViewDescriptor extends IViewDescriptor,
-    ICardNameSelector, ICardProvider {
+public interface ICardProvider {
 
   /**
-   * <code>DEFAULT_CARD</code>.
+   * Gets the card view for the name passed as parameter.
+   * 
+   * @param cardName
+   *          the card name to lookup the view for.
+   * @return the card view descriptor.
    */
-  String DEFAULT_CARD  = "DEFAULT_CARD";
+  IViewDescriptor getCardViewDescriptor(String cardName);
 
-  /**
-   * <code>SECURITY_CARD</code>.
-   */
-  String SECURITY_CARD = "SECURITY_CARD";
 }

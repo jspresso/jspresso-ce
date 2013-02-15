@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.view.descriptor.ICardNameSelector;
+import org.jspresso.framework.view.descriptor.ICardProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -56,7 +57,10 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
    * Everytime the bound model changes, the card name selector is triggered to
    * select a new card. The names returned by the card name selector must match
    * the names under which the cards are registered. Whenever the card name
-   * selector returns an unknown name, the card view displays an empty view.
+   * selector returns an unknown name, the card view displays an empty view. The
+   * card name selector can optionally implement <code>ICardProvider</code> in
+   * which case, it will be given a chance to create cards dynamically based on
+   * their names.
    * 
    * @param cardNameSelector
    *          the cardNameSelector to set.
@@ -77,5 +81,23 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
   public void setCardViewDescriptors(
       Map<String, IViewDescriptor> cardViewDescriptors) {
     super.setCardViewDescriptors(cardViewDescriptors);
+  }
+
+  /**
+   * Delegates to selector if it implements <code>ICardProvider</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getCardViewDescriptor(String cardName) {
+    IViewDescriptor cardViewDescriptor = super.getCardViewDescriptor(cardName);
+    if (cardViewDescriptor == null) {
+      if (cardNameSelector instanceof ICardProvider) {
+        cardViewDescriptor = ((ICardProvider) cardNameSelector)
+            .getCardViewDescriptor(cardName);
+        putCardViewDescriptor(cardName, cardViewDescriptor);
+      }
+    }
+    return cardViewDescriptor;
   }
 }
