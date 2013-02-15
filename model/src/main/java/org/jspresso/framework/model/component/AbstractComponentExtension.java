@@ -165,6 +165,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
     sourceBean.addPropertyChangeListener(sourceCollectionProperty,
         new PropertyChangeListener() {
 
+          @SuppressWarnings("rawtypes")
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {
@@ -202,7 +203,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                     if (listener instanceof AbstractComponentExtension<?>.ForwardingPropertyChangeListener) {
                       if (Arrays
                           .equals(
-                              ((AbstractComponentExtension<?>.ForwardingPropertyChangeListener) listener)
+                              ((AbstractComponentExtension.ForwardingPropertyChangeListener) listener)
                                   .getForwardedProperties(), forwardedProperty)) {
                         child.removePropertyChangeListener(
                             sourceElementProperty, listener);
