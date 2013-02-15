@@ -2952,6 +2952,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setPreferredSize(propertyViewDescriptor.getPreferredSize());
       view = createListView(viewDescriptor, actionHandler, locale);
     }
+    if (view instanceof BasicView) {
+      ((BasicView<E>) view).setDescriptor(propertyViewDescriptor);
+    }
     return view;
   }
 
