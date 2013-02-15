@@ -21,6 +21,7 @@ package org.jspresso.framework.util.uid;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 /**
@@ -37,7 +38,7 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
   private int               cachedHashcode;
 
   /**
-   * Constructs a new <code>Bytes</code> instance.
+   * Constructs a new <code>ByteArray</code> instance.
    * 
    * @param bytes
    *          the bytes content.
@@ -45,6 +46,17 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
   public ByteArray(byte[] bytes) {
     this.bytes = bytes;
     cachedHashcode = Hex.encodeHexString(bytes).hashCode();
+  }
+
+  /**
+   * Constructs a new <code>ByteArray</code> instance.
+   * 
+   * @param bytesHex
+   *          the bytes content hexa encoded.
+   * @throws DecoderException
+   */
+  public ByteArray(String bytesHex) throws DecoderException {
+    this(Hex.decodeHex(bytesHex.toCharArray()));
   }
 
   /**
