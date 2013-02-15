@@ -109,7 +109,7 @@ public interface IPropertyChangeCapable {
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
-  public PropertyChangeListener[] getPropertyChangeListeners();
+  PropertyChangeListener[] getPropertyChangeListeners();
 
   /**
    * @param propertyName
@@ -119,7 +119,7 @@ public interface IPropertyChangeCapable {
    *         <code>propertyName</code> is null, an empty array is returned.
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
    */
-  public PropertyChangeListener[] getPropertyChangeListeners(String propertyName);
+  PropertyChangeListener[] getPropertyChangeListeners(String propertyName);
 
   /**
    * Gets wether this property has at least a property change listener attached
