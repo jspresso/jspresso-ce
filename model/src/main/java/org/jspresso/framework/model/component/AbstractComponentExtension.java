@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.hibernate.Hibernate;
+import org.jspresso.framework.util.accessor.bean.BeanAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
@@ -215,6 +216,31 @@ public abstract class AbstractComponentExtension<T extends IComponent>
             }
           }
         });
+
+    // Setup listener for initial collection if it exists
+    Collection<IPropertyChangeCapable> initialChildren;
+    if (sourceBean instanceof IComponent) {
+      initialChildren = (Collection<IPropertyChangeCapable>) ((IComponent) sourceBean)
+          .straightGetProperty(sourceCollectionProperty);
+    } else {
+      try {
+        initialChildren = (Collection<IPropertyChangeCapable>) new BeanAccessorFactory()
+            .createPropertyAccessor(sourceCollectionProperty,
+                sourceBean.getClass()).getValue(sourceBean);
+      } catch (IllegalAccessException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new NestedRuntimeException(ex);
+      }
+    }
+    if (Hibernate.isInitialized(initialChildren)) {
+      for (IPropertyChangeCapable child : initialChildren) {
+        registerNotificationForwarding(child, sourceElementProperty,
+            forwardedProperty);
+      }
+    }
   }
 
   private class ForwardingPropertyChangeListener implements
