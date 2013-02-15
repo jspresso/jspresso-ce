@@ -85,6 +85,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -264,8 +266,8 @@ public abstract class AbstractComponentInvocationHandler implements
         Class<IComponentExtension<IComponent>> extensionClass = (Class<IComponentExtension<IComponent>>) propertyDescriptor
             .getDelegateClass();
         if (extensionClass != null) {
-          return accessComputedProperty(propertyDescriptor, accessorInfo, extensionClass, proxy,
-              method, args);
+          return accessComputedProperty(propertyDescriptor, accessorInfo,
+              extensionClass, proxy, method, args);
         } else if (!propertyDescriptor.isComputed()) {
           if (accessorInfo.isModifier()) {
             if (modifierMonitors != null
@@ -487,10 +489,16 @@ public abstract class AbstractComponentInvocationHandler implements
             propertyAsList.set(i, decorated);
           }
           if (referent == null) {
-            LOG.warn(
-                "A null element was detected in [{}] indexed list on {} at index "
-                    + i + ".", propertyName, proxy);
-            LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
+            if (proxy instanceof IEntity) {
+              LOG.warn(
+                  "A null element was detected in indexed list [{}] on {}, id {} at index {}",
+                  new Object[] {
+                      propertyName,
+                      ((IEntity) proxy).getComponentContract().getName(),
+                      ((IEntity) proxy).getId(), Integer.valueOf(i)
+                  });
+              LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
+            }
           }
         }
       } else if (property instanceof Set) {
