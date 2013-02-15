@@ -21,7 +21,11 @@ package org.jspresso.framework.model.component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
+import org.hibernate.Hibernate;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
@@ -109,34 +113,155 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(
       IPropertyChangeCapable sourceBean, String sourceProperty,
-      final String... forwardedProperty) {
+      String... forwardedProperty) {
     sourceBean.addPropertyChangeListener(sourceProperty,
+        new ForwardingPropertyChangeListener(forwardedProperty));
+  }
+
+  /**
+   * Registers notification forwarding from a collection's child property
+   * 
+   * @param sourceBean
+   *          the source bean.
+   * @param sourceCollectionProperty
+   *          the collection property to listen to.
+   * @param sourceElementProperty
+   *          the collection elements property to listen to.
+   * @param forwardedProperty
+   *          the name of the forwarded property.
+   */
+  protected void registerNotificationCollectionForwarding(
+      IPropertyChangeCapable sourceBean, String sourceCollectionProperty,
+      String sourceElementProperty, String forwardedProperty) {
+    registerNotificationCollectionForwarding(sourceBean,
+        sourceCollectionProperty, sourceElementProperty, new String[] {
+          forwardedProperty
+        });
+  }
+
+  /**
+   * Registers notification forwarding from a collection's child property
+   * 
+   * @param sourceBean
+   *          the source bean.
+   * @param sourceCollectionProperty
+   *          the collection property to listen to.
+   * @param sourceElementProperty
+   *          the collection elements property to listen to.
+   * @param forwardedProperty
+   *          the name of the forwarded property.
+   */
+  protected void registerNotificationCollectionForwarding(
+      final IPropertyChangeCapable sourceBean,
+      final String sourceCollectionProperty,
+      final String sourceElementProperty, final String... forwardedProperty) {
+
+    // listen normally to collection changes
+    registerNotificationForwarding(sourceBean, sourceCollectionProperty,
+        forwardedProperty);
+
+    // setup collection listener to attach / detach property change listeners on
+    // elements
+    sourceBean.addPropertyChangeListener(sourceCollectionProperty,
         new PropertyChangeListener() {
 
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {
-              try {
-                for (String prop : forwardedProperty) {
-                  if (getComponent().hasListeners(prop)) {
-                    Object newValue = getComponentFactory()
-                        .getAccessorFactory()
-                        .createPropertyAccessor(prop,
-                            getComponent().getComponentContract())
-                        .getValue(getComponent());
-                    getComponent().firePropertyChange(prop,
-                        IPropertyChangeCapable.UNKNOWN, newValue);
+              // add listeners
+              if (evt.getNewValue() != null
+                  && evt.getNewValue() instanceof Collection<?>
+                  && Hibernate.isInitialized(evt.getNewValue())) {
+                Collection<IPropertyChangeCapable> newChildren = new HashSet<IPropertyChangeCapable>(
+                    (Collection<IPropertyChangeCapable>) evt.getNewValue());
+                if (evt.getOldValue() != null
+                    && evt.getOldValue() instanceof Collection<?>
+                    && Hibernate.isInitialized(evt.getOldValue())) {
+                  newChildren.removeAll((Collection<?>) evt.getOldValue());
+                }
+                for (IPropertyChangeCapable child : newChildren) {
+                  registerNotificationForwarding(child, sourceElementProperty,
+                      forwardedProperty);
+                }
+              }
+              // remove listeners
+              if (evt.getOldValue() != null
+                  && evt.getOldValue() instanceof Collection<?>
+                  && Hibernate.isInitialized(evt.getOldValue())) {
+                Collection<IPropertyChangeCapable> removedChildren = new HashSet<IPropertyChangeCapable>(
+                    (Collection<IPropertyChangeCapable>) evt.getOldValue());
+
+                if (evt.getNewValue() != null
+                    && evt.getNewValue() instanceof Collection<?>
+                    && Hibernate.isInitialized(evt.getNewValue())) {
+                  removedChildren.removeAll((Collection<?>) evt.getNewValue());
+                }
+                for (IPropertyChangeCapable child : removedChildren) {
+                  for (PropertyChangeListener listener : child
+                      .getPropertyChangeListeners(sourceElementProperty)) {
+                    if (listener instanceof AbstractComponentExtension<?>.ForwardingPropertyChangeListener) {
+                      if (Arrays
+                          .equals(
+                              ((AbstractComponentExtension<?>.ForwardingPropertyChangeListener) listener)
+                                  .getForwardedProperties(), forwardedProperty)) {
+                        child.removePropertyChangeListener(
+                            sourceElementProperty, listener);
+                      }
+                    }
                   }
                 }
-              } catch (IllegalAccessException ex) {
-                throw new NestedRuntimeException(ex);
-              } catch (InvocationTargetException ex) {
-                throw new NestedRuntimeException(ex);
-              } catch (NoSuchMethodException ex) {
-                throw new NestedRuntimeException(ex);
               }
             }
           }
         });
+  }
+
+  private class ForwardingPropertyChangeListener implements
+      PropertyChangeListener {
+
+    private String[] forwardedProperties;
+
+    /**
+     * Constructs a new <code>ForwardingPropertyChangeListener</code> instance.
+     * 
+     * @param forwardedProperties
+     */
+    public ForwardingPropertyChangeListener(String[] forwardedProperties) {
+      this.forwardedProperties = forwardedProperties;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      if (getComponentFactory().getAccessorFactory() != null) {
+        try {
+          for (String prop : forwardedProperties) {
+            if (getComponent().hasListeners(prop)) {
+              Object newValue = getComponentFactory()
+                  .getAccessorFactory()
+                  .createPropertyAccessor(prop,
+                      getComponent().getComponentContract())
+                  .getValue(getComponent());
+              getComponent().firePropertyChange(prop,
+                  IPropertyChangeCapable.UNKNOWN, newValue);
+            }
+          }
+        } catch (IllegalAccessException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (NoSuchMethodException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+      }
+    }
+
+    /**
+     * Gets the forwardedProperties.
+     * 
+     * @return the forwardedProperties.
+     */
+    public String[] getForwardedProperties() {
+      return forwardedProperties;
+    }
   }
 }
