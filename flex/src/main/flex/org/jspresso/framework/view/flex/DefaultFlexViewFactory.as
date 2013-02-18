@@ -1559,27 +1559,35 @@ package org.jspresso.framework.view.flex {
         var rightBottom:UIComponent = (splitC.getChildAt(1) as UIComponent);
         if(leftTop && rightBottom) {
           if(remoteSplitContainer.orientation == "VERTICAL") {
+            var topHeight:Number;
+            var bottomHeight:Number;
             if(leftTop.height > 0) {
-              leftTop.percentHeight = leftTop.height;
+              topHeight = leftTop.height;
             } else {
-              leftTop.percentHeight = leftTop.measuredHeight;
+              topHeight = leftTop.measuredHeight;
             }
             if(rightBottom.height > 0) {
-              rightBottom.percentHeight = rightBottom.height;
+              bottomHeight = rightBottom.height;
             } else {
-              rightBottom.percentHeight = rightBottom.measuredHeight;
+              bottomHeight = rightBottom.measuredHeight;
             }
+            leftTop.percentHeight = (topHeight * 100.0) / (topHeight + bottomHeight);
+            rightBottom.percentHeight = (bottomHeight * 100.0) / (topHeight + bottomHeight);
           } else {
+            var leftWidth:Number;
+            var rightWidth:Number;
             if(leftTop.width > 0) {
-              leftTop.percentWidth = leftTop.width;
+              leftWidth = leftTop.width;
             } else {
-              leftTop.percentWidth = leftTop.measuredWidth;
+              leftWidth = leftTop.measuredWidth;
             }
             if(rightBottom.width > 0) {
-              rightBottom.percentWidth = rightBottom.width;
+              rightWidth = rightBottom.width;
             } else {
-              rightBottom.percentWidth = rightBottom.measuredWidth;
+              rightWidth = rightBottom.measuredWidth;
             }
+            leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
+            rightBottom.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
           }
         }
       });
@@ -2170,6 +2178,7 @@ package org.jspresso.framework.view.flex {
           }
         );
       }
+
       table.dataProvider = tableModel;
         
       bindTable(table, remoteTable);
@@ -2202,6 +2211,8 @@ package org.jspresso.framework.view.flex {
         table.addEventListener(DataGridEvent.COLUMN_STRETCH, notifyTableChanged); 
         table.addEventListener(IndexChangedEvent.HEADER_SHIFT, notifyTableChanged); 
       }
+      table.minWidth = 0;
+      table.minHeight = table.headerHeight * 2;
       return table;
     }
     
