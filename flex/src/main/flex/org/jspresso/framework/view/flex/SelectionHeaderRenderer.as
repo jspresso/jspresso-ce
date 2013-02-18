@@ -37,13 +37,17 @@ package org.jspresso.framework.view.flex {
       _listData = value;
       _dataGrid = value.owner as DataGrid;
       BindingUtils.bindSetter(function(selectedItems:Array):void {
-        _cb.selected = (selectedItems.length == (_dataGrid.dataProvider as ListCollectionView).length);
+        var l:Number = 0;
+        if(_dataGrid.dataProvider) {
+          l = (_dataGrid.dataProvider as ListCollectionView).length;
+        }
+        _cb.selected = (selectedItems.length == l);
       }, _dataGrid, "selectedItems", true);
     }
     
     
     private function onCBchange(event:Event):void {
-      if(_cb.selected) {
+      if(_cb.selected && _dataGrid.dataProvider) {
         _dataGrid.selectedItems = (_dataGrid.dataProvider as ListCollectionView).toArray();
       } else {
         _dataGrid.selectedItems = [];
