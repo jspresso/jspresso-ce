@@ -90,6 +90,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -134,7 +135,6 @@ public abstract class AbstractBackendController extends AbstractController
   private TransactionTemplate                              transactionTemplate;
   private ComponentTransferStructure<? extends IComponent> transferStructure;
   private IEntityUnitOfWork                                unitOfWork;
-  private Object                                           unitOfWorkTransaction;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
   private LRUMap                                           moduleConnectors;
@@ -181,9 +181,10 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public void joinTransaction(Object transaction) {
+  public void joinTransaction() {
     if (!isUnitOfWorkActive()) {
-      beginUnitOfWork(transaction);
+      TransactionSynchronizationManager.registerSynchronization(this);
+      beginUnitOfWork();
     }
   }
 
@@ -191,33 +192,18 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public final void beginUnitOfWork(Object transaction) {
+  public final void beginUnitOfWork() {
     if (isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot begin a new unit of work. Another one is already active.");
     }
-    doBeginUnitOfWork(transaction);
-    unitOfWorkTransaction = extractActualTransaction(transaction);
-  }
-
-  /**
-   * Extracts the actual transaction from the passed in transaction object.
-   * 
-   * @param transaction
-   *          the transaction object that is potentially a wrapper.
-   * @return the actual transaction object that will be stored.
-   */
-  protected Object extractActualTransaction(Object transaction) {
-    return transaction;
+    doBeginUnitOfWork();
   }
 
   /**
    * Performs actual UOW begin.
-   * 
-   * @param transaction
-   *          the underlying transaction.
    */
-  protected void doBeginUnitOfWork(Object transaction) {
+  protected void doBeginUnitOfWork() {
     unitOfWork.begin();
   }
 
@@ -292,40 +278,18 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public final void commitUnitOfWork(Object transaction) {
+  public final void commitUnitOfWork() {
     if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot commit a unit of work that has not begun.");
     }
-    if (isUnitOfWorkTransaction(transaction)) {
-      doCommitUnitOfWork(transaction);
-    }
-  }
-
-  /**
-   * Determines if this is the transaction that initiated the current UOW.
-   * 
-   * @param transaction
-   *          the transaction to test.
-   * @return <code>true</code> if the transaction is the UOW one.
-   */
-  protected boolean isUnitOfWorkTransaction(Object transaction) {
-    boolean perform;
-    if (unitOfWorkTransaction == null) {
-      perform = (transaction == null);
-    } else {
-      perform = unitOfWorkTransaction.equals(transaction);
-    }
-    return perform;
+    doCommitUnitOfWork();
   }
 
   /**
    * Performs actual UOW commit.
-   * 
-   * @param transaction
-   *          the underlying transaction.
    */
-  protected void doCommitUnitOfWork(Object transaction) {
+  protected void doCommitUnitOfWork() {
     try {
       committingUow = true;
       if (unitOfWork.getUpdatedEntities() != null) {
@@ -861,23 +825,19 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public final void rollbackUnitOfWork(Object transaction) {
+  public final void rollbackUnitOfWork() {
     if (!isUnitOfWorkActive()) {
       throw new BackendException(
           "Cannot rollback a unit of work that has not begun.");
     }
-    if (isUnitOfWorkTransaction(transaction)) {
-      doRollbackUnitOfWork(transaction);
-    }
+    doRollbackUnitOfWork();
   }
 
   /**
    * Performs actual UOW rollback.
    * 
-   * @param transaction
-   *          the underlying transaction.
    */
-  protected void doRollbackUnitOfWork(Object transaction) {
+  protected void doRollbackUnitOfWork() {
     unitOfWork.rollback();
   }
 
@@ -2417,5 +2377,65 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected IEntityRegistry createEntityRegistry(String name) {
     return new BasicEntityRegistry(name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void suspend() {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void resume() {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void flush() {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void beforeCommit(boolean readOnly) {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void beforeCompletion() {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void afterCommit() {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void afterCompletion(int status) {
+    if (status == STATUS_COMMITTED) {
+      commitUnitOfWork();
+    } else {
+      rollbackUnitOfWork();
+    }
   }
 }

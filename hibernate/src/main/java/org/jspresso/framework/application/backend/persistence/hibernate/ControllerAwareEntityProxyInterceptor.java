@@ -26,10 +26,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
-import org.hibernate.transaction.JTATransaction;
 import org.hibernate.type.Type;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -39,7 +37,6 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
-import org.jspresso.framework.util.reflect.ReflectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,69 +54,6 @@ public class ControllerAwareEntityProxyInterceptor extends
 
   private static final Logger LOG              = LoggerFactory
                                                    .getLogger(ControllerAwareEntityProxyInterceptor.class);
-
-  // Not usefull anymore since the new transaction template takes care of that
-  // in every situation including JTA, when this interceptor is not called.
-  // /**
-  // * Begins the backend controller current unit of work.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public void afterTransactionBegin(Transaction tx) {
-  // getBackendController().joinTransaction();
-  // super.afterTransactionBegin(tx);
-  // }
-
-  /**
-   * Either commits or rollbacks the backend controller current unit of work.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void afterTransactionCompletion(Transaction tx) {
-    IBackendController backendController = getBackendController();
-    if (registerCompletion(tx, backendController)) {
-      if (tx.wasCommitted()) {
-        backendController.commitUnitOfWork(tx);
-      } else {
-        backendController.rollbackUnitOfWork(tx);
-      }
-    }
-    super.afterTransactionCompletion(tx);
-  }
-
-  private synchronized boolean registerCompletion(Transaction tx,
-      IBackendController backendController) {
-    if (tx instanceof JTATransaction) {
-      // This is a hack to check that we are not committing a wrongly enlisted
-      // noTxSession.
-      Object transactionContext = null;
-      try {
-        transactionContext = ReflectHelper.getPrivateFieldValue(
-            JTATransaction.class, "transactionContext", tx);
-      } catch (Exception ex) {
-        LOG.warn(
-            "An unexpected exception occurred when accessing private field transactionContext from "
-                + "JTATransaction.class to avoid double afterTransactionCompletion call",
-            ex);
-      }
-      Object noTxSession = null;
-      try {
-        noTxSession = ReflectHelper.getPrivateFieldValue(
-            HibernateBackendController.class, "noTxSession", backendController);
-      } catch (Exception ex) {
-        LOG.warn(
-            "An unexpected exception occurred when accessing private field noTxSession from "
-                + "HibernateBackendController.class to avoid double afterTransactionCompletion call",
-            ex);
-      }
-      if (noTxSession != null && noTxSession == transactionContext) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   /**
    * Uses the backend controller to retrieve the dirty properties of the entity.

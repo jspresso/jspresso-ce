@@ -40,6 +40,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -51,25 +52,21 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @author Vincent Vandenschrick
  */
 public interface IBackendController extends IController,
-    IEntityLifecycleHandler {
+    IEntityLifecycleHandler, TransactionSynchronization {
 
   /**
    * Begins the current unit of work.
    * 
-   * @param transaction
-   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
    */
-  void beginUnitOfWork(Object transaction);
+  void beginUnitOfWork();
 
   /**
    * Joins the transaction, beginning unit of work if not already begun.
    * 
-   * @param transaction
-   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
    */
-  void joinTransaction(Object transaction);
+  void joinTransaction();
 
   /**
    * Registers an entity (actually a clone of it) and all its graph as taking
@@ -146,11 +143,9 @@ public interface IBackendController extends IController,
   /**
    * Commits the current unit of work.
    * 
-   * @param transaction
-   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#commit()
    */
-  void commitUnitOfWork(Object transaction);
+  void commitUnitOfWork();
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a
@@ -420,11 +415,9 @@ public interface IBackendController extends IController,
   /**
    * Rollbacks the current unit of work.
    * 
-   * @param transaction
-   *          the underlying transaction or null if none.
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#rollback()
    */
-  void rollbackUnitOfWork(Object transaction);
+  void rollbackUnitOfWork();
 
   /**
    * Asks this backend controller to perform any necessary action upon startup.

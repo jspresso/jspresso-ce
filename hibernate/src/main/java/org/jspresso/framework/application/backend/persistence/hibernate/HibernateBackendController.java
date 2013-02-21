@@ -163,7 +163,7 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void doBeginUnitOfWork(Object transaction) {
+  public void doBeginUnitOfWork() {
     // This is to avoid having entities attached to 2 open sessions
     // and to periodically clear the noTxSession cache.
     if (noTxSession != null) {
@@ -171,14 +171,14 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     updatedEntities = new HashSet<IEntity>();
     deletedEntities = new HashSet<IEntity>();
-    super.doBeginUnitOfWork(transaction);
+    super.doBeginUnitOfWork();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void doCommitUnitOfWork(Object transaction) {
+  public void doCommitUnitOfWork() {
     updatedEntities = null;
     deletedEntities = null;
     if (traversedPendingOperations) {
@@ -186,7 +186,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // successful commit.
       clearPendingOperations();
     }
-    super.doCommitUnitOfWork(transaction);
+    super.doCommitUnitOfWork();
   }
 
   /**
@@ -547,11 +547,11 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void doRollbackUnitOfWork(Object transaction) {
+  public void doRollbackUnitOfWork() {
     updatedEntities = null;
     deletedEntities = null;
     try {
-      super.doRollbackUnitOfWork(transaction);
+      super.doRollbackUnitOfWork();
     } finally {
       traversedPendingOperations = false;
     }
@@ -1165,17 +1165,6 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   protected IEntityRegistry createEntityRegistry(String name) {
     return new HibernateEntityRegistry(name);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object extractActualTransaction(Object transaction) {
-    if (transaction == null) {
-      return null;
-    }
-    return getHibernateSession().getTransaction();
   }
 
   /**

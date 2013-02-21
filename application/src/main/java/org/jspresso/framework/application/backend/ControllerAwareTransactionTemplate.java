@@ -21,7 +21,6 @@ package org.jspresso.framework.application.backend;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -77,12 +76,7 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
       @Override
       public T doInTransaction(TransactionStatus status) {
-        Object transaction = null;
-        if (status instanceof DefaultTransactionStatus) {
-          transaction = ((DefaultTransactionStatus) status).getTransaction();
-        }
-        BackendControllerHolder.getCurrentBackendController().joinTransaction(
-            transaction);
+        BackendControllerHolder.getCurrentBackendController().joinTransaction();
         return action.doInTransaction(status);
       }
     };
