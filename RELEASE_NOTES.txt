@@ -1,5 +1,9 @@
 3.5.16
 ======
+- We have leveraged Spring session synchronization instead of Hibernate's one. This is now much more accurate and flexible
+  and we don't need to keep track anymore of the underlying transaction. So the API has been reverted for all UOW methods
+  that don't take any parameter anymore. You can safely get rid of them in your use.
+
 - We have completely reviewed the rules about rounding. Every decimal setters are now intercepted and rounded on the fly using
   the maxFractionDigit property which is now garanteed to always return non-null value that defaults to 2.
 
