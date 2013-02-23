@@ -105,7 +105,7 @@ public class EntityGenerator {
         .withArgName(BEAN_FACTORY_SELECTOR)
         .hasArg()
         .withDescription(
-            "use given selector too lookup the bean ref factory context file."
+            "uses given selector too lookup the bean ref factory context file."
                 + " If not set, defaults to classpath*:beanRefFactory.xml .")
         .create(BEAN_FACTORY_SELECTOR));
     options
@@ -114,7 +114,7 @@ public class EntityGenerator {
             .isRequired()
             .hasArg()
             .withDescription(
-                "use given applicationContextKey as registered in the spring BeanFactoryLocator.")
+                "uses given applicationContextKey as registered in the spring BeanFactoryLocator.")
             .create(APPLICATION_CONTEXT_KEY));
     options.addOption(OptionBuilder
         .withArgName(TEMPLATE_RESOURCE_PATH)
@@ -133,10 +133,10 @@ public class EntityGenerator {
         .withDescription("sets the file extension for generated source.")
         .create(FILE_EXTENSION));
     options.addOption(OptionBuilder.withArgName(CLASSNAME_PREFIX).hasArg()
-        .withDescription("appends a prefix to generated class names.")
+        .withDescription("prepends a prefix to generated class names.")
         .create(CLASSNAME_PREFIX));
     options.addOption(OptionBuilder.withArgName(CLASSNAME_SUFFIX).hasArg()
-        .withDescription("appends a sufffix to generated class names.")
+        .withDescription("appends a suffix to generated class names.")
         .create(CLASSNAME_SUFFIX));
     options
         .addOption(OptionBuilder
@@ -144,20 +144,20 @@ public class EntityGenerator {
             .hasArgs()
             .withValueSeparator(',')
             .withDescription(
-                "generate code for the component descriptors declared in the listed packages.")
+                "generates code for the component descriptors declared in the listed packages.")
             .create(INCLUDE_PACKAGES));
     options.addOption(OptionBuilder
         .withArgName(EXCLUDE_PATTERN)
         .hasArgs()
         .withValueSeparator(',')
         .withDescription(
-            "exclude classes whose names match the regular expression.")
+            "excludes classes whose names match the regular expression.")
         .create(EXCLUDE_PATTERN));
     options
         .addOption(OptionBuilder
             .withArgName(GENERATE_ANNOTATIONS)
             .withDescription(
-                "generate java5 annotations (incompatible with XDoclet as of now).")
+                "generates java5 annotations (incompatible with XDoclet as of now).")
             .create(GENERATE_ANNOTATIONS));
     options
         .addOption(OptionBuilder
@@ -165,7 +165,7 @@ public class EntityGenerator {
             .hasArgs()
             .withValueSeparator(',')
             .withDescription(
-                "generate code for the given component descriptor identifiers in the application context.")
+                "generates code for the given component descriptor identifiers in the application context.")
             .create(COMPONENT_IDS));
     CommandLineParser parser = new BasicParser();
     CommandLine cmd = null;
@@ -281,7 +281,7 @@ public class EntityGenerator {
     }
     LOG.debug("Freemarker template initialized");
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
-      LOG.debug("Generating Source code for {}.", componentDescriptor.getName());
+      LOG.info("Generating Source code for {}.", componentDescriptor.getName());
       OutputStream out = null;
       if (outputDir != null) {
         String cDescName = componentDescriptor.getName();
