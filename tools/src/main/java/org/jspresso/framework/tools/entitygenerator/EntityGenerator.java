@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -204,7 +205,8 @@ public class EntityGenerator {
   })
   public void generateComponents() {
     LOG.debug("Loading Spring context {}.", applicationContextKey);
-    ListableBeanFactory appContext = getListableBeanFactory();
+    BeanFactoryReference bfr = getBeanFactoryReference();
+    ListableBeanFactory appContext = (ListableBeanFactory) bfr.getFactory();
     LOG.debug("Spring context {} loaded.", applicationContextKey);
     Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
     if (componentIds == null) {
@@ -281,7 +283,6 @@ public class EntityGenerator {
     }
     LOG.debug("Freemarker template initialized");
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
-      LOG.info("Generating Source code for {}.", componentDescriptor.getName());
       OutputStream out = null;
       if (outputDir != null) {
         String cDescName = componentDescriptor.getName();
@@ -297,6 +298,7 @@ public class EntityGenerator {
           File outFile = new File(outputDir + "/" + cDescName.replace('.', '/')
               + "." + fileExtension);
           if (!outFile.exists()) {
+            LOG.debug("Creating " + outFile.getName());
             if (!outFile.getParentFile().exists()) {
               outFile.getParentFile().mkdirs();
             }
@@ -305,6 +307,14 @@ public class EntityGenerator {
           } else if (componentDescriptor.getLastUpdated() > outFile
               .lastModified()) {
             out = new FileOutputStream(outFile);
+          } else {
+            LOG.debug(
+                "No change detected for {} : {} <= {}",
+                new Object[] {
+                    componentDescriptor.getName(),
+                    new Date(componentDescriptor.getLastUpdated()),
+                    new Date(outFile.lastModified())
+                });
           }
         } catch (IOException ex) {
           ex.printStackTrace();
@@ -314,6 +324,7 @@ public class EntityGenerator {
         out = System.out;
       }
       if (out != null) {
+        LOG.info("Generating source code for {}", componentDescriptor.getName());
         rootContext.put("componentDescriptor", componentDescriptor);
         try {
           template.process(rootContext, new OutputStreamWriter(out));
@@ -328,9 +339,13 @@ public class EntityGenerator {
           ex.printStackTrace();
           return;
         }
+      } else {
+        LOG.debug("Source code for {} is up to date. Skipping generation.",
+            componentDescriptor.getName());
       }
       LOG.debug("Finished generating Source code for {}.",
           componentDescriptor.getName());
+      bfr.release();
     }
   }
 
@@ -444,11 +459,11 @@ public class EntityGenerator {
     this.templateResourcePath = templateResourcePath;
   }
 
-  private ListableBeanFactory getListableBeanFactory() {
+  private BeanFactoryReference getBeanFactoryReference() {
     BeanFactoryLocator bfl = SingletonBeanFactoryLocator
         .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
-    return (ListableBeanFactory) bf.getFactory();
+    return bf;
   }
 
   /**
