@@ -1,5 +1,113 @@
 3.5.16
 ======
+- In order to greatly improve user experience in Eclipse and Jspresso builds speed, we have mavenized SJS and the entity
+  generator so that they can be finely controlled by M2E (Maven Eclipe integration). Existing projects should migrate to
+  these new maven plugins by changing the following (example taken from HRSample, please adapt to your project names) :
+  
+  * delete * :
+  ------------
+    <execution>
+      <id>generate-dsl-application</id>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>execute</goal>
+      </goals>
+      <configuration>
+        <source>${basedir}/src/main/dsl/application.groovy</source>
+        <properties>
+          <srcDir>${basedir}/src/main/dsl</srcDir>
+          <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
+          <modelOutputFileName>dsl-model.xml</modelOutputFileName>
+          <viewOutputFileName>dsl-view.xml</viewOutputFileName>
+          <frontOutputFileName>dsl-frontend.xml</frontOutputFileName>
+          <backOutputFileName>dsl-backend.xml</backOutputFileName>
+        </properties>
+        <classpath>
+          <element>
+            <groupId>org.jspresso.contrib</groupId>
+            <artifactId>jspresso-sjs</artifactId>
+            <version>${sjs.version}</version>
+          </element>
+        </classpath>
+      </configuration>
+    </execution>
+
+  * add * :
+  ---------
+    <plugin>
+      <groupId>org.jspresso.maven</groupId>
+      <artifactId>sjs-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>generate-dsl-application</id>
+          <goals>
+            <goal>compile-sjs</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+    
+  * delete * :
+  ------------
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>exec-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>generate-entities</id>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>java</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <mainClass>org.jspresso.framework.tools.entitygenerator.EntityGenerator</mainClass>
+        <arguments>
+          <argument>-beanFactorySelector</argument>
+          <argument>org/jspresso/hrsample/beanRefFactory.xml</argument>
+          <argument>-applicationContextKey</argument>
+          <argument>hrsample-model-context</argument>
+          <argument>-templateResourcePath</argument>
+          <argument>${generator.templateResourcePath}</argument>
+          <argument>-templateName</argument>
+          <argument>${generator.templateName}</argument>
+          <argument>-outputDir</argument>
+          <argument>${project.build.directory}/generated-sources/entitygenerator</argument>
+          <argument>-includePackages</argument>
+          <argument>org.jspresso.hrsample.model</argument>
+        </arguments>
+      </configuration>
+    </plugin>
+  
+  * add * :
+  ---------
+    <plugin>
+      <groupId>org.jspresso.maven</groupId>
+      <artifactId>entitygenerator-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>generate-entities</id>
+          <goals>
+            <goal>generate-entities</goal>
+          </goals>
+          <configuration>
+            <beanFactorySelector>org/jspresso/hrsample/beanRefFactory.xml</beanFactorySelector>
+            <applicationContextKey>hrsample-model-context</applicationContextKey>
+            <templateResourcePath>${generator.templateResourcePath}</templateResourcePath>
+            <templateName>${generator.templateName}</templateName>
+            <includePackages>
+              <param>org.jspresso.hrsample.model</param>
+            </includePackages>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+  
+- In order to speed up builds in Eclipse, please modify the core/pom.xml by adding preserveLastModified="true" at the end
+  of each replaceregexp instruction. For instance :
+  <replaceregexp byline="true" preserveLastModified="true">
+ 
 - We have leveraged Spring session synchronization instead of Hibernate's one. This is now much more accurate and flexible
   and we don't need to keep track anymore of the underlying transaction. So the API has been reverted for all UOW methods
   that don't take any parameter anymore. You can safely get rid of them in your use.

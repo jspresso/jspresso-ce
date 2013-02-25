@@ -231,7 +231,7 @@
               <goal>run</goal>
             </goals>
             <configuration>
-              <tasks>
+              <target>
                 <property name="xdoclet.dest" value="${symbol_dollar}{project.build.directory}/generated-resources/xdoclet"/>
                 <mkdir dir="${symbol_dollar}{xdoclet.dest}"/>
                  <replaceregexp byline="true" preserveLastModified="true">
@@ -255,14 +255,14 @@
                     <include name="**/*.hbm.xml" />
                   </fileset>
                 </replaceregexp>
-                <replaceregexp byline="false" flags="mg">
+                <replaceregexp byline="false" flags="mg" preserveLastModified="true">
                   <regexp pattern="table=&quot;(.*)&quot;&gt;(\r?\n)(.*)&lt;key column=&quot;ID&quot;/&gt;"/>
                   <substitution expression="table=&quot;\1&quot;&gt;\2\3&lt;key column=&quot;ID&quot; foreign-key=&quot;\1_SUPER_FK&quot;/&gt;"/>
                   <fileset dir="${symbol_dollar}{xdoclet.dest}">
                     <include name="**/*.hbm.xml" />
                   </fileset>
                 </replaceregexp>
-              </tasks>
+              </target>
             </configuration>
           </execution>
         </executions>
