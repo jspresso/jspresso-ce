@@ -270,6 +270,7 @@
     <module>fusioncharts</module>
     <module>app-launch</module>
     <module>app-template</module>
+    <module>maven</module>
     <module>archetype</module>
     <module>documentation</module>
   </modules>

@@ -132,35 +132,43 @@
       </resource>
     </resources>
     <plugins>
+       <plugin>
+        <groupId>org.jspresso.maven</groupId>
+        <artifactId>sjs-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-dsl-application</id>
+            <goals>
+              <goal>compile-sjs</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jspresso.maven</groupId>
+        <artifactId>entitygenerator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-entities</id>
+            <goals>
+              <goal>generate-entities</goal>
+            </goals>
+            <configuration>
+              <beanFactorySelector>${packageInPathFormat}/beanRefFactory.xml</beanFactorySelector>
+              <applicationContextKey>${rootArtifactId}-model-context</applicationContextKey>
+              <templateResourcePath>${symbol_dollar}{generator.templateResourcePath}</templateResourcePath>
+              <templateName>${symbol_dollar}{generator.templateName}</templateName>
+              <includePackages>
+                <param>${package}.model</param>
+              </includePackages>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.gmaven</groupId>
         <artifactId>gmaven-plugin</artifactId>
         <executions>
-          <execution>
-            <id>generate-dsl-application</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <source>${symbol_dollar}{basedir}/src/main/dsl/application.groovy</source>
-              <properties>
-                <srcDir>${symbol_dollar}{basedir}/src/main/dsl</srcDir>
-                <outputDir>${symbol_dollar}{project.build.directory}/generated-resources/dsl</outputDir>
-                <modelOutputFileName>dsl-model.xml</modelOutputFileName>
-                <viewOutputFileName>dsl-view.xml</viewOutputFileName>
-                <frontOutputFileName>dsl-frontend.xml</frontOutputFileName>
-                <backOutputFileName>dsl-backend.xml</backOutputFileName>
-              </properties>
-              <classpath>
-                <element>
-                  <groupId>org.jspresso.contrib</groupId>
-                  <artifactId>jspresso-sjs</artifactId>
-                  <version>${symbol_dollar}{sjs.version}</version>
-                </element>
-              </classpath>
-            </configuration>
-          </execution>
           <execution>
             <id>compile-groovy-classes</id>
             <phase>compile</phase>
@@ -211,36 +219,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-entities</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>java</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <mainClass>org.jspresso.framework.tools.entitygenerator.EntityGenerator</mainClass>
-          <arguments>
-            <argument>-beanFactorySelector</argument>
-            <argument>${packageInPathFormat}/beanRefFactory.xml</argument>
-            <argument>-applicationContextKey</argument>
-            <argument>${rootArtifactId}-model-context</argument>
-            <argument>-templateResourcePath</argument>
-            <argument>${symbol_dollar}{generator.templateResourcePath}</argument>
-            <argument>-templateName</argument>
-            <argument>${symbol_dollar}{generator.templateName}</argument>
-            <argument>-outputDir</argument>
-            <argument>${symbol_dollar}{project.build.directory}/generated-sources/entitygenerator</argument>
-            <argument>-includePackages</argument>
-            <argument>${package}.model</argument>
-          </arguments>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
