@@ -17,6 +17,7 @@ package org.jspresso.maven;
  */
 
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
@@ -131,11 +132,12 @@ public class SjsMojo extends AbstractMojo {
     });
     Binding binding = new Binding();
     binding.setVariable("project", project);
+    binding.setVariable("fail", new FailClosure());
     gse.run(applicationFileName, binding);
   }
 
   private boolean isChangeDetected() {
-    if (!outputDir.exists()) {
+    if (!outputDir.exists() || outputDir.list().length == 0) {
       return true;
     }
     long outputLastModified = latestModified(outputDir,
@@ -177,5 +179,48 @@ public class SjsMojo extends AbstractMojo {
       }
     }
     return false;
+  }
+
+  //
+  // FailClosure
+  //
+  private class FailClosure extends Closure<Object> {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Constructs a new <code>FailClosure</code> instance.
+     */
+    public FailClosure() {
+      super(SjsMojo.this);
+    }
+
+    @Override
+    public Object call(Object... args) {
+      if (args == null || args.length == 0) {
+        throwRuntimeException(new MojoExecutionException("Failed"));
+      } else if (args.length == 1) {
+        if (args[0] instanceof Throwable) {
+          Throwable cause = (Throwable) args[0];
+          throwRuntimeException(new MojoExecutionException(cause.getMessage(),
+              cause));
+        } else {
+          throwRuntimeException(new MojoExecutionException(
+              String.valueOf(args[0])));
+        }
+      } else if (args.length == 2) {
+        if (args[1] instanceof Throwable) {
+          throwRuntimeException(new MojoExecutionException(
+              String.valueOf(args[0]), (Throwable) args[1]));
+        } else {
+          throw new Error(
+              "Invalid arguments to fail(Object, Throwable), second argument must be a Throwable");
+        }
+      } else {
+        throw new Error(
+            "Too many arguments for fail(), expected one of: fail(), fail(Object) or fail(Object, Throwable)");
+      }
+      return null;
+    }
   }
 }

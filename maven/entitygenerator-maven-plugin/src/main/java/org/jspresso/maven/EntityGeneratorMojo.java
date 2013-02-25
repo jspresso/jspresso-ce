@@ -49,7 +49,7 @@ public class EntityGeneratorMojo extends AbstractMojo {
    * The source directory containing dsl files needed for change detection.
    */
   @Parameter(required = false)
-  private File[]   watchedSources;
+  private File[]   sourceDirs;
 
   /**
    * Uses given selector too lookup the bean ref factory context file. If not
@@ -134,10 +134,10 @@ public class EntityGeneratorMojo extends AbstractMojo {
    */
   @Override
   public void execute() throws MojoExecutionException {
-    if (watchedSources == null) {
-      watchedSources = new File[] {
-          new File(project.getBasedir(), "src/main/dsl"),
-          new File(project.getBasedir(), "src/main/resources")
+    if (sourceDirs == null) {
+      sourceDirs = new File[] {
+          new File(project.getBasedir(), "src/main/resources"),
+          new File(project.getBasedir(), "target/generated-resources/dsl"),
       };
     }
     // bind slf4j to maven log
@@ -169,15 +169,14 @@ public class EntityGeneratorMojo extends AbstractMojo {
   }
 
   private boolean isChangeDetected() {
-    if (!outputDir.exists()) {
+    if (!outputDir.exists() || outputDir.list().length == 0) {
       return true;
     }
     long outputLastModified = latestModified(outputDir,
         outputDir.lastModified());
-    for (File watchedSource : watchedSources) {
-      getLog()
-          .info("Scanning for changes : " + watchedSource.getAbsolutePath());
-      if (hasChangedModelDslFile(watchedSource, outputLastModified)) {
+    for (File sourceDir : sourceDirs) {
+      getLog().info("Scanning for changes : " + sourceDir.getAbsolutePath());
+      if (hasChangedModelDslFile(sourceDir, outputLastModified)) {
         return true;
       }
     }
@@ -222,15 +221,21 @@ public class EntityGeneratorMojo extends AbstractMojo {
     try {
       realm = world.newRealm("maven.plugin." + getClass().getSimpleName(),
           Thread.currentThread().getContextClassLoader());
+      for (File sourceDir : sourceDirs) {
+        realm.addConstituent(sourceDir.toURI().toURL());
+        getLog().debug(
+            "Adding element to plugin classpath " + sourceDir.getPath());
+      }
       List<String> compileClasspathElements = project
           .getCompileClasspathElements();
       for (String element : compileClasspathElements) {
-        File elementFile = new File(element);
-        getLog().debug(
-            "Adding element to plugin classpath " + elementFile.getPath());
-        URL url = new URL("file:///" + elementFile.getPath()
-            + (elementFile.isDirectory() ? "/" : ""));
-        realm.addConstituent(url);
+        if (!element.equals(project.getBuild().getOutputDirectory())) {
+          File elementFile = new File(element);
+          getLog().debug(
+              "Adding element to plugin classpath " + elementFile.getPath());
+          URL url = elementFile.toURI().toURL();
+          realm.addConstituent(url);
+        }
       }
     } catch (Exception ex) {
       throw new MojoExecutionException(ex.toString(), ex);
