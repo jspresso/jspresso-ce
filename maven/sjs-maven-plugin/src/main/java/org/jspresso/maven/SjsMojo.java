@@ -80,13 +80,13 @@ public class SjsMojo extends AbstractMojo {
   /**
    * The target file name for the backend Spring beans.
    */
-  @Parameter(defaultValue = "dsl-back.xml", required = true)
+  @Parameter(defaultValue = "dsl-backend.xml", required = true)
   private String backOutputFileName;
 
   /**
    * The target file name for the frontend Spring beans.
    */
-  @Parameter(defaultValue = "dsl-front.xml", required = true)
+  @Parameter(defaultValue = "dsl-frontend.xml", required = true)
   private String frontOutputFileName;
 
   /**
