@@ -234,21 +234,21 @@
               <tasks>
                 <property name="xdoclet.dest" value="${symbol_dollar}{project.build.directory}/generated-resources/xdoclet"/>
                 <mkdir dir="${symbol_dollar}{xdoclet.dest}"/>
-                 <replaceregexp byline="true">
+                 <replaceregexp byline="true" preserveLastModified="true">
                   <regexp pattern="hibernate\.sourceforge\.net" />
                   <substitution expression="www.hibernate.org/dtd" />
                   <fileset dir="${xdoclet.dest}">
                     <include name="**/*.hbm.xml" />
                   </fileset>
                 </replaceregexp>
-                <replaceregexp byline="true">
+                <replaceregexp byline="true" preserveLastModified="true">
                   <regexp pattern="&lt;component name=&quot;(.*)&quot;&gt;$" />
                   <substitution expression="&lt;component name=&quot;\1&quot;&gt;&lt;tuplizer entity-mode=&quot;pojo&quot; class=&quot;org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&quot; /&gt;" />
                   <fileset dir="${symbol_dollar}{xdoclet.dest}">
                     <include name="**/*.hbm.xml" />
                   </fileset>
                 </replaceregexp>
-                <replaceregexp byline="true">
+                <replaceregexp byline="true" preserveLastModified="true">
                   <regexp pattern="&lt;composite-element class=&quot;(.*)&quot;&gt;$" />
                   <substitution expression="&lt;composite-element class=&quot;\1&quot;&gt;&lt;tuplizer entity-mode=&quot;pojo&quot; class=&quot;org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&quot; /&gt;" />
                   <fileset dir="${symbol_dollar}{xdoclet.dest}">
