@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Properties;
 
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -115,7 +116,9 @@ public class SjsMojo extends AbstractMojo {
     } else {
       getLog().info("No change detected. Skipping generation.");
     }
-    project.addCompileSourceRoot(outputDir.getPath());
+    Resource outputResource = new Resource();
+    outputResource.setDirectory(outputDir.getPath());
+    project.addResource(outputResource);
   }
 
   private void runSjsCompilation() throws IOException, ResourceException,
