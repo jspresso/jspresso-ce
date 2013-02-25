@@ -6,6 +6,7 @@
     <groupId>org.jspresso.maven</groupId>
     <artifactId>jspresso-maven</artifactId>
     <version>3.5-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>entitygenerator-maven-plugin</artifactId>
