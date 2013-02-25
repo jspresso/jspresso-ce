@@ -897,7 +897,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
-    if (!(entityFactory instanceof ControllerAwareProxyEntityFactory)) {
+    if (entityFactory != null && !(entityFactory instanceof ControllerAwareProxyEntityFactory)) {
       throw new IllegalArgumentException("entityFactory must be a "
           + ControllerAwareProxyEntityFactory.class.getSimpleName());
     }
@@ -935,7 +935,7 @@ public abstract class AbstractBackendController extends AbstractController
       throw new IllegalArgumentException(
           "Spring transaction template can only be configured once.");
     }
-    if (!(transactionTemplate instanceof ControllerAwareTransactionTemplate)) {
+    if (transactionTemplate != null && !(transactionTemplate instanceof ControllerAwareTransactionTemplate)) {
       throw new IllegalArgumentException(
           "You have configured a transaction template that is not a controller "
               + "aware transaction template. This is not legal since this prevents "
