@@ -103,10 +103,13 @@
         </execution>
       </executions>
     </plugin>
+    
   
 - In order to speed up builds in Eclipse, please modify the core/pom.xml by adding preserveLastModified="true" at the end
   of each replaceregexp instruction. For instance :
-  <replaceregexp byline="true" preserveLastModified="true">
+    <replaceregexp byline="true" preserveLastModified="true">
+  At the end of the antrun tasks, add :
+    <delete dir="${project.build.directory}/antrun" />
  
 - We have leveraged Spring session synchronization instead of Hibernate's one. This is now much more accurate and flexible
   and we don't need to keep track anymore of the underlying transaction. So the API has been reverted for all UOW methods

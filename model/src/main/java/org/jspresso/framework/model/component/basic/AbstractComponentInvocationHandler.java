@@ -91,6 +91,10 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -1379,9 +1383,23 @@ public abstract class AbstractComponentInvocationHandler implements
       // Important to check for not null values
       // since the checking has been delayed until persistence.
       checkMandatoryProperties(proxy);
-
+    } else if (ILifecycleCapable.ON_DELETE_METHOD_NAME.equals(methodName)) {
+      // Performs any necessary operation on internal state to mark the proxy
+      // deleted and thus unuseable.
+      markDeleted(proxy);
     }
     return interceptorResults;
+  }
+
+  /**
+   * Performs any necessary operation on internal state to mark the proxy
+   * deleted and thus unuseable.
+   * 
+   * @param proxy
+   *          the proxy.
+   */
+  protected void markDeleted(Object proxy) {
+    // NO-OP.
   }
 
   private void removeFromProperty(Object proxy,

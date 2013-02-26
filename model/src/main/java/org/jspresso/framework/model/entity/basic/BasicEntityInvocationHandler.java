@@ -89,7 +89,9 @@ public class BasicEntityInvocationHandler extends
       throws Throwable {
     String methodName = method.getName();
     if ("isPersistent".equals(methodName)) {
-      return Boolean.valueOf(((IEntity) proxy).getVersion() != null);
+      Integer version = ((IEntity) proxy).getVersion();
+      return Boolean.valueOf(version != null
+          && !IEntity.DELETED_VERSION.equals(version));
     }
     return super.invoke(proxy, method, args);
   }
@@ -169,5 +171,15 @@ public class BasicEntityInvocationHandler extends
 
   private Map<String, Object> createPropertyMap() {
     return new HashMap<String, Object>();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void markDeleted(Object proxy) {
+    ((IEntity) proxy).straightSetProperty(IEntity.VERSION,
+        IEntity.DELETED_VERSION);
+    super.markDeleted(proxy);
   }
 }

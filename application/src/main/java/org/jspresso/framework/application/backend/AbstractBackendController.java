@@ -762,7 +762,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (isUnitOfWorkActive()) {
       boolean isDirty = isDirty(flushedEntity);
       unitOfWork.clearDirtyState(flushedEntity);
-      if (isDirty) {
+      if (isDirty || isEntityRegisteredForDeletion(flushedEntity)) {
         unitOfWork.addUpdatedEntity(flushedEntity);
       }
     }

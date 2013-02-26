@@ -35,17 +35,22 @@ public interface IEntity extends IComponent {
   /**
    * constant for identifier property <code>ID</code>.
    */
-  String ID         = "id";
+  String  ID              = "id";
 
   /**
    * constant for version property <code>VERSION</code>.
    */
-  String VERSION    = "version";
+  String  VERSION         = "version";
+
+  /**
+   * <code>DELETED_VERSION</code> is a magic constant for deleted entities.
+   */
+  Integer DELETED_VERSION = Integer.valueOf(-Integer.MAX_VALUE);
 
   /**
    * constant for version property <code>PERSISTENT</code>.
    */
-  String PERSISTENT = "persistent";
+  String  PERSISTENT      = "persistent";
 
   /**
    * It is important to declare here so that ORM (hibernate for instance)

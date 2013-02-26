@@ -179,6 +179,10 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void doCommitUnitOfWork() {
+    for (IEntity deletedEntity : deletedEntities) {
+      // Notifies the session of deleted entities.
+      recordAsSynchronized(deletedEntity);
+    }
     updatedEntities = null;
     deletedEntities = null;
     if (traversedPendingOperations) {
