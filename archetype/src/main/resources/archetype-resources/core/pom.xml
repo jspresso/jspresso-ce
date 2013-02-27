@@ -114,25 +114,8 @@
     </profile>
   </profiles>
   <build>
-    <resources>
-      <resource>
-        <directory>${symbol_dollar}{basedir}/src/main/dsl</directory>
-      </resource>
-      <resource>
-        <directory>${symbol_dollar}{basedir}/src/main/resources</directory>
-      </resource>
-      <resource>
-        <directory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</directory>
-      </resource>
-      <resource>
-        <directory>${symbol_dollar}{project.build.directory}/generated-resources/xdoclet</directory>
-      </resource>
-      <resource>
-        <directory>${symbol_dollar}{project.build.directory}/generated-resources/dsl</directory>
-      </resource>
-    </resources>
     <plugins>
-       <plugin>
+      <plugin>
         <groupId>org.jspresso.maven</groupId>
         <artifactId>sjs-maven-plugin</artifactId>
         <executions>
@@ -279,7 +262,6 @@
             </goals>
             <configuration>
               <sources>
-                <source>${symbol_dollar}{project.build.directory}/generated-sources/entitygenerator</source>
                 <source>${basedir}/src/main/groovy</source>
               </sources>
             </configuration>
