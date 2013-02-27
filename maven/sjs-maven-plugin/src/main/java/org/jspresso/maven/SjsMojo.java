@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.model.Resource;
@@ -34,13 +35,16 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.classworlds.ClassRealm;
+import org.codehaus.classworlds.ClassWorld;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Goal which performs SJS compilation for a Jspresso project.
  */
-@Mojo(name = "compile-sjs", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "compile-sjs", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class SjsMojo extends AbstractMojo {
 
   /**
@@ -102,6 +106,7 @@ public class SjsMojo extends AbstractMojo {
     StaticLoggerBinder.getSingleton().setLog(getLog());
     if (isChangeDetected()) {
       try {
+        setupPluginClasspath();
         runSjsCompilation();
       } catch (IOException ex) {
         new MojoExecutionException(
@@ -182,6 +187,29 @@ public class SjsMojo extends AbstractMojo {
       }
     }
     return false;
+  }
+
+  private void setupPluginClasspath() throws MojoExecutionException {
+    ClassWorld world = new ClassWorld();
+    ClassRealm realm;
+    try {
+      realm = world.newRealm("maven.plugin." + getClass().getSimpleName(),
+          Thread.currentThread().getContextClassLoader());
+      List<String> compileClasspathElements = project
+          .getCompileClasspathElements();
+      for (String element : compileClasspathElements) {
+        if (!element.equals(project.getBuild().getOutputDirectory())) {
+          File elementFile = new File(element);
+          getLog().debug(
+              "Adding element to plugin classpath " + elementFile.getPath());
+          URL url = elementFile.toURI().toURL();
+          realm.addConstituent(url);
+        }
+      }
+    } catch (Exception ex) {
+      throw new MojoExecutionException(ex.toString(), ex);
+    }
+    Thread.currentThread().setContextClassLoader(realm.getClassLoader());
   }
 
   //
