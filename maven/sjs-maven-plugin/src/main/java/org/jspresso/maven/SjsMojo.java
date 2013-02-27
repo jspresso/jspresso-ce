@@ -25,10 +25,12 @@ import groovy.util.ScriptException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -37,8 +39,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.classworlds.ClassRealm;
-import org.codehaus.classworlds.ClassWorld;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**
@@ -106,7 +106,6 @@ public class SjsMojo extends AbstractMojo {
     StaticLoggerBinder.getSingleton().setLog(getLog());
     if (isChangeDetected()) {
       try {
-        setupPluginClasspath();
         runSjsCompilation();
       } catch (IOException ex) {
         new MojoExecutionException(
@@ -115,6 +114,9 @@ public class SjsMojo extends AbstractMojo {
         new MojoExecutionException(
             "An unexpected exception occured when running SJS compilation.", ex);
       } catch (ScriptException ex) {
+        new MojoExecutionException(
+            "An unexpected exception occured when running SJS compilation.", ex);
+      } catch (DependencyResolutionRequiredException ex) {
         new MojoExecutionException(
             "An unexpected exception occured when running SJS compilation.", ex);
       }
@@ -127,7 +129,7 @@ public class SjsMojo extends AbstractMojo {
   }
 
   private void runSjsCompilation() throws IOException, ResourceException,
-      ScriptException {
+      ScriptException, DependencyResolutionRequiredException {
     Properties projectProperties = project.getProperties();
     projectProperties.put("srcDir", srcDir.getAbsolutePath());
     projectProperties.put("outputDir", outputDir.getAbsolutePath());
@@ -135,9 +137,23 @@ public class SjsMojo extends AbstractMojo {
     projectProperties.put("viewOutputFileName", viewOutputFileName);
     projectProperties.put("backOutputFileName", backOutputFileName);
     projectProperties.put("frontOutputFileName", frontOutputFileName);
-    GroovyScriptEngine gse = new GroovyScriptEngine(new URL[] {
-      srcDir.toURI().toURL()
-    });
+
+    List<URL> classpath;
+    classpath = new ArrayList<URL>();
+    classpath.add(srcDir.toURI().toURL());
+    List<String> compileClasspathElements = project
+        .getCompileClasspathElements();
+    for (String element : compileClasspathElements) {
+      if (!element.equals(project.getBuild().getOutputDirectory())) {
+        File elementFile = new File(element);
+        getLog().debug(
+            "Adding element to plugin classpath " + elementFile.getPath());
+        URL url = elementFile.toURI().toURL();
+        classpath.add(url);
+      }
+    }
+    GroovyScriptEngine gse = new GroovyScriptEngine(
+        classpath.toArray(new URL[0]));
     Binding binding = new Binding();
     binding.setVariable("project", project);
     binding.setVariable("fail", new FailClosure());
@@ -187,29 +203,6 @@ public class SjsMojo extends AbstractMojo {
       }
     }
     return false;
-  }
-
-  private void setupPluginClasspath() throws MojoExecutionException {
-    ClassWorld world = new ClassWorld();
-    ClassRealm realm;
-    try {
-      realm = world.newRealm("maven.plugin." + getClass().getSimpleName(),
-          Thread.currentThread().getContextClassLoader());
-      List<String> compileClasspathElements = project
-          .getCompileClasspathElements();
-      for (String element : compileClasspathElements) {
-        if (!element.equals(project.getBuild().getOutputDirectory())) {
-          File elementFile = new File(element);
-          getLog().debug(
-              "Adding element to plugin classpath " + elementFile.getPath());
-          URL url = elementFile.toURI().toURL();
-          realm.addConstituent(url);
-        }
-      }
-    } catch (Exception ex) {
-      throw new MojoExecutionException(ex.toString(), ex);
-    }
-    Thread.currentThread().setContextClassLoader(realm.getClassLoader());
   }
 
   //
