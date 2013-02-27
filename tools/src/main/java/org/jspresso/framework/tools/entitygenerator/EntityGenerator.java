@@ -45,10 +45,10 @@ import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.freemarker.InstanceOf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
+import org.springframework.context.ApplicationContext;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
@@ -206,145 +206,148 @@ public class EntityGenerator {
   public void generateComponents() {
     LOG.debug("Loading Spring context {}.", applicationContextKey);
     BeanFactoryReference bfr = getBeanFactoryReference();
-    ListableBeanFactory appContext = (ListableBeanFactory) bfr.getFactory();
-    LOG.debug("Spring context {} loaded.", applicationContextKey);
-    Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
-    if (componentIds == null) {
-      LOG.debug("Retrieving components from Spring context.");
-      Map<String, IComponentDescriptor> allComponents = appContext
-          .getBeansOfType(IComponentDescriptor.class);
-      LOG.debug("{} components retrieved.",
-          Integer.valueOf(allComponents.size()));
-      LOG.debug("Filtering components to generate.");
-      for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
-          .entrySet()) {
-        String className = componentEntry.getValue().getName();
-        if (className != null) {
-          boolean include = false;
-          if (includePackages != null) {
-            for (String pkg : includePackages) {
-              if (className.startsWith(pkg)) {
-                include = true;
-              }
-            }
-          } else {
-            include = true;
-          }
-          if (include) {
-            if (excludePatterns != null) {
-              for (String excludePattern : excludePatterns) {
-                if (include
-                    && Pattern.matches(excludePattern, componentEntry
-                        .getValue().getName())) {
-                  include = false;
+    try {
+      ApplicationContext appContext = (ApplicationContext) bfr.getFactory();
+      LOG.debug("Spring context {} loaded.", applicationContextKey);
+      Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
+      if (componentIds == null) {
+        LOG.debug("Retrieving components from Spring context.");
+        Map<String, IComponentDescriptor> allComponents = appContext
+            .getBeansOfType(IComponentDescriptor.class);
+        LOG.debug("{} components retrieved.",
+            Integer.valueOf(allComponents.size()));
+        LOG.debug("Filtering components to generate.");
+        for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
+            .entrySet()) {
+          String className = componentEntry.getValue().getName();
+          if (className != null) {
+            boolean include = false;
+            if (includePackages != null) {
+              for (String pkg : includePackages) {
+                if (className.startsWith(pkg)) {
+                  include = true;
                 }
               }
+            } else {
+              include = true;
             }
             if (include) {
-              componentDescriptors.add(componentEntry.getValue());
+              if (excludePatterns != null) {
+                for (String excludePattern : excludePatterns) {
+                  if (include
+                      && Pattern.matches(excludePattern, componentEntry
+                          .getValue().getName())) {
+                    include = false;
+                  }
+                }
+              }
+              if (include) {
+                componentDescriptors.add(componentEntry.getValue());
+              }
             }
           }
         }
+      } else {
+        for (String componentId : componentIds) {
+          componentDescriptors.add((IComponentDescriptor<?>) appContext
+              .getBean(componentId));
+        }
       }
-    } else {
-      for (String componentId : componentIds) {
-        componentDescriptors.add((IComponentDescriptor<?>) appContext
-            .getBean(componentId));
+      LOG.debug("{} components filtered.",
+          Integer.valueOf(componentDescriptors.size()));
+      LOG.debug("Initializing Freemarker template");
+      Configuration cfg = new Configuration();
+      cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
+      BeansWrapper wrapper = new DefaultObjectWrapper();
+      cfg.setObjectWrapper(new DefaultObjectWrapper());
+      Template template = null;
+      try {
+        template = cfg.getTemplate(templateName);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        return;
       }
-    }
-    LOG.debug("{} components filtered.",
-        Integer.valueOf(componentDescriptors.size()));
-    LOG.debug("Initializing Freemarker template");
-    Configuration cfg = new Configuration();
-    cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
-    BeansWrapper wrapper = new DefaultObjectWrapper();
-    cfg.setObjectWrapper(new DefaultObjectWrapper());
-    Template template = null;
-    try {
-      template = cfg.getTemplate(templateName);
-    } catch (IOException ex) {
-      ex.printStackTrace();
-      return;
-    }
-    Map<String, Object> rootContext = new HashMap<String, Object>();
+      Map<String, Object> rootContext = new HashMap<String, Object>();
 
-    rootContext.put("generateSQLName", new GenerateSqlName());
-    rootContext.put("instanceof", new InstanceOf(wrapper));
-    rootContext.put("compareStrings", new CompareStrings(wrapper));
-    rootContext.put("compactString", new CompactString());
-    rootContext
-        .put("generateAnnotations", Boolean.valueOf(generateAnnotations));
-    rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
-    if (classnamePrefix == null) {
-      classnamePrefix = "";
-    }
-    if (classnameSuffix == null) {
-      classnameSuffix = "";
-    }
-    LOG.debug("Freemarker template initialized");
-    for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
-      OutputStream out = null;
-      if (outputDir != null) {
-        String cDescName = componentDescriptor.getName();
-        int lastDotIndex = cDescName.lastIndexOf('.');
-        if (lastDotIndex >= 0) {
-          cDescName = cDescName.substring(0, lastDotIndex + 1)
-              + classnamePrefix + cDescName.substring(lastDotIndex + 1);
-        } else {
-          cDescName = classnamePrefix + cDescName;
-        }
-        cDescName = cDescName + classnameSuffix;
-        try {
-          File outFile = new File(outputDir + "/" + cDescName.replace('.', '/')
-              + "." + fileExtension);
-          if (!outFile.exists()) {
-            LOG.debug("Creating " + outFile.getName());
-            if (!outFile.getParentFile().exists()) {
-              outFile.getParentFile().mkdirs();
-            }
-            outFile.createNewFile();
-            out = new FileOutputStream(outFile);
-          } else if (componentDescriptor.getLastUpdated() > outFile
-              .lastModified()) {
-            out = new FileOutputStream(outFile);
-          } else {
-            LOG.debug(
-                "No change detected for {} : {} <= {}",
-                new Object[] {
-                    componentDescriptor.getName(),
-                    new Date(componentDescriptor.getLastUpdated()),
-                    new Date(outFile.lastModified())
-                });
-          }
-        } catch (IOException ex) {
-          ex.printStackTrace();
-          return;
-        }
-      } else {
-        out = System.out;
+      rootContext.put("generateSQLName", new GenerateSqlName());
+      rootContext.put("instanceof", new InstanceOf(wrapper));
+      rootContext.put("compareStrings", new CompareStrings(wrapper));
+      rootContext.put("compactString", new CompactString());
+      rootContext.put("generateAnnotations",
+          Boolean.valueOf(generateAnnotations));
+      rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
+      if (classnamePrefix == null) {
+        classnamePrefix = "";
       }
-      if (out != null) {
-        LOG.info("Generating source code for {}", componentDescriptor.getName());
-        rootContext.put("componentDescriptor", componentDescriptor);
-        try {
-          template.process(rootContext, new OutputStreamWriter(out));
-          out.flush();
-          if (out != System.out) {
-            out.close();
+      if (classnameSuffix == null) {
+        classnameSuffix = "";
+      }
+      LOG.debug("Freemarker template initialized");
+      for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
+        OutputStream out = null;
+        if (outputDir != null) {
+          String cDescName = componentDescriptor.getName();
+          int lastDotIndex = cDescName.lastIndexOf('.');
+          if (lastDotIndex >= 0) {
+            cDescName = cDescName.substring(0, lastDotIndex + 1)
+                + classnamePrefix + cDescName.substring(lastDotIndex + 1);
+          } else {
+            cDescName = classnamePrefix + cDescName;
           }
-        } catch (TemplateException ex) {
-          ex.printStackTrace();
-          return;
-        } catch (IOException ex) {
-          ex.printStackTrace();
-          return;
+          cDescName = cDescName + classnameSuffix;
+          try {
+            File outFile = new File(outputDir + "/"
+                + cDescName.replace('.', '/') + "." + fileExtension);
+            if (!outFile.exists()) {
+              LOG.debug("Creating " + outFile.getName());
+              if (!outFile.getParentFile().exists()) {
+                outFile.getParentFile().mkdirs();
+              }
+              outFile.createNewFile();
+              out = new FileOutputStream(outFile);
+            } else if (componentDescriptor.getLastUpdated() > outFile
+                .lastModified()) {
+              out = new FileOutputStream(outFile);
+            } else {
+              LOG.debug("No change detected for {} : {} <= {}",
+                  new Object[] {
+                      componentDescriptor.getName(),
+                      new Date(componentDescriptor.getLastUpdated()),
+                      new Date(outFile.lastModified())
+                  });
+            }
+          } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+          }
+        } else {
+          out = System.out;
         }
-      } else {
-        LOG.debug("Source code for {} is up to date. Skipping generation.",
+        if (out != null) {
+          LOG.info("Generating source code for {}",
+              componentDescriptor.getName());
+          rootContext.put("componentDescriptor", componentDescriptor);
+          try {
+            template.process(rootContext, new OutputStreamWriter(out));
+            out.flush();
+            if (out != System.out) {
+              out.close();
+            }
+          } catch (TemplateException ex) {
+            ex.printStackTrace();
+            return;
+          } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+          }
+        } else {
+          LOG.debug("Source code for {} is up to date. Skipping generation.",
+              componentDescriptor.getName());
+        }
+        LOG.debug("Finished generating Source code for {}.",
             componentDescriptor.getName());
       }
-      LOG.debug("Finished generating Source code for {}.",
-          componentDescriptor.getName());
+    } finally {
       bfr.release();
     }
   }
