@@ -5,7 +5,8 @@
 
 - In order to greatly improve user experience in Eclipse and Jspresso builds speed, we have mavenized SJS and the entity
   generator so that they can be finely controlled by M2E (Maven Eclipe integration). Existing projects should migrate to
-  these new maven plugins by changing the following (example taken from HRSample, please adapt to your project names) :
+  these new maven plugins by changing the following in core/pom.xml (example taken from HRSample, please adapt to your
+  project names) :
   
   * delete * :
   ------------
@@ -108,11 +109,12 @@
     </plugin>
     
   
-- In order to speed up builds in Eclipse, please modify the core/pom.xml by adding preserveLastModified="true" at the end
+- In order to speed up builds in Eclipse, please modify all project pom.xml by adding preserveLastModified="true" at the end
   of each replaceregexp instruction. For instance :
     <replaceregexp byline="true" preserveLastModified="true">
   At the end of the antrun tasks, add :
     <delete dir="${project.build.directory}/antrun" />
+  Replace each <tasks>...</tasks> by <target>...</target>
  
 - We have leveraged Spring session synchronization instead of Hibernate's one. This is now much more accurate and flexible
   and we don't need to keep track anymore of the underlying transaction. So the API has been reverted for all UOW methods

@@ -119,6 +119,7 @@
                     <delete dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" />
                   </then>
                 </if>
+                <delete dir="${project.build.directory}/antrun" />
               </target>
             </configuration>
             <goals>

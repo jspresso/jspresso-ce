@@ -245,6 +245,7 @@
                     <include name="**/*.hbm.xml" />
                   </fileset>
                 </replaceregexp>
+                <delete dir="${project.build.directory}/antrun" />
               </target>
             </configuration>
           </execution>

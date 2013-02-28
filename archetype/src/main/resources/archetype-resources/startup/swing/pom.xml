@@ -111,9 +111,10 @@
             <id>dist-conf</id>
             <phase>package</phase>
             <configuration>
-              <tasks>
+              <target>
                 <copy todir="${symbol_dollar}{project.build.directory}/dist/conf" file="${symbol_dollar}{basedir}/../../conf/jaas.config"/>
-              </tasks>
+                <delete dir="${project.build.directory}/antrun" />
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
