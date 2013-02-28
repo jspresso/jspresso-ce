@@ -1,5 +1,9 @@
 3.5.16
 ======
+- Be sure to install "Jspresso Developer Studio M2E Configurator Feature" along with latest JDS from the Jspresso update-site.
+  As of this writing, it is only available from the Jspresso SNAPSHOT Eclipse update site, i.e. :
+  http://www.jspresso.org/external/updates-snapshot/e37/sjsplug/
+
 - Log4j dependencies have been removed from core Jspresso artifacts to ensure that only SLF4J is used. Please ensure that
   your code only depends from SLF4J and not from Log4j.
 
