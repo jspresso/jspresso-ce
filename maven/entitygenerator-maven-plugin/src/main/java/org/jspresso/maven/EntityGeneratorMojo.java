@@ -226,7 +226,7 @@ public class EntityGeneratorMojo extends AbstractMojo {
       List<String> compileClasspathElements = project
           .getCompileClasspathElements();
       for (String element : compileClasspathElements) {
-        if (!element.equals(project.getBuild().getOutputDirectory())) {
+        if (!element.equals(project.getBuild().getOutputDirectory()) && !(element.indexOf("log4j") >= 0)) {
           File elementFile = new File(element);
           getLog().debug(
               "Adding element to plugin classpath " + elementFile.getPath());
