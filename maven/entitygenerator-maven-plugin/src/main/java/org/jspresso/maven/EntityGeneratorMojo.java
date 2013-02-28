@@ -28,8 +28,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.classworlds.ClassRealm;
-import org.codehaus.classworlds.ClassWorld;
 import org.jspresso.framework.tools.entitygenerator.EntityGenerator;
 import org.slf4j.impl.StaticLoggerBinder;
 
@@ -126,6 +124,9 @@ public class EntityGeneratorMojo extends AbstractMojo {
    */
   @Parameter(defaultValue = "/org/jspresso/framework/tools/entitygenerator", required = true)
   private String   templateResourcePath;
+  
+  @Parameter(defaultValue = "${plugin.classRealm}", required = true, readonly = true)
+  private org.codehaus.plexus.classworlds.realm.ClassRealm classRealm;
 
   /**
    * Triggers thee execution of EntityGenerator.
@@ -216,13 +217,9 @@ public class EntityGeneratorMojo extends AbstractMojo {
   }
 
   private void setupPluginClasspath() throws MojoExecutionException {
-    ClassWorld world = new ClassWorld();
-    ClassRealm realm;
     try {
-      realm = world.newRealm("maven.plugin." + getClass().getSimpleName(),
-          Thread.currentThread().getContextClassLoader());
       for (File sourceDir : sourceDirs) {
-        realm.addConstituent(sourceDir.toURI().toURL());
+        classRealm.addURL(sourceDir.toURI().toURL());
         getLog().debug(
             "Adding element to plugin classpath " + sourceDir.getPath());
       }
@@ -234,13 +231,12 @@ public class EntityGeneratorMojo extends AbstractMojo {
           getLog().debug(
               "Adding element to plugin classpath " + elementFile.getPath());
           URL url = elementFile.toURI().toURL();
-          realm.addConstituent(url);
+          classRealm.addURL(url);
         }
       }
     } catch (Exception ex) {
       throw new MojoExecutionException(ex.toString(), ex);
     }
-    Thread.currentThread().setContextClassLoader(realm.getClassLoader());
   }
 
 }
