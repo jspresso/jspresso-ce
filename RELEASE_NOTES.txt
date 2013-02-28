@@ -87,6 +87,21 @@
         </arguments>
       </configuration>
     </plugin>
+
+  * delete * :
+  ------------
+    <plugin>
+      <artifactId>maven-resources-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>pre-process-resources</id>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>resources</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
   
   * add * :
   ---------
