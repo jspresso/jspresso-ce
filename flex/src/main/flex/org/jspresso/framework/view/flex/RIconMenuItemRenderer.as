@@ -40,7 +40,7 @@ package org.jspresso.framework.view.flex {
       if(value && value["data"] is RAction) {
         if(_cw != null) {
           _cw.reset(value["data"]);
-          updateState(value["data"]["enabled"]);
+          updateState(value["data"]["enabled"] as Boolean);
         } else {
           _cw = BindingUtils.bindSetter(updateState, value["data"], "enabled", true);
         }

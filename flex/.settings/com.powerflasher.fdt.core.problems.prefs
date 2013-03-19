@@ -1,2 +1,3 @@
 com.powerflasher.fdt.unresolvable.unresolvableNamespace.AS3=Disabled
+com.powerflasher.fdt.unresolvable.unresolvableVariableReference.AS3=Warning
 eclipse.preferences.version=1
