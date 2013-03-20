@@ -304,13 +304,13 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (propertyName == null) {
       return null;
     }
-    if (propertyDescriptorsCache.containsKey(propertyName)) {
-      IPropertyDescriptor pd = propertyDescriptorsCache.get(propertyName);
-      if (pd == NULL_PROPERTY_DESCRIPTOR) {
+    IPropertyDescriptor descriptor = propertyDescriptorsCache.get(propertyName);
+    if (descriptor != null) {
+      if (descriptor == NULL_PROPERTY_DESCRIPTOR) {
         return null;
       }
+      return descriptor;
     }
-    IPropertyDescriptor descriptor = null;
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
       if (nestedPropertyDescriptors == null) {
