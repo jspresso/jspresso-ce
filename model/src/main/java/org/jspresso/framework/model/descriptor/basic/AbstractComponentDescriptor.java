@@ -294,6 +294,8 @@ public abstract class AbstractComponentDescriptor<E> extends
     return pageSize;
   }
 
+  private static final BasicObjectPropertyDescriptor NULL_PROPERTY_DESCRIPTOR = new BasicObjectPropertyDescriptor();
+
   /**
    * {@inheritDoc}
    */
@@ -303,7 +305,10 @@ public abstract class AbstractComponentDescriptor<E> extends
       return null;
     }
     if (propertyDescriptorsCache.containsKey(propertyName)) {
-      return propertyDescriptorsCache.get(propertyName);
+      IPropertyDescriptor pd = propertyDescriptorsCache.get(propertyName);
+      if (pd == NULL_PROPERTY_DESCRIPTOR) {
+        return null;
+      }
     }
     IPropertyDescriptor descriptor = null;
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
@@ -342,7 +347,11 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
     }
     descriptor = refinePropertyDescriptor(descriptor);
-    propertyDescriptorsCache.put(propertyName, descriptor);
+    if (descriptor == null) {
+      propertyDescriptorsCache.put(propertyName, NULL_PROPERTY_DESCRIPTOR);
+    } else {
+      propertyDescriptorsCache.put(propertyName, descriptor);
+    }
     return descriptor;
   }
 
