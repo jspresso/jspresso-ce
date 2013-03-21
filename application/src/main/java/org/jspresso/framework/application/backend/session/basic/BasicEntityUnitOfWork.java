@@ -124,7 +124,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities() {
-    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities =
+    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities = 
         new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>();
     for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
       Class<? extends IEntity> entityContract = ((IEntity) entity)
@@ -262,5 +262,21 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   public void clear() {
     clearPendingOperations();
     cleanup();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isDirtyTrackingEnabled() {
+    return dirtRecorder.isEnabled();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setDirtyTrackingEnabled(boolean enabled) {
+    dirtRecorder.setEnabled(enabled);
   }
 }

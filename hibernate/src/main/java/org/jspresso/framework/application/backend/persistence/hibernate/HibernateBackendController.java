@@ -293,9 +293,9 @@ public class HibernateBackendController extends AbstractBackendController {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
     if (!Hibernate.isInitialized(propertyValue)) {
       // turn off dirt tracking.
-      boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
+      boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
       try {
-        getDirtRecorder().setEnabled(false);
+        setDirtyTrackingEnabled(false);
         // First of all, try to deal with existing opened session from which the
         // lazy property was loaded. We must delay as much as posible the use of
         // the Hibernate template that may create a new thread-bound session.
@@ -358,7 +358,7 @@ public class HibernateBackendController extends AbstractBackendController {
         componentOrEntity.firePropertyChange(propertyName,
             IPropertyChangeCapable.UNKNOWN, propertyValue);
       } finally {
-        getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+        setDirtyTrackingEnabled(dirtRecorderWasEnabled);
       }
     }
   }

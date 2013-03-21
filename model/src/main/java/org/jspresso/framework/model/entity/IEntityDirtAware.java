@@ -38,4 +38,19 @@ public interface IEntityDirtAware {
    *         dirty properties with their original values.
    */
   Map<String, Object> getDirtyProperties(IEntity entity);
+
+  /**
+   * Is dirty tracking enabled.
+   * 
+   * @return <code>true</code> if dirty tracking is enabled.
+   */
+  boolean isDirtyTrackingEnabled();
+
+  /**
+   * Sets dirty tracking enabled.
+   * 
+   * @param enabled
+   *          <code>true</code> if enabled, <code>false</code> otherwise.
+   */
+  void setDirtyTrackingEnabled(boolean enabled);
 }
