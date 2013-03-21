@@ -19,6 +19,8 @@
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,6 +29,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.sql.DataSource;
 
 import org.hibernate.Criteria;
 import org.hibernate.Filter;
@@ -46,6 +50,7 @@ import org.hibernate.engine.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.jspresso.framework.application.backend.AbstractBackendController;
+import org.jspresso.framework.application.backend.BackendException;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -78,6 +83,7 @@ public class HibernateBackendController extends AbstractBackendController {
   private HibernateTemplate   hibernateTemplate;
   private SessionFactory      hibernateSessionFactory;
   private FlushMode           defaultTxFlushMode                = FlushMode.COMMIT;
+  private DataSource          noTxDataSource;
 
   private Set<IEntity>        updatedEntities;
   private Set<IEntity>        deletedEntities;
@@ -237,7 +243,20 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private Session getNoTxSession() {
     if (noTxSession == null) {
-      noTxSession = getHibernateSessionFactory().openSession();
+      if (noTxDataSource != null) {
+        try {
+          noTxSession = getHibernateSessionFactory().openSession(
+              noTxDataSource.getConnection());
+        } catch (SQLException ex) {
+          LOG.error(
+              "Couldn't get connection from non transactional datasource {}",
+              noTxDataSource);
+          throw new BackendException(ex,
+              "Couldn't get connection from non transactional datasource");
+        }
+      } else {
+        noTxSession = getHibernateSessionFactory().openSession();
+      }
       noTxSession.setFlushMode(FlushMode.MANUAL);
     }
     return noTxSession;
@@ -1138,7 +1157,16 @@ public class HibernateBackendController extends AbstractBackendController {
     super.cleanupRequestResources();
     if (noTxSession != null) {
       if (noTxSession.isOpen()) {
-        noTxSession.close();
+        Connection conn = noTxSession.close();
+        if (conn != null) {
+          try {
+            conn.close();
+          } catch (SQLException ex) {
+            LOG.warn(
+                "The provided non transactional connection could not be correctly closed.",
+                ex);
+          }
+        }
       }
       noTxSession = null;
     }
@@ -1186,5 +1214,15 @@ public class HibernateBackendController extends AbstractBackendController {
           + HibernateControllerAwareProxyEntityFactory.class.getSimpleName());
     }
     super.setEntityFactory(entityFactory);
+  }
+
+  /**
+   * Sets the noTxDataSource.
+   * 
+   * @param noTxDataSource
+   *          the noTxDataSource to set.
+   */
+  public void setNoTxDataSource(DataSource noTxDataSource) {
+    this.noTxDataSource = noTxDataSource;
   }
 }
