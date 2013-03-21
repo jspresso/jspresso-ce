@@ -79,23 +79,6 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
       IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
-    if (componentDescriptorProvider instanceof IReferencePropertyDescriptor) {
-      Map<String, Object> initializationMapping = ((IReferencePropertyDescriptor<?>) componentDescriptorProvider)
-          .getInitializationMapping();
-      if (initializationMapping != null && initializationMapping.size() > 0) {
-        // we must refine the rendered properties of the filter view to get rid
-        // of pre-initialized properties.
-        List<String> filterableProperties = new ArrayList<String>();
-        for (String renderedProperty : queryComponentDescriptor
-            .getRenderedProperties()) {
-          if (!initializationMapping.containsKey(renderedProperty)) {
-            filterableProperties.add(renderedProperty);
-          }
-        }
-        queryComponentViewDescriptor
-            .setRenderedProperties(filterableProperties);
-      }
-    }
     List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (String queriableProperty : componentDescriptorProvider
         .getQueryableProperties()) {
