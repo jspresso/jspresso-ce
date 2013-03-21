@@ -20,7 +20,6 @@ package org.jspresso.framework.application.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.model.component.IComponent;
@@ -28,7 +27,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
