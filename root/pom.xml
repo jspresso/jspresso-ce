@@ -83,14 +83,14 @@
     <assembly-plugin.version>2.4</assembly-plugin.version>
     <javadoc-plugin.version>2.8</javadoc-plugin.version>
     <deploy-plugin.version>2.6</deploy-plugin.version>
-    <site-plugin.version>3.0-beta-3</site-plugin.version>
+    <site-plugin.version>3.2</site-plugin.version>
     <install-plugin.version>2.4</install-plugin.version>
     <release-plugin.version>2.3.2</release-plugin.version>
     <clean-plugin.version>2.4.1</clean-plugin.version>
     <archetype-plugin.version>2.0</archetype-plugin.version>
     <source-plugin.version>2.2.1</source-plugin.version>
     <antrun-plugin.version>1.7</antrun-plugin.version>
-    <info-reports-plugin.version>2.4</info-reports-plugin.version>
+    <info-reports-plugin.version>2.6</info-reports-plugin.version>
     <war-plugin.version>2.3</war-plugin.version>
     <shade-plugin.version>1.4</shade-plugin.version>
     <webdav-jackrabbit.version>1.0-beta-7</webdav-jackrabbit.version>
