@@ -22,7 +22,6 @@
     <slf4j-maven-plugin-log.version>1.0.0</slf4j-maven-plugin-log.version>
   </properties>
 
-  </distributionManagement>
   <dependencyManagement>
     <dependencies>
       <dependency>
