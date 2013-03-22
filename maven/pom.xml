@@ -24,7 +24,7 @@
 
   <distributionManagement>
     <site>
-      <id>jspresso-maven-plugind-site</id>
+      <id>jspresso-maven-plugins-site</id>
       <url>dav:http://www.jspresso.org/external/maven-plugins-site</url>
     </site>
   </distributionManagement>
