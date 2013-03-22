@@ -700,11 +700,6 @@
         <version>${blazeds.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.adobe.blazeds</groupId>
-        <artifactId>blazeds-opt</artifactId>
-        <version>${blazeds.version}</version>
-      </dependency>
-      <dependency>
         <groupId>flexlib</groupId>
         <artifactId>flexlib</artifactId>
         <version>${flexlib.version}</version>
