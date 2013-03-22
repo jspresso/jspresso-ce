@@ -82,7 +82,7 @@
     </snapshotRepository>
     <site>
       <id>jspresso-maven-site</id>
-      <url>dav:http://www.jspresso.org/external/maven-site</url>
+      <url>dav:http://www.jspresso.org/external/maven-site/</url>
     </site>
   </distributionManagement>
   <pluginRepositories>

@@ -22,7 +22,7 @@
   <distributionManagement>
     <site>
       <id>${applicationName}-site</id>
-      <url>${siteDistributionUrl}</url>
+      <url>${siteDistributionUrl}/</url>
     </site>
   </distributionManagement>
   <repositories>
