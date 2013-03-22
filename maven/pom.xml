@@ -22,12 +22,6 @@
     <slf4j-maven-plugin-log.version>1.0.0</slf4j-maven-plugin-log.version>
   </properties>
 
-  <distributionManagement>
-    <site>
-      <id>jspresso-maven-plugins-site</id>
-      <url>dav:http://www.jspresso.org/external/maven-plugins-site</url>
-    </site>
-  </distributionManagement>
   <dependencyManagement>
     <dependencies>
       <dependency>
