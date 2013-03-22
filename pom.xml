@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
@@ -10,10 +9,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jspresso.version>3.5-SNAPSHOT</jspresso.version>
     <sjs.version>1.0.16-beta1</sjs.version>
-
+    
     <ant-contrib.version>1.0b3</ant-contrib.version>
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
-
+    
     <!-- Plugins versions -->
     <compiler-plugin.version>2.5.1</compiler-plugin.version>
     <resources-plugin.version>2.6</resources-plugin.version>
@@ -469,8 +468,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <goals>deploy assembly:assembly</goals>
-          <!-- <goals>deploy site-deploy assembly:assembly</goals> -->
+          <goals>deploy site-deploy assembly:assembly</goals>
         </configuration>
       </plugin>
       <plugin>
