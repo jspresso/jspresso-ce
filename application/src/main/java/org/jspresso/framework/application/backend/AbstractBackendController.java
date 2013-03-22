@@ -2456,10 +2456,9 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void setDirtyTrackingEnabled(boolean enabled) {
+    dirtRecorder.setEnabled(enabled);
     if (isUnitOfWorkActive()) {
       unitOfWork.setDirtyTrackingEnabled(enabled);
-    } else {
-      dirtRecorder.setEnabled(enabled);
     }
   }
 }
