@@ -126,8 +126,22 @@
         </execution>
       </executions>
     </plugin>
-    
   
+  * delete * :
+  ------------
+    <source>${project.build.directory}/generated-sources/entitygenerator</source> from the build-helper plugin configuration
+    
+  * delete * :
+  ------------
+    <resources>
+    ...
+    </resources>  
+  
+- Ensure that antrun plugin and ant versions are at least the following. Otherwise, add the properties below to your
+  root pom.xml :
+    <antrun-plugin.version>1.7</antrun-plugin.version>
+    <ant-nodeps.version>1.8.1</ant-nodeps.version>
+
 - In order to speed up builds in Eclipse, please modify all project pom.xml by adding preserveLastModified="true" at the end
   of each replaceregexp instruction. For instance :
     <replaceregexp byline="true" preserveLastModified="true">
