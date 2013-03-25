@@ -36,4 +36,10 @@ public interface IComponentExtension<T extends IComponent> {
    * @return The extended entity instance.
    */
   T getComponent();
+
+  /**
+   * This method is called when the extension instance is completely created and
+   * configured in order to perform extra initialization.
+   */
+  void postCreate();
 }

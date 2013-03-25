@@ -65,6 +65,16 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   }
 
   /**
+   * Default implementation is empty.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void postCreate() {
+    // Empty implementation
+  }
+
+  /**
    * Sets the componentFactory.
    * 
    * @param componentFactory

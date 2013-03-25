@@ -430,6 +430,7 @@ public abstract class AbstractComponentInvocationHandler implements
       ((IComponentFactoryAware) extension)
           .setComponentFactory(getInlineComponentFactory());
     }
+    extension.postCreate();
   }
 
   /**
@@ -567,8 +568,8 @@ public abstract class AbstractComponentInvocationHandler implements
     if (extension == null) {
       extension = extensionFactory.createComponentExtension(extensionClass,
           componentDescriptor.getComponentContract(), proxy);
-      configureExtension(extension);
       componentExtensions.put(extensionClass, extension);
+      configureExtension(extension);
     }
     return extension;
   }
