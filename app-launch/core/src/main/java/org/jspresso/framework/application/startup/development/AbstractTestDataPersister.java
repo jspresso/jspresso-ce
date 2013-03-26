@@ -65,6 +65,7 @@ public abstract class AbstractTestDataPersister {
     try {
       createAndPersistTestData();
     } finally {
+      hbc.cleanupRequestResources();
       if (wasNull) {
         BackendControllerHolder.setThreadBackendController(null);
       }
