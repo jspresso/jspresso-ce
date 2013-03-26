@@ -52,7 +52,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
-  import mx.controls.Tree;
   import mx.controls.VRule;
   import mx.controls.dataGridClasses.DataGridColumn;
   import mx.core.ClassFactory;
@@ -161,7 +160,7 @@ package org.jspresso.framework.view.flex {
     private static const NUMERIC_FIELD_MAX_CHAR_COUNT:int = 16;
     private static const COLUMN_MAX_CHAR_COUNT:int = 20;
     private static const DATE_CHAR_COUNT:int = 10;
-    private static const TIME_CHAR_COUNT:int = 6;
+    private static const TIME_CHAR_COUNT:int = 8;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -234,7 +233,7 @@ package org.jspresso.framework.view.flex {
         component = new Canvas();
       }
       remoteComponent.assignPeer(component);
-      if(!(component is Tree)) {
+      if(!(remoteComponent is RTree || remoteComponent is RDateField || remoteComponent is RTimeField )) {
         component.minWidth = 0;
       }
       component.id = remoteComponent.guid;
@@ -1682,7 +1681,8 @@ package org.jspresso.framework.view.flex {
       dateField.formatString = datePattern;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
-      sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT +2);
+      sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT + 2);
+      dateField.minWidth = dateField.maxWidth;
       bindDateField(dateField, remoteDateField);
       return dateField;
     }
@@ -1773,7 +1773,6 @@ package org.jspresso.framework.view.flex {
       dateTimeField.verticalScrollPolicy = ScrollPolicy.OFF;
 
       var dateField:UIComponent = createDateField(remoteDateField);
-      dateField.percentWidth = 100.0;
       
       var remoteTimeField:RTimeField = new RTimeField();
       remoteTimeField.background = remoteDateField.background;
@@ -1787,19 +1786,20 @@ package org.jspresso.framework.view.flex {
       remoteTimeField.useDateDto(!remoteDateField.timezoneAware);
       
       var timeField:TextInput = createComponent(remoteTimeField, false) as TextInput;
-      timeField.percentWidth = 100.0;
       
       dateTimeField.addChild(dateField);
       dateTimeField.addChild(timeField);
 
-      dateTimeField.maxWidth = dateField.maxWidth + timeField.maxWidth;
+      dateTimeField.maxWidth = dateField.maxWidth + timeField.maxWidth + 10;
+      dateTimeField.minWidth = dateField.minWidth + timeField.minWidth + 10;
       
       return dateTimeField;
     }
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
       var timeField:TextInput = createTextInputComponent();
-      sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT +2);
+      sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
+      timeField.minWidth = timeField.maxWidth;
       bindTextInput(timeField, remoteTimeField.state,
         createFormatter(remoteTimeField), createParser(remoteTimeField));
       return timeField;
