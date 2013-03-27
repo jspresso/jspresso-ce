@@ -95,6 +95,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -1127,6 +1128,11 @@ public abstract class AbstractComponentInvocationHandler implements
       for (PropertyChangeListener listener : listeners) {
         if (listener instanceof InlineReferenceTracker
             && ((InlineReferenceTracker) listener).proxy instanceof IComponent) {
+          if (propertyName
+              .contains(((InlineReferenceTracker) listener).componentName)) {
+            // to prevent stackoverflows with 1-1 relationships
+            return false;
+          }
           return ((IComponent) ((InlineReferenceTracker) listener).proxy)
               .hasListeners(((InlineReferenceTracker) listener).componentName
                   + "." + propertyName);
