@@ -364,12 +364,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public AsyncActionExecutor executeAsynchronously(IAction action,
       Map<String, Object> context) {
-    AbstractBackendController slaveBackendController = (AbstractBackendController) getSlaveControllerFactory()
-        .createBackendController();
-    // Start the slave controller
-    slaveBackendController.start(getLocale(), getClientTimeZone());
-    // Use the same application session
-    slaveBackendController.setApplicationSession(getApplicationSession());
+    AbstractBackendController slaveBackendController = createBackendController();
     AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action,
         context, asyncActionsThreadGroup, slaveBackendController);
     asyncExecutors.add(slaveExecutor);
@@ -386,6 +381,23 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return slaveExecutor;
+  }
+
+  /**
+   * Creates a slave backend controller, starts it and assign it the same
+   * application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public AbstractBackendController createBackendController() {
+    AbstractBackendController slaveBackendController = (AbstractBackendController) getSlaveControllerFactory()
+        .createBackendController();
+    // Start the slave controller
+    slaveBackendController.start(getLocale(), getClientTimeZone());
+    // Use the same application session
+    slaveBackendController.setApplicationSession(getApplicationSession());
+    return slaveBackendController;
   }
 
   /**

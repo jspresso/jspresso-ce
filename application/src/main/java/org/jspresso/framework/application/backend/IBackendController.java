@@ -52,7 +52,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @author Vincent Vandenschrick
  */
 public interface IBackendController extends IController,
-    IEntityLifecycleHandler, TransactionSynchronization {
+    IEntityLifecycleHandler, TransactionSynchronization, IBackendControllerFactory {
 
   /**
    * Begins the current unit of work.
