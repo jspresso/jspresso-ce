@@ -270,7 +270,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
 
-    public function execute(action:RAction, actionEvent:RActionEvent = null, actionCallback:Function=null):void {
+    public function execute(action:RAction, actionEvent:RActionEvent = null, actionCallback:Function=null, disableUI:Boolean=true):void {
       //trace(">>> Execute <<< " + action.name + " param = " + param);
       if(action && action.enabled) {
         var ts:Number = getTimer();
@@ -288,7 +288,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           actionEvent.viewStatePermId = (_dialogStack[_dialogStack.length -1] as Array)[2];
           _nextActionCallback = actionCallback;
           registerCommand(command);
-          blockUI(false);
+          blockUI(!disableUI);
         }
       }
     }

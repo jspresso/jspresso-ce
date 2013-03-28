@@ -186,6 +186,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           // action parameter. We want to preserve it in the UI.
           Object connectorValue = viewConnector.getConnectorValue();
           if (connectorValue instanceof IQueryComponent) {
+            // To cleanup the preceeding values (e.g. ID)
+            // see bug #986
+            ((IQueryComponent) connectorValue).clear();
             ((IQueryComponent) connectorValue).putAll(queryComponent);
           } else {
             viewConnector.setConnectorValue(queryComponent);
@@ -193,6 +196,11 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           ((IRenderableCompositeValueConnector) viewConnector)
               .getRenderingConnector().setConnectorValue(
                   autoCompletePropertyValue);
+          try {
+            Thread.sleep(2000);
+          } catch (InterruptedException ex) {
+            ex.printStackTrace();
+          }
           return true;
         }
       }
