@@ -753,7 +753,7 @@ package org.jspresso.framework.view.flex {
             }
             var actionEvent:RActionEvent = new RActionEvent();
             actionEvent.actionCommand = inputText;
-            _actionHandler.execute(action, actionEvent);
+            _actionHandler.execute(action, actionEvent, null, false);
           }
         };
         textInput.addEventListener(FlexEvent.ENTER,triggerAction);
