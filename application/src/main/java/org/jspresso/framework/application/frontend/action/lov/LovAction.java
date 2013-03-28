@@ -197,11 +197,6 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           ((IRenderableCompositeValueConnector) viewConnector)
               .getRenderingConnector().setConnectorValue(
                   autoCompletePropertyValue);
-          try {
-            Thread.sleep(2000);
-          } catch (InterruptedException ex) {
-            ex.printStackTrace();
-          }
           return true;
         }
       }
