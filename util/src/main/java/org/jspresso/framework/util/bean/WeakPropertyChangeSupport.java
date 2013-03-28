@@ -338,7 +338,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   public synchronized PropertyChangeListener[] getPropertyChangeListeners(
       String propertyName) {
-    ArrayList<PropertyChangeListener> targets = getPropertyChangeListenersList();
+    ArrayList<PropertyChangeListener> targets = new ArrayList<PropertyChangeListener>();
     if (children != null && propertyName != null) {
       WeakPropertyChangeSupport child = children.get(propertyName);
       if (child != null) {
