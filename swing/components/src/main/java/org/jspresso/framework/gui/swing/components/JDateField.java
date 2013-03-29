@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.text.DateFormatSymbols;
 import java.util.Date;
 import java.util.Locale;
 
@@ -34,7 +35,9 @@ import javax.swing.text.DateFormatter;
 import net.sf.nachocalendar.components.DateField;
 import net.sf.nachocalendar.components.DayPanel;
 import net.sf.nachocalendar.components.DefaultDayRenderer;
+import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 import net.sf.nachocalendar.components.FormatSymbols;
+import net.sf.nachocalendar.components.HeaderPanel;
 
 import org.jspresso.framework.util.swing.SwingUtil;
 
@@ -52,37 +55,11 @@ public class JDateField extends DateField {
   /**
    * Constructs a new <code>JDateField</code> instance.
    * 
-   * @param showWeekNumbers
-   *          true if the week numbers must be shown.
-   * @param locale
-   *          the user locale.
-   */
-  public JDateField(boolean showWeekNumbers, Locale locale) {
-    super(showWeekNumbers);
-    initDefaultBehaviour(locale);
-  }
-
-  /**
-   * Constructs a new <code>JDateField</code> instance.
-   * 
-   * @param formatter
-   *          formatter used for the textfield.
-   * @param locale
-   *          the user locale.
-   */
-  public JDateField(DateFormatter formatter, Locale locale) {
-    super(formatter);
-    initDefaultBehaviour(locale);
-  }
-
-  /**
-   * Constructs a new <code>JDateField</code> instance.
-   * 
    * @param locale
    *          the user locale.
    */
   public JDateField(Locale locale) {
-    super();
+    super(locale);
     initDefaultBehaviour(locale);
   }
 
@@ -118,6 +95,7 @@ public class JDateField extends DateField {
 
   private void initDefaultBehaviour(Locale locale) {
     setRenderer(new FixedDayRenderer());
+    setHeaderRenderer(new TranslatedHeaderRenderer(locale));
     new FormatSymbols((DateFormatter) getFormattedTextField().getFormatter(),
         locale);
     getFormattedTextField().setBorder(
@@ -160,6 +138,43 @@ public class JDateField extends DateField {
         renderer.setBorder(null);
       }
       return renderer;
+    }
+  }
+
+  private static class TranslatedHeaderRenderer extends DefaultHeaderRenderer {
+
+    private static final long              serialVersionUID = 7553540246834170L;
+    private static final DateFormatSymbols DEFAULT_DFS      = new DateFormatSymbols();
+    private DateFormatSymbols              dfs;
+
+    /**
+     * Constructs a new <code>TranslatedHeaderRenderer</code> instance.
+     * 
+     * @param locale
+     */
+    protected TranslatedHeaderRenderer(Locale locale) {
+      dfs = new DateFormatSymbols(locale);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getHeaderRenderer(HeaderPanel panel, Object value,
+        boolean isHeader, boolean isWorking) {
+      setText(translate((String) value));
+      return this;
+    }
+
+    private String translate(String value) {
+      String[] systemShortWeekDays = DEFAULT_DFS.getShortWeekdays();
+      String[] shortWeekDays = dfs.getShortWeekdays();
+      for (int i = 0; i < systemShortWeekDays.length; i++) {
+        if (systemShortWeekDays[i].equalsIgnoreCase(value)) {
+          return shortWeekDays[i];
+        }
+      }
+      return "";
     }
   }
 }
