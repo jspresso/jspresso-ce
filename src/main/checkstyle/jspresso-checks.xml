@@ -121,6 +121,7 @@
     <property name="max" value="4000"/>
   </module>
   <module name="NewlineAtEndOfFile">
+    <property name="lineSeparator" value="lf"/>
     <property name="fileExtensions" value="java, xml, js, as, mxml, py, properties, txt"/>
   </module>
 </module>

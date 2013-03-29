@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
 
-  private final static Logger LOG = LoggerFactory
+  private static final Logger LOG = LoggerFactory
                                       .getLogger(EntityCardViewDescriptor.class);
 
   private List<Class<?>>      registeredTypes;
