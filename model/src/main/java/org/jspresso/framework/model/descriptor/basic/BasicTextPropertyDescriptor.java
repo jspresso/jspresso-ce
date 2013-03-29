@@ -57,34 +57,33 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    */
   @Override
   public BasicStringPropertyDescriptor createQueryDescriptor() {
-    BasicStringPropertyDescriptor defaultQueryDecriptor = super
+    BasicStringPropertyDescriptor defaultQueryDescriptor = super
         .createQueryDescriptor();
     if (isQueryMultiline()) {
-      return defaultQueryDecriptor;
+      return defaultQueryDescriptor;
     }
 
     BasicStringPropertyDescriptor queryDescriptor = new BasicStringPropertyDescriptor();
-    queryDescriptor.setName(defaultQueryDecriptor.getName());
-    queryDescriptor.setI18nNameKey(defaultQueryDecriptor.getI18nNameKey());
-    queryDescriptor.setDescription(defaultQueryDecriptor.getDescription());
-    queryDescriptor.setGrantedRoles(defaultQueryDecriptor.getGrantedRoles());
-    queryDescriptor.setMandatory(defaultQueryDecriptor.isMandatory());
-    queryDescriptor.setMaxLength(defaultQueryDecriptor.getMaxLength());
-    queryDescriptor.setReadabilityGates(defaultQueryDecriptor
+    queryDescriptor.setName(defaultQueryDescriptor.getName());
+    queryDescriptor.setI18nNameKey(defaultQueryDescriptor.getI18nNameKey());
+    queryDescriptor.setDescription(defaultQueryDescriptor.getDescription());
+    queryDescriptor.setGrantedRoles(defaultQueryDescriptor.getGrantedRoles());
+    queryDescriptor.setMandatory(defaultQueryDescriptor.isMandatory());
+    queryDescriptor.setMaxLength(defaultQueryDescriptor.getMaxLength());
+    queryDescriptor.setReadabilityGates(defaultQueryDescriptor
         .getReadabilityGates());
-    queryDescriptor.setReadOnly(defaultQueryDecriptor.isReadOnly());
-    queryDescriptor.setRegexpPattern(defaultQueryDecriptor.getRegexpPattern());
-    queryDescriptor.setRegexpPatternSample(defaultQueryDecriptor
+    queryDescriptor.setReadOnly(defaultQueryDescriptor.isReadOnly());
+    queryDescriptor.setRegexpPattern(defaultQueryDescriptor.getRegexpPattern());
+    queryDescriptor.setRegexpPatternSample(defaultQueryDescriptor
         .getRegexpPatternSample());
-    queryDescriptor.setSqlName(defaultQueryDecriptor.getSqlName());
-    queryDescriptor.setUpperCase(defaultQueryDecriptor.isUpperCase());
-    queryDescriptor.setUpperCase(defaultQueryDecriptor.isUpperCase());
-    queryDescriptor.setWritabilityGates(defaultQueryDecriptor
+    queryDescriptor.setSqlName(defaultQueryDescriptor.getSqlName());
+    queryDescriptor.setUpperCase(defaultQueryDescriptor.isUpperCase());
+    queryDescriptor.setWritabilityGates(defaultQueryDescriptor
         .getWritabilityGates());
 
-    queryDescriptor.setDelegateClassName(defaultQueryDecriptor
+    queryDescriptor.setDelegateClassName(defaultQueryDescriptor
         .getDelegateClassName());
-    queryDescriptor.setComputed(defaultQueryDecriptor.isComputed());
+    queryDescriptor.setComputed(defaultQueryDescriptor.isComputed());
 
     return queryDescriptor;
   }

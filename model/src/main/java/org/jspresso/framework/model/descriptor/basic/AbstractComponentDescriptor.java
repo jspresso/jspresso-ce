@@ -161,13 +161,13 @@ public abstract class AbstractComponentDescriptor<E> extends
 
       Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
       if (declaredPropertyDescs != null) {
-        Collection<IPropertyDescriptor> querPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
+        Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
         for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
-          querPropertyDescriptors.add(propertyDescriptor
+          queryPropertyDescriptors.add(propertyDescriptor
               .createQueryDescriptor());
         }
         ((AbstractComponentDescriptor<E>) queryDescriptor)
-            .setPropertyDescriptors(querPropertyDescriptors);
+            .setPropertyDescriptors(queryPropertyDescriptors);
       }
 
     }

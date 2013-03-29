@@ -287,4 +287,34 @@ public class BasicCollectionPropertyDescriptor<E> extends
   protected boolean getDefaultSortablility() {
     return false;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicRelationshipEndPropertyDescriptor createQueryDescriptor() {
+    BasicCollectionPropertyDescriptor<E> defaultQueryDescriptor = (BasicCollectionPropertyDescriptor<E>) super
+        .createQueryDescriptor();
+
+    BasicReferencePropertyDescriptor<E> queryDescriptor = new BasicReferencePropertyDescriptor<E>();
+    queryDescriptor.setName(defaultQueryDescriptor.getName());
+    queryDescriptor.setI18nNameKey(defaultQueryDescriptor.getI18nNameKey());
+    queryDescriptor.setDescription(defaultQueryDescriptor.getDescription());
+    queryDescriptor.setGrantedRoles(defaultQueryDescriptor.getGrantedRoles());
+    queryDescriptor.setMandatory(defaultQueryDescriptor.isMandatory());
+    queryDescriptor.setReadabilityGates(defaultQueryDescriptor
+        .getReadabilityGates());
+    queryDescriptor.setReadOnly(defaultQueryDescriptor.isReadOnly());
+    queryDescriptor.setSqlName(defaultQueryDescriptor.getSqlName());
+    queryDescriptor.setWritabilityGates(defaultQueryDescriptor
+        .getWritabilityGates());
+
+    queryDescriptor.setDelegateClassName(defaultQueryDescriptor
+        .getDelegateClassName());
+    queryDescriptor.setComputed(defaultQueryDescriptor.isComputed());
+
+    queryDescriptor.setReferencedDescriptor(getReferencedDescriptor()
+        .getElementDescriptor().createQueryDescriptor());
+    return queryDescriptor;
+  }
 }
