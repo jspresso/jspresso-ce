@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2012 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -19,8 +19,8 @@
 package org.jspresso.framework.util.accessor;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.jspresso.framework.util.bean.AccessorInfo;
 
@@ -32,13 +32,13 @@ import org.jspresso.framework.util.bean.AccessorInfo;
  */
 public abstract class AbstractAccessorFactory implements IAccessorFactory {
 
-  private Map<Method, AccessorInfo> accessorInfoCache = new ConcurrentHashMap<Method, AccessorInfo>();
+  private Map<Method, AccessorInfo> accessorInfoCache = new HashMap<Method, AccessorInfo>();
 
   /**
    * Constructs and caches Accessor infos. {@inheritDoc}
    */
   @Override
-  public AccessorInfo getAccessorInfo(Method method) {
+  public synchronized AccessorInfo getAccessorInfo(Method method) {
     AccessorInfo info = accessorInfoCache.get(method);
     if (info == null) {
       info = new AccessorInfo(method);

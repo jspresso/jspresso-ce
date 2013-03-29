@@ -86,6 +86,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -214,11 +215,6 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else if ("hasListeners".equals(methodName)) {
       return Boolean.valueOf(hasListeners(proxy, (String) args[0]));
-    } else if ("getPropertyChangeListeners".equals(methodName)) {
-      if (args != null && args.length > 0) {
-        return getPropertyChangeListeners(proxy, (String) args[0]);
-      }
-      return getPropertyChangeListeners(proxy);
     } else if ("firePropertyChange".equals(methodName)) {
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
@@ -1087,42 +1083,6 @@ public abstract class AbstractComponentInvocationHandler implements
       }
     }
     return false;
-  }
-
-  private PropertyChangeListener[] getPropertyChangeListeners(
-      @SuppressWarnings("unused") Object proxy) {
-    List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
-    if (propertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : propertyChangeSupport
-          .getPropertyChangeListeners()) {
-        listeners.add(pcl);
-      }
-    }
-    if (weakPropertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : weakPropertyChangeSupport
-          .getPropertyChangeListeners()) {
-        listeners.add(pcl);
-      }
-    }
-    return listeners.toArray(new PropertyChangeListener[] {});
-  }
-
-  private PropertyChangeListener[] getPropertyChangeListeners(
-      @SuppressWarnings("unused") Object proxy, String propertyName) {
-    List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
-    if (propertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : propertyChangeSupport
-          .getPropertyChangeListeners(propertyName)) {
-        listeners.add(pcl);
-      }
-    }
-    if (weakPropertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : weakPropertyChangeSupport
-          .getPropertyChangeListeners(propertyName)) {
-        listeners.add(pcl);
-      }
-    }
-    return listeners.toArray(new PropertyChangeListener[] {});
   }
 
   private void firePropertyChange(Object proxy, String propertyName,

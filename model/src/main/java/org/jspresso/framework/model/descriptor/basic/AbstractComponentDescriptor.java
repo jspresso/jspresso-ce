@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2012 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
@@ -131,7 +130,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public AbstractComponentDescriptor(String name) {
     setName(name);
-    propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
+    propertyDescriptorsCache = new HashMap<String, IPropertyDescriptor>();
   }
 
   private static IComponentDescriptor<IComponent> createComponentDescriptor() {
@@ -294,23 +293,19 @@ public abstract class AbstractComponentDescriptor<E> extends
     return pageSize;
   }
 
-  private static final BasicObjectPropertyDescriptor NULL_PROPERTY_DESCRIPTOR = new BasicObjectPropertyDescriptor();
-
   /**
    * {@inheritDoc}
    */
   @Override
-  public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
+  public synchronized IPropertyDescriptor getPropertyDescriptor(
+      String propertyName) {
     if (propertyName == null) {
       return null;
     }
-    IPropertyDescriptor descriptor = propertyDescriptorsCache.get(propertyName);
-    if (descriptor != null) {
-      if (descriptor == NULL_PROPERTY_DESCRIPTOR) {
-        return null;
-      }
-      return descriptor;
+    if (propertyDescriptorsCache.containsKey(propertyName)) {
+      return propertyDescriptorsCache.get(propertyName);
     }
+    IPropertyDescriptor descriptor = null;
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
       if (nestedPropertyDescriptors == null) {
@@ -347,52 +342,42 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
     }
     descriptor = refinePropertyDescriptor(descriptor);
-    if (descriptor == null) {
-      propertyDescriptorsCache.put(propertyName, NULL_PROPERTY_DESCRIPTOR);
-    } else {
-      propertyDescriptorsCache.put(propertyName, descriptor);
-    }
+    propertyDescriptorsCache.put(propertyName, descriptor);
     return descriptor;
   }
-
-  private Object allPropertyDescriptorsLock = new Object();
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    synchronized (allPropertyDescriptorsLock) {
-      if (allPropertyDescriptorsCache == null) {
-        // A map is used instead of a set since a set does not replace an
-        // element
-        // it
-        // already contains.
-        Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-        if (getAncestorDescriptors() != null) {
-          for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-            for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
-                .getPropertyDescriptors()) {
-              allDescriptors.put(propertyDescriptor.getName(),
-                  propertyDescriptor);
-            }
-          }
-        }
-        Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
-        if (declaredPropertyDescriptors != null) {
-          for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
-            propertyDescriptor = refinePropertyDescriptor(propertyDescriptor);
+  public synchronized Collection<IPropertyDescriptor> getPropertyDescriptors() {
+    if (allPropertyDescriptorsCache == null) {
+      // A map is used instead of a set since a set does not replace an element
+      // it
+      // already contains.
+      Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
+      if (getAncestorDescriptors() != null) {
+        for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+          for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
+              .getPropertyDescriptors()) {
             allDescriptors
                 .put(propertyDescriptor.getName(), propertyDescriptor);
           }
         }
-        allPropertyDescriptorsCache = new ArrayList<IPropertyDescriptor>();
-        for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
-          allPropertyDescriptorsCache.add(propertyDescriptor);
+      }
+      Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+      if (declaredPropertyDescriptors != null) {
+        for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+          propertyDescriptor = refinePropertyDescriptor(propertyDescriptor);
+          allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
         }
       }
-      return allPropertyDescriptorsCache;
+      allPropertyDescriptorsCache = new ArrayList<IPropertyDescriptor>();
+      for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
+        allPropertyDescriptorsCache.add(propertyDescriptor);
+      }
     }
+    return allPropertyDescriptorsCache;
   }
 
   /**
@@ -532,37 +517,32 @@ public abstract class AbstractComponentDescriptor<E> extends
     return sqlName;
   }
 
-  private Object toStringLock = new Object();
-
   /**
    * Gets the toStringProperty.
    * 
    * @return the toStringProperty.
    */
   @Override
-  public String getToStringProperty() {
-    synchronized (toStringLock) {
-      if (toStringProperty == null) {
-        List<String> rp = getRenderedProperties();
-        if (rp != null && !rp.isEmpty()) {
-          for (String renderedProperty : rp) {
-            if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
-              toStringProperty = renderedProperty;
-              break;
-            }
+  public synchronized String getToStringProperty() {
+    if (toStringProperty == null) {
+      List<String> rp = getRenderedProperties();
+      if (rp != null && !rp.isEmpty()) {
+        for (String renderedProperty : rp) {
+          if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+            toStringProperty = renderedProperty;
+            break;
           }
-          if (toStringProperty == null) {
-            toStringProperty = rp.get(0);
-          }
-        } else if (getPropertyDescriptor("id") != null) {
-          toStringProperty = "id";
-        } else {
-          toStringProperty = getPropertyDescriptors().iterator().next()
-              .getName();
         }
+        if (toStringProperty == null) {
+          toStringProperty = rp.get(0);
+        }
+      } else if (getPropertyDescriptor("id") != null) {
+        toStringProperty = "id";
+      } else {
+        toStringProperty = getPropertyDescriptors().iterator().next().getName();
       }
-      return toStringProperty;
     }
+    return toStringProperty;
   }
 
   /**
@@ -571,14 +551,12 @@ public abstract class AbstractComponentDescriptor<E> extends
    * @return the toStringProperty.
    */
   @Override
-  public String getToHtmlProperty() {
+  public synchronized String getToHtmlProperty() {
     if (toHtmlProperty == null) {
       return getToStringProperty();
     }
     return toHtmlProperty;
   }
-
-  private Object autoCompleteLock = new Object();
 
   /**
    * Gets the autocomplete property.
@@ -586,39 +564,37 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
-  public String getAutoCompleteProperty() {
-    synchronized (autoCompleteLock) {
-      if (autoCompleteProperty == null) {
-        IPropertyDescriptor lpd = getPropertyDescriptor(getToStringProperty());
-        if (lpd != null && !lpd.isComputed()) {
-          autoCompleteProperty = lpd.getName();
-        } else {
-          List<String> rp = getRenderedProperties();
-          if (rp != null && !rp.isEmpty()) {
-            for (String renderedProperty : rp) {
-              if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
-                autoCompleteProperty = renderedProperty;
+  public synchronized String getAutoCompleteProperty() {
+    if (autoCompleteProperty == null) {
+      IPropertyDescriptor lpd = getPropertyDescriptor(getToStringProperty());
+      if (lpd != null && !lpd.isComputed()) {
+        autoCompleteProperty = lpd.getName();
+      } else {
+        List<String> rp = getRenderedProperties();
+        if (rp != null && !rp.isEmpty()) {
+          for (String renderedProperty : rp) {
+            if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+              autoCompleteProperty = renderedProperty;
+              break;
+            }
+          }
+          if (autoCompleteProperty == null) {
+            Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
+            for (IPropertyDescriptor pd : allProps) {
+              if (pd instanceof IStringPropertyDescriptor
+                  && !IEntity.ID.equals(pd.getName())) {
+                autoCompleteProperty = pd.getName();
                 break;
               }
             }
-            if (autoCompleteProperty == null) {
-              Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
-              for (IPropertyDescriptor pd : allProps) {
-                if (pd instanceof IStringPropertyDescriptor
-                    && !IEntity.ID.equals(pd.getName())) {
-                  autoCompleteProperty = pd.getName();
-                  break;
-                }
-              }
-            }
-            if (autoCompleteProperty == null) {
-              autoCompleteProperty = IEntity.ID;
-            }
+          }
+          if (autoCompleteProperty == null) {
+            autoCompleteProperty = IEntity.ID;
           }
         }
       }
-      return autoCompleteProperty;
     }
+    return autoCompleteProperty;
   }
 
   /**
@@ -837,7 +813,7 @@ public abstract class AbstractComponentDescriptor<E> extends
       propertyDescriptorsMap = null;
       nestedPropertyDescriptors = null;
     }
-    propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
+    propertyDescriptorsCache = new HashMap<String, IPropertyDescriptor>();
     allPropertyDescriptorsCache = null;
   }
 
@@ -1109,61 +1085,51 @@ public abstract class AbstractComponentDescriptor<E> extends
     return null;
   }
 
-  private Object propertiesBufferLock = new Object();
-
-  private void processPropertiesBufferIfNecessary() {
-    synchronized (propertiesBufferLock) {
-      if (tempPropertyBuffer != null) {
-        propertyDescriptorsMap = new LinkedHashMap<String, IPropertyDescriptor>();
-        for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
-          propertyDescriptorsMap.put(descriptor.getName(), descriptor);
-        }
-        tempPropertyBuffer = null;
+  private synchronized void processPropertiesBufferIfNecessary() {
+    if (tempPropertyBuffer != null) {
+      propertyDescriptorsMap = new LinkedHashMap<String, IPropertyDescriptor>();
+      for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
+        propertyDescriptorsMap.put(descriptor.getName(), descriptor);
       }
+      tempPropertyBuffer = null;
     }
   }
 
-  private Object delegateServicesLock = new Object();
-
-  private void registerDelegateServicesIfNecessary() {
-    synchronized (delegateServicesLock) {
-      if (serviceDelegateClassNames != null) {
-        for (Entry<String, String> nextPair : serviceDelegateClassNames
-            .entrySet()) {
-          try {
-            IComponentService delegate = null;
-            if (!("".equals(nextPair.getValue()) || "null"
-                .equalsIgnoreCase(nextPair.getValue()))) {
-              delegate = (IComponentService) Class.forName(nextPair.getValue())
-                  .newInstance();
-            }
-            registerService(Class.forName(ObjectUtils
-                .extractRawClassName(nextPair.getKey())), delegate);
-          } catch (ClassNotFoundException ex) {
-            throw new DescriptorException(ex);
-          } catch (InstantiationException ex) {
-            throw new DescriptorException(ex);
-          } catch (IllegalAccessException ex) {
-            throw new DescriptorException(ex);
+  private synchronized void registerDelegateServicesIfNecessary() {
+    if (serviceDelegateClassNames != null) {
+      for (Entry<String, String> nextPair : serviceDelegateClassNames
+          .entrySet()) {
+        try {
+          IComponentService delegate = null;
+          if (!("".equals(nextPair.getValue()) || "null"
+              .equalsIgnoreCase(nextPair.getValue()))) {
+            delegate = (IComponentService) Class.forName(nextPair.getValue())
+                .newInstance();
           }
+          registerService(
+              Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())),
+              delegate);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
         }
-        serviceDelegateClassNames = null;
       }
+      serviceDelegateClassNames = null;
     }
-    synchronized (delegateServicesLock) {
-      if (serviceDelegateBeanNames != null && beanFactory != null) {
-        for (Entry<String, String> nextPair : serviceDelegateBeanNames
-            .entrySet()) {
-          try {
-            registerService(Class.forName(ObjectUtils
-                .extractRawClassName(nextPair.getKey())), beanFactory.getBean(
-                nextPair.getValue(), IComponentService.class));
-          } catch (ClassNotFoundException ex) {
-            throw new DescriptorException(ex);
-          }
+    if (serviceDelegateBeanNames != null && beanFactory != null) {
+      for (Entry<String, String> nextPair : serviceDelegateBeanNames.entrySet()) {
+        try {
+          registerService(
+              Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())),
+              beanFactory.getBean(nextPair.getValue(), IComponentService.class));
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
         }
-        serviceDelegateBeanNames = null;
       }
+      serviceDelegateBeanNames = null;
     }
   }
 
@@ -1175,39 +1141,33 @@ public abstract class AbstractComponentDescriptor<E> extends
     lifecycleInterceptors.add(lifecycleInterceptor);
   }
 
-  private Object lifecycleInterceptorsLock = new Object();
-
-  private void registerLifecycleInterceptorsIfNecessary() {
-    synchronized (lifecycleInterceptorsLock) {
-      // process creation of lifecycle interceptors.
-      if (lifecycleInterceptorClassNames != null) {
-        for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
-          try {
-            registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class
-                .forName(lifecycleInterceptorClassName).newInstance());
-          } catch (InstantiationException ex) {
-            throw new DescriptorException(ex);
-          } catch (IllegalAccessException ex) {
-            throw new DescriptorException(ex);
-          } catch (ClassNotFoundException ex) {
-            throw new DescriptorException(ex);
-          }
+  private synchronized void registerLifecycleInterceptorsIfNecessary() {
+    // process creation of lifecycle interceptors.
+    if (lifecycleInterceptorClassNames != null) {
+      for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
+        try {
+          registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class
+              .forName(lifecycleInterceptorClassName).newInstance());
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
         }
-        lifecycleInterceptorClassNames = null;
       }
+      lifecycleInterceptorClassNames = null;
     }
-    synchronized (lifecycleInterceptorsLock) {
-      if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
-        for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
-          registerLifecycleInterceptor(beanFactory.getBean(
-              lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
-        }
-        lifecycleInterceptorBeanNames = null;
+    if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
+      for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
+        registerLifecycleInterceptor(beanFactory.getBean(
+            lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
       }
+      lifecycleInterceptorBeanNames = null;
     }
   }
 
-  private void registerService(Class<?> serviceContract,
+  private synchronized void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
       serviceDelegates = new HashMap<String, IComponentService>();

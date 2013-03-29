@@ -209,8 +209,7 @@ public abstract class AbstractPropertyChangeCapable implements
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
-  @Override
-  public PropertyChangeListener[] getPropertyChangeListeners() {
+  protected PropertyChangeListener[] getPropertyChangeListeners() {
     ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
       listeners.addAll(Arrays.asList(propertyChangeSupport
@@ -231,8 +230,8 @@ public abstract class AbstractPropertyChangeCapable implements
    *         <code>propertyName</code> is null, an empty array is returned.
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
    */
-  @Override
-  public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+  protected PropertyChangeListener[] getPropertyChangeListeners(
+      String propertyName) {
     ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
       listeners.addAll(Arrays.asList(propertyChangeSupport

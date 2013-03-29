@@ -57,7 +57,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -286,6 +285,7 @@ public class HibernateBackendController extends AbstractBackendController {
                 relinkAfterInitialization(
                     (Collection<IComponent>) propertyValue, componentOrEntity);
               }
+              return;
             } catch (Exception ex) {
               LOG.error(
                   "An internal error occurred when forcing {} collection initialization.",
@@ -299,6 +299,7 @@ public class HibernateBackendController extends AbstractBackendController {
           if (li.getSession() != null && li.getSession().isOpen()) {
             try {
               Hibernate.initialize(propertyValue);
+              return;
             } catch (Exception ex) {
               LOG.error(
                   "An internal error occurred when forcing {} reference initialization.",
@@ -308,32 +309,28 @@ public class HibernateBackendController extends AbstractBackendController {
           }
         }
 
-        if (!Hibernate.isInitialized(propertyValue)) {
-          // If it couldn't succeed, then get the Hibernate template and perform
-          // necessary locks and initialization.
-          if (currentInitializationSession != null) {
-            performPropertyInitializationUsingSession(componentOrEntity,
-                propertyName, currentInitializationSession);
-          } else {
-            Session hibernateSession = getHibernateSession();
-            FlushMode oldFlushMode = hibernateSession.getFlushMode();
+        // If it couldn't succeed, then get the Hibernate template and perform
+        // necessary locks and initialization.
+        if (currentInitializationSession != null) {
+          performPropertyInitializationUsingSession(componentOrEntity,
+              propertyName, currentInitializationSession);
+        } else {
+          Session hibernateSession = getHibernateSession();
+          FlushMode oldFlushMode = hibernateSession.getFlushMode();
+          try {
+            // Temporary switch to a read-only session.
+            hibernateSession.setFlushMode(FlushMode.MANUAL);
             try {
-              // Temporary switch to a read-only session.
-              hibernateSession.setFlushMode(FlushMode.MANUAL);
-              try {
-                currentInitializationSession = hibernateSession;
-                performPropertyInitializationUsingSession(componentOrEntity,
-                    propertyName, hibernateSession);
-              } finally {
-                currentInitializationSession = null;
-              }
+              currentInitializationSession = hibernateSession;
+              performPropertyInitializationUsingSession(componentOrEntity,
+                  propertyName, hibernateSession);
             } finally {
-              hibernateSession.setFlushMode(oldFlushMode);
+              currentInitializationSession = null;
             }
+          } finally {
+            hibernateSession.setFlushMode(oldFlushMode);
           }
         }
-        componentOrEntity.firePropertyChange(propertyName,
-            IPropertyChangeCapable.UNKNOWN, propertyValue);
       } finally {
         getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
       }
