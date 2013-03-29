@@ -89,6 +89,15 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
+
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -1270,30 +1279,79 @@ public abstract class AbstractComponentInvocationHandler implements
       IPropertyDescriptor propertyDescriptor, AccessorInfo accessorInfo,
       Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
       Method method, Object[] args) {
-    String propertyName = propertyDescriptor.getName();
-    Object computedPropertyValue;
-    if (!accessorInfo.isModifier() && propertyDescriptor.isCacheable()) {
-      if (computedPropertiesCache.containsKey(propertyName)) {
-        computedPropertyValue = computedPropertiesCache.get(propertyName);
-        return computedPropertyValue;
-      }
-    }
-    IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
-        extensionClass, (IComponent) proxy);
-    computedPropertyValue = invokeExtensionMethod(extensionDelegate, method,
-        args);
-    if (!accessorInfo.isModifier() && propertyDescriptor.isCacheable()) {
-      computedPropertiesCache.put(propertyName, computedPropertyValue);
-    }
-    return computedPropertyValue;
-  }
-
-  private Object invokeExtensionMethod(
-      IComponentExtension<? extends IComponent> componentExtension,
-      Method method, Object[] args) {
     try {
-      return MethodUtils.invokeMethod(componentExtension, method.getName(),
-          args, method.getParameterTypes());
+      String propertyName = propertyDescriptor.getName();
+      Object computedPropertyValue = null;
+      if (accessorInfo.isModifier()) {
+        computedPropertyValue = getAccessorFactory().createPropertyAccessor(
+            propertyDescriptor.getName(), getComponentContract()).getValue(
+            proxy);
+        Object interceptedValue = args[args.length - 1];
+        if (propertyProcessorsEnabled) {
+          switch (accessorInfo.getAccessorType()) {
+            case SETTER:
+              propertyDescriptor.preprocessSetter(proxy, interceptedValue);
+              interceptedValue = propertyDescriptor.interceptSetter(proxy,
+                  interceptedValue);
+              break;
+            case ADDER:
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .preprocessAdder(proxy,
+                      (Collection<?>) computedPropertyValue, interceptedValue);
+              break;
+            case REMOVER:
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .preprocessRemover(proxy,
+                      (Collection<?>) computedPropertyValue, interceptedValue);
+              break;
+            default:
+              break;
+          }
+          args[args.length - 1] = interceptedValue;
+        }
+      } else if (propertyDescriptor.isCacheable()) {
+        if (computedPropertiesCache.containsKey(propertyName)) {
+          computedPropertyValue = computedPropertiesCache.get(propertyName);
+          return computedPropertyValue;
+        }
+      }
+      IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
+          extensionClass, (IComponent) proxy);
+      if (accessorInfo.isModifier()) {
+        // do not change computed property value
+        invokeExtensionMethod(extensionDelegate, method, args);
+      } else {
+        computedPropertyValue = invokeExtensionMethod(extensionDelegate,
+            method, args);
+      }
+      if (accessorInfo.isModifier()) {
+        Object newComputedPropertyValue = getAccessorFactory()
+            .createPropertyAccessor(propertyDescriptor.getName(),
+                getComponentContract()).getValue(proxy);
+        switch (accessorInfo.getAccessorType()) {
+          case SETTER:
+            propertyDescriptor.postprocessSetter(proxy, computedPropertyValue,
+                newComputedPropertyValue);
+            break;
+          case ADDER:
+            ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                .postprocessAdder(proxy,
+                    (Collection<?>) newComputedPropertyValue,
+                    args[args.length - 1]);
+            break;
+          case REMOVER:
+            ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                .postprocessRemover(proxy,
+                    (Collection<?>) newComputedPropertyValue,
+                    args[args.length - 1]);
+            break;
+          default:
+            break;
+        }
+      } else if (propertyDescriptor.isCacheable()) {
+        computedPropertiesCache.put(propertyName, computedPropertyValue);
+      }
+      return computedPropertyValue;
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
@@ -1304,6 +1362,14 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
+  }
+
+  private Object invokeExtensionMethod(
+      IComponentExtension<? extends IComponent> componentExtension,
+      Method method, Object[] args) throws NoSuchMethodException,
+      IllegalAccessException, InvocationTargetException {
+    return MethodUtils.invokeMethod(componentExtension, method.getName(), args,
+        method.getParameterTypes());
   }
 
   @SuppressWarnings("unchecked")
