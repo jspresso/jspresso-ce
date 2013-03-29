@@ -25,6 +25,7 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
@@ -134,7 +135,7 @@ public abstract class RemoteStartup extends
    */
   public List<RemoteCommand> start(RemoteStartCommand startCommand) {
     try {
-      Locale locale = new Locale(startCommand.getLanguage());
+      Locale locale = LocaleUtils.toLocale(startCommand.getLanguage());
       IFrontendController<RComponent, RIcon, RAction> controller = getFrontendController();
       if (!dupSessionNotifiedOnce && isDupSessionDetectionEnabled()
           && controller != null && controller.isStarted()) {

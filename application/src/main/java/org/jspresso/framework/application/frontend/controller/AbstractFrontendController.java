@@ -33,6 +33,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jspresso.framework.action.ActionContextConstants;
@@ -705,7 +706,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     if (getForcedStartingLocale() != null) {
-      return new Locale(getForcedStartingLocale());
+      return LocaleUtils.toLocale(getForcedStartingLocale());
     }
     return clientLocale;
   }
@@ -1127,7 +1128,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     this.clientLocale = theClientLocale;
     Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
-      initialLocale = new Locale(forcedStartingLocale);
+      initialLocale = LocaleUtils.toLocale(forcedStartingLocale);
     }
     started = peerController.start(initialLocale, theClientTimeZone);
     BackendControllerHolder.setSessionBackendController(peerController);

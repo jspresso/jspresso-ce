@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.application.startup.batch;
 
-import java.util.Locale;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -27,6 +25,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang.LocaleUtils;
 import org.jspresso.framework.application.launch.batch.BatchLauncher;
 import org.jspresso.framework.application.startup.BackendActionStartup;
 
@@ -107,7 +106,7 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
    */
   protected void processCommandLine(CommandLine cmd) throws ParseException {
     setApplicationContextKey(cmd.getOptionValue(APP_CONTEXT));
-    setStartupLocale(new Locale(cmd.getOptionValue(LOCALE, "en")));
+    setStartupLocale(LocaleUtils.toLocale(cmd.getOptionValue(LOCALE, "en")));
     setActionBeanId(cmd.getOptionValue(ACTION_ID));
     setUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));
   }

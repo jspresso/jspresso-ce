@@ -42,6 +42,7 @@ import javax.security.auth.Subject;
 import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.collections.map.ReferenceMap;
+import org.apache.commons.lang.LocaleUtils;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -1852,7 +1853,8 @@ public abstract class AbstractBackendController extends AbstractController
     String userPreferredLanguageCode = (String) getApplicationSession()
         .getPrincipal().getCustomProperty(UserPrincipal.LANGUAGE_PROPERTY);
     if (userPreferredLanguageCode != null) {
-      getApplicationSession().setLocale(new Locale(userPreferredLanguageCode));
+      getApplicationSession().setLocale(
+          LocaleUtils.toLocale(userPreferredLanguageCode));
     }
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(new String[] {

@@ -36,6 +36,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang.LocaleUtils;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
@@ -138,7 +139,7 @@ public class ViewTester {
   public void displayView() {
     Locale locale;
     if (language != null) {
-      locale = new Locale(language);
+      locale = LocaleUtils.toLocale(language);
     } else {
       locale = Locale.getDefault();
     }
@@ -161,7 +162,8 @@ public class ViewTester {
 
     if (viewDescriptor.getModelDescriptor() != null) {
       IValueConnector modelConnector = mockBackController.createModelConnector(
-          IValueConnector.MODEL_CONNECTOR_PROPERTY, viewDescriptor.getModelDescriptor());
+          IValueConnector.MODEL_CONNECTOR_PROPERTY,
+          viewDescriptor.getModelDescriptor());
 
       IEntityFactory entityFactory = mockBackController.getEntityFactory();
 
