@@ -41,17 +41,6 @@ import org.jspresso.framework.security.UserPrincipal;
 public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
 
   /**
-   * Takes care of registering the newly created bean in the backend controller.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    T newEntity = super.createEntityInstance(entityContract);
-    return newEntity;
-  }
-
-  /**
    * If a unit of work is active, clones the instanciated entity before
    * performing any initialization.
    * <p>

@@ -68,10 +68,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   @Override
-  public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    T createdEntity = createEntityInstance(entityContract,
-        entityGUIDGenerator.generateGUID());
-    return initializeEntity(createdEntity);
+  public final <T extends IEntity> T createEntityInstance(
+      Class<T> entityContract) {
+    return createEntityInstance(entityContract,
+        entityGUIDGenerator.generateGUID(), true);
   }
 
   /**
@@ -112,8 +112,17 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   @Override
-  public <T extends IEntity> T createEntityInstance(Class<T> entityContract,
-      Serializable id) {
+  public final <T extends IEntity> T createEntityInstance(
+      Class<T> entityContract, Serializable id) {
+    return createEntityInstance(entityContract, id, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public final <T extends IEntity> T createEntityInstance(
+      Class<T> entityContract, Serializable id, boolean performInitialization) {
     final T createdEntity = createEntityInstance(entityContract, id, null);
     createdEntity.addPropertyChangeListener(IEntity.VERSION,
         new PropertyChangeListener() {
@@ -129,6 +138,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
             }
           }
         });
+    if (performInitialization) {
+      return initializeEntity(createdEntity);
+    }
     return createdEntity;
   }
 

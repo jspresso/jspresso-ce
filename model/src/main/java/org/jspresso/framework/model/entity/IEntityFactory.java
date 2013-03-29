@@ -58,4 +58,21 @@ public interface IEntityFactory extends IComponentFactory {
   <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id);
 
+  /**
+   * Instanciates an entity using a given ID. No lifecycle interceptor nor
+   * registration of any kind is performed.
+   * 
+   * @param <T>
+   *          the concrete class of the created entity.
+   * @param entityContract
+   *          the class of the entity to create.
+   * @param id
+   *          the identifier to set on the entity.
+   * @param performInitialization
+   *          should we perform initialization ?
+   * @return the entity instance.
+   */
+  <T extends IEntity> T createEntityInstance(Class<T> entityContract,
+      Serializable id, boolean performInitialization);
+
 }
