@@ -61,7 +61,12 @@ public class SaveAction extends AbstractHibernateAction {
 
           @Override
           protected void doInTransactionWithoutResult(TransactionStatus status) {
-            getController(context).performPendingOperations();
+            try {
+              getController(context).performPendingOperations();
+            } catch (RuntimeException ex) {
+              getController(context).clearPendingOperations();
+              throw ex;
+            }
           }
         });
     return super.execute(actionHandler, context);
