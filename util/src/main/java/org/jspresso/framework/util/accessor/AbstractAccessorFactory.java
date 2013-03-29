@@ -19,8 +19,8 @@
 package org.jspresso.framework.util.accessor;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jspresso.framework.util.bean.AccessorInfo;
 
@@ -32,13 +32,13 @@ import org.jspresso.framework.util.bean.AccessorInfo;
  */
 public abstract class AbstractAccessorFactory implements IAccessorFactory {
 
-  private Map<Method, AccessorInfo> accessorInfoCache = new HashMap<Method, AccessorInfo>();
+  private Map<Method, AccessorInfo> accessorInfoCache = new ConcurrentHashMap<Method, AccessorInfo>();
 
   /**
    * Constructs and caches Accessor infos. {@inheritDoc}
    */
   @Override
-  public synchronized AccessorInfo getAccessorInfo(Method method) {
+  public AccessorInfo getAccessorInfo(Method method) {
     AccessorInfo info = accessorInfoCache.get(method);
     if (info == null) {
       info = new AccessorInfo(method);
