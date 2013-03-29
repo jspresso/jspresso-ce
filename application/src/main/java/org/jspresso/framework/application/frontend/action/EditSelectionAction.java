@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.action;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.view.IView;
 
 /**
  * This action is meant to trigger editing on the current collection view
@@ -47,7 +48,8 @@ public class EditSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> context) {
     int[] selection = getSelectedIndices(context);
     if (selection != null && selection.length == 1) {
-      E component = getView(context).getPeer();
+      IView<E> view = getView(context);
+      E component = view.getPeer();
       getFrontendController(context).edit(component);
     }
     return super.execute(actionHandler, context);

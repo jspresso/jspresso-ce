@@ -47,7 +47,7 @@ public interface IAccessor {
    *           if this <code>Method</code> object enforces Java language access
    *           control and the underlying method is inaccessible.
    */
-  Object getValue(Object target) throws IllegalAccessException,
+  <T> T getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
 
   /**

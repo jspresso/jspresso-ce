@@ -48,7 +48,7 @@ public interface IItemSelectable {
    * 
    * @return the selected item out of this item selectable.
    */
-  Object getSelectedItem();
+  <T> T getSelectedItem();
 
   /**
    * Removes an item selection listener from this object.

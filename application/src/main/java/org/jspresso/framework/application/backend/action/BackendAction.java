@@ -146,7 +146,7 @@ public class BackendAction extends AbstractAction {
    * {@inheritDoc}
    */
   @Override
-  protected Object getSelectedModel(int[] viewPath, Map<String, Object> context) {
+  protected <T> T getSelectedModel(int[] viewPath, Map<String, Object> context) {
     boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
     try {
       if (viewPath == null) {
@@ -154,7 +154,7 @@ public class BackendAction extends AbstractAction {
         // since it's supported now by injecting a SELECTED_MODEL variable in
         // the context during testing.
         if (context.containsKey(SELECTED_MODEL)) {
-          return context.get(SELECTED_MODEL);
+          return (T) context.get(SELECTED_MODEL);
         }
         context.put(WARN_BAD_ACCESS_DISABLED, null);
       }
@@ -170,7 +170,7 @@ public class BackendAction extends AbstractAction {
    * {@inheritDoc}
    */
   @Override
-  protected List<?> getSelectedModels(int[] viewPath,
+  protected <T> List<T> getSelectedModels(int[] viewPath,
       Map<String, Object> context) {
     boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
     try {
@@ -179,7 +179,7 @@ public class BackendAction extends AbstractAction {
         // since it's supported now by injecting a SELECTED_MODELS variable in
         // the context during testing.
         if (context.containsKey(SELECTED_MODELS)) {
-          return (List<?>) context.get(SELECTED_MODELS);
+          return (List<T>) context.get(SELECTED_MODELS);
         }
         context.put(WARN_BAD_ACCESS_DISABLED, null);
       }
@@ -195,7 +195,7 @@ public class BackendAction extends AbstractAction {
    * {@inheritDoc}
    */
   @Override
-  protected IView<?> getView(int[] viewPath, Map<String, Object> context) {
+  protected <T> IView<T> getView(int[] viewPath, Map<String, Object> context) {
     warnBadFrontendAccess(context);
     return super.getView(viewPath, context);
   }

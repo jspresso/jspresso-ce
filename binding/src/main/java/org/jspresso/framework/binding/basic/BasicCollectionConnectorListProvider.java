@@ -123,8 +123,8 @@ public class BasicCollectionConnectorListProvider extends
    * {@inheritDoc}
    */
   @Override
-  public Object getSelectedItem() {
-    return implGetSelectedItem();
+  public <T> T getSelectedItem() {
+    return (T) implGetSelectedItem();
   }
 
   /**

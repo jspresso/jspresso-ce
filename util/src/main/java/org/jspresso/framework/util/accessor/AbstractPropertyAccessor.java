@@ -120,7 +120,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    * @return the property value.
    */
   @Override
-  public Object getValue(Object target) throws IllegalAccessException,
+  public <T> T getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
     Object finalTarget = getLastNestedTarget(target, getProperty());
     if (finalTarget != null) {
@@ -131,13 +131,13 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
           // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
           // target
           // is a Map and access its properties as such.
-          return PROPERTY_UTILS_BEAN.getSimpleProperty(finalTarget,
+          return (T) PROPERTY_UTILS_BEAN.getSimpleProperty(finalTarget,
               getLastNestedProperty());
         }
-        return PROPERTY_UTILS_BEAN.getProperty(finalTarget,
+        return (T) PROPERTY_UTILS_BEAN.getProperty(finalTarget,
             getLastNestedProperty());
       }
-      return PROPERTY_UTILS_BEAN.getProperty(finalTarget,
+      return (T) PROPERTY_UTILS_BEAN.getProperty(finalTarget,
           getLastNestedProperty());
     }
     return null;

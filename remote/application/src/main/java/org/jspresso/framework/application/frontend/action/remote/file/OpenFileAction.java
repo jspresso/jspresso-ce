@@ -24,7 +24,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
+import org.jspresso.framework.view.IView;
 
 /**
  * This action lets the user browse his local file system and choose a file to
@@ -47,13 +49,12 @@ public class OpenFileAction extends ChooseFileAction {
     RemoteFileUploadCommand fileUploadCommand = new RemoteFileUploadCommand();
     fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
+    IView<RComponent> view = getView(context);
     RAction successCallbackAction = getActionFactory(context).createAction(
-        getFileOpenCallbackAction(), actionHandler, getView(context),
-        getLocale(context));
+        getFileOpenCallbackAction(), actionHandler, view, getLocale(context));
     fileUploadCommand.setSuccessCallbackAction(successCallbackAction);
     RAction cancelCallbackAction = getActionFactory(context).createAction(
-        getFileCancelCallbackAction(), actionHandler, getView(context),
-        getLocale(context));
+        getFileCancelCallbackAction(), actionHandler, view, getLocale(context));
     fileUploadCommand.setCancelCallbackAction(cancelCallbackAction);
     fileUploadCommand.setFileUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);

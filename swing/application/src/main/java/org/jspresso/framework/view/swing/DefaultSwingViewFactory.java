@@ -227,7 +227,6 @@ public class DefaultSwingViewFactory extends
   private static final Dimension    TREE_PREFERRED_SIZE = new Dimension(128,
                                                             128);
   private IListSelectionModelBinder listSelectionModelBinder;
-
   private ITreeSelectionModelBinder treeSelectionModelBinder;
 
   /**
@@ -2069,11 +2068,6 @@ public class DefaultSwingViewFactory extends
   protected JPanel createSecurityComponent() {
     JPanel panel = createJPanel();
     panel.setLayout(new BorderLayout());
-    // JLabel label = createJLabel();
-    // label.setHorizontalAlignment(SwingConstants.CENTER);
-    // label.setVerticalAlignment(SwingConstants.CENTER);
-    // label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    // panel.add(label, BorderLayout.CENTER);
     return panel;
   }
 

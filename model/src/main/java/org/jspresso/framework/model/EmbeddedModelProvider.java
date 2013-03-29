@@ -45,9 +45,10 @@ public class EmbeddedModelProvider implements IModelProvider {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public Object getModel() {
-    return model;
+  public <T> T getModel() {
+    return (T) model;
   }
 
   /**

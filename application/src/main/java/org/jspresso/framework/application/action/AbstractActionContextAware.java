@@ -76,8 +76,8 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the action parameter if it exists in the action context or null.
    */
-  protected Object getActionParameter(Map<String, Object> context) {
-    return context.get(ActionContextConstants.ACTION_PARAM);
+  protected <T> T getActionParameter(Map<String, Object> context) {
+    return (T) context.get(ActionContextConstants.ACTION_PARAM);
   }
 
   /**
@@ -112,9 +112,9 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the frontend controller.
    */
-  protected IFrontendController<?, ?, ?> getFrontendController(
+  protected <E, F, G> IFrontendController<E, F, G> getFrontendController(
       Map<String, Object> context) {
-    return (IFrontendController<?, ?, ?>) context
+    return (IFrontendController<E, F, G>) context
         .get(ActionContextConstants.FRONT_CONTROLLER);
   }
 
@@ -138,7 +138,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the model.
    */
-  protected Object getModel(Map<String, Object> context) {
+  protected <T> T getModel(Map<String, Object> context) {
     return getModel(null, context);
   }
 
@@ -155,7 +155,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the model.
    */
-  protected Object getModel(int[] viewPath, Map<String, Object> context) {
+  protected <T> T getModel(int[] viewPath, Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector != null) {
       if (modelConnector instanceof ICompositeValueConnector) {
@@ -258,7 +258,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the parent model.
    */
-  protected Object getParentModel(Map<String, Object> context) {
+  protected <T> T getParentModel(Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(context);
     if (modelConnector != null) {
       if (modelConnector.getParentConnector() != null) {
@@ -321,7 +321,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the selected model.
    */
-  protected Object getSelectedModel(Map<String, Object> context) {
+  protected <T> T getSelectedModel(Map<String, Object> context) {
     return getSelectedModel(null, context);
   }
 
@@ -340,9 +340,9 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the selected model.
    */
-  protected Object getSelectedModel(int[] viewPath, Map<String, Object> context) {
+  protected <T> T getSelectedModel(int[] viewPath, Map<String, Object> context) {
     IValueConnector viewConnector = getViewConnector(viewPath, context);
-    Object selectedModel;
+    T selectedModel;
     if (viewConnector instanceof IItemSelectable) {
       selectedModel = ((IItemSelectable) viewConnector).getSelectedItem();
       if (selectedModel instanceof IValueConnector) {
@@ -363,7 +363,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the list of selected models.
    */
-  protected List<?> getSelectedModels(Map<String, Object> context) {
+  protected <T> List<T> getSelectedModels(Map<String, Object> context) {
     return getSelectedModels(null, context);
   }
 
@@ -382,27 +382,28 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the list of selected models.
    */
-  protected List<?> getSelectedModels(int[] viewPath,
+  protected <T> List<T> getSelectedModels(int[] viewPath,
       Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector == null) {
       return null;
     }
-    List<Object> models;
+    List<T> models;
     if (modelConnector instanceof ICollectionConnector) {
-      models = new ArrayList<Object>();
+      models = new ArrayList<T>();
       int[] selectedIndices = getSelectedIndices(viewPath, context);
       if (selectedIndices != null && selectedIndices.length > 0) {
         for (int i = 0; i < selectedIndices.length; i++) {
           IValueConnector childConnector = ((ICollectionConnector) modelConnector)
               .getChildConnector(selectedIndices[i]);
           if (childConnector != null) {
-            models.add(childConnector.getConnectorValue());
+            models.add((T) childConnector.getConnectorValue());
           }
         }
       }
     } else {
-      models = Collections.singletonList(getSelectedModel(viewPath, context));
+      T model = getSelectedModel(viewPath, context);
+      models = Collections.singletonList(model);
     }
     return models;
   }
@@ -531,8 +532,8 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the (IView) property view.
    */
-  protected IView<?> getPropertyView(Map<String, Object> context) {
-    return (IView<?>) context.get(ActionContextConstants.PROPERTY_VIEW);
+  protected <T> IView<T> getPropertyView(Map<String, Object> context) {
+    return (IView<T>) context.get(ActionContextConstants.PROPERTY_VIEW);
   }
 
   /**
@@ -551,7 +552,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the view this action was triggered on.
    */
-  protected IView<?> getView(Map<String, Object> context) {
+  protected <T> IView<T> getView(Map<String, Object> context) {
     return getView(null, context);
   }
 
@@ -577,8 +578,8 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the view this action was triggered on.
    */
-  protected IView<?> getView(int[] viewPath, Map<String, Object> context) {
-    return navigate((IView<?>) context.get(ActionContextConstants.VIEW),
+  protected <T> IView<T> getView(int[] viewPath, Map<String, Object> context) {
+    return navigate((IView<T>) context.get(ActionContextConstants.VIEW),
         viewPath);
   }
 
@@ -651,8 +652,8 @@ public abstract class AbstractActionContextAware {
    *          </ul>
    * @return the view navigated to.
    */
-  protected IView<?> navigate(IView<?> fromView, int[] viewPath) {
-    IView<?> target = fromView;
+  protected <T> IView<T> navigate(IView<T> fromView, int[] viewPath) {
+    IView<T> target = fromView;
     if (viewPath != null) {
       for (int nextIndex : viewPath) {
         if (target != null) {
@@ -667,7 +668,7 @@ public abstract class AbstractActionContextAware {
                 && ((ICompositeView<?>) target).getChildren() != null
                 && nextIndex < ((ICompositeView<?>) target).getChildren()
                     .size()) {
-              target = ((ICompositeView<?>) target).getChildren()
+              target = ((ICompositeView<T>) target).getChildren()
                   .get(nextIndex);
             } else {
               target = null;

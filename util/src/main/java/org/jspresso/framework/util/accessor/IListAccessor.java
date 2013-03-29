@@ -19,7 +19,6 @@
 package org.jspresso.framework.util.accessor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * This interface is implemented by any bean value accessor on a list property.
@@ -49,13 +48,4 @@ public interface IListAccessor extends ICollectionAccessor {
   void addToValue(Object target, int index, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException;
-
-  /**
-   * Return type refined.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  List<?> getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException;
 }

@@ -44,7 +44,7 @@ public interface IModelProvider {
    * 
    * @return The bean object
    */
-  Object getModel();
+  <T> T getModel();
 
   /**
    * Gets the bean object of this provider.

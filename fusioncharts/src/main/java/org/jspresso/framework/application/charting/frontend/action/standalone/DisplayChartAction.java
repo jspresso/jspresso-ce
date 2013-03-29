@@ -29,6 +29,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.charting.frontend.action.AbstractChartAction;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.lang.StringUtils;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.ConnectionCallback;
 
@@ -72,8 +73,9 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
     flashContext.put("chartHeight", Integer.toString(d.getHeight() - 100));
     List<G> chartActions = new ArrayList<G>();
     for (IDisplayableAction action : getActions()) {
+      IView<E> view = getView(context);
       chartActions.add(getActionFactory(context).createAction(action,
-          actionHandler, getView(context), getLocale(context)));
+          actionHandler, view, getLocale(context)));
     }
 
     getController(context).displayFlashObject(

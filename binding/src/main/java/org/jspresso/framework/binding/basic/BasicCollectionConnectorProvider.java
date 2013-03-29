@@ -129,8 +129,8 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
    * {@inheritDoc}
    */
   @Override
-  public Object getSelectedItem() {
-    return implGetSelectedItem();
+  public <T> T getSelectedItem() {
+    return (T) implGetSelectedItem();
   }
 
   /**

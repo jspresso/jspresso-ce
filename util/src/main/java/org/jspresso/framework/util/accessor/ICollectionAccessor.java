@@ -19,7 +19,6 @@
 package org.jspresso.framework.util.accessor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 
 /**
  * This interface is implemented by any bean value accessor on a collection
@@ -46,15 +45,6 @@ public interface ICollectionAccessor extends IAccessor {
    *           if a matching method is not found.
    */
   void addToValue(Object target, Object value) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException;
-
-  /**
-   * Return type refined.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  Collection<?> getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
 
   /**

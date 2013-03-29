@@ -72,16 +72,18 @@ public final class PropertyViewDescriptorHelper {
      * Exlude explicitely configured reference property view filled with a
      * custom LOV action
      */
-    boolean toExplode = (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor) || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
-        .getLovAction() == null);
+    boolean toExplode = !(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
+        || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+            .getLovAction() == null;
 
     /*
      * Include inlined component reference
      */
     toExplode = toExplode
-        && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>
-            && EntityHelper
-                .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor) && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)));
+        && propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+        && EntityHelper
+            .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)
+        && !(propertyDescriptor instanceof EnumQueryStructureDescriptor);
 
     if (toExplode) {
       IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)

@@ -201,8 +201,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * {@inheritDoc}
    */
   @Override
-  public Object getModel() {
-    return getConnecteeValue();
+  public <T> T getModel() {
+    return getConnectorValue();
   }
 
   /**

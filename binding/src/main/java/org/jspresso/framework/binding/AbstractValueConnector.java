@@ -277,9 +277,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public Object getConnectorValue() {
-    return getConnecteeValue();
+  public <T> T getConnectorValue() {
+    return (T) getConnecteeValue();
   }
 
   /**

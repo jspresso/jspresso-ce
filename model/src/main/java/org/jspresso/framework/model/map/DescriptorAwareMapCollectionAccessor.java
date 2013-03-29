@@ -63,15 +63,6 @@ public class DescriptorAwareMapCollectionAccessor extends
    * {@inheritDoc}
    */
   @Override
-  public Collection<?> getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
-    return (Collection<?>) super.getValue(target);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void removeFromValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {

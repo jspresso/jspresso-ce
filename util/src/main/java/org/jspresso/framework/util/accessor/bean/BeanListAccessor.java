@@ -20,7 +20,6 @@ package org.jspresso.framework.util.accessor.bean;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.jspresso.framework.util.accessor.IListAccessor;
@@ -80,14 +79,5 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
     } catch (NoSuchMethodException ex) {
       throw new RuntimeException(ex);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<?> getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
-    return (List<?>) super.getValue(target);
   }
 }

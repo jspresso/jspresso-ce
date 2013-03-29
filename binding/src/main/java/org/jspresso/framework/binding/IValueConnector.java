@@ -125,7 +125,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * 
    * @return The peer value
    */
-  Object getConnectorValue();
+  <T> T getConnectorValue();
 
   /**
    * Gets the connector this connector is attached to in mvc relationship.
