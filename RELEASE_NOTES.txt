@@ -1,5 +1,7 @@
 3.5.16
 ======
+- Property processors, if any, will now be invioked on computed properties with delegateWritable=true
+
 - Be sure to install "Jspresso Developer Studio M2E Configurator Feature" along with latest JDS from the Jspresso update-site.
   As of this writing, it is only available from the Jspresso SNAPSHOT Eclipse update site, i.e. :
   http://www.jspresso.org/external/updates-snapshot/e37/sjsplug/
