@@ -273,7 +273,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         }
       }
     }
-    return super.put(key, value);
+    Object refinedValue = value;
+    refinedValue = refineValue(value);
+    return super.put(key, refinedValue);
   }
 
   private Serializable[] extractQueryPropertyValues(IEntity entity,
@@ -701,5 +703,22 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         }
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T refineValue(T value) {
+    if (value instanceof String) {
+      String disjunction = ((String) value).replaceAll("(\\r|\\n)+", DISJUNCT);
+      if (disjunction.endsWith(DISJUNCT)) {
+        disjunction = disjunction.substring(0,
+            disjunction.length() - DISJUNCT.length());
+      }
+      return (T) disjunction;
+    }
+    return value;
   }
 }

@@ -55,6 +55,12 @@ package org.jspresso.framework.view.flex {
         super.measuredWidth = value;
       }
     }
-
+    
+    override protected function commitProperties():void {
+      super.commitProperties();
+      // prevents newlines to be stripped since they
+      // can be transformed to something else on serverside.
+      textField.multiline = true;
+    }
   }
 }

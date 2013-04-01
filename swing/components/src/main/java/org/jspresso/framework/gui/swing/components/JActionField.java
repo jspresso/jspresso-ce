@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
+import javax.swing.text.AbstractDocument;
 
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.swing.SwingUtil;
@@ -69,6 +70,8 @@ public class JActionField extends JPanel {
    */
   public JActionField(boolean showTextField) {
     textField = new JTextField();
+    ((AbstractDocument) textField.getDocument()).putProperty("filterNewlines",
+        Boolean.FALSE);
     setLayout(new GridBagLayout());
     if (showTextField) {
       add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0,

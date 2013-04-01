@@ -91,6 +91,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.JTextComponent;
@@ -1795,6 +1796,8 @@ public class DefaultSwingViewFactory extends
    */
   protected JTextField createJTextField(IPropertyViewDescriptor viewDescriptor) {
     JTextField textField = new JTextField();
+    ((AbstractDocument) textField.getDocument()).putProperty("filterNewlines",
+        Boolean.FALSE);
     SwingUtil.enableSelectionOnFocusGained(textField);
     return textField;
   }

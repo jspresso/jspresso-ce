@@ -156,4 +156,14 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    *          the hierarchical map holding bare filter values.
    */
   void hydrate(Map<String, Object> state);
+
+  /**
+   * Pre-process a value before putting it into the query component. Transforms
+   * a multiline text into a disjunction of values.
+   * 
+   * @param value
+   *          the value to refine to transform.
+   * @return the refined value.
+   */
+  <T> T refineValue(T value);
 }
