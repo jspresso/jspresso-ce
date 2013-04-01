@@ -2323,6 +2323,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createTextField : function(remoteTextField) {
       var textField = new qx.ui.form.TextField();
+      if(window.clipboardData) {
+        // We are in IE
+        textField.addListener("appear", function(appearEvent) {
+          var input = textField.getContentElement().getDomElement();
+          input["onpaste"] = function(pasteEvent) {
+            if(pasteEvent.clipboardData) {
+              var cbData = pasteEvent.clipboardData.getData("Text");
+              if(cbData) {
+                cbData = cbData.replace("(\r|\n)+", " ", "g");
+                pasteEvent.clipboardData.setData("Text", cbData);
+              }
+            }
+          }
+        }, this);
+      }
 
       if (remoteTextField.getMaxLength() > 0) {
         textField.setMaxLength(remoteTextField.getMaxLength());
