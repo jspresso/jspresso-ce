@@ -158,7 +158,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         .get(IQueryComponent.QUERY_COMPONENT);
 
     autoCompletePropertyValue = queryComponent
-        .refineValue(autoCompletePropertyValue);
+        .refineValue(autoCompletePropertyValue, null);
 
     String autoCompletePropertyName = null;
     if (viewConnector instanceof IRenderableCompositeValueConnector

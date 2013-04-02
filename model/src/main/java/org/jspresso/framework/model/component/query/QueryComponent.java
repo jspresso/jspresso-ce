@@ -34,6 +34,7 @@ import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.AbstractEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -273,8 +274,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         }
       }
     }
-    Object refinedValue = value;
-    refinedValue = refineValue(value);
+    Object refinedValue = refineValue(value, propertyDescriptor);
     return super.put(key, refinedValue);
   }
 
@@ -710,8 +710,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T refineValue(T value) {
-    if (value instanceof String) {
+  public <T> T refineValue(T value, IPropertyDescriptor propertyDescriptor) {
+    if (value instanceof String
+        && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
       String disjunction = ((String) value).replaceAll("(\\r|\\n)+", DISJUNCT);
       if (disjunction.endsWith(DISJUNCT)) {
         disjunction = disjunction.substring(0,

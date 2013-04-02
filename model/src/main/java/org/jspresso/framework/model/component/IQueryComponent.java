@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
@@ -163,7 +164,9 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * 
    * @param value
    *          the value to refine to transform.
+   * @param propertyDescriptor
+   *          the property descriptor this value should be refined for.
    * @return the refined value.
    */
-  <T> T refineValue(T value);
+  <T> T refineValue(T value, IPropertyDescriptor propertyDescriptor);
 }
