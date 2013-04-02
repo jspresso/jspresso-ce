@@ -190,8 +190,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           if (connectorValue instanceof IQueryComponent) {
             // To cleanup the preceeding values (e.g. ID)
             // see bug #986
+            connectorValue = ((IQueryComponent) connectorValue).clone();
             ((IQueryComponent) connectorValue).clear();
             ((IQueryComponent) connectorValue).putAll(queryComponent);
+            // will fire connector value change and trigger the action set on
+            // the ref field if any see bug #910
+            viewConnector.setConnectorValue(connectorValue);
           } else {
             viewConnector.setConnectorValue(queryComponent);
           }
@@ -280,7 +284,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         }
       }
     }
+    feedContextWithDialog(erqDescriptor, queryComponent, lovView,
+        actionHandler, context);
+    return super.execute(actionHandler, context);
+  }
 
+  private void feedContextWithDialog(
+      IReferencePropertyDescriptor<IComponent> erqDescriptor,
+      IQueryComponent queryComponent, IView<E> lovView,
+      final IActionHandler actionHandler, final Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
@@ -319,7 +331,6 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       queryComponent.addPropertyChangeListener(IPageable.PAGE,
           paginationListener);
     }
-    return super.execute(actionHandler, context);
   }
 
   private static boolean containsNonLovTriggeringChar(String value) {
