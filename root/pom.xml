@@ -831,6 +831,100 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <tags>
+                <tag>
+                  <name>hibernate.class</name>
+                  <placement>a</placement>
+                  <head>Hibernate class:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.column</name>
+                  <placement>a</placement>
+                  <head>Hibernate column:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.component</name>
+                  <placement>a</placement>
+                  <head>Hibernate component:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.composite-element</name>
+                  <placement>a</placement>
+                  <head>Hibernate composite-element:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.id</name>
+                  <placement>a</placement>
+                  <head>Hibernate id:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.key</name>
+                  <placement>a</placement>
+                  <head>Hibernate key:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.list</name>
+                  <placement>a</placement>
+                  <head>Hibernate list:</head>
+                </tag>      
+                <tag>
+                  <name>hibernate.list-index</name>
+                  <placement>a</placement>
+                  <head>Hibernate list-index:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.many-to-many</name>
+                  <placement>a</placement>
+                  <head>Hibernate many-to-many:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.many-to-one</name>
+                  <placement>a</placement>
+                  <head>Hibernate many-to-one:</head>
+                </tag>      
+                <tag>
+                  <name>hibernate.mapping</name>
+                  <placement>a</placement>
+                  <head>Hibernate mapping:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.one-to-many</name>
+                  <placement>a</placement>
+                  <head>Hibernate one-to-many:</head>
+                </tag>      
+                <tag>
+                  <name>hibernate.property</name>
+                  <placement>a</placement>
+                  <head>Hibernate property:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.set</name>
+                  <placement>a</placement>
+                  <head>Hibernate set:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.version</name>
+                  <placement>a</placement>
+                  <head>Hibernate version:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.joined-subclass</name>
+                  <placement>a</placement>
+                  <head>Hibernate joined-subclass:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.joined-subclass-key</name>
+                  <placement>a</placement>
+                  <head>Hibernate joined-subclass-key:</head>
+                </tag>
+                <tag>
+                  <name>hibernate.one-to-one</name>
+                  <placement>a</placement>
+                  <head>Hibernate one-to-one:</head>
+                </tag>
+              </tags>
+            </configuration>
           </plugin>
         </plugins>
       </build>
