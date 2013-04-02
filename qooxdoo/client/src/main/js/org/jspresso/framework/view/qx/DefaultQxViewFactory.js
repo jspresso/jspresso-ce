@@ -1742,14 +1742,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         if (remoteForm.getLabelsPosition() != "NONE") {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
-            // componentLabel.setTextAlign("right");
             componentLabel.setAlignX("right");
+            componentLabel.setAlignY("top");
           } else {
-            // componentLabel.setTextAlign("left");
             componentLabel.setAlignX("left");
+            componentLabel.setAlignY("bottom");
           }
-          componentLabel.setAlignY("middle");
-          componentLabel.setAllowShrinkX(false);
+          componentLabel.setAllowStretchX(false);
+          componentLabel.setAllowStretchY(false);
           form.add(componentLabel, {
                 row : labelRow,
                 column : labelCol,
@@ -1758,6 +1758,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               });
         }
         component.setAllowShrinkX(true);
+        component.setAlignX("left");
+        component.setAlignY("top");
         if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
           component.setAllowGrowX(true);
         } else {
@@ -1788,9 +1790,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (compCol + compColSpan > lastCol) {
           lastCol = compCol + compColSpan;
         }
-      }
-      for (var i = 0; i <= lastRow; i++) {
-        formLayout.setRowAlign(i, "left", "middle");
       }
       var filler = new qx.ui.core.Widget();
       filler.setMinWidth(0);

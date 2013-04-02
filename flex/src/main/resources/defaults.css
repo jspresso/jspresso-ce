@@ -116,17 +116,20 @@ ApplicationControlBar
 
 .asideLabelCell
 {
-  verticalAlign: middle;
+  verticalAlign: top;
   horizontalAlign: right;
 }
 
 .aboveLabelCell
 {
+  verticalAlign: bottom;
+  horizontalAlign: left;
 }
 
 .componentCell
 {
-  verticalAlign: middle;
+  verticalAlign: top;
+  horizontalAlign: left;
 }
 
 .borderContainer

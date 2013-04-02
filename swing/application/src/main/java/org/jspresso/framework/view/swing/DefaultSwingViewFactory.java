@@ -596,17 +596,13 @@ public class DefaultSwingViewFactory extends
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.insets = new Insets(5, 5, 5, 5);
-          if (isHeightExtensible(propertyViewDescriptor)) {
-            constraints.anchor = GridBagConstraints.NORTHEAST;
-          } else {
-            constraints.anchor = GridBagConstraints.EAST;
-          }
+          constraints.anchor = GridBagConstraints.NORTHEAST;
           constraints.gridx = currentX * 2;
           constraints.gridy = currentY;
           break;
         case ABOVE:
           constraints.insets = new Insets(5, 5, 0, 5);
-          constraints.anchor = GridBagConstraints.WEST;
+          constraints.anchor = GridBagConstraints.SOUTHWEST;
           constraints.gridx = currentX;
           constraints.gridy = currentY * 2;
           constraints.gridwidth = propertyWidth;
@@ -643,7 +639,7 @@ public class DefaultSwingViewFactory extends
           break;
       }
 
-      constraints.anchor = GridBagConstraints.WEST;
+      constraints.anchor = GridBagConstraints.NORTHWEST;
       // constraints.weightx = 1.0;
       constraints.weightx = propertyView.getPeer().getPreferredSize().width;
       if (propertyView.getPeer() instanceof JCheckBox) {
