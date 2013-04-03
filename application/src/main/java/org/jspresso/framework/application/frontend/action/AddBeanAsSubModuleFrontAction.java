@@ -65,7 +65,10 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
    * @return the target workspace to add the module to.
    */
   protected String getParentWorkspaceName(Map<String, Object> context) {
-    return parentWorkspaceName;
+    if (parentWorkspaceName != null) {
+      return parentWorkspaceName;
+    }
+    return getController(context).getSelectedWorkspaceName();
   }
 
   /**
@@ -106,10 +109,11 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
     if (moduleName != null) {
       context.put(AddBeanAsSubModuleAction.PARENT_MODULE_NAME, moduleName);
     }
-    
+
     IViewDescriptor projectedViewDescriptor = getChildModuleProjectedViewDescriptor(context);
     if (projectedViewDescriptor != null) {
-      context.put(AddBeanAsSubModuleAction.PROJECTED_VIEW_DESCRIPTOR, projectedViewDescriptor);
+      context.put(AddBeanAsSubModuleAction.PROJECTED_VIEW_DESCRIPTOR,
+          projectedViewDescriptor);
     }
 
     setActionParameter(getComponentsToAdd(context), context);

@@ -83,16 +83,6 @@ public class AddBeanAsSubModuleAction extends BackendAction {
     if (selectedModels == null) {
       selectedModels = getSelectedModels(context);
     }
-    IModelDescriptor modelDescriptor = getModelDescriptor(context);
-
-    IComponentDescriptor<?> childComponentDescriptor;
-    if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
-      childComponentDescriptor = ((ICollectionDescriptorProvider<?>) modelDescriptor)
-          .getCollectionDescriptor().getElementDescriptor();
-    } else {
-      childComponentDescriptor = ((IComponentDescriptorProvider<?>) modelDescriptor)
-          .getComponentDescriptor();
-    }
 
     Module moduleToSelect = null;
     for (Object nextSelectedModuleObject : selectedModels) {
@@ -101,11 +91,14 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
       Module parentModule = findDestinationModule(nextSelectedModuleObject,
           context);
+      IComponentDescriptor<?> beanComponentDescriptor = getBeanComponentDescriptor(
+          parentModule, context);
+
       List<Module> childModules = parentModule.getSubModules();
       Module newSubModule = null;
 
       Module nextSubModule = createChildModule(parentModule,
-          childComponentDescriptor, nextSelectedModuleObject, context);
+          beanComponentDescriptor, nextSelectedModuleObject, context);
       int nextSubModuleIndex = -1;
       if (childModules != null) {
         nextSubModuleIndex = childModules.indexOf(nextSubModule);
@@ -128,6 +121,30 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
     setActionParameter(moduleToSelect, context);
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Retrieves the bean component descriptor to create the chiold bean module.
+   * 
+   * @param parentModule
+   *          the parent module to add the child bean module to.
+   * @param context
+   *          the action context.
+   * @return the bean module component descriptor.
+   */
+  protected IComponentDescriptor<?> getBeanComponentDescriptor(
+      Module parentModule, Map<String, Object> context) {
+    IModelDescriptor modelDescriptor = getModelDescriptor(context);
+
+    IComponentDescriptor<?> childComponentDescriptor;
+    if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
+      childComponentDescriptor = ((ICollectionDescriptorProvider<?>) modelDescriptor)
+          .getCollectionDescriptor().getElementDescriptor();
+    } else {
+      childComponentDescriptor = ((IComponentDescriptorProvider<?>) modelDescriptor)
+          .getComponentDescriptor();
+    }
+    return childComponentDescriptor;
   }
 
   /**
