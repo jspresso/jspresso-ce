@@ -34,6 +34,7 @@ import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.AbstractEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -273,7 +274,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         }
       }
     }
-    return super.put(key, value);
+    Object refinedValue = refineValue(value, propertyDescriptor);
+    return super.put(key, refinedValue);
   }
 
   private Serializable[] extractQueryPropertyValues(IEntity entity,
@@ -701,5 +703,23 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         }
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T refineValue(T value, IPropertyDescriptor propertyDescriptor) {
+    if (value instanceof String
+        && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
+      String disjunction = ((String) value).replaceAll("(\\r|\\n)+", DISJUNCT);
+      if (disjunction.endsWith(DISJUNCT)) {
+        disjunction = disjunction.substring(0,
+            disjunction.length() - DISJUNCT.length());
+      }
+      return (T) disjunction;
+    }
+    return value;
   }
 }

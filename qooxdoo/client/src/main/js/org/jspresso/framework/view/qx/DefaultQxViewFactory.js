@@ -611,23 +611,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if(foIndex >= 0) {
             additionalAttributes["fontIndex"] = foIndex;
           } else {
-	          var rFont = rColumn.getFont();
-	          if (rFont) {
-	            if (rFont.isItalic()) {
-	              additionalAttributes["font-style"] = "italic";
-	            }
-	            if (rFont.isBold()) {
-	              additionalAttributes["font-weight"] = "bold";
-	            }
-	            if (rFont.getName()) {
-	              additionalAttributes["font-family"] = rFont
-	                  .getName();
-	            }
-	            if (rFont.getSize() > 0) {
-	              additionalAttributes["font-size"] = rFont.getSize()
-	                  + "px";
-	            }
-	          }
+            var rFont = rColumn.getFont();
+            if (rFont) {
+              if (rFont.isItalic()) {
+                additionalAttributes["font-style"] = "italic";
+              }
+              if (rFont.isBold()) {
+                additionalAttributes["font-weight"] = "bold";
+              }
+              if (rFont.getName()) {
+                additionalAttributes["font-family"] = rFont
+                    .getName();
+              }
+              if (rFont.getSize() > 0) {
+                additionalAttributes["font-size"] = rFont.getSize()
+                    + "px";
+              }
+            }
           }
 
           cellRenderer.setAdditionalAttributes(additionalAttributes);
@@ -1327,7 +1327,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         remoteDateField.setType("DATE");
         dateTimeField.add(this._createDateField(remoteDateField));
       } catch(e){
-      	throw e;
+        throw e;
       } finally {
         remoteDateField.setType(oldType);
       }
@@ -2308,6 +2308,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createTextField : function(remoteTextField) {
       var textField = new qx.ui.form.TextField();
+      if(window.clipboardData) {
+        // We are in IE
+        textField.addListener("appear", function(appearEvent) {
+          var input = textField.getContentElement().getDomElement();
+          input["onpaste"] = function(pasteEvent) {
+            var cbData = window.clipboardData.getData("Text");
+            if(cbData) {
+              cbData = cbData.replace(/(\r|\n)+/g, " ");
+              cbData = window.clipboardData.setData("Text", cbData);
+            }
+          }
+        }, this);
+      }
 
       if (remoteTextField.getMaxLength() > 0) {
         textField.setMaxLength(remoteTextField.getMaxLength());

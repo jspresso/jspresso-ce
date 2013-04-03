@@ -122,11 +122,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
-
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
         erqDescriptor);
-
     IValueConnector viewConnector = getViewConnector(context);
     Object preselectedItem = context.get(LOV_PRESELECTED_ITEM);
     String autoCompletePropertyValue = getActionCommand(context);
@@ -157,6 +155,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actionHandler.execute(createQueryComponentAction, context);
     IQueryComponent queryComponent = (IQueryComponent) context
         .get(IQueryComponent.QUERY_COMPONENT);
+
+    autoCompletePropertyValue = queryComponent
+        .refineValue(autoCompletePropertyValue, null);
 
     String autoCompletePropertyName = null;
     if (viewConnector instanceof IRenderableCompositeValueConnector
