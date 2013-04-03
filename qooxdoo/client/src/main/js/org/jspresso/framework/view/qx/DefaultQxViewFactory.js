@@ -1744,6 +1744,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
             componentLabel.setAlignX("right");
             componentLabel.setAlignY("top");
+            componentLabel.setPaddingTop(4);
           } else {
             componentLabel.setAlignX("left");
             componentLabel.setAlignY("bottom");

@@ -595,7 +595,7 @@ public class DefaultSwingViewFactory extends
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
-          constraints.insets = new Insets(5, 5, 5, 5);
+          constraints.insets = new Insets(9, 5, 5, 5);
           constraints.anchor = GridBagConstraints.NORTHEAST;
           constraints.gridx = currentX * 2;
           constraints.gridy = currentY;

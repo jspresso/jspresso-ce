@@ -118,6 +118,7 @@ ApplicationControlBar
 {
   verticalAlign: top;
   horizontalAlign: right;
+  paddingTop: 4;
 }
 
 .aboveLabelCell
