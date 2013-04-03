@@ -42,8 +42,9 @@ import org.jspresso.framework.model.entity.IEntity;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E> the concrete entity type.
  */
-public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> {
+public class BasicEntityDescriptor<E extends IEntity> extends AbstractComponentDescriptor<E> {
 
   private boolean                              purelyAbstract;
   private static IComponentDescriptor<IEntity> rootEntityDescriptor;

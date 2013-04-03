@@ -199,8 +199,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
             .getPropertyDescriptor(property.getKey());
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
-          if (IEntity.class.isAssignableFrom(componentDescriptor
-              .getComponentContract())
+          if (componentDescriptor.isEntity()
               && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }

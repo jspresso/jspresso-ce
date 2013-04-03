@@ -44,6 +44,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.collection.ESort;
@@ -1084,9 +1085,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     for (String propertyName : propertyNames) {
       IPropertyDescriptor propertyDescriptor = componentDescriptor
           .getPropertyDescriptor(propertyName);
-      if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-          .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getComponentContract()))) {
+      if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+          && EntityHelper
+              .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)) {
         List<String> nestedProperties = new ArrayList<String>();
         for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getRenderedProperties()) {

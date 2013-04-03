@@ -68,8 +68,7 @@ public class AddComponentCollectionToMasterAction extends
           .getReferencedDescriptor().getElementDescriptor();
     }
     IComponent newElement;
-    if (IEntity.class
-        .isAssignableFrom(elementDescriptor.getComponentContract())) {
+    if (elementDescriptor.isEntity()) {
       newElement = getEntityFactory(context).createEntityInstance(
           (Class<? extends IEntity>) elementDescriptor.getComponentContract());
     } else {
