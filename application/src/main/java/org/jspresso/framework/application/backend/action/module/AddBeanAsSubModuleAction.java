@@ -242,10 +242,10 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   protected Module findDestinationModule(Object component,
       Map<String, Object> context) {
     Workspace workspace = getParentWorkspace(context);
-    if (workspace == null) {
+    String moduleName = getParentModuleName(context);
+    if (workspace == null || moduleName == null) {
       return getCurrentModule(context);
     }
-    String moduleName = getParentModuleName(context);
     for (Module m : workspace.getModules()) {
       Module m2 = findModule(m, moduleName, null);
       if (m2 != null) {
