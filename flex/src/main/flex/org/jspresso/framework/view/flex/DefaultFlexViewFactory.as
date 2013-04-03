@@ -2412,6 +2412,13 @@ package org.jspresso.framework.view.flex {
         if(text != null && text.length == 0) {
           text = null;
         }
+        if(text) {
+          // TextArea silently replaces line breaks with platform one.
+          // We have to restore them to the default \n server one
+          // See bug #991
+          text = text.replace(new RegExp("(\r\n)", "g"), "\n");
+          text = text.replace(new RegExp("(\r)", "g"), "\n");
+        }
         remoteState.value = text;
       };
       textArea.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
