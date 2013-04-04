@@ -159,8 +159,8 @@ package org.jspresso.framework.view.flex {
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
     private static const NUMERIC_FIELD_MAX_CHAR_COUNT:int = 16;
     private static const COLUMN_MAX_CHAR_COUNT:int = 20;
-    private static const DATE_CHAR_COUNT:int = 10;
-    private static const TIME_CHAR_COUNT:int = 8;
+    private static const DATE_CHAR_COUNT:int = 8;
+    private static const TIME_CHAR_COUNT:int = 6;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -233,7 +233,7 @@ package org.jspresso.framework.view.flex {
         component = new Canvas();
       }
       remoteComponent.assignPeer(component);
-      if(!(remoteComponent is RTree || remoteComponent is RDateField || remoteComponent is RTimeField )) {
+      if(isNaN(component.minWidth)) {
         component.minWidth = 0;
       }
       component.id = remoteComponent.guid;
@@ -874,12 +874,12 @@ package org.jspresso.framework.view.flex {
             width = tr.length;
           }
         }
-        sizeMaxComponentWidth(comboBox, remoteComboBox, width +2);
         if(hasIcon) {
-          comboBox.maxWidth += 45;
-        } else {
-          comboBox.maxWidth += 25;
+          width += 1;
         }
+        sizeMaxComponentWidth(comboBox, remoteComboBox, width);
+        comboBox.maxWidth += 30;
+        comboBox.minWidth = comboBox.maxWidth / 2;
         return comboBox;
       }
     }
@@ -1386,7 +1386,7 @@ package org.jspresso.framework.view.flex {
         if(component.minWidth > 0) {
           componentCell.minWidth = component.minWidth;
         } else {
-          component.minWidth = 0;
+          componentCell.minWidth = 0;
         }
         componentsRow.addChild(componentCell);
         componentCell.addChild(component);
@@ -1790,15 +1790,19 @@ package org.jspresso.framework.view.flex {
       dateTimeField.addChild(dateField);
       dateTimeField.addChild(timeField);
 
-      dateTimeField.maxWidth = dateField.maxWidth + timeField.maxWidth + 10;
-      dateTimeField.minWidth = dateField.minWidth + timeField.minWidth + 10;
+      dateTimeField.maxWidth = dateField.maxWidth + timeField.maxWidth + 5;
+      dateTimeField.minWidth = dateTimeField.maxWidth;
       
       return dateTimeField;
     }
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
       var timeField:TextInput = createTextInputComponent();
-      sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
+      if(remoteTimeField.secondsAware) {
+        sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
+      } else {
+        sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT -2);
+      }
       timeField.minWidth = timeField.maxWidth;
       bindTextInput(timeField, remoteTimeField.state,
         createFormatter(remoteTimeField), createParser(remoteTimeField));

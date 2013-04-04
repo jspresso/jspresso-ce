@@ -180,12 +180,12 @@ ApplicationControlBar
 
 .dateTimeField
 {
-  horizontalGap: 2;
+  horizontalGap: 0;
   verticalGap: 0;
   paddingTop: 2;
   paddingBottom: 2;
-  paddingLeft: 2;
-  paddingRight: 2;
+  paddingLeft: 0;
+  paddingRight: 0;
 }
 
 .htmlEditor
