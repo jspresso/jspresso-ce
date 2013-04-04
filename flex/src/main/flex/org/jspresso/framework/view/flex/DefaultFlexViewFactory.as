@@ -13,75 +13,10 @@
  */
 
 package org.jspresso.framework.view.flex {
-
-  import flash.display.DisplayObject;
-  import flash.events.Event;
-  import flash.events.FocusEvent;
-  import flash.events.KeyboardEvent;
-  import flash.events.MouseEvent;
-  import flash.events.TextEvent;
-  
-  import mx.binding.utils.BindingUtils;
-  import mx.collections.ListCollectionView;
-  import mx.containers.ApplicationControlBar;
-  import mx.containers.Box;
-  import mx.containers.BoxDirection;
-  import mx.containers.Canvas;
-  import mx.containers.DividedBox;
-  import mx.containers.Grid;
-  import mx.containers.GridItem;
-  import mx.containers.GridRow;
-  import mx.containers.HBox;
-  import mx.containers.Panel;
-  import mx.containers.TabNavigator;
-  import mx.containers.VBox;
-  import mx.containers.ViewStack;
-  import mx.controls.Button;
-  import mx.controls.CheckBox;
-  import mx.controls.ColorPicker;
-  import mx.controls.ComboBox;
-  import mx.controls.DataGrid;
-  import mx.controls.DateField;
-  import mx.controls.Image;
-  import mx.controls.Label;
-  import mx.controls.List;
-  import mx.controls.Menu;
-  import mx.controls.PopUpButton;
-  import mx.controls.RadioButton;
-  import mx.controls.RadioButtonGroup;
-  import mx.controls.Text;
-  import mx.controls.TextArea;
-  import mx.controls.TextInput;
-  import mx.controls.VRule;
-  import mx.controls.dataGridClasses.DataGridColumn;
-  import mx.core.ClassFactory;
-  import mx.core.Container;
-  import mx.core.IFlexDisplayObject;
-  import mx.core.ScrollPolicy;
-  import mx.core.UIComponent;
-  import mx.events.CollectionEvent;
-  import mx.events.CollectionEventKind;
-  import mx.events.ColorPickerEvent;
-  import mx.events.DataGridEvent;
-  import mx.events.DataGridEventReason;
-  import mx.events.FlexEvent;
-  import mx.events.IndexChangedEvent;
-  import mx.events.ItemClickEvent;
-  import mx.events.ListEvent;
-  import mx.events.MenuEvent;
-  import mx.formatters.Formatter;
-  import mx.formatters.NumberBase;
-  import mx.formatters.NumberBaseRoundType;
-  import mx.formatters.NumberFormatter;
-  import mx.graphics.SolidColor;
-  import mx.managers.PopUpManager;
-  import mx.managers.ToolTipManager;
-  import mx.utils.ObjectUtil;
-  
   import flex.utils.ui.resize.ResizablePanel;
-  
+
   import flexlib.containers.ButtonScrollingCanvas;
-  
+
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
@@ -144,8 +79,71 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.lang.DateDto;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
-  import org.jspresso.framework.view.flex.CachedImage;
   import org.sepy.ui.CheckBoxExtended;
+
+  import mx.binding.utils.BindingUtils;
+  import mx.collections.ListCollectionView;
+  import mx.containers.ApplicationControlBar;
+  import mx.containers.Box;
+  import mx.containers.BoxDirection;
+  import mx.containers.Canvas;
+  import mx.containers.DividedBox;
+  import mx.containers.Grid;
+  import mx.containers.GridItem;
+  import mx.containers.GridRow;
+  import mx.containers.HBox;
+  import mx.containers.Panel;
+  import mx.containers.TabNavigator;
+  import mx.containers.VBox;
+  import mx.containers.ViewStack;
+  import mx.controls.Button;
+  import mx.controls.CheckBox;
+  import mx.controls.ColorPicker;
+  import mx.controls.ComboBox;
+  import mx.controls.DataGrid;
+  import mx.controls.DateField;
+  import mx.controls.Image;
+  import mx.controls.Label;
+  import mx.controls.List;
+  import mx.controls.Menu;
+  import mx.controls.PopUpButton;
+  import mx.controls.RadioButton;
+  import mx.controls.RadioButtonGroup;
+  import mx.controls.Text;
+  import mx.controls.TextArea;
+  import mx.controls.TextInput;
+  import mx.controls.VRule;
+  import mx.controls.dataGridClasses.DataGridColumn;
+  import mx.core.ClassFactory;
+  import mx.core.Container;
+  import mx.core.IFlexDisplayObject;
+  import mx.core.ScrollPolicy;
+  import mx.core.UIComponent;
+  import mx.events.CollectionEvent;
+  import mx.events.CollectionEventKind;
+  import mx.events.ColorPickerEvent;
+  import mx.events.DataGridEvent;
+  import mx.events.DataGridEventReason;
+  import mx.events.FlexEvent;
+  import mx.events.IndexChangedEvent;
+  import mx.events.ItemClickEvent;
+  import mx.events.ListEvent;
+  import mx.events.MenuEvent;
+  import mx.formatters.Formatter;
+  import mx.formatters.NumberBase;
+  import mx.formatters.NumberBaseRoundType;
+  import mx.formatters.NumberFormatter;
+  import mx.graphics.SolidColor;
+  import mx.managers.PopUpManager;
+  import mx.managers.ToolTipManager;
+  import mx.utils.ObjectUtil;
+
+  import flash.display.DisplayObject;
+  import flash.events.Event;
+  import flash.events.FocusEvent;
+  import flash.events.KeyboardEvent;
+  import flash.events.MouseEvent;
+  import flash.events.TextEvent;
   
   public class DefaultFlexViewFactory {
 
@@ -159,8 +157,10 @@ package org.jspresso.framework.view.flex {
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
     private static const NUMERIC_FIELD_MAX_CHAR_COUNT:int = 16;
     private static const COLUMN_MAX_CHAR_COUNT:int = 20;
-    private static const DATE_CHAR_COUNT:int = 8;
-    private static const TIME_CHAR_COUNT:int = 6;
+    private static const DATE_TEMPLATE:String = "00/00/0000";
+    private static const LONG_TIME_TEMPLATE:String = "00:00:00";
+    private static const SHORT_TIME_TEMPLATE:String = "00:00";
+    private static const ICON_WIDTH:int = 16;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -868,17 +868,18 @@ package org.jspresso.framework.view.flex {
         itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate, showIcon:hasIcon};
         comboBox.itemRenderer = itemRenderer;
         
-        var width:int = 0;
+        var maxTr:String = "";
         for each(var tr:String in remoteComboBox.translations) {
-          if(tr.length > width) {
-            width = tr.length;
+          if(tr.length > maxTr.length) {
+            maxTr = tr;
           }
         }
-        if(hasIcon) {
-          width += 1;
-        }
-        sizeMaxComponentWidth(comboBox, remoteComboBox, width);
+        sizeMaxComponentWidthFromText(comboBox, remoteComboBox, maxTr);
+        // For Arrow
         comboBox.maxWidth += 30;
+        if(hasIcon) {
+          comboBox.maxWidth += ICON_WIDTH;
+        }
         comboBox.minWidth = comboBox.maxWidth / 2;
         return comboBox;
       }
@@ -1681,7 +1682,8 @@ package org.jspresso.framework.view.flex {
       dateField.formatString = datePattern;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
-      sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT + 2);
+      sizeMaxComponentWidthFromText(dateField, remoteDateField, DATE_TEMPLATE);
+      dateField.maxWidth += ICON_WIDTH;
       dateField.minWidth = dateField.maxWidth;
       bindDateField(dateField, remoteDateField);
       return dateField;
@@ -1799,9 +1801,9 @@ package org.jspresso.framework.view.flex {
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
       var timeField:TextInput = createTextInputComponent();
       if(remoteTimeField.secondsAware) {
-        sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT);
+        sizeMaxComponentWidthFromText(timeField, remoteTimeField, LONG_TIME_TEMPLATE);
       } else {
-        sizeMaxComponentWidth(timeField, remoteTimeField, TIME_CHAR_COUNT -2);
+        sizeMaxComponentWidthFromText(timeField, remoteTimeField, SHORT_TIME_TEMPLATE);
       }
       timeField.minWidth = timeField.maxWidth;
       bindTextInput(timeField, remoteTimeField.state,
@@ -2837,14 +2839,22 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function sizeMaxComponentWidth(component:UIComponent, remoteComponent:RComponent, expectedCharCount:int=FIELD_MAX_CHAR_COUNT, maxCharCount:int=FIELD_MAX_CHAR_COUNT):void {
-      var w:int;
-      applyComponentStyle(component, remoteComponent);
-      component.regenerateStyleCache(false);
       var charCount:int = maxCharCount;
       if(expectedCharCount < charCount) {
         charCount = expectedCharCount;
       }
-      w = component.measureText(TEMPLATE_CHAR).width * charCount;
+      var templateText:String = "";
+      for(var i:int = 0; i < charCount; i++) {
+        templateText += TEMPLATE_CHAR;
+      }
+      sizeMaxComponentWidthFromText(component, remoteComponent, templateText);
+    }
+    
+    protected function sizeMaxComponentWidthFromText(component:UIComponent, remoteComponent:RComponent, text:String):void {
+      var w:int;
+      applyComponentStyle(component, remoteComponent);
+      component.regenerateStyleCache(false);
+      w = component.measureText(text).width + 10;
       if(remoteComponent.preferredSize && remoteComponent.preferredSize.width > w) {
         w = remoteComponent.preferredSize.width;
       }
