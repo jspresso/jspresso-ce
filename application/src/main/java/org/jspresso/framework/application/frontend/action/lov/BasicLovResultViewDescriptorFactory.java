@@ -57,6 +57,8 @@ public class BasicLovResultViewDescriptorFactory extends
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
+    resultViewDescriptor.setRenderedProperties(entityRefDescriptor
+        .getRenderedProperties());
     if (getModel(lovContext) instanceof IQueryComponent) {
       // We are on a filter view that suppports multi selection
       resultViewDescriptor
