@@ -668,9 +668,7 @@ public class DefaultSwingViewFactory extends
         Action action = getActionFactory().createAction(
             propertyViewDescriptor.getAction(), actionHandler, targetView,
             locale);
-        Map<String, Object> staticContext = new HashMap<String, Object>();
-        staticContext.put(ActionContextConstants.PROPERTY_VIEW, propertyView);
-        action.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+        configurePropertyViewAction(propertyView, action);
         ((JLink<Action>) propertyView.getPeer()).setTarget(action);
       }
 
@@ -2522,9 +2520,7 @@ public class DefaultSwingViewFactory extends
         && columnViewDescriptor.isReadOnly()) {
       Action colAction = getActionFactory().createAction(
           columnViewDescriptor.getAction(), actionHandler, view, locale);
-      Map<String, Object> staticContext = new HashMap<String, Object>();
-      staticContext.put(ActionContextConstants.PROPERTY_VIEW, editorView);
-      colAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+      configurePropertyViewAction(editorView, colAction);
       cellRenderer = new HyperlinkTableCellRenderer(cellRenderer, colAction,
           columnIndex);
       viewComponent.addMouseListener((MouseListener) cellRenderer);
@@ -3992,5 +3988,21 @@ public class DefaultSwingViewFactory extends
         }
       }
     }
+  }
+
+  /**
+   * Configures a property view action by initializing its static context.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor the action is attached to.
+   * @param propertyViewAction
+   *          the action to configure.
+   */
+  protected void configurePropertyViewAction(
+      IView<JComponent> propertyViewDescriptor, Action propertyViewAction) {
+    Map<String, Object> staticContext = new HashMap<String, Object>();
+    staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR,
+        propertyViewDescriptor);
+    propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
   }
 }

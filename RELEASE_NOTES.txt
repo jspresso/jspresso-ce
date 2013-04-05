@@ -1,5 +1,8 @@
 3.5.16
 ======
+- The getPropertyView(context) has been removed since the only thing that is actually useful is the underlying
+  property descriptor. It has been replaced by the getPropertyViewDescriptor(context) method.
+
 - Property processors, if any, will now be invioked on computed properties with delegateWritable=true
 
 - Be sure to install "Jspresso Developer Studio M2E Configurator Feature" along with latest JDS from the Jspresso update-site.

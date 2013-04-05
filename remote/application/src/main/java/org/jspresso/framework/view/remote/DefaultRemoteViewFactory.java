@@ -595,9 +595,7 @@ public class DefaultRemoteViewFactory extends
         RAction action = getActionFactory().createAction(
             propertyViewDescriptor.getAction(), actionHandler, targetView,
             locale);
-        Map<String, Object> staticContext = new HashMap<String, Object>();
-        staticContext.put(ActionContextConstants.PROPERTY_VIEW, propertyView);
-        action.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+        configurePropertyViewAction(propertyViewDescriptor, action);
         ((RActionable) propertyView.getPeer()).setAction(action);
       }
     }
@@ -1967,9 +1965,7 @@ public class DefaultRemoteViewFactory extends
             && columnViewDescriptor.getAction() != null) {
           RAction action = getActionFactory().createAction(
               columnViewDescriptor.getAction(), actionHandler, view, locale);
-          Map<String, Object> staticContext = new HashMap<String, Object>();
-          staticContext.put(ActionContextConstants.PROPERTY_VIEW, column);
-          action.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+          configurePropertyViewAction(columnViewDescriptor, action);
           ((RActionable) column.getPeer()).setAction(action);
         }
         if (columnViewDescriptorEntry.getValue() != null) {
@@ -2715,5 +2711,21 @@ public class DefaultRemoteViewFactory extends
     RemoteEditCommand editCommand = new RemoteEditCommand();
     editCommand.setTargetPeerGuid(component.getGuid());
     getRemoteCommandHandler().registerCommand(editCommand);
+  }
+
+  /**
+   * Configures a property view action by initializing its static context.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor the action is attached to.
+   * @param propertyViewAction
+   *          the action to configure.
+   */
+  protected void configurePropertyViewAction(
+      IPropertyViewDescriptor propertyViewDescriptor, RAction propertyViewAction) {
+    Map<String, Object> staticContext = new HashMap<String, Object>();
+    staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR,
+        propertyViewDescriptor);
+    propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
   }
 }

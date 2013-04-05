@@ -39,6 +39,7 @@ import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
 /**
  * Abstract class for all objects that need to manipulate an action context. It
@@ -523,17 +524,19 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the (IView) property view out of the context. The property view is
-   * only filled when an action is triggered from a table column or a form
-   * field. It contains a reference to the column/field the action was triggered
-   * from.
+   * Gets the property view descriptor out of the context. The property view
+   * descriptor is only filled when an action is triggered from a table column
+   * or a form field. It contains a reference to the column/field descriptor the
+   * action was triggered from.
    * 
    * @param context
    *          the action context.
-   * @return the (IView) property view.
+   * @return the property view descriptor.
    */
-  protected <T> IView<T> getPropertyView(Map<String, Object> context) {
-    return (IView<T>) context.get(ActionContextConstants.PROPERTY_VIEW);
+  protected IPropertyViewDescriptor getPropertyViewDescriptor(
+      Map<String, Object> context) {
+    return (IPropertyViewDescriptor) context
+        .get(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR);
   }
 
   /**

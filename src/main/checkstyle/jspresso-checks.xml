@@ -118,7 +118,7 @@
   </module>
   <module name="Translation"/>
   <module name="FileLength">
-    <property name="max" value="4000"/>
+    <property name="max" value="4500"/>
   </module>
   <module name="NewlineAtEndOfFile">
     <property name="lineSeparator" value="lf"/>
