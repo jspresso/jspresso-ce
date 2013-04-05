@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
 import org.jspresso.framework.util.bean.integrity.ICollectionPropertyProcessor;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.collection.ESort;
@@ -176,10 +175,11 @@ public class BasicCollectionPropertyDescriptor<E> extends
   @SuppressWarnings("unchecked")
   public void preprocessRemover(final Object component,
       Collection<?> collection, Object removedValue) {
-    if (isMandatory() && collection != null && collection.size() == 1
-        && collection.contains(removedValue)) {
-      throw new MandatoryPropertyException(this, component);
-    }
+    // Mandatory checking should only happen on save. See bug #776 and #646.
+    // if (isMandatory() && collection != null && collection.size() == 1
+    // && collection.contains(removedValue)) {
+    // throw new MandatoryPropertyException(this, component);
+    // }
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
