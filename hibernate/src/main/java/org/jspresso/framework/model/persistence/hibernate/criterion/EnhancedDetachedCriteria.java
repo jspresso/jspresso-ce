@@ -91,7 +91,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    *          class.
    * @return the new enhanced detached criteria.
    */
-  public static EnhancedDetachedCriteria forClass(Class<?> clazz) {
+  public static EnhancedDetachedCriteria forClass(Class clazz) {
     return new EnhancedDetachedCriteria(clazz.getName());
   }
 
@@ -104,7 +104,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    *          alias.
    * @return the new enhanced detached criteria.
    */
-  public static EnhancedDetachedCriteria forClass(Class<?> clazz, String alias) {
+  public static EnhancedDetachedCriteria forClass(Class clazz, String alias) {
     return new EnhancedDetachedCriteria(clazz.getName(), alias);
   }
 
