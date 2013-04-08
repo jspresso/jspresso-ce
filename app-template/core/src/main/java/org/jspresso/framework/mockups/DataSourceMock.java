@@ -20,7 +20,7 @@ package org.jspresso.framework.mockups;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -38,7 +38,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public PrintWriter getLogWriter() throws SQLException {
+  public PrintWriter getLogWriter() {
     return null;
   }
 
@@ -48,7 +48,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public void setLogWriter(PrintWriter out) throws SQLException {
+  public void setLogWriter(PrintWriter out) {
     // NO-OP
   }
 
@@ -58,7 +58,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public void setLoginTimeout(int seconds) throws SQLException {
+  public void setLoginTimeout(int seconds) {
     // NO-OP
   }
 
@@ -68,7 +68,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public int getLoginTimeout() throws SQLException {
+  public int getLoginTimeout() {
     return 0;
   }
 
@@ -78,7 +78,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     return null;
   }
 
@@ -88,7 +88,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return false;
   }
 
@@ -98,7 +98,7 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() {
     return null;
   }
 
@@ -108,8 +108,17 @@ public class DataSourceMock implements DataSource {
    * {@inheritDoc}
    */
   @Override
-  public Connection getConnection(String username, String password)
-      throws SQLException {
+  public Connection getConnection(String username, String password) {
+    return null;
+  }
+  
+  /**
+   * Mock method.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("javadoc")
+  public Logger getParentLogger() {
     return null;
   }
 
