@@ -145,31 +145,33 @@ package org.jspresso.framework.view.flex {
           _toolTipChangeListener = BindingUtils.bindSetter(refreshToolTip, toolTipState, "value", true);
         }
       }
-      if(backgroundIndex >= 0) {
-        var backgroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState);
-        if(_backgroundChangeListener != null) {
-          _backgroundChangeListener.reset(backgroundState);
-          redraw(backgroundState.value);
-        } else {
-          _backgroundChangeListener = BindingUtils.bindSetter(redraw, backgroundState, "value", true);
+      if(data) {
+        if(backgroundIndex >= 0) {
+          var backgroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState);
+          if(_backgroundChangeListener != null) {
+            _backgroundChangeListener.reset(backgroundState);
+            redraw(backgroundState.value);
+          } else {
+            _backgroundChangeListener = BindingUtils.bindSetter(redraw, backgroundState, "value", true);
+          }
         }
-      }
-      if(foregroundIndex >= 0) {
-        var foregroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState);
-        if(_foregroundChangeListener != null) {
-          _foregroundChangeListener.reset(foregroundState);
-          redraw(foregroundState.value);
-        } else {
-          _foregroundChangeListener = BindingUtils.bindSetter(redraw, foregroundState, "value", true);
+        if(foregroundIndex >= 0) {
+          var foregroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState);
+          if(_foregroundChangeListener != null) {
+            _foregroundChangeListener.reset(foregroundState);
+            redraw(foregroundState.value);
+          } else {
+            _foregroundChangeListener = BindingUtils.bindSetter(redraw, foregroundState, "value", true);
+          }
         }
-      }
-      if(fontIndex >= 0) {
-        var fontState:RemoteValueState = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState);
-        if(_fontChangeListener != null) {
-          _fontChangeListener.reset(fontState);
-          redraw(fontState.value);
-        } else {
-          _fontChangeListener = BindingUtils.bindSetter(redraw, fontState, "value", true);
+        if(fontIndex >= 0) {
+          var fontState:RemoteValueState = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState);
+          if(_fontChangeListener != null) {
+            _fontChangeListener.reset(fontState);
+            redraw(fontState.value);
+          } else {
+            _fontChangeListener = BindingUtils.bindSetter(redraw, fontState, "value", true);
+          }
         }
       }
   	}
@@ -306,7 +308,7 @@ package org.jspresso.framework.view.flex {
     }
     
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-      if(listData.owner is DataGrid) {
+      if(data && listData && listData.owner is DataGrid) {
         if(backgroundIndex >= 0) {
           var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
           var g:Graphics = graphics;

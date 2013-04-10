@@ -1207,12 +1207,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
     public function start():void {
       blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(START_METHOD);
-      var startCommand:RemoteStartCommand = new RemoteStartCommand();
-      startCommand.language = _userLanguage;
-      startCommand.keysToTranslate = getKeysToTranslate();
-      startCommand.timezoneOffset = new Date().timezoneOffset * (-60000);
-      startCommand.version = JSPRESSO_VERSION;
-      operation.send(startCommand);
+      if(JSPRESSO_VERSION == "3.5-SNAPSHOT" || JSPRESSO_VERSION.substr(0, 6) > "3.5.13") {
+        var startCommand:RemoteStartCommand = new RemoteStartCommand();
+        startCommand.language = _userLanguage;
+        startCommand.keysToTranslate = getKeysToTranslate();
+        startCommand.timezoneOffset = new Date().timezoneOffset * (-60000);
+        startCommand.version = JSPRESSO_VERSION;
+        operation.send(startCommand);
+      } else {
+        operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
+      }
     }
     
     private var _stillDisable:Boolean  = false;
