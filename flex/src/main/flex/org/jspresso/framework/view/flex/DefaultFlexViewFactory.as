@@ -170,6 +170,7 @@ package org.jspresso.framework.view.flex {
     private var _shortTimeFormatter:DateFormatter;
     private var _passwordFormatter:PasswordFormatter;
     private var _datePattern:String;
+    private var _firstDayOfWeek:int;
     
     private var _lastActionTimestamp:Date = new Date();
 
@@ -1679,6 +1680,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new EnhancedDateField();
+      dateField.firstDayOfWeek = firstDayOfWeek;
       dateField.formatString = datePattern;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
@@ -2989,14 +2991,19 @@ package org.jspresso.framework.view.flex {
     }
 
     public function get datePattern():String {
-      if(_datePattern) {
-        return _datePattern;
-      }
-      return getActionHandler().translate("date_format");
+      return _datePattern;
     }
 
     public function set datePattern(value:String):void {
       _datePattern = value;
+    }
+
+    public function get firstDayOfWeek():int {
+      return _firstDayOfWeek;
+    }
+
+    public function set firstDayOfWeek(value:int):void {
+      _firstDayOfWeek = value;
     }
 
     protected function findFirstFocusableComponent(root:UIComponent):UIComponent {

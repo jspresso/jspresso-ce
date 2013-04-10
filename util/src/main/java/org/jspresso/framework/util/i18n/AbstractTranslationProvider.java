@@ -76,4 +76,12 @@ public abstract class AbstractTranslationProvider implements
   public String getShortTimePattern(Locale locale) {
     return getTranslation(TIME_FORMAT_SHORT_KEY, locale);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getFirstDayOfWeek(Locale locale) {
+    return Integer.parseInt(getTranslation(FIRST_DAY_OF_WEEK_KEY, Integer.toString(1), locale));
+  }
 }

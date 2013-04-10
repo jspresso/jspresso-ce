@@ -1584,6 +1584,22 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Return the default first day of week expressed as a day int (0 is sunday to 6 is saturday).
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param translationProvider
+   *          the translation provider.
+   * @param locale
+   *          the locale.
+   * @return the default first day of week.
+   */
+  protected int getFirstDayOfWeek(IDatePropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
+    return translationProvider.getFirstDayOfWeek(locale);
+  }
+
+  /**
    * Return the default time pattern expressed as a SimpleDateFormat pattern.
    * 
    * @param propertyDescriptor

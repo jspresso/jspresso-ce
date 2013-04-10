@@ -116,6 +116,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __shortDateTimeFormats : null,
     /** @type String */
     __datePattern : null,
+    /** @type Integer */
+    __firstDayOfWeek : null,
 
     /**
      * @param {org.jspresso.framework.gui.remote.RComponent}
@@ -3086,10 +3088,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return String
      */
     _getDatePattern : function() {
-      if (this.__datePattern) {
-        return this.__datePattern;
-      }
-      return qx.locale.Date.getDateFormat("short");
+      return this.__datePattern;
+    },
+
+    /**
+     * 
+     * @param {Integer}
+     *            firstDayOfWeek
+     * @return void
+     */
+    setFirstDayOfWeek : function(firstDayOfWeek) {
+      this.__firstDayOfWeek = firstDayOfWeek;
+    },
+
+    /**
+     * 
+     * @return Integer
+     */
+    _getFirstDayOfWeek : function() {
+      return this.__firstDayOfWeek;
     },
 
     /**

@@ -25,6 +25,7 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _language:String;
         private var _datePattern:String;
+        private var _firstDayOfWeek:int;
         private var _translations:Object;
 
         public function set language(value:String):void {
@@ -47,5 +48,13 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function set translations(value:Object):void {
           _translations = value;
         }
-    }
+    
+        public function get firstDayOfWeek() : int {
+          return _firstDayOfWeek;
+        }
+    
+        public function set firstDayOfWeek(value : int) : void {
+          _firstDayOfWeek = value;
+        }
+      }
 }

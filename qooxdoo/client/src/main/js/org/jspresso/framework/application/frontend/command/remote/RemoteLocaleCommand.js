@@ -30,6 +30,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     {
       check : "String"
     },
+    firstDayOfWeek :
+    {
+      check : "Integer"
+    },
     translations :
     {
       check : "Object"

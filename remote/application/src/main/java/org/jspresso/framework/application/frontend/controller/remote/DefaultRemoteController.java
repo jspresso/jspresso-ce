@@ -630,6 +630,7 @@ public class DefaultRemoteController extends
     RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
     localeCommand.setLanguage(getLocale().getLanguage());
     localeCommand.setDatePattern(getDatePattern(getLocale()));
+    localeCommand.setFirstDayOfWeek(getFirstDayOfWeek(getLocale()));
     localeCommand.setTranslations(translations);
     return localeCommand;
   }

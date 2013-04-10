@@ -32,6 +32,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   private String              language;
   private String              datePattern;
+  private int                 firstDayOfWeek;
   private Map<String, String> translations;
 
   /**
@@ -89,5 +90,24 @@ public class RemoteLocaleCommand extends RemoteCommand {
    */
   public void setTranslations(Map<String, String> translations) {
     this.translations = translations;
+  }
+
+  /**
+   * Gets the firstDayOfWeek.
+   * 
+   * @return the firstDayOfWeek.
+   */
+  public int getFirstDayOfWeek() {
+    return firstDayOfWeek;
+  }
+
+  /**
+   * Sets the firstDayOfWeek.
+   * 
+   * @param firstDayOfWeek
+   *          the firstDayOfWeek to set.
+   */
+  public void setFirstDayOfWeek(int firstDayOfWeek) {
+    this.firstDayOfWeek = firstDayOfWeek;
   }
 }

@@ -42,6 +42,11 @@ public interface ITranslationProvider {
   String DATE_FORMAT_KEY       = "date_format";
 
   /**
+   * <code>FIRST_DAY_OF_WEEK_KEY</code>.
+   */
+  String FIRST_DAY_OF_WEEK_KEY       = "firstDayOfWeek";
+
+  /**
    * Gets a translated string based on a key.
    * 
    * @param key
@@ -104,6 +109,15 @@ public interface ITranslationProvider {
    * @return the default date pattern.
    */
   String getDatePattern(Locale locale);
+
+  /**
+   * Return the default first day of week as 0 for sunday to 6 for saturday.
+   * 
+   * @param locale
+   *          the locale.
+   * @return the default first day of week.
+   */
+  int getFirstDayOfWeek(Locale locale);
 
   /**
    * Return the default time pattern (including seconds) expressed as a

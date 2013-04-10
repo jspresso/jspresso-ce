@@ -338,9 +338,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         if(locale) {
           ResourceManager.getInstance().localeChain = [locale.toString()].concat(_initialLocaleChain);
         }
-        if((command as RemoteLocaleCommand).datePattern) {
-          getViewFactory().datePattern = (command as RemoteLocaleCommand).datePattern.toUpperCase();
-        }
+        getViewFactory().datePattern = (command as RemoteLocaleCommand).datePattern.toUpperCase();
+        getViewFactory().firstDayOfWeek = (command as RemoteLocaleCommand).firstDayOfWeek;
         _translations = (command as RemoteLocaleCommand).translations;
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
@@ -1247,7 +1246,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function getKeysToTranslate():Array {
-      return ["date_format","FS.browse.continue","file.upload","file.download","system.clipboard.continue","content.copy","error","error.unexpected"];
+      return ["FS.browse.continue","file.upload","file.download","system.clipboard.continue","content.copy","error","error.unexpected"];
     }
     
     public function translate(key:String):String {
