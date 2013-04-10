@@ -1583,6 +1583,7 @@ package org.jspresso.framework.view.flex {
     protected function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
       dateField.formatString = datePattern;
+      dateField.firstDayOfWeek = 1;
       dateField.parseFunction = DateUtils.parseDate;
       dateField.editable = true;
       sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT +2);
