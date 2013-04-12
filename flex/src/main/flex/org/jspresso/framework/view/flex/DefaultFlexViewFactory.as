@@ -266,7 +266,7 @@ package org.jspresso.framework.view.flex {
     }
     
     public function createPanelComponent():Panel {
-      return new Panel();
+      return new CollapsiblePanel();
     }
 
     public function createResizableDialog(dialogParent:DisplayObject):Panel {
