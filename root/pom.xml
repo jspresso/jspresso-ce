@@ -76,7 +76,7 @@
     <stax-api.version>1.0.1</stax-api.version>
 
     <!-- Plugins versions -->
-    <compiler-plugin.version>3.0</compiler-plugin.version>
+    <compiler-plugin.version>3.1</compiler-plugin.version>
     <resources-plugin.version>2.6</resources-plugin.version>
     <jar-plugin.version>2.3.1</jar-plugin.version>
     <surefire-plugin.version>2.13</surefire-plugin.version>
