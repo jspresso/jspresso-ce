@@ -190,13 +190,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       component = this._decorateWithActions(remoteComponent, component);
       if (remoteComponent.getBorderType()
           && remoteComponent.getBorderType() != "NONE") {
-        var decorator = new qx.ui.groupbox.GroupBox();
-        decorator.setLayout(new qx.ui.layout.Grow());
+        var decorator;
         if (remoteComponent.getBorderType() == "TITLED") {
+          decorator = new collapsablepanel.Panel(remoteComponent.getLabel());
+          this.setIcon(decorator.getChildControl("bar"),
+              remoteComponent.getIcon())
+        } else {
+          decorator = new qx.ui.groupbox.GroupBox();
           decorator.setLegend(remoteComponent.getLabel());
           this.setIcon(decorator.getChildControl("legend"),
               remoteComponent.getIcon());
         }
+        decorator.setLayout(new qx.ui.layout.Grow());
         decorator.add(component);
         component = decorator;
       }
