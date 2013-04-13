@@ -54,6 +54,7 @@
     <jython.version>2.5.0</jython.version>
     <bsh.version>2.0b4</bsh.version>
     <foxtrot.version>2.0</foxtrot.version>
+    <swingx.version>1.6.1</swingx.version>
     <dj-nativeswing.version>1.0.2.20120308</dj-nativeswing.version>
     <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
@@ -583,6 +584,11 @@
         <groupId>foxtrot</groupId>
         <artifactId>foxtrot</artifactId>
         <version>${foxtrot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.swinglabs</groupId>
+        <artifactId>swingx</artifactId>
+        <version>${swingx.version}</version>
       </dependency>
       <dependency>
         <groupId>chrriis</groupId>
