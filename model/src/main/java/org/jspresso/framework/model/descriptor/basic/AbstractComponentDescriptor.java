@@ -133,6 +133,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   public AbstractComponentDescriptor(String name) {
     setName(name);
     propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
+    // Force initialization of ancestor descriptors
+    setAncestorDescriptors(null);
   }
 
   private static IComponentDescriptor<IComponent> createComponentDescriptor() {

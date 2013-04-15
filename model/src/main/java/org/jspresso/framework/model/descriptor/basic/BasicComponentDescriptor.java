@@ -71,22 +71,6 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<IComponentDescriptor<?>> getAncestorDescriptors() {
-    List<IComponentDescriptor<?>> ancestorDescriptors = super
-        .getAncestorDescriptors();
-    if (ancestorDescriptors == null) {
-      ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>(1);
-    }
-    if (!ancestorDescriptors.contains(COMPONENT_DESCRIPTOR)) {
-      ancestorDescriptors.add(COMPONENT_DESCRIPTOR);
-    }
-    return ancestorDescriptors;
-  }
-
-  /**
    * Relax ClassNotFoundException since component descriptors can be used
    * without actual java class.
    * <p>
@@ -122,5 +106,21 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
   @Override
   public boolean isPurelyAbstract() {
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setAncestorDescriptors(
+      List<IComponentDescriptor<?>> ancestorDescriptors) {
+    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    if (ancestorDescriptors != null) {
+      refinedAncestorDescriptors.addAll(ancestorDescriptors);
+    }
+    if (!refinedAncestorDescriptors.contains(COMPONENT_DESCRIPTOR)) {
+      refinedAncestorDescriptors.add(COMPONENT_DESCRIPTOR);
+    }
+    super.setAncestorDescriptors(refinedAncestorDescriptors);
   }
 }

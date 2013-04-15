@@ -42,9 +42,11 @@ import org.jspresso.framework.model.entity.IEntity;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
- * @param <E> the concrete entity type.
+ * @param <E>
+ *          the concrete entity type.
  */
-public class BasicEntityDescriptor<E extends IEntity> extends AbstractComponentDescriptor<E> {
+public class BasicEntityDescriptor<E extends IEntity> extends
+    AbstractComponentDescriptor<E> {
 
   private boolean                              purelyAbstract;
   private static IComponentDescriptor<IEntity> rootEntityDescriptor;
@@ -92,23 +94,6 @@ public class BasicEntityDescriptor<E extends IEntity> extends AbstractComponentD
     defaultEntityDescriptor.setQueryableProperties(emptyList);
 
     return defaultEntityDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<IComponentDescriptor<?>> getAncestorDescriptors() {
-    List<IComponentDescriptor<?>> ancestorDescriptors = super
-        .getAncestorDescriptors();
-    if (ancestorDescriptors == null) {
-      ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>(1);
-    }
-    IComponentDescriptor<IEntity> rootEntityDesc = getRootEntityDescriptor();
-    if (!ancestorDescriptors.contains(rootEntityDesc)) {
-      ancestorDescriptors.add(rootEntityDesc);
-    }
-    return ancestorDescriptors;
   }
 
   /**
@@ -175,5 +160,22 @@ public class BasicEntityDescriptor<E extends IEntity> extends AbstractComponentD
       rootEntityDescriptor = createDefaultEntityDescriptor();
     }
     return rootEntityDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setAncestorDescriptors(
+      List<IComponentDescriptor<?>> ancestorDescriptors) {
+    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    if (ancestorDescriptors != null) {
+      refinedAncestorDescriptors.addAll(ancestorDescriptors);
+    }
+    IComponentDescriptor<?> rootED = getRootEntityDescriptor();
+    if (!refinedAncestorDescriptors.contains(rootED)) {
+      refinedAncestorDescriptors.add(rootED);
+    }
+    super.setAncestorDescriptors(refinedAncestorDescriptors);
   }
 }
