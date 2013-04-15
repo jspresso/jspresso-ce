@@ -97,23 +97,6 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
    * {@inheritDoc}
    */
   @Override
-  public List<IComponentDescriptor<?>> getAncestorDescriptors() {
-    List<IComponentDescriptor<?>> ancestorDescriptors = super
-        .getAncestorDescriptors();
-    if (ancestorDescriptors == null) {
-      ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>(1);
-    }
-    IComponentDescriptor<IEntity> rootEntityDesc = getRootEntityDescriptor();
-    if (!ancestorDescriptors.contains(rootEntityDesc)) {
-      ancestorDescriptors.add(rootEntityDesc);
-    }
-    return ancestorDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public boolean isEntity() {
     return true;
   }
@@ -174,5 +157,22 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
       rootEntityDescriptor = createDefaultEntityDescriptor();
     }
     return rootEntityDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setAncestorDescriptors(
+      List<IComponentDescriptor<?>> ancestorDescriptors) {
+    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    if (ancestorDescriptors != null) {
+      refinedAncestorDescriptors.addAll(ancestorDescriptors);
+    }
+    IComponentDescriptor<?> rootED = getRootEntityDescriptor();
+    if (!refinedAncestorDescriptors.contains(rootED)) {
+      refinedAncestorDescriptors.add(rootED);
+    }
+    super.setAncestorDescriptors(refinedAncestorDescriptors);
   }
 }
