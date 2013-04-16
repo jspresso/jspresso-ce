@@ -142,36 +142,39 @@ public abstract class AbstractComponentDescriptor<E> extends
     return componentDescriptor;
   }
 
+  private Object queryDescriptorLock = new Object();
+
   /**
    * {@inheritDoc}
    */
   @Override
   public IComponentDescriptor<E> createQueryDescriptor() {
-    if (queryDescriptor == null) {
-      queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
+    synchronized (queryDescriptorLock) {
+      if (queryDescriptor == null) {
+        queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
 
-      List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
-      if (ancestorDescs != null) {
-        List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
-        for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-          queryAncestorDescriptors.add(ancestorDescriptor
-              .createQueryDescriptor());
+        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+        if (ancestorDescs != null) {
+          List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+            queryAncestorDescriptors.add(ancestorDescriptor
+                .createQueryDescriptor());
+          }
+          ((AbstractComponentDescriptor<E>) queryDescriptor)
+              .setAncestorDescriptors(queryAncestorDescriptors);
         }
-        ((AbstractComponentDescriptor<E>) queryDescriptor)
-            .setAncestorDescriptors(queryAncestorDescriptors);
-      }
 
-      Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
-      if (declaredPropertyDescs != null) {
-        Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
-        for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
-          queryPropertyDescriptors.add(propertyDescriptor
-              .createQueryDescriptor());
+        Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
+        if (declaredPropertyDescs != null) {
+          Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
+          for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
+            queryPropertyDescriptors.add(propertyDescriptor
+                .createQueryDescriptor());
+          }
+          ((AbstractComponentDescriptor<E>) queryDescriptor)
+              .setPropertyDescriptors(queryPropertyDescriptors);
         }
-        ((AbstractComponentDescriptor<E>) queryDescriptor)
-            .setPropertyDescriptors(queryPropertyDescriptors);
       }
-
     }
     return queryDescriptor;
   }
@@ -570,8 +573,8 @@ public abstract class AbstractComponentDescriptor<E> extends
               .getName();
         }
       }
-      return toStringProperty;
     }
+    return toStringProperty;
   }
 
   /**
@@ -626,8 +629,8 @@ public abstract class AbstractComponentDescriptor<E> extends
           }
         }
       }
-      return autoCompleteProperty;
     }
+    return autoCompleteProperty;
   }
 
   /**
