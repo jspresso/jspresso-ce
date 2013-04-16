@@ -94,7 +94,6 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<String>                                    lifecycleInterceptorClassNames;
 
   private List<ILifecycleInterceptor<?>>                  lifecycleInterceptors;
-  private Map<String, IPropertyDescriptor>                nestedPropertyDescriptors;
   private Map<String, ESort>                              orderingProperties;
   private Integer                                         pageSize;
   private Map<String, IPropertyDescriptor>                propertyDescriptorsMap;
@@ -316,24 +315,17 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
-      if (nestedPropertyDescriptors == null) {
-        nestedPropertyDescriptors = new HashMap<String, IPropertyDescriptor>();
-      }
-      descriptor = nestedPropertyDescriptors.get(propertyName);
-      if (descriptor == null) {
-        IPropertyDescriptor rootProp = getPropertyDescriptor(propertyName
-            .substring(0, nestedDotIndex));
-        if (rootProp instanceof IComponentDescriptorProvider<?>) {
-          IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
-              .getComponentDescriptor();
-          descriptor = componentDescriptor.getPropertyDescriptor(propertyName
-              .substring(nestedDotIndex + 1));
-          if (descriptor != null) {
-            descriptor = descriptor.clone();
-            if (descriptor instanceof BasicPropertyDescriptor) {
-              ((BasicPropertyDescriptor) descriptor).setName(propertyName);
-            }
-            nestedPropertyDescriptors.put(propertyName, descriptor);
+      IPropertyDescriptor rootProp = getPropertyDescriptor(propertyName
+          .substring(0, nestedDotIndex));
+      if (rootProp instanceof IComponentDescriptorProvider<?>) {
+        IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
+            .getComponentDescriptor();
+        descriptor = componentDescriptor.getPropertyDescriptor(propertyName
+            .substring(nestedDotIndex + 1));
+        if (descriptor != null) {
+          descriptor = descriptor.clone();
+          if (descriptor instanceof BasicPropertyDescriptor) {
+            ((BasicPropertyDescriptor) descriptor).setName(propertyName);
           }
         }
       }
@@ -372,8 +364,9 @@ public abstract class AbstractComponentDescriptor<E> extends
         // it
         // already contains.
         Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-        if (getAncestorDescriptors() != null) {
-          for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+        if (ancestorDescs != null) {
+          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
             for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
                 .getPropertyDescriptors()) {
               allDescriptors.put(propertyDescriptor.getName(),
@@ -398,29 +391,34 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
+  private Object queryablePropertiesLock = new Object();
+
   /**
    * {@inheritDoc}
    */
   @Override
   public List<String> getQueryableProperties() {
-    if (queryableProperties == null) {
-      Set<String> queryablePropertiesSet = new LinkedHashSet<String>();
-      if (getAncestorDescriptors() != null) {
-        for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-          for (String propertyName : ancestorDescriptor
-              .getQueryableProperties()) {
-            queryablePropertiesSet.add(propertyName);
+    synchronized (queryablePropertiesLock) {
+      if (queryableProperties == null) {
+        Set<String> queryablePropertiesSet = new LinkedHashSet<String>();
+        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+        if (ancestorDescs != null) {
+          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+            for (String propertyName : ancestorDescriptor
+                .getQueryableProperties()) {
+              queryablePropertiesSet.add(propertyName);
+            }
           }
         }
-      }
-      for (String renderedProperty : getRenderedProperties()) {
-        IPropertyDescriptor declaredPropertyDescriptor = getDeclaredPropertyDescriptor(renderedProperty);
-        if (declaredPropertyDescriptor != null
-            && declaredPropertyDescriptor.isQueryable()) {
-          queryablePropertiesSet.add(renderedProperty);
+        for (String renderedProperty : getRenderedProperties()) {
+          IPropertyDescriptor declaredPropertyDescriptor = getDeclaredPropertyDescriptor(renderedProperty);
+          if (declaredPropertyDescriptor != null
+              && declaredPropertyDescriptor.isQueryable()) {
+            queryablePropertiesSet.add(renderedProperty);
+          }
         }
+        queryableProperties = new ArrayList<String>(queryablePropertiesSet);
       }
-      queryableProperties = new ArrayList<String>(queryablePropertiesSet);
     }
     return explodeComponentReferences(this, queryableProperties);
   }
@@ -436,39 +434,46 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (readabilityGates != null) {
       gates.addAll(readabilityGates);
     }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+    List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+    if (ancestorDescs != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
         gates.addAll(ancestorDescriptor.getReadabilityGates());
       }
     }
     return gates;
   }
 
+  private Object renderedPropertiesLock = new Object();
+
   /**
    * {@inheritDoc}
    */
   @Override
   public List<String> getRenderedProperties() {
-    if (renderedProperties == null) {
-      Set<String> renderedPropertiesSet = new LinkedHashSet<String>();
-      if (getAncestorDescriptors() != null) {
-        for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-          for (String propertyName : ancestorDescriptor.getRenderedProperties()) {
-            renderedPropertiesSet.add(propertyName);
+    synchronized (renderedPropertiesLock) {
+      if (renderedProperties == null) {
+        Set<String> renderedPropertiesSet = new LinkedHashSet<String>();
+        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+        if (ancestorDescs != null) {
+          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+            for (String propertyName : ancestorDescriptor
+                .getRenderedProperties()) {
+              renderedPropertiesSet.add(propertyName);
+            }
           }
         }
-      }
-      Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
-      if (declaredPropertyDescriptors != null) {
-        for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
-          if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
-              && !(propertyDescriptor instanceof ITextPropertyDescriptor)
-              && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
-            renderedPropertiesSet.add(propertyDescriptor.getName());
+        Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+        if (declaredPropertyDescriptors != null) {
+          for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+            if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
+                && !(propertyDescriptor instanceof ITextPropertyDescriptor)
+                && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
+              renderedPropertiesSet.add(propertyDescriptor.getName());
+            }
           }
         }
+        renderedProperties = new ArrayList<String>(renderedPropertiesSet);
       }
-      renderedProperties = new ArrayList<String>(renderedPropertiesSet);
     }
     return explodeComponentReferences(this, renderedProperties);
   }
@@ -516,9 +521,10 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (serviceDelegates != null) {
       service = serviceDelegates.get(targetMethod.getName());
     }
-    if (service == null && getAncestorDescriptors() != null) {
-      for (Iterator<IComponentDescriptor<?>> ite = getAncestorDescriptors()
-          .iterator(); service == null && ite.hasNext();) {
+    List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+    if (service == null && ancestorDescs != null) {
+      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescs.iterator(); service == null
+          && ite.hasNext();) {
         IComponentDescriptor<?> ancestorDescriptor = ite.next();
         service = ancestorDescriptor.getServiceDelegate(targetMethod);
       }
@@ -635,8 +641,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (unclonedProperties != null) {
       properties.addAll(unclonedProperties);
     }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+    List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+    if (ancestorDescs != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
         properties.addAll(ancestorDescriptor.getUnclonedProperties());
       }
     }
@@ -654,8 +661,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (writabilityGates != null) {
       gates.addAll(writabilityGates);
     }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+    List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+    if (ancestorDescs != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
         gates.addAll(ancestorDescriptor.getWritabilityGates());
       }
     }
@@ -834,11 +842,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (descriptors != null) {
       tempPropertyBuffer = new ArrayList<IPropertyDescriptor>(descriptors);
       propertyDescriptorsMap = null;
-      nestedPropertyDescriptors = null;
     } else {
       tempPropertyBuffer = null;
       propertyDescriptorsMap = null;
-      nestedPropertyDescriptors = null;
     }
     propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
     allPropertyDescriptorsCache = null;
