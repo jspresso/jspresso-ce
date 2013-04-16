@@ -25,7 +25,7 @@ package org.jspresso.framework.view.flex {
       var ti : TextInput = mx_internal::getTextInput();
       if (ti) {
         ti.enabled = true;
-        ti.editable = enabled;
+        ti.editable = value;
       }
     }
 
