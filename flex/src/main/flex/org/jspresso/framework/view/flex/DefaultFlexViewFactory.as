@@ -1588,7 +1588,7 @@ package org.jspresso.framework.view.flex {
               rightWidth = rightBottom.measuredWidth;
             }
             leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
-            rightBottom.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
+            rightBottom.percentWidth = (rightWidth * 100.0) / (leftWidth + rightWidth);
           }
         }
       });
