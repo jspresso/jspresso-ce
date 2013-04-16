@@ -1,5 +1,8 @@
 3.5.16
 ======
+- Flex date fields have  been made un-resizable in order to fix the bug #980. This may introduce changes in form layouts
+  (specially filter forms) containing date fields. Please review them carefully.
+
 - The getPropertyView(context) has been removed since the only thing that is actually useful is the underlying
   property descriptor. It has been replaced by the getPropertyViewDescriptor(context) method.
 
