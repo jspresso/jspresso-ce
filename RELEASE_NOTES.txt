@@ -1,5 +1,8 @@
 3.5.16
 ======
+- Some API methods signature have been improved. No cast is required to the target type anymore when doing a
+  getSelectedModel(context) for instance. The return type is now parameterized.
+
 - New locales : IT, CS, SK, RU, BG, TR
 In order to use the new translation locales in existing projects : 
 
