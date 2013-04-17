@@ -133,6 +133,13 @@ ApplicationControlBar
   horizontalAlign: left;
 }
 
+.labelComponentCell
+{
+  verticalAlign: top;
+  horizontalAlign: left;
+  paddingTop: 4;
+}
+
 .borderContainer
 {
   horizontalGap: 1;

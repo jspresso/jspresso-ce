@@ -1,5 +1,34 @@
 3.5.16
 ======
+- New locales : IT, CS, SK, RU, BG, TR
+In order to use the new translation locales in existing projects : 
+
+Edit startup/qooxdoo/client/src/main/py/config.json and change :
+  "LOCALES"      : ["en","fr",...],
+  to
+  "LOCALES"      : ["en","fr",..., "it", "cs", "sk", "ru", "bg", "tr"],
+
+Edit startup/flex/client/pom.xml and change :
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            ...
+          </locales>
+  to  
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            ...
+            <locale>it_IT</locale>
+            <locale>cs_CZ</locale>
+            <locale>sk_SK</locale>
+            <locale>ru_RU</locale>
+            <locale>bg_BG</locale>
+            <locale>tr_TR</locale>
+          </locales>
+
+Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/client/src/main/locales.
+
 - Flex date fields have  been made un-resizable in order to fix the bug #980. This may introduce changes in form layouts
   (specially filter forms) containing date fields. Please review them carefully.
 

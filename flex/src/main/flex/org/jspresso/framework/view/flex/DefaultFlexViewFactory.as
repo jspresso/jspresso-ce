@@ -1305,7 +1305,11 @@ package org.jspresso.framework.view.flex {
         }
 
         var componentCell:GridItem = new GridItem();
-        componentCell.styleName = "componentCell";
+        if(rComponent is RLabel || rComponent is RCheckBox) {
+          componentCell.styleName = "labelComponentCell";
+        } else {
+          componentCell.styleName = "componentCell";
+        }
         componentCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         componentCell.verticalScrollPolicy  = ScrollPolicy.OFF;
         
