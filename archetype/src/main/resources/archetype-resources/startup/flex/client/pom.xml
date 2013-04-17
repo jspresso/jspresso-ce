@@ -73,6 +73,9 @@
             <locale>pl_PL</locale>
             <locale>cs_CZ</locale>
             <locale>sk_SK</locale>
+            <locale>ru_RU</locale>
+            <locale>bg_BG</locale>
+            <locale>tr_TR</locale>
           </locales>
           <mergeResourceBundle>true</mergeResourceBundle>
           <parameters>

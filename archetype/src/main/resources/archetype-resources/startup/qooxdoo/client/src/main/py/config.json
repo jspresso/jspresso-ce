@@ -41,7 +41,7 @@
     "QXTHEME"      : "${package}.startup.qooxdoo.theme.Theme",
     "QXICONTHEME"  : ["Oxygen"],
     "API_EXCLUDE"  : ["qx.legacy.*","qx.test.*"],
-    "LOCALES"      : ["en","fr","es","pt","de","it","pl","cs","sk"],
+    "LOCALES"      : ["en","fr","es","pt","de","it","pl","cs","sk","ru","bg","tr"],
     "ROOT"         : "..",
     "BUILD_PATH"   : "${symbol_dollar}{TARGET}/web"
   },
