@@ -55,11 +55,9 @@ public class MessageSourceTranslationProvider extends
     if (translation != null
         && translation
             .startsWith(EnhancedResourceBundleMessageSource.DEFAULT_MARKER)) {
-      if (LOG.isWarnEnabled()) {
-        LOG.warn(key + "=/*TO_REPLACE*/");
-      }
-      StringBuilder message = new StringBuilder("[" + locale.getLanguage() + ":"
-          + key + "]");
+      LOG.debug("{}=/*TO_REPLACE*/", key);
+      StringBuilder message = new StringBuilder("[" + locale.getLanguage()
+          + ":" + key + "]");
       if (args != null && args.length > 0) {
         message.append(" { ");
         for (Object arg : args) {
