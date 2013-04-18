@@ -15,9 +15,12 @@
 
 package org.jspresso.framework.state.remote {
 
+    import flash.events.Event;
+
     import mx.collections.ListCollectionView;
     import mx.events.PropertyChangeEvent;
     import mx.events.PropertyChangeEventKind;
+    
 		
 		[Bindable]
     [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCompositeValueState")]
