@@ -41,11 +41,13 @@ Panel
   borderThicknessBottom: 2;
 }
 
-ResizablePanel {
+ResizablePanel
+{
   disabledOverlayAlpha: 0;
 }
 
-PopUpButton {
+PopUpButton
+{
   textAlign: left;
 }
 
@@ -54,6 +56,12 @@ ApplicationControlBar
   fillAlphas: 0.5, 0.5;
   fillColors: #BBBBBB,#666666;
   horizontalGap: 2;
+}
+
+CheckBoxExtended
+{
+  paddingLeft: 0;
+  paddingRight: 0;
 }
 
 .drawerButton

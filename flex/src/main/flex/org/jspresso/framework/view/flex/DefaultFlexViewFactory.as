@@ -1307,6 +1307,7 @@ package org.jspresso.framework.view.flex {
         var componentCell:GridItem = new GridItem();
         if(rComponent is RLabel || rComponent is RCheckBox) {
           componentCell.styleName = "labelComponentCell";
+          component.setStyle("paddingRight", 4);
         } else {
           componentCell.styleName = "componentCell";
         }
@@ -3013,6 +3014,7 @@ package org.jspresso.framework.view.flex {
     protected function findFirstFocusableComponent(root:UIComponent):UIComponent {
       if(  root is TextInput
         || root is CheckBox
+        || root is CheckBoxExtended
         || root is ComboBox
         || root is TextArea
         || root is DateField
