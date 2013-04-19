@@ -82,11 +82,11 @@
     <jar-plugin.version>2.3.1</jar-plugin.version>
     <surefire-plugin.version>2.13</surefire-plugin.version>
     <assembly-plugin.version>2.4</assembly-plugin.version>
-    <javadoc-plugin.version>2.8</javadoc-plugin.version>
+    <javadoc-plugin.version>2.9</javadoc-plugin.version>
     <deploy-plugin.version>2.6</deploy-plugin.version>
     <site-plugin.version>3.2</site-plugin.version>
     <install-plugin.version>2.4</install-plugin.version>
-    <release-plugin.version>2.3.2</release-plugin.version>
+    <release-plugin.version>2.4.1</release-plugin.version>
     <clean-plugin.version>2.4.1</clean-plugin.version>
     <archetype-plugin.version>2.0</archetype-plugin.version>
     <source-plugin.version>2.2.1</source-plugin.version>
@@ -94,12 +94,12 @@
     <info-reports-plugin.version>2.6</info-reports-plugin.version>
     <war-plugin.version>2.3</war-plugin.version>
     <shade-plugin.version>1.4</shade-plugin.version>
-    <webdav-jackrabbit.version>1.0-beta-7</webdav-jackrabbit.version>
+    <webdav-jackrabbit.version>2.4</webdav-jackrabbit.version>
 
     <docbkx-plugin.version>2.0.14</docbkx-plugin.version>
     <xdoclet2-plugin.version>2.0.7.3</xdoclet2-plugin.version>
     <xdoclet2-hibernate-plugin.version>1.0.5</xdoclet2-hibernate-plugin.version>
-    <build-helper-plugin.version>1.4</build-helper-plugin.version>
+    <build-helper-plugin.version>1.8</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
     <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
     <flexmojos-plugin.version>3.8</flexmojos-plugin.version>
