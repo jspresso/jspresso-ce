@@ -1,6 +1,90 @@
 Jspresso CE - Change Log
 
 
+Jspresso CE - 3.6 (Released 2013-04-19) [ View Issues ]
+=======================================
+- 0001001: [View] Add language Turkish into framework (vvandens) - closed.
+- 0001000: [View] Add language BULGARIAN into framework (vvandens) - closed.
+- 0000972: [View] Add language RUSSIAN into framework (vvandens) - closed.
+- 0001002: [View] Update language Czech in framework (vvandens) - closed.
+- 0000945: [View] Date time readonly field is writable (vvandens) - closed.
+- 0000999: [View] Edit date available with booleanWritabilityGates (vvandens) - closed.
+- 0000893: [View] Collapse filter module query form (vvandens) - closed.
+- 0001003: [View] Flex date fields 1st day of week should be made configurable through the formats.properties resource bundle (vvandens) - closed.
+- 0000776: [Model] mandatoryProperties cannot be set to null (vvandens) - closed.
+- 0000646: [Model] When a collection is mandatory, we cannot remove the last element (vvandens) - closed.
+- 0000995: [Frontend] Rendered properties on IReferencePropertyDescriptor are ignored when creating LOV view for the ref property (vvandens) - closed.
+- 0000992: [View] Flex Date-time fields should be made as compact as possible (vvandens) - closed.
+- 0000991: [View] Using a Flex text area silently replaces line breaks with the client platform one (vvandens) - closed.
+- 0000990: [Backend] AddBeanAsSubModuleAction should support null workspace as current one while configuring another parent module (vvandens) - closed.
+- 0000935: [Frontend] Query form's fields vertical alignment (vvandens) - closed.
+- 0000929: [Frontend] Allow to configure multi-line text area in filter views (vvandens) - closed.
+- 0000910: [Frontend] Action never called when a reference field contains '%' in a filter (vvandens) - closed.
+- 0000963: [Build & tools] Add tags to maven-javadoc-plugin to prevent warnings about xdoclet hibernate tags (vvandens) - closed.
+- 0000987: [Frontend] Copy paste excel list to query field (vvandens) - closed.
+- 0000984: [Frontend] Jspresso locale ignore the country part of java locale (vvandens) - closed.
+- 0000983: [Frontend] Swing application does not take care of calendar Locale (vvandens) - closed.
+- 0000709: [Backend] Allow to query on collection property elements (vvandens) - closed.
+- 0000777: [Backend] Entities that failed to be saved still remain in a 'pending' state (vvandens) - closed.
+- 0000933: [Backend] minValue and maxValue contraint are not respected on delegateWritable computed properties (vvandens) - closed.
+- 0000955: [Backend] public <T extends IEntity> T createEntityInstance(Class<T> entityContract, Serializable id, booelan initializeEntity) (vvandens) - closed.
+- 0000965: [Backend] Typing cause an unchecked warning in AbstractActionContextAware.getSelectedModels (vvandens) - closed.
+- 0000982: [Model] hasListeners can produce stack overflows on 1-1 relationships (vvandens) - closed.
+- 0000980: [View] Date / time field may disapear due to resizing (vvandens) - closed.
+- 0000978: [Backend] AbstractTestDataPersister leaks JDBC connections (vvandens) - closed.
+- 0000977: [Backend] Component extension must be provided with a postCreate() callback method (vvandens) - closed.
+- 0000974: [Backend] JTA transaction manager can prevent using a (even new) JDBC connection in the TX commit (vvandens) - closed.
+- 0000970: [Backend] Under high load, synchronized methods on AbstractComponentDescriptor can be a bottleneck (vvandens) - closed.
+- 0000920: [Frontend] removeModuleObjectFrontAction for an entity and backendController.isDirtyInDepth (vvandens) - closed.
+- 0000952: [View] View tester launch is broken in HRSample (vvandens) - closed.
+- 0000946: [Backend] Get rid of the Hibernate interceptor for TX synchronization (vvandens) - closed.
+- 0000943: [Persistence] Criteria.setLockMode does not work correctly (vvandens) - closed.
+- 0000942: [View] Flex Datagrid wrongly computes its vertical size when 1st line height is big (vvandens) - closed.
+- 0000897: [View] Regression: Collection properties cannot be displayed anymore in forms (vvandens) - closed.
+- 0000804: [View] Strategie implementation for cardViews (vvandens) - closed.
+- 0000941: [Model] Implement a helper method for tracking property changes on collection elements (vvandens) - closed.
+- 0000926: [Model] Warning function for collections containing null elements may lead to a stackOverFlow error (vvandens) - closed.
+- 0000790: [Frontend] On the login window, freeze UI while login button is pressed. (vvandens) - closed.
+- 0000938: [View] Dynamic background color is sometimes not corectly applied (vvandens) - closed.
+- 0000934: [Backend] Incompatible settings on computed properties : delegateWritable:true and cacheable:true (vvandens) - closed.
+- 0000931: [Persistence] Allow to specify fetch and batch size on every relationship end. (vvandens) - closed.
+- 0000928: [Backend] Criteria queries may not be sorted as expected (vvandens) - closed.
+- 0000927: [Frontend] Add Czech and Slovak translations (vvandens) - closed.
+- 0000787: [Model] BigDecimal properties arn't scaled (vvandens) - closed.
+- 0000837: [View] Could you add a property verticallyScrollable to a property html of one Entity ? (vvandens) - closed.
+- 0000830: [View] Key "tab" in a decimal value / truncating the value (vvandens) - closed.
+- 0000925: [Backend] Adding an "onModuleStartup" parameter on the controller bean (vvandens) - closed.
+- 0000922: [Backend] Collection adder can be awfully slow due to collection sorting (vvandens) - closed.
+- 0000907: [View] Color picker show clear button on mandatory properties (vvandens) - closed.
+- 0000764: [View] entityCardView doesn't work properly with inheritance (vvandens) - closed.
+- 0000867: [Frontend] Enhance CollectionElementMoveAction.java (vvandens) - closed.
+- 0000916: [View] in a filter , grantedRoles fields became read only field (vvandens) - closed.
+- 0000769: [Backend] Capacity to manipulate a QueryModuleFilterAction to traverse all records (vvandens) - closed.
+- 0000765: [Frontend] Default Date in calendar Pop-up (vvandens) - closed.
+- 0000915: [Frontend] Whenever a table is not paginated, allow sorting computed columns even without sql name (vvandens) - closed.
+- 0000909: [Model] Property processors are not always triggered when a map is used as model at runtime (vvandens) - closed.
+- 0000914: [View] PermId should be reset when cloning a view descriptor (vvandens) - closed.
+- 0000912: [Backend] Define a bean named "null" that is null in order to leverage it for injection (vvandens) - closed.
+- 0000908: [Frontend] Default CTRL+F shortcut for query action (vvandens) - closed.
+- 0000860: [View] mandatory enumeration with queryMultiSelect:true appears like a mandatory property in filterView (vvandens) - closed.
+- 0000683: [View] A date fields when filled with 2 or less characters is not automatically filled with the current date. (vvandens) - closed.
+- 0000846: [Backend] The check on modifiying an entity that hasn't been previously merge in session doesn't work for referenced components (vvandens) - closed.
+- 0000902: [Backend] Collection might be initialized with entities incorrectly merged into the application session (vvandens) - closed.
+- 0000899: [Backend] Introduce an "owningComponent" property on inline components (vvandens) - closed.
+- 0000845: [Frontend] Boolean properties arn't set to readOnly in lovAction results (vvandens) - closed.
+- 0000796: [Frontend] Quote in i18n translation files disappear in flex (vvandens) - closed.
+- 0000779: [Frontend] Enhance EditSelectedComponentAction (vvandens) - closed.
+- 0000895: [Build & tools] Maven archetype fails at first build (vvandens) - closed.
+- 0000424: [Backend] Application monitoring service endpoint (vvandens) - closed.
+- 0000894: [Frontend] Invalidate HTTP session when browser is closed (vvandens) - closed.
+- 0000892: [Backend] Computed field implementation not found when using multi-inheritence (vvandens) - closed.
+- 0000888: [Backend] FindByPrimaryKey (vvandens) - closed.
+- 0000891: [Model] BasicComponentDescriptorRegistry is not thread-safe (vvandens) - closed.
+- 0000890: [Backend] Make ApplicationContext construction thread-safe (vvandens) - closed.
+- 0000884: [Backend] Computed properties may be actually computed whereas there are no listener attached. (vvandens) - closed.
+[79 issues]
+
+
 Jspresso CE - 3.5.15 (Released 2013-01-03) [ View Issues ]
 ==========================================
 - 0000883: [Backend] Nested filters on comparables (date, etc, ...) creates unecessary inners joins. (vvandens) - closed.
