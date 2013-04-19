@@ -3,12 +3,12 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>3.5-SNAPSHOT</version>
+  <version>3.6-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
-    <sjs.version>1.0-SNAPSHOT</sjs.version>
+    <jspresso.version>3.6-SNAPSHOT</jspresso.version>
+    <sjs.version>1.1</sjs.version>
     
     <ant-contrib.version>1.0b3</ant-contrib.version>
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
