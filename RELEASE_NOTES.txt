@@ -1,3 +1,7 @@
+3.7
+===
+
+
 3.6
 ===
 - Some API methods signature have been improved. No cast is required to the target type anymore when doing a
