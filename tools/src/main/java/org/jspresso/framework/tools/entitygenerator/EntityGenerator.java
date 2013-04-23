@@ -73,6 +73,7 @@ public class EntityGenerator {
   private static final String EXCLUDE_PATTERN         = "excludePatterns";
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
   private static final String INCLUDE_PACKAGES        = "includePackages";
+  private static final String MAX_SQL_NAME_SIZE       = "maxSqlNameSize";
   private static final String OUTPUT_DIR              = "outputDir";
   private static final String FILE_EXTENSION          = "fileExtension";
   private static final String CLASSNAME_PREFIX        = "classnamePrefix";
@@ -90,6 +91,7 @@ public class EntityGenerator {
   private String              fileExtension;
   private String              classnamePrefix;
   private String              classnameSuffix;
+  private int                 maxSqlNameSize          = -1;
   private String              templateName;
   private String              templateResourcePath;
 
@@ -139,6 +141,9 @@ public class EntityGenerator {
     options.addOption(OptionBuilder.withArgName(CLASSNAME_SUFFIX).hasArg()
         .withDescription("appends a suffix to generated class names.")
         .create(CLASSNAME_SUFFIX));
+    options.addOption(OptionBuilder.withArgName(MAX_SQL_NAME_SIZE).hasArg()
+        .withDescription("limits the size of the generated SQL names.")
+        .create(MAX_SQL_NAME_SIZE));
     options
         .addOption(OptionBuilder
             .withArgName(INCLUDE_PACKAGES)
@@ -194,6 +199,10 @@ public class EntityGenerator {
     generator.setExcludePatterns(cmd.getOptionValues(EXCLUDE_PATTERN));
     generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
     generator.setComponentIds(cmd.getOptionValues(COMPONENT_IDS));
+    String msns = cmd.getOptionValue(MAX_SQL_NAME_SIZE);
+    if (msns != null && msns.length() > 0) {
+      generator.setMaxSqlNameSize(Integer.parseInt(msns));
+    }
     generator.generateComponents();
   }
 
@@ -269,7 +278,7 @@ public class EntityGenerator {
       }
       Map<String, Object> rootContext = new HashMap<String, Object>();
 
-      rootContext.put("generateSQLName", new GenerateSqlName());
+      rootContext.put("generateSQLName", new GenerateSqlName(maxSqlNameSize));
       rootContext.put("instanceof", new InstanceOf(wrapper));
       rootContext.put("compareStrings", new CompareStrings(wrapper));
       rootContext.put("compactString", new CompactString());
@@ -440,6 +449,16 @@ public class EntityGenerator {
    */
   public void setClassnameSuffix(String classnameSuffix) {
     this.classnameSuffix = classnameSuffix;
+  }
+
+  /**
+   * Sets the maxSqlNameSize.
+   * 
+   * @param maxSqlNameSize
+   *          the maxSqlNameSize to set.
+   */
+  public void setMaxSqlNameSize(int maxSqlNameSize) {
+    this.maxSqlNameSize = maxSqlNameSize;
   }
 
   /**

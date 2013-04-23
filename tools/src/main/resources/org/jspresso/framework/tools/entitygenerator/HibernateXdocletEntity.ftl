@@ -689,7 +689,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Constant value for ${propertyName}.
    */
-  String ${generateSQLName(propertyName)} = "${propertyName}";
+  String ${generateSQLName(propertyName, "false")} = "${propertyName}";
 
 </#macro>
 

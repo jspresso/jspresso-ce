@@ -41,90 +41,96 @@ public class EntityGeneratorMojo extends AbstractMojo {
    * The Maven project.
    */
   @Parameter(defaultValue = "${project}", required = true, readonly = true)
-  MavenProject     project;
+  MavenProject                                             project;
 
   /**
    * The source directory containing dsl files needed for change detection.
    */
   @Parameter(required = false)
-  private File[]   sourceDirs;
+  private File[]                                           sourceDirs;
 
   /**
    * Uses given selector too lookup the bean ref factory context file. If not
    * set, defaults to beanRefFactory.xml.
    */
   @Parameter(required = true)
-  private String   beanFactorySelector;
+  private String                                           beanFactorySelector;
 
   /**
    * Uses given applicationContextKey as registered in the spring
    * BeanFactoryLocator.
    */
   @Parameter(required = true)
-  private String   applicationContextKey;
+  private String                                           applicationContextKey;
 
   /**
    * Generates code for the given component descriptor identifiers in the
    * application context.
    */
   @Parameter(required = false)
-  private String[] componentIds;
+  private String[]                                         componentIds;
 
   /**
    * Excludes classes whose names match the regular expression.
    */
   @Parameter(required = false)
-  private String[] excludePatterns;
+  private String[]                                         excludePatterns;
 
   /**
    * Generates java5 annotations (incompatible with XDoclet as of now).
    */
   @Parameter(defaultValue = "false", required = false)
-  private boolean  generateAnnotations;
+  private boolean                                          generateAnnotations;
 
   /**
    * Generates code for the component descriptors declared in the listed
    * packages.
    */
   @Parameter(property = "includePackages", required = false)
-  private String[] includePackages;
+  private String[]                                         includePackages;
+
+  /**
+   * Configures a maximum size for the generated SQL mapping names.
+   */
+  @Parameter(defaultValue="-1", property = "maxSqlNameSize", required = false)
+  private int                                              maxSqlNameSize;
 
   /**
    * Sets the output directory for generated source.
    */
   @Parameter(defaultValue = "${project.build.directory}/generated-sources/entitygenerator", required = true)
-  private File     outputDir;
+  private File                                             outputDir;
 
   /**
    * Sets the file extension for generated source.
    */
   @Parameter(defaultValue = "java", required = true)
-  private String   fileExtension;
+  private String                                           fileExtension;
 
   /**
    * Prepends a prefix to generated class names.
    */
   @Parameter(required = false)
-  private String   classnamePrefix;
+  private String                                           classnamePrefix;
 
   /**
    * Appends a suffix to generated class names.
    */
   @Parameter(required = false)
-  private String   classnameSuffix;
+  private String                                           classnameSuffix;
 
   /**
    * Sets the used component code template.
    */
   @Parameter(defaultValue = "HibernateXdocletEntity.ftl", required = true)
-  private String   templateName;
+  private String                                           templateName;
 
   /**
    * Sets the path to lookup the template from.
    */
   @Parameter(defaultValue = "/org/jspresso/framework/tools/entitygenerator", required = true)
-  private String   templateResourcePath;
-  
+  private String                                           templateResourcePath;
+
   @Parameter(defaultValue = "${plugin.classRealm}", required = true, readonly = true)
   private org.codehaus.plexus.classworlds.realm.ClassRealm classRealm;
 
@@ -166,6 +172,7 @@ public class EntityGeneratorMojo extends AbstractMojo {
     generator.setExcludePatterns(excludePatterns);
     generator.setGenerateAnnotations(generateAnnotations);
     generator.setComponentIds(componentIds);
+    generator.setMaxSqlNameSize(maxSqlNameSize);
     generator.generateComponents();
   }
 
@@ -226,7 +233,8 @@ public class EntityGeneratorMojo extends AbstractMojo {
       List<String> compileClasspathElements = project
           .getCompileClasspathElements();
       for (String element : compileClasspathElements) {
-        if (!element.equals(project.getBuild().getOutputDirectory()) && !(element.indexOf("log4j") >= 0)) {
+        if (!element.equals(project.getBuild().getOutputDirectory())
+            && !(element.indexOf("log4j") >= 0)) {
           File elementFile = new File(element);
           getLog().debug(
               "Adding element to plugin classpath " + elementFile.getPath());
