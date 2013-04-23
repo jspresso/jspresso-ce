@@ -43,6 +43,7 @@ import org.jspresso.framework.util.freemarker.CompactString;
 import org.jspresso.framework.util.freemarker.CompareStrings;
 import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.freemarker.InstanceOf;
+import org.jspresso.framework.util.freemarker.ReduceSqlName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
@@ -278,7 +279,8 @@ public class EntityGenerator {
       }
       Map<String, Object> rootContext = new HashMap<String, Object>();
 
-      rootContext.put("generateSQLName", new GenerateSqlName(maxSqlNameSize));
+      rootContext.put("generateSQLName", new GenerateSqlName());
+      rootContext.put("reduceSQLName", new ReduceSqlName(maxSqlNameSize));
       rootContext.put("instanceof", new InstanceOf(wrapper));
       rootContext.put("compareStrings", new CompareStrings(wrapper));
       rootContext.put("compactString", new CompactString());

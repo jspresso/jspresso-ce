@@ -19,10 +19,8 @@
 package org.jspresso.framework.util.freemarker;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import freemarker.template.SimpleScalar;
@@ -78,23 +76,14 @@ public class GenerateSqlName implements TemplateMethodModel {
   }
   private Formatter                    formatter;
   private Set<String>                  reservedKeyWords;
-  private int                          maxSize;
-  private Map<String, String>          shortened;
-  private Map<String, Integer>         deduppers;
 
   /**
    * Constructs a new <code>GenerateSqlName</code> instance.
    * 
-   * @param maxSize
-   *          the maximum size of the generated identifiers. <code>-1</code>
-   *          means no limit.
    */
-  public GenerateSqlName(int maxSize) {
+  public GenerateSqlName() {
     reservedKeyWords = new HashSet<String>(DEFAULT_KEY_WORD_PROVIDER.run());
     formatter = DEFAULT_FORMATTER;
-    this.maxSize = maxSize;
-    shortened = new HashMap<String, String>();
-    deduppers = new HashMap<String, Integer>();
   }
 
   /**
@@ -112,44 +101,11 @@ public class GenerateSqlName implements TemplateMethodModel {
         sqlColumnName += formatter.run(arguments.get(1).toString());
       }
     }
-    if (!Boolean.FALSE.toString().equals(arguments.get(arguments.size() - 1))) {
-      sqlColumnName = reduceToMaxSize(sqlColumnName);
-    }
     try {
       return new SimpleScalar(sqlColumnName);
     } catch (Exception ex) {
       throw new TemplateModelException("Could not infer SQL column name.", ex);
     }
-  }
-
-  private String reduceToMaxSize(String sqlColumnName) {
-    if (maxSize <= 0 || sqlColumnName.length() <= maxSize) {
-      return sqlColumnName;
-    }
-    if (shortened.containsKey(sqlColumnName)) {
-      return shortened.get(sqlColumnName);
-    }
-    String[] splitted = sqlColumnName.split(WORD_SEP);
-    int lettersPerSection = (maxSize / splitted.length) - 1;
-    StringBuilder reduced = new StringBuilder();
-    if (lettersPerSection > 0) {
-      for (String section : splitted) {
-        reduced.append(section.substring(0, lettersPerSection));
-        reduced.append(WORD_SEP);
-      }
-    } else {
-      reduced.append(sqlColumnName.substring(0, maxSize - 2)).append(WORD_SEP);
-    }
-    if (deduppers.containsKey(reduced)) {
-      deduppers.put(reduced.toString(),
-          Integer.valueOf(deduppers.get(reduced).intValue() + 1));
-    } else {
-      deduppers.put(reduced.toString(), Integer.valueOf(0));
-    }
-    reduced.append(Integer.toHexString(deduppers.get(reduced.toString())
-        .intValue()));
-    shortened.put(sqlColumnName, reduced.toString());
-    return reduced.toString();
   }
 
   /**
