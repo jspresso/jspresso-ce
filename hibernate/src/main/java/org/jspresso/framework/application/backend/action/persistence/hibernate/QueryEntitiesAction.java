@@ -91,11 +91,14 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   private static final String    CRITERIA_REFINER  = "CRITERIA_REFINER";
   private static final String    COMPONENT_REFINER = "COMPONENT_REFINER";
 
+  private boolean                useInListForPagination;
+
   /**
    * Constructs a new <code>QueryEntitiesAction</code> instance.
    */
   public QueryEntitiesAction() {
     mergeMode = EMergeMode.MERGE_LAZY;
+    useInListForPagination = true;
   }
 
   /**
@@ -263,25 +266,31 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
-        criteria.setProjection(Projections.id());
-        List<Serializable> entityIds = criteria
-            .getExecutableCriteria(hibernateSession)
-            .setFirstResult(page.intValue() * pageSize.intValue())
-            .setMaxResults(pageSize.intValue()).list();
-        criteria = EnhancedDetachedCriteria.forEntityName(queryComponent
-            .getQueryContract().getName());
-        entities = criteria.add(createEntityIdsInCriterion(entityIds, 500))
-            .getExecutableCriteria(hibernateSession).list();
-        Map<Serializable, IEntity> entitiesById = new HashMap<Serializable, IEntity>();
-        for (IEntity entity : entities) {
-          entitiesById.put(entity.getId(), entity);
-        }
-        entities = new ArrayList<IEntity>();
-        for (Serializable id : entityIds) {
-          IEntity entity = entitiesById.get(id);
-          if (entity != null) {
-            entities.add(entity);
+        if (useInListForPagination) {
+          criteria.setProjection(Projections.id());
+          List<Serializable> entityIds = criteria
+              .getExecutableCriteria(hibernateSession)
+              .setFirstResult(page.intValue() * pageSize.intValue())
+              .setMaxResults(pageSize.intValue()).list();
+          criteria = EnhancedDetachedCriteria.forEntityName(queryComponent
+              .getQueryContract().getName());
+          entities = criteria.add(createEntityIdsInCriterion(entityIds, 500))
+              .getExecutableCriteria(hibernateSession).list();
+          Map<Serializable, IEntity> entitiesById = new HashMap<Serializable, IEntity>();
+          for (IEntity entity : entities) {
+            entitiesById.put(entity.getId(), entity);
           }
+          entities = new ArrayList<IEntity>();
+          for (Serializable id : entityIds) {
+            IEntity entity = entitiesById.get(id);
+            if (entity != null) {
+              entities.add(entity);
+            }
+          }
+        } else {
+          entities = criteria.getExecutableCriteria(hibernateSession)
+              .setFirstResult(page.intValue() * pageSize.intValue())
+              .setMaxResults(pageSize.intValue()).list();
         }
       } else {
         if (refinerOrders != null) {
@@ -425,5 +434,15 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       splittedInlist.add(Restrictions.in(IEntity.ID, currentMessageIds));
     }
     return splittedInlist;
+  }
+
+  /**
+   * Sets the useInListForPagination.
+   * 
+   * @param useInListForPagination
+   *          the useInListForPagination to set.
+   */
+  public void setUseInListForPagination(boolean useInListForPagination) {
+    this.useInListForPagination = useInListForPagination;
   }
 }
