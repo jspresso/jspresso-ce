@@ -272,19 +272,23 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               .getExecutableCriteria(hibernateSession)
               .setFirstResult(page.intValue() * pageSize.intValue())
               .setMaxResults(pageSize.intValue()).list();
-          criteria = EnhancedDetachedCriteria.forEntityName(queryComponent
-              .getQueryContract().getName());
-          entities = criteria.add(createEntityIdsInCriterion(entityIds, 500))
-              .getExecutableCriteria(hibernateSession).list();
-          Map<Serializable, IEntity> entitiesById = new HashMap<Serializable, IEntity>();
-          for (IEntity entity : entities) {
-            entitiesById.put(entity.getId(), entity);
-          }
-          entities = new ArrayList<IEntity>();
-          for (Serializable id : entityIds) {
-            IEntity entity = entitiesById.get(id);
-            if (entity != null) {
-              entities.add(entity);
+          if (entityIds.isEmpty()) {
+            entities = new ArrayList<IEntity>();
+          } else {
+            criteria = EnhancedDetachedCriteria.forEntityName(queryComponent
+                .getQueryContract().getName());
+            entities = criteria.add(createEntityIdsInCriterion(entityIds, 500))
+                .getExecutableCriteria(hibernateSession).list();
+            Map<Serializable, IEntity> entitiesById = new HashMap<Serializable, IEntity>();
+            for (IEntity entity : entities) {
+              entitiesById.put(entity.getId(), entity);
+            }
+            entities = new ArrayList<IEntity>();
+            for (Serializable id : entityIds) {
+              IEntity entity = entitiesById.get(id);
+              if (entity != null) {
+                entities.add(entity);
+              }
             }
           }
         } else {
