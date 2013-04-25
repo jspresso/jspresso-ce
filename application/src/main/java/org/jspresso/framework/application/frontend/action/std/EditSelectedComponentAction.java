@@ -18,14 +18,18 @@
  */
 package org.jspresso.framework.application.frontend.action.std;
 
+import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.CloseDialogAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -69,6 +73,23 @@ public class EditSelectedComponentAction<E, F, G> extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    if (!getBackendController(context).isUnitOfWorkActive()) {
+      getBackendController(context).beginUnitOfWork();
+    }
+    try {
+      return super.execute(actionHandler, context);
+    } catch (RuntimeException ex) {
+      getBackendController(context).rollbackUnitOfWork();
+      throw ex;
+    }
+  }
+
+  /**
    * Gets the selected model.
    * 
    * @param context
@@ -77,15 +98,9 @@ public class EditSelectedComponentAction<E, F, G> extends
    */
   @Override
   protected Object getComponentToEdit(Map<String, Object> context) {
-    IBackendController c = getBackendController(context);
-    try {
-      c.beginUnitOfWork();
-      IEntity uowEntity = c.cloneInUnitOfWork(
-          (IEntity) getSelectedModel(context), true);
-      return uowEntity;
-    } finally {
-      c.rollbackUnitOfWork();
-    }
+    IEntity uowEntity = getBackendController(context).cloneInUnitOfWork(
+        (IEntity) getSelectedModel(context));
+    return uowEntity;
   }
 
   /**
@@ -95,7 +110,7 @@ public class EditSelectedComponentAction<E, F, G> extends
    *          the cancelAction to set.
    */
   public void setCancelAction(FrontendAction<E, F, G> cancelAction) {
-    this.cancelAction = cancelAction;
+    this.cancelAction = new UowRollbackerAction<E, F, G>(cancelAction);
   }
 
   /**
@@ -105,7 +120,7 @@ public class EditSelectedComponentAction<E, F, G> extends
    *          the okAction to set.
    */
   public void setOkAction(FrontendAction<E, F, G> okAction) {
-    this.okAction = okAction;
+    this.okAction = new UowRollbackerAction<E, F, G>(okAction);
   }
 
   /**
@@ -131,9 +146,162 @@ public class EditSelectedComponentAction<E, F, G> extends
     @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
-      IEntity entityClone = (IEntity) getModel(context);
+      IEntity entityClone = getModel(context);
       getBackendController(context).merge(entityClone, EMergeMode.MERGE_EAGER);
       return super.execute(actionHandler, context);
+    }
+  }
+
+  /**
+   * A wrapper action that roll backs the current UOW before deegating to its
+   * delegate..
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   * @param <E>
+   *          the actual gui component type used.
+   * @param <F>
+   *          the actual icon type used.
+   * @param <G>
+   *          the actual action type used.
+   */
+  public static class UowRollbackerAction<E, F, G> extends
+      FrontendAction<E, F, G> {
+
+    private FrontendAction<E, F, G> delegate;
+
+    /**
+     * Constructs a new <code>UowRollbackerAction</code> instance.
+     * 
+     * @param delegate
+     *          the action to finally delegate to.
+     */
+    public UowRollbackerAction(FrontendAction<E, F, G> delegate) {
+      this.delegate = delegate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean execute(IActionHandler actionHandler,
+        Map<String, Object> context) {
+      if (getBackendController(context).isUnitOfWorkActive()) {
+        getBackendController(context).rollbackUnitOfWork();
+      }
+      return actionHandler.execute(delegate, context);
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getAcceleratorAsString() {
+      return delegate.getAcceleratorAsString();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<IGate> getActionabilityGates() {
+      return delegate.getActionabilityGates();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+      return delegate.getDescription();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getI18nDescription(ITranslationProvider translationProvider,
+        Locale locale) {
+      return delegate.getI18nDescription(translationProvider, locale);
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getI18nName(ITranslationProvider translationProvider,
+        Locale locale) {
+      return delegate.getI18nName(translationProvider, locale);
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public Icon getIcon() {
+      return delegate.getIcon();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMnemonicAsString() {
+      return delegate.getMnemonicAsString();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+      return delegate.getName();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getPermId() {
+      return delegate.getPermId();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<String> getGrantedRoles() {
+      return delegate.getGrantedRoles();
+    }
+
+    /**
+     * Forwards to the delegate.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public String getStyleName() {
+      return delegate.getStyleName();
     }
   }
 }
