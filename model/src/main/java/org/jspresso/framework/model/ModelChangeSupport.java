@@ -21,8 +21,6 @@ package org.jspresso.framework.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jspresso.framework.util.lang.ObjectUtils;
-
 /**
  * Helper class to ease the IModelChangeListener management.
  * 
@@ -79,7 +77,13 @@ public class ModelChangeSupport {
     if (listeners != null) {
       Object oldValue = evt.getOldValue();
       Object newValue = evt.getNewValue();
-      if (ObjectUtils.equals(oldValue, newValue)) {
+      // Do not use equals, since a model change event be propagated
+      // for 2 different instances even if they are equal.
+      // see bug #1017
+      // if (ObjectUtils.equals(oldValue, newValue)) {
+      // return;
+      // }
+      if (oldValue == newValue) {
         return;
       }
       for (IModelChangeListener listener : listeners) {

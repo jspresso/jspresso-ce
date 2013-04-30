@@ -400,8 +400,11 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
           connector = existingConnectors.remove(0);
         } else {
           connector = createChildConnector(getId() + "Element");
-          connector.setConnectorValue(nextCollectionElement);
         }
+        // The connector value must be set in every case, since it might be
+        // a different instance that equals the old one.
+        // see bug #1017
+        connector.setConnectorValue(nextCollectionElement);
         addChildConnector(computeStorageKey(i), connector);
         i++;
       }
