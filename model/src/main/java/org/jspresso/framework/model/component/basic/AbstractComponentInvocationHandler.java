@@ -1673,6 +1673,8 @@ public abstract class AbstractComponentInvocationHandler implements
             }
           }
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+          Collection<?> oldCollectionSnapshot = CollectionHelper
+              .cloneCollection((Collection<?>) oldProperty);
           // It's a 'many' relation end
           Collection<Object> oldPropertyElementsToRemove = new HashSet<Object>();
           Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<Object>();
@@ -1721,7 +1723,6 @@ public abstract class AbstractComponentInvocationHandler implements
           // careful not to miss one...
           if (actualNewProperty instanceof List) {
             Collection<Object> currentProperty = (Collection<Object>) oldProperty;
-            List<Object> snapshot = new ArrayList<Object>(currentProperty);
             if (currentProperty instanceof List) {
               // Just check that only order differs
               Set<Object> temp = new HashSet<Object>(currentProperty);
@@ -1729,9 +1730,9 @@ public abstract class AbstractComponentInvocationHandler implements
               currentProperty.clear();
               currentProperty.addAll((List<?>) actualNewProperty);
               currentProperty.addAll(temp);
-              oldProperty = snapshot;
             }
           }
+          oldProperty = oldCollectionSnapshot;
         }
       } catch (RuntimeException ex) {
         rollbackProperty(proxy, propertyDescriptor, oldProperty);
