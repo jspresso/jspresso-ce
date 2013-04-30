@@ -1053,6 +1053,7 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       listeners = propertyChangeSupport.getPropertyChangeListeners();
       for (PropertyChangeListener listener : listeners) {
+        // Avoid single property change listeners and dirt trackers
         if (!(listener instanceof PropertyChangeListenerProxy || listener instanceof BeanPropertyChangeRecorder)) {
           return true;
         }
@@ -1062,24 +1063,25 @@ public abstract class AbstractComponentInvocationHandler implements
         && weakPropertyChangeSupport.hasListeners(propertyName)) {
       PropertyChangeListener[] listeners = weakPropertyChangeSupport
           .getPropertyChangeListeners(propertyName);
-      for (PropertyChangeListener listener : listeners) {
-        if (listener instanceof InlineReferenceTracker
-            && ((InlineReferenceTracker) listener).proxy instanceof IComponent) {
-          return ((IComponent) ((InlineReferenceTracker) listener).proxy)
-              .hasListeners(((InlineReferenceTracker) listener).componentName
-                  + "." + propertyName);
-        }
+      if (listeners != null && listeners.length > 0) {
         return true;
       }
       listeners = weakPropertyChangeSupport.getPropertyChangeListeners();
       for (PropertyChangeListener listener : listeners) {
         if (listener instanceof InlineReferenceTracker
             && ((InlineReferenceTracker) listener).proxy instanceof IComponent) {
-          return ((IComponent) ((InlineReferenceTracker) listener).proxy)
-              .hasListeners(((InlineReferenceTracker) listener).componentName
-                  + "." + propertyName);
+          if (!propertyName
+              .contains(((InlineReferenceTracker) listener).componentName)
+              && ((IComponent) ((InlineReferenceTracker) listener).proxy)
+                  .hasListeners(((InlineReferenceTracker) listener).componentName
+                      + "." + propertyName)) {
+            // Query nested component but prevent
+            // stackoverflows with 1-1 relationships
+            return true;
+          }
+        } else {
+          return true;
         }
-        return true;
       }
     }
     return false;

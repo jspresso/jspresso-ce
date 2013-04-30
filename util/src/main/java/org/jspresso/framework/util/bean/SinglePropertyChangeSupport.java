@@ -19,7 +19,11 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeListenerProxy;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This property change support prevents from adding twice the same property
@@ -70,17 +74,17 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
 
   private boolean checkUniqueness(String propertyName,
       PropertyChangeListener listener) {
-    PropertyChangeListener[] containedListeners;
+    List<PropertyChangeListener> containedListeners = new ArrayList<PropertyChangeListener>();
     if (propertyName == null) {
-      containedListeners = getPropertyChangeListeners();
-    } else {
-      containedListeners = getPropertyChangeListeners(propertyName);
-    }
-    for (int i = 0; i < containedListeners.length; i++) {
-      if (containedListeners[i] == listener) {
-        return false;
+      for (PropertyChangeListener pcl : getPropertyChangeListeners()) {
+        if (!(pcl instanceof PropertyChangeListenerProxy)) {
+          containedListeners.add(pcl);
+        }
       }
+    } else {
+      containedListeners.addAll(Arrays
+          .asList(getPropertyChangeListeners(propertyName)));
     }
-    return true;
+    return !containedListeners.contains(listener);
   }
 }

@@ -5,6 +5,7 @@ package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeListenerProxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -212,8 +213,13 @@ public abstract class AbstractPropertyChangeCapable implements
   protected PropertyChangeListener[] getPropertyChangeListeners() {
     ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
-      listeners.addAll(Arrays.asList(propertyChangeSupport
-          .getPropertyChangeListeners()));
+      for (PropertyChangeListener pcl : propertyChangeSupport
+          .getPropertyChangeListeners()) {
+        // do not add single property change listeners
+        if (!(pcl instanceof PropertyChangeListenerProxy)) {
+          listeners.add(pcl);
+        }
+      }
     }
     if (weakPropertyChangeSupport != null) {
       listeners.addAll(Arrays.asList(weakPropertyChangeSupport
