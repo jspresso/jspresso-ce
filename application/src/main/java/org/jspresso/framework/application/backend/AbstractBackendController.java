@@ -788,7 +788,11 @@ public abstract class AbstractBackendController extends AbstractController
   public <T extends IEntity> T registerEntity(T entity,
       boolean isEntityTransient) {
     if (isUnitOfWorkActive()) {
-      return cloneInUnitOfWork(entity);
+      if (isEntityTransient) {
+        return cloneInUnitOfWork(entity);
+      }
+      unitOfWork.register(entity, new HashMap<String, Object>());
+      return entity;
     }
     entityRegistry.register(getComponentContract(entity), entity.getId(),
         entity);
