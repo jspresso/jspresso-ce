@@ -739,7 +739,8 @@ public abstract class AbstractComponentInvocationHandler implements
               && !propertyDescriptor.isComputed());
       referenceTrackers.put(propertyName, newTracker);
       initializeInlineTrackerIfNeeded(
-          (IPropertyChangeCapable) newPropertyValue, propertyName);
+          (IPropertyChangeCapable) newPropertyValue, propertyName,
+          !ObjectUtils.equals(oldPropertyValue, newPropertyValue));
     } else if (oldTracker != null) {
       if (oldPropertyValue instanceof IComponent
           && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
@@ -760,16 +761,20 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the reference to link the tracker to.
    * @param propertyName
    *          the property name of the tracker.
+   * @param fireNestedPropertyChange
+   *          Whenever the initialization is performed, does a first set of
+   *          property change events be fired ?
    */
   protected void initializeInlineTrackerIfNeeded(
-      IPropertyChangeCapable referenceProperty, String propertyName) {
+      IPropertyChangeCapable referenceProperty, String propertyName,
+      boolean fireNestedPropertyChange) {
     if (/* To avoid breaking lazy initialization optim */isInitialized(referenceProperty)) {
       InlineReferenceTracker storedTracker = referenceTrackers
           .get(propertyName);
       if (storedTracker != null && !storedTracker.isInitialized()) {
         storedTracker.setInitialized(true);
         referenceProperty.addWeakPropertyChangeListener(storedTracker);
-        if (referenceProperty instanceof IComponent) {
+        if (fireNestedPropertyChange && referenceProperty instanceof IComponent) {
           for (Map.Entry<String, Object> property : ((IComponent) referenceProperty)
               .straightGetProperties().entrySet()) {
             storedTracker

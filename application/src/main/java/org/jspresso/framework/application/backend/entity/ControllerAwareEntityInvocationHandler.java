@@ -177,7 +177,7 @@ public class ControllerAwareEntityInvocationHandler extends
     Object reference = straightGetProperty(proxy, propertyName);
     if (reference instanceof IPropertyChangeCapable) {
       initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference,
-          propertyName);
+          propertyName, true);
     }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }

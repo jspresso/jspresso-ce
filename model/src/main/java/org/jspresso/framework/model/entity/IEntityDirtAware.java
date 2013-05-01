@@ -34,8 +34,10 @@ public interface IEntityDirtAware {
    * 
    * @param entity
    *          the entity to get the dirty properties of.
-   * @return null or an empty map if the entity is not dirty. The collection of
-   *         dirty properties with their original values.
+   * @return an empty map if the entity is not dirty. The collection of dirty
+   *         properties with their original values. null if dirty recording has
+   *         not been started for this entity instance. In the latter case, the
+   *         dirty state is unknown.
    */
   Map<String, Object> getDirtyProperties(IEntity entity);
 }

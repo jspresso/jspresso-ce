@@ -58,9 +58,9 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    * {@inheritDoc}
    */
   @Override
-  protected <T extends IEntity> T initializeEntity(T entity) {
-    T actualEntity = getBackendController().registerEntity(entity, true);
-    return super.initializeEntity(actualEntity);
+  protected void initializeEntity(IEntity entity) {
+    getBackendController().registerEntity(entity);
+    super.initializeEntity(entity);
   }
 
   /**
