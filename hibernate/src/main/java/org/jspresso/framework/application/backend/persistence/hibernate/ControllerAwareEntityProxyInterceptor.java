@@ -135,32 +135,45 @@ public class ControllerAwareEntityProxyInterceptor extends
   public boolean onLoad(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
     boolean updated = super.onLoad(entity, id, state, propertyNames, types);
-    if (!getBackendController().isUnitOfWorkActive()) {
-      if (entity instanceof IEntity
-          && getBackendController().getRegisteredEntity(
-              ((IEntity) entity).getComponentContract(), id) == null) {
+    if (entity instanceof IEntity) {
+      IBackendController backendController = getBackendController();
+      if (backendController.isUnitOfWorkActive()) {
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
-          if (state[i] != null) {
-            String propertyName = propertyNames[i];
-            if (!isHibernateInternal(propertyName)) {
-              if (state[i] instanceof IEntity) {
-                IEntity refEntity = (IEntity) state[i];
-                IEntity mergedEntity = getBackendController()
-                    .getRegisteredEntity(
-                        HibernateHelper.getComponentContract(refEntity),
-                        refEntity.getId());
-                if (mergedEntity != null && mergedEntity != refEntity) {
-                  state[i] = mergedEntity;
-                  updated = true;
-                }
-              }
-              properties.put(propertyName, state[i]);
-            }
+          String propertyName = propertyNames[i];
+          if (!isHibernateInternal(propertyName)) {
+            properties.put(propertyName, state[i]);
           }
         }
         ((IEntity) entity).straightSetProperties(properties);
-        getBackendController().registerEntity((IEntity) entity, false);
+        // So that dirty tracking is started on the entity.
+        // See bug #1018
+        backendController.registerEntity((IEntity) entity);
+      } else {
+        if (backendController.getRegisteredEntity(
+            ((IEntity) entity).getComponentContract(), id) == null) {
+          Map<String, Object> properties = new HashMap<String, Object>();
+          for (int i = 0; i < propertyNames.length; i++) {
+            if (state[i] != null) {
+              String propertyName = propertyNames[i];
+              if (!isHibernateInternal(propertyName)) {
+                if (state[i] instanceof IEntity) {
+                  IEntity refEntity = (IEntity) state[i];
+                  IEntity mergedEntity = backendController.getRegisteredEntity(
+                      HibernateHelper.getComponentContract(refEntity),
+                      refEntity.getId());
+                  if (mergedEntity != null && mergedEntity != refEntity) {
+                    state[i] = mergedEntity;
+                    updated = true;
+                  }
+                }
+                properties.put(propertyName, state[i]);
+              }
+            }
+          }
+          ((IEntity) entity).straightSetProperties(properties);
+          backendController.registerEntity((IEntity) entity);
+        }
       }
     }
     return updated;

@@ -77,13 +77,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   /**
    * Performs necessary post instanciation initialization.
    * 
-   * @param <T>
-   *          the entity type.
    * @param entity
    *          the instanciated entity.
-   * @return the entity instance ready to be used.
    */
-  protected <T extends IEntity> T initializeEntity(T entity) {
+  protected void initializeEntity(IEntity entity) {
     IComponentDescriptor<?> entityDescriptor = getComponentDescriptor(entity
         .getComponentContract());
     for (IPropertyDescriptor propertyDescriptor : entityDescriptor
@@ -105,7 +102,6 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       ((ILifecycleCapable) entity).onCreate(this, getPrincipal(),
           getEntityLifecycleHandler());
     }
-    return entity;
   }
 
   /**
@@ -139,7 +135,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
           }
         });
     if (performInitialization) {
-      return initializeEntity(createdEntity);
+      initializeEntity(createdEntity);
     }
     return createdEntity;
   }
