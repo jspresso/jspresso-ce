@@ -41,15 +41,15 @@ import org.jspresso.framework.security.UserPrincipal;
 public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
 
   /**
-   * If a unit of work is active, clones the instanciated entity before
-   * performing any initialization.
+   * If a unit of work is active, it will register the new entity in the UOW
+   * before performing any initialization.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  protected <T extends IEntity> T initializeEntity(T entity) {
-    T actualEntity = getBackendController().registerEntity(entity, true);
-    return super.initializeEntity(actualEntity);
+  protected void initializeEntity(IEntity entity) {
+    getBackendController().registerEntity(entity);
+    super.initializeEntity(entity);
   }
 
   /**

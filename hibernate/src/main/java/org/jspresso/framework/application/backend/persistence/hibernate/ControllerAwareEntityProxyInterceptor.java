@@ -146,9 +146,9 @@ public class ControllerAwareEntityProxyInterceptor extends
           }
         }
         ((IEntity) entity).straightSetProperties(properties);
-        // // So that dirty tracking is started on the entity.
-        // // See bug #1018
-        backendController.registerEntity((IEntity) entity, false);
+        // So that dirty tracking is started on the entity.
+        // See bug #1018
+        backendController.registerEntity((IEntity) entity);
       } else {
         if (backendController.getRegisteredEntity(
             ((IEntity) entity).getComponentContract(), id) == null) {
@@ -172,7 +172,7 @@ public class ControllerAwareEntityProxyInterceptor extends
             }
           }
           ((IEntity) entity).straightSetProperties(properties);
-          backendController.registerEntity((IEntity) entity, false);
+          backendController.registerEntity((IEntity) entity);
         }
       }
     }

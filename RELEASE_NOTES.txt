@@ -1,6 +1,8 @@
 3.7
 ===
-
+- The API for IBackendController.registerEntity(IEntity entity) changed. There is no return value anymore
+  since the passed entity is the one registered (no cloning performed)
+  and the second parameter (isEntityTransient) has been removed since it is now safe to rely on entity.isPersistent().
 
 3.6
 ===

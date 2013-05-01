@@ -785,19 +785,13 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public <T extends IEntity> T registerEntity(T entity,
-      boolean isEntityTransient) {
-    if (isUnitOfWorkActive()) {
-      if (isEntityTransient) {
-        return cloneInUnitOfWork(entity);
-      }
-      unitOfWork.register(entity, new HashMap<String, Object>());
-      return entity;
+  public void registerEntity(IEntity entity) {
+    if (!isUnitOfWorkActive()) {
+      entityRegistry.register(getComponentContract(entity), entity.getId(),
+          entity);
     }
-    entityRegistry.register(getComponentContract(entity), entity.getId(),
-        entity);
     Map<String, Object> initialDirtyProperties = null;
-    if (isEntityTransient) {
+    if (!entity.isPersistent()) {
       initialDirtyProperties = new HashMap<String, Object>();
       for (Map.Entry<String, Object> property : entity.straightGetProperties()
           .entrySet()) {
@@ -810,8 +804,11 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     }
-    dirtRecorder.register(entity, initialDirtyProperties);
-    return entity;
+    if (isUnitOfWorkActive()) {
+      unitOfWork.register(entity, initialDirtyProperties);
+    } else {
+      dirtRecorder.register(entity, initialDirtyProperties);
+    }
   }
 
   /**
