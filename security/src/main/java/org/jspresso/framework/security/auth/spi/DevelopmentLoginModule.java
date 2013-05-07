@@ -223,7 +223,7 @@ public class DevelopmentLoginModule implements LoginModule {
 
     // prompt for a user name and password
     if (callbackHandler == null) {
-      throw new LoginException("Error: no CallbackHandler available "
+      throw new IllegalStateException("Error: no CallbackHandler available "
           + "to garner authentication information from the user");
     }
 
@@ -262,9 +262,9 @@ public class DevelopmentLoginModule implements LoginModule {
         ((PasswordCallback) callbacks[1]).clearPassword();
       }
     } catch (java.io.IOException ioe) {
-      throw new LoginException(ioe.toString());
+      throw new RuntimeException(ioe);
     } catch (UnsupportedCallbackException uce) {
-      throw new LoginException("Error: " + uce.getCallback().toString()
+      throw new RuntimeException("Error: " + uce.getCallback().toString()
           + " not available to garner authentication information "
           + "from the user");
     }

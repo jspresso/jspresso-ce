@@ -30,6 +30,7 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
@@ -1630,9 +1631,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
         lc.login();
         loggedIn(lc.getSubject());
       } catch (LoginException le) {
-        if (le.getCause() != null) {
-          LOG.error("A technical exception occurred on login module.",
-              le.getCause());
+        // le.getCause() is always null, so cannot rely on it.
+        // see bug #1019
+        if (!(le instanceof FailedLoginException)) {
+          String message = le.getMessage();
+          if (message.indexOf(':') > 0) {
+            String exceptionClassName = message.substring(0,
+                message.indexOf(':'));
+            try {
+              if (Throwable.class.isAssignableFrom(Class
+                  .forName(exceptionClassName))) {
+                LOG.error("A technical exception occurred on login module.", le);
+              }
+            } catch (ClassNotFoundException ignored) {
+              // ignored.
+            }
+          }
         }
         if (lch instanceof UsernamePasswordHandler) {
           LOG.info("User {} failed to log in for session {}.",
