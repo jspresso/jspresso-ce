@@ -100,6 +100,9 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -1857,10 +1860,18 @@ public abstract class AbstractComponentInvocationHandler implements
             }
           }
           // for ui notification
-          if ((propertyChangeSupport != null && propertyChangeSupport
-              .hasListeners(nestedPropertyName))
-              || (weakPropertyChangeSupport != null && weakPropertyChangeSupport
-                  .hasListeners(nestedPropertyName))) {
+          if ((propertyChangeSupport != null
+          // do not use hasListeners since it also includes generic listeners
+          // see bug #1020
+          // && propertyChangeSupport.hasListeners(nestedPropertyName)
+          && propertyChangeSupport
+              .getPropertyChangeListeners(nestedPropertyName).length > 0)
+              || (weakPropertyChangeSupport != null
+              // do not use hasListeners since it also includes generic
+              // listeners. See bug #1020
+              // && weakPropertyChangeSupport.hasListeners(nestedPropertyName)
+              && weakPropertyChangeSupport
+                  .getPropertyChangeListeners(nestedPropertyName).length > 0)) {
             doFirePropertyChange(proxy, nestedPropertyName, evt.getOldValue(),
                 evt.getNewValue());
           }
