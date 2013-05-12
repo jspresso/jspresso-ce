@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.MethodUtils;
+import org.hibernate.Hibernate;
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
@@ -87,25 +88,15 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
+  private static final PropertyChangeListener FAKE_PCL  = new PropertyChangeListener() {
+                                                            @Override
+                                                            public void propertyChange(PropertyChangeEvent evt) {
+                                                              // It's fake
+                                                            }
+                                                          };
   // @formatter:on
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
@@ -127,11 +118,10 @@ public abstract class AbstractComponentInvocationHandler implements
   private boolean                                                                      propertyChangeEnabled;
   private boolean                                                                      collectionSortEnabled;
 
-  private Map<String, InlineReferenceTracker>                                          referenceTrackers;
+  private Map<String, NestedReferenceTracker>                                          referenceTrackers;
 
   private Map<String, Object>                                                          computedPropertiesCache;
 
-  private static final String                                                          DOT              = ".";
   private static final Collection<String>                                              LIFECYCLE_METHOD_NAMES;
   static {
     Collection<String> methodNames = new HashSet<String>();
@@ -174,7 +164,7 @@ public abstract class AbstractComponentInvocationHandler implements
     this.propertyChangeEnabled = true;
     this.collectionSortEnabled = true;
 
-    this.referenceTrackers = new HashMap<String, InlineReferenceTracker>();
+    this.referenceTrackers = new HashMap<String, NestedReferenceTracker>();
     this.computedPropertiesCache = new HashMap<String, Object>();
   }
 
@@ -759,7 +749,7 @@ public abstract class AbstractComponentInvocationHandler implements
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
-    InlineReferenceTracker oldTracker = null;
+    NestedReferenceTracker referenceTracker = null;
 
     // Handle owning component.
     if (oldPropertyValue instanceof IComponent
@@ -775,30 +765,31 @@ public abstract class AbstractComponentInvocationHandler implements
     }
 
     if (oldPropertyValue != null) {
-      oldTracker = referenceTrackers.get(propertyName);
-      if (oldTracker != null && isInitialized(oldPropertyValue)) {
+      referenceTracker = referenceTrackers.get(propertyName);
+      if (referenceTracker != null && isInitialized(oldPropertyValue)) {
         ((IPropertyChangeCapable) oldPropertyValue)
-            .removePropertyChangeListener(oldTracker);
+            .removePropertyChangeListener(referenceTracker);
       }
-      referenceTrackers.remove(propertyName);
     }
     storeProperty(propertyName, newPropertyValue);
     if (newPropertyValue instanceof IPropertyChangeCapable) {
-      InlineReferenceTracker newTracker = new InlineReferenceTracker(proxy,
-          propertyName,
-          EntityHelper.isInlineComponentReference(propertyDescriptor)
-              && !propertyDescriptor.isComputed());
-      referenceTrackers.put(propertyName, newTracker);
+      if (referenceTracker == null) {
+        referenceTracker = new NestedReferenceTracker(proxy, propertyName,
+            EntityHelper.isInlineComponentReference(propertyDescriptor)
+                && !propertyDescriptor.isComputed());
+        referenceTrackers.put(propertyName, referenceTracker);
+      }
+      referenceTracker.setInitialized(false);
       initializeInlineTrackerIfNeeded(
           (IPropertyChangeCapable) newPropertyValue, propertyName,
           !ObjectUtils.equals(oldPropertyValue, newPropertyValue));
-    } else if (oldTracker != null) {
+    } else if (referenceTracker != null) {
       if (oldPropertyValue instanceof IComponent
           && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
         for (Map.Entry<String, Object> property : ((IComponent) oldPropertyValue)
             .straightGetProperties().entrySet()) {
-          oldTracker.propertyChange(new PropertyChangeEvent(oldPropertyValue,
-              property.getKey(), property.getValue(), null));
+          referenceTracker.propertyChange(new PropertyChangeEvent(
+              oldPropertyValue, property.getKey(), property.getValue(), null));
         }
       }
     }
@@ -820,7 +811,7 @@ public abstract class AbstractComponentInvocationHandler implements
       IPropertyChangeCapable referenceProperty, String propertyName,
       boolean fireNestedPropertyChange) {
     if (/* To avoid breaking lazy initialization optim */isInitialized(referenceProperty)) {
-      InlineReferenceTracker storedTracker = referenceTrackers
+      NestedReferenceTracker storedTracker = referenceTrackers
           .get(propertyName);
       if (storedTracker != null && !storedTracker.isInitialized()) {
         storedTracker.setInitialized(true);
@@ -964,6 +955,7 @@ public abstract class AbstractComponentInvocationHandler implements
     if (propertyChangeSupport == null) {
       propertyChangeSupport = new SinglePropertyChangeSupport(proxy);
     }
+    handleNestedPropertyChangeListening(proxy, propertyName);
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
@@ -975,7 +967,33 @@ public abstract class AbstractComponentInvocationHandler implements
     if (weakPropertyChangeSupport == null) {
       weakPropertyChangeSupport = new SingleWeakPropertyChangeSupport(proxy);
     }
+    handleNestedPropertyChangeListening(proxy, propertyName);
     weakPropertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+  }
+
+  private void handleNestedPropertyChangeListening(Object proxy,
+      String propertyName) {
+    int nestedDelimIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
+    if (nestedDelimIndex >= 0) {
+      String rootProperty = propertyName.substring(0, nestedDelimIndex);
+      String nestedProperty = propertyName.substring(nestedDelimIndex + 1);
+      NestedReferenceTracker referenceTracker = referenceTrackers
+          .get(rootProperty);
+      if (referenceTracker == null) {
+        IReferencePropertyDescriptor<?> rootPropertyDescriptor = (IReferencePropertyDescriptor<?>) componentDescriptor
+            .getPropertyDescriptor(rootProperty);
+        referenceTracker = new NestedReferenceTracker(proxy, rootProperty,
+            EntityHelper.isInlineComponentReference(rootPropertyDescriptor)
+                && !rootPropertyDescriptor.isComputed());
+        referenceTrackers.put(propertyName, referenceTracker);
+      }
+      Object currentRootProperty = straightGetProperty(proxy, rootProperty);
+      if (currentRootProperty instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) currentRootProperty)
+            .addPropertyChangeListener(nestedProperty, FAKE_PCL);
+      }
+      referenceTracker.addToTrackedProperties(nestedProperty);
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -1143,12 +1161,12 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       listeners = weakPropertyChangeSupport.getPropertyChangeListeners();
       for (PropertyChangeListener listener : listeners) {
-        if (listener instanceof InlineReferenceTracker
-            && ((InlineReferenceTracker) listener).proxy instanceof IComponent) {
+        if (listener instanceof NestedReferenceTracker
+            && ((NestedReferenceTracker) listener).source instanceof IComponent) {
           if (!propertyName
-              .contains(((InlineReferenceTracker) listener).componentName)
-              && ((IComponent) ((InlineReferenceTracker) listener).proxy)
-                  .hasListeners(((InlineReferenceTracker) listener).componentName
+              .contains(((NestedReferenceTracker) listener).referencePropertyName)
+              && ((IComponent) ((NestedReferenceTracker) listener).source)
+                  .hasListeners(((NestedReferenceTracker) listener).referencePropertyName
                       + "." + propertyName)) {
             // Query nested component but prevent
             // stackoverflows with 1-1 relationships
@@ -1798,31 +1816,44 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private class InlineReferenceTracker implements PropertyChangeListener {
+  private class NestedReferenceTracker implements PropertyChangeListener {
 
-    private Object  proxy;
-    private String  componentName;
-    private boolean enabled;
-    private boolean initialized;
-    private boolean inlinedComponent;
+    private Object      source;
+    private String      referencePropertyName;
+    private boolean     enabled;
+    private boolean     initialized;
+    private boolean     referencesInlinedComponent;
+    private Set<String> trackedProperties;
 
     /**
-     * Constructs a new <code>InnerComponentTracker</code> instance.
+     * Constructs a new <code>InlineReferenceTracker</code> instance.
      * 
-     * @param proxy
+     * @param source
      *          the proxy holding the reference tracker.
-     * @param componentName
+     * @param referencePropertyName
      *          the name of the component to track the properties.
-     * @param inlinedComponent
+     * @param referencesInlineComponent
      *          is it tracking an inlined component or an entity ref ?
      */
-    public InlineReferenceTracker(Object proxy, String componentName,
-        boolean inlinedComponent) {
-      this.proxy = proxy;
-      this.componentName = componentName;
-      this.inlinedComponent = inlinedComponent;
+    public NestedReferenceTracker(Object source, String referencePropertyName,
+        boolean referencesInlineComponent) {
+      this.source = source;
+      this.referencePropertyName = referencePropertyName;
+      this.referencesInlinedComponent = referencesInlineComponent;
       this.enabled = true;
       this.initialized = false;
+      this.trackedProperties = new HashSet<String>();
+    }
+
+    /**
+     * Adds a property to the list of tracked nested properties for this nested
+     * reference tracker instance.
+     * 
+     * @param nestedPropertyName
+     *          the nested property name.
+     */
+    public void addToTrackedProperties(String nestedPropertyName) {
+      trackedProperties.add(nestedPropertyName);
     }
 
     /**
@@ -1832,21 +1863,21 @@ public abstract class AbstractComponentInvocationHandler implements
     public void propertyChange(PropertyChangeEvent evt) {
       if (enabled) {
         boolean wasEnabled = enabled;
-        String nestedPropertyName = componentName + DOT + evt.getPropertyName();
         try {
           enabled = false;
-          if (inlinedComponent) {
+          if (referencesInlinedComponent) {
             // for dirtyness notification.
             // must check if the actual property change does not come from a
             // nested entity. In that case, the persistent state has not
             // changed.
             boolean chainHasEntity = false;
-            String[] chain = evt.getPropertyName().split("\\.");
+            String[] chain = evt.getPropertyName().split(
+                "\\" + IAccessor.NESTED_DELIM);
             if (chain.length > 1) {
               StringBuilder chainPart = new StringBuilder();
               for (int i = 0; i < chain.length - 1 && !chainHasEntity; i++) {
                 if (chainPart.length() > 0) {
-                  chainPart.append(DOT);
+                  chainPart.append(IAccessor.NESTED_DELIM);
                 }
                 chainPart.append(chain[i]);
                 if (((IComponent) evt.getSource())
@@ -1856,24 +1887,29 @@ public abstract class AbstractComponentInvocationHandler implements
               }
             }
             if (!chainHasEntity) {
-              doFirePropertyChange(proxy, componentName, null, evt.getSource());
+              doFirePropertyChange(source, referencePropertyName, null,
+                  evt.getSource());
+            }
+          }
+          if (evt.getOldValue() instanceof IPropertyChangeCapable
+              && Hibernate.isInitialized(evt.getOldValue())) {
+            for (String trackedProperty : trackedProperties) {
+              ((IPropertyChangeCapable) evt.getOldValue())
+                  .removePropertyChangeListener(trackedProperty, FAKE_PCL);
+            }
+          }
+          if (evt.getNewValue() instanceof IPropertyChangeCapable
+              && Hibernate.isInitialized(evt.getNewValue())) {
+            for (String trackedProperty : trackedProperties) {
+              ((IPropertyChangeCapable) evt.getNewValue())
+                  .addPropertyChangeListener(trackedProperty, FAKE_PCL);
             }
           }
           // for ui notification
-          if ((propertyChangeSupport != null
-          // do not use hasListeners since it also includes generic listeners
-          // see bug #1020
-          // && propertyChangeSupport.hasListeners(nestedPropertyName)
-          && propertyChangeSupport
-              .getPropertyChangeListeners(nestedPropertyName).length > 0)
-              || (weakPropertyChangeSupport != null
-              // do not use hasListeners since it also includes generic
-              // listeners. See bug #1020
-              // && weakPropertyChangeSupport.hasListeners(nestedPropertyName)
-              && weakPropertyChangeSupport
-                  .getPropertyChangeListeners(nestedPropertyName).length > 0)) {
-            doFirePropertyChange(proxy, nestedPropertyName, evt.getOldValue(),
-                evt.getNewValue());
+          if (trackedProperties.contains(evt.getPropertyName())) {
+            doFirePropertyChange(source, referencePropertyName
+                + IAccessor.NESTED_DELIM + evt.getPropertyName(),
+                evt.getOldValue(), evt.getNewValue());
           }
         } finally {
           enabled = wasEnabled;
