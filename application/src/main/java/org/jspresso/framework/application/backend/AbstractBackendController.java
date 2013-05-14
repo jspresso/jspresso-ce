@@ -1491,10 +1491,11 @@ public abstract class AbstractBackendController extends AbstractController
                   initializePropertyIfNeeded(entity, propertyName);
                 }
               }
-              if (isInitialized(registeredProperty)) {
-                mergedProperties.put(propertyName,
-                    merge((IEntity) propertyValue, mergeMode, alreadyMerged));
-              }
+              // Fix for bug #1023 : the referenced entity might have changed
+              // int the TX. Merge must happen unconditionally.
+              // if (isInitialized(registeredProperty)) {
+              mergedProperties.put(propertyName,
+                  merge((IEntity) propertyValue, mergeMode, alreadyMerged));
             }
           } else if (propertyValue instanceof Collection
           // to support collections stored as java serializable blob.
@@ -1634,10 +1635,11 @@ public abstract class AbstractBackendController extends AbstractController
               initializePropertyIfNeeded(componentToMerge, propertyName);
             }
           }
-          if (isInitialized(registeredProperty)) {
-            mergedProperties.put(propertyName,
-                merge((IEntity) propertyValue, mergeMode, alreadyMerged));
-          }
+          // Fix for bug #1023 : the referenced entity might have changed
+          // int the TX. Merge must happen unconditionally.
+          // if (isInitialized(registeredProperty)) {
+          mergedProperties.put(propertyName,
+              merge((IEntity) propertyValue, mergeMode, alreadyMerged));
         }
       } else if (propertyValue instanceof IComponent) {
         IComponent registeredSubComponent = (IComponent) registeredComponentProperties
