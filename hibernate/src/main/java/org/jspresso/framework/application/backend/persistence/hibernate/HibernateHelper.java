@@ -95,11 +95,11 @@ public final class HibernateHelper {
     IEntity actualE1 = e1;
     IEntity actualE2 = e2;
 
-    if (actualE1 instanceof HibernateProxy) {
+    if (actualE1 instanceof HibernateProxy && Hibernate.isInitialized(actualE1)) {
       actualE1 = (IEntity) ((HibernateProxy) actualE1)
           .getHibernateLazyInitializer().getImplementation();
     }
-    if (actualE2 instanceof HibernateProxy) {
+    if (actualE2 instanceof HibernateProxy && Hibernate.isInitialized(actualE2)) {
       actualE2 = (IEntity) ((HibernateProxy) actualE2)
           .getHibernateLazyInitializer().getImplementation();
     }
