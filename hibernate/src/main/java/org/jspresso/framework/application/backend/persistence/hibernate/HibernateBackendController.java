@@ -443,11 +443,6 @@ public class HibernateBackendController extends AbstractBackendController {
     return Hibernate.isInitialized(objectOrProxy);
   }
 
-  private boolean hasBeenProcessed(IEntity entity) {
-    return updatedEntities != null && updatedEntities.contains(entity)
-        || deletedEntities != null && deletedEntities.contains(entity);
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -477,11 +472,9 @@ public class HibernateBackendController extends AbstractBackendController {
           if (sessionEntity == null) {
             sessionEntity = entityToUpdate;
           }
-          if (!hasBeenProcessed(sessionEntity)) {
-            updatedEntities.add(sessionEntity);
-            hibernateSession.saveOrUpdate(sessionEntity);
-            flushIsNecessary = true;
-          }
+          updatedEntities.add(sessionEntity);
+          hibernateSession.saveOrUpdate(sessionEntity);
+          flushIsNecessary = true;
         }
       }
       if (flushIsNecessary) {
@@ -496,11 +489,9 @@ public class HibernateBackendController extends AbstractBackendController {
           if (sessionEntity == null) {
             sessionEntity = entityToDelete;
           }
-          if (!hasBeenProcessed(sessionEntity)) {
-            deletedEntities.add(sessionEntity);
-            hibernateSession.delete(sessionEntity);
-            flushIsNecessary = true;
-          }
+          deletedEntities.add(sessionEntity);
+          hibernateSession.delete(sessionEntity);
+          flushIsNecessary = true;
         }
       }
       if (flushIsNecessary) {
@@ -515,15 +506,15 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void registerForDeletion(IEntity entity) {
     if (isUnitOfWorkActive()) {
-      if (!hasBeenProcessed(entity)) {
-        try {
-          deletedEntities.add(entity);
-          getHibernateSession().delete(entity);
-        } catch (RuntimeException re) {
-          deletedEntities.remove(entity);
-          getHibernateSession().evict(entity);
-          throw re;
-        }
+      Set<IEntity> deletedEntitiesSnapshot = new HashSet<IEntity>(
+          deletedEntities);
+      try {
+        deletedEntities.add(entity);
+        getHibernateSession().delete(entity);
+        updatedEntities.remove(entity);
+      } catch (RuntimeException re) {
+        deletedEntities = deletedEntitiesSnapshot;
+        throw re;
       }
     } else {
       super.registerForDeletion(entity);
@@ -545,15 +536,14 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void registerForUpdate(IEntity entity) {
     if (isUnitOfWorkActive()) {
-      if (!hasBeenProcessed(entity)) {
-        try {
-          updatedEntities.add(entity);
-          getHibernateSession().saveOrUpdate(entity);
-        } catch (RuntimeException re) {
-          updatedEntities.remove(entity);
-          getHibernateSession().evict(entity);
-          throw re;
-        }
+      Set<IEntity> updatedEntitiesSnapshot = new HashSet<IEntity>(
+          updatedEntities);
+      try {
+        updatedEntities.add(entity);
+        getHibernateSession().saveOrUpdate(entity);
+      } catch (RuntimeException re) {
+        updatedEntities = updatedEntitiesSnapshot;
+        throw re;
       }
     } else {
       super.registerForUpdate(entity);
