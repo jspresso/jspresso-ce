@@ -37,7 +37,6 @@ import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * This component invocation handler handles initialization of lazy loaded
@@ -133,11 +132,6 @@ public class ControllerAwareComponentInvocationHandler extends
     String propertyName = propertyDescriptor.getName();
     getBackendController().initializePropertyIfNeeded((IComponent) proxy,
         propertyName);
-    Object reference = straightGetProperty(proxy, propertyName);
-    if (reference instanceof IPropertyChangeCapable) {
-      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference,
-          propertyName, true);
-    }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
