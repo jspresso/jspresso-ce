@@ -1252,7 +1252,12 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void firePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
-    doFirePropertyChange(proxy, propertyName, oldValue, newValue);
+    Object actualNewValue = newValue;
+    if (computedPropertiesCache.containsKey(propertyName)) {
+      computedPropertiesCache.remove(propertyName);
+      actualNewValue = IPropertyChangeCapable.UNKNOWN;
+    }
+    doFirePropertyChange(proxy, propertyName, oldValue, actualNewValue);
     // This method supports firing nested property changes
     if (propertyName != null) {
       int lastIndexOfDelim = propertyName.lastIndexOf(IAccessor.NESTED_DELIM);
@@ -1265,7 +1270,7 @@ public abstract class AbstractComponentInvocationHandler implements
           if (propertyHolder != null && propertyHolder instanceof IComponent) {
             ((IComponent) propertyHolder).firePropertyChange(
                 propertyName.substring(lastIndexOfDelim + 1), oldValue,
-                newValue);
+                actualNewValue);
           }
         } catch (IllegalAccessException ex) {
           throw new ComponentException(ex);
