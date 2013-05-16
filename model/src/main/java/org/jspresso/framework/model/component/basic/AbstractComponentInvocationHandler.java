@@ -1243,7 +1243,8 @@ public abstract class AbstractComponentInvocationHandler implements
   private void firePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
     Object actualNewValue = newValue;
-    if (computedPropertiesCache.containsKey(propertyName)) {
+    if (computedPropertiesCache.containsKey(propertyName)
+        && oldValue != IPropertyChangeCapable.UNKNOWN) {
       computedPropertiesCache.remove(propertyName);
       actualNewValue = IPropertyChangeCapable.UNKNOWN;
     }
