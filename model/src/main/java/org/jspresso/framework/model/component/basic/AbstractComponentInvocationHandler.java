@@ -132,6 +132,7 @@ public abstract class AbstractComponentInvocationHandler implements
   }
   private IComponent                                                                   owningComponent;
   private IPropertyDescriptor                                                          owningPropertyDescriptor;
+  private Map<String, Set<String>>                                                     delayedFakePclAttachements;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -166,6 +167,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
     this.referenceTrackers = new HashMap<String, NestedReferenceTracker>();
     this.computedPropertiesCache = new HashMap<String, Object>();
+    this.delayedFakePclAttachements = new HashMap<String, Set<String>>();
   }
 
   /**
@@ -617,17 +619,25 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected Object getReferenceProperty(Object proxy,
       final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-    IComponent property = (IComponent) straightGetProperty(proxy,
-        propertyDescriptor.getName());
-    if (property == null
+    String propertyName = propertyDescriptor.getName();
+    IComponent referent = (IComponent) straightGetProperty(proxy, propertyName);
+    initializeInlineTrackerIfNeeded(referent, propertyName, true);
+    Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
+        .remove(propertyName);
+    if (delayedNestedPropertyListening != null) {
+      for (String nestedPropertyName : delayedNestedPropertyListening) {
+        referent.addPropertyChangeListener(nestedPropertyName, FAKE_PCL);
+      }
+    }
+    if (referent == null
         && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && !propertyDescriptor.isComputed() && propertyDescriptor.isMandatory()) {
-      property = inlineComponentFactory
+      referent = inlineComponentFactory
           .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
               .getComponentContract());
-      storeReferenceProperty(proxy, propertyDescriptor, null, property);
+      storeReferenceProperty(proxy, propertyDescriptor, null, referent);
     }
-    return decorateReferent(property,
+    return decorateReferent(referent,
         propertyDescriptor.getReferencedDescriptor());
   }
 
@@ -807,7 +817,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *          Whenever the initialization is performed, does a first set of
    *          property change events be fired ?
    */
-  protected void initializeInlineTrackerIfNeeded(
+  private void initializeInlineTrackerIfNeeded(
       IPropertyChangeCapable referenceProperty, String propertyName,
       boolean fireNestedPropertyChange) {
     if (/* To avoid breaking lazy initialization optim */isInitialized(referenceProperty)) {
@@ -989,8 +999,19 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       Object currentRootProperty = straightGetProperty(proxy, rootProperty);
       if (currentRootProperty instanceof IPropertyChangeCapable) {
-        ((IPropertyChangeCapable) currentRootProperty)
-            .addPropertyChangeListener(nestedProperty, FAKE_PCL);
+        if (isInitialized(currentRootProperty)) {
+          ((IPropertyChangeCapable) currentRootProperty)
+              .addPropertyChangeListener(nestedProperty, FAKE_PCL);
+        } else {
+          Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
+              .get(propertyName);
+          if (delayedNestedPropertyListening == null) {
+            delayedNestedPropertyListening = new HashSet<String>();
+            delayedFakePclAttachements.put(rootProperty,
+                delayedNestedPropertyListening);
+          }
+          delayedNestedPropertyListening.add(nestedProperty);
+        }
       }
       referenceTracker.addToTrackedProperties(nestedProperty);
     }
@@ -1891,18 +1912,29 @@ public abstract class AbstractComponentInvocationHandler implements
                   evt.getSource());
             }
           }
-          if (evt.getOldValue() instanceof IPropertyChangeCapable
-              && Hibernate.isInitialized(evt.getOldValue())) {
-            for (String trackedProperty : trackedProperties) {
-              ((IPropertyChangeCapable) evt.getOldValue())
-                  .removePropertyChangeListener(trackedProperty, FAKE_PCL);
+          if (evt.getOldValue() instanceof IPropertyChangeCapable) {
+            if (Hibernate.isInitialized(evt.getOldValue())) {
+              for (String trackedProperty : trackedProperties) {
+                ((IPropertyChangeCapable) evt.getOldValue())
+                    .removePropertyChangeListener(trackedProperty, FAKE_PCL);
+              }
             }
           }
-          if (evt.getNewValue() instanceof IPropertyChangeCapable
-              && Hibernate.isInitialized(evt.getNewValue())) {
-            for (String trackedProperty : trackedProperties) {
-              ((IPropertyChangeCapable) evt.getNewValue())
-                  .addPropertyChangeListener(trackedProperty, FAKE_PCL);
+          if (evt.getNewValue() instanceof IPropertyChangeCapable) {
+            if (Hibernate.isInitialized(evt.getNewValue())) {
+              for (String trackedProperty : trackedProperties) {
+                ((IPropertyChangeCapable) evt.getNewValue())
+                    .addPropertyChangeListener(trackedProperty, FAKE_PCL);
+              }
+            } else {
+              Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
+                  .get(referencePropertyName);
+              if (delayedNestedPropertyListening == null) {
+                delayedNestedPropertyListening = new HashSet<String>();
+                delayedFakePclAttachements.put(referencePropertyName,
+                    delayedNestedPropertyListening);
+              }
+              delayedNestedPropertyListening.addAll(trackedProperties);
             }
           }
           // for ui notification
