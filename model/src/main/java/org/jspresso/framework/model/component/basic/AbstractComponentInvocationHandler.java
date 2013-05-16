@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.MethodUtils;
-import org.hibernate.Hibernate;
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
@@ -85,6 +84,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
+
 
 
 
@@ -1923,42 +1923,6 @@ public abstract class AbstractComponentInvocationHandler implements
             if (!chainHasEntity) {
               doFirePropertyChange(source, referencePropertyName, null,
                   evt.getSource());
-            }
-          }
-          if (evt.getOldValue() instanceof IPropertyChangeCapable) {
-            if (Hibernate.isInitialized(evt.getOldValue())) {
-              for (String trackedProperty : trackedProperties) {
-                if (evt.getPropertyName().indexOf(IAccessor.NESTED_DELIM) < 0
-                    && trackedProperty.indexOf(IAccessor.NESTED_DELIM) >= 0
-                    && trackedProperty.startsWith(evt.getPropertyName())) {
-                  ((IPropertyChangeCapable) evt.getOldValue())
-                      .removePropertyChangeListener(trackedProperty
-                          .substring(evt.getPropertyName().length() + 1),
-                          FAKE_PCL);
-                }
-              }
-            }
-          }
-          if (evt.getNewValue() instanceof IPropertyChangeCapable) {
-            if (Hibernate.isInitialized(evt.getNewValue())) {
-              for (String trackedProperty : trackedProperties) {
-                if (evt.getPropertyName().indexOf(IAccessor.NESTED_DELIM) < 0
-                    && trackedProperty.indexOf(IAccessor.NESTED_DELIM) >= 0
-                    && trackedProperty.startsWith(evt.getPropertyName())) {
-                  ((IPropertyChangeCapable) evt.getNewValue())
-                      .addPropertyChangeListener(trackedProperty.substring(evt
-                          .getPropertyName().length() + 1), FAKE_PCL);
-                }
-              }
-            } else {
-              Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
-                  .get(referencePropertyName);
-              if (delayedNestedPropertyListening == null) {
-                delayedNestedPropertyListening = new HashSet<String>();
-                delayedFakePclAttachements.put(referencePropertyName,
-                    delayedNestedPropertyListening);
-              }
-              delayedNestedPropertyListening.addAll(trackedProperties);
             }
           }
           // for ui notification
