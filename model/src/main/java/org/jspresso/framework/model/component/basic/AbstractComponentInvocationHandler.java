@@ -1915,16 +1915,27 @@ public abstract class AbstractComponentInvocationHandler implements
           if (evt.getOldValue() instanceof IPropertyChangeCapable) {
             if (Hibernate.isInitialized(evt.getOldValue())) {
               for (String trackedProperty : trackedProperties) {
-                ((IPropertyChangeCapable) evt.getOldValue())
-                    .removePropertyChangeListener(trackedProperty, FAKE_PCL);
+                if (evt.getPropertyName().indexOf(IAccessor.NESTED_DELIM) < 0
+                    && trackedProperty.indexOf(IAccessor.NESTED_DELIM) >= 0
+                    && trackedProperty.startsWith(evt.getPropertyName())) {
+                  ((IPropertyChangeCapable) evt.getOldValue())
+                      .removePropertyChangeListener(trackedProperty
+                          .substring(evt.getPropertyName().length() + 1),
+                          FAKE_PCL);
+                }
               }
             }
           }
           if (evt.getNewValue() instanceof IPropertyChangeCapable) {
             if (Hibernate.isInitialized(evt.getNewValue())) {
               for (String trackedProperty : trackedProperties) {
-                ((IPropertyChangeCapable) evt.getNewValue())
-                    .addPropertyChangeListener(trackedProperty, FAKE_PCL);
+                if (evt.getPropertyName().indexOf(IAccessor.NESTED_DELIM) < 0
+                    && trackedProperty.indexOf(IAccessor.NESTED_DELIM) >= 0
+                    && trackedProperty.startsWith(evt.getPropertyName())) {
+                  ((IPropertyChangeCapable) evt.getNewValue())
+                      .addPropertyChangeListener(trackedProperty.substring(evt
+                          .getPropertyName().length() + 1), FAKE_PCL);
+                }
               }
             } else {
               Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
