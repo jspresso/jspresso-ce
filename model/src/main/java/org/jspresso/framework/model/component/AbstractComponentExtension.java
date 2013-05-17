@@ -285,6 +285,9 @@ public abstract class AbstractComponentExtension<T extends IComponent>
         } catch (IllegalAccessException ex) {
           throw new NestedRuntimeException(ex);
         } catch (InvocationTargetException ex) {
+          if (ex.getTargetException() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getTargetException();
+          }
           throw new NestedRuntimeException(ex);
         } catch (NoSuchMethodException ex) {
           throw new NestedRuntimeException(ex);
