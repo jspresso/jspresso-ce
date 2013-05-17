@@ -90,12 +90,6 @@ public abstract class AbstractComponentInvocationHandler implements
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
-  private static final PropertyChangeListener FAKE_PCL  = new PropertyChangeListener() {
-                                                            @Override
-                                                            public void propertyChange(PropertyChangeEvent evt) {
-                                                              // It's fake
-                                                            }
-                                                          };
   // @formatter:on
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
@@ -122,6 +116,13 @@ public abstract class AbstractComponentInvocationHandler implements
   private Map<String, Object>                                                          computedPropertiesCache;
 
   private static final Collection<String>                                              LIFECYCLE_METHOD_NAMES;
+  private IComponent                                                                   owningComponent;
+  private IPropertyDescriptor                                                          owningPropertyDescriptor;
+  private Map<String, Set<String>>                                                     fakePclAttachements;
+  private Map<String, Set<String>>                                                     delayedFakePclAttachements;
+  private PropertyChangeListener                                                       fakePcl;
+  private static final Object                                                          FAKE_COMPONENT   = new Object();
+
   static {
     Collection<String> methodNames = new HashSet<String>();
     for (Method m : ILifecycleCapable.class.getMethods()) {
@@ -129,9 +130,6 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     LIFECYCLE_METHOD_NAMES = methodNames;
   }
-  private IComponent                                                                   owningComponent;
-  private IPropertyDescriptor                                                          owningPropertyDescriptor;
-  private Map<String, Set<String>>                                                     delayedFakePclAttachements;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -166,6 +164,17 @@ public abstract class AbstractComponentInvocationHandler implements
 
     this.referenceTrackers = new HashMap<String, NestedReferenceTracker>();
     this.computedPropertiesCache = new HashMap<String, Object>();
+    // Fake PCL cannot be static, because there must be 1 registration on
+    // referent per owning instance, i.e. 2 different instances must not share
+    // the same fake PCL that will be removed when the referent is detached.
+    this.fakePcl = new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        // It's fake
+      }
+    };
+    this.fakePclAttachements = new HashMap<String, Set<String>>();
     this.delayedFakePclAttachements = new HashMap<String, Set<String>>();
   }
 
@@ -624,8 +633,15 @@ public abstract class AbstractComponentInvocationHandler implements
     Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
         .remove(propertyName);
     if (delayedNestedPropertyListening != null) {
+      Set<String> nestedPropertyListening = fakePclAttachements
+          .get(propertyName);
+      if (nestedPropertyListening == null) {
+        nestedPropertyListening = new HashSet<String>();
+        fakePclAttachements.put(propertyName, nestedPropertyListening);
+      }
       for (String nestedPropertyName : delayedNestedPropertyListening) {
-        referent.addPropertyChangeListener(nestedPropertyName, FAKE_PCL);
+        referent.addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
+        nestedPropertyListening.add(nestedPropertyName);
       }
     }
     if (referent == null
@@ -773,15 +789,38 @@ public abstract class AbstractComponentInvocationHandler implements
           propertyDescriptor);
     }
 
-    if (oldPropertyValue != null) {
-      referenceTracker = referenceTrackers.get(propertyName);
-      if (referenceTracker != null && isInitialized(oldPropertyValue)) {
-        ((IPropertyChangeCapable) oldPropertyValue)
-            .removePropertyChangeListener(referenceTracker);
+    if (oldPropertyValue instanceof IPropertyChangeCapable) {
+      if (isInitialized(oldPropertyValue)) {
+        referenceTracker = referenceTrackers.get(propertyName);
+        if (referenceTracker != null) {
+          ((IPropertyChangeCapable) oldPropertyValue)
+              .removePropertyChangeListener(referenceTracker);
+        }
+        Set<String> nestedPropertyListening = fakePclAttachements
+            .get(propertyName);
+        if (nestedPropertyListening != null) {
+          for (String nestedPropertyName : nestedPropertyListening) {
+            ((IPropertyChangeCapable) oldPropertyValue)
+                .removePropertyChangeListener(nestedPropertyName, fakePcl);
+          }
+        }
+        delayedFakePclAttachements.remove(propertyName);
       }
     }
     storeProperty(propertyName, newPropertyValue);
     if (newPropertyValue instanceof IPropertyChangeCapable) {
+      Set<String> nestedPropertyListening = fakePclAttachements
+          .get(propertyName);
+      if (nestedPropertyListening != null) {
+        if (isInitialized(newPropertyValue)) {
+          for (String nestedPropertyName : nestedPropertyListening) {
+            ((IPropertyChangeCapable) newPropertyValue)
+                .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
+          }
+        } else {
+          delayedFakePclAttachements.put(propertyName, nestedPropertyListening);
+        }
+      }
       if (referenceTracker == null) {
         referenceTracker = new NestedReferenceTracker(proxy, propertyName,
             EntityHelper.isInlineComponentReference(propertyDescriptor)
@@ -828,9 +867,9 @@ public abstract class AbstractComponentInvocationHandler implements
         if (fireNestedPropertyChange && referenceProperty instanceof IComponent) {
           for (Map.Entry<String, Object> property : ((IComponent) referenceProperty)
               .straightGetProperties().entrySet()) {
-            storedTracker
-                .propertyChange(new PropertyChangeEvent(referenceProperty,
-                    property.getKey(), null, property.getValue()));
+            storedTracker.propertyChange(new PropertyChangeEvent(
+                referenceProperty, property.getKey(),
+                IPropertyChangeCapable.UNKNOWN, property.getValue()));
           }
         }
       }
@@ -985,7 +1024,7 @@ public abstract class AbstractComponentInvocationHandler implements
     int nestedDelimIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDelimIndex >= 0) {
       String rootProperty = propertyName.substring(0, nestedDelimIndex);
-      String nestedProperty = propertyName.substring(nestedDelimIndex + 1);
+      String nestedPropertyName = propertyName.substring(nestedDelimIndex + 1);
       NestedReferenceTracker referenceTracker = referenceTrackers
           .get(rootProperty);
       if (referenceTracker == null) {
@@ -1000,7 +1039,14 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentRootProperty instanceof IPropertyChangeCapable) {
         if (isInitialized(currentRootProperty)) {
           ((IPropertyChangeCapable) currentRootProperty)
-              .addPropertyChangeListener(nestedProperty, FAKE_PCL);
+              .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
+          Set<String> nestedPropertyListening = fakePclAttachements
+              .get(propertyName);
+          if (nestedPropertyListening == null) {
+            nestedPropertyListening = new HashSet<String>();
+            fakePclAttachements.put(rootProperty, nestedPropertyListening);
+          }
+          nestedPropertyListening.add(nestedPropertyName);
         } else {
           Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
               .get(propertyName);
@@ -1009,10 +1055,10 @@ public abstract class AbstractComponentInvocationHandler implements
             delayedFakePclAttachements.put(rootProperty,
                 delayedNestedPropertyListening);
           }
-          delayedNestedPropertyListening.add(nestedProperty);
+          delayedNestedPropertyListening.add(nestedPropertyName);
         }
       }
-      referenceTracker.addToTrackedProperties(nestedProperty);
+      referenceTracker.addToTrackedProperties(nestedPropertyName);
     }
   }
 
@@ -1908,15 +1954,50 @@ public abstract class AbstractComponentInvocationHandler implements
               }
             }
             if (!chainHasEntity) {
-              doFirePropertyChange(source, referencePropertyName, null,
-                  evt.getSource());
+              doFirePropertyChange(source, referencePropertyName,
+                  FAKE_COMPONENT, evt.getSource());
             }
           }
           // for ui notification
-          if (trackedProperties.contains(evt.getPropertyName())) {
-            doFirePropertyChange(source, referencePropertyName
-                + IAccessor.NESTED_DELIM + evt.getPropertyName(),
-                evt.getOldValue(), evt.getNewValue());
+          if (evt.getOldValue() != FAKE_COMPONENT) {
+            for (String trackedProperty : trackedProperties) {
+              if (trackedProperty.equals(evt.getPropertyName())) {
+                doFirePropertyChange(source, referencePropertyName
+                    + IAccessor.NESTED_DELIM + trackedProperty,
+                    evt.getOldValue(), evt.getNewValue());
+              } else if (trackedProperty.startsWith(evt.getPropertyName())) {
+                String remainderProperty = trackedProperty.substring(evt
+                    .getPropertyName().length() + 1);
+                if (remainderProperty.indexOf(IAccessor.NESTED_DELIM) >= 0) {
+                  // If the remaider is a nested property, we have to take
+                  // care of manually firing.
+                  if (evt.getNewValue() != null) {
+                    try {
+                      Object newValue = getAccessorFactory()
+                          .createPropertyAccessor(remainderProperty,
+                              evt.getNewValue().getClass()).getValue(
+                              evt.getNewValue());
+                      doFirePropertyChange(source, referencePropertyName
+                          + IAccessor.NESTED_DELIM + trackedProperty,
+                          IPropertyChangeCapable.UNKNOWN, newValue);
+                    } catch (IllegalAccessException ex) {
+                      throw new ComponentException(ex);
+                    } catch (InvocationTargetException ex) {
+                      if (ex.getTargetException() instanceof RuntimeException) {
+                        throw (RuntimeException) ex.getTargetException();
+                      }
+                      throw new ComponentException(ex);
+                    } catch (NoSuchMethodException ex) {
+                      throw new ComponentException(ex);
+                    }
+                  } else {
+                    doFirePropertyChange(source, referencePropertyName
+                        + IAccessor.NESTED_DELIM + trackedProperty,
+                        IPropertyChangeCapable.UNKNOWN, null);
+                  }
+                }
+              }
+            }
           }
         } finally {
           enabled = wasEnabled;
