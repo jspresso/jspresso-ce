@@ -1443,21 +1443,17 @@ public abstract class AbstractBackendController extends AbstractController
           IPropertyDescriptor propertyDescriptor = entityDescriptor
               .getPropertyDescriptor(propertyName);
           if (propertyValue instanceof IEntity) {
-            Object registeredProperty = registeredEntityProperties
-                .get(propertyName);
+            // Do not take the registeredProperty from the
+            // registeredEntityProperties.
+            // It might be a different ID from the one we are trying to merge
+            // Object registeredProperty = registeredEntityProperties
+            // .get(propertyName);
+            Object registeredProperty = getRegisteredEntity(
+                getComponentContract((IEntity) propertyValue),
+                ((IEntity) propertyValue).getId());
             if (registeredProperty == null) {
-              if (isInitialized(propertyValue)) {
-                mergedProperties.put(propertyName,
-                    merge((IEntity) propertyValue, mergeMode, alreadyMerged));
-              } else {
-                // Force MERGE_KEEP mode to prevent lazy initialization
-                // exception. The uninitialized proxy will be copied as is. See
-                // bug #887.
-                mergedProperties.put(
-                    propertyName,
-                    merge((IEntity) propertyValue, EMergeMode.MERGE_KEEP,
-                        alreadyMerged));
-              }
+              mergedProperties.put(propertyName,
+                  merge((IEntity) propertyValue, mergeMode, alreadyMerged));
             } else {
               if (mergeMode == EMergeMode.MERGE_EAGER
                   || mergeMode == EMergeMode.MERGE_LAZY) {
@@ -1587,21 +1583,17 @@ public abstract class AbstractBackendController extends AbstractController
       String propertyName = property.getKey();
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
-        Object registeredProperty = registeredComponentProperties
-            .get(propertyName);
+        // Do not take the registeredProperty from the
+        // registeredEntityProperties.
+        // It might be a different ID from the one we are trying to merge
+        // Object registeredProperty = registeredEntityProperties
+        // .get(propertyName);
+        Object registeredProperty = getRegisteredEntity(
+            getComponentContract((IEntity) propertyValue),
+            ((IEntity) propertyValue).getId());
         if (registeredProperty == null) {
-          if (isInitialized(propertyValue)) {
-            mergedProperties.put(propertyName,
-                merge((IEntity) propertyValue, mergeMode, alreadyMerged));
-          } else {
-            // Force MERGE_KEEP mode to prevent lazy initialization
-            // exception. The uninitialized proxy will be copied as is. See
-            // bug #887.
-            mergedProperties.put(
-                propertyName,
-                merge((IEntity) propertyValue, EMergeMode.MERGE_KEEP,
-                    alreadyMerged));
-          }
+          mergedProperties.put(propertyName,
+              merge((IEntity) propertyValue, mergeMode, alreadyMerged));
         } else {
           if (mergeMode == EMergeMode.MERGE_EAGER
               || mergeMode == EMergeMode.MERGE_LAZY) {
