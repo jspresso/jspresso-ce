@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceVi
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -53,7 +55,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Workspace implements ISecurable, IPermIdSource {
+public class Workspace extends AbstractPropertyChangeCapable implements ISecurable, IPermIdSource {
 
   /**
    * <code>DESCRIPTION</code> is "description".
@@ -419,12 +421,17 @@ public class Workspace implements ISecurable, IPermIdSource {
    *          the modules modules to set.
    */
   public void setModules(List<Module> modules) {
+    List<Module> oldValue = null;
+    if (getModules() != null) {
+      oldValue = new ArrayList<Module>(getModules());
+    }
     this.modules = modules;
     if (this.modules != null) {
       for (Module module : this.modules) {
         module.setSecurityHandler(getSecurityHandler());
       }
     }
+    firePropertyChange(MODULES, oldValue, getModules());
   }
 
   /**

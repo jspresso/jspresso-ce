@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.view.descriptor.basic;
 
+import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.model.descriptor.WorkspaceDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
@@ -40,15 +41,15 @@ public class BasicWorkspaceViewDescriptor extends BasicTreeViewDescriptor {
     BasicListViewDescriptor moduleNodeGroupDescriptor = new BasicListViewDescriptor();
     moduleNodeGroupDescriptor
         .setModelDescriptor(WorkspaceDescriptor.WORKSPACE_DESCRIPTOR
-            .getPropertyDescriptor("modules"));
-    moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
+            .getPropertyDescriptor(Workspace.MODULES));
+    moduleNodeGroupDescriptor.setRenderedProperty(Workspace.I18N_NAME);
     modulesTreeLevelDescriptor
         .setNodeGroupDescriptor(moduleNodeGroupDescriptor);
     modulesTreeLevelDescriptor
         .setChildDescriptor(new BasicModuleViewDescriptor());
 
     setChildDescriptor(modulesTreeLevelDescriptor);
-    setRenderedProperty("i18nName");
+    setRenderedProperty(Workspace.I18N_NAME);
     setExpanded(true);
   }
 }
