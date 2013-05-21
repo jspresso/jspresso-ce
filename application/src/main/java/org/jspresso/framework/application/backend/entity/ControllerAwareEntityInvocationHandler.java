@@ -292,4 +292,23 @@ public class ControllerAwareEntityInvocationHandler extends
     return getBackendController().sanitizeModifierParam(target,
         propertyDescriptor, param);
   }
+  
+  /**
+   * Delegates to backend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isDirtyTrackingEnabled() {
+    return getBackendController().isDirtyTrackingEnabled();
+  }
+  
+  /**
+   * Delegates to backend controller.
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setDirtyTrackingEnabled(boolean enabled) {
+    getBackendController().setDirtyTrackingEnabled(enabled);
+  }
 }

@@ -556,6 +556,25 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
+   * Is dirty tracking enabled.
+   * 
+   * @return <code>true</code> if dirty tracking is enabled.
+   */
+  protected boolean isDirtyTrackingEnabled() {
+    return true;
+  }
+
+  /**
+   * Sets dirty tracking enabled.
+   * 
+   * @param enabled
+   *          <code>true</code> if enabled, <code>false</code> otherwise.
+   */
+  protected void setDirtyTrackingEnabled(boolean enabled) {
+    // NO-OP;
+  }
+
+  /**
    * Creates and registers an extension instance.
    * 
    * @param extensionClass
@@ -1329,8 +1348,8 @@ public abstract class AbstractComponentInvocationHandler implements
         return;
       }
       if (!isInitialized(oldValue) || !isInitialized(newValue)) {
-        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName, null,
-            newValue));
+        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
+            IPropertyChangeCapable.UNKNOWN, newValue));
       } else {
         doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
             oldValue, newValue));
@@ -1341,7 +1360,11 @@ public abstract class AbstractComponentInvocationHandler implements
   private void doFirePropertyChange(PropertyChangeEvent evt) {
     if (propertyChangeEnabled) {
       if (delayedEvents != null) {
-        delayedEvents.add(evt);
+        if (isDirtyTrackingEnabled()) {
+          delayedEvents.add(evt);
+        } else {
+          delayedEvents.add(new DirtyFreePropertyChangeEvent(evt));
+        }
       } else {
         if (propertyChangeSupport != null) {
           propertyChangeSupport.firePropertyChange(evt);
@@ -1350,6 +1373,16 @@ public abstract class AbstractComponentInvocationHandler implements
           weakPropertyChangeSupport.firePropertyChange(evt);
         }
       }
+    }
+  }
+
+  private static class DirtyFreePropertyChangeEvent extends PropertyChangeEvent {
+
+    private static final long serialVersionUID = -3661229785535176973L;
+
+    public DirtyFreePropertyChangeEvent(PropertyChangeEvent pce) {
+      super(pce.getSource(), pce.getPropertyName(), pce.getOldValue(), pce
+          .getNewValue());
     }
   }
 
@@ -1365,7 +1398,15 @@ public abstract class AbstractComponentInvocationHandler implements
           delayedEvents);
       delayedEvents = null;
       for (PropertyChangeEvent evt : delayedEventsCopy) {
-        doFirePropertyChange(evt);
+        boolean wasDirtyTrackingEnabled = isDirtyTrackingEnabled();
+        try {
+          if (evt instanceof DirtyFreePropertyChangeEvent) {
+            setDirtyTrackingEnabled(false);
+          }
+          doFirePropertyChange(evt);
+        } finally {
+          setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
+        }
       }
     }
   }
