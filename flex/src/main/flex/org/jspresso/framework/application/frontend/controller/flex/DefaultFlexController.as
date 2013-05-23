@@ -1206,7 +1206,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     public function start():void {
       blockUI(false);
       var operation:AbstractOperation = _remoteController.getOperation(START_METHOD);
-      if(JSPRESSO_VERSION == "3.5-SNAPSHOT" || JSPRESSO_VERSION.substr(0, 6) > "3.5.13") {
+      if(JSPRESSO_VERSION.substr(0, 3) > "3.5" || JSPRESSO_VERSION.substr(0, 6) > "3.5.13") {
         var startCommand:RemoteStartCommand = new RemoteStartCommand();
         startCommand.language = _userLanguage;
         startCommand.keysToTranslate = getKeysToTranslate();
