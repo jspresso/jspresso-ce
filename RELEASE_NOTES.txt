@@ -1,5 +1,15 @@
 3.7
 ===
+- Now using the org.picketbox:jbosssx dependency in place of the JBossAS one. when running under JBoss,
+  it is now the dependency to exclude.
+
+- Migrated to Spring 3.2
+
+- Check that all references to Spring hibernate3 package are removed from your project in java, spring xml and SJS.
+
+- Migrated to Hibernate 4. HibernateTemplate based API has been removed. From now on, you must use
+  the equivalent getHibernateSession(...) that leverages the Hibernate getCurrentSession() method.
+
 - The API for IBackendController.registerEntity(IEntity entity) changed. There is no return value anymore
   since the passed entity is the one registered (no cloning performed)
   and the second parameter (isEntityTransient) has been removed since it is now safe to rely on entity.isPersistent().

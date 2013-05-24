@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 import org.jspresso.framework.util.uid.ByteArray;
 
@@ -89,14 +90,10 @@ public class ByteArrayType implements UserType {
    * Constucts a Bytes object out of a byte array.
    * <p>
    * {@inheritDoc}
-   * 
-   * @deprecated
    */
-
-  @Deprecated
   @Override
-  public Object nullSafeGet(ResultSet rs, String[] names, Object owner)
-      throws SQLException {
+  public Object nullSafeGet(ResultSet rs, String[] names,
+      SessionImplementor session, Object owner) throws SQLException {
     byte[] bytes = rs.getBytes(names[0]);
     if (rs.wasNull()) {
       return null;
@@ -108,13 +105,10 @@ public class ByteArrayType implements UserType {
    * Constucts a byte array out of a Bytes object.
    * <p>
    * {@inheritDoc}
-   * 
-   * @deprecated
    */
-  @Deprecated
   @Override
-  public void nullSafeSet(PreparedStatement st, Object value, int index)
-      throws SQLException {
+  public void nullSafeSet(PreparedStatement st, Object value, int index,
+      SessionImplementor session) throws SQLException {
     if (value == null) {
       st.setNull(index, Types.VARBINARY);
     } else {

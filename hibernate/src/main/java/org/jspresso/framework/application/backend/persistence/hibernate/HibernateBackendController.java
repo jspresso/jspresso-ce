@@ -41,12 +41,12 @@ import org.hibernate.LockOptions;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.collection.AbstractPersistentCollection;
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.collection.PersistentList;
-import org.hibernate.collection.PersistentSet;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.collection.internal.PersistentList;
+import org.hibernate.collection.internal.PersistentSet;
+import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.jspresso.framework.application.backend.AbstractBackendController;
@@ -66,7 +66,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -80,7 +79,6 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  */
 public class HibernateBackendController extends AbstractBackendController {
 
-  private HibernateTemplate   hibernateTemplate;
   private SessionFactory      hibernateSessionFactory;
   private FlushMode           defaultTxFlushMode                = FlushMode.COMMIT;
   private DataSource          noTxDataSource;
@@ -202,19 +200,6 @@ public class HibernateBackendController extends AbstractBackendController {
     super.doCommitUnitOfWork();
   }
 
-  /**
-   * Gets the hibernateTemplate.
-   * 
-   * @return the hibernateTemplate.
-   * @deprecated use {@link #getHibernateSession()} instead.
-   */
-  @Deprecated
-  public HibernateTemplate getHibernateTemplate() {
-    configureHibernateGlobalFilter(hibernateTemplate
-        .enableFilter(JSPRESSO_SESSION_GLOBALS));
-    return hibernateTemplate;
-  }
-
   private Session noTxSession = null;
 
   /**
@@ -248,8 +233,8 @@ public class HibernateBackendController extends AbstractBackendController {
     if (noTxSession == null) {
       if (noTxDataSource != null) {
         try {
-          noTxSession = getHibernateSessionFactory().openSession(
-              noTxDataSource.getConnection());
+          noTxSession = getHibernateSessionFactory().withOptions()
+              .connection(noTxDataSource.getConnection()).openSession();
         } catch (SQLException ex) {
           LOG.error(
               "Couldn't get connection from non transactional datasource {}",
@@ -571,23 +556,6 @@ public class HibernateBackendController extends AbstractBackendController {
     } finally {
       traversedPendingOperations = false;
     }
-  }
-
-  /**
-   * Assigns the Spring hibernate template to this backend controller. This
-   * property can only be set once and should only be used by the DI container.
-   * It will rarely be changed from built-in defaults unless you need to specify
-   * a custom implementation instance to be used.
-   * <p>
-   * The configured instance is the one that will be returned by the
-   * controller's <code>getHibernateTemplate()</code> method that should be used
-   * by the service layer to access Hibernate.
-   * 
-   * @param hibernateTemplate
-   *          the hibernateTemplate to set.
-   */
-  public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-    this.hibernateTemplate = hibernateTemplate;
   }
 
   /**
@@ -1152,7 +1120,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the defaultTxFlushMode to set.
    */
   public void setDefaultTxFlushMode(String defaultTxFlushMode) {
-    this.defaultTxFlushMode = FlushMode.parse(defaultTxFlushMode);
+    this.defaultTxFlushMode = FlushMode.valueOf(defaultTxFlushMode);
   }
 
   /**

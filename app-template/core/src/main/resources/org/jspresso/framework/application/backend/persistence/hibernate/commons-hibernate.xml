@@ -21,7 +21,7 @@
     <property name="entityFactory" ref="controllerAwareEntityFactory" />
   </bean>
 
-  <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  <bean id="abstractHibernateSessionFactory" class="org.jspresso.framework.application.backend.persistence.hibernate.JspressoLocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
     <property name="mappingLocations">
       <list>
@@ -29,44 +29,15 @@
       </list>
     </property>
     <property name="entityInterceptor" ref="entityInterceptor" />
-    <property name="eventListeners">
-      <map>
-        <entry key="post-load">
-          <list>
-            <bean class="org.hibernate.event.def.DefaultPostLoadEventListener" />
-            <bean class="org.jspresso.framework.application.backend.persistence.hibernate.LifecyclePostLoadEventListener" />
-          </list>
-        </entry>
-      </map>
-    </property>
-    <property name="filterDefinitions">
-      <list>
-        <bean class="org.springframework.orm.hibernate3.FilterDefinitionFactoryBean">
-          <property name="filterName" value="JspressoSessionGlobals" />
-          <property name="parameterTypes">
-            <map>
-              <entry key="login" value="string" />
-              <entry key="language" value="string" />
-            </map>
-          </property>
-        </bean>
-      </list>
-    </property>
   </bean>
 
-  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
     <property name="entityInterceptor" ref="entityInterceptor" />
   </bean>
 
   <bean id="transactionTemplate" class="org.jspresso.framework.application.backend.ControllerAwareTransactionTemplate">
     <property name="transactionManager" ref="transactionManager" />
-  </bean>
-
-  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-    <property name="sessionFactory" ref="hibernateSessionFactory" />
-    <property name="flushModeName" value="FLUSH_COMMIT" />
-    <property name="entityInterceptor" ref="entityInterceptor" />
   </bean>
 
   <!-- Hibernate root action beans. -->
@@ -124,7 +95,6 @@
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController">
     <property name="hibernateSessionFactory" ref="hibernateSessionFactory" />
-    <property name="hibernateTemplate" ref="hibernateTemplate" />
     <property name="defaultTxFlushMode" value="COMMIT" />
   </bean>
 

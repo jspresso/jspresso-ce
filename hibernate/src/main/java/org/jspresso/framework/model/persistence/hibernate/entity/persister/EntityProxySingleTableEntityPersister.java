@@ -18,11 +18,12 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.entity.persister;
 
-import org.hibernate.EntityMode;
-import org.hibernate.cache.access.EntityRegionAccessStrategy;
-import org.hibernate.engine.Mapping;
-import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.cache.spi.access.EntityRegionAccessStrategy;
+import org.hibernate.cache.spi.access.NaturalIdRegionAccessStrategy;
+import org.hibernate.engine.spi.Mapping;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.mapping.PersistentClass;
+import org.hibernate.metamodel.binding.EntityBinding;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.jspresso.framework.model.entity.IEntity;
@@ -39,13 +40,38 @@ public class EntityProxySingleTableEntityPersister extends
     SingleTableEntityPersister {
 
   /**
-   * Constructs a new <code>EntityProxyJoinedSubclassEntityPersister</code>
+   * Constructs a new <code>EntityProxySingleTableEntityPersister</code>
+   * instance.
+   * 
+   * @param entityBinding
+   *          the entity binding.
+   * @param cacheAccessStrategy
+   *          the cache access strategy.
+   * @param naturalIdRegionAccessStrategy
+   *          the natural ID cache access strategy.
+   * @param factory
+   *          the session.
+   * @param mapping
+   *          the mapping.
+   */
+  public EntityProxySingleTableEntityPersister(EntityBinding entityBinding,
+      EntityRegionAccessStrategy cacheAccessStrategy,
+      NaturalIdRegionAccessStrategy naturalIdRegionAccessStrategy,
+      SessionFactoryImplementor factory, Mapping mapping) {
+    super(entityBinding, cacheAccessStrategy, naturalIdRegionAccessStrategy,
+        factory, mapping);
+  }
+
+  /**
+   * Constructs a new <code>EntityProxySingleTableEntityPersister</code>
    * instance.
    * 
    * @param persistentClass
    *          the persistent class.
    * @param cacheAccessStrategy
    *          the cache access strategy.
+   * @param naturalIdRegionAccessStrategy
+   *          the natural ID cache access strategy.
    * @param factory
    *          the session.
    * @param mapping
@@ -53,8 +79,10 @@ public class EntityProxySingleTableEntityPersister extends
    */
   public EntityProxySingleTableEntityPersister(PersistentClass persistentClass,
       EntityRegionAccessStrategy cacheAccessStrategy,
+      NaturalIdRegionAccessStrategy naturalIdRegionAccessStrategy,
       SessionFactoryImplementor factory, Mapping mapping) {
-    super(persistentClass, cacheAccessStrategy, factory, mapping);
+    super(persistentClass, cacheAccessStrategy, naturalIdRegionAccessStrategy,
+        factory, mapping);
   }
 
   /**
@@ -65,19 +93,11 @@ public class EntityProxySingleTableEntityPersister extends
    */
   @Override
   public EntityPersister getSubclassEntityPersister(Object instance,
-      SessionFactoryImplementor factory, EntityMode entityMode) {
+      SessionFactoryImplementor factory) {
     if (instance instanceof IEntity) {
       return factory.getEntityPersister(((IEntity) instance)
           .getComponentContract().getName());
     }
-    return super.getSubclassEntityPersister(instance, factory, entityMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public EntityMode guessEntityMode(Object object) {
-    return EntityMode.POJO;
+    return super.getSubclassEntityPersister(instance, factory);
   }
 }

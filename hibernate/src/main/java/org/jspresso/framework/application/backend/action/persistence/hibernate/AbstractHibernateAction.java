@@ -26,7 +26,6 @@ import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  * This the root abstract class of all hibernate related persistence actions. It
@@ -70,19 +69,6 @@ public abstract class AbstractHibernateAction extends BackendAction {
   @Override
   protected HibernateBackendController getController(Map<String, Object> context) {
     return (HibernateBackendController) super.getController(context);
-  }
-
-  /**
-   * Gets the hibernateTemplate.
-   * 
-   * @param context
-   *          the action context.
-   * @return the hibernateTemplate.
-   * @deprecated use {@link #getHibernateSession(Map)} instead.
-   */
-  @Deprecated
-  protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
-    return getController(context).getHibernateTemplate();
   }
 
   /**
