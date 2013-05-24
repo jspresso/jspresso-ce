@@ -202,7 +202,8 @@ public abstract class RemoteStartup extends
   }
 
   private boolean isClientVersionCompatible(String clientVersion) {
-    return Build.getJspressoVersion() == null
+    return Boolean.parseBoolean(System.getProperty("skipJspressoVersionCheck"))
+        || Build.getJspressoVersion() == null
         || Build.UNKNOWN.equals(Build.getJspressoVersion())
         || Build.getJspressoVersion().equals(clientVersion);
   }
