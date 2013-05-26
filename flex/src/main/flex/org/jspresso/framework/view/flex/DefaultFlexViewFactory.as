@@ -3095,5 +3095,9 @@ package org.jspresso.framework.view.flex {
       }
     }
     
+    public function reset():void {
+      // Callback called when the controller is restarted.
+    }
+    
   }
 }

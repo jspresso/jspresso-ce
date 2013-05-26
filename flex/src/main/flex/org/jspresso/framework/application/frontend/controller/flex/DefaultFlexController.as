@@ -845,6 +845,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
       _dialogStack.push([null, null, null]);
+      _viewFactory.reset();
       start();
     }
 
