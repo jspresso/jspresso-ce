@@ -762,7 +762,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       //        if(_dialogStack && _dialogStack.length > 1) {
       //          dialogParent = _dialogStack[_dialogStack.length -1][0];
       //        } else {
-      alertParent = FlexGlobals.topLevelApplication as Sprite;
+      alertParent = getTopLevelApplication();
       //        }
       if(messageCommand is RemoteOkCancelCommand) {
         alertCloseHandler = function(event:CloseEvent):void {
@@ -834,7 +834,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     protected function restart():void {
-      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
+      var applicationFrame:Application = getTopLevelApplication();
       applicationFrame.removeAllChildren();
       while(_dialogStack.length > 1) {
         PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
@@ -1055,7 +1055,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         secondaryActions,
         helpActions);
       
-      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
+      var applicationFrame:Application = getTopLevelApplication();
       if(size) {
         if(size.width > 0) {
           appContent.minWidth  = size.width;
@@ -1081,7 +1081,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                   secondaryActions:Array,
                                                   helpActions:Array):UIComponent {
 
-      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
+      var applicationFrame:Application = getTopLevelApplication();
       var split:UIComponent = assembleSplittedSection(navigationAccordion, mainViewStack);
       assembleApplicationControlBar(exitAction, navigationActions, actions, helpActions);
       if(secondaryActions && secondaryActions.length > 0) {
@@ -1132,7 +1132,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                      navigationActions:Array,
                                                      actions:Array,
                                                      helpActions:Array):ApplicationControlBar {
-      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
+      var applicationFrame:Application = getTopLevelApplication();
       var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
       if(controlBar) {
         controlBar.removeAllChildren();
@@ -1174,7 +1174,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     protected function createApplicationMenuBar(actions:Array,
                                                 helpActions:Array):MenuBar {
-      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
+      var applicationFrame:Application = getTopLevelApplication();
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
       menus = menus.concat(getViewFactory().createMenus(actions, false, applicationFrame));
@@ -1230,9 +1230,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       if(_dialogStack && _dialogStack.length > 1) {
         ((_dialogStack[_dialogStack.length - 1] as Array)[0] as UIComponent).enabled = value;
       }
-      (FlexGlobals.topLevelApplication as Application).enabled = value;
-      if((FlexGlobals.topLevelApplication as Application).controlBar) {
-        (FlexGlobals.topLevelApplication as Application).controlBar.enabled = true;
+      var application:Application = getTopLevelApplication();
+      application.enabled = value;
+      if(application.controlBar) {
+        application.controlBar.enabled = true;
       }
     }
     
@@ -1243,7 +1244,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         // Delays the UI to the next repaint so that if an action needs to perform immediately
         // after, it can. see Bug #674
-        (FlexGlobals.topLevelApplication as Application).callLater(setUIEnabled, [value]);
+        getTopLevelApplication().callLater(setUIEnabled, [value]);
       }
     }
     
@@ -1361,7 +1362,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //        if(_dialogStack && _dialogStack.length > 1) {
         //          dialogParent = _dialogStack[_dialogStack.length -1][0];
         //        } else {
-        dialogParent = FlexGlobals.topLevelApplication as DisplayObject;
+        dialogParent = getTopLevelApplication();
         //        }
         dialog = getViewFactory().createResizableDialog(dialogParent);
         dialog.setStyle("borderAlpha", 1);
@@ -1388,7 +1389,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
             dialog.height = dimension.height;
           }
         } else {
-          var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
+          var applicationFrame:Application = getTopLevelApplication();
           dialog.width  = Math.min(Math.max(dialog.width,  dialogView.getExplicitOrMeasuredWidth()  + 15),                                           applicationFrame.width * 95  / 100);
           dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight() + 80), applicationFrame.height * 95 / 100);
           dialogView.width = NaN;
@@ -1425,6 +1426,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     protected function getViewFactory():DefaultFlexViewFactory {
       return _viewFactory;
+    }
+    
+    protected function getTopLevelApplication():Application {
+      return FlexGlobals.topLevelApplication as Application;
     }
     
     protected function registerRemoteClasses():void {

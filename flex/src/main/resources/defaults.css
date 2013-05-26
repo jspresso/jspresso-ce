@@ -34,6 +34,7 @@ jspresso|EnhancedRichTextEditor
 
 jspresso|CollapsiblePanel
 {
+  collapseDuration: 250;
   borderAlpha: 1;
   borderThicknessLeft: 2;
   borderThicknessRight: 2;

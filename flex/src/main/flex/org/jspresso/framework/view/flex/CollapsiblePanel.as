@@ -27,16 +27,12 @@ package org.jspresso.framework.view.flex {
   
   import mx.containers.Panel;
   import mx.controls.Button;
-  import mx.core.Application;
-  import mx.core.FlexGlobals;
   import mx.core.ScrollPolicy;
   import mx.core.mx_internal;
   import mx.effects.Resize;
   import mx.events.EffectEvent;
   import mx.logging.ILogger;
   import mx.logging.Log;
-  import mx.styles.CSSStyleDeclaration;
-  import mx.styles.IStyleManager2;
 
   use namespace mx_internal;
   // --------------------------------------
@@ -79,24 +75,6 @@ package org.jspresso.framework.view.flex {
      * Logger for this class.
      */
     private static var logger : ILogger = Log.getLogger("org.jspresso.framework.view.flex.CollapsiblePanel");
-    private static var classConstructed : Boolean = constructClass();
-
-    // --------------------------------------------------------------------------
-    //
-    // Class methods
-    //
-    // --------------------------------------------------------------------------
-    private static function constructClass() : Boolean {
-      var styleManager:IStyleManager2 = (FlexGlobals.topLevelApplication as Application).styleManager;
-      if (!styleManager.getStyleDeclaration("CollapsiblePanel")) {
-        var styleDecl : CSSStyleDeclaration = new CSSStyleDeclaration();
-        styleDecl.defaultFactory = function() : void {
-          this.collapseDuration = 250;
-        };
-        styleManager.setStyleDeclaration("CollapsiblePanel", styleDecl, true);
-      }
-      return true;
-    }
 
     // --------------------------------------------------------------------------
     //
