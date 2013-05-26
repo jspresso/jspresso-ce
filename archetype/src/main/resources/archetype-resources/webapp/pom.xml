@@ -27,7 +27,6 @@
       <groupId>${groupId}</groupId>
       <artifactId>${rootArtifactId}-startup-flex-client</artifactId>
       <type>swf</type>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>${groupId}</groupId>
@@ -128,7 +127,7 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.sonatype.flexmojos</groupId>
+        <groupId>net.flexmojos.oss</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <executions>
           <execution>
@@ -137,10 +136,6 @@
             </goals>
             <phase>prepare-package</phase>
             <configuration>
-              <wrapperArtifact>
-                <groupId>${symbol_dollar}{project.groupId}</groupId>
-                <artifactId>${rootArtifactId}-startup-flex-client</artifactId>
-              </wrapperArtifact>
               <stripVersion>true</stripVersion>
               <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/flex</webappDirectory>
             </configuration>

@@ -24,22 +24,19 @@
 package org.jspresso.framework.view.flex {
   import flash.events.Event;
   import flash.events.MouseEvent;
-  import flash.utils.getQualifiedClassName;
-
+  
   import mx.containers.Panel;
   import mx.controls.Button;
-  import mx.core.EdgeMetrics;
-  import mx.core.FlexVersion;
+  import mx.core.Application;
+  import mx.core.FlexGlobals;
   import mx.core.ScrollPolicy;
-  import mx.core.UITextField;
   import mx.core.mx_internal;
   import mx.effects.Resize;
   import mx.events.EffectEvent;
   import mx.logging.ILogger;
   import mx.logging.Log;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
-  import mx.styles.StyleProxy;
+  import mx.styles.IStyleManager2;
 
   use namespace mx_internal;
   // --------------------------------------
@@ -90,12 +87,13 @@ package org.jspresso.framework.view.flex {
     //
     // --------------------------------------------------------------------------
     private static function constructClass() : Boolean {
-      if (!StyleManager.getStyleDeclaration("CollapsiblePanel")) {
+      var styleManager:IStyleManager2 = (FlexGlobals.topLevelApplication as Application).styleManager;
+      if (!styleManager.getStyleDeclaration("CollapsiblePanel")) {
         var styleDecl : CSSStyleDeclaration = new CSSStyleDeclaration();
         styleDecl.defaultFactory = function() : void {
           this.collapseDuration = 250;
         };
-        StyleManager.setStyleDeclaration("CollapsiblePanel", styleDecl, true);
+        styleManager.setStyleDeclaration("CollapsiblePanel", styleDecl, true);
       }
       return true;
     }

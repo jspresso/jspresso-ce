@@ -383,6 +383,12 @@ package org.jspresso.framework.view.flex {
       });
       return slideBar;
     }
+    
+    protected function createToolBarComponent():ApplicationControlBar {
+      var toolBar:ApplicationControlBar = new ApplicationControlBar();
+      toolBar.styleName = "applicationControlBar";
+      return toolBar;
+    }
 
     protected function createDefaultToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
       return null;
@@ -397,7 +403,7 @@ package org.jspresso.framework.view.flex {
     }
     
     public function createToolBarFromActionLists(actionLists:Array, component:UIComponent):ApplicationControlBar {
-      var toolBar:ApplicationControlBar = new ApplicationControlBar();
+      var toolBar:ApplicationControlBar = createToolBarComponent();
       toolBar.percentWidth = 100.0;
       installActionLists(toolBar, actionLists, component);
       return toolBar;
@@ -2929,7 +2935,9 @@ package org.jspresso.framework.view.flex {
     }
     
     public function createPopUpButtonComponent(topApplicationButton:Boolean = false):PopUpButton {
-      return new PopUpButton();
+      var popupButton:PopUpButton = new PopUpButton();
+      popupButton.styleName = "popupButton";
+      return popupButton;
     }
     
     public function createMenu(actionList:RActionList, component:UIComponent):Object {

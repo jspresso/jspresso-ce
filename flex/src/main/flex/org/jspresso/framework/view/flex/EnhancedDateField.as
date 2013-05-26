@@ -1,6 +1,6 @@
 package org.jspresso.framework.view.flex {
   import mx.controls.DateField;
-  import mx.controls.TextInput;
+  import mx.core.ITextInput;
   import mx.core.mx_internal;
   import mx.events.FlexEvent;
 
@@ -22,7 +22,7 @@ package org.jspresso.framework.view.flex {
       if(mx_internal::ComboDownArrowButton) {
         mx_internal::ComboDownArrowButton.enabled = value;
       }
-      var ti : TextInput = mx_internal::getTextInput();
+      var ti : ITextInput = mx_internal::getTextInput();
       if (ti) {
         ti.enabled = true;
         ti.editable = value;
@@ -30,7 +30,7 @@ package org.jspresso.framework.view.flex {
     }
 
     private function syncTextInputBackground() : void {
-      var ti : TextInput = mx_internal::getTextInput();
+      var ti : ITextInput = mx_internal::getTextInput();
       if (ti) {
         if (enabled) {
           ti.setStyle("backgroundColor", getStyle("backgroundColor"));

@@ -19,7 +19,7 @@
 
     <junit.version>4.11</junit.version>
     <mockito.version>1.9.5-rc1</mockito.version>
-    <flex.version>3.6.0.16995</flex.version>
+    <flex.version>4.6.b.23201</flex.version>
     <flexunit.version>0.90</flexunit.version>
     <blazeds.version>4.0.0.14931</blazeds.version>
     <flexlib.version>2.5</flexlib.version>
@@ -102,7 +102,7 @@
     <build-helper-plugin.version>1.8</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
     <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
-    <flexmojos-plugin.version>3.8</flexmojos-plugin.version>
+    <flexmojos-plugin.version>5.0-beta</flexmojos-plugin.version>
     <exec-plugin.version>1.2.1</exec-plugin.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
     <groovy.version>2.0.5</groovy.version>
@@ -732,6 +732,25 @@
         <type>swc</type>
       </dependency>
       <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>spark</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>mx</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>halo</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
+        <classifier>theme</classifier>
+      </dependency>
+      <dependency>
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-java-rpc</artifactId>
         <version>${qx-java-rpc.version}</version>
@@ -1173,9 +1192,9 @@
           </dependencies> 
         </plugin>
         <plugin>
-        	<groupId>org.sonatype.flexmojos</groupId>
-        	<artifactId>flexmojos-maven-plugin</artifactId>
-        	<version>${flexmojos-plugin.version}</version>
+          <groupId>net.flexmojos.oss</groupId>
+          <artifactId>flexmojos-maven-plugin</artifactId>
+          <version>${flexmojos-plugin.version}</version>
           <extensions>true</extensions>
           <dependencies>
             <dependency>
@@ -1230,7 +1249,7 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>org.sonatype.flexmojos</groupId>
+                    <groupId>net.flexmojos.oss</groupId>
                     <artifactId>flexmojos-maven-plugin</artifactId>
                     <versionRange>[3.6,)</versionRange>
                     <goals>

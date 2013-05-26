@@ -51,6 +51,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
+  import mx.core.FlexGlobals;
   import mx.core.IFlexDisplayObject;
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
@@ -761,7 +762,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       //        if(_dialogStack && _dialogStack.length > 1) {
       //          dialogParent = _dialogStack[_dialogStack.length -1][0];
       //        } else {
-      alertParent = Application.application as Sprite;
+      alertParent = FlexGlobals.topLevelApplication as Sprite;
       //        }
       if(messageCommand is RemoteOkCancelCommand) {
         alertCloseHandler = function(event:CloseEvent):void {
@@ -833,7 +834,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     protected function restart():void {
-      var applicationFrame:Application = Application.application as Application;
+      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
       applicationFrame.removeAllChildren();
       while(_dialogStack.length > 1) {
         PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
@@ -1053,7 +1054,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         secondaryActions,
         helpActions);
       
-      var applicationFrame:Application = Application.application as Application;
+      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
       if(size) {
         if(size.width > 0) {
           appContent.minWidth  = size.width;
@@ -1079,7 +1080,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                   secondaryActions:Array,
                                                   helpActions:Array):UIComponent {
 
-      var applicationFrame:Application = Application.application as Application;
+      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
       var split:UIComponent = assembleSplittedSection(navigationAccordion, mainViewStack);
       assembleApplicationControlBar(exitAction, navigationActions, actions, helpActions);
       if(secondaryActions && secondaryActions.length > 0) {
@@ -1130,7 +1131,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                      navigationActions:Array,
                                                      actions:Array,
                                                      helpActions:Array):ApplicationControlBar {
-      var applicationFrame:Application = Application.application as Application;
+      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
       var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
       if(controlBar) {
         controlBar.removeAllChildren();
@@ -1172,7 +1173,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     protected function createApplicationMenuBar(actions:Array,
                                                 helpActions:Array):MenuBar {
-      var applicationFrame:Application = Application.application as Application;
+      var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
       menus = menus.concat(getViewFactory().createMenus(actions, false, applicationFrame));
@@ -1228,9 +1229,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       if(_dialogStack && _dialogStack.length > 1) {
         ((_dialogStack[_dialogStack.length - 1] as Array)[0] as UIComponent).enabled = value;
       }
-      (Application.application as Application).enabled = value;
-      if((Application.application as Application).controlBar) {
-        (Application.application as Application).controlBar.enabled = true;
+      (FlexGlobals.topLevelApplication as Application).enabled = value;
+      if((FlexGlobals.topLevelApplication as Application).controlBar) {
+        (FlexGlobals.topLevelApplication as Application).controlBar.enabled = true;
       }
     }
     
@@ -1241,7 +1242,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         // Delays the UI to the next repaint so that if an action needs to perform immediately
         // after, it can. see Bug #674
-        (Application.application as Application).callLater(setUIEnabled, [value]);
+        (FlexGlobals.topLevelApplication as Application).callLater(setUIEnabled, [value]);
       }
     }
     
@@ -1359,7 +1360,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //        if(_dialogStack && _dialogStack.length > 1) {
         //          dialogParent = _dialogStack[_dialogStack.length -1][0];
         //        } else {
-        dialogParent = Application.application as DisplayObject;
+        dialogParent = FlexGlobals.topLevelApplication as DisplayObject;
         //        }
         dialog = getViewFactory().createResizableDialog(dialogParent);
         dialog.setStyle("borderAlpha", 1);
@@ -1386,7 +1387,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
             dialog.height = dimension.height;
           }
         } else {
-          var applicationFrame:Application = Application.application as Application;
+          var applicationFrame:Application = FlexGlobals.topLevelApplication as Application;
           dialog.width  = Math.min(Math.max(dialog.width,  dialogView.getExplicitOrMeasuredWidth()  + 15),                                           applicationFrame.width * 95  / 100);
           dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight() + 80), applicationFrame.height * 95 / 100);
           dialogView.width = NaN;

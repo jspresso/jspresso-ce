@@ -12,17 +12,16 @@
 * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
 */
 
-@font-face {
-  src: local("Arial");
-  fontFamily: ArialBold;
-  fontWeight: bold;
-}
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace resize "flex.utils.ui.resize.*";
+@namespace sepy "http://www.sephiroth.it/2006/mxml";
+@namespace jspresso "org.jspresso.framework.view.flex.*";
 
-Application {
+mx|Application {
   disabledOverlayAlpha: 0;
 }
 
-RichTextEditor
+jspresso|EnhancedRichTextEditor
 {
   borderThicknessLeft: 0;
   borderThicknessRight: 0;
@@ -33,7 +32,7 @@ RichTextEditor
   textAreaStyleName: richTextEditorTextArea;
 }
 
-Panel
+jspresso|CollapsiblePanel
 {
   borderAlpha: 1;
   borderThicknessLeft: 2;
@@ -41,32 +40,31 @@ Panel
   borderThicknessBottom: 2;
 }
 
-ResizablePanel
+resize|ResizablePanel
 {
   disabledOverlayAlpha: 0;
 }
 
-PopUpButton
+sepy|CheckBoxExtended
+{
+  paddingLeft: 0;
+  paddingRight: 0;
+}
+
+.popUpButton
 {
   textAlign: left;
 }
 
-ApplicationControlBar
+.applicationControlBar
 {
   fillAlphas: 0.5, 0.5;
   fillColors: #BBBBBB,#666666;
   horizontalGap: 2;
 }
 
-CheckBoxExtended
-{
-  paddingLeft: 0;
-  paddingRight: 0;
-}
-
 .drawerButton
 {
-  fontFamily: ArialBold;
   fontSize: 12;
   textAlign: left;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
@@ -81,7 +79,6 @@ CheckBoxExtended
 
 .drawerAccordionHeader
 {
-  fontFamily: ArialBold;
   fontSize: 12;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
   cornerRadius: 4;

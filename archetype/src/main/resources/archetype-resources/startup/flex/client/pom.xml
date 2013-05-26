@@ -25,6 +25,12 @@
       <artifactId>jspresso-flex</artifactId>
       <type>swc</type>
     </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -41,7 +47,7 @@
     </resources>
     <plugins>
       <plugin>
-        <groupId>org.sonatype.flexmojos</groupId>
+        <groupId>net.flexmojos.oss</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <executions>
           <execution>
@@ -51,7 +57,7 @@
               <goal>compile-swf</goal>
             </goals>
             <configuration>
-             <targetPlayer>10.0.0</targetPlayer>
+             <targetPlayer>11.1.0</targetPlayer>
             </configuration>
           </execution>
           <execution>
@@ -63,21 +69,9 @@
           </execution>
         </executions>
         <configuration>
-          <locales>
+          <localesCompiled>
             <locale>en_US</locale>
-            <locale>fr_FR</locale>
-            <locale>es_ES</locale>
-            <locale>pt_BR</locale>
-            <locale>de_DE</locale>
-            <locale>it_IT</locale>
-            <locale>pl_PL</locale>
-            <locale>cs_CZ</locale>
-            <locale>sk_SK</locale>
-            <locale>ru_RU</locale>
-            <locale>bg_BG</locale>
-            <locale>tr_TR</locale>
-          </locales>
-          <mergeResourceBundle>true</mergeResourceBundle>
+          </localesCompiled>
           <parameters>
             <swf>${symbol_dollar}{project.artifactId}</swf>
           </parameters>

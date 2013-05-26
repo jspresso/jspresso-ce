@@ -1,5 +1,61 @@
 3.7
 ===
+- in your index.html, change the background values to #ffffff
+
+- In your webapp/pom.xml, remove <scope>provided</scope> on the following dependency :
+    <dependency>
+      <groupId>your.app.groupId</groupId>
+      <artifactId>artifactId</artifactId>
+      <type>swf</type>
+    </dependency>
+
+- In your pom.xml files, change :
+    <locales>
+      ...
+    </locales>
+  to
+    <localesCompiled>
+      ...
+    </localesCompiled>
+    
+- In your pom.xml files, delete :
+    <mergeResourceBundle>true</mergeResourceBundle>
+  
+- All references to stylesheets sould be made relaive to the mxml file. For example, change :
+    <mx:Style source="/org/jspresso/hrsample/theme.css" />
+  to
+    <mx:Style source="../resources/org/jspresso/hrsample/theme.css" />
+
+- In your startup/flex/client swf project add either (or both) dependency to switch the used theme to spark or halo
+  unless you have a custom theme :
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+  or
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <type>swc</type>
+      <classifier>theme</classifier>
+      <scope>theme</scope>
+    </dependency>
+
+- Migrated to Flex 4.6
+
+- Migrated to FlexMojos 5.0-beta. You have to change all references to the Flexmojos plugin to the new groupId.
+  Search and replace :
+    <groupId>org.sonatype.flexmojos</groupId>
+  by
+    <groupId>net.flexmojos.oss</groupId>
+
+- Search and replace :
+    <targetPlayer>....</targetPlayer>
+  by
+    <targetPlayer>11.1.0</targetPlayer>
+    
 - Now using the org.picketbox:jbosssx dependency in place of the JBossAS one. when running under JBoss,
   it is now the dependency to exclude.
 

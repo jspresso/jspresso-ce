@@ -20,7 +20,12 @@
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>framework</artifactId>
       <type>swc</type>
-      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <type>swc</type>
+      <scope>theme</scope>
     </dependency>
     <dependency>
       <groupId>flexlib</groupId>
@@ -45,7 +50,7 @@
     <testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.sonatype.flexmojos</groupId>
+        <groupId>net.flexmojos.oss</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <executions>
           <execution>
@@ -55,13 +60,13 @@
               <goal>compile-swc</goal>
             </goals>
             <configuration>
-              <targetPlayer>10.0.0</targetPlayer>
-              <definesDeclaration>
+              <targetPlayer>11.1.0</targetPlayer>
+              <defines>
                 <property>
                   <name>VERSIONS::jspresso_version</name>
                   <value>'${jspresso.version}'</value>
                 </property>
-              </definesDeclaration>
+              </defines>
             </configuration>
           </execution>
         </executions>
