@@ -87,6 +87,13 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
+
+
+
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -848,8 +855,12 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       referenceTracker.setInitialized(false);
       initializeInlineTrackerIfNeeded(
-          (IPropertyChangeCapable) newPropertyValue, propertyName,
-          !ObjectUtils.equals(oldPropertyValue, newPropertyValue));
+          (IPropertyChangeCapable) newPropertyValue,
+          propertyName,
+          // To avoid breaking lazy initialization of oldPropertyValue
+          !isInitialized(oldPropertyValue)
+              || (isInitialized(newPropertyValue) && !ObjectUtils.equals(
+                  oldPropertyValue, newPropertyValue)));
     } else if (referenceTracker != null) {
       if (oldPropertyValue instanceof IComponent
           && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
@@ -1752,7 +1763,8 @@ public abstract class AbstractComponentInvocationHandler implements
     } else {
       actualNewProperty = newProperty;
     }
-    if (ObjectUtils.equals(oldProperty, actualNewProperty)) {
+    if (isInitialized(oldProperty) && isInitialized(actualNewProperty)
+        && ObjectUtils.equals(oldProperty, actualNewProperty)) {
       return;
     }
     if (propertyProcessorsEnabled) {

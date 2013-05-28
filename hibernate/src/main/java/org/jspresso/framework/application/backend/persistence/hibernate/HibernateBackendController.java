@@ -124,9 +124,9 @@ public class HibernateBackendController extends AbstractBackendController {
       boolean allowOuterScopeUpdate) {
     final List<E> uowEntities = super.cloneInUnitOfWork(entities,
         allowOuterScopeUpdate);
-    Set<IEntity> alreadyLocked = new HashSet<IEntity>();
-    for (IEntity mergedEntity : uowEntities) {
-      lockInHibernateInDepth(mergedEntity, getHibernateSession(), alreadyLocked);
+    IEntityRegistry alreadyLocked = createEntityRegistry("lockInHibernateInDepth");
+    for (IEntity uowEntity : uowEntities) {
+      lockInHibernateInDepth(uowEntity, getHibernateSession(), alreadyLocked);
     }
     return uowEntities;
   }
@@ -143,13 +143,16 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected <E extends IEntity> E performUowEntityCloning(final E entity) {
-    if (entity.isPersistent()) {
+    if (!isInitialized(entity) || entity.isPersistent()) {
       E sessionEntity = null;
       if (getHibernateSession().contains(entity)) {
         sessionEntity = entity;
       } else {
         sessionEntity = (E) getHibernateSession().load(
-            entity.getComponentContract(), entity.getId());
+            getComponentContract(entity), entity.getId());
+        if (!isInitialized(entity)) {
+          return sessionEntity;
+        }
         if (!isInitialized(sessionEntity)) {
           getHibernateSession().evict(sessionEntity);
           sessionEntity = null;
@@ -291,7 +294,7 @@ public class HibernateBackendController extends AbstractBackendController {
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       final String propertyName) {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
-    if (!Hibernate.isInitialized(propertyValue)) {
+    if (!isInitialized(propertyValue)) {
       // turn off dirt tracking.
       boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
       try {
@@ -331,7 +334,7 @@ public class HibernateBackendController extends AbstractBackendController {
           }
         }
 
-        if (!Hibernate.isInitialized(propertyValue)) {
+        if (!isInitialized(propertyValue)) {
           // If it couldn't succeed, then get the Hibernate template and perform
           // necessary locks and initialization.
           if (currentInitializationSession != null) {
@@ -368,7 +371,7 @@ public class HibernateBackendController extends AbstractBackendController {
       final IComponent componentOrEntity, final String propertyName,
       Session hibernateSession) {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
-    if (!Hibernate.isInitialized(propertyValue)) {
+    if (!isInitialized(propertyValue)) {
       if (componentOrEntity instanceof IEntity) {
         if (((IEntity) componentOrEntity).isPersistent()) {
           lockInHibernate((IEntity) componentOrEntity, hibernateSession);
@@ -718,13 +721,21 @@ public class HibernateBackendController extends AbstractBackendController {
 
   @SuppressWarnings("unchecked")
   private void lockInHibernateInDepth(IComponent component,
-      Session hibernateSession, Set<IEntity> alreadyLocked) {
+      Session hibernateSession, IEntityRegistry alreadyLocked) {
     if (component == null) {
       return;
     }
+    if (!isInitialized(component)) {
+      lockInHibernate((IEntity) component, hibernateSession);
+      return;
+    }
     boolean isEntity = component instanceof IEntity;
-    if (!isEntity || alreadyLocked.add((IEntity) component)) {
+    if (!isEntity
+        || alreadyLocked.get(getComponentContract((IEntity) component),
+            ((IEntity) component).getId()) == null) {
       if (isEntity) {
+        alreadyLocked.register(getComponentContract((IEntity) component),
+            ((IEntity) component).getId(), (IEntity) component);
         if (((IEntity) component).isPersistent()) {
           lockInHibernate((IEntity) component, hibernateSession);
         } else {
@@ -747,7 +758,7 @@ public class HibernateBackendController extends AbstractBackendController {
         Object propertyValue = property.getValue();
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyName);
-        if (Hibernate.isInitialized(propertyValue)) {
+        if (isInitialized(propertyValue)) {
           if (propertyValue instanceof IEntity) {
             lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
                 alreadyLocked);
@@ -791,7 +802,7 @@ public class HibernateBackendController extends AbstractBackendController {
         Map<String, Object> entityProperties = component
             .straightGetProperties();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-          if (Hibernate.isInitialized(property.getValue())) {
+          if (isInitialized(property.getValue())) {
             if (property.getValue() instanceof IEntity) {
               evictFromHibernateInDepth((IEntity) property.getValue(),
                   hibernateSession, alreadyEvicted);
@@ -909,12 +920,12 @@ public class HibernateBackendController extends AbstractBackendController {
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing, so force
       // to null.
-      
+
       // This is useless to clone in UOW now that UOW regsitration is done
       // in onLoad interceptor
       // res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
       // maxResults, null));
-      
+
       res = findByCriteria(criteria, firstResult, maxResults, null);
     } else {
       // merge mode is passed for merge to occur inside the transaction.
@@ -1073,7 +1084,7 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
     Object clonedPropertyValue = propertyValue;
-    if (Hibernate.isInitialized(owner)) {
+    if (isInitialized(owner)) {
       if (propertyValue instanceof PersistentCollection) {
         if (unwrapProxy((((PersistentCollection) propertyValue).getOwner())) != unwrapProxy(owner)) {
           if (propertyValue instanceof PersistentSet) {

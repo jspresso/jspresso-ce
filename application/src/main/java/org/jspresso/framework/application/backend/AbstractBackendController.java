@@ -1196,108 +1196,116 @@ public abstract class AbstractBackendController extends AbstractController
       if (allowOuterScopeUpdate) {
         excludeFromSanityChecks(uowEntity);
       }
-      Map<String, Object> dirtyProperties = dirtRecorder
-          .getChangedProperties(entity);
-      if (dirtyProperties == null) {
+      Map<String, Object> dirtyProperties;
+      if (isInitialized(entity)) {
+        dirtyProperties = dirtRecorder.getChangedProperties(entity);
+        if (dirtyProperties == null) {
+          dirtyProperties = new HashMap<String, Object>();
+        }
+      } else {
         dirtyProperties = new HashMap<String, Object>();
       }
       alreadyCloned.register(entityContract, entity.getId(), uowEntity);
-      Map<String, Object> entityProperties = entity.straightGetProperties();
-      for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-        String propertyName = property.getKey();
-        Object propertyValue = property.getValue();
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
-            .getPropertyDescriptor(propertyName);
-        if (propertyValue instanceof IEntity) {
-          if (isInitialized(propertyValue)) {
+      if (isInitialized(entity)) {
+        Map<String, Object> entityProperties = entity.straightGetProperties();
+        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+          String propertyName = property.getKey();
+          Object propertyValue = property.getValue();
+          IPropertyDescriptor propertyDescriptor = entityDescriptor
+              .getPropertyDescriptor(propertyName);
+          if (propertyValue instanceof IEntity) {
+            if (isInitialized(propertyValue)) {
+              uowEntity.straightSetProperty(
+                  propertyName,
+                  cloneInUnitOfWork((IEntity) propertyValue,
+                      allowOuterScopeUpdate, alreadyCloned));
+            } else {
+              uowEntity.straightSetProperty(propertyName,
+                  cloneUninitializedProperty(uowEntity, propertyValue));
+            }
+          } else if (propertyValue instanceof Collection<?>
+              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+            if (isInitialized(propertyValue)) {
+              Collection<IComponent> uowCollection = createTransientEntityCollection((Collection<IComponent>) property
+                  .getValue());
+              for (IComponent collectionElement : (Collection<IComponent>) property
+                  .getValue()) {
+                if (collectionElement != null) {
+                  if (collectionElement instanceof IEntity) {
+                    uowCollection.add(cloneInUnitOfWork(
+                        (IEntity) collectionElement, allowOuterScopeUpdate,
+                        alreadyCloned));
+                  } else {
+                    uowCollection
+                        .add(cloneComponentInUnitOfWork(collectionElement,
+                            allowOuterScopeUpdate, alreadyCloned));
+                  }
+                } else {
+                  uowCollection.add(null);
+                }
+              }
+              if (!propertyDescriptor.isComputed()) {
+                Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
+                    .get(propertyName);
+                if (snapshotCollection != null) {
+                  Collection<IComponent> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+                  for (IComponent snapshotCollectionElement : snapshotCollection) {
+                    if (snapshotCollectionElement != null) {
+                      if (snapshotCollectionElement instanceof IEntity) {
+                        clonedSnapshotCollection.add(cloneInUnitOfWork(
+                            (IEntity) snapshotCollectionElement,
+                            allowOuterScopeUpdate, alreadyCloned));
+                      } else {
+                        clonedSnapshotCollection
+                            .add(cloneComponentInUnitOfWork(
+                                snapshotCollectionElement,
+                                allowOuterScopeUpdate, alreadyCloned));
+                      }
+                    } else {
+                      clonedSnapshotCollection.add(null);
+                    }
+                  }
+                  snapshotCollection = clonedSnapshotCollection;
+                }
+                uowCollection = wrapDetachedCollection(entity, uowCollection,
+                    snapshotCollection, propertyName);
+              }
+              uowEntity.straightSetProperty(propertyName, uowCollection);
+            } else {
+              uowEntity.straightSetProperty(propertyName,
+                  cloneUninitializedProperty(uowEntity, propertyValue));
+            }
+          } else if (propertyValue instanceof IEntity[]) {
+            IEntity[] uowArray = new IEntity[((IEntity[]) propertyValue).length];
+            for (int i = 0; i < uowArray.length; i++) {
+              uowArray[i] = cloneInUnitOfWork(((IEntity[]) propertyValue)[i],
+                  allowOuterScopeUpdate, alreadyCloned);
+            }
+            uowEntity.straightSetProperty(propertyName, uowArray);
+          } else if (propertyValue instanceof IComponent[]) {
+            IComponent[] uowArray = new IComponent[((IComponent[]) property
+                .getValue()).length];
+            for (int i = 0; i < uowArray.length; i++) {
+              uowArray[i] = cloneComponentInUnitOfWork(
+                  ((IComponent[]) propertyValue)[i], allowOuterScopeUpdate,
+                  alreadyCloned);
+            }
+            uowEntity.straightSetProperty(propertyName, uowArray);
+          } else if (propertyValue instanceof IComponent) {
             uowEntity.straightSetProperty(
                 propertyName,
-                cloneInUnitOfWork((IEntity) propertyValue,
+                cloneComponentInUnitOfWork((IComponent) propertyValue,
                     allowOuterScopeUpdate, alreadyCloned));
-          } else {
-            uowEntity.straightSetProperty(propertyName,
-                cloneUninitializedProperty(uowEntity, propertyValue));
           }
-        } else if (propertyValue instanceof Collection<?>
-            && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-          if (isInitialized(propertyValue)) {
-            Collection<IComponent> uowCollection = createTransientEntityCollection((Collection<IComponent>) property
-                .getValue());
-            for (IComponent collectionElement : (Collection<IComponent>) property
-                .getValue()) {
-              if (collectionElement != null) {
-                if (collectionElement instanceof IEntity) {
-                  uowCollection.add(cloneInUnitOfWork(
-                      (IEntity) collectionElement, allowOuterScopeUpdate,
-                      alreadyCloned));
-                } else {
-                  uowCollection.add(cloneComponentInUnitOfWork(
-                      collectionElement, allowOuterScopeUpdate, alreadyCloned));
-                }
-              } else {
-                uowCollection.add(null);
-              }
-            }
-            if (!propertyDescriptor.isComputed()) {
-              Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
-                  .get(propertyName);
-              if (snapshotCollection != null) {
-                Collection<IComponent> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
-                for (IComponent snapshotCollectionElement : snapshotCollection) {
-                  if (snapshotCollectionElement != null) {
-                    if (snapshotCollectionElement instanceof IEntity) {
-                      clonedSnapshotCollection.add(cloneInUnitOfWork(
-                          (IEntity) snapshotCollectionElement,
-                          allowOuterScopeUpdate, alreadyCloned));
-                    } else {
-                      clonedSnapshotCollection.add(cloneComponentInUnitOfWork(
-                          snapshotCollectionElement, allowOuterScopeUpdate,
-                          alreadyCloned));
-                    }
-                  } else {
-                    clonedSnapshotCollection.add(null);
-                  }
-                }
-                snapshotCollection = clonedSnapshotCollection;
-              }
-              uowCollection = wrapDetachedCollection(entity, uowCollection,
-                  snapshotCollection, propertyName);
-            }
-            uowEntity.straightSetProperty(propertyName, uowCollection);
-          } else {
-            uowEntity.straightSetProperty(propertyName,
-                cloneUninitializedProperty(uowEntity, propertyValue));
-          }
-        } else if (propertyValue instanceof IEntity[]) {
-          IEntity[] uowArray = new IEntity[((IEntity[]) propertyValue).length];
-          for (int i = 0; i < uowArray.length; i++) {
-            uowArray[i] = cloneInUnitOfWork(((IEntity[]) propertyValue)[i],
-                allowOuterScopeUpdate, alreadyCloned);
-          }
-          uowEntity.straightSetProperty(propertyName, uowArray);
-        } else if (propertyValue instanceof IComponent[]) {
-          IComponent[] uowArray = new IComponent[((IComponent[]) property
-              .getValue()).length];
-          for (int i = 0; i < uowArray.length; i++) {
-            uowArray[i] = cloneComponentInUnitOfWork(
-                ((IComponent[]) propertyValue)[i], allowOuterScopeUpdate,
-                alreadyCloned);
-          }
-          uowEntity.straightSetProperty(propertyName, uowArray);
-        } else if (propertyValue instanceof IComponent) {
-          uowEntity.straightSetProperty(
-              propertyName,
-              cloneComponentInUnitOfWork((IComponent) propertyValue,
-                  allowOuterScopeUpdate, alreadyCloned));
         }
-      }
-      if (uowEntity != null && isInitialized(uowEntity)) {
-        uowEntity.releaseEvents();
-      }
-      unitOfWork.register(uowEntity, new HashMap<String, Object>(
-          dirtyProperties));
-      if (uowEntity instanceof ILifecycleCapable) {
-        ((ILifecycleCapable) uowEntity).onClone(entity);
+        if (uowEntity != null && isInitialized(uowEntity)) {
+          uowEntity.releaseEvents();
+        }
+        unitOfWork.register(uowEntity, new HashMap<String, Object>(
+            dirtyProperties));
+        if (uowEntity instanceof ILifecycleCapable) {
+          ((ILifecycleCapable) uowEntity).onClone(entity);
+        }
       }
     } finally {
       if (uowEntity != null && isInitialized(uowEntity)) {
@@ -1377,21 +1385,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (alreadyMergedEntity != null) {
       return alreadyMergedEntity;
     }
-    if (isUnitOfWorkActive()) {
-      if (isInitialized(entity) && entity.isPersistent() && isDirty(entity)) {
-        LOG.error(
-            "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({})[{}] to the application session.\n"
-                + "This will break transaction isolation since, if the transaction is rolled back,"
-                + " the UOW dirty state will be kept.\n"
-                + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
-            entity, getComponentContract(entity).getSimpleName());
-        if (isThrowExceptionOnBadUsage()) {
-          throw new BackendException(
-              "A bad usage has been detected on the backend controller."
-                  + "This is certainly an application coding problem. Please check the logs.");
-        }
-      }
-    }
+    checkBadMergeUsage(entity);
     boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
     E registeredEntity = null;
     try {
@@ -1557,6 +1551,24 @@ public abstract class AbstractBackendController extends AbstractController
         registeredEntity.releaseEvents();
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
+    }
+  }
+
+  private <E extends IEntity> void checkBadMergeUsage(E entity) {
+    if (isUnitOfWorkActive()) {
+      if (isInitialized(entity) && entity.isPersistent() && isDirty(entity)) {
+        LOG.error(
+            "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({})[{}] to the application session.\n"
+                + "This will break transaction isolation since, if the transaction is rolled back,"
+                + " the UOW dirty state will be kept.\n"
+                + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
+            entity, getComponentContract(entity).getSimpleName());
+        if (isThrowExceptionOnBadUsage()) {
+          throw new BackendException(
+              "A bad usage has been detected on the backend controller."
+                  + "This is certainly an application coding problem. Please check the logs.");
+        }
+      }
     }
   }
 
