@@ -56,10 +56,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
   import mx.core.mx_internal;
+  import mx.events.BrowserChangeEvent;
   import mx.events.CloseEvent;
   import mx.events.FlexEvent;
   import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
+  import mx.managers.BrowserManager;
+  import mx.managers.IBrowserManager;
   import mx.managers.PopUpManager;
   import mx.resources.Locale;
   import mx.resources.ResourceManager;
@@ -67,6 +70,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
   import mx.rpc.remoting.mxml.RemoteObject;
+  import mx.utils.URLUtil;
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -85,6 +89,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
@@ -322,6 +327,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleCommand(command:RemoteCommand):void {
       if(command is RemoteMessageCommand) {
         handleMessageCommand(command as RemoteMessageCommand);
+      } else if(command is RemoteHistoryDisplayCommand) {
+        BrowserManager.getInstance().setFragment(
+          "snapshotId=" + (command as RemoteHistoryDisplayCommand).snapshotId);
       } else if(command is RemoteRestartCommand) {
         restart();
       } else if(command is RemoteFileUploadCommand) {
@@ -402,6 +410,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       } else if(command is RemoteInitCommand) {
         var initCommand:RemoteInitCommand = command as RemoteInitCommand;
+        linkBowserHistory();
         initApplicationFrame(initCommand.workspaceNames,
                              initCommand.workspaceActions,
                              initCommand.exitAction,
@@ -535,6 +544,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         }
       }
+    }
+    
+    protected function linkBowserHistory():void {
+      var browserManager:IBrowserManager = BrowserManager.getInstance();
+      browserManager.init();
+      browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, function(event:BrowserChangeEvent):void {
+        var decodedURL:Object = URLUtil.stringToObject(browserManager.fragment);
+        if(decodedURL.snapshotId) {
+          var command:RemoteHistoryDisplayCommand = new RemoteHistoryDisplayCommand();
+          command.snapshotId = decodedURL.snapshotId;
+          registerCommand(command);
+        }
+      });
     }
     
     protected function pushFakeDialog():void {

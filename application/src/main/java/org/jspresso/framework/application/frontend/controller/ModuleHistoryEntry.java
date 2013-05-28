@@ -31,6 +31,7 @@ import org.jspresso.framework.application.model.Module;
  */
 public class ModuleHistoryEntry {
 
+  private String            id;
   private Reference<Module> moduleRef;
   private String            workspaceName;
 
@@ -49,6 +50,7 @@ public class ModuleHistoryEntry {
     }
     this.workspaceName = workspaceName;
     this.moduleRef = new SoftReference<Module>(module);
+    this.id = Integer.toHexString(System.identityHashCode(module));
   }
 
   /**
@@ -67,6 +69,15 @@ public class ModuleHistoryEntry {
    */
   public String getWorkspaceName() {
     return workspaceName;
+  }
+  
+  /**
+   * Gets the module history entry id.
+   * 
+   * @return the module history entry id.
+   */
+  public String getId() {
+    return id;
   }
 
 }

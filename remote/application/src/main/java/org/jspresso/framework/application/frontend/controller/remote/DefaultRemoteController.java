@@ -43,6 +43,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDia
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
@@ -61,6 +62,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspac
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
+import org.jspresso.framework.application.frontend.controller.ModuleHistoryEntry;
 import org.jspresso.framework.binding.ConnectorInputException;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -729,6 +731,9 @@ public class DefaultRemoteController extends
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
       displayWorkspace(
           ((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
+    } else if (command instanceof RemoteHistoryDisplayCommand) {
+      displayPinnedModule(((RemoteHistoryDisplayCommand) command)
+          .getSnapshotId());
     } else if (command instanceof RemoteTableChangedCommand) {
       Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command)
           .getColumnIds().length][2];
@@ -1069,5 +1074,18 @@ public class DefaultRemoteController extends
         actionContext.putAll(requestParams);
       }
     }
+  }
+
+  /**
+   * Notifies the client.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void modulePinned(ModuleHistoryEntry historyEntry) {
+    super.modulePinned(historyEntry);
+    RemoteHistoryDisplayCommand historyCommand = new RemoteHistoryDisplayCommand();
+    historyCommand.setSnapshotId(historyEntry.getId());
+    registerCommand(historyCommand);
   }
 }

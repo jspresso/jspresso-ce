@@ -398,6 +398,38 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Retrieves a pinned module in the backward or forward history and pins it.
+   * 
+   * @param snapshotId
+   *          the snapshot id of the module history to display.
+   */
+  protected void displayPinnedModule(String snapshotId) {
+    ModuleHistoryEntry historyEntryToDisplay = null;
+    for (ModuleHistoryEntry historyEntry : backwardHistoryEntries) {
+      if (snapshotId.equals(historyEntry.getId())) {
+        historyEntryToDisplay = historyEntry;
+      }
+    }
+    if (historyEntryToDisplay != null) {
+      while (backwardHistoryEntries.contains(historyEntryToDisplay)) {
+        displayPreviousPinnedModule();
+      }
+      return;
+    }
+    for (ModuleHistoryEntry historyEntry : forwardHistoryEntries) {
+      if (snapshotId.equals(historyEntry.getId())) {
+        historyEntryToDisplay = historyEntry;
+      }
+    }
+    if (historyEntryToDisplay != null) {
+      while (forwardHistoryEntries.contains(historyEntryToDisplay)) {
+        displayNextPinnedModule();
+      }
+      return;
+    }
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -1674,9 +1706,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected void pinModule(String workspaceName, Module module) {
     if (moduleAutoPinEnabled && module != null) {
-      backwardHistoryEntries.add(new ModuleHistoryEntry(workspaceName, module));
+      ModuleHistoryEntry historyEntry = new ModuleHistoryEntry(workspaceName,
+          module);
+      backwardHistoryEntries.add(historyEntry);
+      modulePinned(historyEntry);
       forwardHistoryEntries.clear();
     }
+  }
+
+  /**
+   * Callback when a module is actually pinned in history.
+   * 
+   * @param historyEntry
+   *          the pinned module history entry.
+   */
+  protected void modulePinned(ModuleHistoryEntry historyEntry) {
+    // NO-OP. Managed by subclasses when needed.
   }
 
   /**
