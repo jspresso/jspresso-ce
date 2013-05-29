@@ -264,6 +264,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     _handleCommand : function(command) {
       if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand) {
         this._handleMessageCommand(command);
+      } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand) {
+        qx.bom.History.getInstance().setState("snapshotId=" + command.getSnapshotId());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand) {
         this._restart();
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand) {
@@ -319,6 +321,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           topDialog.destroy();
         }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand) {
+        this.linkBowserHistory();
         this._initApplicationFrame(command.getWorkspaceNames(),
                              command.getWorkspaceActions(),
                              command.getExitAction(),
@@ -499,6 +502,27 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       
       uploadDialog.open();
       uploadDialog.center();
+    },
+
+    linkBowserHistory : function() {
+    /**
+     * @type qx.bom.History
+     */
+      var browserManager = qx.bom.History.getInstance();
+      browserManager.addListener("request", function(e) {
+        var state = e.getData();
+        var vars = state.split('&');
+        var decodedFragment = {};
+        for (i=0; i < vars.length; i++) {
+          var tmp = vars[i].split('=');
+          decodedFragment[tmp[0]] = tmp[1];
+        }
+        if(decodedFragment.snapshotId) {
+          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
+          command.setSnapshotId(decodedFragment.snapshotId);
+          this.registerCommand(command);
+        }
+      }, this);
     },
 
     /**

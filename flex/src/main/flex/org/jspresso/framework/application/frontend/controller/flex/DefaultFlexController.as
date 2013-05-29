@@ -550,10 +550,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var browserManager:IBrowserManager = BrowserManager.getInstance();
       browserManager.init();
       browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, function(event:BrowserChangeEvent):void {
-        var decodedURL:Object = URLUtil.stringToObject(browserManager.fragment);
-        if(decodedURL.snapshotId) {
+        var decodedFragment:Object = URLUtil.stringToObject(browserManager.fragment);
+        if(decodedFragment.snapshotId) {
           var command:RemoteHistoryDisplayCommand = new RemoteHistoryDisplayCommand();
-          command.snapshotId = decodedURL.snapshotId;
+          command.snapshotId = decodedFragment.snapshotId;
           registerCommand(command);
         }
       });
