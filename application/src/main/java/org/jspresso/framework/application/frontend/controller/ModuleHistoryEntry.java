@@ -32,6 +32,7 @@ import org.jspresso.framework.application.model.Module;
 public class ModuleHistoryEntry {
 
   private String            id;
+  private String            name;
   private Reference<Module> moduleRef;
   private String            workspaceName;
 
@@ -42,15 +43,17 @@ public class ModuleHistoryEntry {
    *          the workspace name of this history entry.
    * @param module
    *          the module of this history entry.
+   * @param name the user-friendly name of this history entry.
    */
-  public ModuleHistoryEntry(String workspaceName, Module module) {
+  public ModuleHistoryEntry(String workspaceName, Module module, String name) {
     if (workspaceName == null || module == null) {
       throw new IllegalArgumentException(
           "Cannot create a module history entry for null module or workspace.");
     }
     this.workspaceName = workspaceName;
     this.moduleRef = new SoftReference<Module>(module);
-    this.id = Integer.toHexString(System.identityHashCode(module));
+    this.id = Long.toHexString(System.currentTimeMillis());
+    this.name = name;
   }
 
   /**
@@ -78,6 +81,15 @@ public class ModuleHistoryEntry {
    */
   public String getId() {
     return id;
+  }
+
+  /**
+   * Gets the module history name.
+   * 
+   * @return the module history name.
+   */
+  public String getName() {
+    return name;
   }
 
 }

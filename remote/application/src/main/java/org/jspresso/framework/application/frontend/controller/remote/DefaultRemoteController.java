@@ -732,8 +732,14 @@ public class DefaultRemoteController extends
       displayWorkspace(
           ((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
     } else if (command instanceof RemoteHistoryDisplayCommand) {
-      displayPinnedModule(((RemoteHistoryDisplayCommand) command)
+      ModuleHistoryEntry historyEntry = displayPinnedModule(((RemoteHistoryDisplayCommand) command)
           .getSnapshotId());
+      if (historyEntry != null) {
+        // Update the name on client side.
+        RemoteHistoryDisplayCommand reply = new RemoteHistoryDisplayCommand();
+        reply.setName(historyEntry.getName());
+        registerCommand(reply);
+      }
     } else if (command instanceof RemoteTableChangedCommand) {
       Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command)
           .getColumnIds().length][2];
@@ -1086,6 +1092,7 @@ public class DefaultRemoteController extends
     super.modulePinned(historyEntry);
     RemoteHistoryDisplayCommand historyCommand = new RemoteHistoryDisplayCommand();
     historyCommand.setSnapshotId(historyEntry.getId());
+    historyCommand.setName(historyEntry.getName());
     registerCommand(historyCommand);
   }
 }

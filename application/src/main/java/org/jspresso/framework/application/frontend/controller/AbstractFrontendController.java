@@ -397,36 +397,43 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
+  private String lastDisplayedSnapshotId;
+
   /**
    * Retrieves a pinned module in the backward or forward history and pins it.
    * 
    * @param snapshotId
    *          the snapshot id of the module history to display.
+   * @return the history entry actually displayed or null if no change.
    */
-  protected void displayPinnedModule(String snapshotId) {
-    ModuleHistoryEntry historyEntryToDisplay = null;
-    for (ModuleHistoryEntry historyEntry : backwardHistoryEntries) {
-      if (snapshotId.equals(historyEntry.getId())) {
-        historyEntryToDisplay = historyEntry;
+  protected ModuleHistoryEntry displayPinnedModule(String snapshotId) {
+    if (!ObjectUtils.equals(snapshotId, lastDisplayedSnapshotId)) {
+      lastDisplayedSnapshotId = snapshotId;
+      ModuleHistoryEntry historyEntryToDisplay = null;
+      for (ModuleHistoryEntry historyEntry : backwardHistoryEntries) {
+        if (snapshotId.equals(historyEntry.getId())) {
+          historyEntryToDisplay = historyEntry;
+        }
+      }
+      if (historyEntryToDisplay != null) {
+        while (backwardHistoryEntries.contains(historyEntryToDisplay)) {
+          displayPreviousPinnedModule();
+        }
+        return historyEntryToDisplay;
+      }
+      for (ModuleHistoryEntry historyEntry : forwardHistoryEntries) {
+        if (snapshotId.equals(historyEntry.getId())) {
+          historyEntryToDisplay = historyEntry;
+        }
+      }
+      if (historyEntryToDisplay != null) {
+        while (forwardHistoryEntries.contains(historyEntryToDisplay)) {
+          displayNextPinnedModule();
+        }
+        return historyEntryToDisplay;
       }
     }
-    if (historyEntryToDisplay != null) {
-      while (backwardHistoryEntries.contains(historyEntryToDisplay)) {
-        displayPreviousPinnedModule();
-      }
-      return;
-    }
-    for (ModuleHistoryEntry historyEntry : forwardHistoryEntries) {
-      if (snapshotId.equals(historyEntry.getId())) {
-        historyEntryToDisplay = historyEntry;
-      }
-    }
-    if (historyEntryToDisplay != null) {
-      while (forwardHistoryEntries.contains(historyEntryToDisplay)) {
-        displayNextPinnedModule();
-      }
-      return;
-    }
+    return null;
   }
 
   /**
@@ -1706,8 +1713,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected void pinModule(String workspaceName, Module module) {
     if (moduleAutoPinEnabled && module != null) {
+      if (backwardHistoryEntries.size() > 0) {
+        ModuleHistoryEntry lastPinnedModule = backwardHistoryEntries
+            .get(backwardHistoryEntries.size() - 1);
+        if (lastPinnedModule.getWorkspaceName().equals(workspaceName)
+            && lastPinnedModule.getModule().equals(module)) {
+          return;
+        }
+      }
+      String historyEntryName = getWorkspace(workspaceName).getI18nName()
+          + " - " + module.getI18nName();
       ModuleHistoryEntry historyEntry = new ModuleHistoryEntry(workspaceName,
-          module);
+          module, historyEntryName);
       backwardHistoryEntries.add(historyEntry);
       modulePinned(historyEntry);
       forwardHistoryEntries.clear();

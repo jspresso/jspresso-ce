@@ -25,6 +25,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     snapshotId :
     {
       check : "String"
+    },
+    name :
+    {
+      check : "String"
     }
   }
 });

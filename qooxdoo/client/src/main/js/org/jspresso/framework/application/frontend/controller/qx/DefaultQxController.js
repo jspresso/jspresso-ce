@@ -265,7 +265,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand) {
         this._handleMessageCommand(command);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand) {
-        qx.bom.History.getInstance().setState("snapshotId=" + command.getSnapshotId());
+        if(command.getSnapshotId()) {
+          qx.bom.History.getInstance().addToHistory("snapshotId=" + command.getSnapshotId(), command.getName());
+        } else if(command.getName()) {
+          qx.bom.History.getInstance().setTitle(command.getName());
+        }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand) {
         this._restart();
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand) {

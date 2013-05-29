@@ -328,8 +328,15 @@ package org.jspresso.framework.application.frontend.controller.flex {
       if(command is RemoteMessageCommand) {
         handleMessageCommand(command as RemoteMessageCommand);
       } else if(command is RemoteHistoryDisplayCommand) {
-        BrowserManager.getInstance().setFragment(
-          "snapshotId=" + (command as RemoteHistoryDisplayCommand).snapshotId);
+        if((command as RemoteHistoryDisplayCommand).name) {
+          BrowserManager.getInstance().setTitle((command as RemoteHistoryDisplayCommand).name);
+        } else {
+          BrowserManager.getInstance().setTitle("");
+        }
+        if((command as RemoteHistoryDisplayCommand).snapshotId) {
+          BrowserManager.getInstance().setFragment(
+            "snapshotId=" + (command as RemoteHistoryDisplayCommand).snapshotId);
+        }
       } else if(command is RemoteRestartCommand) {
         restart();
       } else if(command is RemoteFileUploadCommand) {

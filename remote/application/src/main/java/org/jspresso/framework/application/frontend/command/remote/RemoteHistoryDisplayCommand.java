@@ -29,6 +29,7 @@ public class RemoteHistoryDisplayCommand extends RemoteCommand {
   private static final long serialVersionUID = 961045267213497189L;
 
   private String            snapshotId;
+  private String            name;
 
   /**
    * Gets the snapshotId.
@@ -47,5 +48,24 @@ public class RemoteHistoryDisplayCommand extends RemoteCommand {
    */
   public void setSnapshotId(String snapshotId) {
     this.snapshotId = snapshotId;
+  }
+
+  /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *          the name to set.
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 }

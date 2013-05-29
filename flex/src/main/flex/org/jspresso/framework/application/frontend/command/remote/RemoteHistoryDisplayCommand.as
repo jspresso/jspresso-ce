@@ -19,6 +19,7 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteHistoryDisplayCommand extends RemoteCommand {
 
         private var _snapshotId:String;
+        private var _name:String;
  
         public function RemoteHistoryDisplayCommand() {
           //default constructor.
@@ -30,6 +31,14 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function set snapshotId(value:String):void {
           _snapshotId = value;
         }
+
+        public function get name():String {
+          return _name;
+        }
+        public function set name(value:String):void {
+          _name = value;
+        }
+
 
     }
 }
