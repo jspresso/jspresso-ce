@@ -513,7 +513,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var state = e.getData();
         var vars = state.split('&');
         var decodedFragment = {};
-        for (i=0; i < vars.length; i++) {
+        for (var i = 0; i < vars.length; i++) {
           var tmp = vars[i].split('=');
           decodedFragment[tmp[0]] = tmp[1];
         }
