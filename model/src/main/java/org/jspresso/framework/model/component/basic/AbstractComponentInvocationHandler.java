@@ -673,10 +673,16 @@ public abstract class AbstractComponentInvocationHandler implements
     if (referent == null
         && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && !propertyDescriptor.isComputed() && propertyDescriptor.isMandatory()) {
-      referent = inlineComponentFactory
-          .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
-              .getComponentContract());
-      storeReferenceProperty(proxy, propertyDescriptor, null, referent);
+      boolean wasDirtyTrackingEnabled = isDirtyTrackingEnabled();
+      try {
+        setDirtyTrackingEnabled(false);
+        referent = inlineComponentFactory
+            .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
+                .getComponentContract());
+        storeReferenceProperty(proxy, propertyDescriptor, null, referent);
+      } finally {
+        setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
+      }
     }
     return decorateReferent(referent,
         propertyDescriptor.getReferencedDescriptor());
