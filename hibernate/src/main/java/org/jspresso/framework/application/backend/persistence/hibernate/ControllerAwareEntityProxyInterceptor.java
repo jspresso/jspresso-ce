@@ -108,24 +108,27 @@ public class ControllerAwareEntityProxyInterceptor extends
    */
   @Override
   public Object getEntity(String entityName, Serializable id) {
-    if (!getBackendController().isUnitOfWorkActive()) {
-      try {
-        IEntity registeredEntity = getBackendController().getRegisteredEntity(
+    IEntity registeredEntity = null;
+    try {
+      if (getBackendController().isUnitOfWorkActive()) {
+        registeredEntity = getBackendController().getUnitOfWorkEntity(
+            (Class<? extends IEntity>) Class.forName(entityName), id);
+      } else {
+        registeredEntity = getBackendController().getRegisteredEntity(
             (Class<? extends IEntity>) Class.forName(entityName), id);
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
           LazyInitializer li = proxy.getHibernateLazyInitializer();
           registeredEntity = (IEntity) li.getImplementation();
         }
-
         HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity,
             null);
         return registeredEntity;
-      } catch (ClassNotFoundException ex) {
-        LOG.error("Class for entity {} was not found", entityName, ex);
       }
+    } catch (ClassNotFoundException ex) {
+      LOG.error("Class for entity {} was not found", entityName, ex);
     }
-    return super.getEntity(entityName, id);
+    return registeredEntity;
   }
 
   /**

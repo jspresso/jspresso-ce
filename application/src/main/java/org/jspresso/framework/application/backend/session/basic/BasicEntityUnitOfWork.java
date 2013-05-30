@@ -29,6 +29,8 @@ import java.util.Set;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
@@ -44,10 +46,18 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
 
   private BeanPropertyChangeRecorder dirtRecorder;
+  private IEntityRegistry            entityRegistry;
 
   private Set<IEntity>               entitiesRegisteredForDeletion;
   private List<IEntity>              entitiesRegisteredForUpdate;
   private Set<IEntity>               updatedEntities;
+
+  /**
+   * Constructs a new <code>BasicEntityUnitOfWork</code> instance.
+   */
+  public BasicEntityUnitOfWork() {
+    entityRegistry = new BasicEntityRegistry("uowEntityRegistry");
+  }
 
   /**
    * {@inheritDoc}
@@ -186,9 +196,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public void register(IEntity bean,
+  public void register(IEntity entity,
       Map<String, Object> initialChangedProperties) {
-    dirtRecorder.register(bean, initialChangedProperties);
+    dirtRecorder.register(entity, initialChangedProperties);
+    entityRegistry.register(entity.getComponentContract(), entity.getId(), entity);
   }
 
   /**
@@ -231,6 +242,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   private void cleanup() {
     dirtRecorder = null;
     updatedEntities = null;
+    entityRegistry.clear();
   }
 
   /**
@@ -278,5 +290,14 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   @Override
   public void setDirtyTrackingEnabled(boolean enabled) {
     dirtRecorder.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Serializable entityId) {
+    return entityRegistry.get(entityContract, entityId);
   }
 }

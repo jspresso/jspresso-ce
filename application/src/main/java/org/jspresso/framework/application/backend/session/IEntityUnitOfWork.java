@@ -133,4 +133,16 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    * Clears the UOW.
    */
   void clear();
+
+  /**
+   * Gets a previously registered entity in the unit of work.
+   * 
+   * @param entityContract
+   *          the entity contract.
+   * @param entityId
+   *          the identifier of the looked-up entity.
+   * @return the registered entity or null.
+   */
+  IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Serializable entityId);
 }

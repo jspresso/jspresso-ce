@@ -188,6 +188,18 @@ public interface IBackendController extends IController,
       Serializable entityId);
 
   /**
+   * Gets a previously registered entity in the unit of work.
+   * 
+   * @param entityContract
+   *          the entity contract.
+   * @param entityId
+   *          the identifier of the looked-up entity.
+   * @return the registered entity or null.
+   */
+  IEntity getUnitOfWorkEntity(Class<? extends IEntity> entityContract,
+      Serializable entityId);
+
+  /**
    * Gets the transactionTemplate.
    * 
    * @return the transactionTemplate.

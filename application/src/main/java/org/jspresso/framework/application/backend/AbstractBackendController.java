@@ -572,6 +572,19 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IEntity getUnitOfWorkEntity(Class<? extends IEntity> entityContract,
+      Serializable entityId) {
+    if (!isUnitOfWorkActive()) {
+      throw new BackendException(
+          "Cannot query a unit of work that has not begun.");
+    }
+    return unitOfWork.getRegisteredEntity(entityContract, entityId);
+  }
+
+  /**
    * Gets the transactionTemplate.
    * 
    * @return the transactionTemplate.
