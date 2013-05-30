@@ -153,8 +153,8 @@ public class EditSelectedComponentAction<E, F, G> extends
   }
 
   /**
-   * A wrapper action that roll backs the current UOW before deegating to its
-   * delegate..
+   * A wrapper action that roll backs the current UOW before delegating to its
+   * delegate.
    * 
    * @version $LastChangedRevision$
    * @author Vincent Vandenschrick
