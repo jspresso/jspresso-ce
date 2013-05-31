@@ -21,7 +21,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
   
   statics :
   {
-    __JSPRESSO_VERSION : "${jspresso.version}",
+    __JSPRESSO_VERSION : "3.7-SNAPSHOT",
     __HANDLE_COMMANDS_METHOD : "handleCommands",
     __START_METHOD : "start",
     __STOP_METHOD : "stop"
@@ -84,6 +84,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __translations : null,
     
     __nextActionCallback : null,
+    __lastReceivedSnapshotId : null,
     
     /**
      * @param {org.jspresso.framework.gui.remote.RComponent} remoteComponent
@@ -266,6 +267,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this._handleMessageCommand(command);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand) {
         if(command.getSnapshotId()) {
+          this.__lastReceivedSnapshotId = command.getSnapshotId();
           qx.bom.History.getInstance().addToHistory("snapshotId=" + command.getSnapshotId(), command.getName());
         } else if(command.getName()) {
           qx.bom.History.getInstance().setTitle(command.getName());
@@ -521,7 +523,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           var tmp = vars[i].split('=');
           decodedFragment[tmp[0]] = tmp[1];
         }
-        if(decodedFragment.snapshotId) {
+        if(decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
           var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
           command.setSnapshotId(decodedFragment.snapshotId);
           this.registerCommand(command);
