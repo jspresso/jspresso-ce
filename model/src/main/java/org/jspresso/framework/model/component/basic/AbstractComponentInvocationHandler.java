@@ -89,6 +89,8 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
 
+
+
   // @formatter:off
   private static final Logger LOG              = LoggerFactory
                                                   .getLogger(AbstractComponentInvocationHandler.class);
@@ -244,8 +246,7 @@ public abstract class AbstractComponentInvocationHandler implements
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
     } else if ("blockEvents".equals(methodName)) {
-      blockEvents();
-      return null;
+      return new Boolean(blockEvents());
     } else if ("releaseEvents".equals(methodName)) {
       releaseEvents();
       return null;
@@ -672,8 +673,8 @@ public abstract class AbstractComponentInvocationHandler implements
       try {
         setDirtyTrackingEnabled(false);
         referent = inlineComponentFactory
-            .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
-                .getComponentContract());
+            .createComponentInstance(propertyDescriptor
+                .getReferencedDescriptor().getComponentContract());
         storeReferenceProperty(proxy, propertyDescriptor, null, referent);
       } finally {
         setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
@@ -1398,10 +1399,12 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private void blockEvents() {
+  private boolean blockEvents() {
     if (delayedEvents == null) {
       delayedEvents = new ArrayList<PropertyChangeEvent>();
+      return true;
     }
+    return false;
   }
 
   private void releaseEvents() {
@@ -1847,7 +1850,7 @@ public abstract class AbstractComponentInvocationHandler implements
                       .getComponentContract());
           boolean oldCollectionSortEnabled = collectionSortEnabled;
           boolean oldPropertyChangeEnabled = propertyChangeEnabled;
-          boolean oldPropertyProcessorsEnabled = propertyChangeEnabled;
+          boolean oldPropertyProcessorsEnabled = propertyProcessorsEnabled;
           try {
             // Delay sorting for performance reasons.
             collectionSortEnabled = false;
@@ -1909,9 +1912,17 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void straightSetProperties(Object proxy,
       Map<String, Object> backendProperties) {
-    for (Map.Entry<String, Object> propertyEntry : backendProperties.entrySet()) {
-      straightSetProperty(proxy, propertyEntry.getKey(),
-          propertyEntry.getValue());
+    boolean eventsBlocked = blockEvents();
+    try {
+      for (Map.Entry<String, Object> propertyEntry : backendProperties
+          .entrySet()) {
+        straightSetProperty(proxy, propertyEntry.getKey(),
+            propertyEntry.getValue());
+      }
+    } finally {
+      if (eventsBlocked) {
+        releaseEvents();
+      }
     }
   }
 

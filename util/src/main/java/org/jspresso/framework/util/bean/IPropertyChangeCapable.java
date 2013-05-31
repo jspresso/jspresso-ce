@@ -135,8 +135,11 @@ public interface IPropertyChangeCapable {
   /**
    * Delays events propagation by buffering them. When events are unblocked,
    * they get fired in the order they were recorded.
+   * 
+   * @return true if the method call actually blocked the events. False if it
+   *         was already blocked before.
    */
-  void blockEvents();
+  boolean blockEvents();
 
   /**
    * Unblocks event propagation. All events that were bufferred are fired.

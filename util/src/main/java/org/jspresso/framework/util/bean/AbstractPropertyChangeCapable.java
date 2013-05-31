@@ -275,10 +275,12 @@ public abstract class AbstractPropertyChangeCapable implements
    * they get fired in the order they were recorded.
    */
   @Override
-  public void blockEvents() {
+  public boolean blockEvents() {
     if (delayedEvents == null) {
       delayedEvents = new ArrayList<PropertyChangeEvent>();
+      return true;
     }
+    return false;
   }
 
   /**

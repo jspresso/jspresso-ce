@@ -1202,9 +1202,10 @@ public abstract class AbstractBackendController extends AbstractController
       return uowEntity;
     }
     uowEntity = performUowEntityCloning(entity);
+    boolean eventsBlocked = false;
     try {
       if (isInitialized(uowEntity)) {
-        uowEntity.blockEvents();
+        eventsBlocked = uowEntity.blockEvents();
       }
       if (allowOuterScopeUpdate) {
         excludeFromSanityChecks(uowEntity);
@@ -1311,7 +1312,7 @@ public abstract class AbstractBackendController extends AbstractController
                     allowOuterScopeUpdate, alreadyCloned));
           }
         }
-        if (uowEntity != null && isInitialized(uowEntity)) {
+        if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
           uowEntity.releaseEvents();
         }
         unitOfWork.register(uowEntity, new HashMap<String, Object>(
@@ -1321,7 +1322,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       }
     } finally {
-      if (uowEntity != null && isInitialized(uowEntity)) {
+      if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
         uowEntity.releaseEvents();
       }
     }
@@ -1401,6 +1402,7 @@ public abstract class AbstractBackendController extends AbstractController
     checkBadMergeUsage(entity);
     boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
     E registeredEntity = null;
+    boolean eventsBlocked = false;
     try {
       if (mergeMode != EMergeMode.MERGE_EAGER) {
         setDirtyTrackingEnabled(false);
@@ -1425,7 +1427,7 @@ public abstract class AbstractBackendController extends AbstractController
         return registeredEntity;
       }
       if (isInitialized(registeredEntity)) {
-        registeredEntity.blockEvents();
+        eventsBlocked = registeredEntity.blockEvents();
       }
       alreadyMerged.register(entityContract, entity.getId(), registeredEntity);
       if (newlyRegistered
@@ -1560,7 +1562,8 @@ public abstract class AbstractBackendController extends AbstractController
       }
       return registeredEntity;
     } finally {
-      if (registeredEntity != null && isInitialized(registeredEntity)) {
+      if (eventsBlocked && registeredEntity != null
+          && isInitialized(registeredEntity)) {
         registeredEntity.releaseEvents();
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
