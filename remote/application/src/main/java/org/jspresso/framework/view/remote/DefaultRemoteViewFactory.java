@@ -562,6 +562,8 @@ public class DefaultRemoteViewFactory extends
       }
       IView<RComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
+      // Fix bug 782
+      propertyView.getPeer().setIcon(null);
       propertyView.setParent(view);
 
       boolean forbidden = !actionHandler
@@ -738,7 +740,8 @@ public class DefaultRemoteViewFactory extends
                         stateDate.getHour(), stateDate.getMinute(),
                         stateDate.getSecond());
                     serverCalendar.set(Calendar.MILLISECOND, 0);
-                    if (serverCalendar.getTime().getTime() >= 0 && serverCalendar.getTime().getTime() < 24 * 3600 * 1000) {
+                    if (serverCalendar.getTime().getTime() >= 0
+                        && serverCalendar.getTime().getTime() < 24 * 3600 * 1000) {
                       // This is a default date. Set it today.
                       Calendar today = Calendar.getInstance(serverTz);
                       serverCalendar.set(today.get(Calendar.YEAR),
