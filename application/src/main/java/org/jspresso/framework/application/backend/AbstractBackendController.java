@@ -183,8 +183,8 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void joinTransaction() {
+    TransactionSynchronizationManager.registerSynchronization(this);
     if (!isUnitOfWorkActive()) {
-      TransactionSynchronizationManager.registerSynchronization(this);
       beginUnitOfWork();
     }
   }
@@ -569,6 +569,19 @@ public abstract class AbstractBackendController extends AbstractController
   public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
       Serializable entityId) {
     return entityRegistry.get(entityContract, entityId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IEntity getUnitOfWorkEntity(Class<? extends IEntity> entityContract,
+      Serializable entityId) {
+    if (!isUnitOfWorkActive()) {
+      throw new BackendException(
+          "Cannot query a unit of work that has not begun.");
+    }
+    return unitOfWork.getRegisteredEntity(entityContract, entityId);
   }
 
   /**

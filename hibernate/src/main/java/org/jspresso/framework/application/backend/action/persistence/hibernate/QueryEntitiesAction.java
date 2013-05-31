@@ -18,15 +18,22 @@
  */
 package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.ResultTransformer;
 import org.jspresso.framework.action.IActionHandler;
@@ -84,11 +91,14 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   private static final String    CRITERIA_REFINER  = "CRITERIA_REFINER";
   private static final String    COMPONENT_REFINER = "COMPONENT_REFINER";
 
+  private boolean                useInListForPagination;
+
   /**
    * Constructs a new <code>QueryEntitiesAction</code> instance.
    */
   public QueryEntitiesAction() {
     mergeMode = EMergeMode.MERGE_LAZY;
+    useInListForPagination = true;
   }
 
   /**
@@ -202,7 +212,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     }
     EnhancedDetachedCriteria criteria = critFactory.createCriteria(
         queryComponent, context);
-    List<?> entities;
+    List<IEntity> entities;
     if (criteria == null) {
       entities = new ArrayList<IEntity>();
       queryComponent.setRecordCount(Integer.valueOf(0));
@@ -256,9 +266,36 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         if (refinerResultTransformer != null) {
           criteria.setResultTransformer(refinerResultTransformer);
         }
-        entities = criteria.getExecutableCriteria(hibernateSession)
-            .setFirstResult(page.intValue() * pageSize.intValue())
-            .setMaxResults(pageSize.intValue()).list();
+        if (useInListForPagination) {
+          criteria.setProjection(Projections.id());
+          List<Serializable> entityIds = criteria
+              .getExecutableCriteria(hibernateSession)
+              .setFirstResult(page.intValue() * pageSize.intValue())
+              .setMaxResults(pageSize.intValue()).list();
+          if (entityIds.isEmpty()) {
+            entities = new ArrayList<IEntity>();
+          } else {
+            criteria = EnhancedDetachedCriteria.forEntityName(queryComponent
+                .getQueryContract().getName());
+            entities = criteria.add(createEntityIdsInCriterion(entityIds, 500))
+                .getExecutableCriteria(hibernateSession).list();
+            Map<Serializable, IEntity> entitiesById = new HashMap<Serializable, IEntity>();
+            for (IEntity entity : entities) {
+              entitiesById.put(entity.getId(), entity);
+            }
+            entities = new ArrayList<IEntity>();
+            for (Serializable id : entityIds) {
+              IEntity entity = entitiesById.get(id);
+              if (entity != null) {
+                entities.add(entity);
+              }
+            }
+          }
+        } else {
+          entities = criteria.getExecutableCriteria(hibernateSession)
+              .setFirstResult(page.intValue() * pageSize.intValue())
+              .setMaxResults(pageSize.intValue()).list();
+        }
       } else {
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
@@ -369,5 +406,47 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   public void setMergeMode(EMergeMode mergeMode) {
     this.mergeMode = mergeMode;
+  }
+
+  /**
+   * Create a in list criterion potentially using disjunction to overcome the
+   * size limitation of certain DBs in restriction (e.g. Orecale is 1000).
+   * 
+   * @param entityIds
+   *          the list of entity ids.
+   * @param chunkSize
+   *          the size of disjunctions parts.
+   * @return the criterion.
+   */
+  public static Criterion createEntityIdsInCriterion(
+      Collection<Serializable> entityIds, int chunkSize) {
+    int i = 0;
+    Disjunction splittedInlist = Restrictions.disjunction();
+    Set<Serializable> currentMessageIds = new LinkedHashSet<Serializable>();
+    boolean complete = false;
+    for (Iterator<Serializable> ite = entityIds.iterator(); ite.hasNext(); i++) {
+      currentMessageIds.add(ite.next());
+      if (i % chunkSize == (chunkSize - 1)) {
+        splittedInlist.add(Restrictions.in(IEntity.ID, currentMessageIds));
+        currentMessageIds = new LinkedHashSet<Serializable>();
+        complete = true;
+      } else {
+        complete = false;
+      }
+    }
+    if (!complete) {
+      splittedInlist.add(Restrictions.in(IEntity.ID, currentMessageIds));
+    }
+    return splittedInlist;
+  }
+
+  /**
+   * Sets the useInListForPagination.
+   * 
+   * @param useInListForPagination
+   *          the useInListForPagination to set.
+   */
+  public void setUseInListForPagination(boolean useInListForPagination) {
+    this.useInListForPagination = useInListForPagination;
   }
 }
