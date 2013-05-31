@@ -183,8 +183,8 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void joinTransaction() {
+    TransactionSynchronizationManager.registerSynchronization(this);
     if (!isUnitOfWorkActive()) {
-      TransactionSynchronizationManager.registerSynchronization(this);
       beginUnitOfWork();
     }
   }
