@@ -24,11 +24,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
   {
     snapshotId :
     {
-      check : "String"
+      check : "String",
+      nullable : true
     },
     name :
     {
-      check : "String"
+      check : "String",
+      nullable : true
     }
   }
 });
