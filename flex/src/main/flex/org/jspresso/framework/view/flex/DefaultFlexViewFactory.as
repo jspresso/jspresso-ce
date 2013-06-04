@@ -76,6 +76,7 @@ package org.jspresso.framework.view.flex {
   import mx.managers.PopUpManager;
   import mx.managers.ToolTipManager;
   import mx.utils.ObjectUtil;
+  import mx.utils.StringUtil;
   
   import flex.utils.ui.resize.ResizablePanel;
   
@@ -2748,7 +2749,24 @@ package org.jspresso.framework.view.flex {
       };
       BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
+      var blockNewLine:Function = function(event:TextEvent):void {
+        if(event.text == '\n' || event.text == '\r\n' || event.text == '\r') {
+          event.preventDefault();
+        }
+      };
+      textInput.addEventListener(TextEvent.TEXT_INPUT, blockNewLine);
+      
+      var trimLastLine:Function = function(evt:Event):void {
+        if(textInput.text) {
+          textInput.text = StringUtil.trim(textInput.text);;
+        }
+      }
+      textInput.addEventListener(Event.CHANGE, trimLastLine)
+      
       var updateModel:Function = function (event:Event):void {
+        if(textInput.text) {
+          textInput.text = StringUtil.trim(textInput.text);
+        }
         var inputText:String = textInput.text;
         if(inputText == null || inputText.length == 0) {
           remoteState.value = null;
@@ -2761,6 +2779,7 @@ package org.jspresso.framework.view.flex {
           }
         }
       };
+      
       textInput.addEventListener(FlexEvent.ENTER,updateModel);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
       textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
