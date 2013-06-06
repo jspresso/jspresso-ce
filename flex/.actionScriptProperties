@@ -7,7 +7,7 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="src/main/flex"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="src/main/resources"/>
     </compilerSourcePath>
-    <libraryPath defaultLinkType="1">
+    <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
         <excludedEntries>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
