@@ -14,6 +14,9 @@
             <entry library-name="Maven: sephiroth:checkbox3state:swc:1.0" library-level="project">
               <dependency linkage="External" />
             </entry>
+            <entry library-name="Flex 4.6 libs" library-level="application">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="Flex 4.6" />
         </dependencies>
@@ -41,11 +44,12 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/flex" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="Flex 4.6.0" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="jdk" jdkName="Flex 4.6" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Maven: flexlib:flexlib:swc:flex3:2.5" level="project" />
     <orderEntry type="library" exported="" name="Maven: resizecontainers:resizecontainers:swc:1.0" level="project" />
     <orderEntry type="library" exported="" name="Maven: sephiroth:checkbox3state:swc:1.0" level="project" />
+    <orderEntry type="library" exported="" name="Flex 4.6 libs" level="application" />
   </component>
 </module>
 
