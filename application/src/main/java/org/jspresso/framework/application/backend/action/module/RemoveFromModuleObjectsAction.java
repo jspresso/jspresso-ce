@@ -72,9 +72,9 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
     } else {
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
-    for (int i = 0; i < selectedIndices.length; i++) {
+    for (int selectedIndice : selectedIndices) {
       Object removedObject = collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue();
+          selectedIndice).getConnectorValue();
       projectedCollection.remove(removedObject);
       removeFromSubModules(module, removedObject);
     }

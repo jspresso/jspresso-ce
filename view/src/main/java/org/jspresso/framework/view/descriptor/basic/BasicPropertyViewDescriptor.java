@@ -126,7 +126,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     if (width != null) {
       return width;
     }
-    return Integer.valueOf(1);
+    return 1;
   }
 
   /**
@@ -306,7 +306,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   @Override
   public boolean isSortable() {
     if (sortable != null) {
-      return sortable.booleanValue();
+      return sortable;
     }
     if (getModelDescriptor() instanceof IPropertyDescriptor) {
       return ((IPropertyDescriptor) getModelDescriptor()).isSortable();
@@ -324,7 +324,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    *          the sortable to set.
    */
   public void setSortable(boolean sortable) {
-    this.sortable = Boolean.valueOf(sortable);
+    this.sortable = sortable;
   }
 
   /**

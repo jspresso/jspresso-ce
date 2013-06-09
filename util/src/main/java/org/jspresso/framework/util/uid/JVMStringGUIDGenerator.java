@@ -30,7 +30,7 @@ public class JVMStringGUIDGenerator implements IGUIDGenerator<String> {
   private static final String SEPARATOR = "-";
   private static final Object LOCK      = new Object();
 
-  private String              instanceId;
+  private final String              instanceId;
   private long                index     = 0;
 
   /**

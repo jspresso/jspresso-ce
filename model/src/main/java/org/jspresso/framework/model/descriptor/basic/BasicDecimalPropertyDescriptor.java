@@ -77,7 +77,7 @@ public class BasicDecimalPropertyDescriptor extends
   @Override
   public boolean isUsingBigDecimal() {
     if (usingBigDecimal != null) {
-      return usingBigDecimal.booleanValue();
+      return usingBigDecimal;
     }
     return false;
   }
@@ -102,7 +102,7 @@ public class BasicDecimalPropertyDescriptor extends
    *          the usingBigDecimal to set.
    */
   public void setUsingBigDecimal(boolean usingBigDecimal) {
-    this.usingBigDecimal = Boolean.valueOf(usingBigDecimal);
+    this.usingBigDecimal = usingBigDecimal;
   }
 
   /**
@@ -151,12 +151,12 @@ public class BasicDecimalPropertyDescriptor extends
     Object actualNewValue = newValue;
     if (getMaxFractionDigit() != null) {
       if (actualNewValue instanceof Double) {
-        actualNewValue = new Double(new BigDecimal(actualNewValue.toString())
-            .setScale(getMaxFractionDigit().intValue(), RoundingMode.HALF_EVEN)
-            .doubleValue());
+        actualNewValue = new BigDecimal(actualNewValue.toString())
+            .setScale(getMaxFractionDigit(), RoundingMode.HALF_EVEN)
+            .doubleValue();
       } else if (actualNewValue instanceof BigDecimal) {
         actualNewValue = ((BigDecimal) actualNewValue).setScale(
-            getMaxFractionDigit().intValue(), RoundingMode.HALF_EVEN);
+            getMaxFractionDigit(), RoundingMode.HALF_EVEN);
       }
     }
     return super.interceptSetter(component, actualNewValue);

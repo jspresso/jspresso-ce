@@ -96,7 +96,7 @@ public class RActionList extends RemotePeer {
    * @param actions
    *          the actions to set.
    */
-  public void setActions(RAction[] actions) {
+  public void setActions(RAction... actions) {
     this.actions = actions;
   }
 

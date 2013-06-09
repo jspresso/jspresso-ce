@@ -79,7 +79,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    List<?> selectedModels = (List<?>) getActionParameter(context);
+    List<?> selectedModels = getActionParameter(context);
     if (selectedModels == null) {
       selectedModels = getSelectedModels(context);
     }
@@ -264,6 +264,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    * @param context
    *          the action context.
    */
+  @SuppressWarnings("EmptyMethod")
   protected void preSelectModuleObject(Object moduleObject,
       Map<String, Object> context) {
     // Empty implementation by default.
@@ -278,6 +279,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    * @param context
    *          the action context.
    */
+  @SuppressWarnings("EmptyMethod")
   protected void postSelectModuleObject(Object moduleObject,
       Map<String, Object> context) {
     // Empty implementation by default.

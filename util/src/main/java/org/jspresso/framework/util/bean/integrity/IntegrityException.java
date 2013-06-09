@@ -56,7 +56,7 @@ public class IntegrityException extends BusinessException {
    *          the parameters of the translated message or null.
    */
   public IntegrityException(String message, String staticI18nKey,
-      Object[] i18nParams) {
+      Object... i18nParams) {
     super(message, staticI18nKey, i18nParams);
   }
 

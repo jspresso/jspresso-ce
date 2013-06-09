@@ -34,7 +34,7 @@ import javax.swing.tree.TreePath;
  */
 public abstract class AbstractTreeModel implements TreeModel {
 
-  private EventListenerList listenerList = new EventListenerList();
+  private final EventListenerList listenerList = new EventListenerList();
 
   /**
    * Adds a listener for the TreeModelEvent posted after the tree changes.
@@ -121,7 +121,7 @@ public abstract class AbstractTreeModel implements TreeModel {
    * @see EventListenerList
    */
   protected void fireTreeNodesChanged(Object source, Object[] path,
-      int[] childIndices, Object[] children) {
+      int[] childIndices, Object... children) {
     // Guaranteed to return a non-null array
     Object[] listeners = listenerList.getListenerList();
     TreeModelEvent e = null;
@@ -154,7 +154,7 @@ public abstract class AbstractTreeModel implements TreeModel {
    * @see EventListenerList
    */
   protected void fireTreeNodesInserted(Object source, Object[] path,
-      int[] childIndices, Object[] children) {
+      int[] childIndices, Object... children) {
     // Guaranteed to return a non-null array
     Object[] listeners = listenerList.getListenerList();
     TreeModelEvent e = null;
@@ -187,7 +187,7 @@ public abstract class AbstractTreeModel implements TreeModel {
    * @see EventListenerList
    */
   protected void fireTreeNodesRemoved(Object source, Object[] path,
-      int[] childIndices, Object[] children) {
+      int[] childIndices, Object... children) {
     // Guaranteed to return a non-null array
     Object[] listeners = listenerList.getListenerList();
     TreeModelEvent e = null;
@@ -220,7 +220,7 @@ public abstract class AbstractTreeModel implements TreeModel {
    * @see EventListenerList
    */
   protected void fireTreeStructureChanged(Object source, Object[] path,
-      int[] childIndices, Object[] children) {
+      int[] childIndices, Object... children) {
     // Guaranteed to return a non-null array
     Object[] listeners = listenerList.getListenerList();
     TreeModelEvent e = null;

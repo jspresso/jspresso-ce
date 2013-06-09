@@ -43,7 +43,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
   private String                    permId;
-  private RemoteConnectorFactory    connectorFactory;
+  private final RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private RemoteCompositeValueState state;
 

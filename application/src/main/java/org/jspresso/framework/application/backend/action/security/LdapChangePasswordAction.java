@@ -58,7 +58,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     DirContextSource contextSource = new DirContextSource();
     contextSource.setUrl(ldapUrl);
     contextSource.setUserDn(userDn);
-    contextSource.setPassword(new String(currentPassword));
+    contextSource.setPassword(currentPassword);
     LdapTemplate ldapTemplate = new LdapTemplate(contextSource);
     try {
       contextSource.afterPropertiesSet();
@@ -72,7 +72,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
           new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
               digestAndEncode(newPassword.toCharArray()))));
       ldapTemplate.modifyAttributes(userDn,
-          mods.toArray(new ModificationItem[0]));
+          mods.toArray(new ModificationItem[mods.size()]));
     } catch (NoSuchAlgorithmException ex) {
       throw new ActionException(ex);
     } catch (UnsupportedEncodingException ex) {

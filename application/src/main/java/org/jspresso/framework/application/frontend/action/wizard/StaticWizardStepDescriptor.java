@@ -19,7 +19,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
-  private DefaultDescriptor     descriptor;
+  private final DefaultDescriptor     descriptor;
   private String                nextLabelKey;
   private IWizardStepDescriptor nextStepDescriptor;
 
@@ -150,6 +150,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   }
 
   /**
+   * Sets the description.
    * @param description
    *          the description to set.
    * @see org.jspresso.framework.util.descriptor.DefaultDescriptor#setDescription(java.lang.String)
@@ -159,6 +160,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   }
 
   /**
+   * Sets the name.
    * @param name
    *          the name to set.
    * @see org.jspresso.framework.util.descriptor.DefaultDescriptor#setName(java.lang.String)

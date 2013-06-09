@@ -37,7 +37,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     implements IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
   private String                    permId;
-  private RemoteConnectorFactory    connectorFactory;
+  private final RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private IRemoteStateValueMapper   remoteStateValueMapper;
   private RemoteFormattedValueState state;

@@ -35,7 +35,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public class DurationFormatter implements IFormatter<Number, String> {
 
-  private PeriodFormatter formatter;
+  private final PeriodFormatter formatter;
 
   /**
    * Constructs a new <code>DurationFormatter</code> instance.
@@ -90,8 +90,8 @@ public class DurationFormatter implements IFormatter<Number, String> {
       return null;
     }
     try {
-      return Long.valueOf(formatter.parsePeriod(source)
-          .toDurationFrom(new Instant(0)).getMillis());
+      return formatter.parsePeriod(source)
+          .toDurationFrom(new Instant(0)).getMillis();
     } catch (Throwable t) {
       throw new ParseException(t.getMessage(), 0);
     }

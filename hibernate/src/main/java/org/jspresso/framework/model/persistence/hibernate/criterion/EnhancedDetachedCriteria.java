@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   private static final long                                    serialVersionUID = 1477297471425065631L;
@@ -347,6 +348,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private List<Order> privateGetOrders() throws IllegalAccessException,
       NoSuchFieldException {
     CriteriaImpl critImpl = (CriteriaImpl) ReflectHelper.getPrivateFieldValue(

@@ -28,7 +28,7 @@ public class ScriptMixin implements IScript {
 
   private String language;
   private String script;
-  private Object scriptedObject;
+  private final Object scriptedObject;
 
   /**
    * Constructs a new <code>ScriptMixin</code> instance.

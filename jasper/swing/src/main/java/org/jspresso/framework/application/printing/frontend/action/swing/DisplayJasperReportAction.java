@@ -40,7 +40,7 @@ public class DisplayJasperReportAction extends AbstractSwingAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    JasperPrint report = (JasperPrint) getActionParameter(context);
+    JasperPrint report = getActionParameter(context);
     if (report != null) {
       JasperViewer.viewReport(report, false);
     }

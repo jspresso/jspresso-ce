@@ -90,7 +90,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
             .straightSetProperty(
                 propertyDescriptor.getName(),
                 componentCollectionFactory
-                    .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .createComponentCollection(propertyDescriptor
                         .getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
           && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
@@ -119,7 +119,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   @Override
   public final <T extends IEntity> T createEntityInstance(
       Class<T> entityContract, Serializable id, boolean performInitialization) {
-    final T createdEntity = createEntityInstance(entityContract, id, null);
+    final T createdEntity = createEntityInstance(entityContract, id, (Class<?>[])null);
     createdEntity.addPropertyChangeListener(IEntity.VERSION,
         new PropertyChangeListener() {
 
@@ -127,10 +127,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getOldValue() == null && evt.getNewValue() != null) {
               createdEntity.firePropertyChange(IEntity.PERSISTENT,
-                  Boolean.valueOf(false), Boolean.valueOf(true));
+                  false, true);
             } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
               createdEntity.firePropertyChange(IEntity.PERSISTENT,
-                  Boolean.valueOf(true), Boolean.valueOf(false));
+                  true, false);
             }
           }
         });
@@ -175,7 +175,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
-      Serializable id, Class<?>[] extraInterfaces) {
+      Serializable id, Class<?>... extraInterfaces) {
     T entity;
     if (entityContract.isInterface()) {
       IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) getComponentDescriptor(entityContract);
@@ -189,9 +189,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
         implementedClasses = new Class[extraInterfaces.length + 2];
         implementedClasses[0] = entityDescriptor.getComponentContract();
         implementedClasses[1] = ILifecycleCapable.class;
-        for (int i = 0; i < extraInterfaces.length; i++) {
-          implementedClasses[i + 2] = extraInterfaces[i];
-        }
+        System.arraycopy(extraInterfaces, 0, implementedClasses, 2, extraInterfaces.length);
       } else {
         implementedClasses = new Class[2];
         implementedClasses[0] = entityDescriptor.getComponentContract();
@@ -239,7 +237,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate) {
     T createdComponent = createComponentInstance(componentContract, delegate,
-        null);
+        (Class<?>[])null);
     return initializeComponent(createdComponent);
   }
 
@@ -262,7 +260,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
             .straightSetProperty(
                 propertyDescriptor.getName(),
                 componentCollectionFactory
-                    .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .createComponentCollection(propertyDescriptor
                         .getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
           && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
@@ -383,8 +381,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   private <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract, Object delegate, Class<?>[] extraInterfaces) {
+      Class<T> componentContract, Object delegate, Class<?>... extraInterfaces) {
     IComponentDescriptor<IComponent> componentDescriptor = (IComponentDescriptor<IComponent>) componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
     InvocationHandler componentHandler;
@@ -399,9 +398,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       implementedClasses = new Class[extraInterfaces.length + 2];
       implementedClasses[0] = componentDescriptor.getComponentContract();
       implementedClasses[1] = ILifecycleCapable.class;
-      for (int i = 0; i < extraInterfaces.length; i++) {
-        implementedClasses[i + 2] = extraInterfaces[i];
-      }
+      System.arraycopy(extraInterfaces, 0, implementedClasses, 2, extraInterfaces.length);
     } else {
       implementedClasses = new Class[2];
       implementedClasses[0] = componentDescriptor.getComponentContract();

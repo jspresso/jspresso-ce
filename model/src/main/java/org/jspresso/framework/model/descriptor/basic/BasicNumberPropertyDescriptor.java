@@ -102,7 +102,7 @@ public abstract class BasicNumberPropertyDescriptor extends
             if (getMaxValue() != null && !isDefault(getMaxValue())) {
               boundsSpec.append(" <= ").append(getMaxValue());
             }
-            String messageKey = null;
+            String messageKey;
             if (getMinValue() != null
                 && compare(((Number) newValue), getMinValue()) < 0) {
               messageKey = "integrity.property.toosmall";

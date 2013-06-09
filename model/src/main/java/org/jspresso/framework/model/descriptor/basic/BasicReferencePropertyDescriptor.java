@@ -48,6 +48,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public BasicReferencePropertyDescriptor<E> clone() {
     BasicReferencePropertyDescriptor<E> clonedDescriptor = (BasicReferencePropertyDescriptor<E>) super
@@ -59,6 +60,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
     BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super
@@ -128,7 +130,7 @@ public class BasicReferencePropertyDescriptor<E> extends
       return getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>;
     }
     if (oneToOne != null) {
-      return oneToOne.booleanValue();
+      return oneToOne;
     }
     return false;
   }
@@ -181,7 +183,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    *          the oneToOne to set.
    */
   public void setOneToOne(boolean oneToOne) {
-    this.oneToOne = Boolean.valueOf(oneToOne);
+    this.oneToOne = oneToOne;
   }
 
   /**

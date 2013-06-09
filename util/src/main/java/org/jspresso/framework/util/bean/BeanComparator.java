@@ -41,8 +41,8 @@ public class BeanComparator implements Comparator<Object> {
    * <code>NATURAL_COMPARATOR</code>.
    */
   public static final Comparator<Object> NATURAL_COMPARATOR = new NaturalComparator();
-  private List<IAccessor>                orderingAccessors;
-  private List<ESort>                    orderingDirections;
+  private final List<IAccessor>                orderingAccessors;
+  private final List<ESort>                    orderingDirections;
 
   /**
    * Constructs a new <code>BeanComparator</code> instance.
@@ -99,8 +99,8 @@ public class BeanComparator implements Comparator<Object> {
     for (int i = 0; i < orderingAccessors.size(); i++) {
       IAccessor orderingAccessor = orderingAccessors.get(i);
       ESort direction = orderingDirections.get(i);
-      Object o1Val = null;
-      Object o2Val = null;
+      Object o1Val;
+      Object o2Val;
       try {
         o1Val = orderingAccessor.getValue(o1);
         o2Val = orderingAccessor.getValue(o2);

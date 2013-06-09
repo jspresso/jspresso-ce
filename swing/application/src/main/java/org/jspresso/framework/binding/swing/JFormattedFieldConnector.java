@@ -38,7 +38,7 @@ import org.jspresso.framework.util.format.IFormatter;
  */
 public class JFormattedFieldConnector extends JTextFieldConnector {
 
-  private IFormatter<?, String> formatter;
+  private final IFormatter<?, String> formatter;
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.

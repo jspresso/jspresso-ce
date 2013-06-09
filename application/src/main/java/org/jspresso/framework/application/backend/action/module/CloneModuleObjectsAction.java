@@ -69,9 +69,9 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
     Collection<IComponent> entityClones = new ArrayList<IComponent>();
-    for (int i = 0; i < selectedIndices.length; i++) {
+    for (int selectedIndice : selectedIndices) {
       Object component = collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue();
+          selectedIndice).getConnectorValue();
       if (component instanceof IComponent) {
         IComponent clone;
         if (component instanceof IEntity) {

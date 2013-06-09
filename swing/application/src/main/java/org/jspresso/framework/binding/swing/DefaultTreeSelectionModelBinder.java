@@ -47,7 +47,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 public class DefaultTreeSelectionModelBinder implements
     ITreeSelectionModelBinder {
 
-  private SelectionModelListener genericSelectionModelListener;
+  private final SelectionModelListener genericSelectionModelListener;
 
   /**
    * Constructs a new <code>DefaultTreeSelectionModelBinder</code> instance.
@@ -71,15 +71,15 @@ public class DefaultTreeSelectionModelBinder implements
   private class CollectionConnectorsSelectionListener implements
       ISelectionChangeListener {
 
-    private IValueConnector    rootConnector;
-    private TreeSelectionModel selectionModel;
+    private final IValueConnector    rootConnector;
+    private final TreeSelectionModel selectionModel;
 
     /**
      * Constructs a new <code>CollectionConnectorsSelectionListener</code>
      * instance.
      * 
-     * @param rootConnector
-     * @param selectionModel
+     * @param rootConnector the root connector.
+     * @param selectionModel the selection model.
      */
     public CollectionConnectorsSelectionListener(IValueConnector rootConnector,
         TreeSelectionModel selectionModel) {
@@ -151,9 +151,9 @@ public class DefaultTreeSelectionModelBinder implements
           IValueConnector connector = (IValueConnector) parentTreePath
               .getLastPathComponent();
           if (connector instanceof ICollectionConnectorProvider) {
-            if (!connectorSelection.containsKey(connector)) {
-              ICollectionConnector parentCollectionConnector = ((ICollectionConnectorProvider) connector)
-                  .getCollectionConnector();
+            ICollectionConnector parentCollectionConnector = ((ICollectionConnectorProvider) connector)
+                .getCollectionConnector();
+            if (!connectorSelection.containsKey(parentCollectionConnector)) {
               connectorSelection.put(parentCollectionConnector, null);
 
               int[] rvTmp = new int[parentCollectionConnector
@@ -170,8 +170,7 @@ public class DefaultTreeSelectionModelBinder implements
               }
               int[] selectedIndices = new int[n];
               System.arraycopy(rvTmp, 0, selectedIndices, 0, n);
-              connectorSelection.put(((ICollectionConnectorProvider) connector)
-                  .getCollectionConnector(), selectedIndices);
+              connectorSelection.put(parentCollectionConnector, selectedIndices);
             }
           }
         }
@@ -201,7 +200,7 @@ public class DefaultTreeSelectionModelBinder implements
 
   private class TreeConnectorsListener implements TreeModelListener {
 
-    private CollectionConnectorsSelectionListener connectorsSelectionListener;
+    private final CollectionConnectorsSelectionListener connectorsSelectionListener;
 
     /**
      * Constructs a new <code>TreeConnectorsListener</code> instance.

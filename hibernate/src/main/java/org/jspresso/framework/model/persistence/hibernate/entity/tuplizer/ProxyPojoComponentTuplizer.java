@@ -78,6 +78,7 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
      * @param component
      *          the hibernate component to build this instanciator for.
      */
+    @SuppressWarnings("unchecked")
     public ProxyInstantiator(Component component) {
       componentContract = component.getComponentClass();
     }

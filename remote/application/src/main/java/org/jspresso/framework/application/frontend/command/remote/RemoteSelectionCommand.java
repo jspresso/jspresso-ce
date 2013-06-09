@@ -65,7 +65,7 @@ public class RemoteSelectionCommand extends RemoteCommand {
    * @param selectedIndices
    *          the selectedIndices to set.
    */
-  public void setSelectedIndices(int[] selectedIndices) {
+  public void setSelectedIndices(int... selectedIndices) {
     this.selectedIndices = selectedIndices;
   }
 

@@ -29,7 +29,7 @@ import java.text.ParseException;
  */
 public class FormatAdapter implements IFormatter<Object, String> {
 
-  private Format format;
+  private final Format format;
 
   /**
    * Constructs a new <code>FormatAdapter</code> instance.

@@ -42,11 +42,8 @@
 
   <!-- Standard views -->
   <bean id="pageableStatusModel" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.application.model.descriptor.PageableDescriptor.INSTANCE
-      </value>
-    </property>
+    <property name="staticField"
+              value="org.jspresso.framework.application.model.descriptor.PageableDescriptor.INSTANCE"/>
   </bean>
 
   <bean id="pageableStatusView" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
@@ -224,7 +221,7 @@
     <property name="connectorActionContextKey" value="VIEW_CONNECTOR" />
   </bean>
 
-  <bean id="abstractOpenFileAction" abstract="true">
+  <bean id="abstractOpenFileAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="open_file" />
@@ -234,7 +231,7 @@
     <property name="description" value="open.file.description" />
   </bean>
 
-  <bean id="abstractSaveFileAction" abstract="true">
+  <bean id="abstractSaveFileAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="save_file" />
@@ -921,9 +918,7 @@
         <ref bean="beanCollectionModuleActionMap" />
       </list>
     </property>
-    <property name="actionLists">
-      <ref bean="queryBeanCollectionModuleActionList" />
-    </property>
+    <property name="actionLists" ref="queryBeanCollectionModuleActionList"/>
   </bean>
 
   <bean id="persistenceBeanModuleActionList" class="org.jspresso.framework.view.action.ActionList">

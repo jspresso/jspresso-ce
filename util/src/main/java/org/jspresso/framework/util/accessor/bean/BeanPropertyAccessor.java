@@ -34,7 +34,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  */
 public class BeanPropertyAccessor extends AbstractPropertyAccessor {
 
-  private Class<?> beanClass;
+  private final Class<?> beanClass;
   private boolean  writable;
 
   /**

@@ -180,7 +180,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   @Override
   public boolean isAutoSelectFirstRow() {
     if (autoSelectFirstRow != null) {
-      return autoSelectFirstRow.booleanValue();
+      return autoSelectFirstRow;
     }
     return getSelectionMode() != ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION
         && getSelectionMode() != ESelectionMode.SINGLE_INTERVAL_CUMULATIVE_SELECTION
@@ -200,7 +200,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    *          the autoSelectFirstRow to set.
    */
   public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
-    this.autoSelectFirstRow = Boolean.valueOf(autoSelectFirstRow);
+    this.autoSelectFirstRow = autoSelectFirstRow;
   }
 
   /**

@@ -70,7 +70,7 @@ public class RTabContainer extends RContainer {
    * @param tabs
    *          the tabs to set.
    */
-  public void setTabs(RComponent[] tabs) {
+  public void setTabs(RComponent... tabs) {
     this.tabs = tabs;
   }
 
@@ -97,7 +97,8 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * @param listener
+   * Delegates to support.
+   * @param listener the listener.
    * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.beans.PropertyChangeListener)
    */
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -105,7 +106,8 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * @param listener
+   * Delegates to support.
+   * @param listener the listener.
    * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.beans.PropertyChangeListener)
    */
   public void removePropertyChangeListener(PropertyChangeListener listener) {
@@ -113,8 +115,9 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * @param propertyName
-   * @param listener
+   * Delegates to support.
+   * @param propertyName the property name.
+   * @param listener the listener.
    * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.lang.String,
    *      java.beans.PropertyChangeListener)
    */
@@ -124,8 +127,9 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * @param propertyName
-   * @param listener
+   * Delegates to support.
+   * @param propertyName the property name.
+   * @param listener the listener.
    * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.lang.String,
    *      java.beans.PropertyChangeListener)
    */

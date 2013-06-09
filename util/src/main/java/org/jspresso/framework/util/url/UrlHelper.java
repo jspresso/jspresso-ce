@@ -65,7 +65,7 @@ public final class UrlHelper {
     if (urlSpec == null) {
       return null;
     }
-    URL returnedURL = null;
+    URL returnedURL;
     if (urlSpec.startsWith(JAR_URL) && urlSpec.indexOf(CLASSPATH_URL) > 0) {
       String entryPath = urlSpec.split(JAR_URL_SEPARATOR)[1];
       URL jarFileUrl = createURL(

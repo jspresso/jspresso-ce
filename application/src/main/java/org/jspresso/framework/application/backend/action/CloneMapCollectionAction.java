@@ -62,9 +62,9 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
       return null;
     }
     List<Object> elementClones = new ArrayList<Object>();
-    for (int i = 0; i < selectedIndices.length; i++) {
+    for (int selectedIndice : selectedIndices) {
       Object element = collectionConnector
-          .getChildConnector(selectedIndices[i]).getConnectorValue();
+          .getChildConnector(selectedIndice).getConnectorValue();
       elementClones.add(cloneElement(element, context));
     }
     return elementClones;

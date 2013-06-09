@@ -73,7 +73,7 @@ public class RCardContainer extends RContainer {
    * @param cardNames
    *          the cardNames to set.
    */
-  public void setCardNames(String[] cardNames) {
+  public void setCardNames(String... cardNames) {
     this.cardNames = cardNames;
   }
 
@@ -83,7 +83,7 @@ public class RCardContainer extends RContainer {
    * @param cards
    *          the cards to set.
    */
-  public void setCards(RComponent[] cards) {
+  public void setCards(RComponent... cards) {
     this.cards = cards;
   }
 }

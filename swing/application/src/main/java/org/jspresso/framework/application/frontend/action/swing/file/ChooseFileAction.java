@@ -129,14 +129,14 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
 
   private static class FileFilterAdapter extends FileFilter {
 
-    private Collection<String> allowedExtensions;
-    private String             description;
+    private final Collection<String> allowedExtensions;
+    private final String             description;
 
     /**
      * Constructs a new <code>FileFilterAdapter</code> instance.
      * 
-     * @param description
-     * @param allowedExtensions
+     * @param description the filter description.
+     * @param allowedExtensions the filter allowed extensions.
      */
     public FileFilterAdapter(Collection<String> allowedExtensions,
         String description) {

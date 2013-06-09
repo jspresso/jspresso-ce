@@ -43,7 +43,7 @@ public interface IGate extends IPropertyChangeCapable, ICloneable {
   IGate clone();
 
   /**
-   * Is the gate open ?
+   * Tests whether the gate is open.
    * 
    * @return true if open.
    */

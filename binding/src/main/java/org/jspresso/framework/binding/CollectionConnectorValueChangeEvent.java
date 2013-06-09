@@ -33,7 +33,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {
 
   private static final long     serialVersionUID = 6547764843701088585L;
-  private List<IValueConnector> removedChildrenConnectors;
+  private final List<IValueConnector> removedChildrenConnectors;
 
   /**
    * Constructs a new <code>CollectionConnectorValueChangeEvent</code> instance.

@@ -12,7 +12,8 @@ package org.jspresso.framework.util.format
   
   public class DateUtils
   {
-    private static var _df:DateFormatter = new DateFormatter;
+    //noinspection JSFieldCanBeLocal
+    private static var _df:DateFormatter = new DateFormatter();
     
     /**
      * Format Strings
@@ -157,7 +158,7 @@ package org.jspresso.framework.util.format
       var isMil:Boolean = false;
       //standard time regex
       var matches:Array;
-      var reg:RegExp = /^(1[012]|[1-9])(:[0-5]\d)?(:[0-5]\d)?(\ ?[AaPp][Mm]?)?$/;
+      var reg:RegExp = /^(1[012]|[1-9])(:[0-5]\d)?(:[0-5]\d)?( ?[AaPp][Mm]?)?$/;
       matches = reg.exec(value);
       if(!matches) {
         //military time regex

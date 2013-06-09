@@ -31,7 +31,7 @@ import java.io.InputStream;
  */
 public class FileResource extends AbstractResource {
 
-  private File resourceFile;
+  private final File resourceFile;
 
   /**
    * Constructs a new <code>FileResource</code> instance.

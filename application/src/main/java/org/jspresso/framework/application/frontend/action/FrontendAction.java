@@ -68,7 +68,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   private String                acceleratorAsString;
   private Collection<IGate>     actionabilityGates;
-  private DefaultIconDescriptor actionDescriptor;
+  private final DefaultIconDescriptor actionDescriptor;
   private boolean               collectionBased;
   private boolean               multiSelectionEnabled;
   private String                mnemonicAsString;
@@ -450,6 +450,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *          the action context.
    * @return the widget which triggered the action.
    */
+  @SuppressWarnings("unchecked")
   protected E getActionWidget(Map<String, Object> context) {
     return (E) context.get(ActionContextConstants.ACTION_WIDGET);
   }
@@ -462,6 +463,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *          the action context.
    * @return the concrete action that was triggered.
    */
+  @SuppressWarnings("unchecked")
   protected G getUiAction(Map<String, Object> context) {
     return (G) context.get(ActionContextConstants.UI_ACTION);
   }
@@ -522,6 +524,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *          the action context.
    * @return the source widget this action was triggered from.
    */
+  @SuppressWarnings("unchecked")
   protected E getSourceComponent(Map<String, Object> context) {
     return (E) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }

@@ -59,6 +59,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public AbstractPropertyModelGate<E> clone() {
     AbstractPropertyModelGate<E> clonedGate = (AbstractPropertyModelGate<E>) super
@@ -88,6 +89,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     try {
@@ -175,7 +177,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
           } else {
             IAccessor accessor = accessorFactory.createPropertyAccessor(
                 propertyName, model.getClass());
-            E modelValue = (E) accessor.getValue(model);
+            E modelValue = accessor.getValue(model);
             this.open = shouldOpen(modelValue);
             if (!openOnTrue) {
               this.open = !this.open;
@@ -238,12 +240,12 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
     if (model.isEmpty()) {
       return /* !openOnTrue */false;
     }
-    for (Object elt : (Collection<?>) model) {
+    for (Object elt : model) {
       boolean eltOpen;
       if (elt != null) {
         IAccessor accessor = accessorFactory.createPropertyAccessor(
             propertyName, elt.getClass());
-        E modelValue = (E) accessor.getValue(elt);
+        E modelValue = accessor.getValue(elt);
         eltOpen = shouldOpen(modelValue);
         if (!openOnTrue) {
           eltOpen = !eltOpen;

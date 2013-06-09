@@ -107,7 +107,7 @@ public class BeanCollectionModule extends Module {
    * 
    * @return the elementComponentDescriptor.
    */
-  public IComponentDescriptor<? extends Object> getElementComponentDescriptor() {
+  public IComponentDescriptor<?> getElementComponentDescriptor() {
     if (elementComponentDescriptor == null) {
       if (getProjectedViewDescriptor() instanceof ICollectionViewDescriptor
           && getProjectedViewDescriptor().getModelDescriptor() != null) {

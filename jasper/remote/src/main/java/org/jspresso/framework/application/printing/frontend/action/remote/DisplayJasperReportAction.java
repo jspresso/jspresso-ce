@@ -49,7 +49,7 @@ public class DisplayJasperReportAction extends AbstractRemoteAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    final JasperPrint report = (JasperPrint) getActionParameter(context);
+    final JasperPrint report = getActionParameter(context);
 
     IActiveResource pdfProducer = new AbstractActiveResource("application/pdf") {
 

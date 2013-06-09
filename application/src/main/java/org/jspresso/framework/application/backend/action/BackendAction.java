@@ -145,6 +145,7 @@ public class BackendAction extends AbstractAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected <T> T getSelectedModel(int[] viewPath, Map<String, Object> context) {
     boolean wbad = context.containsKey(WARN_BAD_ACCESS_DISABLED);
@@ -169,6 +170,7 @@ public class BackendAction extends AbstractAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected <T> List<T> getSelectedModels(int[] viewPath,
       Map<String, Object> context) {
@@ -274,12 +276,12 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Sets the transactional.
-   * 
+   *
    * @param transactional
    *          the transactional to set.
    */
   public void setTransactional(boolean transactional) {
-    this.transactional = transactional;
+    this.transactional = false;
   }
 
   /**

@@ -36,7 +36,7 @@ import org.jspresso.framework.util.format.ParsingException;
 public class BasicFormattedValueConnector extends BasicValueConnector implements
     IFormattedValueConnector {
 
-  private IFormatter<Object, Object> formatter;
+  private final IFormatter<Object, Object> formatter;
 
   /**
    * Constructs a new <code>BasicFormattedValueConnector</code> instance.

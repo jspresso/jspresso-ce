@@ -46,7 +46,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
 
   private BeanPropertyChangeRecorder dirtRecorder;
-  private IEntityRegistry            entityRegistry;
+  private final IEntityRegistry            entityRegistry;
 
   private Set<IEntity>               entitiesRegisteredForDeletion;
   private List<IEntity>              entitiesRegisteredForUpdate;
@@ -214,6 +214,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       entitiesRegisteredForDeletion.add(entity);
     }
     if (entitiesRegisteredForUpdate != null) {
+      //noinspection StatementWithEmptyBody
       while (entitiesRegisteredForUpdate.remove(entity)) {
         // NO-OP.
       }

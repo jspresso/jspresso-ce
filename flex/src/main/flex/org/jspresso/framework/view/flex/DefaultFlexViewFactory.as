@@ -584,7 +584,7 @@ package org.jspresso.framework.view.flex {
 
     protected function bindTree(tree:SelectionTrackingTree, rootState:RemoteCompositeValueState):void {
       var updateModel:Function = function (selectedItems:Array):void {
-        var parentsOfSelectedNodes:Array = new Array();
+        var parentsOfSelectedNodes:Array = [];
         var i:int;
         var node:Object;
         var parentNode:RemoteCompositeValueState;
@@ -609,7 +609,7 @@ package org.jspresso.framework.view.flex {
               parentNode = rootState;
             }
             if(parentNode != null) {
-              var selectedIndices:Array = new Array();
+              var selectedIndices:Array = [];
               if(parentNode.selectedIndices != null) {
                 selectedIndices.concat(parentNode.selectedIndices);
               }
@@ -691,13 +691,15 @@ package org.jspresso.framework.view.flex {
         actionField.addChild(textField);
         sizeMaxComponentWidth(textField, remoteActionField);
       }
-      var actionComponents:Array = new Array();
+      var actionComponents:Array = [];
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
           var actionComponent:Button = createAction(actionList.actions[j], actionField);
           actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-            actionComponent.width = actionComponent.height;
+            var b:Button = event.currentTarget as Button;
+            //noinspection JSSuspiciousNameCombination
+            b.width = b.height;
           });
           //actionComponent.focusEnabled = false;
           actionField.addChild(actionComponent);
@@ -851,8 +853,8 @@ package org.jspresso.framework.view.flex {
       }
       if(remoteComboBox.readOnly) {
         var label:RIconLabel = new RIconLabel();
-        var labels:Object = new Object();
-        var icons:Object = new Object();
+        var labels:Object = {};
+        var icons:Object = {};
         
         for(var i:int = 0; i < remoteComboBox.values.length; i++) {
           labels[remoteComboBox.values[i] as String] = remoteComboBox.translations[i];
@@ -1209,8 +1211,8 @@ package org.jspresso.framework.view.flex {
       var nbCols:int;
       var i:int;
 
-      var row:int;
-      var col:int;
+      var row:int = 0;
+      var col:int = 0;
       var gridRow:GridRow;
       var cell:GridItem;
       var cellComponent:UIComponent;
@@ -1533,12 +1535,8 @@ package org.jspresso.framework.view.flex {
     
     protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
       var splitContainer:DividedBox = new DividedBox();
-      if(remoteSplitContainer.preferredSize != null &&
-        (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0)) {
-        splitContainer.resizeToContent = false;
-      } else {
-        splitContainer.resizeToContent = true;
-      }
+      splitContainer.resizeToContent = !(remoteSplitContainer.preferredSize != null &&
+          (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
       splitContainer.liveDragging = true;
 
       var component:UIComponent;
@@ -1610,12 +1608,8 @@ package org.jspresso.framework.view.flex {
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
       var tabContainer:TabNavigator = createTabNavigatorComponent();
       tabContainer.historyManagementEnabled = false;
-      if(remoteTabContainer.preferredSize != null &&
-        (remoteTabContainer.preferredSize.height > 0 || remoteTabContainer.preferredSize.width > 0)) {
-        tabContainer.resizeToContent = false;
-      } else {
-        tabContainer.resizeToContent = true;
-      }
+      tabContainer.resizeToContent = !(remoteTabContainer.preferredSize != null &&
+          (remoteTabContainer.preferredSize.height > 0 || remoteTabContainer.preferredSize.width > 0));
 
       for(var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
         var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
@@ -1638,6 +1632,7 @@ package org.jspresso.framework.view.flex {
             var tabC:Canvas = event.target as Canvas;
             tabC.measuredWidth = (tabC.getChildAt(0) as UIComponent) .measuredWidth;
             tabC.measuredHeight = (tabC.getChildAt(0) as UIComponent) .measuredHeight;
+            //noinspection JSReferencingMutableVariableFromClosure
             tabC.removeEventListener(FlexEvent.CREATION_COMPLETE,fixTabSize);
           }
         };
@@ -1873,12 +1868,8 @@ package org.jspresso.framework.view.flex {
       list.horizontalScrollPolicy = ScrollPolicy.AUTO;
       list.verticalScrollPolicy = ScrollPolicy.AUTO;
       list.variableRowHeight = true;
-      if(   remoteList.selectionMode == "SINGLE_SELECTION"
-         || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
-        list.allowMultipleSelection = false;
-      } else {
-        list.allowMultipleSelection = true;
-      }
+      list.allowMultipleSelection = !(remoteList.selectionMode == "SINGLE_SELECTION"
+          || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION");
       if(   remoteList.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
          || remoteList.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"
          || remoteList.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
@@ -1979,17 +1970,13 @@ package org.jspresso.framework.view.flex {
       var table:EnhancedDataGrid = new EnhancedDataGrid();
       table.showDataTips = true;
       
-      var columns:Array = new Array();
+      var columns:Array = [];
       
       table.variableRowHeight = true;
       table.regenerateStyleCache(false);
       
-      if(   remoteTable.selectionMode == "SINGLE_SELECTION"
-         || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
-        table.allowMultipleSelection = false;
-      } else {
-        table.allowMultipleSelection = true;
-      }
+      table.allowMultipleSelection = !(remoteTable.selectionMode == "SINGLE_SELECTION"
+          || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION");
       if(   remoteTable.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
          || remoteTable.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"
          || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
@@ -2213,8 +2200,8 @@ package org.jspresso.framework.view.flex {
         var notifyTableChanged:Function = function(e:Event):void {
           var notificationCommand:RemoteTableChangedCommand = new RemoteTableChangedCommand();
           notificationCommand.tableId = remoteTable.permId;
-          var columnIds:Array = new Array();
-          var columnWidths:Array = new Array();
+          var columnIds:Array = [];
+          var columnWidths:Array = [];
           for each (var dgColumn:DataGridColumn in table.columns) {
             var columnRenderer:ClassFactory = dgColumn.itemRenderer as ClassFactory;
             // watch out checkbox selection column...
@@ -2257,7 +2244,7 @@ package org.jspresso.framework.view.flex {
             column.sortDescending = !column.sortDescending;
             table.displaySort(event.columnIndex, column.sortDescending);
             if(state.children.length > 1) {
-              var orderingProperties:Object = new Object();
+              var orderingProperties:Object = {};
               orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
               var sortCommand:RemoteSortCommand = new RemoteSortCommand();
               sortCommand.orderingProperties = orderingProperties;
@@ -2764,10 +2751,10 @@ package org.jspresso.framework.view.flex {
       
       var trimLastLine:Function = function(evt:Event):void {
         if(textInput.text) {
-          textInput.text = StringUtil.trim(textInput.text);;
+          textInput.text = StringUtil.trim(textInput.text);
         }
-      }
-      textInput.addEventListener(Event.CHANGE, trimLastLine)
+      };
+      textInput.addEventListener(Event.CHANGE, trimLastLine);
       
       var updateModel:Function = function (event:Event):void {
         if(textInput.text) {
@@ -2860,11 +2847,10 @@ package org.jspresso.framework.view.flex {
           numberParser = new NumberParser();
         }
         var formatter:NumberFormatter = createFormatter(remoteComponent) as NumberFormatter;
-        var numberBase:NumberBase = new NumberBase(formatter.decimalSeparatorFrom,
-                                                   formatter.thousandsSeparatorFrom,
-                                                   formatter.decimalSeparatorTo,
-                                                   formatter.thousandsSeparatorTo);
-        numberParser.numberBase = numberBase;
+        numberParser.numberBase = new NumberBase(formatter.decimalSeparatorFrom,
+            formatter.thousandsSeparatorFrom,
+            formatter.decimalSeparatorTo,
+            formatter.thousandsSeparatorTo);
         numberParser.precision = formatter.precision as uint;
         return numberParser;
       } else if(remoteComponent is RTimeField) {
@@ -2903,15 +2889,15 @@ package org.jspresso.framework.view.flex {
     }
 
     public function createMenus(actionLists:Array, useSeparator:Boolean, component:UIComponent):Array {
-      var menus:Array = new Array();
+      var menus:Array = [];
       if(actionLists != null) {
-        var menu:Object;
+        var menu:Object = {};
         for each (var actionList:RActionList in actionLists) {
           if (!useSeparator || menus.length == 0) {
             menu = createMenu(actionList, component);
             menus.push(menu);
           } else {
-            var separator:Object = new Object();
+            var separator:Object = {};
             separator["type"] = "separator";
             menu["children"].push(separator);
             for each (var menuItem:Object in createMenuItems(actionList, component)) {
@@ -2960,7 +2946,7 @@ package org.jspresso.framework.view.flex {
     }
     
     public function createMenu(actionList:RActionList, component:UIComponent):Object {
-      var menu:Object = new Object();
+      var menu:Object = {};
       menu["label"] = actionList.name;
       menu["description"] = actionList.description;
       menu["data"] = actionList;
@@ -2969,7 +2955,7 @@ package org.jspresso.framework.view.flex {
         menu["rIcon"] = actionList.icon;
       }
       
-      var menuItems:Array = new Array();
+      var menuItems:Array = [];
       for each (var menuItem:Object in createMenuItems(actionList, component)) {
         menuItems.push(menuItem);
       }
@@ -2978,7 +2964,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createMenuItems(actionList:RActionList, component:UIComponent):Array {
-      var menuItems:Array = new Array();
+      var menuItems:Array = [];
       for each(var action:RAction in actionList.actions) {
         menuItems.push(createMenuItem(action, component));
       }
@@ -2986,7 +2972,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createMenuItem(action:RAction, component:UIComponent):Object {
-      var menuItem:Object = new Object();
+      var menuItem:Object = {};
       menuItem["label"] = action.name;
       menuItem["description"] = createActionTooltip(action);
       menuItem["data"] = action;

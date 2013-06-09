@@ -55,13 +55,14 @@ public final class SplashWindow extends Window {
    * The current instance of the splash window. (Singleton design pattern).
    */
   private static SplashWindow instance;
+  private static final Object LOCK = new Object();
 
   private static final long   serialVersionUID = 4476194702263304379L;
 
   /**
    * The splash image which is displayed on the splash window.
    */
-  private Image               image;
+  private final Image               image;
 
   /**
    * This attribute indicates whether the method paint(Graphics) has been called
@@ -161,7 +162,7 @@ public final class SplashWindow extends Window {
       // and maximize CPU throughput instead.
       if (!EventQueue.isDispatchThread()
           && Runtime.getRuntime().availableProcessors() == 1) {
-        synchronized (instance) {
+        synchronized (LOCK) {
           while (!instance.paintCalled) {
             try {
               instance.wait();

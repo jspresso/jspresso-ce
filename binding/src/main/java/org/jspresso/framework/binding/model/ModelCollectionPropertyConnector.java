@@ -48,11 +48,11 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     implements ICollectionConnector {
 
   private Map<String, IValueConnector> childConnectors;
-  private IModelConnectorFactory       modelConnectorFactory;
+  private final IModelConnectorFactory       modelConnectorFactory;
 
   private SelectionChangeSupport       selectionChangeSupport;
 
-  private List<IValueConnector>        connectorTank;
+  private final List<IValueConnector>        connectorTank;
 
   /**
    * Constructs a new model property connector on a model collection property.

@@ -31,6 +31,8 @@ import org.jspresso.framework.util.swing.splash.SplashWindow;
 import org.jspresso.framework.util.url.UrlHelper;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Swing launcher.
@@ -39,6 +41,8 @@ import chrriis.dj.nativeswing.swtimpl.NativeInterface;
  * @author Vincent Vandenschrick
  */
 public final class SwingLauncher {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SwingLauncher.class);
 
   private SwingLauncher() {
     // Helper class constructor.
@@ -51,7 +55,7 @@ public final class SwingLauncher {
    *          arguments.
    */
   @SuppressWarnings("static-access")
-  public static void main(String[] args) {
+  public static void main(String... args) {
     NativeInterface.open();
     SwingUtil.installDefaults();
     Options options = new Options();
@@ -77,15 +81,15 @@ public final class SwingLauncher {
       startup.start();
       NativeInterface.runEventPump();
     } catch (ParseException ex) {
-      System.err.println(ex.getLocalizedMessage());
+      LOG.error("Couldn't parse the command line", ex);
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(SwingLauncher.class.getSimpleName(), options);
     } catch (InstantiationException ex) {
-      ex.printStackTrace(System.err);
+      LOG.error("An unexpected error occured.", ex);
     } catch (IllegalAccessException ex) {
-      ex.printStackTrace(System.err);
+      LOG.error("An unexpected error occured.", ex);
     } catch (ClassNotFoundException ex) {
-      ex.printStackTrace(System.err);
+      LOG.error("An unexpected error occured.", ex);
     }
     if (splashed) {
       SplashWindow.disposeSplash();

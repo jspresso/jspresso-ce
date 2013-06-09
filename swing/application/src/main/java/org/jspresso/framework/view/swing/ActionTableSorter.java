@@ -42,8 +42,8 @@ import org.jspresso.framework.util.collection.ESort;
 public class ActionTableSorter extends AbstractTableSorter {
 
   private static final long serialVersionUID = -7470159235923510369L;
-  private IActionHandler    actionHandler;
-  private IAction           sortingAction;
+  private final IActionHandler    actionHandler;
+  private final IAction           sortingAction;
 
   /**
    * Constructs a new <code>ActionTableSorter</code> instance.

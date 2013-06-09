@@ -75,10 +75,10 @@ public class ApplicationDirectoryBuilder {
    */
   public static final String ACTION     = "ACTION";
 
-  private Set<String>        modelPermIds;
-  private Set<String>        navigationPermIds;
-  private Set<String>        viewPermIds;
-  private Set<String>        actionPermIds;
+  private final Set<String>        modelPermIds;
+  private final Set<String>        navigationPermIds;
+  private final Set<String>        viewPermIds;
+  private final Set<String>        actionPermIds;
 
   /**
    * Constructs a new <code>ApplicationDirectoryBuilder</code> instance.
@@ -288,7 +288,7 @@ public class ApplicationDirectoryBuilder {
   }
 
   /**
-   * estracts the permId store from this directory builder
+   * Extracts the permId store from this directory builder.
    * 
    * @return the application elements directory.
    */
@@ -318,7 +318,7 @@ public class ApplicationDirectoryBuilder {
    * @param excludePatterns
    *          the excludePatterns to set.
    */
-  public void setExcludePatterns(String[] excludePatterns) {
+  public void setExcludePatterns(String... excludePatterns) {
     this.excludePatterns = excludePatterns;
   }
 }

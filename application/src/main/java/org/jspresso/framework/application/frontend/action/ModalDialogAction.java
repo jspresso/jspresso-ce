@@ -117,6 +117,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the actions.
    */
+  @SuppressWarnings("unchecked")
   public List<IDisplayableAction> getActions(Map<String, Object> context) {
     return (List<IDisplayableAction>) context.get(DIALOG_ACTIONS);
   }
@@ -139,6 +140,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the mainView.
    */
+  @SuppressWarnings("unchecked")
   public IView<E> getMainView(Map<String, Object> context) {
     return (IView<E>) context.get(DIALOG_VIEW);
   }
@@ -161,6 +163,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the focused component or null if not set.
    */
+  @SuppressWarnings("unchecked")
   public E getFocusedComponent(Map<String, Object> context) {
     return (E) context.get(DIALOG_FOCUSED_COMPONENT);
   }

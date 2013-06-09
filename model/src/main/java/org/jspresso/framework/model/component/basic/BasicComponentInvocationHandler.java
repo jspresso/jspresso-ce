@@ -43,7 +43,7 @@ public class BasicComponentInvocationHandler extends
 
   private static final long   serialVersionUID = -3178070064423598514L;
 
-  private Map<String, Object> properties;
+  private final Map<String, Object> properties;
 
   /**
    * Constructs a new <code>BasiccomponentInvocationHandler</code> instance.

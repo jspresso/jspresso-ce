@@ -55,10 +55,10 @@ public final class FontHelper {
       if (fontAttributes.length == 3) {
         Font font = new Font();
         font.setName(fontAttributes[0]);
-        if (fontAttributes[1].indexOf(BOLD) >= 0) {
+        if (fontAttributes[1].contains(BOLD)) {
           font.setBold(true);
         }
-        if (fontAttributes[1].indexOf(ITALIC) >= 0) {
+        if (fontAttributes[1].contains(ITALIC)) {
           font.setItalic(true);
         }
         if (fontAttributes[2] != null && fontAttributes[2].length() > 0) {

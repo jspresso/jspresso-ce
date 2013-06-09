@@ -38,7 +38,7 @@ public class BasicComponentDescriptorRegistry implements
 
   private ApplicationContext                            componentApplicationContext;
   private volatile Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
-  private Object                                        mutex = new Object();
+  private final Object                                        mutex = new Object();
 
   /**
    * {@inheritDoc}

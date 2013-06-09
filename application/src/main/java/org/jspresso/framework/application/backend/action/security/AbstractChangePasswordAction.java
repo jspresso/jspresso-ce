@@ -125,7 +125,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Map<String, Object> actionParam = (Map<String, Object>) getModelConnector(
+    Map<String, Object> actionParam = getModelConnector(
         context).getConnectorValue();
     String typedPasswd = (String) actionParam.get(PASSWD_TYPED);
     String retypedPasswd = (String) actionParam.get(PASSWD_RETYPED);
@@ -214,7 +214,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * @throws IOException
    *           whenever an I/O exception occurs.
    */
-  protected String digestAndEncode(char[] newPassword)
+  protected String digestAndEncode(char... newPassword)
       throws NoSuchAlgorithmException, IOException {
     if (getDigestAlgorithm() != null) {
       MessageDigest md = MessageDigest.getInstance(getDigestAlgorithm());

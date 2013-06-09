@@ -155,10 +155,9 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   protected void setValue(Object value) {
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
-      setSelected((connectorValue != null && ((Boolean) connectorValue)
-          .booleanValue()));
+      setSelected((connectorValue != null && (Boolean) connectorValue));
     } else {
-      setSelected((value != null && ((Boolean) value).booleanValue()));
+      setSelected((value != null && (Boolean) value));
     }
   }
 

@@ -139,10 +139,10 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
     Map<String, String[]> translatedFileFilter = new HashMap<String, String[]>();
     for (Map.Entry<String, List<String>> filterEntry : executionFileFilter
         .entrySet()) {
+      List<String> var = filterEntry.getValue();
       translatedFileFilter.put(
           getTranslationProvider(context).getTranslation(filterEntry.getKey(),
-              getLocale(context)), filterEntry.getValue()
-              .toArray(new String[0]));
+              getLocale(context)), var.toArray(new String[var.size()]));
     }
     return translatedFileFilter;
   }

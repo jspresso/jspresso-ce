@@ -59,13 +59,13 @@ public class RangeEnumerationPropertyDescriptor extends
       int max = 10;
       int step = 1;
       if (minValue != null) {
-        min = minValue.intValue();
+        min = minValue;
       }
       if (maxValue != null) {
-        max = maxValue.intValue();
+        max = maxValue;
       }
       if (rangeStep != null) {
-        step = rangeStep.intValue();
+        step = rangeStep;
       }
       enumerationValues = new ArrayList<String>();
       for (int i = min; i <= max; i += step) {

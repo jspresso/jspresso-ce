@@ -27,6 +27,7 @@ import org.jspresso.framework.application.backend.session.EMergeMode;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("EmptyMethod")
 public class QueryEntitiesActionMock extends BackendAction {
 
   /**

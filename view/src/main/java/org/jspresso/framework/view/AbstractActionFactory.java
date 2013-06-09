@@ -337,13 +337,13 @@ public abstract class AbstractActionFactory<E, F, G> implements
   }
 
   private void assignCollectionBasedGateModel(final IGate gate,
-      ICollectionConnector collConnector, int[] selectedIndices) {
+      ICollectionConnector collConnector, int... selectedIndices) {
     Set<Object> selectedModels = null;
     if (selectedIndices != null && selectedIndices.length > 0) {
       selectedModels = new HashSet<Object>();
-      for (int i = 0; i < selectedIndices.length; i++) {
+      for (int selectedIndice : selectedIndices) {
         IValueConnector childConnector = collConnector
-            .getChildConnector(selectedIndices[i]);
+            .getChildConnector(selectedIndice);
         if (childConnector != null) {
           selectedModels.add(childConnector.getConnectorValue());
         }
@@ -373,8 +373,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   private final class GatesListener implements PropertyChangeListener {
 
-    private E                 action;
-    private Collection<IGate> gates;
+    private final E                 action;
+    private final Collection<IGate> gates;
 
     /**
      * Constructs a new <code>GatesListener</code> instance.

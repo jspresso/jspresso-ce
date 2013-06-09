@@ -528,6 +528,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   @Override
   protected IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
@@ -582,7 +583,7 @@ public class DefaultSwingViewFactory extends
       // if (propertyViewDescriptor.getWritabilityGates() != null) {
       JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale,
           propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
-      int propertyWidth = propertyViewDescriptor.getWidth().intValue();
+      int propertyWidth = propertyViewDescriptor.getWidth();
       if (propertyWidth > viewDescriptor.getColumnCount()) {
         propertyWidth = viewDescriptor.getColumnCount();
       }
@@ -1203,7 +1204,7 @@ public class DefaultSwingViewFactory extends
         connector.setExceptionHandler(actionHandler);
         view.setConnector(connector);
       } else {
-        JComboBox viewComponent = createJComboBox(propertyViewDescriptor);
+        JComboBox<Object> viewComponent = createJComboBox(propertyViewDescriptor);
         if (!propertyDescriptor.isMandatory()) {
           viewComponent.addItem(null);
         }
@@ -1514,7 +1515,8 @@ public class DefaultSwingViewFactory extends
    *          the component view descriptor.
    * @return the created combo box.
    */
-  protected JComboBox createJComboBox(IPropertyViewDescriptor viewDescriptor) {
+  @SuppressWarnings("unchecked")
+  protected JComboBox<Object> createJComboBox(IPropertyViewDescriptor viewDescriptor) {
     return new JComboBox();
   }
 
@@ -1627,8 +1629,9 @@ public class DefaultSwingViewFactory extends
    *          the component view descriptor.
    * @return the created list.
    */
-  protected JList createJList(IListViewDescriptor viewDescriptor) {
-    JList list = new JList();
+  @SuppressWarnings("unchecked")
+  protected JList<IValueConnector> createJList(IListViewDescriptor viewDescriptor) {
+    JList<IValueConnector> list = new JList();
     list.setDragEnabled(true);
     return list;
   }
@@ -1790,7 +1793,7 @@ public class DefaultSwingViewFactory extends
    */
   protected JTextField createJTextField(IPropertyViewDescriptor viewDescriptor) {
     JTextField textField = new JTextField();
-    ((AbstractDocument) textField.getDocument()).putProperty("filterNewlines",
+    textField.getDocument().putProperty("filterNewlines",
         Boolean.FALSE);
     SwingUtil.enableSelectionOnFocusGained(textField);
     return textField;
@@ -1839,6 +1842,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("MagicConstant")
   @Override
   protected IView<JComponent> createListView(
       IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
@@ -1859,7 +1863,7 @@ public class DefaultSwingViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    JList viewComponent = createJList(viewDescriptor);
+    JList<IValueConnector> viewComponent = createJList(viewDescriptor);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1967,9 +1971,8 @@ public class DefaultSwingViewFactory extends
       JComponent propertyComponent, ITranslationProvider translationProvider,
       Locale locale) {
     JLabel propertyLabel = createJLabel(propertyViewDescriptor, false);
-    StringBuilder labelText = new StringBuilder(
-        propertyViewDescriptor.getI18nName(translationProvider, locale));
-    propertyLabel.setText(labelText.toString());
+    String labelText = propertyViewDescriptor.getI18nName(translationProvider, locale);
+    propertyLabel.setText(labelText);
     propertyLabel.setLabelFor(propertyComponent);
     configurePropertyLabel(propertyLabel, propertyViewDescriptor);
     return propertyLabel;
@@ -2223,6 +2226,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings({"ConstantConditions", "MagicConstant"})
   @Override
   protected IView<JComponent> createTableView(
       ITableViewDescriptor viewDescriptor, final IActionHandler actionHandler,
@@ -2399,6 +2403,7 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
+  @SuppressWarnings("ConstantConditions")
   private void configureTableColumn(final IActionHandler actionHandler,
       Locale locale, ITableViewDescriptor viewDescriptor,
       ICollectionConnector connector,
@@ -2546,7 +2551,7 @@ public class DefaultSwingViewFactory extends
       column.setHeaderRenderer(headerRenderer);
     }
     if (columnViewDescriptorEntry.getValue() != null) {
-      column.setPreferredWidth(columnViewDescriptorEntry.getValue().intValue());
+      column.setPreferredWidth(columnViewDescriptorEntry.getValue());
     } else {
       if (columnViewDescriptor.getPreferredSize() != null
           && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
@@ -2582,17 +2587,17 @@ public class DefaultSwingViewFactory extends
 
   private class ColumnPreferencesListener implements TableColumnModelListener {
 
-    private TableColumnModel columnModel;
-    private String           tableId;
-    private IActionHandler   actionHandler;
+    private final TableColumnModel columnModel;
+    private final String           tableId;
+    private final IActionHandler   actionHandler;
     private boolean          columnsChanged;
 
     /**
      * Constructs a new <code>ColumnPreferencesListener</code> instance.
      * 
-     * @param table
-     * @param tableId
-     * @param actionHandler
+     * @param table the table.
+     * @param tableId the table id.
+     * @param actionHandler the action handler.
      */
     public ColumnPreferencesListener(JTable table, String tableId,
         IActionHandler actionHandler) {
@@ -2642,7 +2647,7 @@ public class DefaultSwingViewFactory extends
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
           Object[] columnPref = new Object[] {
               columnModel.getColumn(i).getIdentifier(),
-              Integer.valueOf(columnModel.getColumn(i).getWidth())
+              columnModel.getColumn(i).getWidth()
           };
           columnPrefs[i] = columnPref;
         }
@@ -2921,6 +2926,7 @@ public class DefaultSwingViewFactory extends
    *          the locale used.
    * @return the created tool bar.
    */
+  @SuppressWarnings("ConstantConditions")
   protected JToolBar createViewToolBar(ActionMap actionMap,
       IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
     JToolBar toolBar = createJToolBar();
@@ -2937,7 +2943,7 @@ public class DefaultSwingViewFactory extends
             renderingOptions = actionMap.getRenderingOptions();
           }
           if (nextActionList.isCollapsable()) {
-            JButton actionButton = null;
+            JButton actionButton;
             List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
             for (IDisplayableAction action : nextActionList.getActions()) {
               if (actionHandler.isAccessGranted(action)) {
@@ -3467,8 +3473,8 @@ public class DefaultSwingViewFactory extends
       table.setRowSelectionInterval(row, row);
     }
 
-    ActionMap actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActionMap();
+    ActionMap actionMap = tableView
+        .getDescriptor().getActionMap();
 
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       try {
@@ -3605,18 +3611,18 @@ public class DefaultSwingViewFactory extends
 
   private final class PopupListener extends MouseAdapter {
 
-    private IActionHandler    actionHandler;
-    private Locale            locale;
-    private JComponent        sourceComponent;
-    private IView<JComponent> view;
+    private final IActionHandler    actionHandler;
+    private final Locale            locale;
+    private final JComponent        sourceComponent;
+    private final IView<JComponent> view;
 
     /**
      * Constructs a new <code>PopupListener</code> instance.
      * 
-     * @param sourceComponent
-     * @param view
-     * @param actionHandler
-     * @param locale
+     * @param sourceComponent the source component.
+     * @param view the view.
+     * @param actionHandler the action handler.
+     * @param locale the locale.
      */
     public PopupListener(JComponent sourceComponent, IView<JComponent> view,
         IActionHandler actionHandler, Locale locale) {
@@ -3653,9 +3659,9 @@ public class DefaultSwingViewFactory extends
       DefaultListCellRenderer {
 
     private static final long              serialVersionUID = -5694559709701757582L;
-    private ITranslationProvider           translationProvider;
-    private Locale                         locale;
-    private IEnumerationPropertyDescriptor propertyDescriptor;
+    private final ITranslationProvider           translationProvider;
+    private final Locale                         locale;
+    private final IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code> instance.
@@ -3681,7 +3687,7 @@ public class DefaultSwingViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    public Component getListCellRendererComponent(JList list, Object value,
+    public Component getListCellRendererComponent(JList<?> list, Object value,
         int index, boolean isSelected, boolean cellHasFocus) {
       JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
           index, isSelected, cellHasFocus);
@@ -3706,9 +3712,9 @@ public class DefaultSwingViewFactory extends
       EvenOddTableCellRenderer {
 
     private static final long              serialVersionUID = -4500472602998482756L;
-    private ITranslationProvider           translationProvider;
-    private Locale                         locale;
-    private IEnumerationPropertyDescriptor propertyDescriptor;
+    private final ITranslationProvider           translationProvider;
+    private final Locale                         locale;
+    private final IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
@@ -3782,7 +3788,7 @@ public class DefaultSwingViewFactory extends
     private static final long   serialVersionUID = 9155173076041284128L;
 
     @SuppressWarnings("unused")
-    private IPropertyDescriptor propertyDescriptor;
+    private final IPropertyDescriptor propertyDescriptor;
 
     /**
      * Constructs a new <code>ImageTableCellRenderer</code> instance.
@@ -3828,7 +3834,7 @@ public class DefaultSwingViewFactory extends
     private static final long   serialVersionUID = 9155173076041284128L;
 
     @SuppressWarnings("unused")
-    private IPropertyDescriptor propertyDescriptor;
+    private final IPropertyDescriptor propertyDescriptor;
 
     /**
      * Constructs a new <code>BinaryTableCellRenderer</code> instance.

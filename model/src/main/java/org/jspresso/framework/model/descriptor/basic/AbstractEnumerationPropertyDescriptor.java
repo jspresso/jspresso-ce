@@ -74,7 +74,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
         max = value.length();
       }
     }
-    return Integer.valueOf(max);
+    return max;
   }
 
   /**

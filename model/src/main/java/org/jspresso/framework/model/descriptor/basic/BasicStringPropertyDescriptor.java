@@ -116,7 +116,7 @@ public class BasicStringPropertyDescriptor extends
   @Override
   public boolean isUpperCase() {
     if (upperCase != null) {
-      return upperCase.booleanValue();
+      return upperCase;
     }
     return false;
   }
@@ -129,7 +129,7 @@ public class BasicStringPropertyDescriptor extends
     super.preprocessSetter(component, newValue);
     final String propertyValueAsString = getValueAsString(newValue);
     if (propertyValueAsString != null && getMaxLength() != null
-        && propertyValueAsString.length() > getMaxLength().intValue()) {
+        && propertyValueAsString.length() > getMaxLength()) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + propertyValueAsString + ") is too long on ["
           + component + "].") {
@@ -220,7 +220,7 @@ public class BasicStringPropertyDescriptor extends
    *          the upperCase to set.
    */
   public void setUpperCase(boolean upperCase) {
-    this.upperCase = Boolean.valueOf(upperCase);
+    this.upperCase = upperCase;
   }
 
   /**

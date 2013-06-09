@@ -37,7 +37,7 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
  */
 public class FileOpenCallbackAction extends AbstractRemoteAction {
 
-  private IFileOpenCallback fileOpenCallback;
+  private final IFileOpenCallback fileOpenCallback;
 
   /**
    * Constructs a new <code>FileOpenCallbackAction</code> instance.

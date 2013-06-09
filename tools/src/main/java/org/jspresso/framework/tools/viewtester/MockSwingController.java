@@ -242,7 +242,7 @@ public class MockSwingController extends
         JOptionPane.WARNING_MESSAGE,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
-    IAction nextAction = null;
+    IAction nextAction;
     if (selectedOption == JOptionPane.OK_OPTION) {
       nextAction = okAction;
     } else {
@@ -268,7 +268,7 @@ public class MockSwingController extends
         JOptionPane.QUESTION_MESSAGE,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
-    IAction nextAction = null;
+    IAction nextAction;
     if (selectedOption == JOptionPane.YES_OPTION) {
       nextAction = yesAction;
     } else {
@@ -294,7 +294,7 @@ public class MockSwingController extends
         JOptionPane.QUESTION_MESSAGE,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
-    IAction nextAction = null;
+    IAction nextAction;
     if (selectedOption == JOptionPane.YES_OPTION) {
       nextAction = yesAction;
     } else if (selectedOption == JOptionPane.NO_OPTION) {

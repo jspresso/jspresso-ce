@@ -32,7 +32,7 @@ import org.jspresso.framework.util.url.UrlHelper;
  */
 public class UrlResource extends AbstractResource {
 
-  private URL url;
+  private final URL url;
 
   /**
    * Constructs a new <code>UrlResource</code> instance.

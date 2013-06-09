@@ -49,6 +49,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public BasicCollectionPropertyDescriptor<E> clone() {
     BasicCollectionPropertyDescriptor<E> clonedDescriptor = (BasicCollectionPropertyDescriptor<E>) super
@@ -109,7 +110,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return getReverseRelationEnd() instanceof ICollectionPropertyDescriptor<?>;
     }
     if (manyToMany != null) {
-      return manyToMany.booleanValue();
+      return manyToMany;
     }
     return false;
   }
@@ -205,7 +206,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    *          the manyToMany to set.
    */
   public void setManyToMany(boolean manyToMany) {
-    this.manyToMany = Boolean.valueOf(manyToMany);
+    this.manyToMany = manyToMany;
   }
 
   /**
@@ -291,6 +292,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public BasicRelationshipEndPropertyDescriptor createQueryDescriptor() {
     BasicCollectionPropertyDescriptor<E> defaultQueryDescriptor = (BasicCollectionPropertyDescriptor<E>) super

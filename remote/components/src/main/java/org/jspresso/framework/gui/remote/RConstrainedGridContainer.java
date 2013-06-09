@@ -75,7 +75,7 @@ public class RConstrainedGridContainer extends RContainer {
    * @param cellConstraints
    *          the cellConstraints to set.
    */
-  public void setCellConstraints(CellConstraints[] cellConstraints) {
+  public void setCellConstraints(CellConstraints... cellConstraints) {
     this.cellConstraints = cellConstraints;
   }
 
@@ -85,7 +85,7 @@ public class RConstrainedGridContainer extends RContainer {
    * @param cells
    *          the cells to set.
    */
-  public void setCells(RComponent[] cells) {
+  public void setCells(RComponent... cells) {
     this.cells = cells;
   }
 }

@@ -29,7 +29,7 @@ public class SelectEntityPropertyAction extends BackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IEntity model = (IEntity) getModelConnector(context).getConnectorValue();
+    IEntity model = getModelConnector(context).getConnectorValue();
     if (model != null) {
       try {
         Object propertyValue = getAccessorFactory(context)

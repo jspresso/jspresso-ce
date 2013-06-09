@@ -51,9 +51,9 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
 
   private static final long   serialVersionUID  = 360589456903648696L;
 
-  private Map<String, Object> customProperties;
+  private final Map<String, Object> customProperties;
 
-  private String              name;
+  private final String              name;
 
   /**
    * Constructs a new <code>UserPrincipal</code> instance.
@@ -75,7 +75,7 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
       return false;
     }
     String anotherDn = ((UserPrincipal) another).getName();
-    boolean equals = false;
+    boolean equals;
     if (name == null) {
       equals = anotherDn == null;
     } else {

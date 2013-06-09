@@ -31,7 +31,7 @@ import org.jspresso.framework.util.html.HtmlHelper;
 public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
 
   private static final long     serialVersionUID = 1994281654419286376L;
-  private IFormatter<?, String> formatter;
+  private final IFormatter<?, String> formatter;
 
   /**
    * Constructs a new <code>FormattedTableCellRenderer</code> instance.
@@ -50,7 +50,7 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
   @SuppressWarnings("unchecked")
   @Override
   protected void setValue(Object value) {
-    Object valueToSet = null;
+    Object valueToSet;
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
       if (formatter != null) {

@@ -175,7 +175,7 @@ public abstract class RComponent extends RemotePeer implements
    * @param actionLists
    *          the actionLists to set.
    */
-  public void setActionLists(RActionList[] actionLists) {
+  public void setActionLists(RActionList... actionLists) {
     this.actionLists = actionLists;
   }
 
@@ -319,7 +319,7 @@ public abstract class RComponent extends RemotePeer implements
    * @param secondaryActionLists
    *          the secondaryActionLists to set.
    */
-  public void setSecondaryActionLists(RActionList[] secondaryActionLists) {
+  public void setSecondaryActionLists(RActionList... secondaryActionLists) {
     this.secondaryActionLists = secondaryActionLists;
   }
 

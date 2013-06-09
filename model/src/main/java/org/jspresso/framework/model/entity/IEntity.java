@@ -45,7 +45,7 @@ public interface IEntity extends IComponent {
   /**
    * <code>DELETED_VERSION</code> is a magic constant for deleted entities.
    */
-  Integer DELETED_VERSION = Integer.valueOf(-Integer.MAX_VALUE);
+  Integer DELETED_VERSION = -Integer.MAX_VALUE;
 
   /**
    * constant for version property <code>PERSISTENT</code>.

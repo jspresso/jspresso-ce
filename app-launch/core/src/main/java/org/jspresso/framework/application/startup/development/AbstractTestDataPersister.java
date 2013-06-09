@@ -37,7 +37,7 @@ import org.springframework.beans.factory.BeanFactory;
  */
 public abstract class AbstractTestDataPersister {
 
-  private BeanFactory beanFactory;
+  private final BeanFactory beanFactory;
 
   /**
    * Constructs a new <code>AbstractTestDataPersister</code> instance.

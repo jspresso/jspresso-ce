@@ -64,12 +64,8 @@ package org.jspresso.framework.view.flex {
       
       if (r && r is IDropInListItemRenderer) {
         var dilr:IDropInListItemRenderer = r as IDropInListItemRenderer;
-        if(   dilr.listData.rowIndex != lastClickedRow
-          || dilr.listData.columnIndex != lastClickedColumn) {
-          preventEditing = true; 
-        } else {
-          preventEditing = false;
-        }
+        preventEditing = dilr.listData.rowIndex != lastClickedRow
+            || dilr.listData.columnIndex != lastClickedColumn;
         lastClickedRow = dilr.listData.rowIndex;
         lastClickedColumn = dilr.listData.columnIndex;
       } else {

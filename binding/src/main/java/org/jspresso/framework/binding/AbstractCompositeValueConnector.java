@@ -138,7 +138,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public Icon getDisplayIcon() {
-    Icon icon = null;
+    Icon icon;
     if (iconImageURLProvider != null) {
       icon = iconImageURLProvider.getIconForObject(getConnectorValue());
     } else {

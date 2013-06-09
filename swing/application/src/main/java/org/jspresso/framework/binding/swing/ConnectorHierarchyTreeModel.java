@@ -44,8 +44,8 @@ import org.jspresso.framework.util.swing.SwingUtil;
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     TreeModelListener {
 
-  private TreeConnectorsListener   connectorsListener;
-  private ICompositeValueConnector rootConnector;
+  private final TreeConnectorsListener   connectorsListener;
+  private final ICompositeValueConnector rootConnector;
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
@@ -103,6 +103,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("SuspiciousMethodCalls")
   @Override
   public int getIndexOfChild(Object parent, Object child) {
     if (parent instanceof ICollectionConnectorProvider) {
@@ -285,7 +286,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             }
             if (connector == rootConnector) {
               fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
-                  getTreePathForConnector(connector).getPath(), null, null);
+                  getTreePathForConnector(connector).getPath(), null, (Object[])null);
             } else if (connector.getConnectorValue() != null) {
               IValueConnector parentConnector = connector.getParentConnector();
               while (parentConnector != null
@@ -302,9 +303,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                       getTreePathForConnector(parentConnector).getPath(),
                       new int[] {
                         getIndexOfChild(parentConnector, connector)
-                      }, new Object[] {
-                        connector
-                      });
+                      }, connector);
                 }
               }
             }

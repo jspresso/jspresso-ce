@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class ControllerAwareEntityProxyInterceptor extends
     EntityProxyInterceptor {
 
@@ -106,6 +107,7 @@ public class ControllerAwareEntityProxyInterceptor extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Object getEntity(String entityName, Serializable id) {
     IEntity registeredEntity = null;

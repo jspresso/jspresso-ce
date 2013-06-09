@@ -32,9 +32,9 @@ public class SelectionChangeEvent extends EventObject {
 
   private static final long serialVersionUID = -3165899293226869795L;
 
-  private int               leadingIndex;
-  private int[]             newSelection;
-  private int[]             oldSelection;
+  private final int               leadingIndex;
+  private final int[]             newSelection;
+  private final int[]             oldSelection;
 
   /**
    * Constructs a new <code>SelectionChangeEvent</code>.

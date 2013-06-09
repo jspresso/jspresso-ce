@@ -39,6 +39,7 @@ public interface IQueryComponentRefiner {
    * @param context
    *          the action context.
    */
+  @SuppressWarnings("EmptyMethod")
   void refineQueryComponent(IQueryComponent queryComponent,
       Map<String, Object> context);
 }

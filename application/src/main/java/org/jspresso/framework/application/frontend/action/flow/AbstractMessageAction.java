@@ -51,7 +51,7 @@ public abstract class AbstractMessageAction<E, F, G> extends
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {
-    String msg = (String) getActionParameter(context);
+    String msg = getActionParameter(context);
     if (msg == null || HtmlHelper.isHtml(msg)) {
       return msg;
     }

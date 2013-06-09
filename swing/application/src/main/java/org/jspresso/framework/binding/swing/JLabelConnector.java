@@ -98,7 +98,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
         getConnectedJComponent().setText(
             ((IFormatter<Object, String>) formatter).format(aValue));
       } else if (forceHtml) {
-        if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
+        if (!aValue.toString().toUpperCase().contains(HtmlHelper.HTML_START)) {
           getConnectedJComponent().setText(
               HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
         } else {

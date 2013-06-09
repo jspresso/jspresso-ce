@@ -102,6 +102,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -171,6 +172,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the modelConnectorFactory to set.
    * @deprecated modeconnector is now created by the backend controller.
    */
+  @SuppressWarnings("EmptyMethod")
   @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -196,6 +198,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    * @param context
    *          the action context.
    */
+  @SuppressWarnings("EmptyMethod")
   protected void completeInitialWizardModel(
       Map<String, Object> initialWizardModel, Map<String, Object> context) {
     // No-op by default.
@@ -323,7 +326,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
         if (propertyDescriptor instanceof IScalarPropertyDescriptor
             && ((IScalarPropertyDescriptor) propertyDescriptor)
                 .getDefaultValue() != null) {
-          Map<String, Object> wizardModel = (Map<String, Object>) modelConnector
+          Map<String, Object> wizardModel = modelConnector
               .getConnectorValue();
           if (!wizardModel.containsKey(propertyDescriptor.getName())) {
             wizardModel.put(propertyDescriptor.getName(),
@@ -353,7 +356,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
     Dimension dialogSize = (Dimension) context
         .get(ModalDialogAction.DIALOG_SIZE);
     if (width != null && height != null) {
-      dialogSize = new Dimension(width.intValue(), height.intValue());
+      dialogSize = new Dimension(width, height);
     }
     return dialogSize;
   }
@@ -361,8 +364,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   private class CancelAction extends FrontendAction<E, F, G> {
 
     @SuppressWarnings("unused")
-    private IWizardStepDescriptor wizardStep;
-    private IDisplayableAction    wrappedCancelAction;
+    private final IWizardStepDescriptor wizardStep;
+    private final IDisplayableAction    wrappedCancelAction;
 
     public CancelAction(IWizardStepDescriptor wizardStep,
         IDisplayableAction wrappedCancelAction) {
@@ -404,8 +407,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private class FinishAction extends FrontendAction<E, F, G> {
 
-    private IWizardStepDescriptor wizardStep;
-    private IDisplayableAction    wrappedFinishAction;
+    private final IWizardStepDescriptor wizardStep;
+    private final IDisplayableAction    wrappedFinishAction;
 
     public FinishAction(IWizardStepDescriptor wizardStep,
         IDisplayableAction wrappedFinishAction) {
@@ -452,8 +455,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private class NextAction extends FrontendAction<E, F, G> {
 
-    private IValueConnector       modelConnector;
-    private IWizardStepDescriptor wizardStep;
+    private final IValueConnector       modelConnector;
+    private final IWizardStepDescriptor wizardStep;
 
     public NextAction(IWizardStepDescriptor wizardStep,
         IValueConnector modelConnector) {
@@ -480,8 +483,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private class PreviousAction extends FrontendAction<E, F, G> {
 
-    private IValueConnector       modelConnector;
-    private IWizardStepDescriptor wizardStep;
+    private final IValueConnector       modelConnector;
+    private final IWizardStepDescriptor wizardStep;
 
     public PreviousAction(IWizardStepDescriptor wizardStep,
         IValueConnector modelConnector) {

@@ -34,7 +34,7 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
  */
 public class BasicReport extends DefaultDescriptor implements IReport {
 
-  private Map<String, Object> context;
+  private final Map<String, Object> context;
   private IReportDescriptor   reportDescriptor;
 
   /**

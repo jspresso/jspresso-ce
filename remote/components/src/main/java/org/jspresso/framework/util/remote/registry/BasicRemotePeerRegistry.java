@@ -46,9 +46,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   private static final Logger              LOG = LoggerFactory
                                                    .getLogger(BasicRemotePeerRegistry.class);
 
-  private Map<String, String>              automationBackingStore;
-  private Map<String, Integer>             automationIndices;
-  private Map<String, IRemotePeer>         backingStore;
+  private final Map<String, String>              automationBackingStore;
+  private final Map<String, Integer>             automationIndices;
+  private final Map<String, IRemotePeer>         backingStore;
 
   private Set<IRemotePeerRegistryListener> rprListeners;
 
@@ -169,11 +169,11 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     Integer currentIndex = automationIndices.get(seed);
     int idIndex = 0;
     if (currentIndex != null) {
-      idIndex = currentIndex.intValue() + 1;
+      idIndex = currentIndex + 1;
     }
-    automationIndices.put(seed, Integer.valueOf(idIndex));
+    automationIndices.put(seed, idIndex);
     if (idIndex > 0) {
-      return new StringBuilder(seed).append("#").append(idIndex).toString();
+      return seed + "#" + idIndex;
     }
     return seed;
   }
@@ -197,6 +197,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
     @Override
     public void clear() {
+      //noinspection StatementWithEmptyBody
       while (remotePeerQueue.poll() != null) {
         // drain the queue.
       }
@@ -251,8 +252,8 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   private class RemotePeerSoftRef extends SoftReference<IRemotePeer> implements
       IRemotePeer {
 
-    private int    hash;
-    private String guid;
+    private final int    hash;
+    private final String guid;
 
     public RemotePeerSoftRef(int hash, IRemotePeer r,
         ReferenceQueue<IRemotePeer> q) {
@@ -281,8 +282,8 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   private class RemotePeerWeakRef extends WeakReference<IRemotePeer> implements
       IRemotePeer {
 
-    private int    hash;
-    private String guid;
+    private final int    hash;
+    private final String guid;
 
     public RemotePeerWeakRef(int hash, IRemotePeer r,
         ReferenceQueue<IRemotePeer> q) {
@@ -316,7 +317,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     if (rprListeners == null && listener != null) {
       rprListeners = new LinkedHashSet<IRemotePeerRegistryListener>();
     }
-    rprListeners.add(listener);
+    if (rprListeners != null) {
+      rprListeners.add(listener);
+    }
   }
 
   /**

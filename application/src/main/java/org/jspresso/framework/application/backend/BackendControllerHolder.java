@@ -30,7 +30,7 @@ import org.jspresso.framework.util.http.HttpRequestHolder;
  */
 public final class BackendControllerHolder {
 
-  private static boolean                               isWebContext                   = false;
+  private static final boolean                               isWebContext;
   /**
    * <code>CURRENT_BACKEND_CONTROLLER_KEY</code>.
    */
@@ -41,12 +41,14 @@ public final class BackendControllerHolder {
       new ThreadLocal<IBackendController>();
 
   static {
+    boolean wc = false;
     try {
       Class.forName("org.jspresso.framework.util.http.HttpRequestHolder");
-      isWebContext = true;
+      wc = true;
     } catch (Throwable ex) {
-      isWebContext = false;
+      // Not in web context
     }
+    isWebContext = wc;
   }
 
   private BackendControllerHolder() {
@@ -99,7 +101,7 @@ public final class BackendControllerHolder {
    * @return the tread-bound backend controller.
    */
   public static IBackendController getCurrentBackendController() {
-    IBackendController controller = null;
+    IBackendController controller;
     // First lookup into the current thread
     controller = THREADBOUND_BACKEND_CONTROLLER.get();
     // If none is set, then query the session.

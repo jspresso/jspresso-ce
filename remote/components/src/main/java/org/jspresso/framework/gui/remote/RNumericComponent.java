@@ -78,7 +78,7 @@ public abstract class RNumericComponent extends RComponent {
    */
   public void setMaxValue(Number maxValue) {
     if (maxValue instanceof BigDecimal) {
-      this.maxValue = Double.valueOf(maxValue.doubleValue());
+      this.maxValue = maxValue.doubleValue();
     } else {
       this.maxValue = maxValue;
     }
@@ -92,7 +92,7 @@ public abstract class RNumericComponent extends RComponent {
    */
   public void setMinValue(Number minValue) {
     if (minValue instanceof BigDecimal) {
-      this.minValue = Double.valueOf(minValue.doubleValue());
+      this.minValue = minValue.doubleValue();
     } else {
       this.minValue = minValue;
     }

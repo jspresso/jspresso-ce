@@ -52,7 +52,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   private Dimension                      smallIconSize;
   private Dimension                      tinyIconSize;
 
-  private Map<String, Map<Dimension, E>> iconStore;
+  private final Map<String, Map<Dimension, E>> iconStore;
   private IIconSet                       iconSet;
 
   /**

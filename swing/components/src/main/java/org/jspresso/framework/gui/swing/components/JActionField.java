@@ -57,9 +57,9 @@ public class JActionField extends JPanel {
   private static final long serialVersionUID = 5741890319182521808L;
 
   private List<Action>      actions;
-  private JPanel            buttonPanel;
-  private boolean           showTextField;
-  private JTextField        textField;
+  private final JPanel            buttonPanel;
+  private final boolean           showTextField;
+  private final JTextField        textField;
   private String            value;
 
   /**
@@ -70,7 +70,7 @@ public class JActionField extends JPanel {
    */
   public JActionField(boolean showTextField) {
     textField = new JTextField();
-    ((AbstractDocument) textField.getDocument()).putProperty("filterNewlines",
+    textField.getDocument().putProperty("filterNewlines",
         Boolean.FALSE);
     setLayout(new GridBagLayout());
     if (showTextField) {

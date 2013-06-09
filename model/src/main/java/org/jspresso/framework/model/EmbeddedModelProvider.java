@@ -15,7 +15,7 @@ public class EmbeddedModelProvider implements IModelProvider {
 
   private Object                          model;
   private ModelChangeSupport              modelChangeSupport;
-  private IComponentDescriptorProvider<?> modelDescriptor;
+  private final IComponentDescriptorProvider<?> modelDescriptor;
 
   /**
    * Constructs a new <code>EmbeddedModelProvider</code> instance.

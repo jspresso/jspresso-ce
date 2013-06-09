@@ -68,6 +68,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
@@ -172,7 +173,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   }
 
   private void extractState(IEntity entity, String[] propertyNames,
-      Object[] state) {
+      Object... state) {
     for (int i = 0; i < propertyNames.length; i++) {
       String propertyName = propertyNames[i];
       if (!isHibernateInternal(propertyName)) {

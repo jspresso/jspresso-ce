@@ -44,13 +44,13 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
 
   private static final long  serialVersionUID = 2051850807889065438L;
   private Color              backgroundBase;
-  private IIconFactory<Icon> iconFactory;
-  private String             cellConnectorKey;
+  private final IIconFactory<Icon> iconFactory;
+  private final String             cellConnectorKey;
 
   /**
    * Constructs a new <code>EvenOddListCellRenderer</code> instance.
    * 
-   * @param iconFactory
+   * @param iconFactory the icon factory.
    * @param cellConnectorKey
    *          the key used to retrieve the child cell connector.
    */
@@ -65,7 +65,7 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
    * {@inheritDoc}
    */
   @Override
-  public Component getListCellRendererComponent(JList list, Object value,
+  public Component getListCellRendererComponent(JList<?> list, Object value,
       int index, boolean isSelected, boolean cellHasFocus) {
     JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value,
         index, isSelected, cellHasFocus);
@@ -81,7 +81,7 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
         renderer.setIcon(iconFactory.getIcon(
             ((IRenderableCompositeValueConnector) value).getDisplayIcon(),
             iconFactory.getSmallIconSize()));
-        ListModel lm = list.getModel();
+        ListModel<?> lm = list.getModel();
         if (lm instanceof CollectionConnectorListModel) {
           setToolTipText(((CollectionConnectorListModel) lm)
               .getRowToolTip(index));

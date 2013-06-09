@@ -29,7 +29,6 @@ package org.jspresso.framework.view.flex {
 		private var _labels:Array;
 		private var _icons:Array;
 		private var _iconTemplate:Class;
-		private var _index:int;
     private var _showIcon:Boolean;
 
 		public function RIconListItemRenderer() {
@@ -54,18 +53,18 @@ package org.jspresso.framework.view.flex {
     }
 
     override public function set data(value:Object):void {
-   	  //cannot rely on listData.rowIndex.
-  	  _index = ((owner as List).dataProvider as ArrayCollection).getItemIndex(value);
+      //cannot rely on listData.rowIndex.
+      var _index:int = ((owner as List).dataProvider as ArrayCollection).getItemIndex(value);
       //trace(">>> List index <<< " + _index);
       listData.label = _labels[_index];
-      if(_showIcon) {
-        if(!(listData as ListData).icon) {
+      if (_showIcon) {
+        if (!(listData as ListData).icon) {
           (listData as ListData).icon = _iconTemplate;
         }
-  			var _selectedIcon:RIcon = _icons[_index] as RIcon;
-  			if(_selectedIcon != null) {
-  			  _image.source = _selectedIcon.imageUrlSpec;
-  			}
+        var _selectedIcon:RIcon = _icons[_index] as RIcon;
+        if (_selectedIcon != null) {
+          _image.source = _selectedIcon.imageUrlSpec;
+        }
       }
       super.data = value;
     }

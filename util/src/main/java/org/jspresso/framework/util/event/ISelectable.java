@@ -56,7 +56,7 @@ public interface ISelectable {
    *          the indices to set selected. The leading index is defaulted to the
    *          highest selected one.
    */
-  void setSelectedIndices(int[] selectedIndices);
+  void setSelectedIndices(int... selectedIndices);
 
   /**
    * Sets the selected indices in this selectable.

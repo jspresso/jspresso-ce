@@ -40,7 +40,7 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
 
   private static final long serialVersionUID = 6078989823404409653L;
 
-  private IComponent        componentDelegate;
+  private final IComponent        componentDelegate;
 
   /**
    * Constructs a new <code>QueryComponentInvocationHandler</code> instance.
@@ -76,9 +76,7 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
     } else if (accessorType == EAccessorType.GETTER) {
       String accessedPropertyName = accessorInfo.getAccessedPropertyName();
       if (IQueryComponent.QUERIED_COMPONENTS.equals(accessedPropertyName)) {
-        if (accessedPropertyName != null) {
-          return componentDelegate.straightGetProperty(accessedPropertyName);
-        }
+        return componentDelegate.straightGetProperty(accessedPropertyName);
       }
     }
     return method.invoke(componentDelegate, args);

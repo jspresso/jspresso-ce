@@ -35,7 +35,7 @@ import javax.swing.RootPaneContainer;
  */
 public class WaitCursorTimer extends Thread {
 
-  private int       delay;
+  private final int       delay;
   private Component parent;
   private Object    source;
 
@@ -56,6 +56,7 @@ public class WaitCursorTimer extends Thread {
    */
   @Override
   public synchronized void run() {
+    //noinspection InfiniteLoopStatement
     while (true) {
       try {
         // wait for notification from startTimer()
@@ -105,7 +106,7 @@ public class WaitCursorTimer extends Thread {
     if (parent == null) {
       interrupt();
     } else {
-      if (parent != null && parent.isShowing()) {
+      if (parent.isShowing()) {
         if (parent instanceof RootPaneContainer) {
           ((RootPaneContainer) parent).getGlassPane().setCursor(null);
         }

@@ -128,6 +128,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T getSelectedItem() {
     return (T) implGetSelectedItem();

@@ -58,14 +58,14 @@ public interface ICompositeValueConnector extends IValueConnector {
   void removeChildConnector(String storageKey);
 
   /**
-   * Are the children connectors readable ?
+   * Tests whether the children connectors are readable.
    * 
    * @return true if readable.
    */
   boolean areChildrenReadable();
 
   /**
-   * Are the children connectors writable ?
+   * Tests whether the children connectors are writable.
    * 
    * @return true if writable.
    */

@@ -29,7 +29,7 @@ import javax.swing.JComboBox;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class JComboBoxConnector extends JComponentConnector<JComboBox> {
+public class JComboBoxConnector extends JComponentConnector<JComboBox<?>> {
 
   /**
    * Constructs a new <code>JComboBoxConnector</code> instance.
@@ -39,7 +39,7 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
    * @param comboBox
    *          the connected JComboBox.
    */
-  public JComboBoxConnector(String id, JComboBox comboBox) {
+  public JComboBoxConnector(String id, JComboBox<?> comboBox) {
     super(id, comboBox);
   }
 

@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -29,11 +32,13 @@ import java.util.Properties;
  */
 public final class Build {
 
+  private static final Logger LOG = LoggerFactory.getLogger(Build.class);
+
   /**
    * <code>UNKNOWN</code>.
    */
   public static final String UNKNOWN = "UNKNOWN";
-  private static Properties  jspressoProperties;
+  private static final Properties  jspressoProperties;
 
   static {
     jspressoProperties = new Properties();
@@ -41,9 +46,7 @@ public final class Build {
       jspressoProperties.load(Build.class
           .getResourceAsStream("/META-INF/jspresso.properties"));
     } catch (IOException ioe) {
-      System.err
-          .println("jspresso.properties could not be loaded from the current classloader.");
-      ioe.printStackTrace(System.err);
+      LOG.error("jspresso.properties could not be loaded from the current classloader", ioe);
     }
   }
 
@@ -66,7 +69,8 @@ public final class Build {
    * @param args
    *          none supported.
    */
-  public static void main(String[] args) {
+  public static void main(String... args) {
+    //noinspection UseOfSystemOutOrSystemErr
     System.out.println("Jspresso version : " + getJspressoVersion());
   }
 }

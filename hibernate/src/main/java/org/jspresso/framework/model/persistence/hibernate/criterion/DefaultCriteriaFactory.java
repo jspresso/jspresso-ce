@@ -75,6 +75,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ConstantConditions")
   @Override
   public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
       IQueryComponent queryComponent, Map<String, Object> context) {
@@ -101,9 +102,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               if (EntityHelper.isInlineComponentReference(refPropDescriptor)) {
                 break;
               }
-              IComponentDescriptor<?> referencedDesc = refPropDescriptor
-                  .getReferencedDescriptor();
-              currentCompDesc = referencedDesc;
+              currentCompDesc = refPropDescriptor.getReferencedDescriptor();
               path.add(propElts[i]);
             } else {
               LOG.error("Ordering property {} not found on {}", propElts[i],
@@ -185,6 +184,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
     return criteria;
   }
 
+  @SuppressWarnings("ConstantConditions")
   private boolean completeCriteria(EnhancedDetachedCriteria rootCriteria,
       DetachedCriteria currentCriteria, String path,
       IQueryComponent aQueryComponent) {
@@ -221,8 +221,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                     property.getValue()));
               }
             } else if (property.getValue() instanceof Boolean
-                && (isTriStateBooleanSupported() || ((Boolean) property
-                    .getValue()).booleanValue())) {
+                && (isTriStateBooleanSupported() || (Boolean) property
+                .getValue())) {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
@@ -378,8 +378,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
       Junction disjunction = Restrictions.disjunction();
       currentCriteria.add(disjunction);
-      for (int i = 0; i < propValues.length; i++) {
-        String val = propValues[i];
+      for (String propValue : propValues) {
+        String val = propValue;
         if (val.length() > 0) {
           Criterion crit;
           boolean negate = false;

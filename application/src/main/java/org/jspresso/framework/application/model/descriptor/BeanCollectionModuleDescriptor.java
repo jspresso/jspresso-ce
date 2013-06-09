@@ -42,7 +42,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    *          the component descriptor of the module objects.
    */
   public BeanCollectionModuleDescriptor(
-      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor) {
+      IComponentDescriptor<?> moduleObjectReferencedDescriptor) {
     this(BeanCollectionModule.class.getName(), moduleObjectReferencedDescriptor);
   }
 
@@ -55,7 +55,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    *          the component descriptor of the module objects.
    */
   protected BeanCollectionModuleDescriptor(String name,
-      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor) {
+      IComponentDescriptor<?> moduleObjectReferencedDescriptor) {
     super(name);
 
     BasicListDescriptor<Object> moduleObjectsListDescriptor = new BasicListDescriptor<Object>();

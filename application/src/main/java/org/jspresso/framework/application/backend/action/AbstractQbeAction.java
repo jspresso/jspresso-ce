@@ -49,6 +49,7 @@ public abstract class AbstractQbeAction extends BackendAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -61,7 +62,7 @@ public abstract class AbstractQbeAction extends BackendAction {
               .get(IQueryComponent.ORDERING_PROPERTIES));
         }
         if (isSortOnly() && queryComponent.getPageCount() != null
-            && queryComponent.getPageCount().intValue() == 1) {
+            && queryComponent.getPageCount() == 1) {
           List<?> existingResultList = getExistingResultList(queryComponent,
               context);
           if (existingResultList != null && !existingResultList.isEmpty()) {

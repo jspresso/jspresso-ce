@@ -82,8 +82,7 @@ package org.jspresso.framework.view.flex {
     
     private function redraw(value:Object):void {
       invalidateDisplayList();
-    };
-
+    }
     override public function set data(value:Object):void {
       super.data = value;
       var cellValueState:RemoteValueState = getCellValueState();

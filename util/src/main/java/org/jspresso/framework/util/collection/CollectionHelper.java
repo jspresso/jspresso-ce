@@ -50,6 +50,7 @@ public final class CollectionHelper {
    *          the original collection
    * @return the cloned collection.
    */
+  @SuppressWarnings("unchecked")
   public static <E> Collection<E> cloneCollection(Collection<E> collection) {
     if (collection == null) {
       return null;
@@ -59,7 +60,7 @@ public final class CollectionHelper {
       // try to invoke the clone method reflectively
       try {
         clonedCollection = (Collection<E>) collection.getClass()
-            .getMethod("clone", (Class[]) null)
+            .getMethod("clone", (Class<?>[]) null)
             .invoke(collection, (Object[]) null);
       } catch (IllegalArgumentException ex) {
         throw new NestedRuntimeException(ex);

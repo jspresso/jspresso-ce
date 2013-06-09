@@ -53,6 +53,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   @Override
   protected String bindDNAuthentication(InitialLdapContext ctx, String user,
       Object credential, String searchBaseDN, String filter)
@@ -188,7 +189,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
    * @param endIndex
    *          end index.
    * @return the LDAP name slice.
-   * @throws NamingException
+   * @throws NamingException whenever a naming exception occurs.
    */
   protected String extractSlice(String nameAsString, NameParser nameParser,
       int startIndex, int endIndex) throws NamingException {

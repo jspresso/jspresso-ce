@@ -20,10 +20,7 @@ package org.jspresso.framework.util.bean;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jspresso.framework.util.accessor.IAccessor;
@@ -99,11 +96,9 @@ public final class PropertyHelper {
           && beanClass.getSuperclass() != Object.class) {
         superTypes.add(beanClass.getSuperclass());
       }
-      for (Class<?> superInterface : beanClass.getInterfaces()) {
-        superTypes.add(superInterface);
-      }
+      Collections.addAll(superTypes, beanClass.getInterfaces());
       for (Class<?> superType : superTypes) {
-        PropertyDescriptor descriptor = null;
+        PropertyDescriptor descriptor;
         descriptor = getPropertyDescriptorNoException(superType, property);
         if (descriptor != null) {
           if (descriptorToReturn != null) {

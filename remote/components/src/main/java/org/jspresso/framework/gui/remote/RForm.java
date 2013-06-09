@@ -115,7 +115,7 @@ public class RForm extends RComponent {
    * @param elementLabels
    *          the elementLabels to set.
    */
-  public void setElementLabels(RComponent[] elementLabels) {
+  public void setElementLabels(RComponent... elementLabels) {
     this.elementLabels = elementLabels;
   }
 
@@ -125,7 +125,7 @@ public class RForm extends RComponent {
    * @param elements
    *          the elements to set.
    */
-  public void setElements(RComponent[] elements) {
+  public void setElements(RComponent... elements) {
     this.elements = elements;
   }
 
@@ -135,7 +135,7 @@ public class RForm extends RComponent {
    * @param elementWidths
    *          the elementWidths to set.
    */
-  public void setElementWidths(Integer[] elementWidths) {
+  public void setElementWidths(Integer... elementWidths) {
     this.elementWidths = elementWidths;
   }
 

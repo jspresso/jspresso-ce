@@ -51,7 +51,7 @@ public enum EDuration {
    */
   ONE_WEEK(7 * 24 * 60 * 60 * 1000);
 
-  private int millis;
+  private final int millis;
 
   private EDuration(int millis) {
     this.millis = millis;

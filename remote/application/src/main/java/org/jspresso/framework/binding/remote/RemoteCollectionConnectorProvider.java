@@ -41,7 +41,7 @@ public class RemoteCollectionConnectorProvider extends
     IPermIdSource {
 
   private String                    permId;
-  private RemoteConnectorFactory    connectorFactory;
+  private final RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private RemoteCompositeValueState state;
 

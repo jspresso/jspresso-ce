@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archetype-descriptor name="Jspresso Application Archetype">
+<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+                      name="Jspresso Application Archetype">
   <requiredProperties>
     <requiredProperty key="jspressoVersion">
       <defaultValue>${project.version}</defaultValue>
@@ -60,7 +62,7 @@
     <module id="${rootArtifactId}-core" dir="core" name="${rootArtifactId}-core">
       <fileSets>
         <fileSet filtered="true" encoding="UTF-8">
-          <directory></directory>
+          <directory/>
           <includes>
             <include>.project</include>
             <include>.classpath</include>
@@ -126,7 +128,7 @@
         <module id="${rootArtifactId}-startup-swing" dir="swing" name="${rootArtifactId}-startup-swing">
           <fileSets>
             <fileSet filtered="true" encoding="UTF-8">
-              <directory></directory>
+              <directory/>
               <includes>
                 <include>.springBeans</include>
               </includes>
@@ -156,7 +158,7 @@
         <module id="${rootArtifactId}-startup-remote" dir="remote" name="${rootArtifactId}-startup-remote">
           <fileSets>
             <fileSet filtered="true" encoding="UTF-8">
-              <directory></directory>
+              <directory/>
               <includes>
                 <include>.springBeans</include>
               </includes>
@@ -263,7 +265,7 @@
     <module id="${rootArtifactId}-webapp" dir="webapp" name="${rootArtifactId}-webapp">
       <fileSets>
         <fileSet filtered="true" encoding="UTF-8">
-          <directory></directory>
+          <directory/>
           <includes>
             <include>.project</include>
           </includes>

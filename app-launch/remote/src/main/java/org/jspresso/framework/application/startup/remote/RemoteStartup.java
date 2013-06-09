@@ -177,6 +177,7 @@ public abstract class RemoteStartup extends
       if (startCommand.getVersion() != null
           && !isClientVersionCompatible(startCommand.getVersion())) {
         RemoteMessageCommand errorMessage = createErrorMessageCommand();
+        assert controller != null;
         errorMessage.setMessage(controller.getTranslation(
             "incompatible.client.version", new Object[] {
                 startCommand.getVersion(), Build.getJspressoVersion()

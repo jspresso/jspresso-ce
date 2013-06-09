@@ -103,6 +103,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public ITreeLevelDescriptor getRootSubtreeDescriptor() {
     if (rootSubtreeDescriptor == null) {

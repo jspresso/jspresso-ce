@@ -3,12 +3,12 @@
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local superInterfaceList=[]/>
   <#global isEntity=componentDescriptor.entity/>
-  <#if componentDescriptor.ancestorDescriptors?exists>
+  <#if componentDescriptor.ancestorDescriptors??>
     <#list componentDescriptor.ancestorDescriptors as ancestorDescriptor>
       <#if "org.jspresso.framework.model.entity.IEntity" != ancestorDescriptor.name>
 	      <#if ancestorDescriptor.entity>
 	        <#local superEntity=ancestorDescriptor/>
-	        <#if superEntity.sqlName?exists>
+	        <#if superEntity.sqlName??>
 	          <#local superEntityTableName=superEntity.sqlName/>
 	        <#else>  
 	          <#local superEntityName=superEntity.name[superEntity.name?last_index_of(".")+1..]/>
@@ -19,16 +19,16 @@
 	      </#if>
 	    </#if>
     </#list>
-    <#if isEntity && !(superEntity?exists)>
+    <#if isEntity && !(superEntity??)>
       <#local superInterfaceList = ["org.jspresso.framework.model.entity.IEntity"] + superInterfaceList/>
     </#if>
   </#if>
-  <#if componentDescriptor.serviceContractClassNames?exists>
+  <#if componentDescriptor.serviceContractClassNames??>
     <#list componentDescriptor.serviceContractClassNames as serviceContractClassName>
       <#local superInterfaceList=superInterfaceList + [serviceContractClassName]/>
     </#list>
   </#if>
-  <#if componentDescriptor.sqlName?exists>
+  <#if componentDescriptor.sqlName??>
     <#global tableName=componentDescriptor.sqlName/>
   <#else>  
     <#global tableName=generateSQLName(componentName)/>
@@ -59,18 +59,18 @@ package ${package};
     strategy = javax.persistence.InheritanceType.JOINED
 )
     <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-      <#if propertyDescriptor.unicityScope?exists>
+      <#if propertyDescriptor.unicityScope??>
         <#local propertyName=propertyDescriptor.name/>
-        <#if propertyDescriptor.sqlName?exists>
+        <#if propertyDescriptor.sqlName??>
           <#local columnName=propertyDescriptor.sqlName/>
           <#local columnNameGenerated = false/>
         <#else>  
           <#local columnName=generateSQLName(propertyName)/>
           <#local columnNameGenerated = true/>
         </#if>
-        <#if uniqueConstraints?exists>
+        <#if uniqueConstraints??>
           <#local uniqueConstraint = uniqueConstraints[propertyDescriptor.unicityScope]/>
-          <#if uniqueConstraint?exists>
+          <#if uniqueConstraint??>
             <#local uniqueConstraint = uniqueConstraint + [columnName]/>
           <#else>
             <#local uniqueConstraint = [columnName]/>
@@ -84,7 +84,7 @@ package ${package};
 
 @javax.persistence.Table(
     name = "${tableName}"
-    <#if uniqueConstraints?exists>
+    <#if uniqueConstraints??>
   , uniqueConstraints = {
       <#assign constraints = uniqueConstraints?keys/>
       <#list constraints as uniqueConstraint>
@@ -112,7 +112,7 @@ package ${package};
 @org.hibernate.annotations.Persister(
     impl = org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister.class
 )
-    <#if superEntity?exists>
+    <#if superEntity??>
 @javax.persistence.PrimaryKeyJoinColumn(
     name = "ID"
 )
@@ -127,7 +127,7 @@ package ${package};
   </#if>
 @SuppressWarnings("all")
   <#if isEntity>
-public abstract class ${componentName}<#if superEntity?exists> extends ${superEntity.name}</#if>
+public abstract class ${componentName}<#if superEntity??> extends ${superEntity.name}</#if>
   <#else>
 public interface ${componentName}
 </#if>
@@ -136,7 +136,7 @@ public interface ${componentName}
 <#list superInterfaceList as superInterface>       ${superInterface}<#if superInterface_has_next>,${"\n"}<#else> {</#if></#list>
 <#else> {
 </#if>
-  <#if isEntity && !superEntity?exists>
+  <#if isEntity && !superEntity??>
   <#--<#if isEntity>-->
 
 
@@ -192,7 +192,7 @@ public interface ${componentName}
   <#else>
     <#local propertyType=propertyDescriptor.modelType.name/>
   </#if>
-  <#if propertyDescriptor.sqlName?exists>
+  <#if propertyDescriptor.sqlName??>
     <#local columnName=propertyDescriptor.sqlName/>
     <#local columnNameGenerated = false/>
   <#else>  
@@ -229,7 +229,7 @@ public interface ${componentName}
           || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor")
           || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")
          )
-      && (propertyDescriptor.maxLength?exists)>
+      && (propertyDescriptor.maxLength??)>
     , length = ${propertyDescriptor.maxLength?c}
     <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IColorPropertyDescriptor")>
     , length = 10
@@ -239,8 +239,8 @@ public interface ${componentName}
     , nullable = false
     </#if>
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.INumberPropertyDescriptor")>
-      <#if (propertyDescriptor.minValue?exists)
-         &&(propertyDescriptor.maxValue?exists)>
+      <#if (propertyDescriptor.minValue??)
+         &&(propertyDescriptor.maxValue??)>
         <#local infLength=propertyDescriptor.minValue?int?c?length/>
         <#local supLength=propertyDescriptor.maxValue?int?c?length/>
         <#if (infLength > supLength)>
@@ -253,7 +253,7 @@ public interface ${componentName}
     , precision = 10
       </#if>
       <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor")>
-        <#if propertyDescriptor.maxFractionDigit?exists>
+        <#if propertyDescriptor.maxFractionDigit??>
     , scale = ${propertyDescriptor.maxFractionDigit?c}
         <#else>
     , scale = 2
@@ -266,7 +266,7 @@ public interface ${componentName}
       optional = false
   )
   </#if>
-  <#elseif propertyDescriptor.sqlName?exists>
+  <#elseif propertyDescriptor.sqlName??>
   @org.hibernate.annotations.Formula("${propertyDescriptor.sqlName}")
   <#else>
   @javax.persistence.Transient
@@ -334,7 +334,7 @@ public interface ${componentName}
 
 <#macro generateCollectionGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.fkName?exists>
+  <#if propertyDescriptor.fkName??>
     <#local fkName=propertyDescriptor.fkName/>
   </#if>
   <#local collectionType=propertyDescriptor.modelType.name/>
@@ -350,11 +350,11 @@ public interface ${componentName}
     <#local hibernateCollectionType="set"/>
   </#if>
   <#local manyToMany=propertyDescriptor.manyToMany/>
-  <#if propertyDescriptor.reverseRelationEnd?exists>
+  <#if propertyDescriptor.reverseRelationEnd??>
     <#local bidirectional=true/>
     <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name/>
     <#local reverseMandatory=propertyDescriptor.reverseRelationEnd.mandatory/>
-    <#if propertyDescriptor.reverseRelationEnd.fkName?exists>
+    <#if propertyDescriptor.reverseRelationEnd.fkName??>
       <#local reverseFkName=propertyDescriptor.reverseRelationEnd.fkName/>
     </#if>
     <#if manyToMany>
@@ -381,17 +381,17 @@ public interface ${componentName}
       <#local reversePropertyName=propertyName+componentName/>
     </#if>
   </#if>
-  <#if componentDescriptor.sqlName?exists>
+  <#if componentDescriptor.sqlName??>
     <#local compSqlName=componentDescriptor.sqlName/>
   <#else>  
     <#local compSqlName=generateSQLName(componentName)/>
   </#if>
-  <#if elementDescriptor.sqlName?exists>
+  <#if elementDescriptor.sqlName??>
     <#local eltSqlName=elementDescriptor.sqlName/>
   <#else>  
     <#local eltSqlName=generateSQLName(elementName)/>
   </#if>
-  <#if propertyDescriptor.sqlName?exists>
+  <#if propertyDescriptor.sqlName??>
     <#local propSqlName=propertyDescriptor.sqlName/>
     <#local propSqlNameGenerated = false/>
   <#else>  
@@ -399,8 +399,8 @@ public interface ${componentName}
     <#local propSqlNameGenerated = true/>
   </#if>
   <#local revSqlNameGenerated = true/>
-  <#if propertyDescriptor.reverseRelationEnd?exists>
-	  <#if propertyDescriptor.reverseRelationEnd.sqlName?exists>
+  <#if propertyDescriptor.reverseRelationEnd??>
+	  <#if propertyDescriptor.reverseRelationEnd.sqlName??>
 	    <#local revSqlName=propertyDescriptor.reverseRelationEnd.sqlName/>
       <#local revSqlNameGenerated = false/>
 	  <#else>  
@@ -458,12 +458,12 @@ public interface ${componentName}
   )
         <#if componentName=elementName>
   @org.hibernate.annotations.ForeignKey(
-          <#if fkName?exists>
+          <#if fkName??>
       name = "${fkName}"
           <#else>
       name = "${joinTableName}_${compSqlName}_FK1"
           </#if>
-          <#if reverseFkName?exists>
+          <#if reverseFkName??>
     , inverseName = "${reverseFkName}"
           <#else>
     , inverseName = "${joinTableName}_${compSqlName}_FK2"
@@ -471,12 +471,12 @@ public interface ${componentName}
   )
         <#else>
   @org.hibernate.annotations.ForeignKey(
-          <#if fkName?exists>
+          <#if fkName??>
       name = "${fkName}"
           <#else>
       name = "${joinTableName}_${compSqlName}_FK"
           </#if>
-          <#if reverseFkName?exists>
+          <#if reverseFkName??>
     , inverseName = "${reverseFkName}"
           <#else>
     , inverseName = "${joinTableName}_${eltSqlName}_FK"
@@ -499,7 +499,7 @@ public interface ${componentName}
       name = "${revSqlName}"
         </#if>
   )
-        <#if fkName?exists>
+        <#if fkName??>
   @org.hibernate.annotations.ForeignKey(
       name = "${fkName}"
   )
@@ -543,11 +543,11 @@ public interface ${componentName}
 
 <#macro generateComponentRefGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.fkName?exists>
+  <#if propertyDescriptor.fkName??>
     <#local fkName=propertyDescriptor.fkName/>
   </#if>
   <#local propertyType=propertyDescriptor.referencedDescriptor.name/>
-  <#if propertyDescriptor.referencedDescriptor.sqlName?exists>
+  <#if propertyDescriptor.referencedDescriptor.sqlName??>
     <#local refSqlName=propertyDescriptor.referencedDescriptor.sqlName/>
   <#else>  
     <#local refSqlName=generateSQLName(propertyDescriptor.referencedDescriptor.name[propertyDescriptor.referencedDescriptor.name?last_index_of(".")+1..])/>
@@ -556,7 +556,7 @@ public interface ${componentName}
   <#local isPurelyAbstract=propertyDescriptor.referencedDescriptor.purelyAbstract/>
   <#local oneToOne=propertyDescriptor.oneToOne/>
   <#local composition=propertyDescriptor.composition/>
-  <#if propertyDescriptor.reverseRelationEnd?exists>
+  <#if propertyDescriptor.reverseRelationEnd??>
     <#local bidirectional=true/>
     <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name/>
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
@@ -583,7 +583,7 @@ public interface ${componentName}
     <#local bidirectional=false/>
     <#local reverseOneToOne=false/>
   </#if>
-  <#if propertyDescriptor.sqlName?exists>
+  <#if propertyDescriptor.sqlName??>
     <#local propSqlName=propertyDescriptor.sqlName/>
     <#local propSqlNameGenerated = false/>
   <#else>  
@@ -634,7 +634,7 @@ public interface ${componentName}
         <#if reverseOneToOne>
     , mappedBy = "${propertyDescriptor.reverseRelationEnd.name}"
         <#else>
-          <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
+          <#if propertyDescriptor.fetchType?? && propertyDescriptor.fetchType.toString() = "JOIN">
     , fetch = javax.persistence.FetchType.EAGER
           </#if>
           <#if propertyDescriptor.mandatory>
@@ -647,7 +647,7 @@ public interface ${componentName}
       targetEntity = ${propertyType}.class
   )
         <#if isEntity>
-          <#if fkName?exists>
+          <#if fkName??>
   @org.hibernate.annotations.ForeignKey(
       name = "${fkName}"
   )
@@ -665,7 +665,7 @@ public interface ${componentName}
   )
   @javax.persistence.AttributeOverrides({
       <#list propertyDescriptor.referencedDescriptor.propertyDescriptors as refPropertyDescriptor>
-        <#if refPropertyDescriptor.sqlName?exists>
+        <#if refPropertyDescriptor.sqlName??>
           <#local refPropSqlName=refPropertyDescriptor.sqlName/>
         <#else>  
           <#local refPropSqlName=generateSQLName(refPropertyDescriptor.name)/>
@@ -779,7 +779,7 @@ public interface ${componentName}
 
 </#macro>
 <@generateClassHeader componentDescriptor=componentDescriptor/>
-<#if componentDescriptor.declaredPropertyDescriptors?exists>
+<#if componentDescriptor.declaredPropertyDescriptors??>
   <#assign empty=true/>
   <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
     <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>

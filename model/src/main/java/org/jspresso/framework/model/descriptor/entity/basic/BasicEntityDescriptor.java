@@ -72,7 +72,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
 
     BasicJavaSerializablePropertyDescriptor idPropertyDescriptor = new BasicJavaSerializablePropertyDescriptor();
     idPropertyDescriptor.setName(IEntity.ID);
-    idPropertyDescriptor.setMaxLength(Integer.valueOf(36));
+    idPropertyDescriptor.setMaxLength(36);
     idPropertyDescriptor.setReadOnly(true);
     propertyDescriptors.add(idPropertyDescriptor);
 

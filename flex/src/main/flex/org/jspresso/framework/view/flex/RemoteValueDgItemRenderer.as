@@ -123,9 +123,8 @@ package org.jspresso.framework.view.flex {
 
     private function redraw(value:Object):void {
       invalidateDisplayList();
-    };
-    
-  	override public function set data(value:Object):void	{
+    }
+    override public function set data(value:Object):void	{
   	  updateLabel(value, listData);
   	  if(listData && super.listData) {
   	    super.listData.label = listData.label;

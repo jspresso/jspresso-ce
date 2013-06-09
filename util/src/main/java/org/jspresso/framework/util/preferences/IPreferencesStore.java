@@ -32,7 +32,7 @@ public interface IPreferencesStore {
    * @param storePath
    *          the path identifying this store.
    */
-  void setStorePath(String[] storePath);
+  void setStorePath(String... storePath);
 
   /**
    * Retrieves a preference from the preference store.

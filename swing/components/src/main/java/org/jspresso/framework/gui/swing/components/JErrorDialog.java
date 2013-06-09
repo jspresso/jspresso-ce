@@ -138,17 +138,15 @@ public final class JErrorDialog extends JDialog {
     String exceptionAsDetails = null;
     if (details != null) {
       StringBuilder html = new StringBuilder("<html>");
-      html.append("<b>" + translationProvider.getTranslation("details", locale)
-          + " :</b>");
+      html.append("<b>").append(translationProvider.getTranslation("details", locale)).append(" :</b>");
       html.append("<pre>");
-      html.append("    " + details.getMessage());
+      html.append("    ").append(details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html.append("<b>"
-          + translationProvider.getTranslation("stacktrace", locale) + " :</b>");
+      html.append("<b>").append(translationProvider.getTranslation("stacktrace", locale)).append(" :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
-        html.append("    " + el.toString() + "\n");
+        html.append("    ").append(el.toString()).append("\n");
       }
       html.append("</pre></html>");
       exceptionAsDetails = html.toString();

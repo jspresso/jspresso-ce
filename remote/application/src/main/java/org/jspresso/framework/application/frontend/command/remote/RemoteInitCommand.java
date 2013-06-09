@@ -83,7 +83,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * @param actions
    *          the actions to set.
    */
-  public void setActions(RActionList[] actions) {
+  public void setActions(RActionList... actions) {
     this.actions = actions;
   }
 
@@ -93,7 +93,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * @param helpActions
    *          the helpActions to set.
    */
-  public void setHelpActions(RActionList[] helpActions) {
+  public void setHelpActions(RActionList... helpActions) {
     this.helpActions = helpActions;
   }
 
@@ -113,7 +113,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * @param workspaceNames
    *          the workspaceNames to set.
    */
-  public void setWorkspaceNames(String[] workspaceNames) {
+  public void setWorkspaceNames(String... workspaceNames) {
     this.workspaceNames = workspaceNames;
   }
 
@@ -132,7 +132,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * @param navigationActions
    *          the navigationActions to set.
    */
-  public void setNavigationActions(RActionList[] navigationActions) {
+  public void setNavigationActions(RActionList... navigationActions) {
     this.navigationActions = navigationActions;
   }
 
@@ -170,7 +170,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * @param secondaryActions
    *          the secondaryActions to set.
    */
-  public void setSecondaryActions(RActionList[] secondaryActions) {
+  public void setSecondaryActions(RActionList... secondaryActions) {
     this.secondaryActions = secondaryActions;
   }
 

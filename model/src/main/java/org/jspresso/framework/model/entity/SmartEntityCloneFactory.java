@@ -45,6 +45,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <E extends IComponent> E cloneComponent(E componentToClone,
       IEntityFactory entityFactory) {
@@ -57,6 +58,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
@@ -75,6 +77,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
    * @deprecated accessor factory is now retrieved from the entity factory
    *             passed as parameter of the methods.
    */
+  @SuppressWarnings("EmptyMethod")
   @Deprecated
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     // NO-OP

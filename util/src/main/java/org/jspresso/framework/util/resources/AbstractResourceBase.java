@@ -26,7 +26,7 @@ package org.jspresso.framework.util.resources;
  */
 public abstract class AbstractResourceBase implements IResourceBase {
 
-  private String mimeType;
+  private final String mimeType;
 
   /**
    * Constructs a new <code>AbstractResource</code> instance.

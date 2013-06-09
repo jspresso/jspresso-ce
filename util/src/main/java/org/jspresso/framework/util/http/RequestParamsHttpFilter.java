@@ -57,10 +57,11 @@ public class RequestParamsHttpFilter implements Filter {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain chain) throws IOException, ServletException {
-    Map<String, String> parameterMap = ((HttpServletRequest) request)
+    Map<String, String> parameterMap = request
         .getParameterMap();
     if (parameterMap != null) {
       HttpSession session = ((HttpServletRequest) request).getSession();

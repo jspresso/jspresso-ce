@@ -44,7 +44,7 @@ import org.jspresso.framework.application.model.Workspace;
  */
 public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IAction actualExitAction;
+  private final IAction actualExitAction;
   private IAction checkCurrentModuleDirtyStateAction;
 
   /**

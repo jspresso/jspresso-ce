@@ -73,12 +73,12 @@ public final class CollectionConnectorHelper {
         if (smallCollection == null) {
           ite.next();
         }
-        addedIndices.add(Integer.valueOf(index));
+        addedIndices.add(index);
       }
     }
     int[] result = new int[addedIndices.size()];
     for (int i = 0; i < addedIndices.size(); i++) {
-      result[i] = addedIndices.get(i).intValue();
+      result[i] = addedIndices.get(i);
     }
     return result;
   }

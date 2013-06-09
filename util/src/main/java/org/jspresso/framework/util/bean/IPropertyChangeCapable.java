@@ -105,6 +105,7 @@ public interface IPropertyChangeCapable {
       PropertyChangeListener listener);
 
   /**
+   * Gets listeners attached.
    * @return all of the <code>PropertyChangeListeners</code> added or an empty
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
@@ -112,6 +113,7 @@ public interface IPropertyChangeCapable {
   PropertyChangeListener[] getPropertyChangeListeners();
 
   /**
+   * Gets listeners attached to a given property.
    * @param propertyName
    *          propertyName
    * @return all of the <code>PropertyChangeListeners</code> associated with the
@@ -122,7 +124,7 @@ public interface IPropertyChangeCapable {
   PropertyChangeListener[] getPropertyChangeListeners(String propertyName);
 
   /**
-   * Gets wether this property has at least a property change listener attached
+   * Gets whether this property has at least a property change listener attached
    * to it.
    * 
    * @param propertyName

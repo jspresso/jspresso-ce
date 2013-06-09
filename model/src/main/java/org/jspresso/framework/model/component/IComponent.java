@@ -30,6 +30,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("EmptyMethod")
 public interface IComponent extends IPropertyChangeCapable {
 
   /**

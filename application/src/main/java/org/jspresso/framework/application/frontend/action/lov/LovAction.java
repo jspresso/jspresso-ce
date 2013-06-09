@@ -120,6 +120,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ConstantConditions")
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
@@ -232,12 +233,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             Object secondItem = queryComponent.getQueriedComponents().get(1);
             try {
               // Determine if it is a single exact match.
-              String firstItemPropertyValue = (String) getBackendController(
+              String firstItemPropertyValue = getBackendController(
                   context)
                   .getAccessorFactory()
                   .createPropertyAccessor(autoCompletePropertyName,
                       firstItem.getClass()).getValue(firstItem);
-              String secondItemPropertyValue = (String) getBackendController(
+              String secondItemPropertyValue = getBackendController(
                   context)
                   .getAccessorFactory()
                   .createPropertyAccessor(autoCompletePropertyName,
@@ -275,9 +276,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
                 .getConnector())
                 .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
             if (resultConnector != null) {
-              resultConnector.setSelectedIndices(new int[] {
-                i
-              });
+              resultConnector.setSelectedIndices(i);
             }
             break;
           }

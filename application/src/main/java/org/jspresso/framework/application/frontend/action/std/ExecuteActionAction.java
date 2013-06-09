@@ -45,7 +45,7 @@ public class ExecuteActionAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IAction action = (IAction) getActionParameter(context);
+    IAction action = getActionParameter(context);
     return actionHandler.execute(action, context)
         && super.execute(actionHandler, context);
   }

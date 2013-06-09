@@ -22,16 +22,19 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+
+    <!-- For AbstractTestDataPersister -->
     <dependency>
       <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-hibernate</artifactId>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
+    <!-- For AbstractTestDataContextListener -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>

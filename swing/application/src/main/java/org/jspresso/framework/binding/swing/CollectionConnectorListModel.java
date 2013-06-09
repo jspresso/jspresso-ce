@@ -39,11 +39,11 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CollectionConnectorListModel extends AbstractListModel {
+public class CollectionConnectorListModel extends AbstractListModel<IValueConnector> {
 
   private static final long                  serialVersionUID = -7992011455793793550L;
   private Map<Integer, IValueChangeListener> cachedListeners;
-  private ICollectionConnector               collectionConnector;
+  private final ICollectionConnector               collectionConnector;
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
@@ -64,7 +64,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
    * {@inheritDoc}
    */
   @Override
-  public Object getElementAt(int index) {
+  public IValueConnector getElementAt(int index) {
     return collectionConnector.getChildConnector(index);
   }
 
@@ -105,10 +105,10 @@ public class CollectionConnectorListModel extends AbstractListModel {
       cachedListeners = new HashMap<Integer, IValueChangeListener>();
     }
     IValueChangeListener cachedListener = cachedListeners
-        .get(Integer.valueOf(index));
+        .get(index);
     if (cachedListener == null) {
       cachedListener = new CellConnectorListener(index);
-      cachedListeners.put(Integer.valueOf(index), cachedListener);
+      cachedListeners.put(index, cachedListener);
     }
     return cachedListener;
   }
@@ -126,7 +126,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
 
   private final class CellConnectorListener implements IValueChangeListener {
 
-    private int index;
+    private final int index;
 
     private CellConnectorListener(int index) {
       this.index = index;

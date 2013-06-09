@@ -85,7 +85,8 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * 
    * @return the componentDescriptor.
    */
-  public IComponentDescriptor<? extends Object> getComponentDescriptor() {
+  @SuppressWarnings("unchecked")
+  public IComponentDescriptor<?> getComponentDescriptor() {
     if (componentDescriptor == null) {
       if (getProjectedViewDescriptor() != null
           && getProjectedViewDescriptor().getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {

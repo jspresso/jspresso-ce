@@ -31,7 +31,7 @@ import java.awt.EventQueue;
  */
 public class WaitCursorEventQueue extends EventQueue {
 
-  private WaitCursorTimer waitTimer;
+  private final WaitCursorTimer waitTimer;
 
   /**
    * Constructs a new <code>WaitCursorEventQueue</code> instance.

@@ -33,8 +33,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public class MandatoryPropertyException extends IntegrityException {
 
   private static final long serialVersionUID = 2718861269346880833L;
-  private IDescriptor       descriptor;
-  private Object            targetComponent;
+  private final IDescriptor       descriptor;
+  private final Object            targetComponent;
 
   /**
    * Constructs a new <code>MandatoryPropertyException</code> instance.

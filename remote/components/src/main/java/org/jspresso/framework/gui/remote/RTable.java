@@ -107,7 +107,7 @@ public class RTable extends RCollectionComponent {
    * @param columnIds
    *          the columnIds to set.
    */
-  public void setColumnIds(String[] columnIds) {
+  public void setColumnIds(String... columnIds) {
     this.columnIds = columnIds;
   }
 
@@ -117,7 +117,7 @@ public class RTable extends RCollectionComponent {
    * @param columns
    *          the columns to set.
    */
-  public void setColumns(RComponent[] columns) {
+  public void setColumns(RComponent... columns) {
     this.columns = columns;
   }
 
@@ -166,7 +166,7 @@ public class RTable extends RCollectionComponent {
    * @param columnHeaders
    *          the columnHeaders to set.
    */
-  public void setColumnHeaders(RComponent[] columnHeaders) {
+  public void setColumnHeaders(RComponent... columnHeaders) {
     this.columnHeaders = columnHeaders;
   }
 

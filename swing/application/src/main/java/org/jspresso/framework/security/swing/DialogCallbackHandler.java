@@ -94,6 +94,7 @@ public class DialogCallbackHandler implements CallbackHandler {
     try {
       SwingUtilities.invokeAndWait(new Runnable() {
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         public void run() {
           try {

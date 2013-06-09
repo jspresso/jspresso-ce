@@ -18,40 +18,17 @@
  */
 package org.jspresso.framework.util.swing;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.Window;
+import foxtrot.Job;
+import foxtrot.Worker;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.jspresso.framework.util.exception.NestedRuntimeException;
-import org.jvnet.lafwidget.LafWidget;
-import org.jvnet.lafwidget.preview.DefaultPreviewPainter;
-import org.jvnet.lafwidget.tabbed.DefaultTabPreviewPainter;
-import org.jvnet.lafwidget.utils.LafConstants.TabOverviewKind;
-
-import foxtrot.Job;
-import foxtrot.Worker;
 
 /**
  * A helper class for Swing.
@@ -304,30 +281,30 @@ public final class SwingUtil {
     UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY,
         UIManager.get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
     UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
-    try {
-      UIManager.put(LafWidget.TABBED_PANE_PREVIEW_PAINTER,
-          new DefaultTabPreviewPainter() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public TabOverviewKind getOverviewKind(JTabbedPane tabPane) {
-              return TabOverviewKind.ROUND_CAROUSEL;
-              // return TabOverviewKind.MENU_CAROUSEL;
-            }
-          });
-      UIManager.put(LafWidget.COMPONENT_PREVIEW_PAINTER,
-          new DefaultPreviewPainter());
-      UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
-      // UIManager.put(LafWidget.COMBO_BOX_NO_AUTOCOMPLETION, Boolean.TRUE);
-    } catch (Throwable ignored) {
-      // substance may not be available.
-    }
+//    try {
+//      UIManager.put(LafWidget.TABBED_PANE_PREVIEW_PAINTER,
+//          new DefaultTabPreviewPainter() {
+//
+//            /**
+//             * {@inheritDoc}
+//             */
+//            @Override
+//            public TabOverviewKind getOverviewKind(JTabbedPane tabPane) {
+//              return TabOverviewKind.ROUND_CAROUSEL;
+//              // return TabOverviewKind.MENU_CAROUSEL;
+//            }
+//          });
+//      UIManager.put(LafWidget.COMPONENT_PREVIEW_PAINTER,
+//          new DefaultPreviewPainter());
+//      UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
+//      // UIManager.put(LafWidget.COMBO_BOX_NO_AUTOCOMPLETION, Boolean.TRUE);
+//    } catch (Throwable ignored) {
+//      // substance may not be available.
+//    }
   }
 
   /**
-   * Is the component passed in parameter used as an editor ?
+   * Tests whether the component passed in parameter is used as an editor.
    * 
    * @param comp
    *          the component to test.
@@ -390,7 +367,7 @@ public final class SwingUtil {
 
   private static final class FocusGainedTask implements Runnable {
 
-    private JTextField textField;
+    private final JTextField textField;
 
     /**
      * Constructs a new <code>FocusGainedTask</code> instance.
@@ -419,7 +396,7 @@ public final class SwingUtil {
 
   private static final class FocusLostTask implements Runnable {
 
-    private JTextField textField;
+    private final JTextField textField;
 
     /**
      * Constructs a new <code>FocusLostTask</code> instance.
@@ -447,7 +424,7 @@ public final class SwingUtil {
 
   private static class TfDocumentListener implements DocumentListener {
 
-    private JTextField textField;
+    private final JTextField textField;
 
     /**
      * Constructs a new <code>TfDocumentListener</code> instance.

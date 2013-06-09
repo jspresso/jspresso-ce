@@ -51,7 +51,7 @@ public class FilterableBeanCollectionModuleDescriptor extends
    *          the component descriptor for the filter object.
    */
   public FilterableBeanCollectionModuleDescriptor(
-      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor,
+      IComponentDescriptor<?> moduleObjectReferencedDescriptor,
       IComponentDescriptor<IQueryComponent> moduleFilterReferencedDescriptor) {
     this(FilterableBeanCollectionModule.class.getName(),
         moduleObjectReferencedDescriptor, moduleFilterReferencedDescriptor);
@@ -69,7 +69,7 @@ public class FilterableBeanCollectionModuleDescriptor extends
    *          the component descriptor for the filter object.
    */
   protected FilterableBeanCollectionModuleDescriptor(String name,
-      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor,
+      IComponentDescriptor<?> moduleObjectReferencedDescriptor,
       IComponentDescriptor<IQueryComponent> moduleFilterReferencedDescriptor) {
     super(name, moduleObjectReferencedDescriptor);
 

@@ -50,12 +50,12 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   private static final long      serialVersionUID = -3323472361980315420L;
 
-  private TableConnectorListener tableListener;
-  private RowConnectorListener   rowListener;
-  private CellConnectorListener  cellListener;
-  private ICollectionConnector   collectionConnector;
-  private List<Class<?>>         columnClasses;
-  private List<String>           columnConnectorKeys;
+  private final TableConnectorListener tableListener;
+  private final RowConnectorListener   rowListener;
+  private final CellConnectorListener  cellListener;
+  private final ICollectionConnector   collectionConnector;
+  private final List<Class<?>>         columnClasses;
+  private final List<String>           columnConnectorKeys;
 
   private String                 rowBackgroundProperty;
   private String                 rowForegroundProperty;
@@ -208,12 +208,12 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         .getChildConnector(row);
     if (rowConnector != null && !rowConnector.getValueChangeListeners().contains(rowListener)) {
       rowConnector.addValueChangeListener(rowListener);
-      for (int col = 0; col < columnConnectorKeys.size(); col++) {
+      for (String columnConnectorKey : columnConnectorKeys) {
         IValueConnector cellConnector = rowConnector
-            .getChildConnector(columnConnectorKeys.get(col));
+            .getChildConnector(columnConnectorKey);
         if (cellConnector instanceof IRenderableCompositeValueConnector
             && ((IRenderableCompositeValueConnector) cellConnector)
-                .getRenderingConnector() != null) {
+            .getRenderingConnector() != null) {
           ((IRenderableCompositeValueConnector) cellConnector)
               .getRenderingConnector().addValueChangeListener(cellListener);
         } else {
@@ -306,7 +306,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private void resetRowSelection(int row) {
     if (collectionConnector.getSelectedIndices() != null) {
       if (Arrays.binarySearch(collectionConnector.getSelectedIndices(), row) >= 0) {
-        collectionConnector.setSelectedIndices(new int[0]);
+        collectionConnector.setSelectedIndices();
       }
     }
   }

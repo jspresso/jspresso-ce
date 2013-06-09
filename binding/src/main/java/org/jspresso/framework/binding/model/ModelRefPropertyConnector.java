@@ -57,7 +57,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   private Map<String, IValueConnector> childConnectors;
   private ModelChangeSupport           modelChangeSupport;
 
-  private IModelConnectorFactory       modelConnectorFactory;
+  private final IModelConnectorFactory       modelConnectorFactory;
 
   /**
    * Constructs a new model property connector on a model reference property.

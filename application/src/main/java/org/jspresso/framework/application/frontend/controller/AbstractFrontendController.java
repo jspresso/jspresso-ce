@@ -120,15 +120,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private ActionMap                             actionMap;
   private ActionMap                             secondaryActionMap;
 
-  private List<ModuleHistoryEntry>              backwardHistoryEntries;
+  private final List<ModuleHistoryEntry>              backwardHistoryEntries;
   private Locale                                clientLocale;
-  private DefaultIconDescriptor                 controllerDescriptor;
-  private List<Map<String, Object>>             dialogContextStack;
+  private final DefaultIconDescriptor                 controllerDescriptor;
+  private final List<Map<String, Object>>             dialogContextStack;
   private IDisplayableAction                    exitAction;
 
   private String                                forcedStartingLocale;
 
-  private List<ModuleHistoryEntry>              forwardHistoryEntries;
+  private final List<ModuleHistoryEntry>              forwardHistoryEntries;
 
   private ActionMap                             helpActionMap;
   private ActionMap                             navigationActionMap;
@@ -137,7 +137,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private String                                loginContextName;
   private IViewDescriptor                       loginViewDescriptor;
-  private Map<String, IMapView<E>>              workspaceViews;
+  private final Map<String, IMapView<E>>              workspaceViews;
   private boolean                               moduleAutoPinEnabled;
 
   private IMvcBinder                            mvcBinder;
@@ -145,7 +145,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private IAction                               onModuleExitAction;
   private IAction                               onModuleStartupAction;
 
-  private Map<String, Module>                   selectedModules;
+  private final Map<String, Module>                   selectedModules;
 
   private String                                selectedWorkspaceName;
   private IAction                               loginAction;
@@ -153,7 +153,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private boolean                               tracksWorkspaceNavigator;
   private IViewFactory<E, F, G>                 viewFactory;
-  private Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
+  private final Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
   private Map<String, Workspace>                workspaces;
   private String                                workspacesMenuIconImageUrl;
 
@@ -312,7 +312,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             (ICollectionConnectorListProvider) workspaceNavigatorConnector,
             module);
         if (result != null) {
-          int moduleModelIndex = ((Integer) result[1]).intValue();
+          int moduleModelIndex = (Integer) result[1];
           ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
             moduleModelIndex
           }, moduleModelIndex);
@@ -506,6 +506,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("ThrowFromFinallyBlock")
   @Override
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
@@ -599,8 +600,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           LOG.error(
               ">> [{}] is null in the initial action state but not null in the final one.",
               path);
-        } else if (initialValue != null && finalValue != null
-            && !initialValue.equals(finalValue)) {
+        } else if (initialValue != null && !initialValue.equals(finalValue)) {
           if (initialValue instanceof Map<?, ?>
               && finalValue instanceof Map<?, ?>) {
             logInternalStateDifferences(path,
@@ -880,7 +880,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
       return workspaceNames;
     }
-    return Collections.<String> emptyList();
+    return Collections.emptyList();
   }
 
   /**
@@ -1657,7 +1657,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (lcName != null) {
       CallbackHandler lch = getLoginCallbackHandler();
       try {
-        LoginContext lc = null;
+        LoginContext lc;
         try {
           lc = new LoginContext(lcName, lch);
         } catch (LoginException le) {
@@ -1687,7 +1687,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             }
           }
         }
-        if (lch instanceof UsernamePasswordHandler) {
+        if (lch != null) {
           LOG.info("User {} failed to log in for session {}.",
               ((UsernamePasswordHandler) lch).getUsername(),
               getApplicationSession().getId());
@@ -1809,7 +1809,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (tracksWorkspaceNavigator) {
       if (selectedConnector != null
           && selectedConnector.getConnectorValue() instanceof Module) {
-        Module selectedModule = (Module) selectedConnector.getConnectorValue();
+        Module selectedModule = selectedConnector.getConnectorValue();
         displayModule(workspaceName, selectedModule);
         // We do not reset displayed module on navigator selection anymore.
         // This is because when a node is selected in the tree at different
@@ -1826,6 +1826,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
+  @SuppressWarnings("ConstantConditions")
   private Object[] synchWorkspaceNavigatorSelection(
       ICollectionConnectorListProvider navigatorConnector, Module module) {
     Object[] result = null;
@@ -1848,7 +1849,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
       if (moduleModelIndex >= 0) {
         result = new Object[] {
-            childCollectionConnector, Integer.valueOf(moduleModelIndex)
+            childCollectionConnector, moduleModelIndex
         };
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
@@ -1957,9 +1958,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       buff.append(username);
     }
     buff.append(UP_SEP);
-    if (password != null) {
-      // buff.append(password);
-    }
+//    if (password != null) {
+//      buff.append(password);
+//    }
     return buff.toString();
   }
 
@@ -1979,11 +1980,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
         userPass[0] = temp[0];
         // userPass[1] = temp[1];
       } else if (temp.length == 1) {
-        if (encodedUserPass.indexOf(UP_SEP) == 0) {
-          // userPass[1] = temp[0];
-        } else {
+        if (encodedUserPass.indexOf(UP_SEP) != 0) {
           userPass[0] = temp[0];
         }
+//        else {
+//          userPass[1] = temp[0];
+//        }
       }
     }
     return userPass;
@@ -2009,9 +2011,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected synchronized IPreferencesStore getClientPreferencesStore() {
     if (clientPreferencesStore == null) {
       clientPreferencesStore = createClientPreferencesStore();
-      clientPreferencesStore.setStorePath(new String[] {
-        getName()
-      });
+      clientPreferencesStore.setStorePath(getName());
     }
     return clientPreferencesStore;
   }

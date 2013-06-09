@@ -29,6 +29,7 @@ package org.jspresso.framework.util.bean.integrity;
  * @param <F>
  *          The type of the property.
  */
+@SuppressWarnings("EmptyMethod")
 public interface IPropertyProcessor<E, F> {
 
   /**

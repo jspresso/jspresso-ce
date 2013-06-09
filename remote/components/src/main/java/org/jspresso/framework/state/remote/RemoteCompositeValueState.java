@@ -151,7 +151,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * @param selectedIndices
    *          the selectedIndices to set.
    */
-  public void setSelectedIndices(int[] selectedIndices) {
+  public void setSelectedIndices(int... selectedIndices) {
     this.selectedIndices = selectedIndices;
   }
 }

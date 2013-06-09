@@ -38,7 +38,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
     IRenderableCompositeValueConnector {
 
   private IValueConnector      renderingConnector;
-  private IValueChangeListener renderingListener;
+  private final IValueChangeListener renderingListener;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
@@ -180,7 +180,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   @Override
   public String getDisplayValue() {
     if (getRenderingConnector() != null) {
-      return (String) getRenderingConnector().getConnectorValue();
+      return getRenderingConnector().getConnectorValue();
     }
     return "";
   }

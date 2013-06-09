@@ -101,7 +101,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   Class<?> getQueryContract();
 
   /**
-   * Does this query component map an inline component or an entity ?
+   * Tests whether this query component maps an inline component or an entity.
    * 
    * @return true if this query component map an inline component ?
    */

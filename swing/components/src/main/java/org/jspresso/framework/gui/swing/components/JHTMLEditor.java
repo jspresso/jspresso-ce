@@ -50,10 +50,10 @@ public class JHTMLEditor extends JPanel {
 
   private static final long serialVersionUID = 2630154668370585110L;
 
-  private ResourceBundle    bundle;
-  private JTextPane         editorPane;
-  private JToolBar          toolBar;
-  private JScrollPane       scrollPane;
+  private final ResourceBundle    bundle;
+  private final JTextPane         editorPane;
+  private final JToolBar          toolBar;
+  private final JScrollPane       scrollPane;
 
   /**
    * Constructs a new <code>JHTMLEditor</code> instance.
@@ -70,8 +70,8 @@ public class JHTMLEditor extends JPanel {
 
     Action[] actions = editorPane.getActions();
     Map<String, Action> editorActions = new LinkedHashMap<String, Action>();
-    for (int i = 0; i < actions.length; i++) {
-      editorActions.put((String) actions[i].getValue(Action.NAME), actions[i]);
+    for (Action action : actions) {
+      editorActions.put((String) action.getValue(Action.NAME), action);
     }
 
     toolBar = createToolBar(editorActions);
@@ -92,6 +92,7 @@ public class JHTMLEditor extends JPanel {
   }
 
   /**
+   * Delegates to the internal editor pane.
    * @return the HTML text.
    * @see javax.swing.JEditorPane#getText()
    */
@@ -100,6 +101,7 @@ public class JHTMLEditor extends JPanel {
   }
 
   /**
+   * Delegates to the internal editor pane.
    * @return true if the component is editable.
    * @see javax.swing.text.JTextComponent#isEditable()
    */
@@ -108,6 +110,7 @@ public class JHTMLEditor extends JPanel {
   }
 
   /**
+   * Delegates to the internal editor pane.
    * @param b
    *          editable.
    * @see javax.swing.text.JTextComponent#setEditable(boolean)
@@ -122,6 +125,7 @@ public class JHTMLEditor extends JPanel {
   }
 
   /**
+   * Delegates to the internal editor pane.
    * @param htmlText
    *          the HTML text.
    * @see javax.swing.JEditorPane#setText(java.lang.String)
@@ -159,6 +163,7 @@ public class JHTMLEditor extends JPanel {
     return actionAdapter;
   }
 
+  @SuppressWarnings("unchecked")
   private JToolBar createToolBar(Map<String, Action> editorActions) {
     JToolBar tb = new JToolBar();
 
@@ -192,13 +197,14 @@ public class JHTMLEditor extends JPanel {
         "font-family-Monospaced"));
     fontActions
         .add(createDisplayableAction(editorActions, "font-family-Serif"));
-    JComboBox fontCb = new JComboBox(fontActions.toArray(new Action[0]));
+    JComboBox<Action> fontCb = new JComboBox(fontActions.toArray(new Action[fontActions.size()]));
     tb.add(fontCb);
     fontCb.addActionListener(new ActionListener() {
 
+      @SuppressWarnings("unchecked")
       @Override
       public void actionPerformed(ActionEvent e) {
-        ((Action) ((JComboBox) e.getSource()).getSelectedItem())
+        ((Action) ((JComboBox<Action>) e.getSource()).getSelectedItem())
             .actionPerformed(e);
       }
     });
@@ -209,12 +215,13 @@ public class JHTMLEditor extends JPanel {
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-18"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-24"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-48"));
-    JComboBox fontSizeCb = new JComboBox(fontSizeActions.toArray(new Action[0]));
+    JComboBox<Action> fontSizeCb = new JComboBox(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
     fontSizeCb.addActionListener(new ActionListener() {
 
+      @SuppressWarnings("unchecked")
       @Override
       public void actionPerformed(ActionEvent e) {
-        ((Action) ((JComboBox) e.getSource()).getSelectedItem())
+        ((Action) ((JComboBox<Action>) e.getSource()).getSelectedItem())
             .actionPerformed(e);
       }
     });
@@ -225,7 +232,7 @@ public class JHTMLEditor extends JPanel {
 
   private static class DisplayableActionAdapter implements Action {
 
-    private Action delegate;
+    private final Action delegate;
 
     /**
      * Constructs a new <code>DisplayableAction</code> instance.
@@ -303,17 +310,21 @@ public class JHTMLEditor extends JPanel {
   }
 
   /**
-   * @param policy
+   * Delegates to internal scroll pane.
+   * @param policy the scroll policy.
    * @see javax.swing.JScrollPane#setVerticalScrollBarPolicy(int)
    */
+  @SuppressWarnings("MagicConstant")
   public void setVerticalScrollBarPolicy(int policy) {
     scrollPane.setVerticalScrollBarPolicy(policy);
   }
 
   /**
-   * @param policy
+   * Delegates to internal scroll pane.
+   * @param policy the scroll policy.
    * @see javax.swing.JScrollPane#setHorizontalScrollBarPolicy(int)
    */
+  @SuppressWarnings("MagicConstant")
   public void setHorizontalScrollBarPolicy(int policy) {
     scrollPane.setHorizontalScrollBarPolicy(policy);
   }

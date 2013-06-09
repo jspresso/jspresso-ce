@@ -46,9 +46,9 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
   private int               currentRow       = -1;
   private int               currentCol       = -1;
 
-  private TableCellRenderer delegate;
-  private Action            action;
-  private int               actionColIndex;
+  private final TableCellRenderer delegate;
+  private final Action            action;
+  private final int               actionColIndex;
 
   /**
    * Constructs a new <code>HyperlinkTableCellRenderer</code> instance.

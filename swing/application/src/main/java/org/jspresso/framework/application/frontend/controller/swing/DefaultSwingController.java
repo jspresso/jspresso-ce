@@ -448,7 +448,7 @@ public class DefaultSwingController extends
             JOptionPane.WARNING_MESSAGE,
             getIconFactory().getIcon(iconImageUrl,
                 getIconFactory().getLargeIconSize()));
-        IAction nextAction = null;
+        IAction nextAction;
         if (selectedOption == JOptionPane.OK_OPTION) {
           nextAction = okAction;
         } else {
@@ -481,7 +481,7 @@ public class DefaultSwingController extends
             JOptionPane.QUESTION_MESSAGE,
             getIconFactory().getIcon(iconImageUrl,
                 getIconFactory().getLargeIconSize()));
-        IAction nextAction = null;
+        IAction nextAction;
         if (selectedOption == JOptionPane.YES_OPTION) {
           nextAction = yesAction;
         } else {
@@ -515,7 +515,7 @@ public class DefaultSwingController extends
             JOptionPane.QUESTION_MESSAGE,
             getIconFactory().getIcon(iconImageUrl,
                 getIconFactory().getLargeIconSize()));
-        IAction nextAction = null;
+        IAction nextAction;
         if (selectedOption == JOptionPane.YES_OPTION) {
           nextAction = yesAction;
         } else if (selectedOption == JOptionPane.NO_OPTION) {
@@ -720,10 +720,10 @@ public class DefaultSwingController extends
     int w = 12 * screenRes;
     int h = 8 * screenRes;
     if (getFrameWidth() != null) {
-      w = getFrameWidth().intValue();
+      w = getFrameWidth();
     }
     if (getFrameHeight() != null) {
-      h = getFrameHeight().intValue();
+      h = getFrameHeight();
     }
     controllerFrame.setSize(w, h);
     // controllerFrame.setSize(1100, 800);
@@ -988,7 +988,7 @@ public class DefaultSwingController extends
   private final class WorkspaceInternalFrameListener extends
       InternalFrameAdapter {
 
-    private String workspaceName;
+    private final String workspaceName;
 
     /**
      * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.

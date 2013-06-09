@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class EnumerationFormatter implements IFormatter<Object, String> {
 
-  private Map<Object, String> values;
+  private final Map<Object, String> values;
 
   /**
    * Constructs a new <code>EnumFormatter</code> instance.

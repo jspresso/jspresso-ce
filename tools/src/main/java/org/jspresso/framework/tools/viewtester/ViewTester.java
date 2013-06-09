@@ -22,12 +22,7 @@ import java.awt.BorderLayout;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -47,6 +42,8 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
@@ -54,12 +51,14 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Generates Jspresso powered component java code based on its descriptor.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ViewTester {
 
+  private static final Logger LOG                     = LoggerFactory
+                                                           .getLogger(ViewTester.class);
   private static final String BEAN_FACTORY_SELECTOR   = "beanFactorySelector";
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
   private static final String LANGUAGE                = "language";
@@ -72,12 +71,12 @@ public class ViewTester {
 
   /**
    * Starts Code generation for an component.
-   * 
+   *
    * @param args
    *          the command line arguments.
    */
   @SuppressWarnings("static-access")
-  public static void main(String[] args) {
+  public static void main(String... args) {
     Options options = new Options();
     options
         .addOption(OptionBuilder
@@ -108,11 +107,11 @@ public class ViewTester {
             "use given locale to instanciate and display the view.")
         .create(LANGUAGE));
     CommandLineParser parser = new BasicParser();
-    CommandLine cmd = null;
+    CommandLine cmd;
     try {
       cmd = parser.parse(options, args);
     } catch (ParseException ex) {
-      System.err.println(ex.getLocalizedMessage());
+      LOG.error("Error parsing command line", ex);
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(ViewTester.class.getSimpleName(), options);
       return;
@@ -136,6 +135,7 @@ public class ViewTester {
   /**
    * Generates the component java source files.
    */
+  @SuppressWarnings("unchecked")
   public void displayView() {
     Locale locale;
     if (language != null) {
@@ -176,7 +176,7 @@ public class ViewTester {
     }
 
     JFrame testFrame = new JFrame("View tester");
-    testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    testFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     testFrame.getContentPane().setLayout(new BorderLayout());
     testFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
 
@@ -190,7 +190,7 @@ public class ViewTester {
 
   /**
    * Sets the beanFactorySelector.
-   * 
+   *
    * @param beanFactorySelector
    *          the beanFactorySelector to set.
    */
@@ -200,7 +200,7 @@ public class ViewTester {
 
   /**
    * Sets the applicationContextKey.
-   * 
+   *
    * @param applicationContextKey
    *          the applicationContextKey to set.
    */
@@ -210,7 +210,7 @@ public class ViewTester {
 
   /**
    * Sets the language.
-   * 
+   *
    * @param language
    *          the language to set.
    */
@@ -220,7 +220,7 @@ public class ViewTester {
 
   /**
    * Sets the viewId.
-   * 
+   *
    * @param viewId
    *          the viewId to set.
    */
@@ -237,7 +237,7 @@ public class ViewTester {
 
   /**
    * Specialized exception handler for the tester event dispatch thread.
-   * 
+   *
    * @version $LastChangedRevision$
    * @author Vincent Vandenschrick
    */
@@ -245,12 +245,12 @@ public class ViewTester {
 
     /**
      * Handles a uncaught exception.
-     * 
+     *
      * @param t
      *          the uncaught exception.
      */
     public void handle(Throwable t) {
-      t.printStackTrace();
+      LOG.error("An unexpected error occured.", t);
       JOptionPane.showMessageDialog(null, t.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
     }

@@ -89,7 +89,7 @@ public class RemoveCollectionFromMasterAction extends
         // Traverse the collection reversly for performance reasons.
         for (int i = selectedIndices.length - 1; i >= 0; i--) {
           int selectedIndex = selectedIndices[i];
-          IComponent nextDetailToRemove = (IComponent) collectionConnector
+          IComponent nextDetailToRemove = collectionConnector
               .getChildConnector(selectedIndex).getConnectorValue();
           cleanRelationshipsOnDeletion(nextDetailToRemove, context, true);
           cleanRelationshipsOnDeletion(nextDetailToRemove, context, false);

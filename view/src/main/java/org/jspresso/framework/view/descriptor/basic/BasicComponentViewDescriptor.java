@@ -167,10 +167,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
               (IComponentDescriptorProvider<?>) getModelDescriptor());
       if (exploded.size() > 0) {
         if (propertyViewDescriptor.getWidth() != null
-            && propertyViewDescriptor.getWidth().intValue() > exploded.size()) {
+            && propertyViewDescriptor.getWidth() > exploded.size()) {
           ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1))
-              .setWidth(Integer.valueOf(propertyViewDescriptor.getWidth()
-                  .intValue() - exploded.size() + 1));
+              .setWidth(propertyViewDescriptor.getWidth() - exploded.size() + 1);
         }
         actualPropertyViewDescriptors.addAll(exploded);
       }
@@ -317,7 +316,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
             Integer.valueOf((String) propertyWidth.getValue()));
       } else {
         this.propertyWidths.put(propertyWidth.getKey(),
-            Integer.valueOf(((Number) propertyWidth.getValue()).intValue()));
+            ((Number) propertyWidth.getValue()).intValue());
       }
     }
   }
@@ -376,7 +375,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     if (propertyWidths != null) {
       return propertyWidths.get(propertyName);
     }
-    return Integer.valueOf(1);
+    return 1;
   }
 
   private List<String> computeDefaultRenderedChildProperties(String propertyName) {

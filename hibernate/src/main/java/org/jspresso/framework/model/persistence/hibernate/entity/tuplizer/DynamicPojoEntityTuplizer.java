@@ -51,6 +51,7 @@ public class DynamicPojoEntityTuplizer extends PojoEntityTuplizer {
     fixPropertyAccessors(mappedEntity);
   }
 
+  @SuppressWarnings("unchecked")
   private void fixPropertyAccessors(PersistentClass mappedEntity) {
     Iterator<Property> properties = mappedEntity
         .getPropertyIterator();

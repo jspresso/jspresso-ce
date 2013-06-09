@@ -71,6 +71,6 @@ public class ReloadAction extends AbstractHibernateAction {
    * @return the list of entities to save.
    */
   protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
-    return (List<IEntity>) getActionParameter(context);
+    return getActionParameter(context);
   }
 }

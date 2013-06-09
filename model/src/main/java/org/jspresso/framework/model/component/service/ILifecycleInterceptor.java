@@ -30,6 +30,7 @@ import org.jspresso.framework.security.UserPrincipal;
  * @param <E>
  *          the class of the intercepted entity.
  */
+@SuppressWarnings({"EmptyMethod", "UnusedReturnValue"})
 public interface ILifecycleInterceptor<E> {
 
   /**

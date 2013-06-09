@@ -108,7 +108,7 @@ public class TableSorter extends AbstractTableSorter {
 
   private static final long              serialVersionUID      = -5437879837063286581L;
 
-  private Map<Class<?>, Comparator<?>>   columnComparators     = new HashMap<Class<?>, Comparator<?>>();
+  private final Map<Class<?>, Comparator<?>>   columnComparators     = new HashMap<Class<?>, Comparator<?>>();
 
   private int[]                          modelToView;
   private Row[]                          viewToModel;
@@ -146,7 +146,7 @@ public class TableSorter extends AbstractTableSorter {
    *          comparator.
    */
   public void setColumnComparator(Class<?> type,
-      Comparator<? extends Object> comparator) {
+      Comparator<?> comparator) {
     if (comparator == null) {
       columnComparators.remove(type);
     } else {
@@ -244,12 +244,12 @@ public class TableSorter extends AbstractTableSorter {
 
   private class Row implements Comparable<Object> {
 
-    private int modelIndex;
+    private final int modelIndex;
 
     /**
      * Constructs a new <code>Row</code> instance.
      * 
-     * @param index
+     * @param index the index.
      */
     public Row(int index) {
       this.modelIndex = index;
@@ -258,7 +258,7 @@ public class TableSorter extends AbstractTableSorter {
     /**
      * compareTo.
      * 
-     * @param o
+     * @param o the object to compare to.
      * @return comparison.
      */
     @Override
@@ -267,14 +267,12 @@ public class TableSorter extends AbstractTableSorter {
       int row1 = modelIndex;
       int row2 = ((Row) o).modelIndex;
 
-      for (Iterator<Directive> it = getSortingColumns().iterator(); it
-          .hasNext();) {
-        Directive directive = it.next();
+      for (Directive directive : getSortingColumns()) {
         int column = directive.getColumn();
         Object o1 = getTableModel().getValueAt(row1, column);
         Object o2 = getTableModel().getValueAt(row2, column);
 
-        int comparison = 0;
+        int comparison;
         // Define null less than everything, except null.
         if (o1 == null && o2 == null) {
           comparison = 0;
@@ -356,7 +354,6 @@ public class TableSorter extends AbstractTableSorter {
       // order.
       clearSortingState();
       fireTableDataChanged();
-      return;
     }
   }
 }

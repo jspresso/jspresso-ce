@@ -41,10 +41,10 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
     int w = 600;
     int h = 500;
     if (width != null) {
-      w = width.intValue();
+      w = width;
     }
     if (height != null) {
-      h = height.intValue();
+      h = height;
     }
     Dimension dim = new Dimension();
     dim.setWidth(w);

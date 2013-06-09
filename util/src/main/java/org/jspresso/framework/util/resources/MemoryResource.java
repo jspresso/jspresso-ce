@@ -29,8 +29,8 @@ import java.io.InputStream;
  */
 public class MemoryResource extends AbstractResource {
 
-  private String name;
-  private byte[] resourceBytes;
+  private final String name;
+  private final byte[] resourceBytes;
 
   /**
    * Constructs a new <code>MemoryResource</code> instance.

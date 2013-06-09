@@ -65,7 +65,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
    * @param paramNames
    *          the paramNames to set.
    */
-  public void setParamNames(String[] paramNames) {
+  public void setParamNames(String... paramNames) {
     this.paramNames = paramNames;
   }
 
@@ -75,7 +75,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
    * @param paramValues
    *          the paramValues to set.
    */
-  public void setParamValues(String[] paramValues) {
+  public void setParamValues(String... paramValues) {
     this.paramValues = paramValues;
   }
 

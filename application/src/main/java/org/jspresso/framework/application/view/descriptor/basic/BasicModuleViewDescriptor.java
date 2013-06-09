@@ -40,7 +40,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescript
 public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
     implements IIconDescriptor {
 
-  private DefaultIconDescriptor descriptor;
+  private final DefaultIconDescriptor descriptor;
   private IViewDescriptor       projectedViewDescriptor;
 
   /**

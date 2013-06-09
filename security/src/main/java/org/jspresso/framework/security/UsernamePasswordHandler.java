@@ -69,15 +69,15 @@ public class UsernamePasswordHandler implements CallbackHandler {
    */
   @Override
   public void handle(Callback[] callbacks) {
-    for (int i = 0; i < callbacks.length; i++) {
-      if (callbacks[i] instanceof NameCallback) {
-        ((NameCallback) callbacks[i]).setName(getUsername());
-      } else if (callbacks[i] instanceof PasswordCallback) {
+    for (Callback callback : callbacks) {
+      if (callback instanceof NameCallback) {
+        ((NameCallback) callback).setName(getUsername());
+      } else if (callback instanceof PasswordCallback) {
         if (getPassword() != null) {
-          ((PasswordCallback) callbacks[i]).setPassword(getPassword()
+          ((PasswordCallback) callback).setPassword(getPassword()
               .toCharArray());
         } else {
-          ((PasswordCallback) callbacks[i]).setPassword(null);
+          ((PasswordCallback) callback).setPassword(null);
         }
         // } else {
         // throw new UnsupportedCallbackException(callbacks[i]);

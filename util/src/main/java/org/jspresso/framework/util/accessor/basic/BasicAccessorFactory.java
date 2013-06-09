@@ -52,12 +52,8 @@ public class BasicAccessorFactory extends AbstractAccessorFactory {
    */
   @Override
   public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
-    try {
-      return getAccessorDelegate(beanClass, property).createPropertyAccessor(
-          property, beanClass);
-    } catch (MissingPropertyException ex) {
-      throw ex;
-    }
+    return getAccessorDelegate(beanClass, property).createPropertyAccessor(
+        property, beanClass);
   }
 
   /**

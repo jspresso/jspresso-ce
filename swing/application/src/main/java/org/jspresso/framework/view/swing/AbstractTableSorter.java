@@ -97,11 +97,11 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   private Icon                   downIcon;
 
-  private MouseListener          mouseListener;
-  private List<Directive>        sortingColumns;
+  private final MouseListener          mouseListener;
+  private final List<Directive>        sortingColumns;
   private JTableHeader           tableHeader;
   private TableModel             tableModel;
-  private TableModelListener     tableModelListener;
+  private final TableModelListener     tableModelListener;
   private Icon                   upIcon;
 
   /**
@@ -204,7 +204,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   }
 
   /**
-   * is sorting ?
+   * Tests whether it is sorting.
    * 
    * @return true if sorting
    */
@@ -399,8 +399,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   protected abstract void sortingStatusChanged();
 
   private Directive getDirective(int column) {
-    for (int i = 0; i < sortingColumns.size(); i++) {
-      Directive directive = sortingColumns.get(i);
+    for (Directive directive : sortingColumns) {
       if (directive.column == column) {
         return directive;
       }
@@ -413,14 +412,14 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   protected static final class Directive {
 
-    private int column;
-    private int direction;
+    private final int column;
+    private final int direction;
 
     /**
      * Constructs a new <code>Directive</code> instance.
      * 
-     * @param column
-     * @param direction
+     * @param column the column index.
+     * @param direction the direction.
      */
     private Directive(int column, int direction) {
       this.column = column;
@@ -489,8 +488,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   public static class SortableHeaderRenderer implements TableCellRenderer {
 
-    private AbstractTableSorter tableSorter;
-    private TableCellRenderer   delegate;
+    private final AbstractTableSorter tableSorter;
+    private final TableCellRenderer   delegate;
 
     /**
      * Constructs a new <code>SortableHeaderRenderer</code> instance.

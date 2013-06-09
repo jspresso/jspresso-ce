@@ -192,10 +192,10 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     if (w != null || h != null) {
       Dimension dim = new Dimension();
       if (w != null) {
-        dim.setWidth(w.intValue());
+        dim.setWidth(w);
       }
       if (h != null) {
-        dim.setHeight(h.intValue());
+        dim.setHeight(h);
       }
       return dim;
     }
@@ -213,8 +213,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
       setPreferredWidth(null);
       setPreferredHeight(null);
     } else {
-      setPreferredWidth(Integer.valueOf(preferredSize.getWidth()));
-      setPreferredHeight(Integer.valueOf(preferredSize.getHeight()));
+      setPreferredWidth(preferredSize.getWidth());
+      setPreferredHeight(preferredSize.getHeight());
     }
   }
 

@@ -33,7 +33,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  */
 public abstract class AbstractPropertyAccessor implements IAccessor {
 
-  private String                         property;
+  private final String                         property;
 
   private static final PropertyUtilsBean PROPERTY_UTILS_BEAN = new PropertyUtilsBean();
   static {
@@ -119,6 +119,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    *           whenever an exception occurs.
    * @return the property value.
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {

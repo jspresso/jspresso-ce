@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class PlaceholderInputStream extends FilterInputStream {
 
-  private Map<String, String> variables;
+  private final Map<String, String> variables;
   private String              buffer;
   private int                 buffOffset;
 

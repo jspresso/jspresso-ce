@@ -55,8 +55,8 @@ public final class ResourceManager {
 
   private static final ResourceManager INSTANCE = new ResourceManager();
 
-  private SecureRandom                 random;
-  private Map<String, IResourceBase>   resources;
+  private final SecureRandom                 random;
+  private final Map<String, IResourceBase>   resources;
 
   @SuppressWarnings("unchecked")
   private ResourceManager() {
@@ -137,9 +137,9 @@ public final class ResourceManager {
     bytes = MessageDigest.getInstance("MD5").digest(bytes);
 
     StringBuilder result = new StringBuilder();
-    for (int i = 0; i < bytes.length; i++) {
-      byte b1 = (byte) ((bytes[i] & 0xf0) >> 4);
-      byte b2 = (byte) (bytes[i] & 0x0f);
+    for (byte aByte : bytes) {
+      byte b1 = (byte) ((aByte & 0xf0) >> 4);
+      byte b2 = (byte) (aByte & 0x0f);
 
       result.append(toHex(b1));
       result.append(toHex(b2));

@@ -92,6 +92,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the beanConnectorFactory to set.
    * @deprecated modeconnector is now created by the backend controller.
    */
+  @SuppressWarnings("EmptyMethod")
   @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -119,9 +120,9 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
   private static final class I18nActionInvocationHandler implements
       InvocationHandler {
 
-    private IDisplayableAction   delegate;
-    private Locale               locale;
-    private ITranslationProvider translationProvider;
+    private final IDisplayableAction   delegate;
+    private final Locale               locale;
+    private final ITranslationProvider translationProvider;
 
     private I18nActionInvocationHandler(IDisplayableAction delegate,
         ITranslationProvider translationProvider, Locale locale) {

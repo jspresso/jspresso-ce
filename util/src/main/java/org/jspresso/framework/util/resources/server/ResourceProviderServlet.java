@@ -188,8 +188,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       StringBuilder buf = new StringBuilder("?" + IMAGE_URL_PARAMETER + "="
           + localImageUrl);
       if (dimension != null) {
-        buf.append("&" + IMAGE_WIDTH_PARAMETER + "=" + dimension.getWidth());
-        buf.append("&" + IMAGE_HEIGHT_PARAMETER + "=" + dimension.getHeight());
+        buf.append("&" + IMAGE_WIDTH_PARAMETER + "=").append(dimension.getWidth());
+        buf.append("&" + IMAGE_HEIGHT_PARAMETER + "=").append(dimension.getHeight());
       }
       return computeUrl(request, buf.toString());
     }
@@ -303,6 +303,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
@@ -402,7 +403,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
               allowedLocalUrlPattern.pattern());
           response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-      } else if (imageUrlSpec != null) {
+      } else {
         if (isLocalUrlAllowed(imageUrlSpec)) {
           URL imageUrl = UrlHelper.createURL(imageUrlSpec);
           if (imageUrl == null) {
@@ -584,7 +585,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   private static class UploadResourceAdapter extends AbstractResource {
 
-    private FileItem item;
+    private final FileItem item;
 
     /**
      * Constructs a new <code>UploadResourceAdapter</code> instance.

@@ -83,7 +83,7 @@ public class BasicDurationPropertyDescriptor extends
   public void preprocessSetter(final Object component, Object newValue) {
     super.preprocessSetter(component, newValue);
     if (newValue != null && getMaxMillis() != null
-        && ((Long) newValue).longValue() > getMaxMillis().longValue()) {
+        && (Long) newValue > getMaxMillis()) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value is too high on [" + component + "].") {
 

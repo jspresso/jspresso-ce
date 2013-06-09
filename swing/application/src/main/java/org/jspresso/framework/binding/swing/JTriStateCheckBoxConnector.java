@@ -53,7 +53,7 @@ public class JTriStateCheckBoxConnector extends
     if (getConnectedJComponent().getState() == CheckState.INDETERMINATE) {
       return null;
     }
-    return Boolean.valueOf(getConnectedJComponent().isSelected());
+    return getConnectedJComponent().isSelected();
   }
 
   /**

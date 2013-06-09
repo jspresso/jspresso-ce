@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.view.swing;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -35,38 +38,39 @@ import java.io.StringReader;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"javadoc", "JavaDoc"})
 public class BasicTransferable implements Transferable, ClipboardOwner {
 
-  private String              plainData;
-  private String              htmlData;
+  private static final Logger LOG = LoggerFactory.getLogger(BasicTransferable.class);
 
-  private static DataFlavor[] htmlFlavors;
-  private static DataFlavor[] stringFlavors;
-  private static DataFlavor[] plainFlavors;
+  private final String              plainData;
+  private final String              htmlData;
+
+  private static final DataFlavor[] htmlFlavors;
+  private static final DataFlavor[] stringFlavors;
+  private static final DataFlavor[] plainFlavors;
 
   static {
+    htmlFlavors = new DataFlavor[3];
+    plainFlavors = new DataFlavor[3];
+    stringFlavors = new DataFlavor[2];
     try {
-      htmlFlavors = new DataFlavor[3];
       htmlFlavors[0] = new DataFlavor("text/html;class=java.lang.String");
       htmlFlavors[1] = new DataFlavor("text/html;class=java.io.Reader");
       htmlFlavors[2] = new DataFlavor(
           "text/html;charset=unicode;class=java.io.InputStream");
 
-      plainFlavors = new DataFlavor[3];
       plainFlavors[0] = new DataFlavor("text/plain;class=java.lang.String");
       plainFlavors[1] = new DataFlavor("text/plain;class=java.io.Reader");
       plainFlavors[2] = new DataFlavor(
           "text/plain;charset=unicode;class=java.io.InputStream");
 
-      stringFlavors = new DataFlavor[2];
       stringFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType
           + ";class=java.lang.String");
       stringFlavors[1] = DataFlavor.stringFlavor;
 
     } catch (ClassNotFoundException cle) {
-      System.err
-          .println("error initializing javax.swing.plaf.basic.BasicTranserable");
+      LOG.error("Error initializing javax.swing.plaf.basic.BasicTranserable", cle);
     }
   }
 
@@ -136,8 +140,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   @Override
   public boolean isDataFlavorSupported(DataFlavor flavor) {
     DataFlavor[] flavors = getTransferDataFlavors();
-    for (int i = 0; i < flavors.length; i++) {
-      if (flavors[i].equals(flavor)) {
+    for (DataFlavor flavor1 : flavors) {
+      if (flavor1.equals(flavor)) {
         return true;
       }
     }
@@ -203,8 +207,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   protected boolean isRicherFlavor(DataFlavor flavor) {
     DataFlavor[] richerFlavors = getRicherFlavors();
     if (richerFlavors != null) {
-      for (int i = 0; i < richerFlavors.length; i++) {
-        if (richerFlavors[i].equals(flavor)) {
+      for (DataFlavor richerFlavor : richerFlavors) {
+        if (richerFlavor.equals(flavor)) {
           return true;
         }
       }
@@ -239,8 +243,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    */
   protected boolean isHTMLFlavor(DataFlavor flavor) {
     DataFlavor[] flavors = htmlFlavors;
-    for (int i = 0; i < flavors.length; i++) {
-      if (flavors[i].equals(flavor)) {
+    for (DataFlavor flavor1 : flavors) {
+      if (flavor1.equals(flavor)) {
         return true;
       }
     }
@@ -274,8 +278,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    */
   protected boolean isPlainFlavor(DataFlavor flavor) {
     DataFlavor[] flavors = plainFlavors;
-    for (int i = 0; i < flavors.length; i++) {
-      if (flavors[i].equals(flavor)) {
+    for (DataFlavor flavor1 : flavors) {
+      if (flavor1.equals(flavor)) {
         return true;
       }
     }
@@ -310,8 +314,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    */
   protected boolean isStringFlavor(DataFlavor flavor) {
     DataFlavor[] flavors = stringFlavors;
-    for (int i = 0; i < flavors.length; i++) {
-      if (flavors[i].equals(flavor)) {
+    for (DataFlavor flavor1 : flavors) {
+      if (flavor1.equals(flavor)) {
         return true;
       }
     }

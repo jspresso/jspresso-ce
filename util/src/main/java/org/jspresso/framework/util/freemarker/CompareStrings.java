@@ -33,9 +33,10 @@ import freemarker.template.TemplateScalarModel;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class CompareStrings implements TemplateMethodModelEx {
 
-  private BeansWrapper wrapper;
+  private final BeansWrapper wrapper;
 
   /**
    * Constructs a new <code>CompareStrings</code> instance.
@@ -58,7 +59,7 @@ public class CompareStrings implements TemplateMethodModelEx {
     try {
       String first = ((TemplateScalarModel) arguments.get(0)).getAsString();
       String second = ((TemplateScalarModel) arguments.get(1)).getAsString();
-      return new NumberModel(Integer.valueOf(first.compareTo(second)), wrapper);
+      return new NumberModel(first.compareTo(second), wrapper);
     } catch (Exception ex) {
       throw new TemplateModelException("Could execute compareStrings method.",
           ex);

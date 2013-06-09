@@ -57,7 +57,7 @@ public class SaveFileAction extends ChooseFileAction {
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
-        if (file.getName() != null && file.getName().indexOf(".") == -1) {
+        if (file.getName() != null && !file.getName().contains(".")) {
           Map<String, List<String>> fileFilter = getFileFilter(context);
           if (fileFilter != null && !fileFilter.isEmpty()) {
             List<String> extensions = fileFilter.values().iterator().next();

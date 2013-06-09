@@ -33,13 +33,14 @@ import freemarker.template.TemplateModelException;
  * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class ReduceSqlName implements TemplateMethodModelEx {
 
   private static final String  WORD_SEP = "_";
 
-  private int                  maxSize;
-  private Map<String, String>  shortened;
-  private Map<String, Integer> deduppers;
+  private final int                  maxSize;
+  private final Map<String, String>  shortened;
+  private final Map<String, Integer> deduppers;
 
   /**
    * Constructs a new <code>SqlNameReductor</code> instance.
@@ -96,16 +97,17 @@ public class ReduceSqlName implements TemplateMethodModelEx {
     } else {
       reduced.append(sqlColumnName.substring(0, size - 2)).append(WORD_SEP);
     }
-    if (deduppers.containsKey(reduced)) {
-      deduppers.put(reduced.toString(),
-          Integer.valueOf(deduppers.get(reduced).intValue() + 1));
+    String reducedAsString = reduced.toString();
+    if (deduppers.containsKey(reducedAsString)) {
+      deduppers.put(reducedAsString,
+          deduppers.get(reducedAsString) + 1);
     } else {
-      deduppers.put(reduced.toString(), Integer.valueOf(0));
+      deduppers.put(reducedAsString, 0);
     }
-    reduced.append(Integer.toHexString(deduppers.get(reduced.toString())
-        .intValue()));
-    shortened.put(sqlColumnName, reduced.toString() + mandatorySuffix);
-    return reduced.toString() + mandatorySuffix;
+    reduced.append(Integer.toHexString(deduppers.get(reducedAsString)));
+    reducedAsString = reduced.toString();
+    shortened.put(sqlColumnName, reducedAsString + mandatorySuffix);
+    return reducedAsString + mandatorySuffix;
   }
 
 }

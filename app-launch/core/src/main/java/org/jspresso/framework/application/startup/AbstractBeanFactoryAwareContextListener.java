@@ -115,6 +115,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    * @param event
    *          the servlet context destroy event.
    */
+  @SuppressWarnings("EmptyMethod")
   public void contextDestroyed(BeanFactory beanFactory,
       ServletContextEvent event) {
     // NO-OP

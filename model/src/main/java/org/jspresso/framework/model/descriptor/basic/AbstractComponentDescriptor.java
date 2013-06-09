@@ -142,11 +142,12 @@ public abstract class AbstractComponentDescriptor<E> extends
     return componentDescriptor;
   }
 
-  private Object queryDescriptorLock = new Object();
+  private final Object queryDescriptorLock = new Object();
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public IComponentDescriptor<E> createQueryDescriptor() {
     synchronized (queryDescriptorLock) {
@@ -353,7 +354,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     return descriptor;
   }
 
-  private Object allPropertyDescriptorsLock = new Object();
+  private final Object allPropertyDescriptorsLock = new Object();
 
   /**
    * {@inheritDoc}
@@ -394,7 +395,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
-  private Object queryablePropertiesLock = new Object();
+  private final Object queryablePropertiesLock = new Object();
 
   /**
    * {@inheritDoc}
@@ -446,7 +447,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     return gates;
   }
 
-  private Object renderedPropertiesLock = new Object();
+  private final Object renderedPropertiesLock = new Object();
 
   /**
    * {@inheritDoc}
@@ -544,7 +545,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     return sqlName;
   }
 
-  private Object toStringLock = new Object();
+  private final Object toStringLock = new Object();
 
   /**
    * Gets the toStringProperty.
@@ -590,7 +591,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     return toHtmlProperty;
   }
 
-  private Object autoCompleteLock = new Object();
+  private final Object autoCompleteLock = new Object();
 
   /**
    * Gets the autocomplete property.
@@ -1121,7 +1122,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     return null;
   }
 
-  private Object propertiesBufferLock = new Object();
+  private final Object propertiesBufferLock = new Object();
 
   private void processPropertiesBufferIfNecessary() {
     synchronized (propertiesBufferLock) {
@@ -1135,7 +1136,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
-  private Object delegateServicesLock = new Object();
+  private final Object delegateServicesLock = new Object();
 
   private void registerDelegateServicesIfNecessary() {
     synchronized (delegateServicesLock) {
@@ -1187,7 +1188,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     lifecycleInterceptors.add(lifecycleInterceptor);
   }
 
-  private Object lifecycleInterceptorsLock = new Object();
+  private final Object lifecycleInterceptorsLock = new Object();
 
   private void registerLifecycleInterceptorsIfNecessary() {
     synchronized (lifecycleInterceptorsLock) {

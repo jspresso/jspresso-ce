@@ -45,7 +45,7 @@ public class RemoteCleanupCommand extends RemoteCommand {
    * @param removedPeerGuids
    *          the removedPeerGuids to set.
    */
-  public void setRemovedPeerGuids(String[] removedPeerGuids) {
+  public void setRemovedPeerGuids(String... removedPeerGuids) {
     this.removedPeerGuids = removedPeerGuids;
   }
 

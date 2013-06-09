@@ -97,6 +97,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * 
    * @return the filterComponentDescriptor.
    */
+  @SuppressWarnings("unchecked")
   public IComponentDescriptor<IComponent> getFilterComponentDescriptor() {
     if (filterComponentDescriptor == null) {
       return (IComponentDescriptor<IComponent>) getElementComponentDescriptor();
@@ -141,6 +142,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor superViewDescriptor = super.getViewDescriptor();
@@ -165,9 +167,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     }
     if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
+      ((BasicViewDescriptor) filterViewDesc)
+          .setModelDescriptor(filterModelDescriptorProvider);
     }
-    ((BasicViewDescriptor) filterViewDesc)
-        .setModelDescriptor(filterModelDescriptorProvider);
     if (customFilterView) {
       getQueryViewDescriptorFactory().adaptExistingViewDescriptor(
           filterViewDesc);
@@ -178,7 +180,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
     BasicCollectionViewDescriptor moduleObjectsView = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor
         .extractMainCollectionView(getProjectedViewDescriptor());
-    if (getPageSize() != null && getPageSize().intValue() >= 0) {
+    if (getPageSize() != null && getPageSize() >= 0) {
       if (moduleObjectsView != null
           && moduleObjectsView.getPaginationViewDescriptor() == null) {
         moduleObjectsView.setPaginationViewDescriptor(paginationViewDescriptor);
@@ -217,9 +219,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (ObjectUtils.equals(this.filter, filter)) {
       return;
     }
-    Object oldValue = getFilter();
-    if (oldValue instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) oldValue)
+    IQueryComponent oldValue = getFilter();
+    if (oldValue != null) {
+      oldValue
           .removePropertyChangeListener(filterComponentTracker);
     }
     this.filter = filter;
@@ -329,7 +331,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   private static class FilterComponentTracker implements PropertyChangeListener {
 
-    private FilterableBeanCollectionModule target;
+    private final FilterableBeanCollectionModule target;
 
     /**
      * Constructs a new

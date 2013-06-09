@@ -36,7 +36,7 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
  */
 public class JspressoHibernateIntegrator implements Integrator {
 
-  private PostLoadEventListener postLoadListener = new LifecyclePostLoadEventListener();
+  private final PostLoadEventListener postLoadListener = new LifecyclePostLoadEventListener();
 
   /**
    * Appends the {@link LifecyclePostLoadEventListener}.

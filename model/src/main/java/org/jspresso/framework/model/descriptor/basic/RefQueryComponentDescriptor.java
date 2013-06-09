@@ -50,10 +50,10 @@ import org.jspresso.framework.model.entity.IEntity;
 public class RefQueryComponentDescriptor<E> extends
     AbstractComponentDescriptor<E> implements IQueryComponentDescriptor {
 
-  private Class<? extends E>                                                           componentContract;
-  private IComponentDescriptorProvider<? extends IComponent>                           queryComponentsDescriptorProvider;
+  private final Class<? extends E>                                                           componentContract;
+  private final IComponentDescriptorProvider<? extends IComponent>                           queryComponentsDescriptorProvider;
 
-  private Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
+  private final Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
@@ -158,10 +158,10 @@ public class RefQueryComponentDescriptor<E> extends
           .getReferencedDescriptor();
       Class<? extends IComponent> referencedType = referencedDescriptor
           .getComponentContract();
-      if (!(propertyDescriptor instanceof ComparableQueryStructureDescriptor)
+      if (propertyDescriptor instanceof BasicReferencePropertyDescriptor<?>
           && !(referencedDescriptor instanceof RefQueryComponentDescriptor<?>)) {
-        BasicReferencePropertyDescriptor<IComponent> basicRefPropDesc;
-        basicRefPropDesc = ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor);
+        BasicReferencePropertyDescriptor<IComponent> basicRefPropDesc
+            = ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor);
         // List<String> savedRenderedProperties = basicRefPropDesc
         // .getRenderedProperties();
         basicRefPropDesc.setReferencedDescriptor(createOrGetRefQueryDescriptor(

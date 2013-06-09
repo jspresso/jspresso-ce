@@ -26,6 +26,7 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("EmptyMethod")
 public interface IRemotePeerRegistryListener {
 
   /**

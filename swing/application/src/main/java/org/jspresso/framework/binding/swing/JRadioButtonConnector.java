@@ -28,7 +28,7 @@ import javax.swing.JRadioButton;
  */
 public class JRadioButtonConnector extends JToggleButtonConnector<JRadioButton> {
 
-  private String checkedValue;
+  private final String checkedValue;
 
   /**
    * Constructs a new <code>JRadioButtonConnector</code> instance.

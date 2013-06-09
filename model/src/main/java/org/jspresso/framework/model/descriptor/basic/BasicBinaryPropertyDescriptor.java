@@ -132,9 +132,9 @@ public class BasicBinaryPropertyDescriptor extends
       // watch out for java serializable property
       final byte[] propertyValueAsByteArray = (byte[]) newValue;
       if (getMaxLength() != null
-          && propertyValueAsByteArray.length > getMaxLength().intValue()) {
+          && propertyValueAsByteArray.length > getMaxLength()) {
         IntegrityException ie = new IntegrityException("[" + getName()
-            + "] value (" + propertyValueAsByteArray + ") is too long on ["
+            + "] value is too long on ["
             + component + "].") {
 
           private static final long serialVersionUID = 7459823123892198831L;

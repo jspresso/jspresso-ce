@@ -48,7 +48,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.MenuBar;
   import mx.controls.SWFLoader;
   import mx.controls.Tree;
-  import mx.core.Application;
+import mx.controls.alertClasses.AlertForm;
+import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.FlexGlobals;
@@ -189,12 +190,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
-      _lastFiredActions = new Object();
+      _lastFiredActions = {};
       _viewFactory = createViewFactory();
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
-      _commandsQueue = new ArrayCollection(new Array());
-      _dialogStack = new Array();
+      _commandsQueue = new ArrayCollection([]);
+      _dialogStack = [];
       _dialogStack.push([null, null, null]);
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
@@ -364,7 +365,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           performLogin();
         };
         getViewFactory().addButtonEventListenerWithTimeout(loginButton, listener, 1000);
-        var loginButtons:Array = new Array();
+        var loginButtons:Array = [];
         loginButtons.push(loginButton);
         var loginView:UIComponent = getViewFactory().createComponent(initLoginCommand.loginView);
         popupDialog(initLoginCommand.title, initLoginCommand.message, loginView, initLoginCommand.loginView.icon, loginButtons);
@@ -378,7 +379,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       } else if(command is RemoteAbstractDialogCommand) {
         var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
-        var dialogButtons:Array = new Array();
+        var dialogButtons:Array = [];
         for each(var action:RAction in dialogCommand.actions) {
           if(action != null) {
             dialogButtons.push(getViewFactory().createDialogAction(action));
@@ -390,7 +391,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           dialogView = getViewFactory().createComponent((dialogCommand as RemoteDialogCommand).view);
           icon = (dialogCommand as RemoteDialogCommand).view.icon;
         } else if(dialogCommand is RemoteFlashDisplayCommand) {
-          var url:String = new String((dialogCommand as RemoteFlashDisplayCommand).swfUrl);
+          var url:String = (dialogCommand as RemoteFlashDisplayCommand).swfUrl;
           if((dialogCommand as RemoteFlashDisplayCommand).paramNames.length > 0) {
             url = url+"?&";
             for(var i:int = 0; i < (dialogCommand as RemoteFlashDisplayCommand).paramNames.length; i++) {
@@ -405,7 +406,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           swfLoader.source = url;
           swfLoader.scaleContent = false;
           swfLoader.addEventListener(Event.ADDED_TO_STAGE, function(event:Event):void {
-            event.currentTarget.stage.frameRate=96;
+            (event.currentTarget as Application).stage.frameRate=96;
           });
           
           dialogView = swfLoader;
@@ -453,7 +454,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
           if(!_postponedCommands[command.targetPeerGuid]) {
-            _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
+            _postponedCommands[command.targetPeerGuid] = new ArrayCollection([]);
           } 
           (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
           return;
@@ -558,9 +559,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       browserManager.init();
       browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, function(event:BrowserChangeEvent):void {
         var decodedFragment:Object = URLUtil.stringToObject(browserManager.fragment);
-        if(decodedFragment.snapshotId) {
+        if(decodedFragment["snapshotId"]) {
           var command:RemoteHistoryDisplayCommand = new RemoteHistoryDisplayCommand();
-          command.snapshotId = decodedFragment.snapshotId;
+          command.snapshotId = decodedFragment["snapshotId"];
           registerCommand(command);
         }
       });
@@ -714,11 +715,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function createTypeFilters(filter:Object):Array {
       var typeFilters:Array = null;
       if(filter) {
-        typeFilters = new Array();
+        typeFilters = [];
         for (var name:String in filter) {
+          //noinspection JSUnfilteredForInLoop
           var extensions:Array = filter[name];
           if(extensions) {
-            var extensionsString:String = new String();
+            var extensionsString:String = "";
             if(extensions) {
               for(var i:int = 0; i < extensions.length; i++) {
                 extensionsString += ("*" + extensions[i] as String);
@@ -737,10 +739,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
       var alert:Alert = createAlert(messageCommand);
   
-      var alertForm:UIComponent =  alert.mx_internal::alertForm;
+      var alertForm:AlertForm =  alert.mx_internal::alertForm;
       if(messageCommand.messageIcon) {
-        var messageIcon:Class = getViewFactory().getIconForComponent(alertForm, messageCommand.messageIcon);
-        alert.iconClass = messageIcon;
+        alert.iconClass = getViewFactory().getIconForComponent(alertForm, messageCommand.messageIcon);
         alert.removeChild(alertForm);
         for(var childIndex:int = alertForm.numChildren - 1; childIndex>=0; childIndex--) {
           var childComp:DisplayObject = alertForm.getChildAt(childIndex);
@@ -755,8 +756,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
   
       if(messageCommand.titleIcon) {
-        var titleIcon:Class = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
-        alert.titleIcon = titleIcon;
+        alert.titleIcon = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
       }
       fixAlertSize(alert);
       PopUpManager.centerPopUp(alert as IFlexDisplayObject);
@@ -776,7 +776,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function createAlert(messageCommand:RemoteMessageCommand):Alert {
       var alert:Alert;
       var alertCloseHandler:Function;
-      var message:String = new String(messageCommand.message);
+      var message:String = messageCommand.message;
       var isHtml:Boolean = false;
       if(HtmlUtil.isHtml(message)) {
         isHtml = true;
@@ -869,10 +869,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
         PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
       }
       _remotePeerRegistry = new BasicRemotePeerRegistry();
-      _lastFiredActions = new Object();
+      _lastFiredActions = {};
       _changeNotificationsEnabled = true;
-      _commandsQueue = new ArrayCollection(new Array());
-      _dialogStack = new Array();
+      _commandsQueue = new ArrayCollection([]);
+      _dialogStack = [];
       _dialogStack.push([null, null, null]);
       _viewFactory.reset();
       start();
@@ -892,7 +892,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       try {
         title = translate("error");
         messageHeader = translate("error.unexpected");
-      } catch(e:Error) {
+      } catch(error:Error) {
         title = "Error";
         messageHeader = "An unexpected error occured";
       }
@@ -938,10 +938,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
         blockUI(true);
-        _postponedCommands = new Object();
-        _postponedChildrenNotificationBuffer = new Array();
-        _postponedSelectionCommands = new Object();
-        _postponedEditionCommands = new Array();
+        _postponedCommands = {};
+        _postponedChildrenNotificationBuffer = [];
+        _postponedSelectionCommands = {};
+        _postponedEditionCommands = [];
         try {
           handleCommands(resultEvent.result as IList);
         } finally {
@@ -974,6 +974,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     protected function checkPostponedCommandsCompletion():void {
       for(var guid:String in _postponedCommands) {
+        //noinspection JSUnfilteredForInLoop
         var commands:IList = _postponedCommands[guid] as IList;
         for each(var command:RemoteCommand in commands) {
           traceError("Target remote peer could not be retrieved :");
@@ -1204,8 +1205,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function createApplicationMenuBar(actions:Array,
                                                 helpActions:Array):MenuBar {
       var applicationFrame:Application = getTopLevelApplication();
-      var menuBarModel:Object = new Object();
-      var menus:Array = new Array();
+      var menuBarModel:Object = {};
+      var menus:Array = [];
       menus = menus.concat(getViewFactory().createMenus(actions, false, applicationFrame));
       menus = menus.concat(getViewFactory().createMenus(helpActions, true, applicationFrame));
       menuBarModel["children"] = menus;
@@ -1380,11 +1381,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.addChild(buttonBox);
 
       var dialog:Panel;
-      var newDialog:Boolean = true;
       if(useCurrent && _dialogStack && _dialogStack.length > 1) {
         dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as Panel;
         dialog.removeAllChildren();
-        newDialog = false;
       } else {
         var dialogParent:DisplayObject;
         //fails to center in parent if the second dialog is bigger than the first one. 

@@ -145,6 +145,7 @@ public class CreateQueryComponentAction extends BackendAction {
    * @param context
    *          the action context.
    */
+  @SuppressWarnings("ConstantConditions")
   protected void completeQueryComponent(IQueryComponent queryComponent,
       IReferencePropertyDescriptor<?> erqDescriptor, Map<String, Object> context) {
 
@@ -207,7 +208,7 @@ public class CreateQueryComponentAction extends BackendAction {
             }
           } else if (masterComponent != null
               && initializedAttribute.getValue() instanceof String) {
-            Class<?> masterComponentContract = null;
+            Class<?> masterComponentContract;
             if (masterComponent instanceof IComponent) {
               masterComponentContract = ((IComponent) masterComponent)
                   .getComponentContract();
@@ -280,9 +281,7 @@ public class CreateQueryComponentAction extends BackendAction {
                   try {
                     initValue = expectedType.getConstructor(new Class<?>[] {
                       String.class
-                    }).newInstance(new Object[] {
-                      initValue.toString()
-                    });
+                    }).newInstance(initValue.toString());
                     // Whenever an exception occurs, just try to set it
                     // normally
                     // though.

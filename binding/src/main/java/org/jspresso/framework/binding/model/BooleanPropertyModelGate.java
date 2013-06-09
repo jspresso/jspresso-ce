@@ -67,7 +67,7 @@ public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> 
   protected boolean shouldOpen(Object propertyValue) {
     boolean shouldOpen = propertyValue != null;
     if (propertyValue instanceof Boolean) {
-      shouldOpen = ((Boolean) propertyValue).booleanValue();
+      shouldOpen = (Boolean) propertyValue;
     }
     if (negatedByName) {
       return !shouldOpen;

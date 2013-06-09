@@ -74,6 +74,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    *          the action context.
    * @return the created entity.
    */
+  @SuppressWarnings("unchecked")
   protected Object createNewModuleObject(IActionHandler actionHandler,
       Map<String, Object> context) {
     IComponentDescriptor<? extends IEntity> projectedDesc = ((ICollectionDescriptorProvider<IEntity>) getModelDescriptor(context))

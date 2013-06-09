@@ -139,10 +139,11 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the source entity.
    * @return the cloned entity.
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected <E extends IEntity> E performUowEntityCloning(final E entity) {
     if (!isInitialized(entity) || entity.isPersistent()) {
-      E sessionEntity = null;
+      E sessionEntity;
       if (getHibernateSession().contains(entity)) {
         sessionEntity = entity;
       } else {
@@ -696,7 +697,8 @@ public class HibernateBackendController extends AbstractBackendController {
             ((IEntity) component).getId(), (IEntity) component);
         if (((IEntity) component).isPersistent()) {
           lockInHibernate((IEntity) component, hibernateSession);
-        } else {
+        }
+//        else {
           // Cannot simply re-attach the transient entity, so we have to
           // saveOrUpdate it.
 
@@ -706,7 +708,7 @@ public class HibernateBackendController extends AbstractBackendController {
           // if (!isEntityRegisteredForDeletion((IEntity) component)) {
           // registerForUpdate((IEntity) component);
           // }
-        }
+//        }
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
       IComponentDescriptor<?> componentDescriptor = getEntityFactory()
@@ -749,6 +751,7 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void evictFromHibernateInDepth(IComponent component,
       Session hibernateSession, Set<IEntity> alreadyEvicted) {
     boolean isEntity = component instanceof IEntity;
@@ -791,6 +794,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the found entity
    */
+  @SuppressWarnings("unchecked")
   public <T extends IEntity> T findById(final Serializable id,
       final EMergeMode mergeMode, final Class<? extends T> clazz) {
     T res;
@@ -801,6 +805,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // merge mode is used for merge to occur inside the transaction.
       res = getTransactionTemplate().execute(new TransactionCallback<T>() {
 
+        @SuppressWarnings("unchecked")
         @Override
         public T doInTransaction(TransactionStatus status) {
           return merge((T) getHibernateSession().get(clazz, id), mergeMode);
@@ -874,7 +879,7 @@ public class HibernateBackendController extends AbstractBackendController {
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, int firstResult, int maxResults,
       EMergeMode mergeMode, Class<? extends T> clazz) {
-    List<T> res = null;
+    List<T> res;
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing, so force
       // to null.
@@ -897,6 +902,7 @@ public class HibernateBackendController extends AbstractBackendController {
       final int maxResults, final EMergeMode mergeMode) {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
+      @SuppressWarnings("unchecked")
       @Override
       public List<T> doInTransaction(TransactionStatus status) {
         Criteria executableCriteria = criteria

@@ -19,6 +19,8 @@
 package org.jspresso.framework.application.launch.batch;
 
 import org.jspresso.framework.application.startup.batch.IBatchStartup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Batch launcher.
@@ -27,6 +29,8 @@ import org.jspresso.framework.application.startup.batch.IBatchStartup;
  * @author Vincent Vandenschrick
  */
 public final class BatchLauncher {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BatchLauncher.class);
 
   private BatchLauncher() {
     // Helper class constructor.
@@ -38,7 +42,7 @@ public final class BatchLauncher {
    * @param args
    *          arguments.
    */
-  public static void main(String[] args) {
+  public static void main(String... args) {
     try {
       IBatchStartup startup = instanciateStartup(args[0]);
       String[] subArgs = new String[args.length - 1];
@@ -46,13 +50,13 @@ public final class BatchLauncher {
       startup.parseCmdLine(subArgs);
       startup.start();
     } catch (InstantiationException ex) {
-      ex.printStackTrace(System.err);
+      LOG.error("An unexpected error occured", ex);
       System.exit(1);
     } catch (IllegalAccessException ex) {
-      ex.printStackTrace(System.err);
+      LOG.error("An unexpected error occured", ex);
       System.exit(1);
     } catch (ClassNotFoundException ex) {
-      ex.printStackTrace(System.err);
+      LOG.error("An unexpected error occured", ex);
       System.exit(1);
     }
   }

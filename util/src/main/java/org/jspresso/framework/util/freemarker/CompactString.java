@@ -38,6 +38,7 @@ import freemarker.template.TemplateScalarModel;
  * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class CompactString implements TemplateMethodModelEx {
 
   private static final char UNDERSCORE = '_';
@@ -87,7 +88,7 @@ public class CompactString implements TemplateMethodModelEx {
    * @throws TemplateModelException
    *           whenever an unexpected exception occurs.
    */
-  public static void main(String[] args) throws TemplateModelException {
+  public static void main(String... args) throws TemplateModelException {
     new CompactString().exec(Arrays
         .asList(new SimpleScalar("TEAM_TEAM_MEMBERS")));
   }

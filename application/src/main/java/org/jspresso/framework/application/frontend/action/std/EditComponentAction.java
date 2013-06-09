@@ -77,6 +77,7 @@ public class EditComponentAction<E, F, G> extends
    *          the modelConnectorFactory to set.
    * @deprecated modeconnector is now created by the backend controller.
    */
+  @SuppressWarnings("EmptyMethod")
   @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {

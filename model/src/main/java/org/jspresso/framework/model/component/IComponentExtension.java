@@ -28,6 +28,7 @@ package org.jspresso.framework.model.component;
  * @param <T>
  *          The class of the extended component.
  */
+@SuppressWarnings("EmptyMethod")
 public interface IComponentExtension<T extends IComponent> {
 
   /**

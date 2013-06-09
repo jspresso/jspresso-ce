@@ -34,8 +34,7 @@ package org.jspresso.framework.view.flex {
     private function updateState(enabled:Boolean):void {
       syncView(data);
       invalidateDisplayList();
-    };
-
+    }
     override public function set data(value:Object):void {
       if(value && value["data"] is RAction) {
         if(_cw != null) {

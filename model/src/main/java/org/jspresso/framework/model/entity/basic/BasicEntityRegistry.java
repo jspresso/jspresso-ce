@@ -37,8 +37,8 @@ import org.jspresso.framework.model.entity.IEntityRegistry;
  */
 public class BasicEntityRegistry implements IEntityRegistry {
 
-  private String                                                    name;
-  private Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore;
+  private final String                                                    name;
+  private final Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore;
 
   /**
    * Constructs a new <code>BasicEntityRegistry</code> instance.

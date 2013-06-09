@@ -134,6 +134,7 @@ public class DefaultRemoteController extends
 
   // Keep a hard reference on the login view, so that it is not garbage
   // collected.
+  @SuppressWarnings("FieldCanBeLocal")
   private IView<RComponent>      loginView;
   private String[]               clientKeysToTranslate;
 
@@ -172,7 +173,7 @@ public class DefaultRemoteController extends
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
     flashCommand.setTitle(title);
-    flashCommand.setActions(actions.toArray(new RAction[0]));
+    flashCommand.setActions(actions.toArray(new RAction[actions.size()]));
     flashCommand.setUseCurrent(reuseCurrent);
     List<String> paramNames = new ArrayList<String>();
     List<String> paramValues = new ArrayList<String>();
@@ -180,8 +181,8 @@ public class DefaultRemoteController extends
       paramNames.add(flashVar.getKey());
       paramValues.add(flashVar.getValue());
     }
-    flashCommand.setParamNames(paramNames.toArray(new String[0]));
-    flashCommand.setParamValues(paramValues.toArray(new String[0]));
+    flashCommand.setParamNames(paramNames.toArray(new String[paramNames.size()]));
+    flashCommand.setParamValues(paramValues.toArray(new String[paramValues.size()]));
     flashCommand.setDimension(dimension);
     registerCommand(flashCommand);
   }
@@ -197,7 +198,7 @@ public class DefaultRemoteController extends
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);
-    dialogCommand.setActions(actions.toArray(new RAction[0]));
+    dialogCommand.setActions(actions.toArray(new RAction[actions.size()]));
     dialogCommand.setUseCurrent(reuseCurrent);
     dialogCommand.setDimension(dimension);
     registerCommand(dialogCommand);
@@ -594,7 +595,8 @@ public class DefaultRemoteController extends
    */
   protected RemoteInitCommand createInitCommand() {
     RemoteInitCommand initCommand = new RemoteInitCommand();
-    initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));
+    List<String> var = getWorkspaceNames();
+    initCommand.setWorkspaceNames(var.toArray(new String[var.size()]));
     initCommand
         .setWorkspaceActions(createRActionList(createWorkspaceActionList()));
     initCommand.setActions(createRActionLists(getActionMap()));
@@ -607,11 +609,11 @@ public class DefaultRemoteController extends
         getExitAction(), this, null, getLocale()));
     int w = 0;
     if (getFrameWidth() != null) {
-      w = getFrameWidth().intValue();
+      w = getFrameWidth();
     }
     int h = 0;
     if (getFrameHeight() != null) {
-      h = getFrameHeight().intValue();
+      h = getFrameHeight();
     }
     initCommand.setSize(new Dimension(w, h));
     return initCommand;
@@ -906,6 +908,7 @@ public class DefaultRemoteController extends
     return messageCommand;
   }
 
+  @SuppressWarnings("unchecked")
   private RAction createRAction(IAction action, Map<String, Object> context) {
     return getViewFactory().getActionFactory().createAction(
         wrapAction(action, context), this,
@@ -933,7 +936,7 @@ public class DefaultRemoteController extends
         }
       }
     }
-    rActionList.setActions(actions.toArray(new RAction[0]));
+    rActionList.setActions(actions.toArray(new RAction[actions.size()]));
     rActionList.setCollapsable(actionList.isCollapsable());
     return rActionList;
   }
@@ -959,7 +962,7 @@ public class DefaultRemoteController extends
         }
       }
     }
-    return actionLists.toArray(new RActionList[0]);
+    return actionLists.toArray(new RActionList[actionLists.size()]);
   }
 
   private IDisplayableAction wrapAction(IAction action,
@@ -1070,6 +1073,7 @@ public class DefaultRemoteController extends
     return startupActionContext;
   }
 
+  @SuppressWarnings("unchecked")
   private void completeActionContextWithRequestParameters(
       Map<String, Object> actionContext) {
     if (HttpRequestHolder.isAvailable()) {

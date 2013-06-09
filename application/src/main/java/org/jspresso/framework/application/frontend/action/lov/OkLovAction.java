@@ -74,9 +74,9 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
         IBackendController bc = getController(context).getBackendController();
         if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
           List<Object> selectedElements = new ArrayList<Object>();
-          for (int i = 0; i < resultSelectedIndices.length; i++) {
+          for (int resultSelectedIndice : resultSelectedIndices) {
             Object selectedElement = resultConnector.getChildConnector(
-                resultSelectedIndices[i]).getConnectorValue();
+                resultSelectedIndice).getConnectorValue();
             if (selectedElement instanceof IEntity) {
               if (!bc.isUnitOfWorkActive()) {
                 selectedElement = bc.merge((IEntity) selectedElement,

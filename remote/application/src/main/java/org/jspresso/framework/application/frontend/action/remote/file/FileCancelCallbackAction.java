@@ -34,7 +34,7 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
  */
 public class FileCancelCallbackAction extends AbstractRemoteAction {
 
-  private IFileCallback fileCallback;
+  private final IFileCallback fileCallback;
 
   /**
    * Constructs a new <code>FileCancelCallbackAction</code> instance.

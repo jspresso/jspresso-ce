@@ -135,7 +135,7 @@ public final class HtmlHelper {
     if (msg == null) {
       return false;
     }
-    return msg.toUpperCase().indexOf(HTML_START) >= 0;
+    return msg.toUpperCase().contains(HTML_START);
   }
 
   /**

@@ -20,6 +20,8 @@ package org.jspresso.framework.application;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -31,6 +33,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public final class AppTemplateContextLister {
 
+  private static final Logger LOG = LoggerFactory.getLogger(AppTemplateContextLister.class);
+
   private AppTemplateContextLister() {
     // UtilityClassContructor
   }
@@ -38,16 +42,14 @@ public final class AppTemplateContextLister {
   /**
    * Dumps the application elements along with their actual types.
    * 
-   * @param args
+   * @param args main arguments
    */
-  public static void main(String[] args) {
+  public static void main(String... args) {
     ListableBeanFactory applicationContext = new ClassPathXmlApplicationContext(
-        new String[] {
-            "/org/jspresso/framework/application/commons.xml",
-            "/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml",
-            "/org/jspresso/framework/application/frontend/commons-frontend.xml",
-            "/org/jspresso/framework/application/mock-config.xml",
-        });
+        "/org/jspresso/framework/application/commons.xml",
+        "/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml",
+        "/org/jspresso/framework/application/frontend/commons-frontend.xml",
+        "/org/jspresso/framework/application/mock-config.xml");
     String[] beanNames = applicationContext.getBeanDefinitionNames();
     Arrays.sort(beanNames, String.CASE_INSENSITIVE_ORDER);
     for (String beanName : beanNames) {
@@ -67,8 +69,8 @@ public final class AppTemplateContextLister {
   private static void outputLine(String beanName, Class<?> beanType) {
     StringBuilder line = new StringBuilder(beanName);
     if (beanType != null) {
-      line.append(":" + beanType.getName());
+      line.append(":").append(beanType.getName());
     }
-    System.out.println(line);
+    LOG.info(line.toString());
   }
 }

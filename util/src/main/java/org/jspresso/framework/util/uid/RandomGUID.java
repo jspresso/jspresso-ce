@@ -93,16 +93,16 @@ import org.slf4j.LoggerFactory;
  * @version 1.2.1 11/05/02
  * @author Marc A. Mnich
  */
-public class RandomGUID extends Object {
+public class RandomGUID {
 
   private static final Logger LOG            = LoggerFactory
                                                  .getLogger(RandomGUID.class);
 
-  private static Random       myRand;
-  private static SecureRandom mySecureRand;
-  private static String       sId;
+  private static final Random       myRand;
+  private static final SecureRandom mySecureRand;
+  private static final String       sId;
 
-  private String              separator;
+  private final String              separator;
   private String              valueAfterMD5  = "";
   private String              valueBeforeMD5 = "";
 
@@ -116,11 +116,13 @@ public class RandomGUID extends Object {
     mySecureRand = new SecureRandom();
     long secureInitializer = mySecureRand.nextLong();
     myRand = new Random(secureInitializer);
+    String inetAddr = null;
     try {
-      sId = InetAddress.getLocalHost().toString();
+      inetAddr = InetAddress.getLocalHost().toString();
     } catch (UnknownHostException e) {
-      LOG.error("An unexpected error occured while generating a UID.", e);
+      LOG.error("An unexpected error occured while initializing the GUID generator.", e);
     }
+    sId = inetAddr;
   }
 
   /**
@@ -167,12 +169,12 @@ public class RandomGUID extends Object {
    * @param args
    *          program arguments.
    */
-  public static void main(String[] args) {
+  public static void main(String... args) {
     for (int i = 0; i < 10000; i++) {
       RandomGUID myGUID = new RandomGUID();
-      System.out.println("Seeding String=" + myGUID.valueBeforeMD5);
-      System.out.println("rawGUID=" + myGUID.valueAfterMD5);
-      System.out.println("RandomGUID=" + myGUID.toString());
+      LOG.info("Seeding String={}", myGUID.valueBeforeMD5);
+      LOG.info("rawGUID={}", myGUID.valueAfterMD5);
+      LOG.info("RandomGUID={}", myGUID.toString());
     }
   }
 
@@ -215,7 +217,7 @@ public class RandomGUID extends Object {
       StringBuilder sbValueBeforeMD5 = new StringBuilder();
       MessageDigest md5 = MessageDigest.getInstance("MD5");
       long time = System.currentTimeMillis();
-      long rand = 0;
+      long rand;
 
       if (secure) {
         rand = mySecureRand.nextLong();
@@ -240,8 +242,8 @@ public class RandomGUID extends Object {
 
       byte[] array = md5.digest();
       StringBuilder sb = new StringBuilder();
-      for (int j = 0; j < array.length; ++j) {
-        int b = array[j] & 0xFF;
+      for (byte anArray : array) {
+        int b = anArray & 0xFF;
         if (b < 0x10) {
           sb.append('0');
         }
@@ -251,7 +253,7 @@ public class RandomGUID extends Object {
       valueAfterMD5 = sb.toString();
 
     } catch (NoSuchAlgorithmException e) {
-      System.out.println("Error: " + e);
+      LOG.error("The checksum algorithm is undefined", e);
     }
   }
 }

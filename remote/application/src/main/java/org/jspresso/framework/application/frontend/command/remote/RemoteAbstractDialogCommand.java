@@ -78,7 +78,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    * @param actions
    *          the actions to set.
    */
-  public void setActions(RAction[] actions) {
+  public void setActions(RAction... actions) {
     this.actions = actions;
   }
 

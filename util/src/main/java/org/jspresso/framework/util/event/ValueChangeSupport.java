@@ -63,7 +63,9 @@ public class ValueChangeSupport implements IValueChangeSource {
     if (inhibitedListeners == null && listener != null) {
       inhibitedListeners = new HashSet<IValueChangeListener>(4);
     }
-    inhibitedListeners.add(listener);
+    if (inhibitedListeners != null) {
+      inhibitedListeners.add(listener);
+    }
   }
 
   /**

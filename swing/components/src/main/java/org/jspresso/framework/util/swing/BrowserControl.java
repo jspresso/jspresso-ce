@@ -3,6 +3,9 @@
  */
 package org.jspresso.framework.util.swing;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 /**
@@ -19,6 +22,8 @@ import java.io.IOException;
  */
 
 public final class BrowserControl {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BrowserControl.class);
 
   // The flag to display a url.
   private static final String UNIX_FLAG = "-remote openURL";
@@ -47,7 +52,7 @@ public final class BrowserControl {
    */
   public static void displayURL(String url) throws IOException {
     boolean windows = isWindowsPlatform();
-    String cmd = null;
+    String cmd;
     if (windows) {
       // cmd = 'rundll32 url.dll,FileProtocolHandler http://...'
       cmd = WIN_PATH + " " + WIN_FLAG + " " + url;
@@ -68,11 +73,10 @@ public final class BrowserControl {
           // Command failed, start up the browser
           // cmd = 'netscape http://www.javaworld.com'
           cmd = UNIX_PATH + " " + url;
-          p = Runtime.getRuntime().exec(cmd);
+          Runtime.getRuntime().exec(cmd);
         }
-      } catch (InterruptedException x) {
-        System.err.println("Error bringing up browser, cmd='" + cmd + "'");
-        System.err.println("Caught: " + x);
+      } catch (InterruptedException iex) {
+        LOG.error("Error bringing up browser, cmd='" + cmd + "'", iex);
       }
     }
   }
@@ -85,9 +89,6 @@ public final class BrowserControl {
    */
   public static boolean isWindowsPlatform() {
     String os = System.getProperty("os.name");
-    if (os != null && os.startsWith(WIN_ID)) {
-      return true;
-    }
-    return false;
+    return os != null && os.startsWith(WIN_ID);
   }
 }

@@ -9,6 +9,8 @@ import java.util.Set;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.security.ApplicationDirectoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -23,6 +25,7 @@ import org.springframework.context.ApplicationContextAware;
 public class ListApplicationElementsAction extends BackendAction implements
     ApplicationContextAware {
 
+  private static final Logger LOG = LoggerFactory.getLogger(ListApplicationElementsAction.class);
   private ApplicationContext applicationContext;
 
   /**
@@ -50,12 +53,11 @@ public class ListApplicationElementsAction extends BackendAction implements
     Map<String, Set<String>> permIdsStore = directoryBuilder
         .toApplicationDirectory();
     for (Map.Entry<String, Set<String>> storeEntry : permIdsStore.entrySet()) {
-      System.out.println("\n\n********************************************");
-      System.out.println("************ " + storeEntry.getKey()
-          + " *****************");
-      System.out.println("********************************************");
+      LOG.info("\n\n********************************************");
+      LOG.info("************ " + storeEntry.getKey() + " *****************");
+      LOG.info("********************************************");
       for (String permId : storeEntry.getValue()) {
-        System.out.println(permId);
+        LOG.info(permId);
       }
     }
     return super.execute(actionHandler, context);

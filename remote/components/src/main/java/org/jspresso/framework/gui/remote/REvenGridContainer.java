@@ -83,7 +83,7 @@ public class REvenGridContainer extends RContainer {
    * @param cells
    *          the cells to set.
    */
-  public void setCells(RComponent[] cells) {
+  public void setCells(RComponent... cells) {
     this.cells = cells;
   }
 

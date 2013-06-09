@@ -201,6 +201,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    *          the action context
    * @return the liste of retrieved components.
    */
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   public List<?> performQuery(final IQueryComponent queryComponent,
       final Map<String, Object> context) {
     Session hibernateSession = getHibernateSession(context);
@@ -215,7 +216,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     List<IEntity> entities;
     if (criteria == null) {
       entities = new ArrayList<IEntity>();
-      queryComponent.setRecordCount(Integer.valueOf(0));
+      queryComponent.setRecordCount(0);
     } else {
       ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
           .get(CRITERIA_REFINER);
@@ -247,14 +248,14 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
       if (pageSize != null) {
         if (page == null) {
-          page = Integer.valueOf(0);
+          page = 0;
           queryComponent.setPage(page);
         }
         if (queryComponent.getRecordCount() == null) {
           criteria.setProjection(Projections.rowCount());
-          totalCount = Integer.valueOf(((Number) criteria
+          totalCount = ((Number) criteria
               .getExecutableCriteria(hibernateSession).list().get(0))
-              .intValue());
+              .intValue();
         }
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {
@@ -270,8 +271,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           criteria.setProjection(Projections.id());
           List<Serializable> entityIds = criteria
               .getExecutableCriteria(hibernateSession)
-              .setFirstResult(page.intValue() * pageSize.intValue())
-              .setMaxResults(pageSize.intValue()).list();
+              .setFirstResult(page * pageSize)
+              .setMaxResults(pageSize).list();
           if (entityIds.isEmpty()) {
             entities = new ArrayList<IEntity>();
           } else {
@@ -293,8 +294,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           }
         } else {
           entities = criteria.getExecutableCriteria(hibernateSession)
-              .setFirstResult(page.intValue() * pageSize.intValue())
-              .setMaxResults(pageSize.intValue()).list();
+              .setFirstResult(page * pageSize)
+              .setMaxResults(pageSize).list();
         }
       } else {
         if (refinerOrders != null) {
@@ -308,7 +309,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           criteria.setResultTransformer(refinerResultTransformer);
         }
         entities = criteria.getExecutableCriteria(hibernateSession).list();
-        totalCount = Integer.valueOf(entities.size());
+        totalCount = entities.size();
       }
       if (totalCount != null) {
         queryComponent.setRecordCount(totalCount);

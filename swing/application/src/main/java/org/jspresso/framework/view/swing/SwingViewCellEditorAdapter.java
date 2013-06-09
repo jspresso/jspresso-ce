@@ -66,7 +66,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   private static final Map<String, Object> NULLMAP          = Collections
                                                                 .unmodifiableMap(new HashMap<String, Object>());
   private static final long                serialVersionUID = 8182961519931949735L;
-  private IView<JComponent>                editorView;
+  private final IView<JComponent>                editorView;
 
   /**
    * Constructs a new <code>SwingViewCellEditorAdapter</code> instance.

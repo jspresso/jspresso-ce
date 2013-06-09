@@ -398,10 +398,8 @@ public class DefaultRemoteViewFactory extends
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
-    actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    actionList.setActions(binaryActions.toArray(new RAction[binaryActions.size()]));
+    viewComponent.setActionLists(actionList);
     return propertyView;
   }
 
@@ -490,8 +488,8 @@ public class DefaultRemoteViewFactory extends
     BasicMapView<RComponent> view = constructMapView(viewComponent,
         viewDescriptor);
 
-    viewComponent.setCardNames(cardNames.toArray(new String[0]));
-    viewComponent.setCards(cards.toArray(new RComponent[0]));
+    viewComponent.setCardNames(cardNames.toArray(new String[cardNames.size()]));
+    viewComponent.setCards(cards.toArray(new RComponent[cards.size()]));
     view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
   }
@@ -609,9 +607,9 @@ public class DefaultRemoteViewFactory extends
         modelDescriptor);
     completePropertyViewsWithDynamicFonts(connector, propertyViews,
         modelDescriptor);
-    viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));
-    viewComponent.setElements(elements.toArray(new RComponent[0]));
-    viewComponent.setElementLabels(elementLabels.toArray(new RComponent[0]));
+    viewComponent.setElementWidths(elementWidths.toArray(new Integer[elementWidths.size()]));
+    viewComponent.setElements(elements.toArray(new RComponent[elements.size()]));
+    viewComponent.setElementLabels(elementLabels.toArray(new RComponent[elementLabels.size()]));
     return view;
   }
 
@@ -659,9 +657,9 @@ public class DefaultRemoteViewFactory extends
       cells.add(childView.getPeer());
       childrenViews.add(childView);
     }
-    viewComponent.setCells(cells.toArray(new RComponent[0]));
+    viewComponent.setCells(cells.toArray(new RComponent[cells.size()]));
     viewComponent.setCellConstraints(cellConstraints
-        .toArray(new CellConstraints[0]));
+        .toArray(new CellConstraints[cellConstraints.size()]));
     view.setChildren(childrenViews);
     return view;
   }
@@ -706,6 +704,7 @@ public class DefaultRemoteViewFactory extends
                   return originalValue;
                 }
 
+                @SuppressWarnings("MagicConstant")
                 @Override
                 public Object getValueFromState(Object originalValue) {
                   Calendar serverCalendar = Calendar.getInstance(serverTz);
@@ -730,6 +729,7 @@ public class DefaultRemoteViewFactory extends
           ((RemoteValueConnector) connector)
               .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+                @SuppressWarnings("MagicConstant")
                 @Override
                 public Object getValueFromState(Object originalValue) {
                   Calendar serverCalendar = Calendar.getInstance(serverTz);
@@ -825,8 +825,7 @@ public class DefaultRemoteViewFactory extends
       connector.setExceptionHandler(actionHandler);
       viewComponent = createRDecimalField(propertyViewDescriptor);
       ((RDecimalComponent) viewComponent)
-          .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
-              .intValue());
+          .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -868,7 +867,7 @@ public class DefaultRemoteViewFactory extends
       viewComponent = createRDurationField(propertyViewDescriptor);
       if (propertyDescriptor.getMaxMillis() != null) {
         ((RDurationField) viewComponent).setMaxMillis(propertyDescriptor
-            .getMaxMillis().longValue());
+            .getMaxMillis());
       } else {
         ((RDurationField) viewComponent).setMaxMillis(-1);
       }
@@ -958,11 +957,11 @@ public class DefaultRemoteViewFactory extends
               propertyDescriptor.getIconImageURL(value),
               getIconFactory().getTinyIconSize()));
         }
-        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[0]));
+        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
       }
-      ((REnumBox) viewComponent).setValues(values.toArray(new String[0]));
+      ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
       ((REnumBox) viewComponent).setTranslations(translations
-          .toArray(new String[0]));
+          .toArray(new String[translations.size()]));
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -994,7 +993,7 @@ public class DefaultRemoteViewFactory extends
       cells.add(childView.getPeer());
       childrenViews.add(childView);
     }
-    viewComponent.setCells(cells.toArray(new RComponent[0]));
+    viewComponent.setCells(cells.toArray(new RComponent[cells.size()]));
     view.setChildren(childrenViews);
     return view;
   }
@@ -1187,9 +1186,9 @@ public class DefaultRemoteViewFactory extends
         @Override
         public Object getValueForState(Object originalValue) {
           if (originalValue instanceof BigDecimal) {
-            return Double.valueOf(((BigDecimal) originalValue).doubleValue());
+            return ((BigDecimal) originalValue).doubleValue();
           } else if (originalValue instanceof BigInteger) {
-            return Long.valueOf(((BigInteger) originalValue).longValue());
+            return ((BigInteger) originalValue).longValue();
           }
           return originalValue;
         }
@@ -1255,7 +1254,7 @@ public class DefaultRemoteViewFactory extends
       connector.setExceptionHandler(actionHandler);
       viewComponent = createRPercentField(propertyViewDescriptor);
       ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor
-          .getMaxFractionDigit().intValue());
+          .getMaxFractionDigit());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
@@ -1281,9 +1280,8 @@ public class DefaultRemoteViewFactory extends
       RComponent propertyComponent, ITranslationProvider translationProvider,
       Locale locale) {
     RLabel propertyLabel = createRLabel(null, false);
-    StringBuilder labelText = new StringBuilder(
-        propertyViewDescriptor.getI18nName(translationProvider, locale));
-    propertyLabel.setLabel(labelText.toString());
+    String labelText = propertyViewDescriptor.getI18nName(translationProvider, locale);
+    propertyLabel.setLabel(labelText);
     configurePropertyLabel(propertyLabel, propertyViewDescriptor);
     return propertyLabel;
   }
@@ -1543,12 +1541,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(lovAction);
+      viewComponent.setActionLists(actionList);
     }
     return view;
   }
@@ -1629,9 +1623,7 @@ public class DefaultRemoteViewFactory extends
       boolean bold) {
     RLabel component = new RLabel(getGuidGenerator().generateGUID());
     if (bold) {
-      if (bold) {
-        component.setFont(createFont(BOLD_FONT));
-      }
+      component.setFont(createFont(BOLD_FONT));
     }
     return component;
   }
@@ -1649,9 +1641,7 @@ public class DefaultRemoteViewFactory extends
       boolean bold) {
     RLink component = new RLink(getGuidGenerator().generateGUID());
     if (bold) {
-      if (bold) {
-        component.setFont(createFont(BOLD_FONT));
-      }
+      component.setFont(createFont(BOLD_FONT));
     }
     return component;
   }
@@ -1975,7 +1965,7 @@ public class DefaultRemoteViewFactory extends
           column.getPeer()
               .setPreferredSize(
                   new Dimension(
-                      columnViewDescriptorEntry.getValue().intValue(), -1));
+                      columnViewDescriptorEntry.getValue(), -1));
         }
         propertyViews.add(column);
       }
@@ -1988,9 +1978,9 @@ public class DefaultRemoteViewFactory extends
         propertyViews, rowDescriptor);
     completePropertyViewsWithDynamicFonts(rowConnectorPrototype, propertyViews,
         rowDescriptor);
-    viewComponent.setColumns(columns.toArray(new RComponent[0]));
-    viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[0]));
-    viewComponent.setColumnIds(columnIds.toArray(new String[0]));
+    viewComponent.setColumns(columns.toArray(new RComponent[columns.size()]));
+    viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[columnHeaders.size()]));
+    viewComponent.setColumnIds(columnIds.toArray(new String[columnIds.size()]));
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
@@ -2245,7 +2235,7 @@ public class DefaultRemoteViewFactory extends
         childrenViews.add(childView);
       }
     }
-    viewComponent.setTabs(tabs.toArray(new RComponent[0]));
+    viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
     view.setChildren(childrenViews);
     return view;
   }
@@ -2300,7 +2290,7 @@ public class DefaultRemoteViewFactory extends
     if (view.getPeer() instanceof RTextComponent) {
       if (propertyDescriptor.getMaxLength() != null) {
         ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor
-            .getMaxLength().intValue());
+            .getMaxLength());
       }
     }
     return view;
@@ -2340,6 +2330,7 @@ public class DefaultRemoteViewFactory extends
         ((RemoteValueConnector) connector)
             .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
+              @SuppressWarnings("MagicConstant")
               @Override
               public Object getValueFromState(Object originalValue) {
                 Calendar serverCalendar = Calendar.getInstance(serverTz);
@@ -2420,7 +2411,7 @@ public class DefaultRemoteViewFactory extends
         List<RActionList> viewActionLists = createViewToolBar(actionMap, view,
             actionHandler, locale);
         view.getPeer().setActionLists(
-            viewActionLists.toArray(new RActionList[0]));
+            viewActionLists.toArray(new RActionList[viewActionLists.size()]));
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
       }
@@ -2432,7 +2423,7 @@ public class DefaultRemoteViewFactory extends
         List<RActionList> viewActionLists = createViewToolBar(
             secondaryActionMap, view, actionHandler, locale);
         view.getPeer().setSecondaryActionLists(
-            viewActionLists.toArray(new RActionList[0]));
+            viewActionLists.toArray(new RActionList[viewActionLists.size()]));
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
       }
@@ -2455,9 +2446,7 @@ public class DefaultRemoteViewFactory extends
   protected List<RActionList> createViewToolBar(ActionMap actionMap,
       IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
     List<RActionList> viewActionLists = new ArrayList<RActionList>();
-    for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
-        .iterator(); iter.hasNext();) {
-      ActionList nextActionList = iter.next();
+    for (ActionList nextActionList : actionMap.getActionLists(actionHandler)) {
       if (actionHandler.isAccessGranted(nextActionList)) {
         try {
           actionHandler.pushToSecurityContext(nextActionList);
@@ -2499,7 +2488,7 @@ public class DefaultRemoteViewFactory extends
               }
             }
           }
-          actionList.setActions(actions.toArray(new RAction[0]));
+          actionList.setActions(actions.toArray(new RAction[actions.size()]));
         } finally {
           actionHandler.restoreLastSecurityContextSnapshot();
         }
@@ -2610,7 +2599,7 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void showCardInPanel(RComponent cardsPeer, String cardName) {
-    RemoteValueState cardState = ((RCardContainer) cardsPeer).getState();
+    RemoteValueState cardState = cardsPeer.getState();
     cardState.setValue(cardName);
 
     RemoteValueCommand command = new RemoteValueCommand();

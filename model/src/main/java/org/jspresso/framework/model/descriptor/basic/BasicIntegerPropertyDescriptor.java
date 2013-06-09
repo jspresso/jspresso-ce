@@ -54,7 +54,7 @@ public class BasicIntegerPropertyDescriptor extends
   @Override
   public boolean isUsingLong() {
     if (usingLong != null) {
-      return usingLong.booleanValue();
+      return usingLong;
     }
     return false;
   }
@@ -79,7 +79,7 @@ public class BasicIntegerPropertyDescriptor extends
    *          the usingLong to set.
    */
   public void setUsingLong(boolean usingLong) {
-    this.usingLong = Boolean.valueOf(usingLong);
+    this.usingLong = usingLong;
   }
 
   /**

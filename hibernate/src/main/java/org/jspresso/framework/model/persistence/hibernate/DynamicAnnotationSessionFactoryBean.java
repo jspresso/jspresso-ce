@@ -30,12 +30,6 @@ import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBea
 public class DynamicAnnotationSessionFactoryBean extends
     AnnotationSessionFactoryBean {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void postProcessMappings(Configuration config) {
-    super.postProcessMappings(config);
-  }
+  // Empty as of now.
 
 }

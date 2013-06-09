@@ -94,9 +94,9 @@ public class RemoveFromModuleObjectsAction extends
     }
 
     final List<Object> moduleObjectsToRemove = new ArrayList<Object>();
-    for (int i = 0; i < selectedIndices.length; i++) {
+    for (int selectedIndice : selectedIndices) {
       moduleObjectsToRemove.add(collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue());
+          selectedIndice).getConnectorValue());
     }
     getTransactionTemplate(context).execute(
         new TransactionCallbackWithoutResult() {

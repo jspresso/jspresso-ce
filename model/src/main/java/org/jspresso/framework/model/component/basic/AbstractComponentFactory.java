@@ -69,6 +69,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void sortCollectionProperty(IComponent component, String propertyName) {
     ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) getComponentDescriptor(
@@ -112,11 +113,10 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           collectionCopy.add(comparableProperties.getSourceObject());
         }
         if (!collectionCopy.equals(collectionOrigin)) {
-          Collection<Object> collectionProperty = propertyValue;
-          collectionProperty.clear();
-          collectionProperty.addAll(collectionCopy);
+          propertyValue.clear();
+          propertyValue.addAll(collectionCopy);
           if (wasClean) {
-            ((PersistentCollection) collectionProperty).clearDirty();
+            ((PersistentCollection) propertyValue).clearDirty();
           }
         }
       }
@@ -126,7 +126,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   private static class ComparableProperties {
 
     private Object[] valuesToCompare;
-    private Object   sourceObject;
+    private final Object   sourceObject;
 
     /**
      * Constructs a new <code>ComparableProperties</code> instance.
@@ -181,7 +181,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   private static class ComparablePropertiesComparator implements
       Comparator<ComparableProperties> {
 
-    private List<ESort> orderingDirections;
+    private final List<ESort> orderingDirections;
 
     /**
      * Constructs a new <code>ComparablePropertiesComparator</code> instance.

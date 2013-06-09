@@ -101,8 +101,8 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   boolean isActive();
 
   /**
-   * Is the passed entity already updated in the current unit of work and waits
-   * for commit ?
+   * Tests whether the passed entity already updated in the current unit of work and waits
+   * for commit.
    * 
    * @param entity
    *          the entity to test.

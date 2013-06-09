@@ -46,6 +46,7 @@ public class DatabaseLoginModule extends DatabaseServerLoginModule {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("ConstantConditions")
   @Override
   public boolean login() throws LoginException {
     if (super.login() && getIdentity() instanceof UserPrincipal) {

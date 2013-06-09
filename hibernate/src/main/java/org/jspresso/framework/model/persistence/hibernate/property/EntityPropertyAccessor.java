@@ -47,6 +47,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class EntityPropertyAccessor implements PropertyAccessor {
 
   /**
@@ -75,9 +76,9 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   private static final class EntityPropertyGetter implements Getter {
 
     private static final long serialVersionUID = -7896937881971754040L;
-    private Class<?>          propertyClass;
-    private String            propertyName;
-    private Method            getter;
+    private final Class<?>          propertyClass;
+    private final String            propertyName;
+    private final Method            getter;
 
     /**
      * Constructs a new <code>EntityPropertyGetter</code> instance.
@@ -164,8 +165,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   private static final class EntityPropertySetter implements Setter {
 
     private static final long serialVersionUID = 1836686220358025728L;
-    private String            propertyName;
-    private Method            setter;
+    private final String            propertyName;
+    private final Method            setter;
 
     /**
      * Constructs a new <code>EntityPropertySetter</code> instance.

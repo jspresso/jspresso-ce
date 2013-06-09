@@ -67,7 +67,7 @@ public final class SecurityHelper {
   }
 
   /**
-   * Do the passed subject has sufficient roles ?
+   * Tests whether the passed subject has sufficient roles.
    * 
    * @param subject
    *          the subject to test.

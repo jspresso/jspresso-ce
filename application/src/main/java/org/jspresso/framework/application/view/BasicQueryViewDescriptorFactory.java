@@ -72,6 +72,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ConstantConditions")
   @Override
   public IViewDescriptor createQueryViewDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
@@ -126,7 +127,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
       } else {
         width = 4;
       }
-      ((BasicPropertyViewDescriptor) propertyView).setWidth(Integer.valueOf(width));
+      ((BasicPropertyViewDescriptor) propertyView).setWidth(width);
     }
     queryComponentViewDescriptor
         .setPropertyViewDescriptors(propertyViewDescriptors);

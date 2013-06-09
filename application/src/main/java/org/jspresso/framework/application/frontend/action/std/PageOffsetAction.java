@@ -54,7 +54,7 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     context.put(AbstractQbeAction.PAGINATE, null);
-    IPageable pageableModel = ((IPageable) getModel(context));
+    IPageable pageableModel = getModel(context);
     /*
      * we are on the pagination button view.
      */
@@ -73,8 +73,7 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
     try {
       if (pageOffset != null) {
         if (pageableModel.getPage() != null) {
-          pageableModel.setPage(Integer.valueOf(pageableModel.getPage()
-              .intValue() + pageOffset.intValue()));
+          pageableModel.setPage(pageableModel.getPage() + pageOffset);
         } else {
           pageableModel.setPage(pageOffset);
         }

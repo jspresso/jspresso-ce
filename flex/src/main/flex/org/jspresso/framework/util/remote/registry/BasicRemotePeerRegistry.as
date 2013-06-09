@@ -20,7 +20,7 @@ package org.jspresso.framework.util.remote.registry {
     private var _backingStore:Object;
     
     public function BasicRemotePeerRegistry() {
-      _backingStore = new Object();
+      _backingStore = {};
     }
 
     public function register(remotePeer:IRemotePeer):void {

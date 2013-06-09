@@ -21,6 +21,7 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * @param <V>
  *          the value class.
  */
+@SuppressWarnings("NullableProblems")
 public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
     implements Map<K, V> {
 
@@ -80,17 +81,10 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
         /**
          * {@inheritDoc}
          */
+        @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
         @Override
         public boolean equals(Object o) {
           return this == o;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int hashCode() {
-          return super.hashCode();
         }
       };
     }
@@ -191,6 +185,7 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public ObjectEqualityMap<K, V> clone() {
     ObjectEqualityMap<K, V> clone = (ObjectEqualityMap<K, V>) super.clone();

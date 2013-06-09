@@ -28,6 +28,8 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang.LocaleUtils;
 import org.jspresso.framework.application.launch.batch.BatchLauncher;
 import org.jspresso.framework.application.startup.BackendActionStartup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple batch process starter. The batch itself is coded as a backend action
@@ -43,6 +45,8 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
   private static final String BATCH_USER_NAME = "batchUserName";
   private static final String LOCALE          = "locale";
 
+  private static final Logger LOG = LoggerFactory.getLogger(BatchStartup.class);
+
   /**
    * {@inheritDoc}
    */
@@ -54,7 +58,7 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
       CommandLine cmd = parser.parse(options, args);
       processCommandLine(cmd);
     } catch (ParseException ex) {
-      System.err.println(ex.getLocalizedMessage());
+      LOG.error("An error occured while parsing the command line", ex);
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(BatchLauncher.class.getSimpleName(), options);
       return false;

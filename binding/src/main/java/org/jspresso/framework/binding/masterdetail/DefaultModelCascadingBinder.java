@@ -73,7 +73,7 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
   private final class BoundConnectorSelectionListener implements
       IItemSelectionListener {
 
-    private IValueConnector detailConnector;
+    private final IValueConnector detailConnector;
 
     /**
      * Constructs a new <code>BoundConnectorSelectionListener</code> instance.
@@ -102,7 +102,7 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
   private final class BoundConnectorModelListener implements
       PropertyChangeListener {
 
-    private IValueConnector detailConnector;
+    private final IValueConnector detailConnector;
 
     /**
      * Constructs a new <code>BoundConnectorModelListener</code> instance.

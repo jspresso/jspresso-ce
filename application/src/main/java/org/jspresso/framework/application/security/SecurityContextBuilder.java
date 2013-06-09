@@ -47,7 +47,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class SecurityContextBuilder implements ISecurityContextBuilder {
 
   private Map<String, Object>       currentSecurityContext;
-  private List<Map<String, Object>> snapshots;
+  private final List<Map<String, Object>> snapshots;
 
   private static final String       LAST_PUSHED_VIEW = "LAST_PUSHED_VIEW";
 
@@ -142,6 +142,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
     return this;
   }
 
+  @SuppressWarnings("unchecked")
   private void appendToViewChain(String permId) {
     if (permId != null) {
       List<String> viewChain = (List<String>) currentSecurityContext

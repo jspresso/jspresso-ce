@@ -52,9 +52,9 @@ package org.jspresso.framework.view.flex {
   [Event(name="change", type="mx.events.IndexChangedEvent")]
   
   //Styles
-  [Style(name="orientation", defaultValue="right", type="String", enumeration="left,right")]
+  [Style(name="orientation", type="String", enumeration="left,right")]
   [Style(name="initialWidth", type="int")]
-  [Style(name="openSize", type="int", defaultValue="250")]
+  [Style(name="openSize", type="int")]
   
   public class CollapsibleAccordion extends Container
   {
@@ -85,7 +85,6 @@ package org.jspresso.framework.view.flex {
     private var buttonDict : ArrayCollection;
     private var _barRotate : Number = 90;
     private var _close : Boolean = true;
-    private var closeButton : Button;
     private var closeChanged : Boolean = false;
     private var _content:Array;
     private var contentChanged : Boolean = false;
@@ -232,45 +231,42 @@ package org.jspresso.framework.view.flex {
       return _selectedIndex;
     }
     
-    override protected function createChildren():void
-    {
+    override protected function createChildren():void {
       super.createChildren();
-      
+
       accordionVBox = new Canvas();
       accordionVBox.percentHeight = 100;
       accordionVBox.percentWidth = 100;
-      accordionVBox.setStyle("verticalGap",0);
-      
+      accordionVBox.setStyle("verticalGap", 0);
+
       accordion = new Accordion();
       accordion.historyManagementEnabled = _historyManagementEnabled;
-      accordion.addEventListener( IndexChangedEvent.CHANGE, onAccordionChange );
+      accordion.addEventListener(IndexChangedEvent.CHANGE, onAccordionChange);
       accordion.styleName = accordianStyle; //"drawerAccordion";
       accordion.percentHeight = 100;
       accordion.percentWidth = 100;
       accordion.setStyle("headerHeight", barSize);
-      
-      if(orientation == "right")
-      {
+
+      if (orientation == "right") {
         accordion.x = -1 * width;
       }
-      else
-      {
+      else {
         accordion.x = width;
       }
-      
-      closeButton = new Button();
+
+      var closeButton:Button = new Button();
       closeButton.styleName = closeButtonStyle;
-      closeButton.width=21;
-      closeButton.height=21;
+      closeButton.width = 21;
+      closeButton.height = 21;
       closeButton.toolTip = "Close";
-      closeButton.addEventListener( MouseEvent.CLICK, closeDrawer );
-      
-      closeButton.setStyle( "right", 6 );
-      closeButton.setStyle( "top" , barSize/2 - closeButton.height/2 );
-      
-      accordionVBox.addChild( accordion );
-      accordionVBox.addChild( closeButton );
-      addChild( accordionVBox );
+      closeButton.addEventListener(MouseEvent.CLICK, closeDrawer);
+
+      closeButton.setStyle("right", 6);
+      closeButton.setStyle("top", barSize / 2 - closeButton.height / 2);
+
+      accordionVBox.addChild(accordion);
+      accordionVBox.addChild(closeButton);
+      addChild(accordionVBox);
     }
     
     private function closeDrawer( event : MouseEvent ) : void
@@ -444,9 +440,11 @@ package org.jspresso.framework.view.flex {
       super.measure();
       
       measuredMinWidth = _currentWidth;
+      //noinspection JSSuspiciousNameCombination
       measuredMinHeight = _currentWidth;
       measuredWidth = _currentWidth;
-      measuredHeight = _currentWidth;;
+      //noinspection JSSuspiciousNameCombination
+      measuredHeight = _currentWidth;
     } 
     
     private function onButtonClick( event : MouseEvent ) : void
@@ -541,10 +539,8 @@ package org.jspresso.framework.view.flex {
                 //how far are  we going to have to move?
                 //this should be v * heightPercent
                 //we want the percentage that we are moving
-                var percentMoving:Number = distanceToMoveY/distanceLeftY;
-                var rotateAmount:Number = -1 * (90 * percentMoving);
                 //now we know percent we that of 90
-                button.rotation = rotateAmount;
+                button.rotation = -1 * (90 * distanceToMoveY/distanceLeftY);
               }else{
                 button.rotation = -90;
               }
@@ -649,7 +645,7 @@ package org.jspresso.framework.view.flex {
     public function addAcccordionSection(child:Container):Container {
       var actualContent:Array = content;
       if(!actualContent) {
-        actualContent = new Array();
+        actualContent = [];
       }
       actualContent.push(child);
       content = actualContent;

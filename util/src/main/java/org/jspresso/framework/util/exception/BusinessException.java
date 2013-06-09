@@ -18,8 +18,8 @@ public abstract class BusinessException extends RuntimeException {
 
   private static final long serialVersionUID = -5422600831610337684L;
 
-  private Object[]          i18nParams;
-  private String            staticI18nKey;
+  private final Object[]          i18nParams;
+  private final String            staticI18nKey;
 
   /**
    * Constructs a new <code>BusinessException</code> instance.
@@ -28,7 +28,7 @@ public abstract class BusinessException extends RuntimeException {
    *          the exception message.
    */
   public BusinessException(String message) {
-    this(message, null, null);
+    this(message, null, (Object[])null);
   }
 
   /**
@@ -41,7 +41,7 @@ public abstract class BusinessException extends RuntimeException {
    *          internationalized message.
    */
   public BusinessException(String message, String staticI18nKey) {
-    this(message, staticI18nKey, null);
+    this(message, staticI18nKey, (Object[])null);
   }
 
   /**
@@ -56,7 +56,7 @@ public abstract class BusinessException extends RuntimeException {
    *          the parameters of the translated message or null.
    */
   public BusinessException(String message, String staticI18nKey,
-      Object[] i18nParams) {
+      Object... i18nParams) {
     super(message);
     this.staticI18nKey = staticI18nKey;
     this.i18nParams = i18nParams;

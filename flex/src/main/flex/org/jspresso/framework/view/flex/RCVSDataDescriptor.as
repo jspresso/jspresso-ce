@@ -27,10 +27,8 @@ package org.jspresso.framework.view.flex {
     public override function isBranch(node:Object, model:Object=null):Boolean {
       if(node is RemoteCompositeValueState) {
         var children:ListCollectionView = (node as RemoteCompositeValueState).children;
-        if(children && children.length > 0) {
-          return true;
-        }
-        return false;
+        return children && children.length > 0;
+
       }
       return super.isBranch(node, model);
     }

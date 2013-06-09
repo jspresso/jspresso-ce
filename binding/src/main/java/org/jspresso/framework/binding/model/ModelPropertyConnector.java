@@ -53,7 +53,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
                                       .getLogger(ModelPropertyConnector.class);
 
   private IAccessor           accessor;
-  private IAccessorFactory    accessorFactory;
+  private final IAccessorFactory    accessorFactory;
 
   /**
    * Constructs a new model connector on a model property.

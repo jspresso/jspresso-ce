@@ -124,6 +124,7 @@ public abstract class AbstractPropertyChangeCapable implements
   }
 
   /**
+   * Performs property change firing.
    * @param evt
    *          evt
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.beans.PropertyChangeEvent)
@@ -142,6 +143,7 @@ public abstract class AbstractPropertyChangeCapable implements
   }
 
   /**
+   * Performs property change firing.
    * @param propertyName
    *          propertyName
    * @param oldValue
@@ -154,10 +156,11 @@ public abstract class AbstractPropertyChangeCapable implements
   protected void firePropertyChange(String propertyName, boolean oldValue,
       boolean newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName,
-        Boolean.valueOf(oldValue), Boolean.valueOf(newValue)));
+        oldValue, newValue));
   }
 
   /**
+   * Performs property change firing.
    * @param propertyName
    *          propertyName
    * @param oldValue
@@ -170,10 +173,11 @@ public abstract class AbstractPropertyChangeCapable implements
   protected void firePropertyChange(String propertyName, int oldValue,
       int newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName,
-        Integer.valueOf(oldValue), Integer.valueOf(newValue)));
+        oldValue, newValue));
   }
 
   /**
+   * Performs property change firing.
    * @param propertyName
    *          propertyName
    * @param oldValue
@@ -186,10 +190,11 @@ public abstract class AbstractPropertyChangeCapable implements
   protected void firePropertyChange(String propertyName, long oldValue,
       long newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName,
-        Long.valueOf(oldValue), Long.valueOf(newValue)));
+        oldValue, newValue));
   }
 
   /**
+   * Performs property change firing.
    * @param propertyName
    *          propertyName
    * @param oldValue
@@ -206,6 +211,7 @@ public abstract class AbstractPropertyChangeCapable implements
   }
 
   /**
+   * Retrieves listeners.
    * @return all of the <code>PropertyChangeListeners</code> added or an empty
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
@@ -226,10 +232,11 @@ public abstract class AbstractPropertyChangeCapable implements
       listeners.addAll(Arrays.asList(weakPropertyChangeSupport
           .getPropertyChangeListeners()));
     }
-    return listeners.toArray(new PropertyChangeListener[0]);
+    return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
   /**
+   * Retrieves listeners.
    * @param propertyName
    *          propertyName
    * @return all of the <code>PropertyChangeListeners</code> associated with the
@@ -248,10 +255,11 @@ public abstract class AbstractPropertyChangeCapable implements
       listeners.addAll(Arrays.asList(weakPropertyChangeSupport
           .getPropertyChangeListeners(propertyName)));
     }
-    return listeners.toArray(new PropertyChangeListener[0]);
+    return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
   /**
+   * Tests whether there are listeners for the property.
    * @param propertyName
    *          propertyName
    * @return true if there are one or more listeners for the given property.
@@ -263,11 +271,8 @@ public abstract class AbstractPropertyChangeCapable implements
         && propertyChangeSupport.hasListeners(propertyName)) {
       return true;
     }
-    if (weakPropertyChangeSupport != null
-        && weakPropertyChangeSupport.hasListeners(propertyName)) {
-      return true;
-    }
-    return false;
+    return weakPropertyChangeSupport != null
+        && weakPropertyChangeSupport.hasListeners(propertyName);
   }
 
   /**
@@ -284,7 +289,7 @@ public abstract class AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Unblocks event propagation. All events that were bufferred are fired.
+   * Unblocks event propagation. All events that were buffered are fired.
    */
   @Override
   public void releaseEvents() {

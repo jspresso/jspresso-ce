@@ -34,9 +34,10 @@ import freemarker.template.TemplateScalarModel;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("rawtypes")
 public class InstanceOf implements TemplateMethodModelEx {
 
-  private BeansWrapper wrapper;
+  private final BeansWrapper wrapper;
 
   /**
    * Constructs a new <code>InstanceOf</code> instance.
@@ -61,8 +62,8 @@ public class InstanceOf implements TemplateMethodModelEx {
           .getAdaptedObject(Object.class);
       Class<?> clazz = Class.forName(((TemplateScalarModel) arguments.get(1))
           .getAsString());
-      return new BooleanModel(Boolean.valueOf(clazz.isAssignableFrom(target
-          .getClass())), wrapper);
+      return new BooleanModel(clazz.isAssignableFrom(target
+          .getClass()), wrapper);
     } catch (Exception ex) {
       throw new TemplateModelException("Could execute instanceof method.", ex);
     }

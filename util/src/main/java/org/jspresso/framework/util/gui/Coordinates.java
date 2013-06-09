@@ -119,8 +119,7 @@ public class Coordinates implements Serializable {
    */
   @Override
   public String toString() {
-    return new StringBuilder().append(getClass().getName()).append(" : x=")
-        .append(x).append(", y=").append(y).toString();
+    return getClass().getName() + " : x=" + x + ", y=" + y;
   }
 
 }

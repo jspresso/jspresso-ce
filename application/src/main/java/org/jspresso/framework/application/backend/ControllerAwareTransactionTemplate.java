@@ -43,8 +43,8 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
   /**
    * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
    * 
-   * @param transactionManager
-   * @param transactionDefinition
+   * @param transactionManager the Spring transaction manager
+   * @param transactionDefinition the Spring transaction definition
    */
   public ControllerAwareTransactionTemplate(
       PlatformTransactionManager transactionManager,
@@ -55,7 +55,7 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
   /**
    * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
    * 
-   * @param transactionManager
+   * @param transactionManager the Spring transaction manager
    */
   public ControllerAwareTransactionTemplate(
       PlatformTransactionManager transactionManager) {

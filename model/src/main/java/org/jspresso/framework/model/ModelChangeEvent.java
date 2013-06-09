@@ -40,12 +40,12 @@ public class ModelChangeEvent extends EventObject {
   /**
    * New model.
    */
-  private Object            newValue;
+  private final Object            newValue;
 
   /**
    * Previous model.
    */
-  private Object            oldValue;
+  private final Object            oldValue;
 
   /**
    * Constructs a new <code>ModelChangeEvent</code>.

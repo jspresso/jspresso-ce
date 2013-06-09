@@ -35,6 +35,7 @@ import freemarker.template.TemplateModelException;
  * @author Vincent Vandenschrick
  * @author Pierre-m Raoul (atao)
  */
+@SuppressWarnings("rawtypes")
 public class GenerateSqlName implements TemplateMethodModel {
 
   private static final Formatter       DEFAULT_FORMATTER;
@@ -67,10 +68,8 @@ public class GenerateSqlName implements TemplateMethodModel {
 
       @Override
       public List<String> run() {
-        return Arrays.asList(new String[] {
-      "BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
-      "DAY", "MONTH", "YEAR", "FROM", "TO"
-        });
+        return Arrays.asList("BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
+            "DAY", "MONTH", "YEAR", "FROM", "TO");
       }
     };
   }

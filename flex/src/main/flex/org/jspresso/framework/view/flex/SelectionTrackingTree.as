@@ -57,7 +57,7 @@ package org.jspresso.framework.view.flex {
                   if(pcEvent.property == "selectedIndices"
                       && pcEvent.source is RemoteCompositeValueState) {
                     var changedState:RemoteCompositeValueState = pcEvent.source as RemoteCompositeValueState;
-                    var newlySelectedItems:Array = new Array();
+                    var newlySelectedItems:Array = [];
                     if(changedState.selectedIndices) {
                       for each(var index:int in changedState.selectedIndices) {
                         newlySelectedItems.push(changedState.children[index]);

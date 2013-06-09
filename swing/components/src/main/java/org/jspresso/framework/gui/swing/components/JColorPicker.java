@@ -46,9 +46,9 @@ public class JColorPicker extends JPanel {
   private static final long     serialVersionUID  = -1151212557773199513L;
 
   private transient ChangeEvent changeEvent       = null;
-  private JButton               chooseButton;
-  private EventListenerList     eventListenerList = new EventListenerList();
-  private JButton               resetButton;
+  private final JButton               chooseButton;
+  private final EventListenerList     eventListenerList = new EventListenerList();
+  private final JButton               resetButton;
 
   private Color                 resetValue;
   private Color                 value;

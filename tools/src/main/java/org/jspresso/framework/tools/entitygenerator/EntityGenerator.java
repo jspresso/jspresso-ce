@@ -63,6 +63,7 @@ import freemarker.template.TemplateException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UseOfSystemOutOrSystemErr")
 public class EntityGenerator {
 
   private static final Logger LOG                     = LoggerFactory
@@ -103,7 +104,7 @@ public class EntityGenerator {
    *          the command line arguments.
    */
   @SuppressWarnings("static-access")
-  public static void main(String[] args) {
+  public static void main(String... args) {
     Options options = new Options();
     options.addOption(OptionBuilder
         .withArgName(BEAN_FACTORY_SELECTOR)
@@ -175,11 +176,11 @@ public class EntityGenerator {
                 "generates code for the given component descriptor identifiers in the application context.")
             .create(COMPONENT_IDS));
     CommandLineParser parser = new BasicParser();
-    CommandLine cmd = null;
+    CommandLine cmd;
     try {
       cmd = parser.parse(options, args);
     } catch (ParseException ex) {
-      System.err.println(ex.getLocalizedMessage());
+      LOG.error("Error parsing command line", ex);
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(EntityGenerator.class.getSimpleName(), options);
       return;
@@ -211,8 +212,8 @@ public class EntityGenerator {
    * Generates the component java source files.
    */
   @SuppressWarnings({
-    "rawtypes"
-  })
+      "rawtypes"
+      , "ConstantConditions"})
   public void generateComponents() {
     LOG.debug("Loading Spring context {}.", applicationContextKey);
     BeanFactoryReference bfr = getBeanFactoryReference();
@@ -225,7 +226,7 @@ public class EntityGenerator {
         Map<String, IComponentDescriptor> allComponents = appContext
             .getBeansOfType(IComponentDescriptor.class);
         LOG.debug("{} components retrieved.",
-            Integer.valueOf(allComponents.size()));
+            allComponents.size());
         LOG.debug("Filtering components to generate.");
         for (Map.Entry<String, IComponentDescriptor> componentEntry : allComponents
             .entrySet()) {
@@ -264,17 +265,17 @@ public class EntityGenerator {
         }
       }
       LOG.debug("{} components filtered.",
-          Integer.valueOf(componentDescriptors.size()));
+          componentDescriptors.size());
       LOG.debug("Initializing Freemarker template");
       Configuration cfg = new Configuration();
       cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
       BeansWrapper wrapper = new DefaultObjectWrapper();
       cfg.setObjectWrapper(new DefaultObjectWrapper());
-      Template template = null;
+      Template template;
       try {
         template = cfg.getTemplate(templateName);
       } catch (IOException ex) {
-        ex.printStackTrace();
+        LOG.error("Error while loading the template", ex);
         return;
       }
       Map<String, Object> rootContext = new HashMap<String, Object>();
@@ -285,7 +286,7 @@ public class EntityGenerator {
       rootContext.put("compareStrings", new CompareStrings(wrapper));
       rootContext.put("compactString", new CompactString());
       rootContext.put("generateAnnotations",
-          Boolean.valueOf(generateAnnotations));
+          generateAnnotations);
       rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());
       if (classnamePrefix == null) {
         classnamePrefix = "";
@@ -312,8 +313,10 @@ public class EntityGenerator {
             if (!outFile.exists()) {
               LOG.debug("Creating " + outFile.getName());
               if (!outFile.getParentFile().exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 outFile.getParentFile().mkdirs();
               }
+              //noinspection ResultOfMethodCallIgnored
               outFile.createNewFile();
               out = new FileOutputStream(outFile);
             } else if (componentDescriptor.getLastUpdated() > outFile
@@ -328,7 +331,7 @@ public class EntityGenerator {
                   });
             }
           } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Error while writing output", ex);
             return;
           }
         } else {
@@ -345,10 +348,10 @@ public class EntityGenerator {
               out.close();
             }
           } catch (TemplateException ex) {
-            ex.printStackTrace();
+            LOG.error("Error while processing the template", ex);
             return;
           } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Error while writing output", ex);
             return;
           }
         } else {
@@ -389,7 +392,7 @@ public class EntityGenerator {
    * @param componentIds
    *          the componentIds to set.
    */
-  public void setComponentIds(String[] componentIds) {
+  public void setComponentIds(String... componentIds) {
     this.componentIds = componentIds;
   }
 
@@ -399,7 +402,7 @@ public class EntityGenerator {
    * @param excludePatterns
    *          the excludePatterns to set.
    */
-  public void setExcludePatterns(String[] excludePatterns) {
+  public void setExcludePatterns(String... excludePatterns) {
     this.excludePatterns = excludePatterns;
   }
 
@@ -419,7 +422,7 @@ public class EntityGenerator {
    * @param includePackages
    *          the includePackages to set.
    */
-  public void setIncludePackages(String[] includePackages) {
+  public void setIncludePackages(String... includePackages) {
     this.includePackages = includePackages;
   }
 

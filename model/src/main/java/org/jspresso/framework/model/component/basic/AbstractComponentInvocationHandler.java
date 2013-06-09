@@ -26,14 +26,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.jspresso.framework.model.component.ComponentException;
@@ -98,33 +91,33 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
-  private IAccessorFactory                                                             accessorFactory;
+  private final IAccessorFactory                                                             accessorFactory;
 
   private SinglePropertyChangeSupport                                                  propertyChangeSupport;
   private SingleWeakPropertyChangeSupport                                              weakPropertyChangeSupport;
   private List<PropertyChangeEvent>                                                    delayedEvents;
 
   private IComponentCollectionFactory                                                  collectionFactory;
-  private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
+  private final IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
-  private IComponentExtensionFactory                                                   extensionFactory;
-  private IComponentFactory                                                            inlineComponentFactory;
+  private final IComponentExtensionFactory                                                   extensionFactory;
+  private final IComponentFactory                                                            inlineComponentFactory;
   private Set<String>                                                                  modifierMonitors;
 
   private boolean                                                                      propertyProcessorsEnabled;
   private boolean                                                                      propertyChangeEnabled;
   private boolean                                                                      collectionSortEnabled;
 
-  private Map<String, NestedReferenceTracker>                                          referenceTrackers;
+  private final Map<String, NestedReferenceTracker>                                          referenceTrackers;
 
-  private Map<String, Object>                                                          computedPropertiesCache;
+  private final Map<String, Object>                                                          computedPropertiesCache;
 
   private static final Collection<String>                                              LIFECYCLE_METHOD_NAMES;
   private IComponent                                                                   owningComponent;
   private IPropertyDescriptor                                                          owningPropertyDescriptor;
-  private Map<String, Set<String>>                                                     fakePclAttachements;
-  private Map<String, Set<String>>                                                     delayedFakePclAttachements;
-  private PropertyChangeListener                                                       fakePcl;
+  private final Map<String, Set<String>>                                                     fakePclAttachements;
+  private final Map<String, Set<String>>                                                     delayedFakePclAttachements;
+  private final PropertyChangeListener                                                       fakePcl;
   private static final Object                                                          FAKE_COMPONENT   = new Object();
 
   static {
@@ -187,7 +180,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * 
    * @return the component interface contract.
    */
-  public Class<? extends Object> getComponentContract() {
+  public Class<?> getComponentContract() {
     return componentDescriptor.getComponentContract();
   }
 
@@ -204,9 +197,9 @@ public abstract class AbstractComponentInvocationHandler implements
       throws Throwable {
     String methodName = method.getName()/* .intern() */;
     if ("hashCode".equals(methodName)) {
-      return Integer.valueOf(computeHashCode((IComponent) proxy));
+      return computeHashCode((IComponent) proxy);
     } else if ("equals".equals(methodName)) {
-      return Boolean.valueOf(computeEquals((IComponent) proxy, args[0]));
+      return computeEquals((IComponent) proxy, args[0]);
     } else if ("toString".equals(methodName)) {
       return toString(proxy);
     } else if ("getComponentContract".equals(methodName)) {
@@ -236,7 +229,7 @@ public abstract class AbstractComponentInvocationHandler implements
           (PropertyChangeListener) args[1]);
       return null;
     } else if ("hasListeners".equals(methodName)) {
-      return Boolean.valueOf(hasListeners(proxy, (String) args[0]));
+      return hasListeners(proxy, (String) args[0]);
     } else if ("getPropertyChangeListeners".equals(methodName)) {
       if (args != null && args.length > 0) {
         return getPropertyChangeListeners(proxy, (String) args[0]);
@@ -246,7 +239,7 @@ public abstract class AbstractComponentInvocationHandler implements
       firePropertyChange(proxy, (String) args[0], args[1], args[2]);
       return null;
     } else if ("blockEvents".equals(methodName)) {
-      return new Boolean(blockEvents());
+      return blockEvents();
     } else if ("releaseEvents".equals(methodName)) {
       releaseEvents();
       return null;
@@ -261,7 +254,7 @@ public abstract class AbstractComponentInvocationHandler implements
     } else if ("straightGetProperties".equals(methodName)) {
       return straightGetProperties(proxy);
     } else if ("setPropertyProcessorsEnabled".equals(methodName)) {
-      propertyProcessorsEnabled = ((Boolean) args[0]).booleanValue();
+      propertyProcessorsEnabled = (Boolean) args[0];
       return null;
     } else if ("getOwningComponent".equals(methodName)) {
       return owningComponent;
@@ -273,8 +266,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else {
       if (isLifecycleMethod(method)) {
-        return Boolean
-            .valueOf(invokeLifecycleInterceptors(proxy, method, args));
+        return invokeLifecycleInterceptors(proxy, method, args);
       }
       AccessorInfo accessorInfo = getAccessorFactory().getAccessorInfo(method);
       EAccessorType accessorType = accessorInfo.getAccessorType();
@@ -319,7 +311,7 @@ public abstract class AbstractComponentInvocationHandler implements
                       args[1]);
                   addToProperty(proxy,
                       (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                      ((Integer) args[0]).intValue(), param);
+                      (Integer) args[0], param);
                 } else {
                   param = sanitizeModifierParam(proxy, propertyDescriptor,
                       args[0]);
@@ -491,7 +483,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the property descriptor to get the value for.
    * @return the property value.
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
     String propertyName = propertyDescriptor.getName();
@@ -503,7 +495,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 .getReferencedDescriptor().getCollectionInterface());
         storeProperty(propertyName, property);
       }
-      if (property instanceof List) {
+      if (property instanceof List<?>) {
         List<IComponent> propertyAsList = (List<IComponent>) property;
         for (int i = 0; i < propertyAsList.size(); i++) {
           IComponent referent = propertyAsList.get(i);
@@ -520,13 +512,13 @@ public abstract class AbstractComponentInvocationHandler implements
                   new Object[] {
                       propertyName,
                       ((IEntity) proxy).getComponentContract().getName(),
-                      ((IEntity) proxy).getId(), Integer.valueOf(i)
+                      ((IEntity) proxy).getId(), i
                   });
               LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
             }
           }
         }
-      } else if (property instanceof Set) {
+      } else if (property instanceof Set<?>) {
         Set<IComponent> propertyAsSet = (Set<IComponent>) property;
         for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
           IComponent decorated = decorateReferent(referent, propertyDescriptor
@@ -647,6 +639,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the property descriptor to get the value for.
    * @return the property value.
    */
+  @SuppressWarnings("unchecked")
   protected Object getReferenceProperty(Object proxy,
       final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     String propertyName = propertyDescriptor.getName();
@@ -666,6 +659,8 @@ public abstract class AbstractComponentInvocationHandler implements
         nestedPropertyListening.add(nestedPropertyName);
       }
     }
+    IComponentDescriptor<IComponent> referencedDescriptor = (IComponentDescriptor<IComponent>) propertyDescriptor
+        .getReferencedDescriptor();
     if (referent == null
         && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && !propertyDescriptor.isComputed() && propertyDescriptor.isMandatory()) {
@@ -673,15 +668,14 @@ public abstract class AbstractComponentInvocationHandler implements
       try {
         setDirtyTrackingEnabled(false);
         referent = inlineComponentFactory
-            .createComponentInstance(propertyDescriptor
-                .getReferencedDescriptor().getComponentContract());
+            .createComponentInstance(referencedDescriptor.getComponentContract());
         storeReferenceProperty(proxy, propertyDescriptor, null, referent);
       } finally {
         setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
       }
     }
     return decorateReferent(referent,
-        propertyDescriptor.getReferencedDescriptor());
+        referencedDescriptor);
   }
 
   /**
@@ -699,7 +693,7 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   @SuppressWarnings("unchecked")
   protected Object invokeServiceMethod(Object proxy, Method method,
-      Object[] args) throws NoSuchMethodException {
+      Object... args) throws NoSuchMethodException {
     IComponentService service = componentDescriptor.getServiceDelegate(method);
     if (service != null) {
       try {
@@ -1099,9 +1093,9 @@ public abstract class AbstractComponentInvocationHandler implements
       ICollectionPropertyDescriptor<?> propertyDescriptor, int index,
       Object value) {
     String propertyName = propertyDescriptor.getName();
-    Collection<?> collectionProperty = null;
+    Collection<?> collectionProperty;
     try {
-      collectionProperty = (Collection<?>) accessorFactory
+      collectionProperty = accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
     } catch (IllegalAccessException ex) {
@@ -1158,7 +1152,7 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       Collection<?> oldCollectionSnapshot = CollectionHelper
           .cloneCollection((Collection<?>) collectionProperty);
-      boolean inserted = false;
+      boolean inserted;
       if (collectionProperty instanceof List<?> && index >= 0
           && index < collectionProperty.size()) {
         ((List<Object>) collectionProperty).add(index, value);
@@ -1291,30 +1285,24 @@ public abstract class AbstractComponentInvocationHandler implements
       }
     }
     if (weakPropertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : weakPropertyChangeSupport
-          .getPropertyChangeListeners()) {
-        listeners.add(pcl);
-      }
+      Collections.addAll(listeners, weakPropertyChangeSupport
+          .getPropertyChangeListeners());
     }
-    return listeners.toArray(new PropertyChangeListener[] {});
+    return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
   private PropertyChangeListener[] getPropertyChangeListeners(
       @SuppressWarnings("unused") Object proxy, String propertyName) {
     List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : propertyChangeSupport
-          .getPropertyChangeListeners(propertyName)) {
-        listeners.add(pcl);
-      }
+      Collections.addAll(listeners, propertyChangeSupport
+          .getPropertyChangeListeners(propertyName));
     }
     if (weakPropertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : weakPropertyChangeSupport
-          .getPropertyChangeListeners(propertyName)) {
-        listeners.add(pcl);
-      }
+      Collections.addAll(listeners, weakPropertyChangeSupport
+          .getPropertyChangeListeners(propertyName));
     }
-    return listeners.toArray(new PropertyChangeListener[] {});
+    return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
   private void firePropertyChange(Object proxy, String propertyName,
@@ -1429,7 +1417,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private synchronized Object accessComputedProperty(
       IPropertyDescriptor propertyDescriptor, AccessorInfo accessorInfo,
       Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
-      Method method, Object[] args) {
+      Method method, Object... args) {
     try {
       String propertyName = propertyDescriptor.getName();
       Object computedPropertyValue = null;
@@ -1517,15 +1505,15 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private Object invokeExtensionMethod(
       IComponentExtension<? extends IComponent> componentExtension,
-      Method method, Object[] args) throws NoSuchMethodException,
+      Method method, Object... args) throws NoSuchMethodException,
       IllegalAccessException, InvocationTargetException {
     return MethodUtils.invokeMethod(componentExtension, method.getName(), args,
         method.getParameterTypes());
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   private boolean invokeLifecycleInterceptors(Object proxy,
-      Method lifecycleMethod, Object[] args) {
+      Method lifecycleMethod, Object... args) {
     String methodName = lifecycleMethod.getName()/* .intern() */;
     if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
       onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
@@ -1550,7 +1538,7 @@ public abstract class AbstractComponentInvocationHandler implements
             lifecycleInterceptor, methodName, parameters, parameterTypes);
         if (interceptorResult instanceof Boolean) {
           interceptorResults = interceptorResults
-              || ((Boolean) interceptorResult).booleanValue();
+              || (Boolean) interceptorResult;
         }
       } catch (IllegalAccessException ex) {
         throw new ComponentException(ex);
@@ -1578,7 +1566,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 lifecycleMethod.getParameterTypes());
             if (interceptorResult instanceof Boolean) {
               interceptorResults = interceptorResults
-                  || ((Boolean) interceptorResult).booleanValue();
+                  || (Boolean) interceptorResult;
             }
           } catch (NoSuchMethodException ex) {
             throw new ComponentException(ex);
@@ -1626,9 +1614,9 @@ public abstract class AbstractComponentInvocationHandler implements
     // if (!isInitialized(straightGetProperty(proxy, propertyName))) {
     // return;
     // }
-    Collection<?> collectionProperty = null;
+    Collection<?> collectionProperty;
     try {
-      collectionProperty = (Collection<?>) accessorFactory
+      collectionProperty = accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
     } catch (IllegalAccessException ex) {
@@ -1746,7 +1734,7 @@ public abstract class AbstractComponentInvocationHandler implements
       IPropertyDescriptor propertyDescriptor, Object newProperty) {
     String propertyName = propertyDescriptor.getName();
 
-    Object oldProperty = null;
+    Object oldProperty;
     try {
       oldProperty = accessorFactory.createPropertyAccessor(propertyName,
           componentDescriptor.getComponentContract()).getValue(proxy);
@@ -1950,12 +1938,12 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private class NestedReferenceTracker implements PropertyChangeListener {
 
-    private Object      source;
-    private String      referencePropertyName;
+    private final Object      source;
+    private final String      referencePropertyName;
     private boolean     enabled;
     private boolean     initialized;
-    private boolean     referencesInlinedComponent;
-    private Set<String> trackedProperties;
+    private final boolean     referencesInlinedComponent;
+    private final Set<String> trackedProperties;
 
     /**
      * Constructs a new <code>InlineReferenceTracker</code> instance.
@@ -2093,7 +2081,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private static final class NeverEqualsInvocationHandler implements
       InvocationHandler {
 
-    private Object delegate;
+    private final Object delegate;
 
     private NeverEqualsInvocationHandler(Object delegate) {
       this.delegate = delegate;
@@ -2108,7 +2096,7 @@ public abstract class AbstractComponentInvocationHandler implements
     public Object invoke(Object proxy, Method method, Object[] args)
         throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
-        return Boolean.valueOf(false);
+        return false;
       }
       return method.invoke(delegate, args);
     }

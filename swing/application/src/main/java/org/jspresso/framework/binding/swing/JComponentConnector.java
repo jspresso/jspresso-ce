@@ -40,7 +40,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 public abstract class JComponentConnector<E extends JComponent> extends
     AbstractValueConnector {
 
-  private E     connectedJComponent;
+  private final E     connectedJComponent;
 
   private Color savedForeground;
 

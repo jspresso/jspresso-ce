@@ -64,8 +64,8 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   public void setStorePath(String[] storePath) {
     if (storePath != null && storePath.length > 0) {
       StringBuilder buff = new StringBuilder();
-      for (int i = 0; i < storePath.length; i++) {
-        buff.append(storePath[i]).append('.');
+      for (String aStorePath : storePath) {
+        buff.append(aStorePath).append('.');
       }
       this.storePath = buff.toString();
     } else {

@@ -62,7 +62,7 @@ public class EnumQueryStructureDescriptor extends
    */
   public static final String             ENUMERATION_VALUES = "enumerationValues";
 
-  private IEnumerationPropertyDescriptor sourceDescriptor;
+  private final IEnumerationPropertyDescriptor sourceDescriptor;
 
   /**
    * Constructs a new <code>EnumerationQueryStructureDescriptor</code> instance.
@@ -89,7 +89,7 @@ public class EnumQueryStructureDescriptor extends
     BasicBooleanPropertyDescriptor selectedPropertyDescriptor = new BasicBooleanPropertyDescriptor();
     selectedPropertyDescriptor.setName(SELECTED);
     selectedPropertyDescriptor.setI18nNameKey("enumValue.selected");
-    selectedPropertyDescriptor.setPreferredWidth(Integer.valueOf(30));
+    selectedPropertyDescriptor.setPreferredWidth(30);
     BasicPropertyDescriptor valuePropertyDescriptor = propertyDescriptor
         .clone();
     valuePropertyDescriptor.setName(VALUE);

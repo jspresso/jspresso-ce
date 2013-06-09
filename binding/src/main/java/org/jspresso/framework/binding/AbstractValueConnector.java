@@ -460,7 +460,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public void setConnectorValue(Object aValue) {
     if (aValue instanceof Number) {
       if (getModelDescriptor() != null) {
-        Class<?> expectedType = ((IPropertyDescriptor) getModelDescriptor())
+        Class<?> expectedType = getModelDescriptor()
             .getModelType();
         if (expectedType.isAssignableFrom(aValue.getClass())) {
           setConnecteeValue(aValue);
@@ -468,18 +468,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
           if (Boolean.TYPE.equals(expectedType)) {
             expectedType = Boolean.class;
           }
-          String stringValue;
-          if (aValue instanceof Number) {
-            stringValue = new BigDecimal(aValue.toString()).toPlainString();
-          } else {
-            stringValue = aValue.toString();
-          }
+          String stringValue = new BigDecimal(aValue.toString()).toPlainString();
           try {
             Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
               String.class
-            }).newInstance(new Object[] {
-              stringValue
-            });
+            }).newInstance(stringValue);
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorInputException(ex, stringValue);
@@ -782,6 +775,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   protected abstract Object getConnecteeValue();
 
   /**
+   * Gets the oldConnectorValue.
    * @return Returns the oldConnectorValue.
    */
   protected Object getOldConnectorValue() {
@@ -869,7 +863,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   private static class InnerGateModelListener implements IValueChangeListener {
 
-    private IModelAware gate;
+    private final IModelAware gate;
 
     /**
      * Constructs a new <code>InnerGateModelListener</code> instance.

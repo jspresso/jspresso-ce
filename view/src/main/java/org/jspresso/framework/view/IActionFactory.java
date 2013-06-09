@@ -84,10 +84,6 @@ public interface IActionFactory<E, F> {
    *          the action handler.
    * @param view
    *          the view.
-   * @param modelDescriptor
-   *          the model descriptor.
-   * @param sourceComponent
-   *          the source component.
    * @param viewConnector
    *          the view connector.
    * @param actionCommand

@@ -128,7 +128,7 @@
     <property name="saveBinaryPropertyAsFileAction" ref="saveBinaryPropertyAsFileAction" />
     <property name="resetPropertyAction" ref="resetPropertyFrontAction" />
     <property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
-    <property name="componentCollectionFactory" ref="componentCollectionFactory"></property>
+    <property name="componentCollectionFactory" ref="componentCollectionFactory"/>
   </bean>
 
   <bean id="viewFactoryBase" parent="abstractViewFactory" abstract="true" />
@@ -282,16 +282,13 @@
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
   
   <!-- Utility beans for model. -->
-  <bean id="BasicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE
-      </value>
-    </property>
+  <bean id="basicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField"
+              value="org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE"/>
   </bean>
 
   <!-- Utility beans for views. -->
-  <bean id="decoratedView" abstract="true">
+  <bean id="decoratedView" abstract="true" class="org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor">
     <property name="borderType" value="TITLED" />
   </bean>
 
@@ -373,7 +370,7 @@
   
   <alias name="rootEntityDescriptor" alias="IEntity"/>
 
-  <bean id="EntityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
+  <bean id="entityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
     <property name="targetClass" value="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor" />
     <property name="targetMethod" value="setRootEntityDescriptor" />
     <property name="arguments">

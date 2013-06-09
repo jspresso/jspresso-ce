@@ -75,6 +75,7 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the modelConnectorFactory to set.
    * @deprecated modeconnector is now created by the backend controller.
    */
+  @SuppressWarnings("EmptyMethod")
   @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {

@@ -36,6 +36,7 @@ public class HibernateControllerAwareProxyEntityFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void sortCollectionProperty(IComponent component, String propertyName) {
     Collection<Object> propertyValue = (Collection<Object>) component

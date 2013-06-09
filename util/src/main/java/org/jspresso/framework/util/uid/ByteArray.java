@@ -35,7 +35,7 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
   private static final long serialVersionUID = 4906103696506778514L;
 
   private final byte[]      bytes;
-  private int               cachedHashcode;
+  private final int               cachedHashcode;
 
   /**
    * Constructs a new <code>ByteArray</code> instance.
@@ -53,7 +53,7 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
    * 
    * @param bytesHex
    *          the bytes content hexa encoded.
-   * @throws DecoderException
+   * @throws DecoderException whenever the content is not hexa encoded.
    */
   public ByteArray(String bytesHex) throws DecoderException {
     this(Hex.decodeHex(bytesHex.toCharArray()));

@@ -127,24 +127,24 @@ public abstract class AbstractBackendController extends AbstractController
   private IApplicationSession                              applicationSession;
   private IEntityCloneFactory                              carbonEntityCloneFactory;
   private IComponentCollectionFactory                      collectionFactory;
-  private BeanPropertyChangeRecorder                       dirtRecorder;
+  private final BeanPropertyChangeRecorder                       dirtRecorder;
 
   private IEntityFactory                                   entityFactory;
 
-  private IEntityRegistry                                  entityRegistry;
+  private final IEntityRegistry                                  entityRegistry;
   private IModelConnectorFactory                           modelConnectorFactory;
   private TransactionTemplate                              transactionTemplate;
   private ComponentTransferStructure<? extends IComponent> transferStructure;
-  private IEntityUnitOfWork                                unitOfWork;
+  private final IEntityUnitOfWork                                unitOfWork;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
-  private LRUMap                                           moduleConnectors;
+  private final LRUMap                                           moduleConnectors;
 
   private IPreferencesStore                                userPreferencesStore;
   private ITranslationProvider                             translationProvider;
 
   private ISecurityPlugin                                  customSecurityPlugin;
-  private ISecurityContextBuilder                          securityContextBuilder;
+  private final ISecurityContextBuilder                          securityContextBuilder;
 
   private ITranslationPlugin                               customTranslationPlugin;
 
@@ -152,11 +152,11 @@ public abstract class AbstractBackendController extends AbstractController
 
   private boolean                                          throwExceptionOnBadUsage;
 
-  private Map<Serializable, IEntity>                       entitiesExcludedFromSessionSanityChecks;
+  private final Map<Serializable, IEntity>                       entitiesExcludedFromSessionSanityChecks;
 
   private IBackendControllerFactory                        slaveControllerFactory;
-  private ThreadGroup                                      asyncActionsThreadGroup;
-  private Set<AsyncActionExecutor>                         asyncExecutors;
+  private final ThreadGroup                                      asyncActionsThreadGroup;
+  private final Set<AsyncActionExecutor>                         asyncExecutors;
   private int                                              asyncExecutorsMaxCount;
 
   /**
@@ -341,9 +341,7 @@ public abstract class AbstractBackendController extends AbstractController
       if (maxExecutorsCount >= 0 && currentExecutorsCount >= maxExecutorsCount) {
         throw new ActionBusinessException(
             "The number of concurrent asynchronous actions has exceeded the allowed max value : "
-                + currentExecutorsCount, "async.count.exceeded", new Object[] {
-              Integer.valueOf(currentExecutorsCount)
-            });
+                + currentExecutorsCount, "async.count.exceeded", currentExecutorsCount);
       }
       executeAsynchronously(action, context);
       return true;
@@ -423,10 +421,10 @@ public abstract class AbstractBackendController extends AbstractController
             if (!executionStatus) {
               status.setRollbackOnly();
             }
-            return Boolean.valueOf(executionStatus);
+            return executionStatus;
           }
         });
-    return ret.booleanValue();
+    return ret;
   }
 
   /**
@@ -1185,6 +1183,7 @@ public abstract class AbstractBackendController extends AbstractController
     return uowComponent;
   }
 
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   private <E extends IEntity> E cloneInUnitOfWork(E entity,
       boolean allowOuterScopeUpdate, IEntityRegistry alreadyCloned) {
     if (entity == null) {
@@ -1387,7 +1386,7 @@ public abstract class AbstractBackendController extends AbstractController
     return false;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   private <E extends IEntity> E merge(E entity, final EMergeMode mergeMode,
       IEntityRegistry alreadyMerged) {
     if (entity == null) {
@@ -1684,7 +1683,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "ThrowableResultOfMethodCallIgnored", "ConstantConditions"})
   private void cleanRelationshipsOnDeletion(IComponent componentOrProxy,
       boolean dryRun, Set<IComponent> clearedEntities,
       Map<IComponent, RuntimeException> integrityViolations)
@@ -1731,6 +1730,7 @@ public abstract class AbstractBackendController extends AbstractController
                     .getReverseRelationEnd() != null) {
                   IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                       .getReverseRelationEnd();
+                  //noinspection SuspiciousMethodCalls
                   if (!clearedEntities.contains(propertyValue)) {
                     try {
                       if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -1752,7 +1752,7 @@ public abstract class AbstractBackendController extends AbstractController
                       } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                         if (dryRun) {
                           // manually trigger reverse relations preprocessors.
-                          Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                          Collection<?> reverseCollection = getAccessorFactory()
                               .createPropertyAccessor(
                                   reversePropertyDescriptor.getName(),
                                   getComponentContract(((IComponent) propertyValue)))
@@ -1811,7 +1811,7 @@ public abstract class AbstractBackendController extends AbstractController
                         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                           if (dryRun) {
                             // manually trigger reverse relations preprocessors.
-                            Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                            Collection<?> reverseCollection = getAccessorFactory()
                                 .createPropertyAccessor(
                                     reversePropertyDescriptor.getName(),
                                     getComponentContract(collectionElement))
@@ -1880,9 +1880,7 @@ public abstract class AbstractBackendController extends AbstractController
           LocaleUtils.toLocale(userPreferredLanguageCode));
     }
     if (getUserPreferencesStore() != null) {
-      getUserPreferencesStore().setStorePath(new String[] {
-        getApplicationSession().getUsername()
-      });
+      getUserPreferencesStore().setStorePath(getApplicationSession().getUsername());
     }
 
   }
@@ -2325,6 +2323,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the component to get the component contract for.
    * @return the component contract.
    */
+  @SuppressWarnings("unchecked")
   protected <E extends IComponent> Class<? extends E> getComponentContract(
       E component) {
     return (Class<? extends E>) component.getComponentContract();

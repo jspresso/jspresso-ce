@@ -41,12 +41,12 @@ public class ValueChangeEvent extends EventObject {
   /**
    * New value for connector.
    */
-  private Object            newValue;
+  private final Object            newValue;
 
   /**
    * Previous value for connector.
    */
-  private Object            oldValue;
+  private final Object            oldValue;
 
   /**
    * Constructs a new <code>ValueChangeEvent</code>.

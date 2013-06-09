@@ -49,8 +49,8 @@ public class CookiePreferencesStore implements IPreferencesStore {
   public void setStorePath(String[] storePath) {
     if (storePath != null && storePath.length > 0) {
       StringBuilder buff = new StringBuilder();
-      for (int i = 0; i < storePath.length; i++) {
-        buff.append(storePath[i]).append('.');
+      for (String aStorePath : storePath) {
+        buff.append(aStorePath).append('.');
       }
       this.storePath = buff.toString();
     } else {
@@ -67,9 +67,9 @@ public class CookiePreferencesStore implements IPreferencesStore {
     if (HttpRequestHolder.getServletRequest() != null) {
       Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
       if (cookies != null) {
-        for (int i = 0; i < cookies.length; i++) {
-          if (completeKey.equals(cookies[i].getName())) {
-            return cookies[i].getValue();
+        for (Cookie cooky : cookies) {
+          if (completeKey.equals(cooky.getName())) {
+            return cooky.getValue();
           }
         }
       }

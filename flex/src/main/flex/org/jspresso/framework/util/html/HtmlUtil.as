@@ -15,7 +15,7 @@
 package org.jspresso.framework.util.html {
   public class HtmlUtil {
     
-    private static const HTML_ENTITIES:Object = new Object();
+    private static const HTML_ENTITIES:Object = {};
     {
       HTML_ENTITIES["&nbsp;"]   = "\u00A0"; // non-breaking space
       HTML_ENTITIES["&iexcl;"]  = "\u00A1"; // inverted exclamation mark
@@ -108,6 +108,7 @@ package org.jspresso.framework.util.html {
       var finished:Boolean = false;
       for(var entity:String in HTML_ENTITIES){
         if(!finished) {     // if it finds other occurences of the & symbol
+          //noinspection JSUnfilteredForInLoop
           buf = buf.replace(new RegExp(entity, "g"), HTML_ENTITIES[entity]);
           finished = finished || buf.indexOf('&') < 0; 
         }
@@ -153,7 +154,7 @@ package org.jspresso.framework.util.html {
       pattern = /<\/p>/g;
       str = str.replace(pattern, "</P>");
     
-      pattern = /<span style=\"(.*?)\">/g;
+      pattern = /<span style="(.*?)">/g;
       str = str.replace(pattern, "<FONT $1>");
       pattern = /color:(.*?);/g;
       str = str.replace(pattern, "COLOR=\"$1\" ");
@@ -226,22 +227,22 @@ package org.jspresso.framework.util.html {
       pattern = /<FONT (.*?)>/g;
       str = str.replace(pattern, "<span style=\"$1\">");
       
-      pattern = /COLOR=\"(.*?)\"/g;
+      pattern = /COLOR="(.*?)"/g;
       str = str.replace(pattern, "color:$1;");
      
-      pattern = /SIZE=\"(.*?)\"/g;
+      pattern = /SIZE="(.*?)"/g;
       str = str.replace(pattern, "font-size:$1px;");
       
-      pattern = /FACE=\"(.*?)\"/g;
+      pattern = /FACE="(.*?)"/g;
       str = str.replace(pattern, "font-family:$1;");
       
-      pattern = /ALIGN=\"(.*?)\"/g;
+      pattern = /ALIGN="(.*?)"/g;
       str = str.replace(pattern, "text-align:$1;");
       
-      pattern = /LETTERSPACING=\".*?\"/g;
+      pattern = /LETTERSPACING=".*?"/g;
       str = str.replace(pattern, "");
       
-      pattern = /KERNING=\".*?\"/g;
+      pattern = /KERNING=".*?"/g;
       str = str.replace(pattern, "");
       
       pattern = /<\/FONT.*?>/g;

@@ -41,7 +41,7 @@ public class BeanModuleDescriptor extends ModuleDescriptor {
    *          the component descriptor of the module object.
    */
   public BeanModuleDescriptor(
-      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor) {
+      IComponentDescriptor<?> moduleObjectReferencedDescriptor) {
     this(BeanModule.class.getName(), moduleObjectReferencedDescriptor);
   }
 
@@ -54,7 +54,7 @@ public class BeanModuleDescriptor extends ModuleDescriptor {
    *          the component descriptor of the module object.
    */
   protected BeanModuleDescriptor(String name,
-      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor) {
+      IComponentDescriptor<?> moduleObjectReferencedDescriptor) {
     super(name);
 
     BasicReferencePropertyDescriptor<Object> moduleObjectDescriptor = new BasicReferencePropertyDescriptor<Object>();

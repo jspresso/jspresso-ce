@@ -123,8 +123,7 @@ public class Dimension implements Serializable, ICloneable {
    */
   @Override
   public String toString() {
-    return new StringBuilder().append(getClass().getName()).append(" : width=")
-        .append(width).append(", height=").append(height).toString();
+    return getClass().getName() + " : width=" + width + ", height=" + height;
   }
 
   /**

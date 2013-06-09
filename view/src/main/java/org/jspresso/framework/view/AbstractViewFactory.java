@@ -176,17 +176,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * <code>TEMPLATE_DURATION</code>.
    */
-  protected static final Long           TEMPLATE_DURATION                    = Long
-                                                                                 .valueOf(EDuration.ONE_SECOND
-                                                                                     .getMillis()
-                                                                                     + EDuration.ONE_MINUTE
-                                                                                         .getMillis()
-                                                                                     + EDuration.ONE_HOUR
-                                                                                         .getMillis()
-                                                                                     + EDuration.ONE_DAY
-                                                                                         .getMillis()
-                                                                                     + EDuration.ONE_WEEK
-                                                                                         .getMillis());
+  protected static final Long           TEMPLATE_DURATION                    = (long) (EDuration.ONE_SECOND
+      .getMillis()
+      + EDuration.ONE_MINUTE
+      .getMillis()
+      + EDuration.ONE_HOUR
+      .getMillis()
+      + EDuration.ONE_DAY
+      .getMillis()
+      + EDuration.ONE_WEEK
+      .getMillis());
 
   /**
    * <code>TEMPLATE_TIME</code>.
@@ -198,7 +197,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
   private ERenderingOptions             defaultActionMapRenderingOptions     = ERenderingOptions.ICON;
-  private IValueChangeListener          firstRowSelector;
+  private final IValueChangeListener          firstRowSelector;
   private IIconFactory<F>               iconFactory;
   private IComponentCollectionFactory   componentCollectionFactory;
 
@@ -226,9 +225,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(0);
         }
       }
     };
@@ -237,6 +234,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ConstantConditions")
   @Override
   public IView<E> createView(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -663,7 +661,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           for (int i = 1; i < view.getChildren().size(); i++) {
             IView<E> detailView = view.getChildren().get(i);
 
-            IValueConnector detailConnector = null;
+            IValueConnector detailConnector;
             if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
               IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
                   .createConfigurableCollectionConnectorProvider(
@@ -1037,9 +1035,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
       if (childCardView != null) {
         cardView.setCurrentView(childCardView);
-        boolean accessGranted = true;
-        accessGranted = accessGranted
-            && actionHandler.isAccessGranted(childCardView.getDescriptor());
+        boolean accessGranted = actionHandler.isAccessGranted(childCardView.getDescriptor());
         if (cardModel instanceof ISecurable) {
           accessGranted = accessGranted
               && actionHandler.isAccessGranted((ISecurable) cardModel);
@@ -1202,7 +1198,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * Compute the rendered nested property of a reference property view
    * descriptor.
    * 
-   * @param propertyViewDescriptor
+   * @param propertyViewDescriptor the property view descriptor.
    * @return the rendered property.
    */
   protected String computeRenderedProperty(
@@ -1258,7 +1254,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IPropertyViewDescriptor propertyViewDescriptor,
       IPropertyDescriptor propertyDescriptor) {
     String dynamicToolTipProperty = null;
-    String descriptionKey = null;
+    String descriptionKey;
     if (propertyViewDescriptor.getDescription() != null) {
       descriptionKey = propertyViewDescriptor.getDescription();
     } else {
@@ -1695,8 +1691,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected NumberFormat createDecimalFormat(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getNumberInstance(locale);
-    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
-        .intValue());
+    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
     if (propertyDescriptor.isUsingBigDecimal()
         && (format instanceof DecimalFormat)) {
       ((DecimalFormat) format).setParseBigDecimal(true);
@@ -1838,12 +1833,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
       return createDurationFormatter(
           (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      return createDecimalFormatter(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentFormatter(
           (IPercentPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      return createDecimalFormatter(
+          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return createIntegerFormatter(
           (IIntegerPropertyDescriptor) propertyDescriptor, locale);
@@ -2080,8 +2075,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected NumberFormat createPercentFormat(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getPercentInstance(locale);
-    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
-        .intValue());
+    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
     if (propertyDescriptor.isUsingBigDecimal()
         && (format instanceof DecimalFormat)) {
       ((DecimalFormat) format).setParseBigDecimal(true);
@@ -2458,7 +2452,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
           .createConfigurableCollectionConnectorListProvider(
               ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
+              rootDescriptor
                   .getNodeGroupDescriptor().getRenderedProperty());
       List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
       if (((ICompositeTreeLevelDescriptor) rootDescriptor)
@@ -2486,7 +2480,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
           .createConfigurableCollectionConnectorProvider(
               ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
+              rootDescriptor
                   .getNodeGroupDescriptor().getRenderedProperty());
       ITreeLevelDescriptor childDescriptor = ((ISimpleTreeLevelDescriptor) rootDescriptor)
           .getChildDescriptor();
@@ -2519,6 +2513,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
 
+    //noinspection ConstantConditions
     if (connector instanceof ICollectionConnectorListProvider) {
       ((ICollectionConnectorListProvider) connector)
           .setTracksChildrenSelection(true);
@@ -2639,13 +2634,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor.getMaxValue() != null) {
       templateValue = propertyDescriptor.getMaxValue().doubleValue();
     }
-    int maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
+    int maxFractionDigit = propertyDescriptor.getMaxFractionDigit();
     double decimalPart = 0;
     for (int i = 1; i <= maxFractionDigit; i++) {
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
-    return Double.valueOf(templateValue);
+    return templateValue;
   }
 
   /**
@@ -2694,13 +2689,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
         }
       }
     } else {
-      maxTranslationLength = propertyDescriptor.getMaxLength().intValue();
+      maxTranslationLength = propertyDescriptor.getMaxLength();
     }
     if (maxTranslationLength == -1
         || maxTranslationLength > getMaxCharacterLength()) {
       maxTranslationLength = getMaxCharacterLength();
     }
-    return getStringTemplateValue(Integer.valueOf(maxTranslationLength));
+    return getStringTemplateValue(maxTranslationLength);
   }
 
   /**
@@ -2743,7 +2738,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor.getMaxValue() != null) {
       templateValue = propertyDescriptor.getMaxValue().doubleValue();
     }
-    return Integer.valueOf((int) templateValue);
+    return (int) templateValue;
   }
 
   /**
@@ -2813,13 +2808,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor.getMaxValue() != null) {
       templateValue = propertyDescriptor.getMaxValue().doubleValue();
     }
-    int maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
+    int maxFractionDigit = propertyDescriptor.getMaxFractionDigit();
     double decimalPart = 0;
     for (int i = 1; i <= maxFractionDigit; i++) {
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
-    return Double.valueOf(templateValue / 100.0D);
+    return templateValue / 100.0D;
   }
 
   /**
@@ -2833,7 +2828,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     StringBuilder templateValue = new StringBuilder();
     int fieldLength = getMaxCharacterLength();
     if (maxLength != null) {
-      fieldLength = maxLength.intValue();
+      fieldLength = maxLength;
     }
     for (int i = 0; i < fieldLength; i++) {
       templateValue.append(TEMPLATE_CHAR);
@@ -2870,10 +2865,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
       return getDurationTemplateValue((IDurationPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       return getStringTemplateValue((IStringPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      return getDecimalTemplateValue((IDecimalPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return getPercentTemplateValue((IPercentPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      return getDecimalTemplateValue((IDecimalPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
@@ -3028,7 +3023,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       @Override
       public void selectionChange(SelectionChangeEvent evt) {
         int[] selectedIndices = evt.getNewSelection();
-        Collection<?> elements = (Collection<?>) viewConnector
+        Collection<?> elements = viewConnector
             .getConnectorValue();
         Collection<Object> selectedElements = null;
         if (selectedIndices != null && selectedIndices.length > 0
@@ -3283,10 +3278,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected static class ConnectorActionAdapter<E, F> implements
       IItemSelectionListener, IValueChangeListener, ICloneable {
 
-    private IAction              actionDelegate;
-    private IActionFactory<F, E> actionFactory;
-    private IActionHandler       actionHandler;
-    private IView<E>             view;
+    private final IAction              actionDelegate;
+    private final IActionFactory<F, E> actionFactory;
+    private final IActionHandler       actionHandler;
+    private final IView<E>             view;
 
     /**
      * Constructs a new <code>ConnectorActionAdapter</code> instance.
@@ -3313,6 +3308,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public ConnectorActionAdapter<E, F> clone() {
       try {
@@ -3392,7 +3388,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       if (i > 0) {
         buff.append("!");
       }
-      buff.append(columnPrefs[i][0] + "," + columnPrefs[i][1]);
+      buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]);
     }
     actionHandler.putUserPreference(tableId, buff.toString());
   }
@@ -3438,12 +3434,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
             computeColumnIdentifier(viewDescriptor, columnViewDescriptor),
             columnViewDescriptor);
       }
-      for (int i = 0; i < columnPrefs.length; i++) {
+      for (Object[] columnPref : columnPrefs) {
+        //noinspection SuspiciousMethodCalls
         IPropertyViewDescriptor userColumn = columnsDirectory
-            .remove(columnPrefs[i][0]);
+            .remove(columnPref[0]);
         if (userColumn != null) {
           userColumnViewDescriptors
-              .put(userColumn, (Integer) columnPrefs[i][1]);
+              .put(userColumn, (Integer) columnPref[1]);
         }
       }
       // Add remaining new columns

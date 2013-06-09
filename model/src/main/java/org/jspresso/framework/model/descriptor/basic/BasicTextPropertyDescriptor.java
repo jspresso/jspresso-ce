@@ -167,7 +167,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   }
 
   /**
-   * Should this text be kept multi-line when building a filter screen ?
+   * Tests whether this text should be kept multi-line when building a filter screen.
    * 
    * @return <code>true</code> if this text should be transformed into a
    *         multi-line text area when building a filter screen.

@@ -73,7 +73,7 @@ public abstract class REnumBox extends RComponent {
    * @param translations
    *          the translations to set.
    */
-  public void setTranslations(String[] translations) {
+  public void setTranslations(String... translations) {
     this.translations = translations;
   }
 
@@ -83,7 +83,7 @@ public abstract class REnumBox extends RComponent {
    * @param values
    *          the values to set.
    */
-  public void setValues(String[] values) {
+  public void setValues(String... values) {
     this.values = values;
   }
 }

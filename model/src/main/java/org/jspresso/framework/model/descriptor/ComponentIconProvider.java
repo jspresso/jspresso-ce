@@ -36,7 +36,7 @@ import org.jspresso.framework.util.gui.IconProvider;
  */
 public class ComponentIconProvider implements IconProvider {
 
-  private Map<Class<?>, Icon>                 cache;
+  private final Map<Class<?>, Icon>                 cache;
   private IComponentDescriptorRegistry        componentDescriptorRegistry;
   private Collection<IComponentDescriptor<?>> componentDescriptors;
 

@@ -96,7 +96,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
             .setSelectionMode(ESelectionMode.SINGLE_SELECTION);
         ((BasicTableViewDescriptor) viewDescriptor)
             .setModelDescriptor(componentsModelConnector.getModelDescriptor());
-        ((BasicTableViewDescriptor) viewDescriptor).setPermId("Choose."
+        viewDescriptor.setPermId("Choose."
             + componentsModelConnector.getModelDescriptor().getName());
       }
     } else if (actionParam instanceof Collection<?>) {

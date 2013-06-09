@@ -168,7 +168,7 @@ public class EditSelectedComponentAction<E, F, G> extends
   public static class UowRollbackerAction<E, F, G> extends
       FrontendAction<E, F, G> {
 
-    private FrontendAction<E, F, G> delegate;
+    private final FrontendAction<E, F, G> delegate;
 
     /**
      * Constructs a new <code>UowRollbackerAction</code> instance.

@@ -43,8 +43,8 @@ public class BasicDelegatingComponentInvocationHandler extends
 
   private static final long serialVersionUID = 4064763209800159366L;
 
-  private IComponentFactory componentFactory;
-  private Object            delegate;
+  private final IComponentFactory componentFactory;
+  private final Object            delegate;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.

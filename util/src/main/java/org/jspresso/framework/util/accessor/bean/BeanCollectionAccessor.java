@@ -35,7 +35,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     ICollectionAccessor {
 
   private Method   adderMethod;
-  private Class<?> elementClass;
+  private final Class<?> elementClass;
   private Method   removerMethod;
 
   /**
@@ -69,9 +69,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     }
     try {
       adderMethod.invoke(getLastNestedTarget(target, getProperty()),
-          new Object[] {
-            value
-          });
+          value);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
@@ -99,9 +97,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     }
     try {
       removerMethod.invoke(getLastNestedTarget(target, getProperty()),
-          new Object[] {
-            value
-          });
+          value);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();

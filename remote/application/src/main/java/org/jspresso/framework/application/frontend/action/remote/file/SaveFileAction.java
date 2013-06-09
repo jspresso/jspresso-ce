@@ -156,10 +156,10 @@ public class SaveFileAction extends ChooseFileAction {
 
   private static class ResourceAdapter extends AbstractActiveResource {
 
-    private IActionHandler      actionHandler;
+    private final IActionHandler      actionHandler;
     private Map<String, Object> context;
-    private String              name;
-    private IFileSaveCallback   source;
+    private final String              name;
+    private final IFileSaveCallback   source;
 
     public ResourceAdapter(String name, String contentType,
         IFileSaveCallback source, IActionHandler actionHandler,

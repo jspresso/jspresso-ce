@@ -81,6 +81,7 @@ package org.jspresso.framework.view.flex {
     // Variables
     //
     // --------------------------------------------------------------------------
+    //noinspection JSFieldCanBeLocal
     /**
      * @private
      * Height of the component before collapse.
@@ -90,7 +91,7 @@ package org.jspresso.framework.view.flex {
      * @private
      * The transition effect from collapsed to expanded and back.
      */
-    private var tween : Resize = new Resize(this);
+    private var tween : Resize;
     /**
      * @private
      * The original verticalScrollPolicy.
@@ -107,7 +108,7 @@ package org.jspresso.framework.view.flex {
      */
     public function CollapsiblePanel() {
       super();
-
+      tween = new Resize(this);
       tween.addEventListener(EffectEvent.EFFECT_END, tween_effectEndHandler);
     }
 
@@ -119,6 +120,7 @@ package org.jspresso.framework.view.flex {
     // ----------------------------------
     // collapseButtonStyleFilters
     // ----------------------------------
+    //noinspection JSFieldCanBeLocal
     /**
      * @private
      * Storage for the collapseButtonStyleFilters property.

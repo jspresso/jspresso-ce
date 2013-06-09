@@ -34,9 +34,9 @@ import java.util.WeakHashMap;
  */
 public class BeanPropertyChangeRecorder implements PropertyChangeListener {
 
-  private Map<IPropertyChangeCapable, Map<String, Object>> changedPropertiesMap;
+  private final Map<IPropertyChangeCapable, Map<String, Object>> changedPropertiesMap;
   private boolean                                          enabled;
-  private PropertyChangeListener                           interceptor;
+  private final PropertyChangeListener                           interceptor;
 
   /**
    * Constructs a new <code>BeanPropertyChangeRecorder</code> instance.
@@ -96,6 +96,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("SuspiciousMethodCalls")
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     // don't store nested property changes

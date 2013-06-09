@@ -53,9 +53,9 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     IQueryComponent {
 
-  private IComponentDescriptor<?> componentDescriptor;
+  private final IComponentDescriptor<?> componentDescriptor;
   private IComponentDescriptor<?> queryDescriptor;
-  private IComponentFactory       componentFactory;
+  private final IComponentFactory       componentFactory;
   private Map<String, ESort>      defaultOrderingProperties;
   private Map<String, ESort>      orderingProperties;
   private Integer                 page;
@@ -282,7 +282,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     String acPropValue = null;
     if (acProp != null) {
       try {
-        acPropValue = (String) getComponentFactory().getAccessorFactory()
+        acPropValue = getComponentFactory().getAccessorFactory()
             .createPropertyAccessor(acProp, entity.getComponentContract())
             .getValue(entity);
       } catch (IllegalAccessException ex) {
@@ -367,16 +367,16 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public Integer getDisplayPageIndex() {
     int pc = 0;
     if (getPageCount() != null) {
-      pc = getPageCount().intValue();
+      pc = getPageCount();
     }
     if (pc == 0) {
-      return Integer.valueOf(0);
+      return 0;
     }
     int p = 0;
     if (getPage() != null) {
-      p = getPage().intValue();
+      p = getPage();
     }
-    return Integer.valueOf(p + 1);
+    return p + 1;
   }
 
   /**
@@ -385,7 +385,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public void setDisplayPageIndex(Integer displayPageIndex) {
     if (displayPageIndex != null) {
-      setPage(Integer.valueOf(displayPageIndex.intValue() - 1));
+      setPage(Integer.valueOf(displayPageIndex - 1));
     } else {
       setPage(null);
     }
@@ -399,16 +399,16 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (getRecordCount() == null) {
       return null;
     }
-    if (getPageSize() == null || getPageSize().intValue() <= 0) {
-      return Integer.valueOf(1);
+    if (getPageSize() == null || getPageSize() <= 0) {
+      return 1;
     }
-    int remainder = getRecordCount().intValue() % getPageSize().intValue();
+    int remainder = getRecordCount() % getPageSize();
     int lastIncompletePage = 0;
     if (remainder > 0) {
       lastIncompletePage = 1;
     }
-    return Integer.valueOf(getRecordCount().intValue()
-        / getPageSize().intValue() + lastIncompletePage);
+    return getRecordCount()
+        / getPageSize() + lastIncompletePage;
   }
 
   /**
@@ -464,7 +464,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public boolean isPageNavigationEnabled() {
-    return getPageCount() != null && getPageCount().intValue() > 1;
+    return getPageCount() != null && getPageCount() > 1;
   }
 
   /**
@@ -473,7 +473,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public boolean isNextPageEnabled() {
     return getPageCount() != null && getPage() != null
-        && getPage().intValue() < getPageCount().intValue() - 1;
+        && getPage() < getPageCount() - 1;
   }
 
   /**
@@ -481,7 +481,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public boolean isPreviousPageEnabled() {
-    return getPage() != null && getPage().intValue() > 0;
+    return getPage() != null && getPage() > 0;
   }
 
   /**
@@ -516,13 +516,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
     int pc = 0;
     if (getPageCount() != null) {
-      pc = getPageCount().intValue();
+      pc = getPageCount();
     }
     if (pc > 0) {
-      if (page == null || page.intValue() < 0) {
-        this.page = Integer.valueOf(0);
-      } else if (page.intValue() >= pc) {
-        this.page = Integer.valueOf(pc - 1);
+      if (page == null || page < 0) {
+        this.page = 0;
+      } else if (page >= pc) {
+        this.page = pc - 1;
       } else {
         this.page = page;
       }
@@ -596,7 +596,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   private class InlinedComponentTracker implements PropertyChangeListener {
 
-    private String componentName;
+    private final String componentName;
 
     /**
      * Constructs a new <code>InnerComponentTracker</code> instance.
@@ -688,6 +688,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * @param state
    *          the hierarchical map holding bare filter values.
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void hydrate(Map<String, Object> state) {
     if (state != null) {

@@ -47,25 +47,25 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Integer size = Integer.valueOf(0);
+    Integer size = 0;
     String unit = "Ko";
     byte[] content = getBinaryContent(context);
     if (content != null) {
       if (content.length < 1024) {
-        size = Integer.valueOf(content.length);
+        size = content.length;
         unit = getTranslationProvider(context).getTranslation("bytes",
             getLocale(context));
       } else if (content.length >= 1024 && content.length < 1024 * 1024) {
-        size = Integer.valueOf(content.length / 1024);
+        size = content.length / 1024;
         unit = getTranslationProvider(context).getTranslation("kbytes",
             getLocale(context));
       } else if (content.length >= 1024 * 1024
           && content.length < 1024 * 1024 * 1024) {
-        size = Integer.valueOf(content.length / (1024 * 1024));
+        size = content.length / (1024 * 1024);
         unit = getTranslationProvider(context).getTranslation("mbytes",
             getLocale(context));
       } else if (content.length >= 1024 * 1024 * 1024) {
-        size = Integer.valueOf(content.length / (1024 * 1024 * 1024));
+        size = content.length / (1024 * 1024 * 1024);
         unit = getTranslationProvider(context).getTranslation("gbytes",
             getLocale(context));
       }

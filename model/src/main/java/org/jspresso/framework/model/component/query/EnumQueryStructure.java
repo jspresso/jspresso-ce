@@ -39,7 +39,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
-  private IEnumerationPropertyDescriptor sourceDescriptor;
+  private final IEnumerationPropertyDescriptor sourceDescriptor;
   private ITranslationProvider           translationProvider;
   private Locale                         locale;
   private Set<EnumValueQueryStructure>   enumerationValues;

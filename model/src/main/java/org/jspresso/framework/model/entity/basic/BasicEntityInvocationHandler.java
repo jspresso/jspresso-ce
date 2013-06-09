@@ -46,7 +46,7 @@ public class BasicEntityInvocationHandler extends
 
   private static final long   serialVersionUID = 6078989823404409653L;
 
-  private Map<String, Object> properties;
+  private final Map<String, Object> properties;
   private int                 hashCode;
 
   /**
@@ -90,8 +90,8 @@ public class BasicEntityInvocationHandler extends
     String methodName = method.getName();
     if ("isPersistent".equals(methodName)) {
       Integer version = ((IEntity) proxy).getVersion();
-      return Boolean.valueOf(version != null
-          && !IEntity.DELETED_VERSION.equals(version));
+      return version != null
+          && !IEntity.DELETED_VERSION.equals(version);
     }
     return super.invoke(proxy, method, args);
   }

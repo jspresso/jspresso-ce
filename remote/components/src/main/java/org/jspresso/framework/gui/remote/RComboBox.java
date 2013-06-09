@@ -64,7 +64,7 @@ public class RComboBox extends REnumBox {
    * @param icons
    *          the icons to set.
    */
-  public void setIcons(RIcon[] icons) {
+  public void setIcons(RIcon... icons) {
     this.icons = icons;
   }
 

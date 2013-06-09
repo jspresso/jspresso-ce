@@ -97,7 +97,7 @@ public class DevelopmentLoginModule implements LoginModule {
         // NO-OP.
       }
       return false;
-    } else if (succeeded && !commitSucceeded) {
+    } else if (!commitSucceeded) {
       // login succeeded but overall authentication failed
       succeeded = false;
       username = null;
@@ -211,9 +211,6 @@ public class DevelopmentLoginModule implements LoginModule {
    * @return true in all cases since this <code>LoginModule</code> should not be
    *         ignored.
    * @exception LoginException
-   *              if the authentication fails.
-   *              <p>
-   * @exception LoginException
    *              if this <code>LoginModule</code> is unable to perform the
    *              authentication.
    */
@@ -297,9 +294,6 @@ public class DevelopmentLoginModule implements LoginModule {
       password[i] = ' ';
     }
     password = null;
-    if (!usernameCorrect) {
-      throw new FailedLoginException(LoginUtils.USER_FAILED);
-    }
     throw new FailedLoginException(LoginUtils.PASSWORD_FAILED);
   }
 

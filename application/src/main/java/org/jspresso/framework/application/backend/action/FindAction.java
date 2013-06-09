@@ -59,8 +59,8 @@ public class FindAction extends AbstractQbeAction {
     IQueryComponent queryComponent = null;
     if (queryEntityConnector != null
         && queryEntityConnector.getConnectorValue() != null) {
-      queryComponent = ((IQueryComponent) queryEntityConnector
-          .getConnectorValue());
+      queryComponent = queryEntityConnector
+          .getConnectorValue();
     }
     return queryComponent;
   }

@@ -17,6 +17,7 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: net.sf.nachocalendar:nachocalendar:0.23" level="project" />
     <orderEntry type="library" name="Maven: net.sf.jedit-syntax:jedit-syntax:2.2.2" level="project" />
+    <orderEntry type="library" name="Maven: foxtrot:foxtrot:2.0" level="project" />
     <orderEntry type="module" module-name="jspresso-app-launch-core" />
     <orderEntry type="module" module-name="jspresso-application" />
     <orderEntry type="module" module-name="jspresso-view" />

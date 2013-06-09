@@ -120,7 +120,7 @@ public class PathBasedIconSet implements IIconSet {
    * @param supportedExtensions
    *          the supportedExtensions to set.
    */
-  public void setSupportedExtensions(String[] supportedExtensions) {
+  public void setSupportedExtensions(String... supportedExtensions) {
     this.supportedExtensions = supportedExtensions;
   }
 

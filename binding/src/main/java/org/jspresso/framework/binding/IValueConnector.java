@@ -157,14 +157,14 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   ICompositeValueConnector getParentConnector();
 
   /**
-   * Is the connector readable ?
+   * Tests whether the connector is readable.
    * 
    * @return true if readable.
    */
   boolean isReadable();
 
   /**
-   * Is the connector writable ?
+   * Tests whether the connector is writable.
    * 
    * @return true if writable.
    */

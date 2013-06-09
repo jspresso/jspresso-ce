@@ -88,18 +88,18 @@ public class SwingActionFactory extends
 
     private static final long serialVersionUID = 5819377672533326496L;
 
-    private IAction           action;
-    private IActionHandler    actionHandler;
-    private IView<JComponent> view;
+    private final IAction           action;
+    private final IActionHandler    actionHandler;
+    private final IView<JComponent> view;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
      * 
-     * @param action
-     * @param dimension
-     * @param actionHandler
-     * @param view
-     * @param locale
+     * @param action the action.
+     * @param dimension the dimension.
+     * @param actionHandler the action handler.
+     * @param view the view.
+     * @param locale the locale.
      */
     public ActionAdapter(IAction action, Dimension dimension,
         IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
@@ -132,6 +132,7 @@ public class SwingActionFactory extends
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {

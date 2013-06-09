@@ -54,6 +54,7 @@ package org.jspresso.framework.view.flex {
       super.updateDisplayList(unscaledWidth, unscaledHeight);
       if(_showIcon) {
         iconImage.width = textInput.height - getStyle("cornerRadius");
+        //noinspection JSSuspiciousNameCombination
         iconImage.height = iconImage.width;
         iconImage.x = getStyle("cornerRadius");
         iconImage.y = (height - iconImage.height)/2;

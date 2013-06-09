@@ -92,7 +92,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   @Override
   public boolean isComposition() {
     if (composition != null) {
-      return composition.booleanValue();
+      return composition;
     }
     return getDefaultComposition();
   }
@@ -119,7 +119,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    *          the composition to set.
    */
   public void setComposition(boolean composition) {
-    this.composition = Boolean.valueOf(composition);
+    this.composition = composition;
   }
 
   /**
@@ -172,7 +172,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     // We only ant to actually update reverse relation end if it is an 'actual'
     // property descriptor, e.g. not a compound one used only for the view.
     if (this.reverseRelationEnd != reverseRelationEnd) {
-      if (getName().indexOf(".") < 0) {
+      if (!getName().contains(".")) {
         if (this.reverseRelationEnd != null) {
           this.reverseRelationEnd.setReverseRelationEnd(null);
         }
@@ -181,17 +181,10 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
         // it is set uni-directional.
         leadingPersistence = true;
       } else {
-        if (reverseRelationEnd.getReverseRelationEnd() == this) {
-          // The other side is already connected to this side.
-          // We are setting the reverse as a consequence of the other side
-          // reverse setting.
-          leadingPersistence = false;
-        } else {
-          leadingPersistence = true;
-        }
+        leadingPersistence = reverseRelationEnd.getReverseRelationEnd() != this;
       }
       this.reverseRelationEnd = reverseRelationEnd;
-      if (getName().indexOf(".") < 0) {
+      if (!getName().contains(".")) {
         if (this.reverseRelationEnd != null) {
           this.reverseRelationEnd.setReverseRelationEnd(this);
         }

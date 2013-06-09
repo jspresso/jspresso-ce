@@ -63,6 +63,7 @@ public final class HibernateHelper {
    *          the componennt to rerieve the contract for.
    * @return the component contract.
    */
+  @SuppressWarnings("unchecked")
   public static <E extends IComponent> Class<? extends E> getComponentContract(
       E component) {
     if (!Hibernate.isInitialized(component)) {

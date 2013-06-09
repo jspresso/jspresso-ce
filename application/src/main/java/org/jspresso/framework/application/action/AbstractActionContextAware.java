@@ -77,6 +77,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the action parameter if it exists in the action context or null.
    */
+  @SuppressWarnings("unchecked")
   protected <T> T getActionParameter(Map<String, Object> context) {
     return (T) context.get(ActionContextConstants.ACTION_PARAM);
   }
@@ -113,6 +114,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the frontend controller.
    */
+  @SuppressWarnings("unchecked")
   protected <E, F, G> IFrontendController<E, F, G> getFrontendController(
       Map<String, Object> context) {
     return (IFrontendController<E, F, G>) context
@@ -306,7 +308,7 @@ public abstract class AbstractActionContextAware {
         && !(selectableConnector instanceof ISelectable)) {
       selectableConnector = selectableConnector.getParentConnector();
     }
-    if (selectableConnector instanceof ISelectable) {
+    if (selectableConnector != null) {
       selectedIndices = ((ISelectable) selectableConnector)
           .getSelectedIndices();
     }
@@ -394,9 +396,9 @@ public abstract class AbstractActionContextAware {
       models = new ArrayList<T>();
       int[] selectedIndices = getSelectedIndices(viewPath, context);
       if (selectedIndices != null && selectedIndices.length > 0) {
-        for (int i = 0; i < selectedIndices.length; i++) {
+        for (int selectedIndice : selectedIndices) {
           IValueConnector childConnector = ((ICollectionConnector) modelConnector)
-              .getChildConnector(selectedIndices[i]);
+              .getChildConnector(selectedIndice);
           if (childConnector != null) {
             models.add((T) childConnector.getConnectorValue());
           }
@@ -478,7 +480,7 @@ public abstract class AbstractActionContextAware {
         && !(selectableConnector instanceof ISelectable)) {
       selectableConnector = selectableConnector.getParentConnector();
     }
-    if (selectableConnector instanceof ISelectable) {
+    if (selectableConnector != null) {
       ((ISelectable) selectableConnector).setSelectedIndices(selectedIndices);
     }
   }
@@ -581,6 +583,7 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the view this action was triggered on.
    */
+  @SuppressWarnings("unchecked")
   protected <T> IView<T> getView(int[] viewPath, Map<String, Object> context) {
     return navigate((IView<T>) context.get(ActionContextConstants.VIEW),
         viewPath);
@@ -655,7 +658,7 @@ public abstract class AbstractActionContextAware {
    *          </ul>
    * @return the view navigated to.
    */
-  protected <T> IView<T> navigate(IView<T> fromView, int[] viewPath) {
+  protected <T> IView<T> navigate(IView<T> fromView, int... viewPath) {
     IView<T> target = fromView;
     if (viewPath != null) {
       for (int nextIndex : viewPath) {

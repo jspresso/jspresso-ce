@@ -37,7 +37,7 @@ import org.jspresso.framework.security.UserPrincipal;
  */
 public class BasicApplicationSession implements IApplicationSession {
 
-  private Map<String, Object> customValues;
+  private final Map<String, Object> customValues;
   private Locale              locale;
   private TimeZone            timeZone;
   private Subject             subject;

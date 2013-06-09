@@ -47,8 +47,8 @@ public abstract class AbstractCollectionConnector extends
     AbstractCompositeValueConnector implements ICollectionConnector,
     IItemSelectable {
 
-  private ICompositeValueConnector childConnectorPrototype;
-  private IMvcBinder               mvcBinder;
+  private final ICompositeValueConnector childConnectorPrototype;
+  private final IMvcBinder               mvcBinder;
 
   private List<IValueConnector>    removedChildrenConnectors;
   private SelectionChangeSupport   selectionChangeSupport;
@@ -199,6 +199,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T getSelectedItem() {
     return (T) implGetSelectedItem();
@@ -269,10 +270,9 @@ public abstract class AbstractCollectionConnector extends
 
     if ((oldSelectedIndices == null && newSelectedIndices != null)
         || (oldSelectedIndices != null && newSelectedIndices == null)
-        || (oldSelectedIndices != null && newSelectedIndices != null && !Arrays
-            .equals(oldSelectedIndices, newSelectedIndices))) {
-      if (newSelectedIndices == null || newSelectedIndices.length == 0) {
-        implFireSelectedConnectorChange((IValueConnector) null);
+        || (oldSelectedIndices != null && !Arrays.equals(oldSelectedIndices, newSelectedIndices))) {
+      if (newSelectedIndices == null) {
+        implFireSelectedConnectorChange(null);
       } else {
         implFireSelectedConnectorChange(getChildConnector(leadingIndex));
       }

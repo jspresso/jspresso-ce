@@ -101,7 +101,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
           Object addedComponent = newComponents.get(i);
           if (existingCollection == null
               || !existingCollection.contains(addedComponent)) {
-            if (index >= 0) {
+            if (index >= 0 && collectionAccessor instanceof IListAccessor) {
               ((IListAccessor) collectionAccessor).addToValue(master, index + 1
                   + i, addedComponent);
             } else {

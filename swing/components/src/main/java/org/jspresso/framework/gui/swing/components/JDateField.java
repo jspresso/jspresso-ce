@@ -145,12 +145,12 @@ public class JDateField extends DateField {
 
     private static final long              serialVersionUID = 7553540246834170L;
     private static final DateFormatSymbols DEFAULT_DFS      = new DateFormatSymbols();
-    private DateFormatSymbols              dfs;
+    private final DateFormatSymbols              dfs;
 
     /**
      * Constructs a new <code>TranslatedHeaderRenderer</code> instance.
      * 
-     * @param locale
+     * @param locale the locale.
      */
     protected TranslatedHeaderRenderer(Locale locale) {
       dfs = new DateFormatSymbols(locale);

@@ -66,9 +66,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
         currentPassHash = digestAndEncode(currentPassword.toCharArray());
       }
 
-      int updCount = getJdbcTemplate().update(getUpdateQuery(), new Object[] {
-          newPassHash, userPrincipal.getName(), currentPassHash
-      });
+      int updCount = getJdbcTemplate().update(getUpdateQuery(), newPassHash, userPrincipal.getName(), currentPassHash);
       if (updCount == 0) {
         throw new ActionBusinessException("Current password is not valid.",
             "password.current.invalid");

@@ -86,7 +86,7 @@ public class RemoteStartCommand extends RemoteCommand {
    * @param keysToTranslate
    *          the keysToTranslate to set.
    */
-  public void setKeysToTranslate(String[] keysToTranslate) {
+  public void setKeysToTranslate(String... keysToTranslate) {
     this.keysToTranslate = keysToTranslate;
   }
 

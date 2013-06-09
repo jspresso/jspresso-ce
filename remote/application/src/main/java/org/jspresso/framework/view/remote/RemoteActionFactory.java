@@ -55,6 +55,7 @@ public class RemoteActionFactory extends
   private IRemoteCommandHandler  remoteCommandHandler;
   private IRemotePeerRegistry    remotePeerRegistry;
 
+  @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private Set<RAction>           hardReferences;
 
   /**
@@ -165,10 +166,10 @@ public class RemoteActionFactory extends
 
     private static final long serialVersionUID = -922942515333636161L;
 
-    private RAction           delegate;
-    private IAction           action;
-    private IActionHandler    actionHandler;
-    private IView<RComponent> view;
+    private final RAction           delegate;
+    private final IAction           action;
+    private final IActionHandler    actionHandler;
+    private final IView<RComponent> view;
 
     public ActionAdapter(RAction remoteAction, IAction anAction,
         IActionHandler anActionHandler, IView<RComponent> view) {

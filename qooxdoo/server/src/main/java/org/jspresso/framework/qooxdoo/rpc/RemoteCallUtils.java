@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +54,9 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
       jsonObject.put("array", fromJava(list.toArray()));
       return jsonObject;
     } else if (obj instanceof BigDecimal) {
-      return super.fromJava(Double.valueOf(((BigDecimal) obj).doubleValue()));
+      return super.fromJava(((BigDecimal) obj).doubleValue());
     } else if (obj instanceof BigInteger) {
-      return super.fromJava(Long.valueOf(((BigInteger) obj).longValue()));
+      return super.fromJava(((BigInteger) obj).longValue());
     }
     return super.fromJava(obj);
   }
@@ -79,9 +80,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
             Object array = toJava(jsonArray, Object[].class);
             if (array instanceof Object[]) {
               List<Object> returnedList = new ArrayList<Object>();
-              for (Object o : ((Object[]) array)) {
-                returnedList.add(o);
-              }
+              Collections.addAll(returnedList, ((Object[]) array));
               return returnedList;
             }
           }

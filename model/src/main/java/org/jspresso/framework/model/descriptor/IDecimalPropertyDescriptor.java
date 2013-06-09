@@ -29,7 +29,7 @@ public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {
   /**
    * <code>DEFAULT_MAX_FRACTION_DIGIT</code> is 2.
    */
-  Integer DEFAULT_MAX_FRACTION_DIGIT = new Integer(2);
+  Integer DEFAULT_MAX_FRACTION_DIGIT = 2;
 
   /**
    * Returns the maximum number of fraction digits allowed in this decimal

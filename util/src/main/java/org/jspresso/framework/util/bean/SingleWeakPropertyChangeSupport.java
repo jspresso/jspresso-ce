@@ -75,8 +75,8 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
     } else {
       containedListeners = getPropertyChangeListeners(propertyName);
     }
-    for (int i = 0; i < containedListeners.length; i++) {
-      if (containedListeners[i] == listener) {
+    for (PropertyChangeListener containedListener : containedListeners) {
+      if (containedListener == listener) {
         return false;
       }
     }

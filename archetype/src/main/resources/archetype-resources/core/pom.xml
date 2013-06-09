@@ -21,11 +21,6 @@
       <artifactId>jspresso-app-launch-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jspresso.framework</groupId>
-      <artifactId>jspresso-tools</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>

@@ -17,6 +17,7 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: net.sf.nachocalendar:nachocalendar:0.23" level="project" />
     <orderEntry type="library" name="Maven: net.sf.jedit-syntax:jedit-syntax:2.2.2" level="project" />
+    <orderEntry type="library" name="Maven: foxtrot:foxtrot:2.0" level="project" />
     <orderEntry type="module" module-name="jspresso-binding" />
     <orderEntry type="module" module-name="jspresso-model" />
     <orderEntry type="module" module-name="jspresso-security" />
@@ -52,7 +53,6 @@
     <orderEntry type="library" name="Maven: com.sun:ldapbp:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:3.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:3.2.2.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: foxtrot:foxtrot:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.jvnet.substance:substance:4.3" level="project" />
     <orderEntry type="library" name="Maven: chrriis:dj-nativeswing:1.0.2.20120308" level="project" />
     <orderEntry type="library" name="Maven: chrriis:dj-nativeswing-swt:1.0.2.20120308" level="project" />

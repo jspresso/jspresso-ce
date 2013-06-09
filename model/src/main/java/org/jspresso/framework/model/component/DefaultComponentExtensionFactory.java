@@ -36,6 +36,7 @@ public class DefaultComponentExtensionFactory implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <E extends IComponent> IComponentExtension<E> createComponentExtension(
       Class<IComponentExtension<E>> extensionClass,

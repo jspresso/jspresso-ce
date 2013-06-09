@@ -35,7 +35,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
     IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
   private String                  permId;
-  private RemoteConnectorFactory  connectorFactory;
+  private final RemoteConnectorFactory  connectorFactory;
   private String                  guid;
   private IRemoteStateValueMapper remoteStateValueMapper;
   private RemoteValueState        state;

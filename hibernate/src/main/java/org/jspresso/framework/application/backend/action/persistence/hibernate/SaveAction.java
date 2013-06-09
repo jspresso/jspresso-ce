@@ -80,6 +80,6 @@ public class SaveAction extends AbstractHibernateAction {
    * @return the list of entities to save.
    */
   protected List<IEntity> getEntitiesToSave(Map<String, Object> context) {
-    return (List<IEntity>) getActionParameter(context);
+    return getActionParameter(context);
   }
 }

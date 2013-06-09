@@ -344,8 +344,8 @@ public interface IBackendController extends IController,
   boolean isUnitOfWorkActive();
 
   /**
-   * Is the passed entity already updated in the current unit of work and waits
-   * for commit ?
+   * Tests whether the passed entity already updated in the current unit of work and waits
+   * for commit.
    * 
    * @param entity
    *          the entity to test.

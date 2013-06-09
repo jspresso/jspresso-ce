@@ -46,8 +46,8 @@ public class JavaPreferencesStore implements IPreferencesStore {
   @Override
   public void setStorePath(String[] storePath) {
     preferences = Preferences.userNodeForPackage(getClass());
-    for (int i = 0; i < storePath.length; i++) {
-      preferences = preferences.node(storePath[i]);
+    for (String aStorePath : storePath) {
+      preferences = preferences.node(aStorePath);
     }
   }
 

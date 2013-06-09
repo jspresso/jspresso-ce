@@ -31,7 +31,7 @@ package org.jspresso.framework.util.format {
       }
       var prepared:String = value.replace(new RegExp("\\" + _parser.thousandsSeparatorTo,"g"), _parser.thousandsSeparatorFrom);
       prepared = prepared.replace(new RegExp("\\" + _parser.decimalSeparatorTo, "g"), _parser.decimalSeparatorFrom);
-	    var parsedNumber:Number = new Number(_parser.parseNumberString(prepared));
+	    var parsedNumber:Number = Number(_parser.parseNumberString(prepared));
 	    parsedNumber.toFixed(_precision);
 	    return parsedNumber;
     }

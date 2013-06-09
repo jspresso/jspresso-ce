@@ -15,7 +15,7 @@
               <dependency linkage="External" />
             </entry>
             <entry library-name="Flex 4.6 libs" library-level="application">
-              <dependency linkage="Merged" />
+              <dependency linkage="External" />
             </entry>
           </entries>
           <sdk name="Flex 4.6" />

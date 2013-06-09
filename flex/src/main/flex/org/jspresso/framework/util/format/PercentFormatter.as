@@ -27,7 +27,7 @@ package org.jspresso.framework.util.format {
       if(value is Number) {
         return super.format((value as Number)*100) + PERCENT_SUFFIX;
       } else {
-        return super.format(new Number(value)*100) + PERCENT_SUFFIX;
+        return super.format(Number(value)*100) + PERCENT_SUFFIX;
       }
     }
   }

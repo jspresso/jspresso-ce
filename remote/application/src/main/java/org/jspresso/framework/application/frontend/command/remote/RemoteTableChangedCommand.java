@@ -66,7 +66,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
    * @param columnIds
    *          the columnIds to set.
    */
-  public void setColumnIds(String[] columnIds) {
+  public void setColumnIds(String... columnIds) {
     this.columnIds = columnIds;
   }
 
@@ -85,7 +85,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
    * @param columnWidths
    *          the columnWidths to set.
    */
-  public void setColumnWidths(Integer[] columnWidths) {
+  public void setColumnWidths(Integer... columnWidths) {
     this.columnWidths = columnWidths;
   }
 

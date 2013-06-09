@@ -130,7 +130,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   }
 
   /**
-   * Registers notification forwarding from a collection's child property
+   * Registers notification forwarding from a collection's child property.
    * 
    * @param sourceBean
    *          the source bean.
@@ -151,7 +151,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   }
 
   /**
-   * Registers notification forwarding from a collection's child property
+   * Registers notification forwarding from a collection's child property.
    * 
    * @param sourceBean
    *          the source bean.
@@ -162,6 +162,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    * @param forwardedProperty
    *          the name of the forwarded property.
    */
+  @SuppressWarnings("unchecked")
   protected void registerNotificationCollectionForwarding(
       final IPropertyChangeCapable sourceBean,
       final String sourceCollectionProperty,
@@ -176,7 +177,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
     sourceBean.addPropertyChangeListener(sourceCollectionProperty,
         new PropertyChangeListener() {
 
-          @SuppressWarnings("rawtypes")
+          @SuppressWarnings({"rawtypes", "unchecked"})
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
             if (getComponentFactory().getAccessorFactory() != null) {
@@ -234,7 +235,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
           .straightGetProperty(sourceCollectionProperty);
     } else {
       try {
-        initialChildren = (Collection<IPropertyChangeCapable>) new BeanAccessorFactory()
+        initialChildren = new BeanAccessorFactory()
             .createPropertyAccessor(sourceCollectionProperty,
                 sourceBean.getClass()).getValue(sourceBean);
       } catch (IllegalAccessException ex) {
@@ -256,14 +257,14 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   private class ForwardingPropertyChangeListener implements
       PropertyChangeListener {
 
-    private String[] forwardedProperties;
+    private final String[] forwardedProperties;
 
     /**
      * Constructs a new <code>ForwardingPropertyChangeListener</code> instance.
      * 
-     * @param forwardedProperties
+     * @param forwardedProperties the list of forwarded property names.
      */
-    public ForwardingPropertyChangeListener(String[] forwardedProperties) {
+    public ForwardingPropertyChangeListener(String... forwardedProperties) {
       this.forwardedProperties = forwardedProperties;
     }
 

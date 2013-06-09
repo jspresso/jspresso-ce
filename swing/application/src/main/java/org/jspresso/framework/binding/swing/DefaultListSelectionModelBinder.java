@@ -79,9 +79,9 @@ public class DefaultListSelectionModelBinder implements
   private static final class SelectionChangeListener implements
       ISelectionChangeListener {
 
-    private JComponent         collectionComponent;
-    private IIndexMapper       rowMapper;
-    private ListSelectionModel selectionModel;
+    private final JComponent         collectionComponent;
+    private final IIndexMapper       rowMapper;
+    private final ListSelectionModel selectionModel;
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
@@ -90,7 +90,7 @@ public class DefaultListSelectionModelBinder implements
      *          the collection component to bind the selection model with.
      * @param selectionModel
      *          the selection model to forward the changes to.
-     * @param rowMapper
+     * @param rowMapper the row mapper.
      */
     public SelectionChangeListener(JComponent collectionComponent,
         ListSelectionModel selectionModel, IIndexMapper rowMapper) {
@@ -153,7 +153,6 @@ public class DefaultListSelectionModelBinder implements
           }
           if (firstSelection) {
             selectionModel.setSelectionInterval(nextRangeMin, nextRangeMax);
-            firstSelection = false;
           } else {
             selectionModel.addSelectionInterval(nextRangeMin, nextRangeMax);
           }
@@ -163,7 +162,7 @@ public class DefaultListSelectionModelBinder implements
               visibleCell = ((JTable) collectionComponent).getCellRect(
                   evt.getLeadingIndex(), 0, true);
             } else if (collectionComponent instanceof JList) {
-              visibleCell = ((JList) collectionComponent).getCellBounds(
+              visibleCell = ((JList<?>) collectionComponent).getCellBounds(
                   evt.getLeadingIndex(), evt.getLeadingIndex());
             }
             if (visibleCell != null) {
@@ -178,15 +177,15 @@ public class DefaultListSelectionModelBinder implements
   private static final class SelectionModelListener implements
       ListSelectionListener {
 
-    private IIndexMapper rowMapper;
-    private ISelectable  viewSelectable;
+    private final IIndexMapper rowMapper;
+    private final ISelectable  viewSelectable;
 
     /**
      * Constructs a new <code>SelectionModelListener</code> instance.
      * 
      * @param viewSelectable
      *          the selectable to forward the changes to.
-     * @param rowMapper
+     * @param rowMapper the row mapper.
      */
     public SelectionModelListener(ISelectable viewSelectable,
         IIndexMapper rowMapper) {

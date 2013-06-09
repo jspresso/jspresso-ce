@@ -14,8 +14,8 @@ package org.jspresso.framework.model.datatransfer;
  */
 public class ComponentTransferStructure<E> {
 
-  private Object        content;
-  private ETransferMode transferMode;
+  private final Object        content;
+  private final ETransferMode transferMode;
 
   /**
    * Constructs a new <code>ComponentTransferStructure</code> instance.
