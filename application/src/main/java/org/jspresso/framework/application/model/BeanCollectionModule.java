@@ -35,7 +35,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This type of module keeps a reference on a beans collection. There is no
- * assumption made on wether these beans are actually persistent entites or any
+ * assumption made on whether these beans are actually persistent entities or any
  * other type of java beans.
  * <p>
  * Simple bean collection modules must have their collection of referenced beans
@@ -203,12 +203,12 @@ public class BeanCollectionModule extends Module {
    * Configures the type of bean element this collection module manages. A bunch
    * of default values are inferred from this element component descriptor. For
    * instance, paging size (if used) will default to the component one unless
-   * explicitely set. Same goes for icon image URL, default ordering properties
+   * explicitly set. Same goes for icon image URL, default ordering properties
    * or even granted roles. The latter means that bean collection modules based
    * on forbidden entities will automatically be excluded from the workspace of
    * the logged-in user.
    * <p>
-   * if not explicitely configured, the eement component descriptor can be
+   * if not explicitly configured, the element component descriptor can be
    * inferred from the collection view descriptor configured as projected view
    * descriptor.
    * 
@@ -222,7 +222,7 @@ public class BeanCollectionModule extends Module {
 
   /**
    * This property is not used by the module itself, but by built-in actions
-   * that maybe registered on this module. One of tese actions is
+   * that maybe registered on this module. One of these actions is
    * <code>AddBeanAsSubModuleAction</code>.
    * <p>
    * This property indicates the view to use whenever the user requests a

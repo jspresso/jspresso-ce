@@ -54,7 +54,7 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
   /**
    * Configures the card determination strategy. This delegate is responsible
    * for selecting the card name key based on the model bound to the view.
-   * Everytime the bound model changes, the card name selector is triggered to
+   * Every time the bound model changes, the card name selector is triggered to
    * select a new card. The names returned by the card name selector must match
    * the names under which the cards are registered. Whenever the card name
    * selector returns an unknown name, the card view displays an empty view. The

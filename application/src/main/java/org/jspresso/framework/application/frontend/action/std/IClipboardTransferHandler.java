@@ -32,18 +32,18 @@ public interface IClipboardTransferHandler {
   /**
    * Creates a plain text representation of the component collection.
    * 
-   * @param transferedComponents
+   * @param transferredComponents
    *          the component collection to transform.
    * @return the plain text representation.
    */
-  String toPlainText(List<?> transferedComponents);
+  String toPlainText(List<?> transferredComponents);
 
   /**
    * Creates an HTML representation of the component collection.
    * 
-   * @param transferedComponents
+   * @param transferredComponents
    *          the component collection to transform.
    * @return the HTML representation.
    */
-  String toHtml(List<?> transferedComponents);
+  String toHtml(List<?> transferredComponents);
 }

@@ -29,7 +29,7 @@ import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateScalarModel;
 
 /**
- * Tells wether an object is instance of a class.
+ * Tells whether an object is instance of a class.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -50,7 +50,7 @@ public class InstanceOf implements TemplateMethodModelEx {
   }
 
   /**
-   * Tells wether an object is instance of a class.
+   * Tells whether an object is instance of a class.
    * <p>
    * {@inheritDoc}
    */

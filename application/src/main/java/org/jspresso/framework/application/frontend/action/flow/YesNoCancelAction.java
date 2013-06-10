@@ -26,7 +26,7 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * This action pops-up a binary question with Cancel option. Depending on user
  * answer, another action is triggered. The Yes - No - Cancel alternative
- * actions are parameterized statically.
+ * actions are parametrized statically.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick

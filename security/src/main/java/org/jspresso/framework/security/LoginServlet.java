@@ -29,14 +29,14 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet that performs a JAAS login. The name of the JAAS configuration is
- * read from the servlet config. After succesful login, username and password
+ * read from the servlet config. After successful login, username and password
  * are put in the session. Note that, in contrast to the
  * <code>SecurityContextFilter</code>, the login module used here is supposed to
  * perform a real authentication. With JBoss, you could use the
  * <code>UsersRolesLoginModule</code> for example. <br>
  * Note that this is sample implementation, and is written only in order to demo
  * the use of the {@link SecurityContextFilter} class. In a real life
- * implementation, one would probably never hard-code names of redirect url's,
+ * implementation, one would probably never hard-code names of redirect urls,
  * names of form parameters and names of session attributes.
  */
 public class LoginServlet extends HttpServlet {

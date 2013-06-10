@@ -41,7 +41,7 @@ public class DurationFormatter implements IFormatter<Number, String> {
    * Constructs a new <code>DurationFormatter</code> instance.
    * 
    * @param translationProvider
-   *          the translation provider for uration labels.
+   *          the translation provider for duration labels.
    * @param locale
    *          the locale the formatter must be constructed in.
    */

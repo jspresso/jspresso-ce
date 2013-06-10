@@ -25,8 +25,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 
 /**
- * This descriptore is used to describe an arbitrary object property for which
- * the type can be explicitely declared.
+ * This descriptor is used to describe an arbitrary object property for which
+ * the type can be explicitly declared.
  * 
  * @internal
  * @version $LastChangedRevision$

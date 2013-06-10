@@ -27,7 +27,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * This class is the default implementation of bean property accessors. It
- * relies on Jakarta commmons beanutils.
+ * relies on Jakarta commons beanutils.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

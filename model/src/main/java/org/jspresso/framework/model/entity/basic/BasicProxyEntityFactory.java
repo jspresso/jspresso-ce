@@ -75,10 +75,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   }
 
   /**
-   * Performs necessary post instanciation initialization.
+   * Performs necessary post instantiation initialization.
    * 
    * @param entity
-   *          the instanciated entity.
+   *          the instantiated entity.
    */
   protected void initializeEntity(IEntity entity) {
     IComponentDescriptor<?> entityDescriptor = getComponentDescriptor(entity
@@ -181,7 +181,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) getComponentDescriptor(entityContract);
       if (entityDescriptor.isPurelyAbstract()) {
         throw new EntityException(entityDescriptor.getName()
-            + " is purely abstract. It cannot be instanciated.");
+            + " is purely abstract. It cannot be instantiated.");
       }
       InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
       Class<?>[] implementedClasses;
@@ -201,10 +201,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       try {
         entity = entityContract.newInstance();
       } catch (InstantiationException ex) {
-        throw new EntityException(ex, "Could not instanciate entity "
+        throw new EntityException(ex, "Could not instantiate entity "
             + entityContract.getName());
       } catch (IllegalAccessException ex) {
-        throw new EntityException(ex, "Could not instanciate entity "
+        throw new EntityException(ex, "Could not instantiate entity "
             + entityContract.getName());
       }
     }
@@ -242,12 +242,12 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   }
 
   /**
-   * Performs necessary post instanciation initialization.
+   * Performs necessary post instantiation initialization.
    * 
    * @param <T>
    *          the component type.
    * @param component
-   *          the instanciated component.
+   *          the instantiated component.
    * @return the component instance ready to be used.
    */
   protected <T extends IComponent> T initializeComponent(T component) {

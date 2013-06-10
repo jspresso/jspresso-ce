@@ -732,7 +732,7 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
-   * Wether the object is fully initialized.
+   * Whether the object is fully initialized.
    * 
    * @param objectOrProxy
    *          the object to test.
@@ -872,7 +872,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Performs (potentially delayed due to lazy initialization) inline tracker
-   * attachement.
+   * attachment.
    * 
    * @param referenceProperty
    *          the reference to link the tracker to.
@@ -885,7 +885,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private void initializeInlineTrackerIfNeeded(
       IPropertyChangeCapable referenceProperty, String propertyName,
       boolean fireNestedPropertyChange) {
-    if (/* To avoid breaking lazy initialization optim */isInitialized(referenceProperty)) {
+    if (/* To avoid breaking lazy initialization optimization */isInitialized(referenceProperty)) {
       NestedReferenceTracker storedTracker = referenceTrackers
           .get(propertyName);
       if (storedTracker != null && !storedTracker.isInitialized()) {
@@ -1228,7 +1228,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private boolean hasListeners(Object proxy,
       String propertyName) {
     if (computedPropertiesCache.containsKey(propertyName)) {
-      // this is necessary in order to force cache recomputation
+      // this is necessary in order to force cache re-computation
       computedPropertiesCache.remove(propertyName);
     }
     if (propertyChangeSupport != null
@@ -1263,7 +1263,7 @@ public abstract class AbstractComponentInvocationHandler implements
                   .hasListeners(((NestedReferenceTracker) listener).referencePropertyName
                       + "." + propertyName)) {
             // Query nested component but prevent
-            // stackoverflows with 1-1 relationships
+            // stack overflows with 1-1 relationships
             return true;
           }
         } else {
@@ -1555,7 +1555,7 @@ public abstract class AbstractComponentInvocationHandler implements
         throw new ComponentException(ex);
       }
     }
-    // invoke lifecycle method on inlined components
+    // invoke lifecycle method on inline components
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
@@ -1594,7 +1594,7 @@ public abstract class AbstractComponentInvocationHandler implements
       checkMandatoryProperties(proxy);
     } else if (ILifecycleCapable.ON_DELETE_METHOD_NAME.equals(methodName)) {
       // Performs any necessary operation on internal state to mark the proxy
-      // deleted and thus unuseable.
+      // deleted and thus unusable.
       markDeleted(proxy);
     }
     return interceptorResults;
@@ -1602,7 +1602,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Performs any necessary operation on internal state to mark the proxy
-   * deleted and thus unuseable.
+   * deleted and thus unusable.
    * 
    * @param proxy
    *          the proxy.
@@ -1614,7 +1614,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private void removeFromProperty(Object proxy,
       ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
     String propertyName = propertyDescriptor.getName();
-    // The following optim breaks bidi N-N relationship persistence
+    // The following optimization breaks bidirectional N-N relationship persistence
     // if (!isInitialized(straightGetProperty(proxy, propertyName))) {
     // return;
     // }
@@ -1777,7 +1777,7 @@ public abstract class AbstractComponentInvocationHandler implements
               (IReferencePropertyDescriptor<?>) propertyDescriptor,
               oldProperty, actualNewProperty);
           if (reversePropertyDescriptor != null) {
-            // It is bidirectionnal, so we are going to update the other end.
+            // It is bidirectional, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
               // It's a one-to-one relationship
               if (proxy instanceof IEntity && oldProperty instanceof IEntity) {
@@ -1957,7 +1957,7 @@ public abstract class AbstractComponentInvocationHandler implements
      * @param referencePropertyName
      *          the name of the component to track the properties.
      * @param referencesInlineComponent
-     *          is it tracking an inlined component or an entity ref ?
+     *          is it tracking an inline component or an entity ref ?
      */
     public NestedReferenceTracker(Object source, String referencePropertyName,
         boolean referencesInlineComponent) {
@@ -1990,7 +1990,7 @@ public abstract class AbstractComponentInvocationHandler implements
         try {
           enabled = false;
           if (referencesInlinedComponent) {
-            // for dirtyness notification.
+            // for dirtiness notification.
             // must check if the actual property change does not come from a
             // nested entity. In that case, the persistent state has not
             // changed.
@@ -2026,7 +2026,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 String remainderProperty = trackedProperty.substring(evt
                     .getPropertyName().length() + 1);
                 if (remainderProperty.indexOf(IAccessor.NESTED_DELIM) >= 0) {
-                  // If the remaider is a nested property, we have to take
+                  // If the remainder is a nested property, we have to take
                   // care of manually firing.
                   if (evt.getNewValue() != null) {
                     try {

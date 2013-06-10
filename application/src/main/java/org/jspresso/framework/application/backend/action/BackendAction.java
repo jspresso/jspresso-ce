@@ -286,7 +286,7 @@ public class BackendAction extends AbstractAction {
   }
 
   /**
-   * Iform about the action progress.
+   * Inform about the action progress.
    * 
    * @param progress
    *          the action progress.

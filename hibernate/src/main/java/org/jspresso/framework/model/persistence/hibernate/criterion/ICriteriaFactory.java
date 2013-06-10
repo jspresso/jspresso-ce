@@ -39,7 +39,7 @@ public interface ICriteriaFactory {
    * @param queryComponent
    *          the query component holding the sort order specs.
    * @param context
-   *          the currect action context.
+   *          the current action context.
    */
   void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
       IQueryComponent queryComponent, Map<String, Object> context);
@@ -52,7 +52,7 @@ public interface ICriteriaFactory {
    * @param queryComponent
    *          the query component to traverse.
    * @param context
-   *          the currect action context.
+   *          the current action context.
    * @return the detached criteria or null if the query component is invalid.
    */
   EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent,

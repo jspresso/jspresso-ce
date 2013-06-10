@@ -196,9 +196,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Determines the workspace name of the parameter module.
    * 
    * @param module
-   *          the module to detremine the workspace of.
+   *          the module to determine the workspace of.
    * @return the module workspace name. If no workspace already contains this
-   *         module, defaults to the curent one.
+   *         module, defaults to the current one.
    */
   protected String getModuleWorkspace(Module module) {
     String selectedWsName = getSelectedWorkspaceName();
@@ -563,13 +563,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
         if (!initialActionState.equals(finalActionState)) {
           LOG.error(
-              "A coding probem has been detected that breaks action thread-safety.\n"
+              "A coding problem has been detected that breaks action thread-safety.\n"
                   + "The action internal state has been modified during its execution which is strictly forbidden.\n"
                   + "The action chain started with : {}", action);
           logInternalStateDifferences("root", initialActionState,
               finalActionState);
           throw new ActionException(
-              "A coding probem has been detected that breaks action thread-safety.\n"
+              "A coding problem has been detected that breaks action thread-safety.\n"
                   + "The action internal state has been modified during its execution which is strictly forbidden.\n"
                   + "The action chain started with : " + action);
         }
@@ -906,7 +906,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the application description i18n key. The way this description is
-   * actully leveraged depends on the UI channel.
+   * actually leveraged depends on the UI channel.
    * 
    * @param description
    *          the description to set.
@@ -917,7 +917,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Configures the exit action to be executed whenever the user wants to quit
-   * the application. The default installed exit action fisrt checks for started
+   * the application. The default installed exit action first checks for started
    * module(s) dirty state(s), then notifies user of pending persistent changes.
    * When no flush is needed or the user bypasses them, the actual exit is
    * performed.
@@ -950,9 +950,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * that are related to helping the user (online help, reference manual,
    * tutorial, version dialog...).
    * <p>
-   * The help action map is visually distinguished from the regular aplication
+   * The help action map is visually distinguished from the regular application
    * action map. For instance elp actions can be represented in a menu that is
-   * right-aligned in the menubar.
+   * right-aligned in the menu bar.
    * 
    * @param helpActionMap
    *          the helpActionMap to set.
@@ -1015,7 +1015,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Configures the MVC binder used to apply model-view bindings. There is
-   * hardly any reason for the developper to change the default binder but it
+   * hardly any reason for the developer to change the default binder but it
    * can be customized here.
    * 
    * @param mvcBinder
@@ -1026,7 +1026,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the application name i18n key. The way this nae is actully leveraged
+   * Sets the application name i18n key. The way this name is actually leveraged
    * depends on the UI channel but it typically generates (part of the) frame
    * title.
    * 
@@ -1086,10 +1086,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Configures an action to be executed just after the user has succesfully
+   * Configures an action to be executed just after the user has successfully
    * logged-in but before any UI initialization has begun. An example of such an
    * action would be constructing a map of dynamic user right based on some
-   * arbitrary datastore so that the UI construction can actually depend on
+   * arbitrary data store so that the UI construction can actually depend on
    * these extracted values.
    * 
    * @param loginAction
@@ -1117,7 +1117,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Configures the view factory used to create views from view descriptors.
    * Using a custom view factory is typically needed for extending Jspresso to
    * use custom view descriptors / UI components. Of course, there is a view
-   * factory contrete type per UI channel.
+   * factory concrete type per UI channel.
    * 
    * @param viewFactory
    *          the viewFactory to set.
@@ -1437,7 +1437,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the backend action to execute.
    * @param context
    *          the action execution context.
-   * @return true if the action was succesfully executed.
+   * @return true if the action was successfully executed.
    */
   protected boolean executeBackend(IAction action, Map<String, Object> context) {
     return getBackendController().execute(action, context);
@@ -1450,7 +1450,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the frontend action to execute.
    * @param context
    *          the action execution context.
-   * @return true if the action was succesfully executed.
+   * @return true if the action was successfully executed.
    */
   protected boolean executeFrontend(IAction action, Map<String, Object> context) {
     return action.execute(this, context);
@@ -1523,7 +1523,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Should a login dialog be displayed or should we process login implicitely
+   * Should a login dialog be displayed or should we process login implicitly
    * (either through SSO or using an anonymous subject in case of un-protected
    * application).
    * 
@@ -1818,7 +1818,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         // 1. deselection
         // 2. selection
         // The problem is that you never have from and to modules
-        // simultaneaously,
+        // simultaneously,
         // thus preventing complex algorithms in onEnter/onLeave actions.
         // } else {
         // displayModule(workspaceName, null);
@@ -2175,7 +2175,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Traces unexpecttd exceptions properly.
+   * Traces unexpected exceptions properly.
    * 
    * @param ex
    *          the exception to trace.

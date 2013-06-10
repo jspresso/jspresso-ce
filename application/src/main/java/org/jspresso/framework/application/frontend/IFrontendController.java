@@ -119,7 +119,7 @@ public interface IFrontendController<E, F, G> extends IController,
    * @param reuseCurrent
    *          set to true to reuse an existing modal dialog.
    * @param modal
-   *          wether the dialog is modal.
+   *          whether the dialog is modal.
    */
   void displayDialog(E mainView, List<G> actions, String title,
       E sourceComponent, Map<String, Object> context, Dimension dimension,
@@ -217,7 +217,7 @@ public interface IFrontendController<E, F, G> extends IController,
 
   /**
    * Gets the action that is executed when the controller is started, after the
-   * UI initialization is fnihed based on the logged-in user.
+   * UI initialization is finished based on the logged-in user.
    * 
    * @return the action which is executed when the controller is started.
    */
@@ -375,15 +375,15 @@ public interface IFrontendController<E, F, G> extends IController,
    *          session while not knowing yet the user locale.
    * @param clientTimeZone
    *          the timeZone the client runs in.
-   * @return true if the controller succesfully started.
+   * @return true if the controller successfully started.
    */
   boolean start(IBackendController backendController, Locale clientLocale,
       TimeZone clientTimeZone);
 
   /**
-   * Gets wether this controller has been started and not stopped.
+   * Gets whether this controller has been started and not stopped.
    * 
-   * @return wether this controller has been started and not stopped.
+   * @return whether this controller has been started and not stopped.
    */
   boolean isStarted();
 

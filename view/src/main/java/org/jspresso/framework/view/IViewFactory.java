@@ -79,7 +79,7 @@ public interface IViewFactory<E, F, G> {
    * Stores user table preferences.
    * 
    * @param tableId
-   *          the table id ised as preference key in the user store.
+   *          the table id used as preference key in the user store.
    * @param columnPrefs
    *          the array of {columnId,columnSize} for the table
    * @param actionHandler
@@ -105,7 +105,7 @@ public interface IViewFactory<E, F, G> {
   void edit(E component);
 
   /**
-   * Forces the refresh of a card view, potentially changing its vsible card.
+   * Forces the refresh of a card view, potentially changing its visible card.
    * 
    * @param cardView
    *          the card view to re-compute the visible card for.

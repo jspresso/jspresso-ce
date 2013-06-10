@@ -266,7 +266,7 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
-   * Finds the first card panel startibng from a root component.
+   * Finds the first card panel starting from a root component.
    * 
    * @param root
    *          the root component to start for searching.
@@ -592,7 +592,7 @@ public class DefaultSwingViewFactory extends
         currentX = 0;
         currentY++;
       }
-      // label positionning
+      // label positioning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
@@ -618,7 +618,7 @@ public class DefaultSwingViewFactory extends
           && propertyLabel.getText().length() > 0) {
         viewComponent.add(propertyLabel, constraints);
       }
-      // component positionning
+      // component positioning
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.gridx++;
@@ -641,7 +641,6 @@ public class DefaultSwingViewFactory extends
       }
 
       constraints.anchor = GridBagConstraints.NORTHWEST;
-      // constraints.weightx = 1.0;
       constraints.weightx = propertyView.getPeer().getPreferredSize().width;
       if (propertyView.getPeer() instanceof JCheckBox) {
         constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
@@ -1726,7 +1725,7 @@ public class DefaultSwingViewFactory extends
 
       /**
        * Override this method to fix a bug in the JVM which causes the table to
-       * start editing when a mnuemonic key or function key is pressed.
+       * start editing when a mnemonic key or function key is pressed.
        */
       @Override
       protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
@@ -2455,7 +2454,7 @@ public class DefaultSwingViewFactory extends
       configureComponent(columnViewDescriptor, actionHandler, locale,
           (JComponent) cellRenderer);
       if (cellRenderer instanceof EvenOddTableCellRenderer) {
-        // To preserve font that has been set and avoid Jtable changing it.
+        // To preserve font that has been set and avoid JTable changing it.
         ((EvenOddTableCellRenderer) cellRenderer)
             .setCustomFont(((JComponent) cellRenderer).getFont());
       }
@@ -2542,7 +2541,7 @@ public class DefaultSwingViewFactory extends
       headerRenderer.setText(decorateMandatoryPropertyLabel(headerRenderer
           .getText()));
     }
-    // To preserve font that has been set and avoid Jtable changing it.
+    // To preserve font that has been set and avoid JTable changing it.
     headerRenderer.setCustomFont(headerRenderer.getFont());
     if (tableModel instanceof AbstractTableSorter) {
       column.setHeaderRenderer(new AbstractTableSorter.SortableHeaderRenderer(
@@ -3077,10 +3076,10 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
-   * Decorates the created view with the apropriate border.
+   * Decorates the created view with the appropriate border.
    * 
    * @param view
-   *          the view to descorate.
+   *          the view to decorate.
    * @param locale
    *          the locale to use.
    */

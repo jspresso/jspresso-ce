@@ -168,15 +168,15 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   Collection<String> getUnclonedProperties();
 
   /**
-   * Gets wether the component described is an entity.
+   * Gets whether the component described is an entity.
    * 
    * @return true if the component described is an entity.
    */
   boolean isEntity();
 
   /**
-   * Gets wether this entity descriptor is a pure abstract definition. Only
-   * descendents of this descriptor can be instanciated.
+   * Gets whether this entity descriptor is a pure abstract definition. Only
+   * descendants of this descriptor can be instantiated.
    * 
    * @return true if this is a pure abstract entity descriptor.
    */

@@ -30,5 +30,5 @@ package org.jspresso.framework.application.backend.action;
  */
 @Deprecated
 public abstract class AbstractBackendAction extends BackendAction {
-  // DEPPRECATED
+  // DEPRECATED
 }

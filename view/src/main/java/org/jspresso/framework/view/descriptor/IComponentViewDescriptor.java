@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * This public interface is implemented by view descriptors which are used to
- * display a model in a formular way. A form view will typically display a
+ * display a model in a form way. A form view will typically display a
  * subset of a bean simple properties. For instance, this might be implemented
  * by a swing JPanel containing a set of arranged label/widget pairs.
  * 

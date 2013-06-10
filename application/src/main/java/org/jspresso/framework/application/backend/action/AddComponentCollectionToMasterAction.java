@@ -52,7 +52,7 @@ public class AddComponentCollectionToMasterAction extends
   public static final String ELEMENT_DESCRIPTOR = "ELEMENT_DESCRIPTOR";
 
   /**
-   * Gets the new entity to add. It is created using the informations contained
+   * Gets the new entity to add. It is created using the information contained
    * in the context.
    * 
    * @param context

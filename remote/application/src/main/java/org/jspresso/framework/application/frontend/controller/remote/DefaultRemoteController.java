@@ -111,7 +111,7 @@ import org.slf4j.LoggerFactory;
  * controller. It will implement a 3-tier architecture. The remote controller
  * lives on server-side and communicates with generic UI engines that are
  * deployed on client side. As of now, the remote frontend controller is used by
- * the <b>Flex</b> and <b>Qooxdoo</b> frontends. Communication happens through
+ * the <b>Flex</b> and <b>qooxdoo</b> frontends. Communication happens through
  * the use of generic UI commands that are produced/consumed on both sides of
  * the network.
  * 
@@ -640,7 +640,7 @@ public class DefaultRemoteController extends
   }
 
   /**
-   * Sets the workspace as selected and optionaly notifies the remote peer.
+   * Sets the workspace as selected and optionally notifies the remote peer.
    * 
    * @param workspaceName
    *          the selected workspace name.
@@ -894,7 +894,7 @@ public class DefaultRemoteController extends
   }
 
   /**
-   * Creaes an empty error message command.
+   * Creates an empty error message command.
    * 
    * @return a empty error message command.
    */

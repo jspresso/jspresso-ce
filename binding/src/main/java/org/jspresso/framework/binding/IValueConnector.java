@@ -208,7 +208,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   void setExceptionHandler(IExceptionHandler exceptionHandler);
 
   /**
-   * Sets the connector locally readable. Calling this method does not garantee
+   * Sets the connector locally readable. Calling this method does not guarantee
    * that the readability status of the connector will actually be changed. It
    * may have some other rules or accessibility interceptors that prevent this
    * to happen.
@@ -219,7 +219,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   void setLocallyReadable(boolean locallyReadable);
 
   /**
-   * Sets the connector locally writable. Calling this method does not garantee
+   * Sets the connector locally writable. Calling this method does not guarantee
    * that the writability status of the connector will actually be changed. It
    * may have some other rules or accessibility interceptors that prevent this
    * to happen.

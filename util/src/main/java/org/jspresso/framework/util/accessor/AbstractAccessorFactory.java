@@ -35,7 +35,7 @@ public abstract class AbstractAccessorFactory implements IAccessorFactory {
   private final Map<Method, AccessorInfo> accessorInfoCache = new ConcurrentHashMap<Method, AccessorInfo>();
 
   /**
-   * Constructs and caches Accessor infos. {@inheritDoc}
+   * Constructs and caches Accessor info. {@inheritDoc}
    */
   @Override
   public AccessorInfo getAccessorInfo(Method method) {

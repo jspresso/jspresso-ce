@@ -208,7 +208,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * Assigns the filter to this module instance. It is by default assigned by
    * the module startup action (see <code>InitModuleFilterAction</code>). So if
    * you ever want to change the default implementation of the filter, you have
-   * to write and install you own custom startup action or explicitely inject a
+   * to write and install you own custom startup action or explicitly inject a
    * specific instance.
    * 
    * @param filter
@@ -247,7 +247,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * This property allows to refine the default filer view to re-arange the
+   * This property allows to refine the default filer view to re-arrange the
    * filter fields. Custom filter view descriptors assigned here must not be
    * assigned a model descriptor since they will be at runtime. This is because
    * the filter component descriptor must be reworked - to adapt comparable
@@ -366,7 +366,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Configures the sub view used to navigate beetween the pages.
+   * Configures the sub view used to navigate between the pages.
    * 
    * @param paginationViewDescriptor
    *          the paginationViewDescriptor to set.

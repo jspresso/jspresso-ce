@@ -58,7 +58,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * or components (so that step views can configure themselves). You will
  * typically use a BasicComponentDescriptor without name so that it is
  * automatically excluded from code generation. Note that your actual model
- * object will be a map (and not Jpresso generated java bean) but Jspresso
+ * object will be a map (and not Jspresso generated java bean) but Jspresso
  * connectors are "smart" enough to detect the situation and work with the
  * hierarchy of maps as if it was a hierarchy of java beans.</li>
  * <li>optional <code>onEnterAction</code> and <code>onLeaveAction</code> :
@@ -155,7 +155,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures explicitely the height of the wizard dialog. It prevents the
+   * Configures explicitly the height of the wizard dialog. It prevents the
    * dialog from resizing dynamically depending on the displayed wizard step.
    * 
    * @param height
@@ -170,7 +170,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    * 
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
-   * @deprecated modeconnector is now created by the backend controller.
+   * @deprecated model connector is now created by the backend controller.
    */
   @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   @Deprecated
@@ -180,7 +180,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures explicitely the width of the wizard dialog. It prevents the
+   * Configures explicitly the width of the wizard dialog. It prevents the
    * dialog from resizing dynamically depending on the displayed wizard step.
    * 
    * @param width

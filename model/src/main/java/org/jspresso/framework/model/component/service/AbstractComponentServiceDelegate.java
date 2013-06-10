@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 
 /**
  * Base abstract implementation of a service delegate. It holds a thread local
- * in order to store the current target componnent this delegate is attached to.
+ * in order to store the current target component this delegate is attached to.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -245,7 +245,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                   .getValue());
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
-                  // the joined component is an inlined component so we must use
+                  // the joined component is an inline component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
                   abort = abort
@@ -475,7 +475,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   }
 
   /**
-   * Wether a query component must be considered empty, thus not generating any
+   * Whether a query component must be considered empty, thus not generating any
    * restriction.
    * 
    * @param queryComponent
@@ -516,7 +516,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
             // We are exploring a sub-QueryComponent to determine if it should
             // imply a restriction. Whenever the sub-QueryComponent only
             // contains properties coming from the initialization mapping,
-            // we should still consider it as non-emty. If we don't, we may miss
+            // we should still consider it as non-empty. If we don't, we may miss
             // restrictions that are imposed by the user using nested properties
             // or LOV.
 

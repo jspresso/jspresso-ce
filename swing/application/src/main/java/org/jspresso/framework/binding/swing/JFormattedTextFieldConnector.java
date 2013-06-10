@@ -83,7 +83,7 @@ public class JFormattedTextFieldConnector extends
    */
   @Override
   protected Object getConnecteeValue() {
-    // don't call getValue() due to bad focusevent delivery order of
+    // don't call getValue() due to bad focus event delivery order of
     // JFormattedTextField.
     // return getConnectedJComponent().getValue();
     try {

@@ -120,7 +120,7 @@ public class AccessorInfo {
   }
 
   /**
-   * Returns wether the underlying accessor is a modifier (setter, adder or
+   * Returns whether the underlying accessor is a modifier (setter, adder or
    * remover).
    * 
    * @return true if the underlying accessor is a modifier.

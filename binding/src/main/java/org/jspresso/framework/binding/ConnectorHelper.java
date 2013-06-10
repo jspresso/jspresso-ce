@@ -59,7 +59,7 @@ public final class ConnectorHelper {
   }
 
   /**
-   * This methods gets the array of indices of an onbject collection held as
+   * This methods gets the array of indices of an object collection held as
    * values in a collection connector. if the collection connector does not
    * contain one of the values, the value is simply ignored.
    * 

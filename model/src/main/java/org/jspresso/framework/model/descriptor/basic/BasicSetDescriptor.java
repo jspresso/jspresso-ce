@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * This descriptor is equivalent to a <code>BasicCollectionDescriptor</code>
  * with its <code>collectionInterface</code> property set to
- * <code>java.util.Set</code>. Using this descriptor prevents mesing up with
+ * <code>java.util.Set</code>. Using this descriptor prevents messing up with
  * technical implementation details.
  * 
  * @version $LastChangedRevision$

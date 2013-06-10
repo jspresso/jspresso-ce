@@ -24,8 +24,8 @@ import java.io.InputStream;
 import java.util.Map;
 
 /**
- * A filtered input stream that replaces placehodres on the fly based on a
- * substitition map.
+ * A filtered input stream that replaces placeholders on the fly based on a
+ * substitution map.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

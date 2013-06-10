@@ -129,7 +129,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   }
 
   /**
-   * Make the Rpc java lib more permissive, i.e. do not imposa any signature
+   * Make the Rpc java lib more permissive, i.e. do not impose any signature
    * constraint on public method.
    * <p>
    * {@inheritDoc}

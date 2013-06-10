@@ -150,7 +150,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
 
   /**
    * Configures the offset to use when moving the selected elements inside the
-   * list. A cofigured offset of <b>1</b> will increase (move down) by one the
+   * list. A configured offset of <b>1</b> will increase (move down) by one the
    * selected elements indices whereas an offset of <b>-1</b> will decrease
    * (move up) the selected elements indices.
    * 

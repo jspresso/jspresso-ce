@@ -19,7 +19,7 @@
 package org.jspresso.framework.view.swing;
 
 /**
- * Intergace implemented by dynamic style capable renderers.
+ * Interface implemented by dynamic style capable renderers.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

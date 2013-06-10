@@ -24,7 +24,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * This action displays informations about a binary property content. The
+ * This action displays information about a binary property content. The
  * displayed information mainly consists in the content size. The action must be
  * installed on a property view and supports textual and binary properties.
  * 
@@ -79,11 +79,11 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Retrieve the binary content to display the infos on.
+   * Retrieve the binary content to display the info on.
    * 
    * @param context
    *          the action context.
-   * @return The binary content to display the infos on or null.
+   * @return The binary content to display the info on or null.
    */
   protected byte[] getBinaryContent(Map<String, Object> context) {
     Object connectorValue = getViewConnector(context).getConnectorValue();

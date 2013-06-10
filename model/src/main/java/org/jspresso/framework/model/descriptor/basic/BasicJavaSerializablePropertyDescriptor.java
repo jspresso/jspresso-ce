@@ -24,7 +24,7 @@ import org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescript
 
 /**
  * Describes a property used to store any java <code>Serializable</code> object.
- * The property value is serialized/de-serialized to/from the datastore. The
+ * The property value is serialized/de-serialized to/from the data store. The
  * operation is completely transparent to the developer, i.e. the developer
  * never plays with the serialized form.
  * 

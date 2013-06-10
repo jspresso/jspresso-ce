@@ -55,18 +55,18 @@ public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
   ESelectionMode getSelectionMode();
 
   /**
-   * Gets the decriptor that describes the view used to display and control
+   * Gets the descriptor that describes the view used to display and control
    * pagination.
    * 
-   * @return the decriptor that describes the view used to display and control
+   * @return the descriptor that describes the view used to display and control
    *         pagination.
    */
   IViewDescriptor getPaginationViewDescriptor();
 
   /**
-   * Wether this collection view should autoselect 1st row.
+   * Whether this collection view should auto select 1st row.
    * 
-   * @return true if this collection view should autoselect 1st row.
+   * @return true if this collection view should auto select 1st row.
    */
   boolean isAutoSelectFirstRow();
 

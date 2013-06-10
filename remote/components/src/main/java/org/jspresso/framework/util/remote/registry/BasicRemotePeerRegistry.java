@@ -152,7 +152,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   @Override
   public void unregister(String guid) {
     IRemotePeer remotePeer = backingStore.remove(guid);
-    LOG.trace("Unregistering {} with GUID {}.", remotePeer, guid);
+    LOG.trace("Un-registering {} with GUID {}.", remotePeer, guid);
     if (remotePeer instanceof IPermIdSource) {
       String permId = ((IPermIdSource) remotePeer).getPermId();
       if (permId != null) {

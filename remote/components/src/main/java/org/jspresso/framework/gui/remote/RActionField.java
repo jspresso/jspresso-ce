@@ -19,7 +19,7 @@
 package org.jspresso.framework.gui.remote;
 
 /**
- * A remote actionnable field component.
+ * A remote actionable field component.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -19,7 +19,7 @@
 package org.jspresso.framework.gui.remote;
 
 /**
- * A splitted container.
+ * A split container.
  * 
  * @version $LastChangedRevision: 1486 $
  * @author Vincent Vandenschrick

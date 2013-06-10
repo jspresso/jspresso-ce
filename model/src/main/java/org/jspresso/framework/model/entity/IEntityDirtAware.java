@@ -21,7 +21,7 @@ package org.jspresso.framework.model.entity;
 import java.util.Map;
 
 /**
- * This interface is implemented by classes awre of entities states dirtyness.
+ * This interface is implemented by classes aware of entities states dirtiness.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

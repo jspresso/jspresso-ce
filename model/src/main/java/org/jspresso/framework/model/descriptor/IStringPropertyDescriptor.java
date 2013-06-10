@@ -34,9 +34,9 @@ public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
   Integer getMaxLength();
 
   /**
-   * Gets the regular expression pattern this string preoperty must conform to.
+   * Gets the regular expression pattern this string property must conform to.
    * 
-   * @return the regular expression pattern this string preoperty must conform
+   * @return the regular expression pattern this string property must conform
    *         to.
    */
   String getRegexpPattern();
@@ -46,7 +46,7 @@ public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
    * conform to. This property might be used to inform the end-user of a
    * erroneous value.
    * 
-   * @return the regular expression pattern sample this string preoperty must
+   * @return the regular expression pattern sample this string property must
    *         conform to.
    */
   String getRegexpPatternSample();

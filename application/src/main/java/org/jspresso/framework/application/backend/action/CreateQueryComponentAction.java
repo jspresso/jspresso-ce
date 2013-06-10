@@ -57,7 +57,7 @@ public class CreateQueryComponentAction extends BackendAction {
   public static final String               COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
 
   /**
-   * The master component key from wich the LOV has been trigerred.
+   * The master component key from which the LOV has been triggered.
    */
   public static final String               MASTER_COMPONENT         = "MASTER_COMPONENT";
 
@@ -141,7 +141,7 @@ public class CreateQueryComponentAction extends BackendAction {
    *          the query component.
    * @param erqDescriptor
    *          the reference property descriptor from which the initialization
-   *          mappng is taken out.
+   *          mapping is taken out.
    * @param context
    *          the action context.
    */

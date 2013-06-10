@@ -43,7 +43,7 @@ public interface IEnumerationPropertyDescriptor extends
   String getEnumerationName();
 
   /**
-   * Gets the admisible values of the enumeration.
+   * Gets the admissible values of the enumeration.
    * 
    * @return the list of values contained in the underlying enumeration.
    */
@@ -66,7 +66,7 @@ public interface IEnumerationPropertyDescriptor extends
   Integer getMaxLength();
 
   /**
-   * Gets wether the enumeration values should be presented translated (using
+   * Gets whether the enumeration values should be presented translated (using
    * the i18n keys enumerationName.value) or not.
    * 
    * @return true if the enumeration values should be presented translated.

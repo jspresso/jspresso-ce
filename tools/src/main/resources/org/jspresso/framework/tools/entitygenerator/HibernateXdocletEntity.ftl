@@ -390,9 +390,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           inverse = "true"
     </#if>
 <#--
-  The following replaces the previous block wich makes hibernate fail... Ordering is now handled in the entity itself.
+  The following replaces the previous block which makes hibernate fail... Ordering is now handled in the entity itself.
   But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set but if
-  and only if the referenced collection conains entites.
+  and only if the referenced collection contains entities.
   Well, the following is bad. It kills performance on joined criteria query and it get us into the Hibernate bug
   HHH-7116.
     <#if (elementIsEntity && !manyToMany && !(hibernateCollectionType="list"))>

@@ -30,7 +30,7 @@ import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 
 /**
- * A composite connector holding a reference on a collection connector to easyly
+ * A composite connector holding a reference on a collection connector to easily
  * play a role in a master/detail relationship.
  * 
  * @version $LastChangedRevision$

@@ -25,7 +25,7 @@ import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 /**
  * This type of view allows to make an action available as a view and thus
  * participate in the UI composition as a visual component. An action view can
- * then be embedded in surrounding a composite view. It litterally takes the
+ * then be embedded in surrounding a composite view. It literally takes the
  * action away from the toolbar/context menu it is located when registered in an
  * action map and makes it a primary citizen of the UI.
  * 

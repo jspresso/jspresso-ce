@@ -56,10 +56,10 @@ public interface ICollectionPropertyDescriptor<E> extends
   boolean isManyToMany();
 
   /**
-   * Triggers all adder postprocessors.
+   * Triggers all adder post processors.
    * 
    * @param component
-   *          the component targetted by the adder.
+   *          the component targeted by the adder.
    * @param collection
    *          the collection value.
    * @param addedValue
@@ -69,10 +69,10 @@ public interface ICollectionPropertyDescriptor<E> extends
       Object addedValue);
 
   /**
-   * Triggers all remer postprocessors.
+   * Triggers all remover post processors.
    * 
    * @param component
-   *          the component targetted by the remer.
+   *          the component targeted by the remover.
    * @param collection
    *          the collection value.
    * @param removedValue
@@ -82,10 +82,10 @@ public interface ICollectionPropertyDescriptor<E> extends
       Object removedValue);
 
   /**
-   * Triggers all adder preprocessors.
+   * Triggers all adder pre processors.
    * 
    * @param component
-   *          the component targetted by the adder.
+   *          the component targeted by the adder.
    * @param collection
    *          the collection value.
    * @param addedValue
@@ -95,10 +95,10 @@ public interface ICollectionPropertyDescriptor<E> extends
       Object addedValue);
 
   /**
-   * Triggers all remer preprocessors.
+   * Triggers all remover pre processors.
    * 
    * @param component
-   *          the component targetted by the remer.
+   *          the component targeted by the remover.
    * @param collection
    *          the collection value.
    * @param removedValue

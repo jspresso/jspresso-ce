@@ -61,7 +61,7 @@ public class BasicLovResultViewDescriptorFactory extends
     resultViewDescriptor.setRenderedProperties(entityRefDescriptor
         .getRenderedProperties());
     if (getModel(lovContext) instanceof IQueryComponent) {
-      // We are on a filter view that suppports multi selection
+      // We are on a filter view that supports multi selection
       resultViewDescriptor
           .setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
     } else {

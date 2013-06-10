@@ -4,7 +4,7 @@
 package org.jspresso.framework.model.component;
 
 /**
- * Implemented by objects which have a insterest in componentFactory.
+ * Implemented by objects which have a interest in componentFactory.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

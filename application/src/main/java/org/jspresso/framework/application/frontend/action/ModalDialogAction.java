@@ -80,7 +80,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   public static final String DIALOG_FOCUSED_COMPONENT = "DIALOG_FOCUSED_COMPONENT";
 
   /**
-   * Shows a modal dialog containig a main view and a button panel with the list
+   * Shows a modal dialog containing a main view and a button panel with the list
    * of registered actions.
    * <p>
    * {@inheritDoc}
@@ -123,7 +123,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Gets the sialog size.
+   * Gets the dialog size.
    * 
    * @param context
    *          the action context.

@@ -99,7 +99,7 @@ public final class FontHelper {
   }
 
   /**
-   * Tests wether the parameter string is a font specification.
+   * Tests whether the parameter string is a font specification.
    * 
    * @param fontString
    *          the string to test.

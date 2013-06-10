@@ -107,7 +107,7 @@ package org.jspresso.framework.util.html {
       var buf:String = source;
       var finished:Boolean = false;
       for(var entity:String in HTML_ENTITIES){
-        if(!finished) {     // if it finds other occurences of the & symbol
+        if(!finished) {     // if it finds other occurrences of the & symbol
           //noinspection JSUnfilteredForInLoop
           buf = buf.replace(new RegExp(entity, "g"), HTML_ENTITIES[entity]);
           finished = finished || buf.indexOf('&') < 0; 

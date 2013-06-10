@@ -138,7 +138,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         preselectedItem = viewConnector.getConnectorValue();
       }
       // The following relies on a workaround used to determine the bean
-      // model whenever the lov component is used inside a jtable.
+      // model whenever the lov component is used inside a JTable.
       IValueConnector parentModelConnector = viewConnector.getParentConnector()
           .getModelConnector();
       if (parentModelConnector instanceof IModelProvider) {
@@ -189,7 +189,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           // action parameter. We want to preserve it in the UI.
           Object connectorValue = viewConnector.getConnectorValue();
           if (connectorValue instanceof IQueryComponent) {
-            // To cleanup the preceeding values (e.g. ID)
+            // To cleanup the preceding values (e.g. ID)
             // see bug #986
             connectorValue = ((IQueryComponent) connectorValue).clone();
             ((IQueryComponent) connectorValue).clear();
@@ -435,8 +435,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures explicitely the type of entities the LOV relies on. This is
-   * automatically determined when installed on areference field but must be set
+   * Configures explicitly the type of entities the LOV relies on. This is
+   * automatically determined when installed on a reference field but must be set
    * in any other case.
    * 
    * @param entityDescriptor
@@ -480,8 +480,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the action to be executed whenever the user queries the
-   * persistent store, either explicitely when using the action installed in the
-   * LOV dialog or implicitely through the auto query feature.
+   * persistent store, either explicitly when using the action installed in the
+   * LOV dialog or implicitly through the auto query feature.
    * 
    * @param findAction
    *          the findAction to set.
@@ -598,7 +598,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   private ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
     if (getModel(lovContext) instanceof IQueryComponent) {
-      // We are on a filter view that suppports multi selection
+      // We are on a filter view that supports multi selection
       return ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION;
     }
     return ESelectionMode.SINGLE_SELECTION;

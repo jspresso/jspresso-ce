@@ -47,7 +47,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * <p>
  * This base class allows for visual (name, icon, toolTip) as well as
  * accessibility (accelerator, mnemonic shortcuts) and actionability (using
- * gates) parameterization.
+ * gates) parametrization.
  * <p>
  * A frontend action is to be executed by the frontend controller in the context
  * of the UI. It can thus access the view structure, interact visually with the
@@ -284,7 +284,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * Assigns a collection of gates to determine action <i>actionability</i>. An
    * action will be considered actionable (enabled) if and only if all gates are
-   * open. This mecanism is mainly used for dynamic UI authorization based on
+   * open. This mechanism is mainly used for dynamic UI authorization based on
    * model state, e.g. a validated invoice should not be validated twice.
    * <p>
    * Action assigned gates will be cloned for each concrete action instance
@@ -327,7 +327,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Declares the action as being abled to run on a collection containing more
+   * Declares the action as being able to run on a collection containing more
    * than 1 element. A multiSelectionEnabled = false action will be disabled
    * when the selection contains no or more than one element.
    * 
@@ -379,7 +379,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Configures the mnemnonic key used for this action. Support of this feature
+   * Configures the mnemonic key used for this action. Support of this feature
    * depends on the UI execution platform. Mnemonics are typically used in menu
    * and menu items.
    * 

@@ -638,7 +638,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   }
 
   /**
-   * Gets wether to enforce select distinct when querying.
+   * Gets whether to enforce select distinct when querying.
    * 
    * @return the distinctEnforced.
    */

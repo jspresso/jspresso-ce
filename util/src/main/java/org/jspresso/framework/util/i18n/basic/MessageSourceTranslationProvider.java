@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 /**
- * A translation provider wich relies on a spring message source. It will
- * typically be configured with a ressource bundle message source.
+ * A translation provider which relies on a spring message source. It will
+ * typically be configured with a resource bundle message source.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

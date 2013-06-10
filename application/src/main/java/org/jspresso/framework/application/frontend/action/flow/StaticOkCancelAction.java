@@ -9,7 +9,7 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * This action pops-up an Ok - Cancel confirmation option. The message, instead
- * of being extracted out of the context, is parameterized statically into the
+ * of being extracted out of the context, is parametrized statically into the
  * action through its internationalization key.
  * 
  * @version $LastChangedRevision: 2097 $

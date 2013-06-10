@@ -135,7 +135,7 @@ public class ControllerAwareEntityInvocationHandler extends
     // getBackendController().cleanRelationshipsOnDeletion(child, false);
     // } catch (Exception ex) {
     // throw new ComponentException(ex,
-    // "An error occured when detaching the entity [" + child +
+    // "An error occurred when detaching the entity [" + child +
     // "] from its parent ["
     // + parent + "]. The updated property is " + propertyDescriptor.getName());
     // }

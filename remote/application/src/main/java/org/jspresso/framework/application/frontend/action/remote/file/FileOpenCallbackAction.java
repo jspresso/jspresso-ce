@@ -50,7 +50,7 @@ public class FileOpenCallbackAction extends AbstractRemoteAction {
   }
 
   /**
-   * Trigers the file open callback.
+   * Triggers the file open callback.
    * <p>
    * {@inheritDoc}
    */

@@ -9,7 +9,7 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * This action pops-up a binary question. The message, instead of being
- * extracted out of the context, is parameterized statically into the action
+ * extracted out of the context, is parametrized statically into the action
  * through its internationalization key.
  * 
  * @version $LastChangedRevision: 2097 $

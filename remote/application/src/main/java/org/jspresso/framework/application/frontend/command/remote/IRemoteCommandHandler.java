@@ -29,7 +29,7 @@ import java.util.List;
 public interface IRemoteCommandHandler {
 
   /**
-   * Recieves and handle a list of commands.
+   * Receives and handle a list of commands.
    * 
    * @param commands
    *          the command list.

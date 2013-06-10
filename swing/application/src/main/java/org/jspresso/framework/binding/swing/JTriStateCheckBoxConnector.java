@@ -22,7 +22,7 @@ import chrriis.dj.swingsuite.JTriStateCheckBox;
 import chrriis.dj.swingsuite.JTriStateCheckBox.CheckState;
 
 /**
- * JTriStateCheckox connector.
+ * JTriStateCheckbox connector.
  * 
  * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick

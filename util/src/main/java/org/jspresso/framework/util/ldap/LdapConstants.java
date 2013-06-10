@@ -47,9 +47,9 @@ public final class LdapConstants {
   public static final String ORGANISATIONAL_UNIT_OBJECTCLASS = "organizationalUnit";
 
   /**
-   * <code>PASSWORD_ATTIBUTE</code>.
+   * <code>PASSWORD_ATTRIBUTE</code>.
    */
-  public static final String PASSWORD_ATTIBUTE               = "userPassword";
+  public static final String PASSWORD_ATTRIBUTE = "userPassword";
 
   /**
    * <code>SERIAL_NUMBER_ATTRIBUTE</code>.

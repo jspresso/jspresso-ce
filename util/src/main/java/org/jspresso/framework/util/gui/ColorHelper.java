@@ -44,7 +44,7 @@ public final class ColorHelper {
       rgba[3] = Integer.parseInt(hexString.substring(2, 4), 16);
       offset = 2;
     } else {
-      // to support unexisting alpha
+      // to support un-existing alpha
       rgba[3] = Integer.parseInt("FF", 16);
     }
     rgba[0] = Integer.parseInt(hexString.substring(2 + offset, 4 + offset), 16);
@@ -85,7 +85,7 @@ public final class ColorHelper {
   }
 
   /**
-   * Tests wether the parameter string is a color specification.
+   * Tests whether the parameter string is a color specification.
    * 
    * @param colorString
    *          the string to test.

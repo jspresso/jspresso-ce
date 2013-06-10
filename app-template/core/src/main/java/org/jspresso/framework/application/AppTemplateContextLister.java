@@ -36,7 +36,7 @@ public final class AppTemplateContextLister {
   private static final Logger LOG = LoggerFactory.getLogger(AppTemplateContextLister.class);
 
   private AppTemplateContextLister() {
-    // UtilityClassContructor
+    // UtilityClassConstructor
   }
 
   /**

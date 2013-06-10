@@ -29,7 +29,7 @@ public interface IModelChangeListener {
 
   /**
    * This method is triggered when the listener detects that a
-   * <code>IModelProvider</code> model changed. Idealy this method will only
+   * <code>IModelProvider</code> model changed. Ideally this method will only
    * fire when <code>oldValue</code> differs from <code>newValue</code>.
    * 
    * @param evt

@@ -33,7 +33,7 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
- * An extended database login module to comlpement the user principal with
+ * An extended database login module to complement the user principal with
  * custom values.
  * 
  * @version $LastChangedRevision$

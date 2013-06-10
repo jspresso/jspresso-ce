@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor;
 
 /**
  * This public interface is implemented by a composite view descriptor which
- * organizes 2 view descriptors in a splitted manner. The described view can
+ * organizes 2 view descriptors in a split manner. The described view can
  * typically be implemented using a swing JSplitPane.
  * 
  * @version $LastChangedRevision$

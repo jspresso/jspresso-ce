@@ -19,7 +19,7 @@
 package org.jspresso.framework.application.frontend.command.remote;
 
 /**
- * This command trigers the actual login to the application.
+ * This command triggers the actual login to the application.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

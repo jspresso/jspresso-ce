@@ -26,7 +26,7 @@ import org.jspresso.framework.application.model.Module;
 
 /**
  * This action recomputes the dirty state of the current selected module. It is
- * typically trigerred when the user navigates (leaves) out of the module to
+ * typically triggered when the user navigates (leaves) out of the module to
  * compute a visual notification of a pending change.
  * 
  * @version $LastChangedRevision$

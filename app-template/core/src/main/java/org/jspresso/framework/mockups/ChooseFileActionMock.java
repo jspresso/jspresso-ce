@@ -24,7 +24,7 @@ import java.util.Map;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * A mockup for SaveFileAction.
+ * A mock for SaveFileAction.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

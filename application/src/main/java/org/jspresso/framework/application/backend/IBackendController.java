@@ -46,7 +46,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 /**
  * This interface establishes the contract of the backend controllers. Backend
  * controllers are controllers which act on the application domain model (as
- * oposed to frontend controllers which act on the application view).
+ * opposed to frontend controllers which act on the application view).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -162,9 +162,9 @@ public interface IBackendController extends IController,
       IModelDescriptor modelDescriptor);
 
   /**
-   * Gets the appropriate accessor factory based on the targetted object.
+   * Gets the appropriate accessor factory based on the targeted object.
    * 
-   * @return the approriate accessor factory.
+   * @return the appropriate accessor factory.
    */
   IAccessorFactory getAccessorFactory();
 
@@ -246,7 +246,7 @@ public interface IBackendController extends IController,
   void installWorkspaces(Map<String, Workspace> workspaces);
 
   /**
-   * Gets wether any of the entities or if any of the entities they can reach
+   * Gets whether any of the entities or if any of the entities they can reach
    * are dirty (has changes that need to be updated to the persistent store).
    * Computed properties are also scanned for modification.
    * 
@@ -257,7 +257,7 @@ public interface IBackendController extends IController,
   boolean isAnyDirtyInDepth(Collection<?> elements);
 
   /**
-   * Gets wether the entity or if one of the entities it can reach is dirty (has
+   * Gets whether the entity or if one of the entities it can reach is dirty (has
    * changes that need to be updated to the persistent store). Computed
    * properties are also scanned for modification.
    * 
@@ -268,7 +268,7 @@ public interface IBackendController extends IController,
   boolean isDirtyInDepth(IEntity entity);
 
   /**
-   * Gets wether the entity is dirty (has changes that need to be updated to the
+   * Gets whether the entity is dirty (has changes that need to be updated to the
    * persistent store). Computed properties are also scanned for modification.
    * 
    * @param entity
@@ -278,7 +278,7 @@ public interface IBackendController extends IController,
   boolean isDirty(IEntity entity);
 
   /**
-   * Gets wether any of the entities or if any of the entities they can reach
+   * Gets whether any of the entities or if any of the entities they can reach
    * are dirty (has changes that need to be updated to the persistent store).
    * 
    * @param elements
@@ -290,7 +290,7 @@ public interface IBackendController extends IController,
   boolean isAnyDirtyInDepth(Collection<?> elements, boolean includeComputed);
 
   /**
-   * Gets wether the entity or if one of the entities it can reach is dirty (has
+   * Gets whether the entity or if one of the entities it can reach is dirty (has
    * changes that need to be updated to the persistent store).
    * 
    * @param entity
@@ -302,7 +302,7 @@ public interface IBackendController extends IController,
   boolean isDirtyInDepth(IEntity entity, boolean includeComputed);
 
   /**
-   * Gets wether the entity is dirty (has changes that need to be updated to the
+   * Gets whether the entity is dirty (has changes that need to be updated to the
    * persistent store).
    * 
    * @param entity
@@ -314,7 +314,7 @@ public interface IBackendController extends IController,
   boolean isDirty(IEntity entity, boolean includeComputed);
 
   /**
-   * Gets wether the entity property is dirty (has changes that need to be
+   * Gets whether the entity property is dirty (has changes that need to be
    * updated to the persistent store).
    * 
    * @param entity
@@ -326,7 +326,7 @@ public interface IBackendController extends IController,
   boolean isDirty(IEntity entity, String propertyName);
 
   /**
-   * Wether the object is fully initialized.
+   * Whether the object is fully initialized.
    * 
    * @param objectOrProxy
    *          the object to test.
@@ -335,7 +335,7 @@ public interface IBackendController extends IController,
   boolean isInitialized(Object objectOrProxy);
 
   /**
-   * Gets wether a transactional unit of work has been started in the
+   * Gets whether a transactional unit of work has been started in the
    * application session.
    * 
    * @return true if a transactional unit of work has been started in the
@@ -367,7 +367,7 @@ public interface IBackendController extends IController,
    * @param entity
    *          the entity to merge.
    * @param mergeMode
-   *          the merge mmode to be used.
+   *          the merge mode to be used.
    * @return the entity registered in the application session.
    */
   <E extends IEntity> E merge(E entity, EMergeMode mergeMode);
@@ -385,7 +385,7 @@ public interface IBackendController extends IController,
    * @param entities
    *          the list of entities to merge.
    * @param mergeMode
-   *          the merge mmode to be used.
+   *          the merge mode to be used.
    * @return the merged entity list.
    */
   <E extends IEntity> List<E> merge(List<E> entities, EMergeMode mergeMode);

@@ -45,7 +45,7 @@ public interface IQueryViewDescriptorFactory {
       IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor);
 
   /**
-   * Performs necessary adapations to an existing view descriptor in order to
+   * Performs necessary adaptations to an existing view descriptor in order to
    * make it support query component model.
    * 
    * @param viewDescriptor

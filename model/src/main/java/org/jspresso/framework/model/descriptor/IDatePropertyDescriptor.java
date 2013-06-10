@@ -36,9 +36,9 @@ public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor,
   EDateType getType();
 
   /**
-   * Wether the date display should vary depending on the client timezone.
+   * Whether the date display should vary depending on the client timezone.
    * 
-   * @return wether the date display should vary depending on the client
+   * @return whether the date display should vary depending on the client
    *         timezone.
    */
   boolean isTimeZoneAware();

@@ -28,9 +28,9 @@ import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * This interface establishes the general contract of an object able to axacute
- * actions (controllers for instance). No assumption is made on wether this
- * action is to be executed (a)synchroniously, transactionnally, ...
+ * This interface establishes the general contract of an object able to execute
+ * actions (controllers for instance). No assumption is made on whether this
+ * action is to be executed (a)synchronously, transactionally, ...
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -39,7 +39,7 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
     ITranslationProvider {
 
   /**
-   * Executes an action. Implementors should delegate the execution to the
+   * Executes an action. Implementers should delegate the execution to the
    * action itself but are free to set the context of the execution (action
    * context, synchronous or not, transactionality, ...).
    * 

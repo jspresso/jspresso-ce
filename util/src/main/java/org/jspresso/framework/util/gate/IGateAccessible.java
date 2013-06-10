@@ -43,7 +43,7 @@ public interface IGateAccessible {
   Collection<IGate> getWritabilityGates();
 
   /**
-   * Wether read-only is forced.
+   * Whether read-only is forced.
    * 
    * @return true if read-only.
    */

@@ -104,7 +104,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * lifecycle. For instance, when the owning entity is deleted, the referenced
    * entities in composition properties are also deleted.
    * <p>
-   * Whenever this property is not explicitely set by the developer, Jspresso
+   * Whenever this property is not explicitly set by the developer, Jspresso
    * uses sensible defaults :
    * <ul>
    * <li><i>collection properties</i> are compositions <b>unless</b> they are
@@ -123,7 +123,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   }
 
   /**
-   * Gives the developer the oportunity to customize the geneated foreign key
+   * Gives the developer the opportunity to customize the generated foreign key
    * (if any) name.
    * 
    * @param fkName
@@ -135,10 +135,10 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   /**
    * Allows to make a relationship bi-directional. By default, when a
-   * relationdhip end is defined, it is only navigable from the owning component
+   * relationship end is defined, it is only navigable from the owning component
    * to the described end (default value is <code>null</code>). Assigning a
    * reverse relationship ends instructs the framework that the relationship is
-   * bi-derectional. This implies several complementary features :
+   * bi-directional. This implies several complementary features :
    * <ul>
    * <li>When one of the relationship ends is updated, the other side is
    * automatically maintained by Jspresso, i.e. you never have to worry about
@@ -148,13 +148,13 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * <code>Invoice.addToInvoiceLines(InvoiceLine)</code> are strictly
    * equivalent.</li>
    * <li>You can qualify a &quot;N-N&quot; relationship (thus creating an
-   * association table in the datastore behind the scene) by assigning 2
-   * collection property decriptors as reverse relation ends of each other.</li>
+   * association table in the data store behind the scene) by assigning 2
+   * collection property descriptors as reverse relation ends of each other.</li>
    * <li>You can qualify a &quot;1-1&quot; relationship (thus enforcing some
-   * unicity constraint in the datastore behind the scene) by assigning 2
-   * reference property decriptors as reverse relation ends of each other.</li>
+   * unicity constraint in the data store behind the scene) by assigning 2
+   * reference property descriptors as reverse relation ends of each other.</li>
    * </ul>
-   * Setting the reverse relation end operation is commmutative so that it
+   * Setting the reverse relation end operation is commutative so that it
    * automatically assigns bot ends as reverse, i.e. you only have to set the
    * property on one side of the relationship.
    * 

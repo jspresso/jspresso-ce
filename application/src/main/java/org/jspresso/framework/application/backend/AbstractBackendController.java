@@ -101,7 +101,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * <li>keeping a reference to the application session</li>
  * <li>keeping a reference to the application workspaces and their state</li>
  * <li>keeping a reference to the application clipboard</li>
- * <li>keeping a reference to the entity registry that garantees the in-memory
+ * <li>keeping a reference to the entity registry that guarantees the in-memory
  * entity reference unicity in the user session</li>
  * <li>keeping a reference to the entity dirt recorder that keeps track of
  * entity changes to afterwards optimize the ORM operations</li>
@@ -173,7 +173,7 @@ public abstract class AbstractBackendController extends AbstractController
     entitiesExcludedFromSessionSanityChecks = new ReferenceMap(
         AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
-    asyncActionsThreadGroup = new ThreadGroup("Asynchrounous Actions");
+    asyncActionsThreadGroup = new ThreadGroup("Asynchronous Actions");
     asyncExecutors = new LinkedHashSet<AsyncActionExecutor>();
     setAsyncExecutorsMaxCount(10);
   }
@@ -881,7 +881,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Configures the entity clone factory used to carbon-copy entities. An entity
    * carbon-copy is an technical copy of an entity, including id and version but
-   * excluding relationhip properties. This mecanism is used by the controller
+   * excluding relationship properties. This mechanism is used by the controller
    * when duplicating entities into the UOW to allow for memory state aware
    * transactions. This property should only be used by the DI container. It
    * will rarely be changed from built-in defaults unless you need to specify a
@@ -994,7 +994,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean stop() {
-    // The application session can now be shared accross async slave
+    // The application session can now be shared across async slave
     // controllers.
     // if (applicationSession != null) {
     // applicationSession.clear();
@@ -1104,7 +1104,7 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Gets wether the entity property is dirty (has changes that need to be
+   * Gets whether the entity property is dirty (has changes that need to be
    * updated to the persistent store).
    * 
    * @param entity
@@ -1338,7 +1338,7 @@ public abstract class AbstractBackendController extends AbstractController
    * copy.
    * 
    * @param <E>
-   *          the actusal entity type.
+   *          the actual entity type.
    * @param entity
    *          the source entity.
    * @return the cloned entity.
@@ -2244,7 +2244,7 @@ public abstract class AbstractBackendController extends AbstractController
       if (targetEntity != null
           && !objectEquals(targetEntity, sessionTargetEntity)) {
         // We are working on an entity that has not been registered in the
-        // session. This is not legal unless this entity has explitely been
+        // session. This is not legal unless this entity has explicitly been
         // excluded from sanity checks.
         IEntity excludedEntity = getExcludedFromSanityChecks(targetEntity);
         if (excludedEntity == null

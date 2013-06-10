@@ -225,7 +225,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
 
   /**
    * Based on the underlying property value, determines if the gate should open
-   * or close. The return value might be later changed by the openOntrue value.
+   * or close. The return value might be later changed by the openOnTrue value.
    * 
    * @param propertyValue
    *          the model property value.

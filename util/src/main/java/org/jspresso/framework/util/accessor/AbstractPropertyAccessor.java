@@ -128,7 +128,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
       if (finalTarget instanceof Map<?, ?>) {
         if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
             getLastNestedProperty())) {
-          // We are explicitely on a bean property. Do not use
+          // We are explicitly on a bean property. Do not use
           // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
           // target
           // is a Map and access its properties as such.
@@ -169,7 +169,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
         if (finalTarget instanceof Map<?, ?>) {
           if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
               getLastNestedProperty())) {
-            // We are explicitely on a bean property. Do not use
+            // We are explicitly on a bean property. Do not use
             // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
             // target is a Map and access its properties as such.
             PROPERTY_UTILS_BEAN.setSimpleProperty(finalTarget,
@@ -184,7 +184,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
         }
       }
     } catch (InvocationTargetException ex) {
-      // unnest invocation target exceptions so that the original
+      // un-nest invocation target exceptions so that the original
       // one can be correctly handled by the exception handlers.
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
@@ -228,7 +228,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
       }
       if (target instanceof Map<?, ?>) {
         if (PropertyHelper.getPropertyNames(target.getClass()).contains(prop)) {
-          // We are explicitely on a bean property. Do not use
+          // We are explicitly on a bean property. Do not use
           // PROPERTY_UTILS_BEAN.getProperty since it will detect that the
           // target is
           // a

@@ -46,7 +46,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * component is labelled with the property name it displays and labels can be
  * configured to be displayed aside or above their peer field. Property fields
  * can be configured to span multiple form columns. Component view offer various
- * straightforward customizations, but the most advanced and prowerful one is
+ * straightforward customizations, but the most advanced and powerful one is
  * definitely the <code>propertyViewDescriptors</code> property tat allows to
  * fine-tune each component UI field individually.
  * <p>
@@ -61,7 +61,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * application resource bundles.</li>
  * <li>if the description is the empty string (''), the tooltip is de-activated.
  * </li>
- * <li>if the description is not set, then the toHtml property (see toHtoml
+ * <li>if the description is not set, then the toHtml property (see toHtml
  * property on entities / components definition) is used as dynamic property.
  * And the toHtml falls back to the toString if not set, which falls back to the
  * 1st string rendered property if not set.</li>
@@ -213,9 +213,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Configures the number of columns on this component view. Property fields
    * that are to be displayed in the view are spread across columns and rows
    * following their defined order. Whenever a row does not contain enough empty
-   * cells to recieve the next field (either because the last column has been
+   * cells to receive the next field (either because the last column has been
    * reached or the next field has been configured to span multiple columns and
-   * there is not enough cells left in the current row to satisfty the span), a
+   * there is not enough cells left in the current row to satisfy the span), a
    * new row is created and the next field is added to the first column on the
    * new row.
    * <p>
@@ -260,7 +260,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * This property allows for configuring the fields of the component view in a
    * very customizable manner, thus overriding the model descriptor defaults.
-   * Each property view descriptor copntained in the list describes a form field
+   * Each property view descriptor contained in the list describes a form field
    * that will be rendered in the UI accordingly.
    * <p>
    * For instance, a writable property can be made specifically read-only on
@@ -293,7 +293,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * This property allows to simply define property spans in the underlying grid
    * without having to extensively define the
-   * <code>propertyViewDescriptors</code> property. It must be configued with a
+   * <code>propertyViewDescriptors</code> property. It must be configured with a
    * <code>Map</code> containing only the properties that need to span more than
    * 1 column. The other properties will follow the default span of 1.
    * <p>
@@ -443,7 +443,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * This property allows to define the form vertical scrolling behaviour.
    * Whenever it is set to true, the corresponding UI component will install a
-   * vertical scrollbar when the available vertical space is not enough.
+   * vertical scroll bar when the available vertical space is not enough.
    * <p>
    * Default value is <code>false</code>.
    * 

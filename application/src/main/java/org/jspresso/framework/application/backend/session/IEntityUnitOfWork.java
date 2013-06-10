@@ -26,7 +26,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 
 /**
- * This interface is implemented by unit of works on entities. A uneit of work
+ * This interface is implemented by unit of works on entities. A unit of work
  * is a structure which will generally synchronize with a transaction to keep
  * track of entity creations, updates, deletions and which is able to either
  * commit the changes or rollback them upon work completion. A unit of work is
@@ -94,7 +94,7 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   Collection<IEntity> getUpdatedEntities();
 
   /**
-   * Tests wether this unit of work is currently in use.
+   * Tests whether this unit of work is currently in use.
    * 
    * @return true if the unit of work is active.
    */
@@ -124,7 +124,7 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Rollbacks the unit of work. It should clear it state, restore the entity
-   * states to the one before the unit of work begining and be ready for another
+   * states to the one before the unit of work beginning and be ready for another
    * work.
    */
   void rollback();

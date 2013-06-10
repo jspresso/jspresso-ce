@@ -217,7 +217,7 @@ public class RefQueryComponentDescriptor<E> extends
   }
 
   /**
-   * Wether we need to create a comparable query structure for this property.
+   * Whether we need to create a comparable query structure for this property.
    * 
    * @param propertyDescriptor
    *          the property descriptor to test.

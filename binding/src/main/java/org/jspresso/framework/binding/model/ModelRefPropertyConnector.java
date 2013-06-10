@@ -206,7 +206,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * Overriden to deal with polymorphism.
+   * Overridden to deal with polymorphism.
    * <p>
    * {@inheritDoc}
    */

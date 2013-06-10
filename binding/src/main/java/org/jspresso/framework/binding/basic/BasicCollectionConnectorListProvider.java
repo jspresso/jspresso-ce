@@ -29,7 +29,7 @@ import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 
 /**
- * A composite connector holding a reference on a collection connector to easyly
+ * A composite connector holding a reference on a collection connector to easily
  * play a role in a parent/children relationship.
  * 
  * @version $LastChangedRevision$

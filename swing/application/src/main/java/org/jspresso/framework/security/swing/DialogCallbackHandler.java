@@ -231,13 +231,13 @@ public class DialogCallbackHandler implements CallbackHandler {
         }
       });
     } catch (InterruptedException ex) {
-      LOG.error("An unexpected error occured when handing callbacks.", ex);
+      LOG.error("An unexpected error occurred when handing callbacks.", ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException
           && ex.getCause().getCause() instanceof UnsupportedCallbackException) {
         throw (UnsupportedCallbackException) ex.getCause().getCause();
       }
-      LOG.error("An unexpected error occured when handing callbacks.", ex);
+      LOG.error("An unexpected error occurred when handing callbacks.", ex);
     }
   }
 

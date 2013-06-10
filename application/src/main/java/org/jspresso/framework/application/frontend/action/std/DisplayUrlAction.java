@@ -24,8 +24,8 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * This action opens a browser (or a browser tab) targetted at a URL. The actual
- * URL is a composition of a static parameterized prefix (<code>baseUrl</code>)
+ * This action opens a browser (or a browser tab) targeted at a URL. The actual
+ * URL is a composition of a static parametrized prefix (<code>baseUrl</code>)
  * and a dynamic part taken from the action context parameter.
  * 
  * @version $LastChangedRevision$

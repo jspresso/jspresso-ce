@@ -81,7 +81,7 @@ public final class JErrorDialog extends JDialog {
    * Factory method for error dialog.
    * 
    * @param sourceComponent
-   *          one of the components insinde the owning window.
+   *          one of the components inside the owning window.
    * @param translationProvider
    *          the translationProvider for labels.
    * @param locale

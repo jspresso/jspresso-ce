@@ -177,7 +177,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
         accessor = accessorFactory.createPropertyAccessor(getId(), modelType);
       } catch (Exception ex) {
         LOG.error(
-            "An error occured when creating the accessor for the {} property on {} class.",
+            "An error occurred when creating the accessor for the {} property on {} class.",
             new Object[] {
                 getId(), modelType, ex
             });
@@ -240,7 +240,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
-   * Wether this is a 'real' property connector (a opposed to a ModelConnector).
+   * Whether this is a 'real' property connector (a opposed to a ModelConnector).
    * 
    * @return true if this is a 'real' property connector.
    */
@@ -250,7 +250,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * This method must be called whenever the connector's model provider changes.
-   * This method performs any necessary cleaning, attachements and notification
+   * This method performs any necessary cleaning, attachments and notification
    * needed.
    * 
    * @param oldModelProvider

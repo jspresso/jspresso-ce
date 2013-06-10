@@ -145,9 +145,9 @@ public class BackendActionStartup extends AbstractBackendStartup {
   }
 
   /**
-   * Gets the initial parameterized action context.
+   * Gets the initial parametrized action context.
    * 
-   * @return the initial parameterized action context.
+   * @return the initial parametrized action context.
    */
   protected Map<String, Object> getActionContext() {
     if (actionContext == null) {

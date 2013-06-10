@@ -26,7 +26,7 @@ import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * This composite view arranges its children in a container splitted either
+ * This composite view arranges its children in a container split either
  * horizontally or vertically. An horizontal split disposes its 2 children
  * <i>left</i> and <i>right</i> whereas a vertical split disposes its 2 children
  * <i>top</i> and <i>bottom</i>. The dividing bar can typically be moved by the
@@ -109,8 +109,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * <li><code>HORIZONTAL</code> for splitting the container horizontally and
    * arranging the views left and right</li>
    * </ul>
-   * Default value is <code>EOrientation.VERTICAL</code>, i.e. the ontainer is
-   * splitted vertically.
+   * Default value is <code>EOrientation.VERTICAL</code>, i.e. the container is
+   * split vertically.
    * 
    * @param orientation
    *          the orientation to set.

@@ -139,7 +139,7 @@ package org.jspresso.framework.view.flex {
       }
     }
     
-    // whenever we draw the renderer, make sure we re-eval the checked state
+    // whenever we draw the renderer, make sure we re-evaluate the checked state
     override protected function drawItem(item:IListItemRenderer,
                                          selected:Boolean = false,
                                          highlighted:Boolean = false,
@@ -159,7 +159,7 @@ package org.jspresso.framework.view.flex {
     }
 
     /**
-     *  Work arounds a NPE that occurs when a selection is made before the table is drawn.
+     *  Workarounds a NPE that occurs when a selection is made before the table is drawn.
      */
     override protected function UIDToItemRenderer(uid:String):IListItemRenderer {
       if (!(listContent && visibleData)) return null;

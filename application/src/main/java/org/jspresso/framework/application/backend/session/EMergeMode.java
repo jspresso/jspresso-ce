@@ -48,8 +48,8 @@ public enum EMergeMode {
   /**
    * <code>MERGE_EAGER</code> should be used to update the target object graph
    * state eagerly while keeping its dirty state. It merge mode is typically
-   * used when implementing an in-memory transaction, like editting an object
-   * grph in a unit of work thus allowing the user to commit ar cancel the
+   * used when implementing an in-memory transaction, like editing an object
+   * graph in a unit of work thus allowing the user to commit ar cancel the
    * edition.
    */
   MERGE_EAGER,

@@ -30,7 +30,7 @@ package org.jspresso.framework.view.flex {
     {
       super();
       
-      // Maybe usefull, was necessary for the first Flash 10.1 Beta (thanks Adobe ;-(
+      // Maybe useful, was necessary for the first Flash 10.1 Beta (thanks Adobe ;-(
       if (Security.sandboxType != Security.LOCAL_TRUSTED)
       {
         var ctx:LoaderContext = new LoaderContext();

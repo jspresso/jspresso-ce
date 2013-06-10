@@ -101,7 +101,7 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
    * Allows for text reformatting when a non lenient parser is used.
    * 
    * @param rawText
-   *          the raw text as entered in the textfield.
+   *          the raw text as entered in the text field.
    * @return the text to give to the parser.
    */
   protected String getTextForParser(String rawText) {

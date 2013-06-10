@@ -100,9 +100,9 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   private static final String LOCAL_URL_PARAMETER          = "localUrl";
 
   /**
-   * ommitFileName.
+   * omitFileName.
    */
-  private static final String OMMIT_FILE_NAME_PARAMETER    = "ommitFileName";
+  private static final String OMIT_FILE_NAME_PARAMETER = "omitFileName";
 
   /**
    * the url pattern to activate a resource upload.
@@ -212,18 +212,18 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * 
    * @param localUrl
    *          the resource local url.
-   * @param ommitFileName
+   * @param omitFileName
    *          when set to true, the file name will not be added as
    *          Content-disposition header in the response. This helps to
-   *          workaround scurity issues in flash SWFLoader.
+   *          workaround security issues in flash SWFLoader.
    * @return the resource url.
    */
   public static String computeLocalResourceDownloadUrl(String localUrl,
-      boolean ommitFileName) {
+      boolean omitFileName) {
     if (localUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      return computeUrl(request, "?" + OMMIT_FILE_NAME_PARAMETER + "="
-          + ommitFileName + "&" + LOCAL_URL_PARAMETER + "=" + localUrl);
+      return computeUrl(request, "?" + OMIT_FILE_NAME_PARAMETER + "="
+          + omitFileName + "&" + LOCAL_URL_PARAMETER + "=" + localUrl);
     }
     return null;
   }
@@ -253,7 +253,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * Computes the url where the resource is available for download.
    * 
    * @param request
-   *          the incomming HTTP request.
+   *          the incoming HTTP request.
    * @param id
    *          the resource id.
    * @return the resource url.
@@ -282,7 +282,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * Computes the url where the resource can be uploaded.
    * 
    * @param request
-   *          the incomming HTTP request.
+   *          the incoming HTTP request.
    * @return the resource url.
    */
   private static String computeUploadUrl(HttpServletRequest request) {
@@ -330,7 +330,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       out.flush();
       out.close();
     } catch (Exception ex) {
-      LOG.error("An unexpected error occured while uploading the content.", ex);
+      LOG.error("An unexpected error occurred while uploading the content.", ex);
     } finally {
       HttpRequestHolder.setServletRequest(null);
     }
@@ -347,7 +347,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       String imageUrlSpec = request.getParameter(IMAGE_URL_PARAMETER);
       String id = request.getParameter(ID_PARAMETER);
       boolean ommitFileName = Boolean.parseBoolean(request
-          .getParameter(OMMIT_FILE_NAME_PARAMETER));
+          .getParameter(OMIT_FILE_NAME_PARAMETER));
 
       if (id == null && localUrlSpec == null && imageUrlSpec == null) {
         throw new ServletException("No resource id nor local URL specified.");
@@ -447,7 +447,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
       } catch (IOException ex) {
         throw new NestedRuntimeException(ex,
-            "An exception occured while sending back a "
+            "An exception occurred while sending back a "
                 + HttpServletResponse.SC_NOT_FOUND + "error.");
       }
     } catch (IOException ioex) {
@@ -458,7 +458,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
       } catch (IOException ex) {
         throw new NestedRuntimeException(ex,
-            "An exception occured while sending back a "
+            "An exception occurred while sending back a "
                 + HttpServletResponse.SC_NOT_FOUND + "error.");
       }
     } finally {
@@ -467,7 +467,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   }
 
   /**
-   * Writes an active resource to the servlet outputstream.
+   * Writes an active resource to the servlet output stream.
    * 
    * @param resource
    *          the resource to write.

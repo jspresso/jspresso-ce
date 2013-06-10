@@ -32,7 +32,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This abstract class is a helper base class for components extensions.
- * Developpers should inherit from it and use the <code>getComponent()</code> to
+ * Developers should inherit from it and use the <code>getComponent()</code> to
  * access the extended component instance.
  * 
  * @version $LastChangedRevision$

@@ -42,7 +42,7 @@ import net.sf.nachocalendar.components.HeaderPanel;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
- * A subclass of Nacho calendar datefield with some default values and
+ * A subclass of Nacho calendar date field with some default values and
  * behaviour.
  * 
  * @version $LastChangedRevision$

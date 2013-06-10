@@ -59,7 +59,7 @@ public class SjsMojo extends AbstractMojo {
   MavenProject   project;
 
   /**
-   * The directory containing the grouvy dsl sources.
+   * The directory containing the groovy dsl sources.
    */
   @Parameter(defaultValue = "${basedir}/src/main/dsl", required = true)
   private File   srcDir;
@@ -114,16 +114,16 @@ public class SjsMojo extends AbstractMojo {
         runSjsCompilation();
       } catch (IOException ex) {
         throw new MojoExecutionException(
-            "An unexpected exception occured when running SJS compilation.", ex);
+            "An unexpected exception occurred when running SJS compilation.", ex);
       } catch (ResourceException ex) {
         throw new MojoExecutionException(
-            "An unexpected exception occured when running SJS compilation.", ex);
+            "An unexpected exception occurred when running SJS compilation.", ex);
       } catch (ScriptException ex) {
         throw new MojoExecutionException(
-            "An unexpected exception occured when running SJS compilation.", ex);
+            "An unexpected exception occurred when running SJS compilation.", ex);
       } catch (DependencyResolutionRequiredException ex) {
         throw new MojoExecutionException(
-            "An unexpected exception occured when running SJS compilation.", ex);
+            "An unexpected exception occurred when running SJS compilation.", ex);
       }
     } else {
       getLog().info("No change detected. Skipping generation.");

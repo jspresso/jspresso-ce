@@ -6,7 +6,7 @@ package org.jspresso.framework.model.datatransfer;
 import java.util.List;
 
 /**
- * A simple container for transfering component(s). Its usage is targetting at
+ * A simple container for transferring component(s). Its usage is targeting at
  * copy/cut/paste operations.
  * 
  * @version $LastChangedRevision$

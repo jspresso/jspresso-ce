@@ -69,7 +69,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(getModelDescriptor(context));
       }
-      // Traverse the collection reversly for performance reasons.
+      // Traverse the collection reversely for performance reasons.
       for (int i = selectedIndices.length - 1; i >= 0; i--) {
         int selectedIndex = selectedIndices[i];
         Object nextDetailToRemove = collectionConnector.getChildConnector(

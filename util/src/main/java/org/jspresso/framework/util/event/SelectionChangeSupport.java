@@ -99,7 +99,7 @@ public class SelectionChangeSupport implements ISelectable {
   }
 
   /**
-   * Propagates the <code>SelectionChangeEvent</code> as is (i.e. whithout
+   * Propagates the <code>SelectionChangeEvent</code> as is (i.e. without
    * modifying its source) to the listeners.
    * 
    * @param evt

@@ -58,7 +58,7 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
       CommandLine cmd = parser.parse(options, args);
       processCommandLine(cmd);
     } catch (ParseException ex) {
-      LOG.error("An error occured while parsing the command line", ex);
+      LOG.error("An error occurred while parsing the command line", ex);
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(BatchLauncher.class.getSimpleName(), options);
       return false;

@@ -110,7 +110,7 @@ public class RemoteValueState extends RemotePeer {
   }
 
   /**
-   * tansform object value before using it as value state.
+   * Transform object value before using it as value state.
    * 
    * @param incomingValue
    *          the original value.

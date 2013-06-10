@@ -98,7 +98,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   }
 
   /**
-   * Propagates the <code>ValueChangeEvent</code> as is (i.e. whithout modifying
+   * Propagates the <code>ValueChangeEvent</code> as is (i.e. without modifying
    * its source) to the listeners.
    * 
    * @param evt
@@ -131,7 +131,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   }
 
   /**
-   * Gets wether the listener collection is empty.
+   * Gets whether the listener collection is empty.
    * 
    * @return true if the listener collection is empty.
    */

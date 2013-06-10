@@ -39,7 +39,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   /**
    * Clones this descriptor.
    * 
-   * @return the descriptor's clone.
+   * @return the descriptor clone.
    */
   @Override
   IPropertyDescriptor clone();
@@ -95,7 +95,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * Triggers all setter interceptors.
    * 
    * @param component
-   *          the component targetted by the setter.
+   *          the component targeted by the setter.
    * @param newValue
    *          the property new value.
    * @return the result of the interception.
@@ -103,7 +103,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   Object interceptSetter(Object component, Object newValue);
 
   /**
-   * Gets wether this property is computed (derived). Most of the time a
+   * Gets whether this property is computed (derived). Most of the time a
    * property is computed whenever it has a delegate to compute its value by
    * opposition to properties handled by the ORM.
    * 
@@ -112,14 +112,14 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   boolean isComputed();
 
   /**
-   * Wether the underlying property is mandatory.
+   * Whether the underlying property is mandatory.
    * 
    * @return true if mandatory
    */
   boolean isMandatory();
 
   /**
-   * Wether the underlying property has a modifier. This is only usefull
+   * Whether the underlying property has a modifier. This is only useful
    * whenever the property is computed by delegation. In this case the delegate
    * should be analyzed to check whether it has a modifier on the property.
    * 
@@ -128,17 +128,17 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   boolean isModifiable();
 
   /**
-   * Gets wether this kind of property descriptor is queryable.
+   * Gets whether this kind of property descriptor is queryable.
    * 
    * @return true if this kind of property descriptor is queryable.
    */
   boolean isQueryable();
 
   /**
-   * Triggers all setter postprocessors.
+   * Triggers all setter post processors.
    * 
    * @param component
-   *          the component targetted by the setter.
+   *          the component targeted by the setter.
    * @param oldValue
    *          the property old value.
    * @param newValue
@@ -150,7 +150,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * Triggers all setter preprocessors.
    * 
    * @param component
-   *          the component targetted by the setter.
+   *          the component targeted by the setter.
    * @param newValue
    *          the property new value.
    */
@@ -165,7 +165,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   String getPersistenceFormula();
 
   /**
-   * Gets wether this property can be used for sorting, in a tabular view for
+   * Gets whether this property can be used for sorting, in a tabular view for
    * instance.
    * 
    * @return <code>true</code> if this property can be used for sorting.
@@ -173,7 +173,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   boolean isSortable();
 
   /**
-   * Gets wether this property can be cached. This is only used for computed
+   * Gets whether this property can be cached. This is only used for computed
    * properties. Note that the cached value will be reset whenever a
    * firePropertyChange regarding this property is detected to be fired.
    * 

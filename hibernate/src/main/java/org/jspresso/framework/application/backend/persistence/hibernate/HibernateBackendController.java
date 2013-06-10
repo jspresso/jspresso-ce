@@ -238,10 +238,10 @@ public class HibernateBackendController extends AbstractBackendController {
               .connection(noTxDataSource.getConnection()).openSession();
         } catch (SQLException ex) {
           LOG.error(
-              "Couldn't get connection from non transactional datasource {}",
+              "Couldn't get connection from non transactional data source {}",
               noTxDataSource);
           throw new BackendException(ex,
-              "Couldn't get connection from non transactional datasource");
+              "Couldn't get connection from non transactional data source");
         }
       } else {
         noTxSession = getHibernateSessionFactory().openSession();
@@ -286,7 +286,7 @@ public class HibernateBackendController extends AbstractBackendController {
       try {
         setDirtyTrackingEnabled(false);
         // First of all, try to deal with existing opened session from which the
-        // lazy property was loaded. We must delay as much as posible the use of
+        // lazy property was loaded. We must delay as much as possible the use of
         // the Hibernate template that may create a new thread-bound session.
         if (propertyValue instanceof AbstractPersistentCollection) {
           if (((AbstractPersistentCollection) propertyValue).getSession() != null
@@ -377,7 +377,7 @@ public class HibernateBackendController extends AbstractBackendController {
             li.setSession((SessionImplementor) hibernateSession);
           } catch (Exception ex) {
             LOG.error(
-                "An internal error occurred when reassociating Hibernate session for {} reference initialization.",
+                "An internal error occurred when re-associating Hibernate session for {} reference initialization.",
                 propertyName);
             LOG.error("Source exception", ex);
           }
@@ -658,7 +658,7 @@ public class HibernateBackendController extends AbstractBackendController {
       return;
     }
     traversedComponents.add(componentOrEntity);
-    // Whenever the entity has uninitialized properties, deassociate them with
+    // Whenever the entity has uninitialized properties, disassociate them with
     // their current session if different from the parameter one.
     for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
         .straightGetProperties().entrySet()) {
@@ -704,7 +704,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
           // This is a bad evolution since we don't know if we want to actually
           // create the new entity. If we want to delete it, all checks will be
-          // trigerred.
+          // triggered.
           // if (!isEntityRegisteredForDeletion((IEntity) component)) {
           // registerForUpdate((IEntity) component);
           // }
@@ -885,7 +885,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // merge mode must be ignored if a transaction is pre-existing, so force
       // to null.
 
-      // This is useless to clone in UOW now that UOW regsitration is done
+      // This is useless to clone in UOW now that UOW registration is done
       // in onLoad interceptor
       // res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
       // maxResults, null));
@@ -980,7 +980,7 @@ public class HibernateBackendController extends AbstractBackendController {
       });
     }
 
-    // traverse the reachable dirty entities to explicitely reload the
+    // traverse the reachable dirty entities to explicitly reload the
     // ones that were not reloaded by the previous pass.
     for (IEntity reachableEntity : dirtyReachableEntities) {
       if (reachableEntity.isPersistent() && isDirty(reachableEntity)) {

@@ -35,7 +35,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 public final class PropertyHelper {
 
   private PropertyHelper() {
-    // Just here to prevent direct instanciation.
+    // Just here to prevent direct instantiation.
   }
 
   /**

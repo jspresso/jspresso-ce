@@ -100,7 +100,7 @@ public class DefaultListSelectionModelBinder implements
     }
 
     /**
-     * Forwards selectable's selection to model selection.
+     * Forwards selectable selection to model selection.
      * <p>
      * {@inheritDoc}
      */

@@ -69,7 +69,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     List<ModificationItem> mods = new ArrayList<ModificationItem>();
     try {
       mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
+          new BasicAttribute(LdapConstants.PASSWORD_ATTRIBUTE,
               digestAndEncode(newPassword.toCharArray()))));
       ldapTemplate.modifyAttributes(userDn,
           mods.toArray(new ModificationItem[mods.size()]));

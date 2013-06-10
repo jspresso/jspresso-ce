@@ -42,7 +42,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * This action performs the actual Jasper report generation using a JDBC
- * datasource. The report design is retrieved from the action context (under the
+ * data source. The report design is retrieved from the action context (under the
  * key <code>IReport.REPORT_ACTION_PARAM</code>). The report context used during
  * the generation includes the action context so that all Jspresso managed
  * objects can be leveraged in the report itself. The logged-in user locale is
@@ -112,7 +112,7 @@ public class GenerateJasperReportAction extends BackendAction {
   }
 
   /**
-   * Configures the JDBC template (wrapping a datasource) to use for filling the
+   * Configures the JDBC template (wrapping a data source) to use for filling the
    * report.
    * 
    * @param jdbcTemplate

@@ -96,7 +96,7 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   }
 
   /**
-   * Gest the action text to display in the action field.
+   * Gets the action text to display in the action field.
    * 
    * @return the action text to display in the action field.
    */

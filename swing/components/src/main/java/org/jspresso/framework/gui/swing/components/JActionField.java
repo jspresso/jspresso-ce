@@ -45,7 +45,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * A swing component to represent an actionable field. It should behave like a
  * button except that the action is parametrized by the field text value. This
- * component is represented by a text field and a button. Actionning the button
+ * component is represented by a text field and a button. Actioning the button
  * or the text field triggers the action.
  * 
  * @version $LastChangedRevision$
@@ -147,7 +147,7 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * Gets wether this action field text is synchronized with its underlying
+   * Gets whether this action field text is synchronized with its underlying
    * value.
    * 
    * @return true if this action field text is synchronized with its underlying
@@ -158,7 +158,7 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * performs the registered action programatically.
+   * performs the registered action programmatically.
    */
   public void performAction() {
     textField.getAction().actionPerformed(

@@ -28,7 +28,7 @@ import org.hibernate.metamodel.source.MetadataImplementor;
 import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 
 /**
- * A new Hibernate 4 integrator used to register the default Jspresso postload
+ * A new Hibernate 4 integrator used to register the default Jspresso post-load
  * listener.
  * 
  * @version $LastChangedRevision$
@@ -74,7 +74,7 @@ public class JspressoHibernateIntegrator implements Integrator {
   @Override
   public void disintegrate(SessionFactoryImplementor sessionFactory,
       SessionFactoryServiceRegistry serviceRegistry) {
-    // Cannot unregister listener
+    // Cannot un-register listener
     // serviceRegistry.getService(EventListenerRegistry.class)
     // .getEventListenerGroup(EventType.POST_LOAD)
     // .removeListener(postLoadListener);

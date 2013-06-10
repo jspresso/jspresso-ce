@@ -64,7 +64,7 @@ public final class Build {
   }
 
   /**
-   * Displays various informations about the framework version.
+   * Displays various information about the framework version.
    * 
    * @param args
    *          none supported.

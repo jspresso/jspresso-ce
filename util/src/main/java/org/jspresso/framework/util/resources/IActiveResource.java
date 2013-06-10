@@ -30,10 +30,10 @@ import java.io.OutputStream;
 public interface IActiveResource extends IResourceBase {
 
   /**
-   * Writes content to the passed outputstream.
+   * Writes content to the passed output stream.
    * 
    * @param out
-   *          the outputstream where to write the resource content.
+   *          the output stream where to write the resource content.
    * @throws IOException
    *           whenever an exception occurs.
    */

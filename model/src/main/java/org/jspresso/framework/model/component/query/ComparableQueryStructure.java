@@ -103,7 +103,7 @@ public class ComparableQueryStructure extends QueryComponent {
   }
 
   /**
-   * Wether the comparable query structure actually holds a restriction.
+   * Whether the comparable query structure actually holds a restriction.
    * 
    * @return <code>true</code> if the comparable query structure actually holds
    *         a restriction.
@@ -113,7 +113,7 @@ public class ComparableQueryStructure extends QueryComponent {
   }
 
   /**
-   * Wether the value passed as parameter matches the query structure.
+   * Whether the value passed as parameter matches the query structure.
    * 
    * @param value
    *          the value to test.

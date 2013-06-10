@@ -23,8 +23,8 @@ import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 
 /**
- * This class implements the connector mechanism on an arbitrry model. This type
- * of connector is not targetted at a specific property but at the model
+ * This class implements the connector mechanism on an arbitrary model. This type
+ * of connector is not targeted at a specific property but at the model
  * instance itself. This implies that the <code>getConnectorValue</code> method
  * returns the model instance itself.
  * 
@@ -60,7 +60,7 @@ public class ModelConnector extends ModelRefPropertyConnector {
    */
   @Override
   public boolean areChildrenWritable() {
-    // overriden to restore local writability condition for children (opposite
+    // overridden to restore local writability condition for children (opposite
     // to ModelRefPropertyConnector).
     return isWritable();
   }

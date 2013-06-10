@@ -23,7 +23,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 
 /**
- * An entity registru that knows how to deal with Hibernate proxies.
+ * An entity registry that knows how to deal with Hibernate proxies.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

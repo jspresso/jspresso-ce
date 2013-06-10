@@ -67,7 +67,7 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Propagates the <code>ModelChangeEvent</code> as is (i.e. whithout modifying
+   * Propagates the <code>ModelChangeEvent</code> as is (i.e. without modifying
    * its source) to the listeners.
    * 
    * @param evt

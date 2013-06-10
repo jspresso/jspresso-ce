@@ -46,7 +46,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * This action takes an arbitrary model collection connector from the action
  * context parameter and binds it to a newly created table view. This action is
  * meant to be chained to the generic <code>ModalDialogAction</code> so that the
- * table is actually poped-up in a dialog. Two actions (<code>okAction</code>
+ * table is actually popped-up in a dialog. Two actions (<code>okAction</code>
  * and <code>cancelAction</code>) can be configured to react to the user
  * decision.
  * 

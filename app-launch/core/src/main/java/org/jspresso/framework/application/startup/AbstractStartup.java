@@ -66,7 +66,7 @@ public abstract class AbstractStartup implements IStartup {
       }
       return applicationContext;
     } catch (RuntimeException ex) {
-      LOG.error("{} context could not be instanciated.",
+      LOG.error("{} context could not be instantiated.",
           getApplicationContextKey(), ex);
       throw ex;
     }

@@ -34,7 +34,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <p>
  * One might wonder why a card view is not considered as (and actually does not
  * inherit from) a composite view. The difference is that composite views are
- * used agregate views that displays - hopefully - different parts (the children
+ * used aggregate views that displays - hopefully - different parts (the children
  * views) of the <b>same</b> model. A card view descriptor is rather used to
  * make the same UI region display different views depending on different models
  * (or different model states). Once the model is fixed, the card view behaves

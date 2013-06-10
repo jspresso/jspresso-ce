@@ -33,7 +33,7 @@ public interface IBatchStartup extends IStartup {
    * 
    * @param args
    *          command line arguments.
-   * @return true if parsing was complete and succesfull.
+   * @return true if parsing was complete and successful.
    */
   boolean parseCmdLine(String... args);
 }

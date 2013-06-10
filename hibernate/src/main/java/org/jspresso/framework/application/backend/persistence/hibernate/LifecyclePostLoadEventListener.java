@@ -33,7 +33,7 @@ public class LifecyclePostLoadEventListener implements PostLoadEventListener {
   private static final long serialVersionUID = 7989551891750553087L;
 
   /**
-   * Retrieves the enntity and triggers the onLoad lifecycle hook.
+   * Retrieves the entity and triggers the onLoad lifecycle hook.
    * <p>
    * {@inheritDoc}
    */

@@ -37,7 +37,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This type of module keeps a reference on a single bean. There is no
- * assumption made on wether this bean is actually a persistent entity or any
+ * assumption made on whether this bean is actually a persistent entity or any
  * other type of java bean.
  * <p>
  * Bean modules must have their referenced bean initialized somehow. So it's
@@ -193,11 +193,11 @@ public class BeanModule extends Module implements PropertyChangeListener {
   /**
    * Configures the type of bean this module manages. A bunch of default values
    * are inferred from this component descriptor. For instance, icon image URL
-   * or even granted roles can be infered from the configured component
+   * or even granted roles can be inferred from the configured component
    * descriptor. The latter means that bean modules based on forbidden entities
    * will automatically be excluded from the workspace of the logged-in user.
    * <p>
-   * However, when not set, the omponent descriptor it self can be infered from
+   * However, when not set, the component descriptor it self can be inferred from
    * the configured projected view descriptor model.
    * 
    * @param componentDescriptor

@@ -52,7 +52,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
 
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arays.
+   * file extension arrays.
    * 
    * @param fileFilter
    *          the fileFilter to set.
@@ -117,7 +117,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
 
   /**
    * Computes a file name to save the file. Defaults to the action default file
-   * name parameterized in the action.
+   * name parametrized in the action.
    * 
    * @param context
    *          the action context.

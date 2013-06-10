@@ -21,7 +21,7 @@ package org.jspresso.framework.mockups;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 
 /**
- * A mockup for SaveFileAction.
+ * A mock for SaveFileAction.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

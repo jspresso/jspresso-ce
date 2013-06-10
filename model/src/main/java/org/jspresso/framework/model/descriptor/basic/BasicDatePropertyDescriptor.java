@@ -24,7 +24,7 @@ import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 
 /**
- * Describes a date based property. Wether the date property should include time
+ * Describes a date based property. Whether the date property should include time
  * information or not, can be configured using the type property.
  * 
  * @version $LastChangedRevision$
@@ -74,7 +74,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   }
 
   /**
-   * Sets wether this property should contain time information or not. The
+   * Sets whether this property should contain time information or not. The
    * incoming value must be part of the <code>EDateType</code> enum, i.e. :
    * <ul>
    * <li><code>DATE</code> if the property should only contain the date
@@ -92,7 +92,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   }
 
   /**
-   * Sets wether this date property should have its string representation vary
+   * Sets whether this date property should have its string representation vary
    * depending on the client timezone.
    * <p>
    * Default value is <code>false</code>, meaning that the date is considered as

@@ -76,7 +76,7 @@ public interface IAccessor {
       InvocationTargetException, NoSuchMethodException;
 
   /**
-   * Tests wether the accessor applies to the parameter target.
+   * Tests whether the accessor applies to the parameter target.
    * 
    * @param target
    *          the target to test the accessor for.

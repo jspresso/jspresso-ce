@@ -390,7 +390,7 @@ public class DefaultSwingController extends
   }
 
   // /**
-  // * This method has been overriden to take care of long-running operations
+  // * This method has been overridden to take care of long-running operations
   // not
   // * to have the swing gui blocked. It uses the foxtrot library to achieve
   // this.

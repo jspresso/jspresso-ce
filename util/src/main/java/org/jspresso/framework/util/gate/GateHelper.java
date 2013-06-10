@@ -29,7 +29,7 @@ import java.util.Collection;
 public final class GateHelper {
 
   private GateHelper() {
-    // Just here to prevent direct instanciation.
+    // Just here to prevent direct instantiation.
   }
 
   /**

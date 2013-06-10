@@ -380,7 +380,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   }
 
   /**
-   * Wether the table column is sortable.
+   * Whether the table column is sortable.
    * 
    * @param column
    *          the table column to test.

@@ -33,7 +33,7 @@ public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {
 
   /**
    * Returns the maximum number of fraction digits allowed in this decimal
-   * property. It is guatranteed to return a non-null value which defaults to
+   * property. It is guaranteed to return a non-null value which defaults to
    * <code>2</code>.
    * 
    * @return the number of fraction digits

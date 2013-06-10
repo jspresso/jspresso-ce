@@ -42,7 +42,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <code>childModuleProjectedViewDescriptor</code> as projected view if it has
  * been configured,</li>
  * <li>add the created bean modules as children of the currently selected
- * module, vizualizing them in the workspace navigation tree.</li>
+ * module, visualizing them in the workspace navigation tree.</li>
  * </ol>
  * Whenever there is no <code>childModuleProjectedViewDescriptor</code>
  * configured, and the currently selected module is a bean collection module,
@@ -124,7 +124,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   }
 
   /**
-   * Retrieves the bean component descriptor to create the chiold bean module.
+   * Retrieves the bean component descriptor to create the child bean module.
    * 
    * @param parentModule
    *          the parent module to add the child bean module to.

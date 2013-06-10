@@ -38,7 +38,7 @@ public interface IIconFactory<E> {
    *          the url of the image to be used on the icon.
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getIcon(String urlSpec, Dimension iconSize);
@@ -52,37 +52,37 @@ public interface IIconFactory<E> {
    *          the icon.
    * @param iconSize
    *          the size of the constructed icon if the icon provider does not
-   *          specify one. The image will be resized if nacessary to match the
+   *          specify one. The image will be resized if necessary to match the
    *          requested size.
    * @return the constructed icon.
    */
   E getIcon(Icon icon, Dimension iconSize);
 
   /**
-   * Gets large incon size.
+   * Gets large icon size.
    * 
-   * @return large incon size.
+   * @return large icon size.
    */
   Dimension getLargeIconSize();
 
   /**
-   * Gets medium incon size.
+   * Gets medium icon size.
    * 
-   * @return medium incon size.
+   * @return medium icon size.
    */
   Dimension getMediumIconSize();
 
   /**
-   * Gets small incon size.
+   * Gets small icon size.
    * 
-   * @return small incon size.
+   * @return small icon size.
    */
   Dimension getSmallIconSize();
 
   /**
-   * Gets tiny incon size.
+   * Gets tiny icon size.
    * 
-   * @return tiny incon size.
+   * @return tiny icon size.
    */
   Dimension getTinyIconSize();
 
@@ -182,7 +182,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getBackwardIcon(Dimension iconSize);
@@ -192,7 +192,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getCancelIcon(Dimension iconSize);
@@ -202,7 +202,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getDownIcon(Dimension iconSize);
@@ -212,7 +212,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getErrorIcon(Dimension iconSize);
@@ -222,7 +222,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getForbiddenIcon(Dimension iconSize);
@@ -232,7 +232,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getForwardIcon(Dimension iconSize);
@@ -242,7 +242,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getInfoIcon(Dimension iconSize);
@@ -252,7 +252,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getNoIcon(Dimension iconSize);
@@ -262,7 +262,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getOkYesIcon(Dimension iconSize);
@@ -272,7 +272,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getQuestionIcon(Dimension iconSize);
@@ -282,7 +282,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getUpIcon(Dimension iconSize);
@@ -292,7 +292,7 @@ public interface IIconFactory<E> {
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   E getWarningIcon(Dimension iconSize);

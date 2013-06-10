@@ -28,7 +28,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /**
  * This is the abstract base class for <i>Fusioncharts</i> (flash based charting
  * library) display actions. It holds several common properties that are
- * independant from the actual, concrete, implementations.
+ * independent from the actual, concrete, implementations.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -74,7 +74,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures the JDBC template to be used by the achart to compute its data.
+   * Configures the JDBC template to be used by the chart to compute its data.
    * 
    * @param jdbcTemplate
    *          the jdbcTemplate to set.

@@ -49,7 +49,7 @@ import org.jspresso.framework.util.resources.IResourceBase;
  * This class allows to register a resource provider by a unique id and to
  * display the resource provider's content for a given id. Once a resource has
  * been taken out of the resource manager, it is automatically unregistered. So
- * resource staorage in resource manager is a one-time usage.
+ * resource storage in resource manager is a one-time usage.
  */
 public final class ResourceManager {
 
@@ -80,13 +80,13 @@ public final class ResourceManager {
    * 
    * @param id
    *          the identifier under which the resource has been registered.
-   * @return the registsred resource or null.
+   * @return the registered resource or null.
    */
   public IResourceBase getRegistered(String id) {
     IResourceBase resource = resources.get(id);
-    // Do not unregister resource once retrieved. There might be cases
+    // Do not un-register resource once retrieved. There might be cases
     // when the resource must be retrieved multiple times.
-    // unregister(id);
+    // un-register(id);
     return resource;
   }
 
@@ -122,7 +122,7 @@ public final class ResourceManager {
   }
 
   /**
-   * Unregisters a resource.
+   * Un-registers a resource.
    * 
    * @param id
    *          the identifier under which the resource is registered.

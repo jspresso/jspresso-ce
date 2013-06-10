@@ -170,7 +170,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * since the collection is alone on its level.
    * <p>
    * This property is only used if the <code>rootSubtreeDescriptor</code> is not
-   * explicitely set. In the latter case, nested subtrees are determined from
+   * explicitly set. In the latter case, nested subtrees are determined from
    * the <code>rootSubtreeDescriptor</code>.
    * 
    * @param childDescriptor
@@ -204,7 +204,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * clearly group the tree nodes belonging to the different collections.
    * <p>
    * This property is only used if the <code>rootSubtreeDescriptor</code> is not
-   * explicitely set. In the latter case, nested subtrees are determined from
+   * explicitly set. In the latter case, nested subtrees are determined from
    * the <code>rootSubtreeDescriptor</code>.
    * 
    * @param childrenDescriptors
@@ -247,7 +247,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * This property alows to bind an action that gets triggered every time the
+   * This property allows to bind an action that gets triggered every time the
    * selection changes on the tree view. The action context passed to the action
    * when it is executed is the same as if it had been registered on the tree
    * view.
@@ -277,7 +277,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * node.
    * <p>
    * This property is only used if the <code>rootSubtreeDescriptor</code> is not
-   * explicitely set. In the latter case, <code>renderedProperty</code> is
+   * explicitly set. In the latter case, <code>renderedProperty</code> is
    * determined from the <code>rootSubtreeDescriptor</code>.
    * 
    * @param renderedProperty
@@ -288,7 +288,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * This property allows to explicitely define the tree root level as any other
+   * This property allows to explicitly define the tree root level as any other
    * level. Most of the time, you will prefer using the following shortcut
    * properties :
    * <ul>
@@ -296,7 +296,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * <li><code>childrenDescriptors</code></li>
    * <li><code>renderedProperty</code></li>
    * </ul>
-   * Whenever <code>rootSubtreeDescriptor</code> is explicitely set, the
+   * Whenever <code>rootSubtreeDescriptor</code> is explicitly set, the
    * properties above are simply ignored since all values are determined from
    * <code>rootSubtreeDescriptor</code>.
    * 
@@ -309,7 +309,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Registers an action that is implicitely triggered everytime a row is
+   * Registers an action that is implicitly triggered every time a row is
    * activated (e.g. double-clicked for current UI channels) on the collection
    * view UI peer. The context of the action execution is the same as if the
    * action was registered in the view action map.

@@ -9,7 +9,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * A "normal" business exception. Whenever a contextual translated message is
- * needed, the method "getI18nMessage" might be overriden.
+ * needed, the method "getI18nMessage" might be overridden.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

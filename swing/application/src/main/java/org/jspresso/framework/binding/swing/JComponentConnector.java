@@ -120,7 +120,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
   protected abstract void bindJComponent();
 
   /**
-   * This method has been overriden to take care of long-running operations not
+   * This method has been overridden to take care of long-running operations not
    * to have the swing gui blocked. It uses the foxtrot library to achieve this.
    * <p>
    * {@inheritDoc}
@@ -159,7 +159,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
-   * This method can be overriden by subclasses in lieu of
+   * This method can be overridden by subclasses in lieu of
    * <code>fireConnectorValueChange</code> that has been made final to take care
    * of the swing EDT.
    */

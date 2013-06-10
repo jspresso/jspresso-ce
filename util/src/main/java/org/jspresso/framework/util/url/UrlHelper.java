@@ -117,7 +117,7 @@ public final class UrlHelper {
   }
 
   /**
-   * Wether this url is a "classpath:" pseudo URL.
+   * Whether this url is a "classpath:" pseudo URL.
    * 
    * @param urlSpec
    *          the string representation of the URL.

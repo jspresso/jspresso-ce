@@ -147,8 +147,8 @@ public class BasicReferencePropertyDescriptor<E> extends
    * This property allows to pre-initialize UI filters that are based on this
    * reference property. This includes :
    * <ul>
-   * <li>explicit filters that are dispayed for &quot;list of values&quot;</li>
-   * <li>implicit filters thet are use behind the scene for UI auto-completion</li>
+   * <li>explicit filters that are displayed for &quot;list of values&quot;</li>
+   * <li>implicit filters that are use behind the scene for UI auto-completion</li>
    * </ul>
    * <p>
    * The initialization mapping property is a <code>Map</code> keyed by
@@ -232,7 +232,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * rendered by default when displaying a list of value on this component
    * family. For instance, a table will render 1 column per rendered property of
    * the component. Any type of property can be used except collection
-   * properties. Since this is a <code>List</code> queriable properties are
+   * properties. Since this is a <code>List</code> queryable properties are
    * rendered in the same order.
    * <p>
    * Whenever this property is <code>null</code> (default value) Jspresso
@@ -249,7 +249,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * This property allows to define which of the component properties are to be
    * used in the list of value filter that are based on this component family.
-   * Since this is a <code>List</code> queriable properties are rendered in the
+   * Since this is a <code>List</code> queryable properties are rendered in the
    * same order.
    * <p>
    * Whenever this this property is <code>null</code> (default value), Jspresso

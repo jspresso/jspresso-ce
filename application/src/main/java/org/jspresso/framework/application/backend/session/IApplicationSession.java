@@ -100,7 +100,7 @@ public interface IApplicationSession {
   /**
    * Gets the session identifier.
    * 
-   * @return the sessin identifier.
+   * @return the session identifier.
    */
   String getId();
 

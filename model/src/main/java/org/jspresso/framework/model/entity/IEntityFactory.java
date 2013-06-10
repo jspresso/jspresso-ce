@@ -44,7 +44,7 @@ public interface IEntityFactory extends IComponentFactory {
   <T extends IEntity> T createEntityInstance(Class<T> entityContract);
 
   /**
-   * Instanciates an entity using a given ID. No lifecycle interceptor nor
+   * Instantiates an entity using a given ID. No lifecycle interceptor nor
    * registration of any kind is performed.
    * 
    * @param <T>
@@ -59,7 +59,7 @@ public interface IEntityFactory extends IComponentFactory {
       Serializable id);
 
   /**
-   * Instanciates an entity using a given ID. No lifecycle interceptor nor
+   * Instantiates an entity using a given ID. No lifecycle interceptor nor
    * registration of any kind is performed.
    * 
    * @param <T>

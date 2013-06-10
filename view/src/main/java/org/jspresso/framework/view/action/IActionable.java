@@ -16,7 +16,7 @@ public interface IActionable {
    * should be grouped based on their kind (for instance a list of edit actions,
    * a list of business actions...) and will be presented accordingly. For
    * instance, each action list will be presented in a different menu in a menu
-   * bar, will be separated from the othes by a separator in a toolbar, ...
+   * bar, will be separated from the others by a separator in a toolbar, ...
    * 
    * @return the map of action lists handled by this view.
    */

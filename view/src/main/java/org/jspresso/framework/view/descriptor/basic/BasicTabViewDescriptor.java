@@ -129,7 +129,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * When set to true, this parmeter configures the tabs to be lazy bound
+   * When set to true, this parameter configures the tabs to be lazy bound
    * (binding occurs only for the selected tab). This feature is only supported
    * for tab views with <code>cascadingModel</code> set to true. default value
    * is <code>true</code>.

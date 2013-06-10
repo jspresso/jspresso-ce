@@ -61,7 +61,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   }
 
   /**
-   * Instanciates a new entity (proxy) based on the entityDescriptor returned
+   * Instantiates a new entity (proxy) based on the entityDescriptor returned
    * from the bean factory. The entityName which is the fully qualified name of
    * the entity interface contract is used as the lookup key in the bean
    * factory.

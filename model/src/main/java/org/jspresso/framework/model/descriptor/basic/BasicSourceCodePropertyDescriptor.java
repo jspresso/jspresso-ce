@@ -23,8 +23,8 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 /**
  * Describes a property as handing sourcecode content. This instructs Jspresso
  * to display the property value as sourcecode, using syntax coloring for
- * instance, instead of displaying unformatted raw content. The language used to
- * format the property text content may be defined explicitely using the
+ * instance, instead of displaying un-formatted raw content. The language used to
+ * format the property text content may be defined explicitly using the
  * <code>language</code> property.
  * 
  * @version $LastChangedRevision$
@@ -55,7 +55,7 @@ public class BasicSourceCodePropertyDescriptor extends
   }
 
   /**
-   * Explicitely sets the language this sourcecode property should contain. This
+   * Explicitly sets the language this sourcecode property should contain. This
    * is only a hint fo Jspresso to configure the UI components accordingly to
    * interact with this property.
    * 

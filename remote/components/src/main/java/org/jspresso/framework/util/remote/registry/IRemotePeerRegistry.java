@@ -54,7 +54,7 @@ public interface IRemotePeerRegistry {
   IRemotePeer getRegisteredForPermId(String permId);
 
   /**
-   * Tests wether a remote peer is already registered.
+   * Tests whether a remote peer is already registered.
    * 
    * @param guid
    *          the remote peer guid.
@@ -82,7 +82,7 @@ public interface IRemotePeerRegistry {
   String registerPermId(String permId, String guid);
 
   /**
-   * Unregisters a remote peer.
+   * Un-registers a remote peer.
    * 
    * @param guid
    *          the remote peer guid.

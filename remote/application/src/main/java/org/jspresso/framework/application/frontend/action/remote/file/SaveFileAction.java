@@ -88,7 +88,7 @@ public class SaveFileAction extends ChooseFileAction {
   }
 
   /**
-   * Configures the conten type to be used whenever the UI technology used
+   * Configures the content type to be used whenever the UI technology used
    * requires a download. The content type defaults to
    * <code>&quot;application/octet-stream&quot;</code>.
    * 
@@ -111,7 +111,7 @@ public class SaveFileAction extends ChooseFileAction {
    * <li><code>getFileName(Map&lt;String, Object&gt;)</code> that is called to
    * give a chance top the callback to compute a file name dynamically depending
    * on the action context. Whenever the callback returns a <code>null</code> or
-   * empty file name, the default file name parameterized in the application is
+   * empty file name, the default file name parametrized in the application is
    * used.</li>
    * <li><code>cancel(IActionHandler, Map&lt;String, Object&gt;)</code> that is
    * called whenever the file selection is cancelled. It is perfectly legal not

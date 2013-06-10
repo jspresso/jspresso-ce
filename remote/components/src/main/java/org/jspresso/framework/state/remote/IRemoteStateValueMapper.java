@@ -29,7 +29,7 @@ public interface IRemoteStateValueMapper {
 
   /**
    * Gets the value that has to be set to the remote state when updating it. It
-   * should default to the original value but the developper is given a chance
+   * should default to the original value but the developer is given a chance
    * here to mutate the actual object returned. This allows for changing the
    * type of objects actually exchanged with the remote frontend peer.
    * 
@@ -41,7 +41,7 @@ public interface IRemoteStateValueMapper {
 
   /**
    * Gets the value that has to be set to the remote connector when updating it.
-   * It should default to the original value but the developper is given a
+   * It should default to the original value but the developer is given a
    * chance here to mutate the actual object returned. This allows for changing
    * the type of objects actually exchanged with the remote frontend peer.
    * 

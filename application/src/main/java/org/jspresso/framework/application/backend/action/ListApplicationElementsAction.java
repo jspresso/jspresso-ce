@@ -29,7 +29,7 @@ public class ListApplicationElementsAction extends BackendAction implements
   private ApplicationContext applicationContext;
 
   /**
-   * cofigures the application context this action was instanciated from.
+   * configures the application context this action was instantiated from.
    * <p>
    * {@inheritDoc}
    */

@@ -61,7 +61,7 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox<?>> {
   }
 
   /**
-   * Returns the selected object in the combobox.
+   * Returns the selected object in the combo box.
    * <p>
    * {@inheritDoc}
    */
@@ -71,7 +71,7 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox<?>> {
   }
 
   /**
-   * Sets the selected item in the combobox to be the connector value to set.
+   * Sets the selected item in the combo box to be the connector value to set.
    * <p>
    * {@inheritDoc}
    */

@@ -344,7 +344,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
       orders.removeAll(orders);
       currentOrders = null;
     } catch (Throwable ex) {
-      LOG.error("An error occured when removiong orders.", ex);
+      LOG.error("An error occurred when removing orders.", ex);
     }
   }
 

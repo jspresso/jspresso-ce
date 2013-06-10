@@ -31,7 +31,7 @@ public class BasicHtmlPropertyDescriptor extends BasicTextPropertyDescriptor
     implements IHtmlPropertyDescriptor {
 
   /**
-   * Overriden to disable sorting by default.
+   * Overridden to disable sorting by default.
    * <p>
    * {@inheritDoc}
    */

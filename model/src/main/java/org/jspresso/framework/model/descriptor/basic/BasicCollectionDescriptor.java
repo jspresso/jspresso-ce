@@ -35,9 +35,9 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
  * Jspresso supports :
  * <ul>
  * <li>collections with <code>Set</code> semantic: do not allow for duplicates
- * and do not preserve the order of the elements in the datastore</li>
+ * and do not preserve the order of the elements in the data store</li>
  * <li>collections with <code>List</code> semantic: allows for duplicates and
- * preserves the order of the elements in the datastore through an implicit
+ * preserves the order of the elements in the data store through an implicit
  * index column</li>
  * </ul>
  * 

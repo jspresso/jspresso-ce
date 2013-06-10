@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.jspresso.framework.model.component.IComponent;
 
 /**
- * Defaines the contract of any component able to handle entities lifecycle.
+ * Defines the contract of any component able to handle entities lifecycle.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -36,7 +36,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
   void clearPendingOperations();
 
   /**
-   * Tests wether an entity has been registered for deletion.
+   * Tests whether an entity has been registered for deletion.
    * 
    * @param entity
    *          the entity to test.
@@ -45,7 +45,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
   boolean isEntityRegisteredForDeletion(IEntity entity);
 
   /**
-   * Tests wether an entity has been registered for update.
+   * Tests whether an entity has been registered for update.
    * 
    * @param entity
    *          the entity to test.

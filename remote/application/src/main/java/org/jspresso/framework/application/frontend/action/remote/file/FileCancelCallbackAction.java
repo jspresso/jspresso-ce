@@ -26,7 +26,7 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 
 /**
- * An (intenal) action to trigger the file open cancel callback.
+ * An (internal) action to trigger the file open cancel callback.
  * 
  * @internal
  * @version $LastChangedRevision$
@@ -47,7 +47,7 @@ public class FileCancelCallbackAction extends AbstractRemoteAction {
   }
 
   /**
-   * Trigers the file callback to cancel.
+   * Triggers the file callback to cancel.
    * <p>
    * {@inheritDoc}
    */

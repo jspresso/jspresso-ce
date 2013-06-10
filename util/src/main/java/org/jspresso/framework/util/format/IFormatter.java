@@ -49,7 +49,7 @@ public interface IFormatter<E, F> {
    *          the string representation to parse.
    * @return the parsed object.
    * @throws ParseException
-   *           thrown whenever a parsing error ocurred.
+   *           thrown whenever a parsing error occurred.
    */
   E parse(F source) throws ParseException;
 }

@@ -34,11 +34,11 @@ public interface IWizardStepDescriptor extends IDescriptor {
   String INITIAL_WIZARD_MODEL = "INITIAL_WIZARD_MODEL";
 
   /**
-   * Gets wether this wizard step descriptor can finish the wizard.
+   * Gets whether this wizard step descriptor can finish the wizard.
    * 
    * @param context
    *          the current value of the context.
-   * @return wether this wizard step descriptor can finish the wizard.
+   * @return whether this wizard step descriptor can finish the wizard.
    */
   boolean canFinish(Map<String, Object> context);
 

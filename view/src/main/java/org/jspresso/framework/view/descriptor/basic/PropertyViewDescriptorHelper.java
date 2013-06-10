@@ -69,7 +69,7 @@ public final class PropertyViewDescriptorHelper {
           .getPropertyDescriptor(propertyViewDescriptor.getName());
     }
     /*
-     * Exlude explicitely configured reference property view filled with a
+     * Exclude explicitly configured reference property view filled with a
      * custom LOV action
      */
     boolean toExplode = !(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
@@ -77,7 +77,7 @@ public final class PropertyViewDescriptorHelper {
             .getLovAction() == null;
 
     /*
-     * Include inlined component reference
+     * Include inline component reference
      */
     toExplode = toExplode
         && propertyDescriptor instanceof IReferencePropertyDescriptor<?>
@@ -129,11 +129,11 @@ public final class PropertyViewDescriptorHelper {
   }
 
   /**
-   * Explores a property chain and determines wether one of the chain element is
+   * Explores a property chain and determines whether one of the chain element is
    * computed (thus making the complete chain computed).
    * 
    * @param componentDescriptor
-   *          the component descriptor from wich the property chain is
+   *          the component descriptor from which the property chain is
    *          extracted.
    * @param propertyName
    *          the (potentially nested) property name.

@@ -98,13 +98,13 @@ public class ViewTester {
         .isRequired()
         .hasArg()
         .withDescription(
-            "use given view identifier to instanciate and display the view.")
+            "use given view identifier to instantiate and display the view.")
         .create(VIEW_ID));
     options.addOption(OptionBuilder
         .withArgName(LANGUAGE)
         .hasArg()
         .withDescription(
-            "use given locale to instanciate and display the view.")
+            "use given locale to instantiate and display the view.")
         .create(LANGUAGE));
     CommandLineParser parser = new BasicParser();
     CommandLine cmd;
@@ -250,7 +250,7 @@ public class ViewTester {
      *          the uncaught exception.
      */
     public void handle(Throwable t) {
-      LOG.error("An unexpected error occured.", t);
+      LOG.error("An unexpected error occurred.", t);
       JOptionPane.showMessageDialog(null, t.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
     }

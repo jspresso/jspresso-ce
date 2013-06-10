@@ -62,7 +62,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
    * Computes the url where the resource is available for download.
    * 
    * @param request
-   *          the incomming HTTP request.
+   *          the incoming HTTP request.
    * @param id
    *          the resource id.
    * @return the resource url.

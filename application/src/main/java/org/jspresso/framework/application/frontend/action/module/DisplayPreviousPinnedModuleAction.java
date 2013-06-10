@@ -25,7 +25,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * This action triggers a <i>&quot;backward&quot;</i> navigation in the recorded
- * module history. The frontend controler automatically keeps track of the
+ * module history. The frontend controller automatically keeps track of the
  * traversed modules so that a user can go back and forward his navigation
  * history, much like for a web navigation.
  * 

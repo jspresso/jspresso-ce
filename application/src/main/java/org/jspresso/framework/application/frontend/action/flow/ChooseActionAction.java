@@ -90,7 +90,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
    * 
    * @param modelConnectorFactory
    *          the beanConnectorFactory to set.
-   * @deprecated modeconnector is now created by the backend controller.
+   * @deprecated model connector is now created by the backend controller.
    */
   @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   @Deprecated

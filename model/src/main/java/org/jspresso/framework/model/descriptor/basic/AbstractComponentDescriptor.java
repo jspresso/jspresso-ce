@@ -67,7 +67,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * <li><i>BasicInterfaceDescriptor</i> for defining a common interface that will
  * be implemented by other entities, components or even sub-interfaces.</li>
  * <li><i>BasicComponentDescriptor</i> for defining reusable structures that can
- * be inlined in an entity. It also allows to describe an arbitrary POJO and
+ * be inline in an entity. It also allows to describe an arbitrary POJO and
  * make use of it in Jspresso UIs.</li>
  * </ul>
  * 
@@ -714,8 +714,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    * role(s). This will directly influence the UI behaviour and even
    * composition. Setting the collection of granted roles to <code>null</code>
    * (default value) disables role based authorization on this component level.
-   * Note that this authorization enforcement does not prevent programatic
-   * access that is of the developer responsbility.
+   * Note that this authorization enforcement does not prevent programmatic
+   * access that is of the developer responsibility.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
@@ -728,7 +728,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Registers a list of lifecycle interceptor instances that will be triggered
    * on the different phases of the component lifecycle, i.e. :
    * <ul>
-   * <li>when the component is <i>instanciated</i> in memory</li>
+   * <li>when the component is <i>instantiated</i> in memory</li>
    * <li>when the component is <i>created</i> in the data store</li>
    * <li>when the component is <i>updated</i> in the data store</li>
    * <li>when the component is <i>loaded</i> from the data store</li>
@@ -831,9 +831,9 @@ public abstract class AbstractComponentDescriptor<E> extends
    * This property allows to describe the properties of the components backed by
    * this descriptor. Like in classic OO programming, the actual set of
    * properties available to a component is the union of its properties and of
-   * its ancestors' ones. Jspresso also alows you to refine a property
+   * its ancestors' ones. Jspresso also allows you to refine a property
    * descriptor in a child component descriptor exactly as you would do it in a
-   * subclass. In that case, the atributes of the property defined in the child
+   * subclass. In that case, the attributes of the property defined in the child
    * descriptor prevails over the definition of its ancestors. Naturally,
    * properties are keyed by their names.
    * 
@@ -857,14 +857,14 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * This property allows to define which of the component properties are to be
    * used in the filter UIs that are based on this component family (a QBE
-   * screen for instance). Since this is a <code>List</code> queriable
+   * screen for instance). Since this is a <code>List</code> queryable
    * properties are rendered in the same order.
    * <p>
    * Whenever this this property is <code>null</code> (default value), Jspresso
    * chooses the default set of queryable properties based on their type. For
    * instance, collection properties and binary properties are not used but
    * string, numeric, reference, ... properties are. A computed property cannot
-   * be used since it has no data store existance and thus cannot be queried
+   * be used since it has no data store existence and thus cannot be queried
    * upon.
    * <p>
    * Note that this property is not inherited by children descriptors, i.e. even
@@ -894,7 +894,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * rendered by default when displaying a UI based on this component family.
    * For instance, a table will render 1 column per rendered property of the
    * component. Any type of property can be used except collection properties.
-   * Since this is a <code>List</code> queriable properties are rendered in the
+   * Since this is a <code>List</code> queryable properties are rendered in the
    * same order.
    * <p>
    * Whenever this property is <code>null</code> (default value) Jspresso
@@ -1053,11 +1053,11 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Configures the properties that must not be cloned when this component is
-   * duplicated. For instance, tracing informations like a created timestamp
+   * duplicated. For instance, tracing information like a created timestamp
    * should not be cloned; a SSN neither. For a given component, the uncloned
    * properties are the ones it defines augmented by the ones its ancestors
-   * define. There is no mean to make a component property clonable if one of
-   * the ancestor declares it un-clonable.
+   * define. There is no mean to make a component property cloneable if one of
+   * the ancestor declares it un-cloneable.
    * 
    * @param unclonedProperties
    *          the unclonedProperties to set.
@@ -1069,7 +1069,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Assigns a collection of gates to determine component <i>writability</i>. A
    * component will be considered writable if and only if all gates are open.
-   * This mecanism is mainly used for dynamic UI authorization based on model
+   * This mechanism is mainly used for dynamic UI authorization based on model
    * state, e.g. a validated invoice should not be editable anymore.
    * <p>
    * Descriptor assigned gates will be cloned for each component instance
@@ -1082,7 +1082,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <p>
    * By default, component descriptors are not assigned any gates collection,
    * i.e. there is no writability restriction. Note that gates do not enforce
-   * programatic writability of a component; only UI is impacted.
+   * programmatic writability of a component; only UI is impacted.
    * 
    * @param writabilityGates
    *          the writabilityGates to set.
@@ -1255,7 +1255,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Allow subclasses to hook up and potentialy transform the actual property
+   * Allow subclasses to hook up and potentially transform the actual property
    * descriptor.
    * 
    * @param propertyDescriptor

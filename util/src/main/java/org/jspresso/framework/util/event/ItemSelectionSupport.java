@@ -50,7 +50,7 @@ public class ItemSelectionSupport {
   }
 
   /**
-   * Propagates the <code>ItemSelectionEvent</code> as is (i.e. whithout
+   * Propagates the <code>ItemSelectionEvent</code> as is (i.e. without
    * modifying its source) to the listeners.
    * 
    * @param evt

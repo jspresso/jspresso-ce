@@ -38,7 +38,7 @@ public interface IReportDescriptor extends IComponentDescriptor<IReport> {
 
   /**
    * Gets the action, if any, launched before the report gets executed. This
-   * action may be used to fill the report context with some bitrary computed
+   * action may be used to fill the report context with some arbitrary computed
    * data.
    * 
    * @return An action to be triggered before the report gets executed.

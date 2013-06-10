@@ -46,7 +46,7 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   IAction getItemSelectionAction();
 
   /**
-   * It gets the maximum depth of the tree structure whichis mandatory in case
+   * It gets the maximum depth of the tree structure which is mandatory in case
    * of a recursive one.
    * 
    * @return the maximum tree structure depth.
@@ -68,7 +68,7 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   IAction getRowAction();
 
   /**
-   * Gets wether the tree view should be created expanded.
+   * Gets whether the tree view should be created expanded.
    * 
    * @return true if the tree view should be created expanded.
    */

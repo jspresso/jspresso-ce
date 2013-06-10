@@ -35,7 +35,7 @@ public interface IConfigurableConnectorFactory {
    * @param id
    *          the connector identifier.
    * @param binder
-   *          the MVC bider used by the created collection connector.
+   *          the MVC binder used by the created collection connector.
    * @param childConnectorPrototype
    *          the element prototype connector used by the created collection
    *          connector.

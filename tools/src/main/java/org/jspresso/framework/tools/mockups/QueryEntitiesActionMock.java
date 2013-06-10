@@ -22,7 +22,7 @@ import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 
 /**
- * A mockup for query entities action.
+ * A mock for query entities action.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -38,6 +38,6 @@ public class QueryEntitiesActionMock extends BackendAction {
    */
   @SuppressWarnings("UnusedParameters")
   public void setMergeMode(EMergeMode mergeMode) {
-    // mockup method
+    // mock method
   }
 }

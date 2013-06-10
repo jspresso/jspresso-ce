@@ -28,7 +28,7 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 
 /**
- * This action exits the aplication. Before doing so, user activated application
+ * This action exits the application. Before doing so, user activated application
  * modules are traversed ton check that no pending changes need to be forwarded
  * to the persistent store. Whenever the dirty checking is positive, then the
  * user is notified and given a chance to cancel the exit.

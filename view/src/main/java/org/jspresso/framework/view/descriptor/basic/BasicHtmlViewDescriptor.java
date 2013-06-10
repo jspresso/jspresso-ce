@@ -63,7 +63,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Configures the view to be either vertically croped or scrollable when the
+   * Configures the view to be either vertically cropped or scrollable when the
    * display area is too small to display it.
    * 
    * @param verticallyScrollable
@@ -74,7 +74,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Configures the view to be either horizontally croped or scrollable when the
+   * Configures the view to be either horizontally cropped or scrollable when the
    * display area is too small to display it.
    * 
    * @return the horizontallyScrollable.

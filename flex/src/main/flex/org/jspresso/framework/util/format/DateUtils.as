@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2009 Scott Bailey. All rights reserved.
  * <p>
- * This file comes from Scott Bailey blogpost.
+ * This file comes from Scott Bailey blog-post.
  * http://scottrbailey.wordpress.com/2009/05/28/parsing-dates-flex-as3
  */
 package org.jspresso.framework.util.format

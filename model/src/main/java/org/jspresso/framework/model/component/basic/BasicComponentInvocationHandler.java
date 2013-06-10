@@ -31,9 +31,9 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
- * This is the core implementation of all inlined components in the application.
+ * This is the core implementation of all inline components in the application.
  * Instances of this class serve as handlers for proxies representing the
- * inlined components.
+ * inline components.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -46,7 +46,7 @@ public class BasicComponentInvocationHandler extends
   private final Map<String, Object> properties;
 
   /**
-   * Constructs a new <code>BasiccomponentInvocationHandler</code> instance.
+   * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
    * 
    * @param componentDescriptor
    *          The descriptor of the proxy component.

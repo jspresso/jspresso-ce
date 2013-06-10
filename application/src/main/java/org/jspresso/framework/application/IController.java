@@ -39,7 +39,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public interface IController extends IActionHandler, IPropertyChangeCapable {
 
   /**
-   * This method gets executed when a user succesfully logs in.
+   * This method gets executed when a user successfully logs in.
    * 
    * @param subject
    *          the authenticated user subject.

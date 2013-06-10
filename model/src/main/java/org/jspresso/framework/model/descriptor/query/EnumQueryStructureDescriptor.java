@@ -58,7 +58,7 @@ public class EnumQueryStructureDescriptor extends
   public static final String             VALUE              = "value";
 
   /**
-   * <code>ENUMERATION_VALUESVALUE</code> value.
+   * <code>ENUMERATION_VALUES</code> value.
    */
   public static final String             ENUMERATION_VALUES = "enumerationValues";
 

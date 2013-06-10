@@ -22,7 +22,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 
 /**
- * A mockup for SaveFileAction.
+ * A mock for SaveFileAction.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

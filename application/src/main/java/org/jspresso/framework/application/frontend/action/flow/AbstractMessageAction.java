@@ -27,7 +27,7 @@ import org.jspresso.framework.util.html.HtmlHelper;
  * This is the base class for all UI message based communication actions. This
  * type of action generally opens a modal dialog to display an informational
  * message, ask a question, and so on. It takes the message from the action
- * context parameter and suppports basic HTML formatting. In order for the
+ * context parameter and supports basic HTML formatting. In order for the
  * message to be interpreted as HTML, it must be surrounded by
  * <code>&lt;HTML&gt;</code> tags.
  * 
@@ -75,7 +75,7 @@ public abstract class AbstractMessageAction<E, F, G> extends
   /**
    * Utility method used to translate a code using the context translation
    * provider. If {@link #getMessageArgs(Map)} returns a not-null array or
-   * arguments, they are passed to the translation provider to be used as mesage
+   * arguments, they are passed to the translation provider to be used as message
    * format arguments.
    * 
    * @param messageCode

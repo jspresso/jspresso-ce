@@ -34,7 +34,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * An action used in master/detail views to create and add a new detail to a
- * master domain object. The only method to be implemented by concrete subcasses
+ * master domain object. The only method to be implemented by concrete subclasses
  * to retrieve the instances to be added to the master is :
  * <p>
  * 
@@ -130,7 +130,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
   }
 
   /**
-   * Gets the new entity to add. It is created using the informations contained
+   * Gets the new entity to add. It is created using the information contained
    * in the context.
    * 
    * @param context

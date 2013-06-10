@@ -144,7 +144,7 @@ public interface IPropertyChangeCapable {
   boolean blockEvents();
 
   /**
-   * Unblocks event propagation. All events that were bufferred are fired.
+   * Unblocks event propagation. All events that were buffered are fired.
    */
   void releaseEvents();
 }

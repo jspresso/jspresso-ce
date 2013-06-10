@@ -85,7 +85,7 @@ public class EnhancedResourceBundleMessageSource extends
   }
 
   /**
-   * Overriden so that we can explore the nested key chain for a translation
+   * Overridden so that we can explore the nested key chain for a translation
    * before actually going to the parent.
    * <p>
    * {@inheritDoc}
@@ -119,7 +119,7 @@ public class EnhancedResourceBundleMessageSource extends
   }
 
   /**
-   * Overriden so that we can explore the nested key chain for a translation
+   * Overridden so that we can explore the nested key chain for a translation
    * before actually going to the parent.
    * <p>
    * {@inheritDoc}
@@ -176,7 +176,7 @@ public class EnhancedResourceBundleMessageSource extends
   }
 
   /**
-   * Allows to override the falback locale for resource bundle default
+   * Allows to override the fallback locale for resource bundle default
    * implementation.
    * <p>
    * {@inheritDoc}
@@ -187,7 +187,7 @@ public class EnhancedResourceBundleMessageSource extends
         new ResourceBundle.Control() {
 
           /**
-           * Falls back to parameterized locale if specified.
+           * Falls back to parametrized locale if specified.
            * <p>
            * {@inheritDoc}
            */

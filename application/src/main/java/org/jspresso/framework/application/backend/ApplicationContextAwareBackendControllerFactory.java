@@ -35,7 +35,7 @@ public class ApplicationContextAwareBackendControllerFactory implements
   private String             backendControllerBeanName;
 
   /**
-   * Retrieves a new backend controller instance from the applicatio context.
+   * Retrieves a new backend controller instance from the application context.
    * <p>
    * {@inheritDoc}
    */

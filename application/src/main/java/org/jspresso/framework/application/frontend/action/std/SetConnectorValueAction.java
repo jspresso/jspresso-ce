@@ -27,9 +27,9 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 
 /**
- * This acgion retrieves the action parameter from the action context and
- * assigns it as value to the targetted connector. The connector to target is
- * itself retrieved from the action context using a parameterized key.
+ * This action retrieves the action parameter from the action context and
+ * assigns it as value to the targeted connector. The connector to target is
+ * itself retrieved from the action context using a parametrized key.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

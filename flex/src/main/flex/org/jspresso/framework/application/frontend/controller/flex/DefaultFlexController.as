@@ -310,7 +310,7 @@ import mx.core.Application;
     }
 
     protected function handleCommands(commands:IList):void {
-      //trace("Recieved commands :");
+      //trace("Received commands :");
       var wasEnabled:Boolean = _changeNotificationsEnabled;
       try {
         _changeNotificationsEnabled = false;

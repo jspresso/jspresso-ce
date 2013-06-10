@@ -68,7 +68,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
       BackendControllerHolder.setThreadBackendController(backendController);
       backendController.start(getStartupLocale(), getClientTimeZone());
     } catch (RuntimeException ex) {
-      LOG.error("applicationBackController could not be instanciated.", ex);
+      LOG.error("applicationBackController could not be instantiated.", ex);
       throw ex;
     }
   }
@@ -113,7 +113,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
    *          the JAAS subject to execute the action for.
    * @param locale
    *          the locale used to execute the action.
-   * @return true if the action execution was succesful.
+   * @return true if the action execution was successful.
    */
   protected boolean executeAction(BackendAction action,
       Map<String, Object> initialContext, Subject subject, Locale locale) {

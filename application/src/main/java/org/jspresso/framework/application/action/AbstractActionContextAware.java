@@ -273,7 +273,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Gets the selected indices out of the UI component if it is a collection
-   * component (table, list, ...). More acurately, the selected indices are
+   * component (table, list, ...). More accurately, the selected indices are
    * taken from the view connector that adapts the UI component to the Jspresso
    * binding architecture.
    * 
@@ -287,7 +287,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Gets the selected indices out of the UI component if it is a collection
-   * component (table, list, ...). More acurately, the selected indices are
+   * component (table, list, ...). More accurately, the selected indices are
    * taken from the view connector that adapts the UI component to the Jspresso
    * binding architecture.
    * 
@@ -317,7 +317,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * This is a versatile helper method that retrieves the selected model either
-   * from the 1st selected child connector if the action was trigerred on a
+   * from the 1st selected child connector if the action was triggered on a
    * collection connector or from the connector itself.
    * 
    * @param context
@@ -330,7 +330,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * This is a versatile helper method that retrieves the selected model either
-   * from the 1st selected child connector if the action was trigerred on a
+   * from the 1st selected child connector if the action was triggered on a
    * collection connector or from the connector itself.
    * 
    * @param viewPath
@@ -359,7 +359,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * This is a versatile helper method that retrieves the selected models model
-   * either from the selected child connectors if the action was trigerred on a
+   * either from the selected child connectors if the action was triggered on a
    * collection connector or from the connector itself.
    * 
    * @param context
@@ -372,7 +372,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * This is a versatile helper method that retrieves the selected models model
-   * either from the selected child connectors if the action was trigerred on a
+   * either from the selected child connectors if the action was triggered on a
    * collection connector or from the connector itself.
    * 
    * @param viewPath
@@ -442,7 +442,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Sets the selected indices of the UI component if it is a collection
-   * component (table, list, ...). More acurately, the selected indices are set
+   * component (table, list, ...). More accurately, the selected indices are set
    * to the view connector that adapts the UI component to the Jspresso binding
    * architecture.
    * 
@@ -458,7 +458,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Sets the selected indices of the UI component if it is a collection
-   * component (table, list, ...). More acurately, the selected indices are set
+   * component (table, list, ...). More accurately, the selected indices are set
    * to the view connector that adapts the UI component to the Jspresso binding
    * architecture.
    * 
@@ -645,7 +645,7 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Sarts from a view and navigates the view hierarchy following an index
+   * Starts from a view and navigates the view hierarchy following an index
    * navigation path.
    * 
    * @param fromView

@@ -52,7 +52,7 @@ import org.springframework.transaction.support.TransactionCallback;
  * the scene in several places in Jspresso based applications, as in filtered
  * bean collection modules, list of values, ... The principles are to tailor an
  * Hibernate Criterion based on the Jspresso &quot;<code>IQueryComponent</code>
- * &quot;. A Jspresso query component is a hierarchical datastructure that
+ * &quot;. A Jspresso query component is a hierarchical data structure that
  * mimics a portion of the domain model headed by an entity. It is essentially a
  * set of property/value pairs where values can be :
  * <ol>
@@ -66,7 +66,7 @@ import org.springframework.transaction.support.TransactionCallback;
  * criteria by constructing all join sub-criteria whenever necessary.
  * <p>
  * Once the detached criteria is complete, the action will perform the Hibernate
- * query while using paging informations taken from the query component as well
+ * query while using paging information taken from the query component as well
  * as custom sorting properties.
  * <p>
  * Whenever the query is successful, the result is merged back to the
@@ -192,14 +192,14 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Performs actual Query. This method can be overriden by subclasses in order
+   * Performs actual Query. This method can be overridden by subclasses in order
    * to deal with non-Hibernate searches.
    * 
    * @param queryComponent
    *          the query component.
    * @param context
    *          the action context
-   * @return the liste of retrieved components.
+   * @return the list of retrieved components.
    */
   @SuppressWarnings({"unchecked", "ConstantConditions"})
   public List<?> performQuery(final IQueryComponent queryComponent,
@@ -411,7 +411,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
   /**
    * Create a in list criterion potentially using disjunction to overcome the
-   * size limitation of certain DBs in restriction (e.g. Orecale is 1000).
+   * size limitation of certain DBs in restriction (e.g. Oracle is 1000).
    * 
    * @param entityIds
    *          the list of entity ids.

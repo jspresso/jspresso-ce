@@ -35,18 +35,18 @@ import org.slf4j.LoggerFactory;
  * MACs, IP addresses, time elements, and sequential numbers. GUIDs are not
  * expected to be random and most often are easy/possible to guess given a
  * sample from a given generator. SQL Server, for example generates GUID that
- * are unique but sequencial within a given instance.
+ * are unique but sequential within a given instance.
  * <p>
  * GUIDs can be used as security devices to hide things such as files within a
  * filesystem where listings are unavailable (e.g. files that are served up from
- * a Web server with indexing turned off). This may be desireable in cases where
+ * a Web server with indexing turned off). This may be desirable in cases where
  * standard authentication is not appropriate. In this scenario, the RandomGUIDs
  * are used as directories. Another example is the use of GUIDs for primary keys
  * in a database where you want to ensure that the keys are secret. Random GUIDs
  * can then be used in a URL to prevent hackers (or users) from accessing
  * records by guessing or simply by incrementing sequential numbers.
  * <p>
- * There are many other possiblities of using GUIDs in the realm of security and
+ * There are many other possibilities of using GUIDs in the realm of security and
  * encryption where the element of randomness is important. This class was
  * written for these purposes but can also be used as a general purpose GUID
  * generator as well.
@@ -75,9 +75,9 @@ import org.slf4j.LoggerFactory;
  * time. Thanks to Ashutosh Narhari for the suggestion of using the static
  * method to prime the basic random generator.
  * <p>
- * Using the secure random option, this class compies with the statistical
+ * Using the secure random option, this class compiles with the statistical
  * random number generator tests specified in FIPS 140-2, Security Requirements
- * for Cryptographic Modules, secition 4.9.1.
+ * for Cryptographic Modules, section 4.9.1.
  * <p>
  * I converted all the pieces of the seed to a String before handing it over to
  * the MD5 hash so that you could print it out to make sure it contains the data
@@ -120,7 +120,7 @@ public class RandomGUID {
     try {
       inetAddr = InetAddress.getLocalHost().toString();
     } catch (UnknownHostException e) {
-      LOG.error("An unexpected error occured while initializing the GUID generator.", e);
+      LOG.error("An unexpected error occurred while initializing the GUID generator.", e);
     }
     sId = inetAddr;
   }
@@ -156,7 +156,7 @@ public class RandomGUID {
    *          random number.
    * @param separator
    *          the separator to use between the different GUID parts.
-   *          <code>null</code> means no sepârator.
+   *          <code>null</code> means no separator.
    */
   public RandomGUID(boolean secure, String separator) {
     this.separator = separator;
@@ -164,7 +164,7 @@ public class RandomGUID {
   }
 
   /**
-   * Demonstraton and self test of class.
+   * Demonstration and self test of class.
    * 
    * @param args
    *          program arguments.

@@ -375,9 +375,8 @@ public class DefaultRemoteViewFactory extends
             Checksum checksumEngine = new CRC32();
             checksumEngine.update((byte[]) originalValue, 0,
                 ((byte[]) originalValue).length);
-            // we must add a check sum so that the client nows when the url
-            // content
-            // changes.
+            // we must add a check sum so that the client knows when the url
+            // content changes.
             valueForStateUrl += ("&cs=" + checksumEngine.getValue());
             return valueForStateUrl;
           }
@@ -1050,9 +1049,8 @@ public class DefaultRemoteViewFactory extends
             Checksum checksumEngine = new CRC32();
             checksumEngine.update((byte[]) originalValue, 0,
                 ((byte[]) originalValue).length);
-            // we must add a check sum so that the client nows when the url
-            // content
-            // changes.
+            // we must add a check sum so that the client knows when the url
+            // content changes.
             valueForStateUrl += ("&cs=" + checksumEngine.getValue());
             return valueForStateUrl;
           } else if (originalValue instanceof String) {
@@ -1444,7 +1442,7 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
-   * Creates a remote contrained grid container.
+   * Creates a remote constrained grid container.
    * 
    * @param viewDescriptor
    *          the component view descriptor.

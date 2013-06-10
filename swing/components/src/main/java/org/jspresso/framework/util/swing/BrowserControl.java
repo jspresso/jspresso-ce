@@ -17,7 +17,7 @@ import java.io.IOException;
  * is determined by the OS. This has been tested under Windows 95/98/NT.
  * Examples: BrowserControl.displayURL("http://www.javaworld.com");
  * BrowserControl.displayURL("file://c:\\docs\\index.html");
- * BrowserContorl.displayURL("file:///user/joe/index.html"); Note - you must
+ * BrowserControl.displayURL("file:///user/joe/index.html"); Note - you must
  * include the url type -- either "http://" or "file://".
  */
 
@@ -83,7 +83,7 @@ public final class BrowserControl {
 
   /**
    * Try to determine whether this application is running under Windows or some
-   * other platform by examing the "os.name" property.
+   * other platform by examining the "os.name" property.
    * 
    * @return true if this application is running under a Windows OS
    */

@@ -34,8 +34,8 @@ import org.jspresso.framework.model.entity.IEntity;
 /**
  * This descriptor key to the description of the application model. It is used
  * to describe a model entity. A Jspresso managed entity has a synthetic
- * identifier (<i>id</i>) and is versioned (<i>version</i>) to ccope with
- * concurent access conflicts through optimistic locking. It conforms to the
+ * identifier (<i>id</i>) and is versioned (<i>version</i>) to cope with
+ * concurrent access conflicts through optimistic locking. It conforms to the
  * <i>Java Beans</i> standard so that its property changes can be followed by
  * the classic <code>add/removePropertyChangeListener</code> methods; Jspresso
  * binding architecture leverages this behaviour.
@@ -105,9 +105,9 @@ public class BasicEntityDescriptor<E extends IEntity> extends
   }
 
   /**
-   * Gets wether this entity is purely abstract.
+   * Gets whether this entity is purely abstract.
    * 
-   * @return wether this entity is purely abstract.
+   * @return whether this entity is purely abstract.
    */
   @Override
   public boolean isPurelyAbstract() {
@@ -116,8 +116,8 @@ public class BasicEntityDescriptor<E extends IEntity> extends
 
   /**
    * This property is used to indicate that the entity type described is to be
-   * considered <b>abstract</b>. Jspresso will prevent any instanciation through
-   * its generic actions or internal mecanisms. Trying to do so will result in a
+   * considered <b>abstract</b>. Jspresso will prevent any instantiation through
+   * its generic actions or internal mechanisms. Trying to do so will result in a
    * low level exception and reveals a coding (assembling) error.
    * <p>
    * However, an abstract entity will have a concrete representation in the data
@@ -131,7 +131,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
    * described.
    * 
    * @param purelyAbstract
-   *          Wether this entity is purely abstract.
+   *          Whether this entity is purely abstract.
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;

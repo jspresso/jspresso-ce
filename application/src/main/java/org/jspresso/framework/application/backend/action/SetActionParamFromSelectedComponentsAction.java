@@ -24,7 +24,7 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * A trivial backend action that updates the action context by setting the
- * <code>ActionParamerer</code> with the selected components of the underlying
+ * <code>ActionParameter</code> with the selected components of the underlying
  * model.
  * 
  * @version $LastChangedRevision$

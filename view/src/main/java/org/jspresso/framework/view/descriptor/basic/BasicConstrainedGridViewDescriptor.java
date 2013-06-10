@@ -37,9 +37,9 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * (default value is 1)</li>
  * <li><code>height</code>: the number of rows the cell spans vertically
  * (default value is 1)</li>
- * <li><code>heightResizable</code>: wether the cell should be resized to take
+ * <li><code>heightResizable</code>: whether the cell should be resized to take
  * all the available space vertically</li>
- * <li><code>widthResizable</code>: wether the cell should be resized to take
+ * <li><code>widthResizable</code>: whether the cell should be resized to take
  * all the available space horizontally</li>
  * </ul>
  * Default cascading order follows the order of nested view registrations in the
@@ -84,7 +84,7 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Registers the nested children views along with their cell constaints. They
+   * Registers the nested children views along with their cell constraints. They
    * are set as a <code>Map</code> that is :
    * <ul>
    * <li>keyed by the children views</li>

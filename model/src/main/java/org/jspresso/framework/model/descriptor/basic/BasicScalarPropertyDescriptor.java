@@ -67,7 +67,7 @@ public abstract class BasicScalarPropertyDescriptor extends
 
   /**
    * Sets the property default value. When a component owning this property is
-   * instanciated, its properties are initialized using their default values. By
+   * instantiated, its properties are initialized using their default values. By
    * default, a property default value is <code>null</code>.
    * <p>
    * This incoming value can be either the actual property default value (as an
@@ -107,7 +107,7 @@ public abstract class BasicScalarPropertyDescriptor extends
   }
 
   /**
-   * Parses a value given as String. Calls the modet type constructor using the
+   * Parses a value given as String. Calls the model type constructor using the
    * String parameter.
    * 
    * @param valueAsString

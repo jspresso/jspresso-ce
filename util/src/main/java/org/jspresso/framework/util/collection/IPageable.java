@@ -112,21 +112,21 @@ public interface IPageable {
   Integer getRecordCount();
 
   /**
-   * Wether navigation to next page is enabled.
+   * Whether navigation to next page is enabled.
    * 
    * @return true if navigation to next page is enabled, false otherwise.
    */
   boolean isNextPageEnabled();
 
   /**
-   * Wether page navigation is enabled.
+   * Whether page navigation is enabled.
    * 
    * @return true if page navigation is enabled, false otherwise.
    */
   boolean isPageNavigationEnabled();
 
   /**
-   * Wether navigation to previous page is enabled.
+   * Whether navigation to previous page is enabled.
    * 
    * @return true if navigation to previous page is enabled, false otherwise.
    */

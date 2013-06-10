@@ -31,7 +31,7 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 
 /**
- * This is a simple connector implementation whic allows the management of child
+ * This is a simple connector implementation which allows the management of child
  * connectors. It can be used for straight view connector implementation.
  * 
  * @version $LastChangedRevision$

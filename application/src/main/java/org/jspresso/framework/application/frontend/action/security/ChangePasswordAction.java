@@ -25,9 +25,9 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * offers two concrete implementations :
  * <ul>
  * <li><code>LdapChangePasswordAction</code> for LDAP based authentication
- * backends</li>
+ * backend</li>
  * <li><code>DatabaseChangePasswordAction</code> for JDBC based authentication
- * backends</li>
+ * backend</li>
  * </ul>
  * 
  * @version $LastChangedRevision$

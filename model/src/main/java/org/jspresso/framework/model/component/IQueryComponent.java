@@ -34,7 +34,7 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * A simple adapter to wrap a component used as selection criteria and a list of
  * components. It only serve as a placeholder for the result of the query.
- * instances of this calss do not perform queries by themselves.
+ * instances of this class do not perform queries by themselves.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -68,7 +68,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   String NOT_VAL             = "!";
 
   /**
-   * Disjunct.
+   * Disjunction.
    */
   String DISJUNCT            = ";";
 
@@ -133,7 +133,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   IQueryComponent clone();
 
   /**
-   * Gets wether to enforce select distinct when querying.
+   * Gets whether to enforce select distinct when querying.
    * 
    * @return the distinctEnforced.
    */
@@ -160,7 +160,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
 
   /**
    * Pre-process a value before putting it into the query component. Transforms
-   * a multiline text into a disjunction of values.
+   * a multi-line text into a disjunction of values.
    * 
    * @param value
    *          the value to refine to transform.

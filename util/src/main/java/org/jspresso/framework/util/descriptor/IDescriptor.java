@@ -73,7 +73,7 @@ public interface IDescriptor {
    * @param locale
    *          the locale in which the descriptor must compute its
    *          internationalized name.
-   * @return The internationalized name of this descripted object
+   * @return The internationalized name of this described object
    */
   String getI18nName(ITranslationProvider translationProvider, Locale locale);
 
@@ -82,7 +82,7 @@ public interface IDescriptor {
    * name can be technically meaningful (e.g. a method name, a property name,
    * ...).
    * 
-   * @return The name of this descripted object
+   * @return The name of this described object
    */
   String getName();
 

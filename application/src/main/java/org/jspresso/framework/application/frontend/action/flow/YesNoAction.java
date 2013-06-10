@@ -25,7 +25,7 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * This action pops-up a binary question. Depending on user answer, another
- * action is triggered. The Yes - No alternative actions are parameterized
+ * action is triggered. The Yes - No alternative actions are parametrized
  * statically.
  * 
  * @version $LastChangedRevision: 2097 $

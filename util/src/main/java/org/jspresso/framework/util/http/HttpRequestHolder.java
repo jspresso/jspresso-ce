@@ -111,7 +111,7 @@ public class HttpRequestHolder implements Filter {
   }
 
   /**
-   * Gets wether a thread-bound request is available.
+   * Gets whether a thread-bound request is available.
    * 
    * @return true if a thread-bound request is available.
    */

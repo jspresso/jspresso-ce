@@ -60,7 +60,7 @@ public final class HibernateHelper {
    * Retrieves a component contract without initializing an entity.
    * 
    * @param component
-   *          the componennt to rerieve the contract for.
+   *          the component to retrieve the contract for.
    * @return the component contract.
    */
   @SuppressWarnings("unchecked")
@@ -115,7 +115,7 @@ public final class HibernateHelper {
    * @param componentOrEntity
    *          the entity to clean the collections dirty state of.
    * @param targetSession
-   *          the session that is targetted to after the dirty states have been
+   *          the session that is targeted to after the dirty states have been
    *          reset or null if none.
    */
   public static void clearPersistentCollectionDirtyState(
@@ -136,7 +136,7 @@ public final class HibernateHelper {
               && targetSession != ((AbstractPersistentCollection) persistentCollection)
                   .getSession()) {
             // The following is to avoid to avoid Hibernate exceptions due to
-            // reassociating a collection that is already associated with the
+            // re-associating a collection that is already associated with the
             // session.
             persistentCollection
                 .unsetSession(((AbstractPersistentCollection) persistentCollection)

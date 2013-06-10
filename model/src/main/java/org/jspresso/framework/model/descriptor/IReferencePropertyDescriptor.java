@@ -32,7 +32,7 @@ public interface IReferencePropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, IComponentDescriptorProvider<E> {
 
   /**
-   * Gets the initialization map for a LOV query entity. Initialization mappping
+   * Gets the initialization map for a LOV query entity. Initialization mapping
    * can hold either a references to property names of the owning entity
    * (master) or constant values. For instance, a mapping holding ('propA',
    * 'propB') will indicate that the LOV query entity 'propA' property should be

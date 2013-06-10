@@ -30,7 +30,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.action.AbstractActionContextAware;
 
 /**
- * Default handler implementation to fully read the file inputstream into a byte
+ * Default handler implementation to fully read the file input stream into a byte
  * array and setting it in the context.
  * 
  * @version $LastChangedRevision$

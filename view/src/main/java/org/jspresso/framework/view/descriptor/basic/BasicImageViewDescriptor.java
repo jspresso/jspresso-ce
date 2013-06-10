@@ -26,7 +26,7 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
  * rendered as button fields that allow to upload, download and query size of
  * the binary content. This button field visually indicate whether the binary
  * property is empty or not. Whenever you know that the underlying property is
- * used to store image content, you can explicitely define an image view backed
+ * used to store image content, you can explicitly define an image view backed
  * by the binary property descriptor and use it in your UI. Jspresso will then
  * display the image whose content is stored in the binary property directly in
  * the UI.
@@ -77,7 +77,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Configures the image view to be either croped or scrollable when the
+   * Configures the image view to be either cropped or scrollable when the
    * display area is too small to display it. A value of <code>true</code>
    * (default) means that the image view will be made scrollable.
    * 

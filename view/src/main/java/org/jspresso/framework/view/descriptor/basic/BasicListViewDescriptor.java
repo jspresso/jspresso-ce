@@ -24,7 +24,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 
 /**
  * This type of descriptor is used to implement a list view. A list view is a
- * single column, uneditable collection view used to display a collection of
+ * single column, un-editable collection view used to display a collection of
  * components. Each item is displayed using a string representation that can be
  * customized using the <code>renderedProperty</code> property. List views are
  * rarely used since one might prefer its much more advanced cousin, i.e. the

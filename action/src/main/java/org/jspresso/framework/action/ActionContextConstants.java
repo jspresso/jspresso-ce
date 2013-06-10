@@ -107,6 +107,6 @@ public final class ActionContextConstants {
   public static final String UI_EVENT                 = "UI_EVENT";
 
   private ActionContextConstants() {
-    // to prevent this class from being instanciated.
+    // to prevent this class from being instantiated.
   }
 }

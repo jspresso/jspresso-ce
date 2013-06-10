@@ -224,7 +224,7 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Performs the necessary transformations to build a tring out of a property
+   * Performs the necessary transformations to build a string out of a property
    * value.
    * 
    * @param value

@@ -140,7 +140,7 @@ public final class SplashWindow extends Window {
   }
 
   /**
-   * Open's a splash window using the specified image.
+   * Opens a splash window using the specified image.
    * 
    * @param image
    *          The splash image.
@@ -176,7 +176,7 @@ public final class SplashWindow extends Window {
   }
 
   /**
-   * Open's a splash window using the specified image.
+   * Opens a splash window using the specified image.
    * 
    * @param imageURL
    *          The url of the splash image.

@@ -36,7 +36,7 @@ import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Extends the JBoss LdapExtLoginModule to keep track of the authenticated
- * ditinguished name.
+ * distinguished name.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -48,7 +48,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
   private static final String SLICE_START         = "[";
 
   /**
-   * Overriden to complete the main principal with optional data from the
+   * Overridden to complete the main principal with optional data from the
    * backing store.
    * <p>
    * {@inheritDoc}
@@ -163,7 +163,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
   }
 
   /**
-   * Overriden to construct a user principal instead of the default
+   * Overridden to construct a user principal instead of the default
    * SimplePrincipal.
    * <p>
    * {@inheritDoc}

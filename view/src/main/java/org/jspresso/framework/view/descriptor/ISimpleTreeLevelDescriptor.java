@@ -19,7 +19,7 @@
 package org.jspresso.framework.view.descriptor;
 
 /**
- * This interface is implemented by descriptors of simpl tree levels. Simple
+ * This interface is implemented by descriptors of simple tree levels. Simple
  * tree levels are tree levels where children are organised into a single group.
  * 
  * @version $LastChangedRevision$

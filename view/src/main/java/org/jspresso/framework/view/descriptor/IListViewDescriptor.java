@@ -38,7 +38,7 @@ public interface IListViewDescriptor extends ICollectionViewDescriptor {
   IconProvider getIconImageURLProvider();
 
   /**
-   * Gets the name of the underlying model propertiy which is made visible by
+   * Gets the name of the underlying model property which is made visible by
    * the list.
    * 
    * @return the name of the underlying model rendered property.

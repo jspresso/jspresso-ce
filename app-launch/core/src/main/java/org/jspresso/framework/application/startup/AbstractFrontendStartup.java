@@ -59,14 +59,14 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
       backendController = (IBackendController) getApplicationContext().getBean(
           "applicationBackController");
     } catch (RuntimeException ex) {
-      LOG.error("applicationBackController could not be instanciated.", ex);
+      LOG.error("applicationBackController could not be instantiated.", ex);
       throw ex;
     }
     try {
       frontendController = (IFrontendController<E, F, G>) getApplicationContext()
           .getBean("applicationFrontController");
     } catch (RuntimeException ex) {
-      LOG.error("applicationFrontController could not be instanciated.", ex);
+      LOG.error("applicationFrontController could not be instantiated.", ex);
       throw ex;
     }
     frontendController.start(backendController, getStartupLocale(),

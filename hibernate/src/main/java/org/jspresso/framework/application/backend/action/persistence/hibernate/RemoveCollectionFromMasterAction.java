@@ -86,7 +86,7 @@ public class RemoveCollectionFromMasterAction extends
       }
       try {
         Collection<?> existingCollection = collectionAccessor.getValue(master);
-        // Traverse the collection reversly for performance reasons.
+        // Traverse the collection reversely for performance reasons.
         for (int i = selectedIndices.length - 1; i >= 0; i--) {
           int selectedIndex = selectedIndices[i];
           IComponent nextDetailToRemove = collectionConnector

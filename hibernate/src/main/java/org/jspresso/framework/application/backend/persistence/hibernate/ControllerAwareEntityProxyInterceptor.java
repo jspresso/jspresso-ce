@@ -80,7 +80,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       }
       if (hasJustBeenSaved) {
         // whenever an entity has just been saved, its state is in the dirty
-        // store. Hibernate might ask to check dirtyness especially for
+        // store. Hibernate might ask to check dirtiness especially for
         // collection members. Those just saved entities must not be considered
         // dirty but there might be some reference properties to update, so let
         // Hibernate default dirty checking happen.
@@ -185,8 +185,8 @@ public class ControllerAwareEntityProxyInterceptor extends
   }
 
   /**
-   * registers Enitities to be merged back from the uow to the session on
-   * commmit.
+   * Registers Entities to be merged back from the uow to the session on
+   * commit.
    * <p>
    * {@inheritDoc}
    */
@@ -204,8 +204,8 @@ public class ControllerAwareEntityProxyInterceptor extends
   /**
    * This is the place to trigger the update lifecycle handler. onFlushDirty is
    * not the right place since it cannot deal with transient new instances that
-   * might be added to the object tree. It also registers Enitities to be merged
-   * back from the uow to the session on commmit. This last action is done here
+   * might be added to the object tree. It also registers Entities to be merged
+   * back from the uow to the session on commit. This last action is done here
    * instead of postFlush. See http://www.jspresso.org/mantis/view.php?id=455.
    * <p>
    * {@inheritDoc}
@@ -256,7 +256,7 @@ public class ControllerAwareEntityProxyInterceptor extends
               isClean = true;
             } else if (hasJustBeenSaved) {
               // whenever an entity has just been saved, its state is in the
-              // dirty store. Hibernate might ask to check dirtyness especially
+              // dirty store. Hibernate might ask to check dirtiness especially
               // for collection members. Those just saved entities must not be
               // considered dirty.
               isClean = true;

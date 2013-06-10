@@ -121,7 +121,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
    * @param entity
    *          the entity to test.
    * @param existingRegisteredEntity
-   *          the entity with same contract and id being already rehgistered.
+   *          the entity with same contract and id being already registered.
    * @return true if both entity are &quot;same&quot;. Default implementation is
    *         based on object equality.
    */

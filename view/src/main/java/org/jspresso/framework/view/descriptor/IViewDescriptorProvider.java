@@ -28,9 +28,9 @@ package org.jspresso.framework.view.descriptor;
 public interface IViewDescriptorProvider {
 
   /**
-   * Gets the view descriptorreferenced by this object.
+   * Gets the view descriptor referenced by this object.
    * 
-   * @return the view descriptorreferenced by this object.
+   * @return the view descriptor referenced by this object.
    */
   IViewDescriptor getViewDescriptor();
 

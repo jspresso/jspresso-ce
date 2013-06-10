@@ -84,7 +84,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   }
 
   /**
-   * Wether the object is fully initialized.
+   * Whether the object is fully initialized.
    * 
    * @param objectOrProxy
    *          the object to test.

@@ -59,8 +59,8 @@ public interface IAccessorFactory {
    * Retrieves accessor information from a method.
    * 
    * @param method
-   *          the method to retrieve infos for.
-   * @return the accessor infos.
+   *          the method to retrieve info for.
+   * @return the accessor info.
    */
   AccessorInfo getAccessorInfo(Method method);
 }

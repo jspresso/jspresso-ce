@@ -100,7 +100,7 @@ public interface IEntity extends IComponent {
   int hashCode();
 
   /**
-   * Gets wether this entity has already been saved in the backing store.
+   * Gets whether this entity has already been saved in the backing store.
    * 
    * @return true if the entity is not transient.
    */

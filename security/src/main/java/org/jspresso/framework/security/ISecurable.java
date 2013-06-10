@@ -29,11 +29,11 @@ import java.util.Collection;
 public interface ISecurable {
 
   /**
-   * Gets the list of roles which are granted acces to this resource. If null is
-   * retured the access control is disabled. an empty collection means that
+   * Gets the list of roles which are granted access to this resource. If null is
+   * returned the access control is disabled. an empty collection means that
    * nobody can access the resource (this might not be very useful).
    * 
-   * @return list of roles which are granted acces to this resource
+   * @return list of roles which are granted access to this resource
    */
   Collection<String> getGrantedRoles();
 }

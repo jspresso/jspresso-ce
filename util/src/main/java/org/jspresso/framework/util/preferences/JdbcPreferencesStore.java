@@ -239,10 +239,10 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   }
 
   /**
-   * Configures the datasource to which the JdbcPreferenceStore is persisted.
+   * Configures the data source to which the JdbcPreferenceStore is persisted.
    * 
    * @param dataSource
-   *          the datasource to which the JdbcPreferenceStore is persisted.
+   *          the data source to which the JdbcPreferenceStore is persisted.
    */
   public void setDataSource(DataSource dataSource) {
     jdbcTemplate = new JdbcTemplate(dataSource);
@@ -280,7 +280,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   }
 
   /**
-   * Sets the defaultRestrictions. The default restrictions contrains arbitrary
+   * Sets the defaultRestrictions. The default restrictions contains arbitrary
    * string key value pairs that are added to every SQL where clauses.
    * 
    * @param defaultRestrictions

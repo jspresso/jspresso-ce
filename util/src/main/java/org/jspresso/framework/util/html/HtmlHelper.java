@@ -65,7 +65,7 @@ public final class HtmlHelper {
    * 
    * @param text
    *          the text to escape.
-   * @return the ecaped HTML text.
+   * @return the escaped HTML text.
    */
   public static String escapeForHTML(String text) {
     return escapeForHTML(text, false);
@@ -78,14 +78,14 @@ public final class HtmlHelper {
    *          the text to escape.
    * @param escapeSpaces
    *          should we also escape spaces using &'nbsp'; entity ?
-   * @return the ecaped HTML text.
+   * @return the escaped HTML text.
    */
   public static String escapeForHTML(String text, boolean escapeSpaces) {
     if (text == null) {
       return null;
     }
     // use apache lib to escape...
-    // this librairie doesn't escape spaces (see workaround bellow)
+    // this library doesn't escape spaces (see workaround bellow)
     String str = StringEscapeUtils.escapeHtml(text);
 
     if (escapeSpaces) {
@@ -139,11 +139,11 @@ public final class HtmlHelper {
   }
 
   /**
-   * Keeps the text preformatted.
+   * Keeps the text pre-formatted.
    * 
    * @param message
    *          the message to transform.
-   * @return the html preformatted text.
+   * @return the html pre-formatted text.
    */
   public static String preformat(String message) {
     if (message != null) {
@@ -157,7 +157,7 @@ public final class HtmlHelper {
    * 
    * @param message
    *          the message to transform.
-   * @return the html preformatted text.
+   * @return the html pre-formatted text.
    */
   public static String toHtml(String message) {
     if (message != null) {

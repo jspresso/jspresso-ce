@@ -27,7 +27,7 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 
 /**
- * A mockup for FrontendController.
+ * A mock for FrontendController.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

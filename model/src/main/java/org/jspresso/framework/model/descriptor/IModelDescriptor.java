@@ -21,7 +21,7 @@ package org.jspresso.framework.model.descriptor;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 
 /**
- * This is just a marker interface for model descriptors (ususally bean
+ * This is just a marker interface for model descriptors (usually bean
  * descriptors and sub descriptors).
  * 
  * @version $LastChangedRevision$

@@ -35,7 +35,7 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
  * collection of components (one row per component in the collection) detailed
  * by a set of properties (one column per displayed component property).
  * <p>
- * The table view will automatically adapt its columuns depending on the
+ * The table view will automatically adapt its columns depending on the
  * underlying property descriptors, e.g. :
  * <ul>
  * <li>columns for read-only properties won't be editable</li>
@@ -64,7 +64,7 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
  * application resource bundles.</li>
  * <li>if the description is the empty string (''), the tooltip is de-activated.
  * </li>
- * <li>if the description is not set, then the toHtml property (see toHtoml
+ * <li>if the description is not set, then the toHtml property (see toHtml
  * property on entities / components definition) is used as dynamic property.
  * And the toHtml falls back to the toString if not set, which falls back to the
  * 1st string rendered property if not set.</li>
@@ -193,7 +193,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   /**
    * This property allows for configuring the columns of the table view in a
    * very customizable manner, thus overriding the model descriptor defaults.
-   * Each property view descriptor copntained in the list describes a table
+   * Each property view descriptor contained in the list describes a table
    * column that will be rendered in the UI accordingly.
    * <p>
    * For instance, a writable property can be made specifically read-only on
@@ -274,7 +274,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * Configures the action to be activated when a sort is triggered by the user.
-   * It should be used with caution and rarely be overriden from the default.
+   * It should be used with caution and rarely be overridden from the default.
    * 
    * @param sortingAction
    *          the sortingAction to set.

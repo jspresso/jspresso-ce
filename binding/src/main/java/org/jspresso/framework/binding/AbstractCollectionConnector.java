@@ -61,7 +61,7 @@ public abstract class AbstractCollectionConnector extends
    * @param id
    *          the connector id.
    * @param binder
-   *          the <code>IMvcBinder</code> used to bind dynamicatlly created
+   *          the <code>IMvcBinder</code> used to bind dynamically created
    *          child connectors.
    * @param childConnectorPrototype
    *          the connector prototype used to create new instances of child

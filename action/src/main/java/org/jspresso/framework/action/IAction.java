@@ -43,7 +43,7 @@ public interface IAction extends ISecurable, IPermIdSource {
    * 
    * @param actionHandler
    *          the action handler this action has been told to execute by. It may
-   *          be used to post another actio execution upon completion of this
+   *          be used to post another action execution upon completion of this
    *          one.
    * @param context
    *          the execution context. The action should update it depending on
@@ -53,7 +53,7 @@ public interface IAction extends ISecurable, IPermIdSource {
   boolean execute(IActionHandler actionHandler, Map<String, Object> context);
 
   /**
-   * Tells the framework wether this action executes on the application backend
+   * Tells the framework whether this action executes on the application backend
    * or if it is a pure frontend action. this is aimed at distributing the
    * action execution correctly to the different controllers of the application.
    * 
@@ -63,14 +63,14 @@ public interface IAction extends ISecurable, IPermIdSource {
   boolean isBackend();
 
   /**
-   * Tells the framework wether this action should be executed transactionally.
+   * Tells the framework whether this action should be executed transactionally.
    * 
    * @return true if the action should be executed transactionally.
    */
   boolean isTransactional();
 
   /**
-   * Tells the framework wether this action should be executed asynchronously.
+   * Tells the framework whether this action should be executed asynchronously.
    * In that case, it is executed on a separate thread using it's own context.
    * 
    * @return true if the action should be executed asynchronously.

@@ -32,7 +32,7 @@ public final class EntityHelper {
    * Constructs a new <code>EntityHelper</code> instance.
    */
   private EntityHelper() {
-    // Helper cponstructor.
+    // Helper constructor.
   }
 
   /**

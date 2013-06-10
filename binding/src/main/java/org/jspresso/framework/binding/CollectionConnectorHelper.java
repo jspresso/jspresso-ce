@@ -61,7 +61,7 @@ public final class CollectionConnectorHelper {
    *          the original collection.
    * @param bigCollection
    *          the collection with added elements.
-   * @return the the array of element indices which where added to tyhe original
+   * @return the the array of element indices which where added to the original
    *         collection
    */
   public static int[] computeDifferenceIndices(Collection<?> smallCollection,

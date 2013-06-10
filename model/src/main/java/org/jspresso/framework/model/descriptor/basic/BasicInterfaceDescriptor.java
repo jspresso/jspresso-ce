@@ -20,9 +20,9 @@ package org.jspresso.framework.model.descriptor.basic;
 
 /**
  * This descriptor is a mean of factorizing state/behaviour among components,
- * entities or even sub-interfaces. This is a much less coupling mecanism than
+ * entities or even sub-interfaces. This is a much less coupling mechanism than
  * actual entity inheritance and can be used across entities that don't belong
- * the the same inheritance hierarchy, or even accross types (entities,
+ * the the same inheritance hierarchy, or even across types (entities,
  * components, interfaces).
  * <p>
  * Please note that interface descriptor is not a way for domain elements to

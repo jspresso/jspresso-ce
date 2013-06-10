@@ -93,9 +93,9 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
   }
 
   /**
-   * Constructs the list of actions that will be installed on the dalog toolbar.
+   * Constructs the list of actions that will be installed on the dialog toolbar.
    * 
-   * @return the list of actions that will be installed on the dalog toolbar.
+   * @return the list of actions that will be installed on the dialog toolbar.
    */
   protected List<IDisplayableAction> getDialogActions() {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();

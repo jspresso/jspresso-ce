@@ -51,7 +51,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   }
 
   /**
-   * Overriden since textarea are useless in query screens.
+   * Overridden since text area are useless in query screens.
    * <p>
    * {@inheritDoc}
    */

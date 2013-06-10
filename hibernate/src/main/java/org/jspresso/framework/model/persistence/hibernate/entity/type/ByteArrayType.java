@@ -87,7 +87,7 @@ public class ByteArrayType implements UserType {
   }
 
   /**
-   * Constucts a Bytes object out of a byte array.
+   * Constructs a Bytes object out of a byte array.
    * <p>
    * {@inheritDoc}
    */
@@ -102,7 +102,7 @@ public class ByteArrayType implements UserType {
   }
 
   /**
-   * Constucts a byte array out of a Bytes object.
+   * Constructs a byte array out of a Bytes object.
    * <p>
    * {@inheritDoc}
    */

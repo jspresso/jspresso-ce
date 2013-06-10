@@ -47,7 +47,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * implements the Connector value listener management through the use of the
  * <code>ValueChangeSupport</code> helper. It can virtually adapt to any peer
  * connectee since the way the value is retrieved by from the connectee is left
- * to the implementor.
+ * to the implementer.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -655,7 +655,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (evt.getSource() != getModelConnector()) {
         Object potentiallyChangedValue = getConnectorValue();
         if (!ObjectUtils.equals(potentiallyChangedValue, evt.getNewValue())) {
-          // the source connector must be notified because settting this
+          // the source connector must be notified because setting this
           // connector
           // value resulted in a value changed (a string to uppercase for
           // instance).
@@ -680,9 +680,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * When overriden . This method is called whenever a connector needs some
+   * When overridden . This method is called whenever a connector needs some
    * extra computation to save its old value. By default, the method returns the
-   * parameter itself. For instance, this method is overriden in collection
+   * parameter itself. For instance, this method is overridden in collection
    * connectors, where the underlying collection does not change but its content
    * changes. Simply keeping a reference on the underlying collection would not
    * be of any help since it never changes, preventing the notification to
@@ -733,7 +733,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Whenever an exception occurs when setting a connector value, some
-   * notifications have to be fired to notify listeneres.
+   * notifications have to be fired to notify listeners.
    */
   protected void propagateRollback() {
     Object badValue = getConnectorValue();
@@ -753,7 +753,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Handles a runtime exception, trying to delegete it to the exception handler
+   * Handles a runtime exception, trying to delegate it to the exception handler
    * if any.
    * 
    * @param ex
@@ -830,7 +830,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (gates != null) {
       IValueConnector connectorToListenTo;
       if (getModelDescriptor() instanceof IPropertyDescriptor) {
-        // to avoid misbinding on reference property connectors
+        // to avoid mis-binding on reference property connectors
         connectorToListenTo = getComponentConnector(getParentConnector());
       } else {
         connectorToListenTo = getComponentConnector(this);

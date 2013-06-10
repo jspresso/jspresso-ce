@@ -26,7 +26,7 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  * nest a single subtree. The child subtree is directly placed under each node
  * without any intermediary grouping node. For instance, given a simple tree
  * level mapping a collection of <i>A</i>s and whose child is a tree level
- * maping a collection of <i>B</i>s, the tree would look like :
+ * mapping a collection of <i>B</i>s, the tree would look like :
  * 
  * <pre>
  * parent

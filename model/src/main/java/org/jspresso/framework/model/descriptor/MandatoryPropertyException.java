@@ -25,7 +25,7 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * An exception occuring whenever a mandatory property constraint is violated.
+ * An exception occurring whenever a mandatory property constraint is violated.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -50,13 +50,13 @@ public final class BatchLauncher {
       startup.parseCmdLine(subArgs);
       startup.start();
     } catch (InstantiationException ex) {
-      LOG.error("An unexpected error occured", ex);
+      LOG.error("An unexpected error occurred", ex);
       System.exit(1);
     } catch (IllegalAccessException ex) {
-      LOG.error("An unexpected error occured", ex);
+      LOG.error("An unexpected error occurred", ex);
       System.exit(1);
     } catch (ClassNotFoundException ex) {
-      LOG.error("An unexpected error occured", ex);
+      LOG.error("An unexpected error occurred", ex);
       System.exit(1);
     }
   }

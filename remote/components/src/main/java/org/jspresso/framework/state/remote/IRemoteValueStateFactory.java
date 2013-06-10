@@ -50,7 +50,7 @@ public interface IRemoteValueStateFactory {
   RemoteValueState createRemoteValueState(String guid, String permId);
 
   /**
-   * Creates a new <code>RemoteFormttedValueState</code> instance.
+   * Creates a new <code>RemoteFormattedValueState</code> instance.
    * 
    * @param guid
    *          the state guid.

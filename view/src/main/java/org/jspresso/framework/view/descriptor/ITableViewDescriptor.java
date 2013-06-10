@@ -49,9 +49,9 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
   IDisplayableAction getSortingAction();
 
   /**
-   * Gets wether this table rows should be sorted manually.
+   * Gets whether this table rows should be sorted manually.
    * 
-   * @return wether this table rows should be sorted manually.
+   * @return whether this table rows should be sorted manually.
    */
   boolean isSortable();
 }

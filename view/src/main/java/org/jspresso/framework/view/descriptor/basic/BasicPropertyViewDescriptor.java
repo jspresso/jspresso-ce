@@ -169,7 +169,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * When the property has to be labelled (e.g. in a component view), this
-   * property defines the foregroud color of the corresponding label. It might
+   * property defines the foreground color of the corresponding label. It might
    * differ from the field component one. The color must be defined using its
    * string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
@@ -183,7 +183,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Whenever the property decriptor backing the view is not scalar, this
+   * Whenever the property descriptor backing the view is not scalar, this
    * property allows to override which of the referenced component fields should
    * be displayed :
    * <ul>
@@ -240,8 +240,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * <ol>
    * <li>If the property is read-only, then assigning an action turns the
    * property into a clickable hyperlink</li>
-   * <li>If the property is read-write, the registered action will be trigerred
-   * when the user changes the value of the field. Note thet in that case, the
+   * <li>If the property is read-write, the registered action will be triggered
+   * when the user changes the value of the field. Note that in that case, the
    * action is executed <i>after</i> the model has been updated. However the old
    * property value can be retrieved from the context action param.</li>
    * </ol>
@@ -316,7 +316,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Configure the sortability of a property view when used to defines a table
-   * column for instance. Whenever it is not explicitely set, it falls back to
+   * column for instance. Whenever it is not explicitly set, it falls back to
    * the model property sortability. If no model descriptor is set, defaults to
    * <code>true</code>.
    * 

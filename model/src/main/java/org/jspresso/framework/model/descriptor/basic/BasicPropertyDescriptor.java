@@ -34,7 +34,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * This is the abstract base class for all property descriptors. It mainly
- * serves afor factorizing all commons properties for property descriptors.
+ * serves for factorizing all commons properties for property descriptors.
  * <p>
  * A property descriptor is used for describing a component/entity/interface
  * property (<i>Java Beans</i> semantic).
@@ -328,7 +328,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   /**
    * Default property sortability.
    * 
-   * @return <code>true</code> by default unless overriden in subclasses.
+   * @return <code>true</code> by default unless overridden in subclasses.
    */
   protected boolean getDefaultSortablility() {
     return true;
@@ -400,7 +400,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * its management is left to the developer.
    * <p>
    * Properties declared with a delegate computing class are considered computed
-   * by default so there is no need to explicitely set them
+   * by default so there is no need to explicitly set them
    * <code>computed=true</code>. However, there is sometimes a need to declare a
    * property at some level (e.g. in an interface descriptor) and let lower
    * level implementation decide how to handle this common property concretely
@@ -458,7 +458,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * is made writable through the use of <code>delegateWritable=true</code>, the
    * delegate class must also provide a setter for the computed property.
    * <p>
-   * Defult value is <code>false</code>.
+   * Default value is <code>false</code>.
    * 
    * @param delegateWritable
    *          the delegateWritable to set.
@@ -474,7 +474,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * (e.g. show/hide columns or fields). Setting the collection of granted roles
    * to <code>null</code> (default value) disables role based authorization on
    * this property level. Note that this authorization enforcement does not
-   * prevent programmatic access that is of the developer responsbility.
+   * prevent programmatic access that is of the developer responsibility.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
@@ -595,7 +595,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   /**
    * Enforces a property to be read-only. This is only enforced at the UI level,
    * i.e. the property can still be updated programmatically. The UI may take
-   * decisions like changing textfields into labels if it knows the underlying
+   * decisions like changing text fields into labels if it knows the underlying
    * property is read-only.
    * 
    * @param readOnly
@@ -635,7 +635,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * Makes this property part of a unicity scope. All tuples of properties
    * belonging to the same unicity scope are enforced to be unique in the
    * component type scope. This concretely translates to unique constraints in
-   * the datastore spanning the properties composing the unicity scope.
+   * the data store spanning the properties composing the unicity scope.
    * <p>
    * Note that, for performance reasons, unicity scopes are only enforced by the
    * persistence layer.
@@ -648,7 +648,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * This property allows to fine tune wether this component property
+   * This property allows to fine tune whether this component property
    * participates in optimistic versioning. It mainly allows to declare some
    * properties that should be ignored regarding optimistic versioning thus
    * lowering the risk of version conflicts between concurrent users. Of course,
@@ -668,7 +668,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   /**
    * Assigns a collection of gates to determine property <i>writability</i>. A
    * property will be considered writable if and only if all gates are open.
-   * This mecanism is mainly used for dynamic UI authorization based on model
+   * This mechanism is mainly used for dynamic UI authorization based on model
    * state, e.g. a validated invoice should not be editable anymore.
    * <p>
    * Descriptor assigned gates will be cloned for each property instance created
@@ -681,7 +681,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * <p>
    * By default, property descriptors are not assigned any gates collection,
    * i.e. there is no writability restriction. Note that gates do not enforce
-   * programatic writability of a property; only UI is impacted.
+   * programmatic writability of a property; only UI is impacted.
    * 
    * @param writabilityGates
    *          the writabilityGates to set.

@@ -82,12 +82,12 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    * the first table (or <code>null</code> if selection is empty). Using
    * <code>cascadingModel=true</code> is only necessary when tracking view
    * selection on the master nested view. You don't need it if, for instance,
-   * the master nested view is a single model view like a omponent view. In the
+   * the master nested view is a single model view like a component view. In the
    * latter case, you can bind a table detail view just by adding it to the same
    * composite without having to set <code>cascadingModel=true</code>.
    * <p>
    * Default value is <code>false</code>, i.e. al nested views share the same
-   * model than the outer composite unless explicitely specified differently.
+   * model than the outer composite unless explicitly specified differently.
    * 
    * @param cascadingModels
    *          true if this descriptor is cascading its models based on a master

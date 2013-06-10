@@ -73,7 +73,7 @@ public abstract class AbstractTestDataPersister {
   }
 
   /**
-   * Creates and persist the test data. Tjhis method must be overriden in
+   * Creates and persist the test data. This method must be overridden in
    * subclasses.
    */
   protected abstract void createAndPersistTestData();
@@ -120,7 +120,7 @@ public abstract class AbstractTestDataPersister {
    * Query entities.
    * 
    * @param queryString
-   *          the HSQL query string.
+   *          the HQL query string.
    * @return the entity list.
    */
   protected List<?> find(String queryString) {

@@ -46,7 +46,7 @@ public class SelectionChangeEvent extends EventObject {
    * @param newSelection
    *          The new selection of the source.
    * @param leadingIndex
-   *          the leadingIndex selecton index.
+   *          the leadingIndex selection index.
    */
   public SelectionChangeEvent(ISelectable source, int[] oldSelection,
       int[] newSelection, int leadingIndex) {

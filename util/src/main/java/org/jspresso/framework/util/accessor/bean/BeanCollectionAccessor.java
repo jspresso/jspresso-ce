@@ -111,10 +111,10 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
   }
 
   /**
-   * Capitalizes the first caracter of a string.
+   * Capitalizes the first character of a string.
    * 
    * @param input
-   *          the string to capitalize the first caracter.
+   *          the string to capitalize the first character.
    * @return the transformed string.
    */
   protected String capitalizeFirst(String input) {

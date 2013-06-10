@@ -33,8 +33,8 @@ import org.jspresso.framework.util.collection.ObjectEqualityMap;
  * create and add a new detail to a master domain object. The new instance
  * created is an instance of
  * <code>org.jspresso.framework.util.collection.ObjectEqualityMap</code>.
- * Default property alues as well as <code>onCreate</code> lifecycle
- * interceptors registered on the component descrtiptor are supported.
+ * Default property values as well as <code>onCreate</code> lifecycle
+ * interceptors registered on the component descriptor are supported.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

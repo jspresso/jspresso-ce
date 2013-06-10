@@ -194,10 +194,10 @@ public abstract class RemoteStartup extends
         return Collections.emptyList();
       }
     } catch (RuntimeException ex) {
-      LOG.error("An unexpected error occured while starting the server.", ex);
+      LOG.error("An unexpected error occurred while starting the server.", ex);
       RemoteMessageCommand errorMessage = createErrorMessageCommand();
       errorMessage
-          .setMessage("An unexpected error occured while starting the server. Please contact the application manager.");
+          .setMessage("An unexpected error occurred while starting the server. Please contact the application manager.");
       return Collections.singletonList((RemoteCommand) errorMessage);
     }
   }

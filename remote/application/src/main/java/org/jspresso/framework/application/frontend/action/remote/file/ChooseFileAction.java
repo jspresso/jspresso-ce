@@ -27,7 +27,7 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
 
 /**
  * This is the abstract base class for actions dealing with client file system
- * operations. It holds several parameterizations that are common to all file
+ * operations. It holds several parametrizations that are common to all file
  * operations. Please, be aware that these FS actions heavily depend on the UI
  * channel, i.e. you have different implementation classes (but registered under
  * the same Spring name) for all supported UI technologies. For instance,
@@ -112,7 +112,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
 
   /**
    * Computes a file name to save the file. Defaults to the action default file
-   * name parameterized in the action.
+   * name parametrized in the action.
    * 
    * @param context
    *          the action context.

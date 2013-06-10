@@ -9,7 +9,7 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * This action pops-up an informational message to the user. The message,
- * instead of being extracted out of the context, is parameterized statically
+ * instead of being extracted out of the context, is parametrized statically
  * into the action through its internationalization key.
  * 
  * @version $LastChangedRevision: 2097 $

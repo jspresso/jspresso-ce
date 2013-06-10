@@ -126,7 +126,7 @@ public class EntityGenerator {
         .isRequired()
         .hasArg()
         .withDescription(
-            "sets the resource path of the directory containg the templates.")
+            "sets the resource path of the directory containing the templates.")
         .create(TEMPLATE_RESOURCE_PATH));
     options.addOption(OptionBuilder.withArgName(TEMPLATE_NAME).isRequired()
         .hasArg().withDescription("sets the used component code template.")

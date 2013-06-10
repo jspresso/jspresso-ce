@@ -333,7 +333,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Createsa and binds a collection pagination view.
+   * Creates a and binds a collection pagination view.
    * 
    * @param paginationViewDescriptor
    *          the pagination view descriptor.
@@ -607,7 +607,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param component
    *          the component to apply the preferred sze on.
    * @param preferredSize
-   *          vthe preferred size to apply (might be null).
+   *          the preferred size to apply (might be null).
    */
   protected abstract void applyPreferredSize(E component,
       Dimension preferredSize);
@@ -710,7 +710,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Computes a table column identifer that is used for sorting.
+   * Computes a table column identifier that is used for sorting.
    * 
    * @param viewDescriptor
    *          the table view descriptor.
@@ -1113,7 +1113,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * Creates a table column connector.
    * 
    * @param columnViewDescriptor
-   *          the column decriptor to create the connector for.
+   *          the column descriptor to create the connector for.
    * @param descriptor
    *          the component descriptor this table relies on.
    * @param actionHandler
@@ -1646,7 +1646,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          values.
    * @param locale
    *          the locale to create the formatter for.
-   * @return the fomrmatter.
+   * @return the formatter.
    */
   protected IFormatter<Object, String> createEnumerationFormatter(
       IEnumerationPropertyDescriptor propertyDescriptor,
@@ -2893,7 +2893,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Gets wether a property view is considered to fill all the available height
+   * Gets whether a property view is considered to fill all the available height
    * space.
    * 
    * @param propertyViewDescriptor
@@ -2916,7 +2916,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Shows a card in in card layouted panel.
+   * Shows a card in in card laid out panel.
    * 
    * @param cardsPeer
    *          the component that holds the cards
@@ -3375,7 +3375,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * Stores user table preferences.
    * 
    * @param tableId
-   *          the table id ised as preference key in the user store.
+   *          the table id used as preference key in the user store.
    * @param columnPrefs
    *          the array of {columnId,columnSize} for the table
    * @param actionHandler

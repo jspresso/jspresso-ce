@@ -89,6 +89,6 @@ public final class SecurityContextConstants {
   public static final String SESSION_PROPERTIES = "SESSION_PROPERTIES";
 
   private SecurityContextConstants() {
-    // to prevent this class from being instanciated.
+    // to prevent this class from being instantiated.
   }
 }

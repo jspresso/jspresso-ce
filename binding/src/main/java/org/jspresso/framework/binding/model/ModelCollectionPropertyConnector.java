@@ -57,7 +57,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * Constructs a new model property connector on a model collection property.
    * This constructor does not specify the element class of this collection
-   * connector. It must be setted afterwards using the apropriate setter.
+   * connector. It must be set afterwards using the appropriate setter.
    * 
    * @param modelDescriptor
    *          the model descriptor backing this connector.

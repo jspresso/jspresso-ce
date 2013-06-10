@@ -34,7 +34,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * (collection of) component(s) to the model collection of the view it's
  * installed on. Its objective is to complete the action context with the
  * descriptor of the component (or entity) to be added so that the backend
- * action explicitely knows what to create. Moreover, the name, description and
+ * action explicitly knows what to create. Moreover, the name, description and
  * icon used for the graphical representation are all computed out of the
  * configured <code>elementEntityDescriptor</code>.
  * 

@@ -36,7 +36,7 @@ public interface IListSelectionModelBinder {
   /**
    * Binds a collection connector to keep track of a selection model selections.
    * 
-   * @param collectionCompnent
+   * @param collectionComponent
    *          the collection component to bind the selection model for.
    * @param selectable
    *          the connector to bind.
@@ -45,7 +45,7 @@ public interface IListSelectionModelBinder {
    * @param rowMapper
    *          a row indices transformer or null if none.
    */
-  void bindSelectionModel(JComponent collectionCompnent,
+  void bindSelectionModel(JComponent collectionComponent,
       ISelectable selectable, ListSelectionModel selectionModel,
       IIndexMapper rowMapper);
 }

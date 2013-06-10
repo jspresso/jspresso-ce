@@ -1924,7 +1924,7 @@ package org.jspresso.framework.view.flex {
               if(state.children.length > selectedIndices[i]) {
                 selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
               } else {
-                // there is a desynch that will be fixed by another selection command.
+                // there is a de-sync that will be fixed by another selection command.
                 return;
               }
             }
@@ -2297,7 +2297,7 @@ package org.jspresso.framework.view.flex {
               if(state.children.length > selectedIndices[i]) {
                 selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
               } else {
-                // there is a desynch that will be fixed by another selection command.
+                // there is a de-sync that will be fixed by another selection command.
                 return;
               }
             }

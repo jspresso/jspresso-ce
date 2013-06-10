@@ -74,7 +74,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
         && !getParentConnector().areChildrenWritable()) {
       return false;
     }
-    // overriden to remove model connector writability condition.
+    // overridden to remove model connector writability condition.
     // if (getModelConnector() != null && !getModelConnector().isWritable()) {
     // return false;
     // }

@@ -145,7 +145,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
   }
 
   /**
-   * Utility method used to extact (recursively through the action chain) the
+   * Utility method used to extract (recursively through the action chain) the
    * internal state of an action. This state should be used (using equals) in
    * order guarantee that the internal state of an action has not changed during
    * it's execution since actions are meant to be singletons this would violate

@@ -529,8 +529,8 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * @param urlSpec
    *          the url of the image to be used on the icon.
    * @param iconSize
-   *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resided if
+   *          necessary to match the requested size.
    * @return the constructed icon.
    */
   protected abstract E createIcon(String urlSpec, Dimension iconSize);

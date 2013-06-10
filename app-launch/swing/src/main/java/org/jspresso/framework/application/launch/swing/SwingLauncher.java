@@ -85,11 +85,11 @@ public final class SwingLauncher {
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(SwingLauncher.class.getSimpleName(), options);
     } catch (InstantiationException ex) {
-      LOG.error("An unexpected error occured.", ex);
+      LOG.error("An unexpected error occurred.", ex);
     } catch (IllegalAccessException ex) {
-      LOG.error("An unexpected error occured.", ex);
+      LOG.error("An unexpected error occurred.", ex);
     } catch (ClassNotFoundException ex) {
-      LOG.error("An unexpected error occured.", ex);
+      LOG.error("An unexpected error occurred.", ex);
     }
     if (splashed) {
       SplashWindow.disposeSplash();

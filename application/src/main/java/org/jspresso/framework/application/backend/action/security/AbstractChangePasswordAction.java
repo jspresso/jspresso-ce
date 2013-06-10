@@ -41,8 +41,8 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * </ul>
  * For the action to succeed, <code>current_password</code> must match the
  * logged-in user current password and <code>password_typed</code> and
- * <code>password_retyped</code> mut match between eachother. The only method to
- * be implemented by concrete subcasses is :
+ * <code>password_retyped</code> mut match between each other. The only method to
+ * be implemented by concrete subclasses is :
  * <p>
  * 
  * <pre>
@@ -198,13 +198,13 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    *          the current password.
    * @param newPassword
    *          the new password.
-   * @return true if password was changed succesfully.
+   * @return true if password was changed successfully.
    */
   protected abstract boolean changePassword(UserPrincipal userPrincipal,
       String currentPassword, String newPassword);
 
   /**
-   * Hashes a char array using the algorithm parametered in the instance.
+   * Hashes a char array using the algorithm parametrised in the instance.
    * 
    * @param newPassword
    *          the new password to hash.

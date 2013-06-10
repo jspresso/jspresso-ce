@@ -46,7 +46,7 @@ public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> 
    * <code>openOnTrue</code> property is set to <code>false</code>, the state of
    * the gate will follow the boolean property value. It supports
    * &quot;<b>!</b>&quot; prefix to negate the property value. It also supports
-   * non-boolean properties. In that case, the test is performed aginst the
+   * non-boolean properties. In that case, the test is performed against the
    * <code>property != null</code> condition.
    */
   @Override

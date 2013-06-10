@@ -33,7 +33,7 @@ import java.io.Reader;
 import java.io.StringReader;
 
 /**
- * Strongly inspired from javax.swing.plaf.basic.BasicTranferable.
+ * Strongly inspired from javax.swing.plaf.basic.BasicTransferable.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -70,7 +70,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
       stringFlavors[1] = DataFlavor.stringFlavor;
 
     } catch (ClassNotFoundException cle) {
-      LOG.error("Error initializing javax.swing.plaf.basic.BasicTranserable", cle);
+      LOG.error("Error initializing javax.swing.plaf.basic.BasicTransferable", cle);
     }
   }
 
@@ -301,7 +301,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
     return plainData;
   }
 
-  // --- string flavorss
+  // --- string flavors
   // --------------------------------------------------------
 
   /**

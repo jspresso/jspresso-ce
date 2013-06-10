@@ -104,7 +104,7 @@ public final class SwingUtil {
   }
 
   /**
-   * Configures a jbutton with default behaviour like the multi-click treshold.
+   * Configures a jButton with default behaviour like the multi-click threshold.
    * 
    * @param button
    *          the button to work on.
@@ -114,11 +114,11 @@ public final class SwingUtil {
   }
 
   /**
-   * Configures a textfield so that it selects its content when getting focus by
+   * Configures a text field so that it selects its content when getting focus by
    * another mean than the mouse.
    * 
    * @param textField
-   *          the textfield to work on.
+   *          the text field to work on.
    */
   public static void enableSelectionOnFocusGained(final JTextField textField) {
 
@@ -337,7 +337,7 @@ public final class SwingUtil {
   }
 
   /**
-   * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
+   * Tests whether in swing event dispatch thread. If not, use SwingUtilities to
    * invoke runnable and wait.
    * 
    * @param runnable

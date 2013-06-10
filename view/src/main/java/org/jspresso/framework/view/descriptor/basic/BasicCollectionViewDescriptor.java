@@ -34,7 +34,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * This is the abstract base descriptor of all views used to display a
  * collection of elements. A collection view must be backed by a collection
  * descriptor model. Most of the time, the model will be a collection property
- * descriptor so that the collecion to display is directly inferred from the
+ * descriptor so that the collection to display is directly inferred from the
  * collection property value through the binding layer.
  * 
  * @version $LastChangedRevision$
@@ -95,7 +95,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Registers an action that is implicitely triggered everytime the selection
+   * Registers an action that is implicitly triggered every time the selection
    * changes on the collection view UI peer. The context of the action execution
    * is the same as if the action was registered in the view action map.
    * 
@@ -107,7 +107,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Registers an action that is implicitely triggered everytime a row is
+   * Registers an action that is implicitly triggered every time a row is
    * activated (e.g. double-clicked for current UI channels) on the collection
    * view UI peer. The context of the action execution is the same as if the
    * action was registered in the view action map.
@@ -160,7 +160,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Configures a view that will control the pagination (if any) on this
-   * collection view. When contructed, the collection view will be decorated
+   * collection view. When constructed, the collection view will be decorated
    * with the pagination view. The pagination view will be bound to the same
    * model as the one providing the collection of the collection view.
    * 
