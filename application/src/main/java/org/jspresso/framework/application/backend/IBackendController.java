@@ -417,7 +417,7 @@ public interface IBackendController extends IController,
    * 
    * @return components the component transfer structure to retrieve.
    */
-  ComponentTransferStructure<? extends IComponent> retrieveComponents();
+  ComponentTransferStructure<IComponent> retrieveComponents();
 
   /**
    * Rollbacks the current unit of work.
@@ -447,7 +447,7 @@ public interface IBackendController extends IController,
    *          the component transfer structure to store.
    */
   void storeComponents(
-      ComponentTransferStructure<? extends IComponent> components);
+      ComponentTransferStructure<IComponent> components);
 
   /**
    * Cleans-up request-scoped resources.

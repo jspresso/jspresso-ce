@@ -75,7 +75,7 @@ public class PasteCollectionToMasterAction extends
           .getCollectionDescriptor().getElementDescriptor()
           .getComponentContract();
       if (transferStructure.getContent() instanceof Collection<?>) {
-        for (Object comp : (Collection<?>) transferStructure.getContent()) {
+        for (Object comp : transferStructure.getContent()) {
           if (allowedContract.isAssignableFrom(comp.getClass())) {
             componentsToTransfer.add(comp);
           }

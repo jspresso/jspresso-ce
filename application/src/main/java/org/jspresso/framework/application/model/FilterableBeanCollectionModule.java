@@ -31,7 +31,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.lang.ObjectUtils;

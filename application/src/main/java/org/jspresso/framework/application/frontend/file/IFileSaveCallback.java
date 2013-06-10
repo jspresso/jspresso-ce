@@ -30,6 +30,7 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public interface IFileSaveCallback extends IFileCallback {
 
   /**

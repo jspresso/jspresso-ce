@@ -188,6 +188,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the collectionViewDescriptor.
    */
+  @SuppressWarnings("UnusedParameters")
   protected ICollectionViewDescriptor getCollectionViewDescriptor(
       Map<String, Object> context) {
     return collectionViewDescriptor;
@@ -211,6 +212,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the componentDescriptor.
    */
+  @SuppressWarnings("UnusedParameters")
   protected IComponentDescriptor<?> getComponentDescriptor(
       Map<String, Object> context) {
     return componentDescriptor;

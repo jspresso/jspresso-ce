@@ -460,6 +460,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param propertyDescriptor
    *          the property descriptor this entity was detached from.
    */
+  @SuppressWarnings("UnusedParameters")
   protected void entityDetached(IEntity parent, IEntity child,
       IRelationshipEndPropertyDescriptor propertyDescriptor) {
     // defaults to no-op.
@@ -1223,7 +1224,8 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private boolean hasListeners(@SuppressWarnings("unused") Object proxy,
+  @SuppressWarnings({"unused", "UnusedParameters"})
+  private boolean hasListeners(Object proxy,
       String propertyName) {
     if (computedPropertiesCache.containsKey(propertyName)) {
       // this is necessary in order to force cache recomputation
@@ -1272,8 +1274,9 @@ public abstract class AbstractComponentInvocationHandler implements
     return false;
   }
 
+  @SuppressWarnings({"unused", "UnusedParameters"})
   private PropertyChangeListener[] getPropertyChangeListeners(
-      @SuppressWarnings("unused") Object proxy) {
+      Object proxy) {
     List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
       for (PropertyChangeListener pcl : propertyChangeSupport
@@ -1291,8 +1294,9 @@ public abstract class AbstractComponentInvocationHandler implements
     return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
+  @SuppressWarnings({"unused", "UnusedParameters"})
   private PropertyChangeListener[] getPropertyChangeListeners(
-      @SuppressWarnings("unused") Object proxy, String propertyName) {
+      Object proxy, String propertyName) {
     List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
     if (propertyChangeSupport != null) {
       Collections.addAll(listeners, propertyChangeSupport

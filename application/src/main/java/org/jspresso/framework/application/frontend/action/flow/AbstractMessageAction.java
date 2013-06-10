@@ -67,6 +67,7 @@ public abstract class AbstractMessageAction<E, F, G> extends
    * @return the message arguments to be passed to the translation provider for
    *         being used with message format.
    */
+  @SuppressWarnings("UnusedParameters")
   protected Object[] getMessageArgs(Map<String, Object> context) {
     return null;
   }

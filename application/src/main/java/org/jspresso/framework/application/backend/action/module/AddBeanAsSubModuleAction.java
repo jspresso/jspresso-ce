@@ -132,6 +132,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    *          the action context.
    * @return the bean module component descriptor.
    */
+  @SuppressWarnings("UnusedParameters")
   protected IComponentDescriptor<?> getBeanComponentDescriptor(
       Module parentModule, Map<String, Object> context) {
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
@@ -239,6 +240,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    *          the action context.
    * @return the parent module to add the new module to.
    */
+  @SuppressWarnings("UnusedParameters")
   protected Module findDestinationModule(Object component,
       Map<String, Object> context) {
     Workspace workspace = getParentWorkspace(context);
@@ -264,7 +266,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    * @param context
    *          the action context.
    */
-  @SuppressWarnings("EmptyMethod")
+  @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   protected void preSelectModuleObject(Object moduleObject,
       Map<String, Object> context) {
     // Empty implementation by default.
@@ -279,7 +281,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    * @param context
    *          the action context.
    */
-  @SuppressWarnings("EmptyMethod")
+  @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   protected void postSelectModuleObject(Object moduleObject,
       Map<String, Object> context) {
     // Empty implementation by default.
@@ -296,6 +298,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
    *          the action context.
    * @return the stack of modules containing the found module.
    */
+  @SuppressWarnings("UnusedParameters")
   public Stack<Module> findCurrentModule(Module rootModule,
       Object moduleObject, Map<String, Object> context) {
     Stack<Module> stack = new Stack<Module>();

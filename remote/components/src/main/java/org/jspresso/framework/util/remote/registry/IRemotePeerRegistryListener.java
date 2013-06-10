@@ -35,6 +35,7 @@ public interface IRemotePeerRegistryListener {
    * @param peer
    *          the added remote peer.
    */
+  @SuppressWarnings("UnusedParameters")
   void remotePeerAdded(IRemotePeer peer);
 
   /**

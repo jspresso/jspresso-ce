@@ -24,7 +24,6 @@ import org.jspresso.framework.util.accessor.AbstractAccessorFactory;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
-import org.jspresso.framework.util.bean.MissingPropertyException;
 
 /**
  * This is the default implementation of the accessor factory.
@@ -32,6 +31,7 @@ import org.jspresso.framework.util.bean.MissingPropertyException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public class BasicAccessorFactory extends AbstractAccessorFactory {
 
   private IAccessorFactory beanAccessorFactory;

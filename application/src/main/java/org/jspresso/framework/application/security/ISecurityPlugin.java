@@ -28,6 +28,7 @@ import org.jspresso.framework.security.ISecurable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public interface ISecurityPlugin {
 
   /**

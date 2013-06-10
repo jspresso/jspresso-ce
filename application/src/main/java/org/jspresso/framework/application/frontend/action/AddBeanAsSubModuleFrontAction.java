@@ -40,6 +40,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @param <G>
  *          the actual action type used.
  */
+@SuppressWarnings("UnusedParameters")
 public class AddBeanAsSubModuleFrontAction<E, F, G> extends
     FrontendAction<E, F, G> {
 

@@ -28,6 +28,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public interface ICriteriaFactory {
 
   /**

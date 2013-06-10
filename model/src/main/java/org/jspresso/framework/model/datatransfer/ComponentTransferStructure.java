@@ -3,6 +3,8 @@
  */
 package org.jspresso.framework.model.datatransfer;
 
+import java.util.List;
+
 /**
  * A simple container for transfering component(s). Its usage is targetting at
  * copy/cut/paste operations.
@@ -14,8 +16,8 @@ package org.jspresso.framework.model.datatransfer;
  */
 public class ComponentTransferStructure<E> {
 
-  private final Object        content;
-  private final ETransferMode transferMode;
+  private final List<E> content;
+  private final ETransferMode     transferMode;
 
   /**
    * Constructs a new <code>ComponentTransferStructure</code> instance.
@@ -25,7 +27,7 @@ public class ComponentTransferStructure<E> {
    * @param transferMode
    *          the transfer mode (copy or move).
    */
-  public ComponentTransferStructure(Object content, ETransferMode transferMode) {
+  public ComponentTransferStructure(List<E> content, ETransferMode transferMode) {
     this.content = content;
     this.transferMode = transferMode;
   }
@@ -35,7 +37,7 @@ public class ComponentTransferStructure<E> {
    * 
    * @return the content.
    */
-  public Object getContent() {
+  public List<E> getContent() {
     return content;
   }
 

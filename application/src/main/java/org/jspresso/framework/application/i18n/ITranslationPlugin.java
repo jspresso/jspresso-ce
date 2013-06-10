@@ -31,6 +31,7 @@ import org.jspresso.framework.application.backend.session.IApplicationSession;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public interface ITranslationPlugin {
 
   /**

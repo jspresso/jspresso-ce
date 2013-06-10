@@ -876,6 +876,7 @@ public class HibernateBackendController extends AbstractBackendController {
    *          the type of the entity.
    * @return the first found entity or null
    */
+  @SuppressWarnings("UnusedParameters")
   public <T extends IEntity> List<T> findByCriteria(
       final DetachedCriteria criteria, int firstResult, int maxResults,
       EMergeMode mergeMode, Class<? extends T> clazz) {

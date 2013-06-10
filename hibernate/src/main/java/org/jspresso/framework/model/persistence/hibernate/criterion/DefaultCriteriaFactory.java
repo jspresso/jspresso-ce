@@ -484,6 +484,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *          the holding property descriptor or null if none.
    * @return true, if the query component does not generate any restriction.
    */
+  @SuppressWarnings("UnusedParameters")
   protected boolean isQueryComponentEmpty(IQueryComponent queryComponent,
       IPropertyDescriptor holdingPropertyDescriptor) {
     if (queryComponent == null || queryComponent.isEmpty()) {

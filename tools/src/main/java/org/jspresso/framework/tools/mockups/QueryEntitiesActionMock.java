@@ -36,6 +36,7 @@ public class QueryEntitiesActionMock extends BackendAction {
    * @param mergeMode
    *          the mergeMode to set.
    */
+  @SuppressWarnings("UnusedParameters")
   public void setMergeMode(EMergeMode mergeMode) {
     // mockup method
   }

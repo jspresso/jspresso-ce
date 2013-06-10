@@ -134,7 +134,7 @@ public abstract class AbstractBackendController extends AbstractController
   private final IEntityRegistry                                  entityRegistry;
   private IModelConnectorFactory                           modelConnectorFactory;
   private TransactionTemplate                              transactionTemplate;
-  private ComponentTransferStructure<? extends IComponent> transferStructure;
+  private ComponentTransferStructure<IComponent>           transferStructure;
   private final IEntityUnitOfWork                                unitOfWork;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
@@ -842,7 +842,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public ComponentTransferStructure<? extends IComponent> retrieveComponents() {
+  public ComponentTransferStructure<IComponent> retrieveComponents() {
     return transferStructure;
   }
 
@@ -1026,7 +1026,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void storeComponents(
-      ComponentTransferStructure<? extends IComponent> components) {
+      ComponentTransferStructure<IComponent> components) {
     this.transferStructure = components;
   }
 
@@ -2390,6 +2390,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the action context.
    * @return the asyncExecutorsMaxCount.
    */
+  @SuppressWarnings("UnusedParameters")
   protected int getAsyncExecutorsMaxCount(Map<String, Object> context) {
     return asyncExecutorsMaxCount;
   }

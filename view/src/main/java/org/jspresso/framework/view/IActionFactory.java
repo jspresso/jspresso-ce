@@ -36,6 +36,7 @@ import org.jspresso.framework.util.gui.Dimension;
  * @param <F>
  *          the actual component class the created actions are installed in.
  */
+@SuppressWarnings("UnusedParameters")
 public interface IActionFactory<E, F> {
 
   /**

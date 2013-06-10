@@ -458,6 +458,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the entity descriptor to execute the LOV action for.
    */
+  @SuppressWarnings("UnusedParameters")
   protected IComponentDescriptor<? extends IComponent> getEntityDescriptor(
       Map<String, Object> context) {
     return entityDescriptor;

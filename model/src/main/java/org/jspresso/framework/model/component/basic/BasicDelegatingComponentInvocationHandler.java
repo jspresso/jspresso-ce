@@ -114,8 +114,9 @@ public class BasicDelegatingComponentInvocationHandler extends
         && Proxy.getInvocationHandler(referent) instanceof AbstractComponentInvocationHandler) {
       return referent;
     }
+    Class<? extends IComponent> componentContract = referentDescriptor.getComponentContract();
     return componentFactory.createComponentInstance(
-        referentDescriptor.getComponentContract(), delegate);
+        componentContract, delegate);
   }
 
   /**

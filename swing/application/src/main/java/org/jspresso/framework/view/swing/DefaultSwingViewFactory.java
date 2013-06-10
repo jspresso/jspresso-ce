@@ -91,7 +91,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.JTextComponent;
@@ -222,6 +221,7 @@ import chrriis.dj.swingsuite.LinkListener;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public class DefaultSwingViewFactory extends
     ControllerAwareViewFactory<JComponent, Icon, Action> {
 

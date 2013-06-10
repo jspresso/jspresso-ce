@@ -101,6 +101,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    * @param event
    *          the servlet context initialization event.
    */
+  @SuppressWarnings("UnusedParameters")
   public void contextInitialized(BeanFactory beanFactory,
       ServletContextEvent event) {
     // NO-OP
@@ -115,7 +116,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
    * @param event
    *          the servlet context destroy event.
    */
-  @SuppressWarnings("EmptyMethod")
+  @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   public void contextDestroyed(BeanFactory beanFactory,
       ServletContextEvent event) {
     // NO-OP

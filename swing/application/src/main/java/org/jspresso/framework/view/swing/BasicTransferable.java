@@ -225,7 +225,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
     return null;
   }
 
-  @SuppressWarnings("unused")
+  @SuppressWarnings({"unused", "UnusedParameters"})
   protected Object getRicherData(DataFlavor flavor)
       throws UnsupportedFlavorException {
     return null;

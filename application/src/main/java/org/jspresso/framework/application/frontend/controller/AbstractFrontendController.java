@@ -1952,6 +1952,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the user password;
    * @return the encoded username/password string.
    */
+  @SuppressWarnings("UnusedParameters")
   protected String encodeUserPass(String username, String password) {
     StringBuilder buff = new StringBuilder();
     if (username != null) {

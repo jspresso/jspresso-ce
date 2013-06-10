@@ -99,7 +99,8 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
             documentChanged(e);
           }
 
-          private void documentChanged(@SuppressWarnings("unused") DocumentEvent e) {
+          @SuppressWarnings({"unused", "UnusedParameters"})
+          private void documentChanged(DocumentEvent e) {
             if (isUserAction
                 && !getConnectedJComponent().getEditorPane().hasFocus()) {
               fireConnectorValueChange();

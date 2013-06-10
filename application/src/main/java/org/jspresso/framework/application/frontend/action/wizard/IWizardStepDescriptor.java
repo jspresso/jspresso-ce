@@ -15,6 +15,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public interface IWizardStepDescriptor extends IDescriptor {
 
   /**

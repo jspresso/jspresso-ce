@@ -172,7 +172,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the modelConnectorFactory to set.
    * @deprecated modeconnector is now created by the backend controller.
    */
-  @SuppressWarnings("EmptyMethod")
+  @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -198,7 +198,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    * @param context
    *          the action context.
    */
-  @SuppressWarnings("EmptyMethod")
+  @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   protected void completeInitialWizardModel(
       Map<String, Object> initialWizardModel, Map<String, Object> context) {
     // No-op by default.

@@ -280,6 +280,7 @@ public class BackendAction extends AbstractAction {
    * @param transactional
    *          the transactional to set.
    */
+  @SuppressWarnings("UnusedParameters")
   public void setTransactional(boolean transactional) {
     this.transactional = false;
   }

@@ -30,6 +30,7 @@ import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDeta
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public interface ICriteriaRefiner {
 
   /**

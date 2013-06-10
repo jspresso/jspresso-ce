@@ -49,7 +49,7 @@ package org.jspresso.framework.view.flex {
     {
       var image:Image = event.target as Image;
       
-      if (!imageCache.hasOwnProperty(image.source))
+      if (!imageCache.hasOwnProperty(image.source as String))
       {
         imageCache[this.source] = Bitmap(this.content).bitmapData;
       }
@@ -57,7 +57,7 @@ package org.jspresso.framework.view.flex {
     
     override public function set source(value:Object):void
     {
-      if (imageCache.hasOwnProperty(value))
+      if (imageCache.hasOwnProperty(value as String))
       {
         super.source = new Bitmap(imageCache[value],'auto',true);
       }

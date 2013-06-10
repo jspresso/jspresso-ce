@@ -149,6 +149,7 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
  * @param <G>
  *          the actual action type used.
  */
+@SuppressWarnings("UnusedParameters")
 public abstract class AbstractViewFactory<E, F, G> implements
     IViewFactory<E, F, G> {
 

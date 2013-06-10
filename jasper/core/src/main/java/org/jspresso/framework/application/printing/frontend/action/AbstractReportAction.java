@@ -38,6 +38,7 @@ import org.jspresso.framework.application.printing.model.IReportFactory;
  * @param <G>
  *          the actual action type used.
  */
+@SuppressWarnings("UnusedParameters")
 public abstract class AbstractReportAction<E, F, G> extends
     FrontendAction<E, F, G> {
 

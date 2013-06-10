@@ -90,6 +90,7 @@ import org.jspresso.framework.util.lang.StringUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public abstract class AbstractAction extends AbstractActionContextAware
     implements IAction {
 

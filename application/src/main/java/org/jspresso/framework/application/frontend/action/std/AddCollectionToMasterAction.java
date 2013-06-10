@@ -159,6 +159,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
    *          the action context.
    * @return the elementEntityDescriptor.
    */
+  @SuppressWarnings("UnusedParameters")
   protected IComponentDescriptor<IEntity> getElementEntityDescriptor(
       Map<String, Object> context) {
     return elementEntityDescriptor;

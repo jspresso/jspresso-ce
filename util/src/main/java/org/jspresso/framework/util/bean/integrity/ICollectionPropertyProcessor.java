@@ -31,7 +31,7 @@ import java.util.Collection;
  * @param <F>
  *          The type of the property (a subclass of collection).
  */
-@SuppressWarnings("EmptyMethod")
+@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
 public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
     extends IPropertyProcessor<E, F> {
 

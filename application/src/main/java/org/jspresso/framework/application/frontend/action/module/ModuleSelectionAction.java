@@ -113,6 +113,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the moduleName.
    */
+  @SuppressWarnings("UnusedParameters")
   protected String getModuleName(Map<String, Object> context) {
     return moduleName;
   }
@@ -124,6 +125,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the workspaceName.
    */
+  @SuppressWarnings("UnusedParameters")
   protected String getWorkspaceName(Map<String, Object> context) {
     return workspaceName;
   }

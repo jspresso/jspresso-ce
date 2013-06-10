@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -165,6 +164,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision: 1463 $
  * @author Vincent Vandenschrick
  */
+@SuppressWarnings("UnusedParameters")
 public class DefaultRemoteViewFactory extends
     ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 

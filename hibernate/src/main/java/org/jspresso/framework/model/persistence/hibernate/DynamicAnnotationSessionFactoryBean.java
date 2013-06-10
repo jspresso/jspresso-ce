@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.model.persistence.hibernate;
 
-import org.hibernate.cfg.Configuration;
 import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 
 /**

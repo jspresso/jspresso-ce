@@ -21,7 +21,6 @@ package org.jspresso.framework.view.swing;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.event.TableModelEvent;

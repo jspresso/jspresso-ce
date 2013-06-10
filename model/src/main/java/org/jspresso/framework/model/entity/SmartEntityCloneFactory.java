@@ -77,7 +77,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
    * @deprecated accessor factory is now retrieved from the entity factory
    *             passed as parameter of the methods.
    */
-  @SuppressWarnings("EmptyMethod")
+  @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
   @Deprecated
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     // NO-OP
