@@ -32,8 +32,8 @@ public interface IComponentExtensionFactory {
   /**
    * Constructs a new extension instance. Component extension classes must
    * implement constructors in the form of
-   * <code>public ComponentExtension(ComponentContract component)</code>.
-   * 
+   * {@code public ComponentExtension(ComponentContract component)}.
+   *
    * @param <E>
    *          the real component type.
    * @param extensionClass

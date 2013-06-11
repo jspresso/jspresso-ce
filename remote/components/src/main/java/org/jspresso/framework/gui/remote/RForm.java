@@ -37,8 +37,8 @@ public class RForm extends RComponent {
   private String            labelsPosition;
 
   /**
-   * Constructs a new <code>RForm</code> instance.
-   * 
+   * Constructs a new {@code RForm} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -47,7 +47,7 @@ public class RForm extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RForm</code> instance. Only used for serialization
+   * Constructs a new {@code RForm} instance. Only used for serialization
    * support.
    */
   public RForm() {

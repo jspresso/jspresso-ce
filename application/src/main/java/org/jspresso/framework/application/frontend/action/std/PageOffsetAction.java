@@ -31,9 +31,9 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
 /**
  * This action simply augment the context with a page offset integer (
- * <code>PAGE_OFFSET</code>). It is meant to be linked to a find/query action
+ * {@code PAGE_OFFSET}). It is meant to be linked to a find/query action
  * that will further leverage this offset to navigate a pageable result set.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>

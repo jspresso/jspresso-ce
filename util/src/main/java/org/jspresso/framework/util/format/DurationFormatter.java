@@ -38,8 +38,8 @@ public class DurationFormatter implements IFormatter<Number, String> {
   private final PeriodFormatter formatter;
 
   /**
-   * Constructs a new <code>DurationFormatter</code> instance.
-   * 
+   * Constructs a new {@code DurationFormatter} instance.
+   *
    * @param translationProvider
    *          the translation provider for duration labels.
    * @param locale

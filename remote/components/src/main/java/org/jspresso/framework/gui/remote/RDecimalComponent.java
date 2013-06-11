@@ -31,8 +31,8 @@ public abstract class RDecimalComponent extends RNumericComponent {
   private int               maxFractionDigit;
 
   /**
-   * Constructs a new <code>RIntegerField</code> instance.
-   * 
+   * Constructs a new {@code RIntegerField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -41,7 +41,7 @@ public abstract class RDecimalComponent extends RNumericComponent {
   }
 
   /**
-   * Constructs a new <code>RDecimalComponent</code> instance. Only used for
+   * Constructs a new {@code RDecimalComponent} instance. Only used for
    * serialization support.
    */
   public RDecimalComponent() {

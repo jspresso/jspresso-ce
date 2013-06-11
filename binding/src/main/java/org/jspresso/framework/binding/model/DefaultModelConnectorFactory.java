@@ -147,9 +147,9 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
   /**
    * Sets the factory for the accessors used to access the model properties.
-   * 
+   *
    * @param accessorFactory
-   *          The <code>IAccessorFactory</code> to use.
+   *          The {@code IAccessorFactory} to use.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;

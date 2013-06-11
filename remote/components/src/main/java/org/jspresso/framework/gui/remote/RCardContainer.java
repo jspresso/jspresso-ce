@@ -32,8 +32,8 @@ public class RCardContainer extends RContainer {
   private RComponent[]      cards;
 
   /**
-   * Constructs a new <code>RCardContainer</code> instance.
-   * 
+   * Constructs a new {@code RCardContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -42,7 +42,7 @@ public class RCardContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RCardContainer</code> instance. Only used for
+   * Constructs a new {@code RCardContainer} instance. Only used for
    * serialization support.
    */
   public RCardContainer() {

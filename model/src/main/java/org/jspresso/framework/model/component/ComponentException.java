@@ -32,8 +32,8 @@ public class ComponentException extends NestedRuntimeException {
   private static final long serialVersionUID = -3659844614276359719L;
 
   /**
-   * Constructs a new <code>ComponentException</code> instance.
-   * 
+   * Constructs a new {@code ComponentException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class ComponentException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>ComponentException</code> instance.
-   * 
+   * Constructs a new {@code ComponentException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class ComponentException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>ComponentException</code> instance.
-   * 
+   * Constructs a new {@code ComponentException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

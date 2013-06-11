@@ -63,8 +63,8 @@ public class WeakPropertyChangeSupport implements Serializable {
   private final transient ReferenceQueue<PropertyChangeListener> queue = new ReferenceQueue<PropertyChangeListener>();
 
   /**
-   * Constructs a <code>WeakPropertyChangeSupport</code> object.
-   * 
+   * Constructs a {@code WeakPropertyChangeSupport} object.
+   *
    * @param sourceBean
    *          The bean to be given as the source for any events.
    */
@@ -320,7 +320,7 @@ public class WeakPropertyChangeSupport implements Serializable {
 
   /**
    * Gets listeners attached.
-   * @return all of the <code>PropertyChangeListeners</code> added or an empty
+   * @return all of the {@code PropertyChangeListeners} added or an empty
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
@@ -333,10 +333,10 @@ public class WeakPropertyChangeSupport implements Serializable {
    * Gets listeners attached to a given property.
    * @param propertyName
    *          propertyName
-   * @return all of the <code>PropertyChangeListeners</code> associated with the
+   * @return all of the {@code PropertyChangeListeners} associated with the
    *         named property. If no such listeners have been added, or if
-   *         <code>propertyName</code> is null, an empty array is returned.
-   * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
+   *         {@code propertyName} is null, an empty array is returned.
+   * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(String)
    */
   public synchronized PropertyChangeListener[] getPropertyChangeListeners(
       String propertyName) {

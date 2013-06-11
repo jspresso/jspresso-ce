@@ -42,8 +42,8 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   private ICollectionConnectorProvider collectionConnectorProvider;
 
   /**
-   * Constructs a new <code>BasicCollectionConnectorProvider</code> instance.
-   * 
+   * Constructs a new {@code BasicCollectionConnectorProvider} instance.
+   *
    * @param id
    *          the connector identifier.
    */

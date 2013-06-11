@@ -24,8 +24,8 @@ import org.jspresso.framework.binding.IValueConnector;
 
 /**
  * Helper class used to bind collection view connectors to tree selection models
- * (used in <code>JTree</code>).
- * 
+ * (used in {@code JTree}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

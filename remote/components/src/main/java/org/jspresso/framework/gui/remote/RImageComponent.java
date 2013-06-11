@@ -32,8 +32,8 @@ public class RImageComponent extends RComponent implements RActionable {
   private RAction           action;
 
   /**
-   * Constructs a new <code>RImageComponent</code> instance.
-   * 
+   * Constructs a new {@code RImageComponent} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -42,7 +42,7 @@ public class RImageComponent extends RComponent implements RActionable {
   }
 
   /**
-   * Constructs a new <code>RImageComponent</code> instance. Only used for
+   * Constructs a new {@code RImageComponent} instance. Only used for
    * serialization support.
    */
   public RImageComponent() {

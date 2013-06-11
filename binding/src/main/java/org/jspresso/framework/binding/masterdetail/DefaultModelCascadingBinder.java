@@ -28,8 +28,8 @@ import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 
 /**
- * Default implementation of <code>IModelCascadingBinder</code>.
- * 
+ * Default implementation of {@code IModelCascadingBinder}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -76,8 +76,8 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
     private final IValueConnector detailConnector;
 
     /**
-     * Constructs a new <code>BoundConnectorSelectionListener</code> instance.
-     * 
+     * Constructs a new {@code BoundConnectorSelectionListener} instance.
+     *
      * @param detailConnector
      *          The detail connector tracking master connector's selection.
      */
@@ -105,8 +105,8 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
     private final IValueConnector detailConnector;
 
     /**
-     * Constructs a new <code>BoundConnectorModelListener</code> instance.
-     * 
+     * Constructs a new {@code BoundConnectorModelListener} instance.
+     *
      * @param detailConnector
      *          The detail connector tracking master connector's model.
      */

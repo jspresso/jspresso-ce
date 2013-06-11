@@ -43,8 +43,8 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   private RemoteFormattedValueState state;
 
   /**
-   * Constructs a new <code>RemoteFormattedValueConnector</code> instance.
-   * 
+   * Constructs a new {@code RemoteFormattedValueConnector} instance.
+   *
    * @param id
    *          the connector id.
    * @param connectorFactory

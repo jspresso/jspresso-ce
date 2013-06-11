@@ -32,8 +32,8 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
   private static final long serialVersionUID = -3547472625502417905L;
 
   /**
-   * Constructs a new <code>SinglePropertyChangeSupport</code> instance.
-   * 
+   * Constructs a new {@code SinglePropertyChangeSupport} instance.
+   *
    * @param sourceBean
    *          the source bean.
    */

@@ -21,8 +21,8 @@ package org.jspresso.framework.model.descriptor;
 /**
  * This interface is implemented by descriptors of duration properties. Useful
  * constants are defined in
- * <code>org.jspresso.framework.model.descriptor.Duration</code> enumeration.
- * 
+ * {@code org.jspresso.framework.model.descriptor.Duration} enumeration.
+ *
  * @see EDuration <p>
  *      Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
  *      <p>

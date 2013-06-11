@@ -40,9 +40,9 @@ public class EntityProxyJoinedSubclassEntityPersister extends
     JoinedSubclassEntityPersister {
 
   /**
-   * Constructs a new <code>EntityProxyJoinedSubclassEntityPersister</code>
+   * Constructs a new {@code EntityProxyJoinedSubclassEntityPersister}
    * instance.
-   * 
+   *
    * @param entityBinding
    *          the entity binding.
    * @param cacheAccessStrategy
@@ -63,9 +63,9 @@ public class EntityProxyJoinedSubclassEntityPersister extends
   }
 
   /**
-   * Constructs a new <code>EntityProxyJoinedSubclassEntityPersister</code>
+   * Constructs a new {@code EntityProxyJoinedSubclassEntityPersister}
    * instance.
-   * 
+   *
    * @param persistentClass
    *          the persistent class.
    * @param cacheAccessStrategy

@@ -44,7 +44,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   private boolean               lazy;
 
   /**
-   * Constructs a new <code>BasicTabViewDescriptor</code> instance.
+   * Constructs a new {@code BasicTabViewDescriptor} instance.
    */
   public BasicTabViewDescriptor() {
     this.lazy = true;
@@ -77,17 +77,17 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Indicates how the tabs should be rendered. This is either a value of the
-   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * {@code ERenderingOptions} enum or its equivalent string representation
    * :
    * <ul>
-   * <li><code>LABEL_ICON</code> for label and icon</li>
-   * <li><code>LABEL</code> for label only</li>
-   * <li><code>ICON</code> for icon only.</li>
+   * <li>{@code LABEL_ICON} for label and icon</li>
+   * <li>{@code LABEL} for label only</li>
+   * <li>{@code ICON} for icon only.</li>
    * </ul>
    * <p>
-   * Default value is <code>ERenderingOptions.LABEL_ICON</code>, i.e. label and
+   * Default value is {@code ERenderingOptions.LABEL_ICON}, i.e. label and
    * icon.
-   * 
+   *
    * @param renderingOptions
    *          the renderingOptions to set.
    */
@@ -131,9 +131,9 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * When set to true, this parameter configures the tabs to be lazy bound
    * (binding occurs only for the selected tab). This feature is only supported
-   * for tab views with <code>cascadingModel</code> set to true. default value
-   * is <code>true</code>.
-   * 
+   * for tab views with {@code cascadingModel} set to true. default value
+   * is {@code true}.
+   *
    * @param lazy
    *          the lazy to set.
    */

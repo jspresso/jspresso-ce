@@ -46,8 +46,8 @@ public class CollectionConnectorListModel extends AbstractListModel<IValueConnec
   private final ICollectionConnector               collectionConnector;
 
   /**
-   * Constructs a new <code>CollectionConnectorListModel</code> instance.
-   * 
+   * Constructs a new {@code CollectionConnectorListModel} instance.
+   *
    * @param collectionConnector
    *          the collection connector holding the values of this list model.
    */
@@ -58,7 +58,7 @@ public class CollectionConnectorListModel extends AbstractListModel<IValueConnec
   }
 
   /**
-   * Returns the connector at <code>index</code> in the child connectors
+   * Returns the connector at {@code index} in the child connectors
    * collection contained in the backed collection connector.
    * <p>
    * {@inheritDoc}

@@ -30,7 +30,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * its available space.
  * <p>
  * The number of cells in a row / column is determined by the combination of the
- * <code>drivingDimension</code> and <code>drivingDimensionCellCount</code>
+ * {@code drivingDimension} and {@code drivingDimensionCellCount}
  * properties. the cells are spread along the driving dimension (row or column)
  * until the maximum number of cells in the dimension has been reached. Then a
  * new row (or column) is added. The process repeats until all the cells have
@@ -38,12 +38,12 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <p>
  * This container does not allow for individual cell configuration like
  * row/column spanning. Whenever cell disposition has to be customized more
- * finely, a <code>BasicConstrainedGridViewDescriptor</code> should be used
+ * finely, a {@code BasicConstrainedGridViewDescriptor} should be used
  * instead.
  * <p>
  * Default cascading order follows the order of nested view registrations in the
  * container.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -109,14 +109,14 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Configures the driving dimension of the grid. This is either a value of the
-   * <code>EAxis</code> enum or its equivalent string representation :
+   * {@code EAxis} enum or its equivalent string representation :
    * <ul>
-   * <li><code>ROW</code> for distributing cells along rows then columns</li>
-   * <li><code>COLUMN</code> for distributing cells along columns then rows</li>
+   * <li>{@code ROW} for distributing cells along rows then columns</li>
+   * <li>{@code COLUMN} for distributing cells along columns then rows</li>
    * </ul>
-   * Default value is <code>EAxis.ROW</code>, i.e. distribute cells along rows
+   * Default value is {@code EAxis.ROW}, i.e. distribute cells along rows
    * then columns.
-   * 
+   *
    * @param drivingDimension
    *          the drivingDimension to set.
    */

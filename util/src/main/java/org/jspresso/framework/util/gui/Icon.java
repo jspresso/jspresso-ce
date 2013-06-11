@@ -36,14 +36,14 @@ public class Icon implements Serializable, ICloneable {
   private Dimension         dimension;
 
   /**
-   * Constructs a new <code>Icon</code> instance.
+   * Constructs a new {@code Icon} instance.
    */
   public Icon() {
   }
 
   /**
-   * Constructs a new <code>Icon</code> instance.
-   * 
+   * Constructs a new {@code Icon} instance.
+   *
    * @param iconImageURL
    *          the icon image url.
    * @param dimension
@@ -57,9 +57,9 @@ public class Icon implements Serializable, ICloneable {
   /**
    * Gets the URL of the image used by the icon. For Swing view factory a
    * special kind of URL is supported in the form of
-   * <code>classpath:directory/image.ext</code> to be able to load images as
+   * {@code classpath:directory/image.ext} to be able to load images as
    * classpath resource streams.
-   * 
+   *
    * @return the iconImageURL.
    */
   public String getIconImageURL() {
@@ -69,9 +69,9 @@ public class Icon implements Serializable, ICloneable {
   /**
    * Sets the URL of the image used by the icon. For Swing view factory a
    * special kind of URL is supported in the form of
-   * <code>classpath:directory/image.ext</code> to be able to load images as
+   * {@code classpath:directory/image.ext} to be able to load images as
    * classpath resource streams.
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */

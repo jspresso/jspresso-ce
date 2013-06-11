@@ -121,26 +121,26 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Sets the selection mode of the collection view. This is either a value of
-   * the <code>ESelectionMode</code> enum or its equivalent string
+   * the {@code ESelectionMode} enum or its equivalent string
    * representation :
    * <ul>
-   * <li><code>MULTIPLE_INTERVAL_SELECTION</code> for allowing any type of
+   * <li>{@code MULTIPLE_INTERVAL_SELECTION} for allowing any type of
    * selection</li>
-   * <li><code>MULTIPLE_INTERVAL_CUMULATIVE_SELECTION</code> for allowing any
+   * <li>{@code MULTIPLE_INTERVAL_CUMULATIVE_SELECTION} for allowing any
    * type of selection with toggle behaviour</li>
-   * <li><code>SINGLE_INTERVAL_SELECTION</code> for allowing only contiguous
+   * <li>{@code SINGLE_INTERVAL_SELECTION} for allowing only contiguous
    * interval selection</li>
-   * <li><code>SINGLE_INTERVAL_CUMULATIVE_SELECTION</code> for allowing only
+   * <li>{@code SINGLE_INTERVAL_CUMULATIVE_SELECTION} for allowing only
    * contiguous interval selection with toggle behaviour</li>
-   * <li><code>SINGLE_SELECTION</code> for allowing only a single item selection
+   * <li>{@code SINGLE_SELECTION} for allowing only a single item selection
    * </li>
-   * <li><code>SINGLE_CUMULATIVE_SELECTION</code> for allowing only a single
+   * <li>{@code SINGLE_CUMULATIVE_SELECTION} for allowing only a single
    * item selection with toggle behaviour</li>
    * </ul>
    * <p>
-   * Default value is <code>ESelectionMode.MULTIPLE_INTERVAL_SELECTION</code>,
+   * Default value is {@code ESelectionMode.MULTIPLE_INTERVAL_SELECTION},
    * i.e. any type of selection allowed.
-   * 
+   *
    * @param selectionMode
    *          the selectionMode to set.
    */
@@ -189,13 +189,13 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Configures the default selection that gets applied when the content of the
-   * collection view changes. Whenever set to <code>true</code>, the 1st row
+   * collection view changes. Whenever set to {@code true}, the 1st row
    * will be automatically selected, whereas nothing happens when set to false.
    * <p>
    * The default value depends on the selection mode of the collection view.
-   * When a cumulative selection mode is used, <code>autoSelectFirstRow</code>
-   * defaults to <code>false</code>. It defaults to <code>true</code> otherwise.
-   * 
+   * When a cumulative selection mode is used, {@code autoSelectFirstRow}
+   * defaults to {@code false}. It defaults to {@code true} otherwise.
+   *
    * @param autoSelectFirstRow
    *          the autoSelectFirstRow to set.
    */

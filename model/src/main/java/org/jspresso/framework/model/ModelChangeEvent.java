@@ -22,14 +22,14 @@ import java.util.EventObject;
 
 /**
  * A "ModelChangeEvent" event gets delivered whenever a
- * <code>IModelProvider</code> detects a change of its model. A ModelChangeEvent
- * object is sent as an argument to the <code>IModelChangeListener</code>
+ * {@code IModelProvider} detects a change of its model. A ModelChangeEvent
+ * object is sent as an argument to the {@code IModelChangeListener}
  * methods. Normally ValueChangeEvent are accompanied by the old and new value
  * of the changed value. If the new value is a primitive type (such as int or
  * boolean) it must be wrapped as the corresponding java.lang.* Object type
  * (such as Integer or Boolean). Null values may be provided for the old and the
  * new values if their true values are not known.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -48,8 +48,8 @@ public class ModelChangeEvent extends EventObject {
   private final Object            oldValue;
 
   /**
-   * Constructs a new <code>ModelChangeEvent</code>.
-   * 
+   * Constructs a new {@code ModelChangeEvent}.
+   *
    * @param source
    *          The model provider that initiated the event.
    * @param oldValue
@@ -66,8 +66,8 @@ public class ModelChangeEvent extends EventObject {
 
   /**
    * Gets the new model.
-   * 
-   * @return The new model, expressed as an <code>IPropertyChangeCapable</code>.
+   *
+   * @return The new model, expressed as an {@code IPropertyChangeCapable}.
    */
   public Object getNewValue() {
     return newValue;
@@ -75,8 +75,8 @@ public class ModelChangeEvent extends EventObject {
 
   /**
    * Gets the old model.
-   * 
-   * @return The old model, expressed as an <code>IPropertyChangeCapable</code>.
+   *
+   * @return The old model, expressed as an {@code IPropertyChangeCapable}.
    */
   public Object getOldValue() {
     return oldValue;

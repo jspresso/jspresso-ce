@@ -32,9 +32,9 @@ import org.syntax.jedit.JEditTextArea;
 public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {
 
   /**
-   * Constructs a new <code>JEditTextAreaConnector</code> instance. The
-   * connector will listen to <code>focusLost</code> events.
-   * 
+   * Constructs a new {@code JEditTextAreaConnector} instance. The
+   * connector will listen to {@code focusLost} events.
+   *
    * @param id
    *          the connector identifier.
    * @param textArea

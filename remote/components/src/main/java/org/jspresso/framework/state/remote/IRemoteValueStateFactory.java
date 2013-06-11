@@ -27,36 +27,36 @@ package org.jspresso.framework.state.remote;
 public interface IRemoteValueStateFactory {
 
   /**
-   * Creates a new <code>RemoteCompositeValueState</code> instance.
-   * 
+   * Creates a new {@code RemoteCompositeValueState} instance.
+   *
    * @param guid
    *          the state guid.
    * @param permId
    *          the seed to generate permanent ids.
-   * @return the created <code>RemoteValueState</code>.
+   * @return the created {@code RemoteValueState}.
    */
   RemoteCompositeValueState createRemoteCompositeValueState(String guid,
       String permId);
 
   /**
-   * Creates a new <code>RemoteValueState</code> instance.
-   * 
+   * Creates a new {@code RemoteValueState} instance.
+   *
    * @param guid
    *          the state guid.
    * @param permId
    *          the seed to generate permanent ids.
-   * @return the created <code>RemoteValueState</code>.
+   * @return the created {@code RemoteValueState}.
    */
   RemoteValueState createRemoteValueState(String guid, String permId);
 
   /**
-   * Creates a new <code>RemoteFormattedValueState</code> instance.
-   * 
+   * Creates a new {@code RemoteFormattedValueState} instance.
+   *
    * @param guid
    *          the state guid.
    * @param permId
    *          the seed to generate permanent ids.
-   * @return the created <code>RemoteFormattedValueState</code>.
+   * @return the created {@code RemoteFormattedValueState}.
    */
   RemoteFormattedValueState createRemoteFormattedValueState(String guid,
       String permId);

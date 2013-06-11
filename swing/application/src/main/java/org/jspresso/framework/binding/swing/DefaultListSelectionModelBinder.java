@@ -35,8 +35,8 @@ import org.jspresso.framework.util.gui.IIndexMapper;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
- * Default implementation of <code>IListSelectionModelBinder</code>.
- * 
+ * Default implementation of {@code IListSelectionModelBinder}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -84,8 +84,8 @@ public class DefaultListSelectionModelBinder implements
     private final ListSelectionModel selectionModel;
 
     /**
-     * Constructs a new <code>SelectionChangeListener</code> instance.
-     * 
+     * Constructs a new {@code SelectionChangeListener} instance.
+     *
      * @param collectionComponent
      *          the collection component to bind the selection model with.
      * @param selectionModel
@@ -181,8 +181,8 @@ public class DefaultListSelectionModelBinder implements
     private final ISelectable  viewSelectable;
 
     /**
-     * Constructs a new <code>SelectionModelListener</code> instance.
-     * 
+     * Constructs a new {@code SelectionModelListener} instance.
+     *
      * @param viewSelectable
      *          the selectable to forward the changes to.
      * @param rowMapper the row mapper.

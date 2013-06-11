@@ -27,7 +27,7 @@ package org.jspresso.framework.application.backend.session;
 public enum EMergeMode {
 
   /**
-   * <code>MERGE_CLEAN_EAGER</code> merge mode should be used to override the
+   * {@code MERGE_CLEAN_EAGER} merge mode should be used to override the
    * state of the target object graph whatever its current in-memory state is.
    * The target object graph is completely traversed, and each graph object
    * dirty state is cleaned. This merge mode implements a "deep reload"
@@ -36,7 +36,7 @@ public enum EMergeMode {
   MERGE_CLEAN_EAGER,
 
   /**
-   * <code>MERGE_CLEAN_LAZY</code> merge mode should be used to override the
+   * {@code MERGE_CLEAN_LAZY} merge mode should be used to override the
    * state of the target object graph for nodes whose version is either obsolete
    * or whose in-memory state is dirty. The graph traversal is stopped whenever
    * a clean node in same version is met. Each traversed graph node dirty state
@@ -46,7 +46,7 @@ public enum EMergeMode {
   MERGE_CLEAN_LAZY,
 
   /**
-   * <code>MERGE_EAGER</code> should be used to update the target object graph
+   * {@code MERGE_EAGER} should be used to update the target object graph
    * state eagerly while keeping its dirty state. It merge mode is typically
    * used when implementing an in-memory transaction, like editing an object
    * graph in a unit of work thus allowing the user to commit ar cancel the
@@ -55,7 +55,7 @@ public enum EMergeMode {
   MERGE_EAGER,
 
   /**
-   * <code>MERGE_LAZY</code> merge mode should be used to override the state of
+   * {@code MERGE_LAZY} merge mode should be used to override the state of
    * the target object graph for nodes whose version is obsolete. The graph
    * traversal is stopped whenever a clean node in same version is met. Each
    * traversed graph node dirty state is cleaned if and only if its version is
@@ -65,7 +65,7 @@ public enum EMergeMode {
   MERGE_LAZY,
 
   /**
-   * <code>MERGE_KEEP</code> merge mode is used to only register non-existing
+   * {@code MERGE_KEEP} merge mode is used to only register non-existing
    * graph object nodes. Existing nodes will simply be returned independently of
    * their state (even if they are obsolete).
    */

@@ -34,10 +34,10 @@ public interface ICollectionDescriptor<E> extends
     ICollectionDescriptorProvider<E> {
 
   /**
-   * Gets the <code>Collection</code> sub-interface implemented by the described
-   * collection property (i.e <code>java.util.Set</code>,
-   * <code>java.util.List</code>, ...).
-   * 
+   * Gets the {@code Collection} sub-interface implemented by the described
+   * collection property (i.e {@code java.util.Set},
+   * {@code java.util.List}, ...).
+   *
    * @return the collection interface.
    */
   Class<?> getCollectionInterface();

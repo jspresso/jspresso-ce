@@ -31,8 +31,8 @@ public class JRadioButtonConnector extends JToggleButtonConnector<JRadioButton> 
   private final String checkedValue;
 
   /**
-   * Constructs a new <code>JRadioButtonConnector</code> instance.
-   * 
+   * Constructs a new {@code JRadioButtonConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param radioButton
@@ -48,7 +48,7 @@ public class JRadioButtonConnector extends JToggleButtonConnector<JRadioButton> 
   }
 
   /**
-   * Returns a <code>String</code> object mapping the state of the button.
+   * Returns a {@code String} object mapping the state of the button.
    * <p>
    * {@inheritDoc}
    */

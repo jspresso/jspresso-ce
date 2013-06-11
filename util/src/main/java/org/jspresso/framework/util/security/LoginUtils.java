@@ -27,27 +27,27 @@ package org.jspresso.framework.util.security;
 public final class LoginUtils {
 
   /**
-   * <code>CRED_MESSAGE</code>.
+   * {@code CRED_MESSAGE}.
    */
   public static final String CRED_MESSAGE    = "credentialMessage";
   /**
-   * <code>LOGIN_FAILED</code>.
+   * {@code LOGIN_FAILED}.
    */
   public static final String LOGIN_FAILED    = "loginFailed";
   /**
-   * <code>PASSWORD</code>.
+   * {@code PASSWORD}.
    */
   public static final String PASSWORD        = "password";
   /**
-   * <code>PASSWORD_FAILED</code>.
+   * {@code PASSWORD_FAILED}.
    */
   public static final String PASSWORD_FAILED = "passwordIncorrect";
   /**
-   * <code>USER</code>.
+   * {@code USER}.
    */
   public static final String USER            = "user";
   /**
-   * <code>USER_FAILED</code>.
+   * {@code USER_FAILED}.
    */
   public static final String USER_FAILED     = "userIncorrect";
 

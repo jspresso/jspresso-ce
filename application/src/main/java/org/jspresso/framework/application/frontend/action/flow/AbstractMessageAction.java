@@ -29,8 +29,8 @@ import org.jspresso.framework.util.html.HtmlHelper;
  * message, ask a question, and so on. It takes the message from the action
  * context parameter and supports basic HTML formatting. In order for the
  * message to be interpreted as HTML, it must be surrounded by
- * <code>&lt;HTML&gt;</code> tags.
- * 
+ * {@code &lt;HTML&gt;} tags.
+ *
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>

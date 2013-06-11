@@ -31,8 +31,8 @@ public class RActionComponent extends RComponent {
   private RAction           action;
 
   /**
-   * Constructs a new <code>RActionComponent</code> instance.
-   * 
+   * Constructs a new {@code RActionComponent} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -41,7 +41,7 @@ public class RActionComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RActionComponent</code> instance. Only used for
+   * Constructs a new {@code RActionComponent} instance. Only used for
    * serialization support.
    */
   public RActionComponent() {

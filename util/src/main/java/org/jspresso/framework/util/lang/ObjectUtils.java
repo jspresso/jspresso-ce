@@ -34,12 +34,12 @@ public final class ObjectUtils {
 
   /**
    * Compares two objects for equality.
-   * 
+   *
    * @param object1
-   *          the first object, may be <code>null</code>
+   *          the first object, may be {@code null}
    * @param object2
-   *          the second object, may be <code>null</code>
-   * @return <code>true</code> if the values of both objects are the same
+   *          the second object, may be {@code null}
+   * @return {@code true} if the values of both objects are the same
    */
   public static boolean equals(Object object1, Object object2) {
     if (object1 == object2) {

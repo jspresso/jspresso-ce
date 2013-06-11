@@ -31,12 +31,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 public final class HtmlHelper {
 
   /**
-   * <code>HTML_END</code>.
+   * {@code HTML_END}.
    */
   public static final String HTML_END   = "</HTML>";
 
   /**
-   * <code>HTML_START</code>.
+   * {@code HTML_START}.
    */
   public static final String HTML_START = "<HTML>";
 
@@ -61,8 +61,8 @@ public final class HtmlHelper {
   /**
    * Escapes special characters for HTML. Does not escape spaces. If you need
    * to, you must use {@link #escapeForHTML(String, boolean)} with
-   * <code>escapeSpaces=true</code>.
-   * 
+   * {@code escapeSpaces=true}.
+   *
    * @param text
    *          the text to escape.
    * @return the escaped HTML text.

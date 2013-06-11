@@ -75,11 +75,11 @@ public class DevelopmentLoginModule implements LoginModule {
    * not succeed).
    * <p>
    * If this LoginModule's own authentication attempt succeeded (checked by
-   * retrieving the private state saved by the <code>login</code> and
-   * <code>commit</code> methods), then this method cleans up any state that was
+   * retrieving the private state saved by the {@code login} and
+   * {@code commit} methods), then this method cleans up any state that was
    * originally saved.
    * <p>
-   * 
+   *
    * @return false if this LoginModule's own login and/or commit attempts
    *         failed, and true otherwise.
    */
@@ -124,13 +124,13 @@ public class DevelopmentLoginModule implements LoginModule {
    * LoginModules succeeded).
    * <p>
    * If this LoginModule's own authentication attempt succeeded (checked by
-   * retrieving the private state saved by the <code>login</code> method), then
-   * this method associates a <code>UserPrincipal</code> with the
-   * <code>Subject</code> located in the <code>LoginModule</code>. If this
+   * retrieving the private state saved by the {@code login} method), then
+   * this method associates a {@code UserPrincipal} with the
+   * {@code Subject} located in the {@code LoginModule}. If this
    * LoginModule's own authentication attempted failed, then this method removes
    * any state that was originally saved.
    * <p>
-   * 
+   *
    * @return true if this LoginModule's own login and commit attempts succeeded,
    *         or false otherwise.
    */
@@ -177,22 +177,22 @@ public class DevelopmentLoginModule implements LoginModule {
   }
 
   /**
-   * Initialize this <code>LoginModule</code>.
+   * Initialize this {@code LoginModule}.
    * <p>
-   * 
+   *
    * @param aSubject
-   *          the <code>Subject</code> to be authenticated.
+   *          the {@code Subject} to be authenticated.
    *          <p>
    * @param aCallbackHandler
-   *          a <code>CallbackHandler</code> for communicating with the end user
+   *          a {@code CallbackHandler} for communicating with the end user
    *          (prompting for user names and passwords, for example).
    *          <p>
    * @param aSharedState
-   *          shared <code>LoginModule</code> state.
+   *          shared {@code LoginModule} state.
    *          <p>
    * @param aOptions
-   *          options specified in the login <code>Configuration</code> for this
-   *          particular <code>LoginModule</code>.
+   *          options specified in the login {@code Configuration} for this
+   *          particular {@code LoginModule}.
    */
   @Override
   public void initialize(Subject aSubject, CallbackHandler aCallbackHandler,
@@ -207,11 +207,11 @@ public class DevelopmentLoginModule implements LoginModule {
   /**
    * Authenticate the user by prompting for a user name and password.
    * <p>
-   * 
-   * @return true in all cases since this <code>LoginModule</code> should not be
+   *
+   * @return true in all cases since this {@code LoginModule} should not be
    *         ignored.
    * @exception LoginException
-   *              if this <code>LoginModule</code> is unable to perform the
+   *              if this {@code LoginModule} is unable to perform the
    *              authentication.
    */
   @SuppressWarnings("unchecked")
@@ -300,11 +300,11 @@ public class DevelopmentLoginModule implements LoginModule {
   /**
    * Logout the user.
    * <p>
-   * This method removes the <code>DemoPrincipal</code> that was added by the
-   * <code>commit</code> method.
+   * This method removes the {@code DemoPrincipal} that was added by the
+   * {@code commit} method.
    * <p>
-   * 
-   * @return true in all cases since this <code>LoginModule</code> should not be
+   *
+   * @return true in all cases since this {@code LoginModule} should not be
    *         ignored.
    */
   @Override

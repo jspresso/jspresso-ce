@@ -45,8 +45,8 @@ public class RemoteValueState extends RemotePeer {
   private RemoteCompositeValueState parent;
 
   /**
-   * Constructs a new <code>RemoteValueState</code> instance.
-   * 
+   * Constructs a new {@code RemoteValueState} instance.
+   *
    * @param guid
    *          the state guid.
    */
@@ -55,7 +55,7 @@ public class RemoteValueState extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RemoteValueState</code> instance. Only used for
+   * Constructs a new {@code RemoteValueState} instance. Only used for
    * serialization support.
    */
   public RemoteValueState() {

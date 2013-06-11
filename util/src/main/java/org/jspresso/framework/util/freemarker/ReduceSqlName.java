@@ -43,10 +43,10 @@ public class ReduceSqlName implements TemplateMethodModelEx {
   private final Map<String, Integer> deduppers;
 
   /**
-   * Constructs a new <code>SqlNameReductor</code> instance.
-   * 
+   * Constructs a new {@code SqlNameReductor} instance.
+   *
    * @param maxSize
-   *          the maximum size of the identifiers. <code>-1</code> means no
+   *          the maximum size of the identifiers. {@code -1} means no
    *          limit.
    */
   public ReduceSqlName(int maxSize) {

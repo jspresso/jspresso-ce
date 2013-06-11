@@ -53,8 +53,8 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   private List<Order>                                          currentOrders;
 
   /**
-   * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
-   * 
+   * Constructs a new {@code EnhancedDetachedCriteria} instance.
+   *
    * @param impl
    *          criteria impl.
    * @param criteria
@@ -65,8 +65,8 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   }
 
   /**
-   * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
-   * 
+   * Constructs a new {@code EnhancedDetachedCriteria} instance.
+   *
    * @param entityName
    *          entity name.
    */
@@ -75,8 +75,8 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   }
 
   /**
-   * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
-   * 
+   * Constructs a new {@code EnhancedDetachedCriteria} instance.
+   *
    * @param entityName
    *          entity name.
    * @param alias

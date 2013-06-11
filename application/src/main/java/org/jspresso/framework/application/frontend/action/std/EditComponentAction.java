@@ -31,9 +31,9 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * result. The translated name of the action, whenever not empty, will be used
  * as the dialog title. If the context extracted model is a collection, the
  * first element of the collection is used. Custom actions (
- * <code>okAction</code> and <code>cancelAction</code>) can be configured to
+ * {@code okAction} and {@code cancelAction}) can be configured to
  * take care of user decision when closing the dialog.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>

@@ -55,7 +55,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   private boolean                          automationEnabled;
 
   /**
-   * Constructs a new <code>BasicRemotePeerRegistry</code> instance.
+   * Constructs a new {@code BasicRemotePeerRegistry} instance.
    */
   @SuppressWarnings("unchecked")
   public BasicRemotePeerRegistry() {

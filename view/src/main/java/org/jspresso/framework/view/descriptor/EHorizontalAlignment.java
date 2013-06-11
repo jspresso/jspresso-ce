@@ -27,17 +27,17 @@ package org.jspresso.framework.view.descriptor;
 public enum EHorizontalAlignment {
 
   /**
-   * <code>LEFT</code>.
+   * {@code LEFT}.
    */
   LEFT,
 
   /**
-   * <code>CENTER</code>.
+   * {@code CENTER}.
    */
   CENTER,
 
   /**
-   * <code>RIGHT</code>.
+   * {@code RIGHT}.
    */
   RIGHT
 

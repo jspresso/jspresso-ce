@@ -34,8 +34,8 @@ public class ItemSelectionEvent extends EventObject {
   private Object            selectedItem;
 
   /**
-   * Constructs a new <code>ItemSelectionEvent</code>.
-   * 
+   * Constructs a new {@code ItemSelectionEvent}.
+   *
    * @param source
    *          the object that initiated the event.
    * @param selectedItem

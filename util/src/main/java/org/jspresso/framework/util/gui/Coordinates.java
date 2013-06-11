@@ -34,15 +34,15 @@ public class Coordinates implements Serializable {
   private int               y;
 
   /**
-   * Constructs a new <code>Coordinates</code> instance.
+   * Constructs a new {@code Coordinates} instance.
    */
   public Coordinates() {
     super();
   }
 
   /**
-   * Constructs a new <code>Coordinates</code> instance.
-   * 
+   * Constructs a new {@code Coordinates} instance.
+   *
    * @param x
    *          the x coordinate.
    * @param y

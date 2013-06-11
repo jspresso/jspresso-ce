@@ -37,10 +37,10 @@ public final class FontHelper {
 
   /**
    * Transforms a font string representation to a font.
-   * 
+   *
    * @param fontString
    *          the font string representation. The font is coded
-   *          <code>[name];[style];[size]</code>.
+   *          {@code [name];[style];[size]}.
    *          <ul>
    *          <li>[name] is the name of the font.</li>
    *          <li>[style] is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC
@@ -100,10 +100,10 @@ public final class FontHelper {
 
   /**
    * Tests whether the parameter string is a font specification.
-   * 
+   *
    * @param fontString
    *          the string to test.
-   * @return <code>true</code> if the string can be parsed as a font.
+   * @return {@code true} if the string can be parsed as a font.
    */
   public static boolean isFontSpec(String fontString) {
     return fontString != null && fontString.split(SEP, -1).length == 3;

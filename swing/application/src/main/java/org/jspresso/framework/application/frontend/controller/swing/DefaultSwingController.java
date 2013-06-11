@@ -991,8 +991,8 @@ public class DefaultSwingController extends
     private final String workspaceName;
 
     /**
-     * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
-     * 
+     * Constructs a new {@code WorkspaceInternalFrameListener} instance.
+     *
      * @param workspaceName
      *          the workspace identifier this listener is attached to.
      */

@@ -38,10 +38,10 @@ public class ValueChangeSupport implements IValueChangeSource {
 
   /**
    * Constructs a new value change support.
-   * 
+   *
    * @param source
    *          The source to which this ValueChangeSupport is attached. source
-   *          will serve as <code>source</code> of fired ValueChangeEvent if no
+   *          will serve as {@code source} of fired ValueChangeEvent if no
    *          other is provided.
    */
   public ValueChangeSupport(Object source) {
@@ -84,9 +84,9 @@ public class ValueChangeSupport implements IValueChangeSource {
   }
 
   /**
-   * Fires a new <code>ValueChangeEvent</code> built with <code>source</code> as
+   * Fires a new {@code ValueChangeEvent} built with {@code source} as
    * source and parameters as old and new values.
-   * 
+   *
    * @param oldValue
    *          The old connector's value
    * @param newValue
@@ -98,11 +98,11 @@ public class ValueChangeSupport implements IValueChangeSource {
   }
 
   /**
-   * Propagates the <code>ValueChangeEvent</code> as is (i.e. without modifying
+   * Propagates the {@code ValueChangeEvent} as is (i.e. without modifying
    * its source) to the listeners.
-   * 
+   *
    * @param evt
-   *          the propagated <code>ValueChangeEvent</code>
+   *          the propagated {@code ValueChangeEvent}
    */
   public void fireValueChange(ValueChangeEvent evt) {
     if (listeners != null && evt.needsFiring()) {

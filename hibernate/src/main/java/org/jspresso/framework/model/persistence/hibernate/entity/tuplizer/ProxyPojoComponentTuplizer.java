@@ -39,8 +39,8 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
   private static final long        serialVersionUID = 519439258744322320L;
 
   /**
-   * Constructs a new <code>ProxyPojoComponentTuplizer</code> instance.
-   * 
+   * Constructs a new {@code ProxyPojoComponentTuplizer} instance.
+   *
    * @param component
    *          the component to build the proxy for.
    */
@@ -73,8 +73,8 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
     private final Class<? extends IComponent> componentContract;
 
     /**
-     * Constructs a new <code>ProxyInstantiator</code> instance.
-     * 
+     * Constructs a new {@code ProxyInstantiator} instance.
+     *
      * @param component
      *          the hibernate component to build this instantiator for.
      */

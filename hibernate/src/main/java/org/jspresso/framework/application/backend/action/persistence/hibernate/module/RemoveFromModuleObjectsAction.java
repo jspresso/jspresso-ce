@@ -49,7 +49,7 @@ public class RemoveFromModuleObjectsAction extends
     AbstractHibernateCollectionAction {
 
   /**
-   * Constructs a new <code>RemoveFromModuleObjectsAction</code> instance.
+   * Constructs a new {@code RemoveFromModuleObjectsAction} instance.
    */
   public RemoveFromModuleObjectsAction() {
     // Disable bad frontend access checks.

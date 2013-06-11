@@ -56,8 +56,8 @@ public class RefQueryComponentDescriptor<E> extends
   private final Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
 
   /**
-   * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BasicQueryComponentDescriptor} instance.
+   *
    * @param componentDescriptorProvider
    *          the provider for delegate entity descriptor.
    * @param componentContract

@@ -44,7 +44,7 @@ public class CompactString implements TemplateMethodModelEx {
   private static final char UNDERSCORE = '_';
 
   /**
-   * Constructs a new <code>CompactString</code> instance.
+   * Constructs a new {@code CompactString} instance.
    */
   public CompactString() {
     // Empty constructor.

@@ -29,13 +29,13 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * This abstract class serves as the base class for all JComponent connectors.
  * Subclasses can access the JComponent using the parametrized method
- * <code>getConnectedJComponent()</code> which returns the parametrized type of
+ * {@code getConnectedJComponent()} which returns the parametrized type of
  * the class.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of <code>JComponent</code>.
+ *          The actual class of the subclass of {@code JComponent}.
  */
 public abstract class JComponentConnector<E extends JComponent> extends
     AbstractValueConnector {
@@ -45,8 +45,8 @@ public abstract class JComponentConnector<E extends JComponent> extends
   private Color savedForeground;
 
   /**
-   * Constructs a new <code>JComponentConnector</code> instance.
-   * 
+   * Constructs a new {@code JComponentConnector} instance.
+   *
    * @param id
    *          the connector identifier.
    * @param connectedJComponent
@@ -73,8 +73,8 @@ public abstract class JComponentConnector<E extends JComponent> extends
   /**
    * This implementation takes care of having the peer component modifications
    * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedReadabilityChange</code> method.
-   * 
+   * modification to the {@code protectedReadabilityChange} method.
+   *
    * @see #protectedReadabilityChange()
    */
   @Override
@@ -95,8 +95,8 @@ public abstract class JComponentConnector<E extends JComponent> extends
   /**
    * This implementation takes care of having the peer component modifications
    * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedWritabilityChange</code> method.
-   * 
+   * modification to the {@code protectedWritabilityChange} method.
+   *
    * @see #protectedWritabilityChange()
    */
   @Override
@@ -160,7 +160,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
 
   /**
    * This method can be overridden by subclasses in lieu of
-   * <code>fireConnectorValueChange</code> that has been made final to take care
+   * {@code fireConnectorValueChange} that has been made final to take care
    * of the swing EDT.
    */
   protected void protectedFireConnectorValueChange() {
@@ -169,7 +169,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
 
   /**
    * Implementation of connectee readability state modifications which normally
-   * would have been coded in the <code>readabilityChange</code> method should
+   * would have been coded in the {@code readabilityChange} method should
    * go here to preserve the connector modification to be handled in the event
    * dispatch thread.
    */
@@ -188,9 +188,9 @@ public abstract class JComponentConnector<E extends JComponent> extends
 
   /**
    * Implementation of connectee modifications which normally would have been
-   * coded in the <code>setConnecteeValue</code> should go here to preserve the
+   * coded in the {@code setConnecteeValue} should go here to preserve the
    * connector modification to be handled in the event dispatch thread.
-   * 
+   *
    * @param aValue
    *          the connectee value to set.
    */
@@ -198,7 +198,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
 
   /**
    * Implementation of connectee writability state modifications which normally
-   * would have been coded in the <code>writabilityChange</code> method should
+   * would have been coded in the {@code writabilityChange} method should
    * go here to preserve the connector modification to be handled in the event
    * dispatch thread.
    */
@@ -209,10 +209,10 @@ public abstract class JComponentConnector<E extends JComponent> extends
   /**
    * This implementation takes care of having the peer component modifications
    * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedSetConnecteeValue</code> method.
+   * modification to the {@code protectedSetConnecteeValue} method.
    * <p>
    * {@inheritDoc}
-   * 
+   *
    * @see #protectedSetConnecteeValue(Object)
    */
   @Override

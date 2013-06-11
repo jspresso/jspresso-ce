@@ -37,8 +37,8 @@ public class FileCancelCallbackAction extends AbstractRemoteAction {
   private final IFileCallback fileCallback;
 
   /**
-   * Constructs a new <code>FileCancelCallbackAction</code> instance.
-   * 
+   * Constructs a new {@code FileCancelCallbackAction} instance.
+   *
    * @param fileCallback
    *          the file callback to cancel.
    */

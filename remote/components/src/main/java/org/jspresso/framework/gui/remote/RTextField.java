@@ -30,8 +30,8 @@ public class RTextField extends RTextComponent {
   private String            horizontalAlignment;
 
   /**
-   * Constructs a new <code>RTextField</code> instance.
-   * 
+   * Constructs a new {@code RTextField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -40,7 +40,7 @@ public class RTextField extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RTextField</code> instance. Only used for
+   * Constructs a new {@code RTextField} instance. Only used for
    * serialization support.
    */
   public RTextField() {

@@ -40,8 +40,8 @@ public class InstanceOf implements TemplateMethodModelEx {
   private final BeansWrapper wrapper;
 
   /**
-   * Constructs a new <code>InstanceOf</code> instance.
-   * 
+   * Constructs a new {@code InstanceOf} instance.
+   *
    * @param wrapper
    *          the beans wrapper.
    */

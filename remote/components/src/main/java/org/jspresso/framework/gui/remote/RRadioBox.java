@@ -31,8 +31,8 @@ public class RRadioBox extends REnumBox {
   private String            orientation;
 
   /**
-   * Constructs a new <code>RComboBox</code> instance.
-   * 
+   * Constructs a new {@code RComboBox} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -41,7 +41,7 @@ public class RRadioBox extends REnumBox {
   }
 
   /**
-   * Constructs a new <code>RComboBox</code> instance. Only used for
+   * Constructs a new {@code RComboBox} instance. Only used for
    * serialization support.
    */
   public RRadioBox() {

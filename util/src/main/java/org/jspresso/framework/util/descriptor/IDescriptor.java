@@ -31,15 +31,15 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public interface IDescriptor {
 
   /**
-   * <code>DESCRIPTION</code>="description".
+   * {@code DESCRIPTION}="description".
    */
   String DESCRIPTION  = "description";
   /**
-   * <code>NAME</code>="name".
+   * {@code NAME}="name".
    */
   String NAME         = "name";
   /**
-   * <code>LAST_UPDATED</code>="lastUpdated".
+   * {@code LAST_UPDATED}="lastUpdated".
    */
   String LAST_UPDATED = "lastUpdated";
 

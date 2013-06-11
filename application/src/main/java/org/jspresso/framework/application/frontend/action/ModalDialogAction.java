@@ -33,16 +33,16 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * is meant to be chained after another frontend action that produce the dialog
  * specs into the action context. Context entries that are used are :
  * <ul>
- * <li><code>DIALOG_VIEW</code> : the view to be used as the dialog content
+ * <li>{@code DIALOG_VIEW} : the view to be used as the dialog content
  * pane.</li>
- * <li><code>DIALOG_TITLE</code> : the title of the dialog.</li>
- * <li><code>DIALOG_ACTIONS</code> : the actions to be installed at the bottom
+ * <li>{@code DIALOG_TITLE} : the title of the dialog.</li>
+ * <li>{@code DIALOG_ACTIONS} : the actions to be installed at the bottom
  * of the dialog.</li>
- * <li><code>DIALOG_SIZE</code> : the dialog preferred size. Whenever the dialog
- * size is <code>null</code>, the dialog size is determined from the preferred
+ * <li>{@code DIALOG_SIZE} : the dialog preferred size. Whenever the dialog
+ * size is {@code null}, the dialog size is determined from the preferred
  * size of the content view.</li>
  * </ul>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>

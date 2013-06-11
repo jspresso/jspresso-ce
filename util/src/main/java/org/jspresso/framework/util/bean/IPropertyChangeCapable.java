@@ -22,9 +22,9 @@ import java.beans.PropertyChangeListener;
 
 /**
  * This class needs to be implemented by java beans which are capable of
- * registering a <code>PropertyChangeListener</code>. See also java beans
+ * registering a {@code PropertyChangeListener}. See also java beans
  * specifications.
- * 
+ *
  * @version $LastChangedRevision$
  * @see java.beans.PropertyChangeSupport
  * @author Vincent Vandenschrick
@@ -32,14 +32,14 @@ import java.beans.PropertyChangeListener;
 public interface IPropertyChangeCapable {
 
   /**
-   * <code>UNKNOWN</code> value of property. This value may be passed as
-   * <code>newValue</code> in <code>PropertyChangeEvents</code>.
+   * {@code UNKNOWN} value of property. This value may be passed as
+   * {@code newValue} in {@code PropertyChangeEvents}.
    */
   Object UNKNOWN = new Object();
 
   /**
-   * Adds a new <code>PropertyChangeListener</code>.
-   * 
+   * Adds a new {@code PropertyChangeListener}.
+   *
    * @param listener
    *          The added listener.
    * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
@@ -47,8 +47,8 @@ public interface IPropertyChangeCapable {
   void addPropertyChangeListener(PropertyChangeListener listener);
 
   /**
-   * Adds a new <code>PropertyChangeListener</code> using a weak reference.
-   * 
+   * Adds a new {@code PropertyChangeListener} using a weak reference.
+   *
    * @param listener
    *          The added listener.
    * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
@@ -56,8 +56,8 @@ public interface IPropertyChangeCapable {
   void addWeakPropertyChangeListener(PropertyChangeListener listener);
 
   /**
-   * Adds a new <code>PropertyChangeListener</code> on a specific property.
-   * 
+   * Adds a new {@code PropertyChangeListener} on a specific property.
+   *
    * @param propertyName
    *          The listened property.
    * @param listener
@@ -69,9 +69,9 @@ public interface IPropertyChangeCapable {
       PropertyChangeListener listener);
 
   /**
-   * Adds a new <code>PropertyChangeListener</code> on a specific property using
+   * Adds a new {@code PropertyChangeListener} on a specific property using
    * a weak reference.
-   * 
+   *
    * @param propertyName
    *          The listened property.
    * @param listener
@@ -83,8 +83,8 @@ public interface IPropertyChangeCapable {
       PropertyChangeListener listener);
 
   /**
-   * Removes a new <code>PropertyChangeListener</code>.
-   * 
+   * Removes a new {@code PropertyChangeListener}.
+   *
    * @param listener
    *          The removed listener.
    * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(PropertyChangeListener)
@@ -92,8 +92,8 @@ public interface IPropertyChangeCapable {
   void removePropertyChangeListener(PropertyChangeListener listener);
 
   /**
-   * Removes a <code>PropertyChangeListener</code> on a specific property.
-   * 
+   * Removes a {@code PropertyChangeListener} on a specific property.
+   *
    * @param propertyName
    *          The listened property.
    * @param listener
@@ -106,7 +106,7 @@ public interface IPropertyChangeCapable {
 
   /**
    * Gets listeners attached.
-   * @return all of the <code>PropertyChangeListeners</code> added or an empty
+   * @return all of the {@code PropertyChangeListeners} added or an empty
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
@@ -116,20 +116,20 @@ public interface IPropertyChangeCapable {
    * Gets listeners attached to a given property.
    * @param propertyName
    *          propertyName
-   * @return all of the <code>PropertyChangeListeners</code> associated with the
+   * @return all of the {@code PropertyChangeListeners} associated with the
    *         named property. If no such listeners have been added, or if
-   *         <code>propertyName</code> is null, an empty array is returned.
-   * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
+   *         {@code propertyName} is null, an empty array is returned.
+   * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(String)
    */
   PropertyChangeListener[] getPropertyChangeListeners(String propertyName);
 
   /**
    * Gets whether this property has at least a property change listener attached
    * to it.
-   * 
+   *
    * @param propertyName
    *          The listened property.
-   * @return <code>true</code> if there is a property change listener attached
+   * @return {@code true} if there is a property change listener attached
    *         to this property.
    */
   boolean hasListeners(String propertyName);

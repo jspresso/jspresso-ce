@@ -31,8 +31,8 @@ public class DynamicPojoComponentTuplizer extends ProxyPojoComponentTuplizer {
   private static final long serialVersionUID = 3848795879036937568L;
 
   /**
-   * Constructs a new <code>DynamicPojoComponentTuplizer</code> instance.
-   * 
+   * Constructs a new {@code DynamicPojoComponentTuplizer} instance.
+   *
    * @param component
    *          the component to build the proxy for.
    */

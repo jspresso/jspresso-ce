@@ -27,12 +27,12 @@ package org.jspresso.framework.view.descriptor;
 public enum EAxis {
 
   /**
-   * <code>COLUMN</code>.
+   * {@code COLUMN}.
    */
   COLUMN,
 
   /**
-   * <code>ROW</code>.
+   * {@code ROW}.
    */
   ROW
 

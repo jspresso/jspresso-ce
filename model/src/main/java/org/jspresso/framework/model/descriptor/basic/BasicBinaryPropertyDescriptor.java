@@ -94,9 +94,9 @@ public class BasicBinaryPropertyDescriptor extends
    * <li>saving the property binary value to a file on the file system</li>
    * </ul>
    * Jspresso provides built-in actions that do the above and configure their UI
-   * automatically based on the <code>fileFilter</code> property.
+   * automatically based on the {@code fileFilter} property.
    * <p>
-   * The incoming <code>Map</code> must be structured like following :
+   * The incoming {@code Map} must be structured like following :
    * <ul>
    * <li>keys are translation keys that will be translated by Jspresso i18n
    * layer and presented to the user as the group name of the associated
@@ -104,7 +104,7 @@ public class BasicBinaryPropertyDescriptor extends
    * <li>values are the extension list associated to a certain group name, e.g.
    * a list containing <i>[&quot;.jpeg&quot;,&quot;.jpg&quot;]</i></li>
    * </ul>
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -202,7 +202,7 @@ public class BasicBinaryPropertyDescriptor extends
   }
 
   /**
-   * Returns <code>false</code>.
+   * Returns {@code false}.
    * <p>
    * {@inheritDoc}
    */

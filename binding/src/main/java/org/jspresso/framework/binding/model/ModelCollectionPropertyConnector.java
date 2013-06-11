@@ -161,7 +161,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * This implementation returns a <code>ModelConnector</code> instance.
+   * This implementation returns a {@code ModelConnector} instance.
    * <p>
    * {@inheritDoc}
    */
@@ -246,7 +246,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   /**
    * Before invoking the super implementation which handles the
-   * <code>ModelChangeEvent</code>, this implementation reconstructs the child
+   * {@code ModelChangeEvent}, this implementation reconstructs the child
    * connectors based on the retrieved collection.
    * <p>
    * {@inheritDoc}
@@ -259,7 +259,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   /**
    * Before invoking the super implementation which fires the
-   * <code>ValueChangeEvent</code>, this implementation reconstructs the child
+   * {@code ValueChangeEvent}, this implementation reconstructs the child
    * connectors based on the retrieved collection.
    * <p>
    * {@inheritDoc}

@@ -111,8 +111,8 @@ public class BasicDurationPropertyDescriptor extends
 
   /**
    * Configures the maximum duration value this property accepts in
-   * milliseconds. Default value is <code>null</code>, meaning unbound.
-   * 
+   * milliseconds. Default value is {@code null}, meaning unbound.
+   *
    * @param maxMillis
    *          the maxMillis to set.
    */

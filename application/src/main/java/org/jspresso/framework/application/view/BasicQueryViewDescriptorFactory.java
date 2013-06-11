@@ -63,7 +63,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
   private String             defaultFindIconImageUrl;
 
   /**
-   * Constructs a new <code>BasicQueryViewDescriptorFactory</code> instance.
+   * Constructs a new {@code BasicQueryViewDescriptorFactory} instance.
    */
   public BasicQueryViewDescriptorFactory() {
     horizontallyResizable = true;

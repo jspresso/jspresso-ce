@@ -22,15 +22,15 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
   private static final long serialVersionUID = 8442150281431602947L;
 
   /**
-   * Constructs a new <code>NullableSimpleDateFormat</code> instance.
+   * Constructs a new {@code NullableSimpleDateFormat} instance.
    */
   public NullableSimpleDateFormat() {
     super();
   }
 
   /**
-   * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   * 
+   * Constructs a new {@code NullableSimpleDateFormat} instance.
+   *
    * @param pattern
    *          pattern.
    */
@@ -39,8 +39,8 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
   }
 
   /**
-   * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   * 
+   * Constructs a new {@code NullableSimpleDateFormat} instance.
+   *
    * @param pattern
    *          pattern.
    * @param formatSymbols
@@ -52,8 +52,8 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
   }
 
   /**
-   * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   * 
+   * Constructs a new {@code NullableSimpleDateFormat} instance.
+   *
    * @param pattern
    *          pattern.
    * @param locale

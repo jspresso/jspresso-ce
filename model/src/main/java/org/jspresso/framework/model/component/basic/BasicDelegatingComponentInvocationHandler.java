@@ -47,8 +47,8 @@ public class BasicDelegatingComponentInvocationHandler extends
   private final Object            delegate;
 
   /**
-   * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
-   * 
+   * Constructs a new {@code BasicComponentInvocationHandler} instance.
+   *
    * @param delegate
    *          the delegate to which getters and setters are delegated.
    * @param componentFactory

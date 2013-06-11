@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 public final class ReflectHelper {
 
   /**
-   * Constructs a new <code>ReflectHelper</code> instance.
+   * Constructs a new {@code ReflectHelper} instance.
    */
   private ReflectHelper() {
     // Helper constructor.

@@ -32,8 +32,8 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 public class ComparableQueryStructure extends QueryComponent {
 
   /**
-   * Constructs a new <code>ComparableQueryStructure</code> instance.
-   * 
+   * Constructs a new {@code ComparableQueryStructure} instance.
+   *
    * @param componentDescriptor
    *          the query componentDescriptor.
    * @param componentFactory
@@ -104,8 +104,8 @@ public class ComparableQueryStructure extends QueryComponent {
 
   /**
    * Whether the comparable query structure actually holds a restriction.
-   * 
-   * @return <code>true</code> if the comparable query structure actually holds
+   *
+   * @return {@code true} if the comparable query structure actually holds
    *         a restriction.
    */
   public boolean isRestricting() {
@@ -114,10 +114,10 @@ public class ComparableQueryStructure extends QueryComponent {
 
   /**
    * Whether the value passed as parameter matches the query structure.
-   * 
+   *
    * @param value
    *          the value to test.
-   * @return <code>true</code> if the value passed as parameter matches the
+   * @return {@code true} if the value passed as parameter matches the
    *         query structure.
    */
   public boolean matches(Comparable<Object> value) {

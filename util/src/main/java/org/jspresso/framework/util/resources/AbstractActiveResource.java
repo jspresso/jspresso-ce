@@ -28,8 +28,8 @@ public abstract class AbstractActiveResource extends AbstractResourceBase
     implements IActiveResource {
 
   /**
-   * Constructs a new <code>AbstractResource</code> instance.
-   * 
+   * Constructs a new {@code AbstractResource} instance.
+   *
    * @param mimeType
    *          the mime type of the resource.
    */

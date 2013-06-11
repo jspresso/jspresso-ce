@@ -37,8 +37,8 @@ public class RActionList extends RemotePeer {
   private boolean           collapsable;
 
   /**
-   * Constructs a new <code>RActionList</code> instance.
-   * 
+   * Constructs a new {@code RActionList} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -47,7 +47,7 @@ public class RActionList extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RActionList</code> instance. Only used for
+   * Constructs a new {@code RActionList} instance. Only used for
    * serialization support.
    */
   public RActionList() {

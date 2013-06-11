@@ -35,8 +35,8 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
  * hierarchically. A <i>tree level descriptor</i> is a group of sibling nodes
  * that usually represent a component collection property. Each individual tree
  * node collection can be secured by using role-based authorization (i.e.
- * <code>grantedRoles</code>) on its descriptor.
- * 
+ * {@code grantedRoles}) on its descriptor.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -55,7 +55,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   private IAction                    rowAction;
 
   /**
-   * Constructs a new <code>BasicTreeViewDescriptor</code> instance.
+   * Constructs a new {@code BasicTreeViewDescriptor} instance.
    */
   public BasicTreeViewDescriptor() {
     expanded = false;
@@ -155,7 +155,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * nodes. For instance, if the child tree level is mapped to a collection
    * (collA) containing 5 elements (collA_Elt-1 to 5), the tree would look like
    * :
-   * 
+   *
    * <pre>
    * rootItem
    *   coll<b>A</b>_Elt-<b>1</b>
@@ -164,15 +164,15 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    *   coll<b>A</b>_Elt-<b>4</b>
    *   coll<b>A</b>_Elt-<b>5</b>
    * </pre>
-   * 
+   *
    * In the example above, you should notice that there is no need for the tree
    * to install an intermediary node to visually group the collection elements
    * since the collection is alone on its level.
    * <p>
-   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
+   * This property is only used if the {@code rootSubtreeDescriptor} is not
    * explicitly set. In the latter case, nested subtrees are determined from
-   * the <code>rootSubtreeDescriptor</code>.
-   * 
+   * the {@code rootSubtreeDescriptor}.
+   *
    * @param childDescriptor
    *          the childDescriptor to set.
    */
@@ -186,7 +186,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * nodes (subtrees). For instance, if the children tree levels are mapped to 2
    * collection properties (collA, collB) each containing 3 elements
    * (collA_Elt-1 to 3 and collB_Elt-1 to 3), the tree would look like :
-   * 
+   *
    * <pre>
    * rootItem
    *   <i>collA</i>
@@ -198,15 +198,15 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    *     coll<b>B</b>_Elt-<b>2</b>
    *     coll<b>B</b>_Elt-<b>3</b>
    * </pre>
-   * 
+   *
    * In the example above, you should notice intermediate collection property
    * grouping nodes (collA and collB in italic). They automatically appeared to
    * clearly group the tree nodes belonging to the different collections.
    * <p>
-   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
+   * This property is only used if the {@code rootSubtreeDescriptor} is not
    * explicitly set. In the latter case, nested subtrees are determined from
-   * the <code>rootSubtreeDescriptor</code>.
-   * 
+   * the {@code rootSubtreeDescriptor}.
+   *
    * @param childrenDescriptors
    *          the childrenDescriptor to set.
    */
@@ -217,10 +217,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Setting this property to <code>true</code> configures the created tree to
-   * appear with its node expanded. A value of <code>false</code> (default)
+   * Setting this property to {@code true} configures the created tree to
+   * appear with its node expanded. A value of {@code false} (default)
    * means that the tree nodes are initially collapsed.
-   * 
+   *
    * @param expanded
    *          the expanded to set.
    */
@@ -231,14 +231,14 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * The icon image URL provider is the delegate responsible for inferring a
    * tree node icon based on its underlying model. By default (i.e. when
-   * <code>iconImageURLProvider</code> is <code>null</code>), Jspresso will use
+   * {@code iconImageURLProvider} is {@code null}), Jspresso will use
    * the underlying component descriptor icon, if any. Using a custom icon image
    * URL provider allows to implement finer rules like using different icons
    * based on the underlying object state. There is a single method to implement
    * to achieve this :
    * <p>
-   * <code>String getIconImageURLForObject(Object userObject);</code>
-   * 
+   * {@code String getIconImageURLForObject(Object userObject);}
+   *
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
@@ -276,10 +276,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * This property allows to define the model property used to label the root
    * node.
    * <p>
-   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
-   * explicitly set. In the latter case, <code>renderedProperty</code> is
-   * determined from the <code>rootSubtreeDescriptor</code>.
-   * 
+   * This property is only used if the {@code rootSubtreeDescriptor} is not
+   * explicitly set. In the latter case, {@code renderedProperty} is
+   * determined from the {@code rootSubtreeDescriptor}.
+   *
    * @param renderedProperty
    *          the renderedProperty to set.
    */
@@ -292,14 +292,14 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * level. Most of the time, you will prefer using the following shortcut
    * properties :
    * <ul>
-   * <li><code>childDescriptor</code></li>
-   * <li><code>childrenDescriptors</code></li>
-   * <li><code>renderedProperty</code></li>
+   * <li>{@code childDescriptor}</li>
+   * <li>{@code childrenDescriptors}</li>
+   * <li>{@code renderedProperty}</li>
    * </ul>
-   * Whenever <code>rootSubtreeDescriptor</code> is explicitly set, the
+   * Whenever {@code rootSubtreeDescriptor} is explicitly set, the
    * properties above are simply ignored since all values are determined from
-   * <code>rootSubtreeDescriptor</code>.
-   * 
+   * {@code rootSubtreeDescriptor}.
+   *
    * @param rootSubtreeDescriptor
    *          the rootSubtreeDescriptor to set.
    */

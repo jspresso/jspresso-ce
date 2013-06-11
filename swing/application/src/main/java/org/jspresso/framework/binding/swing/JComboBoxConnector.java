@@ -32,8 +32,8 @@ import javax.swing.JComboBox;
 public class JComboBoxConnector extends JComponentConnector<JComboBox<?>> {
 
   /**
-   * Constructs a new <code>JComboBoxConnector</code> instance.
-   * 
+   * Constructs a new {@code JComboBoxConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param comboBox

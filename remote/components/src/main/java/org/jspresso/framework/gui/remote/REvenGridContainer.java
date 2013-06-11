@@ -33,8 +33,8 @@ public class REvenGridContainer extends RContainer {
   private int               drivingDimensionCellCount;
 
   /**
-   * Constructs a new <code>REvenGridContainer</code> instance.
-   * 
+   * Constructs a new {@code REvenGridContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -43,7 +43,7 @@ public class REvenGridContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>REvenGridContainer</code> instance. Only used for
+   * Constructs a new {@code REvenGridContainer} instance. Only used for
    * GWT serialization support.
    */
   public REvenGridContainer() {

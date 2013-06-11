@@ -30,8 +30,8 @@ public class RCheckBox extends RComponent {
   private boolean           triState;
 
   /**
-   * Constructs a new <code>RCheckBox</code> instance.
-   * 
+   * Constructs a new {@code RCheckBox} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -40,7 +40,7 @@ public class RCheckBox extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RCheckBox</code> instance. Only used for
+   * Constructs a new {@code RCheckBox} instance. Only used for
    * serialization support.
    */
   public RCheckBox() {

@@ -52,8 +52,8 @@ public abstract class AbstractCompositeValueConnector extends
   private boolean                      trackingChildrenSelection;
 
   /**
-   * Constructs a new <code>AbstractCompositeValueConnector</code>.
-   * 
+   * Constructs a new {@code AbstractCompositeValueConnector}.
+   *
    * @param id
    *          the connector identifier
    */
@@ -295,8 +295,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
+   * used by subclasses which implement {@code IConnectorSelector}.
+   *
    * @param listener
    *          the listener to add.
    */
@@ -307,8 +307,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
+   * used by subclasses which implement {@code IConnectorSelector}.
+   *
    * @param selectedConnector
    *          the newly selected connector or null.
    */
@@ -319,8 +319,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IItemSelectable</code>.
-   * 
+   * used by subclasses which implement {@code IItemSelectable}.
+   *
    * @param evt
    *          the item selection event to propagate.
    */
@@ -341,8 +341,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IItemSelectable</code>.
-   * 
+   * used by subclasses which implement {@code IItemSelectable}.
+   *
    * @return the selected item.
    */
   protected Object implGetSelectedItem() {
@@ -351,8 +351,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
+   * used by subclasses which implement {@code IConnectorSelector}.
+   *
    * @param listener
    *          the listener to remove.
    */
@@ -363,8 +363,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
+   * used by subclasses which implement {@code IConnectorSelector}.
+   *
    * @param tracksChildren
    *          the trackingChildrenSelection to set.
    */

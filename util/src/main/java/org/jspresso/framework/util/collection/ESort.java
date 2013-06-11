@@ -27,12 +27,12 @@ package org.jspresso.framework.util.collection;
 public enum ESort {
 
   /**
-   * <code>ASCENDING</code>.
+   * {@code ASCENDING}.
    */
   ASCENDING,
 
   /**
-   * <code>DESCENDING</code>.
+   * {@code DESCENDING}.
    */
   DESCENDING
 

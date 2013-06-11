@@ -33,8 +33,8 @@ public class RSplitContainer extends RContainer {
   private RComponent        rightBottom;
 
   /**
-   * Constructs a new <code>RSplitContainer</code> instance.
-   * 
+   * Constructs a new {@code RSplitContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -43,7 +43,7 @@ public class RSplitContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RSplitContainer</code> instance. Only used for
+   * Constructs a new {@code RSplitContainer} instance. Only used for
    * serialization support.
    */
   public RSplitContainer() {

@@ -29,11 +29,11 @@ import org.apache.commons.lang.StringUtils;
 /**
  * This abstract class serves as the base class for all JTextComponent
  * connectors.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of <code>JTextComponent</code>.
+ *          The actual class of the subclass of {@code JTextComponent}.
  */
 public abstract class JTextComponentConnector<E extends JTextComponent> extends
     JComponentConnector<E> {
@@ -41,10 +41,10 @@ public abstract class JTextComponentConnector<E extends JTextComponent> extends
   private Color savedSelectedTextColor;
 
   /**
-   * Constructs a new <code>JTextComponentConnector</code> instance. The
-   * connector will listen to <code>focusLost</code> events so subclass only
+   * Constructs a new {@code JTextComponentConnector} instance. The
+   * connector will listen to {@code focusLost} events so subclass only
    * need to listen to other unhandled events if necessary.
-   * 
+   *
    * @param id
    *          the connector identifier.
    * @param textComponent

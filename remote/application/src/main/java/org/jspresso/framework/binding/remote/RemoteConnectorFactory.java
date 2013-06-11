@@ -78,7 +78,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   private PropertyChangeListener   writabilityListener;
 
   /**
-   * Constructs a new <code>RemoteConnectorFactory</code> instance.
+   * Constructs a new {@code RemoteConnectorFactory} instance.
    */
   public RemoteConnectorFactory() {
     initAccessibilityListeners();

@@ -370,8 +370,8 @@ public final class SwingUtil {
     private final JTextField textField;
 
     /**
-     * Constructs a new <code>FocusGainedTask</code> instance.
-     * 
+     * Constructs a new {@code FocusGainedTask} instance.
+     *
      * @param textField
      *          the text field to run on.
      */
@@ -399,8 +399,8 @@ public final class SwingUtil {
     private final JTextField textField;
 
     /**
-     * Constructs a new <code>FocusLostTask</code> instance.
-     * 
+     * Constructs a new {@code FocusLostTask} instance.
+     *
      * @param textField
      *          the text field to run on.
      */
@@ -427,8 +427,8 @@ public final class SwingUtil {
     private final JTextField textField;
 
     /**
-     * Constructs a new <code>TfDocumentListener</code> instance.
-     * 
+     * Constructs a new {@code TfDocumentListener} instance.
+     *
      * @param textField
      *          the text field to run on.
      */

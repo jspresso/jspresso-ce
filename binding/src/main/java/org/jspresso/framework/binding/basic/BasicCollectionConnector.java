@@ -26,8 +26,8 @@ import org.jspresso.framework.binding.IMvcBinder;
  * This is a simple collection connector which itself holds the connector's
  * value and which allows child connectors. This connector is useful for
  * building complex technical view models (e.g. TableModel where the underlying
- * structure would be a <code>BasicCollectionConnector</code>).
- * 
+ * structure would be a {@code BasicCollectionConnector}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

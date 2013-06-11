@@ -32,8 +32,8 @@ public class EntityRegistryException extends NestedRuntimeException {
   private static final long serialVersionUID = -2305354369001291978L;
 
   /**
-   * Constructs a new <code>EntityRegistryException</code> instance.
-   * 
+   * Constructs a new {@code EntityRegistryException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class EntityRegistryException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>EntityRegistryException</code> instance.
-   * 
+   * Constructs a new {@code EntityRegistryException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class EntityRegistryException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>EntityRegistryException</code> instance.
-   * 
+   * Constructs a new {@code EntityRegistryException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

@@ -27,12 +27,12 @@ package org.jspresso.framework.security;
 public enum EAuthorization {
 
   /**
-   * <code>VISIBLE</code>.
+   * {@code VISIBLE}.
    */
   VISIBLE,
 
   /**
-   * <code>ENABLED</code>.
+   * {@code ENABLED}.
    */
   ENABLED
 

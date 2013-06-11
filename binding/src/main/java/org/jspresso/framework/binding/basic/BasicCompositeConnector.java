@@ -27,8 +27,8 @@ import org.jspresso.framework.binding.IValueConnector;
  * This is a simple connector which itself holds the connector's value and which
  * allows child connectors. This connector is useful for building complex
  * technical view models (e.g. TableModel where each row model would be an
- * instance of <code>BasicCompositeConnector</code>).
- * 
+ * instance of {@code BasicCompositeConnector}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

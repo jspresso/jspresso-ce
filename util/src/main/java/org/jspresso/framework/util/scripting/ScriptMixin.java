@@ -31,8 +31,8 @@ public class ScriptMixin implements IScript {
   private final Object scriptedObject;
 
   /**
-   * Constructs a new <code>ScriptMixin</code> instance.
-   * 
+   * Constructs a new {@code ScriptMixin} instance.
+   *
    * @param scriptedObject
    *          the object this mixin is introduced in.
    */

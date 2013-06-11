@@ -64,8 +64,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private IExceptionHandler      exceptionHandler;
 
   /**
-   * Constructs a new <code>CollectionConnectorTableModel</code> instance.
-   * 
+   * Constructs a new {@code CollectionConnectorTableModel} instance.
+   *
    * @param collectionConnector
    *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys

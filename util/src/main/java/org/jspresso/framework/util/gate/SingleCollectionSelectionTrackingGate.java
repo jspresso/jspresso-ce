@@ -32,7 +32,7 @@ public class SingleCollectionSelectionTrackingGate extends
     AbstractCollectionSelectionTrackingGate {
 
   /**
-   * <code>INSTANCE</code> is a singleton instance of a gate whose state depends
+   * {@code INSTANCE} is a singleton instance of a gate whose state depends
    * on the underlying collection connector selection (!singleton => closed,
    * singleton => open).
    */

@@ -42,10 +42,10 @@ import org.springframework.jdbc.core.ConnectionCallback;
 /**
  * This is the concrete implementation of the Fusionchart display action. This
  * action is specialized by UI channel, i.e. server based UI channels (Ajax,
- * Flex, ULC) will use <i><code>server</code></i>
- * <code>.DisplayChartAction</code> whereas standalone UI channels (Swing) will
- * use <i><code>standalone</code></i><code>.DisplayChartAction</code>.
- * 
+ * Flex, ULC) will use <i>{@code server}</i>
+ * {@code .DisplayChartAction} whereas standalone UI channels (Swing) will
+ * use <i>{@code standalone}</i>{@code .DisplayChartAction}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>

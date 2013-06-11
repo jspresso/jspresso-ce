@@ -34,8 +34,8 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
   private final IFormatter<?, String> formatter;
 
   /**
-   * Constructs a new <code>FormattedTableCellRenderer</code> instance.
-   * 
+   * Constructs a new {@code FormattedTableCellRenderer} instance.
+   *
    * @param formatter
    *          the formatter used to format object values.
    */

@@ -29,8 +29,8 @@ public class RTextArea extends RTextComponent {
   private static final long serialVersionUID = 7613486745564881806L;
 
   /**
-   * Constructs a new <code>RTextArea</code> instance.
-   * 
+   * Constructs a new {@code RTextArea} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RTextArea extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RTextArea</code> instance. Only used for
+   * Constructs a new {@code RTextArea} instance. Only used for
    * serialization support.
    */
   public RTextArea() {

@@ -80,7 +80,7 @@ public class BasicObjectPropertyDescriptor extends
 
   /**
    * Returns Object class or the class refined by
-   * <code>modelTypeClassName</code>.
+   * {@code modelTypeClassName}.
    * <p>
    * {@inheritDoc}
    */
@@ -115,7 +115,7 @@ public class BasicObjectPropertyDescriptor extends
   }
 
   /**
-   * Returns <code>false</code>.
+   * Returns {@code false}.
    * <p>
    * {@inheritDoc}
    */

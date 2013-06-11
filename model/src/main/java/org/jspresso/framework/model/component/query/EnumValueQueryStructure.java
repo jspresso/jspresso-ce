@@ -33,7 +33,7 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
   private String  value;
 
   /**
-   * Constructs a new <code>EnumValueQueryStructure</code> instance.
+   * Constructs a new {@code EnumValueQueryStructure} instance.
    */
   public EnumValueQueryStructure() {
     this.selected = false;

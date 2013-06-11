@@ -37,8 +37,8 @@ public class RemoteCompositeValueState extends RemoteValueState {
   private int[]                  selectedIndices;
 
   /**
-   * Constructs a new <code>RemoteCompositeValueState</code> instance.
-   * 
+   * Constructs a new {@code RemoteCompositeValueState} instance.
+   *
    * @param guid
    *          the state guid.
    */
@@ -48,7 +48,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
   }
 
   /**
-   * Constructs a new <code>RemoteCompositeValueState</code> instance. Only used
+   * Constructs a new {@code RemoteCompositeValueState} instance. Only used
    * for GWT serialization support.
    */
   public RemoteCompositeValueState() {

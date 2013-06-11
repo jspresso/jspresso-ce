@@ -26,8 +26,8 @@ import org.jspresso.framework.util.gui.IIndexMapper;
 
 /**
  * Helper class used to bind collection view connectors to list selection models
- * (used in <code>JList</code> and <code>JTable</code>).
- * 
+ * (used in {@code JList} and {@code JTable}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

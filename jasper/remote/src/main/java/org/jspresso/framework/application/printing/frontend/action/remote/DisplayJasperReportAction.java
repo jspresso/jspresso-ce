@@ -34,10 +34,10 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 /**
- * This action will take a <code>JasperPrint</code> (a processed Jasper report
+ * This action will take a {@code JasperPrint} (a processed Jasper report
  * instance), produce a PDF output and open a browser window (tab) to display
  * it.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

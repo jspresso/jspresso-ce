@@ -34,7 +34,7 @@ public class RemoteUtilServlet extends HttpServlet {
   private static final long   serialVersionUID         = -3666419534888301379L;
 
   /**
-   * <code>REMOTE_STARTUP</code>.
+   * {@code REMOTE_STARTUP}.
    */
   public static final String  REMOTE_STARTUP           = "remoteStartup";
 

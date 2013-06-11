@@ -23,10 +23,10 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.ConstructorUtils;
 
 /**
- * This is the default implementation of <code>IComponentExtensionFactory</code>
- * . This implementation relies on Jakarta's <code>ConstructorUtils</code> to
+ * This is the default implementation of {@code IComponentExtensionFactory}
+ * . This implementation relies on Jakarta's {@code ConstructorUtils} to
  * build extension instances calling their constructors using reflection.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

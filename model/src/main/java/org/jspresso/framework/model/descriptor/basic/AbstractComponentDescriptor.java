@@ -80,7 +80,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     DefaultIconDescriptor implements IComponentDescriptor<E>, BeanFactoryAware {
 
   /**
-   * IInterface descriptor for IComponent <code>COMPONENT_DESCRIPTOR</code>.
+   * IInterface descriptor for IComponent {@code COMPONENT_DESCRIPTOR}.
    */
   protected static final IComponentDescriptor<IComponent> COMPONENT_DESCRIPTOR = createComponentDescriptor();
 
@@ -123,8 +123,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private Collection<IPropertyDescriptor>                 allPropertyDescriptorsCache;
 
   /**
-   * Constructs a new <code>AbstractComponentDescriptor</code> instance.
-   * 
+   * Constructs a new {@code AbstractComponentDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.
@@ -712,11 +712,11 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Assigns the roles that are authorized to manipulate components backed by
    * this descriptor. It supports &quot;<b>!</b>&quot; prefix to negate the
    * role(s). This will directly influence the UI behaviour and even
-   * composition. Setting the collection of granted roles to <code>null</code>
+   * composition. Setting the collection of granted roles to {@code null}
    * (default value) disables role based authorization on this component level.
    * Note that this authorization enforcement does not prevent programmatic
    * access that is of the developer responsibility.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */
@@ -737,12 +737,12 @@ public abstract class AbstractComponentDescriptor<E> extends
    * This property must be set with Spring bean names (i.e. Spring ids). When
    * needed, Jspresso will query the Spring application context to retrieve the
    * interceptors instances. This property is equivalent to setting
-   * <code>lifecycleInterceptorClassNames</code> except that it allows to
+   * {@code lifecycleInterceptorClassNames} except that it allows to
    * register interceptor instances that are configured externally in the Spring
    * context. lifecycle interceptor instances must implement the
-   * <code>ILifecycleInterceptor&lt;E&gt;</code> interface where &lt;E&gt; is a
+   * {@code ILifecycleInterceptor&lt;E&gt;} interface where &lt;E&gt; is a
    * type assignable from the component type.
-   * 
+   *
    * @param lifecycleInterceptorBeanNames
    *          the lifecycleInterceptorBeanNames to set. They are used to
    *          retrieve interceptor instances from the Spring bean factory this
@@ -755,15 +755,15 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Much the same as <code>lifecycleInterceptorBeanNames</code> except that
+   * Much the same as {@code lifecycleInterceptorBeanNames} except that
    * instead of providing a list of Spring bean names, you provide a list of
    * fully qualified class names. These classes must :
    * <ul>
    * <li>provide a default constructor</li>
-   * <li>implement the <code>IPropertyProcessor&lt;E, F&gt;</code> interface.</li>
+   * <li>implement the {@code IPropertyProcessor&lt;E, F&gt;} interface.</li>
    * </ul>
    * When needed, Jspresso will create the property processor instances.
-   * 
+   *
    * @param lifecycleInterceptorClassNames
    *          the lifecycleInterceptorClassNames to set.
    */
@@ -777,18 +777,18 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Ordering properties are used to sort un-indexed collections of instances of
    * components backed by this descriptor. This sort order can be overridden on
    * the finer collection property level to change the way a specific collection
-   * is sorted. This property consist of a <code>Map</code> whose entries are
+   * is sorted. This property consist of a {@code Map} whose entries are
    * composed with :
    * <ul>
    * <li>the property name as key</li>
    * <li>the sort order for this property as value. This is either a value of
-   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * the {@code ESort} enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
    * equivalent string representation.</li>
    * </ul>
    * Ordering properties are considered following their order in the map
-   * iterator. A <code>null</code> value (default) will not give any indication
+   * iterator. A {@code null} value (default) will not give any indication
    * for the collection sort order.
-   * 
+   *
    * @param untypedOrderingProperties
    *          the orderingProperties to set.
    */
@@ -817,9 +817,9 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Whenever a collection of this component type is presented in a pageable UI,
    * this property gives the size (number of component instances) of one page.
    * This size can usually be refined at a lower level (e.g. at reference
-   * property descriptor for &quot;lists of values&quot;). A <code>null</code>
+   * property descriptor for &quot;lists of values&quot;). A {@code null}
    * value (default) disables paging for this component.
-   * 
+   *
    * @param pageSize
    *          the pageSize to set.
    */
@@ -857,10 +857,10 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * This property allows to define which of the component properties are to be
    * used in the filter UIs that are based on this component family (a QBE
-   * screen for instance). Since this is a <code>List</code> queryable
+   * screen for instance). Since this is a {@code List} queryable
    * properties are rendered in the same order.
    * <p>
-   * Whenever this this property is <code>null</code> (default value), Jspresso
+   * Whenever this this property is {@code null} (default value), Jspresso
    * chooses the default set of queryable properties based on their type. For
    * instance, collection properties and binary properties are not used but
    * string, numeric, reference, ... properties are. A computed property cannot
@@ -870,7 +870,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Note that this property is not inherited by children descriptors, i.e. even
    * if an ancestor defines an explicit set of queryable properties, its
    * children ignore this setting.
-   * 
+   *
    * @param queryableProperties
    *          the queryableProperties to set.
    */
@@ -894,17 +894,17 @@ public abstract class AbstractComponentDescriptor<E> extends
    * rendered by default when displaying a UI based on this component family.
    * For instance, a table will render 1 column per rendered property of the
    * component. Any type of property can be used except collection properties.
-   * Since this is a <code>List</code> queryable properties are rendered in the
+   * Since this is a {@code List} queryable properties are rendered in the
    * same order.
    * <p>
-   * Whenever this property is <code>null</code> (default value) Jspresso
+   * Whenever this property is {@code null} (default value) Jspresso
    * determines the default set of properties to render based on their types,
    * e.g. ignores collection properties.
    * <p>
    * Note that this property is not inherited by children descriptors, i.e. even
    * if an ancestor defines an explicit set of rendered properties, its children
    * ignore this setting.
-   * 
+   *
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -918,28 +918,28 @@ public abstract class AbstractComponentDescriptor<E> extends
    * whenever a method of the service interface it implements get executed. For
    * instance :
    * <ul>
-   * <li>the component interface is <code>MyBeanClass</code>. It implements the
-   * service interface <code>MyService</code>.</li>
-   * <li>the service interface <code>MyService</code> contains method
-   * <code>int foo(String)</code>.</li>
-   * <li>the service delegate class, e.g. <code>MyServiceImpl</code> must
-   * implement the method <code>int foo(MyBeanClass,String)</code>. Note that
+   * <li>the component interface is {@code MyBeanClass}. It implements the
+   * service interface {@code MyService}.</li>
+   * <li>the service interface {@code MyService} contains method
+   * {@code int foo(String)}.</li>
+   * <li>the service delegate class, e.g. {@code MyServiceImpl} must
+   * implement the method {@code int foo(MyBeanClass,String)}. Note that
    * the parameter list is augmented with the owing component type as 1st
    * parameter. This allows to have stateless implementation for delegates, thus
    * sharing instances of delegates among instances of components.</li>
-   * <li>when <code>foo(String)</code> is executed on an instance of
-   * <code>MyBeanClass</code>, the framework will trigger the delegate
+   * <li>when {@code foo(String)} is executed on an instance of
+   * {@code MyBeanClass}, the framework will trigger the delegate
    * implementation, passing the instance of the component itself as parameter.</li>
    * </ul>
    * This property must be set with a map keyed by service interfaces and valued
    * by Spring bean names (i.e. Spring ids). Each bean name corresponds to an
    * instance of service delegate. When needed, Jspresso will query the Spring
    * application context to retrieve the delegate instances. This property is
-   * equivalent to setting <code>serviceDelegateClassNames</code> except that it
+   * equivalent to setting {@code serviceDelegateClassNames} except that it
    * allows to register delegate instances that are configured externally in the
    * Spring context. lifecycle interceptor instances must implement the
-   * <code>IComponentService</code> marker interface.
-   * 
+   * {@code IComponentService} marker interface.
+   *
    * @param serviceDelegateBeanNames
    *          the serviceDelegateBeanNames to set. They are used to retrieve
    *          delegate instances from the Spring bean factory this descriptor
@@ -952,20 +952,20 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Much the same as <code>serviceDelegateBeanNames</code> except that instead
+   * Much the same as {@code serviceDelegateBeanNames} except that instead
    * of providing a map valued with Spring bean names, you provide a map valued
    * with fully qualified class names. These class must :
    * <ul>
    * <li>provide a default constructor</li>
-   * <li>implement the <code>IComponentService</code> marker interface.</li>
+   * <li>implement the {@code IComponentService} marker interface.</li>
    * </ul>
    * When needed, Jspresso will create service delegate instances.
-   * 
+   *
    * @param serviceDelegateClassNames
    *          the component services to be registered keyed by their contract. A
    *          service contract is an interface class defining the service
    *          methods to be registered as implemented by the service delegate.
-   *          Map values must be instances of <code>IComponentService</code>.
+   *          Map values must be instances of {@code IComponentService}.
    */
   public void setServiceDelegateClassNames(
       Map<String, String> serviceDelegateClassNames) {
@@ -978,9 +978,9 @@ public abstract class AbstractComponentDescriptor<E> extends
    * name to the data store namespace. This includes , but is not limited to,
    * database table names.
    * <p>
-   * Default value is <code>null</code> so that Jspresso uses its default naming
+   * Default value is {@code null} so that Jspresso uses its default naming
    * policy.
-   * 
+   *
    * @param sqlName
    *          the sqlName to set.
    */
@@ -994,7 +994,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * as a string. It may be a computed property that composes several other
    * properties in a human friendly format.
    * <p>
-   * Whenever this property is <code>null</code>, the following rule apply to
+   * Whenever this property is {@code null}, the following rule apply to
    * determine the <i>toString</i> property :
    * <ol>
    * <li>the first string property from the rendered property</li>
@@ -1003,7 +1003,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Note that this property is not inherited by children descriptors, i.e. even
    * if an ancestor defines an explicit <i>toString</i> property, its children
    * ignore this setting.
-   * 
+   *
    * @param toStringProperty
    *          the toStringProperty to set.
    */
@@ -1017,11 +1017,11 @@ public abstract class AbstractComponentDescriptor<E> extends
    * as HTML. It may be a computed property that composes several other
    * properties in a human friendly format.
    * <p>
-   * Whenever this property is <code>null</code>, the
-   * <code>toStringProperty</code> is used. Note that this property is not
+   * Whenever this property is {@code null}, the
+   * {@code toStringProperty} is used. Note that this property is not
    * inherited by children descriptors, i.e. even if an ancestor defines an
    * explicit <i>toHtmlProperty</i> property, its children ignore this setting.
-   * 
+   *
    * @param toHtmlProperty
    *          the toHtmlProperty to set.
    */
@@ -1033,7 +1033,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Allows to customize the property used to autocomplete reference fields on
    * this component.
    * <p>
-   * Whenever this property is <code>null</code>, the following rule apply to
+   * Whenever this property is {@code null}, the following rule apply to
    * determine the <i>lovProperty</i> :
    * <ol>
    * <li>the toString property if not a computed one</li>
@@ -1043,7 +1043,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Note that this property is not inherited by children descriptors, i.e. even
    * if an ancestor defines an explicit <i>lovProperty</i>, its children ignore
    * this setting.
-   * 
+   *
    * @param autoCompleteProperty
    *          the autoCompleteProperty to set.
    */

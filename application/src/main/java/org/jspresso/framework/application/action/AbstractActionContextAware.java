@@ -56,8 +56,8 @@ public abstract class AbstractActionContextAware {
    * Gets the (string) action command out of the context. The action command is
    * an arbitrary character string that can be set by the UI component
    * triggering the action. It is stored using the
-   * <code>ActionContextConstants.ACTION_COMMAND</code> standard key.
-   * 
+   * {@code ActionContextConstants.ACTION_COMMAND} standard key.
+   *
    * @param context
    *          the action context.
    * @return the (string) action command if it exists in the action context or
@@ -71,8 +71,8 @@ public abstract class AbstractActionContextAware {
    * Gets the action parameter out of the context. The action parameter is a
    * general purpose context entry that can be used to pass an arbitrary
    * parameter along the action chain. It is stored using the
-   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
-   * 
+   * {@code ActionContextConstants.ACTION_PARAM} standard key.
+   *
    * @param context
    *          the action context.
    * @return the action parameter if it exists in the action context or null.
@@ -86,11 +86,11 @@ public abstract class AbstractActionContextAware {
    * Gets the backend controller out of the action context using either :
    * <ul>
    * <li>the context frontend controller if it exists</li>
-   * <li>the <code>ActionContextConstants.BACK_CONTROLLER</code> standard key if
+   * <li>the {@code ActionContextConstants.BACK_CONTROLLER} standard key if
    * the action was triggered without going through a frontend controller (a
    * batch action for instance).</li>
    * </ul>
-   * 
+   *
    * @param context
    *          the action context.
    * @return the backend controller.
@@ -106,10 +106,10 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Gets the frontend controller out of the action context using the
-   * <code>ActionContextConstants.FRONT_CONTROLLER</code> standard key. If the
+   * {@code ActionContextConstants.FRONT_CONTROLLER} standard key. If the
    * action was triggered without going through a frontend controller (a batch
    * action for instance), this method might return null.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -175,9 +175,9 @@ public abstract class AbstractActionContextAware {
    * is the versatile binding structure that adapts the actual model to the
    * Jspresso binding architecture. The actual model is stored in the model
    * connector value. Unless developing very generic actions, this method will
-   * rarely be used in favor of the more concrete <code>getXXXModel</code>
+   * rarely be used in favor of the more concrete {@code getXXXModel}
    * context accessors.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the model connector this action was triggered on.
@@ -191,9 +191,9 @@ public abstract class AbstractActionContextAware {
    * is the versatile binding structure that adapts the actual model to the
    * Jspresso binding architecture. The actual model is stored in the model
    * connector value. Unless developing very generic actions, this method will
-   * rarely be used in favor of the more concrete <code>getXXXModel</code>
+   * rarely be used in favor of the more concrete {@code getXXXModel}
    * context accessors.
-   * 
+   *
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -215,10 +215,10 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Retrieves the model descriptor from the context using the
-   * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> standard key. The
+   * {@code ActionContextConstants.MODEL_DESCRIPTOR} standard key. The
    * model descriptor is registered in the action context based on the model of
    * the view to which the action is attached.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the model descriptor this model action was triggered on.
@@ -231,8 +231,8 @@ public abstract class AbstractActionContextAware {
   /**
    * Gets the module this action has been executed on. The value is immutable
    * during the action chain and is stored using the
-   * <code>ActionContextConstants.MODULE</code> key.
-   * 
+   * {@code ActionContextConstants.MODULE} key.
+   *
    * @param context
    *          the action context.
    * @return the module this action executes on.
@@ -244,8 +244,8 @@ public abstract class AbstractActionContextAware {
   /**
    * Gets the current module from the context. The value might change during the
    * action chain if one of the action navigates the workspace/module. It is
-   * stored using the <code>ActionContextConstants.CURRENT_MODULE</code> key.
-   * 
+   * stored using the {@code ActionContextConstants.CURRENT_MODULE} key.
+   *
    * @param context
    *          the action context.
    * @return the module this action executes on.
@@ -428,8 +428,8 @@ public abstract class AbstractActionContextAware {
    * Sets the action parameter out of the context. The action parameter is a
    * general purpose context entry that can be used to pass an arbitrary
    * parameter along the action chain. It is stored using the
-   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
-   * 
+   * {@code ActionContextConstants.ACTION_PARAM} standard key.
+   *
    * @param actionParam
    *          the action parameter to set to the context.
    * @param context
@@ -546,13 +546,13 @@ public abstract class AbstractActionContextAware {
    * been executed on from its context. It uses well-known context keys of the
    * action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.VIEW</code> to get the the view the action
+   * <li> {@code ActionContextConstants.VIEW} to get the the view the action
    * executes on.
    * </ul>
    * <p>
    * The returned view mainly serves for acting on the view component the action
    * has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the view this action was triggered on.
@@ -566,13 +566,13 @@ public abstract class AbstractActionContextAware {
    * been executed on from its context. It uses well-known context keys of the
    * action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.VIEW</code> to get the the view the action
+   * <li> {@code ActionContextConstants.VIEW} to get the the view the action
    * executes on.
    * </ul>
    * <p>
    * The returned view mainly serves for acting on the view component the action
    * has to be triggered on.
-   * 
+   *
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -594,13 +594,13 @@ public abstract class AbstractActionContextAware {
    * action has been executed on from its context. It uses well-known context
    * keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the view
+   * <li> {@code ActionContextConstants.VIEW_CONNECTOR} to get the the view
    * value connector the action executes on.
    * </ul>
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the value connector this action was triggered on.
@@ -614,13 +614,13 @@ public abstract class AbstractActionContextAware {
    * action has been executed on from its context. It uses well-known context
    * keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the view
+   * <li> {@code ActionContextConstants.VIEW_CONNECTOR} to get the the view
    * value connector the action executes on.
    * </ul>
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   * 
+   *
    * @param viewPath
    *          the view index path to follow.
    *          <ul>

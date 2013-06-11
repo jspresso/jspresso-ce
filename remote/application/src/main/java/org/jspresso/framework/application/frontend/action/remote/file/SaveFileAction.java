@@ -36,8 +36,8 @@ import org.jspresso.framework.view.IView;
 /**
  * This action lets the user browse his local file system and choose a file to
  * write some content to. What is done with the file content is determined by
- * the configured <code>fileSaveCallback</code> instance.
- * 
+ * the configured {@code fileSaveCallback} instance.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -46,7 +46,7 @@ public class SaveFileAction extends ChooseFileAction {
   private String contentType;
 
   /**
-   * Constructs a new <code>SaveFileAction</code> instance.
+   * Constructs a new {@code SaveFileAction} instance.
    */
   public SaveFileAction() {
     this.contentType = "application/octet-stream";
@@ -90,8 +90,8 @@ public class SaveFileAction extends ChooseFileAction {
   /**
    * Configures the content type to be used whenever the UI technology used
    * requires a download. The content type defaults to
-   * <code>&quot;application/octet-stream&quot;</code>.
-   * 
+   * {@code &quot;application/octet-stream&quot;}.
+   *
    * @param contentType
    *          the contentType to set.
    */
@@ -104,20 +104,20 @@ public class SaveFileAction extends ChooseFileAction {
    * the file dialog events. Three methods must be implemented :
    * <ul>
    * <li>
-   * <code>fileChosen(OutputStream, IActionHandler, Map&lt;String, Object&gt;)</code>
+   * {@code fileChosen(OutputStream, IActionHandler, Map[String, Object])}
    * that is called whenever a file has been chosen. The output stream that is
    * passed as parameter allows for writing to the chosen file. The developer
    * doesn't have to cope with flushing nor closing the stream.</li>
-   * <li><code>getFileName(Map&lt;String, Object&gt;)</code> that is called to
+   * <li>{@code getFileName(Map[String, Object])} that is called to
    * give a chance top the callback to compute a file name dynamically depending
-   * on the action context. Whenever the callback returns a <code>null</code> or
+   * on the action context. Whenever the callback returns a {@code null} or
    * empty file name, the default file name parametrized in the application is
    * used.</li>
-   * <li><code>cancel(IActionHandler, Map&lt;String, Object&gt;)</code> that is
+   * <li>{@code cancel(IActionHandler, Map[String, Object])} that is
    * called whenever the file selection is cancelled. It is perfectly legal not
    * to do anything.</li>
    * </ul>
-   * 
+   *
    * @param fileSaveCallback
    *          the fileSaveCallback to set.
    */

@@ -30,7 +30,7 @@ public class MySQL5InnoDBDialect extends
     org.hibernate.dialect.MySQL5InnoDBDialect {
 
   /**
-   * Constructs a new <code>MySQL5InnoDBDialect</code> instance. Overrides
+   * Constructs a new {@code MySQL5InnoDBDialect} instance. Overrides
    * tinyblob definition by replacing it with varbinary until 64 length.
    */
   public MySQL5InnoDBDialect() {

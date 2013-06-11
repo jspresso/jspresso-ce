@@ -109,7 +109,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     AbstractController implements IFrontendController<E, F, G> {
 
   /**
-   * <code>MAX_LOGIN_RETRIES</code>.
+   * {@code MAX_LOGIN_RETRIES}.
    */
   protected static final int                    MAX_LOGIN_RETRIES = 3;
 
@@ -168,7 +168,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private boolean                               checkActionThreadSafety;
 
   /**
-   * Constructs a new <code>AbstractFrontendController</code> instance.
+   * Constructs a new {@code AbstractFrontendController} instance.
    */
   public AbstractFrontendController() {
     started = false;
@@ -931,13 +931,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Configures the locale used to initiate the login process. Whenever the
-   * forced starting locale is <code>null</code>, the client host default locale
+   * forced starting locale is {@code null}, the client host default locale
    * is used.
    * <p>
    * As soon as the user logs-in, his locale is then used to translate the UI.
    * Whenever the login process is disabled, then the forced starting locale is
    * kept as the UI i18n locale.
-   * 
+   *
    * @param forcedStartingLocale
    *          the forcedStartingLocale to set.
    */
@@ -992,9 +992,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Configures the name of the JAAS login context to use to authenticate users.
    * It must reference a valid JAAS context that is installed in the JVM, either
-   * through setting the <code>java.security.auth.login.config</code> system
+   * through setting the {@code java.security.auth.login.config} system
    * property or through server-specific configuration.
-   * 
+   *
    * @param loginContextName
    *          the loginContextName to set.
    */
@@ -1526,8 +1526,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Should a login dialog be displayed or should we process login implicitly
    * (either through SSO or using an anonymous subject in case of un-protected
    * application).
-   * 
-   * @return true if <code>getLoginContext()</code> returns null.
+   *
+   * @return true if {@code getLoginContext()} returns null.
    */
   protected boolean isLoginInteractive() {
     return getLoginContextName() != null;

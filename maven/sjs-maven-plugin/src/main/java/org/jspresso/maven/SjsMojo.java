@@ -221,7 +221,7 @@ public class SjsMojo extends AbstractMojo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs a new <code>FailClosure</code> instance.
+     * Constructs a new {@code FailClosure} instance.
      */
     public FailClosure() {
       super(SjsMojo.this);

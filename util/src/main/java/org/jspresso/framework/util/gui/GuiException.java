@@ -32,8 +32,8 @@ public class GuiException extends NestedRuntimeException {
   private static final long serialVersionUID = 5403717126687643426L;
 
   /**
-   * Constructs a new <code>GuiException</code> instance.
-   * 
+   * Constructs a new {@code GuiException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class GuiException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>GuiException</code> instance.
-   * 
+   * Constructs a new {@code GuiException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class GuiException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>GuiException</code> instance.
-   * 
+   * Constructs a new {@code GuiException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

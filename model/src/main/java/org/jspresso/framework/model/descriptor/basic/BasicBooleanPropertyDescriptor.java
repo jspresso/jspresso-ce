@@ -30,7 +30,7 @@ public class BasicBooleanPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IBooleanPropertyDescriptor {
 
   /**
-   * Constructs a new <code>BasicBooleanPropertyDescriptor</code> instance.
+   * Constructs a new {@code BasicBooleanPropertyDescriptor} instance.
    */
   public BasicBooleanPropertyDescriptor() {
     setDefaultValue(Boolean.FALSE);

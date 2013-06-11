@@ -29,8 +29,8 @@ public class RPasswordField extends RTextField {
   private static final long serialVersionUID = 1595790630114480024L;
 
   /**
-   * Constructs a new <code>RPasswordField</code> instance.
-   * 
+   * Constructs a new {@code RPasswordField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RPasswordField extends RTextField {
   }
 
   /**
-   * Constructs a new <code>RPasswordField</code> instance. Only used for
+   * Constructs a new {@code RPasswordField} instance. Only used for
    * serialization support.
    */
   public RPasswordField() {

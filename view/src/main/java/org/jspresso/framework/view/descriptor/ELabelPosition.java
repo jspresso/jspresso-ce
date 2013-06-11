@@ -27,17 +27,17 @@ package org.jspresso.framework.view.descriptor;
 public enum ELabelPosition {
 
   /**
-   * <code>ABOVE</code>.
+   * {@code ABOVE}.
    */
   ABOVE,
 
   /**
-   * <code>ASIDE</code>.
+   * {@code ASIDE}.
    */
   ASIDE,
 
   /**
-   * <code>NONE</code>.
+   * {@code NONE}.
    */
   NONE
 }

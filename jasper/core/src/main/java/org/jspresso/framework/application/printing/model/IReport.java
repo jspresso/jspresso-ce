@@ -32,7 +32,7 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 public interface IReport extends IDescriptor {
 
   /**
-   * <code>REPORT_ACTION_PARAM</code>.
+   * {@code REPORT_ACTION_PARAM}.
    */
   String REPORT_ACTION_PARAM = "REPORT_ACTION_PARAM";
 

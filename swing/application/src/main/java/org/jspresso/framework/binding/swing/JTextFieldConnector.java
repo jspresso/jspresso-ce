@@ -32,8 +32,8 @@ import javax.swing.JTextField;
 public class JTextFieldConnector extends JTextComponentConnector<JTextField> {
 
   /**
-   * Constructs a new <code>JTextfieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JTextfieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textField

@@ -65,7 +65,7 @@ public abstract class RemoteStartup extends
   private boolean             dupSessionNotifiedOnce;
 
   /**
-   * Constructs a new <code>RemoteStartup</code> instance.
+   * Constructs a new {@code RemoteStartup} instance.
    */
   public RemoteStartup() {
     dupSessionDetectionEnabled = true;

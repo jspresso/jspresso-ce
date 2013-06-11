@@ -31,8 +31,8 @@ public class ParsingException extends BusinessException {
   private static final long serialVersionUID = 9010023341340096551L;
 
   /**
-   * Constructs a new <code>ParsingException</code> instance.
-   * 
+   * Constructs a new {@code ParsingException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey
@@ -44,8 +44,8 @@ public class ParsingException extends BusinessException {
   }
 
   /**
-   * Constructs a new <code>ParsingException</code> instance.
-   * 
+   * Constructs a new {@code ParsingException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey
@@ -60,8 +60,8 @@ public class ParsingException extends BusinessException {
   }
 
   /**
-   * Constructs a new <code>ParsingException</code> instance.
-   * 
+   * Constructs a new {@code ParsingException} instance.
+   *
    * @param message
    *          the exception message.
    */

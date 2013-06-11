@@ -41,8 +41,8 @@ public class BasicEntityRegistry implements IEntityRegistry {
   private final Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore;
 
   /**
-   * Constructs a new <code>BasicEntityRegistry</code> instance.
-   * 
+   * Constructs a new {@code BasicEntityRegistry} instance.
+   *
    * @param name
    *          the name of the registry;
    */

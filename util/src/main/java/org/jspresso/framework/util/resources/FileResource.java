@@ -34,8 +34,8 @@ public class FileResource extends AbstractResource {
   private final File resourceFile;
 
   /**
-   * Constructs a new <code>FileResource</code> instance.
-   * 
+   * Constructs a new {@code FileResource} instance.
+   *
    * @param mimeType
    *          the resource mime type.
    * @param resourceFile

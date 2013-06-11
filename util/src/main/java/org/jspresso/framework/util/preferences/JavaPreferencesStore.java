@@ -31,7 +31,7 @@ public class JavaPreferencesStore implements IPreferencesStore {
   private Preferences preferences;
 
   /**
-   * Constructs a new <code>JavaPreferencesStore</code> instance.
+   * Constructs a new {@code JavaPreferencesStore} instance.
    */
   public JavaPreferencesStore() {
     preferences = Preferences.userNodeForPackage(getClass());

@@ -27,10 +27,10 @@ import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * This action generates and displays a report that is statically configured
- * through the <code>reportDescriptor</code> parameter. The report context is
+ * through the {@code reportDescriptor} parameter. The report context is
  * augmented with the identifier of the entity that is selected in the view were
- * the action is installed, under the key <code>ENTITY_ID</code>.
- * 
+ * the action is installed, under the key {@code ENTITY_ID}.
+ *
  * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
  * @param <E>

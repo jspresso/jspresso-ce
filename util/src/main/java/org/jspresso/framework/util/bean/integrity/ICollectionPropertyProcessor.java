@@ -38,9 +38,9 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
   /**
    * This method gets called whenever a value has been added to a collection
    * property on an component to which this processor is registered. This method
-   * should throw an <code>IntegrityException</code> if pre-checks are not
+   * should throw an {@code IntegrityException} if pre-checks are not
    * valid.
-   * 
+   *
    * @param target
    *          the component the processor is ran on.
    * @param collection
@@ -53,9 +53,9 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
   /**
    * This method gets called whenever a value has been removed from a collection
    * property on an component to which this processor is registered. This method
-   * should throw an <code>IntegrityException</code> if post-checks are not
+   * should throw an {@code IntegrityException} if post-checks are not
    * valid.
-   * 
+   *
    * @param target
    *          the component the processor is ran on.
    * @param collection
@@ -68,9 +68,9 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
   /**
    * This method gets called whenever a value is about to be added to a
    * collection property on an component to which this processor is registered.
-   * This method should throw an <code>IntegrityException</code> if pre-checks
+   * This method should throw an {@code IntegrityException} if pre-checks
    * are not valid.
-   * 
+   *
    * @param target
    *          the component the processor is ran on.
    * @param collection
@@ -83,9 +83,9 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
   /**
    * This method gets called whenever a value is about to be removed from a
    * collection property on an component to which this processor is registered.
-   * This method should throw an <code>IntegrityException</code> if pre-checks
+   * This method should throw an {@code IntegrityException} if pre-checks
    * are not valid.
-   * 
+   *
    * @param target
    *          the component the processor is ran on.
    * @param collection

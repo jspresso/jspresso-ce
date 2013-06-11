@@ -38,15 +38,15 @@ import org.jspresso.framework.util.collection.ESort;
 public class BeanComparator implements Comparator<Object> {
 
   /**
-   * <code>NATURAL_COMPARATOR</code>.
+   * {@code NATURAL_COMPARATOR}.
    */
   public static final Comparator<Object> NATURAL_COMPARATOR = new NaturalComparator();
   private final List<IAccessor>                orderingAccessors;
   private final List<ESort>                    orderingDirections;
 
   /**
-   * Constructs a new <code>BeanComparator</code> instance.
-   * 
+   * Constructs a new {@code BeanComparator} instance.
+   *
    * @param orderingAccessors
    *          the ordering accessors.
    * @param orderingDirections
@@ -59,8 +59,8 @@ public class BeanComparator implements Comparator<Object> {
   }
 
   /**
-   * Constructs a new <code>BeanComparator</code> instance.
-   * 
+   * Constructs a new {@code BeanComparator} instance.
+   *
    * @param orderingProperties
    *          a map of (propertyName,direction) to define the sort.
    * @param accessorFactory

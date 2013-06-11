@@ -56,7 +56,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   private String              fontProperty;
 
   /**
-   * Constructs a new <code>BooleanTableCellRenderer</code> instance.
+   * Constructs a new {@code BooleanTableCellRenderer} instance.
    */
   public BooleanTableCellRenderer() {
     super();
@@ -235,9 +235,9 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   }
 
   /**
-   * Notification from the <code>UIManager</code> that the look and feel [L&F]
+   * Notification from the {@code UIManager} that the look and feel [L&F]
    * has changed. Replaces the current UI object with the latest version from
-   * the <code>UIManager</code>.
+   * the {@code UIManager}.
    */
   @Override
   public void updateUI() {

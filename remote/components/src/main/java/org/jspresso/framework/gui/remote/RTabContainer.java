@@ -37,8 +37,8 @@ public class RTabContainer extends RContainer {
   private SinglePropertyChangeSupport propertyChangeSupport;
 
   /**
-   * Constructs a new <code>RTabContainer</code> instance.
-   * 
+   * Constructs a new {@code RTabContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -48,7 +48,7 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RTabContainer</code> instance. Only used for
+   * Constructs a new {@code RTabContainer} instance. Only used for
    * serialization support.
    */
   public RTabContainer() {

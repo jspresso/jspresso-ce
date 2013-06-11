@@ -42,8 +42,8 @@ public class BasicQueryComponentDescriptor<E> extends
     RefQueryComponentDescriptor<IQueryComponent> {
 
   /**
-   * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BasicQueryComponentDescriptor} instance.
+   *
    * @param componentDescriptorProvider
    *          the provider for delegate entity descriptor.
    */

@@ -32,8 +32,8 @@ public class RTree extends RComponent {
   private RAction           rowAction;
 
   /**
-   * Constructs a new <code>RTreeComponent</code> instance.
-   * 
+   * Constructs a new {@code RTreeComponent} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -42,7 +42,7 @@ public class RTree extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTree</code> instance. Only used for serialization
+   * Constructs a new {@code RTree} instance. Only used for serialization
    * support.
    */
   public RTree() {

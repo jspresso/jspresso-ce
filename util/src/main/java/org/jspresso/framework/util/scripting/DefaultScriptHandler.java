@@ -33,7 +33,7 @@ import org.apache.bsf.BSFManager;
 public class DefaultScriptHandler implements IScriptHandler {
 
   /**
-   * Constructs a new <code>DefaultScriptHandler</code> instance.
+   * Constructs a new {@code DefaultScriptHandler} instance.
    */
   public DefaultScriptHandler() {
     super();

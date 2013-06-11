@@ -32,7 +32,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
   private IViewDescriptor       viewDescriptor;
 
   /**
-   * Constructs a new <code>StaticWizardStepDescriptor</code> instance.
+   * Constructs a new {@code StaticWizardStepDescriptor} instance.
    */
   public StaticWizardStepDescriptor() {
     descriptor = new DefaultDescriptor();

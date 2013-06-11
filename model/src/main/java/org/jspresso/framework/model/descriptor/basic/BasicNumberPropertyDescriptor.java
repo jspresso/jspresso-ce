@@ -133,8 +133,8 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * Configures the upper bound of the allowed values. Default value is
-   * <code>null</code>, meaning unbound.
-   * 
+   * {@code null}, meaning unbound.
+   *
    * @param maxValue
    *          the maxValue to set.
    */
@@ -144,8 +144,8 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * Configures the lower bound of the allowed values. Default value is
-   * <code>null</code>, meaning unbound.
-   * 
+   * {@code null}, meaning unbound.
+   *
    * @param minValue
    *          the minValue to set.
    */

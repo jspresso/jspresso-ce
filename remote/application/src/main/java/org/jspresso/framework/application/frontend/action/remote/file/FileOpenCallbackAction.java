@@ -40,8 +40,8 @@ public class FileOpenCallbackAction extends AbstractRemoteAction {
   private final IFileOpenCallback fileOpenCallback;
 
   /**
-   * Constructs a new <code>FileOpenCallbackAction</code> instance.
-   * 
+   * Constructs a new {@code FileOpenCallbackAction} instance.
+   *
    * @param fileOpenCallback
    *          the file open callback to trigger.
    */

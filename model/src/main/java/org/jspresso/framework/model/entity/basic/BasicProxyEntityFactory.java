@@ -49,9 +49,9 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
- * Default implementation of <code>IEntityFactory</code>. It creates standard
- * java proxies which delegate to <code>BasicEntityInvocationHandler</code>s.
- * 
+ * Default implementation of {@code IEntityFactory}. It creates standard
+ * java proxies which delegate to {@code BasicEntityInvocationHandler}s.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

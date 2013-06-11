@@ -40,8 +40,8 @@ public abstract class AbstractTestDataPersister {
   private final BeanFactory beanFactory;
 
   /**
-   * Constructs a new <code>AbstractTestDataPersister</code> instance.
-   * 
+   * Constructs a new {@code AbstractTestDataPersister} instance.
+   *
    * @param beanFactory
    *          the spring bean factory to use.
    */

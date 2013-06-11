@@ -151,7 +151,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * <li>implicit filters that are use behind the scene for UI auto-completion</li>
    * </ul>
    * <p>
-   * The initialization mapping property is a <code>Map</code> keyed by
+   * The initialization mapping property is a {@code Map} keyed by
    * referenced type property names (the properties to be initialized).
    * <p>
    * Values in this map can be either :
@@ -161,7 +161,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * <li>a owning component <b>property name</b>. In that case, the filter
    * property is initialize with the value of the owning component property.</li>
    * </ul>
-   * 
+   *
    * @param initializationMapping
    *          the initializationMapping to set.
    */
@@ -172,13 +172,13 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * Forces the reference property to be considered as a one to one
    * (&quot;1-1&quot;) end. When a relationship is bi-directional, setting both
-   * ends as being reference properties turns <code>oneToOne=true</code>
+   * ends as being reference properties turns {@code oneToOne=true}
    * automatically. But when the relationship is not bi-directional, Jspresso
    * has no mean to determine if the reference property is &quot;N-1&quot; or
    * &quot;1-1&quot;. Setting this property allows to inform Jspresso about it.
    * <p>
-   * Default value is <code>false</code>.
-   * 
+   * Default value is {@code false}.
+   *
    * @param oneToOne
    *          the oneToOne to set.
    */
@@ -189,10 +189,10 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * This property allows for defining the page size of &quot;lists of
    * values&quot; that are built by the UI for this reference property. Whenever
-   * the <code>pageSize</code> property is set to <code>null</code> on the
+   * the {@code pageSize} property is set to {@code null} on the
    * reference property level, Jspresso falls back to the element type default
    * page size or turns off paging if the former is also not set.
-   * 
+   *
    * @param pageSize
    *          the pageSize to set.
    */
@@ -232,13 +232,13 @@ public class BasicReferencePropertyDescriptor<E> extends
    * rendered by default when displaying a list of value on this component
    * family. For instance, a table will render 1 column per rendered property of
    * the component. Any type of property can be used except collection
-   * properties. Since this is a <code>List</code> queryable properties are
+   * properties. Since this is a {@code List} queryable properties are
    * rendered in the same order.
    * <p>
-   * Whenever this property is <code>null</code> (default value) Jspresso
+   * Whenever this property is {@code null} (default value) Jspresso
    * determines the default set of properties to render based on the referenced
    * component descriptor.
-   * 
+   *
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -249,13 +249,13 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * This property allows to define which of the component properties are to be
    * used in the list of value filter that are based on this component family.
-   * Since this is a <code>List</code> queryable properties are rendered in the
+   * Since this is a {@code List} queryable properties are rendered in the
    * same order.
    * <p>
-   * Whenever this this property is <code>null</code> (default value), Jspresso
+   * Whenever this this property is {@code null} (default value), Jspresso
    * chooses the default set of queryable properties based on the referenced
    * component descriptor.
-   * 
+   *
    * @param queryableProperties
    *          the queryableProperties to set.
    */

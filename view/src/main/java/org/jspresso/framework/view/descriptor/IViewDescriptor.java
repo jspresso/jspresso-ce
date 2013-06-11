@@ -46,20 +46,20 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
 
   /**
    * Gets the border type used to surround view.
-   * 
-   * @return the border type : <li> <code>NONE</code> means no border. <li>
-   *         <code>SIMPLE</code> means a simple line border. <li>
-   *         <code>TITLED</code> means a titled border. The title will be the
+   *
+   * @return the border type : <li> {@code NONE} means no border. <li>
+   *         {@code SIMPLE} means a simple line border. <li>
+   *         {@code TITLED} means a titled border. The title will be the
    *         name of the view.
    */
   EBorderType getBorderType();
 
   /**
    * Gets the font of this view as string representation. The font is coded
-   * <code>[name];[style];[size]</code>. <li>[name] is the name of the font. <li>
+   * {@code [name];[style];[size]}. <li>[name] is the name of the font. <li>
    * [style] is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC combined with
    * the '|' character, i.e. BOLD|ITALIC. <li>[size] is the size of the font.
-   * 
+   *
    * @return this view's font.
    */
   String getFont();

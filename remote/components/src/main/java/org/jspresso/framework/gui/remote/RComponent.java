@@ -53,8 +53,8 @@ public abstract class RComponent extends RemotePeer implements
   private String            styleName;
 
   /**
-   * Constructs a new <code>RComponent</code> instance.
-   * 
+   * Constructs a new {@code RComponent} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -63,7 +63,7 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Constructs a new <code>RComponent</code> instance. Only used for
+   * Constructs a new {@code RComponent} instance. Only used for
    * serialization support.
    */
   public RComponent() {

@@ -377,8 +377,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
     private final Collection<IGate> gates;
 
     /**
-     * Constructs a new <code>GatesListener</code> instance.
-     * 
+     * Constructs a new {@code GatesListener} instance.
+     *
      * @param action
      *          the action to (de)activate based on gates state.
      * @param gates

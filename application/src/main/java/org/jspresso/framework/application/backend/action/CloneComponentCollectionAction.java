@@ -28,10 +28,10 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
 /**
  * An action used duplicate a collection of entities or components. This action
- * is parametrized with a clone factory (<code>IEntityCloneFactory</code>) to
+ * is parametrized with a clone factory ({@code IEntityCloneFactory}) to
  * perform the actual component cloning. Executing this action will result in
  * adding the cloned component(s) to the underlying model collection.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

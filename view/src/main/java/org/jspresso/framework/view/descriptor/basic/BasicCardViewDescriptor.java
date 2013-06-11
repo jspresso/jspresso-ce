@@ -39,7 +39,7 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
   private ICardNameSelector cardNameSelector;
 
   /**
-   * Delegates the card name selection to the <code>cardNameSelector</code>.
+   * Delegates the card name selection to the {@code cardNameSelector}.
    * <p>
    * {@inheritDoc}
    */
@@ -58,10 +58,10 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
    * select a new card. The names returned by the card name selector must match
    * the names under which the cards are registered. Whenever the card name
    * selector returns an unknown name, the card view displays an empty view. The
-   * card name selector can optionally implement <code>ICardProvider</code> in
+   * card name selector can optionally implement {@code ICardProvider} in
    * which case, it will be given a chance to create cards dynamically based on
    * their names.
-   * 
+   *
    * @param cardNameSelector
    *          the cardNameSelector to set.
    */
@@ -71,9 +71,9 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
 
   /**
    * Registers the card views keyed by their name keys. The names used as key of
-   * the <code>Map</code> must match the names that are returned by the
+   * the {@code Map} must match the names that are returned by the
    * registered card name selector.
-   * 
+   *
    * @param cardViewDescriptors
    *          the cardViewDescriptors to set.
    */
@@ -84,7 +84,7 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
   }
 
   /**
-   * Delegates to selector if it implements <code>ICardProvider</code>.
+   * Delegates to selector if it implements {@code ICardProvider}.
    * <p>
    * {@inheritDoc}
    */

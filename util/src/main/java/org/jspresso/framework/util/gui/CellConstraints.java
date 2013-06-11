@@ -38,7 +38,7 @@ public class CellConstraints implements Serializable {
   private boolean           widthResizable;
 
   /**
-   * Constructs a new <code>CellConstraints</code> instance.
+   * Constructs a new {@code CellConstraints} instance.
    */
   public CellConstraints() {
     width = 1;
@@ -48,8 +48,8 @@ public class CellConstraints implements Serializable {
   }
 
   /**
-   * Constructs a new <code>CellConstraints</code> instance.
-   * 
+   * Constructs a new {@code CellConstraints} instance.
+   *
    * @param row
    *          the row.
    * @param column

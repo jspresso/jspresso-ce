@@ -129,8 +129,8 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     private final Object   sourceObject;
 
     /**
-     * Constructs a new <code>ComparableProperties</code> instance.
-     * 
+     * Constructs a new {@code ComparableProperties} instance.
+     *
      * @param sourceObject
      *          the source object to compare properties.
      * @param orderingAccessors
@@ -184,8 +184,8 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     private final List<ESort> orderingDirections;
 
     /**
-     * Constructs a new <code>ComparablePropertiesComparator</code> instance.
-     * 
+     * Constructs a new {@code ComparablePropertiesComparator} instance.
+     *
      * @param orderingDirections
      *          the ordering directions.
      */

@@ -43,7 +43,7 @@ public class YesNoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   private IAction yesAction;
 
   /**
-   * Displays the message using a <code>JOptionPane.YES_NO_OPTION</code>.
+   * Displays the message using a {@code JOptionPane.YES_NO_OPTION}.
    * <p>
    * {@inheritDoc}
    */

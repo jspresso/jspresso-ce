@@ -26,17 +26,17 @@ package org.jspresso.framework.view.descriptor;
  */
 public enum EBorderType {
   /**
-   * <code>NONE</code>.
+   * {@code NONE}.
    */
   NONE,
 
   /**
-   * <code>SIMPLE</code>.
+   * {@code SIMPLE}.
    */
   SIMPLE,
 
   /**
-   * <code>TITLED</code>.
+   * {@code TITLED}.
    */
   TITLED
 }

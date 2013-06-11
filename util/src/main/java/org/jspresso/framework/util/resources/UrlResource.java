@@ -35,8 +35,8 @@ public class UrlResource extends AbstractResource {
   private final URL url;
 
   /**
-   * Constructs a new <code>UrlResource</code> instance.
-   * 
+   * Constructs a new {@code UrlResource} instance.
+   *
    * @param mimeType
    *          the resource mime type.
    * @param urlSpec

@@ -43,18 +43,18 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * Bean modules must have their referenced bean initialized somehow. So it's
  * rather common to have the module content initialized through a startup action
  * depending on the session state or dynamically constructed by a standard
- * action like <code>AddBeanAsSubModuleAction</code>.
+ * action like {@code AddBeanAsSubModuleAction}.
  * <p>
  * This type of module is definitely the one that offers maximum flexibility to
  * handle arbitrary models.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanModule extends Module implements PropertyChangeListener {
 
   /**
-   * <code>MODULE_OBJECT</code> is "moduleObject".
+   * {@code MODULE_OBJECT} is "moduleObject".
    */
   public static final String           MODULE_OBJECT = "moduleObject";
 

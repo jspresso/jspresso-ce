@@ -44,7 +44,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
   private int     offset;
 
   /**
-   * Constructs a new <code>CollectionElementMoveAction</code> instance.
+   * Constructs a new {@code CollectionElementMoveAction} instance.
    */
   public CollectionElementMoveAction() {
     toTop = false;

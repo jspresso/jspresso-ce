@@ -29,7 +29,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 public final class EntityHelper {
 
   /**
-   * Constructs a new <code>EntityHelper</code> instance.
+   * Constructs a new {@code EntityHelper} instance.
    */
   private EntityHelper() {
     // Helper constructor.
@@ -38,10 +38,10 @@ public final class EntityHelper {
   /**
    * Determines if a reference property descriptor references an inline
    * component.
-   * 
+   *
    * @param propertyDescriptor
    *          the reference property descriptor to test.
-   * @return <code>true</code> if the reference property descriptor references
+   * @return {@code true} if the reference property descriptor references
    *         an inline component.
    */
   public static boolean isInlineComponentReference(

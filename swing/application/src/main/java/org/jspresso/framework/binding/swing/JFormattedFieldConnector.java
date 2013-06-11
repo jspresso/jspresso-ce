@@ -29,10 +29,10 @@ import org.jspresso.framework.util.format.IFormatter;
 
 /**
  * JFormattedFieldConnector connector. Instances of this class must be provided
- * with a <code>Format</code> using the constructor. If not set, the string
+ * with a {@code Format} using the constructor. If not set, the string
  * representation contained in the text component will be used "as is" as the
  * connector value.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,8 +41,8 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
   private final IFormatter<?, String> formatter;
 
   /**
-   * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JFormattedFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textField
@@ -55,8 +55,8 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
   }
 
   /**
-   * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JFormattedFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textField

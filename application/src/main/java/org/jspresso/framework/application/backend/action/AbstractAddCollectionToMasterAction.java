@@ -50,7 +50,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
     AbstractCollectionAction {
 
   /**
-   * Constructs a new <code>AbstractAddCollectionToMasterAction</code> instance.
+   * Constructs a new {@code AbstractAddCollectionToMasterAction} instance.
    */
   public AbstractAddCollectionToMasterAction() {
     // Disable bad frontend access checks.

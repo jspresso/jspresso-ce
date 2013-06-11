@@ -44,7 +44,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
   private IViewDescriptor       projectedViewDescriptor;
 
   /**
-   * Constructs a new <code>BasicModuleViewDescriptor</code> instance.
+   * Constructs a new {@code BasicModuleViewDescriptor} instance.
    */
   public BasicModuleViewDescriptor() {
     descriptor = new DefaultIconDescriptor();

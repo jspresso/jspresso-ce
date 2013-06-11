@@ -23,9 +23,9 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 /**
  * This public interface should be implemented by any class being able to
  * provide a model instance. It allows for registration of
- * <code>IModelChangeListener</code> which can keep track of model object
+ * {@code IModelChangeListener} which can keep track of model object
  * changes.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

@@ -43,16 +43,16 @@ public interface IEntityDirtAware {
 
   /**
    * Is dirty tracking enabled.
-   * 
-   * @return <code>true</code> if dirty tracking is enabled.
+   *
+   * @return {@code true} if dirty tracking is enabled.
    */
   boolean isDirtyTrackingEnabled();
 
   /**
    * Sets dirty tracking enabled.
-   * 
+   *
    * @param enabled
-   *          <code>true</code> if enabled, <code>false</code> otherwise.
+   *          {@code true} if enabled, {@code false} otherwise.
    */
   void setDirtyTrackingEnabled(boolean enabled);
 }

@@ -40,9 +40,9 @@ public class EntityProxySingleTableEntityPersister extends
     SingleTableEntityPersister {
 
   /**
-   * Constructs a new <code>EntityProxySingleTableEntityPersister</code>
+   * Constructs a new {@code EntityProxySingleTableEntityPersister}
    * instance.
-   * 
+   *
    * @param entityBinding
    *          the entity binding.
    * @param cacheAccessStrategy
@@ -63,9 +63,9 @@ public class EntityProxySingleTableEntityPersister extends
   }
 
   /**
-   * Constructs a new <code>EntityProxySingleTableEntityPersister</code>
+   * Constructs a new {@code EntityProxySingleTableEntityPersister}
    * instance.
-   * 
+   *
    * @param persistentClass
    *          the persistent class.
    * @param cacheAccessStrategy

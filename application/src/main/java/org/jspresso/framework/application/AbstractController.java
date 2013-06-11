@@ -98,12 +98,12 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    * refined or handled differently than for the built-in case. The exception
    * handler can either :
    * <ul>
-   * <li>return <code>true</code> if the exception was completely processed and
+   * <li>return {@code true} if the exception was completely processed and
    * does not need any further action.</li>
-   * <li>return <code>false</code> if the exception was either not or
+   * <li>return {@code false} if the exception was either not or
    * un-completely processed and needs to continue the built-in handling.</li>
    * </ul>
-   * 
+   *
    * @param customExceptionHandler
    *          the customExceptionHandler to set.
    */

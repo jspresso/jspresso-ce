@@ -62,8 +62,8 @@ public interface IPropertyProcessor<E, F> {
   /**
    * This method gets called whenever a property is about to be set on an
    * component to which this processor is registered. This method should throw
-   * an <code>IntegrityException</code> if pre-checks are not valid.
-   * 
+   * an {@code IntegrityException} if pre-checks are not valid.
+   *
    * @param target
    *          the component the processor is ran on.
    * @param newPropertyValue

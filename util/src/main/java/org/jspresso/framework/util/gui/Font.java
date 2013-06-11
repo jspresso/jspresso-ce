@@ -36,7 +36,7 @@ public class Font implements Serializable {
   private int               size;
 
   /**
-   * Constructs a new <code>Font</code> instance.
+   * Constructs a new {@code Font} instance.
    */
   public Font() {
     italic = false;

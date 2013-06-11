@@ -34,8 +34,8 @@ public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {
   /**
    * Configures the regular expression to match the property value against. The
    * gate will open if the property value matches the regex unless the
-   * <code>openOnTrue</code> property has been set to false.
-   * 
+   * {@code openOnTrue} property has been set to false.
+   *
    * @param regexpPattern
    *          the regexpPattern to set.
    */

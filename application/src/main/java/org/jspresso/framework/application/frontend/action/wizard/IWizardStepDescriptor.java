@@ -19,16 +19,16 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public interface IWizardStepDescriptor extends IDescriptor {
 
   /**
-   * <code>DEFAULT_NEXT_KEY</code>.
+   * {@code DEFAULT_NEXT_KEY}.
    */
   String DEFAULT_NEXT_KEY     = "next";
   /**
-   * <code>DEFAULT_PREVIOUS_KEY</code>.
+   * {@code DEFAULT_PREVIOUS_KEY}.
    */
   String DEFAULT_PREVIOUS_KEY = "previous";
 
   /**
-   * <code>INITIAL_WIZARD_MODEL</code> is a context entry used to store the
+   * {@code INITIAL_WIZARD_MODEL} is a context entry used to store the
    * initial wizard model.
    */
   String INITIAL_WIZARD_MODEL = "INITIAL_WIZARD_MODEL";

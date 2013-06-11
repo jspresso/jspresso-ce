@@ -39,15 +39,15 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
   private final PropertyChangeListener                           interceptor;
 
   /**
-   * Constructs a new <code>BeanPropertyChangeRecorder</code> instance.
+   * Constructs a new {@code BeanPropertyChangeRecorder} instance.
    */
   public BeanPropertyChangeRecorder() {
     this(null);
   }
 
   /**
-   * Constructs a new <code>BeanPropertyChangeRecorder</code> instance.
-   * 
+   * Constructs a new {@code BeanPropertyChangeRecorder} instance.
+   *
    * @param interceptor
    *          an optional property change listener which will be notified of
    *          changed properties.

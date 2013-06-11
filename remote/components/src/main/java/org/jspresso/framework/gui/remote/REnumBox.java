@@ -32,8 +32,8 @@ public abstract class REnumBox extends RComponent {
   private String[]          values;
 
   /**
-   * Constructs a new <code>RComboBox</code> instance.
-   * 
+   * Constructs a new {@code RComboBox} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -42,7 +42,7 @@ public abstract class REnumBox extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RComboBox</code> instance. Only used for
+   * Constructs a new {@code RComboBox} instance. Only used for
    * serialization support.
    */
   public REnumBox() {

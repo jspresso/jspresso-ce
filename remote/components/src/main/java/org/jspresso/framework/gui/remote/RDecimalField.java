@@ -29,8 +29,8 @@ public class RDecimalField extends RDecimalComponent {
   private static final long serialVersionUID = 2193665529381520403L;
 
   /**
-   * Constructs a new <code>RDecimalField</code> instance.
-   * 
+   * Constructs a new {@code RDecimalField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RDecimalField extends RDecimalComponent {
   }
 
   /**
-   * Constructs a new <code>RDecimalField</code> instance. Only used for
+   * Constructs a new {@code RDecimalField} instance. Only used for
    * serialization support.
    */
   public RDecimalField() {

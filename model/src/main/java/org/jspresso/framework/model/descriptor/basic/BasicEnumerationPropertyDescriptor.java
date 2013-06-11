@@ -92,12 +92,12 @@ public class BasicEnumerationPropertyDescriptor extends
 
   /**
    * Defines the list of values as well as an icon image URL per value this
-   * enumeration contains. The incoming <code>Map</code> is keyed by the actual
+   * enumeration contains. The incoming {@code Map} is keyed by the actual
    * enumeration values and valued by the icon image URLs.
    * <p>
    * Enumeration values are translated in the UI using the following scheme :
    * <i>[enumerationName]_[value]</i>.
-   * 
+   *
    * @param valuesAndIconImageUrls
    *          the valuesAndIconImageUrls to set.
    */

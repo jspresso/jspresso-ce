@@ -34,8 +34,8 @@ public class RConstrainedGridContainer extends RContainer {
   private RComponent[]      cells;
 
   /**
-   * Constructs a new <code>RGridContainer</code> instance.
-   * 
+   * Constructs a new {@code RGridContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -44,7 +44,7 @@ public class RConstrainedGridContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RConstrainedGridContainer</code> instance. Only used
+   * Constructs a new {@code RConstrainedGridContainer} instance. Only used
    * for GWT serialization support.
    */
   public RConstrainedGridContainer() {

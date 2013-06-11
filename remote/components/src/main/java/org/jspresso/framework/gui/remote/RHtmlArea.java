@@ -33,8 +33,8 @@ public class RHtmlArea extends RTextComponent {
   private boolean           horizontallyScrollable;
 
   /**
-   * Constructs a new <code>RHtmlArea</code> instance.
-   * 
+   * Constructs a new {@code RHtmlArea} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -43,7 +43,7 @@ public class RHtmlArea extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RHtmlArea</code> instance. Only used for
+   * Constructs a new {@code RHtmlArea} instance. Only used for
    * serialization support.
    */
   public RHtmlArea() {

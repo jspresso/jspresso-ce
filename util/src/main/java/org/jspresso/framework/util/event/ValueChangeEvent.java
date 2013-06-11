@@ -49,8 +49,8 @@ public class ValueChangeEvent extends EventObject {
   private final Object            oldValue;
 
   /**
-   * Constructs a new <code>ValueChangeEvent</code>.
-   * 
+   * Constructs a new {@code ValueChangeEvent}.
+   *
    * @param source
    *          the source that initiated the event.
    * @param oldValue

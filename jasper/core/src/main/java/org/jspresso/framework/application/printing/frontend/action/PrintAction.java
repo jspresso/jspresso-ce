@@ -95,9 +95,9 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the report factory to use. The report factory is responsible for
-   * creating an <code>IReport</code> (a concrete report instance) from a report
-   * descriptor (<code>IReportDescriptor</code>).
-   * 
+   * creating an {@code IReport} (a concrete report instance) from a report
+   * descriptor ({@code IReportDescriptor}).
+   *
    * @param reportFactory
    *          the reportFactory to set.
    */

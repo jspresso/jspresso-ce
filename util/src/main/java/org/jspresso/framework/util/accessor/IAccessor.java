@@ -29,13 +29,13 @@ import java.lang.reflect.InvocationTargetException;
 public interface IAccessor {
 
   /**
-   * <code>NESTED_DELIM</code> is '.' constant for nested properties.
+   * {@code NESTED_DELIM} is '.' constant for nested properties.
    */
   char NESTED_DELIM = '.';
 
   /**
    * Gets the value from the target of this accessor.
-   * 
+   *
    * @param target
    *          the target from which to get the value.
    * @return the value obtained.
@@ -44,7 +44,7 @@ public interface IAccessor {
    * @throws InvocationTargetException
    *           if the underlying method throws an exception.
    * @throws IllegalAccessException
-   *           if this <code>Method</code> object enforces Java language access
+   *           if this {@code Method} object enforces Java language access
    *           control and the underlying method is inaccessible.
    */
   <T> T getValue(Object target) throws IllegalAccessException,
@@ -59,7 +59,7 @@ public interface IAccessor {
 
   /**
    * Sets the value on the target of this accessor.
-   * 
+   *
    * @param target
    *          the target on which to set the value.
    * @param value
@@ -67,7 +67,7 @@ public interface IAccessor {
    * @throws InvocationTargetException
    *           if the underlying method throws an exception.
    * @throws IllegalAccessException
-   *           if this <code>Method</code> object enforces Java language access
+   *           if this {@code Method} object enforces Java language access
    *           control and the underlying method is inaccessible.
    * @throws NoSuchMethodException
    *           if a matching method is not found.
@@ -77,10 +77,10 @@ public interface IAccessor {
 
   /**
    * Tests whether the accessor applies to the parameter target.
-   * 
+   *
    * @param target
    *          the target to test the accessor for.
-   * @return <code>true</code> if the accessor can be used to access the
+   * @return {@code true} if the accessor can be used to access the
    *         parameter target.
    */
   boolean appliesTo(Object target);

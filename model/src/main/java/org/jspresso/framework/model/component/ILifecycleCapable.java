@@ -31,32 +31,32 @@ import org.jspresso.framework.security.UserPrincipal;
 public interface ILifecycleCapable {
 
   /**
-   * <code>ON_CREATE_METHOD_NAME</code>.
+   * {@code ON_CREATE_METHOD_NAME}.
    */
   String ON_CREATE_METHOD_NAME  = "onCreate";
 
   /**
-   * <code>ON_DELETE_METHOD_NAME</code>.
+   * {@code ON_DELETE_METHOD_NAME}.
    */
   String ON_DELETE_METHOD_NAME  = "onDelete";
 
   /**
-   * <code>ON_LOAD_METHOD_NAME</code>.
+   * {@code ON_LOAD_METHOD_NAME}.
    */
   String ON_LOAD_METHOD_NAME    = "onLoad";
 
   /**
-   * <code>ON_CLONE_METHOD_NAME</code>.
+   * {@code ON_CLONE_METHOD_NAME}.
    */
   String ON_CLONE_METHOD_NAME   = "onClone";
 
   /**
-   * <code>ON_PERSIST_METHOD_NAME</code>.
+   * {@code ON_PERSIST_METHOD_NAME}.
    */
   String ON_PERSIST_METHOD_NAME = "onPersist";
 
   /**
-   * <code>ON_UPDATE_METHOD_NAME</code>.
+   * {@code ON_UPDATE_METHOD_NAME}.
    */
   String ON_UPDATE_METHOD_NAME  = "onUpdate";
 

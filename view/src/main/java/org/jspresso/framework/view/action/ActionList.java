@@ -34,7 +34,7 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
   private String                   permId;
 
   /**
-   * Constructs a new <code>ActionList</code> instance.
+   * Constructs a new {@code ActionList} instance.
    */
   public ActionList() {
     collapsable = false;
@@ -81,17 +81,17 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
 
   /**
    * Indicates how the actions should be rendered. This is either a value of the
-   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * {@code ERenderingOptions} enum or its equivalent string representation
    * :
    * <ul>
-   * <li><code>LABEL_ICON</code> for label and icon</li>
-   * <li><code>LABEL</code> for label only</li>
-   * <li><code>ICON</code> for icon only.</li>
+   * <li>{@code LABEL_ICON} for label and icon</li>
+   * <li>{@code LABEL} for label only</li>
+   * <li>{@code ICON} for icon only.</li>
    * </ul>
    * <p>
-   * Default value is <code>null</code>, i.e. determined from outside, e.g. the
+   * Default value is {@code null}, i.e. determined from outside, e.g. the
    * view factory or the owning action map.
-   * 
+   *
    * @param renderingOptions
    *          the renderingOptions to set.
    */
@@ -113,8 +113,8 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
    * Collapsable action lists can typically be rendered as combo buttons in UI
    * channels that support it.
    * <p>
-   * Default value is <code>false</code>.
-   * 
+   * Default value is {@code false}.
+   *
    * @param collapsable
    *          the collapsable to set.
    */
@@ -136,10 +136,10 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
    * Assigns the roles that are authorized to use this action list. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
    * granted sufficient privileges, the action list is simply not displayed at
-   * runtime. Setting the collection of granted roles to <code>null</code>
+   * runtime. Setting the collection of granted roles to {@code null}
    * (default value) disables role based authorization, then access is granted
    * to anyone.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */

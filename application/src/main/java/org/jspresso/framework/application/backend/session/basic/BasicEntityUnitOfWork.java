@@ -53,7 +53,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   private Set<IEntity>               updatedEntities;
 
   /**
-   * Constructs a new <code>BasicEntityUnitOfWork</code> instance.
+   * Constructs a new {@code BasicEntityUnitOfWork} instance.
    */
   public BasicEntityUnitOfWork() {
     entityRegistry = new BasicEntityRegistry("uowEntityRegistry");

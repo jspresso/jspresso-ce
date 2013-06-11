@@ -52,7 +52,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   private static final String       LAST_PUSHED_VIEW = "LAST_PUSHED_VIEW";
 
   /**
-   * Constructs a new <code>SecurityContextBuilder</code> instance.
+   * Constructs a new {@code SecurityContextBuilder} instance.
    */
   public SecurityContextBuilder() {
     currentSecurityContext = new HashMap<String, Object>();

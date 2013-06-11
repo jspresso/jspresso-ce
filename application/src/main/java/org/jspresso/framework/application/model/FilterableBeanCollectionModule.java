@@ -44,10 +44,10 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This is a specialized type of bean collection module that provides a filter (
- * an instance of <code>IQueryComponent</code> ). This type of module, coupled
+ * an instance of {@code IQueryComponent} ). This type of module, coupled
  * with a generic, built-in, action map is perfectly suited for CRUD-like
  * operations.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -76,7 +76,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   }
 
   /**
-   * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
+   * Constructs a new {@code FilterableBeanCollectionModule} instance.
    */
   public FilterableBeanCollectionModule() {
     filterComponentTracker = new FilterComponentTracker(this);
@@ -206,11 +206,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Assigns the filter to this module instance. It is by default assigned by
-   * the module startup action (see <code>InitModuleFilterAction</code>). So if
+   * the module startup action (see {@code InitModuleFilterAction}). So if
    * you ever want to change the default implementation of the filter, you have
    * to write and install you own custom startup action or explicitly inject a
    * specific instance.
-   * 
+   *
    * @param filter
    *          the filter to set.
    */
@@ -264,17 +264,17 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * Configures a custom map of ordering properties for the result set. If not
    * set, which is the default, the elements ordering properties is used.
    * <p>
-   * This property consist of a <code>Map</code> whose entries are composed with
+   * This property consist of a {@code Map} whose entries are composed with
    * :
    * <ul>
    * <li>the property name as key</li>
    * <li>the sort order for this property as value. This is either a value of
-   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * the {@code ESort} enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
    * equivalent string representation.</li>
    * </ul>
    * Ordering properties are considered following their order in the map
    * iterator.
-   * 
+   *
    * @param orderingProperties
    *          the orderingProperties to set.
    */
@@ -334,9 +334,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
     /**
      * Constructs a new
-     * <code>FilterableBeanCollectionModule.FilterComponentTracker</code>
+     * {@code FilterableBeanCollectionModule.FilterComponentTracker}
      * instance.
-     * 
+     *
      * @param target
      *          the target filter module.
      */

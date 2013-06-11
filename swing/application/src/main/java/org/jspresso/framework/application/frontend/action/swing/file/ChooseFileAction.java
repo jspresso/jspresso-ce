@@ -133,8 +133,8 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
     private final String             description;
 
     /**
-     * Constructs a new <code>FileFilterAdapter</code> instance.
-     * 
+     * Constructs a new {@code FileFilterAdapter} instance.
+     *
      * @param description the filter description.
      * @param allowedExtensions the filter allowed extensions.
      */

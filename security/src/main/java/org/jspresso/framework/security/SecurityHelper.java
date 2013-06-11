@@ -39,12 +39,12 @@ import org.jboss.security.SimplePrincipal;
 public final class SecurityHelper {
 
   /**
-   * <code>ANONYMOUS_USER_NAME</code>.
+   * {@code ANONYMOUS_USER_NAME}.
    */
   public static final String ANONYMOUS_USER_NAME = "anonymous";
 
   /**
-   * <code>ROLES_GROUP_NAME</code>.
+   * {@code ROLES_GROUP_NAME}.
    */
   public static final String ROLES_GROUP_NAME    = "Roles";
 

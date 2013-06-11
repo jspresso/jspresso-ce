@@ -35,8 +35,8 @@ public abstract class RNumericComponent extends RComponent {
   private String            horizontalAlignment;
 
   /**
-   * Constructs a new <code>RIntegerField</code> instance.
-   * 
+   * Constructs a new {@code RIntegerField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -45,7 +45,7 @@ public abstract class RNumericComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RNumericComponent</code> instance. Only used for
+   * Constructs a new {@code RNumericComponent} instance. Only used for
    * serialization support.
    */
   public RNumericComponent() {

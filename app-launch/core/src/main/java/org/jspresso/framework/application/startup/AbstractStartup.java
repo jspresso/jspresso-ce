@@ -74,9 +74,9 @@ public abstract class AbstractStartup implements IStartup {
 
   /**
    * Allows to change the default bean factory selector.
-   * 
+   *
    * @return null by default, which means that
-   *         <code>classpath*:beanRefFactory.xml</code> is used.
+   *         {@code classpath*:beanRefFactory.xml} is used.
    */
   protected String getBeanFactorySelector() {
     return null;

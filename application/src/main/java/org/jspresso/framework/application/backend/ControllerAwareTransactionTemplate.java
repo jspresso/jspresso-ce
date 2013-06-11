@@ -34,15 +34,15 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
   /**
-   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
+   * Constructs a new {@code ControllerAwareTransactionTemplate} instance.
    */
   public ControllerAwareTransactionTemplate() {
     super();
   }
 
   /**
-   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
-   * 
+   * Constructs a new {@code ControllerAwareTransactionTemplate} instance.
+   *
    * @param transactionManager the Spring transaction manager
    * @param transactionDefinition the Spring transaction definition
    */
@@ -53,8 +53,8 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
   }
 
   /**
-   * Constructs a new <code>ControllerAwareTransactionTemplate</code> instance.
-   * 
+   * Constructs a new {@code ControllerAwareTransactionTemplate} instance.
+   *
    * @param transactionManager the Spring transaction manager
    */
   public ControllerAwareTransactionTemplate(

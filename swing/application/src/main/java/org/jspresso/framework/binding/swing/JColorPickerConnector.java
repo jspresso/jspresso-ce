@@ -35,8 +35,8 @@ import org.jspresso.framework.util.gui.ColorHelper;
 public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
 
   /**
-   * Constructs a new <code>JColorPickerConnector</code> instance.
-   * 
+   * Constructs a new {@code JColorPickerConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param colorPicker

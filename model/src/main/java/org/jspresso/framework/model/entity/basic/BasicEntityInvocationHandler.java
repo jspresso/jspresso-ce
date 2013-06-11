@@ -50,8 +50,8 @@ public class BasicEntityInvocationHandler extends
   private int                 hashCode;
 
   /**
-   * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
-   * 
+   * Constructs a new {@code BasicEntityInvocationHandler} instance.
+   *
    * @param entityDescriptor
    *          The descriptor of the proxy entity.
    * @param inlineComponentFactory

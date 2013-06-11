@@ -42,8 +42,8 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * held in the backing store are considered to have been checked formerly.
  * Considering the previous points, this implementation uses a intermediate
  * strategy which update the property values without firing anything but a
- * <code>PropertyChangeEvent</code> in case the actual property value changed.
- * 
+ * {@code PropertyChangeEvent} in case the actual property value changed.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -81,8 +81,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     private final Method            getter;
 
     /**
-     * Constructs a new <code>EntityPropertyGetter</code> instance.
-     * 
+     * Constructs a new {@code EntityPropertyGetter} instance.
+     *
      * @param theClass
      *          The class of the entity.
      * @param propertyName
@@ -169,8 +169,8 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     private final Method            setter;
 
     /**
-     * Constructs a new <code>EntityPropertySetter</code> instance.
-     * 
+     * Constructs a new {@code EntityPropertySetter} instance.
+     *
      * @param theClass
      *          The class of the entity.
      * @param propertyName

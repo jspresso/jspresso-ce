@@ -40,7 +40,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
 public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
 
   /**
-   * <code>MODULE_DESCRIPTOR</code> is a unique reference to the model
+   * {@code MODULE_DESCRIPTOR} is a unique reference to the model
    * descriptor of modules.
    */
   public static final IComponentDescriptor<Module> MODULE_DESCRIPTOR = new ModuleDescriptor(
@@ -48,8 +48,8 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
                                                                              .getName());
 
   /**
-   * Constructs a new <code>ModuleDescriptor</code> instance.
-   * 
+   * Constructs a new {@code ModuleDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor (the actual module class name).
    */

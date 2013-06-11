@@ -27,12 +27,12 @@ package org.jspresso.framework.model.datatransfer;
 public enum ETransferMode {
 
   /**
-   * <code>COPY</code> means that the original object is kept as is.
+   * {@code COPY} means that the original object is kept as is.
    */
   COPY,
 
   /**
-   * <code>MOVE</code> means that the original object is moved to the
+   * {@code MOVE} means that the original object is moved to the
    * destination.
    */
   MOVE

@@ -39,32 +39,32 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <ol>
  * <li>take the selected elements in the underlying model collection,</li>
  * <li>create bean modules out of them, using the
- * <code>childModuleProjectedViewDescriptor</code> as projected view if it has
+ * {@code childModuleProjectedViewDescriptor} as projected view if it has
  * been configured,</li>
  * <li>add the created bean modules as children of the currently selected
  * module, visualizing them in the workspace navigation tree.</li>
  * </ol>
- * Whenever there is no <code>childModuleProjectedViewDescriptor</code>
+ * Whenever there is no {@code childModuleProjectedViewDescriptor}
  * configured, and the currently selected module is a bean collection module,
  * the created modules projected view descriptor is taken from the bean
- * collection module (<code>elementViewDescriptor</code>).
- * 
+ * collection module ({@code elementViewDescriptor}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
-   * <code>PARENT_WORKSPACE</code> is &quot;PARENT_WORKSPACE&quot;.
+   * {@code PARENT_WORKSPACE} is &quot;PARENT_WORKSPACE&quot;.
    */
   public static final String PARENT_WORKSPACE          = "PARENT_WORKSPACE";
   /**
-   * <code>PARENT_MODULE_NAME</code> is &quot;PARENT_MODULE_NAME&quot;.
+   * {@code PARENT_MODULE_NAME} is &quot;PARENT_MODULE_NAME&quot;.
    */
   public static final String PARENT_MODULE_NAME        = "PARENT_MODULE_NAME";
 
   /**
-   * <code>PROJECTED_VIEW_DESCRIPTOR</code> is
+   * {@code PROJECTED_VIEW_DESCRIPTOR} is
    * &quot;PROJECTED_VIEW_DESCRIPTOR&quot;.
    */
   public static final String PROJECTED_VIEW_DESCRIPTOR = "PROJECTED_VIEW_DESCRIPTOR";

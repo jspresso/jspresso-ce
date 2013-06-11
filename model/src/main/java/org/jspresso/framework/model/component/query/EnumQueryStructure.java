@@ -45,8 +45,8 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
   private Set<EnumValueQueryStructure>   enumerationValues;
 
   /**
-   * Constructs a new <code>EnumValueQueryStructure</code> instance.
-   * 
+   * Constructs a new {@code EnumValueQueryStructure} instance.
+   *
    * @param propertyDescriptor
    *          the enumeration property descriptor to create the query structure
    *          for.
@@ -151,10 +151,10 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
   }
 
   /**
-   * Returns <code>true</code> if this query structure does not have any
+   * Returns {@code true} if this query structure does not have any
    * selected value.
-   * 
-   * @return <code>true</code> if this query structure does not have any
+   *
+   * @return {@code true} if this query structure does not have any
    *         selected value.
    */
   public boolean isEmpty() {

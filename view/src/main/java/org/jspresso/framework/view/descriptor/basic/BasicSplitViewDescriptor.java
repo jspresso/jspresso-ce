@@ -101,17 +101,17 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Configures the split orientation of the container. This is either a value
-   * of the <code>EOrientation</code> enum or its equivalent string
+   * of the {@code EOrientation} enum or its equivalent string
    * representation :
    * <ul>
-   * <li><code>VERTICAL</code> for splitting the container vertically and
+   * <li>{@code VERTICAL} for splitting the container vertically and
    * arranging the views top and bottom</li>
-   * <li><code>HORIZONTAL</code> for splitting the container horizontally and
+   * <li>{@code HORIZONTAL} for splitting the container horizontally and
    * arranging the views left and right</li>
    * </ul>
-   * Default value is <code>EOrientation.VERTICAL</code>, i.e. the container is
+   * Default value is {@code EOrientation.VERTICAL}, i.e. the container is
    * split vertically.
-   * 
+   *
    * @param orientation
    *          the orientation to set.
    */

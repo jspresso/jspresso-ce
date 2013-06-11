@@ -59,32 +59,32 @@ public class Module extends AbstractPropertyChangeCapable implements
     IViewDescriptorProvider, ISecurable, IPermIdSource {
 
   /**
-   * <code>DESCRIPTION</code> is "description".
+   * {@code DESCRIPTION} is "description".
    */
   public static final String DESCRIPTION      = "description";
 
   /**
-   * <code>I18N_DESCRIPTION</code> is "i18nDescription".
+   * {@code I18N_DESCRIPTION} is "i18nDescription".
    */
   public static final String I18N_DESCRIPTION = "i18nDescription";
 
   /**
-   * <code>I18N_NAME</code> is "i18nName".
+   * {@code I18N_NAME} is "i18nName".
    */
   public static final String I18N_NAME        = "i18nName";
 
   /**
-   * <code>NAME</code> is "name".
+   * {@code NAME} is "name".
    */
   public static final String NAME             = "name";
 
   /**
-   * <code>PARENT</code> is "parent".
+   * {@code PARENT} is "parent".
    */
   public static final String PARENT           = "parent";
 
   /**
-   * <code>SUB_MODULES</code> is "subModules".
+   * {@code SUB_MODULES} is "subModules".
    */
   public static final String SUB_MODULES      = "subModules";
 
@@ -110,7 +110,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   private String             permId;
 
   /**
-   * Constructs a new <code>Module</code> instance.
+   * Constructs a new {@code Module} instance.
    */
   public Module() {
     started = false;
@@ -119,11 +119,11 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Adds a child module.
-   * 
+   *
    * @param child
    *          the child module to add. It will fire a &quot;subModules&quot;
    *          property change event.
-   * @return <code>true</code> if the module was successfully added.
+   * @return {@code true} if the module was successfully added.
    */
   public boolean addSubModule(Module child) {
     if (subModules == null) {
@@ -140,10 +140,10 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Adds a modules module collection. It will fire a &quot;subModules&quot;
    * property change event.
-   * 
+   *
    * @param children
    *          the modules modules to add.
-   * @return <code>true</code> if the modules module collection was successfully
+   * @return {@code true} if the modules module collection was successfully
    *         added.
    */
   public boolean addSubModules(Collection<? extends Module> children) {
@@ -353,10 +353,10 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Removes a child module. It will fire a &quot;subModules&quot; property
    * change event.
-   * 
+   *
    * @param module
    *          the child module to remove.
-   * @return <code>true</code> if the module was successfully removed.
+   * @return {@code true} if the module was successfully removed.
    */
   public boolean removeSubModule(Module module) {
     if (subModules != null) {
@@ -373,10 +373,10 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Removes a modules module collection. It will fire a &quot;subModules&quot;
    * property change event.
-   * 
+   *
    * @param children
    *          the modules modules to remove.
-   * @return <code>true</code> if the modules module collection was successfully
+   * @return {@code true} if the modules module collection was successfully
    *         removed.
    */
   public boolean removeSubModules(Collection<Module> children) {
@@ -455,13 +455,13 @@ public class Module extends AbstractPropertyChangeCapable implements
    * Assigns the roles that are authorized to start this module. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
    * granted sufficient privileges, the module is simply not installed in the
-   * workspace. Setting the collection of granted roles to <code>null</code>
+   * workspace. Setting the collection of granted roles to {@code null}
    * (default value) disables role based authorization on this module.
    * <p>
    * Some specific modules that are component/entity model based i.e.
-   * <code>Bean(Collection)Module</code> also inherit their authorizations from
+   * {@code Bean(Collection)Module} also inherit their authorizations from
    * their model.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */

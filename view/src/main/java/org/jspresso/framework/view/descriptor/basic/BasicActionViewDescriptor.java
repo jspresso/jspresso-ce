@@ -58,8 +58,8 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
    * Assigns the action to display as a view. The action will typically be
    * rendered as a button in the UI. whenever you want to size the icon used to
    * display the action (and thus the button peer), you might use the
-   * <code>preferredWidth</code> / <code>preferredHeight</code> properties.
-   * 
+   * {@code preferredWidth} / {@code preferredHeight} properties.
+   *
    * @param action
    *          the action to set.
    */
@@ -69,16 +69,16 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Indicates how the action should be rendered. This is either a value of the
-   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * {@code ERenderingOptions} enum or its equivalent string representation
    * :
    * <ul>
-   * <li><code>LABEL_ICON</code> for label and icon</li>
-   * <li><code>LABEL</code> for label only</li>
-   * <li><code>ICON</code> for icon only.</li>
+   * <li>{@code LABEL_ICON} for label and icon</li>
+   * <li>{@code LABEL} for label only</li>
+   * <li>{@code ICON} for icon only.</li>
    * </ul>
    * <p>
-   * Default value is <code>ERenderingOptions.ICON</code>, i.e. icon only.
-   * 
+   * Default value is {@code ERenderingOptions.ICON}, i.e. icon only.
+   *
    * @param renderingOptions
    *          the renderingOptions to set.
    */

@@ -66,7 +66,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   private boolean             triStateBooleanSupported;
 
   /**
-   * Constructs a new <code>DefaultCriteriaFactory</code> instance.
+   * Constructs a new {@code DefaultCriteriaFactory} instance.
    */
   public DefaultCriteriaFactory() {
     triStateBooleanSupported = false;

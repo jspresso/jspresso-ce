@@ -14,8 +14,8 @@ import javax.swing.JPasswordField;
 public class JPasswordFieldConnector extends JTextFieldConnector {
 
   /**
-   * Constructs a new <code>JPasswordFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JPasswordFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param passwordField

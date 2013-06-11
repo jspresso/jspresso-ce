@@ -48,8 +48,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   private final ICompositeValueConnector rootConnector;
 
   /**
-   * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   * 
+   * Constructs a new {@code ConnectorHierarchyTreeModel} instance.
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    */

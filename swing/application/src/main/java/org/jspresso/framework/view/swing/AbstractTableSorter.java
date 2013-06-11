@@ -76,17 +76,17 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     IIndexMapper {
 
   /**
-   * <code>ASCENDING</code>.
+   * {@code ASCENDING}.
    */
   public static final int        ASCENDING            = 1;
 
   /**
-   * <code>DESCENDING</code>.
+   * {@code DESCENDING}.
    */
   public static final int        DESCENDING           = -1;
 
   /**
-   * <code>NOT_SORTED</code>.
+   * {@code NOT_SORTED}.
    */
   public static final int        NOT_SORTED           = 0;
 
@@ -105,8 +105,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   private Icon                   upIcon;
 
   /**
-   * Constructs a new <code>AbstractTableSorter</code> instance.
-   * 
+   * Constructs a new {@code AbstractTableSorter} instance.
+   *
    * @param tableModel
    *          tableModel.
    * @param tableHeader
@@ -416,8 +416,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     private final int direction;
 
     /**
-     * Constructs a new <code>Directive</code> instance.
-     * 
+     * Constructs a new {@code Directive} instance.
+     *
      * @param column the column index.
      * @param direction the direction.
      */
@@ -492,8 +492,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     private final TableCellRenderer   delegate;
 
     /**
-     * Constructs a new <code>SortableHeaderRenderer</code> instance.
-     * 
+     * Constructs a new {@code SortableHeaderRenderer} instance.
+     *
      * @param tableSorter
      *          the table sorter used to compute the sort icon.
      * @param delegate

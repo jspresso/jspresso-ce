@@ -30,7 +30,7 @@ import org.jspresso.framework.util.lang.ICloneable;
 public interface IGate extends IPropertyChangeCapable, ICloneable {
 
   /**
-   * <code>OPEN_PROPERTY</code>.
+   * {@code OPEN_PROPERTY}.
    */
   String OPEN_PROPERTY = "open";
 

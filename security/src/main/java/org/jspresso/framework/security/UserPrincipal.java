@@ -36,16 +36,16 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
     Principal, Serializable {
 
   /**
-   * <code>LANGUAGE_PROPERTY</code>.
+   * {@code LANGUAGE_PROPERTY}.
    */
   public static final String  LANGUAGE_PROPERTY = "language";
 
   /**
-   * <code>OWNER_PROPERTY</code>.
+   * {@code OWNER_PROPERTY}.
    */
   public static final String  OWNER_PROPERTY    = "owner";
   /**
-   * <code>USER_PROPERTY</code>.
+   * {@code USER_PROPERTY}.
    */
   public static final String  USERDN_PROPERTY   = "userDn";
 
@@ -56,8 +56,8 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
   private final String              name;
 
   /**
-   * Constructs a new <code>UserPrincipal</code> instance.
-   * 
+   * Constructs a new {@code UserPrincipal} instance.
+   *
    * @param name
    *          the distinguished name.
    */

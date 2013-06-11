@@ -62,15 +62,15 @@ public interface IModelConnectorFactory {
       IModelDescriptor modelDescriptor, ISecurityHandler securityHandler);
 
   /**
-   * Gets the <code>IAccessorFactory</code> used.
-   * 
+   * Gets the {@code IAccessorFactory} used.
+   *
    * @return the used accessor factory
    */
   IAccessorFactory getAccessorFactory();
 
   /**
-   * Gets the <code>IComponentDescriptorRegistry</code> used.
-   * 
+   * Gets the {@code IComponentDescriptorRegistry} used.
+   *
    * @return the used descriptor registry
    */
   IComponentDescriptorRegistry getDescriptorRegistry();

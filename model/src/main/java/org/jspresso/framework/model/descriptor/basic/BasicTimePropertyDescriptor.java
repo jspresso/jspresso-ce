@@ -24,9 +24,9 @@ import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 
 /**
  * Describes a property used to hold time only values. These properties use a
- * <code>Date</code> to store their value but only the time part of the value is
+ * {@code Date} to store their value but only the time part of the value is
  * relevant.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,7 +36,7 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
   private boolean secondsAware;
 
   /**
-   * Constructs a new <code>BasicTimePropertyDescriptor</code> instance.
+   * Constructs a new {@code BasicTimePropertyDescriptor} instance.
    */
   public BasicTimePropertyDescriptor() {
     secondsAware = true;
@@ -71,9 +71,9 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
 
   /**
    * Should this time information include seconds.
-   * 
+   *
    * @param secondsAware
-   *          Configure to <code>true</code> if this time information include
+   *          Configure to {@code true} if this time information include
    *          seconds.
    */
   public void setSecondsAware(boolean secondsAware) {

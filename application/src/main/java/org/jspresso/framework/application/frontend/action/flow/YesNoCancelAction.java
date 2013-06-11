@@ -44,7 +44,7 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   private IAction yesAction;
 
   /**
-   * Displays the message using a <code>JOptionPane.YES_NO_CANCEL_OPTION</code>.
+   * Displays the message using a {@code JOptionPane.YES_NO_CANCEL_OPTION}.
    * <p>
    * {@inheritDoc}
    */

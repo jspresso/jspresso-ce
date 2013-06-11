@@ -154,28 +154,28 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IViewFactory<E, F, G> {
 
   /**
-   * <code>BOLD_FONT</code>.
+   * {@code BOLD_FONT}.
    */
   protected static final String         BOLD_FONT                            = ";BOLD;";
   /**
-   * <code>DEF_DISP_MAX_VALUE</code>.
+   * {@code DEF_DISP_MAX_VALUE}.
    */
   protected static final double         DEF_DISP_MAX_VALUE                   = 1000;
   /**
-   * <code>DEF_DISP_TEMPLATE_PERCENT</code>.
+   * {@code DEF_DISP_TEMPLATE_PERCENT}.
    */
   protected static final double         DEF_DISP_TEMPLATE_PERCENT            = 99;
   /**
-   * <code>TEMPLATE_CHAR</code>.
+   * {@code TEMPLATE_CHAR}.
    */
   protected static final char           TEMPLATE_CHAR                        = 'O';
   /**
-   * <code>TEMPLATE_DATE</code>.
+   * {@code TEMPLATE_DATE}.
    */
   protected static final Date           TEMPLATE_DATE                        = new Date(
                                                                                  27166271000L);
   /**
-   * <code>TEMPLATE_DURATION</code>.
+   * {@code TEMPLATE_DURATION}.
    */
   protected static final Long           TEMPLATE_DURATION                    = (long) (EDuration.ONE_SECOND
       .getMillis()
@@ -189,7 +189,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       .getMillis());
 
   /**
-   * <code>TEMPLATE_TIME</code>.
+   * {@code TEMPLATE_TIME}.
    */
   protected static final Date           TEMPLATE_TIME                        = new Date(
                                                                                  366000);
@@ -216,7 +216,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private String                        tableHeaderMandatoryPropertyColorHex = null;
 
   /**
-   * Constructs a new <code>AbstractViewFactory</code> instance.
+   * Constructs a new {@code AbstractViewFactory} instance.
    */
   protected AbstractViewFactory() {
     firstRowSelector = new IValueChangeListener() {
@@ -3285,8 +3285,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
     private final IView<E>             view;
 
     /**
-     * Constructs a new <code>ConnectorActionAdapter</code> instance.
-     * 
+     * Constructs a new {@code ConnectorActionAdapter} instance.
+     *
      * @param actionDelegate
      *          the action to trigger when the connector value/selection
      *          changes.
@@ -3478,8 +3478,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Configures the color to be used to highlight mandatory labels. It defaults
-   * to red, i.e. <code>0xFFFF0000</code>.
-   * 
+   * to red, i.e. {@code 0xFFFF0000}.
+   *
    * @param mandatoryPropertyColorHex
    *          the mandatoryPropertyColorHex to set.
    */

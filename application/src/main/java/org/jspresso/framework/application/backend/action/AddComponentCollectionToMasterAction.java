@@ -33,12 +33,12 @@ import org.jspresso.framework.model.entity.IEntity;
  * the entity factory retrieved from the action context. The class of entity
  * (component) to create is either taken :
  * <ol>
- * <li>from the action context under the key <code>ELEMENT_DESCRIPTOR</code></li>
+ * <li>from the action context under the key {@code ELEMENT_DESCRIPTOR}</li>
  * <li>or, if it does not exist, taken from the view model descriptor. In this
  * case, the component descriptor to use is the element descriptor of the
  * underlying collection descriptor.</li>
  * </ol>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

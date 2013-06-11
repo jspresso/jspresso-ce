@@ -41,9 +41,9 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  * nodes that accept a list of subtrees</li>
  * </ul>
  * Defining a tree level is mainly a matter of defining its representation as an
- * individual list of components (i.e. the <code>nodeGroupDescriptor</code>
+ * individual list of components (i.e. the {@code nodeGroupDescriptor}
  * property).
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -98,12 +98,12 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    * Assigns the roles that are authorized to use this subtree. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
    * granted sufficient privileges, the subtree is simply hidden. Setting the
-   * collection of granted roles to <code>null</code> (default value) disables
+   * collection of granted roles to {@code null} (default value) disables
    * role based authorization on the node group level. The framework then checks
    * for the model roles authorizations and will apply the same restrictions. If
-   * both view and model granted roles collections are <code>null</code>, then
+   * both view and model granted roles collections are {@code null}, then
    * access is granted to anyone.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */

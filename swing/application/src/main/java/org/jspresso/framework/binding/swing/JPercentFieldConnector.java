@@ -36,8 +36,8 @@ public class JPercentFieldConnector extends JFormattedFieldConnector {
   private static final String PERCENT = "%";
 
   /**
-   * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JFormattedFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textField
@@ -50,8 +50,8 @@ public class JPercentFieldConnector extends JFormattedFieldConnector {
   }
 
   /**
-   * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JFormattedFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textField

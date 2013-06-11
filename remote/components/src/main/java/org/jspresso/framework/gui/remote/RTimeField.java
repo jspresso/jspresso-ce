@@ -31,8 +31,8 @@ public class RTimeField extends RComponent {
   private boolean           secondsAware;
 
   /**
-   * Constructs a new <code>RDateField</code> instance.
-   * 
+   * Constructs a new {@code RDateField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -41,7 +41,7 @@ public class RTimeField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTimeField</code> instance. Only used for
+   * Constructs a new {@code RTimeField} instance. Only used for
    * serialization support.
    */
   public RTimeField() {

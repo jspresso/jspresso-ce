@@ -31,9 +31,9 @@ import org.jspresso.framework.model.entity.IEntity;
 /**
  * Retrieves the filter of a module and queries the persistent store to populate
  * the module objects. The actual query is delegated to another backend action
- * (defaulted to <code>QueryEntitiesAction</code>) that can be configured
- * through the <code>queryAction</code> property.
- * 
+ * (defaulted to {@code QueryEntitiesAction}) that can be configured
+ * through the {@code queryAction} property.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

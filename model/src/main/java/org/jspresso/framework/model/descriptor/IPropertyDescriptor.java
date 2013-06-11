@@ -53,27 +53,27 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   IPropertyDescriptor createQueryDescriptor();
 
   /**
-   * Gets the <code>Class</code> of the delegates used to compute the values of
-   * the property or <code>null</code> if this property is not a derived one.
-   * 
+   * Gets the {@code Class} of the delegates used to compute the values of
+   * the property or {@code null} if this property is not a derived one.
+   *
    * @return The class of the extension delegates used to compute the property.
    */
   Class<?> getDelegateClass();
 
   /**
-   * Gets the <code>Class</code> name of the delegates used to compute the
-   * values of the property or <code>null</code> if this property is not a
+   * Gets the {@code Class} name of the delegates used to compute the
+   * values of the property or {@code null} if this property is not a
    * derived one.
-   * 
+   *
    * @return The class of the extension delegates used to compute the property.
    */
   String getDelegateClassName();
 
   /**
-   * Gets the collection of <code>IIntegrityProcessor</code> s which are
+   * Gets the collection of {@code IIntegrityProcessor} s which are
    * registered as pre-processors and post-processors.
-   * 
-   * @return the registered <code>IIntegrityProcessor</code> s
+   *
+   * @return the registered {@code IIntegrityProcessor} s
    */
   List<IPropertyProcessor<?, ?>> getIntegrityProcessors();
 
@@ -167,8 +167,8 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
   /**
    * Gets whether this property can be used for sorting, in a tabular view for
    * instance.
-   * 
-   * @return <code>true</code> if this property can be used for sorting.
+   *
+   * @return {@code true} if this property can be used for sorting.
    */
   boolean isSortable();
 
@@ -176,8 +176,8 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * Gets whether this property can be cached. This is only used for computed
    * properties. Note that the cached value will be reset whenever a
    * firePropertyChange regarding this property is detected to be fired.
-   * 
-   * @return <code>true</code> if this property is cacheable.
+   *
+   * @return {@code true} if this property is cacheable.
    */
   boolean isCacheable();
 }

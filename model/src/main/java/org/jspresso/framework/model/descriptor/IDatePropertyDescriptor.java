@@ -28,9 +28,9 @@ public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor,
     ITimeAwarePropertyDescriptor {
 
   /**
-   * Gets the date type. Values are among : <li> <code>DATE</code> <li>
-   * <code>DATE_TIME</code>
-   * 
+   * Gets the date type. Values are among : <li> {@code DATE} <li>
+   * {@code DATE_TIME}
+   *
    * @return the type of this date descriptor.
    */
   EDateType getType();

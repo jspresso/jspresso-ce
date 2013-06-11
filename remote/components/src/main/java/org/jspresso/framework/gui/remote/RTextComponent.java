@@ -31,8 +31,8 @@ public abstract class RTextComponent extends RComponent {
   private int               maxLength        = -1;
 
   /**
-   * Constructs a new <code>RTextField</code> instance.
-   * 
+   * Constructs a new {@code RTextField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -41,7 +41,7 @@ public abstract class RTextComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTextComponent</code> instance. Only used for
+   * Constructs a new {@code RTextComponent} instance. Only used for
    * serialization support.
    */
   public RTextComponent() {

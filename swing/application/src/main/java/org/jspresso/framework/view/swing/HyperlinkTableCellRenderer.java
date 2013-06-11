@@ -51,8 +51,8 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
   private final int               actionColIndex;
 
   /**
-   * Constructs a new <code>HyperlinkTableCellRenderer</code> instance.
-   * 
+   * Constructs a new {@code HyperlinkTableCellRenderer} instance.
+   *
    * @param delegate
    *          the delegate to use.
    * @param action

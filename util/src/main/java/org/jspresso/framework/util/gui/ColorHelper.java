@@ -86,10 +86,10 @@ public final class ColorHelper {
 
   /**
    * Tests whether the parameter string is a color specification.
-   * 
+   *
    * @param colorString
    *          the string to test.
-   * @return <code>true</code> if the string can be parsed as a color.
+   * @return {@code true} if the string can be parsed as a color.
    */
   public static boolean isColorSpec(String colorString) {
     return colorString != null && colorString.toLowerCase().startsWith("0x");

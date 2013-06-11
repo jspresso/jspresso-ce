@@ -148,7 +148,7 @@ public class RandomGUID {
 
   /**
    * Constructor with security option.
-   * 
+   *
    * @param secure
    *          Setting secure true enables each random number generated to be
    *          cryptographically strong. Secure false defaults to the standard
@@ -156,7 +156,7 @@ public class RandomGUID {
    *          random number.
    * @param separator
    *          the separator to use between the different GUID parts.
-   *          <code>null</code> means no separator.
+   *          {@code null} means no separator.
    */
   public RandomGUID(boolean secure, String separator) {
     this.separator = separator;

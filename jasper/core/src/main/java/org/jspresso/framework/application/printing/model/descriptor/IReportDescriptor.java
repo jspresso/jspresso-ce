@@ -32,7 +32,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 public interface IReportDescriptor extends IComponentDescriptor<IReport> {
 
   /**
-   * <code>ENTITY_ID</code> is "entity_id".
+   * {@code ENTITY_ID} is "entity_id".
    */
   String ENTITY_ID = "entity_id";
 

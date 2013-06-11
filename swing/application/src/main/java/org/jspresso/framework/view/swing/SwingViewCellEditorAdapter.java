@@ -69,8 +69,8 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   private final IView<JComponent>                editorView;
 
   /**
-   * Constructs a new <code>SwingViewCellEditorAdapter</code> instance.
-   * 
+   * Constructs a new {@code SwingViewCellEditorAdapter} instance.
+   *
    * @param editorView
    *          the swing view used as editor.
    * @param modelConnectorFactory

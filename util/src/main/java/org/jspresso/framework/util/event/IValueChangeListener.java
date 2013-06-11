@@ -31,14 +31,14 @@ public interface IValueChangeListener {
 
   /**
    * This method is triggered whenever a source detects that its value changed.
-   * Ideally this method will only fire when <code>oldValue</code> differs from
-   * <code>newValue</code>.
-   * 
+   * Ideally this method will only fire when {@code oldValue} differs from
+   * {@code newValue}.
+   *
    * @param evt
    *          The event representing the change. This event will have : <li>
-   *          <code>source</code> set to the source which initiated the event.
-   *          <li><code>oldValue</code> set to the old value of the source. <li>
-   *          <code>newValue</code> set to the new value of the source.
+   *          {@code source} set to the source which initiated the event.
+   *          <li>{@code oldValue} set to the old value of the source. <li>
+   *          {@code newValue} set to the new value of the source.
    */
   void valueChange(ValueChangeEvent evt);
 

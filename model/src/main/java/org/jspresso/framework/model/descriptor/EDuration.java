@@ -27,27 +27,27 @@ package org.jspresso.framework.model.descriptor;
 public enum EDuration {
 
   /**
-   * <code>ONE_DAY</code>.
+   * {@code ONE_DAY}.
    */
   ONE_DAY(24 * 60 * 60 * 1000),
 
   /**
-   * <code>ONE_HOUR</code>.
+   * {@code ONE_HOUR}.
    */
   ONE_HOUR(60 * 60 * 1000),
 
   /**
-   * <code>ONE_MINUTE</code>.
+   * {@code ONE_MINUTE}.
    */
   ONE_MINUTE(60 * 1000),
 
   /**
-   * <code>ONE_SECOND</code>.
+   * {@code ONE_SECOND}.
    */
   ONE_SECOND(1000),
 
   /**
-   * <code>ONE_WEEK</code>.
+   * {@code ONE_WEEK}.
    */
   ONE_WEEK(7 * 24 * 60 * 60 * 1000);
 

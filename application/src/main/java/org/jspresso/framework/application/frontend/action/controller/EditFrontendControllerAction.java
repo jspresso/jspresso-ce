@@ -26,7 +26,7 @@ public class EditFrontendControllerAction<E, F, G> extends
     EditComponentAction<E, F, G> {
 
   /**
-   * Constructs a new <code>ChangePasswordAction</code> instance.
+   * Constructs a new {@code ChangePasswordAction} instance.
    */
   public EditFrontendControllerAction() {
     // Empty a of now.

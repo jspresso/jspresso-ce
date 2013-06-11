@@ -31,8 +31,8 @@ public class RLink extends RLabel implements RActionable {
   private RAction           action;
 
   /**
-   * Constructs a new <code>RLink</code> instance.
-   * 
+   * Constructs a new {@code RLink} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -41,7 +41,7 @@ public class RLink extends RLabel implements RActionable {
   }
 
   /**
-   * Constructs a new <code>RLink</code> instance. Only used for serialization
+   * Constructs a new {@code RLink} instance. Only used for serialization
    * support.
    */
   public RLink() {

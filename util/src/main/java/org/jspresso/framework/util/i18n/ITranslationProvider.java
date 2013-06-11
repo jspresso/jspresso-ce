@@ -29,20 +29,20 @@ import java.util.Locale;
 public interface ITranslationProvider {
 
   /**
-   * <code>TIME_FORMAT_SHORT_KEY</code>.
+   * {@code TIME_FORMAT_SHORT_KEY}.
    */
   String TIME_FORMAT_SHORT_KEY = "time_format_short";
   /**
-   * <code>TIME_FORMAT_KEY</code>.
+   * {@code TIME_FORMAT_KEY}.
    */
   String TIME_FORMAT_KEY       = "time_format";
   /**
-   * <code>DATE_FORMAT_KEY</code>.
+   * {@code DATE_FORMAT_KEY}.
    */
   String DATE_FORMAT_KEY       = "date_format";
 
   /**
-   * <code>FIRST_DAY_OF_WEEK_KEY</code>.
+   * {@code FIRST_DAY_OF_WEEK_KEY}.
    */
   String FIRST_DAY_OF_WEEK_KEY       = "firstDayOfWeek";
 

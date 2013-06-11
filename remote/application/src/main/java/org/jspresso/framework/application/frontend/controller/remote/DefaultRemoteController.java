@@ -141,7 +141,7 @@ public class DefaultRemoteController extends
   private int                    commandLowPriorityOffset;
 
   /**
-   * Constructs a new <code>DefaultRemoteController</code> instance.
+   * Constructs a new {@code DefaultRemoteController} instance.
    */
   public DefaultRemoteController() {
     commandLowPriorityOffset = 0;

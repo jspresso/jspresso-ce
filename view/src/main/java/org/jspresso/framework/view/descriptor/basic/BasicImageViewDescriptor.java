@@ -40,7 +40,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   private boolean scrollable;
 
   /**
-   * Constructs a new <code>BasicImageViewDescriptor</code> instance.
+   * Constructs a new {@code BasicImageViewDescriptor} instance.
    */
   protected BasicImageViewDescriptor() {
     scrollable = true;
@@ -57,7 +57,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Returns <code>true</code> if scrollable.
+   * Returns {@code true} if scrollable.
    * <p>
    * {@inheritDoc}
    */
@@ -67,7 +67,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Returns <code>true</code> if scrollable.
+   * Returns {@code true} if scrollable.
    * <p>
    * {@inheritDoc}
    */
@@ -78,9 +78,9 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * Configures the image view to be either cropped or scrollable when the
-   * display area is too small to display it. A value of <code>true</code>
+   * display area is too small to display it. A value of {@code true}
    * (default) means that the image view will be made scrollable.
-   * 
+   *
    * @param scrollable
    *          the scrollable to set.
    */

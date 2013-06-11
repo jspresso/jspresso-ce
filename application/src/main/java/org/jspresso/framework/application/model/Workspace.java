@@ -58,27 +58,27 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class Workspace extends AbstractPropertyChangeCapable implements ISecurable, IPermIdSource {
 
   /**
-   * <code>DESCRIPTION</code> is "description".
+   * {@code DESCRIPTION} is "description".
    */
   public static final String DESCRIPTION      = "description";
 
   /**
-   * <code>I18N_DESCRIPTION</code> is "i18nDescription".
+   * {@code I18N_DESCRIPTION} is "i18nDescription".
    */
   public static final String I18N_DESCRIPTION = "i18nDescription";
 
   /**
-   * <code>I18N_NAME</code> is "i18nName".
+   * {@code I18N_NAME} is "i18nName".
    */
   public static final String I18N_NAME        = "i18nName";
 
   /**
-   * <code>MODULES</code> is "modules".
+   * {@code MODULES} is "modules".
    */
   public static final String MODULES          = "modules";
 
   /**
-   * <code>NAME</code> is "name".
+   * {@code NAME} is "name".
    */
   public static final String NAME             = "name";
 
@@ -103,7 +103,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   private String             permId;
 
   /**
-   * Constructs a new <code>Workspace</code> instance.
+   * Constructs a new {@code Workspace} instance.
    */
   public Workspace() {
     started = false;
@@ -304,9 +304,9 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
    * granted sufficient privileges, the workspace is not installed at all in the
    * application frame. Setting the collection of granted roles to
-   * <code>null</code> (default value) disables role based authorization on this
+   * {@code null} (default value) disables role based authorization on this
    * workspace.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */
@@ -386,11 +386,11 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * Since a workspace is represented as a tree view of modules, this property
    * can be used to customize an icon image URL provider on the created tree
-   * view (see <code>BasicTreeViewDescriptor.iconImageURLProvider</code>).
+   * view (see {@code BasicTreeViewDescriptor.iconImageURLProvider}).
    * However, the workspace built-in icon image URL provider (
-   * <code>WorkspaceIconImageURLProvider</code>) will setup sensible defaults so
+   * {@code WorkspaceIconImageURLProvider}) will setup sensible defaults so
    * that it unlikely has to be changed.
-   * 
+   *
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
@@ -401,10 +401,10 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * Configures the action to be installed as item selection action on the
    * rendered module tree view - see
-   * <code>BasicTreeViewDescriptor.itemSelectionAction</code>. The configured
+   * {@code BasicTreeViewDescriptor.itemSelectionAction}. The configured
    * action will then be executed each time a module selection changes in the
    * workspace.
-   * 
+   *
    * @param itemSelectionAction
    *          the itemSelectionAction to set.
    */

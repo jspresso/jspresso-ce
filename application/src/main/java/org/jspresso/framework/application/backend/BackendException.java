@@ -32,8 +32,8 @@ public class BackendException extends NestedRuntimeException {
   private static final long serialVersionUID = -809573572653239047L;
 
   /**
-   * Constructs a new <code>BackendException</code> instance.
-   * 
+   * Constructs a new {@code BackendException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class BackendException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>BackendException</code> instance.
-   * 
+   * Constructs a new {@code BackendException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class BackendException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>BackendException</code> instance.
-   * 
+   * Constructs a new {@code BackendException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

@@ -27,12 +27,12 @@ package org.jspresso.framework.model.descriptor;
 public enum EDateType {
 
   /**
-   * <code>DATE</code>.
+   * {@code DATE}.
    */
   DATE,
 
   /**
-   * <code>DATE_TIME</code>.
+   * {@code DATE_TIME}.
    */
   DATE_TIME
 }

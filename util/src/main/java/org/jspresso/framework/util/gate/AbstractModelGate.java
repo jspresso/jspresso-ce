@@ -31,7 +31,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
   private Object  model;
 
   /**
-   * Constructs a new <code>AbstractModelGate</code> instance.
+   * Constructs a new {@code AbstractModelGate} instance.
    */
   public AbstractModelGate() {
     collectionBased = false;
@@ -59,10 +59,10 @@ public abstract class AbstractModelGate extends AbstractGate implements
    * <li>the gate is open for <i>all</i> the selected elements</li>
    * </ol>
    * <p>
-   * Default value is <code>false</code>, meaning that the gate will be assigned
+   * Default value is {@code false}, meaning that the gate will be assigned
    * the collection owning model independently of selected view elements. This
    * property has no effect for writability gates.
-   * 
+   *
    * @return the collectionBased.
    */
   @Override

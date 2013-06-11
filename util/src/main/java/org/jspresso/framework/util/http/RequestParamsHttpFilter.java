@@ -42,7 +42,7 @@ import javax.servlet.http.HttpSession;
 public class RequestParamsHttpFilter implements Filter {
 
   /**
-   * <code>REQUEST_PARAMS_KEY</code>.
+   * {@code REQUEST_PARAMS_KEY}.
    */
   public static final String REQUEST_PARAMS_KEY = "REQUEST_PARAMS_KEY";
 

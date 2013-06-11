@@ -37,9 +37,9 @@ import org.jspresso.framework.model.entity.IEntity;
  * identifier (<i>id</i>) and is versioned (<i>version</i>) to cope with
  * concurrent access conflicts through optimistic locking. It conforms to the
  * <i>Java Beans</i> standard so that its property changes can be followed by
- * the classic <code>add/removePropertyChangeListener</code> methods; Jspresso
+ * the classic {@code add/removePropertyChangeListener} methods; Jspresso
  * binding architecture leverages this behaviour.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -52,8 +52,8 @@ public class BasicEntityDescriptor<E extends IEntity> extends
   private static IComponentDescriptor<IEntity> rootEntityDescriptor;
 
   /**
-   * Constructs a new <code>BasicEntityDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BasicEntityDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.

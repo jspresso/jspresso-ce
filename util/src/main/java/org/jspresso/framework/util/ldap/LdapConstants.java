@@ -27,37 +27,37 @@ package org.jspresso.framework.util.ldap;
 public final class LdapConstants {
 
   /**
-   * <code>DESCRIPTION_ATTRIBUTE</code>.
+   * {@code DESCRIPTION_ATTRIBUTE}.
    */
   public static final String DESCRIPTION_ATTRIBUTE           = "description";
 
   /**
-   * <code>DISPLAY_NAME_ATTRIBUTE</code>.
+   * {@code DISPLAY_NAME_ATTRIBUTE}.
    */
   public static final String DISPLAY_NAME_ATTRIBUTE          = "displayName";
 
   /**
-   * <code>MAIL_ATTRIBUTE</code>.
+   * {@code MAIL_ATTRIBUTE}.
    */
   public static final String MAIL_ATTRIBUTE                  = "mail";
 
   /**
-   * <code>ORGANISATIONAL_UNIT_OBJECTCLASS</code>.
+   * {@code ORGANISATIONAL_UNIT_OBJECTCLASS}.
    */
   public static final String ORGANISATIONAL_UNIT_OBJECTCLASS = "organizationalUnit";
 
   /**
-   * <code>PASSWORD_ATTRIBUTE</code>.
+   * {@code PASSWORD_ATTRIBUTE}.
    */
   public static final String PASSWORD_ATTRIBUTE = "userPassword";
 
   /**
-   * <code>SERIAL_NUMBER_ATTRIBUTE</code>.
+   * {@code SERIAL_NUMBER_ATTRIBUTE}.
    */
   public static final String SERIAL_NUMBER_ATTRIBUTE         = "serialNumber";
 
   /**
-   * <code>TOP_OBJECTCLASS</code>.
+   * {@code TOP_OBJECTCLASS}.
    */
   public static final String TOP_OBJECTCLASS                 = "top";
 

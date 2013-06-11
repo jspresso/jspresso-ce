@@ -45,10 +45,10 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * This abstract class holds some default implementation for a value connector.
  * All the default value connectors inherit from this default behaviour. It
  * implements the Connector value listener management through the use of the
- * <code>ValueChangeSupport</code> helper. It can virtually adapt to any peer
+ * {@code ValueChangeSupport} helper. It can virtually adapt to any peer
  * connectee since the way the value is retrieved by from the connectee is left
  * to the implementer.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -688,11 +688,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * be of any help since it never changes, preventing the notification to
    * happen. In that case, a clone of the model collection can be built to keep
    * track of the collection content change.
-   * 
+   *
    * @param connectorValue
    *          the value to take a snapshot of.
    * @return the value to keep a reference on as the
-   *         <code>oldConnectorValue</code>.
+   *         {@code oldConnectorValue}.
    */
   protected Object computeOldConnectorValue(Object connectorValue) {
     return connectorValue;
@@ -866,8 +866,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     private final IModelAware gate;
 
     /**
-     * Constructs a new <code>InnerGateModelListener</code> instance.
-     * 
+     * Constructs a new {@code InnerGateModelListener} instance.
+     *
      * @param gate
      *          the model gate.
      */

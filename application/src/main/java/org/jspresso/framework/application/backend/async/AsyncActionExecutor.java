@@ -44,8 +44,8 @@ public class AsyncActionExecutor extends Thread {
   private double                    progress;
 
   /**
-   * Constructs a new <code>AsyncActionExecutor</code> instance.
-   * 
+   * Constructs a new {@code AsyncActionExecutor} instance.
+   *
    * @param action
    *          the action to execute asynchronously.
    * @param context

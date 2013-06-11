@@ -31,7 +31,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 public class MapAccessorFactory extends AbstractAccessorFactory {
 
   /**
-   * Creates a new <code>MapCollectionAccessor</code> on the collection
+   * Creates a new {@code MapCollectionAccessor} on the collection
    * property.
    * <p>
    * {@inheritDoc}
@@ -43,7 +43,7 @@ public class MapAccessorFactory extends AbstractAccessorFactory {
   }
 
   /**
-   * Creates a new <code>MapPropertyAccessor</code> on the property.
+   * Creates a new {@code MapPropertyAccessor} on the property.
    * <p>
    * {@inheritDoc}
    */

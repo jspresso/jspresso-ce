@@ -115,8 +115,8 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * Should this enumeration be transformed into a list when building a filter
    * screen ? This will allow to place disjunctions on enumeration value.
-   * 
-   * @return <code>true</code> if this enumeration be transformed into a list
+   *
+   * @return {@code true} if this enumeration be transformed into a list
    *         when building a filter screen.
    */
   public boolean isQueryMultiselect() {
@@ -126,8 +126,8 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * This property allows to control if the enumeration property view should be
    * transformed into a multi-selectable property view in order to allow for
-   * value disjunctions in filters. Default value is <code>false</code>.
-   * 
+   * value disjunctions in filters. Default value is {@code false}.
+   *
    * @param queryMultiselect
    *          the queryMultiselect to set.
    */

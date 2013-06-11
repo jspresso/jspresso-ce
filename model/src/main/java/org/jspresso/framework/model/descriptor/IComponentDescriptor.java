@@ -32,10 +32,10 @@ import org.jspresso.framework.util.gate.IGateAccessible;
 
 /**
  * This interface is implemented by descriptors of components (java bean style).
- * Its is basically a composite of <code>IPropertyDescriptor</code>s.
- * 
+ * Its is basically a composite of {@code IPropertyDescriptor}s.
+ *
  * @version $LastChangedRevision$
- * @see org.jspresso.framework.model.descriptor.IPropertyDescriptor
+ * @see IPropertyDescriptor
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete type of component.
@@ -61,8 +61,8 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Gets the collection of the properties descriptors this entity descriptor
    * declares (excluding the ones of its ancestors).
-   * 
-   * @return the collection of <code>IPropertyDescriptor</code>s.
+   *
+   * @return the collection of {@code IPropertyDescriptor}s.
    */
   Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors();
 
@@ -91,12 +91,12 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   Integer getPageSize();
 
   /**
-   * Retrieves the <code>IPropertyDescriptor</code> describing the property
+   * Retrieves the {@code IPropertyDescriptor} describing the property
    * whose name is passed in parameter.
-   * 
+   *
    * @param propertyName
    *          the name of the property of which to look for the descriptor.
-   * @return the <code>IPropertyDescriptor</code> or null if the property does
+   * @return the {@code IPropertyDescriptor} or null if the property does
    *         not exists.
    */
   IPropertyDescriptor getPropertyDescriptor(String propertyName);
@@ -104,8 +104,8 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Gets the collection of the properties descriptors of this component
    * descriptor.
-   * 
-   * @return the collection of <code>IPropertyDescriptor</code>s.
+   *
+   * @return the collection of {@code IPropertyDescriptor}s.
    */
   Collection<IPropertyDescriptor> getPropertyDescriptors();
 
@@ -127,10 +127,10 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
 
   /**
    * Retrieves the service delegate implemented by this component.
-   * 
+   *
    * @param targetMethod
    *          the method invoked as service.
-   * @return the <code>IComponentService</code> or null if the service does not
+   * @return the {@code IComponentService} or null if the service does not
    *         exists.
    */
   IComponentService getServiceDelegate(Method targetMethod);

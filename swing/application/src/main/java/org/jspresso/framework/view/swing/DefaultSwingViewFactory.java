@@ -2592,8 +2592,8 @@ public class DefaultSwingViewFactory extends
     private boolean          columnsChanged;
 
     /**
-     * Constructs a new <code>ColumnPreferencesListener</code> instance.
-     * 
+     * Constructs a new {@code ColumnPreferencesListener} instance.
+     *
      * @param table the table.
      * @param tableId the table id.
      * @param actionHandler the action handler.
@@ -3616,8 +3616,8 @@ public class DefaultSwingViewFactory extends
     private final IView<JComponent> view;
 
     /**
-     * Constructs a new <code>PopupListener</code> instance.
-     * 
+     * Constructs a new {@code PopupListener} instance.
+     *
      * @param sourceComponent the source component.
      * @param view the view.
      * @param actionHandler the action handler.
@@ -3663,8 +3663,8 @@ public class DefaultSwingViewFactory extends
     private final IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>TranslatedEnumerationCellRenderer</code> instance.
-     * 
+     * Constructs a new {@code TranslatedEnumerationCellRenderer} instance.
+     *
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -3716,9 +3716,9 @@ public class DefaultSwingViewFactory extends
     private final IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
+     * Constructs a new {@code TranslatedEnumerationTableCellRenderer}
      * instance.
-     * 
+     *
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -3790,8 +3790,8 @@ public class DefaultSwingViewFactory extends
     private final IPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>ImageTableCellRenderer</code> instance.
-     * 
+     * Constructs a new {@code ImageTableCellRenderer} instance.
+     *
      * @param propertyDescriptor
      *          the image property descriptor (either image url or image
      *          binary).
@@ -3836,8 +3836,8 @@ public class DefaultSwingViewFactory extends
     private final IPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>BinaryTableCellRenderer</code> instance.
-     * 
+     * Constructs a new {@code BinaryTableCellRenderer} instance.
+     *
      * @param propertyDescriptor
      *          the binary property descriptor.
      */

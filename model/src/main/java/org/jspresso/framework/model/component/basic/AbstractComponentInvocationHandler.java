@@ -129,8 +129,8 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
-   * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
-   * 
+   * Constructs a new {@code BasicComponentInvocationHandler} instance.
+   *
    * @param componentDescriptor
    *          The descriptor of the proxy component.
    * @param inlineComponentFactory
@@ -553,8 +553,8 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Is dirty tracking enabled.
-   * 
-   * @return <code>true</code> if dirty tracking is enabled.
+   *
+   * @return {@code true} if dirty tracking is enabled.
    */
   protected boolean isDirtyTrackingEnabled() {
     return true;
@@ -562,9 +562,9 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Sets dirty tracking enabled.
-   * 
+   *
    * @param enabled
-   *          <code>true</code> if enabled, <code>false</code> otherwise.
+   *          {@code true} if enabled, {@code false} otherwise.
    */
   protected void setDirtyTrackingEnabled(boolean enabled) {
     // NO-OP;
@@ -1950,8 +1950,8 @@ public abstract class AbstractComponentInvocationHandler implements
     private final Set<String> trackedProperties;
 
     /**
-     * Constructs a new <code>InlineReferenceTracker</code> instance.
-     * 
+     * Constructs a new {@code InlineReferenceTracker} instance.
+     *
      * @param source
      *          the proxy holding the reference tracker.
      * @param referencePropertyName

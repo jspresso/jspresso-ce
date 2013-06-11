@@ -32,8 +32,8 @@ public class EntityException extends ComponentException {
   private static final long serialVersionUID = -3659844614276359719L;
 
   /**
-   * Constructs a new <code>EntityException</code> instance.
-   * 
+   * Constructs a new {@code EntityException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class EntityException extends ComponentException {
   }
 
   /**
-   * Constructs a new <code>EntityException</code> instance.
-   * 
+   * Constructs a new {@code EntityException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class EntityException extends ComponentException {
   }
 
   /**
-   * Constructs a new <code>EntityException</code> instance.
-   * 
+   * Constructs a new {@code EntityException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

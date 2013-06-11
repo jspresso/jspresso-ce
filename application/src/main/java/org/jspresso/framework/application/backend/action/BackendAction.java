@@ -50,14 +50,14 @@ public class BackendAction extends AbstractAction {
   private static final String WARN_BAD_ACCESS_DISABLED = "WARN_BAD_ACCESS_DISABLED";
 
   /**
-   * <code>SELECTED_MODEL</code> is a static context key to inject into the test
+   * {@code SELECTED_MODEL} is a static context key to inject into the test
    * context in order to bypass the query to the view to retrieve the selected
    * model.
    */
   public static final String  SELECTED_MODEL           = "SELECTED_MODEL";
 
   /**
-   * <code>SELECTED_MODELS</code> is a static context key to inject into the
+   * {@code SELECTED_MODELS} is a static context key to inject into the
    * test context in order to bypass the query to the view to retrieve the
    * selected models.
    */
@@ -68,7 +68,7 @@ public class BackendAction extends AbstractAction {
   private boolean             transactional;
 
   /**
-   * Constructs a new <code>BackendAction</code> instance.
+   * Constructs a new {@code BackendAction} instance.
    */
   public BackendAction() {
     setBadFrontendAccessChecked(true);
@@ -216,8 +216,8 @@ public class BackendAction extends AbstractAction {
    * Allows to disable frontend access checks from backend actions. This is
    * sometimes necessary to avoid over-complicated refactoring when the access
    * is accepted by the dev team.
-   * 
-   * @return <code>true</code> by default, i.e. bad frontend access detection is
+   *
+   * @return {@code true} by default, i.e. bad frontend access detection is
    *         enabled.
    */
   protected boolean isBadFrontendAccessChecked() {

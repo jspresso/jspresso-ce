@@ -41,8 +41,8 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   private final IValueChangeListener renderingListener;
 
   /**
-   * Constructs a new <code>JActionFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JActionFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param actionField

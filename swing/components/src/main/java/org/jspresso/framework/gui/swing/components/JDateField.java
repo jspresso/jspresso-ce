@@ -53,8 +53,8 @@ public class JDateField extends DateField {
   private static final long serialVersionUID = -4535367240988468690L;
 
   /**
-   * Constructs a new <code>JDateField</code> instance.
-   * 
+   * Constructs a new {@code JDateField} instance.
+   *
    * @param locale
    *          the user locale.
    */
@@ -119,7 +119,7 @@ public class JDateField extends DateField {
     private static final long serialVersionUID = 2527435032589911078L;
 
     /**
-     * Constructs a new <code>FixedDayRenderer</code> instance.
+     * Constructs a new {@code FixedDayRenderer} instance.
      */
     public FixedDayRenderer() {
       // putClientProperty(SubstanceLookAndFeel.WATERMARK_PROPERTY,
@@ -148,8 +148,8 @@ public class JDateField extends DateField {
     private final DateFormatSymbols              dfs;
 
     /**
-     * Constructs a new <code>TranslatedHeaderRenderer</code> instance.
-     * 
+     * Constructs a new {@code TranslatedHeaderRenderer} instance.
+     *
      * @param locale the locale.
      */
     protected TranslatedHeaderRenderer(Locale locale) {

@@ -48,7 +48,7 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
   private IAction checkCurrentModuleDirtyStateAction;
 
   /**
-   * Constructs a new <code>ExitAction</code> instance.
+   * Constructs a new {@code ExitAction} instance.
    */
   public ExitAction() {
     actualExitAction = new FrontendAction<E, F, G>() {

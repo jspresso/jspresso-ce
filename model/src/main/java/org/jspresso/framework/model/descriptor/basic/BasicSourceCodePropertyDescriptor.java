@@ -25,8 +25,8 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
  * to display the property value as sourcecode, using syntax coloring for
  * instance, instead of displaying un-formatted raw content. The language used to
  * format the property text content may be defined explicitly using the
- * <code>language</code> property.
- * 
+ * {@code language} property.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

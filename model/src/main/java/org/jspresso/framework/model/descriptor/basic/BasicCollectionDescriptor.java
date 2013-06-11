@@ -34,13 +34,13 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
  * collection referenced by a collection property descriptor. As of now,
  * Jspresso supports :
  * <ul>
- * <li>collections with <code>Set</code> semantic: do not allow for duplicates
+ * <li>collections with {@code Set} semantic: do not allow for duplicates
  * and do not preserve the order of the elements in the data store</li>
- * <li>collections with <code>List</code> semantic: allows for duplicates and
+ * <li>collections with {@code List} semantic: allows for duplicates and
  * preserves the order of the elements in the data store through an implicit
  * index column</li>
  * </ul>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -109,16 +109,16 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * Allows to choose between the supported collection semantics. The incoming
    * class property value must be one of :
    * <ul>
-   * <li><code>java.util.Set</code></li>
-   * <li><code>java.util.List</code></li>
+   * <li>{@code java.util.Set}</li>
+   * <li>{@code java.util.List}</li>
    * </ul>
    * Any other value is not supported and make the descriptor fall back to its
-   * default. A <code>null</code> value (default) is equivalent to setting
-   * <code>java.util.Set</code>. Alternatively, you can use descriptor
-   * sub-types, i.e. <code>BasicSetDescriptor</code> and
-   * <code>BasicListDescriptor</code> that make this property usage useless
+   * default. A {@code null} value (default) is equivalent to setting
+   * {@code java.util.Set}. Alternatively, you can use descriptor
+   * sub-types, i.e. {@code BasicSetDescriptor} and
+   * {@code BasicListDescriptor} that make this property usage useless
    * since they enforce their collection interface.
-   * 
+   *
    * @param collectionInterface
    *          the collectionInterface to set.
    */
@@ -140,21 +140,21 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
 
   /**
    * Ordering properties are used to sort this collection if and only if it is
-   * un-indexed (not a <code>List</code>). The sort order set on the collection
+   * un-indexed (not a {@code List}). The sort order set on the collection
    * can refine the default one that might have been set on the element type
-   * level. This property consist of a <code>Map</code> whose entries are
+   * level. This property consist of a {@code Map} whose entries are
    * composed with :
    * <ul>
    * <li>the property name as key</li>
    * <li>the sort order for this property as value. This is either a value of
-   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * the {@code ESort} enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
    * equivalent string representation.</li>
    * </ul>
    * Ordering properties are considered following their order in the map
-   * iterator. A <code>null</code> value (default) will not give any indication
+   * iterator. A {@code null} value (default) will not give any indication
    * for the collection sort order and thus, will delegate to higher
    * specification levels (e.g. the element type sort order).
-   * 
+   *
    * @param untypedOrderingProperties
    *          the orderingProperties to set.
    */

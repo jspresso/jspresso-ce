@@ -40,10 +40,10 @@ public final class CollectionHelper {
   }
 
   /**
-   * Clones a collection trying to invoke the <code>clone()</code> method
+   * Clones a collection trying to invoke the {@code clone()} method
    * reflectively. If the latter is unsuccessful, returns an HashSet for a Set
    * and an ArrayList for a List.
-   * 
+   *
    * @param <E>
    *          the type the collection element
    * @param collection

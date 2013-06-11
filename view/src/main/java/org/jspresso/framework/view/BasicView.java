@@ -37,8 +37,8 @@ public class BasicView<E> implements IView<E> {
   private E               peer;
 
   /**
-   * Constructs a new <code>BasicView</code> instance.
-   * 
+   * Constructs a new {@code BasicView} instance.
+   *
    * @param peer
    *          the peer component.
    */
@@ -47,7 +47,7 @@ public class BasicView<E> implements IView<E> {
   }
 
   /**
-   * Returns the <code>IValueConnector</code> connected to the view.
+   * Returns the {@code IValueConnector} connected to the view.
    * <p>
    * {@inheritDoc}
    */

@@ -56,22 +56,22 @@ public class ApplicationDirectoryBuilder {
   private String[]           excludePatterns;
 
   /**
-   * <code>MODEL</code>.
+   * {@code MODEL}.
    */
   public static final String MODEL      = "MODEL";
 
   /**
-   * <code>NAVIGATION</code>.
+   * {@code NAVIGATION}.
    */
   public static final String NAVIGATION = "NAVIGATION";
 
   /**
-   * <code>VIEW</code>.
+   * {@code VIEW}.
    */
   public static final String VIEW       = "VIEW";
 
   /**
-   * <code>ACTION</code>.
+   * {@code ACTION}.
    */
   public static final String ACTION     = "ACTION";
 
@@ -81,7 +81,7 @@ public class ApplicationDirectoryBuilder {
   private final Set<String>        actionPermIds;
 
   /**
-   * Constructs a new <code>ApplicationDirectoryBuilder</code> instance.
+   * Constructs a new {@code ApplicationDirectoryBuilder} instance.
    */
   public ApplicationDirectoryBuilder() {
     modelPermIds = new TreeSet<String>();

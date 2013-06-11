@@ -32,15 +32,15 @@ import org.jspresso.framework.util.automation.IPermIdSource;
 public interface IAction extends ISecurable, IPermIdSource {
 
   /**
-   * <code>STATIC_CONTEXT_KEY</code> is "STATIC_CONTEXT_KEY".
+   * {@code STATIC_CONTEXT_KEY} is "STATIC_CONTEXT_KEY".
    */
   String STATIC_CONTEXT_KEY = "STATIC_CONTEXT_KEY";
 
   /**
    * Executes the action. During execution, the action should access its
-   * execution context through the <code>getContext()</code> method of the
-   * <code>IContextAware</code> interface.
-   * 
+   * execution context through the {@code getContext()} method of the
+   * {@code IContextAware} interface.
+   *
    * @param actionHandler
    *          the action handler this action has been told to execute by. It may
    *          be used to post another action execution upon completion of this
@@ -56,8 +56,8 @@ public interface IAction extends ISecurable, IPermIdSource {
    * Tells the framework whether this action executes on the application backend
    * or if it is a pure frontend action. this is aimed at distributing the
    * action execution correctly to the different controllers of the application.
-   * 
-   * @return <code>true</code> if the action needs the application model (domain
+   *
+   * @return {@code true} if the action needs the application model (domain
    *         model objects).
    */
   boolean isBackend();

@@ -50,7 +50,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class BeanCollectionModule extends Module {
 
   /**
-   * <code>MODULE_OBJECTS</code> is "moduleObjects".
+   * {@code MODULE_OBJECTS} is "moduleObjects".
    */
   public static final String           MODULE_OBJECTS = "moduleObjects";
 
@@ -223,13 +223,13 @@ public class BeanCollectionModule extends Module {
   /**
    * This property is not used by the module itself, but by built-in actions
    * that maybe registered on this module. One of these actions is
-   * <code>AddBeanAsSubModuleAction</code>.
+   * {@code AddBeanAsSubModuleAction}.
    * <p>
    * This property indicates the view to use whenever the user requests a
    * &quot;form-like&quot; view on a collection element. Naturally the
    * configured element view descriptor must be backed by a model matching the
    * type of the module managed beans.
-   * 
+   *
    * @param elementViewDescriptor
    *          the elementViewDescriptor to set.
    */

@@ -27,7 +27,7 @@ package org.jspresso.framework.util.gate;
 public final class ClosedGate extends AbstractGate {
 
   /**
-   * Singleton instance <code>INSTANCE</code>.
+   * Singleton instance {@code INSTANCE}.
    */
   public static final ClosedGate INSTANCE = new ClosedGate();
 

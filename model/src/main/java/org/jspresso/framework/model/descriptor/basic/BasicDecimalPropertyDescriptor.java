@@ -25,9 +25,9 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 
 /**
  * Describes a decimal property. Property value is either stored as a
- * <code>Double</code> or as a <code>BigDecimal</code> depending on the
- * <code>usingBigDecimal</code> property.
- * 
+ * {@code Double} or as a {@code BigDecimal} depending on the
+ * {@code usingBigDecimal} property.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -84,8 +84,8 @@ public class BasicDecimalPropertyDescriptor extends
 
   /**
    * Configures the precision of the decimal property. Default value is
-   * <code>2</code>.
-   * 
+   * {@code 2}.
+   *
    * @param maxFractionDigit
    *          the maxFractionDigit to set.
    */
@@ -95,9 +95,9 @@ public class BasicDecimalPropertyDescriptor extends
 
   /**
    * Configures the property to be managed using
-   * <code>java.math.BigDecimal</code>. Default value is <code>false</code>
-   * which means <code>java.lang.Double</code> will be used.
-   * 
+   * {@code java.math.BigDecimal}. Default value is {@code false}
+   * which means {@code java.lang.Double} will be used.
+   *
    * @param usingBigDecimal
    *          the usingBigDecimal to set.
    */

@@ -33,8 +33,8 @@ public class RemoteFormattedValueState extends RemoteValueState {
   private Serializable      valueAsObject;
 
   /**
-   * Constructs a new <code>RemoteFormattedValueState</code> instance.
-   * 
+   * Constructs a new {@code RemoteFormattedValueState} instance.
+   *
    * @param guid
    *          the state guid.
    */
@@ -43,7 +43,7 @@ public class RemoteFormattedValueState extends RemoteValueState {
   }
 
   /**
-   * Constructs a new <code>RemoteFormattedValueState</code> instance. Only used
+   * Constructs a new {@code RemoteFormattedValueState} instance. Only used
    * for GWT serialization support.
    */
   public RemoteFormattedValueState() {

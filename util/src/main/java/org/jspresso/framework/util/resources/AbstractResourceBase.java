@@ -29,8 +29,8 @@ public abstract class AbstractResourceBase implements IResourceBase {
   private final String mimeType;
 
   /**
-   * Constructs a new <code>AbstractResource</code> instance.
-   * 
+   * Constructs a new {@code AbstractResource} instance.
+   *
    * @param mimeType
    *          the mime type of the resource.
    */

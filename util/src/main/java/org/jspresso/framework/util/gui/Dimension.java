@@ -36,7 +36,7 @@ public class Dimension implements Serializable, ICloneable {
   private int               width;
 
   /**
-   * Constructs a new <code>Dimension</code> instance.
+   * Constructs a new {@code Dimension} instance.
    */
   public Dimension() {
     super();
@@ -45,8 +45,8 @@ public class Dimension implements Serializable, ICloneable {
   }
 
   /**
-   * Constructs a new <code>Dimension</code> instance.
-   * 
+   * Constructs a new {@code Dimension} instance.
+   *
    * @param width
    *          the width.
    * @param height

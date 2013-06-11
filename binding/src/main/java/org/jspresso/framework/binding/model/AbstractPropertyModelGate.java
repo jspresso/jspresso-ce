@@ -49,7 +49,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   private String             propertyName;
 
   /**
-   * Constructs a new <code>AbstractPropertyModelGate</code> instance.
+   * Constructs a new {@code AbstractPropertyModelGate} instance.
    */
   public AbstractPropertyModelGate() {
     openOnTrue = true;

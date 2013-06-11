@@ -20,8 +20,8 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 /**
  * This interface is used to refine query components and can be injected in
- * <code>QueryEntitiesAction</code>.
- * 
+ * {@code QueryEntitiesAction}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @deprecated use

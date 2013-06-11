@@ -114,9 +114,9 @@ public class PathBasedIconSet implements IIconSet {
 
   /**
    * Sets the supportedExtensions. Defaults to
-   * <code>[&quot;.png&quot;,&quot;.gif&quot;,&quot;.jpg&quot;,&quot;.jpeg&quot;]</code>
+   * {@code [&quot;.png&quot;,&quot;.gif&quot;,&quot;.jpg&quot;,&quot;.jpeg&quot;]}
    * .
-   * 
+   *
    * @param supportedExtensions
    *          the supportedExtensions to set.
    */
@@ -134,8 +134,8 @@ public class PathBasedIconSet implements IIconSet {
   }
 
   /**
-   * Sets the defaultExtension. Defaults to <code>&quot;.png&quot;</code>.
-   * 
+   * Sets the defaultExtension. Defaults to {@code &quot;.png&quot;}.
+   *
    * @param defaultExtension
    *          the defaultExtension to set.
    */

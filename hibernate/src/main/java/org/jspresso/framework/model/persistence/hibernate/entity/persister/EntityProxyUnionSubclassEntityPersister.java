@@ -40,9 +40,9 @@ public class EntityProxyUnionSubclassEntityPersister extends
     UnionSubclassEntityPersister {
 
   /**
-   * Constructs a new <code>EntityProxyUnionSubclassEntityPersister</code>
+   * Constructs a new {@code EntityProxyUnionSubclassEntityPersister}
    * instance.
-   * 
+   *
    * @param entityBinding
    *          the entity binding.
    * @param cacheAccessStrategy
@@ -63,9 +63,9 @@ public class EntityProxyUnionSubclassEntityPersister extends
   }
 
   /**
-   * Constructs a new <code>EntityProxyUnionSubclassEntityPersister</code>
+   * Constructs a new {@code EntityProxyUnionSubclassEntityPersister}
    * instance.
-   * 
+   *
    * @param persistentClass
    *          the persistent class.
    * @param cacheAccessStrategy

@@ -31,8 +31,8 @@ public class MissingPropertyException extends NestedRuntimeException {
   private static final long serialVersionUID = 802344614276374621L;
 
   /**
-   * Constructs a new <code>MissingPropertyException</code>.
-   * 
+   * Constructs a new {@code MissingPropertyException}.
+   *
    * @param message
    *          the exception message.
    */

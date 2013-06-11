@@ -40,7 +40,7 @@ import org.jspresso.framework.util.gui.Dimension;
 public interface IActionFactory<E, F> {
 
   /**
-   * <code>TOOLTIP_ELLIPSIS</code> is "...".
+   * {@code TOOLTIP_ELLIPSIS} is "...".
    */
   String TOOLTIP_ELLIPSIS = "...";
 

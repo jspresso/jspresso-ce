@@ -45,28 +45,28 @@ public class EnumQueryStructureDescriptor extends
     BasicReferencePropertyDescriptor<EnumQueryStructure> {
 
   /**
-   * <code>TO_STRING</code> value.
+   * {@code TO_STRING} value.
    */
   public static final String             TO_STRING          = "toString";
   /**
-   * <code>SELECTED</code> value.
+   * {@code SELECTED} value.
    */
   public static final String             SELECTED           = "selected";
   /**
-   * <code>VALUE</code> value.
+   * {@code VALUE} value.
    */
   public static final String             VALUE              = "value";
 
   /**
-   * <code>ENUMERATION_VALUES</code> value.
+   * {@code ENUMERATION_VALUES} value.
    */
   public static final String             ENUMERATION_VALUES = "enumerationValues";
 
   private final IEnumerationPropertyDescriptor sourceDescriptor;
 
   /**
-   * Constructs a new <code>EnumerationQueryStructureDescriptor</code> instance.
-   * 
+   * Constructs a new {@code EnumerationQueryStructureDescriptor} instance.
+   *
    * @param propertyDescriptor
    *          the actual enumeration property descriptor to wrap.
    */

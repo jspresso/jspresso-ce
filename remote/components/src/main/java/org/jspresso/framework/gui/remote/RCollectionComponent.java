@@ -32,8 +32,8 @@ public class RCollectionComponent extends RComponent {
   private String            selectionMode;
 
   /**
-   * Constructs a new <code>RCollectionComponent</code> instance.
-   * 
+   * Constructs a new {@code RCollectionComponent} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -42,7 +42,7 @@ public class RCollectionComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RCollectionComponent</code> instance. Only used for
+   * Constructs a new {@code RCollectionComponent} instance. Only used for
    * GWT serialization support.
    */
   public RCollectionComponent() {

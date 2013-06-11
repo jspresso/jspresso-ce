@@ -93,8 +93,8 @@ public class SwingActionFactory extends
     private final IView<JComponent> view;
 
     /**
-     * Constructs a new <code>ActionAdapter</code> instance.
-     * 
+     * Constructs a new {@code ActionAdapter} instance.
+     *
      * @param action the action.
      * @param dimension the dimension.
      * @param actionHandler the action handler.

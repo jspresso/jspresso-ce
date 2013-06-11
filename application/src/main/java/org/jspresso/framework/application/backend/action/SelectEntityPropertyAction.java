@@ -11,9 +11,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * A generic action to fill-in the context <code>ActionParameter</code> with the
+ * A generic action to fill-in the context {@code ActionParameter} with the
  * value of an entity property.
- * 
+ *
  * @version $LastChangedRevision: 475 $
  * @author Vincent Vandenschrick
  */

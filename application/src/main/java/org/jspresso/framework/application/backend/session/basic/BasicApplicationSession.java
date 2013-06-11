@@ -43,7 +43,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private Subject             subject;
 
   /**
-   * Constructs a new <code>BasicApplicationSession</code> instance.
+   * Constructs a new {@code BasicApplicationSession} instance.
    */
   public BasicApplicationSession() {
     customValues = new HashMap<String, Object>();

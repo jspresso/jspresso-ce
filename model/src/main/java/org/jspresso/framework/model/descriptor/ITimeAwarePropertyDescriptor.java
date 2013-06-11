@@ -28,8 +28,8 @@ public interface ITimeAwarePropertyDescriptor {
 
   /**
    * Should this time information include seconds.
-   * 
-   * @return <code>true</code> if this time information include seconds.
+   *
+   * @return {@code true} if this time information include seconds.
    */
   boolean isSecondsAware();
 }

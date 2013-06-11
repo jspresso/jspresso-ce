@@ -32,8 +32,8 @@ public class DescriptorException extends NestedRuntimeException {
   private static final long serialVersionUID = 1832628349244624679L;
 
   /**
-   * Constructs a new <code>DescriptorException</code> instance.
-   * 
+   * Constructs a new {@code DescriptorException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class DescriptorException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>DescriptorException</code> instance.
-   * 
+   * Constructs a new {@code DescriptorException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class DescriptorException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>DescriptorException</code> instance.
-   * 
+   * Constructs a new {@code DescriptorException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

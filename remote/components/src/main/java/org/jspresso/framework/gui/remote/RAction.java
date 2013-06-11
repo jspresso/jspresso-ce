@@ -44,8 +44,8 @@ public class RAction extends RemotePeer {
   private Map<String, Object> userValues;
 
   /**
-   * Constructs a new <code>RAction</code> instance.
-   * 
+   * Constructs a new {@code RAction} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -55,7 +55,7 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RAction</code> instance. Only used for serialization
+   * Constructs a new {@code RAction} instance. Only used for serialization
    * support.
    */
   public RAction() {
@@ -191,10 +191,10 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets one of this object's properties using the associated key.
-   * 
+   *
    * @param key
-   *          a <code>String</code> containing the key
-   * @return an <code>Object</code> value
+   *          a {@code String} containing the key
+   * @return an {@code Object} value
    * @see #putValue
    */
   public Object getValue(String key) {
@@ -206,12 +206,12 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets one of this object's properties using the associated key. If the value
-   * has changed, a <code>PropertyChangeEvent</code> is sent to listeners.
-   * 
+   * has changed, a {@code PropertyChangeEvent} is sent to listeners.
+   *
    * @param key
-   *          a <code>String</code> containing the key
+   *          a {@code String} containing the key
    * @param value
-   *          an <code>Object</code> value
+   *          an {@code Object} value
    */
   public void putValue(String key, Object value) {
     if (userValues == null) {

@@ -24,8 +24,8 @@ import org.jspresso.framework.binding.AbstractValueConnector;
  * This is a simple connector which itself holds the connector's value. This
  * connector is useful for building complex technical view models (e.g.
  * TableModel where each cell model would be an instance of
- * <code>BasicValueConnector</code>).
- * 
+ * {@code BasicValueConnector}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

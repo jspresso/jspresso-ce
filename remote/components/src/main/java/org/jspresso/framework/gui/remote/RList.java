@@ -29,8 +29,8 @@ public class RList extends RCollectionComponent {
   private static final long serialVersionUID = -1926261840192373120L;
 
   /**
-   * Constructs a new <code>RList</code> instance.
-   * 
+   * Constructs a new {@code RList} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RList extends RCollectionComponent {
   }
 
   /**
-   * Constructs a new <code>RList</code> instance. Only used for serialization
+   * Constructs a new {@code RList} instance. Only used for serialization
    * support.
    */
   public RList() {

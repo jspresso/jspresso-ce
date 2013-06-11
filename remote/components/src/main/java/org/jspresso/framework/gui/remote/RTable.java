@@ -39,8 +39,8 @@ public class RTable extends RCollectionComponent {
   private RAction                   sortingAction;
 
   /**
-   * Constructs a new <code>RTable</code> instance.
-   * 
+   * Constructs a new {@code RTable} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -49,7 +49,7 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
-   * Constructs a new <code>RTable</code> instance. Only used for serialization
+   * Constructs a new {@code RTable} instance. Only used for serialization
    * support.
    */
   public RTable() {

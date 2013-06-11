@@ -195,13 +195,13 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * Forces the collection property to be considered as a many to many
    * (&quot;N-N&quot;) end. When a relationship is bi-directional, setting both
-   * ends as being collection properties turns <code>manyToMany=true</code>
+   * ends as being collection properties turns {@code manyToMany=true}
    * automatically. But when the relationship is not bi-directional, Jspresso
    * has no mean to determine if the collection property is &quot;1-N&quot; or
    * &quot;N-N&quot;. Setting this property allows to inform Jspresso about it.
    * <p>
-   * Default value is <code>false</code>.
-   * 
+   * Default value is {@code false}.
+   *
    * @param manyToMany
    *          the manyToMany to set.
    */
@@ -211,21 +211,21 @@ public class BasicCollectionPropertyDescriptor<E> extends
 
   /**
    * Ordering properties are used to sort this collection property if and only
-   * if it is un-indexed (not a <code>List</code>). The sort order set on the
+   * if it is un-indexed (not a {@code List}). The sort order set on the
    * collection property can refine the default one that might have been set on
    * the referenced collection level. This property consist of a
-   * <code>Map</code> whose entries are composed with :
+   * {@code Map} whose entries are composed with :
    * <ul>
    * <li>the property name as key</li>
    * <li>the sort order for this property as value. This is either a value of
-   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * the {@code ESort} enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
    * equivalent string representation.</li>
    * </ul>
    * Ordering properties are considered following their order in the map
-   * iterator. A <code>null</code> value (default) will not give any indication
+   * iterator. A {@code null} value (default) will not give any indication
    * for the collection property sort order and thus, will delegate to higher
    * specification levels (i.e. the referenced collection sort order).
-   * 
+   *
    * @param untypedOrderingProperties
    *          the orderingProperties to set.
    */
@@ -254,13 +254,13 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * Qualifies the type of collection this property refers to. As of now,
    * Jspresso supports :
    * <ul>
-   * <li>collections with <code>Set</code> semantic: do not allow for duplicates
+   * <li>collections with {@code Set} semantic: do not allow for duplicates
    * and do not preserve the order of the elements in the data store</li>
-   * <li>collections with <code>List</code> semantic: allows for duplicates and
+   * <li>collections with {@code List} semantic: allows for duplicates and
    * preserves the order of the elements in the data store through an implicit
    * index column</li>
    * </ul>
-   * 
+   *
    * @param referencedDescriptor
    *          the referencedDescriptor to set.
    */
@@ -280,7 +280,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Returns <code>false</code>.
+   * Returns {@code false}.
    * <p>
    * {@inheritDoc}
    */

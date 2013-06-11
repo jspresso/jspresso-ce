@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet that performs a JAAS login. The name of the JAAS configuration is
  * read from the servlet config. After successful login, username and password
  * are put in the session. Note that, in contrast to the
- * <code>SecurityContextFilter</code>, the login module used here is supposed to
+ * {@code SecurityContextFilter}, the login module used here is supposed to
  * perform a real authentication. With JBoss, you could use the
- * <code>UsersRolesLoginModule</code> for example. <br>
+ * {@code UsersRolesLoginModule} for example. <br>
  * Note that this is sample implementation, and is written only in order to demo
  * the use of the {@link SecurityContextFilter} class. In a real life
  * implementation, one would probably never hard-code names of redirect urls,
@@ -42,30 +42,30 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
   /**
-   * <code>ERROR_DEFAULT</code>="login-error.html".
+   * {@code ERROR_DEFAULT}="login-error.html".
    */
   public static final String ERROR_DEFAULT        = "/login-error.html";
 
   /**
-   * <code>ERROR_PARAM_NAME</code>"error.redirect".
+   * {@code ERROR_PARAM_NAME}"error.redirect".
    */
   public static final String ERROR_PARAM_NAME     = "error.redirect";
   /**
-   * <code>JAAS_APPL_DEFAULT</code>="other".
+   * {@code JAAS_APPL_DEFAULT}="other".
    */
   public static final String JAAS_APPL_DEFAULT    = "other";
 
   /**
-   * <code>JAAS_APPL_PARAM_NAME</code>="jaas-application".
+   * {@code JAAS_APPL_PARAM_NAME}="jaas-application".
    */
   public static final String JAAS_APPL_PARAM_NAME = "jaas-application";
   /**
-   * <code>SUCCESS_DEFAULT</code>="main.html".
+   * {@code SUCCESS_DEFAULT}="main.html".
    */
   public static final String SUCCESS_DEFAULT      = "/main.html";
 
   /**
-   * <code>SUCCESS_PARAM_NAME</code>="success.redirect".
+   * {@code SUCCESS_PARAM_NAME}="success.redirect".
    */
   public static final String SUCCESS_PARAM_NAME   = "success.redirect";
   private static final long  serialVersionUID     = 6326611145492998226L;

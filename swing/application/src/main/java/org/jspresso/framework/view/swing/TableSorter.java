@@ -75,7 +75,7 @@ import javax.swing.table.TableModel;
 public class TableSorter extends AbstractTableSorter {
 
   /**
-   * <code>COMPARABLE_COMPARATOR</code>.
+   * {@code COMPARABLE_COMPARATOR}.
    */
   public static final Comparator<Object> COMPARABLE_COMPARATOR = new Comparator<Object>() {
 
@@ -90,7 +90,7 @@ public class TableSorter extends AbstractTableSorter {
                                                                };
 
   /**
-   * <code>LEXICAL_COMPARATOR</code>.
+   * {@code LEXICAL_COMPARATOR}.
    */
   public static final Comparator<Object> LEXICAL_COMPARATOR    = new Comparator<Object>() {
 
@@ -113,8 +113,8 @@ public class TableSorter extends AbstractTableSorter {
   private Row[]                          viewToModel;
 
   /**
-   * Constructs a new <code>TableSorter</code> instance.
-   * 
+   * Constructs a new {@code TableSorter} instance.
+   *
    * @param tableModel
    *          tableModel.
    * @param tableHeader
@@ -246,8 +246,8 @@ public class TableSorter extends AbstractTableSorter {
     private final int modelIndex;
 
     /**
-     * Constructs a new <code>Row</code> instance.
-     * 
+     * Constructs a new {@code Row} instance.
+     *
      * @param index the index.
      */
     public Row(int index) {

@@ -35,7 +35,7 @@ public final class Build {
   private static final Logger LOG = LoggerFactory.getLogger(Build.class);
 
   /**
-   * <code>UNKNOWN</code>.
+   * {@code UNKNOWN}.
    */
   public static final String UNKNOWN = "UNKNOWN";
   private static final Properties  jspressoProperties;

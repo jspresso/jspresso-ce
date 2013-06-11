@@ -50,17 +50,17 @@ public interface IEnumerationPropertyViewDescriptor extends
 
   /**
    * Should values be rendered separately using radio buttons.
-   * 
-   * @return <code>true</code> if values should be rendered separately using
+   *
+   * @return {@code true} if values should be rendered separately using
    *         radio buttons.
    */
   boolean isRadio();
 
   /**
    * Should radio values be rendered horizontally or vertically.
-   * 
-   * @return <code>HORIZONTAL</code> if radio values should be rendered
-   *         horizontally and <code>VERTICAL</code> otherwise.
+   *
+   * @return {@code HORIZONTAL} if radio values should be rendered
+   *         horizontally and {@code VERTICAL} otherwise.
    */
   EOrientation getOrientation();
 }

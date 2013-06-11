@@ -26,11 +26,11 @@ import org.jspresso.framework.util.scripting.IScriptHandler;
 
 /**
  * A scripted backend action. The action takes the script to execute (an
- * <code>IScript</code> implementation) out of its context (using
- * <code>ActionParameter</code>) and delegates the actual script execution to a
- * <code>IScriptHandler</code> configured through the <code>scriptHandler</code>
+ * {@code IScript} implementation) out of its context (using
+ * {@code ActionParameter}) and delegates the actual script execution to a
+ * {@code IScriptHandler} configured through the {@code scriptHandler}
  * property.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

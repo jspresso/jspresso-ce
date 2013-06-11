@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Creates a query component to be used in filters or list of values. The
  * created query component is stored in the context under the key
- * <code>IQueryComponent.QUERY_COMPONENT</code>. Further explanations are given
- * about query components in the <code>QueryEntitiesAction</code> documentation.
- * 
+ * {@code IQueryComponent.QUERY_COMPONENT}. Further explanations are given
+ * about query components in the {@code QueryEntitiesAction} documentation.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -77,7 +77,7 @@ public class CreateQueryComponentAction extends BackendAction {
   
   
   /**
-   * Constructs a new <code>CreateQueryComponentAction</code> instance.
+   * Constructs a new {@code CreateQueryComponentAction} instance.
    */
   public CreateQueryComponentAction() {
     queryComponentDescriptorFactory = new BasicQueryComponentDescriptorFactory();
@@ -86,7 +86,7 @@ public class CreateQueryComponentAction extends BackendAction {
   /**
    * Creates a query component using the model descriptor passed in the context.
    * The action result contains the model connector holding the created query
-   * entity with the key <code>QUERY_MODEL_CONNECTOR</code>.
+   * entity with the key {@code QUERY_MODEL_CONNECTOR}.
    * <p>
    * {@inheritDoc}
    */

@@ -43,7 +43,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 /**
  * This is the base class for frontend actions. To get a better understanding of
  * how actions are organized in Jspresso, please refer to
- * <code>AbstractAction</code> documentation.
+ * {@code AbstractAction} documentation.
  * <p>
  * This base class allows for visual (name, icon, toolTip) as well as
  * accessibility (accelerator, mnemonic shortcuts) and actionability (using
@@ -53,7 +53,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * of the UI. It can thus access the view structure, interact visually with the
  * user, and so on. A frontend action can chain a backend action but the
  * opposite will be prevented.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -75,7 +75,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private String                styleName;
 
   /**
-   * Constructs a new <code>AbstractFrontendAction</code> instance.
+   * Constructs a new {@code AbstractFrontendAction} instance.
    */
   public FrontendAction() {
     actionDescriptor = new DefaultIconDescriptor();
@@ -270,10 +270,10 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Configures a keyboard accelerator shortcut on this action. Support of this
    * feature depends on the UI execution platform. The syntax used consists of
    * listing keys that should be pressed to trigger the action, i.e.
-   * <code>alt d</code> or <code>ctrl c</code>. This is the syntax supported by
-   * the <code>javax.swing.KeyStroke#getKeyStroke(...)</code> swing static
+   * {@code alt d} or {@code ctrl c}. This is the syntax supported by
+   * the {@code javax.swing.KeyStroke#getKeyStroke(...)} swing static
    * method.
-   * 
+   *
    * @param acceleratorAsString
    *          the acceleratorAsString to set.
    */
@@ -518,8 +518,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Retrieves the widget this action was triggered from. It may serve to
    * determine the root window or dialog for instance. It uses a well-known
    * action context key which is : <li>
-   * <code>ActionContextConstants.SOURCE_COMPONENT</code>.
-   * 
+   * {@code ActionContextConstants.SOURCE_COMPONENT}.
+   *
    * @param context
    *          the action context.
    * @return the source widget this action was triggered from.
@@ -576,8 +576,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * leveraged depends on the UI channel. It will generally be mapped to some
    * sort of CSS style name.
    * <p>
-   * Default value is <code>null</code>, meaning that a default style is used.
-   * 
+   * Default value is {@code null}, meaning that a default style is used.
+   *
    * @param styleName
    *          the styleName to set.
    */

@@ -37,8 +37,8 @@ public class ModuleHistoryEntry {
   private String            workspaceName;
 
   /**
-   * Constructs a new <code>ModuleHistoryEntry</code> instance.
-   * 
+   * Constructs a new {@code ModuleHistoryEntry} instance.
+   *
    * @param workspaceName
    *          the workspace name of this history entry.
    * @param module

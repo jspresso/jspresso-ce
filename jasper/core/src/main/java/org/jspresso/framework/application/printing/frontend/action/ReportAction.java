@@ -28,10 +28,10 @@ import org.jspresso.framework.binding.ICollectionConnector;
 /**
  * This action allows the user to select a report to generate on the collection
  * view where it has been installed. The collection backing the view can either
- * be a collection of <code>IReport</code> or <code>IReportDescriptor</code>. In
- * the latter situation, the corresponding <code>IReport</code> instances are
+ * be a collection of {@code IReport} or {@code IReportDescriptor}. In
+ * the latter situation, the corresponding {@code IReport} instances are
  * created on the fly using the configured report factory.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>

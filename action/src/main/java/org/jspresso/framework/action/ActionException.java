@@ -32,8 +32,8 @@ public class ActionException extends NestedRuntimeException {
   private static final long serialVersionUID = 5403717126687643426L;
 
   /**
-   * Constructs a new <code>ActionException</code> instance.
-   * 
+   * Constructs a new {@code ActionException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class ActionException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>ActionException</code> instance.
-   * 
+   * Constructs a new {@code ActionException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class ActionException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>ActionException</code> instance.
-   * 
+   * Constructs a new {@code ActionException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

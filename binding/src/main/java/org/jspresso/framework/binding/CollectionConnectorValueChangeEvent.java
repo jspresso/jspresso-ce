@@ -36,8 +36,8 @@ public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {
   private final List<IValueConnector> removedChildrenConnectors;
 
   /**
-   * Constructs a new <code>CollectionConnectorValueChangeEvent</code> instance.
-   * 
+   * Constructs a new {@code CollectionConnectorValueChangeEvent} instance.
+   *
    * @param source
    *          the connector that initiated the event.
    * @param oldValue

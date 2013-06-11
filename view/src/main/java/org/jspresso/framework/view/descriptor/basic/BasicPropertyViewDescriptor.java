@@ -135,8 +135,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * differ from the field component one. The color must be defined using its
    * string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
-   * Default value is <code>null</code>, meaning use UI default.
-   * 
+   * Default value is {@code null}, meaning use UI default.
+   *
    * @param labelBackground
    *          the labelBackground to set.
    */
@@ -158,8 +158,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Any of the above pattern section can be left empty, thus falling back to
    * the component default.
    * <p>
-   * Default value is <code>null</code>, meaning use default component font.
-   * 
+   * Default value is {@code null}, meaning use default component font.
+   *
    * @param labelFont
    *          the labelFont to set.
    */
@@ -173,8 +173,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * differ from the field component one. The color must be defined using its
    * string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
-   * Default value is <code>null</code>, meaning use UI default.
-   * 
+   * Default value is {@code null}, meaning use UI default.
+   *
    * @param labelForeground
    *          the labelForeground to set.
    */
@@ -190,10 +190,10 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * <li>as columns when the rendered property is a collection property</li>
    * <li>as fields when the rendered property is a reference property</li>
    * </ul>
-   * The property must be configured with a <code>List</code> containing the
+   * The property must be configured with a {@code List} containing the
    * property names to render for the child element(s).
    * <p>
-   * A <code>null</code> value (default), means that the non-scalar property
+   * A {@code null} value (default), means that the non-scalar property
    * will be rendered using default rendered properties as specified in its
    * referenced model descriptor.
    * <p>
@@ -201,7 +201,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * directly in a property view. Although permitted, you won't have as much
    * flexibility in the content layouting as you would have when using composite
    * views; so the latter is by far recommended.
-   * 
+   *
    * @param renderedChildProperties
    *          the renderedChildProperties to set.
    */
@@ -214,8 +214,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * component view), this property defines the umber of grid columns the
    * corresponding UI component will span.
    * <p>
-   * Default value is <code>null</code>, meaning use default span of 1.
-   * 
+   * Default value is {@code null}, meaning use default span of 1.
+   *
    * @param width
    *          the width to set.
    */
@@ -267,16 +267,16 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * This property allows to control the property alignment in views that
-   * support it. This is either a value of the <code>EHorizontalAlignment</code>
+   * support it. This is either a value of the {@code EHorizontalAlignment}
    * enum or its equivalent string representation :
    * <ul>
-   * <li><code>LEFT</code> for left alignment</li>
-   * <li><code>CENTER</code> for center alignment</li>
-   * <li><code>RIGHT</code> for right alignment</li>
+   * <li>{@code LEFT} for left alignment</li>
+   * <li>{@code CENTER} for center alignment</li>
+   * <li>{@code RIGHT} for right alignment</li>
    * </ul>
    * <p>
-   * Default value is <code>null</code>, meaning use property type default.
-   * 
+   * Default value is {@code null}, meaning use property type default.
+   *
    * @param horizontalAlignment
    *          the horizontalAlignment to set.
    */
@@ -318,8 +318,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Configure the sortability of a property view when used to defines a table
    * column for instance. Whenever it is not explicitly set, it falls back to
    * the model property sortability. If no model descriptor is set, defaults to
-   * <code>true</code>.
-   * 
+   * {@code true}.
+   *
    * @param sortable
    *          the sortable to set.
    */

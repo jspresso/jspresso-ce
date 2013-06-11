@@ -43,8 +43,8 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
   private final IComponent        componentDelegate;
 
   /**
-   * Constructs a new <code>QueryComponentInvocationHandler</code> instance.
-   * 
+   * Constructs a new {@code QueryComponentInvocationHandler} instance.
+   *
    * @param componentDelegate
    *          The component this delegate forwards the method calls to.
    */

@@ -588,8 +588,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
     private final FileItem item;
 
     /**
-     * Constructs a new <code>UploadResourceAdapter</code> instance.
-     * 
+     * Constructs a new {@code UploadResourceAdapter} instance.
+     *
      * @param mimeType
      *          the resource mime type.
      * @param item

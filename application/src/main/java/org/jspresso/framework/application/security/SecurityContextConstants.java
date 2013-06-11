@@ -27,64 +27,64 @@ package org.jspresso.framework.application.security;
 public final class SecurityContextConstants {
 
   /**
-   * <code>MODEL</code>. References the Entity/Component fully qualified name.
+   * {@code MODEL}. References the Entity/Component fully qualified name.
    */
   public static final String MODEL              = "MODEL";
 
   /**
-   * <code>PROPERTY</code>. References the Entity/Component property name.
+   * {@code PROPERTY}. References the Entity/Component property name.
    */
   public static final String PROPERTY           = "PROPERTY";
 
   /**
-   * <code>WORKSPACE</code>. References the workspace permanent Id.
+   * {@code WORKSPACE}. References the workspace permanent Id.
    */
   public static final String WORKSPACE          = "WORKSPACE";
 
   /**
-   * <code>MODULE</code>. References the list of modules permanent Ids followed
+   * {@code MODULE}. References the list of modules permanent Ids followed
    * to reach the current module.
    */
   public static final String MODULE_CHAIN       = "MODULE_CHAIN";
 
   /**
-   * <code>VIEW_CHAIN</code>. References the list of view permanent Ids followed
+   * {@code VIEW_CHAIN}. References the list of view permanent Ids followed
    * to reach the current view.
    */
   public static final String VIEW_CHAIN         = "VIEW_CHAIN";
 
   /**
-   * <code>ACTION_MAP</code>. References the action map permanent Id.
+   * {@code ACTION_MAP}. References the action map permanent Id.
    */
   public static final String ACTION_MAP         = "ACTION_MAP";
 
   /**
-   * <code>ACTION_LIST</code>. References the action list permanent Id.
+   * {@code ACTION_LIST}. References the action list permanent Id.
    */
   public static final String ACTION_LIST        = "ACTION_LIST";
 
   /**
-   * <code>ACTION</code>. References the action permanent Id.
+   * {@code ACTION}. References the action permanent Id.
    */
   public static final String ACTION             = "ACTION";
 
   /**
-   * <code>AUTH_TYPE</code>. References the type of authorization asked for.
+   * {@code AUTH_TYPE}. References the type of authorization asked for.
    */
   public static final String AUTH_TYPE          = "AUTH_TYPE";
 
   /**
-   * <code>USER_ID</code>.
+   * {@code USER_ID}.
    */
   public static final String USER_ID            = "USER_ID";
 
   /**
-   * <code>USER_ROLES</code>.
+   * {@code USER_ROLES}.
    */
   public static final String USER_ROLES         = "USER_ROLES";
 
   /**
-   * <code>SESSION_PROPERTIES</code>.
+   * {@code SESSION_PROPERTIES}.
    */
   public static final String SESSION_PROPERTIES = "SESSION_PROPERTIES";
 

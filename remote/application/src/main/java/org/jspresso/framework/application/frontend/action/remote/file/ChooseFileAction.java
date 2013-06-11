@@ -31,12 +31,12 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
  * operations. Please, be aware that these FS actions heavily depend on the UI
  * channel, i.e. you have different implementation classes (but registered under
  * the same Spring name) for all supported UI technologies. For instance,
- * <code>SaveFileAction</code> will have as many implementations as the number
+ * {@code SaveFileAction} will have as many implementations as the number
  * of supported UIs, each in a specific package :
  * <p>
- * <code>org.jspresso.framework.application.frontend.action.</code><b>
- * <code>[ui]</code></b><code>.file.SaveFileAction</code>
- * 
+ * {@code org.jspresso.framework.application.frontend.action.}<b>
+ * {@code [ui]}</b>{@code .file.SaveFileAction}
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -66,12 +66,12 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
    * <p>
    * For instance, an entry in this map could be :
    * <ul>
-   * <li>key : <code>&quot;images&quot;</code></li>
+   * <li>key : {@code &quot;images&quot;}</li>
    * <li>value :
-   * <code>[&quot;.png&quot;,&quot;.jpg&quot;,&quot;.gif&quot;,&quot;.bmp&quot;]</code>
+   * {@code [&quot;.png&quot;,&quot;.jpg&quot;,&quot;.gif&quot;,&quot;.bmp&quot;]}
    * </li>
    * </ul>
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */

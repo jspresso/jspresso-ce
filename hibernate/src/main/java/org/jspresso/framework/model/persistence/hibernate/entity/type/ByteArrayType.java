@@ -57,7 +57,7 @@ public class ByteArrayType implements UserType {
   }
 
   /**
-   * Returns <code>Bytes.class</code>.
+   * Returns {@code Bytes.class}.
    * <p>
    * {@inheritDoc}
    */

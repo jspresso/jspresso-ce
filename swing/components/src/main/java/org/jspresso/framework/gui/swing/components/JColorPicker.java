@@ -56,7 +56,7 @@ public class JColorPicker extends JPanel {
   private boolean               resetEnabled;
 
   /**
-   * Constructs a new <code>JColorPicker</code> instance.
+   * Constructs a new {@code JColorPicker} instance.
    */
   public JColorPicker() {
     resetEnabled = true;
@@ -113,8 +113,8 @@ public class JColorPicker extends JPanel {
   }
 
   /**
-   * Adds a <code>ChangeListener</code> to the JColorPicker.
-   * 
+   * Adds a {@code ChangeListener} to the JColorPicker.
+   *
    * @param l
    *          the listener to add
    */
@@ -124,9 +124,9 @@ public class JColorPicker extends JPanel {
 
   /**
    * Returns an array of all the change listeners registered on this
-   * <code>JColorPicker</code>.
-   * 
-   * @return all of this model's <code>ChangeListener</code>s or an empty array
+   * {@code JColorPicker}.
+   *
+   * @return all of this model's {@code ChangeListener}s or an empty array
    *         if no change listeners are currently registered
    * @see #addChangeListener
    * @see #removeChangeListener
@@ -154,8 +154,8 @@ public class JColorPicker extends JPanel {
   }
 
   /**
-   * Removes a <code>ChangeListener</code> from the JColorPicker.
-   * 
+   * Removes a {@code ChangeListener} from the JColorPicker.
+   *
    * @param l
    *          the listener to remove
    */

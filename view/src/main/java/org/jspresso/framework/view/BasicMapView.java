@@ -37,8 +37,8 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   private IView<E>              currentView;
 
   /**
-   * Constructs a new <code>BasicMapView</code> instance.
-   * 
+   * Constructs a new {@code BasicMapView} instance.
+   *
    * @param peer
    *          the peer component.
    */

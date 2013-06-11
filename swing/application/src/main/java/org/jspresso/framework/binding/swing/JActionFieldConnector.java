@@ -37,8 +37,8 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   private Object value;
 
   /**
-   * Constructs a new <code>JActionFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JActionFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param actionField

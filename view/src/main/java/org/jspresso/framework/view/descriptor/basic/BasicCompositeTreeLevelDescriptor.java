@@ -95,10 +95,10 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
   }
 
   /**
-   * Assigns the list children tree level descriptors. A <code>null</code> value
+   * Assigns the list children tree level descriptors. A {@code null} value
    * (default) makes this tree level a leaf tree level and is strictly
-   * equivalent to declaring a <code>BasicTreeLevelDescriptor</code> instead.
-   * 
+   * equivalent to declaring a {@code BasicTreeLevelDescriptor} instead.
+   *
    * @param childrenDescriptors
    *          the childrenDescriptors to set.
    */

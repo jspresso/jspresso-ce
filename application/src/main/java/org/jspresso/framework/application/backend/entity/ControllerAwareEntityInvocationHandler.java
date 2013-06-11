@@ -66,9 +66,9 @@ public class ControllerAwareEntityInvocationHandler extends
   private Set<IEntity>        detachedEntities;
 
   /**
-   * Constructs a new <code>ControllerAwareEntityInvocationHandler</code>
+   * Constructs a new {@code ControllerAwareEntityInvocationHandler}
    * instance.
-   * 
+   *
    * @param entityDescriptor
    *          The descriptor of the proxy entity.
    * @param inlineComponentFactory

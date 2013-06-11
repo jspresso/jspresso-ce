@@ -91,8 +91,8 @@ public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Gets a child connector based on its identifier. It should directly delegate
-   * to the <code>IConnectorMap</code>.
-   * 
+   * to the {@code IConnectorMap}.
+   *
    * @param connectorKey
    *          The key indexing the looked-up connector
    * @return The retrieved connector or null if none exists
@@ -108,8 +108,8 @@ public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Gets the collection of connectors hosted by this connector map. It should
-   * directly delegate to the <code>IConnectorMap</code>.
-   * 
+   * directly delegate to the {@code IConnectorMap}.
+   *
    * @return The collection of child connector in this connector.
    */
   Collection<String> getChildConnectorKeys();

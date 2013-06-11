@@ -50,7 +50,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * configurable (name, description, icon, ...) but its most important properties
  * are :
  * <ol>
- * <li><code>viewDescriptor</code> : the Jspresso view descriptor to be shown in
+ * <li>{@code viewDescriptor} : the Jspresso view descriptor to be shown in
  * the wizard GUI when the user enters this step. It can be arbitrarily complex
  * (even with master-detail like views, inner actions, constraints, security
  * enforcements, ...). Of course, the view descriptor needs a model descriptor.
@@ -61,27 +61,27 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * object will be a map (and not Jspresso generated java bean) but Jspresso
  * connectors are "smart" enough to detect the situation and work with the
  * hierarchy of maps as if it was a hierarchy of java beans.</li>
- * <li>optional <code>onEnterAction</code> and <code>onLeaveAction</code> :
+ * <li>optional {@code onEnterAction} and {@code onLeaveAction} :
  * actions that will respectively be executed when entering and when exiting the
  * wizard step.</li>
- * <li>optional <code>nextLabelKey</code> and <code>previousLabelKey</code> :
+ * <li>optional {@code nextLabelKey} and {@code previousLabelKey} :
  * i18n keys for next and previous buttons if you want to change the default
  * ones.</li>
- * <li>optional <code>nextStepDescriptor</code> : the next wizard step. If null,
+ * <li>optional {@code nextStepDescriptor} : the next wizard step. If null,
  * the wizard GUI will enable the finish action.</li>
  * </ol>
  * </li>
  * <li>The first wizard step is registered on the wizard action using the
- * <code>firstWizardStep</code> property.</li>
+ * {@code firstWizardStep} property.</li>
  * <li>When the user leaves the last wizard step (clicking the finish action
  * button), the finish action is triggered. The finish action can be registered
- * on the wizard action using the <code>finishAction</code> property. This is
+ * on the wizard action using the {@code finishAction} property. This is
  * typically the place where you explore the wizard map model -
- * <code>ACTION_PARAM</code> - to get back all the data the user has worked on.
+ * {@code ACTION_PARAM} - to get back all the data the user has worked on.
  * Note that the finish button is entirely configured from the finish action
  * (label and icon).</li>
  * </ol>
- * 
+ *
  * @version $LastChangedRevision: 1302 $
  * @author Vincent Vandenschrick
  * @param <E>

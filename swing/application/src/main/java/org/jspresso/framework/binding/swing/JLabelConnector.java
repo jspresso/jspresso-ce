@@ -37,8 +37,8 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
   private Object                connecteeValue;
 
   /**
-   * Constructs a new <code>JLabelConnector</code> instance.
-   * 
+   * Constructs a new {@code JLabelConnector} instance.
+   *
    * @param id
    *          the connector id.
    * @param connectedJComponent

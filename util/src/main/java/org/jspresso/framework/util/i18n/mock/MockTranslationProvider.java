@@ -31,7 +31,7 @@ import org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider;
 public class MockTranslationProvider extends MessageSourceTranslationProvider {
 
   /**
-   * Constructs a new <code>MockTranslationProvider</code> instance.
+   * Constructs a new {@code MockTranslationProvider} instance.
    */
   public MockTranslationProvider() {
     setMessageSource(new MockMessageSource());

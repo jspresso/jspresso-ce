@@ -27,10 +27,10 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * This type of descriptor is used to describe :
  * <ul>
  * <li>structures that are to be reused but don't have enough focus for being
- * considered as entities. For instance <code>MoneyAmount</code> component could
- * be composed of a decimal and a reference to a <code>Money</code> entity. This
+ * considered as entities. For instance {@code MoneyAmount} component could
+ * be composed of a decimal and a reference to a {@code Money} entity. This
  * structure could then be reused in other elements of the domain like an
- * <code>Invoice</code> or an <code>Article</code>. Jspresso terminology for
+ * {@code Invoice} or an {@code Article}. Jspresso terminology for
  * these type of structures is <i>&quot;Inline Component&quot;</i>.</li>
  * <li>arbitrary models, that even come from outside of Jspresso (an external
  * library for instance). Describing an arbitrary component allows for seamless
@@ -40,11 +40,11 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * </ul>
  * Both types of components described above must conform to the <i>Java
  * Beans</i> standard so that its property changes can be followed by the
- * classic <code>add/removePropertyChangeListener</code> methods since Jspresso
+ * classic {@code add/removePropertyChangeListener} methods since Jspresso
  * binding architecture leverages this behaviour. Jspresso managed components
  * implement it automatically but the developer must ensure it for other types
  * of components.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -53,15 +53,15 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> {
 
   /**
-   * Constructs a new <code>BasicComponentDescriptor</code> instance.
+   * Constructs a new {@code BasicComponentDescriptor} instance.
    */
   public BasicComponentDescriptor() {
     this(null);
   }
 
   /**
-   * Constructs a new <code>BasicComponentDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BasicComponentDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.

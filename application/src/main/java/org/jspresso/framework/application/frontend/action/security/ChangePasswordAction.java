@@ -19,17 +19,17 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * <li>the new password</li>
  * <li>the confirmation for the new password</li>
  * </ol>
- * This action must be combined (setting <code>okAction</code>) with a concrete
- * subclass of backend <code>AbstractChangePasswordAction</code> that performs
+ * This action must be combined (setting {@code okAction}) with a concrete
+ * subclass of backend {@code AbstractChangePasswordAction} that performs
  * the actual password change depending on the authentication backend. Jspresso
  * offers two concrete implementations :
  * <ul>
- * <li><code>LdapChangePasswordAction</code> for LDAP based authentication
+ * <li>{@code LdapChangePasswordAction} for LDAP based authentication
  * backend</li>
- * <li><code>DatabaseChangePasswordAction</code> for JDBC based authentication
+ * <li>{@code DatabaseChangePasswordAction} for JDBC based authentication
  * backend</li>
  * </ul>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -42,7 +42,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
 public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> {
 
   /**
-   * Constructs a new <code>ChangePasswordAction</code> instance.
+   * Constructs a new {@code ChangePasswordAction} instance.
    */
   public ChangePasswordAction() {
     BasicComponentViewDescriptor viewDescriptor = new BasicComponentViewDescriptor();

@@ -37,7 +37,7 @@ import org.jspresso.framework.action.IActionHandler;
 public class InfoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
   /**
-   * Displays the message using a <code>JOptionPane.INFORMATION_MESSAGE</code>.
+   * Displays the message using a {@code JOptionPane.INFORMATION_MESSAGE}.
    * <p>
    * {@inheritDoc}
    */

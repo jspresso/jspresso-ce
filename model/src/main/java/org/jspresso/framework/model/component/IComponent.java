@@ -34,15 +34,15 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 public interface IComponent extends IPropertyChangeCapable {
 
   /**
-   * Notifies its <code>PropertyChangeListener</code>s on a specific property
+   * Notifies its {@code PropertyChangeListener}s on a specific property
    * change.
-   * 
+   *
    * @param property
    *          The property which changed.
    * @param oldValue
    *          The old value of the property.
    * @param newValue
-   *          The new value of the property or <code>UNKNOWN</code>.
+   *          The new value of the property or {@code UNKNOWN}.
    */
   void firePropertyChange(String property, Object oldValue, Object newValue);
 
@@ -85,8 +85,8 @@ public interface IComponent extends IPropertyChangeCapable {
 
   /**
    * This method is used to update a persistent properties without triggering
-   * any other behaviour except a <code>PropertyChangeEvent</code>.
-   * 
+   * any other behaviour except a {@code PropertyChangeEvent}.
+   *
    * @param properties
    *          the properties to set.
    */
@@ -94,8 +94,8 @@ public interface IComponent extends IPropertyChangeCapable {
 
   /**
    * This method is used to update a persistent property without triggering any
-   * other behaviour except a <code>PropertyChangeEvent</code>.
-   * 
+   * other behaviour except a {@code PropertyChangeEvent}.
+   *
    * @param propertyName
    *          the name of the property to set.
    * @param backendPropertyValue

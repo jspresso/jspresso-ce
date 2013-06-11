@@ -28,8 +28,8 @@ package org.jspresso.framework.model.descriptor.basic;
  * Please note that interface descriptor is not a way for domain elements to
  * implement arbitrary interfaces coming from external libraries unless they
  * only contain property accessors. The latter can be achieved using service
- * delegates and the <code>serviceDelegates[Bean|Class]Names</code> property.
- * 
+ * delegates and the {@code serviceDelegates[Bean|Class]Names} property.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -38,8 +38,8 @@ package org.jspresso.framework.model.descriptor.basic;
 public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> {
 
   /**
-   * Constructs a new <code>BasicInterfaceDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BasicInterfaceDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.

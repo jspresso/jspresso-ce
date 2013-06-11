@@ -32,8 +32,8 @@ public class IntegrityException extends BusinessException {
   private static final long serialVersionUID = -5965567517919706757L;
 
   /**
-   * Constructs a new <code>IntegrityException</code> instance.
-   * 
+   * Constructs a new {@code IntegrityException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey
@@ -45,8 +45,8 @@ public class IntegrityException extends BusinessException {
   }
 
   /**
-   * Constructs a new <code>IntegrityException</code> instance.
-   * 
+   * Constructs a new {@code IntegrityException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey
@@ -61,8 +61,8 @@ public class IntegrityException extends BusinessException {
   }
 
   /**
-   * Constructs a new <code>IntegrityException</code> instance.
-   * 
+   * Constructs a new {@code IntegrityException} instance.
+   *
    * @param message
    *          the exception message.
    */

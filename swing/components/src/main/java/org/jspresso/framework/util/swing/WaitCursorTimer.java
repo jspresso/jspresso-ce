@@ -40,8 +40,8 @@ public class WaitCursorTimer extends Thread {
   private Object    source;
 
   /**
-   * Constructs a new <code>WaitCursorTimer</code> instance.
-   * 
+   * Constructs a new {@code WaitCursorTimer} instance.
+   *
    * @param delay
    *          the delay in milliseconds to wait before setting the hourglass
    *          cursor.

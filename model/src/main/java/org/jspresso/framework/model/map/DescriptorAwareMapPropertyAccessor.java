@@ -24,8 +24,8 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
   private IModelDescriptor modelDescriptor;
 
   /**
-   * Constructs a new <code>DescriptorAwareMapPropertyAccessor</code> instance.
-   * 
+   * Constructs a new {@code DescriptorAwareMapPropertyAccessor} instance.
+   *
    * @param property
    *          the property to create the accessor for.
    */

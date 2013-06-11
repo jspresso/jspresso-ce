@@ -29,8 +29,8 @@ public class RSecurityComponent extends RComponent {
   private static final long serialVersionUID = 6757171028589942114L;
 
   /**
-   * Constructs a new <code>RSecurityComponent</code> instance.
-   * 
+   * Constructs a new {@code RSecurityComponent} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RSecurityComponent extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RSecurityComponent</code> instance. Only used for
+   * Constructs a new {@code RSecurityComponent} instance. Only used for
    * GWT serialization support.
    */
   public RSecurityComponent() {

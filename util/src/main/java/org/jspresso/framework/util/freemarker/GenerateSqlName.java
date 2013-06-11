@@ -77,8 +77,8 @@ public class GenerateSqlName implements TemplateMethodModel {
   private Set<String>                  reservedKeyWords;
 
   /**
-   * Constructs a new <code>GenerateSqlName</code> instance.
-   * 
+   * Constructs a new {@code GenerateSqlName} instance.
+   *
    */
   public GenerateSqlName() {
     reservedKeyWords = new HashSet<String>(DEFAULT_KEY_WORD_PROVIDER.run());

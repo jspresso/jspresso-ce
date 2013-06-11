@@ -56,8 +56,8 @@ public class JHTMLEditor extends JPanel {
   private final JScrollPane       scrollPane;
 
   /**
-   * Constructs a new <code>JHTMLEditor</code> instance.
-   * 
+   * Constructs a new {@code JHTMLEditor} instance.
+   *
    * @param locale
    *          the locale to create the JHTMLEditor for.
    */
@@ -235,8 +235,8 @@ public class JHTMLEditor extends JPanel {
     private final Action delegate;
 
     /**
-     * Constructs a new <code>DisplayableAction</code> instance.
-     * 
+     * Constructs a new {@code DisplayableAction} instance.
+     *
      * @param delegate
      *          the action delegate.
      */

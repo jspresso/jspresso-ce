@@ -212,7 +212,7 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * Retrieves listeners.
-   * @return all of the <code>PropertyChangeListeners</code> added or an empty
+   * @return all of the {@code PropertyChangeListeners} added or an empty
    *         array if no listeners have been added
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
@@ -239,10 +239,10 @@ public abstract class AbstractPropertyChangeCapable implements
    * Retrieves listeners.
    * @param propertyName
    *          propertyName
-   * @return all of the <code>PropertyChangeListeners</code> associated with the
+   * @return all of the {@code PropertyChangeListeners} associated with the
    *         named property. If no such listeners have been added, or if
-   *         <code>propertyName</code> is null, an empty array is returned.
-   * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
+   *         {@code propertyName} is null, an empty array is returned.
+   * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(String)
    */
   @Override
   public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {

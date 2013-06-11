@@ -30,7 +30,7 @@ public class BasicPasswordPropertyDescriptor extends
   }
 
   /**
-   * Returns <code>false</code>.
+   * Returns {@code false}.
    * <p>
    * {@inheritDoc}
    */

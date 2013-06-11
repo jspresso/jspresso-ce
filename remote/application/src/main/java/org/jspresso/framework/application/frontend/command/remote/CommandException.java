@@ -32,8 +32,8 @@ public class CommandException extends NestedRuntimeException {
   private static final long serialVersionUID = -2045547798373306412L;
 
   /**
-   * Constructs a new <code>CommandException</code> instance.
-   * 
+   * Constructs a new {@code CommandException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -42,8 +42,8 @@ public class CommandException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>CommandException</code> instance.
-   * 
+   * Constructs a new {@code CommandException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -52,8 +52,8 @@ public class CommandException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>CommandException</code> instance.
-   * 
+   * Constructs a new {@code CommandException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

@@ -40,7 +40,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
 public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
 
   /**
-   * <code>WORKSPACE_DESCRIPTOR</code> is a unique reference to the model
+   * {@code WORKSPACE_DESCRIPTOR} is a unique reference to the model
    * descriptor of workspaces.
    */
   public static final IComponentDescriptor<Workspace> WORKSPACE_DESCRIPTOR = new WorkspaceDescriptor(
@@ -48,8 +48,8 @@ public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
                                                                                    .getName());
 
   /**
-   * Constructs a new <code>WorkspaceDescriptor</code> instance.
-   * 
+   * Constructs a new {@code WorkspaceDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor (the actual workspace class name).
    */

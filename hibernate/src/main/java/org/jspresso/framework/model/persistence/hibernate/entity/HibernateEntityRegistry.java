@@ -31,8 +31,8 @@ import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 public class HibernateEntityRegistry extends BasicEntityRegistry {
 
   /**
-   * Constructs a new <code>HibernateEntityRegistry</code> instance.
-   * 
+   * Constructs a new {@code HibernateEntityRegistry} instance.
+   *
    * @param name
    *          the name of the registry.
    */

@@ -136,16 +136,16 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   /**
    * Allows to make a relationship bi-directional. By default, when a
    * relationship end is defined, it is only navigable from the owning component
-   * to the described end (default value is <code>null</code>). Assigning a
+   * to the described end (default value is {@code null}). Assigning a
    * reverse relationship ends instructs the framework that the relationship is
    * bi-directional. This implies several complementary features :
    * <ul>
    * <li>When one of the relationship ends is updated, the other side is
    * automatically maintained by Jspresso, i.e. you never have to worry about
-   * reverse state. For instance, considering a <code>Invoice</code> -
-   * <code>InvoiceLine</code> bi-directional relationship,
-   * <code>InvoiceLine.setInvoice(Invoice)</code> and
-   * <code>Invoice.addToInvoiceLines(InvoiceLine)</code> are strictly
+   * reverse state. For instance, considering a {@code Invoice} -
+   * {@code InvoiceLine} bi-directional relationship,
+   * {@code InvoiceLine.setInvoice(Invoice)} and
+   * {@code Invoice.addToInvoiceLines(InvoiceLine)} are strictly
    * equivalent.</li>
    * <li>You can qualify a &quot;N-N&quot; relationship (thus creating an
    * association table in the data store behind the scene) by assigning 2
@@ -157,7 +157,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * Setting the reverse relation end operation is commutative so that it
    * automatically assigns bot ends as reverse, i.e. you only have to set the
    * property on one side of the relationship.
-   * 
+   *
    * @param reverseRelationEnd
    *          the reverseRelationEnd to set.
    */
@@ -233,17 +233,17 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   /**
    * This property allows to finely tune fetching strategy of the ORM on this
-   * relationship end. This is either a value of the <code>EFetchType</code>
+   * relationship end. This is either a value of the {@code EFetchType}
    * enum or its equivalent string representation :
    * <ul>
-   * <li><code>SELECT</code> for default 2nd select strategy (lazy)</li>
-   * <li><code>SUBSELECT</code> for default 2nd select strategy (lazy) using an
+   * <li>{@code SELECT} for default 2nd select strategy (lazy)</li>
+   * <li>{@code SUBSELECT} for default 2nd select strategy (lazy) using an
    * IN clause</li>
-   * <li><code>JOIN</code> for a join select strategy (not lazy)</li>
+   * <li>{@code JOIN} for a join select strategy (not lazy)</li>
    * </ul>
    * <p>
-   * Default value is <code>EFetchType.SELECT</code>, i.e. 2nd select strategy.
-   * 
+   * Default value is {@code EFetchType.SELECT}, i.e. 2nd select strategy.
+   *
    * @param fetchType
    *          the fetchType to set.
    */

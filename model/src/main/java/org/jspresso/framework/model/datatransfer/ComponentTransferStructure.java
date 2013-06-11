@@ -20,8 +20,8 @@ public class ComponentTransferStructure<E> {
   private final ETransferMode     transferMode;
 
   /**
-   * Constructs a new <code>ComponentTransferStructure</code> instance.
-   * 
+   * Constructs a new {@code ComponentTransferStructure} instance.
+   *
    * @param content
    *          the content of the structure.
    * @param transferMode

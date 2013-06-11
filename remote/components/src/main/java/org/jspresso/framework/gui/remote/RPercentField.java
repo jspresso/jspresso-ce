@@ -29,8 +29,8 @@ public class RPercentField extends RDecimalComponent {
   private static final long serialVersionUID = -7371169761366019585L;
 
   /**
-   * Constructs a new <code>RPercentField</code> instance.
-   * 
+   * Constructs a new {@code RPercentField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RPercentField extends RDecimalComponent {
   }
 
   /**
-   * Constructs a new <code>RPercentField</code> instance. Only used for
+   * Constructs a new {@code RPercentField} instance. Only used for
    * serialization support.
    */
   public RPercentField() {

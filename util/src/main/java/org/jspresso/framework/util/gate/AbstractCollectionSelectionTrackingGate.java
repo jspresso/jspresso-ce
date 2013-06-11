@@ -29,7 +29,7 @@ public abstract class AbstractCollectionSelectionTrackingGate extends
     AbstractModelGate {
 
   /**
-   * Constructs a new <code>AbstractCollectionSelectionTrackingGate</code>
+   * Constructs a new {@code AbstractCollectionSelectionTrackingGate}
    * instance.
    */
   public AbstractCollectionSelectionTrackingGate() {

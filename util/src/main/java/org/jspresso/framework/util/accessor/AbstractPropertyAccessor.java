@@ -96,8 +96,8 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   }
 
   /**
-   * Constructs a new <code>AbstractPropertyAccessor</code> instance.
-   * 
+   * Constructs a new {@code AbstractPropertyAccessor} instance.
+   *
    * @param property
    *          the property to access.
    */

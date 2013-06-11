@@ -48,7 +48,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   private Map<String, String> defaultRestrictions;
 
   /**
-   * Constructs a new <code>JdbcPreferenceStore</code> instance.
+   * Constructs a new {@code JdbcPreferenceStore} instance.
    */
   public JdbcPreferencesStore() {
     this.storePath = "";

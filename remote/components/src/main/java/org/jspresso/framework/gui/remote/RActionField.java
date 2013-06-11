@@ -31,8 +31,8 @@ public class RActionField extends RComponent {
   private boolean           showTextField;
 
   /**
-   * Constructs a new <code>RActionField</code> instance.
-   * 
+   * Constructs a new {@code RActionField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -42,7 +42,7 @@ public class RActionField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RActionField</code> instance. Only used for
+   * Constructs a new {@code RActionField} instance. Only used for
    * serialization support.
    */
   public RActionField() {

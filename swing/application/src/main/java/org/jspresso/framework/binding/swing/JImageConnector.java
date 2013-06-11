@@ -35,8 +35,8 @@ public class JImageConnector extends JComponentConnector<JLabel> {
   private Object imageSource;
 
   /**
-   * Constructs a new <code>JImageConnector</code> instance.
-   * 
+   * Constructs a new {@code JImageConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param connectedJComponent

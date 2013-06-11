@@ -39,7 +39,7 @@ public class EnhancedResourceBundleMessageSource extends
     ResourceBundleMessageSource {
 
   /**
-   * <code>DEFAULT_MARKER</code>.
+   * {@code DEFAULT_MARKER}.
    */
   public static final String DEFAULT_MARKER = "#default#:";
 

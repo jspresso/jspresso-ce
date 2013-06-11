@@ -24,8 +24,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Helper class to ease the <code>ISelectionChangeListener</code> management.
- * 
+ * Helper class to ease the {@code ISelectionChangeListener} management.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,10 +42,10 @@ public class SelectionChangeSupport implements ISelectable {
 
   /**
    * Constructs a new support.
-   * 
+   *
    * @param source
    *          The selectable to which this support is attached. It will serve as
-   *          <code>source</code> of fired <code>SelectionChangeEvent</code>s if
+   *          {@code source} of fired {@code SelectionChangeEvent}s if
    *          no other is provided.
    */
   public SelectionChangeSupport(ISelectable source) {
@@ -89,8 +89,8 @@ public class SelectionChangeSupport implements ISelectable {
   }
 
   /**
-   * Fires a new <code>SelectionChangeEvent</code> built with
-   * <code>source</code> as source and parameters as old and new values.
+   * Fires a new {@code SelectionChangeEvent} built with
+   * {@code source} as source and parameters as old and new values.
    */
   public void fireSelectionChange() {
     SelectionChangeEvent evt = new SelectionChangeEvent(source,
@@ -99,11 +99,11 @@ public class SelectionChangeSupport implements ISelectable {
   }
 
   /**
-   * Propagates the <code>SelectionChangeEvent</code> as is (i.e. without
+   * Propagates the {@code SelectionChangeEvent} as is (i.e. without
    * modifying its source) to the listeners.
-   * 
+   *
    * @param evt
-   *          the propagated <code>BeanChangeEvent</code>
+   *          the propagated {@code BeanChangeEvent}
    */
   public void fireSelectionChange(SelectionChangeEvent evt) {
     if (listeners != null) {

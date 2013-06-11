@@ -27,12 +27,12 @@ package org.jspresso.framework.util.scripting;
 public interface IScript {
 
   /**
-   * <code>CONTEXT</code> is the script execution context map.
+   * {@code CONTEXT} is the script execution context map.
    */
   String CONTEXT         = "CONTEXT";
 
   /**
-   * <code>SCRIPTED_OBJECT</code> is the script context key of the scripted
+   * {@code SCRIPTED_OBJECT} is the script context key of the scripted
    * object (the object the script is working on).
    */
   String SCRIPTED_OBJECT = "SCRIPTED_OBJECT";

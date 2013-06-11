@@ -46,8 +46,8 @@ public class ActionTableSorter extends AbstractTableSorter {
   private final IAction           sortingAction;
 
   /**
-   * Constructs a new <code>ActionTableSorter</code> instance.
-   * 
+   * Constructs a new {@code ActionTableSorter} instance.
+   *
    * @param tableModel
    *          tableModel.
    * @param tableHeader

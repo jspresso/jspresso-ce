@@ -38,8 +38,8 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
   private Color savedSelectedTextColor;
 
   /**
-   * Constructs a new <code>JDateField</code> instance.
-   * 
+   * Constructs a new {@code JDateField} instance.
+   *
    * @param id
    *          the connector identifier.
    * @param dateField

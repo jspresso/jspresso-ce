@@ -26,10 +26,10 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
- * This action takes a report (<code>IReport</code>) from the context (
- * <code>REPORT_ACTION_PARAM</code> key) and pops-up a form to allow for the
+ * This action takes a report ({@code IReport}) from the context (
+ * {@code REPORT_ACTION_PARAM} key) and pops-up a form to allow for the
  * report input parameters customization.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>

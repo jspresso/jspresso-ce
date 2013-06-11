@@ -34,7 +34,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 public class BasicWorkspaceViewDescriptor extends BasicTreeViewDescriptor {
 
   /**
-   * Constructs a new <code>BasicWorkspaceViewDescriptor</code> instance.
+   * Constructs a new {@code BasicWorkspaceViewDescriptor} instance.
    */
   public BasicWorkspaceViewDescriptor() {
     BasicSimpleTreeLevelDescriptor modulesTreeLevelDescriptor = new BasicSimpleTreeLevelDescriptor();

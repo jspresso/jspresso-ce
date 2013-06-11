@@ -56,7 +56,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   private IIconSet                       iconSet;
 
   /**
-   * Constructs a new <code>AbstractIconFactory</code> instance.
+   * Constructs a new {@code AbstractIconFactory} instance.
    */
   protected AbstractIconFactory() {
     iconStore = new HashMap<String, Map<Dimension, E>>();

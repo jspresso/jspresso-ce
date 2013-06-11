@@ -48,8 +48,8 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
   private final String             cellConnectorKey;
 
   /**
-   * Constructs a new <code>EvenOddListCellRenderer</code> instance.
-   * 
+   * Constructs a new {@code EvenOddListCellRenderer} instance.
+   *
    * @param iconFactory the icon factory.
    * @param cellConnectorKey
    *          the key used to retrieve the child cell connector.

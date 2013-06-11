@@ -30,9 +30,9 @@ import org.jspresso.framework.util.gate.IGate;
  * This public interface has to be implemented by any class which implements a
  * value connector. A value connector is a wrapper around a peer object. The
  * value connector : <li>keeps track of peer modifications (and fires
- * <code>IValueChangeEvent</code> accordingly). <li>is able to update peer value
- * <li>can attach to other connectors as <code>IValueChangeListener</code>
- * 
+ * {@code IValueChangeEvent} accordingly). <li>is able to update peer value
+ * <li>can attach to other connectors as {@code IValueChangeListener}
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -40,17 +40,17 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
     Comparable<IValueConnector>, IValueChangeSource, ISecurityHandlerAware {
 
   /**
-   * <code>READABLE_PROPERTY</code>.
+   * {@code READABLE_PROPERTY}.
    */
   String READABLE_PROPERTY        = "readable";
 
   /**
-   * <code>WRITABLE_PROPERTY</code>.
+   * {@code WRITABLE_PROPERTY}.
    */
   String WRITABLE_PROPERTY        = "writable";
 
   /**
-   * <code>MODEL_CONNECTOR_PROPERTY</code>.
+   * {@code MODEL_CONNECTOR_PROPERTY}.
    */
   String MODEL_CONNECTOR_PROPERTY = "modelConnector";
 
@@ -95,10 +95,10 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Cleans all bindings with view connectors.
-   * 
+   *
    * @param mvcBinder
    *          the mvcBinder used to unbind view connectors. It might be
-   *          <code>null</code> for model connectors.
+   *          {@code null} for model connectors.
    */
   void recycle(IMvcBinder mvcBinder);
 

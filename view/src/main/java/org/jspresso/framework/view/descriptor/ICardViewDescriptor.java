@@ -30,12 +30,12 @@ public interface ICardViewDescriptor extends IViewDescriptor,
     ICardNameSelector, ICardProvider {
 
   /**
-   * <code>DEFAULT_CARD</code>.
+   * {@code DEFAULT_CARD}.
    */
   String DEFAULT_CARD  = "DEFAULT_CARD";
 
   /**
-   * <code>SECURITY_CARD</code>.
+   * {@code SECURITY_CARD}.
    */
   String SECURITY_CARD = "SECURITY_CARD";
 }

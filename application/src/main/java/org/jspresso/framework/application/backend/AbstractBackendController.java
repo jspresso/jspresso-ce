@@ -160,7 +160,7 @@ public abstract class AbstractBackendController extends AbstractController
   private int                                              asyncExecutorsMaxCount;
 
   /**
-   * Constructs a new <code>AbstractBackendController</code> instance.
+   * Constructs a new {@code AbstractBackendController} instance.
    */
   @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
@@ -912,11 +912,11 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Configures the entity factory to use to create new entities. Backend
    * controllers only accept instances of
-   * <code>ControllerAwareProxyEntityFactory</code> or a subclass. This is
+   * {@code ControllerAwareProxyEntityFactory} or a subclass. This is
    * because the backend controller must keep track of created entities.
    * Jspresso entity implementations also use the controller from which they
    * were created behind the scene.
-   * 
+   *
    * @param entityFactory
    *          the entityFactory to set.
    */
@@ -949,9 +949,9 @@ public abstract class AbstractBackendController extends AbstractController
    * a custom implementation instance to be used.
    * <p>
    * The configured instance is the one that will be returned by the
-   * controller's <code>getTransactionTemplate()</code> method that should be
+   * controller's {@code getTransactionTemplate()} method that should be
    * used by the service layer for transaction management.
-   * 
+   *
    * @param transactionTemplate
    *          the transactionTemplate to set.
    */
@@ -2397,8 +2397,8 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Configures the maximum count of concurrent asynchronous action executors.
-   * It defaults to <code>10</code>.
-   * 
+   * It defaults to {@code 10}.
+   *
    * @param asyncExecutorsMaxCount
    *          the asyncExecutorsMaxCount to set.
    */

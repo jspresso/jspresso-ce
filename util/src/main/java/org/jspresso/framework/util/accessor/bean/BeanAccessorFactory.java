@@ -34,7 +34,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 public class BeanAccessorFactory extends AbstractAccessorFactory {
 
   /**
-   * Creates a new <code>BeanCollectionAccessor</code> on the collection
+   * Creates a new {@code BeanCollectionAccessor} on the collection
    * property.
    * <p>
    * {@inheritDoc}
@@ -50,7 +50,7 @@ public class BeanAccessorFactory extends AbstractAccessorFactory {
   }
 
   /**
-   * Creates a new <code>BeanPropertyAccessor</code> on the property.
+   * Creates a new {@code BeanPropertyAccessor} on the property.
    * <p>
    * {@inheritDoc}
    */

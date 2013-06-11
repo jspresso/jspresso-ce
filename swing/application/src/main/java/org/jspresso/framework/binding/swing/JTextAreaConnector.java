@@ -29,8 +29,8 @@ import javax.swing.JTextArea;
 public class JTextAreaConnector extends JTextComponentConnector<JTextArea> {
 
   /**
-   * Constructs a new <code>JTextAreaConnector</code> instance.
-   * 
+   * Constructs a new {@code JTextAreaConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textArea

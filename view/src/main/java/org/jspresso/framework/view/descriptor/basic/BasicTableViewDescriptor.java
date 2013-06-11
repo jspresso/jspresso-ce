@@ -49,8 +49,8 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
  * <li>...</li>
  * </ul>
  * A table view provides sensible defaults regarding its configuration, but it
- * can be refined using either the simple <code>renderedProperties</code> or the
- * more advanced yet lot more powerful <code>columnViewDescriptors</code>
+ * can be refined using either the simple {@code renderedProperties} or the
+ * more advanced yet lot more powerful {@code columnViewDescriptors}
  * properties.
  * <p>
  * The description property is used to compute view tooltips and support the
@@ -73,7 +73,7 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
  * really useful tooltips (event multi-line), in order to detail some synthetic
  * data. Moreover, this rule is available for the table rows tooltip, but also
  * for each individual column (property view) in the table.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -87,7 +87,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   private IDisplayableAction            sortingAction;
 
   /**
-   * Constructs a new <code>BasicTableViewDescriptor</code> instance.
+   * Constructs a new {@code BasicTableViewDescriptor} instance.
    */
   public BasicTableViewDescriptor() {
     horizontallyScrollable = true;
@@ -163,7 +163,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Returns <code>true</code>.
+   * Returns {@code true}.
    * <p>
    * {@inheritDoc}
    */
@@ -229,9 +229,9 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * Whenever it is set to false, the corresponding table UI component will
    * adapt its columns to fit the available horizontal space.
    * <p>
-   * Default value is <code>true</code>, i.e. table columns will have their
+   * Default value is {@code true}, i.e. table columns will have their
    * default size and tha table will scroll horizontally as needed.
-   * 
+   *
    * @param horizontallyScrollable
    *          the horizontallyScrollable to set.
    */
@@ -240,16 +240,16 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * This is somehow a shortcut to using the <code>columnViewDescriptors</code>
+   * This is somehow a shortcut to using the {@code columnViewDescriptors}
    * property. Instead of providing a full-blown list of property view
    * descriptors to configure the table columns, you just pass-in a list of
    * property names. Table columns are then created from this list, keeping
    * model defaults for all column characteristics.
    * <p>
-   * Whenever the property value is <code>null</code> (default), the column list
+   * Whenever the property value is {@code null} (default), the column list
    * is determined from the collection element component descriptor
-   * <code>renderedProperties</code> property.
-   * 
+   * {@code renderedProperties} property.
+   *
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -262,9 +262,9 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * Whenever it is set to false, the corresponding table UI component will not
    * allow manual sorting of its rows.
    * <p>
-   * Default value is <code>true</code>, i.e. table allows for its rows to be
+   * Default value is {@code true}, i.e. table allows for its rows to be
    * sorted.
-   * 
+   *
    * @param sortable
    *          the sortable to set.
    */

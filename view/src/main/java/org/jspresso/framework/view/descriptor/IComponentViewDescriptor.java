@@ -41,9 +41,9 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
 
   /**
    * Gets the position of the labels naming the displayed properties.
-   * 
-   * @return the relative position of the labels (<code>ABOVE</code> or
-   *         <code>ASIDE</code>).
+   *
+   * @return the relative position of the labels ({@code ABOVE} or
+   *         {@code ASIDE}).
    */
   ELabelPosition getLabelsPosition();
 

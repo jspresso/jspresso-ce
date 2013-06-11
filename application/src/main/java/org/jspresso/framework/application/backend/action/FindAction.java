@@ -29,8 +29,8 @@ import org.jspresso.framework.model.component.IQueryComponent;
  * component used as QBE filter. It will then tailor paging status on this query
  * component before continuing execution. This action is meant to be chained
  * with an actual backend action to perform the query (like
- * <code>QueryEntitiesAction</code>).
- * 
+ * {@code QueryEntitiesAction}).
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

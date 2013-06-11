@@ -171,8 +171,8 @@ public class EditSelectedComponentAction<E, F, G> extends
     private final FrontendAction<E, F, G> delegate;
 
     /**
-     * Constructs a new <code>UowRollbackerAction</code> instance.
-     * 
+     * Constructs a new {@code UowRollbackerAction} instance.
+     *
      * @param delegate
      *          the action to finally delegate to.
      */

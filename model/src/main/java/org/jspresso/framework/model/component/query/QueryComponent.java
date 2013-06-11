@@ -66,8 +66,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private List<?>                 stickyResults;
 
   /**
-   * Constructs a new <code>QueryComponent</code> instance.
-   * 
+   * Constructs a new {@code QueryComponent} instance.
+   *
    * @param componentDescriptor
    *          the query componentDescriptor.
    * @param componentFactory
@@ -599,8 +599,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     private final String componentName;
 
     /**
-     * Constructs a new <code>InnerComponentTracker</code> instance.
-     * 
+     * Constructs a new {@code InnerComponentTracker} instance.
+     *
      * @param componentName
      *          the name of the component to track the properties.
      */

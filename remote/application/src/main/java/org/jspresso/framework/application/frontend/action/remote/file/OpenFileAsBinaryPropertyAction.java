@@ -38,7 +38,7 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
 public class OpenFileAsBinaryPropertyAction extends OpenFileAction {
 
   /**
-   * Constructs a new <code>OpenFileAsBinaryPropertyAction</code> instance.
+   * Constructs a new {@code OpenFileAsBinaryPropertyAction} instance.
    */
   public OpenFileAsBinaryPropertyAction() {
     setFileOpenCallback(new ConnectorValueSetterCallback());

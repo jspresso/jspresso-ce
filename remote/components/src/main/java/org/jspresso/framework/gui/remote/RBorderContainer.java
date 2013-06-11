@@ -35,8 +35,8 @@ public class RBorderContainer extends RContainer {
   private RComponent        west;
 
   /**
-   * Constructs a new <code>RBorderContainer</code> instance.
-   * 
+   * Constructs a new {@code RBorderContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -45,7 +45,7 @@ public class RBorderContainer extends RContainer {
   }
 
   /**
-   * Constructs a new <code>RBorderContainer</code> instance. Only used for
+   * Constructs a new {@code RBorderContainer} instance. Only used for
    * serialization support.
    */
   public RBorderContainer() {

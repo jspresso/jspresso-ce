@@ -18,8 +18,8 @@ public class EmbeddedModelProvider implements IModelProvider {
   private final IComponentDescriptorProvider<?> modelDescriptor;
 
   /**
-   * Constructs a new <code>EmbeddedModelProvider</code> instance.
-   * 
+   * Constructs a new {@code EmbeddedModelProvider} instance.
+   *
    * @param modelDescriptor
    *          the model descriptor of this model provider.
    */
@@ -73,9 +73,9 @@ public class EmbeddedModelProvider implements IModelProvider {
 
   /**
    * Sets a new internally held model instance and forwards the change to all
-   * <code>IModelChangeListener</code>s. In this case this is the enclosing
-   * <code>ModelConnector</code>.
-   * 
+   * {@code IModelChangeListener}s. In this case this is the enclosing
+   * {@code ModelConnector}.
+   *
    * @param newModel
    *          the new model instance.
    */

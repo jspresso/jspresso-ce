@@ -35,7 +35,7 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
 public class SaveBinaryPropertyAsFileAction extends SaveFileAction {
 
   /**
-   * Constructs a new <code>OpenFileAsBinaryPropertyAction</code> instance.
+   * Constructs a new {@code OpenFileAsBinaryPropertyAction} instance.
    */
   public SaveBinaryPropertyAsFileAction() {
     setFileSaveCallback(new ConnectorValueGetterCallback());

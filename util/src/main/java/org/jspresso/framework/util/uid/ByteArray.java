@@ -38,8 +38,8 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
   private final int               cachedHashcode;
 
   /**
-   * Constructs a new <code>ByteArray</code> instance.
-   * 
+   * Constructs a new {@code ByteArray} instance.
+   *
    * @param bytes
    *          the bytes content.
    */
@@ -49,8 +49,8 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
   }
 
   /**
-   * Constructs a new <code>ByteArray</code> instance.
-   * 
+   * Constructs a new {@code ByteArray} instance.
+   *
    * @param bytesHex
    *          the bytes content hexa encoded.
    * @throws DecoderException whenever the content is not hexa encoded.

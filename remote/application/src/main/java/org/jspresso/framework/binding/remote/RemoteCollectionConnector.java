@@ -48,8 +48,8 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   private RemoteCompositeValueState state;
 
   /**
-   * Constructs a new <code>RemoteCollectionConnector</code> instance.
-   * 
+   * Constructs a new {@code RemoteCollectionConnector} instance.
+   *
    * @param id
    *          the connector id.
    * @param binder

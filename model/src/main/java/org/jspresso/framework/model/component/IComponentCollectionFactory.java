@@ -29,9 +29,9 @@ import java.util.Collection;
 public interface IComponentCollectionFactory {
 
   /**
-   * Given a collection interface (i.e. <code>Set</code>,<code>List</code>, ...)
+   * Given a collection interface (i.e. {@code Set},{@code List}, ...)
    * this method creates a concrete implementation.
-   * 
+   *
    * @param collectionInterface
    *          the interface which must be implemented by the created collection.
    * @return an empty instance of a concrete collection.

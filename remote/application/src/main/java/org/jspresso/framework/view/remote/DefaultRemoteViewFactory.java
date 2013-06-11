@@ -202,7 +202,7 @@ public class DefaultRemoteViewFactory extends
                                                            };
 
   /**
-   * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
+   * Constructs a new {@code DefaultRemoteViewFactory} instance.
    */
   public DefaultRemoteViewFactory() {
     durationServerParse = false;

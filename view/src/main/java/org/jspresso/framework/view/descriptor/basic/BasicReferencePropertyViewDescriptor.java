@@ -48,8 +48,8 @@ public class BasicReferencePropertyViewDescriptor extends
    * Allows to override the default &quot;List of values&quot; action attached
    * to this reference property view.
    * <p>
-   * A <code>null</code> value (default) keeps the standard action.
-   * 
+   * A {@code null} value (default) keeps the standard action.
+   *
    * @param lovAction
    *          the lovAction to set.
    */

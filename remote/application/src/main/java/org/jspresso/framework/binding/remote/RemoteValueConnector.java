@@ -41,8 +41,8 @@ public class RemoteValueConnector extends BasicValueConnector implements
   private RemoteValueState        state;
 
   /**
-   * Constructs a new <code>RemoteValueConnector</code> instance.
-   * 
+   * Constructs a new {@code RemoteValueConnector} instance.
+   *
    * @param id
    *          the connector id.
    * @param connectorFactory

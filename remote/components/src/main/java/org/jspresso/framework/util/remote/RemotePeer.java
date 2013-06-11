@@ -37,7 +37,7 @@ public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
   private String            guid;
 
   /**
-   * Constructs a new <code>RemotePeer</code> instance. Only used for
+   * Constructs a new {@code RemotePeer} instance. Only used for
    * serialization support.
    */
   public RemotePeer() {
@@ -45,8 +45,8 @@ public abstract class RemotePeer implements IRemotePeer, IPermIdSource,
   }
 
   /**
-   * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
-   * 
+   * Constructs a new {@code RemoteServerPeer} instance generating its UID.
+   *
    * @param guid
    *          the guid.
    */

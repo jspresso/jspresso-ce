@@ -30,7 +30,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
 public class RIcon extends RemotePeer {
 
   /**
-   * <code>DEFAULT_DIM</code>.
+   * {@code DEFAULT_DIM}.
    */
   public static final Dimension DEFAULT_DIM      = new Dimension(24, 24);
 
@@ -40,8 +40,8 @@ public class RIcon extends RemotePeer {
   private String                imageUrlSpec;
 
   /**
-   * Constructs a new <code>RIcon</code> instance.
-   * 
+   * Constructs a new {@code RIcon} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -50,7 +50,7 @@ public class RIcon extends RemotePeer {
   }
 
   /**
-   * Constructs a new <code>RIcon</code> instance. Only used for serialization
+   * Constructs a new {@code RIcon} instance. Only used for serialization
    * support.
    */
   public RIcon() {

@@ -34,8 +34,8 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
   private Collection<?> connecteeValue;
 
   /**
-   * Constructs a new <code>ModelCollectionConnector</code> instance.
-   * 
+   * Constructs a new {@code ModelCollectionConnector} instance.
+   *
    * @param id
    *          the connector identifier.
    * @param modelDescriptor

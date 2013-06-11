@@ -37,8 +37,8 @@ public class SelectionChangeEvent extends EventObject {
   private final int[]             oldSelection;
 
   /**
-   * Constructs a new <code>SelectionChangeEvent</code>.
-   * 
+   * Constructs a new {@code SelectionChangeEvent}.
+   *
    * @param source
    *          The object that initiated the event.
    * @param oldSelection

@@ -35,10 +35,10 @@ public class ModelChangeSupport {
 
   /**
    * Constructs a new Connector change support.
-   * 
+   *
    * @param sourceModelProvider
    *          The model provider to which this ModelChangeSupport is attached.
-   *          sourceModelProvider will serve as <code>source</code> of fired
+   *          sourceModelProvider will serve as {@code source} of fired
    *          ModelChangeEvent if no other is provided.
    */
   public ModelChangeSupport(IModelProvider sourceModelProvider) {
@@ -49,8 +49,8 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Adds a new <code>IModelChangeListener</code>.
-   * 
+   * Adds a new {@code IModelChangeListener}.
+   *
    * @param listener
    *          The added listener.
    * @see IModelProvider#addModelChangeListener(IModelChangeListener)
@@ -67,11 +67,11 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Propagates the <code>ModelChangeEvent</code> as is (i.e. without modifying
+   * Propagates the {@code ModelChangeEvent} as is (i.e. without modifying
    * its source) to the listeners.
-   * 
+   *
    * @param evt
-   *          the propagated <code>ModelChangeEvent</code>
+   *          the propagated {@code ModelChangeEvent}
    */
   public void fireModelChange(ModelChangeEvent evt) {
     if (listeners != null) {
@@ -93,9 +93,9 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Fires a new <code>ModelChangeEvent</code> built with <code>source</code> as
+   * Fires a new {@code ModelChangeEvent} built with {@code source} as
    * source and parameters as old and new values.
-   * 
+   *
    * @param oldValue
    *          The old model provider's model value
    * @param newValue
@@ -107,8 +107,8 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Removes a <code>IModelChangeListener</code>.
-   * 
+   * Removes a {@code IModelChangeListener}.
+   *
    * @param listener
    *          The removed listener.
    * @see IModelProvider#removeModelChangeListener(IModelChangeListener)

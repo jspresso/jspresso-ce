@@ -39,8 +39,8 @@ import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
- * Default implementation of <code>ITreeSelectionModelBinder</code>.
- * 
+ * Default implementation of {@code ITreeSelectionModelBinder}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -50,7 +50,7 @@ public class DefaultTreeSelectionModelBinder implements
   private final SelectionModelListener genericSelectionModelListener;
 
   /**
-   * Constructs a new <code>DefaultTreeSelectionModelBinder</code> instance.
+   * Constructs a new {@code DefaultTreeSelectionModelBinder} instance.
    */
   public DefaultTreeSelectionModelBinder() {
     genericSelectionModelListener = new SelectionModelListener();
@@ -75,9 +75,9 @@ public class DefaultTreeSelectionModelBinder implements
     private final TreeSelectionModel selectionModel;
 
     /**
-     * Constructs a new <code>CollectionConnectorsSelectionListener</code>
+     * Constructs a new {@code CollectionConnectorsSelectionListener}
      * instance.
-     * 
+     *
      * @param rootConnector the root connector.
      * @param selectionModel the selection model.
      */
@@ -203,8 +203,8 @@ public class DefaultTreeSelectionModelBinder implements
     private final CollectionConnectorsSelectionListener connectorsSelectionListener;
 
     /**
-     * Constructs a new <code>TreeConnectorsListener</code> instance.
-     * 
+     * Constructs a new {@code TreeConnectorsListener} instance.
+     *
      * @param rootConnector
      *          the root connector of the connector hierarchy.
      * @param selectionModel

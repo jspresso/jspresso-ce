@@ -31,8 +31,8 @@ public class EnumerationFormatter implements IFormatter<Object, String> {
   private final Map<Object, String> values;
 
   /**
-   * Constructs a new <code>EnumFormatter</code> instance.
-   * 
+   * Constructs a new {@code EnumFormatter} instance.
+   *
    * @param values
    *          the values translations. A null translation map simply means that
    *          the values are returned as is.

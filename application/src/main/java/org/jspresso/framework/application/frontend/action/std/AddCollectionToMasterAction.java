@@ -36,8 +36,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * descriptor of the component (or entity) to be added so that the backend
  * action explicitly knows what to create. Moreover, the name, description and
  * icon used for the graphical representation are all computed out of the
- * configured <code>elementEntityDescriptor</code>.
- * 
+ * configured {@code elementEntityDescriptor}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -134,13 +134,13 @@ public class AddCollectionToMasterAction<E, F, G> extends
    * multiple objectives :
    * <ul>
    * <li>complete the application context with the
-   * <code>AddComponentCollectionToMasterAction.ELEMENT_DESCRIPTOR</code> key so
+   * {@code AddComponentCollectionToMasterAction.ELEMENT_DESCRIPTOR} key so
    * that the chained backend action knows what type of entity to create.</li>
    * <li>customize the name, description and icon used to represent the action
    * in the UI. All three are derived from the configured element entity
    * descriptor.</li>
    * </ul>
-   * 
+   *
    * @param elementEntityDescriptor
    *          the elementEntityDescriptor to set.
    */

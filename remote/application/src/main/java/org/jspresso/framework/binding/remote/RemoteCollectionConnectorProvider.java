@@ -46,8 +46,8 @@ public class RemoteCollectionConnectorProvider extends
   private RemoteCompositeValueState state;
 
   /**
-   * Constructs a new <code>RemoteCollectionConnectorProvider</code> instance.
-   * 
+   * Constructs a new {@code RemoteCollectionConnectorProvider} instance.
+   *
    * @param id
    *          the connector id.
    * @param connectorFactory

@@ -50,7 +50,7 @@ public final class HibernateHelper {
                                       .getLogger(HibernateHelper.class);
 
   /**
-   * Constructs a new <code>HibernateUtils</code> instance.
+   * Constructs a new {@code HibernateUtils} instance.
    */
   private HibernateHelper() {
     // Helper constructor

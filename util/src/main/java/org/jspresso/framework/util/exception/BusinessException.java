@@ -22,8 +22,8 @@ public abstract class BusinessException extends RuntimeException {
   private final String            staticI18nKey;
 
   /**
-   * Constructs a new <code>BusinessException</code> instance.
-   * 
+   * Constructs a new {@code BusinessException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -32,8 +32,8 @@ public abstract class BusinessException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <code>BusinessException</code> instance.
-   * 
+   * Constructs a new {@code BusinessException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey
@@ -45,8 +45,8 @@ public abstract class BusinessException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <code>BusinessException</code> instance.
-   * 
+   * Constructs a new {@code BusinessException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey

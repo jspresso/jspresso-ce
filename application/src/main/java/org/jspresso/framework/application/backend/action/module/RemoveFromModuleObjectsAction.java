@@ -41,7 +41,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
 public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
   /**
-   * Constructs a new <code>RemoveFromModuleObjectsAction</code> instance.
+   * Constructs a new {@code RemoveFromModuleObjectsAction} instance.
    */
   public RemoveFromModuleObjectsAction() {
     // Disable bad frontend access checks.

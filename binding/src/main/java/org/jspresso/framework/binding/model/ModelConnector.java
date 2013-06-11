@@ -25,9 +25,9 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 /**
  * This class implements the connector mechanism on an arbitrary model. This type
  * of connector is not targeted at a specific property but at the model
- * instance itself. This implies that the <code>getConnectorValue</code> method
+ * instance itself. This implies that the {@code getConnectorValue} method
  * returns the model instance itself.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

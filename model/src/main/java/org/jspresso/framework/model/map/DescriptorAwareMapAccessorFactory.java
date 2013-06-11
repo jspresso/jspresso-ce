@@ -17,7 +17,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 public class DescriptorAwareMapAccessorFactory extends AbstractAccessorFactory {
 
   /**
-   * Creates a new <code>DescriptorAwareMapCollectionAccessor</code> on the
+   * Creates a new {@code DescriptorAwareMapCollectionAccessor} on the
    * collection property.
    * <p>
    * {@inheritDoc}
@@ -29,7 +29,7 @@ public class DescriptorAwareMapAccessorFactory extends AbstractAccessorFactory {
   }
 
   /**
-   * Creates a new <code>DescriptorAwareMapPropertyAccessor</code> on the
+   * Creates a new {@code DescriptorAwareMapPropertyAccessor} on the
    * property.
    * <p>
    * {@inheritDoc}

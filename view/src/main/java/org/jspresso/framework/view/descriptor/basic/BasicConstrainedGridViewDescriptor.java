@@ -31,20 +31,20 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * dimensions are configured using cell constraints. A cell constraint is a
  * simple data structure holding the following properties :
  * <ul>
- * <li><code>row</code>: the row to which the cell belongs</li>
- * <li><code>column</code>: the column to which the cell belongs</li>
- * <li><code>width</code>: the number of columns the cell spans horizontally
+ * <li>{@code row}: the row to which the cell belongs</li>
+ * <li>{@code column}: the column to which the cell belongs</li>
+ * <li>{@code width}: the number of columns the cell spans horizontally
  * (default value is 1)</li>
- * <li><code>height</code>: the number of rows the cell spans vertically
+ * <li>{@code height}: the number of rows the cell spans vertically
  * (default value is 1)</li>
- * <li><code>heightResizable</code>: whether the cell should be resized to take
+ * <li>{@code heightResizable}: whether the cell should be resized to take
  * all the available space vertically</li>
- * <li><code>widthResizable</code>: whether the cell should be resized to take
+ * <li>{@code widthResizable}: whether the cell should be resized to take
  * all the available space horizontally</li>
  * </ul>
  * Default cascading order follows the order of nested view registrations in the
  * container.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -85,12 +85,12 @@ public class BasicConstrainedGridViewDescriptor extends
 
   /**
    * Registers the nested children views along with their cell constraints. They
-   * are set as a <code>Map</code> that is :
+   * are set as a {@code Map} that is :
    * <ul>
    * <li>keyed by the children views</li>
    * <li>valued by the cell constraints to apply to each nested view</li>
    * </ul>
-   * 
+   *
    * @param cells
    *          the cells to set.
    */
@@ -99,8 +99,8 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Deprecated. Use <code>cells</code> instead.
-   * 
+   * Deprecated. Use {@code cells} instead.
+   *
    * @param constrainedCells
    *          the constrainedCells to set.
    * @deprecated use setCells instead.
@@ -112,8 +112,8 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Deprecated. Use <code>cells</code> instead.
-   * 
+   * Deprecated. Use {@code cells} instead.
+   *
    * @param constrainedViews
    *          the constrainedViews to set.
    * @deprecated use setCells instead.

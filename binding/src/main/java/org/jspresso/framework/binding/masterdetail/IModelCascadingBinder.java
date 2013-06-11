@@ -23,8 +23,8 @@ import org.jspresso.framework.binding.IValueConnector;
 /**
  * This is the interface which has to be implemented by classes which bind two
  * connectors in a master / detail relationship where the master connector is
- * determined by the selection in a <code>ISelectableConnector</code>.
- * 
+ * determined by the selection in a {@code ISelectableConnector}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

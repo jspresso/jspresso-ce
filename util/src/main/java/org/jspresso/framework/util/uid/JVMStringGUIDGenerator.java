@@ -34,7 +34,7 @@ public class JVMStringGUIDGenerator implements IGUIDGenerator<String> {
   private long                index     = 0;
 
   /**
-   * Constructs a new <code>JVMGUIDGenerator</code> instance.
+   * Constructs a new {@code JVMGUIDGenerator} instance.
    */
   public JVMStringGUIDGenerator() {
     synchronized (LOCK) {

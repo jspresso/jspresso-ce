@@ -30,8 +30,8 @@ import org.jspresso.framework.util.format.IFormatter;
 public interface IConfigurableConnectorFactory {
 
   /**
-   * Creates a <code>ICollectionConnector</code>.
-   * 
+   * Creates a {@code ICollectionConnector}.
+   *
    * @param id
    *          the connector identifier.
    * @param binder
@@ -45,8 +45,8 @@ public interface IConfigurableConnectorFactory {
       ICompositeValueConnector childConnectorPrototype);
 
   /**
-   * Creates a <code>ICompositeValueConnector</code>.
-   * 
+   * Creates a {@code ICompositeValueConnector}.
+   *
    * @param id
    *          the connector identifier.
    * @param renderingConnectorId
@@ -57,8 +57,8 @@ public interface IConfigurableConnectorFactory {
       String renderingConnectorId);
 
   /**
-   * Creates a <code>IConfigurableCollectionConnectorListProvider</code>.
-   * 
+   * Creates a {@code IConfigurableCollectionConnectorListProvider}.
+   *
    * @param id
    *          the connector identifier.
    * @param renderingConnectorId
@@ -69,8 +69,8 @@ public interface IConfigurableConnectorFactory {
       String id, String renderingConnectorId);
 
   /**
-   * Creates a <code>IConfigurableCollectionConnectorProvider</code>.
-   * 
+   * Creates a {@code IConfigurableCollectionConnectorProvider}.
+   *
    * @param id
    *          the connector identifier.
    * @param renderingConnectorId
@@ -81,8 +81,8 @@ public interface IConfigurableConnectorFactory {
       String id, String renderingConnectorId);
 
   /**
-   * Creates a <code>IFormattedValueConnector</code>.
-   * 
+   * Creates a {@code IFormattedValueConnector}.
+   *
    * @param id
    *          the connector identifier.
    * @param formatter
@@ -93,8 +93,8 @@ public interface IConfigurableConnectorFactory {
       IFormatter<?, ?> formatter);
 
   /**
-   * Creates a <code>IValueConnector</code>.
-   * 
+   * Creates a {@code IValueConnector}.
+   *
    * @param id
    *          the connector identifier.
    * @return the created connector.

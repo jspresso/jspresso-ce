@@ -50,11 +50,11 @@ public class ItemSelectionSupport {
   }
 
   /**
-   * Propagates the <code>ItemSelectionEvent</code> as is (i.e. without
+   * Propagates the {@code ItemSelectionEvent} as is (i.e. without
    * modifying its source) to the listeners.
-   * 
+   *
    * @param evt
-   *          the propagated <code>ConnectorSelectionEvent</code>
+   *          the propagated {@code ConnectorSelectionEvent}
    */
   public void fireSelectedConnectorChange(ItemSelectionEvent evt) {
     if (listeners != null) {
@@ -66,8 +66,8 @@ public class ItemSelectionSupport {
   }
 
   /**
-   * Removes a new <code>IItemValueChangeListener</code>.
-   * 
+   * Removes a new {@code IItemValueChangeListener}.
+   *
    * @param listener
    *          The removed listener.
    */

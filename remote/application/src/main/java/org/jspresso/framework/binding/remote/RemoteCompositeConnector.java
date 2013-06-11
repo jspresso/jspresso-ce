@@ -46,8 +46,8 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   private RemoteCompositeValueState state;
 
   /**
-   * Constructs a new <code>RemoteCompositeConnector</code> instance.
-   * 
+   * Constructs a new {@code RemoteCompositeConnector} instance.
+   *
    * @param id
    *          the connector id.
    * @param connectorFactory

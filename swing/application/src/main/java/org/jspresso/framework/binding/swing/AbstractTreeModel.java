@@ -50,30 +50,30 @@ public abstract class AbstractTreeModel implements TreeModel {
 
   /**
    * Returns an array of all the objects currently registered as
-   * <code><em>Foo</em>Listener</code>s upon this model.
-   * <code><em>Foo</em>Listener</code>s are registered using the
-   * <code>add<em>Foo</em>Listener</code> method.
+   * {@code <em>Foo</em>Listener}s upon this model.
+   * {@code <em>Foo</em>Listener}s are registered using the
+   * {@code add<em>Foo</em>Listener} method.
    * <p>
-   * You can specify the <code>listenerType</code> argument with a class
-   * literal, such as <code><em>Foo</em>Listener.class</code>. For example, you
-   * can query a <code>DefaultTreeModel</code> <code>m</code> for its tree model
+   * You can specify the {@code listenerType} argument with a class
+   * literal, such as {@code <em>Foo</em>Listener.class}. For example, you
+   * can query a {@code DefaultTreeModel} {@code m} for its tree model
    * listeners with the following code:
-   * 
+   *
    * <pre>
-   * 
+   *
    * TreeModelListener[] tmls = (TreeModelListener[]) (m
    *                              .getListeners(TreeModelListener.class));
    * </pre>
-   * 
+   *
    * If no such listeners exist, this method returns an empty array.
-   * 
+   *
    * @param <T>
    *          The type of EventListener.
    * @param listenerType
    *          the type of listeners requested; this parameter should specify an
-   *          interface that descends from <code>java.util.EventListener</code>
+   *          interface that descends from {@code java.util.EventListener}
    * @return an array of all objects registered as
-   *         <code><em>Foo</em>Listener</code>s on this component, or an empty
+   *         {@code <em>Foo</em>Listener}s on this component, or an empty
    *         array if no such listeners have been added
    * @see #getTreeModelListeners
    */
@@ -83,8 +83,8 @@ public abstract class AbstractTreeModel implements TreeModel {
 
   /**
    * Returns an array of all the tree model listeners registered on this model.
-   * 
-   * @return all of this model's <code>TreeModelListener</code>s or an empty
+   *
+   * @return all of this model's {@code TreeModelListener}s or an empty
    *         array if no tree model listeners are currently registered
    * @see #addTreeModelListener
    * @see #removeTreeModelListener

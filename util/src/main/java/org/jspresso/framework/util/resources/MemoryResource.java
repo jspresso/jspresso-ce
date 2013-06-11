@@ -33,8 +33,8 @@ public class MemoryResource extends AbstractResource {
   private final byte[] resourceBytes;
 
   /**
-   * Constructs a new <code>MemoryResource</code> instance.
-   * 
+   * Constructs a new {@code MemoryResource} instance.
+   *
    * @param name
    *          the name of the resource.
    * @param mimeType

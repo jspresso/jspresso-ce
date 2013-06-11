@@ -33,7 +33,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
   private String storePath;
 
   /**
-   * Constructs a new <code>CookiePreferencesStore</code> instance.
+   * Constructs a new {@code CookiePreferencesStore} instance.
    */
   public CookiePreferencesStore() {
     this.storePath = "";

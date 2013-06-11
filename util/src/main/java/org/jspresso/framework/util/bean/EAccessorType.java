@@ -27,28 +27,28 @@ package org.jspresso.framework.util.bean;
 public enum EAccessorType {
 
   /**
-   * <code>ADDER</code>. This type of method is an adder ("addToXXX").
+   * {@code ADDER}. This type of method is an adder ("addToXXX").
    */
   ADDER,
 
   /**
-   * <code>GETTER</code>. This type of method is a getter (either "getXXX" or
+   * {@code GETTER}. This type of method is a getter (either "getXXX" or
    * "isXXX").
    */
   GETTER,
 
   /**
-   * <code>NONE</code>. This type of method is not an accessor.
+   * {@code NONE}. This type of method is not an accessor.
    */
   NONE,
 
   /**
-   * <code>REMOVER</code>. This type of method is a remover ("removeFromXXX").
+   * {@code REMOVER}. This type of method is a remover ("removeFromXXX").
    */
   REMOVER,
 
   /**
-   * <code>SETTER</code>. This type of method is a setter ("setXXX").
+   * {@code SETTER}. This type of method is a setter ("setXXX").
    */
   SETTER
 

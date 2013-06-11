@@ -38,8 +38,8 @@ public class JFormattedTextFieldConnector extends
     JTextComponentConnector<JFormattedTextField> {
 
   /**
-   * Constructs a new <code>JFormattedTextFieldConnector</code> instance.
-   * 
+   * Constructs a new {@code JFormattedTextFieldConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textField

@@ -28,10 +28,10 @@ import org.jspresso.framework.util.collection.ObjectEqualityMap;
 /**
  * An action used duplicate a collection of domain objects implemented as maps.
  * Newly created maps are instances of
- * <code>org.jspresso.framework.util.collection.ObjectEqualityMap</code> that
+ * {@code org.jspresso.framework.util.collection.ObjectEqualityMap} that
  * contains the same key/value pairs as the maps to clone. Executing this action
  * will result in adding the cloned map to the underlying model collection.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

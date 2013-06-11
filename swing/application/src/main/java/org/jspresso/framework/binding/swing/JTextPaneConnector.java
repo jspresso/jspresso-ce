@@ -29,8 +29,8 @@ import javax.swing.JTextPane;
 public class JTextPaneConnector extends JTextComponentConnector<JTextPane> {
 
   /**
-   * Constructs a new <code>JTextPane</code> instance.
-   * 
+   * Constructs a new {@code JTextPane} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param textPane

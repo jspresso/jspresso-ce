@@ -32,8 +32,8 @@ public class RComboBox extends REnumBox {
   private boolean           readOnly;
 
   /**
-   * Constructs a new <code>RComboBox</code> instance.
-   * 
+   * Constructs a new {@code RComboBox} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -42,7 +42,7 @@ public class RComboBox extends REnumBox {
   }
 
   /**
-   * Constructs a new <code>RComboBox</code> instance. Only used for
+   * Constructs a new {@code RComboBox} instance. Only used for
    * serialization support.
    */
   public RComboBox() {

@@ -57,10 +57,10 @@ public class AccessorInfo {
   private EAccessorType      accessorType;
 
   /**
-   * Constructs a new <code>AccessorInfo</code> instance. If the method passed
-   * in parameter is not an accessor, the <code>getAccessorType</code> method
-   * will return <code>NONE</code>.
-   * 
+   * Constructs a new {@code AccessorInfo} instance. If the method passed
+   * in parameter is not an accessor, the {@code getAccessorType} method
+   * will return {@code NONE}.
+   *
    * @param method
    *          the method supposed to be an accessor.
    */

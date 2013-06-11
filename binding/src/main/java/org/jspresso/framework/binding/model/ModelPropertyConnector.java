@@ -57,11 +57,11 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Constructs a new model connector on a model property.
-   * 
+   *
    * @param modelDescriptor
    *          The model descriptor to which the connector is bound at.
    * @param accessorFactory
-   *          The factory which is used to build the <code>IAccessor</code> used
+   *          The factory which is used to build the {@code IAccessor} used
    *          to access the java model property bi-directionally
    */
   ModelPropertyConnector(IModelDescriptor modelDescriptor,
@@ -118,10 +118,10 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
-   * Detaches <code>this</code> as <code>PropertyChangeListener</code> on the
-   * old model instance and attaches as <code>PropertyChangeListener</code> on
+   * Detaches {@code this} as {@code PropertyChangeListener} on the
+   * old model instance and attaches as {@code PropertyChangeListener} on
    * the new model instance. When this is done, it notifies its
-   * <code>IValueChangeListener</code> s about a possible change on the model
+   * {@code IValueChangeListener} s about a possible change on the model
    * property value (the new model property).
    * <p>
    * {@inheritDoc}
@@ -191,7 +191,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Called when the underlying connectee value (the model property) changes.
-   * This implementation notifies its <code>IValueChangeListener</code> s about
+   * This implementation notifies its {@code IValueChangeListener} s about
    * the change passing the new model property.
    * <p>
    * {@inheritDoc}
@@ -204,7 +204,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   /**
    * Since model provider is usually the parent connector for this kind of
    * connector, this method is overloaded to call the
-   * <code>modelProviderChanged</code> method.
+   * {@code modelProviderChanged} method.
    * <p>
    * {@inheritDoc}
    */

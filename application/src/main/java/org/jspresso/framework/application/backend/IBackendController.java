@@ -493,8 +493,8 @@ public interface IBackendController extends IController,
   /**
    * Gets the entity dirty properties (changed properties that need to be
    * updated to the persistent store as well as computed properties if
-   * includeComputed is set to <code>true</code>).
-   * 
+   * includeComputed is set to {@code true}).
+   *
    * @param entity
    *          the entity to get the dirty properties of.
    * @param includeComputed

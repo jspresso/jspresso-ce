@@ -32,8 +32,8 @@ public class RColorField extends RComponent {
   private boolean           resetEnabled;
 
   /**
-   * Constructs a new <code>RColorField</code> instance.
-   * 
+   * Constructs a new {@code RColorField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -43,7 +43,7 @@ public class RColorField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RColorField</code> instance. Only used for
+   * Constructs a new {@code RColorField} instance. Only used for
    * serialization support.
    */
   public RColorField() {

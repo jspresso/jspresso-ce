@@ -37,17 +37,17 @@ public interface IValueChangeSource {
   void addValueChangeListener(IValueChangeListener listener);
 
   /**
-   * Removes a new <code>IValueChangeListener</code>.
-   * 
+   * Removes a new {@code IValueChangeListener}.
+   *
    * @param listener
    *          The removed listener.
    */
   void removeValueChangeListener(IValueChangeListener listener);
 
   /**
-   * Gets the registered <code>IValueChangeListener</code>s.
-   * 
-   * @return the registered <code>IValueChangeListener</code>s.
+   * Gets the registered {@code IValueChangeListener}s.
+   *
+   * @return the registered {@code IValueChangeListener}s.
    */
   Set<IValueChangeListener> getValueChangeListeners();
 

@@ -31,8 +31,8 @@ public class ViewException extends NestedRuntimeException {
   private static final long serialVersionUID = 5403717126687643426L;
 
   /**
-   * Constructs a new <code>ViewException</code> instance.
-   * 
+   * Constructs a new {@code ViewException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -41,8 +41,8 @@ public class ViewException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>ViewException</code> instance.
-   * 
+   * Constructs a new {@code ViewException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    */
@@ -51,8 +51,8 @@ public class ViewException extends NestedRuntimeException {
   }
 
   /**
-   * Constructs a new <code>ViewException</code> instance.
-   * 
+   * Constructs a new {@code ViewException} instance.
+   *
    * @param nestedException
    *          the nested exception.
    * @param message

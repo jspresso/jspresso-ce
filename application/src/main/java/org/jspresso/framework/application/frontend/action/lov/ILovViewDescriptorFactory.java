@@ -36,12 +36,12 @@ public interface ILovViewDescriptorFactory {
 
   /**
    * Creates a new lov view descriptor for a component descriptor.
-   * 
+   *
    * @param entityRefDescriptor
    *          the entity reference descriptor.
    * @param selectionMode
    *          allows to force the result view selection mode. When
-   *          <code>null</code>, the default selection mode is applied.
+   *          {@code null}, the default selection mode is applied.
    * @param okAction
    *          the action used to select the entity in the LOV.
    * @param lovContext

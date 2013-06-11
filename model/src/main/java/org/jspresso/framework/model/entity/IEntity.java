@@ -33,22 +33,22 @@ import org.jspresso.framework.model.component.IComponent;
 public interface IEntity extends IComponent {
 
   /**
-   * constant for identifier property <code>ID</code>.
+   * constant for identifier property {@code ID}.
    */
   String  ID              = "id";
 
   /**
-   * constant for version property <code>VERSION</code>.
+   * constant for version property {@code VERSION}.
    */
   String  VERSION         = "version";
 
   /**
-   * <code>DELETED_VERSION</code> is a magic constant for deleted entities.
+   * {@code DELETED_VERSION} is a magic constant for deleted entities.
    */
   Integer DELETED_VERSION = -Integer.MAX_VALUE;
 
   /**
-   * constant for version property <code>PERSISTENT</code>.
+   * constant for version property {@code PERSISTENT}.
    */
   String  PERSISTENT      = "persistent";
 
@@ -74,11 +74,11 @@ public interface IEntity extends IComponent {
   /**
    * Gets the id used to uniquely identify an entity (surrogate key). The id is
    * assigned to the entity instance as soon as the entity is created in memory
-   * an is afterwards made immutable so that <code>equals()</code> and
-   * <code>hashCode()</code> can safely rely on it whenever they are transient
+   * an is afterwards made immutable so that {@code equals()} and
+   * {@code hashCode()} can safely rely on it whenever they are transient
    * or not. It also establishes the minimal contract of a versionable entity
    * which is providing version accessors to handle access concurrency.
-   * 
+   *
    * @return The id of the entity.
    */
   Serializable getId();

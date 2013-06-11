@@ -50,8 +50,8 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
   private String                                    reportDesignUrl;
 
   /**
-   * Constructs a new <code>BasicReportDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BasicReportDescriptor} instance.
+   *
    * @param name
    *          the name of the report.
    */

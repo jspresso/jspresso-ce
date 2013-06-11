@@ -34,8 +34,8 @@ public class EnumerationPropertyModelGate extends
 
   /**
    * Configures the enumeration values for which the gate is to be open, unless
-   * the <code>openOnTrue</code> property is set to <code>false</code>.
-   * 
+   * the {@code openOnTrue} property is set to {@code false}.
+   *
    * @param openingValues
    *          the openingValues to set.
    */

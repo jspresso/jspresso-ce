@@ -38,8 +38,8 @@ import org.jspresso.framework.model.persistence.hibernate.property.EntityPropert
 public class DynamicPojoEntityTuplizer extends PojoEntityTuplizer {
 
   /**
-   * Constructs a new <code>ProxyPojoEntityTuplizer</code> instance.
-   * 
+   * Constructs a new {@code ProxyPojoEntityTuplizer} instance.
+   *
    * @param entityMetamodel
    *          the entity meta model.
    * @param mappedEntity

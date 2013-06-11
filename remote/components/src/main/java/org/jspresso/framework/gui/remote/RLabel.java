@@ -30,8 +30,8 @@ public class RLabel extends RTextComponent {
   private String            horizontalAlignment;
 
   /**
-   * Constructs a new <code>RLabel</code> instance.
-   * 
+   * Constructs a new {@code RLabel} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -40,7 +40,7 @@ public class RLabel extends RTextComponent {
   }
 
   /**
-   * Constructs a new <code>RLabel</code> instance. Only used for serialization
+   * Constructs a new {@code RLabel} instance. Only used for serialization
    * support.
    */
   public RLabel() {

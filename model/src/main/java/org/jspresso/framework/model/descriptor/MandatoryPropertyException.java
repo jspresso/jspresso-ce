@@ -37,8 +37,8 @@ public class MandatoryPropertyException extends IntegrityException {
   private final Object            targetComponent;
 
   /**
-   * Constructs a new <code>MandatoryPropertyException</code> instance.
-   * 
+   * Constructs a new {@code MandatoryPropertyException} instance.
+   *
    * @param descriptor
    *          the violated property descriptor.
    * @param targetComponent
@@ -53,7 +53,7 @@ public class MandatoryPropertyException extends IntegrityException {
   }
 
   /**
-   * Uses the <code>integrity.property.mandatory</code> key to translate the
+   * Uses the {@code integrity.property.mandatory} key to translate the
    * message.
    * <p>
    * {@inheritDoc}

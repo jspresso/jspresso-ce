@@ -22,8 +22,8 @@ import java.text.Format;
 import java.text.ParseException;
 
 /**
- * An adapter for the <code>Format</code> jdk objects.
- * 
+ * An adapter for the {@code Format} jdk objects.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,8 +32,8 @@ public class FormatAdapter implements IFormatter<Object, String> {
   private final Format format;
 
   /**
-   * Constructs a new <code>FormatAdapter</code> instance.
-   * 
+   * Constructs a new {@code FormatAdapter} instance.
+   *
    * @param format
    *          the format to adapt.
    */

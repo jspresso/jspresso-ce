@@ -95,8 +95,8 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   /**
    * Configures the rendering of the enumeration property as radio buttons if
-   * supported instead of combo box. Default value is <code>false</code>.
-   * 
+   * supported instead of combo box. Default value is {@code false}.
+   *
    * @param radio
    *          the radio to set.
    */
@@ -116,9 +116,9 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   /**
    * Configures whether radio values be rendered horizontally or vertically.
-   * <code>HORIZONTAL</code> if radio values should be rendered horizontally and
-   * <code>VERTICAL</code> otherwise. Default value is <code>VERTICAL</code>.
-   * 
+   * {@code HORIZONTAL} if radio values should be rendered horizontally and
+   * {@code VERTICAL} otherwise. Default value is {@code VERTICAL}.
+   *
    * @param orientation
    *          the orientation to set.
    */

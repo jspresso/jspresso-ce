@@ -39,8 +39,8 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
   private final IFormatter<Object, Object> formatter;
 
   /**
-   * Constructs a new <code>BasicFormattedValueConnector</code> instance.
-   * 
+   * Constructs a new {@code BasicFormattedValueConnector} instance.
+   *
    * @param id
    *          the connector id.
    * @param formatter

@@ -307,8 +307,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * Sets the background color of the UI component. The color must be defined
    * using its string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
-   * Default value is <code>null</code>, meaning use UI default.
-   * 
+   * Default value is {@code null}, meaning use UI default.
+   *
    * @param background
    *          the background to set.
    */
@@ -318,17 +318,17 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the border type of the view. This is either a value of the
-   * <code>EBorderType</code> enum or its equivalent string representation :
+   * {@code EBorderType} enum or its equivalent string representation :
    * <ul>
-   * <li><code>NONE</code> for no border</li>
-   * <li><code>SIMPLE</code> for a line border</li>
-   * <li><code>TITLED</code> for a titled border. The view is then labeled with
+   * <li>{@code NONE} for no border</li>
+   * <li>{@code SIMPLE} for a line border</li>
+   * <li>{@code TITLED} for a titled border. The view is then labeled with
    * its translated name and and icon. Whenever the view name has not been
    * explicitly set, the model name is used is used.</li>
    * </ul>
    * <p>
-   * Default value is <code>EBorderType.NONE</code>, i.e. no border.
-   * 
+   * Default value is {@code EBorderType.NONE}, i.e. no border.
+   *
    * @param borderType
    *          the borderType to set.
    */
@@ -348,8 +348,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * Any of the above pattern section can be left empty, thus falling back to
    * the component default.
    * <p>
-   * Default value is <code>null</code>, meaning use default component font.
-   * 
+   * Default value is {@code null}, meaning use default component font.
+   *
    * @param font
    *          the font to set.
    */
@@ -361,8 +361,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * Sets the foreground color of the UI component. The color must be defined
    * using its string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
-   * Default value is <code>null</code>, meaning use UI default.
-   * 
+   * Default value is {@code null}, meaning use UI default.
+   *
    * @param foreground
    *          the foreground to set.
    */
@@ -374,12 +374,12 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * Assigns the roles that are authorized to use this view. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
    * granted sufficient privileges, the view is replaced by an empty section at
-   * runtime. Setting the collection of granted roles to <code>null</code>
+   * runtime. Setting the collection of granted roles to {@code null}
    * (default value) disables role based authorization on the view level. The
    * framework then checks for the model roles authorizations and will apply the
    * same restrictions. If both view and model granted roles collections are
-   * <code>null</code>, then access is granted to anyone.
-   * 
+   * {@code null}, then access is granted to anyone.
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */
@@ -408,9 +408,9 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * will infer it. For instance, a composite view will by default transmit its
    * model descriptor to its children that do not have their model descriptor
    * explicitly set. This allows for setting the model descriptor only on the
-   * composite view and keep default <code>null</code> value on the children as
+   * composite view and keep default {@code null} value on the children as
    * an implicit model inheritance enablement.
-   * 
+   *
    * @param modelDescriptor
    *          the modelDescriptor to set.
    */
@@ -461,8 +461,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * take specific decisions to render properties in a slightly different way,
    * e.g. instead of using a disabled text field, use a label.
    * <p>
-   * Default value is <code>false</code>, i.e. view is updatable.
-   * 
+   * Default value is {@code false}, i.e. view is updatable.
+   *
    * @param readOnly
    *          the readOnly to set.
    */
@@ -549,8 +549,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * leveraged depends on the UI channel. It will generally be mapped to some
    * sort of CSS style name.
    * <p>
-   * Default value is <code>null</code>, meaning that a default style is used.
-   * 
+   * Default value is {@code null}, meaning that a default style is used.
+   *
    * @param styleName
    *          the styleName to set.
    */

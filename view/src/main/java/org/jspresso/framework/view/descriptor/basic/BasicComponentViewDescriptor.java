@@ -47,7 +47,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * configured to be displayed aside or above their peer field. Property fields
  * can be configured to span multiple form columns. Component view offer various
  * straightforward customizations, but the most advanced and powerful one is
- * definitely the <code>propertyViewDescriptors</code> property tat allows to
+ * definitely the {@code propertyViewDescriptors} property tat allows to
  * fine-tune each component UI field individually.
  * <p>
  * The description property is used to compute view tooltips and support the
@@ -70,7 +70,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * really useful tooltips (event multi-line), in order to detail some synthetic
  * data. Moreover, this rule is available for the form tooltip, but also for
  * each individual field (property view) in the form.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -86,7 +86,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   private boolean                       verticallyScrollable;
 
   /**
-   * Constructs a new <code>BasicComponentViewDescriptor</code> instance.
+   * Constructs a new {@code BasicComponentViewDescriptor} instance.
    */
   public BasicComponentViewDescriptor() {
     verticallyScrollable = false;
@@ -237,19 +237,19 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Instructs Jspresso where to place the fields label. This is either a value
-   * of the <code>ELabelPosition</code> enum or its equivalent string
+   * of the {@code ELabelPosition} enum or its equivalent string
    * representation :
    * <ul>
-   * <li><code>ABOVE</code> for placing each field label above the property UI
+   * <li>{@code ABOVE} for placing each field label above the property UI
    * component</li>
-   * <li><code>ASIDE</code> for placing each field label aside the property UI
+   * <li>{@code ASIDE} for placing each field label aside the property UI
    * component</li>
-   * <li><code>NONE</code> for completely disabling fields labelling on the view
+   * <li>{@code NONE} for completely disabling fields labelling on the view
    * </li>
    * </ul>
-   * Default value is <code>ELabelPosition.ASIDE</code>, i.e. fields label next
+   * Default value is {@code ELabelPosition.ASIDE}, i.e. fields label next
    * to the property UI component.
-   * 
+   *
    * @param labelsPosition
    *          the labelsPosition to set.
    */
@@ -293,18 +293,18 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * This property allows to simply define property spans in the underlying grid
    * without having to extensively define the
-   * <code>propertyViewDescriptors</code> property. It must be configured with a
-   * <code>Map</code> containing only the properties that need to span more than
+   * {@code propertyViewDescriptors} property. It must be configured with a
+   * {@code Map} containing only the properties that need to span more than
    * 1 column. The other properties will follow the default span of 1.
    * <p>
-   * The <code>Map</code> is :
+   * The {@code Map} is :
    * <ul>
    * <li>keyed by the name of the property</li>
    * <li>valued by the number of columns of the property span</li>
    * </ul>
-   * Default value is <code>null</code>, meaning all property fields have a span
+   * Default value is {@code null}, meaning all property fields have a span
    * of 1.
-   * 
+   *
    * @param propertyWidths
    *          the propertyWidths to set.
    */
@@ -328,14 +328,14 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * <li>as columns when the rendered property is a collection property</li>
    * <li>as fields when the rendered property is a reference property</li>
    * </ul>
-   * The property must be configured with a <code>Map</code> which is :
+   * The property must be configured with a {@code Map} which is :
    * <ul>
    * <li>keyed by the non-scalar property name</li>
    * <li>valued by the list of the property names to render for the child
    * element(s)</li>
    * </ul>
    * <p>
-   * A <code>null</code> value (default), means that all non-scalar properties
+   * A {@code null} value (default), means that all non-scalar properties
    * will be rendered using default rendered properties as specified in their
    * referenced model descriptor.
    * <p>
@@ -343,7 +343,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * directly in a component view. Although permitted, you won't have as much
    * flexibility in the content layouting as you would have when using composite
    * views; so the latter is by far recommended.
-   * 
+   *
    * @param renderedChildProperties
    *          the renderedChildProperties to set.
    */
@@ -354,16 +354,16 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * This is somehow a shortcut to using the
-   * <code>propertyViewDescriptors</code> property. Instead of providing a
+   * {@code propertyViewDescriptors} property. Instead of providing a
    * full-blown list of property view descriptors to configure the component
    * view fields, you just pass-in a list of property names. view fields are
    * then created from this list, keeping model defaults for all fields
    * characteristics.
    * <p>
-   * Whenever the property value is <code>null</code> (default), the fields list
-   * is determined from the component descriptor <code>renderedProperties</code>
+   * Whenever the property value is {@code null} (default), the fields list
+   * is determined from the component descriptor {@code renderedProperties}
    * property.
-   * 
+   *
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -445,8 +445,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Whenever it is set to true, the corresponding UI component will install a
    * vertical scroll bar when the available vertical space is not enough.
    * <p>
-   * Default value is <code>false</code>.
-   * 
+   * Default value is {@code false}.
+   *
    * @param verticallyScrollable
    *          the verticallyScrollable to set.
    */

@@ -31,7 +31,7 @@ public class BasicImageUrlPropertyDescriptor extends
     BasicStringPropertyDescriptor implements IImageUrlPropertyDescriptor {
 
   /**
-   * Returns <code>false</code>.
+   * Returns {@code false}.
    * <p>
    * {@inheritDoc}
    */

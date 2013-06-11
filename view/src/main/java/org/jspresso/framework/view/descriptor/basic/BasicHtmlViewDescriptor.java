@@ -35,7 +35,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
   private boolean horizontallyScrollable;
 
   /**
-   * Constructs a new <code>BasicImageViewDescriptor</code> instance.
+   * Constructs a new {@code BasicImageViewDescriptor} instance.
    */
   protected BasicHtmlViewDescriptor() {
     verticallyScrollable = true;

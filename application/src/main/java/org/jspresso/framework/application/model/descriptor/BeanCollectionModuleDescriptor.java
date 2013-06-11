@@ -36,8 +36,8 @@ import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
 
   /**
-   * Constructs a new <code>BeanModuleDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BeanModuleDescriptor} instance.
+   *
    * @param moduleObjectReferencedDescriptor
    *          the component descriptor of the module objects.
    */
@@ -47,8 +47,8 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
   }
 
   /**
-   * Constructs a new <code>BeanModuleDescriptor</code> instance.
-   * 
+   * Constructs a new {@code BeanModuleDescriptor} instance.
+   *
    * @param name
    *          the name of the descriptor (the actual module class name).
    * @param moduleObjectReferencedDescriptor

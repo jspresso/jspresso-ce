@@ -34,8 +34,8 @@ public class BasicCompositeView<E> extends BasicView<E> implements
   private List<IView<E>> children;
 
   /**
-   * Constructs a new <code>BasicCompositeView</code> instance.
-   * 
+   * Constructs a new {@code BasicCompositeView} instance.
+   *
    * @param peer
    *          the peer component.
    */

@@ -34,8 +34,8 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
   private int currentViewIndex = -1;
 
   /**
-   * Constructs a new <code>BasicMapView</code> instance.
-   * 
+   * Constructs a new {@code BasicMapView} instance.
+   *
    * @param peer
    *          the peer component.
    */

@@ -29,8 +29,8 @@ public class RIntegerField extends RNumericComponent {
   private static final long serialVersionUID = -8516423065572521893L;
 
   /**
-   * Constructs a new <code>RIntegerField</code> instance.
-   * 
+   * Constructs a new {@code RIntegerField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -39,7 +39,7 @@ public class RIntegerField extends RNumericComponent {
   }
 
   /**
-   * Constructs a new <code>RIntegerField</code> instance. Only used for
+   * Constructs a new {@code RIntegerField} instance. Only used for
    * serialization support.
    */
   public RIntegerField() {

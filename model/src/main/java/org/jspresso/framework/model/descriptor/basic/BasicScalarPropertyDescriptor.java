@@ -68,12 +68,12 @@ public abstract class BasicScalarPropertyDescriptor extends
   /**
    * Sets the property default value. When a component owning this property is
    * instantiated, its properties are initialized using their default values. By
-   * default, a property default value is <code>null</code>.
+   * default, a property default value is {@code null}.
    * <p>
    * This incoming value can be either the actual property default value (as an
-   * <code>Object</code>) or its string representation whose parsing will be
+   * {@code Object}) or its string representation whose parsing will be
    * delegated to the property descriptor.
-   * 
+   *
    * @param defaultValue
    *          the defaultValue to set.
    */

@@ -30,7 +30,7 @@ public interface IListAccessor extends ICollectionAccessor {
 
   /**
    * Adds the value to the bean property of this accessor.
-   * 
+   *
    * @param target
    *          the target on which to add the value.
    * @param index
@@ -40,7 +40,7 @@ public interface IListAccessor extends ICollectionAccessor {
    * @throws IllegalAccessException
    *           if the underlying method throws an exception.
    * @throws InvocationTargetException
-   *           if this <code>Method</code> object enforces Java language access
+   *           if this {@code Method} object enforces Java language access
    *           control and the underlying method is inaccessible.
    * @throws NoSuchMethodException
    *           if a matching method is not found.

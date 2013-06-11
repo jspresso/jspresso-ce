@@ -41,7 +41,7 @@ public class ComponentIconProvider implements IconProvider {
   private Collection<IComponentDescriptor<?>> componentDescriptors;
 
   /**
-   * Constructs a new <code>ComponentIconImageURLProvider</code> instance.
+   * Constructs a new {@code ComponentIconImageURLProvider} instance.
    */
   protected ComponentIconProvider() {
     cache = new HashMap<Class<?>, Icon>();

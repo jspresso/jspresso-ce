@@ -51,7 +51,7 @@ import org.springframework.transaction.support.TransactionCallback;
  * This action is used to Hibernate query entities by example. It is used behind
  * the scene in several places in Jspresso based applications, as in filtered
  * bean collection modules, list of values, ... The principles are to tailor an
- * Hibernate Criterion based on the Jspresso &quot;<code>IQueryComponent</code>
+ * Hibernate Criterion based on the Jspresso &quot;{@code IQueryComponent}
  * &quot;. A Jspresso query component is a hierarchical data structure that
  * mimics a portion of the domain model headed by an entity. It is essentially a
  * set of property/value pairs where values can be :
@@ -71,12 +71,12 @@ import org.springframework.transaction.support.TransactionCallback;
  * <p>
  * Whenever the query is successful, the result is merged back to the
  * application session and assigned to the query component
- * <code>queriedComponents</code> property.
+ * {@code queriedComponents} property.
  * <p>
  * Note that there are 2 hooks that can be configured by injection to fine-tune
- * the performed query : <code>queryComponentRefiner</code> and
- * <code>criteriaRefiner</code>.
- * 
+ * the performed query : {@code queryComponentRefiner} and
+ * {@code criteriaRefiner}.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -94,7 +94,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   private boolean                useInListForPagination;
 
   /**
-   * Constructs a new <code>QueryEntitiesAction</code> instance.
+   * Constructs a new {@code QueryEntitiesAction} instance.
    */
   public QueryEntitiesAction() {
     mergeMode = EMergeMode.MERGE_LAZY;
@@ -396,12 +396,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
   /**
    * Sets the mergeMode to use when assigning the queried components to the
-   * filter query component. A <code>null</code> value means that the queried
+   * filter query component. A {@code null} value means that the queried
    * components will assigned without being merged at all. In that case, the
    * merging has to be performed later on in the action chain. Forgetting to do
    * so will lead to unexpected results. Default value is
-   * <code>EMergeMode.MERGE_CLEAN_LAZY</code>.
-   * 
+   * {@code EMergeMode.MERGE_CLEAN_LAZY}.
+   *
    * @param mergeMode
    *          the mergeMode to set.
    */

@@ -56,12 +56,12 @@ public abstract class AbstractCollectionConnector extends
   private List<IValueConnector>    connectorTank;
 
   /**
-   * Creates a new <code>AbstractCollectionConnector</code>.
-   * 
+   * Creates a new {@code AbstractCollectionConnector}.
+   *
    * @param id
    *          the connector id.
    * @param binder
-   *          the <code>IMvcBinder</code> used to bind dynamically created
+   *          the {@code IMvcBinder} used to bind dynamically created
    *          child connectors.
    * @param childConnectorPrototype
    *          the connector prototype used to create new instances of child
@@ -320,7 +320,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Overrides the default to produce
-   * <code>CollectionConnectorValueChangeEvent</code>s.
+   * {@code CollectionConnectorValueChangeEvent}s.
    * <p>
    * {@inheritDoc}
    */

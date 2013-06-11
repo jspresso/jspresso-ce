@@ -166,17 +166,17 @@ public class ActionMap implements ISecurable, IPermIdSource {
 
   /**
    * Indicates how the actions should be rendered. This is either a value of the
-   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * {@code ERenderingOptions} enum or its equivalent string representation
    * :
    * <ul>
-   * <li><code>LABEL_ICON</code> for label and icon</li>
-   * <li><code>LABEL</code> for label only</li>
-   * <li><code>ICON</code> for icon only.</li>
+   * <li>{@code LABEL_ICON} for label and icon</li>
+   * <li>{@code LABEL} for label only</li>
+   * <li>{@code ICON} for icon only.</li>
    * </ul>
    * <p>
-   * Default value is <code>null</code>, i.e. determined from outside, e.g. the
+   * Default value is {@code null}, i.e. determined from outside, e.g. the
    * view factory.
-   * 
+   *
    * @param renderingOptions
    *          the renderingOptions to set.
    */
@@ -198,10 +198,10 @@ public class ActionMap implements ISecurable, IPermIdSource {
    * Assigns the roles that are authorized to use this action map. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
    * granted sufficient privileges, the action map is simply not displayed at
-   * runtime. Setting the collection of granted roles to <code>null</code>
+   * runtime. Setting the collection of granted roles to {@code null}
    * (default value) disables role based authorization, then access is granted
    * to anyone.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */

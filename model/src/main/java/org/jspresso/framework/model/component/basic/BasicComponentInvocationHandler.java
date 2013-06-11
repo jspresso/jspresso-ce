@@ -46,8 +46,8 @@ public class BasicComponentInvocationHandler extends
   private final Map<String, Object> properties;
 
   /**
-   * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
-   * 
+   * Constructs a new {@code BasicComponentInvocationHandler} instance.
+   *
    * @param componentDescriptor
    *          The descriptor of the proxy component.
    * @param inlineComponentFactory

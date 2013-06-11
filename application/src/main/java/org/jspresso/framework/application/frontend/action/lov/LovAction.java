@@ -61,17 +61,17 @@ import org.slf4j.LoggerFactory;
  * This is a standard &quot;List Of Values&quot; action for reference property
  * views. Although this action is used by default in view factories on reference
  * fields, it can also be used in a more standard way, i.e. registered as a view
- * action. In the latter, the <code>okAction</code> must be configured to
+ * action. In the latter, the {@code okAction} must be configured to
  * perform a custom treatment once the entity is chosen from the LOV.
  * Additionally you can statically configure the descriptor of the searched
- * entities using the <code>entityDescriptor</code> parameter so that the LOV
+ * entities using the {@code entityDescriptor} parameter so that the LOV
  * will act on this type of entities.
  * <p>
  * The LOV action prepares a QBE view (filter / result list) along with 3
- * actions that can be further refined : <code>findAction</code>,
- * <code>okAction</code> and <code>cancelAction</code>. It must the be linked to
- * a <code>ModalDialogAction</code> so that the LOV actually pops up.
- * 
+ * actions that can be further refined : {@code findAction},
+ * {@code okAction} and {@code cancelAction}. It must the be linked to
+ * a {@code ModalDialogAction} so that the LOV actually pops up.
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -87,11 +87,11 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
                                                                                   .getLogger(LovAction.class);
 
   /**
-   * <code>LOV_PRESELECTED_ITEM</code>.
+   * {@code LOV_PRESELECTED_ITEM}.
    */
   public static final String                         LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
   /**
-   * <code>LOV_SELECTED_ITEM</code>.
+   * {@code LOV_SELECTED_ITEM}.
    */
   public static final String                         LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
   private static final String                        NON_LOV_TRIGGERING_CHARS = "%;"
@@ -111,7 +111,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private String                                     defaultIconImageURL;
 
   /**
-   * Constructs a new <code>LovAction</code> instance.
+   * Constructs a new {@code LovAction} instance.
    */
   public LovAction() {
     setAutoquery(true);
@@ -397,13 +397,13 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Whenever setting autoquery to <code>true</code>, the LOV action will
+   * Whenever setting autoquery to {@code true}, the LOV action will
    * trigger the query as soon as it gets executed and the initial query filter
    * is not empty (e.g. the user typed something in the reference field). This
    * brings autocomplete feature to reference fields since, whenever the initial
    * filter limits to exactly 1 result, the LOV dialog won't even open. Defaults
    * to true.
-   * 
+   *
    * @param autoquery
    *          the autoquery to set.
    */
@@ -493,11 +493,11 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Whenever the LOV action is not used on a reference field, in which case the
    * filter initialization mapping is taken from the reference field descriptor
-   * (see <code>BasicReferencePropertyDescriptor</code> documentation), this
+   * (see {@code BasicReferencePropertyDescriptor} documentation), this
    * property allows to initialize some of the LOV filter properties.
    * Initialization is computed dynamically by transferring property values from
    * the view model to the filter.
-   * 
+   *
    * @param initializationMapping
    *          the initializationMapping to set.
    */
@@ -580,9 +580,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Allows to force the result view selection mode.
-   * 
+   *
    * @param selectionMode
-   *          the result view selection mode. When <code>null</code>, the
+   *          the result view selection mode. When {@code null}, the
    *          default selection mode is applied.
    */
   public void setSelectionMode(ESelectionMode selectionMode) {

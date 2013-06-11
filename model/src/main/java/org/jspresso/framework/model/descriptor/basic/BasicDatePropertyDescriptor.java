@@ -38,7 +38,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   private boolean   secondsAware;
 
   /**
-   * Constructs a new <code>BasicDatePropertyDescriptor</code> instance.
+   * Constructs a new {@code BasicDatePropertyDescriptor} instance.
    */
   public BasicDatePropertyDescriptor() {
     type = EDateType.DATE;
@@ -75,15 +75,15 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
 
   /**
    * Sets whether this property should contain time information or not. The
-   * incoming value must be part of the <code>EDateType</code> enum, i.e. :
+   * incoming value must be part of the {@code EDateType} enum, i.e. :
    * <ul>
-   * <li><code>DATE</code> if the property should only contain the date
+   * <li>{@code DATE} if the property should only contain the date
    * information</li>
-   * <li><code>DATE_TIME</code> if the property should contain both date and
+   * <li>{@code DATE_TIME} if the property should contain both date and
    * time information</li>
    * </ul>
-   * Default value is <code>EDateType.DATE</code>.
-   * 
+   * Default value is {@code EDateType.DATE}.
+   *
    * @param type
    *          the type to set.
    */
@@ -95,9 +95,9 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * Sets whether this date property should have its string representation vary
    * depending on the client timezone.
    * <p>
-   * Default value is <code>false</code>, meaning that the date is considered as
+   * Default value is {@code false}, meaning that the date is considered as
    * a string. It is in fact expressed in the server timezone.
-   * 
+   *
    * @param timeZoneAware
    *          the timeZoneAware to set.
    */
@@ -125,9 +125,9 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
 
   /**
    * Should this time information include seconds.
-   * 
+   *
    * @param secondsAware
-   *          Configure to <code>true</code> if this time information include
+   *          Configure to {@code true} if this time information include
    *          seconds.
    */
   public void setSecondsAware(boolean secondsAware) {

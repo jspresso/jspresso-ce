@@ -22,9 +22,9 @@ public class DescriptorAwareMapCollectionAccessor extends
     DescriptorAwareMapPropertyAccessor implements ICollectionAccessor {
 
   /**
-   * Constructs a new <code>DescriptorAwareMapCollectionAccessor</code>
+   * Constructs a new {@code DescriptorAwareMapCollectionAccessor}
    * instance.
-   * 
+   *
    * @param property
    *          the property to create the accessor for.
    */

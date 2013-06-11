@@ -58,10 +58,10 @@ public class BasicSimpleTreeLevelDescriptor extends BasicTreeLevelDescriptor
   }
 
   /**
-   * Assigns the single child tree level descriptor. A <code>null</code> value
+   * Assigns the single child tree level descriptor. A {@code null} value
    * (default) makes this tree level a leaf tree level and is strictly
-   * equivalent to declaring a <code>BasicTreeLevelDescriptor</code> instead.
-   * 
+   * equivalent to declaring a {@code BasicTreeLevelDescriptor} instead.
+   *
    * @param childDescriptor
    *          the childDescriptor to set.
    */

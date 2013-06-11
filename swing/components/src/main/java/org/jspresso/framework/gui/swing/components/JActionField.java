@@ -62,8 +62,8 @@ public class JActionField extends JPanel {
   private String            value;
 
   /**
-   * Constructs a new <code>JActionField</code> instance.
-   * 
+   * Constructs a new {@code JActionField} instance.
+   *
    * @param showTextField
    *          is the text field visible to the user.
    */

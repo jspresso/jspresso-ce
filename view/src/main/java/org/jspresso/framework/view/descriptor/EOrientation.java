@@ -27,12 +27,12 @@ package org.jspresso.framework.view.descriptor;
 public enum EOrientation {
 
   /**
-   * <code>HORIZONTAL</code>.
+   * {@code HORIZONTAL}.
    */
   HORIZONTAL,
 
   /**
-   * <code>VERTICAL</code>.
+   * {@code VERTICAL}.
    */
   VERTICAL
 

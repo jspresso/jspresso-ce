@@ -31,8 +31,8 @@ public class JTriStateCheckBoxConnector extends
     JToggleButtonConnector<JTriStateCheckBox> {
 
   /**
-   * Constructs a new <code>JTriStateCheckBoxConnector</code> instance.
-   * 
+   * Constructs a new {@code JTriStateCheckBoxConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param triStateCheckBox
@@ -44,7 +44,7 @@ public class JTriStateCheckBoxConnector extends
   }
 
   /**
-   * Returns a <code>Boolean</code> object mapping the state of the button.
+   * Returns a {@code Boolean} object mapping the state of the button.
    * <p>
    * {@inheritDoc}
    */

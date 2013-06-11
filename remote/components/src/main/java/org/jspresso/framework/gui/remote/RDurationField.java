@@ -31,8 +31,8 @@ public class RDurationField extends RComponent {
   private long              maxMillis;
 
   /**
-   * Constructs a new <code>RDurationField</code> instance.
-   * 
+   * Constructs a new {@code RDurationField} instance.
+   *
    * @param guid
    *          the guid.
    */
@@ -41,7 +41,7 @@ public class RDurationField extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RDurationField</code> instance. Only used for
+   * Constructs a new {@code RDurationField} instance. Only used for
    * serialization support.
    */
   public RDurationField() {

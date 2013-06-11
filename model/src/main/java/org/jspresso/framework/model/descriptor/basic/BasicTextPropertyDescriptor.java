@@ -106,9 +106,9 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * <li>saving the property text value to a file on the file system</li>
    * </ul>
    * Jspresso provides built-in actions that do the above and configure their UI
-   * automatically based on the <code>fileFilter</code> property.
+   * automatically based on the {@code fileFilter} property.
    * <p>
-   * The incoming <code>Map</code> must be structured like following :
+   * The incoming {@code Map} must be structured like following :
    * <ul>
    * <li>keys are translation keys that will be translated by Jspresso i18n
    * layer and presented to the user as the group name of the associated
@@ -116,7 +116,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * <li>values are the extension list associated to a certain group name, e.g.
    * a list containing <i>[&quot;.html&quot;,&quot;.htm&quot;]</i></li>
    * </ul>
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -168,8 +168,8 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
 
   /**
    * Tests whether this text should be kept multi-line when building a filter screen.
-   * 
-   * @return <code>true</code> if this text should be transformed into a
+   *
+   * @return {@code true} if this text should be transformed into a
    *         multi-line text area when building a filter screen.
    */
   protected boolean isQueryMultiline() {
@@ -179,8 +179,8 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   /**
    * This property allows to control if the text property view should be
    * transformed into a multi-line text view in order to allow for multi-line
-   * text in filters. Default value is <code>false</code>.
-   * 
+   * text in filters. Default value is {@code false}.
+   *
    * @param queryMultiline
    *          the queryMultiline to set.
    */

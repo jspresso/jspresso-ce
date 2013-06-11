@@ -88,15 +88,15 @@ public class HibernateBackendController extends AbstractBackendController {
   private boolean             traversedPendingOperations        = false;
 
   /**
-   * <code>JSPRESSO_SESSION_GLOBALS</code> is "JspressoSessionGlobals".
+   * {@code JSPRESSO_SESSION_GLOBALS} is "JspressoSessionGlobals".
    */
   public static final String  JSPRESSO_SESSION_GLOBALS          = "JspressoSessionGlobals";
   /**
-   * <code>JSPRESSO_SESSION_GLOBALS_LOGIN</code> is "login".
+   * {@code JSPRESSO_SESSION_GLOBALS_LOGIN} is "login".
    */
   public static final String  JSPRESSO_SESSION_GLOBALS_LOGIN    = "login";
   /**
-   * <code>JSPRESSO_SESSION_GLOBALS_LANGUAGE</code> is "language".
+   * {@code JSPRESSO_SESSION_GLOBALS_LANGUAGE} is "language".
    */
   public static final String  JSPRESSO_SESSION_GLOBALS_LANGUAGE = "language";
 
@@ -1183,8 +1183,8 @@ public class HibernateBackendController extends AbstractBackendController {
   /**
    * Configures the entity factory to use to create new entities. Backend
    * controllers only accept instances of
-   * <code>HibernateControllerAwareProxyEntityFactory</code> or a subclass.
-   * 
+   * {@code HibernateControllerAwareProxyEntityFactory} or a subclass.
+   *
    * @param entityFactory
    *          the entityFactory to set.
    */

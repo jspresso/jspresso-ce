@@ -37,9 +37,9 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
   private boolean isUserAction;
 
   /**
-   * Constructs a new <code>JHTMLEditorConnector</code> instance. The connector
-   * will listen to <code>focusLost</code> events.
-   * 
+   * Constructs a new {@code JHTMLEditorConnector} instance. The connector
+   * will listen to {@code focusLost} events.
+   *
    * @param id
    *          the connector identifier.
    * @param htmlEditor

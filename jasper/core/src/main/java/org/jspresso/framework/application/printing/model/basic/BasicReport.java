@@ -38,7 +38,7 @@ public class BasicReport extends DefaultDescriptor implements IReport {
   private IReportDescriptor   reportDescriptor;
 
   /**
-   * Constructs a new <code>BasicReport</code> instance.
+   * Constructs a new {@code BasicReport} instance.
    */
   public BasicReport() {
     this.context = new HashMap<String, Object>();

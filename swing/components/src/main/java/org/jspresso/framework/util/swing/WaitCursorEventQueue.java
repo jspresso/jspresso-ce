@@ -34,8 +34,8 @@ public class WaitCursorEventQueue extends EventQueue {
   private final WaitCursorTimer waitTimer;
 
   /**
-   * Constructs a new <code>WaitCursorEventQueue</code> instance.
-   * 
+   * Constructs a new {@code WaitCursorEventQueue} instance.
+   *
    * @param delay
    *          the time in milliseconds the event queue will wait before
    *          installing the hourglass cursor.

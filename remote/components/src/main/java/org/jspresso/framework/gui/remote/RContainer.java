@@ -29,8 +29,8 @@ public abstract class RContainer extends RComponent {
   private static final long serialVersionUID = -7174072538766465667L;
 
   /**
-   * Constructs a new <code>RContainer</code> instance.
-   * 
+   * Constructs a new {@code RContainer} instance.
+   *
    * @param guid
    *          the guid
    */
@@ -39,7 +39,7 @@ public abstract class RContainer extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RContainer</code> instance. Only used for
+   * Constructs a new {@code RContainer} instance. Only used for
    * serialization support.
    */
   public RContainer() {

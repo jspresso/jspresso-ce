@@ -31,8 +31,8 @@ public class ActionBusinessException extends BusinessException {
   private static final long serialVersionUID = -6735248989227589846L;
 
   /**
-   * Constructs a new <code>ActionException</code> instance.
-   * 
+   * Constructs a new {@code ActionException} instance.
+   *
    * @param message
    *          the exception message.
    */
@@ -41,8 +41,8 @@ public class ActionBusinessException extends BusinessException {
   }
 
   /**
-   * Constructs a new <code>ActionBusinessException</code> instance.
-   * 
+   * Constructs a new {@code ActionBusinessException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey
@@ -54,8 +54,8 @@ public class ActionBusinessException extends BusinessException {
   }
 
   /**
-   * Constructs a new <code>ActionBusinessException</code> instance.
-   * 
+   * Constructs a new {@code ActionBusinessException} instance.
+   *
    * @param message
    *          the exception message.
    * @param staticI18nKey

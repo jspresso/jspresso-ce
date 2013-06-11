@@ -37,14 +37,14 @@ public class FilterableBeanCollectionModuleDescriptor extends
     BeanCollectionModuleDescriptor {
 
   /**
-   * <code>FILTER</code> is the "filter" constant.
+   * {@code FILTER} is the "filter" constant.
    */
   public static final String FILTER = "filter";
 
   /**
-   * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code>
+   * Constructs a new {@code FilterableBeanCollectionModuleDescriptor}
    * instance.
-   * 
+   *
    * @param moduleObjectReferencedDescriptor
    *          the component descriptor of the module objects.
    * @param moduleFilterReferencedDescriptor
@@ -58,9 +58,9 @@ public class FilterableBeanCollectionModuleDescriptor extends
   }
 
   /**
-   * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code>
+   * Constructs a new {@code FilterableBeanCollectionModuleDescriptor}
    * instance.
-   * 
+   *
    * @param name
    *          the name of the descriptor (the actual module class name).
    * @param moduleObjectReferencedDescriptor

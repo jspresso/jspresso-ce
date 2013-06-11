@@ -39,8 +39,8 @@ public class CompareStrings implements TemplateMethodModelEx {
   private final BeansWrapper wrapper;
 
   /**
-   * Constructs a new <code>CompareStrings</code> instance.
-   * 
+   * Constructs a new {@code CompareStrings} instance.
+   *
    * @param wrapper
    *          the beans wrapper.
    */

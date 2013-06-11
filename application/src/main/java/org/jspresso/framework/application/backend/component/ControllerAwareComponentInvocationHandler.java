@@ -52,9 +52,9 @@ public class ControllerAwareComponentInvocationHandler extends
   private static final long serialVersionUID = -3613223267370638150L;
 
   /**
-   * Constructs a new <code>ControllerAwareEntityInvocationHandler</code>
+   * Constructs a new {@code ControllerAwareEntityInvocationHandler}
    * instance.
-   * 
+   *
    * @param componentDescriptor
    *          The descriptor of the proxy entity.
    * @param inlineComponentFactory

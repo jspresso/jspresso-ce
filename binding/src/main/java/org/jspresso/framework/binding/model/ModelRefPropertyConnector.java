@@ -50,7 +50,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     ICompositeValueConnector, IModelProvider {
 
   /**
-   * <code>THIS_PROPERTY</code> is a fake property name returning the model
+   * {@code THIS_PROPERTY} is a fake property name returning the model
    * itself.
    */
   public static final String           THIS_PROPERTY = "&this";
@@ -229,7 +229,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
 
   /**
    * After having performed the standard (super implementation) handling of the
-   * <code>ModelChangeEvent</code>, it will notify its child connectors of the
+   * {@code ModelChangeEvent}, it will notify its child connectors of the
    * referenced model change.
    * <p>
    * {@inheritDoc}
@@ -243,8 +243,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * The referenced model of this <code>ModelRefPropertyConnector</code>
-   * changed. It will notify its <code>IModelChangeListener</code> s (i.e. the
+   * The referenced model of this {@code ModelRefPropertyConnector}
+   * changed. It will notify its {@code IModelChangeListener} s (i.e. the
    * child property connectors) of the change.
    * <p>
    * {@inheritDoc}

@@ -39,14 +39,14 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * A property descriptor is used for describing a component/entity/interface
  * property (<i>Java Beans</i> semantic).
  * <p>
- * You will never use <code>BasicPropertyDescriptor</code> as such but rather
+ * You will never use {@code BasicPropertyDescriptor} as such but rather
  * use its concrete descendants.
  * <p>
- * Please note that <code>BasicPropertyDescriptor</code> enforces its name to
+ * Please note that {@code BasicPropertyDescriptor} enforces its name to
  * start with a lower case letter, following the JavaBean convention. So even if
  * you name it &quot;MyProperty&quot;, it will actually end up to
  * &quot;myProperty&quot;.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -81,7 +81,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   private Collection<IGate>              writabilityGates;
 
   /**
-   * Constructs a new <code>BasicPropertyDescriptor</code> instance.
+   * Constructs a new {@code BasicPropertyDescriptor} instance.
    */
   public BasicPropertyDescriptor() {
     computed = false;
@@ -250,8 +250,8 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
 
   /**
    * Returns true if a delegate class is registered to compute the property
-   * value. A property can be made <code>computed</code> even if its delegate
-   * class is null by calling <code>setComputed(true)</code>. This way, the
+   * value. A property can be made {@code computed} even if its delegate
+   * class is null by calling {@code setComputed(true)}. This way, the
    * property should be ignored by the ORM.
    * <p>
    * {@inheritDoc}
@@ -274,8 +274,8 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
 
   /**
    * Gets the default value of the mandatory attribute.
-   * 
-   * @return <code>false</code>.
+   *
+   * @return {@code false}.
    */
   protected boolean getDefaultMandatory() {
     return false;
@@ -327,8 +327,8 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
 
   /**
    * Default property sortability.
-   * 
-   * @return <code>true</code> by default unless overridden in subclasses.
+   *
+   * @return {@code true} by default unless overridden in subclasses.
    */
   protected boolean getDefaultSortablility() {
     return true;
@@ -401,16 +401,16 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * <p>
    * Properties declared with a delegate computing class are considered computed
    * by default so there is no need to explicitly set them
-   * <code>computed=true</code>. However, there is sometimes a need to declare a
+   * {@code computed=true}. However, there is sometimes a need to declare a
    * property at some level (e.g. in an interface descriptor) and let lower
    * level implementation decide how to handle this common property concretely
    * (either computing it or handling it as a real persistent property). In that
-   * case, you can declare this property <code>computed=true</code> in the super
+   * case, you can declare this property {@code computed=true} in the super
    * type and refine the actual implementation (computed or not) in the
    * sub-types.
    * <p>
-   * Default value is <code>false</code>.
-   * 
+   * Default value is {@code false}.
+   *
    * @param computed
    *          the computed to set.
    */
@@ -420,7 +420,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
 
   /**
    * Instructs the framework that this property is computed by a delegate
-   * attached to the owning component. The <code>delegateClassName</code>
+   * attached to the owning component. The {@code delegateClassName}
    * property must be set with the fully qualified class name of the delegate
    * instance to use.
    * <p>
@@ -431,19 +431,19 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * or by the binding layer.
    * <p>
    * The delegate class must implement the
-   * <code>IComponentExtension&lt;T&gt;</code> interface (where &lt;T&gt; is
+   * {@code IComponentExtension&lt;T&gt;} interface (where &lt;T&gt; is
    * assignable from the owning component class) and provide a public
    * constructor taking exactly 1 parameter : the component instance. Jspresso
    * provides an adapter class to inherit from :
-   * <code>AbstractComponentExtension&lt;T&gt;</code>. This helper class
+   * {@code AbstractComponentExtension&lt;T&gt;}. This helper class
    * provides the methods to access the enclosing component from the delegate
    * implementation as well as the Spring context it comes from, when needed.
    * <p>
    * A delegate-computed property is most of the time read-only but it can be
    * made writable by setting the property descriptor
-   * <code>delegateWritable=true</code>. In that case the delegate class must
+   * {@code delegateWritable=true}. In that case the delegate class must
    * also provide a setter for the computed property.
-   * 
+   *
    * @param delegateClassName
    *          The class name of the extension delegate used to compute this
    *          property.
@@ -455,11 +455,11 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   /**
    * Instructs the framework that a delegate-computed property is writable. Most
    * of the time, a computed property is read-only. Whenever a computed property
-   * is made writable through the use of <code>delegateWritable=true</code>, the
+   * is made writable through the use of {@code delegateWritable=true}, the
    * delegate class must also provide a setter for the computed property.
    * <p>
-   * Default value is <code>false</code>.
-   * 
+   * Default value is {@code false}.
+   *
    * @param delegateWritable
    *          the delegateWritable to set.
    */
@@ -472,10 +472,10 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * this descriptor. It supports &quot;<b>!</b>&quot; prefix to negate the
    * role(s). This will directly influence the UI behaviour and even composition
    * (e.g. show/hide columns or fields). Setting the collection of granted roles
-   * to <code>null</code> (default value) disables role based authorization on
+   * to {@code null} (default value) disables role based authorization on
    * this property level. Note that this authorization enforcement does not
    * prevent programmatic access that is of the developer responsibility.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */
@@ -498,20 +498,20 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * This property must be set with Spring bean names (i.e. Spring ids). When
    * needed, Jspresso will query the Spring application context to retrieve the
    * processor instances. This property is equivalent to setting
-   * <code>integrityProcessorClassNames</code> except that it allows to register
+   * {@code integrityProcessorClassNames} except that it allows to register
    * processor instances that are configured externally in the Spring context.
    * <p>
    * Property processor instances must implement the
-   * <code>IPropertyProcessor&lt;E, F&gt;</code> interface where &lt;E, F&gt;
+   * {@code IPropertyProcessor&lt;E, F&gt;} interface where &lt;E, F&gt;
    * represent respectively the type of the owning component and the type of the
    * property. Since there are 3 methods to implement in the interface (1 for
    * each of the phase described above), Jspresso provides an adapter class with
    * empty implementations to override :
-   * <code>EmptyPropertyProcessor&lt;E, F&gt;</code>.
+   * {@code EmptyPropertyProcessor&lt;E, F&gt;}.
    * <p>
    * Whenever the underlying property is a collection property, the interface to
-   * implement is <code>ICollectionPropertyProcessor&lt;E, F&gt;</code> (or
-   * extend <code>EmptyCollectionPropertyProcessor&lt;E, F&gt;</code>) with 4
+   * implement is {@code ICollectionPropertyProcessor&lt;E, F&gt;} (or
+   * extend {@code EmptyCollectionPropertyProcessor&lt;E, F&gt;}) with 4
    * new phases introduced :
    * <ul>
    * <li><i>before</i> an element is <i>added</i> to the collection property</li>
@@ -520,7 +520,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * </li>
    * <li><i>after</i> an element is <i>removed</i> from the collection property</li>
    * </ul>
-   * 
+   *
    * @param integrityProcessorBeanNames
    *          the integrityProcessorBeanNames to set.
    */
@@ -531,15 +531,15 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * Much the same as <code>integrityProcessorBeanNames</code> except that
+   * Much the same as {@code integrityProcessorBeanNames} except that
    * instead of providing a list of Spring bean names, you provide a list of
    * fully qualified class names. These classes must :
    * <ul>
    * <li>provide a default constructor</li>
-   * <li>implement the <code>ILifecycleInterceptor&lt;E&gt;</code> interface.</li>
+   * <li>implement the {@code ILifecycleInterceptor&lt;E&gt;} interface.</li>
    * </ul>
    * When needed, Jspresso will create lifecycle interceptor instances.
-   * 
+   *
    * @param integrityProcessorClassNames
    *          the integrityProcessorClassNames to set.
    */
@@ -570,10 +570,10 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * This property allows for setting an indication of width for representing
    * this property in a view.
    * <p>
-   * Default value is <code>null</code>, so that the view factory will make its
+   * Default value is {@code null}, so that the view factory will make its
    * decision based on the type and/or other characteristics of the property
    * (e.g. max length).
-   * 
+   *
    * @param preferredWidth
    *          the preferredWidth to set.
    */
@@ -621,9 +621,9 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * the data store namespace. This includes , but is not limited to, database
    * column names.
    * <p>
-   * Default value is <code>null</code> so that Jspresso uses its default naming
+   * Default value is {@code null} so that Jspresso uses its default naming
    * policy.
-   * 
+   *
    * @param sqlName
    *          the sqlName to set.
    */
@@ -655,9 +655,9 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * this feature has to be used with care since it may generate phantom updates
    * to the data store.
    * <p>
-   * Default value is <code>true</code> so that any change in the described
+   * Default value is {@code true} so that any change in the described
    * property increases the owning component version.
-   * 
+   *
    * @param versionControl
    *          the versionControl to set.
    */
@@ -787,10 +787,10 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * computed properties. Note that the cached value will be reset whenever a
    * firePropertyChange regarding this property is detected to be fired.
    * <p>
-   * Default value is <code>false</code> in order to prevent un-desired
+   * Default value is {@code false} in order to prevent un-desired
    * side-effects if computed property change notification is not correctly
    * wired.
-   * 
+   *
    * @param cacheable
    *          the cacheable to set.
    */

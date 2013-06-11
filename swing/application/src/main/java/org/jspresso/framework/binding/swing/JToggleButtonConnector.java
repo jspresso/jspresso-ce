@@ -35,8 +35,8 @@ public class JToggleButtonConnector<E extends JToggleButton> extends
     JComponentConnector<E> {
 
   /**
-   * Constructs a new <code>JToggleButtonConnector</code> instance.
-   * 
+   * Constructs a new {@code JToggleButtonConnector} instance.
+   *
    * @param id
    *          the id of the connector.
    * @param toggleButton
@@ -64,7 +64,7 @@ public class JToggleButtonConnector<E extends JToggleButton> extends
   }
 
   /**
-   * Returns a <code>Boolean</code> object mapping the state of the button.
+   * Returns a {@code Boolean} object mapping the state of the button.
    * <p>
    * {@inheritDoc}
    */

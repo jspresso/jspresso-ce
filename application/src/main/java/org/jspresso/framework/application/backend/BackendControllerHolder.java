@@ -32,7 +32,7 @@ public final class BackendControllerHolder {
 
   private static final boolean                               isWebContext;
   /**
-   * <code>CURRENT_BACKEND_CONTROLLER_KEY</code>.
+   * {@code CURRENT_BACKEND_CONTROLLER_KEY}.
    */
   public static final String                           CURRENT_BACKEND_CONTROLLER_KEY = "CURRENT_BACKEND_CONTROLLER";
   private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER =

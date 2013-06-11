@@ -31,7 +31,7 @@ public interface ICollectionAccessor extends IAccessor {
 
   /**
    * Adds the value to the bean property of this accessor.
-   * 
+   *
    * @param target
    *          the target on which to add the value.
    * @param value
@@ -39,7 +39,7 @@ public interface ICollectionAccessor extends IAccessor {
    * @throws IllegalAccessException
    *           if the underlying method throws an exception.
    * @throws InvocationTargetException
-   *           if this <code>Method</code> object enforces Java language access
+   *           if this {@code Method} object enforces Java language access
    *           control and the underlying method is inaccessible.
    * @throws NoSuchMethodException
    *           if a matching method is not found.
@@ -49,7 +49,7 @@ public interface ICollectionAccessor extends IAccessor {
 
   /**
    * Removes the value from the bean property of this accessor.
-   * 
+   *
    * @param target
    *          the target on which to remove the value.
    * @param value
@@ -57,7 +57,7 @@ public interface ICollectionAccessor extends IAccessor {
    * @throws IllegalAccessException
    *           if the underlying method throws an exception.
    * @throws InvocationTargetException
-   *           if this <code>Method</code> object enforces Java language access
+   *           if this {@code Method} object enforces Java language access
    *           control and the underlying method is inaccessible.
    * @throws NoSuchMethodException
    *           if a matching method is not found.

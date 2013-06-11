@@ -41,54 +41,54 @@ public class ComparableQueryStructureDescriptor extends
     BasicReferencePropertyDescriptor<ComparableQueryStructure> {
 
   /**
-   * <code>LG</code> between.
+   * {@code LG} between.
    */
   public static final String BE         = "BE";
 
   /**
-   * <code>COMPARATOR</code> comparator.
+   * {@code COMPARATOR} comparator.
    */
   public static final String COMPARATOR = "comparator";
 
   /**
-   * <code>EQ</code> equals.
+   * {@code EQ} equals.
    */
   public static final String EQ         = "EQ";
 
   /**
-   * <code>GT</code> greater than or equals.
+   * {@code GT} greater than or equals.
    */
   public static final String GE         = "GE";
 
   /**
-   * <code>GT</code> greater than.
+   * {@code GT} greater than.
    */
   public static final String GT         = "GT";
 
   /**
-   * <code>INF_VALUE</code> infValue.
+   * {@code INF_VALUE} infValue.
    */
   public static final String INF_VALUE  = "infValue";
 
   /**
-   * <code>LT</code> lower than or equals.
+   * {@code LT} lower than or equals.
    */
   public static final String LE         = "LE";
 
   /**
-   * <code>LT</code> lower than.
+   * {@code LT} lower than.
    */
   public static final String LT         = "LT";
 
   /**
-   * <code>SUP_VALUE</code> supValue.
+   * {@code SUP_VALUE} supValue.
    */
   public static final String SUP_VALUE  = "supValue";
 
   /**
-   * Constructs a new <code>ComparablePropertyQueryStructureDescriptor</code>
+   * Constructs a new {@code ComparablePropertyQueryStructureDescriptor}
    * instance.
-   * 
+   *
    * @param propertyDescriptor
    *          the comparable property descriptor to build the query descriptor
    *          for.

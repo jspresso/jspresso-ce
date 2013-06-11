@@ -178,8 +178,8 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Configures the maximum string length this property allows. Default value is
-   * <code>null</code> which means unlimited.
-   * 
+   * {@code null} which means unlimited.
+   *
    * @param maxLength
    *          the maxLength to set.
    */
@@ -189,8 +189,8 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Configures the regular expression pattern this string property allows.
-   * Default is <code>null</code> which means constraint free.
-   * 
+   * Default is {@code null} which means constraint free.
+   *
    * @param regexpPattern
    *          the regexpPattern to set.
    */

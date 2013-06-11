@@ -32,62 +32,62 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * This map must contain :
  * <p>
  * <ul>
- * <li><code>password_current</code> entry containing current password. Entry
+ * <li>{@code password_current} entry containing current password. Entry
  * key can be referred to as PASSWD_CURRENT static constant.</li>
- * <li><code>password_typed</code> entry containing the new password. Entry key
+ * <li>{@code password_typed} entry containing the new password. Entry key
  * can be referred to as PASSWD_TYPED static constant.</li>
- * <li><code>password_retyped</code> entry containing the new password retyped.
+ * <li>{@code password_retyped} entry containing the new password retyped.
  * Entry key can be referred to as PASSWD_RETYPED static constant.</li>
  * </ul>
- * For the action to succeed, <code>current_password</code> must match the
- * logged-in user current password and <code>password_typed</code> and
- * <code>password_retyped</code> mut match between each other. The only method to
+ * For the action to succeed, {@code current_password} must match the
+ * logged-in user current password and {@code password_typed} and
+ * {@code password_retyped} mut match between each other. The only method to
  * be implemented by concrete subclasses is :
  * <p>
- * 
+ *
  * <pre>
  * protected abstract boolean changePassword(UserPrincipal userPrincipal,
  *           String currentPassword, String newPassword)
  * </pre>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
-   * <code>PASSWD_CHANGE_DESCRIPTOR</code> is a unique reference to the model
+   * {@code PASSWD_CHANGE_DESCRIPTOR} is a unique reference to the model
    * descriptor of the change password action.
    */
   public static final IComponentDescriptor<Map<String, String>> PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
   /**
-   * <code>TO_STRING</code>.
+   * {@code TO_STRING}.
    */
   public static final String                                    TO_STRING                = "to_string";
   /**
-   * <code>PASSWD_CURRENT</code>.
+   * {@code PASSWD_CURRENT}.
    */
   public static final String                                    PASSWD_CURRENT           = "password_current";
   /**
-   * <code>PASSWD_RETYPED</code>.
+   * {@code PASSWD_RETYPED}.
    */
   public static final String                                    PASSWD_RETYPED           = "password_retyped";
 
   /**
-   * <code>PASSWD_TYPED</code>.
+   * {@code PASSWD_TYPED}.
    */
   public static final String                                    PASSWD_TYPED             = "password_typed";
 
   /**
-   * <code>BASE64_ENCODING</code> is &quot;BASE64&quot;.
+   * {@code BASE64_ENCODING} is &quot;BASE64&quot;.
    */
   public static final String                                    BASE64_ENCODING          = "BASE64";
   /**
-   * <code>BASE16_ENCODING</code> is &quot;HEX&quot;.
+   * {@code BASE16_ENCODING} is &quot;HEX&quot;.
    */
   public static final String                                    BASE16_ENCODING          = "BASE16";
   /**
-   * <code>HEX_ENCODING</code> is &quot;HEX&quot;.
+   * {@code HEX_ENCODING} is &quot;HEX&quot;.
    */
   public static final String                                    HEX_ENCODING             = "HEX";
 
@@ -149,8 +149,8 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   /**
    * Gives the opportunity to check the new password validity against some
    * business rule. Buy default, it only checks that the password is not empty
-   * if <code>allowEmptyPassword</code> is <code>false</code>.
-   * 
+   * if {@code allowEmptyPassword} is {@code false}.
+   *
    * @param typedPasswd
    *          the password to check.
    */
@@ -177,11 +177,11 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * Sets the hashEncoding to encode the password hash before storing it. You
    * may choose between :
    * <ul>
-   * <li><code>BASE64</code> for base 64 encoding.</li>
-   * <li><code>HEX</code> for base 16 encoding.</li>
+   * <li>{@code BASE64} for base 64 encoding.</li>
+   * <li>{@code HEX} for base 16 encoding.</li>
    * </ul>
-   * Default encoding is <code>BASE64</code>.
-   * 
+   * Default encoding is {@code BASE64}.
+   *
    * @param hashEncoding
    *          the hashEncoding to set.
    */
@@ -287,8 +287,8 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   /**
    * Configures the possibility to choose an empty password.
    * <p>
-   * Default value is <code>true</code>, i.e. allow for empty passwords.
-   * 
+   * Default value is {@code true}, i.e. allow for empty passwords.
+   *
    * @param allowEmptyPasswords
    *          the allowEmptyPasswords to set.
    */

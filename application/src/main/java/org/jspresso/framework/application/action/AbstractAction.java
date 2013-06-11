@@ -69,9 +69,9 @@ import org.jspresso.framework.util.lang.StringUtils;
  * <p>
  * Regarding framework-standard context elements, an action developer can
  * (should) leverage the utility methods declared in the
- * <code>AbstractActionContextAware</code> super class instead of relying on the
+ * {@code AbstractActionContextAware} super class instead of relying on the
  * element keys in the map. Take a look to the
- * <code>AbstractActionContextAware</code> documentation to get your hands on
+ * {@code AbstractActionContextAware} documentation to get your hands on
  * action context exploration.
  * <p>
  * Last but not least, you should be aware that actions should be coded with
@@ -86,7 +86,7 @@ import org.jspresso.framework.util.lang.StringUtils;
  * differently through their class attributes (refer to it as static
  * configuration), but this is all for using in different places in the
  * application.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -95,7 +95,7 @@ public abstract class AbstractAction extends AbstractActionContextAware
     implements IAction {
 
   /**
-   * <code>ACTION_MODEL_NAME</code>.
+   * {@code ACTION_MODEL_NAME}.
    */
   protected static final String ACTION_MODEL_NAME = "ActionModel";
   private String                permId;
@@ -154,11 +154,11 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * Assigns the roles that are authorized to execute this action. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). This will directly
    * influence the UI behaviour since unauthorized actions won't be displayed.
-   * Setting the collection of granted roles to <code>null</code> (default
+   * Setting the collection of granted roles to {@code null} (default
    * value) disables role based authorization on this action. Note that this
    * authorization enforcement does not prevent programmatic access that is of
    * the developer responsibility.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */

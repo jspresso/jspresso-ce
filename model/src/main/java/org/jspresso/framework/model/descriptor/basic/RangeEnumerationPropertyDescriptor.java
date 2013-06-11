@@ -140,9 +140,9 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * The step to use for constructing the enumeration values, starting from
-   * <code>minValue</code> up to <code>maxValue</code>. Default value is
+   * {@code minValue} up to {@code maxValue}. Default value is
    * <i>1</i>.
-   * 
+   *
    * @param rangeStep
    *          the rangeStep to set.
    */
