@@ -139,7 +139,7 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
 
 /**
  * Abstract base class factory for views.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -334,7 +334,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a and binds a collection pagination view.
-   * 
+   *
    * @param paginationViewDescriptor
    *          the pagination view descriptor.
    * @param view
@@ -368,7 +368,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the actionFactory.
-   * 
+   *
    * @return the actionFactory.
    */
   @Override
@@ -378,7 +378,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the connectorFactory.
-   * 
+   *
    * @return the connectorFactory.
    */
   @Override
@@ -388,7 +388,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the iconFactory.
-   * 
+   *
    * @return the iconFactory.
    */
   @Override
@@ -398,7 +398,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the actionFactory.
-   * 
+   *
    * @param actionFactory
    *          the actionFactory to set.
    */
@@ -408,7 +408,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the binaryPropertyInfoAction.
-   * 
+   *
    * @param binaryPropertyInfoAction
    *          the binaryPropertyInfoAction to set.
    */
@@ -419,7 +419,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the connectorFactory.
-   * 
+   *
    * @param connectorFactory
    *          the connectorFactory to set.
    */
@@ -429,7 +429,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the defaultActionMapRenderingOptions.
-   * 
+   *
    * @param defaultActionMapRenderingOptions
    *          the defaultActionMapRenderingOptions to set.
    */
@@ -440,7 +440,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -450,7 +450,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the lovAction.
-   * 
+   *
    * @param lovAction
    *          the lovAction to set.
    */
@@ -460,7 +460,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the maxCharacterLength.
-   * 
+   *
    * @param maxCharacterLength
    *          the maxCharacterLength to set.
    */
@@ -470,7 +470,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the maxColumnCharacterLength.
-   * 
+   *
    * @param maxColumnCharacterLength
    *          the maxColumnCharacterLength to set.
    */
@@ -480,7 +480,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the modelCascadingBinder.
-   * 
+   *
    * @param modelCascadingBinder
    *          the modelCascadingBinder to set.
    */
@@ -490,7 +490,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the modelConnectorFactory.
-   * 
+   *
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    */
@@ -501,7 +501,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the mvcBinder.
-   * 
+   *
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -511,7 +511,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the openFileAsBinaryPropertyAction.
-   * 
+   *
    * @param openFileAsBinaryPropertyAction
    *          the openFileAsBinaryPropertyAction to set.
    */
@@ -522,7 +522,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the resetPropertyAction.
-   * 
+   *
    * @param resetPropertyAction
    *          the resetPropertyAction to set.
    */
@@ -532,7 +532,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the saveBinaryPropertyAsFileAction.
-   * 
+   *
    * @param saveBinaryPropertyAsFileAction
    *          the saveBinaryPropertyAsFileAction to set.
    */
@@ -543,7 +543,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Adds a card in a card view.
-   * 
+   *
    * @param cardView
    *          the card view to add the card to.
    * @param card
@@ -556,7 +556,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Selects a child view in an indexed view, e.g. a tab view.
-   * 
+   *
    * @param viewComponent
    *          the indexed view.
    * @param index
@@ -567,7 +567,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Adjusts a component various sizes (e.g. min, max, preferred) based on a
    * formatter and a template value.
-   * 
+   *
    * @param component
    *          the component to adjust the sizes for.
    * @param formatter
@@ -585,7 +585,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Adjusts a component various sizes (e.g. min, max, preferred) based on a
    * formatter and a template value.
-   * 
+   *
    * @param component
    *          the component to adjust the sizes for.
    * @param formatter
@@ -603,7 +603,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Applies a component preferred size.
-   * 
+   *
    * @param component
    *          the component to apply the preferred sze on.
    * @param preferredSize
@@ -614,7 +614,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Selects the first element of a collection connector when its value changes.
-   * 
+   *
    * @param collectionConnector
    *          the collection connector to attach the listener to.
    */
@@ -626,7 +626,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Performs all the necessary connectors binding among the composite view and
    * its children.
-   * 
+   *
    * @param view
    *          the composite view to bind.
    */
@@ -711,7 +711,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Computes a table column identifier that is used for sorting.
-   * 
+   *
    * @param viewDescriptor
    *          the table view descriptor.
    * @param columnDescriptor
@@ -747,7 +747,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes a size in pixels based on a number of characters and a component.
    * It should use component font do do so.
-   * 
+   *
    * @param component
    *          the component.
    * @param characterLength
@@ -758,7 +758,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Constructs a composite view.
-   * 
+   *
    * @param viewComponent
    *          the peer view component
    * @param descriptor
@@ -774,7 +774,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an indexed view, e.g. for tab container.
-   * 
+   *
    * @param viewComponent
    *          the view component peer.
    * @param descriptor
@@ -845,7 +845,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Constructs a map view.
-   * 
+   *
    * @param viewComponent
    *          the peer view component
    * @param descriptor
@@ -861,7 +861,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Constructs a view.
-   * 
+   *
    * @param viewComponent
    *          the peer view component
    * @param descriptor
@@ -880,7 +880,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an action view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -896,7 +896,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates the action list for a binary property (open from file, save as
    * file, reset, size info).
-   * 
+   *
    * @param propertyView
    *          the view these actions will be triggered from.
    * @param actionHandler
@@ -929,7 +929,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a binary property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -944,7 +944,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a boolean property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -959,7 +959,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a border view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -974,7 +974,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a tree view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -989,7 +989,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a card view connector.
-   * 
+   *
    * @param cardView
    *          the card view to create the connector for.
    * @param actionHandler
@@ -1096,7 +1096,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a color property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1111,7 +1111,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a table column connector.
-   * 
+   *
    * @param columnViewDescriptor
    *          the column descriptor to create the connector for.
    * @param descriptor
@@ -1176,7 +1176,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Performs dependency injection on a gate.
-   * 
+   *
    * @param gate
    *          the gate.
    * @param actionHandler
@@ -1198,7 +1198,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Compute the rendered nested property of a reference property view
    * descriptor.
-   * 
+   *
    * @param propertyViewDescriptor the property view descriptor.
    * @return the rendered property.
    */
@@ -1224,7 +1224,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a component view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1240,7 +1240,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a property view dynamic tooltip
    * or null if none or if the tooltip is a static one.
-   * 
+   *
    * @param modelDescriptor
    *          the component model descriptor.
    * @param propertyViewDescriptor
@@ -1274,7 +1274,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a property view dynamic
    * background or null if none or if the background is a static one.
-   * 
+   *
    * @param modelDescriptor
    *          the component model descriptor.
    * @param propertyViewDescriptor
@@ -1306,7 +1306,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a property view dynamic
    * foreground or null if none or if the foreground is a static one.
-   * 
+   *
    * @param modelDescriptor
    *          the component model descriptor.
    * @param propertyViewDescriptor
@@ -1338,7 +1338,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a property view dynamic font or
    * null if none or if the font is a static one.
-   * 
+   *
    * @param modelDescriptor
    *          the component model descriptor.
    * @param propertyViewDescriptor
@@ -1370,7 +1370,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a component view dynamic tooltip
    * or null if none or if the tooltip is a static one.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param modelDescriptor
@@ -1396,7 +1396,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a component view background or
    * null if none or if the background is a static one.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param modelDescriptor
@@ -1420,7 +1420,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a component view foreground or
    * null if none or if the foreground is a static one.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param modelDescriptor
@@ -1444,7 +1444,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the property name used to compute a component view font or null if
    * none or if the font is a static one.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param modelDescriptor
@@ -1467,7 +1467,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a composite view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1499,7 +1499,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a constrained grid view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1515,7 +1515,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Gives a chance to subclasses to create custom views. Returns null by
    * default.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor being the root of the view hierarchy to be
    *          constructed.
@@ -1533,7 +1533,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a date format based on a date property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the date property descriptor.
    * @param timeZone
@@ -1566,7 +1566,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Return the default date pattern expressed as a SimpleDateFormat pattern.
-   * 
+   *
    * @param propertyDescriptor
    *          the date property descriptor.
    * @param translationProvider
@@ -1582,7 +1582,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Return the default first day of week expressed as a day int (0 is sunday to 6 is saturday).
-   * 
+   *
    * @param propertyDescriptor
    *          the date property descriptor.
    * @param translationProvider
@@ -1598,7 +1598,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Return the default time pattern expressed as a SimpleDateFormat pattern.
-   * 
+   *
    * @param propertyDescriptor
    *          the time aware property descriptor.
    * @param translationProvider
@@ -1618,7 +1618,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a date formatter based on a date property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the date property descriptor.
    * @param timeZone
@@ -1638,7 +1638,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an enumeration formatter.
-   * 
+   *
    * @param propertyDescriptor
    *          the enumeration property descriptor
    * @param translationProvider
@@ -1667,7 +1667,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a date property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1682,7 +1682,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a decimal format based on a decimal property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the decimal property descriptor.
    * @param locale
@@ -1703,7 +1703,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a decimal formatter based on a decimal property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the decimal property descriptor.
    * @param locale
@@ -1717,7 +1717,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a decimal property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1732,7 +1732,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a duration formatter based on a duration property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the duration property descriptor.
    * @param translationProvider
@@ -1749,7 +1749,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a duration property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1764,14 +1764,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an empty panel.
-   * 
+   *
    * @return the security panel.
    */
   protected abstract E createEmptyComponent();
 
   /**
    * Creates an enumeration property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1786,7 +1786,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an evenly distributed grid view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1801,7 +1801,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Wraps a format in a formatter.
-   * 
+   *
    * @param format
    *          the format to wrap.
    * @return the resulting formatter.
@@ -1812,7 +1812,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a formatter based on a property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @param actionHandler
@@ -1849,7 +1849,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a grid view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1875,7 +1875,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an html property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1890,7 +1890,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a image property view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1905,7 +1905,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an integer format based on an integer property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the integer property descriptor.
    * @param locale
@@ -1919,7 +1919,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an integer formatter based on an integer property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the integer property descriptor.
    * @param locale
@@ -1933,7 +1933,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates an integer property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -1948,7 +1948,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a list column connector.
-   * 
+   *
    * @param renderedProperty
    *          the list rendered property.
    * @param descriptor
@@ -1975,7 +1975,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a list view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -1990,7 +1990,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates the list of value action.
-   * 
+   *
    * @param propertyView
    *          the view these actions will be triggered from.
    * @param actionHandler
@@ -2024,7 +2024,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a number property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2051,7 +2051,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a password property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2066,7 +2066,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a percent format based on a percent property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the percent property descriptor.
    * @param locale
@@ -2087,7 +2087,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a percent formatter based on a percent property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the percent property descriptor.
    * @param locale
@@ -2101,7 +2101,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a percent property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2116,7 +2116,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a single property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2191,7 +2191,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a reference property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2206,7 +2206,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a relationship end property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2234,14 +2234,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a panel to be substituted with any view when the user is not
    * granted access.
-   * 
+   *
    * @return the security panel.
    */
   protected abstract E createSecurityComponent();
 
   /**
    * Creates a source code property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2256,7 +2256,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a split view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -2271,7 +2271,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a string property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2286,7 +2286,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a table view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -2301,7 +2301,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a tab view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -2316,7 +2316,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a text property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2331,7 +2331,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a textual property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2367,7 +2367,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a time format based on a time property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the time property descriptor.
    * @param translationProvider
@@ -2386,7 +2386,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a time formatter based on an time property descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the time property descriptor.
    * @param translationProvider
@@ -2404,7 +2404,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a time property view.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param actionHandler
@@ -2419,7 +2419,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a tree view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -2434,7 +2434,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates the connector for a tree view.
-   * 
+   *
    * @param viewDescriptor
    *          the tree view descriptor.
    * @param actionHandler
@@ -2540,7 +2540,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Decorates a view with the actions registered in the view descriptor.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -2555,7 +2555,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Decorates a view with a border.
-   * 
+   *
    * @param view
    *          the view to decorate.
    * @param translationProvider
@@ -2568,7 +2568,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Applies the font and color configuration to a view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param translationProvider
@@ -2584,7 +2584,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Computes the connector id for component view.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the computed connector id.
@@ -2598,7 +2598,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Computes the connector id for bean based view.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the computed connector id.
@@ -2613,7 +2613,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets a date template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the date template value.
@@ -2624,7 +2624,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets a decimal template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the decimal template value.
@@ -2646,7 +2646,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the defaultActionMapRenderingOptions.
-   * 
+   *
    * @return the defaultActionMapRenderingOptions.
    */
   protected ERenderingOptions getDefaultActionMapRenderingOptions() {
@@ -2655,7 +2655,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets a duration template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the duration template value.
@@ -2667,7 +2667,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets an enumeration template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @param translationProvider
@@ -2702,7 +2702,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes the number of characters used to represent a template value based
    * on a formatter.
-   * 
+   *
    * @param formatter
    *          the formatter.
    * @param templateValue
@@ -2728,7 +2728,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets an integer template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the integer template value.
@@ -2744,7 +2744,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the lovAction.
-   * 
+   *
    * @return the lovAction.
    */
   protected IDisplayableAction getLovAction() {
@@ -2753,7 +2753,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the maxCharacterLength.
-   * 
+   *
    * @return the maxCharacterLength.
    */
   protected int getMaxCharacterLength() {
@@ -2762,7 +2762,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the maxColumnCharacterLength.
-   * 
+   *
    * @return the maxColumnCharacterLength.
    */
   protected int getMaxColumnCharacterLength() {
@@ -2771,7 +2771,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the modelCascadingBinder.
-   * 
+   *
    * @return the modelCascadingBinder.
    */
   protected IModelCascadingBinder getModelCascadingBinder() {
@@ -2780,7 +2780,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the modelConnectorFactory.
-   * 
+   *
    * @return the modelConnectorFactory.
    */
   protected IModelConnectorFactory getModelConnectorFactory() {
@@ -2789,7 +2789,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the mvcBinder.
-   * 
+   *
    * @return the mvcBinder.
    */
   protected IMvcBinder getMvcBinder() {
@@ -2798,7 +2798,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets an percent template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the percent template value.
@@ -2820,7 +2820,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets an string template value.
-   * 
+   *
    * @param maxLength
    *          the attribute max length.
    * @return the string template value.
@@ -2839,7 +2839,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets an string template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the string template value.
@@ -2852,7 +2852,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Gets a template value matching a property descriptor. This is useful for
    * computing preferred width on components.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return a field template value.
@@ -2883,7 +2883,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets a time template value.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the time template value.
@@ -2895,7 +2895,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Gets whether a property view is considered to fill all the available height
    * space.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @return true if a property view is considered to fill all the available
@@ -2917,7 +2917,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Shows a card in in card laid out panel.
-   * 
+   *
    * @param cardsPeer
    *          the component that holds the cards
    * @param cardName
@@ -2972,7 +2972,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Creates a collection view.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor.
    * @param actionHandler
@@ -3048,7 +3048,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Binds the item selection action and decorates with the pagination view.
-   * 
+   *
    * @param view
    *          the collection view to configure.
    * @param viewDescriptor
@@ -3108,7 +3108,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Decorates a view with a pagination view.
-   * 
+   *
    * @param viewPeer
    *          the collection view to decorate.
    * @param paginationViewPeer
@@ -3174,7 +3174,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates an empty view whenever this specific view descriptor is not
    * supported.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor being the root of the view hierarchy to be
    *          constructed.
@@ -3268,7 +3268,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Connector action adapter.
-   * 
+   *
    * @version $LastChangedRevision$
    * @author Vincent Vandenschrick
    * @param <E>
@@ -3373,7 +3373,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Stores user table preferences.
-   * 
+   *
    * @param tableId
    *          the table id used as preference key in the user store.
    * @param columnPrefs
@@ -3396,7 +3396,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Reworks column view descriptors to align with user preferences.
-   * 
+   *
    * @param viewDescriptor
    *          the table view descriptor.
    * @param actionHandler
@@ -3454,7 +3454,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Filters enumeration values if refined.
-   * 
+   *
    * @param enumerationValues
    *          the original collection to filter.
    * @param propertyViewDescriptor
@@ -3490,7 +3490,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Decorates mandatory property label. Default is to append a &quot;*&quot;.
-   * 
+   *
    * @param labelText
    *          the original label text.
    * @return the decorated label text.
@@ -3507,7 +3507,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the formLabelMandatoryPropertyColorHex.
-   * 
+   *
    * @return the formLabelMandatoryPropertyColorHex.
    */
   public String getFormLabelMandatoryPropertyColorHex() {
@@ -3516,7 +3516,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the formLabelMandatoryPropertyColorHex.
-   * 
+   *
    * @param formLabelMandatoryPropertyColorHex
    *          the formLabelMandatoryPropertyColorHex to set.
    */
@@ -3527,7 +3527,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the tableHeaderMandatoryPropertyColorHex.
-   * 
+   *
    * @return the tableHeaderMandatoryPropertyColorHex.
    */
   public String getTableHeaderMandatoryPropertyColorHex() {
@@ -3536,7 +3536,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the tableHeaderMandatoryPropertyColorHex.
-   * 
+   *
    * @param tableHeaderMandatoryPropertyColorHex
    *          the tableHeaderMandatoryPropertyColorHex to set.
    */
@@ -3547,7 +3547,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Gets the componentCollectionFactory.
-   * 
+   *
    * @return the componentCollectionFactory.
    */
   public IComponentCollectionFactory getComponentCollectionFactory() {
@@ -3556,7 +3556,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   /**
    * Sets the componentCollectionFactory.
-   * 
+   *
    * @param componentCollectionFactory
    *          the componentCollectionFactory to set.
    */

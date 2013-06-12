@@ -22,7 +22,7 @@
         </dependencies>
         <compiler-options>
           <map>
-            <entry key="compiler.define" value="VERSIONS::jspresso_version&#9;'3.5.13.9'" />
+            <entry key="compiler.define" value="VERSIONS::jspresso_version&#9;'3.7-SNAPSHOT'" />
             <entry key="compiler.locale" value="" />
           </map>
           <option name="filesToIncludeInSWC" value="$MODULE_DIR$/src/main/resources/defaults.css&#10;$MODULE_DIR$/src/main/resources/assets" />
