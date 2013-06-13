@@ -24,6 +24,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
@@ -65,7 +66,8 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
     IView<E> collectionView = getView(collectionViewPath, context);
     if (collectionView.getDescriptor() instanceof ICollectionViewDescriptor
         && ((ICollectionViewDescriptor) collectionView.getDescriptor())
-            .getSelectionMode() == ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION) {
+            .getSelectionMode() == ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION
+        && !(pageableModel instanceof FilterableBeanCollectionModule)) {
       stickyResults = getSelectedModels(collectionViewPath, context);
     }
     pageableModel.setStickyResults(stickyResults);
