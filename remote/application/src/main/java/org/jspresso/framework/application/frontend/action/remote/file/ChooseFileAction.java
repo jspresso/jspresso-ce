@@ -42,6 +42,11 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
  */
 public abstract class ChooseFileAction extends AbstractRemoteAction {
 
+  /**
+   * {@code FILE_CALLBACK} is "FILE_CALLBACK".
+   */
+  public final static String FILE_CALLBACK = "FILE_CALLBACK";
+
   private String                    defaultFileName;
   private FileCancelCallbackAction  fileCancelCallbackAction;
   private Map<String, List<String>> fileFilter;
@@ -51,7 +56,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
    * Configures a default file name to be used whenever a file needs to be
    * chosen. Subclasses ma use their specific callback to override this name
    * with a more dynamically computed one.
-   * 
+   *
    * @param defaultFileName
    *          the defaultFileName to set.
    */
@@ -81,7 +86,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
 
   /**
    * Sets the file callback and performs necessary initializations.
-   * 
+   *
    * @param fileCallback
    *          the file callback.
    */
@@ -92,7 +97,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
 
   /**
    * Gets the defaultFileName.
-   * 
+   *
    * @return the defaultFileName.
    */
   protected String getDefaultFileName() {
@@ -101,7 +106,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
 
   /**
    * Gets the fileFilter.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the fileFilter.
@@ -113,7 +118,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   /**
    * Computes a file name to save the file. Defaults to the action default file
    * name parametrized in the action.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the file name to save the file under.
@@ -123,8 +128,22 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   }
 
   /**
+   * Gets the fileCancelCallbackAction.
+   *
+   * @param context the action context.
+   * @return the fileCancelCallbackAction.
+   */
+  protected FileCancelCallbackAction getFileCancelCallbackAction(Map<String, Object> context) {
+    IFileCallback callback = (IFileCallback) context.get(FILE_CALLBACK);
+    if(callback != null) {
+      return new FileCancelCallbackAction(callback);
+    }
+    return fileCancelCallbackAction;
+  }
+
+  /**
    * Translates the file filter for usage in remote commands.
-   * 
+   *
    * @param executionFileFilter
    *          the file filter to translate.
    * @param context
@@ -148,20 +167,16 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   }
 
   /**
-   * Gets the fileCancelCallbackAction.
-   * 
-   * @return the fileCancelCallbackAction.
-   */
-  protected FileCancelCallbackAction getFileCancelCallbackAction() {
-    return fileCancelCallbackAction;
-  }
-
-  /**
    * Gets the fileCallback.
-   * 
+   *
+   * @param context the action context.
    * @return the fileCallback.
    */
-  protected IFileCallback getFileCallback() {
-    return fileCallback;
+  protected IFileCallback getFileCallback(Map<String, Object> context) {
+    IFileCallback callback = (IFileCallback) context.get(FILE_CALLBACK);
+    if(callback == null) {
+      callback = fileCallback;
+    }
+    return callback;
   }
 }

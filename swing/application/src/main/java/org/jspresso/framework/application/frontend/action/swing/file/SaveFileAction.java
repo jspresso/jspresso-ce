@@ -41,8 +41,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  */
 public class SaveFileAction extends ChooseFileAction {
 
-  private IFileSaveCallback fileSaveCallback;
-
   /**
    * {@inheritDoc}
    */
@@ -54,6 +52,7 @@ public class SaveFileAction extends ChooseFileAction {
 
     int returnVal = currentFileChooser.showSaveDialog(SwingUtil
         .getVisibleWindow(getSourceComponent(context)));
+    IFileSaveCallback saveCallback = getFileSaveCallback(context);
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
@@ -81,7 +80,7 @@ public class SaveFileAction extends ChooseFileAction {
           try {
             FileOutputStream fos = new FileOutputStream(file);
             try {
-              fileSaveCallback.fileChosen(file.getName(), fos, actionHandler,
+              saveCallback.fileChosen(file.getName(), fos, actionHandler,
                   context);
               fos.flush();
             } catch (IOException ex) {
@@ -94,28 +93,38 @@ public class SaveFileAction extends ChooseFileAction {
               }
             }
           } catch (FileNotFoundException ex) {
-            fileSaveCallback.cancel(actionHandler, context);
+            saveCallback.cancel(actionHandler, context);
           }
         } else {
-          fileSaveCallback.cancel(actionHandler, context);
+          saveCallback.cancel(actionHandler, context);
         }
       } else {
-        fileSaveCallback.cancel(actionHandler, context);
+        saveCallback.cancel(actionHandler, context);
       }
     } else {
-      fileSaveCallback.cancel(actionHandler, context);
+      saveCallback.cancel(actionHandler, context);
     }
     return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the fileSaveCallback.
-   * 
+   *
    * @param fileSaveCallback
    *          the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
-    this.fileSaveCallback = fileSaveCallback;
+    super.setFileCallback(fileSaveCallback);
+  }
+
+  /**
+   * Gets the fileSaveCallback.
+   *
+   * @param context the action context.
+   * @return the fileSaveCallback.
+   */
+  protected IFileSaveCallback getFileSaveCallback(Map<String, Object> context) {
+    return (IFileSaveCallback) super.getFileCallback(context);
   }
 
   /**
@@ -128,8 +137,9 @@ public class SaveFileAction extends ChooseFileAction {
    */
   @Override
   protected String getFileName(Map<String, Object> context) {
-    if (fileSaveCallback != null) {
-      String fileName = fileSaveCallback.getFileName(context);
+    IFileSaveCallback saveCallback = getFileSaveCallback(context);
+    if (saveCallback != null) {
+      String fileName = saveCallback.getFileName(context);
       if (fileName != null && fileName.length() > 0) {
         return fileName;
       }

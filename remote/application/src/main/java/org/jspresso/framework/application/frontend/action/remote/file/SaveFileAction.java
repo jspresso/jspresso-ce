@@ -63,7 +63,7 @@ public class SaveFileAction extends ChooseFileAction {
         context));
     String fileName = getFileName(context);
     fileDownloadCommand.setDefaultFileName(fileName);
-    IFileSaveCallback callback = getFileSaveCallback();
+    IFileSaveCallback callback = getFileSaveCallback(context);
     String resourceId = ResourceManager.getInstance().register(
         new ResourceAdapter(fileName, getContentType(), callback,
             actionHandler, context));
@@ -72,7 +72,7 @@ public class SaveFileAction extends ChooseFileAction {
         .computeDownloadUrl(resourceId));
     IView<RComponent> view = getView(context);
     RAction cancelCallbackAction = getActionFactory(context).createAction(
-        getFileCancelCallbackAction(), actionHandler, view, getLocale(context));
+        getFileCancelCallbackAction(context), actionHandler, view, getLocale(context));
     fileDownloadCommand.setCancelCallbackAction(cancelCallbackAction);
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);
@@ -128,10 +128,11 @@ public class SaveFileAction extends ChooseFileAction {
   /**
    * Gets the file save callback.
    * 
+   * @param context the action context.
    * @return the file save callback.
    */
-  protected IFileSaveCallback getFileSaveCallback() {
-    return (IFileSaveCallback) super.getFileCallback();
+  protected IFileSaveCallback getFileSaveCallback(Map<String, Object> context) {
+    return (IFileSaveCallback) super.getFileCallback(context);
   }
 
   /**
@@ -144,7 +145,7 @@ public class SaveFileAction extends ChooseFileAction {
    */
   @Override
   protected String getFileName(Map<String, Object> context) {
-    IFileSaveCallback callback = getFileSaveCallback();
+    IFileSaveCallback callback = getFileSaveCallback(context);
     if (callback != null) {
       String fileName = callback.getFileName(context);
       if (fileName != null && fileName.length() > 0) {

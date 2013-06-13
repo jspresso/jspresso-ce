@@ -51,10 +51,10 @@ public class OpenFileAction extends ChooseFileAction {
         context));
     IView<RComponent> view = getView(context);
     RAction successCallbackAction = getActionFactory(context).createAction(
-        getFileOpenCallbackAction(), actionHandler, view, getLocale(context));
+        getFileOpenCallbackAction(context), actionHandler, view, getLocale(context));
     fileUploadCommand.setSuccessCallbackAction(successCallbackAction);
     RAction cancelCallbackAction = getActionFactory(context).createAction(
-        getFileCancelCallbackAction(), actionHandler, view, getLocale(context));
+        getFileCancelCallbackAction(context), actionHandler, view, getLocale(context));
     fileUploadCommand.setCancelCallbackAction(cancelCallbackAction);
     fileUploadCommand.setFileUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);
@@ -86,18 +86,24 @@ public class OpenFileAction extends ChooseFileAction {
   /**
    * Gets the file save callback.
    * 
+   * @param context the action context.
    * @return the file save callback.
    */
-  protected IFileOpenCallback getFileOpenCallback() {
-    return (IFileOpenCallback) super.getFileCallback();
+  protected IFileOpenCallback getFileOpenCallback(Map<String, Object> context) {
+    return (IFileOpenCallback) super.getFileCallback(context);
   }
 
   /**
    * Gets the fileCancelCallbackAction.
    * 
+   * @param context the action context.
    * @return the fileCancelCallbackAction.
    */
-  protected FileOpenCallbackAction getFileOpenCallbackAction() {
+  protected FileOpenCallbackAction getFileOpenCallbackAction(Map<String, Object> context) {
+    IFileOpenCallback callback = (IFileOpenCallback) context.get(FILE_CALLBACK);
+    if(callback != null) {
+      return new FileOpenCallbackAction(callback);
+    }
     return fileOpenCallbackAction;
   }
 }

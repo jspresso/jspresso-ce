@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
+import org.jspresso.framework.application.frontend.file.IFileCallback;
 
 /**
  * Initiates a file choosing action.
@@ -37,12 +38,18 @@ import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAct
  */
 public abstract class ChooseFileAction extends AbstractSwingAction {
 
+  /**
+   * {@code FILE_CALLBACK} is "FILE_CALLBACK".
+   */
+  public final static String FILE_CALLBACK = "FILE_CALLBACK";
+
   private String                    defaultFileName;
   private Map<String, List<String>> fileFilter;
+  private IFileCallback             fileCallback;
 
   /**
    * Sets the defaultFileName.
-   * 
+   *
    * @param defaultFileName
    *          the defaultFileName to set.
    */
@@ -53,7 +60,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arrays.
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -63,7 +70,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
 
   /**
    * Gets the file chooser.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the file chooser.
@@ -125,6 +132,30 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
    */
   protected String getFileName(Map<String, Object> context) {
     return getDefaultFileName();
+  }
+
+  /**
+   * Sets the file callback.
+   *
+   * @param fileCallback
+   *          the file callback.
+   */
+  protected void setFileCallback(IFileCallback fileCallback) {
+    this.fileCallback = fileCallback;
+  }
+
+  /**
+   * Gets the fileCallback.
+   *
+   * @param context the action context.
+   * @return the fileCallback.
+   */
+  protected IFileCallback getFileCallback(Map<String, Object> context) {
+    IFileCallback callback = (IFileCallback) context.get(FILE_CALLBACK);
+    if(callback == null) {
+      callback = fileCallback;
+    }
+    return callback;
   }
 
   private static class FileFilterAdapter extends FileFilter {

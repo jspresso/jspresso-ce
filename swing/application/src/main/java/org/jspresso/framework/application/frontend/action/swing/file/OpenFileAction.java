@@ -37,8 +37,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  */
 public class OpenFileAction extends ChooseFileAction {
 
-  private IFileOpenCallback fileOpenCallback;
-
   /**
    * {@inheritDoc}
    */
@@ -50,20 +48,21 @@ public class OpenFileAction extends ChooseFileAction {
 
     int returnVal = currentFileChooser.showOpenDialog(SwingUtil
         .getVisibleWindow(getSourceComponent(context)));
+    IFileOpenCallback openCallback = getFileOpenCallback(context);
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
         try {
-          fileOpenCallback.fileChosen(file.getName(),
+          openCallback.fileChosen(file.getName(),
               new FileInputStream(file), actionHandler, context);
         } catch (FileNotFoundException ex) {
-          fileOpenCallback.cancel(actionHandler, context);
+          openCallback.cancel(actionHandler, context);
         }
       } else {
-        fileOpenCallback.cancel(actionHandler, context);
+        openCallback.cancel(actionHandler, context);
       }
     } else {
-      fileOpenCallback.cancel(actionHandler, context);
+      openCallback.cancel(actionHandler, context);
     }
     return super.execute(actionHandler, context);
   }
@@ -75,6 +74,16 @@ public class OpenFileAction extends ChooseFileAction {
    *          the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
-    this.fileOpenCallback = fileOpenCallback;
+    super.setFileCallback(fileOpenCallback);
+  }
+
+  /**
+   * Gets the fileOpenCallback.
+   *
+   * @param context the action context.
+   * @return the fileOpenCallback.
+   */
+  protected IFileOpenCallback getFileOpenCallback(Map<String, Object> context) {
+    return (IFileOpenCallback) super.getFileCallback(context);
   }
 }
