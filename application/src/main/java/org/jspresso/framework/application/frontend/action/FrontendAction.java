@@ -66,13 +66,17 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 public class FrontendAction<E, F, G> extends AbstractAction implements
     IDisplayableAction {
 
-  private String                acceleratorAsString;
-  private Collection<IGate>     actionabilityGates;
+  /**
+   * {@code COMPONENT_TO_FOCUS} is COMPONENT_TO_FOCUS.
+   */
+  public static final String COMPONENT_TO_FOCUS = "COMPONENT_TO_FOCUS";
+  private       String                acceleratorAsString;
+  private       Collection<IGate>     actionabilityGates;
   private final DefaultIconDescriptor actionDescriptor;
-  private boolean               collectionBased;
-  private boolean               multiSelectionEnabled;
-  private String                mnemonicAsString;
-  private String                styleName;
+  private       boolean               collectionBased;
+  private       boolean               multiSelectionEnabled;
+  private       String                mnemonicAsString;
+  private       String                styleName;
 
   /**
    * Constructs a new {@code AbstractFrontendAction} instance.
@@ -116,7 +120,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the actionabilityGates.
-   * 
+   *
    * @return the actionabilityGates.
    */
   @Override
@@ -163,7 +167,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the icon image URL or null if no icon is set.
-   * 
+   *
    * @return the icon image URL or null if no icon is set.
    */
   protected String getIconImageURL() {
@@ -192,7 +196,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the permId.
-   * 
+   *
    * @return the permId.
    */
   @Override

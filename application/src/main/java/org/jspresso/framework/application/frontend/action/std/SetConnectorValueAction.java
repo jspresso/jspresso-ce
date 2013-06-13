@@ -23,8 +23,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 
 /**
  * This action retrieves the action parameter from the action context and
@@ -56,22 +54,13 @@ public class SetConnectorValueAction<E, F, G> extends FrontendAction<E, F, G> {
     // the following will force a connector value change event.
     // connector.setConnectorValue(null);
     connector.setConnectorValue(previousActionResult);
-    IView<E> parentView = getView(new int[] {
-      -1
-    }, context);
-    if (parentView != null
-        && parentView.getDescriptor() instanceof ITableViewDescriptor) {
-      getController(context).focus(parentView.getPeer());
-    } else {
-      getController(context).focus(getSourceComponent(context));
-    }
     return super.execute(actionHandler, context);
   }
 
   /**
    * Configures the key to look for the target connector in the context, e.g.
    * VIEW_CONNECTOR.
-   * 
+   *
    * @param connectorActionContextKey
    *          the connectorActionContextKey to set.
    */

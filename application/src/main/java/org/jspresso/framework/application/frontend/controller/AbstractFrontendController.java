@@ -45,6 +45,7 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.frontend.IFrontendController;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
@@ -485,6 +486,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public void disposeModalDialog(E sourceWidget, Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
+    @SuppressWarnings("unchecked")
+    E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
+    if(componentToFocus != null) {
+      focus(componentToFocus);
+    }
     if (dialogContextStack.size() > 0) {
       Map<String, Object> savedContext = dialogContextStack.remove(0);
       if (context != null && savedContext != null) {
