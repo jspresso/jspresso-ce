@@ -168,7 +168,7 @@ public class SelectionChangeSupport implements ISelectable {
    * {@inheritDoc}
    */
   @Override
-  public void setSelectedIndices(int[] selectedIndices) {
+  public void setSelectedIndices(int... selectedIndices) {
     int leadingInd = -1;
     if (selectedIndices != null && selectedIndices.length > 0) {
       leadingInd = selectedIndices[selectedIndices.length - 1];

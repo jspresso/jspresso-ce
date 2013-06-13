@@ -46,7 +46,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
    *          the preferences store path.
    */
   @Override
-  public void setStorePath(String[] storePath) {
+  public void setStorePath(String... storePath) {
     if (storePath != null && storePath.length > 0) {
       StringBuilder buff = new StringBuilder();
       for (String aStorePath : storePath) {

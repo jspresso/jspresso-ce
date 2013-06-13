@@ -30,7 +30,7 @@ public class MockPreferencesStore implements IPreferencesStore {
    * {@inheritDoc}
    */
   @Override
-  public void setStorePath(String[] storePath) {
+  public void setStorePath(String... storePath) {
     // NO-OP
   }
 
