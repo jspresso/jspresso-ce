@@ -88,42 +88,27 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-flex-config</id>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <phase>prepare-package</phase>
-            <configuration>
-              <outputDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/WEB-INF/flex</outputDirectory>
-              <includeArtifactIds>${rootArtifactId}-startup-flex-config</includeArtifactIds>
-              <includeClassifiers>resources</includeClassifiers>
-              <excludeTransitive>true</excludeTransitive>
-            </configuration>
-          </execution>
-          <execution>
-            <id>unpack-qooxdoo-dependencies</id>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <phase>prepare-package</phase>
-            <configuration>
-              <outputDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/qooxdoo</outputDirectory>
-              <includeArtifactIds>${rootArtifactId}-startup-qooxdoo-client</includeArtifactIds>
-              <includeClassifiers>web-resources</includeClassifiers>
-              <excludeTransitive>true</excludeTransitive>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warName>${symbol_dollar}{project.artifactId}</warName>
           <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}</webappDirectory>
+          <overlays>
+            <overlay>
+              <groupId>org.jspresso.hrsample</groupId>
+              <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
+              <type>zip</type>
+              <classifier>resources</classifier>
+              <targetPath>WEB-INF/flex</targetPath>
+            </overlay>
+            <overlay>
+              <groupId>org.jspresso.hrsample</groupId>
+              <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
+              <type>zip</type>
+              <classifier>web-resources</classifier>
+              <targetPath>qooxdoo</targetPath>
+            </overlay>
+          </overlays>
         </configuration>
       </plugin>
       <plugin>
