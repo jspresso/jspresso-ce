@@ -50,22 +50,19 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
          * 
          * @param str
          *            {String} the string to parse.
-         * @return {var} the parsed object.
+         * @return {Object} the parsed object.
          */
         parse : function(str) {
           if(str == null || str.length == 0) {
             return null;
           }
           var existingValue = this.getRemoteComponent().getState().getValue();
-          var existingDateDto;
           var existingDate;
           if(existingValue) {
             if(existingValue instanceof org.jspresso.framework.util.lang.DateDto) {
-              existingDateDto = existingValue;
-              existingDate = org.jspresso.framework.util.format.DateUtils.fromDateDto(existingDateDto);
+              existingDate = org.jspresso.framework.util.format.DateUtils.fromDateDto(existingValue);
             } else {
               existingDate = existingValue;
-              existingDateDto = org.jspresso.framework.util.format.DateUtils.fromDate(existingDate);
             }
           }
           var parsedDate;
@@ -129,7 +126,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
           }
           if(this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField
              && this.getRemoteComponent().isUseDateDto()) {
-            parsedDate = org.jspresso.framework.util.format.DateUtils.fromDate(parsedDate);
+            return org.jspresso.framework.util.format.DateUtils.fromDate(/** @type {Date}*/parsedDate);
           }
           return parsedDate;
         }

@@ -20,29 +20,30 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil",
     /**
      * Transforms a Qooxdoo object graph into a simple untyped JS object graph
      * ready to be sent to server-side. Only public properties are handled.
-     * @param {var} root the object graph containing Qooxdoo objects.
-     * @return {var} the corresponding untyped JS Object graph.
+     * @param {Object} root the object graph containing Qooxdoo objects.
+     * @return {Object} the corresponding untyped JS Object graph.
      */
     untypeObjectGraph : function(root) {
       var untypedRoot = null;
+      var i;
       if(root != null) {
         if(root instanceof Array) {
           untypedRoot = new Array();
-          for(var i = 0; i < root.length; i++) {
+          for(i = 0; i < root.length; i++) {
             untypedRoot[i] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(root[i]);
           }
         } else if(root instanceof qx.core.Object) {
           untypedRoot = new Object();
-          untypedRoot["class"] = root.classname;
+          untypedRoot["class"] = (/** @type{qx.core.Object}*/ root).classname;
           if(qx.Class.implementsInterface(root, qx.data.IListData)) {
-            untypedRoot["array"] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(root.toArray());
+            untypedRoot["array"] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph((/** @type{qx.data.IListData}*/root).toArray());
           } else {
             var clazz = root.constructor;
             var properties = qx.Class.getProperties(clazz);
-            for(var i = 0; i < properties.length; i++) {
+            for(i = 0; i < properties.length; i++) {
               var propertyName = properties[i];
               if(propertyName.charAt(0) != "_") {
-                untypedRoot[propertyName] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(root.get(propertyName));
+                untypedRoot[propertyName] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph((/** @type{qx.core.Object}*/ root).get(propertyName));
               }
             }
           }

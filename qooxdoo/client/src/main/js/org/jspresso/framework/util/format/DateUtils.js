@@ -35,7 +35,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateUtils",
     
     /**
      * @param {Date} source
-     * @return {DateDto}
+     * @return {org.jspresso.framework.util.lang.DateDto}
      */
     fromDate : function(source) {
       if(source) {
