@@ -154,7 +154,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * @param newValue
    *          the property new value.
    */
-  void preprocessSetter(Object component, Object newValue);
+  void preprocessSetter(final Object component, final Object newValue);
 
   /**
    * Gets the formula used to represent this property in the persistent store.

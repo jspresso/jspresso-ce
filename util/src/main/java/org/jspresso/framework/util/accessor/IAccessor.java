@@ -36,6 +36,8 @@ public interface IAccessor {
   /**
    * Gets the value from the target of this accessor.
    *
+   * @param <T>
+   *     type inference return.
    * @param target
    *          the target from which to get the value.
    * @return the value obtained.

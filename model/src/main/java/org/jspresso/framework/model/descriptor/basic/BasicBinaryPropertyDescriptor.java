@@ -126,7 +126,7 @@ public class BasicBinaryPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preprocessSetter(final Object component, Object newValue) {
+  public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
     if (newValue instanceof byte[]) {
       // watch out for java serializable property

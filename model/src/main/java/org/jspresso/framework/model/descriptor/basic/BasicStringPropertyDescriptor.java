@@ -125,7 +125,7 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preprocessSetter(final Object component, Object newValue) {
+  public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
     final String propertyValueAsString = getValueAsString(newValue);
     if (propertyValueAsString != null && getMaxLength() != null

@@ -23,25 +23,27 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.beanutils.expression.DefaultResolver;
+
 import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * Abstract class for property accessors.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public abstract class AbstractPropertyAccessor implements IAccessor {
 
-  private final String                         property;
+  private final String property;
 
   private static final PropertyUtilsBean PROPERTY_UTILS_BEAN = new PropertyUtilsBean();
+
   static {
     PROPERTY_UTILS_BEAN.setResolver(new DefaultResolver() {
 
       /**
        * Supports properties starting with a single lowercase letter.
-       * <p>
+       * <p/>
        * {@inheritDoc}
        */
       @Override
@@ -56,9 +58,9 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   /**
    * Whenever a property name starts with a single lowercase letter, the actual
    * java bean property starts with an upper case letter.
-   * 
+   *
    * @param prop
-   *          the property name.
+   *     the property name.
    * @return the fixed java bean property name.
    */
   public static String toJavaBeanPropertyName(String prop) {
@@ -77,9 +79,9 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   /**
    * Whenever a property name starts with a single lowercase letter, the actual
    * java bean property starts with an upper case letter.
-   * 
+   *
    * @param prop
-   *          the property name.
+   *     the property name.
    * @return the fixed java bean property name.
    */
   public static String fromJavaBeanPropertyName(String prop) {
@@ -99,7 +101,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    * Constructs a new {@code AbstractPropertyAccessor} instance.
    *
    * @param property
-   *          the property to access.
+   *     the property to access.
    */
   public AbstractPropertyAccessor(String property) {
     this.property = property;
@@ -108,16 +110,19 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   /**
    * Gets a property value, taking care of Map vs bean implementation and nested
    * properties.
-   * 
+   *
+   * @param <T>
+   *     type inference return.
    * @param target
-   *          the target object.
-   * @throws IllegalAccessException
-   *           whenever an exception occurs.
-   * @throws InvocationTargetException
-   *           whenever an exception occurs.
-   * @throws NoSuchMethodException
-   *           whenever an exception occurs.
+   *     the target object.
    * @return the property value.
+   *
+   * @throws IllegalAccessException
+   *     whenever an exception occurs.
+   * @throws InvocationTargetException
+   *     whenever an exception occurs.
+   * @throws NoSuchMethodException
+   *     whenever an exception occurs.
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -147,17 +152,17 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   /**
    * Sets a property value, taking care of Map vs bean implementation and nested
    * properties.
-   * 
+   *
    * @param target
-   *          the target object.
+   *     the target object.
    * @param value
-   *          the value to set.
+   *     the value to set.
    * @throws IllegalAccessException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws InvocationTargetException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws NoSuchMethodException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    */
   @Override
   public void setValue(Object target, Object value)
@@ -195,7 +200,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
 
   /**
    * Gets the final nested property.
-   * 
+   *
    * @return the final nested property.
    */
   protected String getLastNestedProperty() {
@@ -205,18 +210,19 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
 
   /**
    * Gets the last target of a nested property.
-   * 
+   *
    * @param target
-   *          the starting target.
+   *     the starting target.
    * @param prop
-   *          the property.
+   *     the property.
    * @return the last target of a nested property.
+   *
    * @throws IllegalAccessException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws InvocationTargetException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws NoSuchMethodException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    */
   protected Object getLastNestedTarget(Object target, String prop)
       throws IllegalAccessException, InvocationTargetException,
@@ -253,7 +259,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
 
   /**
    * Gets the property property.
-   * 
+   *
    * @return the property.
    */
   protected String getProperty() {

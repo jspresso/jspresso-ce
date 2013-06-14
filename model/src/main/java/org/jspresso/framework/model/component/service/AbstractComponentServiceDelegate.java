@@ -57,8 +57,6 @@ public class AbstractComponentServiceDelegate<T> implements IComponentService {
    *           whenever an unexpected exception occurs when invoking the method.
    * @throws IllegalAccessException
    *           whenever an unexpected exception occurs when invoking the method.
-   * @throws IllegalArgumentException
-   *           whenever an unexpected exception occurs when invoking the method.
    */
   public Object executeWith(T target, Method serviceMethod, Object... args)
       throws IllegalAccessException, InvocationTargetException {

@@ -48,6 +48,7 @@ public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> 
    * &quot;<b>!</b>&quot; prefix to negate the property value. It also supports
    * non-boolean properties. In that case, the test is performed against the
    * {@code property != null} condition.
+   * @param propertyName the name of the property.
    */
   @Override
   public void setPropertyName(String propertyName) {

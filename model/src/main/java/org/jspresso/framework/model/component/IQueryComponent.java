@@ -161,7 +161,9 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   /**
    * Pre-process a value before putting it into the query component. Transforms
    * a multi-line text into a disjunction of values.
-   * 
+   *
+   * @param <T>
+   *     type type of value.
    * @param value
    *          the value to refine to transform.
    * @param propertyDescriptor

@@ -54,6 +54,8 @@ public class PlaceholderInputStream extends FilterInputStream {
   /**
    * Reads the next byte from the stream per the general contract of
    * InputStream.read(). Returns -1 on error or end of stream.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   public int read() throws IOException {
@@ -105,6 +107,7 @@ public class PlaceholderInputStream extends FilterInputStream {
 
   /**
    * Returns false.
+   * @return false;
    */
   @Override
   public boolean markSupported() {

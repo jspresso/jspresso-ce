@@ -67,6 +67,8 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
   }
 
   /**
+   * Fires a property change on put.
+   * <p>
    * {@inheritDoc}
    */
   @Override

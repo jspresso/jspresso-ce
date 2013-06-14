@@ -278,6 +278,7 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * Delays events propagation by buffering them. When events are unblocked,
    * they get fired in the order they were recorded.
+   * {@inheritDoc}
    */
   @Override
   public boolean blockEvents() {
@@ -290,6 +291,7 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * Unblocks event propagation. All events that were buffered are fired.
+   * {@inheritDoc}
    */
   @Override
   public void releaseEvents() {

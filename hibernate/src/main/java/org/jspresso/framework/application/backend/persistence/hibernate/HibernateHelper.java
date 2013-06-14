@@ -58,7 +58,9 @@ public final class HibernateHelper {
 
   /**
    * Retrieves a component contract without initializing an entity.
-   * 
+   *
+   * @param <E>
+   *     The actual type of component.
    * @param component
    *          the component to retrieve the contract for.
    * @return the component contract.

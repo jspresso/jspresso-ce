@@ -3080,6 +3080,7 @@ public class DefaultSwingViewFactory extends
    * 
    * @param view
    *          the view to decorate.
+   *          @param translationProvider the translation provider.
    * @param locale
    *          the locale to use.
    */

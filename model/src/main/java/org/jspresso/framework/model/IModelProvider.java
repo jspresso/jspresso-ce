@@ -41,7 +41,9 @@ public interface IModelProvider {
 
   /**
    * Gets the bean object of this provider.
-   * 
+   *
+   * @param <T>
+   *     type inference return.
    * @return The bean object
    */
   <T> T getModel();

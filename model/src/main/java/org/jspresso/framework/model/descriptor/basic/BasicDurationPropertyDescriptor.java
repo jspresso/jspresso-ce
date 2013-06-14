@@ -77,10 +77,12 @@ public class BasicDurationPropertyDescriptor extends
   }
 
   /**
+   * Handles max value.
+   * <p>
    * {@inheritDoc}
    */
   @Override
-  public void preprocessSetter(final Object component, Object newValue) {
+  public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
     if (newValue != null && getMaxMillis() != null
         && (Long) newValue > getMaxMillis()) {

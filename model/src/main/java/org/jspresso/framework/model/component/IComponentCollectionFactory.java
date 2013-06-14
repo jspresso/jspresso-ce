@@ -32,6 +32,8 @@ public interface IComponentCollectionFactory {
    * Given a collection interface (i.e. {@code Set},{@code List}, ...)
    * this method creates a concrete implementation.
    *
+   * @param <E>
+   *     type inference return.
    * @param collectionInterface
    *          the interface which must be implemented by the created collection.
    * @return an empty instance of a concrete collection.

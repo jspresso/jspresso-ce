@@ -467,7 +467,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (dirtyProperties != null) {
       for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet()
-          .iterator(); ite.hasNext(); ) {
+          .iterator(); ite.hasNext();) {
         Map.Entry<String, Object> property = ite.next();
         boolean include = true;
         if (!includeComputed) {
@@ -637,7 +637,7 @@ public abstract class AbstractBackendController extends AbstractController
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
     if (propertyValue instanceof Collection<?>) {
       for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite
-          .hasNext(); ) {
+          .hasNext();) {
         Object collectionElement = ite.next();
         if (collectionElement instanceof IEntity) {
           if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
@@ -2322,7 +2322,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Hook to allow subclasses to determine component contract without
    * initializing it.
-   *
+   * @param <E> the actual component type.
    * @param component
    *     the component to get the component contract for.
    * @return the component contract.

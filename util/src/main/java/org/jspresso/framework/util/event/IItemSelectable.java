@@ -45,7 +45,9 @@ public interface IItemSelectable {
 
   /**
    * Retrieves the selected item out of this item selectable or null if none.
-   * 
+   *
+   * @param <T>
+   *     type inference return.
    * @return the selected item out of this item selectable.
    */
   <T> T getSelectedItem();

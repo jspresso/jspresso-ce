@@ -34,11 +34,10 @@ import java.io.StringReader;
 
 /**
  * Strongly inspired from javax.swing.plaf.basic.BasicTransferable.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-@SuppressWarnings({"javadoc", "JavaDoc"})
 public class BasicTransferable implements Transferable, ClipboardOwner {
 
   private static final Logger LOG = LoggerFactory.getLogger(BasicTransferable.class);
@@ -74,6 +73,14 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
     }
   }
 
+  /**
+   * Constructs a new {@code BasicTransferable} instance.
+   *
+   * @param plainData
+   *     plain data.
+   * @param htmlData
+   *     HTML data.
+   */
   public BasicTransferable(String plainData, String htmlData) {
     this.plainData = plainData;
     this.htmlData = htmlData;
@@ -132,9 +139,9 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Returns whether or not the specified data flavor is supported for this
    * object.
-   * 
+   *
    * @param flavor
-   *          the requested flavor for the data
+   *     the requested flavor for the data
    * @return boolean indicating whether or not the data flavor is supported
    */
   @Override
@@ -151,14 +158,16 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Returns an object which represents the data to be transferred. The class of
    * the object returned is defined by the representation class of the flavor.
-   * 
+   *
    * @param flavor
-   *          the requested flavor for the data
+   *     the requested flavor for the data
+   * @return the transferred object.
+   *
+   * @throws IOException
+   *     if the data is no longer available in the requested flavor.
+   * @throws UnsupportedFlavorException
+   *     if the requested data flavor is not supported.
    * @see DataFlavor#getRepresentationClass
-   * @exception IOException
-   *              if the data is no longer available in the requested flavor.
-   * @exception UnsupportedFlavorException
-   *              if the requested data flavor is not supported.
    */
   @Override
   public Object getTransferData(DataFlavor flavor)
@@ -204,6 +213,13 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
 
   // --- richer subclass flavors ----------------------------------------------
 
+  /**
+   * Tests whether the passed in flavor is richer than this.
+   *
+   * @param flavor
+   *     the flavor to test.
+   * @return @{code true} if the flavor is richer than this.
+   */
   protected boolean isRicherFlavor(DataFlavor flavor) {
     DataFlavor[] richerFlavors = getRicherFlavors();
     if (richerFlavors != null) {
@@ -220,11 +236,22 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    * Some subclasses will have flavors that are more descriptive than HTML or
    * plain text. If this method returns a non-null value, it will be placed at
    * the start of the array of supported flavors.
+   *
+   * @return the richer compatible flavors.
    */
   protected DataFlavor[] getRicherFlavors() {
     return null;
   }
 
+  /**
+   * Gets richer data.
+   *
+   * @param flavor
+   *     the flavor to get the data.
+   * @throws UnsupportedFlavorException
+   *     whenever this flavor is not supported.
+   * @returnthe richer data.
+   */
   @SuppressWarnings({"unused", "UnusedParameters"})
   protected Object getRicherData(DataFlavor flavor)
       throws UnsupportedFlavorException {
@@ -236,9 +263,9 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Returns whether or not the specified data flavor is an HTML flavor that is
    * supported.
-   * 
+   *
    * @param flavor
-   *          the requested flavor for the data
+   *     the requested flavor for the data
    * @return boolean indicating whether or not the data flavor is supported
    */
   protected boolean isHTMLFlavor(DataFlavor flavor) {
@@ -254,6 +281,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Should the HTML flavors be offered? If so, the method getHTMLData should be
    * implemented to provide something reasonable.
+   *
+   * @return true if HTML is supported.
    */
   protected boolean isHTMLSupported() {
     return htmlData != null;
@@ -261,6 +290,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
 
   /**
    * Fetch the data in a text/html format
+   *
+   * @return HTML data.
    */
   protected String getHTMLData() {
     return htmlData;
@@ -271,9 +302,9 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Returns whether or not the specified data flavor is an plain flavor that is
    * supported.
-   * 
+   *
    * @param flavor
-   *          the requested flavor for the data
+   *     the requested flavor for the data
    * @return boolean indicating whether or not the data flavor is supported
    */
   protected boolean isPlainFlavor(DataFlavor flavor) {
@@ -289,6 +320,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Should the plain text flavors be offered? If so, the method getPlainData
    * should be implemented to provide something reasonable.
+   *
+   * @return true if plain flavor is supported.
    */
   protected boolean isPlainSupported() {
     return plainData != null;
@@ -296,6 +329,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
 
   /**
    * Fetch the data in a text/plain format.
+   *
+   * @return plain data.
    */
   protected String getPlainData() {
     return plainData;
@@ -307,9 +342,9 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   /**
    * Returns whether or not the specified data flavor is a String flavor that is
    * supported.
-   * 
+   *
    * @param flavor
-   *          the requested flavor for the data
+   *     the requested flavor for the data
    * @return boolean indicating whether or not the data flavor is supported
    */
   protected boolean isStringFlavor(DataFlavor flavor) {

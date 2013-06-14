@@ -122,7 +122,9 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Gets the value of the peer object.
-   * 
+   *
+   * @param <T>
+   *     type inference return.
    * @return The peer value
    */
   <T> T getConnectorValue();
