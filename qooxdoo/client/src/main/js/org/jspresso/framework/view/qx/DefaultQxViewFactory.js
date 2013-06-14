@@ -388,11 +388,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (!qx.lang.Array.equals(selectedIndices, stateSelection)) {
           if (selectedIndices.length > 0) {
             state
-                .setLeadingIndex(selectedIndices[selectedIndices.length
-                    - 1])
+                .setLeadingIndex(selectedIndices[selectedIndices.length - 1]);
+            ;
             state.setSelectedIndices(selectedIndices);
           } else {
-            state.setLeadingIndex(-1)
+            state.setLeadingIndex(-1);
+            ;
             state.setSelectedIndices(null);
           }
         }
@@ -516,8 +517,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel);
       } else {
         // Customize the table column model. We want one that
-        // automatically
-        // resizes columns.
+        // automatically resize columns.
         var custom = {
           tableColumnModel : function(obj) {
             return new qx.ui.table.columnmodel.Resize(obj);
@@ -736,7 +736,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (selectedIndices.length == 0) {
           leadingIndex = -1;
         }
-        var stateSelection = state.getSelectedIndices()
+        var stateSelection = state.getSelectedIndices();
+        ;
         if (!stateSelection) {
           stateSelection = new Array();
         }
@@ -1037,7 +1038,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             alignY : "baseline"
           });
       colorWidget.addListener("mousedown", function(e) {
-            colorPopup.placeToMouse(e)
+            colorPopup.placeToMouse(e);
+        ;
             colorPopup.setValue(this.getBackgroundColor());
             colorPopup.show();
           });
@@ -1351,7 +1353,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.isSecondsAware());
-      remoteTimeField.useDateDto(!remoteDateField.isTimezoneAware())
+      remoteTimeField.useDateDto(!remoteDateField.isTimezoneAware());
+      ;
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this
           ._sizeMaxComponentWidth(
@@ -1413,7 +1416,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var actionList = remoteActionField.getActionLists()[i];
         for (var j = 0; j < actionList.getActions().length; j++) {
           var actionComponent = this.createAction(actionList
-              .getActions()[j])
+              .getActions()[j]);
           //actionComponent.setFocusable(false);
           actionComponent.setAllowStretchY(false, false);
           actionField.add(actionComponent);
@@ -2574,8 +2577,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     /**
      * 
-     * @param
-     * {org.jspresso.framework.state.remote.RemoteCompositeValueState} state
+     * @param {org.jspresso.framework.state.remote.RemoteCompositeValueState} state
      * @param {qx.data.Array}
      *            selectedItems
      */
@@ -3181,9 +3183,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     edit : function(component) {
       var editableChild = this._findFirstEditableComponent(component);
       if(editableChild instanceof qx.ui.table.Table) {
-        /** @type qx.ui.table.Table */
-        var table = editableChild;
-        table.startEditing();
+        editableChild.startEditing();
       }
     }
     

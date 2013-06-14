@@ -1,3 +1,4 @@
+//noinspection FunctionWithInconsistentReturnsJS
 /**
  * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -32,9 +33,12 @@ qx.Class.define("org.jspresso.framework.util.browser.ClipboardHelper", {
 		 */
     copyToSystemClipboard : function(dataTransfers) {
       if (window.clipboardData) {
-	      for (var i = 0; i < dataTransfers.length; i+=2) {
-	        var flavor = dataTransfers[i];
-	        var text = dataTransfers[i+1];
+        var i;
+        var flavor;
+        var text;
+	      for (i = 0; i < dataTransfers.length; i+=2) {
+	        flavor = dataTransfers[i];
+	        text = dataTransfers[i+1];
 	        if (!flavor) {
 	          // default
 	          flavor = "text/unicode";
@@ -65,9 +69,9 @@ qx.Class.define("org.jspresso.framework.util.browser.ClipboardHelper", {
         if (!trans)
           return;
           
-	      for (var i = 0; i < dataTransfers.length; i+=2) {
-	        var flavor = dataTransfers[i];
-	        var text = dataTransfers[i+1];
+	      for (i = 0; i < dataTransfers.length; i+=2) {
+	        flavor = dataTransfers[i];
+	        text = dataTransfers[i+1];
 	        if (!flavor) {
 	          // default
 	          flavor = "text/unicode";
@@ -78,9 +82,8 @@ qx.Class.define("org.jspresso.framework.util.browser.ClipboardHelper", {
 	        var len = new Object();
 	        var str = Components.classes["@mozilla.org/supports-string;1"]
 	            .createInstance(Components.interfaces.nsISupportsString);
-	        var copytext = text;
-	        str.data = copytext;
-	        trans.setTransferData(flavor, str, copytext.length * 2);
+	        str.data = text;
+	        trans.setTransferData(flavor, str, text.length * 2);
         }
         var clipid = Components.interfaces.nsIClipboard;
         if (!clip)

@@ -1,15 +1,15 @@
 /*******************************************************************************
- * 
+ *
  * Copyright:
- * 
+ *
  * License:
- * 
+ *
  * Authors:
- * 
+ *
  ******************************************************************************/
 
 /*******************************************************************************
- * 
+ *
  * #use(org.jspresso.framework.gui.remote.RAction)
  * #use(org.jspresso.framework.gui.remote.RActionField)
  * #use(org.jspresso.framework.gui.remote.RActionList)
@@ -44,11 +44,11 @@
  * #use(org.jspresso.framework.gui.remote.RTextField)
  * #use(org.jspresso.framework.gui.remote.RTimeField)
  * #use(org.jspresso.framework.gui.remote.RTree)
- * 
+ *
  * #use(org.jspresso.framework.util.gui.Dimension)
  * #use(org.jspresso.framework.util.gui.CellConstraints)
  * #use(org.jspresso.framework.util.gui.Font)
- * 
+ *
  * #use(org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand)
  * #use(org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand)
  * #use(org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand)
@@ -75,52 +75,54 @@
  * #use(org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand)
  * #use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand)
  * #use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand)
- * 
+ *
  ******************************************************************************/
 
 qx.Class.define("org.jspresso.framework.application.frontend.Application", {
-	extend : qx.application.Standalone,
+  extend: qx.application.Standalone,
 
-	members : {
-		/** @type org.jspresso.framework.application.frontend.controller.qx.DefaultQxController */
-		__qxController : null,
+  members: {
+    /** @type org.jspresso.framework.application.frontend.controller.qx.DefaultQxController */
+    __qxController: null,
 
-		main : function() {
-			this.base(arguments);
+    main: function () {
+      this.base(arguments);
 
-			qx.Class.patch(qx.ui.form.CheckBox,
-					org.jspresso.framework.patch.MCheckBox);
+      qx.Class.patch(qx.ui.form.CheckBox,
+          org.jspresso.framework.patch.MCheckBox);
 
-			qx.Theme.include(qx.theme.modern.Appearance,
-					collapsablepanel.theme.modern.Appearance);
-			qx.Theme.include(qx.theme.classic.Appearance,
-					collapsablepanel.theme.classic.Appearance);
+      qx.Theme.include(qx.theme.modern.Appearance,
+          collapsablepanel.theme.modern.Appearance);
+      qx.Theme.include(qx.theme.classic.Appearance,
+          collapsablepanel.theme.classic.Appearance);
 
-			// In order to cope with dates the old "new Date(Date.UTC..." way
-			// Not used anymore. Jspresso now handles dates using the ISO8601
-			// spec
-			// qx.io.remote.Rpc.CONVERT_DATES = true;
+      // In order to cope with dates the old "new Date(Date.UTC..." way
+      // Not used anymore. Jspresso now handles dates using the ISO8601
+      // spec
+      // qx.io.remote.Rpc.CONVERT_DATES = true;
 
-			// Enable logging in debug variant
-			if (qx.core.Environment.get("qx.debug")) {
-				// support native logging capabilities, e.g. Firebug for Firefox
-				qx.log.appender.Native;
-				// support additional cross-browser console. Press F7 to toggle
-				// visibility
-				qx.log.appender.Console;
-			}
-			this.start();
-		},
+      // Enable logging in debug variant
+      if (qx.core.Environment.get("qx.debug")) { //noinspection BadExpressionStatementJS
+        {
+          // support native logging capabilities, e.g. Firebug for Firefox
+          qx.log.appender.Native;
+          // support additional cross-browser console. Press F7 to toggle
+          // visibility
+          qx.log.appender.Console;
+        }
+      }
+      this.start();
+    },
 
-		startController : function(remoteController) {
-			this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(
-					this, remoteController, "en");
-			this.__qxController.start();
-		},
+    startController: function (remoteController) {
+      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(
+          this, remoteController, "en");
+      this.__qxController.start();
+    },
 
-		close : function() {
-			this.base(arguments);
-			this.__qxController.stop()
-		}
-	}
+    close: function () {
+      this.base(arguments);
+      this.__qxController.stop()
+    }
+  }
 });

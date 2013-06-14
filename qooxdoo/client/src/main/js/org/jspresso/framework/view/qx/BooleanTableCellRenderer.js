@@ -33,6 +33,7 @@ qx.Class.define("org.jspresso.framework.view.qx.BooleanTableCellRenderer",
     // overridden
     _identifyImage : function(cellInfo)
     {
+      //noinspection RedundantIfStatementJS
       if(cellInfo.value) {
         cellInfo.value = true;
       } else {

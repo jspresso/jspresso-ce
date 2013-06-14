@@ -240,7 +240,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     _handleCommands : function(commands) {
-      //this.debug("Recieved commands :");
+      //this.debug("Received commands :");
       var wasEnabled = this.__changeNotificationsEnabled;
       try {
         this.__changeNotificationsEnabled = false;
@@ -716,7 +716,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__viewFactory.installActionLists(toolBar, navigationActions);
       if(actions) {
         for(var i = 0; i < actions.length; i++) {
-          var splitButton = this.__viewFactory.createSplitButton(actions[i])
+          var splitButton = this.__viewFactory.createSplitButton(actions[i]);
+          ;
           if(splitButton) {
             toolBar.add(splitButton);
           }
@@ -728,7 +729,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //toolBar.addSpacer();
       if(helpActions) {
         for(var i = 0; i < helpActions.length; i++) {
-          var splitButton = this.__viewFactory.createSplitButton(helpActions[i])
+          var splitButton = this.__viewFactory.createSplitButton(helpActions[i]);
+          ;
           if(splitButton) {
             toolBar.add(splitButton);
           }
@@ -1026,6 +1028,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             try {
               this.__nextActionCallback();
             } catch(e){
+              //noinspection ThrowInsideFinallyBlockJS
               throw e;
             } finally {
               this.__nextActionCallback = null;

@@ -250,7 +250,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    *     the flavor to get the data.
    * @throws UnsupportedFlavorException
    *     whenever this flavor is not supported.
-   * @returnthe richer data.
+   * @return the richer data.
    */
   @SuppressWarnings({"unused", "UnusedParameters"})
   protected Object getRicherData(DataFlavor flavor)
@@ -289,7 +289,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
   }
 
   /**
-   * Fetch the data in a text/html format
+   * Fetch the data in a text/html format.
    *
    * @return HTML data.
    */

@@ -92,6 +92,7 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
         /**
          * {@inheritDoc}
          */
+        @SuppressWarnings("EmptyMethod")
         @Override
         public int hashCode() {
           return super.hashCode();

@@ -1,3 +1,4 @@
+//noinspection FunctionWithInconsistentReturnsJS
 /**
  * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
  * <p>
