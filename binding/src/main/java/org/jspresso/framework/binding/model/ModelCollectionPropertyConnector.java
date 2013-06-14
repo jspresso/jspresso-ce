@@ -312,7 +312,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   @Override
-  public void setSelectedIndices(int[] newSelectedIndices) {
+  public void setSelectedIndices(int... newSelectedIndices) {
     selectionChangeSupport.setSelectedIndices(newSelectedIndices);
   }
 

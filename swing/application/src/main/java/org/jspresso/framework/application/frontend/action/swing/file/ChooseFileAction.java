@@ -32,16 +32,16 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
 
 /**
  * Initiates a file choosing action.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public abstract class ChooseFileAction extends AbstractSwingAction {
 
   /**
    * {@code FILE_CALLBACK} is "FILE_CALLBACK".
    */
-  public final static String FILE_CALLBACK = "FILE_CALLBACK";
+  public static final String FILE_CALLBACK = "FILE_CALLBACK";
 
   private String                    defaultFileName;
   private Map<String, List<String>> fileFilter;
@@ -51,18 +51,17 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
    * Sets the defaultFileName.
    *
    * @param defaultFileName
-   *          the defaultFileName to set.
+   *     the defaultFileName to set.
    */
   public void setDefaultFileName(String defaultFileName) {
     this.defaultFileName = defaultFileName;
   }
 
   /**
-   * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arrays.
+   * Sets the fileFilter. Filter file types are a map of descriptions keying file extension arrays.
    *
    * @param fileFilter
-   *          the fileFilter to set.
+   *     the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
@@ -72,7 +71,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
    * Gets the file chooser.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the file chooser.
    */
   protected JFileChooser createFileChooser(Map<String, Object> context) {
@@ -104,7 +103,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
 
   /**
    * Gets the defaultFileName.
-   * 
+   *
    * @return the defaultFileName.
    */
   protected String getDefaultFileName() {
@@ -113,9 +112,9 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
 
   /**
    * Gets the fileFilter.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the fileFilter.
    */
   protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
@@ -123,11 +122,10 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
   }
 
   /**
-   * Computes a file name to save the file. Defaults to the action default file
-   * name parametrized in the action.
-   * 
+   * Computes a file name to save the file. Defaults to the action default file name parametrized in the action.
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the file name to save the file under.
    */
   protected String getFileName(Map<String, Object> context) {
@@ -138,7 +136,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
    * Sets the file callback.
    *
    * @param fileCallback
-   *          the file callback.
+   *     the file callback.
    */
   protected void setFileCallback(IFileCallback fileCallback) {
     this.fileCallback = fileCallback;
@@ -147,12 +145,13 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
   /**
    * Gets the fileCallback.
    *
-   * @param context the action context.
+   * @param context
+   *     the action context.
    * @return the fileCallback.
    */
   protected IFileCallback getFileCallback(Map<String, Object> context) {
     IFileCallback callback = (IFileCallback) context.get(FILE_CALLBACK);
-    if(callback == null) {
+    if (callback == null) {
       callback = fileCallback;
     }
     return callback;
@@ -166,8 +165,10 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
     /**
      * Constructs a new {@code FileFilterAdapter} instance.
      *
-     * @param description the filter description.
-     * @param allowedExtensions the filter allowed extensions.
+     * @param description
+     *     the filter description.
+     * @param allowedExtensions
+     *     the filter allowed extensions.
      */
     public FileFilterAdapter(Collection<String> allowedExtensions,
         String description) {

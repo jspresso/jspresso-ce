@@ -43,31 +43,31 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
 
   private static final Logger LOG = LoggerFactory.getLogger(BasicTransferable.class);
 
-  private final String              plainData;
-  private final String              htmlData;
+  private final String plainData;
+  private final String htmlData;
 
-  private static final DataFlavor[] htmlFlavors;
-  private static final DataFlavor[] stringFlavors;
-  private static final DataFlavor[] plainFlavors;
+  private static final DataFlavor[] HTML_FLAVORS;
+  private static final DataFlavor[] STRING_FLAVORS;
+  private static final DataFlavor[] PLAIN_FLAVORS;
 
   static {
-    htmlFlavors = new DataFlavor[3];
-    plainFlavors = new DataFlavor[3];
-    stringFlavors = new DataFlavor[2];
+    HTML_FLAVORS = new DataFlavor[3];
+    PLAIN_FLAVORS = new DataFlavor[3];
+    STRING_FLAVORS = new DataFlavor[2];
     try {
-      htmlFlavors[0] = new DataFlavor("text/html;class=java.lang.String");
-      htmlFlavors[1] = new DataFlavor("text/html;class=java.io.Reader");
-      htmlFlavors[2] = new DataFlavor(
+      HTML_FLAVORS[0] = new DataFlavor("text/html;class=java.lang.String");
+      HTML_FLAVORS[1] = new DataFlavor("text/html;class=java.io.Reader");
+      HTML_FLAVORS[2] = new DataFlavor(
           "text/html;charset=unicode;class=java.io.InputStream");
 
-      plainFlavors[0] = new DataFlavor("text/plain;class=java.lang.String");
-      plainFlavors[1] = new DataFlavor("text/plain;class=java.io.Reader");
-      plainFlavors[2] = new DataFlavor(
+      PLAIN_FLAVORS[0] = new DataFlavor("text/plain;class=java.lang.String");
+      PLAIN_FLAVORS[1] = new DataFlavor("text/plain;class=java.io.Reader");
+      PLAIN_FLAVORS[2] = new DataFlavor(
           "text/plain;charset=unicode;class=java.io.InputStream");
 
-      stringFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType
+      STRING_FLAVORS[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType
           + ";class=java.lang.String");
-      stringFlavors[1] = DataFlavor.stringFlavor;
+      STRING_FLAVORS[1] = DataFlavor.stringFlavor;
 
     } catch (ClassNotFoundException cle) {
       LOG.error("Error initializing javax.swing.plaf.basic.BasicTransferable", cle);
@@ -83,7 +83,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    * Returns an array of DataFlavor objects indicating the flavors the data can
    * be provided in. The array should be ordered according to preference for
    * providing the data (from most richly descriptive to least descriptive).
-   * 
+   *
    * @return an array of data flavors in which this data can be transferred
    */
   @Override
@@ -95,15 +95,15 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
     }
     int nHTML = 0;
     if (isHTMLSupported()) {
-      nHTML = htmlFlavors.length;
+      nHTML = HTML_FLAVORS.length;
     }
     int nPlain = 0;
     if (isPlainSupported()) {
-      nPlain = plainFlavors.length;
+      nPlain = PLAIN_FLAVORS.length;
     }
     int nString = 0;
     if (isPlainSupported()) {
-      nString = stringFlavors.length;
+      nString = STRING_FLAVORS.length;
     }
     int nFlavors = nRicher + nHTML + nPlain + nString;
     DataFlavor[] flavors = new DataFlavor[nFlavors];
@@ -115,15 +115,15 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
       nDone += nRicher;
     }
     if (nHTML > 0) {
-      System.arraycopy(htmlFlavors, 0, flavors, nDone, nHTML);
+      System.arraycopy(HTML_FLAVORS, 0, flavors, nDone, nHTML);
       nDone += nHTML;
     }
     if (nPlain > 0) {
-      System.arraycopy(plainFlavors, 0, flavors, nDone, nPlain);
+      System.arraycopy(PLAIN_FLAVORS, 0, flavors, nDone, nPlain);
       nDone += nPlain;
     }
     if (nString > 0) {
-      System.arraycopy(stringFlavors, 0, flavors, nDone, nString);
+      System.arraycopy(STRING_FLAVORS, 0, flavors, nDone, nString);
       nDone += nString;
     }
     return flavors;
@@ -242,7 +242,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    * @return boolean indicating whether or not the data flavor is supported
    */
   protected boolean isHTMLFlavor(DataFlavor flavor) {
-    DataFlavor[] flavors = htmlFlavors;
+    DataFlavor[] flavors = HTML_FLAVORS;
     for (DataFlavor flavor1 : flavors) {
       if (flavor1.equals(flavor)) {
         return true;
@@ -277,7 +277,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    * @return boolean indicating whether or not the data flavor is supported
    */
   protected boolean isPlainFlavor(DataFlavor flavor) {
-    DataFlavor[] flavors = plainFlavors;
+    DataFlavor[] flavors = PLAIN_FLAVORS;
     for (DataFlavor flavor1 : flavors) {
       if (flavor1.equals(flavor)) {
         return true;
@@ -313,7 +313,7 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
    * @return boolean indicating whether or not the data flavor is supported
    */
   protected boolean isStringFlavor(DataFlavor flavor) {
-    DataFlavor[] flavors = stringFlavors;
+    DataFlavor[] flavors = STRING_FLAVORS;
     for (DataFlavor flavor1 : flavors) {
       if (flavor1.equals(flavor)) {
         return true;

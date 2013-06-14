@@ -30,11 +30,11 @@ import org.jspresso.framework.util.http.HttpRequestHolder;
  */
 public final class BackendControllerHolder {
 
-  private static final boolean                               isWebContext;
+  private static final boolean IS_WEB_CONTEXT;
   /**
    * {@code CURRENT_BACKEND_CONTROLLER_KEY}.
    */
-  public static final String                           CURRENT_BACKEND_CONTROLLER_KEY = "CURRENT_BACKEND_CONTROLLER";
+  public static final  String                          CURRENT_BACKEND_CONTROLLER_KEY = "CURRENT_BACKEND_CONTROLLER";
   private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER =
       new InheritableThreadLocal<IBackendController>();
   private static final ThreadLocal<IBackendController> THREADLOCAL_BACKEND_CONTROLLER =
@@ -48,7 +48,7 @@ public final class BackendControllerHolder {
     } catch (Throwable ex) {
       // Not in web context
     }
-    isWebContext = wc;
+    IS_WEB_CONTEXT = wc;
   }
 
   private BackendControllerHolder() {
@@ -57,13 +57,13 @@ public final class BackendControllerHolder {
 
   /**
    * Sets the session-bound backend controller.
-   * 
+   *
    * @param controller
    *          the tread-bound backend controller.
    */
   public static void setSessionBackendController(IBackendController controller) {
     // First try to bind to the HttpSession
-    if (isWebContext && HttpRequestHolder.isAvailable()) {
+    if (IS_WEB_CONTEXT && HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
       if (session != null) {
         session.setAttribute(CURRENT_BACKEND_CONTROLLER_KEY, controller);
@@ -75,7 +75,7 @@ public final class BackendControllerHolder {
 
   /**
    * Sets the tread-bound backend controller.
-   * 
+   *
    * @param controller
    *          the tread-bound backend controller.
    */
@@ -105,7 +105,7 @@ public final class BackendControllerHolder {
     // First lookup into the current thread
     controller = THREADBOUND_BACKEND_CONTROLLER.get();
     // If none is set, then query the session.
-    if (controller == null && isWebContext && HttpRequestHolder.isAvailable()) {
+    if (controller == null && IS_WEB_CONTEXT && HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
       if (session != null) {
         controller = (IBackendController) session

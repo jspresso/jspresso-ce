@@ -101,7 +101,7 @@ public class OpenFileAction extends ChooseFileAction {
    */
   protected FileOpenCallbackAction getFileOpenCallbackAction(Map<String, Object> context) {
     IFileOpenCallback callback = (IFileOpenCallback) context.get(FILE_CALLBACK);
-    if(callback != null) {
+    if (callback != null) {
       return new FileOpenCallbackAction(callback);
     }
     return fileOpenCallbackAction;

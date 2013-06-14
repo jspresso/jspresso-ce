@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.backend.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -74,16 +73,10 @@ public class PasteCollectionToMasterAction extends
       Class<?> allowedContract = getModelDescriptor(context)
           .getCollectionDescriptor().getElementDescriptor()
           .getComponentContract();
-      if (transferStructure.getContent() instanceof Collection<?>) {
-        for (Object comp : transferStructure.getContent()) {
-          if (allowedContract.isAssignableFrom(comp.getClass())) {
-            componentsToTransfer.add(comp);
-          }
+      for (Object comp : transferStructure.getContent()) {
+        if (allowedContract.isAssignableFrom(comp.getClass())) {
+          componentsToTransfer.add(comp);
         }
-      } else if (transferStructure.getContent() != null
-          && allowedContract.isAssignableFrom(transferStructure.getContent()
-              .getClass())) {
-        componentsToTransfer.add(transferStructure.getContent());
       }
       if (transferStructure.getTransferMode() == ETransferMode.COPY) {
         for (int i = 0; i < componentsToTransfer.size(); i++) {

@@ -126,7 +126,7 @@ public class BasicDelegatingComponentInvocationHandler extends
    */
   @Override
   protected Object invokeServiceMethod(Object proxy, Method method,
-      Object[] args) throws NoSuchMethodException {
+      Object... args) throws NoSuchMethodException {
     try {
       return super.invokeServiceMethod(proxy, method, args);
     } catch (NoSuchMethodException ex) {

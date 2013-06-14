@@ -37,9 +37,9 @@ import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * This tree model maps a connector hierarchy.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     TreeModelListener {
@@ -51,7 +51,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * Constructs a new {@code ConnectorHierarchyTreeModel} instance.
    *
    * @param rootConnector
-   *          the connector being the root node of the tree.
+   *     the connector being the root node of the tree.
    */
   public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector) {
     this.rootConnector = rootConnector;
@@ -286,7 +286,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             }
             if (connector == rootConnector) {
               fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
-                  getTreePathForConnector(connector).getPath(), null, (Object[])null);
+                  getTreePathForConnector(connector).getPath(), null, (Object[]) null);
             } else if (connector.getConnectorValue() != null) {
               IValueConnector parentConnector = connector.getParentConnector();
               while (parentConnector != null
@@ -301,8 +301,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 if (connectorPath != null) {
                   fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
                       getTreePathForConnector(parentConnector).getPath(),
-                      new int[] {
-                        getIndexOfChild(parentConnector, connector)
+                      new int[]{
+                          getIndexOfChild(parentConnector, connector)
                       }, connector);
                 }
               }

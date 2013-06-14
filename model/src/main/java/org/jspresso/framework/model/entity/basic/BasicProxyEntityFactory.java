@@ -49,11 +49,11 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
- * Default implementation of {@code IEntityFactory}. It creates standard
- * java proxies which delegate to {@code BasicEntityInvocationHandler}s.
+ * Default implementation of {@code IEntityFactory}. It creates standard java proxies
+ * which delegate to {@code BasicEntityInvocationHandler}s.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     IEntityFactory {
@@ -76,9 +76,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Performs necessary post instantiation initialization.
-   * 
+   *
    * @param entity
-   *          the instantiated entity.
+   *     the instantiated entity.
    */
   protected void initializeEntity(IEntity entity) {
     IComponentDescriptor<?> entityDescriptor = getComponentDescriptor(entity
@@ -119,7 +119,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   @Override
   public final <T extends IEntity> T createEntityInstance(
       Class<T> entityContract, Serializable id, boolean performInitialization) {
-    final T createdEntity = createEntityInstance(entityContract, id, (Class<?>[])null);
+    final T createdEntity = createEntityInstance(entityContract, id, (Class<?>[]) null);
     createdEntity.addPropertyChangeListener(IEntity.VERSION,
         new PropertyChangeListener() {
 
@@ -142,9 +142,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Sets the entityGUIDGenerator.
-   * 
+   *
    * @param entityGUIDGenerator
-   *          the entityGUIDGenerator to set.
+   *     the entityGUIDGenerator to set.
    */
   public void setEntityGUIDGenerator(IGUIDGenerator<?> entityGUIDGenerator) {
     this.entityGUIDGenerator = entityGUIDGenerator;
@@ -152,9 +152,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Creates the entity proxy invocation handler.
-   * 
+   *
    * @param entityDescriptor
-   *          the entity descriptor.
+   *     the entity descriptor.
    * @return the entity proxy invocation handler.
    */
   protected InvocationHandler createEntityInvocationHandler(
@@ -166,7 +166,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Gets the entity lifecycle handler.
-   * 
+   *
    * @return the entity lifecycle handler.
    */
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {
@@ -214,7 +214,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Gets the entityGUIDGenerator.
-   * 
+   *
    * @return the entityGUIDGenerator.
    */
   protected IGUIDGenerator<?> getEntityGUIDGenerator() {
@@ -237,17 +237,17 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate) {
     T createdComponent = createComponentInstance(componentContract, delegate,
-        (Class<?>[])null);
+        (Class<?>[]) null);
     return initializeComponent(createdComponent);
   }
 
   /**
    * Performs necessary post instantiation initialization.
-   * 
+   *
    * @param <T>
-   *          the component type.
+   *     the component type.
    * @param component
-   *          the instantiated component.
+   *     the instantiated component.
    * @return the component instance ready to be used.
    */
   protected <T extends IComponent> T initializeComponent(T component) {
@@ -309,9 +309,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Sets the componentCollectionFactory property.
-   * 
+   *
    * @param componentCollectionFactory
-   *          the componentCollectionFactory to set.
+   *     the componentCollectionFactory to set.
    */
   public void setComponentCollectionFactory(
       IComponentCollectionFactory componentCollectionFactory) {
@@ -320,9 +320,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Sets the componentDescriptorRegistry.
-   * 
+   *
    * @param componentDescriptorRegistry
-   *          the componentDescriptorRegistry to set.
+   *     the componentDescriptorRegistry to set.
    */
   public void setComponentDescriptorRegistry(
       IComponentDescriptorRegistry componentDescriptorRegistry) {
@@ -331,9 +331,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Sets the componentExtensionFactory property.
-   * 
+   *
    * @param componentExtensionFactory
-   *          the componentCollectionFactory to set.
+   *     the componentCollectionFactory to set.
    */
   public void setComponentExtensionFactory(
       IComponentExtensionFactory componentExtensionFactory) {
@@ -342,9 +342,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Creates the component proxy invocation handler.
-   * 
+   *
    * @param componentDescriptor
-   *          the component descriptor.
+   *     the component descriptor.
    * @return the component proxy invocation handler.
    */
   protected InvocationHandler createComponentInvocationHandler(
@@ -356,7 +356,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Gets the componentCollectionFactory.
-   * 
+   *
    * @return the componentCollectionFactory.
    */
   protected IComponentCollectionFactory getComponentCollectionFactory() {
@@ -365,7 +365,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Gets the componentExtensionFactory.
-   * 
+   *
    * @return the componentExtensionFactory.
    */
   protected IComponentExtensionFactory getComponentExtensionFactory() {
@@ -374,7 +374,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Gets the principal using the factory.
-   * 
+   *
    * @return the principal using the factory.
    */
   protected UserPrincipal getPrincipal() {
@@ -418,7 +418,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Gets the queryComponentDescriptorFactory.
-   * 
+   *
    * @return the queryComponentDescriptorFactory.
    */
   protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
@@ -430,9 +430,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   /**
    * Sets the queryComponentDescriptorFactory.
-   * 
+   *
    * @param queryComponentDescriptorFactory
-   *          the queryComponentDescriptorFactory to set.
+   *     the queryComponentDescriptorFactory to set.
    */
   public void setQueryComponentDescriptorFactory(
       IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {

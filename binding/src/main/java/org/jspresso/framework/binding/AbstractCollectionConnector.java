@@ -244,7 +244,7 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   @Override
-  public void setSelectedIndices(int[] newSelectedIndices) {
+  public void setSelectedIndices(int... newSelectedIndices) {
     int leadingIndex = -1;
     if (newSelectedIndices != null && newSelectedIndices.length > 0) {
       leadingIndex = newSelectedIndices[newSelectedIndices.length - 1];

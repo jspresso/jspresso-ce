@@ -197,7 +197,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
    * {@inheritDoc}
    */
   @Override
-  public void setSelectedIndices(int[] selectedIndices) {
+  public void setSelectedIndices(int... selectedIndices) {
     ICollectionConnector collectionConnector = getCollectionConnector();
     if (collectionConnector != null) {
       collectionConnector.setSelectedIndices(selectedIndices);

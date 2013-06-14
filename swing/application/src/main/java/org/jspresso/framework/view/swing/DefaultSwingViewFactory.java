@@ -1203,7 +1203,7 @@ public class DefaultSwingViewFactory extends
         connector.setExceptionHandler(actionHandler);
         view.setConnector(connector);
       } else {
-        JComboBox<Object> viewComponent = createJComboBox(propertyViewDescriptor);
+        JComboBox viewComponent = createJComboBox(propertyViewDescriptor);
         if (!propertyDescriptor.isMandatory()) {
           viewComponent.addItem(null);
         }
@@ -1515,7 +1515,7 @@ public class DefaultSwingViewFactory extends
    * @return the created combo box.
    */
   @SuppressWarnings("unchecked")
-  protected JComboBox<Object> createJComboBox(IPropertyViewDescriptor viewDescriptor) {
+  protected JComboBox createJComboBox(IPropertyViewDescriptor viewDescriptor) {
     return new JComboBox();
   }
 
@@ -1629,8 +1629,8 @@ public class DefaultSwingViewFactory extends
    * @return the created list.
    */
   @SuppressWarnings("unchecked")
-  protected JList<IValueConnector> createJList(IListViewDescriptor viewDescriptor) {
-    JList<IValueConnector> list = new JList();
+  protected JList createJList(IListViewDescriptor viewDescriptor) {
+    JList list = new JList();
     list.setDragEnabled(true);
     return list;
   }
@@ -1862,7 +1862,7 @@ public class DefaultSwingViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    JList<IValueConnector> viewComponent = createJList(viewDescriptor);
+    JList viewComponent = createJList(viewDescriptor);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -3686,7 +3686,7 @@ public class DefaultSwingViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value,
+    public Component getListCellRendererComponent(JList list, Object value,
         int index, boolean isSelected, boolean cellHasFocus) {
       JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
           index, isSelected, cellHasFocus);

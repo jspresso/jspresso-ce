@@ -73,6 +73,8 @@ public abstract class AbstractActionContextAware {
    * parameter along the action chain. It is stored using the
    * {@code ActionContextConstants.ACTION_PARAM} standard key.
    *
+   * @param <T>
+   *     type inference return.
    * @param context
    *          the action context.
    * @return the action parameter if it exists in the action context or null.
@@ -110,6 +112,12 @@ public abstract class AbstractActionContextAware {
    * action was triggered without going through a frontend controller (a batch
    * action for instance), this method might return null.
    *
+   * @param <E>
+   *     the actual gui component type used.
+   * @param <F>
+   *     the actual icon type used.
+   * @param <G>
+   *     the actual action type used.
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -137,6 +145,8 @@ public abstract class AbstractActionContextAware {
   /**
    * Gets the model this action was triggered on.
    * 
+   * @param <T>
+   *     type inference return.
    * @param context
    *          the action context.
    * @return the model.
@@ -148,6 +158,8 @@ public abstract class AbstractActionContextAware {
   /**
    * Gets the model this action was triggered on.
    * 
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -257,6 +269,8 @@ public abstract class AbstractActionContextAware {
   /**
    * Gets the parent model this action was triggered on.
    * 
+   * @param <T>
+   *     type inference return.
    * @param context
    *          the action context.
    * @return the parent model.
@@ -320,6 +334,8 @@ public abstract class AbstractActionContextAware {
    * from the 1st selected child connector if the action was triggered on a
    * collection connector or from the connector itself.
    * 
+   * @param <T>
+   *     type inference return.
    * @param context
    *          the action context.
    * @return the selected model.
@@ -333,6 +349,8 @@ public abstract class AbstractActionContextAware {
    * from the 1st selected child connector if the action was triggered on a
    * collection connector or from the connector itself.
    * 
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -362,6 +380,8 @@ public abstract class AbstractActionContextAware {
    * either from the selected child connectors if the action was triggered on a
    * collection connector or from the connector itself.
    * 
+   * @param <T>
+   *     type inference return.
    * @param context
    *          the action context.
    * @return the list of selected models.
@@ -375,6 +395,8 @@ public abstract class AbstractActionContextAware {
    * either from the selected child connectors if the action was triggered on a
    * collection connector or from the connector itself.
    * 
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -553,6 +575,8 @@ public abstract class AbstractActionContextAware {
    * The returned view mainly serves for acting on the view component the action
    * has to be triggered on.
    *
+   * @param <T>
+   *     type inference return.
    * @param context
    *          the action context.
    * @return the view this action was triggered on.
@@ -573,6 +597,8 @@ public abstract class AbstractActionContextAware {
    * The returned view mainly serves for acting on the view component the action
    * has to be triggered on.
    *
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -648,6 +674,8 @@ public abstract class AbstractActionContextAware {
    * Starts from a view and navigates the view hierarchy following an index
    * navigation path.
    * 
+   * @param <T>
+   *     The root class of the view peers.
    * @param fromView
    *          the view to start from.
    * @param viewPath

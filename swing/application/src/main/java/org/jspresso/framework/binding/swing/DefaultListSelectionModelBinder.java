@@ -162,7 +162,7 @@ public class DefaultListSelectionModelBinder implements
               visibleCell = ((JTable) collectionComponent).getCellRect(
                   evt.getLeadingIndex(), 0, true);
             } else if (collectionComponent instanceof JList) {
-              visibleCell = ((JList<?>) collectionComponent).getCellBounds(
+              visibleCell = ((JList) collectionComponent).getCellBounds(
                   evt.getLeadingIndex(), evt.getLeadingIndex());
             }
             if (visibleCell != null) {

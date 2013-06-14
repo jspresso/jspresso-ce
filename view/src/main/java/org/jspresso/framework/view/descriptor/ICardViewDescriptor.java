@@ -29,6 +29,8 @@ package org.jspresso.framework.view.descriptor;
 public interface ICardViewDescriptor extends IViewDescriptor,
     ICardNameSelector, ICardProvider {
 
+  // This is a constants tank.
+
   /**
    * {@code DEFAULT_CARD}.
    */

@@ -39,7 +39,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CollectionConnectorListModel extends AbstractListModel<IValueConnector> {
+public class CollectionConnectorListModel extends AbstractListModel {
 
   private static final long                  serialVersionUID = -7992011455793793550L;
   private Map<Integer, IValueChangeListener> cachedListeners;

@@ -38,12 +38,12 @@ public final class Build {
    * {@code UNKNOWN}.
    */
   public static final String UNKNOWN = "UNKNOWN";
-  private static final Properties  jspressoProperties;
+  private static final Properties JSPRESSO_PROPERTIES;
 
   static {
-    jspressoProperties = new Properties();
+    JSPRESSO_PROPERTIES = new Properties();
     try {
-      jspressoProperties.load(Build.class
+      JSPRESSO_PROPERTIES.load(Build.class
           .getResourceAsStream("/META-INF/jspresso.properties"));
     } catch (IOException ioe) {
       LOG.error("jspresso.properties could not be loaded from the current classloader", ioe);
@@ -56,16 +56,16 @@ public final class Build {
 
   /**
    * Retrieves the Jspresso version.
-   * 
+   *
    * @return the Jspresso version.
    */
   public static String getJspressoVersion() {
-    return jspressoProperties.getProperty("jspresso.version", UNKNOWN);
+    return JSPRESSO_PROPERTIES.getProperty("jspresso.version", UNKNOWN);
   }
 
   /**
    * Displays various information about the framework version.
-   * 
+   *
    * @param args
    *          none supported.
    */

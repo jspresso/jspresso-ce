@@ -45,7 +45,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   /**
    * {@code FILE_CALLBACK} is "FILE_CALLBACK".
    */
-  public final static String FILE_CALLBACK = "FILE_CALLBACK";
+  public static final String FILE_CALLBACK = "FILE_CALLBACK";
 
   private String                    defaultFileName;
   private FileCancelCallbackAction  fileCancelCallbackAction;
@@ -135,7 +135,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
    */
   protected FileCancelCallbackAction getFileCancelCallbackAction(Map<String, Object> context) {
     IFileCallback callback = (IFileCallback) context.get(FILE_CALLBACK);
-    if(callback != null) {
+    if (callback != null) {
       return new FileCancelCallbackAction(callback);
     }
     return fileCancelCallbackAction;
@@ -174,7 +174,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
    */
   protected IFileCallback getFileCallback(Map<String, Object> context) {
     IFileCallback callback = (IFileCallback) context.get(FILE_CALLBACK);
-    if(callback == null) {
+    if (callback == null) {
       callback = fileCallback;
     }
     return callback;

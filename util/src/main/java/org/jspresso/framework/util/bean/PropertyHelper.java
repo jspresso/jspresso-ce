@@ -20,9 +20,14 @@ package org.jspresso.framework.util.bean;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
+
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 

@@ -488,12 +488,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
     LOG.debug("Disposing modal dialog.");
     @SuppressWarnings("unchecked")
     E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
-    if(componentToFocus != null) {
+    if (componentToFocus != null) {
       focus(componentToFocus);
     }
     if (dialogContextStack.size() > 0) {
       Map<String, Object> savedContext = dialogContextStack.remove(0);
-      if (context != null && savedContext != null) {
+      if (savedContext != null) {
         // preserve action param
         Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
         context.putAll(savedContext);

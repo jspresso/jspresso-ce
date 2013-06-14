@@ -86,6 +86,14 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
         public boolean equals(Object o) {
           return this == o;
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+          return super.hashCode();
+        }
       };
     }
     firePropertyChange(key.toString(), oldValue, value);

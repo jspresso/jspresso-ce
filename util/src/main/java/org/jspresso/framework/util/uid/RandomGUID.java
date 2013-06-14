@@ -95,16 +95,16 @@ import org.slf4j.LoggerFactory;
  */
 public class RandomGUID {
 
-  private static final Logger LOG            = LoggerFactory
-                                                 .getLogger(RandomGUID.class);
+  private static final Logger LOG = LoggerFactory
+      .getLogger(RandomGUID.class);
 
-  private static final Random       myRand;
-  private static final SecureRandom mySecureRand;
-  private static final String       sId;
+  private static final Random       MY_RAND;
+  private static final SecureRandom MY_SECURE_RAND;
+  private static final String       S_ID;
 
-  private final String              separator;
-  private String              valueAfterMD5  = "";
-  private String              valueBeforeMD5 = "";
+  private final String separator;
+  private String valueAfterMD5  = "";
+  private String valueBeforeMD5 = "";
 
   /**
    * Static block to take care of one time secureRandom seed. It takes a few
@@ -113,16 +113,16 @@ public class RandomGUID {
    * reduce this time. This block will run only once per JVM instance.
    */
   static {
-    mySecureRand = new SecureRandom();
-    long secureInitializer = mySecureRand.nextLong();
-    myRand = new Random(secureInitializer);
+    MY_SECURE_RAND = new SecureRandom();
+    long secureInitializer = MY_SECURE_RAND.nextLong();
+    MY_RAND = new Random(secureInitializer);
     String inetAddr = null;
     try {
       inetAddr = InetAddress.getLocalHost().toString();
     } catch (UnknownHostException e) {
       LOG.error("An unexpected error occurred while initializing the GUID generator.", e);
     }
-    sId = inetAddr;
+    S_ID = inetAddr;
   }
 
   /**
@@ -135,7 +135,7 @@ public class RandomGUID {
 
   /**
    * Constructor with security option.
-   * 
+   *
    * @param secure
    *          Setting secure true enables each random number generated to be
    *          cryptographically strong. Secure false defaults to the standard
@@ -165,7 +165,7 @@ public class RandomGUID {
 
   /**
    * Demonstration and self test of class.
-   * 
+   *
    * @param args
    *          program arguments.
    */
@@ -220,9 +220,9 @@ public class RandomGUID {
       long rand;
 
       if (secure) {
-        rand = mySecureRand.nextLong();
+        rand = MY_SECURE_RAND.nextLong();
       } else {
-        rand = myRand.nextLong();
+        rand = MY_RAND.nextLong();
       }
 
       // This StringBuilder can be a long as you need; the MD5
@@ -231,7 +231,7 @@ public class RandomGUID {
       // You could even stream a file through the MD5 making
       // the odds of guessing it at least as great as that
       // of guessing the contents of the file!
-      sbValueBeforeMD5.append(sId);
+      sbValueBeforeMD5.append(S_ID);
       sbValueBeforeMD5.append(":");
       sbValueBeforeMD5.append(Long.toString(time));
       sbValueBeforeMD5.append(":");

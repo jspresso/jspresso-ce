@@ -18,17 +18,35 @@
  */
 package org.jspresso.framework.util.swing;
 
-import foxtrot.Job;
-import foxtrot.Worker;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import foxtrot.Job;
+import foxtrot.Worker;
+
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * A helper class for Swing.

@@ -117,7 +117,6 @@ public class DataSourceMock implements DataSource {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   @SuppressWarnings("javadoc")
   public Logger getParentLogger() {
     return null;

@@ -43,6 +43,7 @@ import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.collections.map.ReferenceMap;
 import org.apache.commons.lang.LocaleUtils;
+
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -87,6 +88,7 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
@@ -114,50 +116,50 @@ import org.springframework.transaction.support.TransactionTemplate;
  * that can be configured to customize default, built-in behaviour. Most of
  * these configured properties will be accessible using the corresponding
  * getters. Those getters should be used by the service layer.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
-  private static final Logger                              LOG = LoggerFactory
-                                                                   .getLogger(AbstractBackendController.class);
+  private static final Logger LOG = LoggerFactory
+      .getLogger(AbstractBackendController.class);
 
-  private IApplicationSession                              applicationSession;
-  private IEntityCloneFactory                              carbonEntityCloneFactory;
-  private IComponentCollectionFactory                      collectionFactory;
-  private final BeanPropertyChangeRecorder                       dirtRecorder;
+  private       IApplicationSession         applicationSession;
+  private       IEntityCloneFactory         carbonEntityCloneFactory;
+  private       IComponentCollectionFactory collectionFactory;
+  private final BeanPropertyChangeRecorder  dirtRecorder;
 
-  private IEntityFactory                                   entityFactory;
+  private IEntityFactory entityFactory;
 
-  private final IEntityRegistry                                  entityRegistry;
-  private IModelConnectorFactory                           modelConnectorFactory;
-  private TransactionTemplate                              transactionTemplate;
-  private ComponentTransferStructure<IComponent>           transferStructure;
-  private final IEntityUnitOfWork                                unitOfWork;
+  private final IEntityRegistry                        entityRegistry;
+  private       IModelConnectorFactory                 modelConnectorFactory;
+  private       TransactionTemplate                    transactionTemplate;
+  private       ComponentTransferStructure<IComponent> transferStructure;
+  private final IEntityUnitOfWork                      unitOfWork;
 
-  private Map<String, IValueConnector>                     workspaceConnectors;
-  private final LRUMap                                           moduleConnectors;
+  private       Map<String, IValueConnector> workspaceConnectors;
+  private final LRUMap                       moduleConnectors;
 
-  private IPreferencesStore                                userPreferencesStore;
-  private ITranslationProvider                             translationProvider;
+  private IPreferencesStore    userPreferencesStore;
+  private ITranslationProvider translationProvider;
 
-  private ISecurityPlugin                                  customSecurityPlugin;
-  private final ISecurityContextBuilder                          securityContextBuilder;
+  private       ISecurityPlugin         customSecurityPlugin;
+  private final ISecurityContextBuilder securityContextBuilder;
 
-  private ITranslationPlugin                               customTranslationPlugin;
+  private ITranslationPlugin customTranslationPlugin;
 
-  private TimeZone                                         clientTimeZone;
+  private TimeZone clientTimeZone;
 
-  private boolean                                          throwExceptionOnBadUsage;
+  private boolean throwExceptionOnBadUsage;
 
-  private final Map<Serializable, IEntity>                       entitiesExcludedFromSessionSanityChecks;
+  private final Map<Serializable, IEntity> entitiesExcludedFromSessionSanityChecks;
 
-  private IBackendControllerFactory                        slaveControllerFactory;
-  private final ThreadGroup                                      asyncActionsThreadGroup;
-  private final Set<AsyncActionExecutor>                         asyncExecutors;
-  private int                                              asyncExecutorsMaxCount;
+  private       IBackendControllerFactory slaveControllerFactory;
+  private final ThreadGroup               asyncActionsThreadGroup;
+  private final Set<AsyncActionExecutor>  asyncExecutors;
+  private       int                       asyncExecutorsMaxCount;
 
   /**
    * Constructs a new {@code AbstractBackendController} instance.
@@ -210,7 +212,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Clears the pending operations.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -316,7 +318,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Directly delegates execution to the action after having completed its
    * execution context with the controller's initial context.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -354,11 +356,11 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Executes an action asynchronously, i.e. when
    * {@link IAction#isAsynchronous()} returns true.
-   * 
+   *
    * @param action
-   *          the action to execute.
+   *     the action to execute.
    * @param context
-   *          the context
+   *     the context
    * @return the slave thread executing the action.
    */
   public AsyncActionExecutor executeAsynchronously(IAction action,
@@ -385,7 +387,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Creates a slave backend controller, starts it and assign it the same
    * application session.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -402,11 +404,11 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Executes an action transactionally, e.g. when the @Transactional annotation
    * is present.
-   * 
+   *
    * @param action
-   *          the action to execute.
+   *     the action to execute.
    * @param context
-   *          the context
+   *     the context
    * @return the action outcome
    */
   public boolean executeTransactionally(final IAction action,
@@ -465,7 +467,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (dirtyProperties != null) {
       for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet()
-          .iterator(); ite.hasNext();) {
+          .iterator(); ite.hasNext(); ) {
         Map.Entry<String, Object> property = ite.next();
         boolean include = true;
         if (!includeComputed) {
@@ -482,7 +484,7 @@ public abstract class AbstractBackendController extends AbstractController
               .straightGetProperty(property.getKey());
           if ((currentProperty != null
               && !(currentProperty instanceof Collection) && areEqualWithoutInitializing(
-                currentProperty, property.getValue()))
+              currentProperty, property.getValue()))
               || (currentProperty == null && propertyValue == null)) {
             // Unfortunately, we cannot ignore collections that have been
             // changed but reset to their original state. This prevents the
@@ -521,9 +523,9 @@ public abstract class AbstractBackendController extends AbstractController
    * reset technical dirty state. Useful in Hibernate for resetting collection
    * dirty states when their state is identical to the original one after
    * several modifications.
-   * 
+   *
    * @param property
-   *          the property to reset the dirty state for.
+   *     the property to reset the dirty state for.
    */
   protected void clearPropertyDirtyState(Object property) {
     // NO-OP
@@ -539,7 +541,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Contains the current backend controller.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -552,7 +554,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Gets the locale used by this controller. The locale is actually held by the
    * session.
-   * 
+   *
    * @return locale used by this controller.
    */
   @Override
@@ -584,7 +586,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the transactionTemplate.
-   * 
+   *
    * @return the transactionTemplate.
    */
   @Override
@@ -635,7 +637,7 @@ public abstract class AbstractBackendController extends AbstractController
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
     if (propertyValue instanceof Collection<?>) {
       for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite
-          .hasNext();) {
+          .hasNext(); ) {
         Object collectionElement = ite.next();
         if (collectionElement instanceof IEntity) {
           if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
@@ -649,10 +651,10 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Sets the model controller workspaces. These workspaces are not kept as-is.
    * Their connectors are.
-   * 
+   *
    * @param workspaces
-   *          A map containing the workspaces indexed by a well-known key used
-   *          to bind them with their views.
+   *     A map containing the workspaces indexed by a well-known key used
+   *     to bind them with their views.
    */
   @Override
   public void installWorkspaces(Map<String, Workspace> workspaces) {
@@ -810,7 +812,7 @@ public abstract class AbstractBackendController extends AbstractController
         Object propertyValue = property.getValue();
         if (propertyValue != null
             && !(propertyValue instanceof Collection<?> && ((Collection<?>) property
-                .getValue()).isEmpty())) {
+            .getValue()).isEmpty())) {
           initialDirtyProperties.put(propertyName, null);
         }
       }
@@ -870,9 +872,9 @@ public abstract class AbstractBackendController extends AbstractController
    * can only be set once and should only be used by the DI container. It will
    * rarely be changed from built-in defaults unless you need to specify a
    * custom implementation instance to be used.
-   * 
+   *
    * @param applicationSession
-   *          the applicationSession to set.
+   *     the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     this.applicationSession = applicationSession;
@@ -886,9 +888,9 @@ public abstract class AbstractBackendController extends AbstractController
    * transactions. This property should only be used by the DI container. It
    * will rarely be changed from built-in defaults unless you need to specify a
    * custom implementation instance to be used.
-   * 
+   *
    * @param carbonEntityCloneFactory
-   *          the carbonEntityCloneFactory to set.
+   *     the carbonEntityCloneFactory to set.
    */
   public void setCarbonEntityCloneFactory(
       IEntityCloneFactory carbonEntityCloneFactory) {
@@ -901,9 +903,9 @@ public abstract class AbstractBackendController extends AbstractController
    * should only be used by the DI container. It will rarely be changed from
    * built-in defaults unless you need to specify a custom implementation
    * instance to be used.
-   * 
+   *
    * @param collectionFactory
-   *          the collectionFactory to set.
+   *     the collectionFactory to set.
    */
   public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
@@ -918,7 +920,7 @@ public abstract class AbstractBackendController extends AbstractController
    * were created behind the scene.
    *
    * @param entityFactory
-   *          the entityFactory to set.
+   *     the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     if (entityFactory != null
@@ -933,9 +935,9 @@ public abstract class AbstractBackendController extends AbstractController
    * Configures the model connector factory to use to create new model
    * connectors. Connectors are adapters used by the binding layer to access
    * domain model values.
-   * 
+   *
    * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
+   *     the modelConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -947,13 +949,13 @@ public abstract class AbstractBackendController extends AbstractController
    * property can only be set once and should only be used by the DI container.
    * It will rarely be changed from built-in defaults unless you need to specify
    * a custom implementation instance to be used.
-   * <p>
+   * <p/>
    * The configured instance is the one that will be returned by the
    * controller's {@code getTransactionTemplate()} method that should be
    * used by the service layer for transaction management.
    *
    * @param transactionTemplate
-   *          the transactionTemplate to set.
+   *     the transactionTemplate to set.
    */
   public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
     if (this.transactionTemplate != null) {
@@ -972,7 +974,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Creates a &quot;Unit of Work&quot; to be used by this controller.
-   * 
+   *
    * @return the created UOW.
    */
   protected IEntityUnitOfWork createUnitOfWork() {
@@ -1033,9 +1035,9 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Creates a transient collection instance, in respect to the type of
    * collection passed as parameter.
-   * 
+   *
    * @param collection
-   *          the collection to take the type from (List, Set, ...)
+   *     the collection to take the type from (List, Set, ...)
    * @return a transient collection instance with the same interface type as the
    *         parameter.
    */
@@ -1054,7 +1056,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the entity dirt recorder. To be used by subclasses.
-   * 
+   *
    * @return the entity dirt recorder.
    */
   protected BeanPropertyChangeRecorder getDirtRecorder() {
@@ -1063,7 +1065,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the entities that are registered for deletion.
-   * 
+   *
    * @return the entities that are registered for deletion.
    */
   protected Collection<IEntity> getEntitiesRegisteredForDeletion() {
@@ -1072,7 +1074,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the entities that are registered for update.
-   * 
+   *
    * @return the entities that are registered for update.
    */
   protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
@@ -1106,11 +1108,11 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Gets whether the entity property is dirty (has changes that need to be
    * updated to the persistent store).
-   * 
+   *
    * @param entity
-   *          the entity to test.
+   *     the entity to test.
    * @param propertyName
-   *          the entity property to test.
+   *     the entity property to test.
    * @return true if the entity is dirty.
    */
   @Override
@@ -1132,16 +1134,16 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Gives a chance to the session to wrap a collection before making it part of
    * the unit of work.
-   * 
+   *
    * @param owner
-   *          the entity the collection belongs to.
+   *     the entity the collection belongs to.
    * @param transientCollection
-   *          the transient collection to make part of the unit of work.
+   *     the transient collection to make part of the unit of work.
    * @param snapshotCollection
-   *          the original collection state as reported by the dirt recorder.
+   *     the original collection state as reported by the dirt recorder.
    * @param role
-   *          the name of the property represented by the collection in its
-   *          owner.
+   *     the name of the property represented by the collection in its
+   *     owner.
    * @return the wrapped collection if any (it may be the collection itself as
    *         in this implementation).
    */
@@ -1336,11 +1338,11 @@ public abstract class AbstractBackendController extends AbstractController
    * Performs the actual entity cloning in unit of work. Gives a chance to
    * subclasses to override and take a better decision than just a deep carbon
    * copy.
-   * 
+   *
    * @param <E>
-   *          the actual entity type.
+   *     the actual entity type.
    * @param entity
-   *          the source entity.
+   *     the source entity.
    * @return the cloned entity.
    */
   protected <E extends IEntity> E performUowEntityCloning(E entity) {
@@ -1361,8 +1363,8 @@ public abstract class AbstractBackendController extends AbstractController
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)
             && alreadyTraversed.get(
-                getComponentContract((IEntity) propertyValue),
-                ((IEntity) propertyValue).getId()) == null) {
+            getComponentContract((IEntity) propertyValue),
+            ((IEntity) propertyValue).getId()) == null) {
           if (isDirtyInDepth((IEntity) propertyValue, includeComputed,
               alreadyTraversed)) {
             return true;
@@ -1373,7 +1375,7 @@ public abstract class AbstractBackendController extends AbstractController
           for (Object elt : ((Collection<?>) propertyValue)) {
             if (elt instanceof IEntity
                 && alreadyTraversed.get(getComponentContract((IEntity) elt),
-                    ((IEntity) elt).getId()) == null) {
+                ((IEntity) elt).getId()) == null) {
               if (isDirtyInDepth((IEntity) elt, includeComputed,
                   alreadyTraversed)) {
                 return true;
@@ -1478,7 +1480,7 @@ public abstract class AbstractBackendController extends AbstractController
                   merge((IEntity) propertyValue, mergeMode, alreadyMerged));
             }
           } else if (propertyValue instanceof Collection
-          // to support collections stored as java serializable blob.
+              // to support collections stored as java serializable blob.
               && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                 .get(propertyName);
@@ -1653,17 +1655,17 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Performs necessary cleanings when an entity or component is deleted.
-   * 
+   *
    * @param component
-   *          the deleted entity or component.
+   *     the deleted entity or component.
    * @param dryRun
-   *          set to true to simulate before actually doing it.
+   *     set to true to simulate before actually doing it.
    * @throws IllegalAccessException
-   *           whenever this kind of exception occurs.
+   *     whenever this kind of exception occurs.
    * @throws InvocationTargetException
-   *           whenever this kind of exception occurs.
+   *     whenever this kind of exception occurs.
    * @throws NoSuchMethodException
-   *           whenever this kind of exception occurs.
+   *     whenever this kind of exception occurs.
    */
   @Override
   public void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun)
@@ -1766,7 +1768,7 @@ public abstract class AbstractBackendController extends AbstractController
                                   reversePropertyDescriptor.getName(),
                                   getComponentContract(((IComponent) propertyValue)),
                                   componentContract).removeFromValue(
-                                  propertyValue, component);
+                              propertyValue, component);
                           // but technically reset to original value to avoid
                           // Hibernate not-null checks
                           component.straightSetProperty(propertyName,
@@ -1825,7 +1827,7 @@ public abstract class AbstractBackendController extends AbstractController
                                     reversePropertyDescriptor.getName(),
                                     getComponentContract(collectionElement),
                                     componentContract).removeFromValue(
-                                    collectionElement, component);
+                                collectionElement, component);
                           }
                         }
                       } catch (RuntimeException ex) {
@@ -1846,20 +1848,20 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Unwrap ORM proxy if needed.
-   * 
+   *
    * @param componentOrProxy
-   *          the component or proxy.
+   *     the component or proxy.
    * @return the proxy implementation if it's an ORM proxy.
    */
   protected abstract Object unwrapProxy(Object componentOrProxy);
 
   /**
    * Clones an uninitialized (proxied) property.
-   * 
+   *
    * @param owner
-   *          the property owner.
+   *     the property owner.
    * @param propertyValue
-   *          the propertyValue.
+   *     the propertyValue.
    * @return the property clone.
    */
   protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
@@ -1887,9 +1889,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Reads a user preference.
-   * 
+   *
    * @param key
-   *          the key under which the preference as been stored.
+   *     the key under which the preference as been stored.
    * @return the stored preference or null.
    */
   @Override
@@ -1902,11 +1904,11 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Stores a user preference.
-   * 
+   *
    * @param key
-   *          the key under which the preference as to be stored.
+   *     the key under which the preference as to be stored.
    * @param value
-   *          the value of the preference to be stored.
+   *     the value of the preference to be stored.
    */
   @Override
   public void putUserPreference(String key, String value) {
@@ -1917,9 +1919,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Deletes a user preference.
-   * 
+   *
    * @param key
-   *          the key under which the preference is stored.
+   *     the key under which the preference is stored.
    */
   @Override
   public void removeUserPreference(String key) {
@@ -1930,7 +1932,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the user preferences store.
-   * 
+   *
    * @return the user preferences store.
    */
   protected IPreferencesStore getUserPreferencesStore() {
@@ -1939,9 +1941,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the user preference store.
-   * 
+   *
    * @param userPreferencesStore
-   *          the userPreferenceStore to set.
+   *     the userPreferenceStore to set.
    */
   public void setUserPreferencesStore(IPreferencesStore userPreferencesStore) {
     this.userPreferencesStore = userPreferencesStore;
@@ -1950,9 +1952,9 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Configures the translation provider used to compute internationalized
    * messages and labels.
-   * 
+   *
    * @param translationProvider
-   *          the translationProvider to set.
+   *     the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -1960,7 +1962,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Delegates to the translation provider.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -1977,7 +1979,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Delegates to the translation provider.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -1994,7 +1996,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Delegates to the translation provider.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -2011,7 +2013,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Delegates to the translation provider.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -2069,9 +2071,9 @@ public abstract class AbstractBackendController extends AbstractController
    * itself is a security handler and is used as such across most of the
    * application layers. Before delegating to the custom security handler, the
    * controller will apply role-based security rules that cannot be disabled.
-   * 
+   *
    * @param customSecurityPlugin
-   *          the customESecurityHandler to set.
+   *     the customESecurityHandler to set.
    */
   public void setCustomSecurityPlugin(ISecurityPlugin customSecurityPlugin) {
     this.customSecurityPlugin = customSecurityPlugin;
@@ -2108,9 +2110,9 @@ public abstract class AbstractBackendController extends AbstractController
    * itself is a translation provider and is used as such across most of the
    * application layers. The custom translation plugin is used to override the
    * default static, bundle-based, i18n scheme.
-   * 
+   *
    * @param customTranslationPlugin
-   *          the customTranslationPlugin to set.
+   *     the customTranslationPlugin to set.
    */
   public void setCustomTranslationPlugin(
       ITranslationPlugin customTranslationPlugin) {
@@ -2119,7 +2121,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the clientTimezone.
-   * 
+   *
    * @return the clientTimezone.
    */
   @Override
@@ -2140,7 +2142,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the throwExceptionOnBadUsage.
-   * 
+   *
    * @return the throwExceptionOnBadUsage.
    */
   public boolean isThrowExceptionOnBadUsage() {
@@ -2151,9 +2153,9 @@ public abstract class AbstractBackendController extends AbstractController
    * Configures the backend controller to throw or not an exception whenever a
    * bad usage is detected like manually merging a dirty entity from an ongoing
    * UOW.
-   * 
+   *
    * @param throwExceptionOnBadUsage
-   *          the throwExceptionOnBadUsage to set.
+   *     the throwExceptionOnBadUsage to set.
    */
   public void setThrowExceptionOnBadUsage(boolean throwExceptionOnBadUsage) {
     this.throwExceptionOnBadUsage = throwExceptionOnBadUsage;
@@ -2161,6 +2163,8 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Performs necessary checks in order to ensure isolation on unit of work.
+   * <p/>
+   * {@inheritDoc}
    */
   @Override
   public Object sanitizeModifierParam(Object target,
@@ -2211,11 +2215,11 @@ public abstract class AbstractBackendController extends AbstractController
             "*BAD UOW USAGE* You are modifying a session registered entity ({})[{}] inside an ongoing UOW.\n"
                 + "You should only work on entities copies you obtain using the "
                 + "backendController.cloneInUnitOfWork(...) method.\n"
-                + "The property being modified is [{}].", new Object[] {
-                targetEntity,
-                getComponentContract(targetEntity).getSimpleName(),
-                propertyDescriptor.getName()
-            });
+                + "The property being modified is [{}].", new Object[]{
+            targetEntity,
+            getComponentContract(targetEntity).getSimpleName(),
+            propertyDescriptor.getName()
+        });
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
               "An invalid modification on a session entity has been detected while having an active Unit of Work. "
@@ -2229,11 +2233,11 @@ public abstract class AbstractBackendController extends AbstractController
             "*BAD UOW USAGE* You are linking an entity ({})[{}] with a session entity ({})[{}] inside an ongoing UOW.\n"
                 + "You should only work on entities copies you obtain using the "
                 + "backendController.cloneInUnitOfWork(...) method\n"
-                + "The property being modified is [{}].", new Object[] {
-                target, targetClass.getSimpleName(), paramEntity,
-                getComponentContract(paramEntity).getSimpleName(),
-                propertyDescriptor.getName()
-            });
+                + "The property being modified is [{}].", new Object[]{
+            target, targetClass.getSimpleName(), paramEntity,
+            getComponentContract(paramEntity).getSimpleName(),
+            propertyDescriptor.getName()
+        });
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
               "An invalid usage of a session entity has been detected while having an active Unit of Work. "
@@ -2253,11 +2257,11 @@ public abstract class AbstractBackendController extends AbstractController
               "*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the session.\n"
                   + "You should 1st merge your entities in the session by using the "
                   + "backendController.merge(...) method.\n"
-                  + "The property being modified is [{}].", new Object[] {
-                  targetEntity,
-                  getComponentContract(targetEntity).getSimpleName(),
-                  propertyDescriptor.getName()
-              });
+                  + "The property being modified is [{}].", new Object[]{
+              targetEntity,
+              getComponentContract(targetEntity).getSimpleName(),
+              propertyDescriptor.getName()
+          });
           if (isThrowExceptionOnBadUsage()) {
             throw new BackendException(
                 "An invalid modification of an entity that was not previously registered in the session has been detected. "
@@ -2273,11 +2277,11 @@ public abstract class AbstractBackendController extends AbstractController
                 + "that has not been previously merged in the session.\n"
                 + "You should 1st merge your entities in the session by using the "
                 + "backendController.merge(...) method.\n"
-                + "The property being modified is [{}].", new Object[] {
-                target, targetClass.getSimpleName(), paramEntity,
-                getComponentContract(paramEntity).getSimpleName(),
-                propertyDescriptor.getName()
-            });
+                + "The property being modified is [{}].", new Object[]{
+            target, targetClass.getSimpleName(), paramEntity,
+            getComponentContract(paramEntity).getSimpleName(),
+            propertyDescriptor.getName()
+        });
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
               "An invalid usage of an entity that was not previously registered in the session has been detected. "
@@ -2304,11 +2308,11 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Checks object equality between 2 entities ignoring any implementation
    * details like proxy optimisation.
-   * 
+   *
    * @param e1
-   *          the 1st entity.
+   *     the 1st entity.
    * @param e2
-   *          the 2nd entity.
+   *     the 2nd entity.
    * @return true if both entity are object equal.
    */
   protected boolean objectEquals(IEntity e1, IEntity e2) {
@@ -2318,9 +2322,9 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Hook to allow subclasses to determine component contract without
    * initializing it.
-   * 
+   *
    * @param component
-   *          the component to get the component contract for.
+   *     the component to get the component contract for.
    * @return the component contract.
    */
   @SuppressWarnings("unchecked")
@@ -2331,7 +2335,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the slaveControllerFactory.
-   * 
+   *
    * @return the slaveControllerFactory.
    */
   protected IBackendControllerFactory getSlaveControllerFactory() {
@@ -2340,9 +2344,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the slaveControllerFactory.
-   * 
+   *
    * @param slaveControllerFactory
-   *          the slaveControllerFactory to set.
+   *     the slaveControllerFactory to set.
    */
   public void setSlaveControllerFactory(
       IBackendControllerFactory slaveControllerFactory) {
@@ -2385,9 +2389,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Gets the asyncExecutorsMaxCount.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the asyncExecutorsMaxCount.
    */
   @SuppressWarnings("UnusedParameters")
@@ -2400,7 +2404,7 @@ public abstract class AbstractBackendController extends AbstractController
    * It defaults to {@code 10}.
    *
    * @param asyncExecutorsMaxCount
-   *          the asyncExecutorsMaxCount to set.
+   *     the asyncExecutorsMaxCount to set.
    */
   public void setAsyncExecutorsMaxCount(int asyncExecutorsMaxCount) {
     this.asyncExecutorsMaxCount = asyncExecutorsMaxCount;
@@ -2408,9 +2412,9 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Creates an entity registry.
-   * 
+   *
    * @param name
-   *          the entity registry name.
+   *     the entity registry name.
    * @return a new entity registry.
    */
   protected IEntityRegistry createEntityRegistry(String name) {

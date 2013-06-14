@@ -294,7 +294,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     feedContextWithDialog(erqDescriptor, queryComponent, lovView,
         actionHandler, context);
-    if(context.get(FrontendAction.COMPONENT_TO_FOCUS) == null) {
+    if (context.get(FrontendAction.COMPONENT_TO_FOCUS) == null) {
       // To return to the action field once the dialog closes if and only if
       // The focus has not been explicitly set to something else.
       context.put(FrontendAction.COMPONENT_TO_FOCUS, getSourceComponent(context));
