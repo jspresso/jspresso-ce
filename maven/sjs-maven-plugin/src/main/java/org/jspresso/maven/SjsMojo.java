@@ -46,23 +46,25 @@ import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Goal which performs SJS compilation for a Jspresso project.
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-@Mojo(name = "compile-sjs", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "compile-sjs", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    requiresDependencyResolution = ResolutionScope.COMPILE)
 public class SjsMojo extends AbstractMojo {
 
   /**
    * The Maven project.
    */
   @Parameter(defaultValue = "${project}", required = true, readonly = true)
-  MavenProject   project;
+  private MavenProject project;
 
   /**
    * The directory containing the groovy dsl sources.
    */
   @Parameter(defaultValue = "${basedir}/src/main/dsl", required = true)
-  private File   srcDir;
+  private File srcDir;
 
   /**
    * The name of the application groovy file that packs the application.
@@ -74,7 +76,7 @@ public class SjsMojo extends AbstractMojo {
    * Sets the output directory for generated resources.
    */
   @Parameter(defaultValue = "${project.build.directory}/generated-resources/dsl", required = true)
-  private File   outputDir;
+  private File outputDir;
 
   /**
    * The target file name for the model Spring beans.
@@ -102,8 +104,9 @@ public class SjsMojo extends AbstractMojo {
 
   /**
    * Triggers thee execution of SJS compilation.
-   * <p>
-   * {@inheritDoc}
+   *
+   * @throws MojoExecutionException
+   *     whenever an unexpected error occurs when executing mojo.
    */
   @Override
   public void execute() throws MojoExecutionException {
@@ -182,7 +185,7 @@ public class SjsMojo extends AbstractMojo {
     }
     if (root.isDirectory()) {
       File[] files = root.listFiles();
-      if(files != null) {
+      if (files != null) {
         for (File child : files) {
           latest = latestModified(child, latest);
         }
@@ -194,7 +197,7 @@ public class SjsMojo extends AbstractMojo {
   private boolean hasChangedSourceFile(File source, long maxLastModified) {
     if (source.isDirectory()) {
       File[] files = source.listFiles();
-      if(files != null) {
+      if (files != null) {
         for (File childSource : files) {
           if (hasChangedSourceFile(childSource, maxLastModified)) {
             return true;
