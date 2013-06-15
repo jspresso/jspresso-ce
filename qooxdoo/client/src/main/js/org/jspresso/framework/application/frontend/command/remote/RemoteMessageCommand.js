@@ -12,35 +12,29 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    message :
-    {
-      check : "String",
-      nullable : true
-    },
-    messageIcon :
-    {
-      check : "org.jspresso.framework.gui.remote.RIcon",
-      nullable : true
-    },
-    title :
-    {
-      check : "String",
-      nullable : true
-    },
-    titleIcon :
-    {
-      check : "org.jspresso.framework.gui.remote.RIcon",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        message: {
+          check: "String",
+          nullable: true
+        },
+        messageIcon: {
+          check: "org.jspresso.framework.gui.remote.RIcon",
+          nullable: true
+        },
+        title: {
+          check: "String",
+          nullable: true
+        },
+        titleIcon: {
+          check: "org.jspresso.framework.gui.remote.RIcon",
+          nullable: true
+        }
+      }
+    });

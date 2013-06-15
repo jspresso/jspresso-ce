@@ -12,44 +12,35 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RTable",
-{
-  extend : org.jspresso.framework.gui.remote.RCollectionComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RTable", {
+      extend: org.jspresso.framework.gui.remote.RCollectionComponent,
 
-  properties :
-  {
-    columns :
-    {
-      check : "Array"
-    },
-    columnHeaders :
-    {
-      check : "Array"
-    },
-    columnIds :
-    {
-      check : "Array"
-    },
-    rowPrototype :
-    {
-      check : "org.jspresso.framework.state.remote.RemoteCompositeValueState"
-    },
-    sortingAction :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction",
-      nullable : true
-    },
-    horizontallyScrollable :
-    {
-      check : "Boolean"
-    },
-    sortable :
-    {
-      check : "Boolean"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        columns: {
+          check: "Array"
+        },
+        columnHeaders: {
+          check: "Array"
+        },
+        columnIds: {
+          check: "Array"
+        },
+        rowPrototype: {
+          check: "org.jspresso.framework.state.remote.RemoteCompositeValueState"
+        },
+        sortingAction: {
+          check: "org.jspresso.framework.gui.remote.RAction",
+          nullable: true
+        },
+        horizontallyScrollable: {
+          check: "Boolean"
+        },
+        sortable: {
+          check: "Boolean"
+        }
+      }
+    });

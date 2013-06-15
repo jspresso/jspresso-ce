@@ -12,12 +12,9 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Interface
-		.define(
-				"org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler",
-				{
-					members : {
-						registerCommand : function(command) {
-						}
-					}
-				});
+qx.Interface.define("org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler", {
+      members: {
+        registerCommand: function (command) {
+        }
+      }
+    });

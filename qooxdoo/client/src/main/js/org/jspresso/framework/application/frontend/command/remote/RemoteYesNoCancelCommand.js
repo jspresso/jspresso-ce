@@ -12,20 +12,17 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand,
 
-  properties :
-  {
-    cancelAction :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        cancelAction: {
+          check: "org.jspresso.framework.gui.remote.RAction",
+          nullable: true
+        }
+      }
+    });

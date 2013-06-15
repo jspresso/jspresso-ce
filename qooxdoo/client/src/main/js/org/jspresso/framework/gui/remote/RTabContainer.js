@@ -12,24 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer",
-{
-  extend : org.jspresso.framework.gui.remote.RContainer,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer", {
+      extend: org.jspresso.framework.gui.remote.RContainer,
 
-  properties :
-  {
-    tabs :
-    {
-      check : "Array"
-    },
-    selectedIndex :
-    {
-      check : "Integer",
-      event : "changeSelectedIndex"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        tabs: {
+          check: "Array"
+        },
+        selectedIndex: {
+          check: "Integer",
+          event: "changeSelectedIndex"
+        }
+      }
+    });

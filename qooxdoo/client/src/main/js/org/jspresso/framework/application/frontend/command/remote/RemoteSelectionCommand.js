@@ -12,24 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    leadingIndex :
-    {
-      check : "Integer"
-    },
-    selectedIndices :
-    {
-      check : "Array",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        leadingIndex: {
+          check: "Integer"
+        },
+        selectedIndices: {
+          check: "Array",
+          nullable: true
+        }
+      }
+    });

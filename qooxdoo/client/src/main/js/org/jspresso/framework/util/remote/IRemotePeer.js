@@ -13,13 +13,12 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Interface.define("org.jspresso.framework.util.remote.IRemotePeer",
-{
-  members :
-  {
-    /**
-     * @return String
-     */
-    getGuid : function(){}
-  }
-});
+qx.Interface.define("org.jspresso.framework.util.remote.IRemotePeer", {
+      members: {
+        /**
+         * @return String
+         */
+        getGuid: function () {
+        }
+      }
+    });

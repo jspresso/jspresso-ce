@@ -12,26 +12,22 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.remote.RemotePeer",
-{
-  extend : qx.core.Object,
-  
-  implement : [org.jspresso.framework.util.remote.IRemotePeer],
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.util.remote.RemotePeer", {
+      extend: qx.core.Object,
 
-  properties :
-  {
-    guid :
-    {
-      check : "String"
-    },
-    permId :
-    {
-      check : "String",
-      nullable : true
-    }
-  }
-});
+      implement: [org.jspresso.framework.util.remote.IRemotePeer],
+
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        guid: {
+          check: "String"
+        },
+        permId: {
+          check: "String",
+          nullable: true
+        }
+      }
+    });

@@ -88,13 +88,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
     main: function () {
       this.base(arguments);
 
-      qx.Class.patch(qx.ui.form.CheckBox,
-          org.jspresso.framework.patch.MCheckBox);
+      qx.Class.patch(qx.ui.form.CheckBox, org.jspresso.framework.patch.MCheckBox);
 
-      qx.Theme.include(qx.theme.modern.Appearance,
-          collapsablepanel.theme.modern.Appearance);
-      qx.Theme.include(qx.theme.classic.Appearance,
-          collapsablepanel.theme.classic.Appearance);
+      qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
+      qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
 
       // In order to cope with dates the old "new Date(Date.UTC..." way
       // Not used anymore. Jspresso now handles dates using the ISO8601
@@ -102,12 +99,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
       // qx.io.remote.Rpc.CONVERT_DATES = true;
 
       // Enable logging in debug variant
-      if (qx.core.Environment.get("qx.debug")) { //noinspection BadExpressionStatementJS
+      if (qx.core.Environment.get("qx.debug")) {
         {
           // support native logging capabilities, e.g. Firebug for Firefox
+          //noinspection BadExpressionStatementJS
           qx.log.appender.Native;
-          // support additional cross-browser console. Press F7 to toggle
-          // visibility
+          // support additional cross-browser console. Press F7 to toggle visibility
+          //noinspection BadExpressionStatementJS
           qx.log.appender.Console;
         }
       }
@@ -115,8 +113,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
     },
 
     startController: function (remoteController) {
-      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(
-          this, remoteController, "en");
+      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(this,
+          remoteController, "en");
       this.__qxController.start();
     },
 

@@ -12,31 +12,24 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.ColorTableCellRenderer",
-{
-  extend : qx.ui.table.cellrenderer.Default,
-  include : [org.jspresso.framework.view.qx.MCellAdditionalStyle],
-
-  /**
-   * 
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
-   */
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.view.qx.ColorTableCellRenderer", {
+      extend: qx.ui.table.cellrenderer.Default,
+      include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
 
-  members :
-  {
-    _getCellStyle : function(cellInfo) {
-      var superStyle = this.base(arguments, cellInfo);
-      if(cellInfo.value) {
-        var bgStyle = "color: #" + cellInfo.value.substring(4) + ";";
-        superStyle = (superStyle || "") + bgStyle;
+      construct: function () {
+        this.base(arguments);
+      },
+
+
+      members: {
+        _getCellStyle: function (cellInfo) {
+          var superStyle = this.base(arguments, cellInfo);
+          if (cellInfo.value) {
+            var bgStyle = "color: #" + cellInfo.value.substring(4) + ";";
+            superStyle = (superStyle || "") + bgStyle;
+          }
+          return superStyle + this._getAdditionalCellStyle(cellInfo);
+        }
       }
-      return superStyle + this._getAdditionalCellStyle(cellInfo);
-    }
-  }
-});
+    });

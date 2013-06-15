@@ -12,30 +12,25 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RNumericComponent",
-{
-  extend : org.jspresso.framework.gui.remote.RComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RNumericComponent", {
+      extend: org.jspresso.framework.gui.remote.RComponent,
 
-  properties :
-  {
-    maxValue :
-    {
-      check : "Number",
-      nullable : true
-    },
-    minValue :
-    {
-      check : "Number",
-      nullable : true
-    },
-    horizontalAlignment :
-    {
-      check : "String",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        maxValue: {
+          check: "Number",
+          nullable: true
+        },
+        minValue: {
+          check: "Number",
+          nullable: true
+        },
+        horizontalAlignment: {
+          check: "String",
+          nullable: true
+        }
+      }
+    });

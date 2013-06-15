@@ -12,23 +12,19 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.gui.Dimension",
-{
-  extend : qx.core.Object,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.util.gui.Dimension", {
+      extend: qx.core.Object,
 
-  properties :
-  {
-    height :
-    {
-      check : "Integer"
-    },
-    width :
-    {
-      check : "Integer"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        height: {
+          check: "Integer"
+        },
+        width: {
+          check: "Integer"
+        }
+      }
+    });

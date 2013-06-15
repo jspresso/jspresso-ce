@@ -13,19 +13,19 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RColorField", {
-			extend : org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-			construct : function() {
-				this.base(arguments);
-			},
+  construct: function () {
+    this.base(arguments);
+  },
 
-			properties : {
-				defaultColor : {
-					check : "String",
-					nullable : true
-				},
-				resetEnabled : {
-					check : "Boolean"
-				}
-			}
-		});
+  properties: {
+    defaultColor: {
+      check: "String",
+      nullable: true
+    },
+    resetEnabled: {
+      check: "Boolean"
+    }
+  }
+});

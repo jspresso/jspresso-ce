@@ -12,29 +12,24 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer",
-{
-  extend : org.jspresso.framework.gui.remote.RContainer,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer", {
+      extend: org.jspresso.framework.gui.remote.RContainer,
 
-  properties :
-  {
-    leftTop :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    },
-    orientation :
-    {
-      check : "String"
-    },
-    rightBottom :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        leftTop: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        },
+        orientation: {
+          check: "String"
+        },
+        rightBottom: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        }
+      }
+    });

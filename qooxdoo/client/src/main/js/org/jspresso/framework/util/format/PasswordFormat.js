@@ -12,35 +12,33 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.format.PasswordFormat",
-{
-  extend : qx.core.Object,
-  implement : qx.util.format.IFormat,
-  
-  members :
-  {
-    /**
-     * Formats a password.
-     *
-     * @param obj {var} the password to format.
-     * @return {String} the formatted password as a string.
-     */
-    format : function(obj) {
-      if(obj) {
-        return "***";
+qx.Class.define("org.jspresso.framework.util.format.PasswordFormat", {
+      extend: qx.core.Object,
+      implement: qx.util.format.IFormat,
+
+      members: {
+        /**
+         * Formats a password.
+         *
+         * @param obj {var} the password to format.
+         * @return {String} the formatted password as a string.
+         */
+        format: function (obj) {
+          if (obj) {
+            return "***";
+          }
+          return "";
+        },
+
+
+        /**
+         * Parses a password.
+         *
+         * @param str {String} the string to parse.
+         * @return {String} the password.
+         */
+        parse: function (str) {
+          return str;
+        }
       }
-      return "";
-    },
-
-
-    /**
-     * Parses a password.
-     *
-     * @param str {String} the string to parse.
-     * @return {String} the password.
-     */
-    parse : function(str) {
-      return str;
-    }
-  }
-});
+    });

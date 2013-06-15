@@ -12,33 +12,35 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-qx.Interface.define("org.jspresso.framework.util.remote.registry.IRemotePeerRegistry",
-{
-  members :
-  {
-    /**
-     * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
-     * @return void
-     */
-    register : function(remotePeer){},
 
-    /**
-     * @param {String} guid
-     * @return org.jspresso.framework.util.remote.IRemotePeer
-     */
-    getRegistered : function(guid){},
+qx.Interface.define("org.jspresso.framework.util.remote.registry.IRemotePeerRegistry", {
+      members: {
+        /**
+         * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
+         * @return void
+         */
+        register: function (remotePeer) {
+        },
 
-    /**
-     * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
-     * @return void
-     */
-    unregister : function(remotePeer){},
+        /**
+         * @param {String} guid
+         * @return org.jspresso.framework.util.remote.IRemotePeer
+         */
+        getRegistered: function (guid) {
+        },
 
-    /**
-     * @param {String} guid
-     * @return Boolean
-     */
-    isRegistered : function(guid){}
-  }
-});
+        /**
+         * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
+         * @return void
+         */
+        unregister: function (remotePeer) {
+        },
+
+        /**
+         * @param {String} guid
+         * @return Boolean
+         */
+        isRegistered: function (guid) {
+        }
+      }
+    });

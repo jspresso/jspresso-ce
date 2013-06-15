@@ -12,40 +12,38 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry",
-{
-  extend : qx.core.Object,
-  
-  implement : [org.jspresso.framework.util.remote.registry.IRemotePeerRegistry],
-  
-  construct : function() {
-    this.base(arguments);
-    this.__backingStore = new Object();
-  },
+qx.Class.define("org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry", {
+      extend: qx.core.Object,
 
-  members :
-  {
-    __backingStore : null,
-    
-    register : function(remotePeer){
-      if(remotePeer && remotePeer.getGuid()) {
-        this.__backingStore[remotePeer.getGuid()] = remotePeer;
+      implement: [org.jspresso.framework.util.remote.registry.IRemotePeerRegistry],
+
+      construct: function () {
+        this.base(arguments);
+        this.__backingStore = {};
+      },
+
+      members: {
+        __backingStore: null,
+
+        register: function (remotePeer) {
+          if (remotePeer && remotePeer.getGuid()) {
+            this.__backingStore[remotePeer.getGuid()] = remotePeer;
+          }
+        },
+
+        getRegistered: function (guid) {
+          return this.__backingStore[guid];
+        },
+
+        unregister: function (remotePeer) {
+          if (remotePeer && remotePeer.getGuid()) {
+            delete this.__backingStore[remotePeer.getGuid()];
+          }
+        },
+
+        isRegistered: function (guid) {
+          return this.__backingStore.hasOwnProperty(guid);
+        }
+
       }
-    },
-
-    getRegistered : function(guid){
-      return this.__backingStore[guid];
-    },
-
-    unregister : function(remotePeer){
-      if(remotePeer && remotePeer.getGuid()) {
-        delete this.__backingStore[remotePeer.getGuid()];
-      }
-    },
-
-    isRegistered : function(guid){
-      return this.__backingStore.hasOwnProperty(guid);
-    }
-    
-  }
-});
+    });

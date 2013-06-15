@@ -12,27 +12,22 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.REvenGridContainer",
-{
-  extend : org.jspresso.framework.gui.remote.RContainer,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.REvenGridContainer", {
+      extend: org.jspresso.framework.gui.remote.RContainer,
 
-  properties :
-  {
-    cells :
-    {
-      check : "Array"
-    },
-    drivingDimension :
-    {
-      check : "String"
-    },
-    drivingDimensionCellCount :
-    {
-      check : "Integer"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        cells: {
+          check: "Array"
+        },
+        drivingDimension: {
+          check: "String"
+        },
+        drivingDimensionCellCount: {
+          check: "Integer"
+        }
+      }
+    });

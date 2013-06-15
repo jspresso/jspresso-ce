@@ -12,35 +12,28 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    loginView :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent"
-    },
-    message :
-    {
-      check : "String"
-    },
-    okIcon :
-    {
-      check : "org.jspresso.framework.gui.remote.RIcon"
-    },
-    okLabel :
-    {
-      check : "String"
-    },
-    title :
-    {
-      check : "String"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        loginView: {
+          check: "org.jspresso.framework.gui.remote.RComponent"
+        },
+        message: {
+          check: "String"
+        },
+        okIcon: {
+          check: "org.jspresso.framework.gui.remote.RIcon"
+        },
+        okLabel: {
+          check: "String"
+        },
+        title: {
+          check: "String"
+        }
+      }
+    });

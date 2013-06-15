@@ -13,16 +13,15 @@
  */
 
 qx.Interface.define("org.jspresso.framework.action.IActionHandler", {
-			members : {
-				execute : function(action, actionEvent, actionCallback) {
-				},
+  members: {
+    execute: function (action, actionEvent, actionCallback) {
+    },
 
-				setCurrentViewStateGuid : function(viewStateGuid,
-						viewStatePermId) {
-				},
+    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
+    },
 
-				translate : function(key) {
-				}
+    translate: function (key) {
+    }
 
-			}
-		});
+  }
+});

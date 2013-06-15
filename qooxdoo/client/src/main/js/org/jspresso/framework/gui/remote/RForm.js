@@ -12,39 +12,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RForm",
-{
-  extend : org.jspresso.framework.gui.remote.RComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RForm", {
+      extend: org.jspresso.framework.gui.remote.RComponent,
 
-  properties :
-  {
-    columnCount :
-    {
-      check : "Integer"
-    },
-    elementWidths :
-    {
-      check : "Array"
-    },
-    elements :
-    {
-      check : "Array"
-    },
-    elementLabels :
-    {
-      check : "Array"
-    },
-    labelsPosition :
-    {
-      check : "String"
-    },
-    verticallyScrollable :
-    {
-      check : "Boolean"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        columnCount: {
+          check: "Integer"
+        },
+        elementWidths: {
+          check: "Array"
+        },
+        elements: {
+          check: "Array"
+        },
+        elementLabels: {
+          check: "Array"
+        },
+        labelsPosition: {
+          check: "String"
+        },
+        verticallyScrollable: {
+          check: "Boolean"
+        }
+      }
+    });

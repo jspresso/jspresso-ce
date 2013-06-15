@@ -12,31 +12,25 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.gui.Font",
-{
-  extend : qx.core.Object,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.util.gui.Font", {
+      extend: qx.core.Object,
 
-  properties :
-  {
-    bold :
-    {
-      check : "Boolean"
-    },
-    italic :
-    {
-      check : "Boolean"
-    },
-    name :
-    {
-      check : "String"
-    },
-    size :
-    {
-      check : "Integer"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        bold: {
+          check: "Boolean"
+        },
+        italic: {
+          check: "Boolean"
+        },
+        name: {
+          check: "String"
+        },
+        size: {
+          check: "Integer"
+        }
+      }
+    });

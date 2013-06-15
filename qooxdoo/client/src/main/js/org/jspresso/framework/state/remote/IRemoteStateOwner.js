@@ -12,10 +12,9 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Interface.define("org.jspresso.framework.state.remote.IRemoteStateOwner",
-{    
-  members :
-  {
-    getState : function (){}
-  }
-});
+qx.Interface.define("org.jspresso.framework.state.remote.IRemoteStateOwner", {
+      members: {
+        getState: function () {
+        }
+      }
+    });

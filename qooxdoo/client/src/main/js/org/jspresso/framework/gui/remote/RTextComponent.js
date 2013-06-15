@@ -12,19 +12,16 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RTextComponent",
-{
-  extend : org.jspresso.framework.gui.remote.RComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RTextComponent", {
+      extend: org.jspresso.framework.gui.remote.RComponent,
 
-  properties :
-  {
-    maxLength :
-    {
-      check : "Integer"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        maxLength: {
+          check: "Integer"
+        }
+      }
+    });

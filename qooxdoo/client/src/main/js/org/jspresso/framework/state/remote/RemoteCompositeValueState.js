@@ -12,68 +12,55 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
-{
-  extend : org.jspresso.framework.state.remote.RemoteValueState,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState", {
+      extend: org.jspresso.framework.state.remote.RemoteValueState,
 
-  properties :
-  {
-    children :
-    {
-      check : "qx.data.Array",
-      nullable : true,
-      event : "changeChildren",
-      apply : "__bindChildrenArray"
-    },
-    description :
-    {
-      check : "String",
-      nullable : true,
-      event : "changeDescription"
-    },
-    iconImageUrl :
-    {
-      check : "String",
-      nullable : true,
-      event : "changeIconImageUrl"
-    },
-    leadingIndex :
-    {
-      check : "Integer",
-      nullable : true,
-      event : "changeLeadingIndex"
-    },
-    selectedIndices :
-    {
-      check : "Array",
-      nullable : true,
-      event : "changeSelectedIndices"
-    }
-  },
-  
-  members :
-  {
-    __bindChildrenArray : function(value, old) {
-      if(value == null) {
-        this.setChildren(new qx.data.Array());
-      } else {
-        for(var i = 0; i < value.length; i++) {
-          value.getItem(i).setParent(this);
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        children: {
+          check: "qx.data.Array",
+          nullable: true,
+          event: "changeChildren",
+          apply: "__bindChildrenArray"
+        },
+        description: {
+          check: "String",
+          nullable: true,
+          event: "changeDescription"
+        },
+        iconImageUrl: {
+          check: "String",
+          nullable: true,
+          event: "changeIconImageUrl"
+        },
+        leadingIndex: {
+          check: "Integer",
+          nullable: true,
+          event: "changeLeadingIndex"
+        },
+        selectedIndices: {
+          check: "Array",
+          nullable: true,
+          event: "changeSelectedIndices"
+        }
+      },
+
+      members: {
+        __bindChildrenArray: function (value, old) {
+          if (value == null) {
+            this.setChildren(new qx.data.Array());
+          } else {
+            for (var i = 0; i < value.length; i++) {
+              value.getItem(i).setParent(this);
+            }
+          }
+        },
+
+        notifyChildrenChanged: function () {
+          this.fireDataEvent("changeChildren", this.getChildren(), this.getChildren(), false);
         }
       }
-    },
-    
-    notifyChildrenChanged : function() {
-      this.fireDataEvent(
-          "changeChildren",
-          this.getChildren(),
-          this.getChildren(),
-          false
-      );
-    }
-  }
-});
+    });

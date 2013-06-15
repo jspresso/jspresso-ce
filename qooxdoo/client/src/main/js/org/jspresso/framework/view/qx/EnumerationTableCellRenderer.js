@@ -12,57 +12,54 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer",
-{
-  extend : qx.ui.table.cellrenderer.Default,
-  include : [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
+      extend: qx.ui.table.cellrenderer.Default,
+      include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
-  /**
-   * 
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
-   */
-  construct : function(labels, icons) {
-    this.base(arguments);
-    this.__labels = labels;
-    this.__icons = icons;
-  },
+      /**
+       *
+       * @param icons
+       * @param labels
+       */
+      construct: function (labels, icons) {
+        this.base(arguments);
+        this.__labels = labels;
+        this.__icons = icons;
+      },
 
 
-  members :
-  {
-    __labels : null,
-    __icons : null,
-    
-    _getContentHtml : function(cellInfo) {
-      return this.__getImgHtml(cellInfo) + (this.__labels[cellInfo.value]||"");
-    },
-    
-    __getImgHtml : function(cellInfo) {
-      var rIcon = this.__icons[cellInfo.value];
-      if(rIcon) {
-        var w = 12;
-        var h = 12;
-        if(rIcon.getDimension()) {
-          w = rIcon.getDimension().getWidth();
-          h = rIcon.getDimension().getHeight();
+      members: {
+        __labels: null,
+        __icons: null,
+
+        _getContentHtml: function (cellInfo) {
+          return this.__getImgHtml(cellInfo) + (this.__labels[cellInfo.value] || "");
+        },
+
+        __getImgHtml: function (cellInfo) {
+          var rIcon = this.__icons[cellInfo.value];
+          if (rIcon) {
+            var w = 12;
+            var h = 12;
+            if (rIcon.getDimension()) {
+              w = rIcon.getDimension().getWidth();
+              h = rIcon.getDimension().getHeight();
+            }
+            var css = qx.bom.element.Style.compile({
+              position: "relative",
+              width: w + "px",
+              height: h + "px",
+              "margin-right": "3px",
+              "vertical-align": "middle"
+            });
+            return '<img src="' + rIcon.getImageUrlSpec() + '" style="' + css + '"/>';
+          }
+          return "";
+        },
+
+        _getCellStyle: function (cellInfo) {
+          var superStyle = this.base(arguments, cellInfo);
+          return superStyle + this._getAdditionalCellStyle(cellInfo);
         }
-        var css = qx.bom.element.Style.compile({
-          position : "relative",
-          width : w + "px",
-          height : h + "px",
-          "margin-right" : "3px",
-          "vertical-align" : "middle"
-        });
-        return '<img src="' + rIcon.getImageUrlSpec() + '" style="' + css + '"/>';
       }
-      return "";
-    },
-    
-    _getCellStyle : function(cellInfo) {
-      var superStyle = this.base(arguments, cellInfo);
-      return superStyle + this._getAdditionalCellStyle(cellInfo);
-    }
-  }
-});
+    });

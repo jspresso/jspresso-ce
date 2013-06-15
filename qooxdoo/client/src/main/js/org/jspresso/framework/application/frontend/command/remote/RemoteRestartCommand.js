@@ -12,12 +12,11 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  }
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-});
+      construct: function () {
+        this.base(arguments);
+      }
+
+    });

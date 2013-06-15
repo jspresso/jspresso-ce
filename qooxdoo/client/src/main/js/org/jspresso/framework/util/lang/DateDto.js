@@ -12,39 +12,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.lang.DateDto",
-{
-  extend : qx.core.Object,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.util.lang.DateDto", {
+      extend: qx.core.Object,
 
-  properties :
-  {
-    year :
-    {
-      check : "Integer"
-    },
-    month :
-    {
-      check : "Integer"
-    },
-    date :
-    {
-      check : "Integer"
-    },
-    hour :
-    {
-      check : "Integer"
-    },
-    minute :
-    {
-      check : "Integer"
-    },
-    second :
-    {
-      check : "Integer"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        year: {
+          check: "Integer"
+        },
+        month: {
+          check: "Integer"
+        },
+        date: {
+          check: "Integer"
+        },
+        hour: {
+          check: "Integer"
+        },
+        minute: {
+          check: "Integer"
+        },
+        second: {
+          check: "Integer"
+        }
+      }
+    });

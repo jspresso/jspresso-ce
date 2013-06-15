@@ -1,34 +1,31 @@
 {
-  "info" : 
-  {
-    "name" : "jspresso-qooxdoo",
+  "info": {
+    "name": "jspresso-qooxdoo",
 
-    "summary" : "Jspresso Framework Qooxdoo UI",
-    "description" : "This is the implementation of the QooxDoo UI channel for the Jspresso framework.",
-    
-    "homepage" : "http://www.jspresso.org/",
+    "summary": "Jspresso Framework Qooxdoo UI",
+    "description": "This is the implementation of the QooxDoo UI channel for the Jspresso framework.",
 
-    "license" : "LGPL V3",
-    "authors" : 
-    [
+    "homepage": "http://www.jspresso.org/",
+
+    "license": "LGPL V3",
+    "authors": [
       {
-        "name" : "Vincent Vandenschrick (vvandens)",
-        "email" : "vvandens@jspresso.org"
+        "name": "Vincent Vandenschrick (vvandens)",
+        "email": "vvandens@jspresso.org"
       }
     ],
 
-    "version" : "trunk",
-    "qooxdoo-versions": ["0.8.2","1.1","1.2","1.3","1.4","1.5","1.6","2.0","2.1"]
+    "version": "trunk",
+    "qooxdoo-versions": ["0.8.2", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "2.0", "2.1"]
   },
-  
-  "provides" : 
-  {
-    "namespace"   : "org.jspresso.framework",
-    "encoding"    : "utf-8",
-    "class"       : "js",
-    "resource"    : "resources",
-    "translation" : "translations",
-    "type"        : "library"
+
+  "provides": {
+    "namespace": "org.jspresso.framework",
+    "encoding": "utf-8",
+    "class": "js",
+    "resource": "resources",
+    "translation": "translations",
+    "type": "library"
   }
 }
 

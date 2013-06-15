@@ -12,39 +12,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.gui.CellConstraints",
-{
-  extend : qx.core.Object,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.util.gui.CellConstraints", {
+      extend: qx.core.Object,
 
-  properties :
-  {
-    column :
-    {
-      check : "Integer"
-    },
-    height :
-    {
-      check : "Integer"
-    },
-    heightResizable :
-    {
-      check : "Boolean"
-    },
-    row :
-    {
-      check : "Integer"
-    },
-    width :
-    {
-      check : "Integer"
-    },
-    widthResizable :
-    {
-      check : "Boolean"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        column: {
+          check: "Integer"
+        },
+        height: {
+          check: "Integer"
+        },
+        heightResizable: {
+          check: "Boolean"
+        },
+        row: {
+          check: "Integer"
+        },
+        width: {
+          check: "Integer"
+        },
+        widthResizable: {
+          check: "Boolean"
+        }
+      }
+    });

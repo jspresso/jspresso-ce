@@ -12,22 +12,19 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class
-		.define(
-				"org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",
-				{
-					extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-					construct : function() {
-						this.base(arguments);
-					},
+      construct: function () {
+        this.base(arguments);
+      },
 
-					properties : {
-						cardName : {
-							check : "String"
-						},
-						card : {
-							check : "org.jspresso.framework.gui.remote.RComponent"
-						}
-					}
-				});
+      properties: {
+        cardName: {
+          check: "String"
+        },
+        card: {
+          check: "org.jspresso.framework.gui.remote.RComponent"
+        }
+      }
+    });

@@ -12,12 +12,11 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RPasswordField",
-{
-  extend : org.jspresso.framework.gui.remote.RTextField,
+qx.Class.define("org.jspresso.framework.gui.remote.RPasswordField", {
+      extend: org.jspresso.framework.gui.remote.RTextField,
 
-  construct : function() {
-    this.base(arguments);
-  }
+      construct: function () {
+        this.base(arguments);
+      }
 
-});
+    });

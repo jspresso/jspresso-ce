@@ -12,8 +12,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat",
-    {
+qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
       extend: qx.util.format.NumberFormat,
 
       /**

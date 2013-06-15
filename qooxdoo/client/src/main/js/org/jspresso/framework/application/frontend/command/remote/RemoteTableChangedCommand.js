@@ -12,27 +12,22 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    tableId :
-    {
-      check : "String"
-    },
-    columnIds :
-    {
-      check : "Array"
-    },
-    columnWidths :
-    {
-      check : "Array"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        tableId: {
+          check: "String"
+        },
+        columnIds: {
+          check: "Array"
+        },
+        columnWidths: {
+          check: "Array"
+        }
+      }
+    });

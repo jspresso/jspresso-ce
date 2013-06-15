@@ -12,20 +12,17 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RLink",
-{
-  extend : org.jspresso.framework.gui.remote.RLabel,
-  
-  construct : function() {
-    this.base(arguments);
-  },
-  
-  properties :
-  {
-    action :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction",
-      nullable : true
-    }
-  }
-});
+qx.Class.define("org.jspresso.framework.gui.remote.RLink", {
+      extend: org.jspresso.framework.gui.remote.RLabel,
+
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        action: {
+          check: "org.jspresso.framework.gui.remote.RAction",
+          nullable: true
+        }
+      }
+    });

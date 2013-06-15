@@ -12,48 +12,38 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    navigationActions :
-    {
-      check : "Array"
-    },
-    actions :
-    {
-      check : "Array"
-    },
-    secondaryActions :
-    {
-      check : "Array"
-    },
-    helpActions :
-    {
-      check : "Array"
-    },
-    workspaceActions :
-    {
-      check : "org.jspresso.framework.gui.remote.RActionList"
-    },
-    workspaceNames :
-    {
-      check : "Array"
-    },
-    exitAction :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction"
-    },
-    size :
-    {
-      check : "org.jspresso.framework.util.gui.Dimension",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        navigationActions: {
+          check: "Array"
+        },
+        actions: {
+          check: "Array"
+        },
+        secondaryActions: {
+          check: "Array"
+        },
+        helpActions: {
+          check: "Array"
+        },
+        workspaceActions: {
+          check: "org.jspresso.framework.gui.remote.RActionList"
+        },
+        workspaceNames: {
+          check: "Array"
+        },
+        exitAction: {
+          check: "org.jspresso.framework.gui.remote.RAction"
+        },
+        size: {
+          check: "org.jspresso.framework.util.gui.Dimension",
+          nullable: true
+        }
+      }
+    });

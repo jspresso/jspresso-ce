@@ -12,29 +12,26 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class
-		.define(
-				"org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand",
-				{
-					extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-					construct : function() {
-						this.base(arguments);
-					},
+      construct: function () {
+        this.base(arguments);
+      },
 
-					properties : {
-						actions : {
-							check : "Array"
-						},
-						title : {
-							check : "String"
-						},
-						useCurrent : {
-							check : "Boolean"
-						},
-						dimension : {
-							check : "org.jspresso.framework.util.gui.Dimension",
-							nullable : true
-						}
-					}
-				});
+      properties: {
+        actions: {
+          check: "Array"
+        },
+        title: {
+          check: "String"
+        },
+        useCurrent: {
+          check: "Boolean"
+        },
+        dimension: {
+          check: "org.jspresso.framework.util.gui.Dimension",
+          nullable: true
+        }
+      }
+    });

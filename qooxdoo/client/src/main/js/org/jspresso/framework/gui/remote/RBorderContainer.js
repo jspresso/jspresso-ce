@@ -12,40 +12,33 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RBorderContainer",
-{
-  extend : org.jspresso.framework.gui.remote.RContainer,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RBorderContainer", {
+      extend: org.jspresso.framework.gui.remote.RContainer,
 
-  properties :
-  {
-    center :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    },
-    east :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    },
-    north :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    },
-    south :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    },
-    west :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        center: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        },
+        east: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        },
+        north: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        },
+        south: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        },
+        west: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        }
+      }
+    });

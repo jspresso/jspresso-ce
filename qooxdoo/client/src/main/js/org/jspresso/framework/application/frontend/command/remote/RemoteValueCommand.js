@@ -12,33 +12,27 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    description :
-    {
-      check : "String",
-      nullable : true
-    },
-    iconImageUrl :
-    {
-      check : "String",
-      nullable : true
-    },
-    value :
-    {
-      nullable : true
-    },
-    valueAsObject :
-    {
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        description: {
+          check: "String",
+          nullable: true
+        },
+        iconImageUrl: {
+          check: "String",
+          nullable: true
+        },
+        value: {
+          nullable: true
+        },
+        valueAsObject: {
+          nullable: true
+        }
+      }
+    });

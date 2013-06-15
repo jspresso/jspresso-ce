@@ -1,77 +1,52 @@
 {
-  "name"    : "jspresso-qooxdoo",
+  "name": "jspresso-qooxdoo",
 
-  "include" :
-  [
+  "include": [
     {
-      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+      "path": "${QOOXDOO_PATH}/tool/data/config/application.json"
     },
     {
-      "path" : "library.json",
-      "as"   : "jspresso-qooxdoo"
+      "path": "library.json",
+      "as": "jspresso-qooxdoo"
     }
   ],
 
-  "export" :
-  [
-    "api",
-    "build",
-    "clean",
-    "distclean",
-    "fix",
-    "inspector",
-    "lint",
-    "migration",
-    "pretty",
-    "profiling",
-    "source",
-    "source-all",
-    "test",
-    "test-source",
-    "translation"
+  "export": [
+    "api", "build", "clean", "distclean", "fix", "inspector", "lint", "migration", "pretty", "profiling", "source",
+    "source-all", "test", "test-source", "translation"
   ],
 
-  "let" :
-  {
-    "TARGET"       : "../../../target",
-    "APPLICATION"  : "org.jspresso.framework",
-    "APPLICATION_CLASS_NAME" : "org.jspresso.framework.application.frontend.Application",
-    "QOOXDOO_PATH" : "../../../target/qooxdoo-sdk",
-    "API_EXCLUDE"  : ["qx.legacy.*","qx.test.*"],
-    "ROOT"         : "..",
-    "BUILD_PATH"   : "${TARGET}/web"
+  "let": {
+    "TARGET": "../../../target",
+    "APPLICATION": "org.jspresso.framework",
+    "APPLICATION_CLASS_NAME": "org.jspresso.framework.application.frontend.Application",
+    "QOOXDOO_PATH": "../../../target/qooxdoo-sdk",
+    "API_EXCLUDE": ["qx.legacy.*", "qx.test.*"],
+    "ROOT": "..",
+    "BUILD_PATH": "${TARGET}/web"
   },
 
   // You only need to edit the remainder of this file, if you want to customize
   // specific jobs, or add own job definitions.
 
-  "jobs" :
-  {
-    "common" : 
-    {
-      "cache" :
-      {
-        "compile"     : "${TARGET}/cache",
-        "downloads"   : "${TARGET}/cache/downloads"
-      }
-      ,
-      "=include" :
-      [
+  "jobs": {
+    "common": {
+      "cache": {
+        "compile": "${TARGET}/cache",
+        "downloads": "${TARGET}/cache/downloads"
+      },
+      "=include": [
         "${APPLICATION_CLASS_NAME}"
       ]
     },
 
-    "libraries" : 
-    {
-      "extend" : ["jspresso-qooxdoo::libraries"]
+    "libraries": {
+      "extend": ["jspresso-qooxdoo::libraries"]
     },
 
-    "build" :
-    {
-      "=run" :
-      [
-        "build-resources",
-        "build-script"
+    "build": {
+      "=run": [
+        "build-resources", "build-script"
       ]
     }
   }

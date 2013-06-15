@@ -12,23 +12,19 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RComboBox",
-{
-  extend : org.jspresso.framework.gui.remote.REnumBox,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RComboBox", {
+      extend: org.jspresso.framework.gui.remote.REnumBox,
 
-  properties :
-  {
-    icons :
-    {
-      check : "Array"
-    },
-    readOnly :
-    {
-      check : "Boolean"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        icons: {
+          check: "Array"
+        },
+        readOnly: {
+          check: "Boolean"
+        }
+      }
+    });

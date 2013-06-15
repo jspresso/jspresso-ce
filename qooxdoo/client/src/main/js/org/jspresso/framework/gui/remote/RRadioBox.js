@@ -12,20 +12,17 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RRadioBox",
-{
-  extend : org.jspresso.framework.gui.remote.REnumBox,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RRadioBox", {
+      extend: org.jspresso.framework.gui.remote.REnumBox,
 
-  properties :
-  {
-    orientation :
-    {
-      check : "String",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        orientation: {
+          check: "String",
+          nullable: true
+        }
+      }
+    });

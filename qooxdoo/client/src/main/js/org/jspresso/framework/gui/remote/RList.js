@@ -12,12 +12,11 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RList",
-{
-  extend : org.jspresso.framework.gui.remote.RCollectionComponent,
+qx.Class.define("org.jspresso.framework.gui.remote.RList", {
+      extend: org.jspresso.framework.gui.remote.RCollectionComponent,
 
-  construct : function() {
-    this.base(arguments);
-  }
+      construct: function () {
+        this.base(arguments);
+      }
 
-});
+    });

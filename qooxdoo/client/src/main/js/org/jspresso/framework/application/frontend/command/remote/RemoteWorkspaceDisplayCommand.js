@@ -12,24 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    workspaceName :
-    {
-      check : "String"
-    },
-    workspaceView :
-    {
-      check : "org.jspresso.framework.gui.remote.RComponent",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        workspaceName: {
+          check: "String"
+        },
+        workspaceView: {
+          check: "org.jspresso.framework.gui.remote.RComponent",
+          nullable: true
+        }
+      }
+    });

@@ -12,12 +12,11 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RIntegerField",
-{
-  extend : org.jspresso.framework.gui.remote.RNumericComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  }
+qx.Class.define("org.jspresso.framework.gui.remote.RIntegerField", {
+      extend: org.jspresso.framework.gui.remote.RNumericComponent,
 
-});
+      construct: function () {
+        this.base(arguments);
+      }
+
+    });

@@ -12,19 +12,16 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RActionComponent",
-{
-  extend : org.jspresso.framework.gui.remote.RComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RActionComponent", {
+      extend: org.jspresso.framework.gui.remote.RComponent,
 
-  properties :
-  {
-    action :
-    {
-      check : "org.jspresso.framework.gui.remote.RAction"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        action: {
+          check: "org.jspresso.framework.gui.remote.RAction"
+        }
+      }
+    });

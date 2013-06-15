@@ -12,43 +12,41 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer",
-{
-  extend : qx.ui.table.headerrenderer.Default,
+qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer", {
+      extend: qx.ui.table.headerrenderer.Default,
 
 
-  /**
-   * 
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
-   */
-  construct : function(table, viewFactory, rComponent) {
-    this.base(arguments);
-    this.__table = table;
-    this.__viewFactory = viewFactory;
-    this.__rComponent = rComponent;
-  },
+      /**
+       *
+       * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
+       * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
+       * @param table
+       */
+      construct: function (table, viewFactory, rComponent) {
+        this.base(arguments);
+        this.__table = table;
+        this.__viewFactory = viewFactory;
+        this.__rComponent = rComponent;
+      },
 
 
-  members :
-  {
-    __table : null,
-    __viewFactory : null,
-    __rComponent : null,
-    
-    createHeaderCell : function(cellInfo) {
-      var widget = new org.jspresso.framework.view.qx.MultilineHeaderCell();
-      this.updateHeaderCell(cellInfo, widget);
-      this.__viewFactory.applyComponentStyle(widget, this.__rComponent);
-      var heightHint = widget.getSizeHint()["height"];
-      if(this.__table.getHeaderCellHeight() < heightHint) {
-        this.__table.setHeaderCellHeight(heightHint);
+      members: {
+        __table: null,
+        __viewFactory: null,
+        __rComponent: null,
+
+        createHeaderCell: function (cellInfo) {
+          var widget = new org.jspresso.framework.view.qx.MultilineHeaderCell();
+          this.updateHeaderCell(cellInfo, widget);
+          this.__viewFactory.applyComponentStyle(widget, this.__rComponent);
+          var heightHint = widget.getSizeHint()["height"];
+          if (this.__table.getHeaderCellHeight() < heightHint) {
+            this.__table.setHeaderCellHeight(heightHint);
+          }
+          if (this.__rComponent.getIcon()) {
+            widget.setIcon(this.__rComponent.getIcon().getImageUrlSpec());
+          }
+          return widget;
+        }
       }
-      if(this.__rComponent.getIcon()) {
-        widget.setIcon(this.__rComponent.getIcon().getImageUrlSpec());
-      }
-      return widget;
-    }
-  }
-});
+    });

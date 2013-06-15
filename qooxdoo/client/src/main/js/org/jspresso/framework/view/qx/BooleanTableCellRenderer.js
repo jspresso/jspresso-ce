@@ -12,39 +12,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.BooleanTableCellRenderer",
-{
-  extend : qx.ui.table.cellrenderer.Boolean,
-  include : [org.jspresso.framework.view.qx.MCellAdditionalStyle],
-
-  /**
-   * 
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
-   */
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.view.qx.BooleanTableCellRenderer", {
+      extend: qx.ui.table.cellrenderer.Boolean,
+      include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
 
-  members :
-  {
-    // overridden
-    _identifyImage : function(cellInfo)
-    {
-      //noinspection RedundantIfStatementJS
-      if(cellInfo.value) {
-        cellInfo.value = true;
-      } else {
-        cellInfo.value = false;
+      construct: function () {
+        this.base(arguments);
+      },
+
+
+      members: {
+        // overridden
+        _identifyImage: function (cellInfo) {
+          //noinspection RedundantIfStatementJS
+          if (cellInfo.value) {
+            cellInfo.value = true;
+          } else {
+            cellInfo.value = false;
+          }
+          return this.base(arguments, cellInfo);
+        },
+
+        _getCellStyle: function (cellInfo) {
+          var superStyle = this.base(arguments, cellInfo);
+          return superStyle + this._getAdditionalCellStyle(cellInfo);
+        }
       }
-      return this.base(arguments, cellInfo);
-    },
-    
-    _getCellStyle : function(cellInfo) {
-      var superStyle = this.base(arguments, cellInfo);
-      return superStyle + this._getAdditionalCellStyle(cellInfo);
-    }
-  }
-});
+    });

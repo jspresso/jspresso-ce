@@ -12,23 +12,20 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class
-		.define(
-				"org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand",
-				{
-					extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-					construct : function() {
-						this.base(arguments);
-					},
+      construct: function () {
+        this.base(arguments);
+      },
 
-					properties : {
-						plainContent : {
-							check : "String"
-						},
+      properties: {
+        plainContent: {
+          check: "String"
+        },
 
-						htmlContent : {
-							check : "String"
-						}
-					}
-				});
+        htmlContent: {
+          check: "String"
+        }
+      }
+    });

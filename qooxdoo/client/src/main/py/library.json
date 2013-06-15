@@ -1,17 +1,14 @@
 {
-  "name"    : "jspresso-qooxdoo",
+  "name": "jspresso-qooxdoo",
 
-  "jobs" :
-  {
-    "libraries" : 
-    {
-      "library" :
-      [
+  "jobs": {
+    "libraries": {
+      "library": [
         {
-          "manifest" : "../../../target/qooxdoo-collapsable-panel-zip/Manifest.json"
+          "manifest": "../../../target/qooxdoo-collapsable-panel-zip/Manifest.json"
         },
         {
-          "manifest" : "../../../target/qooxdoo-upload-widget-zip/Manifest.json"
+          "manifest": "../../../target/qooxdoo-upload-widget-zip/Manifest.json"
         }
       ]
     }

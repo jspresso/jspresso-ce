@@ -12,43 +12,37 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.format.DateUtils",
-{
-  statics :
-  {
-    
-    /**
-     * @param {org.jspresso.framework.util.lang.DateDto} source
-     * @return {Date}
-     */
-    fromDateDto : function(source) {
-      if(source) {
-        return new Date(source.getYear(),
-          source.getMonth(),
-          source.getDate(),
-          source.getHour(),
-          source.getMinute(),
-          source.getSecond());
+qx.Class.define("org.jspresso.framework.util.format.DateUtils", {
+      statics: {
+
+        /**
+         * @param {org.jspresso.framework.util.lang.DateDto} source
+         * @return {Date}
+         */
+        fromDateDto: function (source) {
+          if (source) {
+            return new Date(source.getYear(), source.getMonth(), source.getDate(), source.getHour(), source.getMinute(),
+                source.getSecond());
+          }
+          return null;
+        },
+
+        /**
+         * @param {Date} source
+         * @return {org.jspresso.framework.util.lang.DateDto}
+         */
+        fromDate: function (source) {
+          if (source) {
+            var dateDto = new org.jspresso.framework.util.lang.DateDto();
+            dateDto.setYear(source.getFullYear());
+            dateDto.setMonth(source.getMonth());
+            dateDto.setDate(source.getDate());
+            dateDto.setHour(source.getHours());
+            dateDto.setMinute(source.getMinutes());
+            dateDto.setSecond(source.getSeconds());
+            return dateDto;
+          }
+          return null;
+        }
       }
-      return null;
-    },
-    
-    /**
-     * @param {Date} source
-     * @return {org.jspresso.framework.util.lang.DateDto}
-     */
-    fromDate : function(source) {
-      if(source) {
-        var dateDto = new org.jspresso.framework.util.lang.DateDto();
-        dateDto.setYear(source.getFullYear());
-        dateDto.setMonth(source.getMonth());
-        dateDto.setDate(source.getDate());
-        dateDto.setHour(source.getHours());
-        dateDto.setMinute(source.getMinutes());
-        dateDto.setSecond(source.getSeconds());
-        return dateDto;
-      }
-      return null;
-    }
-  }
-});
+    });

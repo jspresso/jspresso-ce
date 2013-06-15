@@ -12,34 +12,32 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.util.html.HtmlUtil",
-{
-  statics :
-  {
-    
-    /**
-     * @param {String} content
-     * @return {Boolean}
-     */
-    isHtml : function(content) {
-      if(typeof content === "string" || content instanceof String) {
-        return content.toLowerCase().indexOf("<html>") > -1 || content.toLowerCase().indexOf("<p") > -1;
+qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
+      statics: {
+
+        /**
+         * @param {String} content
+         * @return {Boolean}
+         */
+        isHtml: function (content) {
+          if (typeof content === "string" || content instanceof String) {
+            return content.toLowerCase().indexOf("<html>") > -1 || content.toLowerCase().indexOf("<p") > -1;
+          }
+          return false;
+        },
+
+        preformat: function (message) {
+          if (message) {
+            return "<pre>" + message + "</pre>";
+          }
+          return message;
+        },
+
+        toHtml: function (message) {
+          if (message != null) {
+            return "<html>" + message + "</html>";
+          }
+          return message;
+        }
       }
-      return false;
-    },
-    
-    preformat : function(message) {
-      if (message) {
-        return "<pre>" + message + "</pre>";
-      }
-      return message;
-    },
-  
-    toHtml : function(message) {
-      if (message != null) {
-        return "<html>" + message + "</html>";
-      }
-      return message;
-    }
-  }
-});
+    });

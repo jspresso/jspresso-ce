@@ -12,23 +12,19 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RIcon",
-{
-  extend : org.jspresso.framework.util.remote.RemotePeer,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RIcon", {
+      extend: org.jspresso.framework.util.remote.RemotePeer,
 
-  properties :
-  {
-    dimension :
-    {
-      check : "org.jspresso.framework.util.gui.Dimension"
-    },
-    imageUrlSpec :
-    {
-      check : "String"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        dimension: {
+          check: "org.jspresso.framework.util.gui.Dimension"
+        },
+        imageUrlSpec: {
+          check: "String"
+        }
+      }
+    });

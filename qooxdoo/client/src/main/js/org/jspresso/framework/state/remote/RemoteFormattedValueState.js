@@ -12,20 +12,17 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.state.remote.RemoteFormattedValueState",
-{
-  extend : org.jspresso.framework.state.remote.RemoteValueState,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.state.remote.RemoteFormattedValueState", {
+      extend: org.jspresso.framework.state.remote.RemoteValueState,
 
-  properties :
-  {
-    valueAsObject :
-    {
-      nullable : true,
-      event : "changeValueAsObject"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        valueAsObject: {
+          nullable: true,
+          event: "changeValueAsObject"
+        }
+      }
+    });

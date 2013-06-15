@@ -12,27 +12,22 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RDateField",
-{
-  extend : org.jspresso.framework.gui.remote.RComponent,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RDateField", {
+      extend: org.jspresso.framework.gui.remote.RComponent,
 
-  properties :
-  {
-    type :
-    {
-      check : "String"
-    },
-    timezoneAware :
-    {
-      check : "Boolean"
-    },
-    secondsAware :
-    {
-      check : "Boolean"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        type: {
+          check: "String"
+        },
+        timezoneAware: {
+          check: "Boolean"
+        },
+        secondsAware: {
+          check: "Boolean"
+        }
+      }
+    });

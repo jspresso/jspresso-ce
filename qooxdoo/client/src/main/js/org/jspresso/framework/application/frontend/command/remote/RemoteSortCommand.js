@@ -12,28 +12,23 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand",
-{
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand", {
+      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  properties :
-  {
-    orderingProperties :
-    {
-      check : "Object"
-    },
-    viewStateGuid :
-    {
-      check : "String"
-    },
-    viewStatePermId :
-    {
-      check : "String",
-      nullable : true
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        orderingProperties: {
+          check: "Object"
+        },
+        viewStateGuid: {
+          check: "String"
+        },
+        viewStatePermId: {
+          check: "String",
+          nullable: true
+        }
+      }
+    });

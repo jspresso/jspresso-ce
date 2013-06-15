@@ -12,23 +12,19 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RConstrainedGridContainer",
-{
-  extend : org.jspresso.framework.gui.remote.RContainer,
-  
-  construct : function() {
-    this.base(arguments);
-  },
+qx.Class.define("org.jspresso.framework.gui.remote.RConstrainedGridContainer", {
+      extend: org.jspresso.framework.gui.remote.RContainer,
 
-  properties :
-  {
-    cellConstraints :
-    {
-      check : "Array"
-    },
-    cells :
-    {
-      check : "Array"
-    }
-  }
-});
+      construct: function () {
+        this.base(arguments);
+      },
+
+      properties: {
+        cellConstraints: {
+          check: "Array"
+        },
+        cells: {
+          check: "Array"
+        }
+      }
+    });
