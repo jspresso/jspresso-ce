@@ -15,25 +15,23 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RRadioBox")]
-    public class RRadioBox extends REnumBox {
 
-      private var _orientation:String;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RRadioBox")]
+public class RRadioBox extends REnumBox {
 
-      public function RRadioBox() {
-          //default constructor.
-      }
+  private var _orientation:String;
 
-      public function get orientation():String
-      {
-        return _orientation;
-      }
+  public function RRadioBox() {
+    //default constructor.
+  }
 
-      public function set orientation(value:String):void
-      {
-        _orientation = value;
-      }
+  public function get orientation():String {
+    return _orientation;
+  }
 
-    }
+  public function set orientation(value:String):void {
+    _orientation = value;
+  }
+
+}
 }

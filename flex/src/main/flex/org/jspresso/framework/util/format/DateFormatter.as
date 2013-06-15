@@ -13,20 +13,21 @@
  */
 
 package org.jspresso.framework.util.format {
-  import mx.formatters.DateFormatter;
-  
-  import org.jspresso.framework.util.lang.DateDto;
-  
-  public class DateFormatter extends mx.formatters.DateFormatter {
 
-    override public function format(value:Object):String {
-      var valueAsDate:Date;
-      if(value is DateDto) {
-        valueAsDate = DateUtils.fromDateDto(value as DateDto);
-      } else {
-        valueAsDate = value as Date;
-      }
-      return super.format(valueAsDate);
+import mx.formatters.DateFormatter;
+
+import org.jspresso.framework.util.lang.DateDto;
+
+public class DateFormatter extends mx.formatters.DateFormatter {
+
+  override public function format(value:Object):String {
+    var valueAsDate:Date;
+    if (value is DateDto) {
+      valueAsDate = DateUtils.fromDateDto(value as DateDto);
+    } else {
+      valueAsDate = value as Date;
     }
+    return super.format(valueAsDate);
   }
+}
 }

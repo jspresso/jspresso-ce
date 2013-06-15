@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RConstrainedGridContainer")]
-    public class RConstrainedGridContainer extends RContainer {
 
-        private var _cellConstraints:Array;
-        private var _cells:Array;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RConstrainedGridContainer")]
+public class RConstrainedGridContainer extends RContainer {
 
-        public function RConstrainedGridContainer() {
-          //default constructor.
-        }
+  private var _cellConstraints:Array;
+  private var _cells:Array;
 
-        public function set cellConstraints(value:Array):void {
-            _cellConstraints = value;
-        }
-        public function get cellConstraints():Array {
-            return _cellConstraints;
-        }
+  public function RConstrainedGridContainer() {
+    //default constructor.
+  }
 
-        public function set cells(value:Array):void {
-            _cells = value;
-        }
-        public function get cells():Array {
-            return _cells;
-        }
-    }
+  public function set cellConstraints(value:Array):void {
+    _cellConstraints = value;
+  }
+
+  public function get cellConstraints():Array {
+    return _cellConstraints;
+  }
+
+  public function set cells(value:Array):void {
+    _cells = value;
+  }
+
+  public function get cells():Array {
+    return _cells;
+  }
+}
 }

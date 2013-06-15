@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RContainer")]
-    public class RContainer extends RComponent {
 
-        public function RContainer() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RContainer")]
+public class RContainer extends RComponent {
 
-    }
+  public function RContainer() {
+    //default constructor.
+  }
+
+}
 }

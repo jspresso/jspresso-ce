@@ -15,30 +15,28 @@
 
 package org.jspresso.framework.i18n {
 
-    public class DelegationTranslationProvider implements ITranslationProvider {
-      
-      private var _delegate:ITranslationProvider;
-      
-      public function DelegationTranslationProvider() {
-        //default constructor.
-      }
-      
-      public function translate(key:String):String {
-        if(delegate) {
-          return delegate.translate(key);
-        }
-        return key;
-      }
+public class DelegationTranslationProvider implements ITranslationProvider {
 
-      public function get delegate():ITranslationProvider
-      {
-        return _delegate;
-      }
+  private var _delegate:ITranslationProvider;
 
-      public function set delegate(value:ITranslationProvider):void
-      {
-        _delegate = value;
-      }
+  public function DelegationTranslationProvider() {
+    //default constructor.
+  }
 
+  public function translate(key:String):String {
+    if (delegate) {
+      return delegate.translate(key);
     }
+    return key;
+  }
+
+  public function get delegate():ITranslationProvider {
+    return _delegate;
+  }
+
+  public function set delegate(value:ITranslationProvider):void {
+    _delegate = value;
+  }
+
+}
 }

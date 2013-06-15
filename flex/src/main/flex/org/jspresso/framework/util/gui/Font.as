@@ -15,44 +15,48 @@
 
 package org.jspresso.framework.util.gui {
 
-    [RemoteClass(alias="org.jspresso.framework.util.gui.Font")]
-    public class Font {
+[RemoteClass(alias="org.jspresso.framework.util.gui.Font")]
+public class Font {
 
-        private var _bold:Boolean;
-        private var _italic:Boolean;
-        private var _name:String;
-        private var _size:int;
+  private var _bold:Boolean;
+  private var _italic:Boolean;
+  private var _name:String;
+  private var _size:int;
 
-        public function Font() {
-          //default constructor.
-        }
+  public function Font() {
+    //default constructor.
+  }
 
-        public function set bold(value:Boolean):void {
-            _bold = value;
-        }
-        public function get bold():Boolean {
-            return _bold;
-        }
+  public function set bold(value:Boolean):void {
+    _bold = value;
+  }
 
-        public function set italic(value:Boolean):void {
-            _italic = value;
-        }
-        public function get italic():Boolean {
-            return _italic;
-        }
+  public function get bold():Boolean {
+    return _bold;
+  }
 
-        public function set name(value:String):void {
-            _name = value;
-        }
-        public function get name():String {
-            return _name;
-        }
+  public function set italic(value:Boolean):void {
+    _italic = value;
+  }
 
-        public function set size(value:int):void {
-            _size = value;
-        }
-        public function get size():int {
-            return _size;
-        }
-    }
+  public function get italic():Boolean {
+    return _italic;
+  }
+
+  public function set name(value:String):void {
+    _name = value;
+  }
+
+  public function get name():String {
+    return _name;
+  }
+
+  public function set size(value:int):void {
+    _size = value;
+  }
+
+  public function get size():int {
+    return _size;
+  }
+}
 }

@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RIntegerField")]
-    public class RIntegerField extends RNumericComponent {
 
-        public function RIntegerField() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RIntegerField")]
+public class RIntegerField extends RNumericComponent {
 
-    }
+  public function RIntegerField() {
+    //default constructor.
+  }
+
+}
 }

@@ -15,58 +15,60 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import org.jspresso.framework.util.remote.RemotePeer;
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RActionList")]
-    public class RActionList extends RemotePeer {
+import org.jspresso.framework.util.remote.RemotePeer;
 
-        private var _actions:Array;
-        private var _description:String;
-        private var _icon:RIcon;
-        private var _name:String;
-        private var _collapsable:Boolean;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RActionList")]
+public class RActionList extends RemotePeer {
 
-        public function RActionList() {
-          //default constructor.
-        }
+  private var _actions:Array;
+  private var _description:String;
+  private var _icon:RIcon;
+  private var _name:String;
+  private var _collapsable:Boolean;
 
-        public function set actions(value:Array):void {
-            _actions = value;
-        }
-        public function get actions():Array {
-            return _actions;
-        }
+  public function RActionList() {
+    //default constructor.
+  }
 
-        public function set description(value:String):void {
-            _description = value;
-        }
-        public function get description():String {
-            return _description;
-        }
+  public function set actions(value:Array):void {
+    _actions = value;
+  }
 
-        public function set icon(value:RIcon):void {
-            _icon = value;
-        }
-        public function get icon():RIcon {
-            return _icon;
-        }
+  public function get actions():Array {
+    return _actions;
+  }
 
-        public function set name(value:String):void {
-            _name = value;
-        }
-        public function get name():String {
-            return _name;
-        }
+  public function set description(value:String):void {
+    _description = value;
+  }
 
-        public function get collapsable():Boolean
-        {
-          return _collapsable;
-        }
+  public function get description():String {
+    return _description;
+  }
 
-        public function set collapsable(value:Boolean):void
-        {
-          _collapsable = value;
-        }
+  public function set icon(value:RIcon):void {
+    _icon = value;
+  }
 
-    }
+  public function get icon():RIcon {
+    return _icon;
+  }
+
+  public function set name(value:String):void {
+    _name = value;
+  }
+
+  public function get name():String {
+    return _name;
+  }
+
+  public function get collapsable():Boolean {
+    return _collapsable;
+  }
+
+  public function set collapsable(value:Boolean):void {
+    _collapsable = value;
+  }
+
+}
 }

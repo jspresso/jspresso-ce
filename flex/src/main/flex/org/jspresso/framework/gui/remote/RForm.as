@@ -15,63 +15,68 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RForm")]
-    public class RForm extends RComponent {
 
-        private var _columnCount:int;
-        private var _elementWidths:Array;
-        private var _elements:Array;
-        private var _elementLabels:Array;
-        private var _labelsPosition:String;
-        private var _verticallyScrollable:Boolean;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RForm")]
+public class RForm extends RComponent {
 
-        public function RForm() {
-          //default constructor.
-        }
+  private var _columnCount:int;
+  private var _elementWidths:Array;
+  private var _elements:Array;
+  private var _elementLabels:Array;
+  private var _labelsPosition:String;
+  private var _verticallyScrollable:Boolean;
 
-        public function set columnCount(value:int):void {
-            _columnCount = value;
-        }
-        public function get columnCount():int {
-            return _columnCount;
-        }
+  public function RForm() {
+    //default constructor.
+  }
 
-        public function set elementWidths(value:Array):void {
-            _elementWidths = value;
-        }
-        public function get elementWidths():Array {
-            return _elementWidths;
-        }
+  public function set columnCount(value:int):void {
+    _columnCount = value;
+  }
 
-        public function set elements(value:Array):void {
-            _elements = value;
-        }
-        public function get elements():Array {
-            return _elements;
-        }
+  public function get columnCount():int {
+    return _columnCount;
+  }
 
-        public function set elementLabels(value:Array):void {
-            _elementLabels = value;
-        }
-        public function get elementLabels():Array {
-            return _elementLabels;
-        }
+  public function set elementWidths(value:Array):void {
+    _elementWidths = value;
+  }
 
-        public function set labelsPosition(value:String):void {
-            _labelsPosition = value;
-        }
-        public function get labelsPosition():String {
-            return _labelsPosition;
-        }
+  public function get elementWidths():Array {
+    return _elementWidths;
+  }
 
-        public function get verticallyScrollable():Boolean {
-          return _verticallyScrollable;
-        }
+  public function set elements(value:Array):void {
+    _elements = value;
+  }
 
-        public function set verticallyScrollable(value:Boolean):void {
-          _verticallyScrollable = value;
-        }
+  public function get elements():Array {
+    return _elements;
+  }
 
-    }
+  public function set elementLabels(value:Array):void {
+    _elementLabels = value;
+  }
+
+  public function get elementLabels():Array {
+    return _elementLabels;
+  }
+
+  public function set labelsPosition(value:String):void {
+    _labelsPosition = value;
+  }
+
+  public function get labelsPosition():String {
+    return _labelsPosition;
+  }
+
+  public function get verticallyScrollable():Boolean {
+    return _verticallyScrollable;
+  }
+
+  public function set verticallyScrollable(value:Boolean):void {
+    _verticallyScrollable = value;
+  }
+
+}
 }

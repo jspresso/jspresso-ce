@@ -15,39 +15,40 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RHtmlArea")]
-    public class RHtmlArea extends RTextComponent {
-      
-      private var _readOnly:Boolean;
-      private var _verticallyScrollable:Boolean;
-      private var _horizontallyScrollable:Boolean;
 
-        public function RHtmlArea() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RHtmlArea")]
+public class RHtmlArea extends RTextComponent {
 
-        public function set readOnly(value:Boolean):void {
-            _readOnly = value;
-        }
-        public function get readOnly():Boolean {
-            return _readOnly;
-        }
+  private var _readOnly:Boolean;
+  private var _verticallyScrollable:Boolean;
+  private var _horizontallyScrollable:Boolean;
 
-        public function get verticallyScrollable():Boolean {
-          return _verticallyScrollable;
-        }
-  
-        public function set verticallyScrollable(value:Boolean):void {
-          _verticallyScrollable = value;
-        }
-  
-        public function get horizontallyScrollable():Boolean {
-          return _horizontallyScrollable;
-        }
-  
-        public function set horizontallyScrollable(value:Boolean):void {
-          _horizontallyScrollable = value;
-        }
-    }
+  public function RHtmlArea() {
+    //default constructor.
+  }
+
+  public function set readOnly(value:Boolean):void {
+    _readOnly = value;
+  }
+
+  public function get readOnly():Boolean {
+    return _readOnly;
+  }
+
+  public function get verticallyScrollable():Boolean {
+    return _verticallyScrollable;
+  }
+
+  public function set verticallyScrollable(value:Boolean):void {
+    _verticallyScrollable = value;
+  }
+
+  public function get horizontallyScrollable():Boolean {
+    return _horizontallyScrollable;
+  }
+
+  public function set horizontallyScrollable(value:Boolean):void {
+    _horizontallyScrollable = value;
+  }
+}
 }

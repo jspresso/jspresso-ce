@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RSecurityComponent")]
-    public class RSecurityComponent extends RComponent {
 
-        public function RSecurityComponent() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RSecurityComponent")]
+public class RSecurityComponent extends RComponent {
 
-    }
+  public function RSecurityComponent() {
+    //default constructor.
+  }
+
+}
 }

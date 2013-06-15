@@ -14,15 +14,15 @@
 
 package org.jspresso.framework.util.format {
 
-  import mx.formatters.Formatter;
+import mx.formatters.Formatter;
 
-  public class PasswordFormatter extends Formatter {
-    
-    override public function format(value:Object):String {
-      if(value == null) {
-        return null;
-      }
-      return "***";
+public class PasswordFormatter extends Formatter {
+
+  override public function format(value:Object):String {
+    if (value == null) {
+      return null;
     }
+    return "***";
   }
+}
 }

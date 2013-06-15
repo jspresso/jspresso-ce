@@ -15,20 +15,21 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand")]
-    public class RemoteCleanupCommand extends RemoteCommand {
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand")]
+public class RemoteCleanupCommand extends RemoteCommand {
 
-        private var _removedPeerGuids:Array;
+  private var _removedPeerGuids:Array;
 
-        public function RemoteCleanupCommand() {
-          //default constructor.
-        }
+  public function RemoteCleanupCommand() {
+    //default constructor.
+  }
 
-        public function set removedPeerGuids(value:Array):void {
-          _removedPeerGuids = value;
-        }
-        public function get removedPeerGuids():Array {
-            return _removedPeerGuids;
-        }
-    }
+  public function set removedPeerGuids(value:Array):void {
+    _removedPeerGuids = value;
+  }
+
+  public function get removedPeerGuids():Array {
+    return _removedPeerGuids;
+  }
+}
 }

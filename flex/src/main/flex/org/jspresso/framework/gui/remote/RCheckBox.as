@@ -15,25 +15,23 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RCheckBox")]
-    public class RCheckBox extends RComponent {
 
-      private var _triState:Boolean;
-      
-      public function RCheckBox() {
-        //default constructor.
-      }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RCheckBox")]
+public class RCheckBox extends RComponent {
 
-      public function get triState():Boolean
-      {
-        return _triState;
-      }
+  private var _triState:Boolean;
 
-      public function set triState(value:Boolean):void
-      {
-        _triState = value;
-      }
+  public function RCheckBox() {
+    //default constructor.
+  }
 
-    }
+  public function get triState():Boolean {
+    return _triState;
+  }
+
+  public function set triState(value:Boolean):void {
+    _triState = value;
+  }
+
+}
 }

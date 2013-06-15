@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RPasswordField")]
-    public class RPasswordField extends RTextField {
 
-        public function RPasswordField() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RPasswordField")]
+public class RPasswordField extends RTextField {
 
-    }
+  public function RPasswordField() {
+    //default constructor.
+  }
+
+}
 }

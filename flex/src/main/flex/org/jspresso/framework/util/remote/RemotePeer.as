@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.util.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
-    public class RemotePeer implements IRemotePeer {
 
-        private var _guid:String;
-        private var _permId:String;
+[RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
+public class RemotePeer implements IRemotePeer {
 
-        public function RemotePeer() {
-          //default constructor.
-        }
+  private var _guid:String;
+  private var _permId:String;
 
-        public function set guid(value:String):void {
-            _guid = value;
-        }
-        public function get guid():String {
-            return _guid;
-        }
+  public function RemotePeer() {
+    //default constructor.
+  }
 
-        public function set permId(value:String):void {
-            _permId = value;
-        }
-        public function get permId():String {
-            return _permId;
-        }
-    }
+  public function set guid(value:String):void {
+    _guid = value;
+  }
+
+  public function get guid():String {
+    return _guid;
+  }
+
+  public function set permId(value:String):void {
+    _permId = value;
+  }
+
+  public function get permId():String {
+    return _permId;
+  }
+}
 }

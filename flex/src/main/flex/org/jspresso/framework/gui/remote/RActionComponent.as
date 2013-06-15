@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RActionComponent")]
-    public class RActionComponent extends RComponent {
 
-        private var _action:RAction;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RActionComponent")]
+public class RActionComponent extends RComponent {
 
-        public function RActionComponent() {
-          //default constructor.
-        }
+  private var _action:RAction;
 
-        public function set action(value:RAction):void {
-            _action = value;
-        }
-        public function get action():RAction {
-            return _action;
-        }
-    }
+  public function RActionComponent() {
+    //default constructor.
+  }
+
+  public function set action(value:RAction):void {
+    _action = value;
+  }
+
+  public function get action():RAction {
+    return _action;
+  }
+}
 }

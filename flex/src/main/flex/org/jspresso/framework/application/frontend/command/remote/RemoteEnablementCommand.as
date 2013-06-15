@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand")]
-    public class RemoteEnablementCommand extends RemoteCommand {
 
-        private var _enabled:Boolean;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand")]
+public class RemoteEnablementCommand extends RemoteCommand {
 
-        public function RemoteEnablementCommand() {
-          //default constructor.
-        }
+  private var _enabled:Boolean;
 
-        public function set enabled(value:Boolean):void {
-            _enabled = value;
-        }
-        public function get enabled():Boolean {
-            return _enabled;
-        }
-    }
+  public function RemoteEnablementCommand() {
+    //default constructor.
+  }
+
+  public function set enabled(value:Boolean):void {
+    _enabled = value;
+  }
+
+  public function get enabled():Boolean {
+    return _enabled;
+  }
+}
 }

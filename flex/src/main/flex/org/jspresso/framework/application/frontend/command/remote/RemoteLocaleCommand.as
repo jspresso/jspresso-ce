@@ -15,46 +15,49 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand")]
-    public class RemoteLocaleCommand extends RemoteCommand {
 
-        public function RemoteLocaleCommand() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand")]
+public class RemoteLocaleCommand extends RemoteCommand {
 
-        private var _language:String;
-        private var _datePattern:String;
-        private var _firstDayOfWeek:int;
-        private var _translations:Object;
+  public function RemoteLocaleCommand() {
+    //default constructor.
+  }
 
-        public function set language(value:String):void {
-            _language = value;
-        }
-        public function get language():String {
-            return _language;
-        }
+  private var _language:String;
+  private var _datePattern:String;
+  private var _firstDayOfWeek:int;
+  private var _translations:Object;
 
-        public function get datePattern():String {
-          return _datePattern;
-        }
-        public function set datePattern(value:String):void {
-          _datePattern = value;
-        }
+  public function set language(value:String):void {
+    _language = value;
+  }
 
-        public function get translations():Object {
-          return _translations;
-        }
-        public function set translations(value:Object):void {
-          _translations = value;
-        }
-    
-        public function get firstDayOfWeek() : int {
-          return _firstDayOfWeek;
-        }
-    
-        public function set firstDayOfWeek(value : int) : void {
-          _firstDayOfWeek = value;
-        }
-      }
+  public function get language():String {
+    return _language;
+  }
+
+  public function get datePattern():String {
+    return _datePattern;
+  }
+
+  public function set datePattern(value:String):void {
+    _datePattern = value;
+  }
+
+  public function get translations():Object {
+    return _translations;
+  }
+
+  public function set translations(value:Object):void {
+    _translations = value;
+  }
+
+  public function get firstDayOfWeek():int {
+    return _firstDayOfWeek;
+  }
+
+  public function set firstDayOfWeek(value:int):void {
+    _firstDayOfWeek = value;
+  }
+}
 }

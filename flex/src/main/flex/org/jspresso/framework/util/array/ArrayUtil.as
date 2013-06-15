@@ -13,47 +13,48 @@
  */
 
 package org.jspresso.framework.util.array {
-  import mx.utils.ObjectUtil;
-  
-  import org.jspresso.framework.util.remote.IRemotePeer;
-  
-  public class ArrayUtil {
-    
-    public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
-      if (!a1 && !a2) {
-        return true;
-      } else   if((a1 && !a2) || (a2 && !a1)) {
-        return false;
-      } else if(a1.length != a2.length) {
-        return false;
-      } else {
-        for each (var e:Object in a1) {
-          if(arrayIndexOf(a2,e) < 0) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
 
-    public static function arrayContains(arr:Array, element:Object):Boolean {
-      return arrayIndexOf(arr, element) >= 0;
-    }
-    
-    public static function arrayIndexOf(arr:Array, element:Object):int {
-      for(var i:int = 0; i < arr.length; i++) {
-        var arrElement:Object = arr[i];
-        if(element is IRemotePeer) {
-          if(arrElement is IRemotePeer) {
-            if(ObjectUtil.compare((arrElement as IRemotePeer).guid, (element as IRemotePeer).guid) == 0) {
-              return i;
-            }
-          }
-        } else if(ObjectUtil.compare(element, arrElement) == 0) {
-          return i;
+import mx.utils.ObjectUtil;
+
+import org.jspresso.framework.util.remote.IRemotePeer;
+
+public class ArrayUtil {
+
+  public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
+    if (!a1 && !a2) {
+      return true;
+    } else if ((a1 && !a2) || (a2 && !a1)) {
+      return false;
+    } else if (a1.length != a2.length) {
+      return false;
+    } else {
+      for each (var e:Object in a1) {
+        if (arrayIndexOf(a2, e) < 0) {
+          return false;
         }
       }
-      return -1;
     }
+    return true;
   }
+
+  public static function arrayContains(arr:Array, element:Object):Boolean {
+    return arrayIndexOf(arr, element) >= 0;
+  }
+
+  public static function arrayIndexOf(arr:Array, element:Object):int {
+    for (var i:int = 0; i < arr.length; i++) {
+      var arrElement:Object = arr[i];
+      if (element is IRemotePeer) {
+        if (arrElement is IRemotePeer) {
+          if (ObjectUtil.compare((arrElement as IRemotePeer).guid, (element as IRemotePeer).guid) == 0) {
+            return i;
+          }
+        }
+      } else if (ObjectUtil.compare(element, arrElement) == 0) {
+        return i;
+      }
+    }
+    return -1;
+  }
+}
 }

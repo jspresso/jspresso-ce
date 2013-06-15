@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.util.gui {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.util.gui.Dimension")]
-    public class Dimension {
 
-        private var _height:int;
-        private var _width:int;
+[RemoteClass(alias="org.jspresso.framework.util.gui.Dimension")]
+public class Dimension {
 
-        public function Dimension() {
-          //default constructor.
-        }
+  private var _height:int;
+  private var _width:int;
 
-        public function set height(value:int):void {
-            _height = value;
-        }
-        public function get height():int {
-            return _height;
-        }
+  public function Dimension() {
+    //default constructor.
+  }
 
-        public function set width(value:int):void {
-            _width = value;
-        }
-        public function get width():int {
-            return _width;
-        }
-    }
+  public function set height(value:int):void {
+    _height = value;
+  }
+
+  public function get height():int {
+    return _height;
+  }
+
+  public function set width(value:int):void {
+    _width = value;
+  }
+
+  public function get width():int {
+    return _width;
+  }
+}
 }

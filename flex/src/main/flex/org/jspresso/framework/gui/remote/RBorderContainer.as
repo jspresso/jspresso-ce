@@ -15,53 +15,58 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RBorderContainer")]
-    public class RBorderContainer extends RContainer {
 
-        private var _center:RComponent;
-        private var _east:RComponent;
-        private var _north:RComponent;
-        private var _south:RComponent;
-        private var _west:RComponent;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RBorderContainer")]
+public class RBorderContainer extends RContainer {
 
-        public function RBorderContainer() {
-          //default constructor.
-        }
+  private var _center:RComponent;
+  private var _east:RComponent;
+  private var _north:RComponent;
+  private var _south:RComponent;
+  private var _west:RComponent;
 
-        public function set center(value:RComponent):void {
-            _center = value;
-        }
-        public function get center():RComponent {
-            return _center;
-        }
+  public function RBorderContainer() {
+    //default constructor.
+  }
 
-        public function set east(value:RComponent):void {
-            _east = value;
-        }
-        public function get east():RComponent {
-            return _east;
-        }
+  public function set center(value:RComponent):void {
+    _center = value;
+  }
 
-        public function set north(value:RComponent):void {
-            _north = value;
-        }
-        public function get north():RComponent {
-            return _north;
-        }
+  public function get center():RComponent {
+    return _center;
+  }
 
-        public function set south(value:RComponent):void {
-            _south = value;
-        }
-        public function get south():RComponent {
-            return _south;
-        }
+  public function set east(value:RComponent):void {
+    _east = value;
+  }
 
-        public function set west(value:RComponent):void {
-            _west = value;
-        }
-        public function get west():RComponent {
-            return _west;
-        }
-    }
+  public function get east():RComponent {
+    return _east;
+  }
+
+  public function set north(value:RComponent):void {
+    _north = value;
+  }
+
+  public function get north():RComponent {
+    return _north;
+  }
+
+  public function set south(value:RComponent):void {
+    _south = value;
+  }
+
+  public function get south():RComponent {
+    return _south;
+  }
+
+  public function set west(value:RComponent):void {
+    _west = value;
+  }
+
+  public function get west():RComponent {
+    return _west;
+  }
+}
 }

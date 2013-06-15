@@ -14,8 +14,8 @@
 
 package org.jspresso.framework.util.remote {
 
-    public interface IRemotePeer {
+public interface IRemotePeer {
 
-        function get guid():String;
-    }
+  function get guid():String;
+}
 }

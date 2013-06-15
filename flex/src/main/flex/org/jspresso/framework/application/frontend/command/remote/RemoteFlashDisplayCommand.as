@@ -15,37 +15,40 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand")]
-    public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand")]
+public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
-        private var _swfUrl:String;
-        private var _paramNames:Array;
-        private var _paramValues:Array;
+  private var _swfUrl:String;
+  private var _paramNames:Array;
+  private var _paramValues:Array;
 
-        public function RemoteFlashDisplayCommand() {
-          //default constructor.
-        }
+  public function RemoteFlashDisplayCommand() {
+    //default constructor.
+  }
 
-        public function set swfUrl(value:String):void {
-            _swfUrl = value;
-        }
-        public function get swfUrl():String {
-            return _swfUrl;
-        }
+  public function set swfUrl(value:String):void {
+    _swfUrl = value;
+  }
 
-        public function set paramNames(value:Array):void {
-            _paramNames = value;
-        }
-        public function get paramNames():Array {
-            return _paramNames;
-        }
+  public function get swfUrl():String {
+    return _swfUrl;
+  }
 
-        public function set paramValues(value:Array):void {
-            _paramValues = value;
-        }
-        public function get paramValues():Array {
-            return _paramValues;
-        }
+  public function set paramNames(value:Array):void {
+    _paramNames = value;
+  }
 
-    }
+  public function get paramNames():Array {
+    return _paramNames;
+  }
+
+  public function set paramValues(value:Array):void {
+    _paramValues = value;
+  }
+
+  public function get paramValues():Array {
+    return _paramValues;
+  }
+
+}
 }

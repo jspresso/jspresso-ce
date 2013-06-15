@@ -12,17 +12,17 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.util.remote.registry {
-  import org.jspresso.framework.util.remote.IRemotePeer;
-  
-  
-  public interface IRemotePeerRegistry {
 
-    function register(remotePeer:IRemotePeer):void;
+import org.jspresso.framework.util.remote.IRemotePeer;
 
-    function getRegistered(guid:String):IRemotePeer;
+public interface IRemotePeerRegistry {
 
-    function unregister(remotePeer:IRemotePeer):void;
-    
-    function isRegistered(guid:String):Boolean;
-  }
+  function register(remotePeer:IRemotePeer):void;
+
+  function getRegistered(guid:String):IRemotePeer;
+
+  function unregister(remotePeer:IRemotePeer):void;
+
+  function isRegistered(guid:String):Boolean;
+}
 }

@@ -15,33 +15,32 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RImageComponent")]
-    public class RImageComponent extends RComponent {
 
-        private var _scrollable:Boolean;
-        private var _action:RAction;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RImageComponent")]
+public class RImageComponent extends RComponent {
 
-        public function RImageComponent() {
-          //default constructor.
-        }
+  private var _scrollable:Boolean;
+  private var _action:RAction;
 
-        public function set scrollable(value:Boolean):void {
-            _scrollable = value;
-        }
-        public function get scrollable():Boolean {
-            return _scrollable;
-        }
+  public function RImageComponent() {
+    //default constructor.
+  }
 
-        public function get action():RAction
-        {
-          return _action;
-        }
+  public function set scrollable(value:Boolean):void {
+    _scrollable = value;
+  }
 
-        public function set action(value:RAction):void
-        {
-          _action = value;
-        }
+  public function get scrollable():Boolean {
+    return _scrollable;
+  }
 
-    }
+  public function get action():RAction {
+    return _action;
+  }
+
+  public function set action(value:RAction):void {
+    _action = value;
+  }
+
+}
 }

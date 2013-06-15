@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand")]
-    public class RemoteReadabilityCommand extends RemoteCommand {
 
-        private var _readable:Boolean;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand")]
+public class RemoteReadabilityCommand extends RemoteCommand {
 
-        public function RemoteReadabilityCommand() {
-          //default constructor.
-        }
+  private var _readable:Boolean;
 
-        public function set readable(value:Boolean):void {
-            _readable = value;
-        }
-        public function get readable():Boolean {
-            return _readable;
-        }
-    }
+  public function RemoteReadabilityCommand() {
+    //default constructor.
+  }
+
+  public function set readable(value:Boolean):void {
+    _readable = value;
+  }
+
+  public function get readable():Boolean {
+    return _readable;
+  }
+}
 }

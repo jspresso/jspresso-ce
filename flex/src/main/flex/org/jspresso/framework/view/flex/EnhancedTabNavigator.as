@@ -13,17 +13,17 @@
  */
 
 package org.jspresso.framework.view.flex {
-  
-  import mx.containers.TabNavigator;
-  
-  public class EnhancedTabNavigator extends TabNavigator {
-    
-    public function EnhancedTabNavigator() {
-      super();
-    }
 
-    override protected function measure():void {
-      super.measure();
-    }
+import mx.containers.TabNavigator;
+
+public class EnhancedTabNavigator extends TabNavigator {
+
+  public function EnhancedTabNavigator() {
+    super();
   }
+
+  override protected function measure():void {
+    super.measure();
+  }
+}
 }

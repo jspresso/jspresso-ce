@@ -14,89 +14,91 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
-  import org.jspresso.framework.gui.remote.RAction;
-  import org.jspresso.framework.gui.remote.RActionList;
-  import org.jspresso.framework.util.gui.Dimension;
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand")]
-    public class RemoteInitCommand extends RemoteCommand {
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionList;
+import org.jspresso.framework.util.gui.Dimension;
 
-        private var _actions:Array;
-        private var _secondaryActions:Array;
-        private var _helpActions:Array;
-        private var _navigationActions:Array;
-        private var _workspaceActions:RActionList;
-        private var _workspaceNames:Array;
-        private var _exitAction:RAction;
-        private var _size:Dimension;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand")]
+public class RemoteInitCommand extends RemoteCommand {
 
-        public function RemoteInitCommand() {
-          //default constructor.
-        }
+  private var _actions:Array;
+  private var _secondaryActions:Array;
+  private var _helpActions:Array;
+  private var _navigationActions:Array;
+  private var _workspaceActions:RActionList;
+  private var _workspaceNames:Array;
+  private var _exitAction:RAction;
+  private var _size:Dimension;
 
-        public function set actions(value:Array):void {
-            _actions = value;
-        }
-        public function get actions():Array {
-            return _actions;
-        }
+  public function RemoteInitCommand() {
+    //default constructor.
+  }
 
-        public function set helpActions(value:Array):void {
-            _helpActions = value;
-        }
-        public function get helpActions():Array {
-            return _helpActions;
-        }
+  public function set actions(value:Array):void {
+    _actions = value;
+  }
 
-        public function set workspaceActions(value:RActionList):void {
-            _workspaceActions = value;
-        }
-        public function get workspaceActions():RActionList {
-            return _workspaceActions;
-        }
+  public function get actions():Array {
+    return _actions;
+  }
 
-        public function set workspaceNames(value:Array):void {
-          _workspaceNames = value;
-        }
-        public function get workspaceNames():Array {
-          return _workspaceNames;
-        }
+  public function set helpActions(value:Array):void {
+    _helpActions = value;
+  }
 
-        public function get navigationActions():Array {
-          return _navigationActions;
-        }
-        public function set navigationActions(value:Array):void {
-          _navigationActions = value;
-        }
+  public function get helpActions():Array {
+    return _helpActions;
+  }
 
-        public function get exitAction():RAction {
-          return _exitAction;
-        }
-        public function set exitAction(value:RAction):void {
-          _exitAction = value;
-        }
+  public function set workspaceActions(value:RActionList):void {
+    _workspaceActions = value;
+  }
 
-        public function get secondaryActions():Array
-        {
-          return _secondaryActions;
-        }
+  public function get workspaceActions():RActionList {
+    return _workspaceActions;
+  }
 
-        public function set secondaryActions(value:Array):void
-        {
-          _secondaryActions = value;
-        }
+  public function set workspaceNames(value:Array):void {
+    _workspaceNames = value;
+  }
 
-        public function get size():Dimension
-        {
-          return _size;
-        }
+  public function get workspaceNames():Array {
+    return _workspaceNames;
+  }
 
-        public function set size(value:Dimension):void
-        {
-          _size = value;
-        }
+  public function get navigationActions():Array {
+    return _navigationActions;
+  }
+
+  public function set navigationActions(value:Array):void {
+    _navigationActions = value;
+  }
+
+  public function get exitAction():RAction {
+    return _exitAction;
+  }
+
+  public function set exitAction(value:RAction):void {
+    _exitAction = value;
+  }
+
+  public function get secondaryActions():Array {
+    return _secondaryActions;
+  }
+
+  public function set secondaryActions(value:Array):void {
+    _secondaryActions = value;
+  }
+
+  public function get size():Dimension {
+    return _size;
+  }
+
+  public function set size(value:Dimension):void {
+    _size = value;
+  }
 
 
-    }
+}
 }

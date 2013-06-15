@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand")]
-    public class RemoteClipboardCommand extends RemoteCommand {
 
-      private var _plainContent:String;
-      private var _htmlContent:String;
-      
-      public function RemoteClipboardCommand() {
-        //default constructor.
-      }
-      
-      public function set plainContent(value:String):void {
-        _plainContent = value;
-      }
-      public function get plainContent():String {
-        return _plainContent;
-      }
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand")]
+public class RemoteClipboardCommand extends RemoteCommand {
 
-      public function set htmlContent(value:String):void {
-        _htmlContent = value;
-      }
-      public function get htmlContent():String {
-        return _htmlContent;
-      }
-    }
+  private var _plainContent:String;
+  private var _htmlContent:String;
+
+  public function RemoteClipboardCommand() {
+    //default constructor.
+  }
+
+  public function set plainContent(value:String):void {
+    _plainContent = value;
+  }
+
+  public function get plainContent():String {
+    return _plainContent;
+  }
+
+  public function set htmlContent(value:String):void {
+    _htmlContent = value;
+  }
+
+  public function get htmlContent():String {
+    return _htmlContent;
+  }
+}
 }

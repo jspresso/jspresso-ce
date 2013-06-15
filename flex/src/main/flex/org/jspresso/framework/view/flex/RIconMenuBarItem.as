@@ -13,43 +13,44 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import org.jspresso.framework.gui.remote.RIcon;
 
-  import mx.controls.Image;
-  import mx.controls.menuClasses.MenuBarItem;
+import mx.controls.Image;
+import mx.controls.menuClasses.MenuBarItem;
 
-  public class RIconMenuBarItem extends MenuBarItem {
+import org.jspresso.framework.gui.remote.RIcon;
 
-		private var _image:Image;
+public class RIconMenuBarItem extends MenuBarItem {
 
-		public function RIconMenuBarItem() {
-		  _image = new CachedImage();
-			addChild(_image);
-		}
+  private var _image:Image;
 
-  	override public function set data(value:Object):void {
-  	  if(value) {
-  	    var rIcon:RIcon = value["rIcon"];
-  	    if(rIcon) {
-  	      _image.source = rIcon.imageUrlSpec;
-  	    }
-  	  }
-  	  super.data = value;
-  	}
-
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-		  if(icon) {
-  			_image.x = icon.x;
-  			_image.y = icon.y;
-  			_image.width = icon.width;
-  			_image.height = icon.height;
-  			
-  			icon.visible = false;
-  			_image.visible = true;
-  		} else {
-  		  _image.visible = false;
-  		}
-		}
+  public function RIconMenuBarItem() {
+    _image = new CachedImage();
+    addChild(_image);
   }
+
+  override public function set data(value:Object):void {
+    if (value) {
+      var rIcon:RIcon = value["rIcon"];
+      if (rIcon) {
+        _image.source = rIcon.imageUrlSpec;
+      }
+    }
+    super.data = value;
+  }
+
+  override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+    super.updateDisplayList(unscaledWidth, unscaledHeight);
+    if (icon) {
+      _image.x = icon.x;
+      _image.y = icon.y;
+      _image.width = icon.width;
+      _image.height = icon.height;
+
+      icon.visible = false;
+      _image.visible = true;
+    } else {
+      _image.visible = false;
+    }
+  }
+}
 }

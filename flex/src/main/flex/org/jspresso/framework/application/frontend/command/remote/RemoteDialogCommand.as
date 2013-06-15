@@ -15,34 +15,33 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RComponent;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand")]
-    public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
+import org.jspresso.framework.gui.remote.RComponent;
 
-        private var _view:RComponent;
-        private var _modal:Boolean;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand")]
+public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
-        public function RemoteDialogCommand() {
-          //default constructor.
-        }
+  private var _view:RComponent;
+  private var _modal:Boolean;
 
-        public function set view(value:RComponent):void {
-            _view = value;
-        }
-        public function get view():RComponent {
-            return _view;
-        }
+  public function RemoteDialogCommand() {
+    //default constructor.
+  }
 
-        public function get modal():Boolean
-        {
-          return _modal;
-        }
+  public function set view(value:RComponent):void {
+    _view = value;
+  }
 
-        public function set modal(value:Boolean):void
-        {
-          _modal = value;
-        }
+  public function get view():RComponent {
+    return _view;
+  }
 
-    }
+  public function get modal():Boolean {
+    return _modal;
+  }
+
+  public function set modal(value:Boolean):void {
+    _modal = value;
+  }
+
+}
 }

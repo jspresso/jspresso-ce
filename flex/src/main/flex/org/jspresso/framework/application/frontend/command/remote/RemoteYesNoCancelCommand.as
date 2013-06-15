@@ -15,22 +15,23 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RAction;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand")]
-    public class RemoteYesNoCancelCommand extends RemoteYesNoCommand {
+import org.jspresso.framework.gui.remote.RAction;
 
-        private var _cancelAction:RAction;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand")]
+public class RemoteYesNoCancelCommand extends RemoteYesNoCommand {
 
-        public function RemoteYesNoCancelCommand() {
-          //default constructor.
-        }
+  private var _cancelAction:RAction;
 
-        public function set cancelAction(value:RAction):void {
-            _cancelAction = value;
-        }
-        public function get cancelAction():RAction {
-            return _cancelAction;
-        }
-    }
+  public function RemoteYesNoCancelCommand() {
+    //default constructor.
+  }
+
+  public function set cancelAction(value:RAction):void {
+    _cancelAction = value;
+  }
+
+  public function get cancelAction():RAction {
+    return _cancelAction;
+  }
+}
 }

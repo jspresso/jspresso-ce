@@ -15,74 +15,74 @@
 
 package org.jspresso.framework.state.remote {
 
-    import flash.events.Event;
+import flash.events.Event;
 
-    import mx.collections.ListCollectionView;
-    import mx.events.PropertyChangeEvent;
-    import mx.events.PropertyChangeEventKind;
-    
-		
-		[Bindable]
-    [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCompositeValueState")]
-    public dynamic class RemoteCompositeValueState extends RemoteValueState {
+import mx.collections.ListCollectionView;
+import mx.events.PropertyChangeEvent;
+import mx.events.PropertyChangeEventKind;
 
-        private var _children:ListCollectionView;
-        private var _description:String;
-        private var _iconImageUrl:String;
-        private var _leadingIndex:int;
-        private var _selectedIndices:Array;
+[Bindable]
+[RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCompositeValueState")]
+public dynamic class RemoteCompositeValueState extends RemoteValueState {
 
-        public function RemoteCompositeValueState() {
-          //default constructor.
-        }
+  private var _children:ListCollectionView;
+  private var _description:String;
+  private var _iconImageUrl:String;
+  private var _leadingIndex:int;
+  private var _selectedIndices:Array;
 
-        public function set children(value:ListCollectionView):void {
-            _children = value;
-        }
-        public function get children():ListCollectionView {
-            return _children;
-        }
+  public function RemoteCompositeValueState() {
+    //default constructor.
+  }
 
-        public function set description(value:String):void {
-            _description = value;
-        }
-        public function get description():String {
-            return _description;
-        }
+  public function set children(value:ListCollectionView):void {
+    _children = value;
+  }
 
-        public function set iconImageUrl(value:String):void {
-            _iconImageUrl = value;
-        }
-        public function get iconImageUrl():String {
-            return _iconImageUrl;
-        }
+  public function get children():ListCollectionView {
+    return _children;
+  }
 
-        public function set leadingIndex(value:int):void {
-            _leadingIndex = value;
-        }
-        public function get leadingIndex():int {
-            return _leadingIndex;
-        }
+  public function set description(value:String):void {
+    _description = value;
+  }
 
-        public function set selectedIndices(value:Array):void {
-            _selectedIndices = value;
-        }
-        public function get selectedIndices():Array {
-            return _selectedIndices;
-        }
-        
-        public function notifyChildrenChanged():void {
-          this.dispatchEvent(new PropertyChangeEvent(
-            "propertyChange", true, true, 
-            PropertyChangeEventKind.UPDATE,
-            "children", null, _children, this) as Event);
-        }
+  public function get description():String {
+    return _description;
+  }
 
-        public function notifySelectionChanged():void {
-          this.dispatchEvent(new PropertyChangeEvent(
-            "propertyChange", true, true, 
-            PropertyChangeEventKind.UPDATE,
-            "selectedIndices", null, selectedIndices, this) as Event);
-        }
-    }
+  public function set iconImageUrl(value:String):void {
+    _iconImageUrl = value;
+  }
+
+  public function get iconImageUrl():String {
+    return _iconImageUrl;
+  }
+
+  public function set leadingIndex(value:int):void {
+    _leadingIndex = value;
+  }
+
+  public function get leadingIndex():int {
+    return _leadingIndex;
+  }
+
+  public function set selectedIndices(value:Array):void {
+    _selectedIndices = value;
+  }
+
+  public function get selectedIndices():Array {
+    return _selectedIndices;
+  }
+
+  public function notifyChildrenChanged():void {
+    this.dispatchEvent(new PropertyChangeEvent("propertyChange", true, true, PropertyChangeEventKind.UPDATE, "children",
+                                               null, _children, this) as Event);
+  }
+
+  public function notifySelectionChanged():void {
+    this.dispatchEvent(new PropertyChangeEvent("propertyChange", true, true, PropertyChangeEventKind.UPDATE,
+                                               "selectedIndices", null, selectedIndices, this) as Event);
+  }
+}
 }

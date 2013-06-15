@@ -15,41 +15,40 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDateField")]
-    public class RDateField extends RComponent {
 
-        private var _type:String;
-        private var _timezoneAware:Boolean;
-        private var _secondsAware:Boolean;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RDateField")]
+public class RDateField extends RComponent {
 
-        public function RDateField() {
-          //default constructor.
-        }
+  private var _type:String;
+  private var _timezoneAware:Boolean;
+  private var _secondsAware:Boolean;
 
-        public function set type(value:String):void {
-            _type = value;
-        }
-        public function get type():String {
-            return _type;
-        }
+  public function RDateField() {
+    //default constructor.
+  }
 
-        public function get timezoneAware():Boolean
-        {
-          return _timezoneAware;
-        }
+  public function set type(value:String):void {
+    _type = value;
+  }
 
-        public function set timezoneAware(value:Boolean):void
-        {
-          _timezoneAware = value;
-        }
+  public function get type():String {
+    return _type;
+  }
 
-        public function get secondsAware():Boolean {
-          return _secondsAware;
-        }
+  public function get timezoneAware():Boolean {
+    return _timezoneAware;
+  }
 
-        public function set secondsAware(value:Boolean):void {
-          _secondsAware = value;
-        }
-    }
+  public function set timezoneAware(value:Boolean):void {
+    _timezoneAware = value;
+  }
+
+  public function get secondsAware():Boolean {
+    return _secondsAware;
+  }
+
+  public function set secondsAware(value:Boolean):void {
+    _secondsAware = value;
+  }
+}
 }

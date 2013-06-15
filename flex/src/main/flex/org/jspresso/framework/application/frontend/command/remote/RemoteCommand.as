@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteCommand")]
-    public class RemoteCommand {
 
-        private var _targetPeerGuid:String;
-        private var _permId:String;
-        
-        public function RemoteCommand() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteCommand")]
+public class RemoteCommand {
 
-        public function set targetPeerGuid(value:String):void {
-            _targetPeerGuid = value;
-        }
-        public function get targetPeerGuid():String {
-            return _targetPeerGuid;
-        }
+  private var _targetPeerGuid:String;
+  private var _permId:String;
 
-        public function set permId(value:String):void {
-            _permId = value;
-        }
-        public function get permId():String {
-            return _permId;
-        }
-    }
+  public function RemoteCommand() {
+    //default constructor.
+  }
+
+  public function set targetPeerGuid(value:String):void {
+    _targetPeerGuid = value;
+  }
+
+  public function get targetPeerGuid():String {
+    return _targetPeerGuid;
+  }
+
+  public function set permId(value:String):void {
+    _permId = value;
+  }
+
+  public function get permId():String {
+    return _permId;
+  }
+}
 }

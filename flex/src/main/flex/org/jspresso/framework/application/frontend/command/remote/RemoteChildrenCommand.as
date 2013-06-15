@@ -15,34 +15,33 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import mx.collections.ListCollectionView;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand")]
-    public class RemoteChildrenCommand extends RemoteCommand {
+import mx.collections.ListCollectionView;
 
-        private var _children:ListCollectionView;
-        private var _remove:Boolean;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand")]
+public class RemoteChildrenCommand extends RemoteCommand {
 
-        public function RemoteChildrenCommand() {
-          //default constructor.
-        }
+  private var _children:ListCollectionView;
+  private var _remove:Boolean;
 
-        public function set children(value:ListCollectionView):void {
-            _children = value;
-        }
-        public function get children():ListCollectionView {
-            return _children;
-        }
+  public function RemoteChildrenCommand() {
+    //default constructor.
+  }
 
-        public function get remove():Boolean
-        {
-          return _remove;
-        }
+  public function set children(value:ListCollectionView):void {
+    _children = value;
+  }
 
-        public function set remove(value:Boolean):void
-        {
-          _remove = value;
-        }
+  public function get children():ListCollectionView {
+    return _children;
+  }
 
-    }
+  public function get remove():Boolean {
+    return _remove;
+  }
+
+  public function set remove(value:Boolean):void {
+    _remove = value;
+  }
+
+}
 }

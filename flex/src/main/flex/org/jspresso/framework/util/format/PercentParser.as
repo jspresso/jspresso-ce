@@ -13,21 +13,21 @@
  */
 
 package org.jspresso.framework.util.format {
-  
 
-  public class PercentParser extends NumberParser {
 
-    override public function parse(value:String, existingValue:Object = null):Object	{
-      if(value == null || value.length == 0) {
-        return null;
-      }
-      var parsedNumber:Number = super.parse(trimSuffix(value)) as Number;
-      return parsedNumber / 100;
+public class PercentParser extends NumberParser {
+
+  override public function parse(value:String, existingValue:Object = null):Object {
+    if (value == null || value.length == 0) {
+      return null;
     }
-    
-    private function trimSuffix(value:String):String {
-      var pattern:RegExp = /( |%)/g;
-      return value.replace(pattern,""); 
-    }
+    var parsedNumber:Number = super.parse(trimSuffix(value)) as Number;
+    return parsedNumber / 100;
   }
+
+  private function trimSuffix(value:String):String {
+    var pattern:RegExp = /( |%)/g;
+    return value.replace(pattern, "");
+  }
+}
 }

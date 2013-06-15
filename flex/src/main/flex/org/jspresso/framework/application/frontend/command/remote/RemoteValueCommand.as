@@ -15,45 +15,49 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand")]
-    public class RemoteValueCommand extends RemoteCommand {
 
-        private var _description:String;
-        private var _iconImageUrl:String;
-        private var _value:Object;
-        private var _valueAsObject:Object;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand")]
+public class RemoteValueCommand extends RemoteCommand {
 
-        public function RemoteValueCommand() {
-          //default constructor.
-        }
+  private var _description:String;
+  private var _iconImageUrl:String;
+  private var _value:Object;
+  private var _valueAsObject:Object;
 
-        public function set description(value:String):void {
-            _description = value;
-        }
-        public function get description():String {
-            return _description;
-        }
+  public function RemoteValueCommand() {
+    //default constructor.
+  }
 
-        public function set iconImageUrl(value:String):void {
-            _iconImageUrl = value;
-        }
-        public function get iconImageUrl():String {
-            return _iconImageUrl;
-        }
+  public function set description(value:String):void {
+    _description = value;
+  }
 
-        public function set value(value:Object):void {
-            _value = value;
-        }
-        public function get value():Object {
-            return _value;
-        }
+  public function get description():String {
+    return _description;
+  }
 
-        public function set valueAsObject(value:Object):void {
-          _valueAsObject = value;
-        }
-        public function get valueAsObject():Object {
-          return _valueAsObject;
-        }
-    }
+  public function set iconImageUrl(value:String):void {
+    _iconImageUrl = value;
+  }
+
+  public function get iconImageUrl():String {
+    return _iconImageUrl;
+  }
+
+  public function set value(value:Object):void {
+    _value = value;
+  }
+
+  public function get value():Object {
+    return _value;
+  }
+
+  public function set valueAsObject(value:Object):void {
+    _valueAsObject = value;
+  }
+
+  public function get valueAsObject():Object {
+    return _valueAsObject;
+  }
+}
 }

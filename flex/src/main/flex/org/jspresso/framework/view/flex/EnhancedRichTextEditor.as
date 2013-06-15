@@ -14,48 +14,48 @@
 
 package org.jspresso.framework.view.flex {
 
-  import mx.controls.RichTextEditor;
-  import mx.events.FlexEvent;
-  
-  import org.jspresso.framework.util.html.HtmlUtil;
+import mx.controls.RichTextEditor;
+import mx.events.FlexEvent;
 
-  public class EnhancedRichTextEditor extends RichTextEditor {
-    
-    private var _editable:Boolean = true;
+import org.jspresso.framework.util.html.HtmlUtil;
 
-    public function EnhancedRichTextEditor() {
-      addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
-        synchEditability();
-      });
-    }
-    
-    public function get xhtmlText():String {
-      return HtmlUtil.convertToXHtml(this.htmlText);
-    }
-    
-    public function set xhtmlText(val:String):void {
-      this.htmlText = HtmlUtil.convertFromXHtml(val);
-    }
+public class EnhancedRichTextEditor extends RichTextEditor {
 
-    public function get editable():Boolean {
-      return _editable;
-    }
+  private var _editable:Boolean = true;
 
-    public function set editable(value:Boolean):void {
-      _editable = value;
+  public function EnhancedRichTextEditor() {
+    addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
       synchEditability();
-    }
+    });
+  }
 
-    protected function synchEditability():void {
-      if(textArea) {
-        textArea.editable = editable;
-      }
-      if(toolbar) {
-        toolbar.visible = editable;
-      }
-      if(toolBar2) {
-        toolBar2.visible = editable;
-      }
+  public function get xhtmlText():String {
+    return HtmlUtil.convertToXHtml(this.htmlText);
+  }
+
+  public function set xhtmlText(val:String):void {
+    this.htmlText = HtmlUtil.convertFromXHtml(val);
+  }
+
+  public function get editable():Boolean {
+    return _editable;
+  }
+
+  public function set editable(value:Boolean):void {
+    _editable = value;
+    synchEditability();
+  }
+
+  protected function synchEditability():void {
+    if (textArea) {
+      textArea.editable = editable;
+    }
+    if (toolbar) {
+      toolbar.visible = editable;
+    }
+    if (toolBar2) {
+      toolBar2.visible = editable;
     }
   }
+}
 }

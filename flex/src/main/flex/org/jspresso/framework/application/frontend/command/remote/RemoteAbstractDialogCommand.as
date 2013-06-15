@@ -14,47 +14,51 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
-  import org.jspresso.framework.util.gui.Dimension;
-  
 
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand")]
-    public class RemoteAbstractDialogCommand extends RemoteCommand {
+import org.jspresso.framework.util.gui.Dimension;
 
-        private var _actions:Array;
-        private var _title:String;
-        private var _useCurrent:Boolean;
-        private var _dimension:Dimension;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand")]
+public class RemoteAbstractDialogCommand extends RemoteCommand {
 
-        public function RemoteAbstractDialogCommand() {
-          //default constructor.
-        }
+  private var _actions:Array;
+  private var _title:String;
+  private var _useCurrent:Boolean;
+  private var _dimension:Dimension;
 
-        public function set actions(value:Array):void {
-            _actions = value;
-        }
-        public function get actions():Array {
-            return _actions;
-        }
+  public function RemoteAbstractDialogCommand() {
+    //default constructor.
+  }
 
-        public function set title(value:String):void {
-            _title = value;
-        }
-        public function get title():String {
-            return _title;
-        }
+  public function set actions(value:Array):void {
+    _actions = value;
+  }
 
-        public function set useCurrent(value:Boolean):void {
-            _useCurrent = value;
-        }
-        public function get useCurrent():Boolean {
-            return _useCurrent;
-        }
+  public function get actions():Array {
+    return _actions;
+  }
 
-        public function set dimension(value:Dimension):void {
-            _dimension = value;
-        }
-        public function get dimension():Dimension {
-            return _dimension;
-        }
-    }
+  public function set title(value:String):void {
+    _title = value;
+  }
+
+  public function get title():String {
+    return _title;
+  }
+
+  public function set useCurrent(value:Boolean):void {
+    _useCurrent = value;
+  }
+
+  public function get useCurrent():Boolean {
+    return _useCurrent;
+  }
+
+  public function set dimension(value:Dimension):void {
+    _dimension = value;
+  }
+
+  public function get dimension():Dimension {
+    return _dimension;
+  }
+}
 }

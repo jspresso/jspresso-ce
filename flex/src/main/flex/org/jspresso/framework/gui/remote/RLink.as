@@ -15,23 +15,23 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RLink")]
-    public class RLink extends RLabel {
 
-      private var _action:RAction;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RLink")]
+public class RLink extends RLabel {
 
-      public function RLink() {
-          //default constructor.
-       }
+  private var _action:RAction;
 
-      public function get action():RAction {
-        return _action;
-      }
+  public function RLink() {
+    //default constructor.
+  }
 
-      public function set action(value:RAction):void {
-        _action = value;
-      }
+  public function get action():RAction {
+    return _action;
+  }
 
-    }
+  public function set action(value:RAction):void {
+    _action = value;
+  }
+
+}
 }

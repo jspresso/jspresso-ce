@@ -15,31 +15,33 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import org.jspresso.framework.util.gui.Dimension;
-    import org.jspresso.framework.util.remote.RemotePeer;
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
-    public class RIcon extends RemotePeer {
+import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.remote.RemotePeer;
 
-        private var _dimension:Dimension;
-        private var _imageUrlSpec:String;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
+public class RIcon extends RemotePeer {
 
-        public function RIcon() {
-          //default constructor.
-        }
+  private var _dimension:Dimension;
+  private var _imageUrlSpec:String;
 
-        public function set dimension(value:Dimension):void {
-            _dimension = value;
-        }
-        public function get dimension():Dimension {
-            return _dimension;
-        }
+  public function RIcon() {
+    //default constructor.
+  }
 
-        public function set imageUrlSpec(value:String):void {
-            _imageUrlSpec = value;
-        }
-        public function get imageUrlSpec():String {
-            return _imageUrlSpec;
-        }
-    }
+  public function set dimension(value:Dimension):void {
+    _dimension = value;
+  }
+
+  public function get dimension():Dimension {
+    return _dimension;
+  }
+
+  public function set imageUrlSpec(value:String):void {
+    _imageUrlSpec = value;
+  }
+
+  public function get imageUrlSpec():String {
+    return _imageUrlSpec;
+  }
+}
 }

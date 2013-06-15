@@ -15,22 +15,23 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand")]
-    public class RemoteUpdateStatusCommand extends RemoteCommand {
 
-        private var _status:String;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand")]
+public class RemoteUpdateStatusCommand extends RemoteCommand {
 
-        public function RemoteUpdateStatusCommand() {
-          //default constructor.
-        }
+  private var _status:String;
 
-        public function set status(value:String):void {
-            _status = value;
-        }
-        public function get status():String {
-            return _status;
-        }
+  public function RemoteUpdateStatusCommand() {
+    //default constructor.
+  }
 
-    }
+  public function set status(value:String):void {
+    _status = value;
+  }
+
+  public function get status():String {
+    return _status;
+  }
+
+}
 }

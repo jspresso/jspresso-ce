@@ -15,12 +15,12 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTextArea")]
-    public class RTextArea extends RTextComponent {
 
-        public function RTextArea() {
-          //default constructor.
-        }
-    }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RTextArea")]
+public class RTextArea extends RTextComponent {
+
+  public function RTextArea() {
+    //default constructor.
+  }
+}
 }

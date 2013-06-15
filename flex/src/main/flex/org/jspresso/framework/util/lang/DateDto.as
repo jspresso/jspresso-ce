@@ -15,81 +15,69 @@
 
 package org.jspresso.framework.util.lang {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.util.lang.DateDto")]
-    public class DateDto {
 
-        private var _year:int;
-        private var _month:int;
-        private var _date:int;
-        private var _hour:int;
-        private var _minute:int;
-        private var _second:int;
+[RemoteClass(alias="org.jspresso.framework.util.lang.DateDto")]
+public class DateDto {
 
-        public function DateDto() {
-          //default constructor.
-        }
+  private var _year:int;
+  private var _month:int;
+  private var _date:int;
+  private var _hour:int;
+  private var _minute:int;
+  private var _second:int;
 
-        public function get year():int
-        {
-          return _year;
-        }
+  public function DateDto() {
+    //default constructor.
+  }
 
-        public function set year(value:int):void
-        {
-          _year = value;
-        }
+  public function get year():int {
+    return _year;
+  }
 
-        public function get month():int
-        {
-          return _month;
-        }
+  public function set year(value:int):void {
+    _year = value;
+  }
 
-        public function set month(value:int):void
-        {
-          _month = value;
-        }
+  public function get month():int {
+    return _month;
+  }
 
-        public function get date():int
-        {
-          return _date;
-        }
+  public function set month(value:int):void {
+    _month = value;
+  }
 
-        public function set date(value:int):void
-        {
-          _date = value;
-        }
+  public function get date():int {
+    return _date;
+  }
 
-        public function get hour():int
-        {
-          return _hour;
-        }
+  public function set date(value:int):void {
+    _date = value;
+  }
 
-        public function set hour(value:int):void
-        {
-          _hour = value;
-        }
+  public function get hour():int {
+    return _hour;
+  }
 
-        public function get minute():int
-        {
-          return _minute;
-        }
+  public function set hour(value:int):void {
+    _hour = value;
+  }
 
-        public function set minute(value:int):void
-        {
-          _minute = value;
-        }
+  public function get minute():int {
+    return _minute;
+  }
 
-        public function get second():int
-        {
-          return _second;
-        }
+  public function set minute(value:int):void {
+    _minute = value;
+  }
 
-        public function set second(value:int):void
-        {
-          _second = value;
-        }
+  public function get second():int {
+    return _second;
+  }
+
+  public function set second(value:int):void {
+    _second = value;
+  }
 
 
-    }
+}
 }

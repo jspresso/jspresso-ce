@@ -13,48 +13,47 @@
  */
 
 package org.jspresso.framework.util.format {
-  import org.jspresso.framework.util.lang.DateDto;
-  
-  public class TimeParser extends Parser {
-    
-    private var _parseDateDto:Boolean = true;
 
-    public function TimeParser() {
-      parseDateDto = true;
-    }
+import org.jspresso.framework.util.lang.DateDto;
 
-    override public function parse(value:String, existingValue:Object = null):Object	{
-      if(value == null || value.length == 0) {
-        return null;
-      }
-      var parsedDate:Date = DateUtils.parseTime(value);
-      if(parsedDate == null) {
-        return existingValue;
-      } else if(existingValue != null) {
-        if(existingValue is Date) {
-          var existingDate:Date = existingValue as Date;
-          parsedDate.setFullYear(existingDate.fullYear, existingDate.month, existingDate.date);
-        } else if(existingValue is DateDto) {
-          var existingDateDto:DateDto = existingValue as DateDto;
-          parsedDate.setFullYear(existingDateDto.year, existingDateDto.month, existingDateDto.date);
-        }
-      }
-      if(parseDateDto) {
-        return DateUtils.fromDate(parsedDate);
-      } else {
-        return parsedDate;
-      }
-    }
+public class TimeParser extends Parser {
 
-    public function get parseDateDto():Boolean
-    {
-      return _parseDateDto;
-    }
+  private var _parseDateDto:Boolean = true;
 
-    public function set parseDateDto(value:Boolean):void
-    {
-      _parseDateDto = value;
-    }
-
+  public function TimeParser() {
+    parseDateDto = true;
   }
+
+  override public function parse(value:String, existingValue:Object = null):Object {
+    if (value == null || value.length == 0) {
+      return null;
+    }
+    var parsedDate:Date = DateUtils.parseTime(value);
+    if (parsedDate == null) {
+      return existingValue;
+    } else if (existingValue != null) {
+      if (existingValue is Date) {
+        var existingDate:Date = existingValue as Date;
+        parsedDate.setFullYear(existingDate.fullYear, existingDate.month, existingDate.date);
+      } else if (existingValue is DateDto) {
+        var existingDateDto:DateDto = existingValue as DateDto;
+        parsedDate.setFullYear(existingDateDto.year, existingDateDto.month, existingDateDto.date);
+      }
+    }
+    if (parseDateDto) {
+      return DateUtils.fromDate(parsedDate);
+    } else {
+      return parsedDate;
+    }
+  }
+
+  public function get parseDateDto():Boolean {
+    return _parseDateDto;
+  }
+
+  public function set parseDateDto(value:Boolean):void {
+    _parseDateDto = value;
+  }
+
+}
 }

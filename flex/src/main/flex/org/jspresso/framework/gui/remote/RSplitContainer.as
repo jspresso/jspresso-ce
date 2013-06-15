@@ -15,37 +15,40 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RSplitContainer")]
-    public class RSplitContainer extends RContainer {
 
-        private var _leftTop:RComponent;
-        private var _orientation:String;
-        private var _rightBottom:RComponent;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RSplitContainer")]
+public class RSplitContainer extends RContainer {
 
-        public function RSplitContainer() {
-          //default constructor.
-        }
+  private var _leftTop:RComponent;
+  private var _orientation:String;
+  private var _rightBottom:RComponent;
 
-        public function set leftTop(value:RComponent):void {
-            _leftTop = value;
-        }
-        public function get leftTop():RComponent {
-            return _leftTop;
-        }
+  public function RSplitContainer() {
+    //default constructor.
+  }
 
-        public function set orientation(value:String):void {
-            _orientation = value;
-        }
-        public function get orientation():String {
-            return _orientation;
-        }
+  public function set leftTop(value:RComponent):void {
+    _leftTop = value;
+  }
 
-        public function set rightBottom(value:RComponent):void {
-            _rightBottom = value;
-        }
-        public function get rightBottom():RComponent {
-            return _rightBottom;
-        }
-    }
+  public function get leftTop():RComponent {
+    return _leftTop;
+  }
+
+  public function set orientation(value:String):void {
+    _orientation = value;
+  }
+
+  public function get orientation():String {
+    return _orientation;
+  }
+
+  public function set rightBottom(value:RComponent):void {
+    _rightBottom = value;
+  }
+
+  public function get rightBottom():RComponent {
+    return _rightBottom;
+  }
+}
 }

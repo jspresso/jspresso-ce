@@ -13,57 +13,57 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import mx.controls.Image;
-  import mx.controls.treeClasses.TreeItemRenderer;
-  
-  import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-  import org.jspresso.framework.util.html.HtmlUtil;
-  import org.jspresso.framework.view.flex.CachedImage;
 
-  public class RemoteValueTreeItemRenderer extends TreeItemRenderer  {
+import mx.controls.Image;
+import mx.controls.treeClasses.TreeItemRenderer;
 
-		private var image:Image;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.util.html.HtmlUtil;
 
-		public function RemoteValueTreeItemRenderer() {
-		  image = new CachedImage();
-			addChild(image);
-		}
+public class RemoteValueTreeItemRenderer extends TreeItemRenderer {
 
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			if(data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
-				image.x = icon.x;
-				image.y = icon.y;
-				image.width = icon.width;
-				image.height = icon.height;
-				var iconImageUrl:String = (data as RemoteCompositeValueState).iconImageUrl;
-				if(iconImageUrl) {
-				  image.source = iconImageUrl;
-				}
-				image.visible = true;
-				if(icon) {
-				  icon.visible = false;
-				}
-			} else {
-				image.visible = false;
-				if(icon) {
-				  icon.visible = false;
-				}
-			}
-		}
-		
-		override protected function commitProperties():void {
-		  super.commitProperties();
-		  if(listData) {
-		    if(HtmlUtil.isHtml(listData.label)) {
-		      label.text = null;
-		      label.htmlText = HtmlUtil.convertHtmlEntities(listData.label);
-		    } else {
-          label.htmlText = null;
-          label.text = listData.label;
-		    }
-		    invalidateDisplayList();
-		  }
-		}
+  private var image:Image;
+
+  public function RemoteValueTreeItemRenderer() {
+    image = new CachedImage();
+    addChild(image);
   }
+
+  override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+    super.updateDisplayList(unscaledWidth, unscaledHeight);
+    if (data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
+      image.x = icon.x;
+      image.y = icon.y;
+      image.width = icon.width;
+      image.height = icon.height;
+      var iconImageUrl:String = (data as RemoteCompositeValueState).iconImageUrl;
+      if (iconImageUrl) {
+        image.source = iconImageUrl;
+      }
+      image.visible = true;
+      if (icon) {
+        icon.visible = false;
+      }
+    } else {
+      image.visible = false;
+      if (icon) {
+        icon.visible = false;
+      }
+    }
+  }
+
+  override protected function commitProperties():void {
+    super.commitProperties();
+    if (listData) {
+      if (HtmlUtil.isHtml(listData.label)) {
+        label.text = null;
+        label.htmlText = HtmlUtil.convertHtmlEntities(listData.label);
+      } else {
+        label.htmlText = null;
+        label.text = listData.label;
+      }
+      invalidateDisplayList();
+    }
+  }
+}
 }

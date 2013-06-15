@@ -13,76 +13,78 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import org.jspresso.framework.gui.remote.RAction;
-  import org.jspresso.framework.gui.remote.RIcon;
 
-  import mx.binding.utils.BindingUtils;
-  import mx.binding.utils.ChangeWatcher;
-  import mx.controls.Image;
-  import mx.controls.menuClasses.MenuItemRenderer;
+import mx.binding.utils.BindingUtils;
+import mx.binding.utils.ChangeWatcher;
+import mx.controls.Image;
+import mx.controls.menuClasses.MenuItemRenderer;
 
-  public class RIconMenuItemRenderer extends MenuItemRenderer {
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RIcon;
 
-		private var _image:Image;
-    private var _cw:ChangeWatcher;
+public class RIconMenuItemRenderer extends MenuItemRenderer {
 
-		public function RIconMenuItemRenderer() {
-		  _image = new CachedImage();
-			addChild(_image);
-		}
+  private var _image:Image;
+  private var _cw:ChangeWatcher;
 
-    private function updateState(enabled:Boolean):void {
-      syncView(data);
-      invalidateDisplayList();
-    }
-    override public function set data(value:Object):void {
-      if(value && value["data"] is RAction) {
-        if(_cw != null) {
-          _cw.reset(value["data"]);
-          updateState(value["data"]["enabled"] as Boolean);
-        } else {
-          _cw = BindingUtils.bindSetter(updateState, value["data"], "enabled", true);
-        }
-      }
-      syncView(value);
-      super.data = value;
-  	}
-    
-    private function syncView(value:Object):void {
-      if(value) {
-        var rIcon:RIcon = value["rIcon"];
-        if(rIcon) {
-          _image.source = rIcon.imageUrlSpec;
-        }
-        if(value["enabled"]) {
-          _image.alpha = 1.0;
-          label.enabled = true;
-        } else {
-          _image.alpha = 0.4;
-          label.enabled = false;
-        }
-        if(!value["label"]) {
-          value["label"] = "";
-        }
-        label.toolTip = value["description"];
-        _image.toolTip = value["description"];
-        toolTip = value["description"];
-      }
-    }
-
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-		  if(icon) {
-  			_image.x = icon.x;
-  			_image.y = icon.y;
-  			_image.width = icon.width;
-  			_image.height = icon.height;
-  			
-  			icon.visible = false;
-  			_image.visible = true;
-  		} else {
-  		  _image.visible = false;
-  		}
-		}
+  public function RIconMenuItemRenderer() {
+    _image = new CachedImage();
+    addChild(_image);
   }
+
+  private function updateState(enabled:Boolean):void {
+    syncView(data);
+    invalidateDisplayList();
+  }
+
+  override public function set data(value:Object):void {
+    if (value && value["data"] is RAction) {
+      if (_cw != null) {
+        _cw.reset(value["data"]);
+        updateState(value["data"]["enabled"] as Boolean);
+      } else {
+        _cw = BindingUtils.bindSetter(updateState, value["data"], "enabled", true);
+      }
+    }
+    syncView(value);
+    super.data = value;
+  }
+
+  private function syncView(value:Object):void {
+    if (value) {
+      var rIcon:RIcon = value["rIcon"];
+      if (rIcon) {
+        _image.source = rIcon.imageUrlSpec;
+      }
+      if (value["enabled"]) {
+        _image.alpha = 1.0;
+        label.enabled = true;
+      } else {
+        _image.alpha = 0.4;
+        label.enabled = false;
+      }
+      if (!value["label"]) {
+        value["label"] = "";
+      }
+      label.toolTip = value["description"];
+      _image.toolTip = value["description"];
+      toolTip = value["description"];
+    }
+  }
+
+  override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+    super.updateDisplayList(unscaledWidth, unscaledHeight);
+    if (icon) {
+      _image.x = icon.x;
+      _image.y = icon.y;
+      _image.width = icon.width;
+      _image.height = icon.height;
+
+      icon.visible = false;
+      _image.visible = true;
+    } else {
+      _image.visible = false;
+    }
+  }
+}
 }

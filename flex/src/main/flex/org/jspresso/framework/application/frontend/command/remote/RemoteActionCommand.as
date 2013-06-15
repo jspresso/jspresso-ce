@@ -14,23 +14,24 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
-  import org.jspresso.framework.gui.remote.RActionEvent;
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand")]
-    public class RemoteActionCommand extends RemoteCommand {
+import org.jspresso.framework.gui.remote.RActionEvent;
 
-        private var _actionEvent:RActionEvent;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand")]
+public class RemoteActionCommand extends RemoteCommand {
 
-        public function RemoteActionCommand() {
-          //default constructor.
-        }
+  private var _actionEvent:RActionEvent;
 
-        public function set actionEvent(value:RActionEvent):void {
-            _actionEvent = value;
-        }
-        public function get actionEvent():RActionEvent {
-            return _actionEvent;
-        }
-    }
+  public function RemoteActionCommand() {
+    //default constructor.
+  }
+
+  public function set actionEvent(value:RActionEvent):void {
+    _actionEvent = value;
+  }
+
+  public function get actionEvent():RActionEvent {
+    return _actionEvent;
+  }
+}
 }

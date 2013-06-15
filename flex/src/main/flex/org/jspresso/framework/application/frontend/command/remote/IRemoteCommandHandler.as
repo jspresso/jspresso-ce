@@ -13,10 +13,10 @@
  */
 
 package org.jspresso.framework.application.frontend.command.remote {
-  
-  public interface IRemoteCommandHandler {
-    
-    function registerCommand(command:RemoteCommand):void;
-    
-  }
+
+public interface IRemoteCommandHandler {
+
+  function registerCommand(command:RemoteCommand):void;
+
+}
 }

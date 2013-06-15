@@ -13,52 +13,52 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import mx.controls.Image;
-  import mx.controls.listClasses.BaseListData;
-  
-  import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-  import org.jspresso.framework.view.flex.CachedImage;
 
-  public class RemoteValueListItemRenderer extends RemoteValueDgItemRenderer {
+import mx.controls.Image;
+import mx.controls.listClasses.BaseListData;
 
-		private var image:Image;
-		private var _iconTemplate:Class;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 
-		public function RemoteValueListItemRenderer() {
-		  image = new CachedImage();
-			addChild(image);
-		}
+public class RemoteValueListItemRenderer extends RemoteValueDgItemRenderer {
 
-    public function set iconTemplate(value:Class):void {
-      _iconTemplate = value;
-    }
+  private var image:Image;
+  private var _iconTemplate:Class;
 
-  	override public function set listData(value:BaseListData):void {
-  	  super.listData = value;
-  	  listDataIcon = _iconTemplate;
-  	}
-
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			if(data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
-				image.x = icon.x;
-				image.y = icon.y;
-				image.width = icon.width;
-				image.height = icon.height;
-				var iconImageUrl:String = (data as RemoteCompositeValueState).iconImageUrl;
-				if(iconImageUrl) {
-				  image.source = iconImageUrl;
-				}
-				image.visible = true;
-				if(icon) {
-				  icon.visible = false;
-				}
-			} else {
-				image.visible = false;
-				if(icon) {
-				  icon.visible = true;
-				}
-			}
-		}
+  public function RemoteValueListItemRenderer() {
+    image = new CachedImage();
+    addChild(image);
   }
+
+  public function set iconTemplate(value:Class):void {
+    _iconTemplate = value;
+  }
+
+  override public function set listData(value:BaseListData):void {
+    super.listData = value;
+    listDataIcon = _iconTemplate;
+  }
+
+  override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+    super.updateDisplayList(unscaledWidth, unscaledHeight);
+    if (data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
+      image.x = icon.x;
+      image.y = icon.y;
+      image.width = icon.width;
+      image.height = icon.height;
+      var iconImageUrl:String = (data as RemoteCompositeValueState).iconImageUrl;
+      if (iconImageUrl) {
+        image.source = iconImageUrl;
+      }
+      image.visible = true;
+      if (icon) {
+        icon.visible = false;
+      }
+    } else {
+      image.visible = false;
+      if (icon) {
+        icon.visible = true;
+      }
+    }
+  }
+}
 }

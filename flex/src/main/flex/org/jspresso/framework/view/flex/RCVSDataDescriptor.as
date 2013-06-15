@@ -13,24 +13,25 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import mx.collections.ListCollectionView;
-  import mx.controls.treeClasses.DefaultDataDescriptor;
-  
-  import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-  
-  public class RCVSDataDescriptor extends DefaultDataDescriptor {
-    
-    public function RCVSDataDescriptor() {
-      super();
-    }
-    
-    public override function isBranch(node:Object, model:Object=null):Boolean {
-      if(node is RemoteCompositeValueState) {
-        var children:ListCollectionView = (node as RemoteCompositeValueState).children;
-        return children && children.length > 0;
 
-      }
-      return super.isBranch(node, model);
-    }
+import mx.collections.ListCollectionView;
+import mx.controls.treeClasses.DefaultDataDescriptor;
+
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+
+public class RCVSDataDescriptor extends DefaultDataDescriptor {
+
+  public function RCVSDataDescriptor() {
+    super();
   }
+
+  public override function isBranch(node:Object, model:Object = null):Boolean {
+    if (node is RemoteCompositeValueState) {
+      var children:ListCollectionView = (node as RemoteCompositeValueState).children;
+      return children && children.length > 0;
+
+    }
+    return super.isBranch(node, model);
+  }
+}
 }

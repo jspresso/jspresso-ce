@@ -14,8 +14,8 @@
 
 package org.jspresso.framework.state.remote {
 
-    public interface IRemoteStateOwner {
+public interface IRemoteStateOwner {
 
-        function get state():RemoteValueState;
-    }
+  function get state():RemoteValueState;
+}
 }

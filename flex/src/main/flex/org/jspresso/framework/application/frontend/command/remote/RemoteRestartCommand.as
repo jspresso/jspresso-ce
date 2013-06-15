@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand")]
-    public class RemoteRestartCommand extends RemoteCommand {
 
-        public function RemoteRestartCommand() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand")]
+public class RemoteRestartCommand extends RemoteCommand {
 
-    }
+  public function RemoteRestartCommand() {
+    //default constructor.
+  }
+
+}
 }

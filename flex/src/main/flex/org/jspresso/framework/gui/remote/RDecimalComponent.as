@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalComponent")]
-    public class RDecimalComponent extends RNumericComponent {
 
-        private var _maxFractionDigit:int;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalComponent")]
+public class RDecimalComponent extends RNumericComponent {
 
-        public function RDecimalComponent() {
-          //default constructor.
-        }
+  private var _maxFractionDigit:int;
 
-        public function set maxFractionDigit(value:int):void {
-            _maxFractionDigit = value;
-        }
-        public function get maxFractionDigit():int {
-            return _maxFractionDigit;
-        }
-    }
+  public function RDecimalComponent() {
+    //default constructor.
+  }
+
+  public function set maxFractionDigit(value:int):void {
+    _maxFractionDigit = value;
+  }
+
+  public function get maxFractionDigit():int {
+    return _maxFractionDigit;
+  }
+}
 }

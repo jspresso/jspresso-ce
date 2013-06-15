@@ -13,35 +13,36 @@
  */
 
 package org.jspresso.framework.util.format {
-  import mx.formatters.NumberBase;
-  
 
-  public class NumberParser extends Parser {
+import mx.formatters.NumberBase;
 
-    private var _parser:NumberBase;
-    private var _precision:uint;
+public class NumberParser extends Parser {
 
-    public function NumberParser() {
-      //default constructor.
-    }
+  private var _parser:NumberBase;
+  private var _precision:uint;
 
-    override public function parse(value:String, existingValue:Object = null):Object	{
-      if(value == null || value.length == 0) {
-        return null;
-      }
-      var prepared:String = value.replace(new RegExp("\\" + _parser.thousandsSeparatorTo,"g"), _parser.thousandsSeparatorFrom);
-      prepared = prepared.replace(new RegExp("\\" + _parser.decimalSeparatorTo, "g"), _parser.decimalSeparatorFrom);
-	    var parsedNumber:Number = Number(_parser.parseNumberString(prepared));
-	    parsedNumber.toFixed(_precision);
-	    return parsedNumber;
-    }
-    
-  	public function set numberBase(value:NumberBase):void	{
-  	  _parser = value;
-  	}
-
-  	public function set precision(value:uint):void	{
-  	  _precision = value;
-  	}
+  public function NumberParser() {
+    //default constructor.
   }
+
+  override public function parse(value:String, existingValue:Object = null):Object {
+    if (value == null || value.length == 0) {
+      return null;
+    }
+    var prepared:String = value.replace(new RegExp("\\" + _parser.thousandsSeparatorTo, "g"),
+                                        _parser.thousandsSeparatorFrom);
+    prepared = prepared.replace(new RegExp("\\" + _parser.decimalSeparatorTo, "g"), _parser.decimalSeparatorFrom);
+    var parsedNumber:Number = Number(_parser.parseNumberString(prepared));
+    parsedNumber.toFixed(_precision);
+    return parsedNumber;
+  }
+
+  public function set numberBase(value:NumberBase):void {
+    _parser = value;
+  }
+
+  public function set precision(value:uint):void {
+    _precision = value;
+  }
+}
 }

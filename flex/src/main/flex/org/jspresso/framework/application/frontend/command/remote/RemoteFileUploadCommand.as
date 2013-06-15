@@ -15,22 +15,23 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RAction;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand")]
-    public class RemoteFileUploadCommand extends RemoteFileCommand {
+import org.jspresso.framework.gui.remote.RAction;
 
-        private var _successCallbackAction:RAction;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand")]
+public class RemoteFileUploadCommand extends RemoteFileCommand {
 
-        public function RemoteFileUploadCommand() {
-          //default constructor.
-        }
+  private var _successCallbackAction:RAction;
 
-        public function set successCallbackAction(value:RAction):void {
-            _successCallbackAction = value;
-        }
-        public function get successCallbackAction():RAction {
-            return _successCallbackAction;
-        }
-    }
+  public function RemoteFileUploadCommand() {
+    //default constructor.
+  }
+
+  public function set successCallbackAction(value:RAction):void {
+    _successCallbackAction = value;
+  }
+
+  public function get successCallbackAction():RAction {
+    return _successCallbackAction;
+  }
+}
 }

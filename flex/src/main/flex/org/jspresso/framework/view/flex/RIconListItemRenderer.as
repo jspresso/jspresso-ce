@@ -13,75 +13,75 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import mx.collections.ArrayCollection;
-  import mx.controls.Image;
-  import mx.controls.List;
-  import mx.controls.listClasses.ListData;
-  import mx.controls.listClasses.ListItemRenderer;
-  
-  import org.jspresso.framework.gui.remote.RIcon;
-  import org.jspresso.framework.view.flex.CachedImage;
 
-  public class RIconListItemRenderer extends ListItemRenderer  {
+import mx.collections.ArrayCollection;
+import mx.controls.Image;
+import mx.controls.List;
+import mx.controls.listClasses.ListData;
+import mx.controls.listClasses.ListItemRenderer;
 
-		private var _image:Image;
-		
-		private var _labels:Array;
-		private var _icons:Array;
-		private var _iconTemplate:Class;
-    private var _showIcon:Boolean;
+import org.jspresso.framework.gui.remote.RIcon;
 
-		public function RIconListItemRenderer() {
-		  _image = new CachedImage();
-			addChild(_image);
-		}
+public class RIconListItemRenderer extends ListItemRenderer {
 
-    public function set labels(value:Array):void {
-      _labels = value;
-    }
+  private var _image:Image;
 
-    public function set icons(value:Array):void {
-      _icons = value;
-    }
+  private var _labels:Array;
+  private var _icons:Array;
+  private var _iconTemplate:Class;
+  private var _showIcon:Boolean;
 
-    public function set iconTemplate(value:Class):void {
-      _iconTemplate = value;
-    }
-
-    public function set showIcon(value:Boolean):void {
-      _showIcon = value;
-    }
-
-    override public function set data(value:Object):void {
-      //cannot rely on listData.rowIndex.
-      var _index:int = ((owner as List).dataProvider as ArrayCollection).getItemIndex(value);
-      //trace(">>> List index <<< " + _index);
-      listData.label = _labels[_index];
-      if (_showIcon) {
-        if (!(listData as ListData).icon) {
-          (listData as ListData).icon = _iconTemplate;
-        }
-        var _selectedIcon:RIcon = _icons[_index] as RIcon;
-        if (_selectedIcon != null) {
-          _image.source = _selectedIcon.imageUrlSpec;
-        }
-      }
-      super.data = value;
-    }
-    
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-      if(_showIcon) {
-  			_image.x = icon.x;
-  			_image.y = icon.y;
-  			_image.width = icon.width;
-  			_image.height = icon.height;
-      } else {
-        _image.visible = false;
-      }
-      if(icon) {
-        icon.visible = false;
-      }
-		}
+  public function RIconListItemRenderer() {
+    _image = new CachedImage();
+    addChild(_image);
   }
+
+  public function set labels(value:Array):void {
+    _labels = value;
+  }
+
+  public function set icons(value:Array):void {
+    _icons = value;
+  }
+
+  public function set iconTemplate(value:Class):void {
+    _iconTemplate = value;
+  }
+
+  public function set showIcon(value:Boolean):void {
+    _showIcon = value;
+  }
+
+  override public function set data(value:Object):void {
+    //cannot rely on listData.rowIndex.
+    var _index:int = ((owner as List).dataProvider as ArrayCollection).getItemIndex(value);
+    //trace(">>> List index <<< " + _index);
+    listData.label = _labels[_index];
+    if (_showIcon) {
+      if (!(listData as ListData).icon) {
+        (listData as ListData).icon = _iconTemplate;
+      }
+      var _selectedIcon:RIcon = _icons[_index] as RIcon;
+      if (_selectedIcon != null) {
+        _image.source = _selectedIcon.imageUrlSpec;
+      }
+    }
+    super.data = value;
+  }
+
+  override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+    super.updateDisplayList(unscaledWidth, unscaledHeight);
+    if (_showIcon) {
+      _image.x = icon.x;
+      _image.y = icon.y;
+      _image.width = icon.width;
+      _image.height = icon.height;
+    } else {
+      _image.visible = false;
+    }
+    if (icon) {
+      icon.visible = false;
+    }
+  }
+}
 }

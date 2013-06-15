@@ -21,8 +21,7 @@ mx|Application {
   disabledOverlayAlpha: 0;
 }
 
-jspresso|EnhancedRichTextEditor
-{
+jspresso|EnhancedRichTextEditor {
   borderThicknessLeft: 0;
   borderThicknessRight: 0;
   borderThicknessTop: 0;
@@ -32,8 +31,7 @@ jspresso|EnhancedRichTextEditor
   textAreaStyleName: richTextEditorTextArea;
 }
 
-jspresso|CollapsiblePanel
-{
+jspresso|CollapsiblePanel {
   collapseDuration: 250;
   borderAlpha: 1;
   borderThicknessLeft: 2;
@@ -41,31 +39,26 @@ jspresso|CollapsiblePanel
   borderThicknessBottom: 2;
 }
 
-resize|ResizablePanel
-{
+resize|ResizablePanel {
   disabledOverlayAlpha: 0;
 }
 
-sepy|CheckBoxExtended
-{
+sepy|CheckBoxExtended {
   paddingLeft: 0;
   paddingRight: 0;
 }
 
-.popUpButton
-{
+.popUpButton {
   textAlign: left;
 }
 
-.applicationControlBar
-{
+.applicationControlBar {
   fillAlphas: 0.5, 0.5;
-  fillColors: #BBBBBB,#666666;
+  fillColors: #BBBBBB, #666666;
   horizontalGap: 2;
 }
 
-.drawerButton
-{
+.drawerButton {
   fontSize: 12;
   textAlign: left;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
@@ -73,45 +66,38 @@ sepy|CheckBoxExtended
   paddingLeft: 10;
 }
 
-.drawerAccordion
-{
+.drawerAccordion {
   headerStyleName: drawerAccordionHeader;
 }
 
-.drawerAccordionHeader
-{
+.drawerAccordionHeader {
   fontSize: 12;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
   cornerRadius: 4;
   paddingLeft: 10;
 }
 
-.drawerCloseRight
-{
+.drawerCloseRight {
   up-skin: Embed(source="assets/images/closeaccordion2.png");
   over-skin: Embed(source="assets/images/closeaccordion2.png");
   down-skin: Embed(source="assets/images/closeaccordion2.png");
   disabled-skin: Embed(source="assets/images/closeaccordion2.png");
 }
 
-.drawerCloseLeft
-{
+.drawerCloseLeft {
   up-skin: Embed(source="assets/images/closeaccordion2.png");
   over-skin: Embed(source="assets/images/closeaccordion2.png");
   down-skin: Embed(source="assets/images/closeaccordion2.png");
   disabled-skin: Embed(source="assets/images/closeaccordion2.png");
 }
 
-.richTextEditorStatus
-{
+.richTextEditorStatus {
 }
 
-.richTextEditorTextArea
-{
+.richTextEditorTextArea {
 }
 
-.form
-{
+.form {
   paddingLeft: 2;
   paddingRight: 2;
   paddingTop: 2;
@@ -120,68 +106,57 @@ sepy|CheckBoxExtended
   verticalGap: 2;
 }
 
-.asideLabelCell
-{
+.asideLabelCell {
   verticalAlign: top;
   horizontalAlign: right;
   paddingTop: 4;
 }
 
-.aboveLabelCell
-{
+.aboveLabelCell {
   verticalAlign: bottom;
   horizontalAlign: left;
 }
 
-.componentCell
-{
+.componentCell {
   verticalAlign: top;
   horizontalAlign: left;
 }
 
-.labelComponentCell
-{
+.labelComponentCell {
   verticalAlign: top;
   horizontalAlign: left;
   paddingTop: 4;
 }
 
-.borderContainer
-{
+.borderContainer {
   horizontalGap: 1;
   verticalGap: 1;
 }
 
-.northCell
-{
+.northCell {
   paddingLeft: 2;
   paddingRight: 2;
 }
 
-.westCell
-{
+.westCell {
   horizontalAlign: left;
   paddingLeft: 2;
 }
 
-.centerCell
-{
+.centerCell {
 }
 
-.eastCell
-{
+.eastCell {
   horizontalAlign: right;
   paddingRight: 2;
 }
 
-.southCell
-{
+.southCell {
   paddingLeft: 2;
   paddingRight: 2;
 }
 
-.constrainedGridContainer
-{
+.constrainedGridContainer {
   horizontalGap: 1;
   verticalGap: 1;
 }
@@ -191,8 +166,7 @@ sepy|CheckBoxExtended
   verticalGap: 1;
 }
 
-.dateTimeField
-{
+.dateTimeField {
   horizontalGap: 1;
   verticalGap: 0;
   paddingTop: 2;
@@ -201,44 +175,37 @@ sepy|CheckBoxExtended
   paddingRight: 0;
 }
 
-.htmlEditor
-{
+.htmlEditor {
   headerHeight: 0;
 }
 
-.htmlText
-{
+.htmlText {
   borderStyle: none;
   focusAlpha: 0;
 }
 
-.actionField
-{
+.actionField {
   verticalAlign: middle;
 }
 
-.emptyActionField
-{
+.emptyActionField {
   verticalAlign: middle;
   borderStyle: none;
 }
 
-.filledActionField
-{
+.filledActionField {
   verticalAlign: middle;
   borderStyle: solid;
   borderThickness: 1;
   borderColor: #FF0000;
 }
 
-.scrollableImage
-{
+.scrollableImage {
   horizontalAlign: left;
   verticalAlign: top;
 }
 
-.unscrollableImage
-{
+.unscrollableImage {
   horizontalAlign: center;
   verticalAlign: middle;
 }

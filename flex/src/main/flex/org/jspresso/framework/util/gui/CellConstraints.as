@@ -15,61 +15,67 @@
 
 package org.jspresso.framework.util.gui {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.util.gui.CellConstraints")]
-    public class CellConstraints {
 
-        private var _column:int;
-        private var _height:int;
-        private var _heightResizable:Boolean;
-        private var _row:int;
-        private var _width:int;
-        private var _widthResizable:Boolean;
+[RemoteClass(alias="org.jspresso.framework.util.gui.CellConstraints")]
+public class CellConstraints {
 
-        public function CellConstraints() {
-          //default constructor.
-        }
+  private var _column:int;
+  private var _height:int;
+  private var _heightResizable:Boolean;
+  private var _row:int;
+  private var _width:int;
+  private var _widthResizable:Boolean;
 
-        public function set column(value:int):void {
-            _column = value;
-        }
-        public function get column():int {
-            return _column;
-        }
+  public function CellConstraints() {
+    //default constructor.
+  }
 
-        public function set height(value:int):void {
-            _height = value;
-        }
-        public function get height():int {
-            return _height;
-        }
+  public function set column(value:int):void {
+    _column = value;
+  }
 
-        public function set heightResizable(value:Boolean):void {
-            _heightResizable = value;
-        }
-        public function get heightResizable():Boolean {
-            return _heightResizable;
-        }
+  public function get column():int {
+    return _column;
+  }
 
-        public function set row(value:int):void {
-            _row = value;
-        }
-        public function get row():int {
-            return _row;
-        }
+  public function set height(value:int):void {
+    _height = value;
+  }
 
-        public function set width(value:int):void {
-            _width = value;
-        }
-        public function get width():int {
-            return _width;
-        }
+  public function get height():int {
+    return _height;
+  }
 
-        public function set widthResizable(value:Boolean):void {
-            _widthResizable = value;
-        }
-        public function get widthResizable():Boolean {
-            return _widthResizable;
-        }
-    }
+  public function set heightResizable(value:Boolean):void {
+    _heightResizable = value;
+  }
+
+  public function get heightResizable():Boolean {
+    return _heightResizable;
+  }
+
+  public function set row(value:int):void {
+    _row = value;
+  }
+
+  public function get row():int {
+    return _row;
+  }
+
+  public function set width(value:int):void {
+    _width = value;
+  }
+
+  public function get width():int {
+    return _width;
+  }
+
+  public function set widthResizable(value:Boolean):void {
+    _widthResizable = value;
+  }
+
+  public function get widthResizable():Boolean {
+    return _widthResizable;
+  }
+}
 }

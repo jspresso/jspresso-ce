@@ -13,81 +13,82 @@
  */
 
 package org.jspresso.framework.view.flex {
-  import org.jspresso.framework.gui.remote.RIcon;
 
-  import mx.containers.HBox;
-  import mx.controls.Image;
-  import mx.controls.Label;
-  import mx.core.ScrollPolicy;
-    
-  public class RIconLabel extends HBox {
-      
-    private var _label:Label;
-    private var _iconImage:Image;
-    private var _labels:Object;
-    private var _icons:Object;
-    private var _showIcon:Boolean;
-    private var _value:String;
-    
-    public function RIconLabel() {
-      horizontalScrollPolicy = ScrollPolicy.OFF;
-      verticalScrollPolicy = ScrollPolicy.OFF;
-      _label = new Label();
-      _iconImage = new CachedImage();
-      addChild(_iconImage);
-      addChild(_label);
-    }
-    
-    public function set labels(value:Object):void {
-      _labels = value;
-    }
-    
-    public function set showIcon(value:Boolean):void {
-      _showIcon = value;
-      if(_showIcon) {
-        setStyle("horizontalGap",2);
-      } else {
-        setStyle("horizontalGap",0);
-      }
-    }
+import mx.containers.HBox;
+import mx.controls.Image;
+import mx.controls.Label;
+import mx.core.ScrollPolicy;
 
-    public function set icons(value:Object):void {
-      _icons = value;
-    }
+import org.jspresso.framework.gui.remote.RIcon;
 
-    public function get value():String {
-      return _value;
-    }
+public class RIconLabel extends HBox {
 
-    public function set value(value:String):void {
-      _value = value;
-      if(value) {
-        if(_showIcon && _icons) {
-          var icon:RIcon = _icons[value] as RIcon;
-          if(icon) {
-            if(icon.dimension) {
-              _iconImage.width = icon.dimension.width;
-              _iconImage.height = icon.dimension.height;
-            }
-            _iconImage.source = icon.imageUrlSpec;
-          } else {
-            _iconImage.source = null;
-          }
-        } else {
-          _iconImage.visible = false;
-        }
-        if(_labels) {
-          var text:String = _labels[value] as String;
-          if(text) {
-            _label.text = text;
-          } else {
-            _label.text = "";
-          }
-        }
-      } else {
-        _iconImage.source = null;
-        _label.text = "";
-      }
+  private var _label:Label;
+  private var _iconImage:Image;
+  private var _labels:Object;
+  private var _icons:Object;
+  private var _showIcon:Boolean;
+  private var _value:String;
+
+  public function RIconLabel() {
+    horizontalScrollPolicy = ScrollPolicy.OFF;
+    verticalScrollPolicy = ScrollPolicy.OFF;
+    _label = new Label();
+    _iconImage = new CachedImage();
+    addChild(_iconImage);
+    addChild(_label);
+  }
+
+  public function set labels(value:Object):void {
+    _labels = value;
+  }
+
+  public function set showIcon(value:Boolean):void {
+    _showIcon = value;
+    if (_showIcon) {
+      setStyle("horizontalGap", 2);
+    } else {
+      setStyle("horizontalGap", 0);
     }
   }
+
+  public function set icons(value:Object):void {
+    _icons = value;
+  }
+
+  public function get value():String {
+    return _value;
+  }
+
+  public function set value(value:String):void {
+    _value = value;
+    if (value) {
+      if (_showIcon && _icons) {
+        var icon:RIcon = _icons[value] as RIcon;
+        if (icon) {
+          if (icon.dimension) {
+            _iconImage.width = icon.dimension.width;
+            _iconImage.height = icon.dimension.height;
+          }
+          _iconImage.source = icon.imageUrlSpec;
+        } else {
+          _iconImage.source = null;
+        }
+      } else {
+        _iconImage.visible = false;
+      }
+      if (_labels) {
+        var text:String = _labels[value] as String;
+        if (text) {
+          _label.text = text;
+        } else {
+          _label.text = "";
+        }
+      }
+    } else {
+      _iconImage.source = null;
+      _label.text = "";
+    }
+  }
+}
 }

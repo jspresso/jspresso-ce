@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.state.remote {
 
-		[Bindable]
-    [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteFormattedValueState")]
-    public class RemoteFormattedValueState extends RemoteValueState {
+[Bindable]
+[RemoteClass(alias="org.jspresso.framework.state.remote.RemoteFormattedValueState")]
+public class RemoteFormattedValueState extends RemoteValueState {
 
-        private var _valueAsObject:Object;
+  private var _valueAsObject:Object;
 
-        public function RemoteFormattedValueState() {
-          //default constructor.
-        }
+  public function RemoteFormattedValueState() {
+    //default constructor.
+  }
 
-        public function set valueAsObject(value:Object):void {
-          _valueAsObject = value;
-        }
-        public function get valueAsObject():Object {
-          return _valueAsObject;
-        }
-    }
+  public function set valueAsObject(value:Object):void {
+    _valueAsObject = value;
+  }
+
+  public function get valueAsObject():Object {
+    return _valueAsObject;
+  }
+}
 }

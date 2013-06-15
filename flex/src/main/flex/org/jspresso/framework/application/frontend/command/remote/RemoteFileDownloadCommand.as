@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand")]
-    public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
-        private var _defaultFileName:String;
-        private var _resourceId:String;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand")]
+public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
-        public function RemoteFileDownloadCommand() {
-          //default constructor.
-        }
+  private var _defaultFileName:String;
+  private var _resourceId:String;
 
-        public function set defaultFileName(value:String):void {
-            _defaultFileName = value;
-        }
-        public function get defaultFileName():String {
-            return _defaultFileName;
-        }
+  public function RemoteFileDownloadCommand() {
+    //default constructor.
+  }
 
-        public function set resourceId(value:String):void {
-            _resourceId = value;
-        }
-        public function get resourceId():String {
-            return _resourceId;
-        }
-    }
+  public function set defaultFileName(value:String):void {
+    _defaultFileName = value;
+  }
+
+  public function get defaultFileName():String {
+    return _defaultFileName;
+  }
+
+  public function set resourceId(value:String):void {
+    _resourceId = value;
+  }
+
+  public function get resourceId():String {
+    return _resourceId;
+  }
+}
 }

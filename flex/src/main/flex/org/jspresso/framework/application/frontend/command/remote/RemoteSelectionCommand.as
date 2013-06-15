@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand")]
-    public class RemoteSelectionCommand extends RemoteCommand {
 
-        private var _leadingIndex:int;
-        private var _selectedIndices:Array;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand")]
+public class RemoteSelectionCommand extends RemoteCommand {
 
-        public function RemoteSelectionCommand() {
-          //default constructor.
-        }
+  private var _leadingIndex:int;
+  private var _selectedIndices:Array;
 
-        public function set leadingIndex(value:int):void {
-            _leadingIndex = value;
-        }
-        public function get leadingIndex():int {
-            return _leadingIndex;
-        }
+  public function RemoteSelectionCommand() {
+    //default constructor.
+  }
 
-        public function set selectedIndices(value:Array):void {
-            _selectedIndices = value;
-        }
-        public function get selectedIndices():Array {
-            return _selectedIndices;
-        }
-    }
+  public function set leadingIndex(value:int):void {
+    _leadingIndex = value;
+  }
+
+  public function get leadingIndex():int {
+    return _leadingIndex;
+  }
+
+  public function set selectedIndices(value:Array):void {
+    _selectedIndices = value;
+  }
+
+  public function get selectedIndices():Array {
+    return _selectedIndices;
+  }
+}
 }

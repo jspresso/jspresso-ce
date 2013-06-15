@@ -12,42 +12,44 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.view.flex {
-  import mx.controls.List;
-  import mx.controls.listClasses.IListItemRenderer;
-  
-  /** 
-   *  List that uses checkboxes for multiple selection
-   */
-  public class EnhancedList extends List {
-    
-    //Allow selection managed by checkboxes
-    private var _cumulativeSelection:Boolean;
-    
-    public function EnhancedList()	{
-      super();
-      _cumulativeSelection = false;
-    }
 
-    public function set cumulativeSelection(value:Boolean):void {
-      _cumulativeSelection = value;
-    }
-    
-    // fake all mouse interaction as if it had the ctrl key down
-    override protected function selectItem(item:IListItemRenderer,
-                                           shiftKey:Boolean, ctrlKey:Boolean,
-                                           transition:Boolean = true):Boolean {
-      if (_cumulativeSelection) {
-        return super.selectItem(item, false, true, transition);
-      }
-      return super.selectItem(item, shiftKey, ctrlKey, transition);
-    }
+import mx.controls.List;
+import mx.controls.listClasses.IListItemRenderer;
 
-    /**
-     *  Workarounds a NPE that occurs when a selection is made before the table is drawn.
-     */
-    override protected function UIDToItemRenderer(uid:String):IListItemRenderer {
-      if (!(listContent && visibleData)) return null;
-      return super.UIDToItemRenderer(uid);
-    }
+/**
+ *  List that uses checkboxes for multiple selection
+ */
+public class EnhancedList extends List {
+
+  //Allow selection managed by checkboxes
+  private var _cumulativeSelection:Boolean;
+
+  public function EnhancedList() {
+    super();
+    _cumulativeSelection = false;
   }
+
+  public function set cumulativeSelection(value:Boolean):void {
+    _cumulativeSelection = value;
+  }
+
+  // fake all mouse interaction as if it had the ctrl key down
+  override protected function selectItem(item:IListItemRenderer, shiftKey:Boolean, ctrlKey:Boolean,
+                                         transition:Boolean = true):Boolean {
+    if (_cumulativeSelection) {
+      return super.selectItem(item, false, true, transition);
+    }
+    return super.selectItem(item, shiftKey, ctrlKey, transition);
+  }
+
+  /**
+   *  Workarounds a NPE that occurs when a selection is made before the table is drawn.
+   */
+  override protected function UIDToItemRenderer(uid:String):IListItemRenderer {
+    if (!(listContent && visibleData)) {
+      return null;
+    }
+    return super.UIDToItemRenderer(uid);
+  }
+}
 }

@@ -13,9 +13,9 @@
  */
 
 package org.jspresso.framework.i18n {
-  
-  public interface ITranslationProvider {
-    
-    function translate(key:String):String;
-  }
+
+public interface ITranslationProvider {
+
+  function translate(key:String):String;
+}
 }

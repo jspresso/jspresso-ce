@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTextComponent")]
-    public class RTextComponent extends RComponent {
 
-        private var _maxLength:int;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RTextComponent")]
+public class RTextComponent extends RComponent {
 
-        public function RTextComponent() {
-          //default constructor.
-        }
+  private var _maxLength:int;
 
-        public function set maxLength(value:int):void {
-            _maxLength = value;
-        }
-        public function get maxLength():int {
-            return _maxLength;
-        }
-    }
+  public function RTextComponent() {
+    //default constructor.
+  }
+
+  public function set maxLength(value:int):void {
+    _maxLength = value;
+  }
+
+  public function get maxLength():int {
+    return _maxLength;
+  }
+}
 }

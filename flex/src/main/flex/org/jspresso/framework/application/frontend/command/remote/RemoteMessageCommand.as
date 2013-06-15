@@ -15,46 +15,50 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RIcon;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand")]
-    public class RemoteMessageCommand extends RemoteCommand {
+import org.jspresso.framework.gui.remote.RIcon;
 
-        private var _message:String;
-        private var _messageIcon:RIcon;
-        private var _title:String;
-        private var _titleIcon:RIcon;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand")]
+public class RemoteMessageCommand extends RemoteCommand {
 
-        public function RemoteMessageCommand() {
-          //default constructor.
-        }
+  private var _message:String;
+  private var _messageIcon:RIcon;
+  private var _title:String;
+  private var _titleIcon:RIcon;
 
-        public function set message(value:String):void {
-            _message = value;
-        }
-        public function get message():String {
-            return _message;
-        }
+  public function RemoteMessageCommand() {
+    //default constructor.
+  }
 
-        public function set messageIcon(value:RIcon):void {
-            _messageIcon = value;
-        }
-        public function get messageIcon():RIcon {
-            return _messageIcon;
-        }
+  public function set message(value:String):void {
+    _message = value;
+  }
 
-        public function set title(value:String):void {
-            _title = value;
-        }
-        public function get title():String {
-            return _title;
-        }
+  public function get message():String {
+    return _message;
+  }
 
-        public function set titleIcon(value:RIcon):void {
-            _titleIcon = value;
-        }
-        public function get titleIcon():RIcon {
-            return _titleIcon;
-        }
-    }
+  public function set messageIcon(value:RIcon):void {
+    _messageIcon = value;
+  }
+
+  public function get messageIcon():RIcon {
+    return _messageIcon;
+  }
+
+  public function set title(value:String):void {
+    _title = value;
+  }
+
+  public function get title():String {
+    return _title;
+  }
+
+  public function set titleIcon(value:RIcon):void {
+    _titleIcon = value;
+  }
+
+  public function get titleIcon():RIcon {
+    return _titleIcon;
+  }
+}
 }

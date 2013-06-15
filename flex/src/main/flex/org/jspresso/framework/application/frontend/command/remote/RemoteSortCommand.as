@@ -15,37 +15,40 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand")]
-    public class RemoteSortCommand extends RemoteCommand {
 
-        private var _orderingProperties:Object;
-        private var _viewStateGuid:String;
-        private var _viewStatePermId:String;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand")]
+public class RemoteSortCommand extends RemoteCommand {
 
-        public function RemoteSortCommand() {
-          //default constructor.
-        }
+  private var _orderingProperties:Object;
+  private var _viewStateGuid:String;
+  private var _viewStatePermId:String;
 
-        public function set orderingProperties(value:Object):void {
-            _orderingProperties = value;
-        }
-        public function get orderingProperties():Object {
-            return _orderingProperties;
-        }
+  public function RemoteSortCommand() {
+    //default constructor.
+  }
 
-        public function set viewStateGuid(value:String):void {
-            _viewStateGuid = value;
-        }
-        public function get viewStateGuid():String {
-            return _viewStateGuid;
-        }
+  public function set orderingProperties(value:Object):void {
+    _orderingProperties = value;
+  }
 
-        public function set viewStatePermId(value:String):void {
-            _viewStatePermId = value;
-        }
-        public function get viewStatePermId():String {
-            return _viewStatePermId;
-        }
-    }
+  public function get orderingProperties():Object {
+    return _orderingProperties;
+  }
+
+  public function set viewStateGuid(value:String):void {
+    _viewStateGuid = value;
+  }
+
+  public function get viewStateGuid():String {
+    return _viewStateGuid;
+  }
+
+  public function set viewStatePermId(value:String):void {
+    _viewStatePermId = value;
+  }
+
+  public function get viewStatePermId():String {
+    return _viewStatePermId;
+  }
+}
 }

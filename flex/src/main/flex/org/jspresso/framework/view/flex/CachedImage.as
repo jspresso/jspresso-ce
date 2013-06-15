@@ -12,59 +12,51 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.view.flex {
-  import flash.display.Bitmap;
-  import flash.events.Event;
-  import flash.system.ApplicationDomain;
-  import flash.system.LoaderContext;
-  import flash.system.Security;
-  import flash.system.SecurityDomain;
-  import flash.utils.Dictionary;
-  
-  import mx.controls.Image;
-  
-  public class CachedImage extends Image
-  {
-    static private var imageCache:Dictionary = new Dictionary(true);
-    
-    public function CachedImage()
-    {
-      super();
-      
-      // Maybe useful, was necessary for the first Flash 10.1 Beta (thanks Adobe ;-(
-      if (Security.sandboxType != Security.LOCAL_TRUSTED)
-      {
-        var ctx:LoaderContext = new LoaderContext();
-        
-        ctx.checkPolicyFile = true;
-        ctx.applicationDomain = ApplicationDomain.currentDomain;
-        ctx.securityDomain = SecurityDomain.currentDomain;
-        
-        this.loaderContext = ctx;
-      }			
-      
-      this.addEventListener(Event.COMPLETE, onImageComplete);
+
+import flash.display.Bitmap;
+import flash.events.Event;
+import flash.system.ApplicationDomain;
+import flash.system.LoaderContext;
+import flash.system.Security;
+import flash.system.SecurityDomain;
+import flash.utils.Dictionary;
+
+import mx.controls.Image;
+
+public class CachedImage extends Image {
+  static private var imageCache:Dictionary = new Dictionary(true);
+
+  public function CachedImage() {
+    super();
+
+    // Maybe useful, was necessary for the first Flash 10.1 Beta (thanks Adobe ;-(
+    if (Security.sandboxType != Security.LOCAL_TRUSTED) {
+      var ctx:LoaderContext = new LoaderContext();
+
+      ctx.checkPolicyFile = true;
+      ctx.applicationDomain = ApplicationDomain.currentDomain;
+      ctx.securityDomain = SecurityDomain.currentDomain;
+
+      this.loaderContext = ctx;
     }
-    
-    private function onImageComplete (event : Event) : void
-    {
-      var image:Image = event.target as Image;
-      
-      if (!imageCache.hasOwnProperty(image.source as String))
-      {
-        imageCache[this.source] = Bitmap(this.content).bitmapData;
-      }
-    } 
-    
-    override public function set source(value:Object):void
-    {
-      if (imageCache.hasOwnProperty(value as String))
-      {
-        super.source = new Bitmap(imageCache[value],'auto',true);
-      }
-      else
-      {
-        super.source = value;
-      }
+
+    this.addEventListener(Event.COMPLETE, onImageComplete);
+  }
+
+  private function onImageComplete(event:Event):void {
+    var image:Image = event.target as Image;
+
+    if (!imageCache.hasOwnProperty(image.source as String)) {
+      imageCache[this.source] = Bitmap(this.content).bitmapData;
     }
   }
+
+  override public function set source(value:Object):void {
+    if (imageCache.hasOwnProperty(value as String)) {
+      super.source = new Bitmap(imageCache[value], 'auto', true);
+    } else {
+      super.source = value;
+    }
+  }
+}
 }

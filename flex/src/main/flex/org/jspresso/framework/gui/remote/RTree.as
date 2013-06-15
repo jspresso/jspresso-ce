@@ -15,29 +15,31 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTree")]
-    public class RTree extends RComponent {
 
-        private var _expanded:Boolean;
-        private var _rowAction:RAction;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RTree")]
+public class RTree extends RComponent {
 
-        public function RTree() {
-          //default constructor.
-        }
+  private var _expanded:Boolean;
+  private var _rowAction:RAction;
 
-        public function set expanded(value:Boolean):void {
-            _expanded = value;
-        }
-        public function get expanded():Boolean {
-            return _expanded;
-        }
+  public function RTree() {
+    //default constructor.
+  }
 
-        public function set rowAction(value:RAction):void {
-            _rowAction = value;
-        }
-        public function get rowAction():RAction {
-            return _rowAction;
-        }
-    }
+  public function set expanded(value:Boolean):void {
+    _expanded = value;
+  }
+
+  public function get expanded():Boolean {
+    return _expanded;
+  }
+
+  public function set rowAction(value:RAction):void {
+    _rowAction = value;
+  }
+
+  public function get rowAction():RAction {
+    return _rowAction;
+  }
+}
 }

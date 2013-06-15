@@ -15,32 +15,33 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTabContainer")]
-    public class RTabContainer extends RContainer {
 
-        private var _tabs:Array;
-        private var _selectedIndex:int;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RTabContainer")]
+public class RTabContainer extends RContainer {
 
-        public function RTabContainer() {
-          //default constructor.
-        }
+  private var _tabs:Array;
+  private var _selectedIndex:int;
 
-        public function set tabs(value:Array):void {
-            _tabs = value;
-        }
-        public function get tabs():Array {
-            return _tabs;
-        }
-  
-        [Bindable]
-        public function get selectedIndex():int {
-          return _selectedIndex;
-        }
+  public function RTabContainer() {
+    //default constructor.
+  }
 
-        public function set selectedIndex(value:int):void {
-          _selectedIndex = value;
-        }
+  public function set tabs(value:Array):void {
+    _tabs = value;
+  }
 
-    }
+  public function get tabs():Array {
+    return _tabs;
+  }
+
+  [Bindable]
+  public function get selectedIndex():int {
+    return _selectedIndex;
+  }
+
+  public function set selectedIndex(value:int):void {
+    _selectedIndex = value;
+  }
+
+}
 }

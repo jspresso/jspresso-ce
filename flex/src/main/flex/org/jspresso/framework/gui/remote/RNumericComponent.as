@@ -15,38 +15,40 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RNumericComponent")]
-    public class RNumericComponent extends RComponent {
 
-        private var _maxValue:Number;
-        private var _minValue:Number;
-        private var _horizontalAlignment:String;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RNumericComponent")]
+public class RNumericComponent extends RComponent {
 
-        public function RNumericComponent() {
-          //default constructor.
-        }
+  private var _maxValue:Number;
+  private var _minValue:Number;
+  private var _horizontalAlignment:String;
 
-        public function set maxValue(value:Number):void {
-            _maxValue = value;
-        }
-        public function get maxValue():Number {
-            return _maxValue;
-        }
+  public function RNumericComponent() {
+    //default constructor.
+  }
 
-        public function set minValue(value:Number):void {
-            _minValue = value;
-        }
-        public function get minValue():Number {
-            return _minValue;
-        }
+  public function set maxValue(value:Number):void {
+    _maxValue = value;
+  }
 
-        public function get horizontalAlignment():String {
-          return _horizontalAlignment;
-        }
-        
-        public function set horizontalAlignment(value:String):void {
-          _horizontalAlignment = value;
-        }
-    }
+  public function get maxValue():Number {
+    return _maxValue;
+  }
+
+  public function set minValue(value:Number):void {
+    _minValue = value;
+  }
+
+  public function get minValue():Number {
+    return _minValue;
+  }
+
+  public function get horizontalAlignment():String {
+    return _horizontalAlignment;
+  }
+
+  public function set horizontalAlignment(value:String):void {
+    _horizontalAlignment = value;
+  }
+}
 }

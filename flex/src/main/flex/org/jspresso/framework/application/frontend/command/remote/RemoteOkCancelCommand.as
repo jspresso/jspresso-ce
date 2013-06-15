@@ -15,30 +15,32 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RAction;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand")]
-    public class RemoteOkCancelCommand extends RemoteMessageCommand {
+import org.jspresso.framework.gui.remote.RAction;
 
-        private var _cancelAction:RAction;
-        private var _okAction:RAction;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand")]
+public class RemoteOkCancelCommand extends RemoteMessageCommand {
 
-        public function RemoteOkCancelCommand() {
-          //default constructor.
-        }
+  private var _cancelAction:RAction;
+  private var _okAction:RAction;
 
-        public function set cancelAction(value:RAction):void {
-            _cancelAction = value;
-        }
-        public function get cancelAction():RAction {
-            return _cancelAction;
-        }
+  public function RemoteOkCancelCommand() {
+    //default constructor.
+  }
 
-        public function set okAction(value:RAction):void {
-            _okAction = value;
-        }
-        public function get okAction():RAction {
-            return _okAction;
-        }
-    }
+  public function set cancelAction(value:RAction):void {
+    _cancelAction = value;
+  }
+
+  public function get cancelAction():RAction {
+    return _cancelAction;
+  }
+
+  public function set okAction(value:RAction):void {
+    _okAction = value;
+  }
+
+  public function get okAction():RAction {
+    return _okAction;
+  }
+}
 }

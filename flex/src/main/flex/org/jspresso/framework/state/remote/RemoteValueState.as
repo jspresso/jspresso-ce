@@ -15,51 +15,52 @@
 
 package org.jspresso.framework.state.remote {
 
-    import org.jspresso.framework.util.remote.RemotePeer;
-		
-		[Bindable]
-    [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteValueState")]
-    public dynamic class RemoteValueState extends RemotePeer {
+import org.jspresso.framework.util.remote.RemotePeer;
 
-        private var _readable:Boolean;
-        private var _value:Object;
-        private var _writable:Boolean;
-        private var _parent:RemoteCompositeValueState;
+[Bindable]
+[RemoteClass(alias="org.jspresso.framework.state.remote.RemoteValueState")]
+public dynamic class RemoteValueState extends RemotePeer {
 
-        public function RemoteValueState() {
-          //default constructor.
-        }
+  private var _readable:Boolean;
+  private var _value:Object;
+  private var _writable:Boolean;
+  private var _parent:RemoteCompositeValueState;
 
-        public function set readable(value:Boolean):void {
-            _readable = value;
-        }
-        public function get readable():Boolean {
-            return _readable;
-        }
+  public function RemoteValueState() {
+    //default constructor.
+  }
 
-        public function set value(value:Object):void {
-            _value = value;
-        }
-        public function get value():Object {
-            return _value;
-        }
+  public function set readable(value:Boolean):void {
+    _readable = value;
+  }
 
-        public function set writable(value:Boolean):void {
-            _writable = value;
-        }
-        public function get writable():Boolean {
-            return _writable;
-        }
+  public function get readable():Boolean {
+    return _readable;
+  }
 
-        public function get parent():RemoteCompositeValueState
-        {
-          return _parent;
-        }
+  public function set value(value:Object):void {
+    _value = value;
+  }
 
-        public function set parent(value:RemoteCompositeValueState):void
-        {
-          _parent = value;
-        }
+  public function get value():Object {
+    return _value;
+  }
 
-    }
+  public function set writable(value:Boolean):void {
+    _writable = value;
+  }
+
+  public function get writable():Boolean {
+    return _writable;
+  }
+
+  public function get parent():RemoteCompositeValueState {
+    return _parent;
+  }
+
+  public function set parent(value:RemoteCompositeValueState):void {
+    _parent = value;
+  }
+
+}
 }

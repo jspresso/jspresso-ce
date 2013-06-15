@@ -15,38 +15,41 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RAction;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand")]
-    public class RemoteFileCommand extends RemoteCommand {
+import org.jspresso.framework.gui.remote.RAction;
 
-        private var _cancelCallbackAction:RAction;
-        private var _fileFilter:Object;
-        private var _fileUrl:String;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand")]
+public class RemoteFileCommand extends RemoteCommand {
 
-        public function RemoteFileCommand() {
-          //default constructor.
-        }
+  private var _cancelCallbackAction:RAction;
+  private var _fileFilter:Object;
+  private var _fileUrl:String;
 
-        public function set cancelCallbackAction(value:RAction):void {
-            _cancelCallbackAction = value;
-        }
-        public function get cancelCallbackAction():RAction {
-            return _cancelCallbackAction;
-        }
+  public function RemoteFileCommand() {
+    //default constructor.
+  }
 
-        public function set fileFilter(value:Object):void {
-            _fileFilter = value;
-        }
-        public function get fileFilter():Object {
-            return _fileFilter;
-        }
+  public function set cancelCallbackAction(value:RAction):void {
+    _cancelCallbackAction = value;
+  }
 
-        public function set fileUrl(value:String):void {
-            _fileUrl = value;
-        }
-        public function get fileUrl():String {
-            return _fileUrl;
-        }
-    }
+  public function get cancelCallbackAction():RAction {
+    return _cancelCallbackAction;
+  }
+
+  public function set fileFilter(value:Object):void {
+    _fileFilter = value;
+  }
+
+  public function get fileFilter():Object {
+    return _fileFilter;
+  }
+
+  public function set fileUrl(value:String):void {
+    _fileUrl = value;
+  }
+
+  public function get fileUrl():String {
+    return _fileUrl;
+  }
+}
 }

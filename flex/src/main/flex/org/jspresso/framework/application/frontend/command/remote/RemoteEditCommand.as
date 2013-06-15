@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand")]
-    public class RemoteEditCommand extends RemoteCommand {
 
-        public function RemoteEditCommand() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand")]
+public class RemoteEditCommand extends RemoteCommand {
 
-    }
+  public function RemoteEditCommand() {
+    //default constructor.
+  }
+
+}
 }

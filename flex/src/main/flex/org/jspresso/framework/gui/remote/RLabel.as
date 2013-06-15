@@ -15,23 +15,23 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RLabel")]
-    public class RLabel extends RTextComponent {
 
-      private var _horizontalAlignment:String;
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RLabel")]
+public class RLabel extends RTextComponent {
 
-      public function RLabel() {
-          //default constructor.
-      }
+  private var _horizontalAlignment:String;
 
-      public function get horizontalAlignment():String {
-        return _horizontalAlignment;
-      }
+  public function RLabel() {
+    //default constructor.
+  }
 
-      public function set horizontalAlignment(value:String):void {
-        _horizontalAlignment = value;
-      }
+  public function get horizontalAlignment():String {
+    return _horizontalAlignment;
+  }
 
-    }
+  public function set horizontalAlignment(value:String):void {
+    _horizontalAlignment = value;
+  }
+
+}
 }

@@ -15,21 +15,22 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand")]
-    public class RemoteWritabilityCommand extends RemoteCommand {
 
-        private var _writable:Boolean;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand")]
+public class RemoteWritabilityCommand extends RemoteCommand {
 
-        public function RemoteWritabilityCommand() {
-          //default constructor.
-        }
+  private var _writable:Boolean;
 
-        public function set writable(value:Boolean):void {
-            _writable = value;
-        }
-        public function get writable():Boolean {
-            return _writable;
-        }
-    }
+  public function RemoteWritabilityCommand() {
+    //default constructor.
+  }
+
+  public function set writable(value:Boolean):void {
+    _writable = value;
+  }
+
+  public function get writable():Boolean {
+    return _writable;
+  }
+}
 }

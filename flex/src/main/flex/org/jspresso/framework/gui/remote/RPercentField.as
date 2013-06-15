@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RPercentField")]
-    public class RPercentField extends RDecimalComponent {
 
-        public function RPercentField() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RPercentField")]
+public class RPercentField extends RDecimalComponent {
 
-    }
+  public function RPercentField() {
+    //default constructor.
+  }
+
+}
 }

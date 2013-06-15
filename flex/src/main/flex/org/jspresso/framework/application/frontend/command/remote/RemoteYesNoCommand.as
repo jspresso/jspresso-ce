@@ -15,30 +15,32 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RAction;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand")]
-    public class RemoteYesNoCommand extends RemoteMessageCommand {
+import org.jspresso.framework.gui.remote.RAction;
 
-        private var _noAction:RAction;
-        private var _yesAction:RAction;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand")]
+public class RemoteYesNoCommand extends RemoteMessageCommand {
 
-        public function RemoteYesNoCommand() {
-          //default constructor.
-        }
+  private var _noAction:RAction;
+  private var _yesAction:RAction;
 
-        public function set noAction(value:RAction):void {
-            _noAction = value;
-        }
-        public function get noAction():RAction {
-            return _noAction;
-        }
+  public function RemoteYesNoCommand() {
+    //default constructor.
+  }
 
-        public function set yesAction(value:RAction):void {
-            _yesAction = value;
-        }
-        public function get yesAction():RAction {
-            return _yesAction;
-        }
-    }
+  public function set noAction(value:RAction):void {
+    _noAction = value;
+  }
+
+  public function get noAction():RAction {
+    return _noAction;
+  }
+
+  public function set yesAction(value:RAction):void {
+    _yesAction = value;
+  }
+
+  public function get yesAction():RAction {
+    return _yesAction;
+  }
+}
 }

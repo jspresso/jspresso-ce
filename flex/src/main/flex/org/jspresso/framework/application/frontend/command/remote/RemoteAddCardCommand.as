@@ -14,32 +14,33 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
-  import org.jspresso.framework.gui.remote.RComponent;
-  
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand")]
-    public class RemoteAddCardCommand extends RemoteCommand {
+import org.jspresso.framework.gui.remote.RComponent;
 
-        private var _cardName:String;
-        private var _card:RComponent;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand")]
+public class RemoteAddCardCommand extends RemoteCommand {
 
-        public function RemoteAddCardCommand() {
-          //default constructor.
-        }
+  private var _cardName:String;
+  private var _card:RComponent;
 
-        public function set cardName(value:String):void {
-            _cardName = value;
-        }
-        public function get cardName():String {
-            return _cardName;
-        }
+  public function RemoteAddCardCommand() {
+    //default constructor.
+  }
 
-        public function set card(value:RComponent):void {
-            _card = value;
-        }
-        public function get card():RComponent {
-            return _card;
-        }
-   }
+  public function set cardName(value:String):void {
+    _cardName = value;
+  }
+
+  public function get cardName():String {
+    return _cardName;
+  }
+
+  public function set card(value:RComponent):void {
+    _card = value;
+  }
+
+  public function get card():RComponent {
+    return _card;
+  }
+}
 }

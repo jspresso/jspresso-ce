@@ -15,48 +15,42 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand")]
-    public class RemoteTableChangedCommand extends RemoteCommand {
 
-      private var _tableId:String;
-      private var _columnIds:Array;
-      private var _columnWidths:Array;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand")]
+public class RemoteTableChangedCommand extends RemoteCommand {
 
-      public function RemoteTableChangedCommand() {
-        //default constructor.
-      }
+  private var _tableId:String;
+  private var _columnIds:Array;
+  private var _columnWidths:Array;
 
-      public function get tableId():String
-      {
-        return _tableId;
-      }
+  public function RemoteTableChangedCommand() {
+    //default constructor.
+  }
 
-      public function set tableId(value:String):void
-      {
-        _tableId = value;
-      }
+  public function get tableId():String {
+    return _tableId;
+  }
 
-      public function get columnIds():Array
-      {
-        return _columnIds;
-      }
+  public function set tableId(value:String):void {
+    _tableId = value;
+  }
 
-      public function set columnIds(value:Array):void
-      {
-        _columnIds = value;
-      }
+  public function get columnIds():Array {
+    return _columnIds;
+  }
 
-      public function get columnWidths():Array
-      {
-        return _columnWidths;
-      }
+  public function set columnIds(value:Array):void {
+    _columnIds = value;
+  }
 
-      public function set columnWidths(value:Array):void
-      {
-        _columnWidths = value;
-      }
+  public function get columnWidths():Array {
+    return _columnWidths;
+  }
+
+  public function set columnWidths(value:Array):void {
+    _columnWidths = value;
+  }
 
 
-    }
+}
 }

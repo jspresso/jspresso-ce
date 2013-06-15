@@ -15,13 +15,13 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand")]
-    public class RemoteFocusCommand extends RemoteCommand {
 
-        public function RemoteFocusCommand() {
-          //default constructor.
-        }
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand")]
+public class RemoteFocusCommand extends RemoteCommand {
 
-    }
+  public function RemoteFocusCommand() {
+    //default constructor.
+  }
+
+}
 }

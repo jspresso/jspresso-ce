@@ -12,35 +12,35 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.util.remote.registry {
-  import org.jspresso.framework.util.remote.IRemotePeer;
-  
-  
-  public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
-    
-    private var _backingStore:Object;
-    
-    public function BasicRemotePeerRegistry() {
-      _backingStore = {};
-    }
 
-    public function register(remotePeer:IRemotePeer):void {
-      if(remotePeer && remotePeer.guid) {
-        _backingStore[remotePeer.guid] = remotePeer;
-      }
-    }
+import org.jspresso.framework.util.remote.IRemotePeer;
 
-    public function getRegistered(guid:String):IRemotePeer {
-      return _backingStore[guid];
-    }
+public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
-    public function unregister(remotePeer:IRemotePeer):void {
-      if(remotePeer && remotePeer.guid) {
-        delete _backingStore[remotePeer.guid];
-      }
-    }
+  private var _backingStore:Object;
 
-    public function isRegistered(guid:String):Boolean {
-      return _backingStore.hasOwnProperty(guid);
+  public function BasicRemotePeerRegistry() {
+    _backingStore = {};
+  }
+
+  public function register(remotePeer:IRemotePeer):void {
+    if (remotePeer && remotePeer.guid) {
+      _backingStore[remotePeer.guid] = remotePeer;
     }
   }
+
+  public function getRegistered(guid:String):IRemotePeer {
+    return _backingStore[guid];
+  }
+
+  public function unregister(remotePeer:IRemotePeer):void {
+    if (remotePeer && remotePeer.guid) {
+      delete _backingStore[remotePeer.guid];
+    }
+  }
+
+  public function isRegistered(guid:String):Boolean {
+    return _backingStore.hasOwnProperty(guid);
+  }
+}
 }

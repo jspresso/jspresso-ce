@@ -15,30 +15,32 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RComponent;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand")]
-    public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
+import org.jspresso.framework.gui.remote.RComponent;
 
-        private var _workspaceName:String;
-        private var _workspaceView:RComponent;
+[RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand")]
+public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
 
-        public function RemoteWorkspaceDisplayCommand() {
-          //default constructor.
-        }
+  private var _workspaceName:String;
+  private var _workspaceView:RComponent;
 
-        public function set workspaceName(value:String):void {
-            _workspaceName = value;
-        }
-        public function get workspaceName():String {
-            return _workspaceName;
-        }
+  public function RemoteWorkspaceDisplayCommand() {
+    //default constructor.
+  }
 
-        public function set workspaceView(value:RComponent):void {
-            _workspaceView = value;
-        }
-        public function get workspaceView():RComponent {
-            return _workspaceView;
-        }
-    }
+  public function set workspaceName(value:String):void {
+    _workspaceName = value;
+  }
+
+  public function get workspaceName():String {
+    return _workspaceName;
+  }
+
+  public function set workspaceView(value:RComponent):void {
+    _workspaceView = value;
+  }
+
+  public function get workspaceView():RComponent {
+    return _workspaceView;
+  }
+}
 }
