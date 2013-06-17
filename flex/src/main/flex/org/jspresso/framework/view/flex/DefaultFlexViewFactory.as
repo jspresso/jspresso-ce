@@ -26,6 +26,7 @@ import flex.utils.ui.resize.ResizablePanel;
 import flexlib.containers.ButtonScrollingCanvas;
 
 import mx.binding.utils.BindingUtils;
+import mx.collections.ICollectionView;
 import mx.collections.ListCollectionView;
 import mx.containers.ApplicationControlBar;
 import mx.containers.Box;
@@ -149,12 +150,6 @@ import org.sepy.ui.CheckBoxExtended;
 
 public class DefaultFlexViewFactory {
 
-  [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
-  private var _iconTemplate:Class;
-
-  [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
-  private var _resetIcon:Class;
-
   private static const TEMPLATE_CHAR:String = "O";
   private static const FIELD_MAX_CHAR_COUNT:int = 32;
   private static const NUMERIC_FIELD_MAX_CHAR_COUNT:int = 16;
@@ -163,7 +158,8 @@ public class DefaultFlexViewFactory {
   private static const LONG_TIME_TEMPLATE:String = "00:00:00";
   private static const SHORT_TIME_TEMPLATE:String = "00:00";
   private static const ICON_WIDTH:int = 16;
-
+  [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
+  private var _resetIcon:Class;
   private var _remotePeerRegistry:IRemotePeerRegistry;
   private var _actionHandler:IActionHandler;
   private var _commandHandler:IRemoteCommandHandler;
@@ -171,10 +167,11 @@ public class DefaultFlexViewFactory {
   private var _timeFormatter:DateFormatter;
   private var _shortTimeFormatter:DateFormatter;
   private var _passwordFormatter:PasswordFormatter;
+  private var _lastActionTimestamp:Date = new Date();
+  [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
+  private var _iconTemplate:Class;
   private var _datePattern:String;
   private var _firstDayOfWeek:int;
-
-  private var _lastActionTimestamp:Date = new Date();
 
   public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry, actionHandler:IActionHandler,
                                          commandHandler:IRemoteCommandHandler) {
@@ -188,6 +185,34 @@ public class DefaultFlexViewFactory {
     _shortTimeFormatter = new DateFormatter();
     _shortTimeFormatter.formatString = "JJ:NN";
     ToolTipManager.toolTipClass = HtmlToolTip;
+  }
+
+  public static function getAlphaFromArgb(argb:String):Number {
+    if (argb && argb.length == 10) {
+      var alpha:Number = parseInt(argb.substr(2, 2), 16);
+      return alpha / 255;
+    }
+    return 1.0;
+  }
+
+  public function get iconTemplate():Class {
+    return _iconTemplate;
+  }
+
+  public function get datePattern():String {
+    return _datePattern;
+  }
+
+  public function set datePattern(value:String):void {
+    _datePattern = value;
+  }
+
+  public function get firstDayOfWeek():int {
+    return _firstDayOfWeek;
+  }
+
+  public function set firstDayOfWeek(value:int):void {
+    _firstDayOfWeek = value;
   }
 
   public function createComponent(remoteComponent:RComponent, registerPeers:Boolean = true):UIComponent {
@@ -276,19 +301,6 @@ public class DefaultFlexViewFactory {
     return dialog;
   }
 
-  protected function applyComponentPreferredSize(component:UIComponent, preferredSize:Dimension):void {
-    if (preferredSize) {
-      component.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
-        if (preferredSize.width > 0) {
-          component.width = preferredSize.width;
-        }
-        if (preferredSize.height > 0) {
-          component.height = preferredSize.height;
-        }
-      });
-    }
-  }
-
   public function applyComponentStyle(component:*, remoteComponent:RComponent):void {
     if (remoteComponent.foreground) {
       component.setStyle("color", remoteComponent.foreground);
@@ -319,53 +331,6 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  protected function getColorFromArgb(argb:String):SolidColor {
-    var color:uint = parseInt(argb.substr(argb.length - 6, 6), 16);
-    return new SolidColor(color, getAlphaFromArgb(argb));
-  }
-
-  public static function getAlphaFromArgb(argb:String):Number {
-    if (argb && argb.length == 10) {
-      var alpha:Number = parseInt(argb.substr(2, 2), 16);
-      return alpha / 255;
-    }
-    return 1.0;
-  }
-
-  protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
-    var toolBar:UIComponent;
-    var secondaryToolBar:UIComponent;
-    if (!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
-      toolBar = createToolBar(remoteComponent, component);
-    } else {
-      toolBar = createDefaultToolBar(remoteComponent, component);
-    }
-    if (remoteComponent.secondaryActionLists != null && remoteComponent.secondaryActionLists.length > 0) {
-      secondaryToolBar = createSecondaryToolBar(remoteComponent, component);
-    }
-    if (toolBar || secondaryToolBar) {
-      var surroundingBox:VBox = new VBox();
-      component.percentWidth = 100.0;
-      component.percentHeight = 100.0;
-
-      if (toolBar) {
-        toolBar = decorateWithSlideBar(toolBar);
-        toolBar.percentWidth = 100.0;
-        surroundingBox.addChild(toolBar);
-      }
-      surroundingBox.addChild(component);
-      if (secondaryToolBar) {
-        secondaryToolBar = decorateWithSlideBar(secondaryToolBar);
-        secondaryToolBar.percentWidth = 100.0;
-        surroundingBox.addChild(secondaryToolBar);
-      }
-      surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
-      surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
-      return surroundingBox;
-    }
-    return component;
-  }
-
   public function decorateWithSlideBar(component:UIComponent):UIComponent {
     var slideBar:ButtonScrollingCanvas = new ButtonScrollingCanvas();
     slideBar.addChild(component);
@@ -383,24 +348,6 @@ public class DefaultFlexViewFactory {
       slideBar.maxHeight = slideBar.height;
     });
     return slideBar;
-  }
-
-  protected function createToolBarComponent():ApplicationControlBar {
-    var toolBar:ApplicationControlBar = new ApplicationControlBar();
-    toolBar.styleName = "applicationControlBar";
-    return toolBar;
-  }
-
-  protected function createDefaultToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-    return null;
-  }
-
-  protected function createToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-    return createToolBarFromActionLists(remoteComponent.actionLists, component);
-  }
-
-  protected function createSecondaryToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-    return createToolBarFromActionLists(remoteComponent.secondaryActionLists, component);
   }
 
   public function createToolBarFromActionLists(actionLists:Array, component:UIComponent):ApplicationControlBar {
@@ -438,6 +385,309 @@ public class DefaultFlexViewFactory {
     separator.height = size;
     separator.maxHeight = size;
     toolBar.addChild(separator);
+  }
+
+  public function createTreeComponent():SelectionTrackingTree {
+    return new SelectionTrackingTree();
+  }
+
+  public function createTreeItemRenderer():ClassFactory {
+    return new ClassFactory(RemoteValueTreeItemRenderer);
+  }
+
+  public function createComboBoxComponent():RIconComboBox {
+    return new RIconComboBox();
+  }
+
+  public function createRadioButtonComponent():RadioButton {
+    return new RadioButton();
+  }
+
+  public function addCard(cardContainer:ViewStack, rCardComponent:RComponent, cardName:String):void {
+    var existingCard:Container = cardContainer.getChildByName(cardName) as Container;
+    if (existingCard == null) {
+      var cardCanvas:Canvas = new Canvas();
+      cardCanvas.percentWidth = 100.0;
+      cardCanvas.percentHeight = 100.0;
+      cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+      cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
+      cardCanvas.name = cardName;
+      cardContainer.addChild(cardCanvas);
+
+      var cardComponent:UIComponent = createComponent(rCardComponent);
+      cardComponent.percentWidth = 100.0;
+      cardComponent.percentHeight = 100.0;
+      cardCanvas.addChild(cardComponent);
+    }
+  }
+
+  public function createTabNavigatorComponent():TabNavigator {
+    return new EnhancedTabNavigator();
+  }
+
+  public function createTextAreaComponent():TextArea {
+    var ta:EnhancedTextArea = new EnhancedTextArea();
+    return ta;
+  }
+
+  public function createRichTextEditorComponent():EnhancedRichTextEditor {
+    return new EnhancedRichTextEditor();
+  }
+
+  public function createAction(remoteAction:RAction, component:UIComponent,
+                               topApplicationAction:Boolean = false):Button {
+    var button:Button = createButton(remoteAction.name, createActionTooltip(remoteAction), remoteAction.icon,
+                                     topApplicationAction);
+    configureActionButton(button, remoteAction);
+    installKeyboardShortcut(remoteAction, component);
+    return button;
+  }
+
+  public function installKeyboardShortcut(action:RAction, component:UIComponent):void {
+    if (action.acceleratorAsString && component) {
+      var splittedAccelerator:Array = action.acceleratorAsString.toLowerCase().split(" ");
+      var accAlt:Boolean = splittedAccelerator.indexOf("alt") >= 0;
+      var accCtrl:Boolean = splittedAccelerator.indexOf("ctrl") >= 0;
+      var accShift:Boolean = splittedAccelerator.indexOf("shift") >= 0;
+      component.addEventListener(KeyboardEvent.KEY_UP, function (keyEvent:KeyboardEvent):void {
+        if (keyEvent.altKey || keyEvent.ctrlKey) {
+          if ((keyEvent.altKey && accAlt) || (!keyEvent.altKey && !accAlt)) {
+            if ((keyEvent.ctrlKey && accCtrl) || (!keyEvent.ctrlKey && !accCtrl)) {
+              if ((keyEvent.shiftKey && accShift) || (!keyEvent.shiftKey && !accShift)) {
+                var character:String = String.fromCharCode(keyEvent.charCode);
+                if (splittedAccelerator.indexOf(character.toLowerCase()) >= 0) {
+                  keyEvent.stopPropagation();
+                  getActionHandler().execute(action);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  public function createDialogAction(remoteAction:RAction):Button {
+    var button:Button = createDialogButton(remoteAction.name, remoteAction.description, remoteAction.icon);
+    configureActionButton(button, remoteAction);
+    return button;
+  }
+
+  public function addButtonEventListenerWithTimeout(button:Button, listener:Function, timeout:int = 400):void {
+    button.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
+      if ((new Date()).time - _lastActionTimestamp.time < timeout) {
+        return;
+      }
+      _lastActionTimestamp = new Date();
+      listener(event);
+    });
+  }
+
+  public function createButton(label:String, toolTip:String, icon:RIcon, topApplicationButton:Boolean = false):Button {
+    var button:Button = createButtonComponent(topApplicationButton);
+    configureButton(button, label, toolTip, icon);
+    return button;
+  }
+
+  public function createDialogButton(label:String, toolTip:String, icon:RIcon):Button {
+    return createButton(label, toolTip, icon);
+  }
+
+  public function createButtonComponent(topApplicationButton:Boolean = false):Button {
+    return new EnhancedButton();
+  }
+
+  public function createTextInputComponent():TextInput {
+    var tf:EnhancedTextInput = new EnhancedTextInput();
+    tf.preventDefaultButton = true;
+    return tf;
+  }
+
+  public function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
+    if (rIcon != null) {
+      return IconFactory.getClass(component, rIcon.imageUrlSpec, rIcon.dimension.width, rIcon.dimension.height);
+    }
+    return null;
+  }
+
+  public function createMenus(actionLists:Array, useSeparator:Boolean, component:UIComponent):Array {
+    var menus:Array = [];
+    if (actionLists != null) {
+      var menu:Object = {};
+      for each (var actionList:RActionList in actionLists) {
+        if (!useSeparator || menus.length == 0) {
+          menu = createMenu(actionList, component);
+          menus.push(menu);
+        } else {
+          var separator:Object = {};
+          separator["type"] = "separator";
+          menu["children"].push(separator);
+          for each (var menuItem:Object in createMenuItems(actionList, component)) {
+            menu["children"].push(menuItem);
+          }
+        }
+      }
+    }
+    return menus;
+  }
+
+  public function createPopupButton(actionList:RActionList, component:UIComponent,
+                                    topApplicationButton:Boolean = false):Button {
+    if (actionList.actions == null || actionList.actions.length == 0) {
+      return null;
+    }
+    if (actionList.actions.length == 1) {
+      return createAction(actionList.actions[0], component, topApplicationButton);
+    }
+    var dp:Object = createMenuItems(actionList, component);
+    var menu:Menu = new Menu();
+    menu.showDataTips = true;
+    menu.dataProvider = dp;
+    menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
+    var popupButton:PopUpButton = createPopUpButtonComponent(topApplicationButton);
+    popupButton.popUp = menu;
+    var menuHandler:Function = function (event:MenuEvent):void {
+      if (event.item["data"] is RAction) {
+        var action:RAction = event.item["data"] as RAction;
+        getActionHandler().execute(action, null);
+      }
+    };
+    var defaultAction:RAction = actionList.actions[0];
+    configureButton(popupButton, defaultAction.name, defaultAction.description, defaultAction.icon);
+    popupButton.data = defaultAction;
+    popupButton.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
+      getActionHandler().execute((event.currentTarget as PopUpButton).data as RAction);
+    });
+    menu.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
+    return popupButton;
+  }
+
+  public function createPopUpButtonComponent(topApplicationButton:Boolean = false):PopUpButton {
+    var popupButton:PopUpButton = new PopUpButton();
+    popupButton.styleName = "popupButton";
+    return popupButton;
+  }
+
+  public function createMenu(actionList:RActionList, component:UIComponent):Object {
+    var menu:Object = {};
+    menu["label"] = actionList.name;
+    menu["description"] = actionList.description;
+    menu["data"] = actionList;
+    if (actionList.icon) {
+      menu["icon"] = iconTemplate;
+      menu["rIcon"] = actionList.icon;
+    }
+
+    var menuItems:Array = [];
+    for each (var menuItem:Object in createMenuItems(actionList, component)) {
+      menuItems.push(menuItem);
+    }
+    menu["children"] = menuItems;
+    return menu;
+  }
+
+  public function edit(component:UIComponent):void {
+    var editableChild:UIComponent = findFirstEditableComponent(component);
+    if (editableChild is DataGrid) {
+      var table:DataGrid = editableChild as DataGrid;
+      var selIdx:int = table.selectedIndex;
+      if (selIdx >= 0) {
+        var col:int = 0;
+        var columnRenderer:ClassFactory = table.columns[0].itemRenderer as ClassFactory;
+        // watch out checkbox selection column...
+        if (!columnRenderer.properties || isNaN(columnRenderer.properties["index"])) {
+          col++;
+        }
+        if (isDgCellEditable(table, selIdx, col)) {
+          table.editedItemPosition = {rowIndex: selIdx, columnIndex: col};
+        } else {
+          table.editedItemPosition = null;
+        }
+      }
+    }
+  }
+
+  public function focus(component:UIComponent):void {
+    var focusableChild:UIComponent = findFirstFocusableComponent(component);
+    if (focusableChild) {
+      focusableChild.callLater(function ():void {
+        focusableChild.setFocus();
+      });
+    }
+  }
+
+  public function reset():void {
+    // Callback called when the controller is restarted.
+  }
+
+  protected function applyComponentPreferredSize(component:UIComponent, preferredSize:Dimension):void {
+    if (preferredSize) {
+      component.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
+        if (preferredSize.width > 0) {
+          component.width = preferredSize.width;
+        }
+        if (preferredSize.height > 0) {
+          component.height = preferredSize.height;
+        }
+      });
+    }
+  }
+
+  protected function getColorFromArgb(argb:String):SolidColor {
+    var color:uint = parseInt(argb.substr(argb.length - 6, 6), 16);
+    return new SolidColor(color, getAlphaFromArgb(argb));
+  }
+
+  protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
+    var toolBar:UIComponent;
+    var secondaryToolBar:UIComponent;
+    if (!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
+      toolBar = createToolBar(remoteComponent, component);
+    } else {
+      toolBar = createDefaultToolBar(remoteComponent, component);
+    }
+    if (remoteComponent.secondaryActionLists != null && remoteComponent.secondaryActionLists.length > 0) {
+      secondaryToolBar = createSecondaryToolBar(remoteComponent, component);
+    }
+    if (toolBar || secondaryToolBar) {
+      var surroundingBox:VBox = new VBox();
+      component.percentWidth = 100.0;
+      component.percentHeight = 100.0;
+
+      if (toolBar) {
+        toolBar = decorateWithSlideBar(toolBar);
+        toolBar.percentWidth = 100.0;
+        surroundingBox.addChild(toolBar);
+      }
+      surroundingBox.addChild(component);
+      if (secondaryToolBar) {
+        secondaryToolBar = decorateWithSlideBar(secondaryToolBar);
+        secondaryToolBar.percentWidth = 100.0;
+        surroundingBox.addChild(secondaryToolBar);
+      }
+      surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
+      surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
+      return surroundingBox;
+    }
+    return component;
+  }
+
+  protected function createToolBarComponent():ApplicationControlBar {
+    var toolBar:ApplicationControlBar = new ApplicationControlBar();
+    toolBar.styleName = "applicationControlBar";
+    return toolBar;
+  }
+
+  protected function createDefaultToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+    return null;
+  }
+
+  protected function createToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+    return createToolBarFromActionLists(remoteComponent.actionLists, component);
+  }
+
+  protected function createSecondaryToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+    return createToolBarFromActionLists(remoteComponent.secondaryActionLists, component);
   }
 
   protected function getRemotePeerRegistry():IRemotePeerRegistry {
@@ -556,14 +806,6 @@ public class DefaultFlexViewFactory {
       });
     }
     return tree;
-  }
-
-  public function createTreeComponent():SelectionTrackingTree {
-    return new SelectionTrackingTree();
-  }
-
-  public function createTreeItemRenderer():ClassFactory {
-    return new ClassFactory(RemoteValueTreeItemRenderer);
   }
 
   protected function expandItem(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState,
@@ -893,10 +1135,6 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  public function createComboBoxComponent():RIconComboBox {
-    return new RIconComboBox();
-  }
-
   protected function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
     BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value", true);
     BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem", true);
@@ -923,10 +1161,6 @@ public class DefaultFlexViewFactory {
     }
     bindRadioGroup(radioGroup, remoteRadioBox);
     return radioBox;
-  }
-
-  public function createRadioButtonComponent():RadioButton {
-    return new RadioButton();
   }
 
   protected function bindRadioGroup(radioGroup:RadioButtonGroup, remoteRadioBox:RRadioBox):void {
@@ -1093,24 +1327,6 @@ public class DefaultFlexViewFactory {
     bindCardContainer(cardContainer, remoteCardContainer.state);
 
     return cardContainer;
-  }
-
-  public function addCard(cardContainer:ViewStack, rCardComponent:RComponent, cardName:String):void {
-    var existingCard:Container = cardContainer.getChildByName(cardName) as Container;
-    if (existingCard == null) {
-      var cardCanvas:Canvas = new Canvas();
-      cardCanvas.percentWidth = 100.0;
-      cardCanvas.percentHeight = 100.0;
-      cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
-      cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
-      cardCanvas.name = cardName;
-      cardContainer.addChild(cardCanvas);
-
-      var cardComponent:UIComponent = createComponent(rCardComponent);
-      cardComponent.percentWidth = 100.0;
-      cardComponent.percentHeight = 100.0;
-      cardCanvas.addChild(cardComponent);
-    }
   }
 
   protected function bindCardContainer(cardContainer:ViewStack, remoteState:RemoteValueState):void {
@@ -1446,19 +1662,6 @@ public class DefaultFlexViewFactory {
     return decoratedForm;
   }
 
-  private function bindDynamicAspects(component:UIComponent, rComponent:RComponent):void {
-    if (component is Container) {
-      for each(var child:UIComponent in (component as Container).getChildren()) {
-        bindDynamicAspects(child, rComponent);
-      }
-    } else {
-      bindDynamicToolTip(component, rComponent);
-      bindDynamicBackground(component, rComponent);
-      bindDynamicForeground(component, rComponent);
-      bindDynamicFont(component, rComponent);
-    }
-  }
-
   protected function bindDynamicToolTip(component:UIComponent, rComponent:RComponent):void {
     if (rComponent.toolTipState) {
       getRemotePeerRegistry().register(rComponent.toolTipState);
@@ -1666,10 +1869,6 @@ public class DefaultFlexViewFactory {
       _commandHandler.registerCommand(command);
     }, tabContainer, "selectedIndex", true);
     return tabContainer;
-  }
-
-  public function createTabNavigatorComponent():TabNavigator {
-    return new EnhancedTabNavigator();
   }
 
   protected function createDateComponent(remoteDateField:RDateField):UIComponent {
@@ -2387,11 +2586,6 @@ public class DefaultFlexViewFactory {
     return textArea;
   }
 
-  public function createTextAreaComponent():TextArea {
-    var ta:EnhancedTextArea = new EnhancedTextArea();
-    return ta;
-  }
-
   protected function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
     BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
 
@@ -2453,10 +2647,6 @@ public class DefaultFlexViewFactory {
     }
     bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
     return htmlEditor;
-  }
-
-  public function createRichTextEditorComponent():EnhancedRichTextEditor {
-    return new EnhancedRichTextEditor();
   }
 
   protected function bindHtmlEditor(htmlEditor:EnhancedRichTextEditor, remoteState:RemoteValueState):void {
@@ -2605,45 +2795,6 @@ public class DefaultFlexViewFactory {
     return textField;
   }
 
-  public function createAction(remoteAction:RAction, component:UIComponent,
-                               topApplicationAction:Boolean = false):Button {
-    var button:Button = createButton(remoteAction.name, createActionTooltip(remoteAction), remoteAction.icon,
-                                     topApplicationAction);
-    configureActionButton(button, remoteAction);
-    installKeyboardShortcut(remoteAction, component);
-    return button;
-  }
-
-  public function installKeyboardShortcut(action:RAction, component:UIComponent):void {
-    if (action.acceleratorAsString && component) {
-      var splittedAccelerator:Array = action.acceleratorAsString.toLowerCase().split(" ");
-      var accAlt:Boolean = splittedAccelerator.indexOf("alt") >= 0;
-      var accCtrl:Boolean = splittedAccelerator.indexOf("ctrl") >= 0;
-      var accShift:Boolean = splittedAccelerator.indexOf("shift") >= 0;
-      component.addEventListener(KeyboardEvent.KEY_UP, function (keyEvent:KeyboardEvent):void {
-        if (keyEvent.altKey || keyEvent.ctrlKey) {
-          if ((keyEvent.altKey && accAlt) || (!keyEvent.altKey && !accAlt)) {
-            if ((keyEvent.ctrlKey && accCtrl) || (!keyEvent.ctrlKey && !accCtrl)) {
-              if ((keyEvent.shiftKey && accShift) || (!keyEvent.shiftKey && !accShift)) {
-                var character:String = String.fromCharCode(keyEvent.charCode);
-                if (splittedAccelerator.indexOf(character.toLowerCase()) >= 0) {
-                  keyEvent.stopPropagation();
-                  getActionHandler().execute(action);
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-  }
-
-  public function createDialogAction(remoteAction:RAction):Button {
-    var button:Button = createDialogButton(remoteAction.name, remoteAction.description, remoteAction.icon);
-    configureActionButton(button, remoteAction);
-    return button;
-  }
-
   protected function configureActionButton(button:Button, remoteAction:RAction):void {
     //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
     var updateButtonState:Function = function (enabled:Boolean):void {
@@ -2660,30 +2811,6 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  public function addButtonEventListenerWithTimeout(button:Button, listener:Function, timeout:int = 400):void {
-    button.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
-      if ((new Date()).time - _lastActionTimestamp.time < timeout) {
-        return;
-      }
-      _lastActionTimestamp = new Date();
-      listener(event);
-    });
-  }
-
-  public function createButton(label:String, toolTip:String, icon:RIcon, topApplicationButton:Boolean = false):Button {
-    var button:Button = createButtonComponent(topApplicationButton);
-    configureButton(button, label, toolTip, icon);
-    return button;
-  }
-
-  public function createDialogButton(label:String, toolTip:String, icon:RIcon):Button {
-    return createButton(label, toolTip, icon);
-  }
-
-  public function createButtonComponent(topApplicationButton:Boolean = false):Button {
-    return new EnhancedButton();
-  }
-
   protected function configureButton(button:Button, label:String, toolTip:String, icon:RIcon):void {
     button.setStyle("icon", null);
     if (icon) {
@@ -2695,12 +2822,6 @@ public class DefaultFlexViewFactory {
     if (toolTip) {
       button.toolTip = toolTip;
     }
-  }
-
-  public function createTextInputComponent():TextInput {
-    var tf:EnhancedTextInput = new EnhancedTextInput();
-    tf.preventDefaultButton = true;
-    return tf;
   }
 
   protected function bindTextInput(textInput:TextInput, remoteState:RemoteValueState, formatter:Formatter = null,
@@ -2778,13 +2899,6 @@ public class DefaultFlexViewFactory {
       remoteState.value = "0x" + currentAlpha + (event.currentTarget as ColorPicker).selectedColor.toString(16);
     };
     colorPicker.addEventListener(ColorPickerEvent.CHANGE, updateModel);
-  }
-
-  public function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
-    if (rIcon != null) {
-      return IconFactory.getClass(component, rIcon.imageUrlSpec, rIcon.dimension.width, rIcon.dimension.height);
-    }
-    return null;
   }
 
   protected function createFormatter(remoteComponent:RComponent):Formatter {
@@ -2870,86 +2984,6 @@ public class DefaultFlexViewFactory {
     component.maxWidth = w;
   }
 
-  public function get iconTemplate():Class {
-    return _iconTemplate;
-  }
-
-  public function createMenus(actionLists:Array, useSeparator:Boolean, component:UIComponent):Array {
-    var menus:Array = [];
-    if (actionLists != null) {
-      var menu:Object = {};
-      for each (var actionList:RActionList in actionLists) {
-        if (!useSeparator || menus.length == 0) {
-          menu = createMenu(actionList, component);
-          menus.push(menu);
-        } else {
-          var separator:Object = {};
-          separator["type"] = "separator";
-          menu["children"].push(separator);
-          for each (var menuItem:Object in createMenuItems(actionList, component)) {
-            menu["children"].push(menuItem);
-          }
-        }
-      }
-    }
-    return menus;
-  }
-
-  public function createPopupButton(actionList:RActionList, component:UIComponent,
-                                    topApplicationButton:Boolean = false):Button {
-    if (actionList.actions == null || actionList.actions.length == 0) {
-      return null;
-    }
-    if (actionList.actions.length == 1) {
-      return createAction(actionList.actions[0], component, topApplicationButton);
-    }
-    var dp:Object = createMenuItems(actionList, component);
-    var menu:Menu = new Menu();
-    menu.showDataTips = true;
-    menu.dataProvider = dp;
-    menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
-    var popupButton:PopUpButton = createPopUpButtonComponent(topApplicationButton);
-    popupButton.popUp = menu;
-    var menuHandler:Function = function (event:MenuEvent):void {
-      if (event.item["data"] is RAction) {
-        var action:RAction = event.item["data"] as RAction;
-        getActionHandler().execute(action, null);
-      }
-    };
-    var defaultAction:RAction = actionList.actions[0];
-    configureButton(popupButton, defaultAction.name, defaultAction.description, defaultAction.icon);
-    popupButton.data = defaultAction;
-    popupButton.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
-      getActionHandler().execute((event.currentTarget as PopUpButton).data as RAction);
-    });
-    menu.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
-    return popupButton;
-  }
-
-  public function createPopUpButtonComponent(topApplicationButton:Boolean = false):PopUpButton {
-    var popupButton:PopUpButton = new PopUpButton();
-    popupButton.styleName = "popupButton";
-    return popupButton;
-  }
-
-  public function createMenu(actionList:RActionList, component:UIComponent):Object {
-    var menu:Object = {};
-    menu["label"] = actionList.name;
-    menu["description"] = actionList.description;
-    menu["data"] = actionList;
-    if (actionList.icon) {
-      menu["icon"] = iconTemplate;
-      menu["rIcon"] = actionList.icon;
-    }
-
-    var menuItems:Array = [];
-    for each (var menuItem:Object in createMenuItems(actionList, component)) {
-      menuItems.push(menuItem);
-    }
-    menu["children"] = menuItems;
-    return menu;
-  }
-
   protected function createMenuItems(actionList:RActionList, component:UIComponent):Array {
     var menuItems:Array = [];
     for each(var action:RAction in actionList.actions) {
@@ -2995,25 +3029,9 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  public function get datePattern():String {
-    return _datePattern;
-  }
-
-  public function set datePattern(value:String):void {
-    _datePattern = value;
-  }
-
-  public function get firstDayOfWeek():int {
-    return _firstDayOfWeek;
-  }
-
-  public function set firstDayOfWeek(value:int):void {
-    _firstDayOfWeek = value;
-  }
-
   protected function findFirstFocusableComponent(root:UIComponent):UIComponent {
     if (root is TextInput || root is CheckBox || root is CheckBoxExtended || root is ComboBox || root is TextArea
-        || root is DateField || root is DataGrid) {
+        || root is DateField || (root is DataGrid && ((root as DataGrid).dataProvider as ICollectionView).length > 0)) {
       if (root.enabled) {
         return root;
       }
@@ -3052,38 +3070,17 @@ public class DefaultFlexViewFactory {
     return null;
   }
 
-  public function edit(component:UIComponent):void {
-    var editableChild:UIComponent = findFirstEditableComponent(component);
-    if (editableChild is DataGrid) {
-      var table:DataGrid = editableChild as DataGrid;
-      var selIdx:int = table.selectedIndex;
-      if (selIdx >= 0) {
-        var col:int = 0;
-        var columnRenderer:ClassFactory = table.columns[0].itemRenderer as ClassFactory;
-        // watch out checkbox selection column...
-        if (!columnRenderer.properties || isNaN(columnRenderer.properties["index"])) {
-          col++;
-        }
-        if (isDgCellEditable(table, selIdx, col)) {
-          table.editedItemPosition = {rowIndex: selIdx, columnIndex: col};
-        } else {
-          table.editedItemPosition = null;
-        }
+  private function bindDynamicAspects(component:UIComponent, rComponent:RComponent):void {
+    if (component is Container) {
+      for each(var child:UIComponent in (component as Container).getChildren()) {
+        bindDynamicAspects(child, rComponent);
       }
+    } else {
+      bindDynamicToolTip(component, rComponent);
+      bindDynamicBackground(component, rComponent);
+      bindDynamicForeground(component, rComponent);
+      bindDynamicFont(component, rComponent);
     }
-  }
-
-  public function focus(component:UIComponent):void {
-    var focusableChild:UIComponent = findFirstFocusableComponent(component);
-    if (focusableChild) {
-      focusableChild.callLater(function ():void {
-        focusableChild.setFocus();
-      });
-    }
-  }
-
-  public function reset():void {
-    // Callback called when the controller is restarted.
   }
 
 }
