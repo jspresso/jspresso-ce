@@ -14,6 +14,7 @@
 
 package org.jspresso.framework.view.flex {
 
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -181,6 +182,16 @@ public class EnhancedDataGrid extends DataGrid {
       }
     }
     super.keyDownHandler(event);
+  }
+
+
+  override protected function drawSelectionIndicator(indicator:Sprite, x:Number, y:Number, width:Number, height:Number,
+                                                     color:uint, itemRenderer:IListItemRenderer):void {
+    if(isNaN(x) || isNaN(y) || isNaN(width) || isNaN(height) || isNaN(unscaledWidth) ||isNaN(unscaledHeight)) {
+      // Calling the above properties seems sufficient for fixing the Flex error that appears
+      // due to a NaN unscaledWidth.
+    }
+    super.drawSelectionIndicator(indicator, x, y, width, height, color, itemRenderer);
   }
 }
 }
