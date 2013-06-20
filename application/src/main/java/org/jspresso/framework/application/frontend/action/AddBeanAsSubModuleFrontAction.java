@@ -18,41 +18,47 @@
  */
 package org.jspresso.framework.application.frontend.action;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction;
+import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This action can be installed on any collection view and will take the
  * selected elements in the underlying model collection and create a bean module
  * out of them.
- * 
- * @see org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction
- * @version $LastChangedRevision: 5946 $
- * @author Maxime HAMM
+ *
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Maxime HAMM
+ * @version $LastChangedRevision: 5946 $
+ * @see org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction
  */
 @SuppressWarnings("UnusedParameters")
-public class AddBeanAsSubModuleFrontAction<E, F, G> extends
-    FrontendAction<E, F, G> {
+public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private String          parentWorkspaceName;
   private String          parentModuleName;
   private IViewDescriptor childModuleProjectedViewDescriptor;
+  private String          referencePath;
 
   /**
    * Sets the WorkspaceName where to add components to.
-   * 
+   *
    * @param parentWorkspaceName
-   *          the parent workspace name.
+   *     the parent workspace name.
    */
   public void setParentWorkspaceName(String parentWorkspaceName) {
     this.parentWorkspaceName = parentWorkspaceName;
@@ -60,9 +66,9 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
 
   /**
    * Gets the target workspace to add the module to.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the target workspace to add the module to.
    */
   protected String getParentWorkspaceName(Map<String, Object> context) {
@@ -74,9 +80,9 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
 
   /**
    * Sets the parent module where to add components to.
-   * 
+   *
    * @param parentModuleName
-   *          the parent module name.
+   *     the parent module name.
    */
   public void setParentModuleName(String parentModuleName) {
     this.parentModuleName = parentModuleName;
@@ -84,9 +90,9 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
 
   /**
    * Gets the target module to add the module to.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the target module to add the module to.
    */
   protected String getParentModuleName(Map<String, Object> context) {
@@ -97,13 +103,11 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
 
     String workspaceName = getParentWorkspaceName(context);
     if (workspaceName != null) {
-      context.put(AddBeanAsSubModuleAction.PARENT_WORKSPACE,
-          getController(context).getWorkspace(workspaceName));
+      context.put(AddBeanAsSubModuleAction.PARENT_WORKSPACE, getController(context).getWorkspace(workspaceName));
     }
 
     String moduleName = getParentModuleName(context);
@@ -113,8 +117,7 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
 
     IViewDescriptor projectedViewDescriptor = getChildModuleProjectedViewDescriptor(context);
     if (projectedViewDescriptor != null) {
-      context.put(AddBeanAsSubModuleAction.PROJECTED_VIEW_DESCRIPTOR,
-          projectedViewDescriptor);
+      context.put(AddBeanAsSubModuleAction.PROJECTED_VIEW_DESCRIPTOR, projectedViewDescriptor);
     }
 
     setActionParameter(getComponentsToAdd(context), context);
@@ -125,36 +128,77 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends
   /**
    * Gets the components to add as child modules. Defaults to the view selected
    * models.
-   * 
+   *
    * @param context
-   *          tha action context.
+   *     the action context.
    * @return the components to add as child modules.
    */
   protected List<?> getComponentsToAdd(Map<String, Object> context) {
-    return getSelectedModels(context);
+    List<?> componentsToAdd = getSelectedModels(context);
+    if (getReferencePath() == null || componentsToAdd == null || componentsToAdd.isEmpty()) {
+      return componentsToAdd;
+    }
+
+    try {
+      IAccessorFactory accessorFactory = getBackendController(context).getAccessorFactory();
+      List<Object> references = new ArrayList<Object>();
+      for (Object component : componentsToAdd) {
+        IAccessor accessor = accessorFactory.createPropertyAccessor(getReferencePath(), component.getClass());
+        Object reference = accessor.getValue(component);
+        if (reference instanceof Collection<?>) {
+          references.addAll((Collection<?>) reference);
+        } else {
+          references.add(reference);
+        }
+      }
+      return references;
+    } catch (IllegalAccessException e) {
+      throw new NestedRuntimeException(e);
+    } catch (InvocationTargetException e) {
+      throw new NestedRuntimeException(e);
+    } catch (NoSuchMethodException e) {
+      throw new NestedRuntimeException(e);
+    }
   }
 
   /**
    * Gets the childModuleProjectedViewDescriptor.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the childModuleProjectedViewDescriptor.
    */
-  protected IViewDescriptor getChildModuleProjectedViewDescriptor(
-      Map<String, Object> context) {
+  protected IViewDescriptor getChildModuleProjectedViewDescriptor(Map<String, Object> context) {
     return childModuleProjectedViewDescriptor;
   }
 
   /**
    * Sets the childModuleProjectedViewDescriptor.
-   * 
+   *
    * @param childModuleProjectedViewDescriptor
-   *          the childModuleProjectedViewDescriptor to set.
+   *     the childModuleProjectedViewDescriptor to set.
    */
-  public void setChildModuleProjectedViewDescriptor(
-      IViewDescriptor childModuleProjectedViewDescriptor) {
+  public void setChildModuleProjectedViewDescriptor(IViewDescriptor childModuleProjectedViewDescriptor) {
     this.childModuleProjectedViewDescriptor = childModuleProjectedViewDescriptor;
   }
 
+  /**
+   * Gets the referencePath.
+   *
+   * @return the referencePath.
+   */
+  protected String getReferencePath() {
+    return referencePath;
+  }
+
+  /**
+   * Allows to configure a property path to extract the bean(s) to add from the selected models. If {@code null},
+   * which is the default value, the selected models are used themselves.
+   *
+   * @param referencePath
+   *     the referencePath to set.
+   */
+  public void setReferencePath(String referencePath) {
+    this.referencePath = referencePath;
+  }
 }
