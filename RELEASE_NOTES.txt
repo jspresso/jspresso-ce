@@ -1,5 +1,12 @@
 3.7
 ===
+
+- in QueryEntitiesAction, getCriteriaFactory(), getCriteriaRefiner, getComponentRefiner now take the action context
+  as parameter to enable feature #1074.
+
+- deprecated org.jspresso.framework.application.backend.action.persistence.hibernate.IQueryComponentRefiner has been
+  removed in favor of org.jspresso.framework.application.backend.action.IQueryComponentRefiner
+
 - in your index.html, change the background values to #ffffff
 
 - In your webapp/pom.xml, remove <scope>provided</scope> on the following dependency :
