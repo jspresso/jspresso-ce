@@ -81,6 +81,16 @@ public class ComparableQueryStructureDescriptor extends
   public static final String LT         = "LT";
 
   /**
+   * {@code NU} is null.
+   */
+  public static final String NU         = "NU";
+
+  /**
+   * {@code NN} is not null.
+   */
+  public static final String NN         = "NN";
+
+  /**
    * {@code SUP_VALUE} supValue.
    */
   public static final String SUP_VALUE  = "supValue";
@@ -119,6 +129,8 @@ public class ComparableQueryStructureDescriptor extends
     values.put(LT, null);
     values.put(LE, null);
     values.put(BE, null);
+    values.put(NU, null);
+    values.put(NN, null);
     comparatorPropertyDescriptor.setValuesAndIconImageUrls(values);
     comparatorPropertyDescriptor.setGrantedRoles(propertyDescriptor
         .getGrantedRoles());

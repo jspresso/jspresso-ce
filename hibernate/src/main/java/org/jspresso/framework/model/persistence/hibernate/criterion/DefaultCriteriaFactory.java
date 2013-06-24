@@ -462,6 +462,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
         currentCriteria.add(Restrictions.lt(path, compareValue));
       } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
         currentCriteria.add(Restrictions.le(path, compareValue));
+      } else if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
+        currentCriteria.add(Restrictions.isNull(path));
+      } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
+        currentCriteria.add(Restrictions.isNotNull(path));
       } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
         if (infValue != null && supValue != null) {
           currentCriteria.add(Restrictions.between(path, infValue, supValue));

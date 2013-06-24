@@ -109,7 +109,8 @@ public class ComparableQueryStructure extends QueryComponent {
    *         a restriction.
    */
   public boolean isRestricting() {
-    return getInfValue() != null || getSupValue() != null;
+    return getInfValue() != null || getSupValue() != null || ComparableQueryStructureDescriptor.NU.equals
+        (getComparator()) || ComparableQueryStructureDescriptor.NN.equals(getComparator());
   }
 
   /**
@@ -142,6 +143,10 @@ public class ComparableQueryStructure extends QueryComponent {
         return value.compareTo(compareValue) < 0;
       } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
         return value.compareTo(compareValue) <= 0;
+      } else if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
+        return compareValue == null;
+      } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
+        return compareValue != null;
       } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
         if (infValue != null && supValue != null) {
           return value.compareTo(infValue) >= 0
