@@ -51,7 +51,7 @@ import org.slf4j.impl.StaticLoggerBinder;
  * @version $LastChangedRevision$
  */
 @Mojo(name = "compile-sjs", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresDependencyResolution = ResolutionScope.COMPILE)
+    requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class SjsMojo extends AbstractMojo {
 
   /**

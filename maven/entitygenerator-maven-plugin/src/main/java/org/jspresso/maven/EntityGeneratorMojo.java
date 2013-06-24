@@ -43,7 +43,7 @@ import org.slf4j.impl.StaticLoggerBinder;
  * @version $LastChangedRevision$
  */
 @Mojo(name = "generate-entities", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresDependencyResolution = ResolutionScope.COMPILE)
+    requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class EntityGeneratorMojo extends AbstractMojo {
 
   /**
