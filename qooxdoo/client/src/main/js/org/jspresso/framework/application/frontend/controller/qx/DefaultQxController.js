@@ -909,10 +909,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       ]
     },
 
-    translate: function (key) {
-      var tr = this.__translations[key];
-      if (tr != null) {
-        return tr;
+    translate:function(key) {
+      if(this.__translations) {
+        var tr = this.__translations[key];
+        if(tr != null) {
+          return tr;
+        }
       }
       return key;
     },

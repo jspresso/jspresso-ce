@@ -1211,9 +1211,11 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   public function translate(key:String):String {
-    var tr:String = _translations[key] as String;
-    if (tr != null) {
-      return tr;
+    if(_translations != null) {
+      var tr:String = _translations[key] as String;
+      if (tr != null) {
+        return tr;
+      }
     }
     return key;
   }
