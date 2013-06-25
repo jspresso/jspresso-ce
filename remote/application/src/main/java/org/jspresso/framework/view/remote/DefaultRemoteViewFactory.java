@@ -1524,6 +1524,8 @@ public class DefaultRemoteViewFactory extends
       if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor) {
         ((RActionField) viewComponent)
             .setFieldEditable(((IReferencePropertyViewDescriptor) propertyViewDescriptor).isAutoCompleteEnabled());
+      } else {
+        ((RActionField) viewComponent).setFieldEditable(true);
       }
       RAction lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.setName(getTranslationProvider().getTranslation(

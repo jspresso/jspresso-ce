@@ -97,6 +97,7 @@ import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RCheckBox;
+import org.jspresso.framework.gui.remote.RCollectionComponent;
 import org.jspresso.framework.gui.remote.RColorField;
 import org.jspresso.framework.gui.remote.RComboBox;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -639,6 +640,19 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
+    if(remoteComponent is RTextField
+        || remoteComponent is RDateField
+        || remoteComponent is RNumericComponent
+        || remoteComponent is RLabel
+        || remoteComponent is RTimeField) {
+      return decorateWithAsideActions(component, remoteComponent);
+    } else {
+      return decorateWithToolbars(component, remoteComponent);
+    }
+  }
+
+  protected function decorateWithToolbars(component:UIComponent, remoteComponent:RComponent):UIComponent {
+    var decorated:UIComponent = component;
     var toolBar:UIComponent;
     var secondaryToolBar:UIComponent;
     if (!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
@@ -667,9 +681,9 @@ public class DefaultFlexViewFactory {
       }
       surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
       surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
-      return surroundingBox;
+      decorated = surroundingBox;
     }
-    return component;
+    return decorated;
   }
 
   protected function createToolBarComponent():ApplicationControlBar {
@@ -918,42 +932,55 @@ public class DefaultFlexViewFactory {
   }
 
   protected function createActionField(remoteActionField:RActionField):UIComponent {
-    var actionField:HBox = new HBox();
-    actionField.styleName = "actionField";
-    actionField.regenerateStyleCache(false);
-    actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
-    actionField.verticalScrollPolicy = ScrollPolicy.OFF;
-    var textField:TextInput;
+    var textField:TextInput = null;
     if (remoteActionField.showTextField) {
       textField = createTextInputComponent();
-      actionField.percentWidth = 100.0;
-      textField.percentWidth = 100.0;
       textField.name = "tf";
-      actionField.addChild(textField);
       sizeMaxComponentWidth(textField, remoteActionField);
     }
-    var actionComponents:Array = [];
-    for (var i:int = 0; i < remoteActionField.actionLists.length; i++) {
-      var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
-      for (var j:int = 0; j < actionList.actions.length; j++) {
-        var actionComponent:Button = createAction(actionList.actions[j], actionField);
-        actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
-          var b:Button = event.currentTarget as Button;
-          //noinspection JSSuspiciousNameCombination
-          b.width = b.height;
-        });
-        //actionComponent.focusEnabled = false;
-        actionField.addChild(actionComponent);
-        actionComponents.push(actionComponent);
-      }
-    }
+    var actionField:UIComponent = decorateWithAsideActions(textField, remoteActionField);
     bindActionField(actionField, textField, remoteActionField.state,
-                    (remoteActionField.actionLists[0] as RActionList).actions[0], actionComponents, remoteActionField.fieldEditable);
+                    (remoteActionField.actionLists[0] as RActionList).actions[0], remoteActionField.fieldEditable);
     return actionField;
   }
 
+  protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent):UIComponent {
+    var decorated = component;
+    if(remoteComponent.actionLists) {
+      var actionField:HBox = new HBox();
+      actionField.styleName = "actionField";
+      actionField.regenerateStyleCache(false);
+      actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
+      actionField.verticalScrollPolicy = ScrollPolicy.OFF;
+
+      if(component) {
+        component.percentWidth = 100.0;
+        actionField.addChild(component);
+      }
+      actionField.percentWidth = 100.0;
+      for (var i:int = 0; i < remoteComponent.actionLists.length; i++) {
+        var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
+        for (var j:int = 0; j < actionList.actions.length; j++) {
+          var actionComponent:Button = createAction(actionList.actions[j], actionField);
+          actionComponent.label = null;
+          actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
+            var b:Button = event.currentTarget as Button;
+            //noinspection JSSuspiciousNameCombination
+            b.width = b.height;
+          });
+          actionField.addChild(actionComponent);
+          if (remoteComponent.state) {
+            BindingUtils.bindProperty(actionComponent, "enabled", remoteComponent.state, "writable");
+          }
+        }
+      }
+      decorated = actionField;
+    }
+    return decorated;
+  }
+
   protected function bindActionField(actionField:UIComponent, textInput:TextInput, remoteState:RemoteValueState,
-                                     action:RAction, actionComponents:Array, textFieldEditable:Boolean):void {
+                                     action:RAction, textFieldEditable:Boolean):void {
 
     var updateView:Function = function (value:Object):void {
       if (textInput) {
@@ -1013,9 +1040,6 @@ public class DefaultFlexViewFactory {
       textInput.addEventListener(FlexEvent.ENTER, triggerAction);
       textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, triggerAction);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, triggerAction);
-    }
-    for each (var actionComponent:UIComponent in actionComponents) {
-      BindingUtils.bindProperty(actionComponent, "enabled", remoteState, "writable");
     }
   }
 

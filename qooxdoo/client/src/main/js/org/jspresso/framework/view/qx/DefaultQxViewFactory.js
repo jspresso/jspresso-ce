@@ -235,6 +235,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     _decorateWithActions: function (remoteComponent, component) {
+      if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField
+          || remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField
+          || remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent
+          || remoteComponent instanceof org.jspresso.framework.gui.remote.RLabel
+          || remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
+        return this._decorateWithAsideActions(component, remoteComponent);
+      } else {
+        return this._decorateWithToolbars(component, remoteComponent);
+      }
+    },
+
+    _decorateWithToolbars: function (component, remoteComponent) {
+      var decorated = component;
       var toolBar;
       var secondaryToolBar;
       if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField)
@@ -263,9 +276,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           slideBar.add(secondaryToolBar);
           surroundingBox.add(slideBar);
         }
-        return surroundingBox;
+        decorated = surroundingBox;
       }
-      return component;
+      return decorated;
     },
 
     _createDefaultToolBar: function (remoteComponent, component) {
@@ -1272,19 +1285,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteActionField
      */
     _createActionField: function (remoteActionField) {
-      var actionField = new qx.ui.container.Composite();
-      actionField.setFocusable(true);
-      actionField.setAllowStretchY(false, false);
-      actionField.setLayout(new qx.ui.layout.HBox());
+
       /** @type qx.ui.form.TextField */
       var textField;
-      var mainAction;
-
       if (remoteActionField.getShowTextField()) {
         textField = new qx.ui.form.TextField();
-        actionField.add(textField, {
-          flex: 1
-        });
+        this._sizeMaxComponentWidth(textField, remoteActionField);
+      }
+      var actionField = this._decorateWithAsideActions(textField, remoteActionField);
+      var state = remoteActionField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
+      if (textField) {
         // propagate focus
         actionField.addListener("focus", function () {
           textField.focus();
@@ -1294,28 +1306,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         actionField.addListener("activate", function () {
           textField.activate();
         });
-
-        this._sizeMaxComponentWidth(textField, remoteActionField);
-      }
-
-      var state = remoteActionField.getState();
-      var modelController = new qx.data.controller.Object(state);
-
-      for (var i = 0; i < remoteActionField.getActionLists().length; i++) {
-        var actionList = remoteActionField.getActionLists()[i];
-        for (var j = 0; j < actionList.getActions().length; j++) {
-          var actionComponent = this.createAction(actionList.getActions()[j]);
-          //actionComponent.setFocusable(false);
-          actionComponent.setAllowStretchY(false, false);
-          actionField.add(actionComponent);
-          if (!mainAction) {
-            mainAction = actionList.getActions()[j];
-          }
-          modelController.addTarget(actionComponent, "enabled", "writable", false);
-        }
-      }
-
-      if (textField) {
         if(remoteActionField.getFieldEditable()) {
           modelController.addTarget(textField, "readOnly", "writable", false, {
             converter: this._readOnlyFieldConverter
@@ -1359,6 +1349,50 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       return actionField;
     },
+
+    /**
+     *
+     * @param {qx.ui.core.Widget} component
+     * @param {org.jspresso.framework.gui.remote.RComponent} remoteComponent
+     * @returns {qx.ui.core.Widget}
+     * @protected
+     */
+    _decorateWithAsideActions: function(component, remoteComponent) {
+      var decorated = component;
+      if(remoteComponent.getActionLists()) {
+        var actionField = new qx.ui.container.Composite();
+        actionField.setFocusable(true);
+        actionField.setAllowStretchY(false, false);
+        actionField.setLayout(new qx.ui.layout.HBox());
+
+        if(component) {
+          actionField.add(component, {
+            flex: 1
+          });
+        }
+        var modelController;
+        if(remoteComponent.getState()) {
+          modelController = new qx.data.controller.Object(remoteComponent.getState());
+        }
+        for (var i = 0; i < remoteComponent.getActionLists().length; i++) {
+          var actionList = remoteComponent.getActionLists()[i];
+          for (var j = 0; j < actionList.getActions().length; j++) {
+            var remoteAction = actionList.getActions()[j];
+            var actionComponent = this.createAction(remoteAction);
+            actionComponent.setLabel(null);
+            //actionComponent.setFocusable(false);
+            actionComponent.setAllowStretchY(false, false);
+            actionField.add(actionComponent);
+            if(modelController) {
+              modelController.addTarget(actionComponent, "enabled", "writable", false);
+            }
+          }
+        }
+        decorated = actionField;
+      }
+      return decorated;
+    },
+
 
     /**
      *            remoteContainer
