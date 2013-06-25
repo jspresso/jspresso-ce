@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.descriptor.query;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
 /**
  * The component descriptor of comparable property query structures.
@@ -39,6 +41,11 @@ import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescr
  */
 public class ComparableQueryStructureDescriptor extends
     BasicReferencePropertyDescriptor<ComparableQueryStructure> {
+
+  /**
+   * {@code TO_STRING} value.
+   */
+  public static final String             TO_STRING          = "toString";
 
   /**
    * {@code LG} between.
@@ -146,12 +153,18 @@ public class ComparableQueryStructureDescriptor extends
     supValuePropertyDescriptor.setName(SUP_VALUE);
     supValuePropertyDescriptor.setI18nNameKey("");
 
+    BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
+    toStringPropertyDescriptor.setName(TO_STRING);
+
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(comparatorPropertyDescriptor);
     propertyDescriptors.add(infValuePropertyDescriptor);
     propertyDescriptors.add(supValuePropertyDescriptor);
+    propertyDescriptors.add(toStringPropertyDescriptor);
 
     refDescriptor.setPropertyDescriptors(propertyDescriptors);
+    refDescriptor.setRenderedProperties(Arrays.asList(COMPARATOR, INF_VALUE, SUP_VALUE));
+    refDescriptor.setToStringProperty(TO_STRING);
 
     setReferencedDescriptor(refDescriptor);
     setComputed(propertyDescriptor.isComputed());

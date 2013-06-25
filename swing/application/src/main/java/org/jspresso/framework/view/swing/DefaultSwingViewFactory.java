@@ -200,6 +200,7 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -2030,6 +2031,10 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (viewComponent instanceof JActionField) {
+      if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor) {
+        ((JActionField) viewComponent)
+            .setFieldEditable(((IReferencePropertyViewDescriptor) propertyViewDescriptor).isAutoCompleteEnabled());
+      }
       Action lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.putValue(Action.NAME,
       // actionHandler.getTranslation(

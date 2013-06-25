@@ -1316,9 +1316,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
 
       if (textField) {
-        modelController.addTarget(textField, "readOnly", "writable", false, {
-          converter: this._readOnlyFieldConverter
-        });
+        if(remoteActionField.getFieldEditable()) {
+          modelController.addTarget(textField, "readOnly", "writable", false, {
+            converter: this._readOnlyFieldConverter
+          });
+        } else {
+          textField.setReadOnly(true);
+        }
         var triggerAction = function (e) {
           var content = textField.getValue();
           if (content && content.length > 0) {

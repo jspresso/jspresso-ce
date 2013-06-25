@@ -22,6 +22,9 @@ qx.Class.define("org.jspresso.framework.gui.remote.RActionField", {
       properties: {
         showTextField: {
           check: "Boolean"
+        },
+        fieldEditable: {
+          check: "Boolean"
         }
       }
     });

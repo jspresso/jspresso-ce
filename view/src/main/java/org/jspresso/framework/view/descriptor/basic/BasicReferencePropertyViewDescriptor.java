@@ -27,14 +27,22 @@ import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
  * installed by Jspresso when a reference property is displayed. You can then
  * customize this action when defining the corresponding column in a table view
  * or field in a component view.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public class BasicReferencePropertyViewDescriptor extends
-    BasicPropertyViewDescriptor implements IReferencePropertyViewDescriptor {
+public class BasicReferencePropertyViewDescriptor extends BasicPropertyViewDescriptor
+    implements IReferencePropertyViewDescriptor {
 
   private IDisplayableAction lovAction;
+  private boolean            autoCompleteEnabled;
+
+  /**
+   * Instantiates a new Basic reference property view descriptor.
+   */
+  public BasicReferencePropertyViewDescriptor() {
+    autoCompleteEnabled = true;
+  }
 
   /**
    * {@inheritDoc}
@@ -47,14 +55,33 @@ public class BasicReferencePropertyViewDescriptor extends
   /**
    * Allows to override the default &quot;List of values&quot; action attached
    * to this reference property view.
-   * <p>
+   * <p/>
    * A {@code null} value (default) keeps the standard action.
    *
    * @param lovAction
-   *          the lovAction to set.
+   *     the lovAction to set.
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
   }
 
+
+  /**
+   * Is auto complete enabled.
+   *
+   * @return the boolean
+   */
+  public boolean isAutoCompleteEnabled() {
+    return autoCompleteEnabled;
+  }
+
+  /**
+   * Sets auto complete enabled. I set to {@code false}, then the field will always be read-only whereas the LOV
+   * action button will follow enabled / disabled rules.
+   *
+   * @param autoCompleteEnabled the auto complete enabled value.
+   */
+  public void setAutoCompleteEnabled(boolean autoCompleteEnabled) {
+    this.autoCompleteEnabled = autoCompleteEnabled;
+  }
 }

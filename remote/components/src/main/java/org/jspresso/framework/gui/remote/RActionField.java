@@ -27,8 +27,8 @@ package org.jspresso.framework.gui.remote;
 public class RActionField extends RComponent {
 
   private static final long serialVersionUID = -5445056567090394779L;
-
-  private boolean           showTextField;
+  private boolean showTextField;
+  private boolean fieldEditable;
 
   /**
    * Constructs a new {@code RActionField} instance.
@@ -68,4 +68,21 @@ public class RActionField extends RComponent {
     this.showTextField = showTextField;
   }
 
+  /**
+   * Is field editable.
+   *
+   * @return the boolean
+   */
+  public boolean isFieldEditable() {
+    return fieldEditable;
+  }
+
+  /**
+   * Sets field editable.
+   *
+   * @param fieldEditable the field editable
+   */
+  public void setFieldEditable(boolean fieldEditable) {
+    this.fieldEditable = fieldEditable;
+  }
 }

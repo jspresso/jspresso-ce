@@ -18,36 +18,68 @@
  */
 package org.jspresso.framework.model.component.query;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * A simple query structure which holds a comparator, and inf value and a sup
  * value.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class ComparableQueryStructure extends QueryComponent {
+
+  private final IPropertyDescriptor  sourceDescriptor;
+  private       ITranslationProvider translationProvider;
+  private       Locale               locale;
 
   /**
    * Constructs a new {@code ComparableQueryStructure} instance.
    *
    * @param componentDescriptor
-   *          the query componentDescriptor.
+   *     the query componentDescriptor
    * @param componentFactory
-   *          the component factory.
+   *     the component factory
+   * @param propertyDescriptor
+   *     the property descriptor
    */
-  public ComparableQueryStructure(IComponentDescriptor<?> componentDescriptor,
-      IComponentFactory componentFactory) {
+  public ComparableQueryStructure(IComponentDescriptor<?> componentDescriptor, IComponentFactory componentFactory,
+                                  IPropertyDescriptor propertyDescriptor) {
     super(componentDescriptor, componentFactory);
+    this.sourceDescriptor = propertyDescriptor;
     setComparator(ComparableQueryStructureDescriptor.EQ);
+    PropertyChangeListener toStringListener = new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        firePropertyChange(ComparableQueryStructureDescriptor.TO_STRING, null, getToString());
+      }
+    };
+    addPropertyChangeListener(ComparableQueryStructureDescriptor.COMPARATOR, toStringListener);
+    addPropertyChangeListener(ComparableQueryStructureDescriptor.INF_VALUE, toStringListener);
+    addPropertyChangeListener(ComparableQueryStructureDescriptor.SUP_VALUE, toStringListener);
   }
 
   /**
    * Gets the comparator.
-   * 
+   *
    * @return the comparator.
    */
   public String getComparator() {
@@ -55,8 +87,18 @@ public class ComparableQueryStructure extends QueryComponent {
   }
 
   /**
+   * Sets the comparator.
+   *
+   * @param comparator
+   *     the comparator to set.
+   */
+  public void setComparator(String comparator) {
+    put(ComparableQueryStructureDescriptor.COMPARATOR, comparator);
+  }
+
+  /**
    * Gets the infValue.
-   * 
+   *
    * @return the infValue.
    */
   public Object getInfValue() {
@@ -64,8 +106,18 @@ public class ComparableQueryStructure extends QueryComponent {
   }
 
   /**
+   * Sets the infValue.
+   *
+   * @param infValue
+   *     the infValue to set.
+   */
+  public void setInfValue(Object infValue) {
+    put(ComparableQueryStructureDescriptor.INF_VALUE, infValue);
+  }
+
+  /**
    * Gets the supValue.
-   * 
+   *
    * @return the supValue.
    */
   public Object getSupValue() {
@@ -73,30 +125,10 @@ public class ComparableQueryStructure extends QueryComponent {
   }
 
   /**
-   * Sets the comparator.
-   * 
-   * @param comparator
-   *          the comparator to set.
-   */
-  public void setComparator(String comparator) {
-    put(ComparableQueryStructureDescriptor.COMPARATOR, comparator);
-  }
-
-  /**
-   * Sets the infValue.
-   * 
-   * @param infValue
-   *          the infValue to set.
-   */
-  public void setInfValue(Object infValue) {
-    put(ComparableQueryStructureDescriptor.INF_VALUE, infValue);
-  }
-
-  /**
    * Sets the supValue.
-   * 
+   *
    * @param supValue
-   *          the supValue to set.
+   *     the supValue to set.
    */
   public void setSupValue(Object supValue) {
     put(ComparableQueryStructureDescriptor.SUP_VALUE, supValue);
@@ -109,15 +141,16 @@ public class ComparableQueryStructure extends QueryComponent {
    *         a restriction.
    */
   public boolean isRestricting() {
-    return getInfValue() != null || getSupValue() != null || ComparableQueryStructureDescriptor.NU.equals
-        (getComparator()) || ComparableQueryStructureDescriptor.NN.equals(getComparator());
+    return getInfValue() != null || getSupValue() != null
+        || ComparableQueryStructureDescriptor.NU.equals(getComparator())
+        || ComparableQueryStructureDescriptor.NN.equals(getComparator());
   }
 
   /**
    * Whether the value passed as parameter matches the query structure.
    *
    * @param value
-   *          the value to test.
+   *     the value to test.
    * @return {@code true} if the value passed as parameter matches the
    *         query structure.
    */
@@ -149,8 +182,7 @@ public class ComparableQueryStructure extends QueryComponent {
         return compareValue != null;
       } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
         if (infValue != null && supValue != null) {
-          return value.compareTo(infValue) >= 0
-              && value.compareTo(supValue) <= 0;
+          return value.compareTo(infValue) >= 0 && value.compareTo(supValue) <= 0;
         } else if (infValue != null) {
           return value.compareTo(infValue) >= 0;
         } else {
@@ -159,5 +191,132 @@ public class ComparableQueryStructure extends QueryComponent {
       }
     }
     return true;
+  }
+
+  /**
+   * Computes the toString().
+   *
+   * @return the toString().
+   */
+  public String getToString() {
+    if (isRestricting()) {
+      String comparator = getComparator();
+      if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
+        return "#";
+      } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
+        return "!#";
+      } else {
+        Format format = null;
+        IPropertyDescriptor sd = getSourceDescriptor();
+        if (sd instanceof IDatePropertyDescriptor) {
+          if (((IDatePropertyDescriptor) sd).getType() == EDateType.DATE_TIME) {
+            if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
+              format = new SimpleDateFormat(
+                  getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
+                      .getTimePattern(getLocale()));
+            } else {
+              format = new SimpleDateFormat(
+                  getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
+                      .getShortTimePattern(getLocale()));
+            }
+          } else {
+            format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()));
+          }
+        } else if (sd instanceof ITimePropertyDescriptor) {
+          if (((ITimePropertyDescriptor) sd).isSecondsAware()) {
+            format = new SimpleDateFormat(getTranslationProvider().getTimePattern(getLocale()));
+          } else {
+            format = new SimpleDateFormat(getTranslationProvider().getShortTimePattern(getLocale()));
+          }
+        } else if (sd instanceof IIntegerPropertyDescriptor) {
+          format = NumberFormat.getIntegerInstance(locale);
+        } else if (sd instanceof IDecimalPropertyDescriptor) {
+          if (sd instanceof IPercentPropertyDescriptor) {
+            format = NumberFormat.getPercentInstance(locale);
+          } else {
+            format = NumberFormat.getNumberInstance(locale);
+          }
+          ((NumberFormat) format).setMaximumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
+          ((NumberFormat) format).setMinimumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
+        }
+        StringBuilder buf = new StringBuilder();
+        Object infValue = getInfValue();
+        Object supValue = getSupValue();
+        Object compareValue = infValue;
+        if (compareValue == null) {
+          compareValue = supValue;
+        }
+        assert format != null;
+        String formattedCompareValue = format.format(compareValue);
+        if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
+          buf.append("= ").append(formattedCompareValue);
+        } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
+          buf.append("> ").append(formattedCompareValue);
+        } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
+          buf.append(">= ").append(formattedCompareValue);
+        } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
+          buf.append("< ").append(formattedCompareValue);
+        } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
+          buf.append("<= ").append(formattedCompareValue);
+        } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
+          if (infValue != null && supValue != null) {
+            buf.append(">= ").append(format.format(infValue)).append(", <= ").append(format.format(supValue));
+          } else if (infValue != null) {
+            buf.append(">= ").append(format.format(infValue));
+          } else if (supValue != null) {
+            buf.append("<= ").append(format.format(supValue));
+          }
+        }
+        return buf.toString();
+      }
+    }
+    return "";
+  }
+
+  /**
+   * Gets the translationProvider.
+   *
+   * @return the translationProvider.
+   */
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
+  }
+
+  /**
+   * Sets the translationProvider.
+   *
+   * @param translationProvider
+   *     the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  /**
+   * Gets the locale.
+   *
+   * @return the locale.
+   */
+  protected Locale getLocale() {
+    return locale;
+  }
+
+  /**
+   * Sets the locale.
+   *
+   * @param locale
+   *     the locale to set.
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  /**
+   * Gets the sourceDescriptor.
+   *
+   * @return the sourceDescriptor.
+   */
+  protected IPropertyDescriptor getSourceDescriptor() {
+    return sourceDescriptor;
   }
 }

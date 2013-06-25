@@ -127,6 +127,14 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    */
   @Override
   public List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
+    return getPropertyViewDescriptors(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<IPropertyViewDescriptor> getPropertyViewDescriptors(boolean explodeComponentReferences) {
     IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
         .getComponentDescriptor();
     List<IPropertyViewDescriptor> declaredPropertyViewDescriptors = propertyViewDescriptors;
@@ -141,38 +149,27 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
             .setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
         propertyViewDescriptor.setModelDescriptor(componentDescriptor
             .getPropertyDescriptor(renderedProperty));
-        // if (propertyViewDescriptor.getModelDescriptor() instanceof
-        // EnumQueryStructureDescriptor) {
-        // IEnumerationPropertyDescriptor enumPropertyDescriptor =
-        // ((EnumQueryStructureDescriptor) propertyViewDescriptor
-        // .getModelDescriptor()).getSourceDescriptor();
-        // int lineCount = enumPropertyDescriptor.getEnumerationValues().size();
-        // if (!enumPropertyDescriptor.isMandatory()) {
-        // lineCount++;
-        // }
-        // if (lineCount > 4) {
-        // lineCount = 4;
-        // }
-        // propertyViewDescriptor.setPreferredHeight(Integer.valueOf(25 *
-        // lineCount));
-        // propertyViewDescriptor.setPreferredWidth(Integer.valueOf(250));
-        // }
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);
       }
     }
-    List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
-    for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-      List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
-          .explodeComponentReferences(propertyViewDescriptor,
-              (IComponentDescriptorProvider<?>) getModelDescriptor());
-      if (exploded.size() > 0) {
-        if (propertyViewDescriptor.getWidth() != null
-            && propertyViewDescriptor.getWidth() > exploded.size()) {
-          ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1))
-              .setWidth(propertyViewDescriptor.getWidth() - exploded.size() + 1);
+    List<IPropertyViewDescriptor> actualPropertyViewDescriptors;
+    if(explodeComponentReferences) {
+      actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
+        List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
+            .explodeComponentReferences(propertyViewDescriptor,
+                (IComponentDescriptorProvider<?>) getModelDescriptor());
+        if (exploded.size() > 0) {
+          if (propertyViewDescriptor.getWidth() != null
+              && propertyViewDescriptor.getWidth() > exploded.size()) {
+            ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1))
+                .setWidth(propertyViewDescriptor.getWidth() - exploded.size() + 1);
+          }
+          actualPropertyViewDescriptors.addAll(exploded);
         }
-        actualPropertyViewDescriptors.addAll(exploded);
       }
+    } else {
+      actualPropertyViewDescriptors = declaredPropertyViewDescriptors;
     }
     return actualPropertyViewDescriptors;
   }

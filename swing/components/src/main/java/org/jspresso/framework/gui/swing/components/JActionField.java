@@ -55,11 +55,12 @@ public class JActionField extends JPanel {
 
   private static final long serialVersionUID = 5741890319182521808L;
 
-  private List<Action>      actions;
-  private final JPanel            buttonPanel;
-  private final boolean           showTextField;
-  private final JTextField        textField;
-  private String            value;
+  private final JPanel       buttonPanel;
+  private final boolean      showTextField;
+  private final JTextField   textField;
+  private       List<Action> actions;
+  private       String       value;
+  private       boolean      fieldEditable;
 
   /**
    * Constructs a new {@code JActionField} instance.
@@ -69,13 +70,11 @@ public class JActionField extends JPanel {
    */
   public JActionField(boolean showTextField) {
     textField = new JTextField();
-    textField.getDocument().putProperty("filterNewlines",
-        Boolean.FALSE);
+    textField.getDocument().putProperty("filterNewlines", Boolean.FALSE);
     setLayout(new GridBagLayout());
     if (showTextField) {
-      add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0,
-          GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
-              0, 0, 0, 0), 0, 0));
+      add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+          new Insets(0, 0, 0, 0), 0, 0));
       super.addFocusListener(new FocusAdapter() {
 
         @Override
@@ -95,14 +94,15 @@ public class JActionField extends JPanel {
     } else {
       buttonPosition = 0;
     }
-    add(buttonPanel, new GridBagConstraints(buttonPosition, 0, 1, 1, 0, 1,
-        GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(0, 0,
-            0, 0), 0, 0));
+    add(buttonPanel,
+        new GridBagConstraints(buttonPosition, 0, 1, 1, 0, 1, GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+            new Insets(0, 0, 0, 0), 0, 0));
+    fieldEditable = true;
   }
 
   /**
    * Adds a focus listener to the text field.
-   * 
+   *
    * @param l
    *          the listener to add.
    */
@@ -112,7 +112,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   public List<Action> getActions() {
@@ -121,7 +121,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the action field text.
-   * 
+   *
    * @return the action field text.
    */
   public String getActionText() {
@@ -130,7 +130,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value.
    */
   public Object getValue() {
@@ -139,7 +139,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the showTextField.
-   * 
+   *
    * @return the showTextField.
    */
   public boolean isShowingTextField() {
@@ -243,20 +243,7 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * Turns the date field to be editable or not.
-   * 
-   * @param editable
-   *          true if editable.
-   */
-  public void setEditable(boolean editable) {
-    if (textField.getAction() != null) {
-      textField.getAction().setEnabled(editable);
-    }
-    textField.setEditable(editable);
-  }
-
-  /**
-   * Turns the date field to be enabled or not.
+   * Turns the action field to be editable or not.
    * 
    * @param enabled
    *          true if enabled.
@@ -266,7 +253,7 @@ public class JActionField extends JPanel {
     if (textField.getAction() != null) {
       textField.getAction().setEnabled(enabled);
     }
-    textField.setEnabled(enabled);
+    textField.setEditable(enabled && fieldEditable);
   }
 
   /**
@@ -295,5 +282,15 @@ public class JActionField extends JPanel {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Sets field editable.
+   *
+   * @param fieldEditable the field editable
+   */
+  public void setFieldEditable(boolean fieldEditable) {
+    this.fieldEditable = fieldEditable;
+    textField.setEditable(isEnabled() && fieldEditable);
   }
 }

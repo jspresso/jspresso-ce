@@ -36,6 +36,7 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.AbstractEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
@@ -84,14 +85,20 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
     if (!ComparableQueryStructure.class.isAssignableFrom(queryDescriptor
         .getComponentContract())) {
-      for (IPropertyDescriptor propertyDescriptor : queryDescriptor
+      for (IPropertyDescriptor propertyDescriptor : getComponentDescriptor()
           .getPropertyDescriptors()) {
-        if (propertyDescriptor instanceof AbstractEnumerationPropertyDescriptor
-            && ((AbstractEnumerationPropertyDescriptor) propertyDescriptor)
-                .isQueryMultiselect()) {
+        if (propertyDescriptor instanceof EnumQueryStructureDescriptor) {
           EnumQueryStructure enumQueryStructure = new EnumQueryStructure(
-              (IEnumerationPropertyDescriptor) propertyDescriptor);
+              (IEnumerationPropertyDescriptor) getQueryDescriptor().getPropertyDescriptor
+                  (propertyDescriptor.getName()));
           put(propertyDescriptor.getName(), enumQueryStructure);
+        } else if(propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
+          IComponentDescriptor<?> referencedDescriptor = ((ComparableQueryStructureDescriptor) propertyDescriptor)
+              .getReferencedDescriptor();
+          ComparableQueryStructure comparableQueryStructure = new ComparableQueryStructure(
+              referencedDescriptor, getComponentFactory(), getQueryDescriptor().getPropertyDescriptor
+              (propertyDescriptor.getName()));
+          put(propertyDescriptor.getName(), comparableQueryStructure);
         }
       }
     }
@@ -111,6 +118,10 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         ((EnumQueryStructure) value)
             .setTranslationProvider(translationProvider);
         ((EnumQueryStructure) value).setLocale(locale);
+      } else if (value instanceof ComparableQueryStructure) {
+        ((ComparableQueryStructure) value)
+            .setTranslationProvider(translationProvider);
+        ((ComparableQueryStructure) value).setLocale(locale);
       }
     }
   }
@@ -134,18 +145,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     Object actualValue = super.get(key);
     if (actualValue == null
         && propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+        && !(propertyDescriptor instanceof ComparableQueryStructureDescriptor)
         && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
-      QueryComponent referencedQueryComponent;
-      if (ComparableQueryStructure.class.isAssignableFrom(referencedDescriptor
-          .getComponentContract())) {
-        referencedQueryComponent = new ComparableQueryStructure(
-            referencedDescriptor, getComponentFactory());
-      } else {
-        referencedQueryComponent = new QueryComponent(referencedDescriptor,
+      QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor,
             getComponentFactory());
-      }
       referencedQueryComponent
           .addPropertyChangeListener(new InlinedComponentTracker(
               propertyDescriptor.getName()));

@@ -130,6 +130,6 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   @Override
   protected void protectedWritabilityChange() {
     super.protectedWritabilityChange();
-    getConnectedJComponent().setEditable(isWritable());
+    getConnectedJComponent().setEnabled(isWritable());
   }
 }

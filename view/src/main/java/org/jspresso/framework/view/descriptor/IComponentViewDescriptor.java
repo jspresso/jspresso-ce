@@ -53,4 +53,12 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
    * @return the property view descriptors.
    */
   List<IPropertyViewDescriptor> getPropertyViewDescriptors();
+
+  /**
+   * Gets the property view descriptors.
+   *
+   * @param explodeComponentReferences explode component references ?
+   * @return the property view descriptors.
+   */
+  List<IPropertyViewDescriptor> getPropertyViewDescriptors(boolean explodeComponentReferences);
 }

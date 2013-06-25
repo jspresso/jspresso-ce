@@ -53,7 +53,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    */
   public EnumQueryStructure(IEnumerationPropertyDescriptor propertyDescriptor) {
     this.sourceDescriptor = propertyDescriptor;
-    PropertyChangeListener selectedListener = new PropertyChangeListener() {
+    PropertyChangeListener toStringListener = new PropertyChangeListener() {
 
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
@@ -65,13 +65,13 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
     if (!propertyDescriptor.isMandatory()) {
       EnumValueQueryStructure nullValueQueryStructure = new EnumValueQueryStructure();
       nullValueQueryStructure.setValue(null);
-      nullValueQueryStructure.addPropertyChangeListener(selectedListener);
+      nullValueQueryStructure.addPropertyChangeListener(toStringListener);
       enumerationValues.add(nullValueQueryStructure);
     }
     for (String value : propertyDescriptor.getEnumerationValues()) {
       EnumValueQueryStructure enumValueQueryStructure = new EnumValueQueryStructure();
       enumValueQueryStructure.setValue(value);
-      enumValueQueryStructure.addPropertyChangeListener(selectedListener);
+      enumValueQueryStructure.addPropertyChangeListener(toStringListener);
       enumerationValues.add(enumValueQueryStructure);
     }
   }
@@ -159,14 +159,6 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    */
   public boolean isEmpty() {
     return getSelectedEnumerationValues().isEmpty();
-  }
-
-  /**
-   * Force a notification of the toString().
-   */
-  public void refreshToString() {
-    firePropertyChange(EnumQueryStructureDescriptor.TO_STRING, null,
-        getToString());
   }
 
   /**

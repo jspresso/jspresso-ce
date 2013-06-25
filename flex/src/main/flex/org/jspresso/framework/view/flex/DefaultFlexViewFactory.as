@@ -948,12 +948,12 @@ public class DefaultFlexViewFactory {
       }
     }
     bindActionField(actionField, textField, remoteActionField.state,
-                    (remoteActionField.actionLists[0] as RActionList).actions[0], actionComponents);
+                    (remoteActionField.actionLists[0] as RActionList).actions[0], actionComponents, remoteActionField.fieldEditable);
     return actionField;
   }
 
   protected function bindActionField(actionField:UIComponent, textInput:TextInput, remoteState:RemoteValueState,
-                                     action:RAction, actionComponents:Array):void {
+                                     action:RAction, actionComponents:Array, textFieldEditable:Boolean):void {
 
     var updateView:Function = function (value:Object):void {
       if (textInput) {
@@ -973,15 +973,19 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
     if (textInput) {
-      var updateEditability:Function = function (value:Object):void {
-        if (value) {
-          textInput.setStyle("backgroundColor", null);
-        } else {
-          textInput.setStyle("backgroundColor", textInput.getStyle("backgroundDisabledColor"));
-        }
-        textInput.editable = value as Boolean;
-      };
-      BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+      if(textFieldEditable) {
+        var updateEditability:Function = function (value:Object):void {
+          if (value) {
+            textInput.setStyle("backgroundColor", null);
+          } else {
+            textInput.setStyle("backgroundColor", textInput.getStyle("backgroundDisabledColor"));
+          }
+          textInput.editable = (value as Boolean);
+        };
+        BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+      } else {
+        textInput.editable = false;
+      }
 
       var triggerAction:Function = function (event:Event):void {
         var tf:TextInput = (event.currentTarget as TextInput);

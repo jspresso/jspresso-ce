@@ -22,18 +22,25 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * A property view descriptor used to refine reference property views.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public interface IReferencePropertyViewDescriptor extends
-    IPropertyViewDescriptor {
+public interface IReferencePropertyViewDescriptor extends IPropertyViewDescriptor {
 
   /**
    * Returns an optional custom LOV action.
-   * 
+   *
    * @return an optional custom LOV action.
    */
   IDisplayableAction getLovAction();
+
+  /**
+   * Is auto complete enabled.
+   *
+   * @return {@code true} if the field should be considered auto completable.
+   *         If {@code false}, then the textfield is made readonly.
+   */
+  boolean isAutoCompleteEnabled();
 
 }

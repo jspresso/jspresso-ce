@@ -151,6 +151,7 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -1520,6 +1521,10 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (viewComponent instanceof RActionField) {
+      if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor) {
+        ((RActionField) viewComponent)
+            .setFieldEditable(((IReferencePropertyViewDescriptor) propertyViewDescriptor).isAutoCompleteEnabled());
+      }
       RAction lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.setName(getTranslationProvider().getTranslation(
       // "lov.element.name",

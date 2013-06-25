@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
 public class RActionField extends RComponent {
 
   private var _showTextField:Boolean;
+  private var _fieldEditable:Boolean;
 
   public function RActionField() {
     //default constructor.
@@ -31,6 +32,14 @@ public class RActionField extends RComponent {
 
   public function get showTextField():Boolean {
     return _showTextField;
+  }
+
+  public function get fieldEditable():Boolean {
+    return _fieldEditable;
+  }
+
+  public function set fieldEditable(value:Boolean):void {
+    _fieldEditable = value;
   }
 }
 }
