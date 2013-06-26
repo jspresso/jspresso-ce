@@ -241,8 +241,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           || remoteComponent instanceof org.jspresso.framework.gui.remote.RLabel
           || remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField
           || remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox
-          || remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox
-          || remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
+          || remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
         return this._decorateWithAsideActions(component, remoteComponent);
       } else {
         return this._decorateWithToolbars(component, remoteComponent);

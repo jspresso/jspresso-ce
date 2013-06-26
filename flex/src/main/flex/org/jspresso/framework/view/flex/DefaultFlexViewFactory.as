@@ -646,8 +646,7 @@ public class DefaultFlexViewFactory {
         || remoteComponent is RLabel
         || remoteComponent is RTimeField
         || remoteComponent is RComboBox
-        || remoteComponent is RCheckBox
-        || remoteComponent is RActionField) {
+        || remoteComponent is RCheckBox) {
       return decorateWithAsideActions(component, remoteComponent);
     } else {
       return decorateWithToolbars(component, remoteComponent);
