@@ -358,6 +358,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
           || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
           || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.RECORD_COUNT.equals(evt.getPropertyName())
+          || IPageable.SELECTED_RECORD_COUNT.equals(evt.getPropertyName())
           || IPageable.PAGE_NAVIGATION_ENABLED.equals(evt.getPropertyName())) {
         target.firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
             evt.getNewValue());
@@ -446,6 +447,19 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * {@inheritDoc}
    */
   @Override
+  public Integer getSelectedRecordCount() {
+    if (filter != null) {
+      return filter.getSelectedRecordCount();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
   public boolean isNextPageEnabled() {
     if (filter != null) {
       return filter.isNextPageEnabled();
@@ -500,6 +514,18 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public void setRecordCount(Integer recordCount) {
     if (filter != null) {
       filter.setRecordCount(recordCount);
+    }
+  }
+
+  /**
+   * Delegates to filter.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setSelectedRecordCount(Integer selectedRecordCount) {
+    if (filter != null) {
+      filter.setSelectedRecordCount(selectedRecordCount);
     }
   }
 

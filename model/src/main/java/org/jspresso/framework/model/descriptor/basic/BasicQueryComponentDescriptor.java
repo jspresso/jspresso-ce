@@ -99,6 +99,11 @@ public class BasicQueryComponentDescriptor<E> extends
     recordCountPropertyDescriptor.setReadOnly(true);
     extraPropertyDescriptors.add(recordCountPropertyDescriptor);
 
+    BasicIntegerPropertyDescriptor selectedRecordCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    selectedRecordCountPropertyDescriptor.setName(IPageable.SELECTED_RECORD_COUNT);
+    selectedRecordCountPropertyDescriptor.setReadOnly(true);
+    extraPropertyDescriptors.add(selectedRecordCountPropertyDescriptor);
+
     return extraPropertyDescriptors;
   }
 

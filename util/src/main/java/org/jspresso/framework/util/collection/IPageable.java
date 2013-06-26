@@ -69,6 +69,11 @@ public interface IPageable {
   String RECORD_COUNT            = "recordCount";
 
   /**
+   * "selectedRecordCount" string constant.
+   */
+  String SELECTED_RECORD_COUNT            = "selectedRecordCount";
+
+  /**
    * Gets the page number used for query actions.
    * 
    * @return the page number used for query actions.
@@ -170,4 +175,18 @@ public interface IPageable {
    * @return the collection of sticky results.
    */
   List<?> getStickyResults();
+
+  /**
+   * Sets selected record count.
+   *
+   * @param selectedRecordCount the selected record count
+   */
+  void setSelectedRecordCount(Integer selectedRecordCount);
+
+  /**
+   * Gets selected record count.
+   *
+   * @return the selected record count
+   */
+  Integer getSelectedRecordCount();
 }

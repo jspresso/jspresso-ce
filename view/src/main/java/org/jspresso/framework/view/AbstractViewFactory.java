@@ -88,6 +88,7 @@ import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
@@ -3098,6 +3099,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
         paginationView.setParent(view);
         view.setPeer(decorateWithPaginationView(view.getPeer(),
             paginationView.getPeer()));
+        ((ICollectionConnectorProvider) view.getConnector()).getCollectionConnector().addSelectionChangeListener(
+            new ISelectionChangeListener() {
+              @Override
+              public void selectionChange(SelectionChangeEvent evt) {
+                IPageable pageable = ((ICollectionConnector) evt.getSource()).getModelConnector().getModelProvider()
+                                                                             .getModel();
+                if (pageable != null) {
+                  int[] selectedIndices = evt.getNewSelection();
+                  pageable.setSelectedRecordCount(selectedIndices == null ? 0 : selectedIndices.length);
+                }
+              }
+            });
       }
       if (viewDescriptor.isAutoSelectFirstRow()) {
         attachDefaultCollectionListener(((ICollectionConnectorProvider) view

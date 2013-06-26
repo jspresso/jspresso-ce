@@ -35,7 +35,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.AbstractEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -55,16 +54,17 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     IQueryComponent {
 
   private final IComponentDescriptor<?> componentDescriptor;
-  private IComponentDescriptor<?> queryDescriptor;
   private final IComponentFactory       componentFactory;
-  private Map<String, ESort>      defaultOrderingProperties;
-  private Map<String, ESort>      orderingProperties;
-  private Integer                 page;
-  private Integer                 pageSize;
-  private Integer                 recordCount;
-  private boolean                 distinctEnforced;
-  private List<?>                 queriedComponents;
-  private List<?>                 stickyResults;
+  private       IComponentDescriptor<?> queryDescriptor;
+  private       Map<String, ESort>      defaultOrderingProperties;
+  private       Map<String, ESort>      orderingProperties;
+  private       Integer                 page;
+  private       Integer                 pageSize;
+  private       Integer                 recordCount;
+  private       Integer                 selectedRecordCount;
+  private       boolean                 distinctEnforced;
+  private       List<?>                 queriedComponents;
+  private       List<?>                 stickyResults;
 
   /**
    * Constructs a new {@code QueryComponent} instance.
@@ -89,15 +89,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
           .getPropertyDescriptors()) {
         if (propertyDescriptor instanceof EnumQueryStructureDescriptor) {
           EnumQueryStructure enumQueryStructure = new EnumQueryStructure(
-              (IEnumerationPropertyDescriptor) getQueryDescriptor().getPropertyDescriptor
-                  (propertyDescriptor.getName()));
+              (IEnumerationPropertyDescriptor) getQueryDescriptor().getPropertyDescriptor(
+                  propertyDescriptor.getName()));
           put(propertyDescriptor.getName(), enumQueryStructure);
-        } else if(propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
+        } else if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
           IComponentDescriptor<?> referencedDescriptor = ((ComparableQueryStructureDescriptor) propertyDescriptor)
               .getReferencedDescriptor();
-          ComparableQueryStructure comparableQueryStructure = new ComparableQueryStructure(
-              referencedDescriptor, getComponentFactory(), getQueryDescriptor().getPropertyDescriptor
-              (propertyDescriptor.getName()));
+          ComparableQueryStructure comparableQueryStructure = new ComparableQueryStructure(referencedDescriptor,
+              getComponentFactory(), getQueryDescriptor().getPropertyDescriptor(propertyDescriptor.getName()));
           put(propertyDescriptor.getName(), comparableQueryStructure);
         }
       }
@@ -597,6 +596,28 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     firePropertyChange(IPageable.PAGE_NAVIGATION_ENABLED,
         Boolean.valueOf(oldPageNavigationEnabled),
         Boolean.valueOf(isPageNavigationEnabled()));
+  }
+
+  /**
+   * Gets selected record count.
+   *
+   * @return the selected record count
+   */
+  @Override
+  public Integer getSelectedRecordCount() {
+    return selectedRecordCount;
+  }
+
+  /**
+   * Sets selected record count.
+   *
+   * @param selectedRecordCount the selected record count
+   */
+  @Override
+  public void setSelectedRecordCount(Integer selectedRecordCount) {
+    Integer oldValue = getSelectedRecordCount();
+    this.selectedRecordCount = selectedRecordCount;
+    firePropertyChange(SELECTED_RECORD_COUNT, oldValue, getSelectedRecordCount());
   }
 
   private class InlinedComponentTracker implements PropertyChangeListener {

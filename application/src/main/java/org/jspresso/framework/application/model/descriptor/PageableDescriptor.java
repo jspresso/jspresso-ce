@@ -69,11 +69,16 @@ public final class PageableDescriptor {
     recordCountDesc.setName(IPageable.RECORD_COUNT);
     recordCountDesc.setReadOnly(true);
 
+    BasicIntegerPropertyDescriptor selectedRecordCountDesc = new BasicIntegerPropertyDescriptor();
+    selectedRecordCountDesc.setName(IPageable.SELECTED_RECORD_COUNT);
+    selectedRecordCountDesc.setReadOnly(true);
+
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(pageDesc);
     propertyDescriptors.add(displayPageIndexDesc);
     propertyDescriptors.add(pageCountDesc);
     propertyDescriptors.add(recordCountDesc);
+    propertyDescriptors.add(selectedRecordCountDesc);
 
     descriptor.setPropertyDescriptors(propertyDescriptors);
 
