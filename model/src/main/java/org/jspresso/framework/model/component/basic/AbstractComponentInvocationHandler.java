@@ -78,9 +78,9 @@ import org.slf4j.LoggerFactory;
  * This is the core implementation of all components in the application.
  * Instances of this class serve as handlers for proxies representing the
  * components.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
@@ -95,17 +95,17 @@ public abstract class AbstractComponentInvocationHandler implements
 
 
   // @formatter:off
-  private static final Logger LOG              = LoggerFactory
-                                                  .getLogger(AbstractComponentInvocationHandler.class);
+  private static final Logger LOG = LoggerFactory
+      .getLogger(AbstractComponentInvocationHandler.class);
   // @formatter:on
 
-  private static final long                                                            serialVersionUID = -8332414648339056836L;
+  private static final long serialVersionUID = -8332414648339056836L;
 
   private IAccessorFactory                                                             accessorFactory;
 
-  private SinglePropertyChangeSupport                                                  propertyChangeSupport;
-  private SingleWeakPropertyChangeSupport                                              weakPropertyChangeSupport;
-  private List<PropertyChangeEvent>                                                    delayedEvents;
+  private SinglePropertyChangeSupport     propertyChangeSupport;
+  private SingleWeakPropertyChangeSupport weakPropertyChangeSupport;
+  private List<PropertyChangeEvent>       delayedEvents;
 
   private IComponentCollectionFactory                                                  collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
@@ -114,9 +114,9 @@ public abstract class AbstractComponentInvocationHandler implements
   private IComponentFactory                                                            inlineComponentFactory;
   private Set<String>                                                                  modifierMonitors;
 
-  private boolean                                                                      propertyProcessorsEnabled;
-  private boolean                                                                      propertyChangeEnabled;
-  private boolean                                                                      collectionSortEnabled;
+  private boolean propertyProcessorsEnabled;
+  private boolean propertyChangeEnabled;
+  private boolean collectionSortEnabled;
 
   private Map<String, NestedReferenceTracker>                                          referenceTrackers;
 
@@ -142,17 +142,17 @@ public abstract class AbstractComponentInvocationHandler implements
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
    * 
    * @param componentDescriptor
-   *          The descriptor of the proxy component.
+   *     The descriptor of the proxy component.
    * @param inlineComponentFactory
-   *          the factory used to create inline components.
+   *     the factory used to create inline components.
    * @param collectionFactory
-   *          The factory used to create empty component collections from
-   *          collection getters.
+   *     The factory used to create empty component collections from
+   *     collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *     The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create component extensions based on their
-   *          classes.
+   *     The factory used to create component extensions based on their
+   *     classes.
    */
   protected AbstractComponentInvocationHandler(
       IComponentDescriptor<? extends IComponent> componentDescriptor,
@@ -187,7 +187,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Gets the interface class being the contract of this component.
-   * 
+   *
    * @return the component interface contract.
    */
   public Class<? extends Object> getComponentContract() {
@@ -198,7 +198,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * Handles methods invocations on the component proxy. Either : <li>delegates
    * to one of its extension if the accessed property is registered as being
    * part of an extension <li>handles property access internally
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -390,13 +390,13 @@ public abstract class AbstractComponentInvocationHandler implements
    * Gives chance to subclasses to perform sanity checks and eventually
    * substitute the passed param by an other one when it's technically
    * necessary.
-   * 
+   *
    * @param target
-   *          the target being modified.
+   *     the target being modified.
    * @param propertyDescriptor
-   *          the descriptor of the property being modified.
+   *     the descriptor of the property being modified.
    * @param param
-   *          the modifier parameter.
+   *     the modifier parameter.
    * @return the parameter to actually pass to the modifier
    */
   protected Object sanitizeModifierParam(Object target,
@@ -406,9 +406,9 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Sets the collectionFactory.
-   * 
+   *
    * @param collectionFactory
-   *          the collectionFactory to set.
+   *     the collectionFactory to set.
    */
   public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
@@ -416,29 +416,29 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Delegate method to compute object equality.
-   * 
+   *
    * @param proxy
-   *          the target component to compute equality of.
+   *     the target component to compute equality of.
    * @param another
-   *          the object to compute equality against.
+   *     the object to compute equality against.
    * @return the computed equality.
    */
   protected abstract boolean computeEquals(IComponent proxy, Object another);
 
   /**
    * Delegate method to compute hashcode.
-   * 
+   *
    * @param proxy
-   *          the target component to compute hashcode for.
+   *     the target component to compute hashcode for.
    * @return the computed hashcode.
    */
   protected abstract int computeHashCode(IComponent proxy);
 
   /**
    * Gives a chance to configure created extensions.
-   * 
+   *
    * @param extension
-   *          the extension to configure.
+   *     the extension to configure.
    */
   protected void configureExtension(IComponentExtension<IComponent> extension) {
     if (extension instanceof IComponentFactoryAware) {
@@ -451,11 +451,11 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Gives a chance to the implementor to decorate a component reference before
    * returning it when fetching association ends.
-   * 
+   *
    * @param referent
-   *          the component reference to decorate.
+   *     the component reference to decorate.
    * @param referentDescriptor
-   *          the component descriptor of the referent.
+   *     the component descriptor of the referent.
    * @return the decorated component.
    */
   protected abstract IComponent decorateReferent(IComponent referent,
@@ -464,13 +464,13 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * An empty hook that gets called whenever an entity is detached from a parent
    * one.
-   * 
+   *
    * @param parent
-   *          the parent entity.
+   *     the parent entity.
    * @param child
-   *          the child entity.
+   *     the child entity.
    * @param propertyDescriptor
-   *          the property descriptor this entity was detached from.
+   *     the property descriptor this entity was detached from.
    */
   protected void entityDetached(IEntity parent, IEntity child,
       IRelationshipEndPropertyDescriptor propertyDescriptor) {
@@ -479,7 +479,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Gets the accessorFactory.
-   * 
+   *
    * @return the accessorFactory.
    */
   protected IAccessorFactory getAccessorFactory() {
@@ -488,11 +488,11 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Gets a collection property value.
-   * 
+   *
    * @param proxy
-   *          the proxy to get the property of.
+   *     the proxy to get the property of.
    * @param propertyDescriptor
-   *          the property descriptor to get the value for.
+   *     the property descriptor to get the value for.
    * @return the property value.
    */
   @SuppressWarnings("unchecked")
@@ -521,7 +521,7 @@ public abstract class AbstractComponentInvocationHandler implements
             if (proxy instanceof IEntity) {
               LOG.warn(
                   "A null element was detected in indexed list [{}] on {}, id {} at index {}",
-                  new Object[] {
+                  new Object[]{
                       propertyName,
                       ((IEntity) proxy).getComponentContract().getName(),
                       ((IEntity) proxy).getId(), Integer.valueOf(i)
@@ -555,7 +555,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Allow to disable collection property sorting on read.
-   * 
+   *
    * @return true if collection sorting is enabled on read access.
    */
   protected boolean isCollectionSortOnReadEnabled() {
@@ -583,11 +583,11 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Creates and registers an extension instance.
-   * 
+   *
    * @param extensionClass
-   *          the extension class.
+   *     the extension class.
    * @param proxy
-   *          the proxy to register the extension on.
+   *     the proxy to register the extension on.
    * @return the component extension.
    */
   protected synchronized IComponentExtension<? extends IComponent> getExtensionInstance(
@@ -610,7 +610,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Gets the inlineComponentFactory.
-   * 
+   *
    * @return the inlineComponentFactory.
    */
   protected IComponentFactory getInlineComponentFactory() {
@@ -619,11 +619,11 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Gets a property value.
-   * 
+   *
    * @param proxy
-   *          the proxy to get the property of.
+   *     the proxy to get the property of.
    * @param propertyDescriptor
-   *          the property descriptor to get the value for.
+   *     the property descriptor to get the value for.
    * @return the property value.
    */
   @SuppressWarnings("unchecked")
@@ -644,11 +644,11 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Gets a reference property value.
-   * 
+   *
    * @param proxy
-   *          the proxy to get the property of.
+   *     the proxy to get the property of.
    * @param propertyDescriptor
-   *          the property descriptor to get the value for.
+   *     the property descriptor to get the value for.
    * @return the property value.
    */
   protected Object getReferenceProperty(Object proxy,
@@ -690,16 +690,17 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * Invokes a service method on the component.
-   * 
+   *
    * @param proxy
-   *          the component to invoke the service on.
+   *     the component to invoke the service on.
    * @param method
-   *          the method implemented by the component.
+   *     the method implemented by the component.
    * @param args
-   *          the arguments of the method implemented by the component.
+   *     the arguments of the method implemented by the component.
    * @return the value returned by the method execution if any.
+   *
    * @throws NoSuchMethodException
-   *           if no mean could be found to service the method.
+   *     if no mean could be found to service the method.
    */
   @SuppressWarnings("unchecked")
   protected Object invokeServiceMethod(Object proxy, Method method,
@@ -709,7 +710,7 @@ public abstract class AbstractComponentInvocationHandler implements
       try {
         if (service instanceof AbstractComponentServiceDelegate<?>
             && service.getClass().getMethod(method.getName(),
-                method.getParameterTypes()) != null) {
+            method.getParameterTypes()) != null) {
           return ((AbstractComponentServiceDelegate<Object>) service)
               .executeWith(proxy, method, args);
         }
@@ -744,7 +745,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * Wether the object is fully initialized.
    * 
    * @param objectOrProxy
-   *          the object to test.
+   *     the object to test.
    * @return true if the object is fully initialized.
    */
   protected boolean isInitialized(Object objectOrProxy) {
@@ -753,14 +754,14 @@ public abstract class AbstractComponentInvocationHandler implements
 
   /**
    * An empty hook that gets called whenever an entity is to be updated.
-   * 
+   *
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *     the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *     entityLifecycleHandler.
    */
   protected void onUpdate(IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
@@ -770,9 +771,9 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Direct read access to the properties map without any other operation. Use
    * with caution only in subclasses.
-   * 
+   *
    * @param propertyName
-   *          the property name.
+   *     the property name.
    * @return the property value.
    */
   protected abstract Object retrievePropertyValue(String propertyName);
@@ -780,11 +781,11 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Direct write access to the properties map without any other operation. Use
    * with caution only in subclasses.
-   * 
+   *
    * @param propertyName
-   *          the property name.
+   *     the property name.
    * @param propertyValue
-   *          the property value.
+   *     the property value.
    */
   protected abstract void storeProperty(String propertyName,
       Object propertyValue);
@@ -792,15 +793,15 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Performs necessary registration on inline components before actually
    * storing them.
-   * 
+   *
    * @param proxy
-   *          the proxy to store the reference property for.
+   *     the proxy to store the reference property for.
    * @param propertyDescriptor
-   *          the reference property descriptor.
+   *     the reference property descriptor.
    * @param oldPropertyValue
-   *          the old reference property value.
+   *     the old reference property value.
    * @param newPropertyValue
-   *          the new reference property value.
+   *     the new reference property value.
    */
   protected void storeReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<?> propertyDescriptor,
@@ -866,7 +867,7 @@ public abstract class AbstractComponentInvocationHandler implements
           // To avoid breaking lazy initialization of oldPropertyValue
           !isInitialized(oldPropertyValue)
               || (isInitialized(newPropertyValue) && !ObjectUtils.equals(
-                  oldPropertyValue, newPropertyValue)));
+              oldPropertyValue, newPropertyValue)));
     } else if (referenceTracker != null) {
       if (oldPropertyValue instanceof IComponent
           && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
@@ -884,12 +885,12 @@ public abstract class AbstractComponentInvocationHandler implements
    * attachement.
    * 
    * @param referenceProperty
-   *          the reference to link the tracker to.
+   *     the reference to link the tracker to.
    * @param propertyName
-   *          the property name of the tracker.
+   *     the property name of the tracker.
    * @param fireNestedPropertyChange
-   *          Whenever the initialization is performed, does a first set of
-   *          property change events be fired ?
+   *     Whenever the initialization is performed, does a first set of
+   *     property change events be fired ?
    */
   private void initializeInlineTrackerIfNeeded(
       IPropertyChangeCapable referenceProperty, String propertyName,
@@ -915,9 +916,9 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Directly gets all property values out of the property store without any
    * other operation.
-   * 
+   *
    * @param proxy
-   *          the proxy to straight get the properties from.
+   *     the proxy to straight get the properties from.
    * @return The map of properties.
    */
   protected Map<String, Object> straightGetProperties(Object proxy) {
@@ -937,11 +938,11 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Directly get a property value out of the property store without any other
    * operation.
-   * 
+   *
    * @param proxy
-   *          the proxy to straight get the property from.
+   *     the proxy to straight get the property from.
    * @param propertyName
-   *          the name of the property.
+   *     the name of the property.
    * @return the property value or null.
    */
   protected Object straightGetProperty(Object proxy, String propertyName) {
@@ -949,7 +950,7 @@ public abstract class AbstractComponentInvocationHandler implements
         .getPropertyDescriptor(propertyName);
     if (propertyDescriptor == null
         || (propertyDescriptor.isComputed() && propertyDescriptor
-            .getPersistenceFormula() == null)) {
+        .getPersistenceFormula() == null)) {
       return null;
     }
     Object propertyValue = retrievePropertyValue(propertyName);
@@ -963,13 +964,13 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Directly set a property value to the property store without any other
    * operation.
-   * 
+   *
    * @param proxy
-   *          the proxy to straight set the property to.
+   *     the proxy to straight set the property to.
    * @param propertyName
-   *          the name of the property.
+   *     the name of the property.
    * @param newPropertyValue
-   *          the property value or null.
+   *     the property value or null.
    */
   protected void straightSetProperty(Object proxy, String propertyName,
       Object newPropertyValue) {
@@ -977,7 +978,7 @@ public abstract class AbstractComponentInvocationHandler implements
         .getPropertyDescriptor(propertyName);
     if (propertyDescriptor == null
         || (propertyDescriptor.isComputed() && propertyDescriptor
-            .getPersistenceFormula() == null)) {
+        .getPersistenceFormula() == null)) {
       return;
     }
     Object currentPropertyValue = straightGetProperty(proxy, propertyName);
@@ -997,9 +998,9 @@ public abstract class AbstractComponentInvocationHandler implements
           && isInitialized(currentPropertyValue)) {
         currentPropertyValue = Proxy.newProxyInstance(
             Thread.currentThread().getContextClassLoader(),
-            new Class[] {
-              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                  .getReferencedDescriptor().getCollectionInterface()
+            new Class[]{
+                ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .getReferencedDescriptor().getCollectionInterface()
             },
             new NeverEqualsInvocationHandler(CollectionHelper
                 .cloneCollection((Collection<?>) currentPropertyValue)));
@@ -1225,7 +1226,7 @@ public abstract class AbstractComponentInvocationHandler implements
               propertyDescriptor.getName());
           if (newValue == null
               || (isInitialized(newValue) && newValue instanceof Collection<?> && ((Collection<?>) newValue)
-                  .isEmpty())) {
+              .isEmpty())) {
             throw new MandatoryPropertyException(propertyDescriptor, proxy);
           }
         }
@@ -1268,8 +1269,8 @@ public abstract class AbstractComponentInvocationHandler implements
           if (!propertyName
               .contains(((NestedReferenceTracker) listener).referencePropertyName)
               && ((IComponent) ((NestedReferenceTracker) listener).source)
-                  .hasListeners(((NestedReferenceTracker) listener).referencePropertyName
-                      + "." + propertyName)) {
+              .hasListeners(((NestedReferenceTracker) listener).referencePropertyName
+                  + "." + propertyName)) {
             // Query nested component but prevent
             // stackoverflows with 1-1 relationships
             return true;
@@ -1570,13 +1571,27 @@ public abstract class AbstractComponentInvocationHandler implements
         .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
           && EntityHelper
-              .isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
+          .isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
           && !propertyDescriptor.isComputed()) {
         Object inlineComponent = getProperty(proxy, propertyDescriptor);
         if (inlineComponent instanceof ILifecycleCapable) {
           try {
+            Object[] compArgs = null;
+            if (args != null) {
+              compArgs = new Object[args.length];
+              for (int j = 0; j < args.length; j++) {
+                // certainly onClone argument
+                if (args[j] != null
+                    && ((IComponent) proxy).getComponentContract().isAssignableFrom(args[j].getClass())) {
+                  // we must retrieve the original inline component
+                  compArgs[j] = ((IComponent) args[j]).straightGetProperty(propertyDescriptor.getName());
+                } else {
+                  compArgs[j] = args[j];
+                }
+              }
+            }
             Object interceptorResult = MethodUtils.invokeMethod(
-                inlineComponent, methodName, args,
+                inlineComponent, methodName, compArgs,
                 lifecycleMethod.getParameterTypes());
             if (interceptorResult instanceof Boolean) {
               interceptorResults = interceptorResults
@@ -1615,7 +1630,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * deleted and thus unuseable.
    * 
    * @param proxy
-   *          the proxy.
+   *     the proxy.
    */
   protected void markDeleted(Object proxy) {
     // NO-OP.
@@ -1955,9 +1970,9 @@ public abstract class AbstractComponentInvocationHandler implements
      * Constructs a new <code>InlineReferenceTracker</code> instance.
      * 
      * @param source
-     *          the proxy holding the reference tracker.
+     *     the proxy holding the reference tracker.
      * @param referencePropertyName
-     *          the name of the component to track the properties.
+     *     the name of the component to track the properties.
      * @param referencesInlineComponent
      *          is it tracking an inlined component or an entity ref ?
      */
@@ -1974,9 +1989,9 @@ public abstract class AbstractComponentInvocationHandler implements
     /**
      * Adds a property to the list of tracked nested properties for this nested
      * reference tracker instance.
-     * 
+     *
      * @param nestedPropertyName
-     *          the nested property name.
+     *     the nested property name.
      */
     public void addToTrackedProperties(String nestedPropertyName) {
       trackedProperties.add(nestedPropertyName);
@@ -2066,7 +2081,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
     /**
      * Gets the initialized.
-     * 
+     *
      * @return the initialized.
      */
     public boolean isInitialized() {
@@ -2075,9 +2090,9 @@ public abstract class AbstractComponentInvocationHandler implements
 
     /**
      * Sets the initialized.
-     * 
+     *
      * @param initialized
-     *          the initialized to set.
+     *     the initialized to set.
      */
     public void setInitialized(boolean initialized) {
       this.initialized = initialized;
@@ -2095,7 +2110,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
     /**
      * Just 'overrides' the equals method to always return false.
-     * <p>
+     * <p/>
      * {@inheritDoc}
      */
     @Override
