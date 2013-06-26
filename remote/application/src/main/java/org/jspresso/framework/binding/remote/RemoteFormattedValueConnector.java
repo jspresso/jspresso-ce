@@ -193,8 +193,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
     if (getRemoteStateValueMapper() != null) {
-      valueForState = getRemoteStateValueMapper().getValueForState(
-          valueForState);
+      valueForState = getRemoteStateValueMapper().getValueForState(getState(), valueForState);
     }
     return valueForState;
   }
@@ -214,7 +213,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     Object valueFromState;
     if (getRemoteStateValueMapper() != null) {
       valueFromState = getRemoteStateValueMapper()
-          .getValueFromState(stateValue);
+          .getValueFromState(getState(), stateValue);
     } else {
       valueFromState = stateValue;
     }

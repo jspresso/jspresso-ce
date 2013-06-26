@@ -14,11 +14,15 @@
 
 package org.jspresso.framework.view.flex {
 
+import flash.events.MouseEvent;
+
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
 import mx.controls.DataGrid;
 import mx.controls.listClasses.BaseListData;
 import mx.controls.listClasses.IDropInListItemRenderer;
+
+import org.jspresso.framework.action.IActionHandler;
 
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -28,6 +32,7 @@ import org.jspresso.framework.util.gui.Font;
 public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implements IDropInListItemRenderer {
 
   private var _viewFactory:DefaultFlexViewFactory;
+  private var _actionHandler:IActionHandler;
   private var _remoteComponent:RComponent;
   private var _toolTipIndex:int;
   private var _backgroundIndex:int;
@@ -45,6 +50,11 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
 
   public function UIComponentDgItemRenderer() {
     //default constructor.
+    addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
+      var dg:DataGrid = listData.owner as DataGrid;
+      var cellValueState:RemoteValueState = getCellValueState();
+      _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
+    });
   }
 
   public function set viewFactory(value:DefaultFlexViewFactory):void {
@@ -261,5 +271,8 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
     _fontIndex = value;
   }
 
+  public function set actionHandler(value:IActionHandler):void {
+    _actionHandler = value;
+  }
 }
 }

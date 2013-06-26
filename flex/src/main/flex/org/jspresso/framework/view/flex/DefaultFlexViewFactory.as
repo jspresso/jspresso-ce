@@ -2269,7 +2269,9 @@ public class DefaultFlexViewFactory {
       } else if (rColumn is RCheckBox || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
           || rColumn is RImageComponent) {
         itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
-        itemRenderer.properties = {viewFactory: this,
+        itemRenderer.properties = {
+          viewFactory: this,
+          actionHandler: getActionHandler(),
           remoteComponent: rColumn,
           index: i + 1,
           toolTipIndex: ttIndex,
