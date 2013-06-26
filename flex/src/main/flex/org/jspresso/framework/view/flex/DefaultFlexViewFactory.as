@@ -21,6 +21,7 @@ package org.jspresso.framework.view.flex {
   import flash.events.TextEvent;
   
   import mx.binding.utils.BindingUtils;
+  import mx.collections.ICollectionView;
   import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Box;
@@ -3037,7 +3038,7 @@ package org.jspresso.framework.view.flex {
         || root is ComboBox
         || root is TextArea
         || root is DateField
-        || root is DataGrid) {
+        || (root is DataGrid && ((root as DataGrid).dataProvider as ICollectionView).length > 0)) {
         if(root.enabled) {
           return root;
         }
