@@ -155,6 +155,7 @@ import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
@@ -2891,12 +2892,29 @@ public class DefaultSwingViewFactory extends
       viewPanel.setLayout(new BorderLayout());
       viewPanel.add(view.getPeer(), BorderLayout.CENTER);
 
+      boolean asideActions = false;
+      ERenderingOptions defaultRenderingOptions = null;
+      IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+      if (modelDescriptor instanceof IStringPropertyDescriptor
+          || modelDescriptor instanceof IDatePropertyDescriptor
+          || modelDescriptor instanceof INumberPropertyDescriptor
+          || modelDescriptor instanceof ITimePropertyDescriptor
+          || modelDescriptor instanceof IEnumerationPropertyDescriptor
+          || modelDescriptor instanceof IBooleanPropertyDescriptor
+          || modelDescriptor instanceof IReferencePropertyDescriptor) {
+        asideActions = true;
+        defaultRenderingOptions = ERenderingOptions.ICON;
+      }
       if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
         try {
           actionHandler.pushToSecurityContext(actionMap);
-          JToolBar toolBar = createViewToolBar(actionMap, view, actionHandler,
+          JToolBar toolBar = createViewToolBar(actionMap, view, defaultRenderingOptions, actionHandler,
               locale);
-          viewPanel.add(toolBar, BorderLayout.NORTH);
+          if (asideActions) {
+            viewPanel.add(toolBar, BorderLayout.EAST);
+          } else {
+            viewPanel.add(toolBar, BorderLayout.NORTH);
+          }
         } finally {
           actionHandler.restoreLastSecurityContextSnapshot();
         }
@@ -2905,9 +2923,12 @@ public class DefaultSwingViewFactory extends
           && actionHandler.isAccessGranted(secondaryActionMap)) {
         try {
           actionHandler.pushToSecurityContext(secondaryActionMap);
-          JToolBar toolBar = createViewToolBar(secondaryActionMap, view,
-              actionHandler, locale);
-          viewPanel.add(toolBar, BorderLayout.SOUTH);
+          JToolBar toolBar = createViewToolBar(secondaryActionMap, view, defaultRenderingOptions, actionHandler, locale);
+          if (asideActions) {
+            viewPanel.add(toolBar, BorderLayout.EAST);
+          } else {
+            viewPanel.add(toolBar, BorderLayout.SOUTH);
+          }
         } finally {
           actionHandler.restoreLastSecurityContextSnapshot();
         }
@@ -2920,19 +2941,20 @@ public class DefaultSwingViewFactory extends
   /**
    * Creates a view toolbar based on an action map.
    * 
+   *
    * @param actionMap
    *          the action map to create the toolbar for.
    * @param view
    *          the view to create the toolbar for.
-   * @param actionHandler
+   * @param defaultRenderingOptions overrides default rendering options.
+   *@param actionHandler
    *          the action handler used.
    * @param locale
-   *          the locale used.
-   * @return the created tool bar.
+ *          the locale used.   @return the created tool bar.
    */
   @SuppressWarnings("ConstantConditions")
-  protected JToolBar createViewToolBar(ActionMap actionMap,
-      IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
+  protected JToolBar createViewToolBar(ActionMap actionMap, IView<JComponent> view,
+                                       ERenderingOptions defaultRenderingOptions, IActionHandler actionHandler, Locale locale) {
     JToolBar toolBar = createJToolBar();
     for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler)
         .iterator(); iter.hasNext();) {
@@ -2940,7 +2962,10 @@ public class DefaultSwingViewFactory extends
       if (actionHandler.isAccessGranted(nextActionList)) {
         try {
           actionHandler.pushToSecurityContext(nextActionList);
-          ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
+          ERenderingOptions renderingOptions = defaultRenderingOptions;
+          if(renderingOptions == null) {
+            renderingOptions = getDefaultActionMapRenderingOptions();
+          }
           if (nextActionList.getRenderingOptions() != null) {
             renderingOptions = nextActionList.getRenderingOptions();
           } else if (actionMap.getRenderingOptions() != null) {
