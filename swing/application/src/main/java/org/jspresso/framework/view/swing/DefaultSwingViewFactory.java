@@ -199,6 +199,7 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
@@ -2159,17 +2160,16 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a table cell renderer for a given property descriptor.
-   * 
-   * @param propertyDescriptor
-   *          the property descriptor to create the renderer for.
-   * @param actionHandler
-   *          the action handler.
-   * @param locale
-   *          the locale.
+   *
+   * @param propertyDescriptor           the property descriptor to create the renderer for.
+   * @param propertyViewDescriptor the property view descriptor
+   * @param actionHandler           the action handler.
+   * @param locale           the locale.
    * @return the created table cell renderer.
    */
   protected TableCellRenderer createTableCellRenderer(
-      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      IPropertyDescriptor propertyDescriptor, IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler,
       Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
@@ -2197,7 +2197,7 @@ public class DefaultSwingViewFactory extends
       cellRenderer = createRelationshipEndTableCellRenderer(
           (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      cellRenderer = createBinaryTableCellRenderer((IBinaryPropertyDescriptor) propertyDescriptor);
+      cellRenderer = createBinaryTableCellRenderer((IBinaryPropertyDescriptor) propertyDescriptor, propertyViewDescriptor);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       cellRenderer = createStringTableCellRenderer(
           (IStringPropertyDescriptor) propertyDescriptor, locale);
@@ -2438,7 +2438,7 @@ public class DefaultSwingViewFactory extends
     }
     column.setCellEditor(createTableCellEditor(editorView, actionHandler));
     TableCellRenderer cellRenderer = createTableCellRenderer(
-        propertyDescriptor, actionHandler, locale);
+        propertyDescriptor, columnViewDescriptor, actionHandler, locale);
     if (cellRenderer == null) {
       cellRenderer = new EvenOddTableCellRenderer();
     }
@@ -3342,8 +3342,9 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createBinaryTableCellRenderer(
-      IBinaryPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor instanceof IImageBinaryPropertyDescriptor) {
+      IBinaryPropertyDescriptor propertyDescriptor, IPropertyViewDescriptor propertyViewDescriptor) {
+    if (propertyDescriptor instanceof IImageBinaryPropertyDescriptor
+        || propertyViewDescriptor instanceof IImageViewDescriptor) {
       return createImageTableCellRenderer(propertyDescriptor);
     }
     return new BinaryTableCellRenderer(propertyDescriptor);

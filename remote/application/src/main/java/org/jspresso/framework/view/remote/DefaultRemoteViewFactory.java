@@ -168,38 +168,32 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteViewFactory extends
     ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
-  private boolean                              dateServerParse;
+  private boolean dateServerParse;
 
-  private boolean                              durationServerParse;
-  private IGUIDGenerator<String>               guidGenerator;
-  private boolean                              numberServerParse;
+  private boolean                durationServerParse;
+  private IGUIDGenerator<String> guidGenerator;
+  private boolean                numberServerParse;
 
-  private IRemoteCommandHandler                remoteCommandHandler;
-  private IRemotePeerRegistry                  remotePeerRegistry;
+  private IRemoteCommandHandler remoteCommandHandler;
+  private IRemotePeerRegistry   remotePeerRegistry;
   private static final IRemoteStateValueMapper FONT_MAPPER = new IRemoteStateValueMapper() {
 
-                                                             @Override
-                                                             public Object getValueFromState(
-                                                                 Object originalValue) {
-                                                               if (originalValue instanceof Font) {
-                                                                 return FontHelper
-                                                                     .toString((Font) originalValue);
-                                                               }
-                                                               return null;
-                                                             }
+    @Override
+    public Object getValueFromState(RemoteValueState state, Object originalValue) {
+      if (originalValue instanceof Font) {
+        return FontHelper.toString((Font) originalValue);
+      }
+      return null;
+    }
 
-                                                             @Override
-                                                             public Object getValueForState(
-                                                                 Object originalValue) {
-                                                               if (originalValue instanceof String
-                                                                   && FontHelper
-                                                                       .isFontSpec((String) originalValue)) {
-                                                                 return FontHelper
-                                                                     .fromString((String) originalValue);
-                                                               }
-                                                               return null;
-                                                             }
-                                                           };
+    @Override
+    public Object getValueForState(RemoteValueState state, Object originalValue) {
+      if (originalValue instanceof String && FontHelper.isFontSpec((String) originalValue)) {
+        return FontHelper.fromString((String) originalValue);
+      }
+      return null;
+    }
+  };
 
   /**
    * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
@@ -212,7 +206,7 @@ public class DefaultRemoteViewFactory extends
 
   /**
    * Sets the dateServerParse.
-   * 
+   *
    * @param dateServerParse
    *          the dateServerParse to set.
    */
@@ -222,7 +216,7 @@ public class DefaultRemoteViewFactory extends
 
   /**
    * Sets the durationServerParse.
-   * 
+   *
    * @param durationServerParse
    *          the durationServerParse to set.
    */
@@ -232,7 +226,7 @@ public class DefaultRemoteViewFactory extends
 
   /**
    * Sets the guidGenerator.
-   * 
+   *
    * @param guidGenerator
    *          the guidGenerator to set.
    */
@@ -242,7 +236,7 @@ public class DefaultRemoteViewFactory extends
 
   /**
    * Sets the numberServerParse.
-   * 
+   *
    * @param numberServerParse
    *          the numberServerParse to set.
    */
@@ -252,7 +246,7 @@ public class DefaultRemoteViewFactory extends
 
   /**
    * Sets the remoteCommandHandler.
-   * 
+   *
    * @param remoteCommandHandler
    *          the remoteCommandHandler to set.
    */
@@ -264,8 +258,7 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void addCard(IMapView<RComponent> cardView, IView<RComponent> card,
-      String cardName) {
+  protected void addCard(IMapView<RComponent> cardView, IView<RComponent> card, String cardName) {
     cardView.addToChildrenMap(cardName, card);
 
     RCardContainer cardContainer = (RCardContainer) cardView.getPeer();
@@ -296,9 +289,8 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(IViewDescriptor viewDescriptor,
-      RComponent component, IFormatter<?, String> formatter,
-      Object templateValue, int extraWidth) {
+  protected void adjustSizes(IViewDescriptor viewDescriptor, RComponent component, IFormatter<?, String> formatter,
+                             Object templateValue, int extraWidth) {
     // Empty as of now.
   }
 
@@ -306,8 +298,7 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void applyPreferredSize(RComponent component,
-      Dimension preferredSize) {
+  protected void applyPreferredSize(RComponent component, Dimension preferredSize) {
     if (preferredSize != null) {
       component.setPreferredSize(preferredSize);
     }
@@ -326,17 +317,13 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createActionView(
-      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
+  protected IView<RComponent> createActionView(IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                               Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     connector.setExceptionHandler(actionHandler);
     RActionComponent viewComponent = createRActionComponent(viewDescriptor);
-    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    RAction action = getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    RAction action = getActionFactory().createAction(viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale);
     switch (viewDescriptor.getRenderingOptions()) {
       case ICON:
@@ -356,28 +343,23 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createBinaryPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected IView<RComponent> createBinaryPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+                                                       IActionHandler actionHandler, Locale locale) {
     IBinaryPropertyDescriptor propertyDescriptor = (IBinaryPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+    IValueConnector connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
     if (connector instanceof RemoteValueConnector) {
       final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
       rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
         @Override
-        public Object getValueForState(Object originalValue) {
+        public Object getValueForState(RemoteValueState state, Object originalValue) {
           if (originalValue instanceof byte[]) {
-            String valueForStateUrl = RemotePeerRegistryServlet
-                .computeDownloadUrl(rConnector.getGuid());
+            String valueForStateUrl = RemotePeerRegistryServlet.computeDownloadUrl(state.getGuid());
             Checksum checksumEngine = new CRC32();
-            checksumEngine.update((byte[]) originalValue, 0,
-                ((byte[]) originalValue).length);
-            // we must add a check sum so that the client nows when the url
-            // content
-            // changes.
+            checksumEngine.update((byte[]) originalValue, 0, ((byte[]) originalValue).length);
+            // we must add a check sum so that the client knows when the url
+            // content changes.
             valueForStateUrl += ("&cs=" + checksumEngine.getValue());
             return valueForStateUrl;
           }
@@ -385,16 +367,14 @@ public class DefaultRemoteViewFactory extends
         }
 
         @Override
-        public Object getValueFromState(Object originalValue) {
+        public Object getValueFromState(RemoteValueState state, Object originalValue) {
           return originalValue;
         }
       });
     }
     connector.setExceptionHandler(actionHandler);
-    RActionField viewComponent = createRActionField(propertyViewDescriptor,
-        false);
-    IView<RComponent> propertyView = constructView(viewComponent,
-        propertyViewDescriptor, connector);
+    RActionField viewComponent = createRActionField(propertyViewDescriptor, false);
+    IView<RComponent> propertyView = constructView(viewComponent, propertyViewDescriptor, connector);
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
@@ -409,20 +389,17 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createBooleanPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected IView<RComponent> createBooleanPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+                                                        IActionHandler actionHandler, Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+    IValueConnector connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RCheckBox viewComponent = createRCheckBox(propertyViewDescriptor);
     if (!propertyDescriptor.isMandatory()) {
       viewComponent.setTriState(true);
     }
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -430,41 +407,34 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<RComponent> createBorderView(
-      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+  protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
+                                                        IActionHandler actionHandler, Locale locale) {
     RBorderContainer viewComponent = createRBorderContainer(viewDescriptor);
-    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor);
+    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
     if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<RComponent> northView = createView(
-          viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
+      IView<RComponent> northView = createView(viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.setNorth(northView.getPeer());
       childrenViews.add(northView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<RComponent> westView = createView(
-          viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
+      IView<RComponent> westView = createView(viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
       viewComponent.setWest(westView.getPeer());
       childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<RComponent> centerView = createView(
-          viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
+      IView<RComponent> centerView = createView(viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
       viewComponent.setCenter(centerView.getPeer());
       childrenViews.add(centerView);
     }
     if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<RComponent> eastView = createView(
-          viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
+      IView<RComponent> eastView = createView(viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
       viewComponent.setEast(eastView.getPeer());
       childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<RComponent> southView = createView(
-          viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
+      IView<RComponent> southView = createView(viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
       viewComponent.setSouth(southView.getPeer());
       childrenViews.add(southView);
     }
@@ -476,9 +446,8 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createCardView(
-      ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+  protected IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
     RCardContainer viewComponent = createRCardContainer(viewDescriptor);
     List<String> cardNames = new ArrayList<String>();
     List<RComponent> cards = new ArrayList<RComponent>();
@@ -700,12 +669,12 @@ public class DefaultRemoteViewFactory extends
               .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
                 @Override
-                public Object getValueForState(Object originalValue) {
+                public Object getValueForState(RemoteValueState state, Object originalValue) {
                   return originalValue;
                 }
 
                 @Override
-                public Object getValueFromState(Object originalValue) {
+                public Object getValueFromState(RemoteValueState state, Object originalValue) {
                   Calendar serverCalendar = Calendar.getInstance(serverTz);
                   if (originalValue instanceof Date) {
                     serverCalendar.setTime((Date) originalValue);
@@ -729,7 +698,7 @@ public class DefaultRemoteViewFactory extends
               .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
                 @Override
-                public Object getValueFromState(Object originalValue) {
+                public Object getValueFromState(RemoteValueState state, Object originalValue) {
                   Calendar serverCalendar = Calendar.getInstance(serverTz);
                   if (originalValue instanceof DateDto) {
                     DateDto stateDate = (DateDto) originalValue;
@@ -751,7 +720,7 @@ public class DefaultRemoteViewFactory extends
                 }
 
                 @Override
-                public Object getValueForState(Object originalValue) {
+                public Object getValueForState(RemoteValueState state, Object originalValue) {
                   if (originalValue instanceof Date) {
                     Date connectorDate = (Date) originalValue;
                     Calendar serverCalendar = Calendar.getInstance(serverTz);
@@ -1041,10 +1010,10 @@ public class DefaultRemoteViewFactory extends
       rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
         @Override
-        public Object getValueForState(Object originalValue) {
+        public Object getValueForState(RemoteValueState state, Object originalValue) {
           if (originalValue instanceof byte[]) {
             String valueForStateUrl = RemotePeerRegistryServlet
-                .computeDownloadUrl(rConnector.getGuid());
+                .computeDownloadUrl(state.getGuid());
             Checksum checksumEngine = new CRC32();
             checksumEngine.update((byte[]) originalValue, 0,
                 ((byte[]) originalValue).length);
@@ -1061,7 +1030,7 @@ public class DefaultRemoteViewFactory extends
         }
 
         @Override
-        public Object getValueFromState(Object originalValue) {
+        public Object getValueFromState(RemoteValueState state, Object originalValue) {
           return originalValue;
         }
       });
@@ -1182,7 +1151,7 @@ public class DefaultRemoteViewFactory extends
       rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
         @Override
-        public Object getValueForState(Object originalValue) {
+        public Object getValueForState(RemoteValueState state, Object originalValue) {
           if (originalValue instanceof BigDecimal) {
             return Double.valueOf(((BigDecimal) originalValue).doubleValue());
           } else if (originalValue instanceof BigInteger) {
@@ -1192,7 +1161,7 @@ public class DefaultRemoteViewFactory extends
         }
 
         @Override
-        public Object getValueFromState(Object originalValue) {
+        public Object getValueFromState(RemoteValueState state, Object originalValue) {
           return originalValue;
         }
       });
@@ -2338,7 +2307,7 @@ public class DefaultRemoteViewFactory extends
             .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
               @Override
-              public Object getValueFromState(Object originalValue) {
+              public Object getValueFromState(RemoteValueState state, Object originalValue) {
                 Calendar serverCalendar = Calendar.getInstance(serverTz);
                 if (originalValue instanceof DateDto) {
                   DateDto stateDate = (DateDto) originalValue;
@@ -2353,7 +2322,7 @@ public class DefaultRemoteViewFactory extends
               }
 
               @Override
-              public Object getValueForState(Object originalValue) {
+              public Object getValueForState(RemoteValueState state, Object originalValue) {
                 if (originalValue instanceof Date) {
                   Date connectorDate = (Date) originalValue;
                   Calendar serverCalendar = Calendar.getInstance(serverTz);

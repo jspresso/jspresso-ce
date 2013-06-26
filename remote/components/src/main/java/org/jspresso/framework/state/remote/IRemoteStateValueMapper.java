@@ -33,21 +33,25 @@ public interface IRemoteStateValueMapper {
    * here to mutate the actual object returned. This allows for changing the
    * type of objects actually exchanged with the remote frontend peer.
    * 
+   *
+   * @param state the remote value state to map the value for.
    * @param originalValue
    *          the value to fill-in the state with.
    * @return the potentially transformed value.
    */
-  Object getValueForState(Object originalValue);
+  Object getValueForState(RemoteValueState state, Object originalValue);
 
   /**
    * Gets the value that has to be set to the remote connector when updating it.
    * It should default to the original value but the developper is given a
    * chance here to mutate the actual object returned. This allows for changing
    * the type of objects actually exchanged with the remote frontend peer.
-   * 
+   *
+   *
+   * @param state the remote value state to map the value for.
    * @param originalValue
    *          the value to fill-in the connector with.
    * @return the potentially transformed value.
    */
-  Object getValueFromState(Object originalValue);
+  Object getValueFromState(RemoteValueState state, Object originalValue);
 }
