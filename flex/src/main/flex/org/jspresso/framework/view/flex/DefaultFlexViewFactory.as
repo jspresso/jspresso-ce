@@ -947,7 +947,7 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent):UIComponent {
-    var decorated = component;
+    var decorated:UIComponent = component;
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
       actionField.styleName = "actionField";
