@@ -53,5 +53,5 @@ public interface IRemoteStateValueMapper {
    *          the value to fill-in the connector with.
    * @return the potentially transformed value.
    */
-  Object getValueFromState(RemoteValueState state, Object originalValue);
+  Object getValueFromState(@SuppressWarnings("UnusedParameters") RemoteValueState state, Object originalValue);
 }

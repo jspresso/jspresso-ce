@@ -71,6 +71,7 @@ public class BasicReferencePropertyViewDescriptor extends BasicPropertyViewDescr
    *
    * @return the boolean
    */
+  @Override
   public boolean isAutoCompleteEnabled() {
     return autoCompleteEnabled;
   }

@@ -2940,17 +2940,14 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a view toolbar based on an action map.
-   * 
    *
-   * @param actionMap
-   *          the action map to create the toolbar for.
-   * @param view
-   *          the view to create the toolbar for.
+   *
+   * @param actionMap           the action map to create the toolbar for.
+   * @param view           the view to create the toolbar for.
    * @param defaultRenderingOptions overrides default rendering options.
-   *@param actionHandler
-   *          the action handler used.
-   * @param locale
- *          the locale used.   @return the created tool bar.
+   * @param actionHandler           the action handler used.
+   * @param locale           the locale used.   @return the created tool bar.
+   * @return the tool bar
    */
   @SuppressWarnings("ConstantConditions")
   protected JToolBar createViewToolBar(ActionMap actionMap, IView<JComponent> view,
@@ -2963,7 +2960,7 @@ public class DefaultSwingViewFactory extends
         try {
           actionHandler.pushToSecurityContext(nextActionList);
           ERenderingOptions renderingOptions = defaultRenderingOptions;
-          if(renderingOptions == null) {
+          if (renderingOptions == null) {
             renderingOptions = getDefaultActionMapRenderingOptions();
           }
           if (nextActionList.getRenderingOptions() != null) {

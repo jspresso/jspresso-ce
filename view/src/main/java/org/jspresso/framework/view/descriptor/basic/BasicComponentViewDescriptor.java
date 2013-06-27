@@ -153,7 +153,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       }
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors;
-    if(explodeComponentReferences) {
+    if (explodeComponentReferences) {
       actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
         List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
