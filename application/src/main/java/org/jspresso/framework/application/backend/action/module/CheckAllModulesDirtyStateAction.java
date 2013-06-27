@@ -67,11 +67,11 @@ public class CheckAllModulesDirtyStateAction<E, F, G> extends
   private void registerModule(Module module, Collection<Module> modulesToCheck) {
     if (module.isStarted()) {
       modulesToCheck.add(module);
-      List<Module> subModules = module.getSubModules();
-      if (subModules != null) {
-        for (Module subModule : subModules) {
-          registerModule(subModule, modulesToCheck);
-        }
+    }
+    List<Module> subModules = module.getSubModules();
+    if (subModules != null) {
+      for (Module subModule : subModules) {
+        registerModule(subModule, modulesToCheck);
       }
     }
   }
