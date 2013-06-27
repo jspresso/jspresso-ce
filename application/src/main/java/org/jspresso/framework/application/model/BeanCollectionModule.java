@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -271,5 +272,15 @@ public class BeanCollectionModule extends Module {
     BeanCollectionModule clone = (BeanCollectionModule) super.clone();
     clone.moduleObjects = null;
     return clone;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isLocallyDirty(IBackendController backendController) {
+    boolean locallyDirty = backendController
+        .isAnyDirtyInDepth(getModuleObjects());
+    return locallyDirty;
   }
 }

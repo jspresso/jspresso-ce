@@ -24,7 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
@@ -87,6 +89,11 @@ public class Module extends AbstractPropertyChangeCapable implements
    * {@code SUB_MODULES} is "subModules".
    */
   public static final String SUB_MODULES      = "subModules";
+
+  /**
+   * {@code DIRTY} is "dirty".
+   */
+  public static final String DIRTY      = "dirty";
 
   private String             description;
   private boolean            dirty;
@@ -418,9 +425,11 @@ public class Module extends AbstractPropertyChangeCapable implements
    *          the dirty to set.
    * @internal
    */
-  public void setDirty(boolean dirty) {
+  protected void setDirty(boolean dirty) {
+    boolean oldDirty = isDirty();
     String oldI18nName = getI18nName();
     this.dirty = dirty;
+    firePropertyChange(DIRTY, oldDirty, isDirty());
     firePropertyChange(I18N_NAME, oldI18nName, getI18nName());
   }
 
@@ -771,4 +780,35 @@ public class Module extends AbstractPropertyChangeCapable implements
     clone.subModules = subModulesClones;
     return clone;
   }
+
+  /**
+   * Compute dirtiness in depth.
+   *
+   * @param backendController the backend controller
+   * @return true if the module or one of its sub-module is dirty
+   */
+  public final boolean refreshDirtinessInDepth(IBackendController backendController) {
+    boolean depthDirtyness = false;
+    if (getSubModules() != null) {
+      for (Module subModule : getSubModules()) {
+        if (subModule.refreshDirtinessInDepth(backendController)) {
+          depthDirtyness = true;
+        }
+      }
+    }
+    depthDirtyness = depthDirtyness || isLocallyDirty(backendController);
+    setDirty(depthDirtyness);
+    return depthDirtyness;
+  }
+
+  /**
+   * Is this module locally dirty.
+   *
+   * @param backendController the backend controller
+   * @return {@code true} if this module is dirty itself (without considering its children)
+   */
+  protected boolean isLocallyDirty(IBackendController backendController) {
+    return false;
+  }
+
 }

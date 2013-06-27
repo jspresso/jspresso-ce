@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.controller;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -112,61 +114,45 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@code MAX_LOGIN_RETRIES}.
    */
-  protected static final int                    MAX_LOGIN_RETRIES = 3;
-
-  private static final Logger                   LOG               = LoggerFactory
-                                                                      .getLogger(AbstractFrontendController.class);
-
-  private boolean                               started;
-  private ActionMap                             actionMap;
-  private ActionMap                             secondaryActionMap;
-
+  protected static final int    MAX_LOGIN_RETRIES = 3;
+  private static final   Logger LOG               = LoggerFactory.getLogger(AbstractFrontendController.class);
+  private static final   String UP_KEY            = "UP_KEY";
+  private static final   String UP_SEP            = "!";
   private final List<ModuleHistoryEntry>              backwardHistoryEntries;
-  private Locale                                clientLocale;
   private final DefaultIconDescriptor                 controllerDescriptor;
   private final List<Map<String, Object>>             dialogContextStack;
-  private IDisplayableAction                    exitAction;
-
-  private String                                forcedStartingLocale;
-
   private final List<ModuleHistoryEntry>              forwardHistoryEntries;
-
-  private ActionMap                             helpActionMap;
-  private ActionMap                             navigationActionMap;
-
-  private UsernamePasswordHandler               loginCallbackHandler;
-
-  private String                                loginContextName;
-  private IViewDescriptor                       loginViewDescriptor;
   private final Map<String, IMapView<E>>              workspaceViews;
-  private boolean                               moduleAutoPinEnabled;
-
-  private IMvcBinder                            mvcBinder;
-  private IAction                               onModuleEnterAction;
-  private IAction                               onModuleExitAction;
-  private IAction                               onModuleStartupAction;
-
   private final Map<String, Module>                   selectedModules;
-
-  private String                                selectedWorkspaceName;
-  private IAction                               loginAction;
-  private IAction                               startupAction;
-
-  private boolean                               tracksWorkspaceNavigator;
-  private IViewFactory<E, F, G>                 viewFactory;
   private final Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
-  private Map<String, Workspace>                workspaces;
-  private String                                workspacesMenuIconImageUrl;
-
-  private Integer                               frameWidth;
-  private Integer                               frameHeight;
-
-  private static final String                   UP_KEY            = "UP_KEY";
-  private static final String                   UP_SEP            = "!";
-
-  private IPreferencesStore                     clientPreferencesStore;
-
-  private boolean                               checkActionThreadSafety;
+  private       boolean                               started;
+  private       ActionMap                             actionMap;
+  private       ActionMap                             secondaryActionMap;
+  private       Locale                                clientLocale;
+  private       IDisplayableAction                    exitAction;
+  private       String                                forcedStartingLocale;
+  private       ActionMap                             helpActionMap;
+  private       ActionMap                             navigationActionMap;
+  private       UsernamePasswordHandler               loginCallbackHandler;
+  private       String                                loginContextName;
+  private       IViewDescriptor                       loginViewDescriptor;
+  private       boolean                               moduleAutoPinEnabled;
+  private       IMvcBinder                            mvcBinder;
+  private       IAction                               onModuleEnterAction;
+  private       IAction                               onModuleExitAction;
+  private       IAction                               onModuleStartupAction;
+  private       String                                selectedWorkspaceName;
+  private       IAction                               loginAction;
+  private       IAction                               startupAction;
+  private       boolean                               tracksWorkspaceNavigator;
+  private       IViewFactory<E, F, G>                 viewFactory;
+  private       Map<String, Workspace>                workspaces;
+  private       String                                workspacesMenuIconImageUrl;
+  private       Integer                               frameWidth;
+  private       Integer                               frameHeight;
+  private       IPreferencesStore                     clientPreferencesStore;
+  private       boolean                               checkActionThreadSafety;
+  private       PropertyChangeListener                dirtInterceptor;
 
   /**
    * Constructs a new {@code AbstractFrontendController} instance.
@@ -183,6 +169,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
     moduleAutoPinEnabled = true;
     tracksWorkspaceNavigator = true;
     checkActionThreadSafety = true;
+    dirtInterceptor = new PropertyChangeListener() {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        Module module = getSelectedModule();
+        if (module != null && !module.isDirty()) {
+          // Retrieve the top module
+          while (module.getParent() != null) {
+            module = module.getParent();
+          }
+          module.refreshDirtinessInDepth(getBackendController());
+        }
+      }
+    };
   }
 
   /**
@@ -195,7 +194,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Determines the workspace name of the parameter module.
-   * 
+   *
    * @param module
    *          the module to determine the workspace of.
    * @return the module workspace name. If no workspace already contains this
@@ -209,8 +208,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     // Then on the others
     for (String wsName : getWorkspaceNames()) {
-      if (!wsName.equals(selectedWsName)
-          && belongsTo(getWorkspace(wsName), module)) {
+      if (!wsName.equals(selectedWsName) && belongsTo(getWorkspace(wsName), module)) {
         return wsName;
       }
     }
@@ -246,15 +244,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public void displayModule(String workspaceName, Module module) {
-    Module currentModule = getSelectedModule(getSelectedWorkspaceName());
+    Module currentModule = getSelectedModule();
     // Test same workspace and same module. important when module is null and
     // selected module also to avoid stack overflows.
-    if (((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils
-        .equals(getSelectedWorkspaceName(), workspaceName))
-        && ((currentModule == null && module == null) || ObjectUtils.equals(
-            currentModule, module))) {
-      if (currentModule != null && module != null
-          && ObjectUtils.equals(currentModule.getParent(), module.getParent())) {
+    if (((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils.equals(getSelectedWorkspaceName(),
+        workspaceName)) && ((currentModule == null && module == null) || ObjectUtils.equals(currentModule, module))) {
+      if (currentModule != null && module != null && ObjectUtils.equals(currentModule.getParent(),
+          module.getParent())) {
         return;
       }
     }
@@ -279,20 +275,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
       // oldModuleModelConnector.setConnectorValue(null);
       // }
 
-      IValueConnector moduleModelConnector = getBackendController()
-          .getModuleConnector(module);
+      IValueConnector moduleModelConnector = getBackendController().getModuleConnector(module);
       mvcBinder.bind(moduleAreaView.getConnector(), moduleModelConnector);
     }
     selectedModules.put(workspaceName, module);
     if (module != null) {
       if (!module.isStarted()) {
         if (getOnModuleStartupAction() != null) {
-          execute(getOnModuleStartupAction(),
-              getModuleActionContext(workspaceName));
+          execute(getOnModuleStartupAction(), getModuleActionContext(workspaceName));
         }
         if (module.getStartupAction() != null) {
-          execute(module.getStartupAction(),
-              getModuleActionContext(workspaceName));
+          execute(module.getStartupAction(), getModuleActionContext(workspaceName));
         }
       }
       module.setStarted(true);
@@ -303,15 +296,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
       execute(getOnModuleEnterAction(), new HashMap<String, Object>());
       execute(module.getEntryAction(), new HashMap<String, Object>());
     }
+    firePropertyChange(SELECTED_MODULE, currentModule, module);
     boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
     try {
       tracksWorkspaceNavigator = false;
-      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
-          .get(workspaceName);
+      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors.get(workspaceName);
       if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
-        Object[] result = synchWorkspaceNavigatorSelection(
-            (ICollectionConnectorListProvider) workspaceNavigatorConnector,
-            module);
+        Object[] result = synchWorkspaceNavigatorSelection((ICollectionConnectorListProvider) workspaceNavigatorConnector, module);
         if (result != null) {
           int moduleModelIndex = (Integer) result[1];
           ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
@@ -352,7 +343,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           backwardHistoryEntries.add(nextEntry);
           if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
               && ObjectUtils.equals(nextModule,
-                  getSelectedModule(getSelectedWorkspaceName()))) {
+                  getSelectedModule())) {
             displayNextPinnedModule();
           } else {
             displayModule(nextWorkspaceName, nextModule);
@@ -384,7 +375,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           if (ObjectUtils.equals(previousWorkspaceName,
               getSelectedWorkspaceName())
               && ObjectUtils.equals(previousModule,
-                  getSelectedModule(getSelectedWorkspaceName()))) {
+                  getSelectedModule())) {
             displayPreviousPinnedModule();
           } else {
             displayModule(previousWorkspaceName, previousModule);
@@ -460,6 +451,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       return;
     }
     if (bypassModuleBoundaryActions) {
+      Workspace oldSelectedWorkspace = getSelectedWorkspace();
       if (workspaceName != null) {
         Workspace workspace = getWorkspace(workspaceName);
         if (!workspace.isStarted()) {
@@ -472,6 +464,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       this.selectedWorkspaceName = workspaceName;
+      firePropertyChange(SELECTED_WORKSPACE, oldSelectedWorkspace, getSelectedWorkspace());
     } else {
       // do as if we had selected the module in the target workspace.
       // so that module boundary actions get triggered
@@ -526,7 +519,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     // This is handled here since the selected module might have changed during
     // the action chain.
     context.put(ActionContextConstants.CURRENT_MODULE,
-        getSelectedModule(getSelectedWorkspaceName()));
+        getSelectedModule());
     boolean result;
     Map<String, Object> initialActionState = null;
     try {
@@ -802,6 +795,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public String getSelectedWorkspaceName() {
     return selectedWorkspaceName;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Workspace getSelectedWorkspace() {
+    return getWorkspace(getSelectedWorkspaceName());
+  }
+
+  public Module getSelectedModule() {
+    return getSelectedModule(getSelectedWorkspaceName());
   }
 
   /**
@@ -1177,6 +1182,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       initialLocale = LocaleUtils.toLocale(forcedStartingLocale);
     }
     started = peerController.start(initialLocale, theClientTimeZone);
+    peerController.addDirtInterceptor(dirtInterceptor);
     BackendControllerHolder.setSessionBackendController(peerController);
     return started;
   }
@@ -1219,6 +1225,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
     selectedWorkspaceName = null;
     loginCallbackHandler = null;
+    getBackendController().removeDirtInterceptor(dirtInterceptor);
     started = !getBackendController().stop();
     return !started;
   }
@@ -2118,12 +2125,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
     try {
       if (!currentSecurityContext
           .containsKey(SecurityContextConstants.WORKSPACE)) {
-        pushToSecurityContext(getWorkspace(getSelectedWorkspaceName()));
+        pushToSecurityContext(getSelectedWorkspace());
         snapshotsToRestore++;
       }
       if (!currentSecurityContext
           .containsKey(SecurityContextConstants.MODULE_CHAIN)) {
-        pushToSecurityContext(getSelectedModule(getSelectedWorkspaceName()));
+        pushToSecurityContext(getSelectedModule());
         snapshotsToRestore++;
       }
       return getBackendController().isAccessGranted(securable);

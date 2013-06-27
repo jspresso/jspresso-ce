@@ -45,7 +45,7 @@ public class CheckAllModulesDirtyStateAction<E, F, G> extends
     AbstractModuleDirtyStateAction<E, F, G> {
 
   /**
-   * Returns all application modules that have been marked dirty.
+   * Returns all application modules.
    * <p>
    * {@inheritDoc}
    */
@@ -56,23 +56,9 @@ public class CheckAllModulesDirtyStateAction<E, F, G> extends
       Workspace ws = getController(context).getWorkspace(workspaceName);
       List<Module> modules = ws.getModules();
       if (modules != null) {
-        for (Module m : modules) {
-          registerModule(m, modulesToCheck);
-        }
+        modulesToCheck.addAll(modules);
       }
     }
     return modulesToCheck;
-  }
-
-  private void registerModule(Module module, Collection<Module> modulesToCheck) {
-    if (module.isStarted()) {
-      modulesToCheck.add(module);
-    }
-    List<Module> subModules = module.getSubModules();
-    if (subModules != null) {
-      for (Module subModule : subModules) {
-        registerModule(subModule, modulesToCheck);
-      }
-    }
   }
 }

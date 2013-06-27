@@ -52,6 +52,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
+
   /**
    * Displays a flash object on the client in a modal dialog.
    * 
@@ -202,10 +203,24 @@ public interface IFrontendController<E, F, G> extends IController,
 
   /**
    * Gets the selectedWorkspaceName.
-   * 
+   *
    * @return the selectedWorkspaceName.
    */
   String getSelectedWorkspaceName();
+
+  /**
+   * Gets the selected workspace.
+   *
+   * @return the selected workspace.
+   */
+  Workspace getSelectedWorkspace();
+
+  /**
+   * Gets the selected module.
+   *
+   * @return the selected module.
+   */
+  Module getSelectedModule();
 
   /**
    * Gets the action that is executed just after the login process has ended but

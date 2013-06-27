@@ -48,6 +48,13 @@ public class CheckModuleDirtyStateAction<E, F, G> extends
    */
   @Override
   protected Collection<Module> getModulesToCheck(Map<String, Object> context) {
-    return Collections.singleton(getModule(context));
+    Module module = getModule(context);
+    if (module != null) {
+      // Retrieve the top module
+      while (module.getParent() != null) {
+        module = module.getParent();
+      }
+    }
+    return Collections.singleton(module);
   }
 }

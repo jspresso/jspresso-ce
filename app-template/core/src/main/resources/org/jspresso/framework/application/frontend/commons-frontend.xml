@@ -748,7 +748,7 @@
     <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
   </bean>
 
-  <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.module.SaveModuleObjectFrontAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="save" />
