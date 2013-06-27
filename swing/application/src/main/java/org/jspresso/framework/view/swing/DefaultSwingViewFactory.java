@@ -2900,8 +2900,7 @@ public class DefaultSwingViewFactory extends
           || modelDescriptor instanceof INumberPropertyDescriptor
           || modelDescriptor instanceof ITimePropertyDescriptor
           || modelDescriptor instanceof IEnumerationPropertyDescriptor
-          || modelDescriptor instanceof IBooleanPropertyDescriptor
-          || modelDescriptor instanceof IReferencePropertyDescriptor) {
+          || modelDescriptor instanceof IBooleanPropertyDescriptor) {
         asideActions = true;
         defaultRenderingOptions = ERenderingOptions.ICON;
       }
