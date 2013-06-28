@@ -551,10 +551,12 @@ public class DefaultSwingViewFactory extends
     GridBagLayout layout = new GridBagLayout();
     viewComponent.setLayout(layout);
     int currentX = 0;
+    int extraRowOffset = 0;
     int currentY = 0;
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
     List<IView<JComponent>> propertyViews = new ArrayList<IView<JComponent>>();
+    int formInset = 2;
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
@@ -594,18 +596,20 @@ public class DefaultSwingViewFactory extends
         fillLastRow(viewComponent);
         currentX = 0;
         currentY++;
+        currentY += extraRowOffset;
+        extraRowOffset = 0;
       }
       // label positioning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
-          constraints.insets = new Insets(9, 5, 5, 5);
-          constraints.anchor = GridBagConstraints.NORTHEAST;
+          constraints.insets = new Insets(formInset, formInset, formInset, formInset);
+          constraints.anchor = GridBagConstraints.EAST;
           constraints.gridx = currentX * 2;
           constraints.gridy = currentY;
           break;
         case ABOVE:
-          constraints.insets = new Insets(5, 5, 0, 5);
+          constraints.insets = new Insets(formInset, formInset, 0, formInset);
           constraints.anchor = GridBagConstraints.SOUTHWEST;
           constraints.gridx = currentX;
           constraints.gridy = currentY * 2;
@@ -625,25 +629,25 @@ public class DefaultSwingViewFactory extends
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.gridx++;
-          constraints.insets = new Insets(5, 0, 5, 5);
+          constraints.insets = new Insets(formInset, 0, formInset, formInset);
           constraints.gridwidth = propertyWidth * 2 - 1;
           break;
         case ABOVE:
           constraints.gridy++;
-          constraints.insets = new Insets(0, 5, 0, 5);
+          constraints.insets = new Insets(0, formInset, 0, formInset);
           constraints.gridwidth = propertyWidth;
           break;
         case NONE:
           constraints.gridx = currentX;
           constraints.gridy = currentY;
-          constraints.insets = new Insets(0, 5, 0, 5);
+          constraints.insets = new Insets(0, formInset, 0, formInset);
           constraints.gridwidth = propertyWidth;
           break;
         default:
           break;
       }
 
-      constraints.anchor = GridBagConstraints.NORTHWEST;
+      constraints.anchor = GridBagConstraints.WEST;
       constraints.weightx = propertyView.getPeer().getPreferredSize().width;
       if (propertyView.getPeer() instanceof JCheckBox) {
         constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
@@ -651,6 +655,8 @@ public class DefaultSwingViewFactory extends
       if (isHeightExtensible(propertyViewDescriptor)) {
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridheight = 2;
+        extraRowOffset = 1;
         isSpaceFilled = true;
         if (!ite.hasNext()) {
           constraints.gridwidth = GridBagConstraints.REMAINDER;

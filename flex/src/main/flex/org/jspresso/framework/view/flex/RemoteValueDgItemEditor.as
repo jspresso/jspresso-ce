@@ -14,7 +14,9 @@
 
 package org.jspresso.framework.view.flex {
 
+import flash.display.DisplayObject;
 import flash.events.FocusEvent;
+import flash.text.TextField;
 
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
@@ -70,12 +72,11 @@ public class RemoteValueDgItemEditor extends Canvas implements IColumnIndexProvi
 
   private function setupChildren():void {
     removeAllChildren();
-    if (_editor is CheckBox) {
+    if(_editor is EnhancedCheckBox) {
       _editor.setStyle("horizontalCenter", 0);
-      _editor.setStyle("verticalCenter", 0);
+      (_editor as EnhancedCheckBox).forceCentered = true;
     } else {
       _editor.percentWidth = 100.0;
-      //_editor.percentHeight = 100.0;
     }
     addChild(_editor);
   }

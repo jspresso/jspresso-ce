@@ -268,6 +268,9 @@ public abstract class RemoteStartup extends
    * @return the dupSessionDetectionEnabled.
    */
   public boolean isDupSessionDetectionEnabled() {
+    if (Boolean.TRUE.toString().equalsIgnoreCase(System.getProperty("skipDupSessionCheck"))) {
+      return false;
+    }
     boolean isPermalink = false;
     if (HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
