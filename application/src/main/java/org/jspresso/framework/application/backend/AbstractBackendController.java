@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
@@ -121,43 +122,31 @@ import org.springframework.transaction.support.TransactionTemplate;
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
-  private static final Logger                              LOG = LoggerFactory
-                                                                   .getLogger(AbstractBackendController.class);
-
-  private IApplicationSession                              applicationSession;
-  private IEntityCloneFactory                              carbonEntityCloneFactory;
-  private IComponentCollectionFactory                      collectionFactory;
-  private BeanPropertyChangeRecorder                       dirtRecorder;
-
-  private IEntityFactory                                   entityFactory;
-
-  private IEntityRegistry                                  entityRegistry;
-  private IModelConnectorFactory                           modelConnectorFactory;
-  private TransactionTemplate                              transactionTemplate;
-  private ComponentTransferStructure<? extends IComponent> transferStructure;
-  private IEntityUnitOfWork                                unitOfWork;
-
-  private Map<String, IValueConnector>                     workspaceConnectors;
-  private LRUMap                                           moduleConnectors;
-
-  private IPreferencesStore                                userPreferencesStore;
-  private ITranslationProvider                             translationProvider;
-
-  private ISecurityPlugin                                  customSecurityPlugin;
-  private ISecurityContextBuilder                          securityContextBuilder;
-
-  private ITranslationPlugin                               customTranslationPlugin;
-
-  private TimeZone                                         clientTimeZone;
-
-  private boolean                                          throwExceptionOnBadUsage;
-
-  private Map<Serializable, IEntity>                       entitiesExcludedFromSessionSanityChecks;
-
-  private IBackendControllerFactory                        slaveControllerFactory;
-  private ThreadGroup                                      asyncActionsThreadGroup;
-  private Set<AsyncActionExecutor>                         asyncExecutors;
-  private int                                              asyncExecutorsMaxCount;
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
+  private final BeanPropertyChangeRecorder             dirtRecorder;
+  private final IEntityRegistry                        entityRegistry;
+  private final IEntityUnitOfWork                      unitOfWork;
+  private final LRUMap                                 moduleConnectors;
+  private final ISecurityContextBuilder                securityContextBuilder;
+  private final Map<Serializable, IEntity>             entitiesExcludedFromSessionSanityChecks;
+  private final ThreadGroup                            asyncActionsThreadGroup;
+  private final Set<AsyncActionExecutor>               asyncExecutors;
+  private       IApplicationSession                    applicationSession;
+  private       IEntityCloneFactory                    carbonEntityCloneFactory;
+  private       IComponentCollectionFactory            collectionFactory;
+  private       IEntityFactory                         entityFactory;
+  private       IModelConnectorFactory                 modelConnectorFactory;
+  private       TransactionTemplate                    transactionTemplate;
+  private       ComponentTransferStructure<IComponent> transferStructure;
+  private       Map<String, IValueConnector>           workspaceConnectors;
+  private       IPreferencesStore                      userPreferencesStore;
+  private       ITranslationProvider                   translationProvider;
+  private       ISecurityPlugin                        customSecurityPlugin;
+  private       ITranslationPlugin                     customTranslationPlugin;
+  private       TimeZone                               clientTimeZone;
+  private       boolean                                throwExceptionOnBadUsage;
+  private       IBackendControllerFactory              slaveControllerFactory;
+  private       int                                    asyncExecutorsMaxCount;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -2494,5 +2483,21 @@ public abstract class AbstractBackendController extends AbstractController
     if (isUnitOfWorkActive()) {
       unitOfWork.setDirtyTrackingEnabled(enabled);
     }
+  }
+
+  /**
+   * {@inheritDoc}.
+   */
+  @Override
+  public void addDirtInterceptor(PropertyChangeListener interceptor) {
+    getDirtRecorder().addInterceptor(interceptor);
+  }
+
+  /**
+   * {@inheritDoc}.
+   */
+  @Override
+  public void removeDirtInterceptor(PropertyChangeListener interceptor) {
+    getDirtRecorder().removeInterceptor(interceptor);
   }
 }

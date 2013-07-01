@@ -23,10 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
-import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * This is the base abstract class for actions that are responsible for checking
@@ -62,22 +59,7 @@ public abstract class AbstractModuleDirtyStateAction<E, F, G> extends
     if (modulesToCheck != null) {
       for (Module module : modulesToCheck) {
         if (module != null) {
-          boolean dirty = false;
-          if (module instanceof BeanModule) {
-            Object moduleContent = ((BeanModule) module).getModuleObject();
-            if (moduleContent instanceof IEntity
-                && getController(context).getBackendController()
-                    .isDirtyInDepth((IEntity) moduleContent)) {
-              dirty = true;
-            }
-          } else if (module instanceof BeanCollectionModule) {
-            if (getController(context).getBackendController()
-                .isAnyDirtyInDepth(
-                    ((BeanCollectionModule) module).getModuleObjects())) {
-              dirty = true;
-            }
-          }
-          module.setDirty(dirty);
+          module.refreshDirtinessInDepth(getController(context).getBackendController());
         }
       }
     }

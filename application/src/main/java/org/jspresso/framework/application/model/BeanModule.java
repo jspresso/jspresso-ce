@@ -21,9 +21,12 @@ package org.jspresso.framework.application.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.model.descriptor.BeanModuleDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -251,5 +254,15 @@ public class BeanModule extends Module implements PropertyChangeListener {
     BeanModule clone = (BeanModule) super.clone();
     clone.moduleObject = null;
     return clone;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isLocallyDirty(IBackendController backendController) {
+    boolean locallyDirty = backendController
+        .isAnyDirtyInDepth(Collections.singleton(getModuleObject()));
+    return locallyDirty;
   }
 }

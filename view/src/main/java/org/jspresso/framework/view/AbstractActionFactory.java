@@ -163,9 +163,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
         }
         viewConnector = view.getConnector();
       }
-      if (action.getActionabilityGates() != null) {
+      Collection<IGate> actionabilityGates = action.getActionabilityGates();
+      if (actionabilityGates != null) {
         Collection<IGate> clonedGates = new HashSet<IGate>();
-        for (IGate gate : action.getActionabilityGates()) {
+        for (IGate gate : actionabilityGates) {
           if (!(gate instanceof ISecurable)
               || actionHandler.isAccessGranted((ISecurable) gate)) {
             final IGate clonedGate = gate.clone();

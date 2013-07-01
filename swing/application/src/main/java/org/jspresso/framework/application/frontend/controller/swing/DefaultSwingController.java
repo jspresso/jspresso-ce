@@ -976,7 +976,7 @@ public class DefaultSwingController extends
   private void updateFrameTitle() {
     String workspaceName = getSelectedWorkspaceName();
     if (workspaceName != null) {
-      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
+      controllerFrame.setTitle(getSelectedWorkspace()
           .getViewDescriptor().getI18nDescription(this, getLocale())
           + " - "
           + getI18nName(this, getLocale()));

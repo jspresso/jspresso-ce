@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -504,4 +505,17 @@ public interface IBackendController extends IController,
    */
   Map<String, Object> getDirtyProperties(IEntity entity, boolean includeComputed);
 
+  /**
+   * Adds a new dirt interceptor that will be notified every time an entity is made dirty.
+   *
+   * @param interceptor the interceptor.
+   */
+  void addDirtInterceptor(PropertyChangeListener interceptor);
+
+  /**
+   * Removes a dirt interceptor that was previously added.
+   *
+   * @param interceptor the interceptor.
+   */
+  void removeDirtInterceptor(PropertyChangeListener interceptor);
 }

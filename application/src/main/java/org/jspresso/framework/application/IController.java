@@ -39,7 +39,17 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public interface IController extends IActionHandler, IPropertyChangeCapable {
 
   /**
-   * This method gets executed when a user succesfully logs in.
+   * {@code SELECTED_MODULE} is "selectedModule".
+   */
+  String SELECTED_MODULE = "selectedModule";
+
+  /**
+   * {@code SELECTED_WORKSPACE} is "selectedWorkspace".
+   */
+  String SELECTED_WORKSPACE = "selectedWorkspace";
+
+  /**
+   * This method gets executed when a user successfully logs in.
    * 
    * @param subject
    *          the authenticated user subject.
