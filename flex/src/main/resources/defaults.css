@@ -122,30 +122,26 @@ CheckBoxExtended
   verticalGap: 2;
 }
 
-.asideLabelCell
-{
-  verticalAlign: top;
+.asideLabelCell {
+  verticalAlign: middle;
   horizontalAlign: right;
-  paddingTop: 4;
+  paddingTop: 2;
 }
 
-.aboveLabelCell
-{
-  verticalAlign: bottom;
+.aboveLabelCell {
+  verticalAlign: middle;
   horizontalAlign: left;
 }
 
-.componentCell
-{
-  verticalAlign: top;
+.componentCell {
+  verticalAlign: middle;
   horizontalAlign: left;
 }
 
-.labelComponentCell
-{
-  verticalAlign: top;
+.labelComponentCell {
+  verticalAlign: middle;
   horizontalAlign: left;
-  paddingTop: 4;
+  paddingTop: 2;
 }
 
 .borderContainer

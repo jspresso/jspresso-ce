@@ -1031,16 +1031,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               ._hexColorToQxColor(remoteColorField
                   .getDefaultColor()));
       colorWidget.set({
-            decorator : "main",
-            textAlign : "center",
-            alignX : "center",
-            alignY : "baseline"
-          });
-      colorWidget.addListener("mousedown", function(e) {
-            colorPopup.placeToMouse(e)
-            colorPopup.setValue(this.getBackgroundColor());
-            colorPopup.show();
-          });
+        decorator: "main",
+        textAlign: "center",
+        alignX: "center",
+        alignY: "middle"
+      });
+      colorWidget.addListener("mousedown", function (e) {
+        colorPopup.placeToMouse(e);
+        colorPopup.setValue(this.getBackgroundColor());
+        colorPopup.show();
+      });
 
       var resetButton = new qx.ui.form.Button();
       resetButton.setIcon("qx/icon/Oxygen/16/actions/dialog-close.png");
@@ -1053,6 +1053,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           });
       resetButton.setAllowStretchX(false, false);
       resetButton.setAllowStretchY(false, false);
+      resetButton.setAlignY("middle");
 
       // colorWidget.addListener("resize", function(e) {
       // var dim = e.getData().height;
@@ -1690,12 +1691,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createForm : function(remoteForm) {
       var form = new qx.ui.container.Composite();
       var formLayout = new qx.ui.layout.Grid(5, 5);
-      form.setLayout(formLayout);
       var columnCount = remoteForm.getColumnCount();
       var col = 0;
       var row = 0;
+      var extraRowOffset = 0;
       var lastRow = 0;
       var lastCol = 0;
+
+      form.setLayout(formLayout);
 
       for (var i = 0; i < remoteForm.getElements().length; i++) {
         var elementWidth = remoteForm.getElementWidths()[i];
@@ -1709,7 +1712,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var compRow;
         var compCol;
         var compColSpan;
-        
+        var compRowSpan;
+
         this._bindDynamicToolTip(component, rComponent);
         this._bindDynamicBackground(component, rComponent);
         this._bindDynamicForeground(component, rComponent);
@@ -1725,7 +1729,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         if (col + elementWidth > columnCount) {
           col = 0;
-          row += 1;
+          row += (1 + extraRowOffset);
+          extraRowOffset = 0;
         }
 
         if (remoteForm.getLabelsPosition() == "ABOVE") {
@@ -1750,8 +1755,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (remoteForm.getLabelsPosition() != "NONE") {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
             componentLabel.setAlignX("right");
-            componentLabel.setAlignY("top");
-            componentLabel.setPaddingTop(4);
+            componentLabel.setAlignY("middle");
           } else {
             componentLabel.setAlignX("left");
             componentLabel.setAlignY("bottom");
@@ -1767,28 +1771,33 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         component.setAllowShrinkX(true);
         component.setAlignX("left");
-        component.setAlignY("top");
+        component.setAlignY("middle");
         if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
           component.setAllowGrowX(true);
         } else {
           component.setAllowGrowX(false);
         }
-        form.add(component, {
-              row : compRow,
-              column : compCol,
-              rowSpan : 1,
-              colSpan : compColSpan
-            });
-
-        if (rComponent instanceof org.jspresso.framework.gui.remote.RTable
-            || rComponent instanceof org.jspresso.framework.gui.remote.RTextArea
-            || rComponent instanceof org.jspresso.framework.gui.remote.RList
-            || rComponent instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
-          formLayout.setRowFlex(compRow, 1);
+        if (rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
+            instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
+            instanceof org.jspresso.framework.gui.remote.RList || rComponent
+            instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
+          compRowSpan = 2;
+          extraRowOffset = 1;
+          formLayout.setRowFlex(compRow + 1, 1);
           if (compColSpan > 1) {
             component.setMaxWidth(null);
           }
+        } else {
+          compRowSpan = 1;
         }
+
+        form.add(component, {
+          row: compRow,
+          column: compCol,
+          rowSpan: compRowSpan,
+          colSpan: compColSpan
+        });
+
         if (compColSpan > 1 && component.getWidth() == null/*to cope with preferred width*/) {
           component.setAllowGrowX(true);
         }

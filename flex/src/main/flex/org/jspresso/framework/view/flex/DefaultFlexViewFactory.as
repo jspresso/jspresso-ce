@@ -42,6 +42,7 @@ import mx.containers.TabNavigator;
 import mx.containers.VBox;
 import mx.containers.ViewStack;
 import mx.controls.Button;
+import mx.controls.ButtonLabelPlacement;
 import mx.controls.CheckBox;
 import mx.controls.ColorPicker;
 import mx.controls.ComboBox;
@@ -947,7 +948,7 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent):UIComponent {
-    var decorated = component;
+    var decorated:UIComponent = component;
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
       actionField.styleName = "actionField";
@@ -982,7 +983,7 @@ public class DefaultFlexViewFactory {
   }
 
   protected function bindActionField(actionField:UIComponent, textInput:TextInput, remoteState:RemoteValueState,
-                                     action:RAction):void {
+                                     action:RAction, textFieldEditable:Boolean=true):void {
 
     var updateView:Function = function (value:Object):void {
       if (textInput) {
@@ -1002,6 +1003,7 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
     if (textInput) {
+      if(textFieldEditable) {
         var updateEditability:Function = function (value:Object):void {
           if (value) {
             textInput.setStyle("backgroundColor", null);
@@ -1011,6 +1013,9 @@ public class DefaultFlexViewFactory {
           textInput.editable = (value as Boolean);
         };
         BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+      } else {
+        textInput.editable = false;
+      }
 
       var triggerAction:Function = function (event:Event):void {
         var tf:TextInput = (event.currentTarget as TextInput);
@@ -1066,17 +1071,24 @@ public class DefaultFlexViewFactory {
   }
 
   protected function createCheckBox(remoteCheckBox:RCheckBox):UIComponent {
-    var checkBox:UIComponent;
+    var checkBox:Button;
     if (remoteCheckBox.triState) {
       checkBox = new CheckBoxExtended();
       (checkBox as CheckBoxExtended).allow3StateForUser = true;
       bindCheckBoxExtended(checkBox as CheckBoxExtended, remoteCheckBox.state);
     } else {
-      checkBox = new CheckBox();
+      checkBox = createCheckBoxComponent();
       bindCheckBox(checkBox as CheckBox, remoteCheckBox.state);
     }
+    checkBox.label = null;
+    checkBox.setStyle("horizontalGap", 0);
+    checkBox.setStyle("verticalGap", 0);
     sizeMaxComponentWidth(checkBox, remoteCheckBox, 1);
     return checkBox;
+  }
+
+  protected function createCheckBoxComponent():CheckBox {
+    return new EnhancedCheckBox();
   }
 
   protected function bindCheckBox(checkBox:CheckBox, remoteState:RemoteValueState):void {
@@ -1516,10 +1528,12 @@ public class DefaultFlexViewFactory {
     var col:int = 0;
     var labelsRow:GridRow;
     var componentsRow:GridRow;
+    var rowSpanRow:GridRow;
 
     form.styleName = "form";
 
     componentsRow = new GridRow();
+    rowSpanRow = null;
     componentsRow.percentWidth = 100.0;
     if (remoteForm.labelsPosition == "ABOVE") {
       labelsRow = new GridRow();
@@ -1570,6 +1584,7 @@ public class DefaultFlexViewFactory {
       }
       if (col + elementWidth > remoteForm.columnCount) {
         componentsRow = new GridRow();
+        rowSpanRow = null;
         componentsRow.percentWidth = 100.0;
         if (remoteForm.labelsPosition == "ABOVE") {
           labelsRow = new GridRow();
@@ -1622,7 +1637,13 @@ public class DefaultFlexViewFactory {
       if (rComponent is RTable || rComponent is RTextArea || rComponent is RList || rComponent is RHtmlArea) {
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
-        componentsRow.percentHeight = 100.0;
+        componentCell.rowSpan = 2;
+        if(!rowSpanRow) {
+          rowSpanRow = new GridRow();
+          rowSpanRow.percentWidth = 100.0;
+          rowSpanRow.percentHeight = 100.0;
+          form.addChild(rowSpanRow);
+        }
         if (componentCell.colSpan > 1 || componentCell.colSpan == remoteForm.columnCount) {
           componentCell.maxWidth = NaN;
           component.maxWidth = NaN;
