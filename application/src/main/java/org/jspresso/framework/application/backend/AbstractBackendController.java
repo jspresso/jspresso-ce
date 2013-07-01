@@ -137,7 +137,7 @@ public abstract class AbstractBackendController extends AbstractController
   private       IEntityFactory                         entityFactory;
   private       IModelConnectorFactory                 modelConnectorFactory;
   private       TransactionTemplate                    transactionTemplate;
-  private       ComponentTransferStructure<IComponent> transferStructure;
+  private       ComponentTransferStructure<? extends IComponent> transferStructure;
   private       Map<String, IValueConnector>           workspaceConnectors;
   private       IPreferencesStore                      userPreferencesStore;
   private       ITranslationProvider                   translationProvider;

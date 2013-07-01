@@ -110,53 +110,47 @@ public abstract class AbstractFrontendController<E, F, G> extends
     AbstractController implements IFrontendController<E, F, G> {
 
   /**
-   * <code>MAX_LOGIN_RETRIES</code>.
+   * {@code MAX_LOGIN_RETRIES}.
    */
-  protected static final int                    MAX_LOGIN_RETRIES = 3;
-
-  private static final Logger                   LOG               = LoggerFactory
-                                                                      .getLogger(AbstractFrontendController.class);
-
-  private boolean                               started;
-  private ActionMap                             actionMap;
-  private ActionMap                             secondaryActionMap;
-
-  private List<ModuleHistoryEntry>              backwardHistoryEntries;
-  private Locale                                clientLocale;
-  private DefaultIconDescriptor                 controllerDescriptor;
-  private List<Map<String, Object>>             dialogContextStack;
-  private IDisplayableAction                    exitAction;
-
-  private String                                forcedStartingLocale;
-
-  private List<ModuleHistoryEntry>              forwardHistoryEntries;
-
-  private ActionMap                             helpActionMap;
-  private ActionMap                             navigationActionMap;
-
-  private UsernamePasswordHandler               loginCallbackHandler;
-
-  private String                                loginContextName;
-  private IViewDescriptor                       loginViewDescriptor;
-  private Map<String, IMapView<E>>              workspaceViews;
-  private boolean                               moduleAutoPinEnabled;
-
-  private IMvcBinder                            mvcBinder;
-  private IAction                               onModuleEnterAction;
-  private IAction                               onModuleExitAction;
-  private IAction                               onModuleStartupAction;
-
-  private Map<String, Module>                   selectedModules;
-
-  private String                                selectedWorkspaceName;
-  private IAction                               loginAction;
-  private IAction                               startupAction;
-
-  private boolean                               tracksWorkspaceNavigator;
-  private IViewFactory<E, F, G>                 viewFactory;
-  private Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
-  private Map<String, Workspace>                workspaces;
-  private String                                workspacesMenuIconImageUrl;
+  protected static final int    MAX_LOGIN_RETRIES = 3;
+  private static final   Logger LOG               = LoggerFactory.getLogger(AbstractFrontendController.class);
+  private static final   String UP_KEY            = "UP_KEY";
+  private static final   String UP_SEP            = "!";
+  private final List<ModuleHistoryEntry>              backwardHistoryEntries;
+  private final DefaultIconDescriptor                 controllerDescriptor;
+  private final List<Map<String, Object>>             dialogContextStack;
+  private final List<ModuleHistoryEntry>              forwardHistoryEntries;
+  private final Map<String, IMapView<E>>              workspaceViews;
+  private final Map<String, Module>                   selectedModules;
+  private final Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
+  private       boolean                               started;
+  private       ActionMap                             actionMap;
+  private       ActionMap                             secondaryActionMap;
+  private       Locale                                clientLocale;
+  private       IDisplayableAction                    exitAction;
+  private       String                                forcedStartingLocale;
+  private       ActionMap                             helpActionMap;
+  private       ActionMap                             navigationActionMap;
+  private       UsernamePasswordHandler               loginCallbackHandler;
+  private       String                                loginContextName;
+  private       IViewDescriptor                       loginViewDescriptor;
+  private       boolean                               moduleAutoPinEnabled;
+  private       IMvcBinder                            mvcBinder;
+  private       IAction                               onModuleEnterAction;
+  private       IAction                               onModuleExitAction;
+  private       IAction                               onModuleStartupAction;
+  private       String                                selectedWorkspaceName;
+  private       IAction                               loginAction;
+  private       IAction                               startupAction;
+  private       boolean                               tracksWorkspaceNavigator;
+  private       IViewFactory<E, F, G>                 viewFactory;
+  private       Map<String, Workspace>                workspaces;
+  private       String                                workspacesMenuIconImageUrl;
+  private       Integer                               frameWidth;
+  private       Integer                               frameHeight;
+  private       IPreferencesStore                     clientPreferencesStore;
+  private       boolean                               checkActionThreadSafety;
+  private       PropertyChangeListener                dirtInterceptor;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
