@@ -76,7 +76,8 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
       @Override
       public T doInTransaction(TransactionStatus status) {
-        if (getPropagationBehavior() != TransactionDefinition.PROPAGATION_REQUIRES_NEW) {
+        if (status.isNewTransaction() && getPropagationBehavior() != TransactionDefinition
+        .PROPAGATION_REQUIRES_NEW) {
           // To avoid attaching to nested transactions
           BackendControllerHolder.getCurrentBackendController()
               .joinTransaction();
