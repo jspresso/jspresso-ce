@@ -549,7 +549,16 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-      return (IReferencePropertyDescriptor<IComponent>) modelDescriptor;
+      IReferencePropertyDescriptor<IComponent> returnedDescriptor = (IReferencePropertyDescriptor<IComponent>)
+          modelDescriptor;
+      if (initializationMapping != null && returnedDescriptor instanceof BasicReferencePropertyDescriptor) {
+        returnedDescriptor = (BasicReferencePropertyDescriptor<IComponent>) (
+            (IReferencePropertyDescriptor<IComponent>) modelDescriptor)
+            .clone();
+        ((BasicReferencePropertyDescriptor<IComponent>) returnedDescriptor).setInitializationMapping(
+            initializationMapping);
+      }
+      return returnedDescriptor;
     }
     return null;
   }
