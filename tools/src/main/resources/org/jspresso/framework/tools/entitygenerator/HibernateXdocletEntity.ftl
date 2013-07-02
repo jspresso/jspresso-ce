@@ -88,11 +88,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.modelType.array>
-    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
-  <#else>
-    <#local propertyType=propertyDescriptor.modelType.name/>
-  </#if>
+  <#local propertyType=propertyDescriptor.modelTypeName/>
   /**
    * Sets the ${propertyName}.
    *
@@ -107,10 +103,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local propertyName=propertyDescriptor.name/>
   <#if propertyDescriptor.name ="id">
     <#local propertyType="java.io.Serializable"/>
-  <#elseif propertyDescriptor.modelType.array>
-    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
   <#else>
-    <#local propertyType=propertyDescriptor.modelType.name/>
+    <#local propertyType=propertyDescriptor.modelTypeName/>
   </#if>
   <#if propertyDescriptor.sqlName??>
     <#local columnName=propertyDescriptor.sqlName/>
@@ -126,11 +120,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if propertyDescriptor.name ="id">
    * @hibernate.id
    *           generator-class = "assigned"
-      <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)??>
+      <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelTypeName)??>
         <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")>
           <#assign idTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.ByteArrayType"/>
         <#else> 
-          <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelType.name)/>
+          <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelTypeName)/>
           <#if hibernateType??>
             <#assign idTypeName=hibernateType.name/>
           </#if>
@@ -225,7 +219,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateCollectionSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#local collectionType=propertyDescriptor.modelType.name/>
+  <#local collectionType=propertyDescriptor.modelTypeName/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   /**
    * Sets the ${propertyName}.
@@ -247,7 +241,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} element to add.
    */
   void addTo${propertyName?cap_first}(${elementType} ${propertyName}Element);
-  <#if propertyDescriptor.modelType.name = "java.util.List">
+  <#if propertyDescriptor.modelTypeName = "java.util.List">
 
   /**
    * Adds an element to the ${propertyName} at the specified index. If the index is out
@@ -281,7 +275,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if propertyDescriptor.fkName??>
     <#local fkName=propertyDescriptor.fkName/>
   </#if>
-  <#local collectionType=propertyDescriptor.modelType.name/>
+  <#local collectionType=propertyDescriptor.modelTypeName/>
   <#local elementDescriptor=propertyDescriptor.referencedDescriptor.elementDescriptor/>
   <#local elementIsEntity=elementDescriptor.entity/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
@@ -545,7 +539,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#local reverseOneToOne = !propertyDescriptor.leadingPersistence/>
     <#else>
       <#local reverseOneToOne=false/>
-      <#if propertyDescriptor.reverseRelationEnd.modelType.name="java.util.List">
+      <#if propertyDescriptor.reverseRelationEnd.modelTypeName="java.util.List">
         <#local managesPersistence=false/>
       <#else>
         <#local managesPersistence=true/>

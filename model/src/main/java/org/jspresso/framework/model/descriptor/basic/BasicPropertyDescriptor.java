@@ -797,4 +797,17 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   public void setCacheable(boolean cacheable) {
     this.cacheable = cacheable;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getModelTypeName() {
+    Class<?> modelType = getModelType();
+    if (modelType.isArray()) {
+      return getModelType().getComponentType() + "[]";
+    }
+    return modelType.getName();
+  }
+
 }

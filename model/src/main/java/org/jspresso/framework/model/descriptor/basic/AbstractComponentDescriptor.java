@@ -272,6 +272,14 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
+  public String getModelTypeName() {
+    return getName();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public Map<String, ESort> getOrderingProperties() {
     // use a set to avoid duplicates.
     Map<String, ESort> properties = new LinkedHashMap<String, ESort>();

@@ -170,11 +170,7 @@ public interface ${componentName}
 
 <#macro generateScalarSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.modelType.array>
-    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
-  <#else>
-    <#local propertyType=propertyDescriptor.modelType.name/>
-  </#if>
+  <#local propertyType=propertyDescriptor.modelTypeName/>
   /**
    * Sets the ${propertyName}.
    *
@@ -187,11 +183,7 @@ public interface ${componentName}
 
 <#macro generateScalarGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.modelType.array>
-    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
-  <#else>
-    <#local propertyType=propertyDescriptor.modelType.name/>
-  </#if>
+  <#local propertyType=propertyDescriptor.modelTypeName/>
   <#if propertyDescriptor.sqlName??>
     <#local columnName=propertyDescriptor.sqlName/>
     <#local columnNameGenerated = false/>
@@ -281,7 +273,7 @@ public interface ${componentName}
 
 <#macro generateCollectionSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#local collectionType=propertyDescriptor.modelType.name/>
+  <#local collectionType=propertyDescriptor.modelTypeName/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   /**
    * Sets the ${propertyName}.
@@ -303,7 +295,7 @@ public interface ${componentName}
    *          the ${propertyName} element to add.
    */
   public abstract void addTo${propertyName?cap_first}(${elementType} ${propertyName}Element);
-  <#if propertyDescriptor.modelType.name = "java.util.List">
+  <#if propertyDescriptor.modelTypeName = "java.util.List">
 
   /**
    * Adds an element to the ${propertyName} at the specified index. If the index is out
@@ -337,7 +329,7 @@ public interface ${componentName}
   <#if propertyDescriptor.fkName??>
     <#local fkName=propertyDescriptor.fkName/>
   </#if>
-  <#local collectionType=propertyDescriptor.modelType.name/>
+  <#local collectionType=propertyDescriptor.modelTypeName/>
   <#local elementDescriptor=propertyDescriptor.referencedDescriptor.elementDescriptor/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
@@ -573,7 +565,7 @@ public interface ${componentName}
       <#local reverseOneToOne = !propertyDescriptor.leadingPersistence/>
     <#else>
       <#local reverseOneToOne=false/>
-      <#if propertyDescriptor.reverseRelationEnd.modelType.name="java.util.List">
+      <#if propertyDescriptor.reverseRelationEnd.modelTypeName="java.util.List">
         <#local managesPersistence=false/>
       <#else>
         <#local managesPersistence=true/>

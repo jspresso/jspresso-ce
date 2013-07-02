@@ -90,6 +90,14 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getModelTypeName() {
+    return getModelType().getName();
+  }
+
+  /**
    * Gets the orderingProperties.
    * 
    * @return the orderingProperties.

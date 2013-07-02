@@ -123,4 +123,12 @@ public class BasicObjectPropertyDescriptor extends
   protected boolean getDefaultSortablility() {
     return false;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getModelTypeName() {
+    return this.modelTypeClassName;
+  }
 }

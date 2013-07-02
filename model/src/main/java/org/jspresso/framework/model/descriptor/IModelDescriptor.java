@@ -31,8 +31,15 @@ public interface IModelDescriptor extends IDescriptor {
 
   /**
    * Gets the type of the model.
-   * 
+   *
    * @return the type of the model.
    */
   Class<?> getModelType();
+
+  /**
+   * Gets the fully qualified type name of the model.
+   *
+   * @return the the fully qualified type name of the model.
+   */
+  String getModelTypeName();
 }
