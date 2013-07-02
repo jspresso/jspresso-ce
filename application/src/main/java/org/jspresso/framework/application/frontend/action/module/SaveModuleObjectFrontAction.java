@@ -33,19 +33,25 @@ import org.jspresso.framework.util.gate.IGate;
 
 /**
  * This action is used to save module and sub-modules objects.
- * 
- * @version $LastChangedRevision: 7120 $
- * @author Vincent Vandenschrick
+ *
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
+ * @version $LastChangedRevision: 7120 $
  */
 public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IGate dirtyModuleGate = new DirtyModuleGate();
+  private boolean dirtyTrackingEnabled;
+  private IGate   dirtyModuleGate;
+
+  SaveModuleObjectFrontAction() {
+    dirtyTrackingEnabled = true;
+    dirtyModuleGate = new DirtyModuleGate();
+  }
 
   /**
    * Augments the actionability gates with the internal gate tracking the module dirtiness.
@@ -55,6 +61,9 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
   @Override
   public Collection<IGate> getActionabilityGates() {
     Collection<IGate> existingGates = super.getActionabilityGates();
+    if (!isDirtyTrackingEnabled()) {
+      return existingGates;
+    }
     Collection<IGate> gates = new HashSet<IGate>();
     gates.add(dirtyModuleGate);
     if (existingGates != null) {
@@ -66,8 +75,8 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
   private static class DirtyModuleGate extends AbstractGate implements IActionHandlerAware {
 
     private IFrontendController<?, ?, ?> frontendController;
-    private PropertyChangeListener moduleListener;
-    private boolean open;
+    private PropertyChangeListener       moduleListener;
+    private boolean                      open;
 
     public DirtyModuleGate() {
       createModuleListener();
@@ -118,7 +127,8 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
     /**
      * Sets open.
      *
-     * @param open the open
+     * @param open
+     *     the open
      */
     public void setOpen(boolean open) {
       boolean oldOpen = this.open;
@@ -134,4 +144,21 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
     }
   }
 
+  /**
+   * Is dirty tracking enabled.
+   *
+   * @return the boolean
+   */
+  protected boolean isDirtyTrackingEnabled() {
+    return dirtyTrackingEnabled;
+  }
+
+  /**
+   * Set dirty tracking enabled.
+   *
+   * @param dirtyTrackingEnabled the dirty tracking enabled
+   */
+  public void setDirtyTrackingEnabled(boolean dirtyTrackingEnabled) {
+    this.dirtyTrackingEnabled = dirtyTrackingEnabled;
+  }
 }
