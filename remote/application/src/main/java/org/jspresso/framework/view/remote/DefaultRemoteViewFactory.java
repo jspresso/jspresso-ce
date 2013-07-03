@@ -1852,6 +1852,7 @@ public class DefaultRemoteViewFactory extends
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     RTable viewComponent = createRTable(viewDescriptor);
+    viewComponent.setColumnReorderingAllowed(viewDescriptor.isColumnReorderingAllowed());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 

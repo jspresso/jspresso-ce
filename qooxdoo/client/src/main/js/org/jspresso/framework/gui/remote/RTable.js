@@ -41,6 +41,9 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable", {
         },
         sortable: {
           check: "Boolean"
+        },
+        columnReorderingAllowed: {
+          check: "Boolean"
         }
       }
     });

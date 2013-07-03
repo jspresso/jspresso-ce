@@ -482,7 +482,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     /**
      *            remoteTable
      * @return {qx.ui.core.Widget}
-     * @param remoteTable
+     * @param {org.jspresso.framework.gui.remote.RTable} remoteTable
      */
     _createTable: function (remoteTable) {
       /** @type org.jspresso.framework.state.remote.RemoteCompositeValueState */
@@ -514,6 +514,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
       }
       table.setStatusBarVisible(false);
+      if(!remoteTable.getColumnReorderingAllowed()) {
+        table.getPaneScroller(0)._startMoveHeader = function(moveCol, pageX) {};
+      }
       var columnModel = table.getTableColumnModel();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         var rColumn = remoteTable.getColumns()[i];

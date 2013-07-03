@@ -37,6 +37,7 @@ public class RTable extends RCollectionComponent {
   private boolean                   horizontallyScrollable;
   private boolean                   sortable;
   private RAction                   sortingAction;
+  private boolean                   columnReorderingAllowed;
 
   /**
    * Constructs a new {@code RTable} instance.
@@ -187,5 +188,23 @@ public class RTable extends RCollectionComponent {
    */
   public void setRowPrototype(RemoteCompositeValueState rowPrototype) {
     this.rowPrototype = rowPrototype;
+  }
+
+  /**
+   * Is column reordering allowed.
+   *
+   * @return the boolean
+   */
+  public boolean isColumnReorderingAllowed() {
+    return columnReorderingAllowed;
+  }
+
+  /**
+   * Sets column reordering allowed.
+   *
+   * @param columnReorderingAllowed the column reordering allowed
+   */
+  public void setColumnReorderingAllowed(boolean columnReorderingAllowed) {
+    this.columnReorderingAllowed = columnReorderingAllowed;
   }
 }

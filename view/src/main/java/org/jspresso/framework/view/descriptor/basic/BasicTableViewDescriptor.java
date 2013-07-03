@@ -85,6 +85,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   private List<String>                  renderedProperties;
   private boolean                       sortable;
   private IDisplayableAction            sortingAction;
+  private boolean                       columnReorderingAllowed;
 
   /**
    * Constructs a new {@code BasicTableViewDescriptor} instance.
@@ -92,6 +93,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   public BasicTableViewDescriptor() {
     horizontallyScrollable = true;
     sortable = true;
+    columnReorderingAllowed = true;
   }
 
   /**
@@ -100,43 +102,35 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   @Override
   public List<IPropertyViewDescriptor> getColumnViewDescriptors() {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
-    IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
-        .getCollectionDescriptor().getElementDescriptor();
+    IComponentDescriptor<?> rowModelDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
     List<IPropertyViewDescriptor> declaredPropertyViewDescriptors = columnViewDescriptors;
     if (declaredPropertyViewDescriptors == null) {
       List<String> viewRenderedProperties = getRenderedProperties();
       if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>
-          && ((ICollectionPropertyDescriptor<?>) modelDescriptor)
-              .getReverseRelationEnd() != null) {
-        viewRenderedProperties
-            .remove(((ICollectionPropertyDescriptor<?>) modelDescriptor)
-                .getReverseRelationEnd().getName());
+          && ((ICollectionPropertyDescriptor<?>) modelDescriptor).getReverseRelationEnd() != null) {
+        viewRenderedProperties.remove(
+            ((ICollectionPropertyDescriptor<?>) modelDescriptor).getReverseRelationEnd().getName());
       }
       declaredPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor columnDescriptor = new BasicPropertyViewDescriptor();
         columnDescriptor.setName(renderedProperty);
-        columnDescriptor.setModelDescriptor(rowModelDescriptor
-            .getPropertyDescriptor(renderedProperty));
+        columnDescriptor.setModelDescriptor(rowModelDescriptor.getPropertyDescriptor(renderedProperty));
         declaredPropertyViewDescriptors.add(columnDescriptor);
       }
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-      IModelDescriptor columnModelDescriptor = propertyViewDescriptor
-          .getModelDescriptor();
+      IModelDescriptor columnModelDescriptor = propertyViewDescriptor.getModelDescriptor();
       if (columnModelDescriptor == null) {
         if (propertyViewDescriptor.getName() != null) {
-          columnModelDescriptor = rowModelDescriptor
-              .getPropertyDescriptor(propertyViewDescriptor.getName());
+          columnModelDescriptor = rowModelDescriptor.getPropertyDescriptor(propertyViewDescriptor.getName());
         }
       }
       // Collection properties are not supported as columns
-      if (columnModelDescriptor != null
-          && !(columnModelDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
-        actualPropertyViewDescriptors.addAll(PropertyViewDescriptorHelper
-            .explodeComponentReferences(propertyViewDescriptor,
-                rowModelDescriptor));
+      if (columnModelDescriptor != null && !(columnModelDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
+        actualPropertyViewDescriptors.addAll(PropertyViewDescriptorHelper.explodeComponentReferences(
+            propertyViewDescriptor, rowModelDescriptor));
       }
     }
     return actualPropertyViewDescriptors;
@@ -144,7 +138,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * Gets the sortingAction.
-   * 
+   *
    * @return the sortingAction.
    */
   @Override
@@ -154,7 +148,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * Gets the horizontallyScrollable.
-   * 
+   *
    * @return the horizontallyScrollable.
    */
   @Override
@@ -182,7 +176,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * Gets the sortable.
-   * 
+   *
    * @return the sortable.
    */
   @Override
@@ -297,4 +291,23 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     return renderedProperties;
   }
 
+  /**
+   * Is column reordering allowed.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isColumnReorderingAllowed() {
+    return columnReorderingAllowed;
+  }
+
+  /**
+   * Configures if the table view should allow for column reordering.
+   * The default value is {@code true}.
+   *
+   * @param columnReorderingAllowed the column reordering allowed boolean.
+   */
+  public void setColumnReorderingAllowed(boolean columnReorderingAllowed) {
+    this.columnReorderingAllowed = columnReorderingAllowed;
+  }
 }

@@ -54,4 +54,11 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    * @return whether this table rows should be sorted manually.
    */
   boolean isSortable();
+
+  /**
+   * Is column reordering allowed.
+   *
+   * @return {@code true} if column reordering is allowed. False otherwise.
+   */
+  boolean isColumnReorderingAllowed();
 }

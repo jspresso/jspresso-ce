@@ -2229,6 +2229,7 @@ public class DefaultFlexViewFactory {
       selectionColumn.headerRenderer = new ClassFactory(SelectionHeaderRenderer);
       columns.push(selectionColumn);
     }
+    table.draggableColumns = remoteTable.columnReorderingAllowed;
 
     for (var i:int = 0; i < remoteTable.columns.length; i++) {
       var rColumn:RComponent = remoteTable.columns[i] as RComponent;

@@ -27,6 +27,7 @@ public class RTable extends RCollectionComponent {
   private var _sortingAction:RAction;
   private var _horizontallyScrollable:Boolean;
   private var _sortable:Boolean;
+  private var _columnReorderingAllowed:Boolean;
 
   public function RTable() {
     //default constructor.
@@ -86,6 +87,14 @@ public class RTable extends RCollectionComponent {
 
   public function set rowPrototype(value:RemoteCompositeValueState):void {
     _rowPrototype = value;
+  }
+
+  public function get columnReorderingAllowed():Boolean {
+    return _columnReorderingAllowed;
+  }
+
+  public function set columnReorderingAllowed(value:Boolean):void {
+    _columnReorderingAllowed = value;
   }
 }
 }

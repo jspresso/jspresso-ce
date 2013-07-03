@@ -2253,6 +2253,7 @@ public class DefaultSwingViewFactory extends
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     JTable viewComponent = createJTable(viewDescriptor);
+    viewComponent.getTableHeader().setReorderingAllowed(viewDescriptor.isColumnReorderingAllowed());
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = new JLabel();
