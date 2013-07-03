@@ -121,7 +121,6 @@ public abstract class AbstractComponentInvocationHandler implements
   private final        Map<String, Set<String>> fakePclAttachements;
   private final        Map<String, Set<String>> delayedFakePclAttachements;
   private final        PropertyChangeListener   fakePcl;
-  private static final Object FAKE_COMPONENT = new Object();
 
   static {
     Collection<String> methodNames = new HashSet<String>();
@@ -2015,6 +2014,7 @@ public abstract class AbstractComponentInvocationHandler implements
             boolean chainHasEntity = false;
             String[] chain = evt.getPropertyName().split(
                 "\\" + IAccessor.NESTED_DELIM);
+            IComponent sourceComponent = (IComponent) evt.getSource();
             if (chain.length > 1) {
               StringBuilder chainPart = new StringBuilder();
               for (int i = 0; i < chain.length - 1 && !chainHasEntity; i++) {
@@ -2022,19 +2022,23 @@ public abstract class AbstractComponentInvocationHandler implements
                   chainPart.append(IAccessor.NESTED_DELIM);
                 }
                 chainPart.append(chain[i]);
-                if (((IComponent) evt.getSource())
+                if (sourceComponent
                     .straightGetProperty(chainPart.toString()) instanceof IEntity) {
                   chainHasEntity = true;
                 }
               }
             }
             if (!chainHasEntity) {
-              doFirePropertyChange(source, referencePropertyName,
-                  FAKE_COMPONENT, evt.getSource());
+              IComponent oldComponentValue = getInlineComponentFactory().createComponentInstance(
+                  sourceComponent.getComponentContract());
+              oldComponentValue.straightSetProperties(sourceComponent.straightGetProperties());
+              oldComponentValue.straightSetProperty(evt.getPropertyName(), evt.getOldValue());
+              doFirePropertyChange(source, referencePropertyName, oldComponentValue, evt.getSource());
             }
           }
           // for ui notification
-          if (evt.getOldValue() != FAKE_COMPONENT) {
+          if (!(evt.getOldValue() instanceof IComponent
+              && ((IComponent) evt.getOldValue()).getOwningComponent() == null)) { // FAKE OLD COMPONENT VALUE
             for (String trackedProperty : trackedProperties) {
               if (trackedProperty.equals(evt.getPropertyName())) {
                 doFirePropertyChange(source, referencePropertyName
