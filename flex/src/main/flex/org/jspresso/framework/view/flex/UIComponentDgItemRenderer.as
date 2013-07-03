@@ -50,10 +50,15 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
 
   public function UIComponentDgItemRenderer() {
     //default constructor.
-    addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
+    addEventListener(MouseEvent.MOUSE_OVER, function (event:MouseEvent):void {
       var dg:DataGrid = listData.owner as DataGrid;
       var cellValueState:RemoteValueState = getCellValueState();
       _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
+    });
+    addEventListener(MouseEvent.MOUSE_OUT, function (event:MouseEvent):void {
+      var dg:DataGrid = listData.owner as DataGrid;
+      var cellValueState:RemoteValueState = getCellValueState();
+      _actionHandler.setCurrentViewStateGuid(dg, null, null);
     });
   }
 
