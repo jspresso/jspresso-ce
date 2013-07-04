@@ -1052,15 +1052,15 @@ public class DefaultFlexViewFactory {
     colorPicker.name = "cc";
     bindColorPicker(colorPicker, remoteColorField.state);
     colorField.addChild(colorPicker);
-    var resetButton:Button = createButtonComponent();
-    resetButton.setStyle("icon", _resetIcon);
-    if (!remoteColorField.resetEnabled) {
-      resetButton.enabled = false;
+    if (remoteColorField.resetEnabled) {
+      var resetButton:Button = createButtonComponent();
+      resetButton.setStyle("icon", _resetIcon);
+      resetButton.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
+        remoteColorField.state.value = remoteColorField.defaultColor;
+      });
+      colorField.addChild(resetButton);
+      BindingUtils.bindProperty(resetButton, "enabled", colorPicker, "enabled", true);
     }
-    colorField.addChild(resetButton);
-    resetButton.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
-      remoteColorField.state.value = remoteColorField.defaultColor;
-    });
     var focusIn:Function = function (event:FocusEvent):void {
       var cc:UIComponent = (event.currentTarget as Container).getChildByName("cc") as UIComponent;
       cc.setFocus();
