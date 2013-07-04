@@ -266,6 +266,12 @@ public abstract class AbstractComponentInvocationHandler implements
       owningComponent = (IComponent) args[0];
       owningPropertyDescriptor = (IPropertyDescriptor) args[1];
       return null;
+    } else if ("checkIntegrity".equals(methodName)) {
+      checkIntegrity(proxy);
+      return null;
+    } else if ("checkMandatoryProperties".equals(methodName)) {
+      checkMandatoryProperties(proxy);
+      return null;
     } else {
       if (isLifecycleMethod(method)) {
         return invokeLifecycleInterceptors(proxy, method, args);

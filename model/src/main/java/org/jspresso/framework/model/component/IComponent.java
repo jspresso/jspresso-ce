@@ -127,4 +127,15 @@ public interface IComponent extends IPropertyChangeCapable {
    */
   void setOwningComponent(IComponent owningComponent,
       IPropertyDescriptor owningPropertyDescriptor);
+
+  /**
+   * Check integrity. This method will trigger all property processors in order to detect violations of validation
+   * rules.
+   */
+  void checkIntegrity();
+
+  /**
+   * Check mandatory properties. This method will check that all mandatory properties are actually filled.
+   */
+  void checkMandatoryProperties();
 }
