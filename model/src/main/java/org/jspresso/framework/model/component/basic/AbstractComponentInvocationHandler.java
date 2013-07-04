@@ -1935,7 +1935,13 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private String toString(Object proxy) {
+  /**
+   * To string.
+   *
+   * @param proxy the proxy
+   * @return the to string
+   */
+  protected String toString(Object proxy) {
     try {
       String toStringPropertyName = componentDescriptor.getToStringProperty();
       Object toStringValue = accessorFactory.createPropertyAccessor(
