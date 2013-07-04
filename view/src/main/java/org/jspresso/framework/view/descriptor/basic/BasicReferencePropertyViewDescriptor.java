@@ -31,7 +31,7 @@ import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class BasicReferencePropertyViewDescriptor extends BasicPropertyViewDescriptor
+public class BasicReferencePropertyViewDescriptor extends BasicStringPropertyViewDescriptor
     implements IReferencePropertyViewDescriptor {
 
   private IDisplayableAction lovAction;

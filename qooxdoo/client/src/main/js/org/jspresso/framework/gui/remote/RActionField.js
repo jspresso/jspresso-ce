@@ -25,6 +25,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RActionField", {
         },
         fieldEditable: {
           check: "Boolean"
+        },
+        characterAction: {
+          check: "org.jspresso.framework.gui.remote.RAction",
+          nullable: true
         }
       }
     });

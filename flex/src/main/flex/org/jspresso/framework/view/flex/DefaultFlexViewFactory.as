@@ -940,6 +940,13 @@ public class DefaultFlexViewFactory {
       textField = createTextInputComponent();
       textField.name = "tf";
       sizeMaxComponentWidth(textField, remoteActionField);
+      if(remoteActionField.characterAction) {
+        textField.addEventListener(Event.CHANGE, function (event:Event):void {
+          var actionEvent:RActionEvent = new RActionEvent();
+          actionEvent.actionCommand = textField.text;
+          getActionHandler().execute(remoteActionField.characterAction, actionEvent, null, false);
+        });
+      }
     }
     var actionField:UIComponent = decorateWithAsideActions(textField, remoteActionField);
     bindActionField(actionField, textField, remoteActionField.state,
@@ -2841,6 +2848,13 @@ public class DefaultFlexViewFactory {
       sizeMaxComponentWidth(textField, remoteTextField);
     }
     configureHorizontalAlignment(textField, remoteTextField.horizontalAlignment);
+    if(remoteTextField.characterAction) {
+      textField.addEventListener(Event.CHANGE, function (event:Event):void {
+        var actionEvent:RActionEvent = new RActionEvent();
+        actionEvent.actionCommand = textField.text;
+        getActionHandler().execute(remoteTextField.characterAction, actionEvent, null, false);
+      });
+    }
     bindTextInput(textField, remoteTextField.state);
     return textField;
   }

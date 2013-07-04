@@ -1343,6 +1343,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         modelController.addTarget(textField, "value", "value", false, {
           converter: this._modelToViewFieldConverter
         });
+        if(remoteActionField.getCharacterAction()) {
+          textField.addListener("input", function (event) {
+            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+            actionEvent.setActionCommand(textField.getValue());
+            this.__actionHandler.execute(remoteActionField.getCharacterAction(), actionEvent);
+          }, this);
+        }
       } else {
         state.addListener("changeValue", function (e) {
           if (e.getData()) {
@@ -2272,6 +2279,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         converter: this._readOnlyFieldConverter
       });
       this._configureHorizontalAlignment(textField, remoteTextField.getHorizontalAlignment());
+      if(remoteTextField.getCharacterAction()) {
+        textField.addListener("input", function (event) {
+          var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+          actionEvent.setActionCommand(textField.getValue());
+          this.__actionHandler.execute(remoteTextField.getCharacterAction(), actionEvent);
+        }, this);
+      }
       return textField;
     },
 

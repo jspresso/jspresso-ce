@@ -23,6 +23,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTextField", {
         horizontalAlignment: {
           check: "String",
           nullable: true
+        },
+        characterAction: {
+          check: "org.jspresso.framework.gui.remote.RAction",
+          nullable: true
         }
       }
 

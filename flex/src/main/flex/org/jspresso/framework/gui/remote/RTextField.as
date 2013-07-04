@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
 public class RTextField extends RTextComponent {
 
   private var _horizontalAlignment:String;
+  private var _characterAction:RAction;
 
   public function RTextField() {
     //default constructor.
@@ -31,6 +32,14 @@ public class RTextField extends RTextComponent {
 
   public function set horizontalAlignment(value:String):void {
     _horizontalAlignment = value;
+  }
+
+  public function get characterAction():RAction {
+    return _characterAction;
+  }
+
+  public function set characterAction(value:RAction):void {
+    _characterAction = value;
   }
 }
 }

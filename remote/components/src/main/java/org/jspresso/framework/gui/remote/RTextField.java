@@ -28,6 +28,7 @@ public class RTextField extends RTextComponent {
 
   private static final long serialVersionUID = -7482939529748984634L;
   private String            horizontalAlignment;
+  private RAction           characterAction;
 
   /**
    * Constructs a new {@code RTextField} instance.
@@ -64,5 +65,13 @@ public class RTextField extends RTextComponent {
    */
   public String getHorizontalAlignment() {
     return horizontalAlignment;
+  }
+
+  public RAction getCharacterAction() {
+    return characterAction;
+  }
+
+  public void setCharacterAction(RAction characterAction) {
+    this.characterAction = characterAction;
   }
 }

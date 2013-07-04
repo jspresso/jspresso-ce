@@ -21,6 +21,7 @@ public class RActionField extends RComponent {
 
   private var _showTextField:Boolean;
   private var _fieldEditable:Boolean;
+  private var _characterAction:RAction;
 
   public function RActionField() {
     //default constructor.
@@ -40,6 +41,14 @@ public class RActionField extends RComponent {
 
   public function set fieldEditable(value:Boolean):void {
     _fieldEditable = value;
+  }
+
+  public function get characterAction():RAction {
+    return _characterAction;
+  }
+
+  public function set characterAction(value:RAction):void {
+    _characterAction = value;
   }
 }
 }

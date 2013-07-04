@@ -29,6 +29,7 @@ public class RActionField extends RComponent {
   private static final long serialVersionUID = -5445056567090394779L;
   private boolean showTextField;
   private boolean fieldEditable;
+  private RAction characterAction;
 
   /**
    * Constructs a new {@code RActionField} instance.
@@ -84,5 +85,23 @@ public class RActionField extends RComponent {
    */
   public void setFieldEditable(boolean fieldEditable) {
     this.fieldEditable = fieldEditable;
+  }
+
+  /**
+   * Gets character action.
+   *
+   * @return the character action
+   */
+  public RAction getCharacterAction() {
+    return characterAction;
+  }
+
+  /**
+   * Sets character action.
+   *
+   * @param characterAction the character action
+   */
+  public void setCharacterAction(RAction characterAction) {
+    this.characterAction = characterAction;
   }
 }

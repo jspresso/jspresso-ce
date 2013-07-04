@@ -293,4 +293,13 @@ public class JActionField extends JPanel {
     this.fieldEditable = fieldEditable;
     textField.setEditable(isEnabled() && fieldEditable);
   }
+
+  /**
+   * Gets the text field in this action field.
+   *
+   * @return the text field
+   */
+  public JTextField getTextField() {
+    return textField;
+  }
 }

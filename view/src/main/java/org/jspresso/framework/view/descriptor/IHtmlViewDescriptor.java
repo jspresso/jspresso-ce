@@ -24,6 +24,6 @@ package org.jspresso.framework.view.descriptor;
  * @version $LastChangedRevision: 7163 $
  * @author Vincent Vandenschrick
  */
-public interface IHtmlViewDescriptor extends IScrollableViewDescriptor {
+public interface IHtmlViewDescriptor extends IScrollableViewDescriptor, IPropertyViewDescriptor {
   // This is just a marker interface as of now.
 }

@@ -31,6 +31,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -80,6 +81,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
@@ -91,8 +94,10 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -205,6 +210,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -2067,6 +2073,11 @@ public class DefaultSwingViewFactory extends
       }
       ((JActionField) viewComponent).setActions(Collections
           .singletonList(lovAction));
+      if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor) {
+        attachCharAction(view, ((JActionField) viewComponent).getTextField(), ((IStringPropertyViewDescriptor)
+            propertyViewDescriptor)
+            .getCharacterAction(), actionHandler, locale);
+      }
     }
     return view;
   }
@@ -2169,6 +2180,11 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
+
+    if (viewComponent instanceof JTextComponent && propertyViewDescriptor instanceof IStringPropertyViewDescriptor) {
+      attachCharAction(view, (JTextComponent) viewComponent, ((IStringPropertyViewDescriptor) propertyViewDescriptor)
+          .getCharacterAction(), actionHandler, locale);
+    }
     return view;
   }
 
@@ -4044,5 +4060,41 @@ public class DefaultSwingViewFactory extends
     staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR,
         propertyViewDescriptor);
     propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+  }
+
+  /**
+   * Attach char action.
+   *
+   * @param view the view
+   * @param viewComponent the view component
+   * @param action the action
+   * @param actionHandler the action handler
+   * @param locale the locale
+   */
+  protected void attachCharAction(final IView<JComponent> view, final JTextComponent viewComponent,
+                                  final IDisplayableAction action,
+                                  final IActionHandler actionHandler, Locale locale) {
+    if (action != null) {
+      viewComponent.addKeyListener(new KeyAdapter() {
+
+        private void triggerCharAction() {
+          String text = viewComponent.getText();
+          Map<String, Object> context = getActionFactory().createActionContext(actionHandler, view, view.getConnector(),
+              null, view.getPeer());
+          context.put(ActionContextConstants.ACTION_COMMAND, text);
+          actionHandler.execute(action, context);
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              triggerCharAction();
+            }
+          });
+        }
+      });
+    }
   }
 }

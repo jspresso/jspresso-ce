@@ -154,6 +154,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -1517,6 +1518,12 @@ public class DefaultRemoteViewFactory extends
           .generateGUID());
       actionList.setActions(lovAction);
       viewComponent.setActionLists(actionList);
+      if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor && ((IStringPropertyViewDescriptor)
+          propertyViewDescriptor).getCharacterAction() != null) {
+        ((RActionField) viewComponent).setCharacterAction(getActionFactory().createAction(
+            ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(),
+            actionHandler, view, locale));
+      }
     }
     return view;
   }
@@ -1818,6 +1825,14 @@ public class DefaultRemoteViewFactory extends
     }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
+    if (viewComponent instanceof RTextField) {
+      if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor && ((IStringPropertyViewDescriptor)
+          propertyViewDescriptor).getCharacterAction() != null) {
+        ((RTextField) viewComponent).setCharacterAction(getActionFactory().createAction(
+            ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(),
+            actionHandler, view, locale));
+      }
+    }
     return view;
   }
 
