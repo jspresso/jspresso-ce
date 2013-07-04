@@ -55,4 +55,11 @@ public interface ICollectionDescriptor<E> extends
    * @return the list of properties ordering this collection.
    */
   Map<String, ESort> getOrderingProperties();
+
+  /**
+   * Is null element allowed.
+   *
+   * @return the boolean
+   */
+  boolean isNullElementAllowed();
 }

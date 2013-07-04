@@ -52,6 +52,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   private Class<?>                          collectionInterface;
   private IComponentDescriptor<? extends E> elementDescriptor;
   private Map<String, ESort>                orderingProperties;
+  private boolean                           nullElementAllowed;
 
   /**
    * {@inheritDoc}
@@ -66,8 +67,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    */
   @Override
   public Class<?> getCollectionInterface() {
-    if (Set.class.equals(collectionInterface)
-        || List.class.equals(collectionInterface)) {
+    if (Set.class.equals(collectionInterface) || List.class.equals(collectionInterface)) {
       return collectionInterface;
     }
     return Set.class;
@@ -99,7 +99,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
 
   /**
    * Gets the orderingProperties.
-   * 
+   *
    * @return the orderingProperties.
    */
   @Override
@@ -185,5 +185,25 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
     } else {
       orderingProperties = null;
     }
+  }
+
+  /**
+   * Is null element allowed.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isNullElementAllowed() {
+    return nullElementAllowed;
+  }
+
+  /**
+   * Configures the collection to accept null element values or not. If the collection does not allows for null
+   * values, it forbids to have holes in lists, i.e. all elements have consecutive indices.
+   *
+   * @param nullElementAllowed {@code true} if the collection accepts {@code null} elements.
+   */
+  public void setNullElementAllowed(boolean nullElementAllowed) {
+    this.nullElementAllowed = nullElementAllowed;
   }
 }

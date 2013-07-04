@@ -1217,16 +1217,25 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void checkMandatoryProperties(Object proxy) {
     if (propertyProcessorsEnabled) {
-      for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-          .getPropertyDescriptors()) {
-        if (!propertyDescriptor.isComputed()
-            && propertyDescriptor.isMandatory()) {
-          Object newValue = straightGetProperty(proxy,
-              propertyDescriptor.getName());
-          if (newValue == null
-              || (isInitialized(newValue) && newValue instanceof Collection<?> && ((Collection<?>) newValue)
-              .isEmpty())) {
-            throw new MandatoryPropertyException(propertyDescriptor, proxy);
+      for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
+        if (!propertyDescriptor.isComputed()) {
+          if (propertyDescriptor.isMandatory()) {
+            Object newValue = straightGetProperty(proxy, propertyDescriptor.getName());
+            if (newValue == null || (isInitialized(newValue) && newValue instanceof Collection<?>
+                && ((Collection<?>) newValue).isEmpty())) {
+              throw new MandatoryPropertyException(propertyDescriptor, proxy);
+            }
+          }
+          if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?> && !((ICollectionPropertyDescriptor)
+              propertyDescriptor).getReferencedDescriptor().isNullElementAllowed()) {
+            Object newValue = straightGetProperty(proxy, propertyDescriptor.getName());
+            if (isInitialized(newValue) && newValue instanceof Collection<?>) {
+              for (Object element : ((Collection<?>) newValue)) {
+                if (element == null) {
+                  throw new MandatoryPropertyException(propertyDescriptor, proxy);
+                }
+              }
+            }
           }
         }
       }
