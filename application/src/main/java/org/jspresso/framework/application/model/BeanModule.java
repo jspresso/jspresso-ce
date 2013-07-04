@@ -223,17 +223,28 @@ public class BeanModule extends Module implements PropertyChangeListener {
     if (ObjectUtils.equals(this.moduleObject, moduleObject)) {
       return;
     }
+    String toStringProperty = getComponentDescriptor().getToStringProperty();
     if (getName() == null
         && this.moduleObject instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) this.moduleObject)
-          .removePropertyChangeListener(this);
+      if (toStringProperty != null) {
+        ((IPropertyChangeCapable) this.moduleObject)
+            .removePropertyChangeListener(toStringProperty, this);
+      } else {
+        ((IPropertyChangeCapable) this.moduleObject)
+            .removePropertyChangeListener(this);
+      }
     }
     Object oldValue = getModuleObject();
     this.moduleObject = moduleObject;
     if (getName() == null
         && this.moduleObject instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) this.moduleObject)
-          .addPropertyChangeListener(this);
+      if (toStringProperty != null) {
+        ((IPropertyChangeCapable) this.moduleObject)
+            .addPropertyChangeListener(toStringProperty, this);
+      } else {
+        ((IPropertyChangeCapable) this.moduleObject)
+            .addPropertyChangeListener(this);
+      }
     }
     firePropertyChange(MODULE_OBJECT, oldValue, getModuleObject());
   }
