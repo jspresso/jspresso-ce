@@ -18,11 +18,14 @@
  */
 package org.jspresso.framework.model.component.basic;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
@@ -123,6 +126,22 @@ public class BasicComponentInvocationHandler extends
   protected void storeProperty(String propertyName, Object propertyValue) {
     properties.put(propertyName, propertyValue);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String toString(Object proxy) {
+    String toString;
+    IComponent owningComponent = ((IComponent) proxy).getOwningComponent();
+    if (owningComponent != null) {
+      toString = owningComponent.toString();
+    } else {
+      toString = super.toString(proxy);
+    }
+    return toString;
+  }
+
 
   private Map<String, Object> createPropertyMap() {
     return new HashMap<String, Object>();
