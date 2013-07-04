@@ -49,7 +49,7 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
   private IGate   dirtyModuleGate;
 
   SaveModuleObjectFrontAction() {
-    dirtyTrackingEnabled = true;
+    dirtyTrackingEnabled = false;
     dirtyModuleGate = new DirtyModuleGate();
   }
 
