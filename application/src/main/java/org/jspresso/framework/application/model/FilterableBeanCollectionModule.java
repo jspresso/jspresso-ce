@@ -179,7 +179,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
     BasicCollectionViewDescriptor moduleObjectsView = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor
         .extractMainCollectionView(getProjectedViewDescriptor());
-    if (getPageSize() != null && getPageSize() >= 0) {
+    if (getPageSize() != null && getPageSize() > 0) {
       if (moduleObjectsView != null
           && moduleObjectsView.getPaginationViewDescriptor() == null) {
         moduleObjectsView.setPaginationViewDescriptor(paginationViewDescriptor);

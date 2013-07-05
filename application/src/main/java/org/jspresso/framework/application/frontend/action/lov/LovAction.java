@@ -96,10 +96,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@code LOV_SELECTED_ITEM}.
    */
   public static final String                         LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
-  private static final String                        NON_LOV_TRIGGERING_CHARS = "%;"
+  private static final String                        NON_LOV_TRIGGERING_CHARS = "%"
+                                                                                  + IQueryComponent.DISJUNCT
                                                                                   + IQueryComponent.NOT_VAL
                                                                                   + IQueryComponent.NULL_VAL;
   private boolean                                    autoquery;
+  private Integer                                    pageSize;
   private IDisplayableAction                         cancelAction;
   private CreateQueryComponentAction                 createQueryComponentAction;
   private IComponentDescriptor<? extends IComponent> entityDescriptor;
@@ -166,6 +168,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actionHandler.execute(createQueryComponentAction, context);
     IQueryComponent queryComponent = (IQueryComponent) context
         .get(IQueryComponent.QUERY_COMPONENT);
+    queryComponent.setPageSize(getPageSize());
 
     autoCompletePropertyValue = queryComponent
         .refineValue(autoCompletePropertyValue, null);
@@ -644,5 +647,23 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setDefaultIconImageURL(String defaultIconImageURL) {
     this.defaultIconImageURL = defaultIconImageURL;
+  }
+
+  /**
+   * Gets page size.
+   *
+   * @return the page size
+   */
+  protected Integer getPageSize() {
+    return pageSize;
+  }
+
+  /**
+   * Sets page size.
+   *
+   * @param pageSize the page size
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
   }
 }

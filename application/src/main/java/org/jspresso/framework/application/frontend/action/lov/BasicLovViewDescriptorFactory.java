@@ -78,8 +78,10 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
           .setSortingAction(sortingAction);
     }
     resultCollectionViewDescriptor.setRowAction(okAction);
-    if (entityRefDescriptor.getComponentDescriptor().getPageSize() != null
-        && entityRefDescriptor.getComponentDescriptor().getPageSize() >= 0) {
+    IQueryComponent queryComponent = (IQueryComponent) lovContext
+        .get(IQueryComponent.QUERY_COMPONENT);
+    Integer pageSize = queryComponent.getPageSize();
+    if (pageSize != null && pageSize > 0) {
       if (paginationViewDescriptor != null) {
         resultCollectionViewDescriptor
             .setPaginationViewDescriptor(paginationViewDescriptor);
