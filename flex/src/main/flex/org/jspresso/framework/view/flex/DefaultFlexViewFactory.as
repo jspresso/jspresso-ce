@@ -2354,13 +2354,6 @@ public class DefaultFlexViewFactory {
         column.itemEditor = itemEditor;
       }
 
-      var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
-      headerRenderer.properties = { index: i + 1,
-        toolTip: editorComponent.toolTip,
-        viewFactory: this,
-        rTemplate: rColumnHeader};
-      column.headerRenderer = headerRenderer;
-
       if (rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {
         column.width = rColumn.preferredSize.width;
       } else {
@@ -2374,11 +2367,11 @@ public class DefaultFlexViewFactory {
       editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
       column.editorDataField = "state";
 
-      if (remoteTable.sortable && !remoteTable.sortingAction) {
+      if (remoteTable.sortable) {
         var property:String = remoteTable.columnIds[i];
         if (!property || property.length == 0 || property.charAt(0) == "#") {
           column.sortable = false;
-        } else {
+        } else if (!remoteTable.sortingAction) {
           if (rColumn is RCheckBox) {
             column.sortCompareFunction = _remoteValueSorter.compareBooleans;
           } else if (rColumn is RNumericComponent) {
@@ -2392,6 +2385,14 @@ public class DefaultFlexViewFactory {
           }
         }
       }
+
+      var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
+      headerRenderer.properties = { index: i + 1,
+        toolTip: editorComponent.toolTip,
+        viewFactory: this,
+        rTemplate: rColumnHeader};
+      column.headerRenderer = headerRenderer;
+
       columns.push(column);
     }
     if (remoteTable.sortable) {
