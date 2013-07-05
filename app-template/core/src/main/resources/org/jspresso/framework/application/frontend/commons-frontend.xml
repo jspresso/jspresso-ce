@@ -1155,6 +1155,16 @@
   <bean id="staticOkCancelFrontAction" abstract="true" parent="yesNoFrontAction"
     class="org.jspresso.framework.application.frontend.action.flow.StaticOkCancelAction" />
 
+  <bean id="pickupAndAddAnyFrontAction" parent="lovAction">
+    <property name="autoquery" value="true" />
+    <property name="selectionMode" value="MULTIPLE_INTERVAL_CUMULATIVE_SELECTION" />
+    <property name="okAction">
+      <bean parent="lovOkFrontAction">
+        <property name="nextAction" ref="addAnyToMasterFrontAction" />
+      </bean>
+    </property>
+  </bean>
+
   <bean id="showRunningExecutorsAction" parent="editComponentAction"
     class="org.jspresso.framework.application.frontend.action.controller.EditBackendControllerAction">
     <property name="name" value="runningExecutors" />
