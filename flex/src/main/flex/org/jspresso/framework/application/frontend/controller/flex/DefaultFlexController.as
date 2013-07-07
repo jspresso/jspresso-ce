@@ -836,23 +836,35 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     //_remoteController.channelSet.disconnectAll();
   }
 
-  protected function popupError(message:String):void {
-    var title:String;
-    var messageHeader:String;
-    try {
-      title = translate("error");
-      messageHeader = translate("error.unexpected");
-    } catch (error:Error) {
-      title = "Error";
-      messageHeader = "An unexpected error occured";
+  protected function popupError(message:String,
+                                messageHeader:String="An unexpected error occured",
+                                messageHeaderCode:String="error.unexpected",
+                                title:String="Error", titleCode:String="error"):void {
+    var popupTitle:String;
+    var popupMessageHeader:String;
+    var popupMessage:String = message;
+    if (_translations != null) {
+      if (titleCode) {
+        popupTitle = translate(titleCode);
+      } else {
+        popupTitle = title;
+      }
+      if (messageHeaderCode) {
+        popupMessageHeader = translate(messageHeaderCode);
+      } else {
+        popupMessageHeader = messageHeader;
+      }
+    } else {
+      popupTitle = title;
+      popupMessageHeader = messageHeader;
     }
-    if (message && message.length > 1200) {
-      var buff:String = message.substr(0, 600);
+    if (popupMessage && popupMessage.length > 1200) {
+      var buff:String = popupMessage.substr(0, 600);
       buff += "\n...\n...\n...\n";
-      buff += message.substr(message.length - 600, message.length);
-      message = buff;
+      buff += popupMessage.substr(popupMessage.length - 600, popupMessage.length);
+      popupMessage = buff;
     }
-    var alert:Alert = Alert.show(messageHeader + "\n\n\n" + message, title, Alert.OK, null, null, null, Alert.OK);
+    var alert:Alert = Alert.show(popupMessageHeader + "\n\nDetails :\n" + popupMessage, popupTitle, Alert.OK, null, null, null, Alert.OK);
     fixAlertSize(alert);
   }
 
@@ -905,7 +917,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     };
     var errorHandler:Function = function (faultEvent:FaultEvent):void {
       blockUI(true);
-      popupError(faultEvent.fault.message);
+      popupError(faultEvent.fault.message, "A network error has occurred while communicating with the server",
+                 "server.comm.failure");
     };
     var operation:AbstractOperation;
     operation = _remoteController.getOperation(HANDLE_COMMANDS_METHOD);
@@ -1207,7 +1220,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   protected function getKeysToTranslate():Array {
     return ["FS.browse.continue", "file.upload", "file.download", "system.clipboard.continue", "content.copy", "error",
-            "error.unexpected"];
+            "error.unexpected", "server.comm.failure"];
   }
 
   public function translate(key:String):String {
