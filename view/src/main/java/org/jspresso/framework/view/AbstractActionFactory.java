@@ -72,6 +72,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   private IIconFactory<G> iconFactory;
 
+  private boolean liveDebugUI = false;
+
   /**
    * {@inheritDoc}
    */
@@ -335,6 +337,24 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   protected IIconFactory<G> getIconFactory() {
     return iconFactory;
+  }
+
+  /**
+   * Is live debug UI structure.
+   *
+   * @return the boolean
+   */
+  protected boolean isLiveDebugUI() {
+    return liveDebugUI;
+  }
+
+  /**
+   * Sets live debug UI structure.
+   *
+   * @param liveDebugUI the live debug uI structure
+   */
+  public void setLiveDebugUI(boolean liveDebugUI) {
+    this.liveDebugUI = liveDebugUI;
   }
 
   private void assignCollectionBasedGateModel(final IGate gate,

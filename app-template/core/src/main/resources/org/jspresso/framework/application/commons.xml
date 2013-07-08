@@ -129,12 +129,14 @@
     <property name="resetPropertyAction" ref="resetPropertyFrontAction" />
     <property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
     <property name="componentCollectionFactory" ref="componentCollectionFactory"/>
+    <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
   </bean>
 
   <bean id="viewFactoryBase" parent="abstractViewFactory" abstract="true" />
 
   <bean id="abstractActionFactory" abstract="true" class="org.jspresso.framework.view.AbstractActionFactory">
     <property name="iconFactory" ref="iconFactory" />
+    <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
   </bean>
 
   <bean id="actionFactoryBase" parent="abstractActionFactory" abstract="true" />

@@ -142,6 +142,14 @@ public class RemoteActionFactory extends
           actionHandler, locale));
       String i18nDescription = ((IDisplayableAction) action)
           .getI18nDescription(actionHandler, locale);
+      if (isLiveDebugUI()) {
+        if (i18nDescription == null) {
+          i18nDescription = "";
+        } else {
+          i18nDescription = i18nDescription + "\n";
+        }
+        i18nDescription = i18nDescription + "PermId -> [" + action.getPermId() + "]";
+      }
       if (i18nDescription != null && i18nDescription.length() > 0) {
         remoteAction.setDescription(i18nDescription + TOOLTIP_ELLIPSIS);
       }

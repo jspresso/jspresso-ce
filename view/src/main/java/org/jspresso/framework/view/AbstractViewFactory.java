@@ -157,64 +157,57 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * {@code BOLD_FONT}.
    */
-  protected static final String         BOLD_FONT                            = ";BOLD;";
+  protected static final String BOLD_FONT                 = ";BOLD;";
   /**
    * {@code DEF_DISP_MAX_VALUE}.
    */
-  protected static final double         DEF_DISP_MAX_VALUE                   = 1000;
+  protected static final double DEF_DISP_MAX_VALUE        = 1000;
   /**
    * {@code DEF_DISP_TEMPLATE_PERCENT}.
    */
-  protected static final double         DEF_DISP_TEMPLATE_PERCENT            = 99;
+  protected static final double DEF_DISP_TEMPLATE_PERCENT = 99;
   /**
    * {@code TEMPLATE_CHAR}.
    */
-  protected static final char           TEMPLATE_CHAR                        = 'O';
+  protected static final char   TEMPLATE_CHAR             = 'O';
   /**
    * {@code TEMPLATE_DATE}.
    */
-  protected static final Date           TEMPLATE_DATE                        = new Date(
-                                                                                 27166271000L);
+  protected static final Date   TEMPLATE_DATE             = new Date(27166271000L);
   /**
    * {@code TEMPLATE_DURATION}.
    */
-  protected static final Long           TEMPLATE_DURATION                    = (long) (EDuration.ONE_SECOND
-      .getMillis()
-      + EDuration.ONE_MINUTE
-      .getMillis()
-      + EDuration.ONE_HOUR
-      .getMillis()
-      + EDuration.ONE_DAY
-      .getMillis()
-      + EDuration.ONE_WEEK
-      .getMillis());
+  protected static final Long   TEMPLATE_DURATION         = (long) (EDuration.ONE_SECOND.getMillis() + EDuration
+      .ONE_MINUTE.getMillis() + EDuration.ONE_HOUR.getMillis() + EDuration.ONE_DAY.getMillis() + EDuration.ONE_WEEK
+                                                                                                          .getMillis());
 
   /**
    * {@code TEMPLATE_TIME}.
    */
-  protected static final Date           TEMPLATE_TIME                        = new Date(
-                                                                                 366000);
+  protected static final Date TEMPLATE_TIME = new Date(366000);
 
   private IActionFactory<G, E>          actionFactory;
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
-  private ERenderingOptions             defaultActionMapRenderingOptions     = ERenderingOptions.ICON;
-  private final IValueChangeListener          firstRowSelector;
-  private IIconFactory<F>               iconFactory;
-  private IComponentCollectionFactory   componentCollectionFactory;
+  private ERenderingOptions defaultActionMapRenderingOptions = ERenderingOptions.ICON;
+  private final IValueChangeListener        firstRowSelector;
+  private       IIconFactory<F>             iconFactory;
+  private       IComponentCollectionFactory componentCollectionFactory;
 
-  private IDisplayableAction            lovAction;
-  private int                           maxCharacterLength                   = 32;
-  private int                           maxColumnCharacterLength             = 32;
-  private IModelCascadingBinder         modelCascadingBinder;
-  private IModelConnectorFactory        modelConnectorFactory;
-  private IMvcBinder                    mvcBinder;
+  private IDisplayableAction lovAction;
+  private int maxCharacterLength       = 32;
+  private int maxColumnCharacterLength = 32;
+  private IModelCascadingBinder  modelCascadingBinder;
+  private IModelConnectorFactory modelConnectorFactory;
+  private IMvcBinder             mvcBinder;
 
-  private IDisplayableAction            openFileAsBinaryPropertyAction;
-  private IDisplayableAction            resetPropertyAction;
-  private IDisplayableAction            saveBinaryPropertyAsFileAction;
-  private String                        formLabelMandatoryPropertyColorHex   = "0xFFFF0000";
-  private String                        tableHeaderMandatoryPropertyColorHex = null;
+  private IDisplayableAction openFileAsBinaryPropertyAction;
+  private IDisplayableAction resetPropertyAction;
+  private IDisplayableAction saveBinaryPropertyAsFileAction;
+  private String formLabelMandatoryPropertyColorHex   = "0xFFFF0000";
+  private String tableHeaderMandatoryPropertyColorHex = null;
+
+  private boolean liveDebugUI = false;
 
   /**
    * Constructs a new {@code AbstractViewFactory} instance.
@@ -224,10 +217,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
       @Override
       public void valueChange(ValueChangeEvent evt) {
-        if (evt.getNewValue() != null
-            && !((Collection<?>) evt.getNewValue()).isEmpty()) {
-          ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(0);
+        if (evt.getNewValue() != null && !((Collection<?>) evt.getNewValue()).isEmpty()) {
+          ((ICollectionConnector) evt.getSource()).setSelectedIndices(0);
         }
       }
     };
@@ -238,42 +229,31 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   @SuppressWarnings("ConstantConditions")
   @Override
-  public IView<E> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  public IView<E> createView(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
     try {
       actionHandler.pushToSecurityContext(viewDescriptor);
       IView<E> view = createCustomView(viewDescriptor, actionHandler, locale);
       if (view == null) {
         if (viewDescriptor instanceof IComponentViewDescriptor) {
-          view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-              actionHandler, locale);
+          view = createComponentView((IComponentViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof IActionViewDescriptor) {
-          view = createActionView((IActionViewDescriptor) viewDescriptor,
-              actionHandler, locale);
+          view = createActionView((IActionViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-          view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-              actionHandler, locale);
+          view = createPropertyView((IPropertyViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-          view = createCollectionView(
-              (ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
-          finishCollectionViewConfiguration(view,
-              (ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
+          view = createCollectionView((ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
+          finishCollectionViewConfiguration(view, (ICollectionViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ICardViewDescriptor) {
-          view = createCardView((ICardViewDescriptor) viewDescriptor,
-              actionHandler, locale);
+          view = createCardView((ICardViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-          view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-              actionHandler, locale);
+          view = createTreeView((ITreeViewDescriptor) viewDescriptor, actionHandler, locale);
           if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
-            ((IItemSelectable) view.getConnector())
-                .addItemSelectionListener(new ConnectorActionAdapter<E, G>(
-                    ((ITreeViewDescriptor) viewDescriptor)
-                        .getItemSelectionAction(), getActionFactory(),
-                    actionHandler, view));
+            ((IItemSelectable) view.getConnector()).addItemSelectionListener(new ConnectorActionAdapter<E, G>(
+                ((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction(), getActionFactory(), actionHandler,
+                view));
           }
         } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-          view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-              actionHandler, locale);
+          view = createCompositeView((ICompositeViewDescriptor) viewDescriptor, actionHandler, locale);
         }
       }
       if (view != null) {
@@ -290,12 +270,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
         view.getConnector().setLocallyWritable(locallyWritable);
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
-            if (!(gate instanceof ISecurable)
-                || actionHandler.isAccessGranted((ISecurable) gate)) {
+            if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {
               IGate clonedGate = gate.clone();
               if (clonedGate instanceof IActionHandlerAware) {
-                ((IActionHandlerAware) clonedGate)
-                    .setActionHandler(actionHandler);
+                ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
               view.getConnector().addReadabilityGate(clonedGate);
             }
@@ -303,23 +281,19 @@ public abstract class AbstractViewFactory<E, F, G> implements
         }
         if (viewDescriptor.getWritabilityGates() != null) {
           for (IGate gate : viewDescriptor.getWritabilityGates()) {
-            if (!(gate instanceof ISecurable)
-                || actionHandler.isAccessGranted((ISecurable) gate)) {
+            if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {
               IGate clonedGate = gate.clone();
               if (clonedGate instanceof IActionHandlerAware) {
-                ((IActionHandlerAware) clonedGate)
-                    .setActionHandler(actionHandler);
+                ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
               view.getConnector().addWritabilityGate(clonedGate);
             }
           }
         }
-        finishComponentConfiguration(viewDescriptor, actionHandler, locale,
-            view);
+        finishComponentConfiguration(viewDescriptor, actionHandler, locale, view);
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
         decorateWithBorder(view, actionHandler, locale);
-        view.getConnector().setModelDescriptor(
-            viewDescriptor.getModelDescriptor());
+        view.getConnector().setModelDescriptor(viewDescriptor.getModelDescriptor());
         if (!actionHandler.isAccessGranted(viewDescriptor)) {
           view.setPeer(createSecurityComponent());
         }
@@ -346,13 +320,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the ready to assemble pagination view.
    */
-  protected IView<E> createPaginationView(
-      IViewDescriptor paginationViewDescriptor, IView<E> view,
-      IActionHandler actionHandler, Locale locale) {
-    final IView<E> paginationView = createView(paginationViewDescriptor,
-        actionHandler, locale);
-    (view.getConnector()).addPropertyChangeListener(
-        IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
+  protected IView<E> createPaginationView(IViewDescriptor paginationViewDescriptor, IView<E> view,
+                                          IActionHandler actionHandler, Locale locale) {
+    final IView<E> paginationView = createView(paginationViewDescriptor, actionHandler, locale);
+    (view.getConnector()).addPropertyChangeListener(IValueConnector.MODEL_CONNECTOR_PROPERTY,
+        new PropertyChangeListener() {
 
           @Override
           public void propertyChange(PropertyChangeEvent evt) {
@@ -413,8 +385,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param binaryPropertyInfoAction
    *          the binaryPropertyInfoAction to set.
    */
-  public void setBinaryPropertyInfoAction(
-      IDisplayableAction binaryPropertyInfoAction) {
+  public void setBinaryPropertyInfoAction(IDisplayableAction binaryPropertyInfoAction) {
     this.binaryPropertyInfoAction = binaryPropertyInfoAction;
   }
 
@@ -434,8 +405,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param defaultActionMapRenderingOptions
    *          the defaultActionMapRenderingOptions to set.
    */
-  public void setDefaultActionMapRenderingOptions(
-      ERenderingOptions defaultActionMapRenderingOptions) {
+  public void setDefaultActionMapRenderingOptions(ERenderingOptions defaultActionMapRenderingOptions) {
     this.defaultActionMapRenderingOptions = defaultActionMapRenderingOptions;
   }
 
@@ -1633,8 +1603,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected IFormatter<?, String> createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
       ITranslationProvider translationProvider, Locale locale) {
-    return createFormatter(createDateFormat(propertyDescriptor, timeZone,
-        translationProvider, locale));
+    return createFormatter(createDateFormat(propertyDescriptor, timeZone, translationProvider, locale));
   }
 
   /**
@@ -2399,8 +2368,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected IFormatter<?, String> createTimeFormatter(
       ITimePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return createFormatter(createTimeFormat(propertyDescriptor,
-        translationProvider, locale));
+    return createFormatter(createTimeFormat(propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -3274,9 +3242,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
+        .createCollectionConnector(nodeGroupModelDescriptor.getName(), mvcBinder, nodeGroupPrototypeConnector);
     return nodeGroupCollectionConnector;
+  }
+
+  /**
+   * Is live debug UI structure.
+   *
+   * @return the boolean
+   */
+  protected boolean isLiveDebugUI() {
+    return liveDebugUI;
+  }
+
+  /**
+   * Sets live debug UI structure.
+   *
+   * @param liveDebugUI the live debug uI structure
+   */
+  public void setLiveDebugUI(boolean liveDebugUI) {
+    this.liveDebugUI = liveDebugUI;
   }
 
   /**

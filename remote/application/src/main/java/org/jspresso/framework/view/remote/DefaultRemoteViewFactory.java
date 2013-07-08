@@ -2513,6 +2513,16 @@ public class DefaultRemoteViewFactory extends
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
     String viewDescription = viewDescriptor.getI18nDescription(
         translationProvider, locale);
+    if (isLiveDebugUI()) {
+      if (viewPeer.getPermId() != null) {
+        if (viewDescription == null) {
+          viewDescription = "";
+        } else {
+          viewDescription = viewDescription + "\n";
+        }
+        viewDescription = viewDescription + "PermId -> [" + viewPeer.getPermId() + "]";
+      }
+    }
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTip(viewDescription);
     }
