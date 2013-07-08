@@ -87,8 +87,12 @@ public class BasicObjectPropertyDescriptor extends
   @Override
   public Class<?> getModelType() {
     if (modelTypeClassName != null) {
+      String refinedClassName = modelTypeClassName;
+      if (modelTypeClassName.contains("<")) {
+        refinedClassName = modelTypeClassName.substring(0, modelTypeClassName.indexOf("<"));
+      }
       try {
-        return Class.forName(modelTypeClassName);
+        return Class.forName(refinedClassName);
       } catch (Exception ex) {
         throw new DescriptorException(ex);
       }
