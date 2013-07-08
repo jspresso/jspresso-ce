@@ -24,6 +24,8 @@
     <localesCompiled>
       ...
     </localesCompiled>
+
+- In startup/flex/client/pom.xml, remove all <localesCompiled> nested elements except <locale>en_US</locale>
     
 - In your pom.xml files, delete :
     <mergeResourceBundle>true</mergeResourceBundle>

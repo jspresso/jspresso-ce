@@ -1203,6 +1203,22 @@
           <artifactId>flexmojos-maven-plugin</artifactId>
           <version>${flexmojos-plugin.version}</version>
           <extensions>true</extensions>
+          <configuration>
+            <fonts>
+              <advancedAntiAliasing>true</advancedAntiAliasing>
+              <maxCachedFonts>20</maxCachedFonts>
+              <maxGlyphsPerFace>1000</maxGlyphsPerFace>
+              <managers>
+                <!-- Here we enforce using the Adobe Font Manager -->
+
+                <manager>flash.fonts.AFEFontManager</manager>
+                <!--
+                <manager>flash.fonts.JREFontManager</manager>
+                <manager>flash.fonts.BatikFontManager</manager>
+                -->
+              </managers>
+            </fonts>
+          </configuration>
           <dependencies>
             <dependency>
               <groupId>com.adobe.flex</groupId>
