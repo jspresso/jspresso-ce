@@ -638,6 +638,11 @@
         <version>${jbosssx.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.picketbox</groupId>
+        <artifactId>picketbox-spi-bare</artifactId>
+        <version>${jbosssx.version}</version>
+      </dependency>
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>

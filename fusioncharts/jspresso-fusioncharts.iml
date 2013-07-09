@@ -23,6 +23,12 @@
     <orderEntry type="module" module-name="jspresso-model" />
     <orderEntry type="module" module-name="jspresso-security" />
     <orderEntry type="library" name="Maven: org.picketbox:jbosssx:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:picketbox-spi-bare:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.security.auth.message:jboss-jaspi-api_1.0_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:common-spi:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:identity-spi:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:authorization-spi:4.0.18.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
@@ -52,7 +58,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:3.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:3.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.fusioncharts:fusioncharts-free:2.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>

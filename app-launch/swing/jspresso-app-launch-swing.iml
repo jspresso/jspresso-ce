@@ -28,6 +28,12 @@
     <orderEntry type="module" module-name="jspresso-model" />
     <orderEntry type="module" module-name="jspresso-security" />
     <orderEntry type="library" name="Maven: org.picketbox:jbosssx:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:picketbox-spi-bare:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.security.auth.message:jboss-jaspi-api_1.0_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:common-spi:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:identity-spi:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.picketbox:authorization-spi:4.0.18.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
