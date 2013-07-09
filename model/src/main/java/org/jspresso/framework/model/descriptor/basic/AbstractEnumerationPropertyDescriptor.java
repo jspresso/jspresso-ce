@@ -165,7 +165,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
     if (newValue  != null && !getEnumerationValues().contains(newValue)) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + newValue + ") is not allowed on ["
-          + component + "].") {
+          + component + "]. Allowed values are: " + getEnumerationValues()) {
 
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
