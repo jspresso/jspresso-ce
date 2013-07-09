@@ -227,7 +227,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @param ${propertyName}
    *          the ${propertyName} to set.
    */
-  void set${propertyName?cap_first}(${collectionType}<? extends ${elementType}> ${propertyName});
+  void set${propertyName?cap_first}(${collectionType}<${elementType}> ${propertyName});
 
 </#macro>
 
@@ -490,7 +490,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if generateAnnotations>
   @org.jspresso.framework.util.bean.ElementClass(${elementType}.class)
   </#if>
-  ${collectionType}<? extends ${elementType}> get${propertyName?cap_first}();
+  ${collectionType}<${elementType}> get${propertyName?cap_first}();
 
 </#macro>
 

@@ -281,7 +281,7 @@ public interface ${componentName}
    * @param ${propertyName}
    *          the ${propertyName} to set.
    */
-  public abstract void set${propertyName?cap_first}(${collectionType}<? extends ${elementType}> ${propertyName});
+  public abstract void set${propertyName?cap_first}(${collectionType}<${elementType}> ${propertyName});
 
 </#macro>
 
@@ -516,7 +516,7 @@ public interface ${componentName}
   @javax.persistence.OrderBy
     </#if>
   </#if>
-  public abstract ${collectionType}<? extends ${elementType}> get${propertyName?cap_first}();
+  public abstract ${collectionType}<${elementType}> get${propertyName?cap_first}();
 
 </#macro>
 
