@@ -1,13 +1,28 @@
 3.7
 ===
 
-- in QueryEntitiesAction, getCriteriaFactory(), getCriteriaRefiner, getComponentRefiner now take the action context
+- If you use jspresso libraries that were not built with Jspresso 3.7+, please add the following lines to
+  core/pom.xml inside the antrun plugin <target> section in order to remove any collection order-by handed by
+  Hibernate :
+
+    <replaceregexp byline="true" flags="mg" preserveLastModified="true">
+      <regexp pattern="order-by=&quot;[^&quot;]*&quot;" />
+      <substitution expression="" />
+      <fileset dir="${xdoclet.dest}">
+        <include name="**/*.hbm.xml" />
+      </fileset>
+    </replaceregexp>
+
+  If you don't do the above and use libraries the were built with previous Jspresso versions,
+  you might recieve errors like "Could not locate table which owns column [ID] referenced in order-by mapping"
+
+- In QueryEntitiesAction, getCriteriaFactory(), getCriteriaRefiner, getComponentRefiner now take the action context
   as parameter to enable feature #1074.
 
-- deprecated org.jspresso.framework.application.backend.action.persistence.hibernate.IQueryComponentRefiner has been
+- Deprecated org.jspresso.framework.application.backend.action.persistence.hibernate.IQueryComponentRefiner has been
   removed in favor of org.jspresso.framework.application.backend.action.IQueryComponentRefiner
 
-- in your index.html, change the background values to #ffffff
+- In your index.html, change the background values to #ffffff
 
 - In your webapp/pom.xml, remove <scope>provided</scope> on the following dependency :
     <dependency>
