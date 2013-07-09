@@ -171,4 +171,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * @return the refined value.
    */
   <T> T refineValue(T value, IPropertyDescriptor propertyDescriptor);
+
+  /**
+   * Is the query component restricting.
+   *
+   * @return the boolean
+   */
+  boolean isRestricting();
 }

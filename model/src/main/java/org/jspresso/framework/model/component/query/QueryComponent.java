@@ -748,4 +748,37 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
     return value;
   }
+
+  @Override
+  public boolean isRestricting() {
+    if (isEmpty()) {
+      return false;
+    }
+    IComponentDescriptor<?> qDesc = getQueryDescriptor();
+    for (Map.Entry<String, Object> property : entrySet()) {
+      IPropertyDescriptor propertyDescriptor = qDesc
+          .getPropertyDescriptor(property.getKey());
+      if (propertyDescriptor != null) {
+        if (property.getValue() != null) {
+          if (property.getValue() instanceof ComparableQueryStructure) {
+            if (((ComparableQueryStructure) property.getValue())
+                .isRestricting()) {
+              return true;
+            }
+          } else if (property.getValue() instanceof EnumQueryStructure) {
+            if (!((EnumQueryStructure) property.getValue()).isEmpty()) {
+              return true;
+            }
+          } else if (property.getValue() instanceof IQueryComponent) {
+            if (((IQueryComponent) property.getValue()).isRestricting()) {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
 }

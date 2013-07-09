@@ -491,56 +491,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   @SuppressWarnings("UnusedParameters")
   protected boolean isQueryComponentEmpty(IQueryComponent queryComponent,
       IPropertyDescriptor holdingPropertyDescriptor) {
-    if (queryComponent == null || queryComponent.isEmpty()) {
-      return true;
-    }
-    IComponentDescriptor<?> componentDescriptor = queryComponent
-        .getQueryDescriptor();
-    for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
-      IPropertyDescriptor propertyDescriptor = componentDescriptor
-          .getPropertyDescriptor(property.getKey());
-      if (propertyDescriptor != null) {
-        if (property.getValue() != null) {
-          if (property.getValue() instanceof ComparableQueryStructure) {
-            if (((ComparableQueryStructure) property.getValue())
-                .isRestricting()) {
-              return false;
-            }
-          } else if (property.getValue() instanceof EnumQueryStructure) {
-            if (!((EnumQueryStructure) property.getValue()).isEmpty()) {
-              return false;
-            }
-          } else if (property.getValue() instanceof IQueryComponent) {
-            if (!isQueryComponentEmpty((IQueryComponent) property.getValue(),
-                propertyDescriptor)) {
-              return false;
-            }
-          } else {
-            // I can't understand the reason of the following code.
-            // We are exploring a sub-QueryComponent to determine if it should
-            // imply a restriction. Whenever the sub-QueryComponent only
-            // contains properties coming from the initialization mapping,
-            // we should still consider it as non-empty. If we don't, we may miss
-            // restrictions that are imposed by the user using nested properties
-            // or LOV.
-
-            // Map<String, Object> initializationMapping = null;
-            // if (holdingPropertyDescriptor instanceof
-            // IReferencePropertyDescriptor<?>) {
-            // initializationMapping = ((IReferencePropertyDescriptor<?>)
-            // holdingPropertyDescriptor)
-            // .getInitializationMapping();
-            // }
-            // if (initializationMapping == null
-            // || !initializationMapping.containsKey(property.getKey())) {
-            // return false;
-            // }
-            return false;
-          }
-        }
-      }
-    }
-    return true;
+    return !queryComponent.isRestricting();
   }
 
   /**
