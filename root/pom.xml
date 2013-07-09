@@ -1209,13 +1209,10 @@
               <maxCachedFonts>20</maxCachedFonts>
               <maxGlyphsPerFace>1000</maxGlyphsPerFace>
               <managers>
-                <!-- Here we enforce using the Adobe Font Manager -->
-
-                <manager>flash.fonts.AFEFontManager</manager>
-                <!--
-                <manager>flash.fonts.JREFontManager</manager>
-                <manager>flash.fonts.BatikFontManager</manager>
-                -->
+                <manager-class>flash.fonts.JREFontManager</manager-class>
+                <manager-class>flash.fonts.BatikFontManager</manager-class>
+                <manager-class>flash.fonts.AFEFontManager</manager-class>
+                <manager-class>flash.fonts.CFFFontManager</manager-class>
               </managers>
             </fonts>
           </configuration>
