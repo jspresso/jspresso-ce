@@ -19,12 +19,14 @@
 package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -57,19 +59,37 @@ public class SaveModuleObjectAction extends SaveAction {
         && ((BeanCollectionModule) module).getModuleObjects() != null) {
       for (Object moduleObject : ((BeanCollectionModule) module)
           .getModuleObjects()) {
-        if (moduleObject instanceof IEntity) {
-          entitiesToSave.add((IEntity) moduleObject);
+        if (moduleObject instanceof IComponent) {
+          completeEntitiesToSave((IComponent) moduleObject, entitiesToSave);
         }
       }
     } else if (module instanceof BeanModule) {
       Object moduleObject = ((BeanModule) module).getModuleObject();
-      if (moduleObject instanceof IEntity) {
-        entitiesToSave.add((IEntity) moduleObject);
+      if (moduleObject instanceof IComponent) {
+        completeEntitiesToSave((IComponent) moduleObject, entitiesToSave);
       }
     }
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {
         completeEntitiesToSave(subModule, entitiesToSave);
+      }
+    }
+  }
+
+  private void completeEntitiesToSave(IComponent component, List<IEntity> entitiesToSave) {
+    if (component instanceof IEntity) {
+      entitiesToSave.add((IEntity) component);
+    } else {
+      for (Map.Entry<String, Object> propertyEntry : component.straightGetProperties().entrySet()) {
+        if (propertyEntry.getValue() instanceof IComponent) {
+          completeEntitiesToSave((IComponent) propertyEntry.getValue(), entitiesToSave);
+        } else if (propertyEntry.getValue() instanceof Collection<?>) {
+          for (Object element : (Collection<?>) propertyEntry.getValue()) {
+            if (element instanceof IComponent) {
+              completeEntitiesToSave((IComponent) element, entitiesToSave);
+            }
+          }
+        }
       }
     }
   }
