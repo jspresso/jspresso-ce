@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.model.component;
 
+import java.util.Map;
+
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
@@ -81,4 +84,15 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    *          the name of the collection property to sort.
    */
   void sortCollectionProperty(IComponent component, String propertyName);
+
+  /**
+   * Apply initialization mapping.
+   *
+   * @param component the component or query component to initialize
+   * @param componentDescriptor the component descriptor
+   * @param masterComponent the master component from which initialization is performed
+   * @param initializationMapping the initialization mapping to apply
+   */
+  void applyInitializationMapping(Object component, IComponentDescriptor<?> componentDescriptor,
+                                  Object masterComponent, Map<String, Object> initializationMapping);
 }

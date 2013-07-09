@@ -27,9 +27,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.collection.spi.PersistentCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanComparator;
@@ -44,11 +51,13 @@ import org.jspresso.framework.util.collection.ESort;
  */
 public abstract class AbstractComponentFactory implements IComponentFactory {
 
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractComponentFactory.class);
+
   private IAccessorFactory accessorFactory;
 
   /**
    * Gets the accessorFactory.
-   * 
+   *
    * @return the accessorFactory.
    */
   @Override
@@ -58,7 +67,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
 
   /**
    * Sets the accessorFactory used by this entity factory.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    */
@@ -74,29 +83,22 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   public void sortCollectionProperty(IComponent component, String propertyName) {
     ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) getComponentDescriptor(
         component.getComponentContract()).getPropertyDescriptor(propertyName);
-    Map<String, ESort> orderingProperties = propertyDescriptor
-        .getOrderingProperties();
+    Map<String, ESort> orderingProperties = propertyDescriptor.getOrderingProperties();
     if (orderingProperties != null && !orderingProperties.isEmpty()) {
-      Collection<Object> propertyValue = (Collection<Object>) component
-          .straightGetProperty(propertyName);
+      Collection<Object> propertyValue = (Collection<Object>) component.straightGetProperty(propertyName);
       boolean wasClean = false;
-      if (propertyValue instanceof PersistentCollection
-          && !((PersistentCollection) propertyValue).isDirty()) {
+      if (propertyValue instanceof PersistentCollection && !((PersistentCollection) propertyValue).isDirty()) {
         wasClean = true;
       }
-      if (propertyValue != null
-          && !propertyValue.isEmpty()
-          && !List.class.isAssignableFrom(propertyDescriptor
-              .getCollectionDescriptor().getCollectionInterface())) {
+      if (propertyValue != null && !propertyValue.isEmpty() && !List.class.isAssignableFrom(
+          propertyDescriptor.getCollectionDescriptor().getCollectionInterface())) {
         List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
         List<ESort> orderingDirections = new ArrayList<ESort>();
-        Class<?> collectionElementContract = propertyDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getComponentContract();
-        for (Map.Entry<String, ESort> orderingProperty : orderingProperties
-            .entrySet()) {
-          orderingAccessors.add(accessorFactory.createPropertyAccessor(
-              orderingProperty.getKey(), collectionElementContract));
+        Class<?> collectionElementContract = propertyDescriptor.getCollectionDescriptor().getElementDescriptor()
+                                                               .getComponentContract();
+        for (Map.Entry<String, ESort> orderingProperty : orderingProperties.entrySet()) {
+          orderingAccessors.add(accessorFactory.createPropertyAccessor(orderingProperty.getKey(),
+              collectionElementContract));
           orderingDirections.add(orderingProperty.getValue());
         }
 
@@ -121,6 +123,156 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
         }
       }
     }
+  }
+
+  public void applyInitializationMapping(Object component, IComponentDescriptor<?> componentDescriptor,
+                                          Object masterComponent, Map<String, Object> initializationMapping) {
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("initializationMapping : " + initializationMapping);
+    }
+    for (Map.Entry<String, Object> initializedAttribute : initializationMapping
+        .entrySet()) {
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("initializing property : " + initializedAttribute.getKey()
+            + " from " + initializedAttribute.getKey());
+      }
+      IAccessor accessor = getAccessorFactory().createPropertyAccessor(initializedAttribute.getKey(),
+          componentDescriptor.getComponentContract());
+      try {
+        Object initValue;
+        initValue = extractInitValue(masterComponent, initializedAttribute.getValue());
+        if (initValue != null) {
+          if (initValue instanceof String
+              && (((String) initValue).endsWith("null") || ((String) initValue)
+              .endsWith(IQueryComponent.NULL_VAL))) {
+            if (((String) initValue).startsWith(IQueryComponent.NOT_VAL)) {
+              initValue = IQueryComponent.NULL_VAL + IQueryComponent.NULL_VAL;
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Init value set to not null");
+              }
+            } else {
+              initValue = IQueryComponent.NULL_VAL;
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Init value set to null");
+              }
+            }
+          } else {
+            IPropertyDescriptor initializedPropertyDescriptor = componentDescriptor
+                .getPropertyDescriptor(initializedAttribute.getKey());
+
+            if (initializedPropertyDescriptor != null) {
+              Class<?> expectedType = initializedPropertyDescriptor
+                  .getModelType();
+              Class<?> initValueType = initValue.getClass();
+              if (!IQueryComponent.class.isAssignableFrom(initValueType)
+                  && !expectedType.isAssignableFrom(initValueType)) {
+                if (Boolean.TYPE.equals(expectedType)) {
+                  expectedType = Boolean.class;
+                }
+                if (LOG.isDebugEnabled()) {
+                  LOG.debug("Init value needs to be refined to match expected type : "
+                      + expectedType.getName());
+                }
+                try {
+                  initValue = expectedType.getConstructor(new Class<?>[] {
+                      String.class
+                  }).newInstance(initValue.toString());
+                  // Whenever an exception occurs, just try to set it
+                  // normally
+                  // though.
+                  if (LOG.isDebugEnabled()) {
+                    LOG.debug("Refined init value : " + initValue);
+                  }
+                } catch (IllegalArgumentException ex) {
+                  // throw new NestedRuntimeException(ex,
+                  // "Invalid initialization mapping for property "
+                  // + initializedAttribute.getKey());
+                } catch (SecurityException ex) {
+                  // throw new NestedRuntimeException(ex,
+                  // "Invalid initialization mapping for property "
+                  // + initializedAttribute.getKey());
+                } catch (InstantiationException ex) {
+                  // throw new NestedRuntimeException(ex,
+                  // "Invalid initialization mapping for property "
+                  // + initializedAttribute.getKey());
+                }
+              }
+            }
+          }
+          // } else {
+          // initValue = IQueryComponent.NULL_VAL;
+          // if (LOG.isDebugEnabled()) {
+          // LOG.debug("Init value set to null");
+          // }
+        }
+        accessor.setValue(component, initValue);
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("Init value assigned.");
+        }
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
+    }
+  }
+
+  /**
+   * Extract init value.
+   *
+   * @param masterComponent the master component
+   * @param initializedAttributeValue the initialized attribute value
+   * @return the object
+   * @throws IllegalAccessException the illegal access exception
+   * @throws InvocationTargetException the invocation target exception
+   * @throws NoSuchMethodException the no such method exception
+   */
+  protected Object extractInitValue(Object masterComponent, Object initializedAttributeValue)
+      throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    Object initValue;
+    if (masterComponent != null
+        && initializedAttributeValue instanceof String) {
+      Class<?> masterComponentContract;
+      if (masterComponent instanceof IComponent) {
+        masterComponentContract = ((IComponent) masterComponent)
+            .getComponentContract();
+      } else if (masterComponent instanceof IQueryComponent) {
+        masterComponentContract = ((IQueryComponent) masterComponent)
+            .getQueryContract();
+      } else {
+        masterComponentContract = masterComponent.getClass();
+      }
+      try {
+        IAccessor masterAccessor = getAccessorFactory()
+            .createPropertyAccessor((String) initializedAttributeValue, masterComponentContract);
+        initValue = masterAccessor.getValue(masterComponent);
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("Master component contract : "
+              + masterComponentContract.getName());
+          LOG.debug("Init value computed from master component : "
+              + initValue);
+        }
+      } catch (MissingPropertyException ex) {
+        // the value in the initialization mapping is not a property.
+        // Handle it as a constant value.
+        initValue = initializedAttributeValue;
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("Init value computed from static value : "
+              + initValue);
+        }
+      }
+    } else {
+      initValue = initializedAttributeValue;
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("Init value computed from static value : " + initValue);
+      }
+    }
+    return initValue;
   }
 
   private static class ComparableProperties {

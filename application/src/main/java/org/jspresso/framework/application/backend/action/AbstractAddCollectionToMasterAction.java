@@ -27,6 +27,7 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.model.ModelPropertyConnector;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.accessor.IListAccessor;
@@ -48,6 +49,8 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  */
 public abstract class AbstractAddCollectionToMasterAction extends
     AbstractCollectionAction {
+
+  private Map<String, Object>                        initializationMapping;
 
   /**
    * Constructs a new {@code AbstractAddCollectionToMasterAction} instance.
@@ -73,8 +76,9 @@ public abstract class AbstractAddCollectionToMasterAction extends
 
     List<?> newComponents = getAddedComponents(context);
     if (newComponents != null && newComponents.size() > 0) {
-      Class<?> newComponentContract = getModelDescriptor(context)
-          .getCollectionDescriptor().getElementDescriptor()
+      IComponentDescriptor<?> addedComponentDescriptor = getModelDescriptor(context).getCollectionDescriptor()
+          .getElementDescriptor();
+      Class<?> newComponentContract = addedComponentDescriptor
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()
           .getConnectorValue();
@@ -99,6 +103,10 @@ public abstract class AbstractAddCollectionToMasterAction extends
         Collection<?> existingCollection = collectionAccessor.getValue(master);
         for (int i = 0; i < newComponents.size(); i++) {
           Object addedComponent = newComponents.get(i);
+          if (getInitializationMapping() != null) {
+            getEntityFactory(context).applyInitializationMapping(addedComponent, addedComponentDescriptor, master,
+                getInitializationMapping());
+          }
           if (existingCollection == null
               || !existingCollection.contains(addedComponent)) {
             if (index >= 0 && collectionAccessor instanceof IListAccessor) {
@@ -138,4 +146,22 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * @return the entity to add to the collection.
    */
   protected abstract List<?> getAddedComponents(Map<String, Object> context);
+
+  /**
+   * Gets initialization mapping.
+   *
+   * @return the initialization mapping
+   */
+  protected Map<String, Object> getInitializationMapping() {
+    return initializationMapping;
+  }
+
+  /**
+   * Sets initialization mapping.
+   *
+   * @param initializationMapping the initialization mapping
+   */
+  public void setInitializationMapping(Map<String, Object> initializationMapping) {
+    this.initializationMapping = initializationMapping;
+  }
 }
