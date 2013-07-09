@@ -87,11 +87,26 @@ public class ReduceSqlName implements TemplateMethodModelEx {
       return shortened.get(sqlColumnName);
     }
     String[] splitted = sqlColumnName.split(WORD_SEP);
-    int lettersPerSection = (size / splitted.length) - 1;
+    int charsPerSection = (size / splitted.length) - 1;
     StringBuilder reduced = new StringBuilder();
-    if (lettersPerSection > 0) {
+    if (charsPerSection > 0) {
+      int remainingExtraChars = 0;
       for (String section : splitted) {
-        reduced.append(section.substring(0, lettersPerSection));
+        if (section.length() < charsPerSection) {
+          remainingExtraChars += (charsPerSection - section.length());
+        }
+      }
+      for (String section : splitted) {
+        if (section.length() <= charsPerSection) {
+          reduced.append(section);
+        } else {
+          int extraChars = 0;
+          if (remainingExtraChars > 0) {
+            extraChars = Math.min(remainingExtraChars, section.length() - charsPerSection);
+            remainingExtraChars -= extraChars;
+          }
+          reduced.append(section.substring(0, charsPerSection + extraChars));
+        }
         reduced.append(WORD_SEP);
       }
     } else {
@@ -104,8 +119,8 @@ public class ReduceSqlName implements TemplateMethodModelEx {
     } else {
       deduppers.put(reducedAsString, 0);
     }
-    reduced.append(Integer.toHexString(deduppers.get(reducedAsString)));
-    reducedAsString = reduced.toString();
+    String dedupper = Integer.toHexString(deduppers.get(reducedAsString));
+    reducedAsString = reduced.substring(0, reduced.length() - dedupper.length()) + dedupper;
     shortened.put(sqlColumnName, reducedAsString + mandatorySuffix);
     return reducedAsString + mandatorySuffix;
   }

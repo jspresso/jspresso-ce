@@ -281,7 +281,7 @@ public interface ${componentName}
    * @param ${propertyName}
    *          the ${propertyName} to set.
    */
-  public abstract void set${propertyName?cap_first}(${collectionType}<${elementType}> ${propertyName});
+  public abstract void set${propertyName?cap_first}(${collectionType}<? extends ${elementType}> ${propertyName});
 
 </#macro>
 
@@ -375,18 +375,18 @@ public interface ${componentName}
   </#if>
   <#if componentDescriptor.sqlName??>
     <#local compSqlName=componentDescriptor.sqlName/>
-  <#else>  
+  <#else>
     <#local compSqlName=generateSQLName(componentName)/>
   </#if>
   <#if elementDescriptor.sqlName??>
     <#local eltSqlName=elementDescriptor.sqlName/>
-  <#else>  
+  <#else>
     <#local eltSqlName=generateSQLName(elementName)/>
   </#if>
   <#if propertyDescriptor.sqlName??>
     <#local propSqlName=propertyDescriptor.sqlName/>
     <#local propSqlNameGenerated = false/>
-  <#else>  
+  <#else>
     <#local propSqlName=generateSQLName(propertyName)/>
     <#local propSqlNameGenerated = true/>
   </#if>
@@ -395,7 +395,7 @@ public interface ${componentName}
 	  <#if propertyDescriptor.reverseRelationEnd.sqlName??>
 	    <#local revSqlName=propertyDescriptor.reverseRelationEnd.sqlName/>
       <#local revSqlNameGenerated = false/>
-	  <#else>  
+	  <#else>
 	    <#local revSqlName=generateSQLName(reversePropertyName)/>
 	  </#if>
 	<#else>
@@ -500,7 +500,7 @@ public interface ${componentName}
       name = "${revSqlName}_FK"
   )
         </#if>
-      </#if>   
+      </#if>
   @javax.persistence.OneToMany(
       targetEntity = ${elementType}.class
       <#if inverse>
@@ -516,7 +516,7 @@ public interface ${componentName}
   @javax.persistence.OrderBy
     </#if>
   </#if>
-  public abstract ${collectionType}<${elementType}> get${propertyName?cap_first}();
+  public abstract ${collectionType}<? extends ${elementType}> get${propertyName?cap_first}();
 
 </#macro>
 

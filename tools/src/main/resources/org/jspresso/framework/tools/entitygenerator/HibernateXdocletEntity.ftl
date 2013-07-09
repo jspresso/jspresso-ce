@@ -227,7 +227,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @param ${propertyName}
    *          the ${propertyName} to set.
    */
-  void set${propertyName?cap_first}(${collectionType}<${elementType}> ${propertyName});
+  void set${propertyName?cap_first}(${collectionType}<? extends ${elementType}> ${propertyName});
 
 </#macro>
 
@@ -322,18 +322,18 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
   <#if componentDescriptor.sqlName??>
     <#local compSqlName=componentDescriptor.sqlName/>
-  <#else>  
+  <#else>
     <#local compSqlName=generateSQLName(componentName)/>
   </#if>
   <#if elementDescriptor.sqlName??>
     <#local eltSqlName=elementDescriptor.sqlName/>
-  <#else>  
+  <#else>
     <#local eltSqlName=generateSQLName(elementName)/>
   </#if>
   <#if propertyDescriptor.sqlName??>
     <#local propSqlName=propertyDescriptor.sqlName/>
     <#local propSqlNameGenerated = false/>
-  <#else>  
+  <#else>
     <#local propSqlName=generateSQLName(propertyName)/>
     <#local propSqlNameGenerated = true/>
   </#if>
@@ -342,7 +342,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 	  <#if propertyDescriptor.reverseRelationEnd.sqlName??>
 	    <#local revSqlName=propertyDescriptor.reverseRelationEnd.sqlName/>
         <#local revSqlNameGenerated = false/>
-	  <#else>  
+	  <#else>
 	    <#local revSqlName=generateSQLName(reversePropertyName)/>
 	  </#if>
 	<#else>
@@ -490,7 +490,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if generateAnnotations>
   @org.jspresso.framework.util.bean.ElementClass(${elementType}.class)
   </#if>
-  ${collectionType}<${elementType}> get${propertyName?cap_first}();
+  ${collectionType}<? extends ${elementType}> get${propertyName?cap_first}();
 
 </#macro>
 
