@@ -388,7 +388,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set but if
   and only if the referenced collection contains entities.
   Well, the following is bad. It kills performance on joined criteria query and it get us into the Hibernate bug
-  HHH-7116.
+  HHH-7116 and HHH-7630.
     <#if (elementIsEntity && !manyToMany && !(hibernateCollectionType="list"))>
    *           order-by="ID"
     </#if>
