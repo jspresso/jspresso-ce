@@ -21,6 +21,7 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -157,5 +158,28 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    */
   protected String computeEnumerationKey(Object value) {
     return getEnumerationName() + "." + value;
+  }
+
+  @Override
+  public void preprocessSetter(final Object component, Object newValue) {
+    if (newValue  != null && !getEnumerationValues().contains(newValue)) {
+      IntegrityException ie = new IntegrityException("[" + getName()
+          + "] value (" + newValue + ") is not allowed on ["
+          + component + "].") {
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+                                     Locale locale) {
+          return translationProvider.getTranslation(
+              "integrity.property.outOfRange", new Object[] {
+              getI18nName(translationProvider, locale), getEnumerationValues(),
+              component
+          }, locale);
+        }
+
+      };
+      throw ie;
+    }
+    super.preprocessSetter(component, newValue);
   }
 }
