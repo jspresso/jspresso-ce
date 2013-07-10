@@ -933,6 +933,24 @@ public class DefaultRemoteViewFactory extends
       ((REnumBox) viewComponent).setTranslations(translations
           .toArray(new String[translations.size()]));
     }
+    ((RemoteValueConnector)connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+      @Override
+      public Object getValueForState(RemoteValueState state, Object originalValue) {
+        if (originalValue == null) {
+          return "";
+        }
+        return originalValue;
+      }
+
+      @Override
+      public Object getValueFromState(RemoteValueState state,
+                                      Object originalValue) {
+        if ("".equals(originalValue)) {
+          return null;
+        }
+        return originalValue;
+      }
+    });
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);

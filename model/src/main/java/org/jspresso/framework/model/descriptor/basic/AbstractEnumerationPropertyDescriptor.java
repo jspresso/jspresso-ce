@@ -162,7 +162,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
 
   @Override
   public void preprocessSetter(final Object component, Object newValue) {
-    if (newValue  != null && !getEnumerationValues().contains(newValue)) {
+    if (newValue  != null && !"".equals(newValue) && !getEnumerationValues().contains(newValue)) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + newValue + ") is not allowed on ["
           + component + "]. Allowed values are: " + getEnumerationValues()) {
