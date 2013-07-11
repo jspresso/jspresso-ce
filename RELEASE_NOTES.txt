@@ -1,6 +1,9 @@
 3.7
 ===
 
+- DefaultCriteriaFactory properted API has changed for a more consistent naming policy. All createXXXRestriction
+  methods now actually return a criterion and does not have the surrounding detached criteria as parameter.
+
 - If you use jspresso libraries that were not built with Jspresso 3.7+, please add the following lines to
   core/pom.xml inside the antrun plugin <target> section in order to remove any collection order-by handed by
   Hibernate :

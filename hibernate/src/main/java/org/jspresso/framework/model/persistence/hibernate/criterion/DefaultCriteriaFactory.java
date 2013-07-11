@@ -190,8 +190,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       IQueryComponent aQueryComponent) {
     boolean abort = false;
     if (aQueryComponent instanceof ComparableQueryStructure) {
-      completeWithComparableQueryStructure(currentCriteria, path,
-          (ComparableQueryStructure) aQueryComponent);
+      completeCriteria(currentCriteria, createComparableQueryStructureRestriction(path,
+          (ComparableQueryStructure) aQueryComponent));
     } else {
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
           .getQueryDescriptor();
@@ -217,29 +217,27 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               if (!((IEntity) property.getValue()).isPersistent()) {
                 abort = true;
               } else {
-                currentCriteria.add(Restrictions.eq(prefixedProperty,
+                completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty,
                     property.getValue()));
               }
             } else if (property.getValue() instanceof Boolean
                 && (isTriStateBooleanSupported() || (Boolean) property
                 .getValue())) {
-              currentCriteria.add(Restrictions.eq(prefixedProperty,
-                  property.getValue()));
+              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
             } else if (property.getValue() instanceof String) {
               if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
-                createIdRestriction(propertyDescriptor, currentCriteria,
-                    property.getValue(), prefixedProperty);
+                completeCriteria(currentCriteria, createIdRestriction(propertyDescriptor, prefixedProperty,
+                    property.getValue()));
               } else {
-                createStringRestriction(propertyDescriptor, currentCriteria,
-                    (String) property.getValue(), prefixedProperty);
+                completeCriteria(currentCriteria, createStringRestriction(propertyDescriptor, prefixedProperty,
+                    (String) property.getValue()));
               }
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
-              currentCriteria.add(Restrictions.eq(prefixedProperty,
-                  property.getValue()));
+              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
             } else if (property.getValue() instanceof EnumQueryStructure) {
-              completeWithEnumQueryStructure(currentCriteria, prefixedProperty,
-                  ((EnumQueryStructure) property.getValue()));
+              completeCriteria(currentCriteria, createEnumQueryStructureRestriction(prefixedProperty,
+                  ((EnumQueryStructure) property.getValue())));
             } else if (property.getValue() instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) property
                   .getValue());
@@ -273,7 +271,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                         if (negate) {
                           crit = Restrictions.not(crit);
                         }
-                        currentCriteria.add(crit);
+                        completeCriteria(currentCriteria, crit);
                         digDeeper = false;
                       }
                     }
@@ -290,8 +288,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               }
             } else if (property.getValue() != null) {
               // Unknown property type. Assume equals.
-              currentCriteria.add(Restrictions.eq(prefixedProperty,
-                  property.getValue()));
+              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
             }
           }
         }
@@ -301,17 +298,27 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   }
 
   /**
+   * Complete with criterion.
+   *
+   * @param currentCriteria the current criteria
+   * @param criterion the criterion
+   */
+  protected void completeCriteria(DetachedCriteria currentCriteria, Criterion criterion) {
+    if (criterion != null) {
+      currentCriteria.add(criterion);
+    }
+  }
+
+  /**
    * Complements a criteria by processing an enumeration query structure.
    * 
-   * @param currentCriteria
-   *          the current criteria that is being built.
    * @param path
    *          the path to the comparable property.
    * @param enumQueryStructure
    *          the collection of checked / unchecked enumeration values.
+   * @return the created criterion or null if no criterion necessary.
    */
-  protected void completeWithEnumQueryStructure(
-      DetachedCriteria currentCriteria, String path,
+  protected Criterion createEnumQueryStructureRestriction(String path,
       EnumQueryStructure enumQueryStructure) {
     Set<String> inListValues = new HashSet<String>();
     boolean nullAllowed = false;
@@ -323,17 +330,15 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
         inListValues.add(inListValue.getValue());
       }
     }
+    Junction queryStructureRestriction = null;
     if (!inListValues.isEmpty()) {
-      Criterion inListCriterion = Restrictions.in(path, inListValues);
+      queryStructureRestriction = Restrictions.disjunction();
+      queryStructureRestriction.add(Restrictions.in(path, inListValues));
       if (nullAllowed) {
-        Junction disjunction = Restrictions.disjunction();
-        disjunction.add(inListCriterion);
-        disjunction.add(Restrictions.isNull(path));
-        currentCriteria.add(disjunction);
-      } else {
-        currentCriteria.add(inListCriterion);
+        queryStructureRestriction.add(Restrictions.isNull(path));
       }
     }
+    return queryStructureRestriction;
   }
 
   /**
@@ -341,43 +346,38 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    * 
    * @param propertyDescriptor
    *          the id property descriptor.
-   * @param currentCriteria
-   *          the current criteria being built.
    * @param propertyValue
    *          the string property value.
    * @param prefixedProperty
    *          the full path of the property.
+   * @return the created criterion or null if no criterion necessary.
    */
-  protected void createIdRestriction(IPropertyDescriptor propertyDescriptor,
-      DetachedCriteria currentCriteria, Object propertyValue,
-      String prefixedProperty) {
+  protected Criterion createIdRestriction(IPropertyDescriptor propertyDescriptor,
+                                     String prefixedProperty, Object propertyValue) {
     if (propertyValue instanceof String) {
-      createStringRestriction(propertyDescriptor, currentCriteria,
-          (String) propertyValue, prefixedProperty);
+      return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue);
     } else {
-      currentCriteria.add(Restrictions.eq(prefixedProperty, propertyValue));
+      return Restrictions.eq(prefixedProperty, propertyValue);
     }
   }
 
   /**
    * Creates a string based restriction.
-   * 
+   *
    * @param propertyDescriptor
    *          the property descriptor.
-   * @param currentCriteria
-   *          the current criteria being built.
    * @param propertyValue
    *          the string property value.
    * @param prefixedProperty
    *          the full path of the property.
+   * @return the created criterion or null if no criterion necessary.
    */
-  protected void createStringRestriction(
-      IPropertyDescriptor propertyDescriptor, DetachedCriteria currentCriteria,
-      String propertyValue, String prefixedProperty) {
+  protected Criterion createStringRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                         String propertyValue) {
+    Junction stringRestriction = null;
     if (propertyValue.length() > 0) {
       String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
-      Junction disjunction = Restrictions.disjunction();
-      currentCriteria.add(disjunction);
+      stringRestriction = Restrictions.disjunction();
       for (String propValue : propValues) {
         String val = propValue;
         if (val.length() > 0) {
@@ -401,10 +401,11 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
           if (negate) {
             crit = Restrictions.not(crit);
           }
-          disjunction.add(crit);
+          stringRestriction.add(crit);
         }
       }
     }
+    return stringRestriction;
   }
 
   /**
@@ -414,37 +415,36 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *          the property descriptor.
    * @param prefixedProperty
    *          the complete property path.
-   * @param val
+   * @param propertyValue
    *          the value to create the like restriction for
-   * @return the like criterion;
+   * @return the created criterion or null if no criterion necessary.
    */
   protected Criterion createLikeRestriction(
       IPropertyDescriptor propertyDescriptor, String prefixedProperty,
-      String val) {
+      String propertyValue) {
     if (propertyDescriptor instanceof IStringPropertyDescriptor
         && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
       // don't use ignoreCase() to be able to leverage indices.
-      return Restrictions.like(prefixedProperty, val.toUpperCase(),
-          MatchMode.START);
+      return Restrictions.like(prefixedProperty, propertyValue.toUpperCase(), MatchMode.START);
     }
-    return Restrictions.like(prefixedProperty, val, MatchMode.START)
+    return Restrictions.like(prefixedProperty, propertyValue, MatchMode.START)
         .ignoreCase();
   }
 
   /**
-   * Complements a criteria by processing a comparable query structure.
+   * Creates a criterion by processing a comparable query structure.
    * 
-   * @param currentCriteria
-   *          the current criteria that is being built.
    * @param path
    *          the path to the comparable property.
    * @param queryStructure
    *          the comparable query structure.
+   * @return the created criterion or null if no criterion necessary.
    */
-  protected void completeWithComparableQueryStructure(
-      DetachedCriteria currentCriteria, String path,
+  protected Criterion createComparableQueryStructureRestriction(String path,
       ComparableQueryStructure queryStructure) {
+    Junction queryStructureRestriction = null;
     if (queryStructure.isRestricting()) {
+      queryStructureRestriction = Restrictions.conjunction();
       String comparator = queryStructure.getComparator();
       Object infValue = queryStructure.getInfValue();
       Object supValue = queryStructure.getSupValue();
@@ -453,29 +453,30 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
         compareValue = supValue;
       }
       if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-        currentCriteria.add(Restrictions.eq(path, compareValue));
+        queryStructureRestriction.add(Restrictions.eq(path, compareValue));
       } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
-        currentCriteria.add(Restrictions.gt(path, compareValue));
+        queryStructureRestriction.add(Restrictions.gt(path, compareValue));
       } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
-        currentCriteria.add(Restrictions.ge(path, compareValue));
+        queryStructureRestriction.add(Restrictions.ge(path, compareValue));
       } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
-        currentCriteria.add(Restrictions.lt(path, compareValue));
+        queryStructureRestriction.add(Restrictions.lt(path, compareValue));
       } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
-        currentCriteria.add(Restrictions.le(path, compareValue));
+        queryStructureRestriction.add(Restrictions.le(path, compareValue));
       } else if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
-        currentCriteria.add(Restrictions.isNull(path));
+        queryStructureRestriction.add(Restrictions.isNull(path));
       } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
-        currentCriteria.add(Restrictions.isNotNull(path));
+        queryStructureRestriction.add(Restrictions.isNotNull(path));
       } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
         if (infValue != null && supValue != null) {
-          currentCriteria.add(Restrictions.between(path, infValue, supValue));
+          queryStructureRestriction.add(Restrictions.between(path, infValue, supValue));
         } else if (infValue != null) {
-          currentCriteria.add(Restrictions.ge(path, infValue));
+          queryStructureRestriction.add(Restrictions.ge(path, infValue));
         } else {
-          currentCriteria.add(Restrictions.le(path, supValue));
+          queryStructureRestriction.add(Restrictions.le(path, supValue));
         }
       }
     }
+    return queryStructureRestriction;
   }
 
   /**
