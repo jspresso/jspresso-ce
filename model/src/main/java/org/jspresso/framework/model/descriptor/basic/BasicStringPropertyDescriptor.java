@@ -38,6 +38,7 @@ public class BasicStringPropertyDescriptor extends
   private String  regexpPattern;
   private String  regexpPatternSample;
   private Boolean upperCase;
+  private Boolean translatable;
 
   /**
    * {@inheritDoc}
@@ -117,6 +118,17 @@ public class BasicStringPropertyDescriptor extends
   public boolean isUpperCase() {
     if (upperCase != null) {
       return upperCase;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isTranslatable() {
+    if (translatable != null) {
+      return translatable;
     }
     return false;
   }
@@ -221,6 +233,20 @@ public class BasicStringPropertyDescriptor extends
    */
   public void setUpperCase(boolean upperCase) {
     this.upperCase = upperCase;
+  }
+
+  /**
+   * Configures the string property to be translatable. Jspresso will then implement a translation store for the
+   * property so that it can be displayed in the connected user language. This is particularly useful for
+   * non-european character sets like chinese, indian, and so on. In that case,
+   * only the &quot;raw&quot; untranslated property value is stored in the object itself. the various translations
+   * are stored in an extra store. translated properties support searching, ordering,
+   * ... exactly like non-translatable properties.
+   *
+   * @param translatable the translatable
+   */
+  public void setTranslatable(boolean translatable) {
+    this.translatable = translatable;
   }
 
   /**

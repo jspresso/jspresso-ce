@@ -381,4 +381,36 @@
       </list>
     </property>
   </bean>
+
+  <bean id="componentTranslationDescriptor"
+        class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
+    <constructor-arg value="Translation"/>
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="propertyName" />
+          <property name="maxLength" value="64" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="language" />
+          <property name="maxLength" value="5" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="translatedValue" />
+          <property name="maxLength" value="512" />
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="componentDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+        lazy-init="false">
+    <property name="targetClass" value="org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor" />
+    <property name="targetMethod" value="setComponentTranslationDescriptorTemplate" />
+    <property name="arguments">
+      <list>
+        <ref bean="componentTranslationDescriptor" />
+      </list>
+    </property>
+  </bean>
 </beans>

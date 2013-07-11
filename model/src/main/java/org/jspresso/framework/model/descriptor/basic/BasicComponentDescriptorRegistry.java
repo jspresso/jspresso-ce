@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.springframework.context.ApplicationContext;
@@ -38,7 +40,7 @@ public class BasicComponentDescriptorRegistry implements
 
   private ApplicationContext                            componentApplicationContext;
   private volatile Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
-  private final Object                                        mutex = new Object();
+  private final Object                                  mutex = new Object();
 
   /**
    * {@inheritDoc}
@@ -92,9 +94,17 @@ public class BasicComponentDescriptorRegistry implements
         .getBeansOfType(IComponentDescriptor.class, false, false);
     for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
-      if (descriptorEntry.getValue().getComponentContract() != null) {
-        map.put(descriptorEntry.getValue()
-            .getComponentContract().getName(), descriptorEntry.getValue());
+      IComponentDescriptor componentDescriptor = descriptorEntry.getValue();
+      if (componentDescriptor.getComponentContract() != null) {
+        map.put(componentDescriptor.getComponentContract().getName(), componentDescriptor);
+        if (componentDescriptor.isTranslatable()) {
+          IComponentDescriptor<?> translationComponentDescriptor = ((ICollectionPropertyDescriptor<?>)
+              componentDescriptor.getPropertyDescriptor(IComponentDescriptor.TRANSLATIONS_PROPERTY_NAME))
+              .getReferencedDescriptor().getElementDescriptor();
+          if (translationComponentDescriptor.getComponentContract() != null) {
+            map.put(translationComponentDescriptor.getComponentContract().getName(), translationComponentDescriptor);
+          }
+        }
       }
     }
     contractNameToComponentDescriptorMap = map;

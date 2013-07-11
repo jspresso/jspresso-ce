@@ -122,6 +122,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private Map<String, IPropertyDescriptor>                propertyDescriptorsCache;
   private Collection<IPropertyDescriptor>                 allPropertyDescriptorsCache;
 
+  private static BasicComponentDescriptor<IComponent>     componentTranslationDescriptorTemplate;
+
   /**
    * Constructs a new {@code AbstractComponentDescriptor} instance.
    *
@@ -1140,6 +1142,18 @@ public abstract class AbstractComponentDescriptor<E> extends
           propertyDescriptorsMap.put(descriptor.getName(), descriptor);
         }
         tempPropertyBuffer = null;
+        if (isTranslatable()) {
+          BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) getComponentTranslationDescriptorTemplate()
+              .clone();
+          translationDescriptor.setName(getName() + "$Translation");
+          BasicSetDescriptor<IComponent> ptSetDescriptor = new BasicSetDescriptor<IComponent>();
+          ptSetDescriptor.setElementDescriptor(translationDescriptor);
+          BasicCollectionPropertyDescriptor<IComponent> ptDescriptor = new
+              BasicCollectionPropertyDescriptor<IComponent>();
+          ptDescriptor.setName("propertyTranslations");
+          ptDescriptor.setReferencedDescriptor(ptSetDescriptor);
+          propertyDescriptorsMap.put(ptDescriptor.getName(), ptDescriptor);
+        }
       }
     }
   }
@@ -1273,5 +1287,51 @@ public abstract class AbstractComponentDescriptor<E> extends
   protected IPropertyDescriptor refinePropertyDescriptor(
       IPropertyDescriptor propertyDescriptor) {
     return propertyDescriptor;
+  }
+
+  /**
+   * Is translated.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isTranslatable() {
+    Collection<IPropertyDescriptor> propertyDescriptors = getDeclaredPropertyDescriptors();
+    if (propertyDescriptors != null) {
+      for (IPropertyDescriptor pDesc: propertyDescriptors) {
+        if (pDesc instanceof IStringPropertyDescriptor) {
+          if (((IStringPropertyDescriptor) pDesc).isTranslatable()) {
+            return true;
+          }
+        }
+      }
+    }
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        if (ancestorDescriptor.isTranslatable()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Sets component translation descriptor template.
+   *
+   * @param template the template
+   */
+  public static synchronized void setComponentTranslationDescriptorTemplate(
+      BasicComponentDescriptor<IComponent> template) {
+    componentTranslationDescriptorTemplate = template;
+  }
+
+  /**
+   * Gets component translation descriptor template.
+   *
+   * @return the component translation descriptor template
+   */
+  public static synchronized BasicComponentDescriptor<IComponent> getComponentTranslationDescriptorTemplate() {
+    return componentTranslationDescriptorTemplate;
   }
 }

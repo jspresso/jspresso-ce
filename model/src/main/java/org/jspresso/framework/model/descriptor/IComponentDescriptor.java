@@ -44,8 +44,13 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
     IComponentDescriptorProvider<E>, IGateAccessible, IPermIdSource {
 
   /**
+   * The constant TRANSLATIONS_PROPERTY_NAME is "propertyTranslations".
+   */
+  public static final String TRANSLATIONS_PROPERTY_NAME = "propertyTranslations";
+
+  /**
    * Creates a new component descriptor to allow for querying.
-   * 
+   *
    * @return a new component descriptor that allows for expressing constraints
    *         on this component.
    */
@@ -53,7 +58,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
 
   /**
    * Gets the interface class defining the component contract.
-   * 
+   *
    * @return the interface class defining the component contract.
    */
   Class<? extends E> getComponentContract();
@@ -68,7 +73,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
 
   /**
    * Gets the entity lifecycle interceptors.
-   * 
+   *
    * @return the list of entity lifecycle interceptors.
    */
   List<ILifecycleInterceptor<?>> getLifecycleInterceptors();
@@ -76,7 +81,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Get the list of properties ordering the collections containing this
    * component along with their individual sorting direction.
-   * 
+   *
    * @return the map of properties ordering the collections containing this
    *         component.
    */
@@ -85,7 +90,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Whenever this component is used as a query filter, this is the default page
    * size applied for the query.
-   * 
+   *
    * @return the page size for the query when used as query filter.
    */
   Integer getPageSize();
@@ -181,4 +186,11 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
+
+  /**
+   * Return {@code true} if and only if this component descriptor has at least one translated string property.
+   *
+   * @return the boolean
+   */
+  boolean isTranslatable();
 }

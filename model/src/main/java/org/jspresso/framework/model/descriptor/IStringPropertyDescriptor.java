@@ -59,4 +59,13 @@ public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
    *         automatically.
    */
   boolean isUpperCase();
+
+  /**
+   * Gets whether the underlying string property should be translated when displayed in
+   * languages with non-european character sets.
+   *
+   * @return true if the underlying string property should be translated when displayed in
+   * languages with non-european character sets.
+   */
+  boolean isTranslatable();
 }
