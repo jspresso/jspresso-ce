@@ -31,23 +31,21 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 
 /**
  * Default implementation based on spring application context.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public class BasicComponentDescriptorRegistry implements
-    IComponentDescriptorRegistry, ApplicationContextAware {
+public class BasicComponentDescriptorRegistry implements IComponentDescriptorRegistry, ApplicationContextAware {
 
-  private ApplicationContext                            componentApplicationContext;
+  private final Object mutex = new Object();
+  private          ApplicationContext                   componentApplicationContext;
   private volatile Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
-  private final Object                                  mutex = new Object();
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public IComponentDescriptor<?> getComponentDescriptor(
-      Class<?> componentContract) {
+  public IComponentDescriptor<?> getComponentDescriptor(Class<?> componentContract) {
     if (contractNameToComponentDescriptorMap == null) {
       synchronized (mutex) {
         if (contractNameToComponentDescriptorMap == null) {
@@ -55,8 +53,7 @@ public class BasicComponentDescriptorRegistry implements
         }
       }
     }
-    return contractNameToComponentDescriptorMap
-        .get(componentContract.getName());
+    return contractNameToComponentDescriptorMap.get(componentContract.getName());
   }
 
   /**
@@ -77,10 +74,10 @@ public class BasicComponentDescriptorRegistry implements
   /**
    * Sets the application context holding the component descriptor bean
    * definitions.
-   * 
+   *
    * @param applicationContext
-   *          the application context holding the component descriptor bean
-   *          definitions.
+   *     the application context holding the component descriptor bean
+   *     definitions.
    */
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
@@ -90,20 +87,22 @@ public class BasicComponentDescriptorRegistry implements
   @SuppressWarnings("rawtypes")
   private void buildContractNameIdMap() {
     Map<String, IComponentDescriptor<?>> map = new HashMap<String, IComponentDescriptor<?>>();
-    Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext
-        .getBeansOfType(IComponentDescriptor.class, false, false);
-    for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors
-        .entrySet()) {
+    Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext.getBeansOfType(
+        IComponentDescriptor.class, false, false);
+    for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors.entrySet()) {
       IComponentDescriptor componentDescriptor = descriptorEntry.getValue();
       if (componentDescriptor.getComponentContract() != null) {
         map.put(componentDescriptor.getComponentContract().getName(), componentDescriptor);
         if (componentDescriptor.isTranslatable()) {
-          IComponentDescriptor<?> translationComponentDescriptor = ((ICollectionPropertyDescriptor<?>)
-              componentDescriptor.getPropertyDescriptor(
-                  BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName()))
-              .getReferencedDescriptor().getElementDescriptor();
-          if (translationComponentDescriptor.getComponentContract() != null) {
-            map.put(translationComponentDescriptor.getComponentContract().getName(), translationComponentDescriptor);
+          ICollectionPropertyDescriptor<?> collectionPropertyDescriptor = (ICollectionPropertyDescriptor<?>)
+              componentDescriptor
+              .getPropertyDescriptor(BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
+          if (collectionPropertyDescriptor != null) {
+            IComponentDescriptor<?> translationComponentDescriptor = collectionPropertyDescriptor
+                .getReferencedDescriptor().getElementDescriptor();
+            if (translationComponentDescriptor.getComponentContract() != null) {
+              map.put(translationComponentDescriptor.getComponentContract().getName(), translationComponentDescriptor);
+            }
           }
         }
       }

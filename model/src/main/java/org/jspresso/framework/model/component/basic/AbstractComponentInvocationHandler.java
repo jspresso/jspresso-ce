@@ -410,9 +410,8 @@ public abstract class AbstractComponentInvocationHandler implements
   protected final String invokeNlsOrRawGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
     String nlsOrRawValue = invokeNlsGetter(proxy, propertyDescriptor);
     if (nlsOrRawValue == null) {
-      nlsOrRawValue = (String) straightGetProperty(proxy, propertyDescriptor.getName().substring(0,
-          propertyDescriptor.getName().length() - IComponentDescriptor.NLS_SUFFIX.length())
-          + IComponentDescriptor.RAW_SUFFIX);
+      nlsOrRawValue = (String) straightGetProperty(proxy, propertyDescriptor.getName() + IComponentDescriptor
+          .RAW_SUFFIX);
     }
     return nlsOrRawValue;
   }

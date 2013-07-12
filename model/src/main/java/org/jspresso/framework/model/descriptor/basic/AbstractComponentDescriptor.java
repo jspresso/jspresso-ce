@@ -53,7 +53,6 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
-import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -485,7 +484,10 @@ public abstract class AbstractComponentDescriptor<E> extends
             if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
                 && !(propertyDescriptor instanceof ITextPropertyDescriptor)
                 && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
-              renderedPropertiesSet.add(propertyDescriptor.getName());
+              String propertyName = propertyDescriptor.getName();
+              if(!propertyName.endsWith(RAW_SUFFIX) && !propertyName.endsWith(NLS_SUFFIX)) {
+                renderedPropertiesSet.add(propertyName);
+              }
             }
           }
         }
@@ -1150,56 +1152,74 @@ public abstract class AbstractComponentDescriptor<E> extends
                 rawSqlName = new SqlHelper().transformToSql(descriptor.getName(), null);
               }
               ((BasicStringPropertyDescriptor) descriptor).setSqlName(rawSqlName);
-              BasicStringPropertyDescriptor nlsDescriptor = (BasicStringPropertyDescriptor) descriptor.clone();
-              nlsDescriptor.setName(descriptor.getName() + NLS_SUFFIX);
-              nlsDescriptor.setDelegateWritable(true);
-              nlsDescriptor.setComputed(true);
-              nlsDescriptor.setSqlName(
-                  "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" + getComponentTranslationsDescriptorTemplate()
-                      .getName() +
-                      " T WHERE T." +
-                      getComponentTranslationsDescriptorTemplate().getSqlName() +
-                      "_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
-                      "T.PROPERTY_NAME = '" + descriptor.getName() + "')");
-
-              BasicStringPropertyDescriptor rawOrNlsDescriptor = (BasicStringPropertyDescriptor) descriptor.clone();
-              rawOrNlsDescriptor.setName(descriptor.getName());
-              rawOrNlsDescriptor.setDelegateWritable(true);
-              rawOrNlsDescriptor.setComputed(true);
-              rawOrNlsDescriptor.setSqlName("CASE WHEN " +
-                  nlsDescriptor.getSqlName() +
-                  " IS NULL THEN " +
-                  rawSqlName +
-                  " ELSE " +
-                  nlsDescriptor.getSqlName() +
-                  " END");
-
-              ((BasicStringPropertyDescriptor) descriptor).setName(descriptor.getName() + RAW_SUFFIX);
-              propertyDescriptorsMap.put(nlsDescriptor.getName(), nlsDescriptor);
-              propertyDescriptorsMap.put(rawOrNlsDescriptor.getName(), rawOrNlsDescriptor);
+              if (!descriptor.getName().endsWith(RAW_SUFFIX)) {
+                ((BasicStringPropertyDescriptor) descriptor).setName(descriptor.getName() + RAW_SUFFIX);
+              }
             }
           }
           propertyDescriptorsMap.put(descriptor.getName(), descriptor);
         }
         tempPropertyBuffer = null;
         if (isTranslatable()) {
-          BasicCollectionPropertyDescriptor<IComponent> translationsPropertyDescriptor =
-              getComponentTranslationsDescriptorTemplate()
-              .clone();
-          BasicCollectionDescriptor<IComponent> translationsCollectionDescriptor =
-              (BasicCollectionDescriptor<IComponent>) ((BasicCollectionDescriptor<IComponent>)
-                  translationsPropertyDescriptor
-              .getReferencedDescriptor()).clone();
-          BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) (
-              (BasicComponentDescriptor<IComponent>) translationsCollectionDescriptor
-              .getElementDescriptor()).clone();
-          translationsPropertyDescriptor.setReferencedDescriptor(translationsCollectionDescriptor);
-          translationsCollectionDescriptor.setElementDescriptor(translationDescriptor);
-          translationDescriptor.setName(getName() + "$Translation");
-          propertyDescriptorsMap.put(translationsPropertyDescriptor.getName(), translationsPropertyDescriptor);
+          for (IPropertyDescriptor translatablePropertyDescriptor : getPropertyDescriptors()) {
+            if (translatablePropertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor)
+                translatablePropertyDescriptor).isTranslatable()) {
+              completeWithComputedNlsDescriptors(translatablePropertyDescriptor);
+            }
+          }
+          if (!isPurelyAbstract()) {
+            BasicCollectionPropertyDescriptor<IComponent> translationsPropertyDescriptor =
+                getComponentTranslationsDescriptorTemplate()
+                .clone();
+            BasicCollectionDescriptor<IComponent> translationsCollectionDescriptor =
+                (BasicCollectionDescriptor<IComponent>) ((BasicCollectionDescriptor<IComponent>)
+                    translationsPropertyDescriptor
+                .getReferencedDescriptor()).clone();
+            BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) (
+                (BasicComponentDescriptor<IComponent>) translationsCollectionDescriptor
+                .getElementDescriptor()).clone();
+            translationsPropertyDescriptor.setReferencedDescriptor(translationsCollectionDescriptor);
+            translationsCollectionDescriptor.setElementDescriptor(translationDescriptor);
+            translationDescriptor.setName(getName() + "$Translation");
+            propertyDescriptorsMap.put(translationsPropertyDescriptor.getName(), translationsPropertyDescriptor);
+          }
         }
       }
     }
+  }
+
+  private void completeWithComputedNlsDescriptors(IPropertyDescriptor rawDescriptor) {
+    String barePropertyName = rawDescriptor.getName();
+    if (barePropertyName.endsWith(RAW_SUFFIX)) {
+      barePropertyName = barePropertyName.substring(0, barePropertyName.length() - RAW_SUFFIX.length());
+    }
+    BasicStringPropertyDescriptor nlsDescriptor = (BasicStringPropertyDescriptor) rawDescriptor.clone();
+    nlsDescriptor.setName(barePropertyName + NLS_SUFFIX);
+    nlsDescriptor.setDelegateWritable(true);
+    nlsDescriptor.setComputed(true);
+    if (!isPurelyAbstract()) {
+      nlsDescriptor.setSqlName(
+          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" + getComponentTranslationsDescriptorTemplate().getName() +
+              " T WHERE T." +
+              getComponentTranslationsDescriptorTemplate().getSqlName() +
+              "_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
+              "T.PROPERTY_NAME = '" + barePropertyName + "')");
+    }
+    BasicStringPropertyDescriptor rawOrNlsDescriptor = (BasicStringPropertyDescriptor) rawDescriptor.clone();
+    rawOrNlsDescriptor.setName(barePropertyName);
+    rawOrNlsDescriptor.setDelegateWritable(true);
+    rawOrNlsDescriptor.setComputed(true);
+    if (!isPurelyAbstract()) {
+      rawOrNlsDescriptor.setSqlName("CASE WHEN " +
+          nlsDescriptor.getSqlName() +
+          " IS NULL THEN " +
+          ((BasicPropertyDescriptor) rawDescriptor).getSqlName() +
+          " ELSE " +
+          nlsDescriptor.getSqlName() +
+          " END");
+    }
+    propertyDescriptorsMap.put(nlsDescriptor.getName(), nlsDescriptor);
+    propertyDescriptorsMap.put(rawOrNlsDescriptor.getName(), rawOrNlsDescriptor);
   }
 
   private final Object delegateServicesLock = new Object();
@@ -1340,6 +1360,25 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public boolean isTranslatable() {
+    if (isDeclaredTranslatable()) {
+      return true;
+    }
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        if (ancestorDescriptor.isTranslatable()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Is declared translatable.
+   *
+   * @return the boolean
+   */
+  protected boolean isDeclaredTranslatable() {
     Collection<IPropertyDescriptor> propertyDescriptors = getDeclaredPropertyDescriptors();
     if (propertyDescriptors != null) {
       for (IPropertyDescriptor pDesc: propertyDescriptors) {
@@ -1347,13 +1386,6 @@ public abstract class AbstractComponentDescriptor<E> extends
           if (((IStringPropertyDescriptor) pDesc).isTranslatable()) {
             return true;
           }
-        }
-      }
-    }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-        if (ancestorDescriptor.isTranslatable()) {
-          return true;
         }
       }
     }

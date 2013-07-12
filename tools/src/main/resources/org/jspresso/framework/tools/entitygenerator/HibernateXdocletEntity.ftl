@@ -764,7 +764,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <@generatePackageHeader componentDescriptor=componentDescriptor/>
 <@generateClassSource componentDescriptor=componentDescriptor/>
 
-<#if componentDescriptor.translatable>
+<#if componentDescriptor.translatable && !componentDescriptor.purelyAbstract>
   <@generateClassSource componentDescriptor=componentTranslationsDescriptor.referencedDescriptor.elementDescriptor/>
 }
 </#if>
