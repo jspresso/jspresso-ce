@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,23 +34,27 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.component.query.EnumQueryStructure;
 import org.jspresso.framework.model.component.query.EnumValueQueryStructure;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of a criteria factory.
@@ -177,7 +182,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       IQueryComponent queryComponent, Map<String, Object> context) {
     EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria
         .forEntityName(queryComponent.getQueryContract().getName());
-    boolean abort = completeCriteria(criteria, criteria, null, queryComponent);
+    boolean abort = completeCriteria(criteria, criteria, null, queryComponent, context);
     if (abort) {
       return null;
     }
@@ -187,7 +192,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   @SuppressWarnings("ConstantConditions")
   private boolean completeCriteria(EnhancedDetachedCriteria rootCriteria,
       DetachedCriteria currentCriteria, String path,
-      IQueryComponent aQueryComponent) {
+      IQueryComponent aQueryComponent, Map<String, Object> context) {
     boolean abort = false;
     if (aQueryComponent instanceof ComparableQueryStructure) {
       completeCriteria(currentCriteria, createComparableQueryStructureRestriction(path,
@@ -195,6 +200,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
     } else {
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
           .getQueryDescriptor();
+      String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
+      if (componentDescriptor.isTranslatable()) {
+        rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath, translationsPath, JoinType.LEFT_OUTER_JOIN);
+      }
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(property.getKey());
@@ -204,8 +213,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if (!PropertyViewDescriptorHelper.isComputed(componentDescriptor,
-              property.getKey())
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
+              propertyDescriptor instanceof IStringPropertyDescriptor
+                  && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()))
               && (!isEntityRef || IEntity.ID.equals(property.getKey()))) {
             String prefixedProperty;
             if (path != null) {
@@ -217,8 +227,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               if (!((IEntity) property.getValue()).isPersistent()) {
                 abort = true;
               } else {
-                completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty,
-                    property.getValue()));
+                completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
               }
             } else if (property.getValue() instanceof Boolean
                 && (isTriStateBooleanSupported() || (Boolean) property
@@ -229,8 +238,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                 completeCriteria(currentCriteria, createIdRestriction(propertyDescriptor, prefixedProperty,
                     property.getValue()));
               } else {
-                completeCriteria(currentCriteria, createStringRestriction(propertyDescriptor, prefixedProperty,
-                    (String) property.getValue()));
+                completeCriteriaWithTranslations(currentCriteria, translationsPath, property,
+                    componentDescriptor, propertyDescriptor, prefixedProperty, getBackendController(context).getLocale());
               }
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
@@ -249,7 +258,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                   abort = abort
                       || completeCriteria(rootCriteria, currentCriteria,
                           prefixedProperty,
-                          (IQueryComponent) property.getValue());
+                          (IQueryComponent) property.getValue(), context);
                 } else {
                   // the joined component is an entity so we must use
                   // nested criteria; unless the autoComplete property
@@ -282,7 +291,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                             JoinType.INNER_JOIN);
                     abort = abort
                         || completeCriteria(rootCriteria, joinCriteria, null,
-                            joinedComponent);
+                            joinedComponent, context);
                   }
                 }
               }
@@ -295,6 +304,67 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       }
     }
     return abort;
+  }
+
+  /**
+   * Complete criteria with translations.
+   *
+   * @param currentCriteria the current criteria
+   * @param translationsPath the translations path
+   * @param property the property
+   * @param componentDescriptor the component descriptor
+   * @param propertyDescriptor the property descriptor
+   * @param prefixedProperty the prefixed property
+   * @param locale the locale
+   */
+  @SuppressWarnings("unchecked")
+  protected void completeCriteriaWithTranslations(DetachedCriteria currentCriteria,
+                                                  String translationsPath, Map.Entry<String, Object> property,
+                                                  IComponentDescriptor<?> componentDescriptor,
+                                                  IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                                  Locale locale) {
+    if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
+        .isTranslatable()) {
+      String nlsOrRawValue = null;
+      String nlsValue = (String) property.getValue();
+      String barePropertyName = property.getKey();
+      if (property.getKey().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+        barePropertyName = barePropertyName.substring(0,
+            barePropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+      } else {
+        nlsOrRawValue = nlsValue;
+      }
+      if (nlsValue != null) {
+        Junction translationRestriction = Restrictions.conjunction();
+        translationRestriction.add(createStringRestriction(
+            ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
+                translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor(
+                IPropertyTranslation.TRANSLATED_VALUE), translationsPath + "." + IPropertyTranslation.TRANSLATED_VALUE,
+            nlsValue));
+        String languagePath = translationsPath + "." + IPropertyTranslation.LANGUAGE;
+        translationRestriction.add(Restrictions.eq(languagePath,
+            locale.getLanguage()));
+        translationRestriction.add(Restrictions.eq(translationsPath + "." + IPropertyTranslation.PROPERTY_NAME,
+            barePropertyName));
+
+        Junction disjunction = Restrictions.disjunction();
+        disjunction.add(translationRestriction);
+        if (nlsOrRawValue != null) {
+          Junction rawValueRestriction = Restrictions.conjunction();
+          rawValueRestriction.add(Restrictions.disjunction().add(Restrictions.isNull(languagePath)).add(Restrictions.ne(
+              languagePath, locale.getLanguage())));
+          String rawPropertyName = barePropertyName + IComponentDescriptor.RAW_SUFFIX;
+          rawValueRestriction.add(createStringRestriction(componentDescriptor.getPropertyDescriptor(rawPropertyName),
+              rawPropertyName,
+              nlsOrRawValue));
+          disjunction.add(rawValueRestriction);
+        }
+        currentCriteria.add(disjunction);
+      }
+    } else {
+      completeCriteria(currentCriteria, createStringRestriction(propertyDescriptor, prefixedProperty,
+          (String) property.getValue()));
+    }
   }
 
   /**
