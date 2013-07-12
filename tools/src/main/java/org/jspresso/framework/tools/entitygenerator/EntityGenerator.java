@@ -285,7 +285,7 @@ public class EntityGenerator {
       rootContext.put("instanceof", new InstanceOf(wrapper));
       rootContext.put("compareStrings", new CompareStrings(wrapper));
       rootContext.put("compactString", new CompactString());
-      rootContext.put("componentTranslationDescriptor", appContext.getBean("componentTranslationDescriptor"));
+      rootContext.put("componentTranslationsDescriptor", appContext.getBean("componentTranslationsDescriptor"));
       rootContext.put("generateAnnotations",
           generateAnnotations);
       rootContext.put("hibernateTypeRegistry", new BasicTypeRegistry());

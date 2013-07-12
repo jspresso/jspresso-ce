@@ -382,34 +382,51 @@
     </property>
   </bean>
 
-  <bean id="componentTranslationDescriptor"
-        class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
-    <constructor-arg value="Translation"/>
-    <property name="propertyDescriptors">
-      <list>
-        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-          <property name="name" value="propertyName" />
-          <property name="maxLength" value="64" />
-        </bean>
-        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-          <property name="name" value="language" />
-          <property name="maxLength" value="5" />
-        </bean>
-        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-          <property name="name" value="translatedValue" />
-          <property name="maxLength" value="512" />
-        </bean>
-      </list>
+  <bean id="componentTranslationsDescriptor"
+        class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
+    <property name="name" value="propertyTranslations" />
+    <property name="sqlName" value="T" />
+    <property name="referencedDescriptor">
+      <bean class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor">
+        <property name="elementDescriptor">
+          <bean class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
+            <constructor-arg value="Translation"/>
+            <property name="propertyDescriptors">
+              <list>
+                <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+                  <property name="name" value="propertyName" />
+                  <property name="maxLength" value="64" />
+                </bean>
+                <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+                  <property name="name" value="language" />
+                  <property name="maxLength" value="5" />
+                </bean>
+                <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+                  <property name="name" value="translatedValue" />
+                  <property name="maxLength" value="512" />
+                </bean>
+              </list>
+            </property>
+            <property name="serviceDelegateClassNames">
+              <map>
+                <entry key="org.jspresso.framework.model.component.IPropertyTranslation">
+                  <null/>
+                </entry>
+              </map>
+            </property>
+          </bean>
+        </property>
+      </bean>
     </property>
   </bean>
 
   <bean id="componentDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
         lazy-init="false">
     <property name="targetClass" value="org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor" />
-    <property name="targetMethod" value="setComponentTranslationDescriptorTemplate" />
+    <property name="targetMethod" value="setComponentTranslationsDescriptorTemplate" />
     <property name="arguments">
       <list>
-        <ref bean="componentTranslationDescriptor" />
+        <ref bean="componentTranslationsDescriptor" />
       </list>
     </property>
   </bean>

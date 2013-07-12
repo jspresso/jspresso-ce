@@ -33,6 +33,7 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
@@ -206,10 +207,29 @@ public class ControllerAwareComponentInvocationHandler extends
   }
 
   /**
-   * Delegates to backend controller. {@inheritDoc}
+   * Delegates to backend controller.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
   protected void setDirtyTrackingEnabled(boolean enabled) {
     getBackendController().setDirtyTrackingEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String invokeNlsGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
+    return getNlsPropertyValue(proxy, propertyDescriptor, getBackendController().getLocale());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void invokeNlsSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue) {
+    setNlsPropertyValue(proxy, propertyDescriptor, translatedValue, getBackendController().getEntityFactory(),
+        getBackendController().getLocale());
   }
 }

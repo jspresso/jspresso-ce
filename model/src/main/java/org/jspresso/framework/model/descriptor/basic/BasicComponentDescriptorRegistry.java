@@ -22,12 +22,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.model.component.IComponent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * Default implementation based on spring application context.
@@ -99,7 +99,8 @@ public class BasicComponentDescriptorRegistry implements
         map.put(componentDescriptor.getComponentContract().getName(), componentDescriptor);
         if (componentDescriptor.isTranslatable()) {
           IComponentDescriptor<?> translationComponentDescriptor = ((ICollectionPropertyDescriptor<?>)
-              componentDescriptor.getPropertyDescriptor(IComponentDescriptor.TRANSLATIONS_PROPERTY_NAME))
+              componentDescriptor.getPropertyDescriptor(
+                  BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName()))
               .getReferencedDescriptor().getElementDescriptor();
           if (translationComponentDescriptor.getComponentContract() != null) {
             map.put(translationComponentDescriptor.getComponentContract().getName(), translationComponentDescriptor);

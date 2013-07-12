@@ -32,6 +32,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
@@ -50,11 +53,11 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
+import org.jspresso.framework.util.sql.SqlHelper;
 
 /**
  * This is the abstract base descriptor for all component-like part of the
@@ -122,7 +125,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private Map<String, IPropertyDescriptor>                propertyDescriptorsCache;
   private Collection<IPropertyDescriptor>                 allPropertyDescriptorsCache;
 
-  private static BasicComponentDescriptor<IComponent>     componentTranslationDescriptorTemplate;
+  private static BasicCollectionPropertyDescriptor<IComponent>     componentTranslationsDescriptorTemplate;
 
   /**
    * Constructs a new {@code AbstractComponentDescriptor} instance.
@@ -1134,25 +1137,66 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private final Object propertiesBufferLock = new Object();
 
+  @SuppressWarnings("unchecked")
   private void processPropertiesBufferIfNecessary() {
     synchronized (propertiesBufferLock) {
       if (tempPropertyBuffer != null) {
         propertyDescriptorsMap = new LinkedHashMap<String, IPropertyDescriptor>();
         for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
+          if (descriptor instanceof IStringPropertyDescriptor) {
+            if (((IStringPropertyDescriptor) descriptor).isTranslatable()) {
+              String rawSqlName = ((BasicStringPropertyDescriptor) descriptor).getSqlName();
+              if (rawSqlName == null) {
+                rawSqlName = new SqlHelper().transformToSql(descriptor.getName(), null);
+              }
+              ((BasicStringPropertyDescriptor) descriptor).setSqlName(rawSqlName);
+              BasicStringPropertyDescriptor nlsDescriptor = (BasicStringPropertyDescriptor) descriptor.clone();
+              nlsDescriptor.setName(descriptor.getName() + NLS_SUFFIX);
+              nlsDescriptor.setDelegateWritable(true);
+              nlsDescriptor.setComputed(true);
+              nlsDescriptor.setSqlName(
+                  "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" + getComponentTranslationsDescriptorTemplate()
+                      .getName() +
+                      " T WHERE T." +
+                      getComponentTranslationsDescriptorTemplate().getSqlName() +
+                      "_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
+                      "T.PROPERTY_NAME = '" + descriptor.getName() + "')");
+
+              BasicStringPropertyDescriptor rawOrNlsDescriptor = (BasicStringPropertyDescriptor) descriptor.clone();
+              rawOrNlsDescriptor.setName(descriptor.getName());
+              rawOrNlsDescriptor.setDelegateWritable(true);
+              rawOrNlsDescriptor.setComputed(true);
+              rawOrNlsDescriptor.setSqlName("CASE WHEN " +
+                  nlsDescriptor.getSqlName() +
+                  " IS NULL THEN " +
+                  rawSqlName +
+                  " ELSE " +
+                  nlsDescriptor.getSqlName() +
+                  " END");
+
+              ((BasicStringPropertyDescriptor) descriptor).setName(descriptor.getName() + RAW_SUFFIX);
+              propertyDescriptorsMap.put(nlsDescriptor.getName(), nlsDescriptor);
+              propertyDescriptorsMap.put(rawOrNlsDescriptor.getName(), rawOrNlsDescriptor);
+            }
+          }
           propertyDescriptorsMap.put(descriptor.getName(), descriptor);
         }
         tempPropertyBuffer = null;
         if (isTranslatable()) {
-          BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) getComponentTranslationDescriptorTemplate()
+          BasicCollectionPropertyDescriptor<IComponent> translationsPropertyDescriptor =
+              getComponentTranslationsDescriptorTemplate()
               .clone();
+          BasicCollectionDescriptor<IComponent> translationsCollectionDescriptor =
+              (BasicCollectionDescriptor<IComponent>) ((BasicCollectionDescriptor<IComponent>)
+                  translationsPropertyDescriptor
+              .getReferencedDescriptor()).clone();
+          BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) (
+              (BasicComponentDescriptor<IComponent>) translationsCollectionDescriptor
+              .getElementDescriptor()).clone();
+          translationsPropertyDescriptor.setReferencedDescriptor(translationsCollectionDescriptor);
+          translationsCollectionDescriptor.setElementDescriptor(translationDescriptor);
           translationDescriptor.setName(getName() + "$Translation");
-          BasicSetDescriptor<IComponent> ptSetDescriptor = new BasicSetDescriptor<IComponent>();
-          ptSetDescriptor.setElementDescriptor(translationDescriptor);
-          BasicCollectionPropertyDescriptor<IComponent> ptDescriptor = new
-              BasicCollectionPropertyDescriptor<IComponent>();
-          ptDescriptor.setName("propertyTranslations");
-          ptDescriptor.setReferencedDescriptor(ptSetDescriptor);
-          propertyDescriptorsMap.put(ptDescriptor.getName(), ptDescriptor);
+          propertyDescriptorsMap.put(translationsPropertyDescriptor.getName(), translationsPropertyDescriptor);
         }
       }
     }
@@ -1317,21 +1361,21 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets component translation descriptor template.
+   * Sets component translations descriptor template.
    *
    * @param template the template
    */
-  public static synchronized void setComponentTranslationDescriptorTemplate(
-      BasicComponentDescriptor<IComponent> template) {
-    componentTranslationDescriptorTemplate = template;
+  public static synchronized void setComponentTranslationsDescriptorTemplate(
+      BasicCollectionPropertyDescriptor<IComponent> template) {
+    componentTranslationsDescriptorTemplate = template;
   }
 
   /**
-   * Gets component translation descriptor template.
+   * Gets component translations descriptor template.
    *
    * @return the component translation descriptor template
    */
-  public static synchronized BasicComponentDescriptor<IComponent> getComponentTranslationDescriptorTemplate() {
-    return componentTranslationDescriptorTemplate;
+  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate() {
+    return componentTranslationsDescriptorTemplate;
   }
 }

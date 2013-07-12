@@ -38,6 +38,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -310,5 +311,22 @@ public class ControllerAwareEntityInvocationHandler extends
   @Override
   protected void setDirtyTrackingEnabled(boolean enabled) {
     getBackendController().setDirtyTrackingEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String invokeNlsGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
+    return getNlsPropertyValue(proxy, propertyDescriptor, getBackendController().getLocale());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void invokeNlsSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue) {
+    setNlsPropertyValue(proxy, propertyDescriptor, translatedValue, getBackendController().getEntityFactory(),
+        getBackendController().getLocale());
   }
 }

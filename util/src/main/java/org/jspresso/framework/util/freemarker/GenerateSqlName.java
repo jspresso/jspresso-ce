@@ -18,15 +18,14 @@
  */
 package org.jspresso.framework.util.freemarker;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+
+import org.jspresso.framework.util.sql.SqlHelper;
 
 /**
  * Infers a SQL column name from a property name.
@@ -35,54 +34,29 @@ import freemarker.template.TemplateModelException;
  * @author Vincent Vandenschrick
  * @author Pierre-m Raoul (atao)
  */
-@SuppressWarnings("rawtypes")
 public class GenerateSqlName implements TemplateMethodModel {
 
-  private static final Formatter       DEFAULT_FORMATTER;
-  private static final KeyWordProvider DEFAULT_KEY_WORD_PROVIDER;
-  private static final String          WORD_SEP = "_";
-
-  static {
-    DEFAULT_FORMATTER = new Formatter() {
-
-      @Override
-      public String run(String name) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < name.length(); i++) {
-          if (i > 0 && Character.isLowerCase(name.charAt(i - 1))
-              && Character.isUpperCase(name.charAt(i))) {
-            result.append(WORD_SEP);
-          }
-          if ((i == 0 && Character.isJavaIdentifierStart(name.charAt(i)))
-              || (i > 0 && Character.isJavaIdentifierPart(name.charAt(i)))) {
-            result.append(Character.toUpperCase(name.charAt(i)));
-          } else {
-            result.append(WORD_SEP);
-          }
-        }
-        return result.toString();
-      }
-    };
-
-    DEFAULT_KEY_WORD_PROVIDER = new KeyWordProvider() {
-
-      @Override
-      public List<String> run() {
-        return Arrays.asList("BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
-            "DAY", "MONTH", "YEAR", "FROM", "TO");
-      }
-    };
-  }
-  private Formatter                    formatter;
-  private Set<String>                  reservedKeyWords;
+  private SqlHelper.Formatter formatter;
+  private SqlHelper.KeyWordProvider keyWordProvider;
 
   /**
-   * Constructs a new {@code GenerateSqlName} instance.
+   * Sets a new column name formatter.
    *
+   * @param formatter
+   *          a new formatter.
    */
-  public GenerateSqlName() {
-    reservedKeyWords = new HashSet<String>(DEFAULT_KEY_WORD_PROVIDER.run());
-    formatter = DEFAULT_FORMATTER;
+  public void setFormatter(SqlHelper.Formatter formatter) {
+    this.formatter = formatter;
+  }
+
+  /**
+   * Sets a new keyword provider.
+   *
+   * @param keyWordProvider
+   *          a new keyword provider.
+   */
+  public void setKeyWordProvider(SqlHelper.KeyWordProvider keyWordProvider) {
+    this.keyWordProvider = keyWordProvider;
   }
 
   /**
@@ -90,98 +64,21 @@ public class GenerateSqlName implements TemplateMethodModel {
    * parser to separate words with "_" - check for sql reserved key words
    * {@inheritDoc}
    */
+  @SuppressWarnings("rawtypes")
   @Override
   public TemplateModel exec(List arguments) throws TemplateModelException {
 
-    String sqlColumnName = formatter.run(arguments.get(0).toString());
-    if (isReserved(sqlColumnName)) {
-      sqlColumnName += WORD_SEP;
-      if (arguments.size() > 1 && arguments.get(1) != null) {
-        sqlColumnName += formatter.run(arguments.get(1).toString());
-      }
+    String root = arguments.get(0).toString();
+    String suffix = null;
+    if (arguments.size() > 1 && arguments.get(1) != null) {
+      suffix = arguments.get(1).toString();
     }
+
+    String sqlColumnName = new SqlHelper(formatter, keyWordProvider).transformToSql(root, suffix);
     try {
       return new SimpleScalar(sqlColumnName);
     } catch (Exception ex) {
       throw new TemplateModelException("Could not infer SQL column name.", ex);
     }
   }
-
-  /**
-   * Sets an additional keyword provider.
-   * 
-   * @param provider
-   *          an additional keyword provider.
-   */
-  public void setAdditionalKeyWordProvider(KeyWordProvider provider) {
-    if (provider == null) {
-      return;
-    }
-
-    reservedKeyWords.addAll(provider.run());
-  }
-
-  /**
-   * Sets a new column name formatter. If null, the default one is restored.
-   * 
-   * @param formatter
-   *          a new formatter.
-   */
-  public void setFormatter(Formatter formatter) {
-    if (formatter != null) {
-      this.formatter = formatter;
-    } else {
-      this.formatter = DEFAULT_FORMATTER;
-    }
-  }
-
-  /**
-   * Sets a new keyword provider. If null, the default one is restored.
-   * 
-   * @param provider
-   *          a new keyword provider.
-   */
-  public void setKeyWordProvider(KeyWordProvider provider) {
-    KeyWordProvider currentProvider;
-    if (provider != null) {
-      currentProvider = provider;
-    } else {
-      currentProvider = DEFAULT_KEY_WORD_PROVIDER;
-    }
-    reservedKeyWords = new HashSet<String>(currentProvider.run());
-  }
-
-  private boolean isReserved(String name) {
-    return reservedKeyWords.contains(name.toUpperCase());
-  }
-
-  /**
-   * Any modification of the provided word before checking, e.g. from camel
-   * style to upper case and underscore separated.
-   */
-  public interface Formatter {
-
-    /**
-     * Executes the formatter on the given name.
-     * 
-     * @param name
-     *          the name to format
-     * @return the formatted name.
-     */
-    String run(String name);
-  }
-
-  /**
-   * Provide upper case reserved key words.
-   */
-  public interface KeyWordProvider {
-
-    /**
-     * Gets the list of reserved keywords uppercase.
-     * 
-     * @return the list of reserved keywords uppercase.
-     */
-    List<String> run();
-  }
-
 }

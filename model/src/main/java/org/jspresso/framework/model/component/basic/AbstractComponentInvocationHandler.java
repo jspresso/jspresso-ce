@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,6 +49,7 @@ import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IComponentFactoryAware;
 import org.jspresso.framework.model.component.ILifecycleCapable;
+import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.service.AbstractComponentServiceDelegate;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
@@ -58,7 +60,9 @@ import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
+import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -343,6 +347,22 @@ public abstract class AbstractComponentInvocationHandler implements
               modifierMonitors.remove(methodName);
             }
           }
+        } else if (propertyDescriptor instanceof IStringPropertyDescriptor
+            && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()) {
+          if (accessorInfo.isModifier()) {
+            if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+              invokeNlsSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+            } else {
+              invokeNlsOrRawSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+            }
+            return null;
+          } else {
+            if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+              return invokeNlsGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+            } else {
+              return invokeNlsOrRawGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+            }
+          }
         } else {
           try {
             return invokeServiceMethod(proxy, method, args);
@@ -367,6 +387,59 @@ public abstract class AbstractComponentInvocationHandler implements
     throw new ComponentException(method.toString()
         + " is not supported on the component "
         + componentDescriptor.getComponentContract().getName());
+  }
+
+  /**
+   * Invoke nls getter.
+   *
+   * @param proxy the proxy
+   * @param propertyDescriptor the property descriptor
+   * @return the translated value
+   */
+  protected String invokeNlsGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
+    return (String) straightGetProperty(proxy, propertyDescriptor.getName() + IComponentDescriptor.RAW_SUFFIX);
+  }
+
+  /**
+   * Invoke nls or raw getter.
+   *
+   * @param proxy the proxy
+   * @param propertyDescriptor the property descriptor
+   * @return the translated value or raw if non-existent.
+   */
+  protected final String invokeNlsOrRawGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
+    String nlsOrRawValue = invokeNlsGetter(proxy, propertyDescriptor);
+    if (nlsOrRawValue == null) {
+      nlsOrRawValue = (String) straightGetProperty(proxy, propertyDescriptor.getName().substring(0,
+          propertyDescriptor.getName().length() - IComponentDescriptor.NLS_SUFFIX.length())
+          + IComponentDescriptor.RAW_SUFFIX);
+    }
+    return nlsOrRawValue;
+  }
+
+  /**
+   * Invoke nls setter.
+   *
+   * @param proxy the proxy
+   * @param propertyDescriptor the property descriptor
+   * @param translatedValue the translated value
+   */
+  protected void invokeNlsSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue) {
+    straightSetProperty(proxy, propertyDescriptor.getName() + IComponentDescriptor.RAW_SUFFIX, translatedValue);
+  }
+
+  /**
+   * Invoke nls or raw setter.
+   *
+   * @param proxy the proxy
+   * @param propertyDescriptor the property descriptor
+   * @param translatedValue the translated value
+   */
+  protected final void invokeNlsOrRawSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor,
+                                   String translatedValue) {
+    String oldTranslation = invokeNlsOrRawGetter(proxy, propertyDescriptor);
+    invokeNlsSetter(proxy, propertyDescriptor, translatedValue);
+    firePropertyChange(proxy, propertyDescriptor.getName(), oldTranslation, translatedValue);
   }
 
   private boolean isLifecycleMethod(Method method) {
@@ -1327,7 +1400,15 @@ public abstract class AbstractComponentInvocationHandler implements
     return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
-  private void firePropertyChange(Object proxy, String propertyName,
+  /**
+   * Fire property change.
+   *
+   * @param proxy the proxy
+   * @param propertyName the property name
+   * @param oldValue the old value
+   * @param newValue the new value
+   */
+  protected void firePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
     Object actualNewValue = newValue;
     if (computedPropertiesCache.containsKey(propertyName)
@@ -1975,6 +2056,123 @@ public abstract class AbstractComponentInvocationHandler implements
       throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
+    }
+  }
+
+  /**
+   * Gets component descriptor.
+   *
+   * @return the component descriptor
+   */
+  protected IComponentDescriptor<? extends IComponent> getComponentDescriptor() {
+    return componentDescriptor;
+  }
+
+  /**
+   * Gets translated property value.
+   *
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param locale
+   *     the locale
+   * @return the translated property value
+   */
+  @SuppressWarnings("unchecked")
+  protected String getNlsPropertyValue(Object proxy, IStringPropertyDescriptor propertyDescriptor, Locale locale) {
+    if (locale != null) {
+      String nlsPropertyName = propertyDescriptor.getName();
+      String barePropertyName = nlsPropertyName.substring(0,
+          nlsPropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+      Set<IPropertyTranslation> translations = (Set<IPropertyTranslation>) straightGetProperty(proxy,
+          BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
+      if (translations != null && isInitialized(translations)) {
+        String sessionLanguage = locale.getLanguage();
+        if (sessionLanguage != null) {
+          for (IPropertyTranslation translation : translations) {
+            if (sessionLanguage.equalsIgnoreCase(translation.getLanguage()) && barePropertyName.equals(
+                translation.getPropertyName())) {
+              return translation.getTranslatedValue();
+            }
+          }
+        }
+        return null;
+      }
+      return (String) straightGetProperty(proxy, nlsPropertyName);
+    }
+    return null;
+  }
+
+  /**
+   * Sets translated property value.
+   *
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param translatedValue
+   *     the translated value
+   * @param entityFactory
+   *     the entity factory
+   * @param locale
+   *     the locale
+   */
+  protected void setNlsPropertyValue(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue,
+                                     IEntityFactory entityFactory, Locale locale) {
+    if(locale != null) {
+      String nlsPropertyName = propertyDescriptor.getName();
+      String barePropertyName = nlsPropertyName.substring(0,
+          nlsPropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+
+      String oldTranslation = invokeNlsGetter(proxy, propertyDescriptor);
+      Set<IPropertyTranslation> translations;
+      ICollectionAccessor translationsAccessor = (ICollectionAccessor) getAccessorFactory().createPropertyAccessor(
+          BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName(), getComponentContract());
+      try {
+        translations = translationsAccessor.getValue(proxy);
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
+      String sessionLanguage = locale.getLanguage();
+      IPropertyTranslation sessionTranslation = null;
+      if (sessionLanguage != null) {
+        for (IPropertyTranslation translation : translations) {
+          if (sessionLanguage.equalsIgnoreCase(translation.getLanguage()) && barePropertyName.equals(
+              translation.getPropertyName())) {
+            sessionTranslation = translation;
+          }
+        }
+      }
+      if (sessionTranslation == null) {
+        sessionTranslation = (IPropertyTranslation) entityFactory.createComponentInstance(
+            ((ICollectionPropertyDescriptor) getComponentDescriptor().getPropertyDescriptor(
+                BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName()))
+                .getReferencedDescriptor().getElementDescriptor().getComponentContract());
+        sessionTranslation.setLanguage(locale.getLanguage());
+        sessionTranslation.setPropertyName(barePropertyName);
+        try {
+          translationsAccessor.addToValue(proxy, sessionTranslation);
+        } catch (IllegalAccessException ex) {
+          throw new ComponentException(ex);
+        } catch (InvocationTargetException ex) {
+          if (ex.getCause() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getCause();
+          }
+          throw new ComponentException(ex.getCause());
+        } catch (NoSuchMethodException ex) {
+          throw new ComponentException(ex);
+        }
+      }
+      sessionTranslation.setTranslatedValue(translatedValue);
+      firePropertyChange(proxy, nlsPropertyName, oldTranslation, translatedValue);
     }
   }
 

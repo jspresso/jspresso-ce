@@ -44,6 +44,7 @@ package ${package};
   <#else>  
     <#global tableName=generateSQLName(componentName)/>
   </#if>
+  <#global reducedTableName=reduceSQLName(tableName)/>
 /**
  * ${componentName} <#if isEntity>entity<#else>component</#if>.
  * <p>
@@ -59,7 +60,7 @@ package ${package};
     <#else>
  * @hibernate.class
     </#if>
- *           table = "${reduceSQLName(tableName)}"
+ *           table = "${reducedTableName}"
  *           dynamic-insert = "true"
  *           dynamic-update = "true"
  *           persister =
@@ -206,7 +207,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     </#if>
   <#elseif propertyDescriptor.sqlName??>
    * @hibernate.property
-   *           formula = "${propertyDescriptor.sqlName}"
+   *            formula = "${propertyDescriptor.sqlName?replace("{tableName}", reducedTableName)?replace("{entityName}", componentDescriptor.name)}"
   </#if>
    * @return the ${propertyName}.
    */
@@ -764,7 +765,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <@generateClassSource componentDescriptor=componentDescriptor/>
 
 <#if componentDescriptor.translatable>
-  <@generateClassSource componentDescriptor=componentTranslationDescriptor/>
+  <@generateClassSource componentDescriptor=componentTranslationsDescriptor.referencedDescriptor.elementDescriptor/>
 }
 </#if>
 }

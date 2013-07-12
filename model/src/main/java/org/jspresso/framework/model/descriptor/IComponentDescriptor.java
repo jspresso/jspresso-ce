@@ -44,9 +44,14 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
     IComponentDescriptorProvider<E>, IGateAccessible, IPermIdSource {
 
   /**
-   * The constant TRANSLATIONS_PROPERTY_NAME is "propertyTranslations".
+   * The constant RAW_SUFFIX is "Raw".
    */
-  public static final String TRANSLATIONS_PROPERTY_NAME = "propertyTranslations";
+  String RAW_SUFFIX = "Raw";
+
+  /**
+   * The constant NLS_SUFFIX is "Nls".
+   */
+  String NLS_SUFFIX = "Nls";
 
   /**
    * Creates a new component descriptor to allow for querying.
