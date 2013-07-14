@@ -95,14 +95,14 @@
           <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}</webappDirectory>
           <overlays>
             <overlay>
-              <groupId>org.jspresso.hrsample</groupId>
+              <groupId>${groupId}</groupId>
               <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
               <type>zip</type>
               <classifier>resources</classifier>
               <targetPath>WEB-INF/flex</targetPath>
             </overlay>
             <overlay>
-              <groupId>org.jspresso.hrsample</groupId>
+              <groupId>${groupId}</groupId>
               <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
               <type>zip</type>
               <classifier>web-resources</classifier>
