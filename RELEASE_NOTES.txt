@@ -82,7 +82,11 @@
     <targetPlayer>....</targetPlayer>
   by
     <targetPlayer>11.1.0</targetPlayer>
-    
+
+- If you use Flex 3 legacy skins / themes, add the following <configuration> entry in the FlexMojos plugin entry in
+  startup/flex/client/pom.xml :
+              <compatibilityVersion>3.0.0</compatibilityVersion>
+
 - Now using the org.picketbox:jbosssx and org.picketbox:picketbox-spi-bare dependencies in place of the JBossAS one.
   When running under JBoss, it is now the dependencies to exclude by marking them <scope>provided</scope>.
 

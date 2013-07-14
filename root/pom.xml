@@ -1220,7 +1220,7 @@
                 <manager-class>flash.fonts.AFEFontManager</manager-class>
               </managers>
             </fonts>
-            <compatibilityVersion>3.0.0</compatibilityVersion>
+            <!--<compatibilityVersion>3.0.0</compatibilityVersion>-->
           </configuration>
           <dependencies>
             <dependency>
