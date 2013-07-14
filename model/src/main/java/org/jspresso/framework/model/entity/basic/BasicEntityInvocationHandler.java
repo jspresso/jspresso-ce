@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.entity.basic;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
@@ -25,12 +26,15 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.basic.AbstractComponentInvocationHandler;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
@@ -89,11 +93,21 @@ public class BasicEntityInvocationHandler extends
       throws Throwable {
     String methodName = method.getName();
     if ("isPersistent".equals(methodName)) {
-      Integer version = ((IEntity) proxy).getVersion();
-      return version != null
-          && !IEntity.DELETED_VERSION.equals(version);
+      return isPersistent(proxy);
     }
     return super.invoke(proxy, method, args);
+  }
+
+  /**
+   * Is persistent.
+   *
+   * @param proxy the proxy
+   * @return the boolean
+   */
+  protected boolean isPersistent(Object proxy) {
+    Integer version = ((IEntity) proxy).getVersion();
+    return version != null
+        && !IEntity.DELETED_VERSION.equals(version);
   }
 
   /**
@@ -181,5 +195,35 @@ public class BasicEntityInvocationHandler extends
     ((IEntity) proxy).straightSetProperty(IEntity.VERSION,
         IEntity.DELETED_VERSION);
     super.markDeleted(proxy);
+  }
+
+  /**
+   * Assigns raw property if the entity is not persistent yet.
+   * @param proxy the proxy
+   * @param propertyDescriptor the property descriptor
+   * @param translatedValue the translated value
+   */
+  @Override
+  protected void invokeNlsOrRawSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor,
+                                      String translatedValue) {
+    super.invokeNlsOrRawSetter(proxy, propertyDescriptor, translatedValue);
+    if (!isPersistent(proxy)) {
+      try {
+        String rawPropertyName = propertyDescriptor.getName() + IComponentDescriptor.RAW_SUFFIX;
+        getAccessorFactory().createPropertyAccessor(
+            rawPropertyName, getComponentDescriptor().getComponentContract())
+                                              .setValue(proxy, translatedValue);
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
+
+    }
   }
 }

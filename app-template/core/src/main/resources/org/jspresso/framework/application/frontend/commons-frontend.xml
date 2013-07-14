@@ -1212,4 +1212,13 @@
       </bean>
     </property>
   </bean>
+
+  <bean id="propertyTranslationsTableBase"
+        class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor">
+    <!--<property name="actionMap" ref="masterDetailActionMap"/>-->
+    <property name="permId" value="translations.table"/>
+    <property name="modelDescriptor" ref="componentTranslationsDescriptor"/>
+  </bean>
+  <bean id="translations.table" parent="propertyTranslationsTableBase"/>
+
 </beans>

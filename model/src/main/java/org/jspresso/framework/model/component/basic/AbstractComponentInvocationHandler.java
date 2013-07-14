@@ -62,6 +62,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
+import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
@@ -407,7 +408,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param propertyDescriptor the property descriptor
    * @return the translated value or raw if non-existent.
    */
-  protected final String invokeNlsOrRawGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
+  protected String invokeNlsOrRawGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
     String nlsOrRawValue = invokeNlsGetter(proxy, propertyDescriptor);
     if (nlsOrRawValue == null) {
       nlsOrRawValue = (String) straightGetProperty(proxy, propertyDescriptor.getName() + IComponentDescriptor
@@ -434,11 +435,13 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param propertyDescriptor the property descriptor
    * @param translatedValue the translated value
    */
-  protected final void invokeNlsOrRawSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor,
+  protected void invokeNlsOrRawSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor,
                                    String translatedValue) {
     String oldTranslation = invokeNlsOrRawGetter(proxy, propertyDescriptor);
     invokeNlsSetter(proxy, propertyDescriptor, translatedValue);
-    firePropertyChange(proxy, propertyDescriptor.getName(), oldTranslation, translatedValue);
+    String propertyName = propertyDescriptor.getName();
+    storeProperty(propertyName, translatedValue);
+    firePropertyChange(proxy, propertyName, oldTranslation, translatedValue);
   }
 
   private boolean isLifecycleMethod(Method method) {
@@ -2081,9 +2084,12 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   protected String getNlsPropertyValue(Object proxy, IStringPropertyDescriptor propertyDescriptor, Locale locale) {
     if (locale != null) {
-      String nlsPropertyName = propertyDescriptor.getName();
-      String barePropertyName = nlsPropertyName.substring(0,
-          nlsPropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+      String barePropertyName = propertyDescriptor.getName();
+      if (barePropertyName.endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+        barePropertyName = barePropertyName.substring(0,
+            barePropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+      }
+      String nlsPropertyName = barePropertyName + IComponentDescriptor.NLS_SUFFIX;
       Set<IPropertyTranslation> translations = (Set<IPropertyTranslation>) straightGetProperty(proxy,
           BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
       if (translations != null && isInitialized(translations)) {
@@ -2117,17 +2123,24 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param locale
    *     the locale
    */
+  @SuppressWarnings("unchecked")
   protected void setNlsPropertyValue(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue,
                                      IEntityFactory entityFactory, Locale locale) {
-    if(locale != null) {
-      String nlsPropertyName = propertyDescriptor.getName();
-      String barePropertyName = nlsPropertyName.substring(0,
-          nlsPropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
-
+    if (locale != null) {
+      String barePropertyName = propertyDescriptor.getName();
+      if (barePropertyName.endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+        barePropertyName = barePropertyName.substring(0,
+            barePropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+      }
+      String nlsPropertyName = barePropertyName + IComponentDescriptor.NLS_SUFFIX;
       String oldTranslation = invokeNlsGetter(proxy, propertyDescriptor);
       Set<IPropertyTranslation> translations;
-      ICollectionAccessor translationsAccessor = (ICollectionAccessor) getAccessorFactory().createPropertyAccessor(
-          BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName(), getComponentContract());
+      String translationsPropertyName = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
+
+      Class<IComponent> translationContract = ((ICollectionPropertyDescriptor) getComponentDescriptor()
+          .getPropertyDescriptor(translationsPropertyName)).getReferencedDescriptor().getElementDescriptor().getComponentContract();
+      ICollectionAccessor translationsAccessor = getAccessorFactory().
+          createCollectionPropertyAccessor(translationsPropertyName, getComponentContract(), translationContract);
       try {
         translations = translationsAccessor.getValue(proxy);
       } catch (IllegalAccessException ex) {
@@ -2152,9 +2165,7 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       if (sessionTranslation == null) {
         sessionTranslation = (IPropertyTranslation) entityFactory.createComponentInstance(
-            ((ICollectionPropertyDescriptor) getComponentDescriptor().getPropertyDescriptor(
-                BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName()))
-                .getReferencedDescriptor().getElementDescriptor().getComponentContract());
+            translationContract);
         sessionTranslation.setLanguage(locale.getLanguage());
         sessionTranslation.setPropertyName(barePropertyName);
         try {
@@ -2171,6 +2182,7 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
       sessionTranslation.setTranslatedValue(translatedValue);
+      storeProperty(nlsPropertyName, translatedValue);
       firePropertyChange(proxy, nlsPropertyName, oldTranslation, translatedValue);
     }
   }

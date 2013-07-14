@@ -376,9 +376,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     synchronized (allPropertyDescriptorsLock) {
       if (allPropertyDescriptorsCache == null) {
         // A map is used instead of a set since a set does not replace an
-        // element
-        // it
-        // already contains.
+        // element it already contains.
         Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
@@ -485,7 +483,7 @@ public abstract class AbstractComponentDescriptor<E> extends
                 && !(propertyDescriptor instanceof ITextPropertyDescriptor)
                 && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
               String propertyName = propertyDescriptor.getName();
-              if(!propertyName.endsWith(RAW_SUFFIX) && !propertyName.endsWith(NLS_SUFFIX)) {
+              if (!propertyName.endsWith(RAW_SUFFIX) && !propertyName.endsWith(NLS_SUFFIX)) {
                 renderedPropertiesSet.add(propertyName);
               }
             }
@@ -865,6 +863,10 @@ public abstract class AbstractComponentDescriptor<E> extends
       tempPropertyBuffer = null;
       propertyDescriptorsMap = null;
     }
+    resetPropertyDescriptorCaches();
+  }
+
+  private void resetPropertyDescriptorCaches() {
     propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
     allPropertyDescriptorsCache = null;
   }
@@ -1184,6 +1186,7 @@ public abstract class AbstractComponentDescriptor<E> extends
             propertyDescriptorsMap.put(translationsPropertyDescriptor.getName(), translationsPropertyDescriptor);
           }
         }
+        resetPropertyDescriptorCaches();
       }
     }
   }
