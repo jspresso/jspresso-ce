@@ -518,4 +518,11 @@ public interface IBackendController extends IController,
    * @param interceptor the interceptor.
    */
   void removeDirtInterceptor(PropertyChangeListener interceptor);
+
+  /**
+   * Sets client time zone.
+   *
+   * @param clientTimeZone the client time zone
+   */
+  void setClientTimeZone(TimeZone clientTimeZone);
 }

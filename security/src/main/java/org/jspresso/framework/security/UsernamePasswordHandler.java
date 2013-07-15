@@ -35,6 +35,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
   private String  password;
   private String  username;
   private String  language;
+  private String  timeZoneId;
   private boolean rememberMe;
 
   /**
@@ -44,11 +45,12 @@ public class UsernamePasswordHandler implements CallbackHandler {
     setUsername(null);
     setPassword(null);
     setLanguage(null);
+    setTimeZoneId(null);
   }
 
   /**
    * Gets the password.
-   * 
+   *
    * @return the password.
    */
   public String getPassword() {
@@ -57,7 +59,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
 
   /**
    * Gets the username.
-   * 
+   *
    * @return the username.
    */
   public String getUsername() {
@@ -76,8 +78,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
         ((NameCallback) callback).setName(getUsername());
       } else if (callback instanceof PasswordCallback) {
         if (getPassword() != null) {
-          ((PasswordCallback) callback).setPassword(getPassword()
-              .toCharArray());
+          ((PasswordCallback) callback).setPassword(getPassword().toCharArray());
         } else {
           ((PasswordCallback) callback).setPassword(null);
         }
@@ -89,7 +90,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
 
   /**
    * Sets the password.
-   * 
+   *
    * @param password
    *          the password to set.
    */
@@ -99,7 +100,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
 
   /**
    * Sets the username.
-   * 
+   *
    * @param username
    *          the username to set.
    */
@@ -142,5 +143,23 @@ public class UsernamePasswordHandler implements CallbackHandler {
    */
   public void setLanguage(String language) {
     this.language = language;
+  }
+
+  /**
+   * Gets time zone.
+   *
+   * @return the time zone
+   */
+  public String getTimeZoneId() {
+    return timeZoneId;
+  }
+
+  /**
+   * Sets time zone.
+   *
+   * @param timeZoneId the time zone
+   */
+  public void setTimeZoneId(String timeZoneId) {
+    this.timeZoneId = timeZoneId;
   }
 }

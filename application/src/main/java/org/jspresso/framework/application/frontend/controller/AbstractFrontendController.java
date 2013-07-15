@@ -117,10 +117,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@code MAX_LOGIN_RETRIES}.
    */
   protected static final int    MAX_LOGIN_RETRIES = 3;
-  private static final   Logger LOG                 = LoggerFactory.getLogger(AbstractFrontendController.class);
-  private static final   String UP_KEY              = "UP_KEY";
-  private static final   String UP_SEP              = "!";
-  private static final   String LANG_KEY            = "LANG_KEY";
+  private static final   Logger LOG               = LoggerFactory.getLogger(AbstractFrontendController.class);
+  private static final   String UP_KEY            = "UP_KEY";
+  private static final   String UP_SEP            = "!";
+  private static final   String LANG_KEY          = "LANG_KEY";
+  private static final   String TZ_KEY            = "TZ_KEY";
   private final List<ModuleHistoryEntry>              backwardHistoryEntries;
   private final DefaultIconDescriptor                 controllerDescriptor;
   private final List<Map<String, Object>>             dialogContextStack;
@@ -1257,6 +1258,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } else {
       uph.setLanguage(null);
     }
+    String savedTzId = getClientPreference(TZ_KEY);
+    if (savedTzId != null && !savedTzId.isEmpty()) {
+      uph.setTimeZoneId(savedTzId);
+    } else {
+      uph.setTimeZoneId(null);
+    }
     return uph;
   }
 
@@ -1629,12 +1636,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } else {
       removeClientPreference(LANG_KEY);
     }
+    String loginTimeZoneId = uph.getTimeZoneId();
+    if (loginTimeZoneId != null && !loginTimeZoneId.isEmpty()) {
+      putClientPreference(TZ_KEY, loginTimeZoneId);
+    } else {
+      removeClientPreference(TZ_KEY);
+    }
     uph.clear();
     if (loginLocale != null) {
       for (Principal principal : subject.getPrincipals()) {
         if (principal instanceof UserPrincipal) {
           ((UserPrincipal) principal).putCustomProperty(UserPrincipal.LANGUAGE_PROPERTY, loginLocale);
         }
+      }
+    }
+    if (loginTimeZoneId != null) {
+      TimeZone loginTimeZone = TimeZone.getTimeZone(loginTimeZoneId);
+      if (loginTimeZone != null) {
+        getBackendController().setClientTimeZone(loginTimeZone);
       }
     }
     getBackendController().loggedIn(subject);

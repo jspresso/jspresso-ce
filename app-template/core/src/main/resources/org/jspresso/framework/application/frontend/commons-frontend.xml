@@ -1078,6 +1078,9 @@
           <property name="maxLength" value="64" />
         </bean>
         <ref bean="languagePropertyDescriptor" />
+        <bean class="org.jspresso.framework.model.descriptor.basic.TimeZoneEnumerationPropertyDescriptor">
+          <property name="name" value="timeZoneId" />
+        </bean>
         <bean class="org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor">
           <property name="name" value="rememberMe" />
         </bean>

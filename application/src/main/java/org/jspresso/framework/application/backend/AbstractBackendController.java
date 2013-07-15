@@ -976,8 +976,18 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public boolean start(Locale startingLocale, TimeZone theClientTimeZone) {
     applicationSession.setLocale(startingLocale);
-    this.clientTimeZone = theClientTimeZone;
+    setClientTimeZone(theClientTimeZone);
     return true;
+  }
+
+  /**
+   * Sets client time zone.
+   *
+   * @param clientTimeZone the client time zone
+   */
+  @Override
+  public void setClientTimeZone(TimeZone clientTimeZone) {
+    this.clientTimeZone = clientTimeZone;
   }
 
   /**
