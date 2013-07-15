@@ -20,6 +20,7 @@ package org.jspresso.framework.application.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -158,7 +159,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (filterViewDesc == null) {
       filterViewDesc = getQueryViewDescriptorFactory()
           .createQueryViewDescriptor(realComponentDesc,
-              filterModelDescriptorProvider.getComponentDescriptor());
+              filterModelDescriptorProvider.getComponentDescriptor(), Collections.<String, Object>emptyMap());
     } else {
       customFilterView = true;
       // Deeply clean model descriptors on filter views

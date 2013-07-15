@@ -20,6 +20,7 @@ package org.jspresso.framework.application.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.model.component.IComponent;
@@ -74,7 +75,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
   @Override
   public IViewDescriptor createQueryViewDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
-      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor) {
+      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, Map<String, Object> actionContext) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (String queriableProperty : componentDescriptorProvider

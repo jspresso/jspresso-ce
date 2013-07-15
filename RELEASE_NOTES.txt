@@ -1,6 +1,9 @@
 3.7
 ===
 
+- IQueryViewDescriptorFactory API has changed to satisfy RFE #944. The action contaxt, if any,
+  is passed to the factory method.
+
 - DefaultCriteriaFactory properted API has changed for a more consistent naming policy. All createXXXRestriction
   methods now actually return a criterion and does not have the surrounding detached criteria as parameter.
 

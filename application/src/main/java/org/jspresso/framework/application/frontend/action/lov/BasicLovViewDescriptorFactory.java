@@ -64,7 +64,7 @@ public class BasicLovViewDescriptorFactory extends AbstractActionContextAware
     IComponentDescriptor<IQueryComponent> filterModelDescriptor = getQueryComponentDescriptorFactory()
         .createQueryComponentDescriptor(entityRefDescriptor);
     IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
-        .createQueryViewDescriptor(entityRefDescriptor, filterModelDescriptor);
+        .createQueryViewDescriptor(entityRefDescriptor, filterModelDescriptor, lovContext);
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());
