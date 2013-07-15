@@ -108,8 +108,14 @@ public final class UrlHelper {
       if (paramIndex > 0) {
         resourcePath = resourcePath.substring(0, paramIndex);
       }
-      if (makeAbsolute && !resourcePath.startsWith("/")) {
-        resourcePath = "/" + resourcePath;
+      if (makeAbsolute) {
+        if (!resourcePath.startsWith("/")) {
+          resourcePath = "/" + resourcePath;
+        }
+      } else {
+        while (resourcePath.startsWith("/")) {
+          resourcePath = resourcePath.substring(1);
+        }
       }
       return resourcePath;
     }

@@ -1233,7 +1233,7 @@ public class DefaultSwingViewFactory extends
             null,
             getEnumerationTemplateValue(propertyDescriptor, actionHandler,
                 locale),
-            Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
+            Toolkit.getDefaultToolkit().getScreenResolution() * 3 / 5);
         IValueConnector connector = new JComboBoxConnector(
             propertyDescriptor.getName(), viewComponent);
         connector.setExceptionHandler(actionHandler);

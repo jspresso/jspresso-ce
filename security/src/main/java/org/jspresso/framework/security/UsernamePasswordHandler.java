@@ -34,6 +34,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
 
   private String  password;
   private String  username;
+  private String  language;
   private boolean rememberMe;
 
   /**
@@ -42,6 +43,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
   public void clear() {
     setUsername(null);
     setPassword(null);
+    setLanguage(null);
   }
 
   /**
@@ -122,5 +124,23 @@ public class UsernamePasswordHandler implements CallbackHandler {
    */
   public boolean isRememberMe() {
     return rememberMe;
+  }
+
+  /**
+   * Gets language.
+   *
+   * @return the language
+   */
+  public String getLanguage() {
+    return language;
+  }
+
+  /**
+   * Sets language.
+   *
+   * @param language the language
+   */
+  public void setLanguage(String language) {
+    this.language = language;
   }
 }

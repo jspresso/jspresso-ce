@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,6 +64,7 @@ import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
@@ -115,9 +117,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@code MAX_LOGIN_RETRIES}.
    */
   protected static final int    MAX_LOGIN_RETRIES = 3;
-  private static final   Logger LOG               = LoggerFactory.getLogger(AbstractFrontendController.class);
-  private static final   String UP_KEY            = "UP_KEY";
-  private static final   String UP_SEP            = "!";
+  private static final   Logger LOG                 = LoggerFactory.getLogger(AbstractFrontendController.class);
+  private static final   String UP_KEY              = "UP_KEY";
+  private static final   String UP_SEP              = "!";
+  private static final   String LANG_KEY            = "LANG_KEY";
   private final List<ModuleHistoryEntry>              backwardHistoryEntries;
   private final DefaultIconDescriptor                 controllerDescriptor;
   private final List<Map<String, Object>>             dialogContextStack;
@@ -1248,6 +1251,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       uph.setPassword(null);
       uph.setRememberMe(false);
     }
+    String savedLang = getClientPreference(LANG_KEY);
+    if (savedLang != null && !savedLang.isEmpty()) {
+      uph.setLanguage(savedLang);
+    } else {
+      uph.setLanguage(null);
+    }
     return uph;
   }
 
@@ -1614,7 +1623,20 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } else {
       removeClientPreference(UP_KEY);
     }
+    String loginLocale = uph.getLanguage();
+    if (loginLocale != null && !loginLocale.isEmpty()) {
+      putClientPreference(LANG_KEY, loginLocale);
+    } else {
+      removeClientPreference(LANG_KEY);
+    }
     uph.clear();
+    if (loginLocale != null) {
+      for (Principal principal : subject.getPrincipals()) {
+        if (principal instanceof UserPrincipal) {
+          ((UserPrincipal) principal).putCustomProperty(UserPrincipal.LANGUAGE_PROPERTY, loginLocale);
+        }
+      }
+    }
     getBackendController().loggedIn(subject);
     execute(getLoginAction(), getLoginActionContext());
     if (workspaces != null) {
