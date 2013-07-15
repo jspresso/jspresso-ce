@@ -25,7 +25,7 @@
 - Deprecated org.jspresso.framework.application.backend.action.persistence.hibernate.IQueryComponentRefiner has been
   removed in favor of org.jspresso.framework.application.backend.action.IQueryComponentRefiner
 
-- In your index.html, change the background values to #ffffff
+- In your index.html, change the background-color values (if any) to #ffffff
 
 - In your webapp/pom.xml, remove <scope>provided</scope> on the following dependency :
     <dependency>
@@ -48,7 +48,7 @@
 - In your startup/flex/client/pom.xml files, delete :
     <mergeResourceBundle>true</mergeResourceBundle>
   
-- All references to stylesheets sould be made relative to the mxml file. For example, change :
+- All references to stylesheets, if any, sould be made relative to the mxml file. For example, change :
     <mx:Style source="/org/jspresso/hrsample/theme.css" />
   to
     <mx:Style source="../resources/org/jspresso/hrsample/theme.css" />
@@ -92,7 +92,8 @@
 
 - Migrated to Spring 3.2
 
-- Check that all references to Spring hibernate3 package are removed from your project in java, spring xml and SJS.
+- Check that all references to Spring hibernate3 package are removed from your project in java,
+  spring xml and SJS. Do not change any reference to the hibernate3 plugin inside your pom.xml.
 
 - Migrated to Hibernate 4. HibernateTemplate based API has been removed. From now on, you must use
   the equivalent getHibernateSession(...) that leverages the Hibernate getCurrentSession() method.
