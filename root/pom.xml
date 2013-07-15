@@ -11,7 +11,7 @@
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
     
     <!-- Java version -->
-    <java.version>1.6</java.version>
+    <java.version>1.7</java.version>
     
     <!-- Jspresso dependencies versions -->
     <jspresso.version>3.7-SNAPSHOT</jspresso.version>

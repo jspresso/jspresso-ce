@@ -1,6 +1,8 @@
 3.7
 ===
 
+- Moved to Java 7. Source and target compilation versions moved from 1.6 to 1.7.
+
 - IQueryViewDescriptorFactory API has changed to satisfy RFE #944. The action contaxt, if any,
   is passed to the factory method.
 
