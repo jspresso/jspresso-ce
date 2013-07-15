@@ -430,4 +430,51 @@
       </list>
     </property>
   </bean>
+
+  <bean id="languagePropertyDescriptor"
+        class="org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor">
+    <property name="name" value="language" />
+    <property name="enumerationName" value="LANGUAGE"/>
+    <property name="mandatory" value="false"/>
+    <property name="valuesAndIconImageUrls">
+      <map>
+        <entry key="fr" value="classpath:org/jspresso/framework/application/images/i18n/fr.png"/>
+        <entry key="en" value="classpath:org/jspresso/framework/application/images/i18n/en.png"/>
+        <entry key="de" value="classpath:org/jspresso/framework/application/images/i18n/de.png"/>
+        <entry key="es" value="classpath:org/jspresso/framework/application/images/i18n/es.png"/>
+        <entry key="pt" value="classpath:org/jspresso/framework/application/images/i18n/pt.png"/>
+        <entry key="it" value="classpath:org/jspresso/framework/application/images/i18n/it.png"/>
+        <entry key="nl" value="classpath:org/jspresso/framework/application/images/i18n/nl.png"/>
+        <entry key="pl" value="classpath:org/jspresso/framework/application/images/i18n/pl.png"/>
+        <entry key="tr" value="classpath:org/jspresso/framework/application/images/i18n/tr.png"/>
+        <entry key="bg" value="classpath:org/jspresso/framework/application/images/i18n/bg.png"/>
+        <entry key="ru" value="classpath:org/jspresso/framework/application/images/i18n/ru.png"/>
+        <entry key="cs" value="classpath:org/jspresso/framework/application/images/i18n/cs.png"/>
+        <entry key="sk" value="classpath:org/jspresso/framework/application/images/i18n/sk.png"/>
+      </map>
+    </property>
+  </bean>
+  <bean id="loginModelDescriptor"
+        class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
+    <constructor-arg value="org.jspresso.framework.security.UsernamePasswordHandler" />
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="username" />
+          <property name="maxLength" value="64" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor">
+          <property name="name" value="password" />
+          <property name="maxLength" value="64" />
+        </bean>
+        <ref bean="languagePropertyDescriptor" />
+        <bean class="org.jspresso.framework.model.descriptor.basic.TimeZoneEnumerationPropertyDescriptor">
+          <property name="name" value="timeZoneId" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor">
+          <property name="name" value="rememberMe" />
+        </bean>
+      </list>
+    </property>
+  </bean>
 </beans>
