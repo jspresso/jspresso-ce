@@ -397,10 +397,7 @@
                   <property name="name" value="propertyName" />
                   <property name="maxLength" value="64" />
                 </bean>
-                <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-                  <property name="name" value="language" />
-                  <property name="maxLength" value="5" />
-                </bean>
+                <ref bean="languagePropertyDescriptor" />
                 <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
                   <property name="name" value="translatedValue" />
                   <property name="maxLength" value="512" />

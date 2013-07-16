@@ -62,12 +62,7 @@ public class AddComponentCollectionToMasterAction extends
   @SuppressWarnings("unchecked")
   @Override
   protected List<?> getAddedComponents(Map<String, Object> context) {
-    IComponentDescriptor<?> elementDescriptor = (IComponentDescriptor<?>) context
-        .get(ELEMENT_DESCRIPTOR);
-    if (elementDescriptor == null) {
-      elementDescriptor = ((ICollectionPropertyDescriptor<?>) getModelDescriptor(context))
-          .getReferencedDescriptor().getElementDescriptor();
-    }
+    IComponentDescriptor<?> elementDescriptor = getAddedElementDescriptor(context);
     IComponent newElement;
     if (elementDescriptor.isEntity()) {
       newElement = getEntityFactory(context).createEntityInstance(
@@ -78,5 +73,18 @@ public class AddComponentCollectionToMasterAction extends
               .getComponentContract());
     }
     return Collections.singletonList(newElement);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IComponentDescriptor<?> getAddedElementDescriptor(Map<String, Object> context) {
+    IComponentDescriptor<?> elementDescriptor = (IComponentDescriptor<?>) context
+        .get(ELEMENT_DESCRIPTOR);
+    if (elementDescriptor == null) {
+      elementDescriptor = super.getAddedElementDescriptor(context);
+    }
+    return elementDescriptor;
   }
 }

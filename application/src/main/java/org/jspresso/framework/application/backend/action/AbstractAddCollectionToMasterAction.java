@@ -27,6 +27,8 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.model.ModelPropertyConnector;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
@@ -76,8 +78,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
 
     List<?> newComponents = getAddedComponents(context);
     if (newComponents != null && newComponents.size() > 0) {
-      IComponentDescriptor<?> addedComponentDescriptor = getModelDescriptor(context).getCollectionDescriptor()
-          .getElementDescriptor();
+      IComponentDescriptor<?> addedComponentDescriptor = getAddedElementDescriptor(context);
       Class<?> newComponentContract = addedComponentDescriptor
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()
@@ -135,6 +136,25 @@ public abstract class AbstractAddCollectionToMasterAction extends
       setSelectedModels(newComponents, context);
     }
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Gets added element descriptor.
+   *
+   * @param context the context
+   * @return the added element descriptor
+   */
+  protected IComponentDescriptor<?> getAddedElementDescriptor(Map<String, Object> context) {
+    // Component type should be refined depending on concrete master. See property translations for instance.
+    // elementDescriptor = ((ICollectionPropertyDescriptor<?>) getModelDescriptor(context))
+    //   .getReferencedDescriptor().getElementDescriptor();
+    String collectionPropertyName = getModelDescriptor(context).getName();
+    IComponent master = getModelConnector(context).getModelProvider().getModel();
+    IComponentDescriptor<?> refinedMasterDescriptor = getEntityFactory(context).getComponentDescriptor(
+        master.getComponentContract());
+    IComponentDescriptor<?> elementDescriptor = ((ICollectionPropertyDescriptor<?>) refinedMasterDescriptor.getPropertyDescriptor(
+        collectionPropertyName)).getReferencedDescriptor().getElementDescriptor();
+    return elementDescriptor;
   }
 
   /**
