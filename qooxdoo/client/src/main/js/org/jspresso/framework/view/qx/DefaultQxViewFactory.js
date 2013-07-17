@@ -1367,6 +1367,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      *
      * @param {qx.ui.core.Widget} component
      * @param {org.jspresso.framework.gui.remote.RComponent} remoteComponent
+     * @param {Boolean} disableActionsWithField
      * @returns {qx.ui.core.Widget}
      * @protected
      */
