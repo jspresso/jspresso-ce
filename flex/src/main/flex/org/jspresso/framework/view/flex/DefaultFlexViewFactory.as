@@ -648,7 +648,7 @@ public class DefaultFlexViewFactory {
         || remoteComponent is RTimeField
         || remoteComponent is RComboBox
         || remoteComponent is RCheckBox) {
-      return decorateWithAsideActions(component, remoteComponent);
+      return decorateWithAsideActions(component, remoteComponent, false);
     } else {
       return decorateWithToolbars(component, remoteComponent);
     }
@@ -948,13 +948,14 @@ public class DefaultFlexViewFactory {
         });
       }
     }
-    var actionField:UIComponent = decorateWithAsideActions(textField, remoteActionField);
+    var actionField:UIComponent = decorateWithAsideActions(textField, remoteActionField, true);
     bindActionField(actionField, textField, remoteActionField.state,
                     (remoteActionField.actionLists[0] as RActionList).actions[0], remoteActionField.fieldEditable);
     return actionField;
   }
 
-  protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent):UIComponent {
+  protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent,
+                                              disableActionsWithField:Boolean):UIComponent {
     var decorated:UIComponent = component;
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
@@ -979,7 +980,7 @@ public class DefaultFlexViewFactory {
             b.width = b.height;
           });
           actionField.addChild(actionComponent);
-          if (remoteComponent.state) {
+          if (remoteComponent.state && disableActionsWithField) {
             BindingUtils.bindProperty(actionComponent, "enabled", remoteComponent.state, "writable");
           }
         }

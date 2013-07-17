@@ -242,7 +242,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           || remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField
           || remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox
           || remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
-        return this._decorateWithAsideActions(component, remoteComponent);
+        return this._decorateWithAsideActions(component, remoteComponent, false);
       } else {
         return this._decorateWithToolbars(component, remoteComponent);
       }
@@ -1298,7 +1298,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         textField = new qx.ui.form.TextField();
         this._sizeMaxComponentWidth(textField, remoteActionField);
       }
-      var actionField = this._decorateWithAsideActions(textField, remoteActionField);
+      var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
       var state = remoteActionField.getState();
       var modelController = new qx.data.controller.Object(state);
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
@@ -1370,7 +1370,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @returns {qx.ui.core.Widget}
      * @protected
      */
-    _decorateWithAsideActions: function(component, remoteComponent) {
+    _decorateWithAsideActions: function(component, remoteComponent, disableActionsWithField) {
       var decorated = component;
       if(remoteComponent.getActionLists()) {
         var actionField = new qx.ui.container.Composite();
@@ -1398,7 +1398,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             actionComponent.setAllowStretchY(false, false);
             actionComponent.setAlignY("middle");
             actionField.add(actionComponent);
-            if(modelController) {
+            if(modelController && disableActionsWithField) {
               modelController.addTarget(actionComponent, "enabled", "writable", false);
             }
           }
