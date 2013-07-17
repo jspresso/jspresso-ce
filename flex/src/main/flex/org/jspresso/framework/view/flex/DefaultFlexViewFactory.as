@@ -2916,14 +2916,15 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
     var blockNewLine:Function = function (event:TextEvent):void {
-      if (event.text == '\n' || event.text == '\r\n' || event.text == '\r') {
+      var text:String = event.text;
+      if (isNewline(text)) {
         event.preventDefault();
       }
     };
     textInput.addEventListener(TextEvent.TEXT_INPUT, blockNewLine);
 
     var trimLastLine:Function = function (evt:Event):void {
-      if (textInput.text) {
+      while (textInput.text && isNewline(textInput.text.substr(textInput.text.length-1))) {
         textInput.text = StringUtil.trim(textInput.text);
       }
     };
@@ -2949,6 +2950,10 @@ public class DefaultFlexViewFactory {
     textInput.addEventListener(FlexEvent.ENTER, updateModel);
     textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, updateModel);
     textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, updateModel);
+  }
+
+  protected function isNewline(text:String):Boolean {
+    return text == "\n" || text == "\r\n" || text == "\r";
   }
 
   protected function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
