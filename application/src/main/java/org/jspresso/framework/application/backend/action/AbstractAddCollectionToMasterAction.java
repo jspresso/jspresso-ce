@@ -145,15 +145,18 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * @return the added element descriptor
    */
   protected IComponentDescriptor<?> getAddedElementDescriptor(Map<String, Object> context) {
-    // Component type should be refined depending on concrete master. See property translations for instance.
-    // elementDescriptor = ((ICollectionPropertyDescriptor<?>) getModelDescriptor(context))
-    //   .getReferencedDescriptor().getElementDescriptor();
+    IComponentDescriptor<?> elementDescriptor;
     String collectionPropertyName = getModelDescriptor(context).getName();
-    IComponent master = getModelConnector(context).getModelProvider().getModel();
-    IComponentDescriptor<?> refinedMasterDescriptor = getEntityFactory(context).getComponentDescriptor(
-        master.getComponentContract());
-    IComponentDescriptor<?> elementDescriptor = ((ICollectionPropertyDescriptor<?>) refinedMasterDescriptor.getPropertyDescriptor(
-        collectionPropertyName)).getReferencedDescriptor().getElementDescriptor();
+    Object master = getModelConnector(context).getModelProvider().getModel();
+    if (master instanceof IComponent) {
+      // Component type should be refined depending on concrete master. See property translations for instance.
+      elementDescriptor = ((ICollectionPropertyDescriptor<?>) getEntityFactory(context).getComponentDescriptor(
+          ((IComponent) master).getComponentContract()).getPropertyDescriptor(collectionPropertyName))
+          .getReferencedDescriptor().getElementDescriptor();
+    } else {
+      elementDescriptor = ((ICollectionPropertyDescriptor<?>) getModelDescriptor(context)).getReferencedDescriptor()
+                                                                                          .getElementDescriptor();
+    }
     return elementDescriptor;
   }
 
