@@ -2900,6 +2900,7 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
     var blockNewLine:Function = function (event:TextEvent):void {
+      var text:String = event.text;
       if (isNewline(text)) {
         event.preventDefault();
       }
