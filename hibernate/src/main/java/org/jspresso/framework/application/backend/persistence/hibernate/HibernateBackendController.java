@@ -1206,4 +1206,15 @@ public class HibernateBackendController extends AbstractBackendController {
   public void setNoTxDataSource(DataSource noTxDataSource) {
     this.noTxDataSource = noTxDataSource;
   }
+
+  /**
+   * Flushes the current underlying hibernate session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void flush() {
+    getHibernateSession().flush();
+  }
+
 }
