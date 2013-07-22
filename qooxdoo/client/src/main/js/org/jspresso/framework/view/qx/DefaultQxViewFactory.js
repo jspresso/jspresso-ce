@@ -1226,7 +1226,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }, {
         converter: function (viewValue, model) {
-          if (viewValue != null && !remoteDateField.getTimezoneAware()) {
+          if (viewValue != null) {
             return org.jspresso.framework.util.format.DateUtils.fromDate(viewValue);
           }
           if (viewValue === undefined) {
@@ -1267,7 +1267,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
-      remoteTimeField.useDateDto(!remoteDateField.getTimezoneAware());
+      remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this._sizeMaxComponentWidth(dateTimeField, remoteDateField,
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT

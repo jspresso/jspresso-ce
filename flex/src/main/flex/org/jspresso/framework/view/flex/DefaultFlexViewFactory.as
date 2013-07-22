@@ -2000,11 +2000,7 @@ public class DefaultFlexViewFactory {
               selectedDate.setHours(currentAsDate.getHours(), currentAsDate.getMinutes(), currentAsDate.getSeconds(),
                                     currentAsDate.getMilliseconds());
             }
-            if (remoteDateField.timezoneAware) {
-              remoteState.value = selectedDate;
-            } else {
-              remoteState.value = DateUtils.fromDate(selectedDate);
-            }
+            remoteState.value = DateUtils.fromDate(selectedDate);
           } else {
             // rollback text update
             var ti:TextInput = (dateField.getChildAt(2) as TextInput);
@@ -2043,7 +2039,7 @@ public class DefaultFlexViewFactory {
     remoteTimeField.state = remoteDateField.state;
     remoteTimeField.toolTip = remoteDateField.toolTip;
     remoteTimeField.secondsAware = remoteDateField.secondsAware;
-    remoteTimeField.useDateDto(!remoteDateField.timezoneAware);
+    remoteTimeField.useDateDto(true);
 
     var timeField:TextInput = createComponent(remoteTimeField, false) as TextInput;
 

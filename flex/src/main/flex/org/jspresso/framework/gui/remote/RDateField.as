@@ -20,7 +20,6 @@ package org.jspresso.framework.gui.remote {
 public class RDateField extends RComponent {
 
   private var _type:String;
-  private var _timezoneAware:Boolean;
   private var _secondsAware:Boolean;
 
   public function RDateField() {
@@ -33,14 +32,6 @@ public class RDateField extends RComponent {
 
   public function get type():String {
     return _type;
-  }
-
-  public function get timezoneAware():Boolean {
-    return _timezoneAware;
-  }
-
-  public function set timezoneAware(value:Boolean):void {
-    _timezoneAware = value;
   }
 
   public function get secondsAware():Boolean {

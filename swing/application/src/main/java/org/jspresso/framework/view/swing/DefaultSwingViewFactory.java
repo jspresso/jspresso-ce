@@ -1020,8 +1020,10 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
+    TimeZone timeZone = propertyDescriptor.isTimeZoneAware() ?
+        actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
     DateFormat format = createDateFormat(propertyDescriptor,
-        actionHandler.getClientTimeZone(), actionHandler, locale);
+        timeZone, actionHandler, locale);
     IFormatter<?, String> formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
@@ -2206,9 +2208,11 @@ public class DefaultSwingViewFactory extends
       cellRenderer = createBooleanTableCellRenderer(
           (IBooleanPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
+      TimeZone timeZone = ((IDatePropertyDescriptor) propertyDescriptor).isTimeZoneAware() ?
+          actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
       cellRenderer = createDateTableCellRenderer(
           (IDatePropertyDescriptor) propertyDescriptor,
-          actionHandler.getClientTimeZone(), actionHandler, locale);
+          timeZone, actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       cellRenderer = createTimeTableCellRenderer(
           (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);

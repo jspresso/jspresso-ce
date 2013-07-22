@@ -92,4 +92,11 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
    * @return the client timeZone.
    */
   TimeZone getClientTimeZone();
+
+  /**
+   * Gets the reference timeZone.
+   *
+   * @return the reference timeZone.
+   */
+  TimeZone getReferenceTimeZone();
 }

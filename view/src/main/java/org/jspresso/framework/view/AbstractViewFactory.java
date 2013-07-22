@@ -1529,9 +1529,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           + getTimePattern(propertyDescriptor, translationProvider, locale),
           locale);
     }
-    if (propertyDescriptor.isTimeZoneAware()) {
-      format.setTimeZone(timeZone);
-    }
+    format.setTimeZone(timeZone);
     return format;
   }
 
@@ -1795,8 +1793,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
+      TimeZone timeZone = ((IDatePropertyDescriptor) propertyDescriptor).isTimeZoneAware() ?
+          actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
-          actionHandler.getClientTimeZone(), actionHandler, locale);
+          timeZone, actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
           actionHandler, locale);

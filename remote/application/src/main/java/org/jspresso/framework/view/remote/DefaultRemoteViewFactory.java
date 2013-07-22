@@ -641,12 +641,14 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDatePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
+    final IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
+    final TimeZone timeZone = propertyDescriptor.isTimeZoneAware() ?
+        actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
     IFormatter<?, String> formatter = createDateFormatter(propertyDescriptor,
-        actionHandler.getClientTimeZone(), actionHandler, locale);
+        timeZone, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -664,90 +666,52 @@ public class DefaultRemoteViewFactory extends
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
-        final TimeZone serverTz = TimeZone.getDefault();
-        if (propertyDescriptor.isTimeZoneAware()) {
-          ((RemoteValueConnector) connector)
-              .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+        ((RemoteValueConnector) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
-                @Override
-                public Object getValueForState(RemoteValueState state, Object originalValue) {
-                  return originalValue;
-                }
+          @SuppressWarnings("MagicConstant")
+          @Override
+          public Object getValueFromState(RemoteValueState state, Object originalValue) {
+            // We have to use a Date DTO to avoid any
+            // transformation by the network layer
+            Calendar fieldCalendar = Calendar.getInstance(timeZone);
+            if (originalValue instanceof DateDto) {
+              DateDto stateDate = (DateDto) originalValue;
+              fieldCalendar.set(stateDate.getYear(), stateDate.getMonth(), stateDate.getDate(), stateDate.getHour(),
+                  stateDate.getMinute(), stateDate.getSecond());
+              fieldCalendar.set(Calendar.MILLISECOND, 0);
+              if (fieldCalendar.getTime().getTime() >= 0 && fieldCalendar.getTime().getTime() < 24 * 3600 * 1000) {
+                // This is a default date. Set it today.
+                Calendar today = Calendar.getInstance(timeZone);
+                fieldCalendar.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
+              }
+              Date connectorDate = fieldCalendar.getTime();
+              return connectorDate;
+            }
+            return originalValue;
+          }
 
-                @SuppressWarnings("MagicConstant")
-                @Override
-                public Object getValueFromState(RemoteValueState state, Object originalValue) {
-                  Calendar serverCalendar = Calendar.getInstance(serverTz);
-                  if (originalValue instanceof Date) {
-                    serverCalendar.setTime((Date) originalValue);
-                    if (serverCalendar.getTime().getTime() < 24 * 3600 * 1000) {
-                      // This is a default date. Set it today.
-                      Calendar today = Calendar.getInstance(serverTz);
-                      serverCalendar.set(today.get(Calendar.YEAR),
-                          today.get(Calendar.MONTH), today.get(Calendar.DATE));
-                    }
-                    Date connectorDate = serverCalendar.getTime();
-                    return connectorDate;
-                  }
-                  return originalValue;
-                }
+          @Override
+          public Object getValueForState(RemoteValueState state, Object originalValue) {
+            if (originalValue instanceof Date) {
+              Date connectorDate = (Date) originalValue;
+              Calendar fieldCalendar = Calendar.getInstance(timeZone);
+              fieldCalendar.setTime(connectorDate);
 
-              });
-        } else {
-          // In that case, we have to use a Date DTO to avoid any
-          // transformation by the network layer
-          ((RemoteValueConnector) connector)
-              .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
-
-                @SuppressWarnings("MagicConstant")
-                @Override
-                public Object getValueFromState(RemoteValueState state, Object originalValue) {
-                  Calendar serverCalendar = Calendar.getInstance(serverTz);
-                  if (originalValue instanceof DateDto) {
-                    DateDto stateDate = (DateDto) originalValue;
-                    serverCalendar.set(stateDate.getYear(),
-                        stateDate.getMonth(), stateDate.getDate(),
-                        stateDate.getHour(), stateDate.getMinute(),
-                        stateDate.getSecond());
-                    serverCalendar.set(Calendar.MILLISECOND, 0);
-                    if (serverCalendar.getTime().getTime() >= 0
-                        && serverCalendar.getTime().getTime() < 24 * 3600 * 1000) {
-                      // This is a default date. Set it today.
-                      Calendar today = Calendar.getInstance(serverTz);
-                      serverCalendar.set(today.get(Calendar.YEAR),
-                          today.get(Calendar.MONTH), today.get(Calendar.DATE));
-                    }
-                    Date connectorDate = serverCalendar.getTime();
-                    return connectorDate;
-                  }
-                  return originalValue;
-                }
-
-                @Override
-                public Object getValueForState(RemoteValueState state, Object originalValue) {
-                  if (originalValue instanceof Date) {
-                    Date connectorDate = (Date) originalValue;
-                    Calendar serverCalendar = Calendar.getInstance(serverTz);
-                    serverCalendar.setTime(connectorDate);
-
-                    DateDto stateDate = new DateDto();
-                    stateDate.setYear(serverCalendar.get(Calendar.YEAR));
-                    stateDate.setMonth(serverCalendar.get(Calendar.MONTH));
-                    stateDate.setDate(serverCalendar.get(Calendar.DATE));
-                    stateDate.setHour(serverCalendar.get(Calendar.HOUR_OF_DAY));
-                    stateDate.setMinute(serverCalendar.get(Calendar.MINUTE));
-                    stateDate.setSecond(serverCalendar.get(Calendar.SECOND));
-                    return stateDate;
-                  }
-                  return originalValue;
-                }
-              });
-        }
+              DateDto stateDate = new DateDto();
+              stateDate.setYear(fieldCalendar.get(Calendar.YEAR));
+              stateDate.setMonth(fieldCalendar.get(Calendar.MONTH));
+              stateDate.setDate(fieldCalendar.get(Calendar.DATE));
+              stateDate.setHour(fieldCalendar.get(Calendar.HOUR_OF_DAY));
+              stateDate.setMinute(fieldCalendar.get(Calendar.MINUTE));
+              stateDate.setSecond(fieldCalendar.get(Calendar.SECOND));
+              return stateDate;
+            }
+            return originalValue;
+          }
+        });
       }
       viewComponent = createRDateField(propertyViewDescriptor);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
-      ((RDateField) viewComponent).setTimezoneAware(propertyDescriptor
-          .isTimeZoneAware());
       ((RDateField) viewComponent).setSecondsAware(propertyDescriptor
           .isSecondsAware());
     }
@@ -2334,7 +2298,7 @@ public class DefaultRemoteViewFactory extends
       } else {
         connector = getConnectorFactory().createValueConnector(
             propertyDescriptor.getName());
-        final TimeZone serverTz = TimeZone.getDefault();
+        final TimeZone serverTz = actionHandler.getReferenceTimeZone();
         ((RemoteValueConnector) connector)
             .setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 

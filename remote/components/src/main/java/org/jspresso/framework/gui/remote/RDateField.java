@@ -29,7 +29,6 @@ public class RDateField extends RComponent {
   private static final long serialVersionUID = 8506924046869058069L;
 
   private String            type;
-  private boolean           timezoneAware;
   private boolean           secondsAware;
 
   /**
@@ -67,25 +66,6 @@ public class RDateField extends RComponent {
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /**
-   * Gets the timezoneAware.
-   * 
-   * @return the timezoneAware.
-   */
-  public boolean isTimezoneAware() {
-    return timezoneAware;
-  }
-
-  /**
-   * Sets the timezoneAware.
-   * 
-   * @param timezoneAware
-   *          the timezoneAware to set.
-   */
-  public void setTimezoneAware(boolean timezoneAware) {
-    this.timezoneAware = timezoneAware;
   }
 
   /**

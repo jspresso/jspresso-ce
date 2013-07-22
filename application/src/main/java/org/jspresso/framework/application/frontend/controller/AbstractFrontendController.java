@@ -766,6 +766,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public TimeZone getReferenceTimeZone() {
+    if (getBackendController() != null) {
+      return getBackendController().getReferenceTimeZone();
+    }
+    return TimeZone.getDefault();
+  }
+
+  /**
    * Gets the mvcBinder.
    * 
    * @return the mvcBinder.

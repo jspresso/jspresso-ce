@@ -145,6 +145,7 @@ public abstract class AbstractBackendController extends AbstractController
   private       ITranslationProvider                   translationProvider;
   private       ISecurityPlugin                        customSecurityPlugin;
   private       ITranslationPlugin                     customTranslationPlugin;
+  private       TimeZone                               referenceTimeZone;
   private       TimeZone                               clientTimeZone;
   private       boolean                                throwExceptionOnBadUsage;
   private       IBackendControllerFactory              slaveControllerFactory;
@@ -161,8 +162,7 @@ public abstract class AbstractBackendController extends AbstractController
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
     entityRegistry = createEntityRegistry("sessionEntityRegistry");
-    entitiesExcludedFromSessionSanityChecks = new ReferenceMap(
-        AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
+    entitiesExcludedFromSessionSanityChecks = new ReferenceMap(AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchronous Actions");
     asyncExecutors = new LinkedHashSet<AsyncActionExecutor>();
@@ -186,8 +186,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public final void beginUnitOfWork() {
     if (isUnitOfWorkActive()) {
-      throw new BackendException(
-          "Cannot begin a new unit of work. Another one is already active.");
+      throw new BackendException("Cannot begin a new unit of work. Another one is already active.");
     }
     doBeginUnitOfWork();
   }
@@ -221,10 +220,8 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public final <E extends IEntity> E cloneInUnitOfWork(E entity,
-      boolean allowOuterScopeUpdate) {
-    return cloneInUnitOfWork(Collections.singletonList(entity),
-        allowOuterScopeUpdate).get(0);
+  public final <E extends IEntity> E cloneInUnitOfWork(E entity, boolean allowOuterScopeUpdate) {
+    return cloneInUnitOfWork(Collections.singletonList(entity), allowOuterScopeUpdate).get(0);
   }
 
   /**
@@ -239,27 +236,20 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities,
-      boolean allowOuterScopeUpdate) {
+  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities, boolean allowOuterScopeUpdate) {
     if (!isUnitOfWorkActive()) {
-      throw new BackendException(
-          "Cannot use a unit of work that has not begun.");
+      throw new BackendException("Cannot use a unit of work that has not begun.");
     }
     List<E> uowEntities = new ArrayList<E>();
-    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork
-        .getRegisteredEntities();
+    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
     IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork");
-    for (Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> contractStore : uowExistingEntities
-        .entrySet()) {
-      for (Entry<Serializable, IEntity> entityEntry : contractStore.getValue()
-          .entrySet()) {
-        alreadyCloned.register(contractStore.getKey(), entityEntry.getKey(),
-            entityEntry.getValue());
+    for (Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> contractStore : uowExistingEntities.entrySet()) {
+      for (Entry<Serializable, IEntity> entityEntry : contractStore.getValue().entrySet()) {
+        alreadyCloned.register(contractStore.getKey(), entityEntry.getKey(), entityEntry.getValue());
       }
     }
     for (E entity : entities) {
-      uowEntities.add(cloneInUnitOfWork(entity, allowOuterScopeUpdate,
-          alreadyCloned));
+      uowEntities.add(cloneInUnitOfWork(entity, allowOuterScopeUpdate, alreadyCloned));
     }
     return uowEntities;
   }
@@ -272,8 +262,7 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public final void commitUnitOfWork() {
     if (!isUnitOfWorkActive()) {
-      throw new BackendException(
-          "Cannot commit a unit of work that has not begun.");
+      throw new BackendException("Cannot commit a unit of work that has not begun.");
     }
     doCommitUnitOfWork();
   }
@@ -285,8 +274,7 @@ public abstract class AbstractBackendController extends AbstractController
     try {
       committingUow = true;
       if (unitOfWork.getUpdatedEntities() != null) {
-        merge(new ArrayList<IEntity>(unitOfWork.getUpdatedEntities()),
-            EMergeMode.MERGE_CLEAN_LAZY);
+        merge(new ArrayList<IEntity>(unitOfWork.getUpdatedEntities()), EMergeMode.MERGE_CLEAN_LAZY);
       }
     } finally {
       committingUow = false;
@@ -298,10 +286,8 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   @Override
-  public IValueConnector createModelConnector(String id,
-      IModelDescriptor modelDescriptor) {
-    return modelConnectorFactory
-        .createModelConnector(id, modelDescriptor, this);
+  public IValueConnector createModelConnector(String id, IModelDescriptor modelDescriptor) {
+    return modelConnectorFactory.createModelConnector(id, modelDescriptor, this);
   }
 
   /**
@@ -317,8 +303,8 @@ public abstract class AbstractBackendController extends AbstractController
     }
     if (!action.isBackend()) {
       throw new ActionException(
-          "The backend controller is executing a frontend action. Please check the action chaining : "
-              + action.toString());
+          "The backend controller is executing a frontend action. Please check the action chaining : " + action
+              .toString());
     }
     // Should be handled before getting there.
     // checkAccess(action);
@@ -352,11 +338,10 @@ public abstract class AbstractBackendController extends AbstractController
    *     the context
    * @return the slave thread executing the action.
    */
-  public AsyncActionExecutor executeAsynchronously(IAction action,
-      Map<String, Object> context) {
+  public AsyncActionExecutor executeAsynchronously(IAction action, Map<String, Object> context) {
     AbstractBackendController slaveBackendController = createBackendController();
-    AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action,
-        context, asyncActionsThreadGroup, slaveBackendController);
+    AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action, context, asyncActionsThreadGroup,
+        slaveBackendController);
     asyncExecutors.add(slaveExecutor);
     Set<AsyncActionExecutor> oldRunningExecutors = new LinkedHashSet<AsyncActionExecutor>(
         getRunningExecutors());
@@ -988,6 +973,19 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public void setClientTimeZone(TimeZone clientTimeZone) {
     this.clientTimeZone = clientTimeZone;
+  }
+
+  /**
+   * Sets reference time zone id.
+   *
+   * @param referenceTimeZoneId the reference time zone id
+   */
+  public void setReferenceTimeZoneId(String referenceTimeZoneId) {
+    if(referenceTimeZoneId != null) {
+      this.referenceTimeZone = TimeZone.getTimeZone(referenceTimeZoneId);
+    } else {
+      this.referenceTimeZone = null;
+    }
   }
 
   /**
@@ -2119,9 +2117,18 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Gets the clientTimezone.
-   *
-   * @return the clientTimezone.
+   * {@inheritDoc}
+   */
+  @Override
+  public TimeZone getReferenceTimeZone() {
+    if (referenceTimeZone != null) {
+      return referenceTimeZone;
+    }
+    return TimeZone.getDefault();
+  }
+
+  /**
+   * {@inheritDoc}
    */
   @Override
   public TimeZone getClientTimeZone() {
