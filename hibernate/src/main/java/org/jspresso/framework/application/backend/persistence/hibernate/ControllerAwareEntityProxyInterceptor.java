@@ -19,6 +19,8 @@
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
+import java.lang.Object;
+import java.lang.String;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,8 +33,11 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.transaction.JTATransaction;
 import org.hibernate.type.Type;
+
+import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -186,30 +191,52 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames,
       @SuppressWarnings("unused") Type[] types) {
-    boolean updated = false;
-    if (!getBackendController().isUnitOfWorkActive()) {
-      if (entity instanceof IEntity
-          && getBackendController().getRegisteredEntity(((IEntity) entity).getComponentContract(), id) == null) {
+    boolean updated = super.onLoad(entity, id, state, propertyNames, types);
+    if (entity instanceof IEntity) {
+      IBackendController backendController = getBackendController();
+      if (backendController.isUnitOfWorkActive()) {
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
-          if (state[i] != null) {
-            String propertyName = propertyNames[i];
-            if (!isHibernateInternal(propertyName)) {
-              if (state[i] instanceof IEntity) {
-                IEntity refEntity = (IEntity) state[i];
-                IEntity mergedEntity = getBackendController().getRegisteredEntity(
-                    HibernateHelper.getComponentContract(refEntity), refEntity.getId());
-                if (mergedEntity != null && mergedEntity != refEntity) {
-                  state[i] = mergedEntity;
-                  updated = true;
-                }
-              }
-              properties.put(propertyName, state[i]);
-            }
+          String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
+          if (!isHibernateInternal(propertyName)) {
+            properties.put(propertyName, state[i]);
           }
         }
         ((IEntity) entity).straightSetProperties(properties);
-        getBackendController().registerEntity((IEntity) entity, false);
+        // So that dirty tracking is started on the entity.
+        // See bug #1018
+        try {
+          IEntityUnitOfWork uow = (IEntityUnitOfWork) ReflectHelper.getPrivateFieldValue(AbstractBackendController.class, "unitOfWork",
+              backendController);
+          uow.register((IEntity)entity, new HashMap<String, Object>());
+        } catch (Exception ex) {
+          // ignored
+        }
+      } else {
+        if (backendController.getRegisteredEntity(
+            ((IEntity) entity).getComponentContract(), id) == null) {
+          Map<String, Object> properties = new HashMap<String, Object>();
+          for (int i = 0; i < propertyNames.length; i++) {
+            if (state[i] != null) {
+              String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
+              if (!isHibernateInternal(propertyName)) {
+                if (state[i] instanceof IEntity) {
+                  IEntity refEntity = (IEntity) state[i];
+                  IEntity mergedEntity = backendController.getRegisteredEntity(
+                      HibernateHelper.getComponentContract(refEntity),
+                      refEntity.getId());
+                  if (mergedEntity != null && mergedEntity != refEntity) {
+                    state[i] = mergedEntity;
+                    updated = true;
+                  }
+                }
+                properties.put(propertyName, state[i]);
+              }
+            }
+          }
+          ((IEntity) entity).straightSetProperties(properties);
+          backendController.registerEntity((IEntity) entity, false);
+        }
       }
     }
     return updated;
