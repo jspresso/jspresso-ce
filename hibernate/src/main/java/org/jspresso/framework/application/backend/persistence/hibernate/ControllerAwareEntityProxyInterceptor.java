@@ -26,6 +26,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
@@ -94,6 +95,9 @@ public class ControllerAwareEntityProxyInterceptor extends
         if (dirtyProperties.containsKey(propertyName)) {
           indices[n] = i;
           n++;
+          if (currentState[i] instanceof PersistentCollection) {
+            ((PersistentCollection) currentState[i]).dirty();
+          }
         }
       }
       int[] shrinkedArray = new int[n];
