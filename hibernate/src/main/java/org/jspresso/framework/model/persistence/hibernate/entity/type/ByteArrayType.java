@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.usertype.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ import org.jspresso.framework.util.uid.ByteArray;
 public class ByteArrayType implements UserType {
 
 
-  private static final Logger LOG               = LoggerFactory.getLogger(BasicBinder.class);
+  private static final Logger LOG = LoggerFactory.getLogger("org.hibernate.type");
 
   /**
    * {@inheritDoc}
