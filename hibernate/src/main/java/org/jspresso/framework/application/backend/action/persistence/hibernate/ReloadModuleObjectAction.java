@@ -59,7 +59,9 @@ public class ReloadModuleObjectAction extends ReloadAction {
         entitiesToReload.add((IEntity) entity);
       }
     } else if (module instanceof BeanModule) {
-      entitiesToReload.add((IEntity) ((BeanModule) module).getModuleObject());
+      if(((BeanModule) module).getModuleObject() != null) {
+        entitiesToReload.add((IEntity) ((BeanModule) module).getModuleObject());
+      }
     }
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {
