@@ -55,11 +55,16 @@ public class ReloadModuleObjectAction extends ReloadAction {
       List<IEntity> entitiesToReload) {
     if (module instanceof BeanCollectionModule
         && ((BeanCollectionModule) module).getModuleObjects() != null) {
-      for (Object entity : ((BeanCollectionModule) module).getModuleObjects()) {
-        entitiesToReload.add((IEntity) entity);
+      for (Object moduleObject : ((BeanCollectionModule) module).getModuleObjects()) {
+        if (moduleObject instanceof IEntity) {
+          entitiesToReload.add((IEntity) moduleObject);
+        }
       }
     } else if (module instanceof BeanModule) {
-      entitiesToReload.add((IEntity) ((BeanModule) module).getModuleObject());
+      Object moduleObject = ((BeanModule) module).getModuleObject();
+      if (moduleObject instanceof IEntity) {
+        entitiesToReload.add((IEntity) moduleObject);
+      }
     }
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {
