@@ -26,6 +26,8 @@ import java.sql.Types;
 
 import org.hibernate.usertype.UserType;
 import org.jspresso.framework.util.uid.ByteArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A user type to be able to use byte arrays as entity identifiers.
@@ -34,6 +36,8 @@ import org.jspresso.framework.util.uid.ByteArray;
  * @author Vincent Vandenschrick
  */
 public class ByteArrayType implements UserType {
+
+  private static final Logger LOG = LoggerFactory.getLogger("org.hibernate.type");
 
   /**
    * {@inheritDoc}
@@ -99,9 +103,16 @@ public class ByteArrayType implements UserType {
       throws SQLException {
     byte[] bytes = rs.getBytes(names[0]);
     if (rs.wasNull()) {
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("Found [null] as column [{0}]", names);
+      }
       return null;
     }
-    return new ByteArray(bytes);
+    ByteArray value = new ByteArray(bytes);
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("Found [{}] as column [{0}]", value, names);
+    }
+    return value;
   }
 
   /**
@@ -116,8 +127,14 @@ public class ByteArrayType implements UserType {
   public void nullSafeSet(PreparedStatement st, Object value, int index)
       throws SQLException {
     if (value == null) {
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("binding parameter [{}] - <null>", index);
+      }
       st.setNull(index, Types.VARBINARY);
     } else {
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("binding parameter [{}] - {}", index, value);
+      }
       st.setBytes(index, ((ByteArray) value).getBytes());
     }
   }
