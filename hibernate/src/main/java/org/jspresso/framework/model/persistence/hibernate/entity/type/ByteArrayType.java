@@ -25,7 +25,11 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.usertype.UserType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.util.uid.ByteArray;
 
 /**
@@ -36,14 +40,15 @@ import org.jspresso.framework.util.uid.ByteArray;
  */
 public class ByteArrayType implements UserType {
 
+
+  private static final Logger LOG               = LoggerFactory.getLogger(BasicBinder.class);
+
   /**
    * {@inheritDoc}
    */
   @Override
   public int[] sqlTypes() {
-    return new int[] {
-      Types.VARBINARY
-    };
+    return new int[]{Types.VARBINARY};
   }
 
   /**
@@ -92,13 +97,20 @@ public class ByteArrayType implements UserType {
    * {@inheritDoc}
    */
   @Override
-  public Object nullSafeGet(ResultSet rs, String[] names,
-      SessionImplementor session, Object owner) throws SQLException {
+  public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner)
+      throws SQLException {
     byte[] bytes = rs.getBytes(names[0]);
     if (rs.wasNull()) {
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("Found [null] as column [{0}]", names);
+      }
       return null;
     }
-    return new ByteArray(bytes);
+    ByteArray value = new ByteArray(bytes);
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("Found [{}] as column [{0}]", value, names);
+    }
+    return value;
   }
 
   /**
@@ -107,11 +119,17 @@ public class ByteArrayType implements UserType {
    * {@inheritDoc}
    */
   @Override
-  public void nullSafeSet(PreparedStatement st, Object value, int index,
-      SessionImplementor session) throws SQLException {
+  public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session)
+      throws SQLException {
     if (value == null) {
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("binding parameter [{}] - <null>", index);
+      }
       st.setNull(index, Types.VARBINARY);
     } else {
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("binding parameter [{}] - {}", index, value);
+      }
       st.setBytes(index, ((ByteArray) value).getBytes());
     }
   }
