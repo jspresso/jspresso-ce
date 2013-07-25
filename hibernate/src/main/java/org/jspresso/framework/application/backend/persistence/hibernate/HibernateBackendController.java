@@ -786,7 +786,14 @@ public class HibernateBackendController extends AbstractBackendController {
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing, so force
       // to null.
-      res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult, maxResults, null));
+
+
+      // This is useless to clone in UOW now that UOW regsitration is done
+      // in onLoad interceptor
+      // res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
+      // maxResults, null));
+
+      res = findByCriteria(criteria, firstResult, maxResults, null);
     } else {
       // merge mode is passed for merge to occur inside the transaction.
       res = findByCriteria(criteria, firstResult, maxResults, mergeMode);

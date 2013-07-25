@@ -122,7 +122,7 @@ public class ControllerAwareComponentInvocationHandler extends BasicComponentInv
     getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyName);
     Object reference = straightGetProperty(proxy, propertyName);
     if (reference instanceof IPropertyChangeCapable) {
-      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference, propertyName);
+      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) reference, propertyName, true);
     }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }

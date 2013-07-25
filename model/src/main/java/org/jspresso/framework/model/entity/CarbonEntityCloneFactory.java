@@ -64,6 +64,9 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
 
   private void carbonCopyComponent(IComponent componentToClone,
       IComponent clonedComponent, IEntityFactory entityFactory) {
+    if (componentToClone == clonedComponent) {
+      return;
+    }
     IComponentDescriptor<?> componentDescriptor = entityFactory
         .getComponentDescriptor(componentToClone.getComponentContract());
 
