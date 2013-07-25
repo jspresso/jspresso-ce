@@ -713,7 +713,11 @@ public abstract class AbstractComponentInvocationHandler implements
       referenceTrackers.put(propertyName, newTracker);
       initializeInlineTrackerIfNeeded(
           (IPropertyChangeCapable) newPropertyValue, propertyName,
-          !ObjectUtils.equals(oldPropertyValue, newPropertyValue));
+          // To avoid breaking lazy initialization of
+          // oldPropertyValue
+          !isInitialized(oldPropertyValue)
+          || (isInitialized(newPropertyValue) && !ObjectUtils.equals(
+          oldPropertyValue, newPropertyValue)));
     } else if (oldTracker != null) {
       if (oldPropertyValue instanceof IComponent
           && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
