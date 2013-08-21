@@ -385,7 +385,7 @@
   <bean id="componentTranslationsDescriptor"
         class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
     <property name="name" value="propertyTranslations" />
-    <property name="sqlName" value="T" />
+    <property name="sqlName" value="I18N" />
     <property name="referencedDescriptor">
       <bean class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor">
         <property name="elementDescriptor">
