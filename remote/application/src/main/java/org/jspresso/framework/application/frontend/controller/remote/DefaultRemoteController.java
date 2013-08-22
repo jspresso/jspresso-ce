@@ -599,7 +599,14 @@ public class DefaultRemoteController extends
     initCommand.setWorkspaceNames(var.toArray(new String[var.size()]));
     initCommand
         .setWorkspaceActions(createRActionList(createWorkspaceActionList()));
-    initCommand.setActions(createRActionLists(getActionMap()));
+    if (getActionMap() != null && isAccessGranted(getActionMap())) {
+      try {
+        pushToSecurityContext(getActionMap());
+        initCommand.setActions(createRActionLists(getActionMap()));
+      } finally {
+        restoreLastSecurityContextSnapshot();
+      }
+    }
     initCommand
         .setSecondaryActions(createRActionLists(getSecondaryActionMap()));
     initCommand.setHelpActions(createRActionLists(getHelpActions()));
@@ -917,28 +924,36 @@ public class DefaultRemoteController extends
   }
 
   private RActionList createRActionList(ActionList actionList) {
-    RActionList rActionList = new RActionList(guidGenerator.generateGUID());
-    rActionList.setName(actionList.getI18nName(this, getLocale()));
-    rActionList
-        .setDescription(actionList.getI18nDescription(this, getLocale()));
-    rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(),
-        getIconFactory().getTinyIconSize()));
+    if (isAccessGranted(actionList)) {
+      try {
+        pushToSecurityContext(actionList);
+        RActionList rActionList = new RActionList(guidGenerator.generateGUID());
+        rActionList.setName(actionList.getI18nName(this, getLocale()));
+        rActionList
+            .setDescription(actionList.getI18nDescription(this, getLocale()));
+        rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(),
+            getIconFactory().getTinyIconSize()));
 
-    List<RAction> actions = new ArrayList<RAction>();
-    for (IDisplayableAction action : actionList.getActions()) {
-      if (isAccessGranted(action)) {
-        try {
-          pushToSecurityContext(action);
-          actions.add(getViewFactory().getActionFactory().createAction(action,
-              this, null, getLocale()));
-        } finally {
-          restoreLastSecurityContextSnapshot();
+        List<RAction> actions = new ArrayList<RAction>();
+        for (IDisplayableAction action : actionList.getActions()) {
+          if (isAccessGranted(action)) {
+            try {
+              pushToSecurityContext(action);
+              actions.add(getViewFactory().getActionFactory().createAction(action,
+                  this, null, getLocale()));
+            } finally {
+              restoreLastSecurityContextSnapshot();
+            }
+          }
         }
+        rActionList.setActions(actions.toArray(new RAction[actions.size()]));
+        rActionList.setCollapsable(actionList.isCollapsable());
+        return rActionList;
+      } finally {
+        restoreLastSecurityContextSnapshot();
       }
     }
-    rActionList.setActions(actions.toArray(new RAction[actions.size()]));
-    rActionList.setCollapsable(actionList.isCollapsable());
-    return rActionList;
+    return null;
   }
 
   private RActionList[] createRActionLists(ActionMap actionMap) {
@@ -951,7 +966,10 @@ public class DefaultRemoteController extends
             if (isAccessGranted(actionList)) {
               try {
                 pushToSecurityContext(actionList);
-                actionLists.add(createRActionList(actionList));
+                RActionList rActionList = createRActionList(actionList);
+                if(rActionList != null) {
+                  actionLists.add(rActionList);
+                }
               } finally {
                 restoreLastSecurityContextSnapshot();
               }
