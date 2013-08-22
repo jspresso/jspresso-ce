@@ -356,7 +356,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if !propertyDescriptor.computed>
    * @hibernate.${hibernateCollectionType}
     <#if !elementIsEntity>
-   *           table = "${compSqlName+"_"+propSqlName}"
+   *           table = "${compSqlName+"_"+eltSqlName}"
     </#if>
     <#if propertyDescriptor.fetchType??>
       <#if propertyDescriptor.fetchType.toString() = "JOIN">

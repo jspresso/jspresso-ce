@@ -1165,7 +1165,8 @@ public abstract class AbstractComponentDescriptor<E> extends
         if (isTranslatable()) {
           for (IPropertyDescriptor translatablePropertyDescriptor : getPropertyDescriptors()) {
             if (translatablePropertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor)
-                translatablePropertyDescriptor).isTranslatable()) {
+                translatablePropertyDescriptor).isTranslatable()
+                && !translatablePropertyDescriptor.getName().endsWith(NLS_SUFFIX)) {
               completeWithComputedNlsDescriptors(translatablePropertyDescriptor);
             }
           }
@@ -1202,7 +1203,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     nlsDescriptor.setComputed(true);
     if (!isPurelyAbstract()) {
       nlsDescriptor.setSqlName(
-          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" + getComponentTranslationsDescriptorTemplate().getName() +
+          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" + ((AbstractComponentDescriptor<?>)
+              getComponentTranslationsDescriptorTemplate()
+              .getCollectionDescriptor().getElementDescriptor()).getSqlName() +
               " T WHERE T." +
               getComponentTranslationsDescriptorTemplate().getSqlName() +
               "_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
