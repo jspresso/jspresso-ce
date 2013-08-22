@@ -41,6 +41,13 @@ public class BasicStringPropertyDescriptor extends
   private Boolean translatable;
 
   /**
+   * Instantiates a new Basic string property descriptor.
+   */
+  public BasicStringPropertyDescriptor() {
+    setMaxLength(256);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

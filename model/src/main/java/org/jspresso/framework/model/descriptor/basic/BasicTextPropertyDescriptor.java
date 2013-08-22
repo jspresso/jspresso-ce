@@ -40,6 +40,13 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   private boolean                   queryMultiline = false;
 
   /**
+   * Instantiates a new Basic text property descriptor.
+   */
+  public BasicTextPropertyDescriptor() {
+    setMaxLength(8192);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
