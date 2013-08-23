@@ -96,4 +96,11 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    * @return the horizontal alignment used for displaying the property.
    */
   EHorizontalAlignment getHorizontalAlignment();
+
+  /**
+   * Gets label horizontal position.
+   *
+   * @return the label horizontal position
+   */
+  EHorizontalPosition getLabelHorizontalPosition();
 }

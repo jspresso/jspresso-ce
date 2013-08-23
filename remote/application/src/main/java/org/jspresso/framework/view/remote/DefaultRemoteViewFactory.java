@@ -142,6 +142,7 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
@@ -511,6 +512,7 @@ public class DefaultRemoteViewFactory extends
     List<Integer> elementWidths = new ArrayList<Integer>();
     List<RComponent> elements = new ArrayList<RComponent>();
     List<RComponent> elementLabels = new ArrayList<RComponent>();
+    List<String> labelHorizontalPositions = new ArrayList<String>();
     List<IView<RComponent>> propertyViews = new ArrayList<IView<RComponent>>();
 
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
@@ -548,6 +550,14 @@ public class DefaultRemoteViewFactory extends
           propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
       elementLabels.add(propertyLabel);
       elementWidths.add(propertyViewDescriptor.getWidth());
+      EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
+      if (labelHorizontalPosition == null) {
+        labelHorizontalPosition = viewDescriptor.getLabelsHorizontalPosition();
+      }
+      if (labelHorizontalPosition == null) {
+        labelHorizontalPosition = EHorizontalPosition.LEFT;
+      }
+      labelHorizontalPositions.add(labelHorizontalPosition.name());
       connector.addChildConnector(propertyName, propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {
@@ -571,15 +581,14 @@ public class DefaultRemoteViewFactory extends
     }
     completePropertyViewsWithDynamicToolTips(connector, propertyViews,
         modelDescriptor);
-    completePropertyViewsWithDynamicBackgrounds(connector, propertyViews,
-        modelDescriptor);
-    completePropertyViewsWithDynamicForegrounds(connector, propertyViews,
-        modelDescriptor);
-    completePropertyViewsWithDynamicFonts(connector, propertyViews,
-        modelDescriptor);
+    completePropertyViewsWithDynamicBackgrounds(connector, propertyViews, modelDescriptor);
+    completePropertyViewsWithDynamicForegrounds(connector, propertyViews, modelDescriptor);
+    completePropertyViewsWithDynamicFonts(connector, propertyViews, modelDescriptor);
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[elementWidths.size()]));
     viewComponent.setElements(elements.toArray(new RComponent[elements.size()]));
     viewComponent.setElementLabels(elementLabels.toArray(new RComponent[elementLabels.size()]));
+    viewComponent.setLabelHorizontalPositions(labelHorizontalPositions.toArray(
+        new String[labelHorizontalPositions.size()]));
     return view;
   }
 

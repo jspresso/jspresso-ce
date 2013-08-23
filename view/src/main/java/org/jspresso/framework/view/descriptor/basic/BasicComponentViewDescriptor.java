@@ -34,6 +34,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -77,8 +78,9 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
-  private int                           columnCount    = 1;
-  private ELabelPosition                labelsPosition = ELabelPosition.ASIDE;
+  private int                           columnCount;
+  private ELabelPosition                labelsPosition;
+  private EHorizontalPosition           labelsHorizontalPosition;
   private List<IPropertyViewDescriptor> propertyViewDescriptors;
   private Map<String, Integer>          propertyWidths;
   private Map<String, List<String>>     renderedChildProperties;
@@ -89,7 +91,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Constructs a new {@code BasicComponentViewDescriptor} instance.
    */
   public BasicComponentViewDescriptor() {
+    columnCount = 1;
+    labelsPosition = ELabelPosition.ASIDE;
     verticallyScrollable = false;
+    labelsHorizontalPosition = EHorizontalPosition.LEFT;
   }
 
   /**
@@ -107,8 +112,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public Icon getIcon() {
     Icon icon = super.getIcon();
     if (icon == null) {
-      icon = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor().getIcon();
+      icon = ((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().getIcon();
       setIcon(icon);
     }
     return icon;
@@ -145,10 +149,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
         BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
         propertyViewDescriptor.setName(renderedProperty);
         propertyViewDescriptor.setWidth(getPropertyWidth(renderedProperty));
-        propertyViewDescriptor
-            .setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
-        propertyViewDescriptor.setModelDescriptor(componentDescriptor
-            .getPropertyDescriptor(renderedProperty));
+        propertyViewDescriptor.setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
+        propertyViewDescriptor.setModelDescriptor(componentDescriptor.getPropertyDescriptor(renderedProperty));
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);
       }
     }
@@ -156,14 +158,12 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     if (explodeComponentReferences) {
       actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-        List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper
-            .explodeComponentReferences(propertyViewDescriptor,
-                (IComponentDescriptorProvider<?>) getModelDescriptor());
+        List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper.explodeComponentReferences(
+            propertyViewDescriptor, (IComponentDescriptorProvider<?>) getModelDescriptor());
         if (exploded.size() > 0) {
-          if (propertyViewDescriptor.getWidth() != null
-              && propertyViewDescriptor.getWidth() > exploded.size()) {
-            ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1))
-                .setWidth(propertyViewDescriptor.getWidth() - exploded.size() + 1);
+          if (propertyViewDescriptor.getWidth() != null && propertyViewDescriptor.getWidth() > exploded.size()) {
+            ((BasicPropertyViewDescriptor) exploded.get(exploded.size() - 1)).setWidth(
+                propertyViewDescriptor.getWidth() - exploded.size() + 1);
           }
           actualPropertyViewDescriptors.addAll(exploded);
         }
@@ -176,7 +176,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the readabilityGates.
-   * 
+   *
    * @return the readabilityGates.
    */
   @Override
@@ -192,7 +192,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the writabilityGates.
-   * 
+   *
    * @return the writabilityGates.
    */
   @Override
@@ -465,5 +465,32 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   @Override
   public boolean isScrollable() {
     return isVerticallyScrollable() || isHorizontallyScrollable();
+  }
+
+  /**
+   * Gets label horizontal position.
+   *
+   * @return the label horizontal position
+   */
+  @Override
+  public EHorizontalPosition getLabelsHorizontalPosition() {
+    return labelsHorizontalPosition;
+  }
+
+  /**
+   * Configures the label horizontal position. There are special cases when the default label position has to be
+   * overridden. This is either a value of the {@code EHorizontalPosition}
+   * enum or its equivalent string representation :
+   * <ul>
+   * <li>{@code LEFT} for left position</li>
+   * <li>{@code RIGHT} for right position</li>
+   * </ul>
+   * <p>
+   * Default value is {@code LEFT}.
+   *
+   * @param labelsHorizontalPosition the label horizontal position
+   */
+  public void setLabelsHorizontalPosition(EHorizontalPosition labelsHorizontalPosition) {
+    this.labelsHorizontalPosition = labelsHorizontalPosition;
   }
 }

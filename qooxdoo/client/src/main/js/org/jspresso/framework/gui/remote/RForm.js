@@ -32,6 +32,9 @@ qx.Class.define("org.jspresso.framework.gui.remote.RForm", {
         elementLabels: {
           check: "Array"
         },
+        labelHorizontalPositions: {
+          check: "Array"
+        },
         labelsPosition: {
           check: "String"
         },

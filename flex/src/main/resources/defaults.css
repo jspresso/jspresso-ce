@@ -106,9 +106,15 @@ sepy|CheckBoxExtended {
   verticalGap: 2;
 }
 
-.asideLabelCell {
+.leftAsideLabelCell {
   verticalAlign: middle;
   horizontalAlign: right;
+  paddingTop: 2;
+}
+
+.rightAsideLabelCell {
+  verticalAlign: middle;
+  horizontalAlign: left;
   paddingTop: 2;
 }
 
@@ -117,14 +123,24 @@ sepy|CheckBoxExtended {
   horizontalAlign: left;
 }
 
-.componentCell {
+.leftComponentCell {
   verticalAlign: middle;
   horizontalAlign: left;
 }
+.rightComponentCell {
+  verticalAlign: middle;
+  horizontalAlign: right;
+}
 
-.labelComponentCell {
+.leftLabelComponentCell {
   verticalAlign: middle;
   horizontalAlign: left;
+  paddingTop: 2;
+}
+
+.rightLabelComponentCell {
+  verticalAlign: middle;
+  horizontalAlign: right;
   paddingTop: 2;
 }
 

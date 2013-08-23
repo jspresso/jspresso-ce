@@ -61,4 +61,11 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
    * @return the property view descriptors.
    */
   List<IPropertyViewDescriptor> getPropertyViewDescriptors(boolean explodeComponentReferences);
+
+  /**
+   * Gets label horizontal position.
+   *
+   * @return the label horizontal position
+   */
+  EHorizontalPosition getLabelsHorizontalPosition();
 }

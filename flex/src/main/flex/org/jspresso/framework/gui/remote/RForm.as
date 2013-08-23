@@ -23,6 +23,7 @@ public class RForm extends RComponent {
   private var _elementWidths:Array;
   private var _elements:Array;
   private var _elementLabels:Array;
+  private var _labelHorizontalPositions:Array;
   private var _labelsPosition:String;
   private var _verticallyScrollable:Boolean;
 
@@ -78,5 +79,12 @@ public class RForm extends RComponent {
     _verticallyScrollable = value;
   }
 
+  public function get labelHorizontalPositions():Array {
+    return _labelHorizontalPositions;
+  }
+
+  public function set labelHorizontalPositions(value:Array):void {
+    _labelHorizontalPositions = value;
+  }
 }
 }

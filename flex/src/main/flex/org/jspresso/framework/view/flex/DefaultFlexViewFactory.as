@@ -1555,6 +1555,7 @@ public class DefaultFlexViewFactory {
     form.addChild(componentsRow);
     for (var i:int = 0; i < remoteForm.elements.length; i++) {
       var elementWidth:int = remoteForm.elementWidths[i] as int;
+      var labelHorizontalPosition:String = remoteForm.labelHorizontalPositions[i] as String;
       var rComponent:RComponent = remoteForm.elements[i] as RComponent;
       var rComponentLabel:RComponent = remoteForm.elementLabels[i] as RComponent;
       var component:UIComponent = createComponent(rComponent);
@@ -1578,11 +1579,20 @@ public class DefaultFlexViewFactory {
       }
 
       var componentCell:GridItem = new GridItem();
-      if (rComponent is RLabel || rComponent is RCheckBox) {
-        componentCell.styleName = "labelComponentCell";
-        component.setStyle("paddingRight", 4);
+      if(labelHorizontalPosition == "RIGHT") {
+        if (rComponent is RLabel || rComponent is RCheckBox) {
+          componentCell.styleName = "rightLabelComponentCell";
+          component.setStyle("paddingLeft", 4);
+        } else {
+          componentCell.styleName = "rightComponentCell";
+        }
       } else {
-        componentCell.styleName = "componentCell";
+        if (rComponent is RLabel || rComponent is RCheckBox) {
+          componentCell.styleName = "leftLabelComponentCell";
+          component.setStyle("paddingRight", 4);
+        } else {
+          componentCell.styleName = "leftComponentCell";
+        }
       }
       componentCell.horizontalScrollPolicy = ScrollPolicy.OFF;
       componentCell.verticalScrollPolicy = ScrollPolicy.OFF;
@@ -1612,16 +1622,17 @@ public class DefaultFlexViewFactory {
         labelCell.colSpan = elementWidth;
         componentCell.colSpan = elementWidth;
       } else if (remoteForm.labelsPosition == "ASIDE") {
-        labelCell.styleName = "asideLabelCell";
+        if(labelHorizontalPosition == "RIGHT") {
+          labelCell.styleName = "rightAsideLabelCell";
+        } else {
+          labelCell.styleName = "leftAsideLabelCell";
+        }
         componentCell.colSpan = (elementWidth * 2) - 1;
       } else if (remoteForm.labelsPosition == "NONE") {
         componentCell.colSpan = elementWidth;
       }
 
       if (remoteForm.labelsPosition != "NONE") {
-        //labelCell.setStyle("borderStyle","solid");
-        //labelCell.setStyle("borderColor","0x00FF00");
-        labelsRow.addChild(labelCell);
         if (rComponentLabel.label || rComponentLabel.icon) {
           labelCell.addChild(componentLabel);
           // makes alignment wrong
@@ -1671,8 +1682,21 @@ public class DefaultFlexViewFactory {
       } else {
         componentCell.minWidth = 0;
       }
-      componentsRow.addChild(componentCell);
       componentCell.addChild(component);
+
+      if (remoteForm.labelsPosition != "NONE") {
+        if(labelHorizontalPosition == "RIGHT") {
+          componentsRow.addChild(componentCell);
+          labelsRow.addChild(labelCell);
+        } else {
+          //labelCell.setStyle("borderStyle","solid");
+          //labelCell.setStyle("borderColor","0x00FF00");
+          labelsRow.addChild(labelCell);
+          componentsRow.addChild(componentCell);
+        }
+      } else {
+        componentsRow.addChild(componentCell);
+      }
 
       col += elementWidth;
     }

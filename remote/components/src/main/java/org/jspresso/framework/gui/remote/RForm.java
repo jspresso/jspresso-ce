@@ -32,6 +32,7 @@ public class RForm extends RComponent {
   private RComponent[]      elementLabels;
   private RComponent[]      elements;
   private Integer[]         elementWidths;
+  private String[]          labelHorizontalPositions;
 
   private boolean           verticallyScrollable;
   private String            labelsPosition;
@@ -168,4 +169,21 @@ public class RForm extends RComponent {
     this.verticallyScrollable = verticallyScrollable;
   }
 
+  /**
+   * Get label horizontal positions.
+   *
+   * @return the label horizontal positions
+   */
+  public String[] getLabelHorizontalPositions() {
+    return labelHorizontalPositions;
+  }
+
+  /**
+   * Sets label horizontal positions.
+   *
+   * @param labelHorizontalPositions the label horizontal positions
+   */
+  public void setLabelHorizontalPositions(String... labelHorizontalPositions) {
+    this.labelHorizontalPositions = labelHorizontalPositions;
+  }
 }

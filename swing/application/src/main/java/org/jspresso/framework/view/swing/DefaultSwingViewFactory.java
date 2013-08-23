@@ -81,8 +81,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
@@ -94,10 +92,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -195,6 +191,7 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -595,6 +592,13 @@ public class DefaultSwingViewFactory extends
       JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale,
           propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
       int propertyWidth = propertyViewDescriptor.getWidth();
+      EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
+      if (labelHorizontalPosition == null) {
+        labelHorizontalPosition = viewDescriptor.getLabelsHorizontalPosition();
+      }
+      if (labelHorizontalPosition == null) {
+        labelHorizontalPosition = EHorizontalPosition.LEFT;
+      }
       if (propertyWidth > viewDescriptor.getColumnCount()) {
         propertyWidth = viewDescriptor.getColumnCount();
       }
@@ -610,8 +614,17 @@ public class DefaultSwingViewFactory extends
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.insets = new Insets(formInset, formInset, formInset, formInset);
-          constraints.anchor = GridBagConstraints.EAST;
-          constraints.gridx = currentX * 2;
+          switch (labelHorizontalPosition) {
+            case RIGHT:
+              constraints.anchor = GridBagConstraints.WEST;
+              constraints.gridx = currentX * 2 + propertyWidth * 2 - 1;
+              break;
+            case LEFT:
+            default:
+              constraints.anchor = GridBagConstraints.EAST;
+              constraints.gridx = currentX * 2;
+              break;
+          }
           constraints.gridy = currentY;
           break;
         case ABOVE:
@@ -634,7 +647,17 @@ public class DefaultSwingViewFactory extends
       // component positioning
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
-          constraints.gridx++;
+          switch (labelHorizontalPosition) {
+            case RIGHT:
+              constraints.anchor = GridBagConstraints.EAST;
+              constraints.gridx = currentX * 2;
+              break;
+            case LEFT:
+            default:
+              constraints.anchor = GridBagConstraints.WEST;
+              constraints.gridx = currentX * 2 + 1;
+              break;
+          }
           constraints.insets = new Insets(formInset, 0, formInset, formInset);
           constraints.gridwidth = propertyWidth * 2 - 1;
           break;
@@ -642,18 +665,18 @@ public class DefaultSwingViewFactory extends
           constraints.gridy++;
           constraints.insets = new Insets(0, formInset, 0, formInset);
           constraints.gridwidth = propertyWidth;
+          constraints.anchor = GridBagConstraints.WEST;
           break;
         case NONE:
           constraints.gridx = currentX;
           constraints.gridy = currentY;
           constraints.insets = new Insets(0, formInset, 0, formInset);
           constraints.gridwidth = propertyWidth;
+          constraints.anchor = GridBagConstraints.WEST;
           break;
         default:
           break;
       }
-
-      constraints.anchor = GridBagConstraints.WEST;
       constraints.weightx = propertyView.getPeer().getPreferredSize().width;
       if (propertyView.getPeer() instanceof JCheckBox) {
         constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();

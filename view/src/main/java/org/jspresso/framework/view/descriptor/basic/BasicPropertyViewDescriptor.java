@@ -29,6 +29,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
 /**
@@ -55,6 +56,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   private String               labelBackground;
   private String               labelFont;
   private String               labelForeground;
+  private EHorizontalPosition  labelHorizontalPosition;
   private List<String>         renderedChildProperties;
   private Integer              width;
   private IAction              action;
@@ -63,7 +65,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the labelBackground.
-   * 
+   *
    * @return the labelBackground.
    */
   @Override
@@ -73,7 +75,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the labelFont.
-   * 
+   *
    * @return the labelFont.
    */
   @Override
@@ -83,7 +85,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the labelForeground.
-   * 
+   *
    * @return the labelForeground.
    */
   @Override
@@ -107,18 +109,16 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     IModelDescriptor propertyDescriptor = getModelDescriptor();
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
       return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-          .getCollectionDescriptor()).getElementDescriptor()
-          .getRenderedProperties();
+          .getCollectionDescriptor()).getElementDescriptor().getRenderedProperties();
     } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-      return ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getRenderedProperties();
+      return ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor().getRenderedProperties();
     }
     return null;
   }
 
   /**
    * Gets the width.
-   * 
+   *
    * @return the width.
    */
   @Override
@@ -341,5 +341,32 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
       }
     }
     return readOnly;
+  }
+
+  /**
+   * Gets label horizontal position.
+   *
+   * @return the label horizontal position
+   */
+  @Override
+  public EHorizontalPosition getLabelHorizontalPosition() {
+    return labelHorizontalPosition;
+  }
+
+  /**
+   * Configures the label horizontal position. There are special cases when the default label position has to be
+   * overridden. This is either a value of the {@code EHorizontalPosition}
+   * enum or its equivalent string representation :
+   * <ul>
+   * <li>{@code LEFT} for left position</li>
+   * <li>{@code RIGHT} for right position</li>
+   * </ul>
+   * <p>
+   * Default value is {@code LEFT}.
+   *
+   * @param labelHorizontalPosition the label horizontal position
+   */
+  public void setLabelHorizontalPosition(EHorizontalPosition labelHorizontalPosition) {
+    this.labelHorizontalPosition = labelHorizontalPosition;
   }
 }
