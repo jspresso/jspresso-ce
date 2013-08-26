@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
@@ -97,20 +98,29 @@ public class ApplicationDirectoryBuilder {
    * Processes a workspace recursively to register all reachable application
    * elements into the directory.
    * 
-   * @param workspace
-   *          the workspace to analyze.
+   * @param frontendController
+   *          the application front controller to analyse.
    * @return this.
    */
-  public ApplicationDirectoryBuilder process(Workspace workspace) {
-    String wsPermId = workspace.getPermId();
-    if (wsPermId != null) {
-      if (isPermIdExcluded(wsPermId) || navigationPermIds.contains(wsPermId)) {
-        return this;
-      }
-      navigationPermIds.add(wsPermId);
+  public ApplicationDirectoryBuilder process(IFrontendController<?, ?, ?> frontendController) {
+    if (frontendController.getActionMap() != null) {
+      process(frontendController.getActionMap());
     }
-    for (Module module : workspace.getModules()) {
-      process(module, wsPermId);
+    if (frontendController.getSecondaryActionMap() != null) {
+      process(frontendController.getSecondaryActionMap());
+    }
+    for (String workspaceName : frontendController.getWorkspaceNames(true)) {
+      Workspace workspace = frontendController.getWorkspace(workspaceName);
+      String wsPermId = workspace.getPermId();
+      if (wsPermId != null) {
+        if (isPermIdExcluded(wsPermId) || navigationPermIds.contains(wsPermId)) {
+          return this;
+        }
+        navigationPermIds.add(wsPermId);
+      }
+      for (Module module : workspace.getModules()) {
+        process(module, wsPermId);
+      }
     }
     return this;
   }
