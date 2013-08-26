@@ -2599,6 +2599,12 @@ public class DefaultSwingViewFactory extends
     }
     // To preserve font that has been set and avoid JTable changing it.
     headerRenderer.setCustomFont(headerRenderer.getFont());
+    String viewDescription = columnViewDescriptor.getI18nDescription(
+        actionHandler, locale);
+    viewDescription = completeDescriptionWithLiveDebugUI(columnViewDescriptor, viewDescription);
+    if (viewDescription != null && viewDescription.length() > 0) {
+      headerRenderer.setToolTipText(viewDescription);
+    }
     if (tableModel instanceof AbstractTableSorter) {
       column.setHeaderRenderer(new AbstractTableSorter.SortableHeaderRenderer(
           (AbstractTableSorter) tableModel, headerRenderer));
