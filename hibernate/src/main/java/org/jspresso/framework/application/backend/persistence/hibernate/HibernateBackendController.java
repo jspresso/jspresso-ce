@@ -491,6 +491,9 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void registerForDeletion(IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     if (isUnitOfWorkActive()) {
       Set<IEntity> deletedEntitiesSnapshot = new HashSet<IEntity>(
           deletedEntities);
@@ -521,6 +524,9 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void registerForUpdate(IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     if (isUnitOfWorkActive()) {
       Set<IEntity> updatedEntitiesSnapshot = new HashSet<IEntity>(
           updatedEntities);
@@ -953,6 +959,9 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void reload(final IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     // builds a collection of entities to reload.
     Set<IEntity> dirtyReachableEntities = buildReachableDirtyEntitySet(entity);
 

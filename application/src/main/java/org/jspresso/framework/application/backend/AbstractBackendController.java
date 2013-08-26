@@ -803,6 +803,9 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void registerForDeletion(IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     unitOfWork.registerForDeletion(entity);
   }
 
@@ -811,6 +814,9 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void registerForUpdate(IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     unitOfWork.registerForUpdate(entity);
   }
 

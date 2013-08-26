@@ -207,6 +207,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void registerForDeletion(IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     if (entity.isPersistent()) {
       if (entitiesRegisteredForDeletion == null) {
         entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
@@ -226,6 +229,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void registerForUpdate(IEntity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("Passed entity cannot be null");
+    }
     if (entitiesRegisteredForUpdate == null) {
       entitiesRegisteredForUpdate = new ArrayList<IEntity>();
     }
