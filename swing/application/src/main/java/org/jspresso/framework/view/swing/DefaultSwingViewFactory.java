@@ -3202,6 +3202,7 @@ public class DefaultSwingViewFactory extends
     }
     String viewDescription = viewDescriptor.getI18nDescription(
         translationProvider, locale);
+    viewDescription = completeDescriptionWithLiveDebugUI(viewDescriptor, viewDescription);
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTipText(viewDescription);
     }

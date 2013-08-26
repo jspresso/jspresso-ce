@@ -3265,6 +3265,27 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Complete description with live debug uI.
+   *
+   * @param viewDescriptor the view descriptor
+   * @param viewDescription the view description
+   * @return the completed view description.
+   */
+  protected String completeDescriptionWithLiveDebugUI(IViewDescriptor viewDescriptor, String viewDescription) {
+    if (isLiveDebugUI()) {
+      if (viewDescriptor.getPermId() != null) {
+        if (viewDescription == null) {
+          viewDescription = "";
+        } else {
+          viewDescription = viewDescription + " ";
+        }
+        viewDescription = viewDescription + "(Descriptor PermId -> [" + viewDescriptor.getPermId() + "])";
+      }
+    }
+    return viewDescription;
+  }
+
+  /**
    * Connector action adapter.
    *
    * @version $LastChangedRevision$

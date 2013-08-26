@@ -392,6 +392,25 @@ public abstract class AbstractActionFactory<E, F, G> implements
     }
   }
 
+  /**
+   * Complete description with live debug uI.
+   *
+   * @param action the action
+   * @param i18nDescription the i 18 n description
+   * @return the completed action description
+   */
+  protected String completeDescriptionWithLiveDebugUI(IAction action, String i18nDescription) {
+    if (isLiveDebugUI()) {
+      if (i18nDescription == null) {
+        i18nDescription = "";
+      } else {
+        i18nDescription = i18nDescription + " ";
+      }
+      i18nDescription = i18nDescription + "(Action PermId -> [" + action.getPermId() + "])";
+    }
+    return i18nDescription;
+  }
+
   private final class GatesListener implements PropertyChangeListener {
 
     private final E                 action;
