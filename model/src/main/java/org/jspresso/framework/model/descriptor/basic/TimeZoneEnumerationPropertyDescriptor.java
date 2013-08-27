@@ -19,7 +19,6 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
@@ -40,8 +39,7 @@ public class TimeZoneEnumerationPropertyDescriptor extends
    */
   @Override
   public TimeZoneEnumerationPropertyDescriptor clone() {
-    TimeZoneEnumerationPropertyDescriptor clonedDescriptor = (TimeZoneEnumerationPropertyDescriptor) super
-        .clone();
+    TimeZoneEnumerationPropertyDescriptor clonedDescriptor = (TimeZoneEnumerationPropertyDescriptor) super.clone();
 
     return clonedDescriptor;
   }
@@ -52,7 +50,15 @@ public class TimeZoneEnumerationPropertyDescriptor extends
   @Override
   public List<String> getEnumerationValues() {
     if (enumerationValues == null) {
-      enumerationValues = Arrays.asList(TimeZone.getAvailableIDs());
+      enumerationValues = new ArrayList<String>();
+      for (String timezoneId : TimeZone.getAvailableIDs()) {
+        if (timezoneId.matches("(Africa/|America/|Antarctica/|Arctic/|Asia/" +
+            "|Atlantic/|Australia/|Europe/|Indian/|Pacific/).*")) {
+          if (!timezoneId.startsWith("Asia/Riyadh8")) {
+            enumerationValues.add(timezoneId);
+          }
+        }
+      }
       Collections.sort(enumerationValues);
     }
     return enumerationValues;
