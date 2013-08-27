@@ -1,5 +1,7 @@
 3.7
 ===
+- In your startup/flex/client/pom.xml, make sure that all theme artifacts listed in the dependency section are marked
+  with <scope>theme</scope>. Ther can be more than one.
 
 - Moved to Java 7. Source and target compilation versions moved from 1.6 to 1.7.
 
