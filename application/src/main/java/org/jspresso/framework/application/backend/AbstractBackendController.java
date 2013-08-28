@@ -1757,7 +1757,7 @@ public abstract class AbstractBackendController extends AbstractController
                       } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                         if (dryRun) {
                           // manually trigger reverse relations preprocessors.
-                          Collection<?> reverseCollection = getAccessorFactory()
+                          Collection<Object> reverseCollection = getAccessorFactory()
                               .createPropertyAccessor(
                                   reversePropertyDescriptor.getName(),
                                   getComponentContract(((IComponent) propertyValue)))
@@ -1816,7 +1816,7 @@ public abstract class AbstractBackendController extends AbstractController
                         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                           if (dryRun) {
                             // manually trigger reverse relations preprocessors.
-                            Collection<?> reverseCollection = getAccessorFactory()
+                            Collection<Object> reverseCollection = getAccessorFactory()
                                 .createPropertyAccessor(
                                     reversePropertyDescriptor.getName(),
                                     getComponentContract(collectionElement))

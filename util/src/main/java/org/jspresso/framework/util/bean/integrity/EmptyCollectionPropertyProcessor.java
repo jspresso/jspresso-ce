@@ -29,10 +29,12 @@ import java.util.Collection;
  *          The type of the target.
  * @param <F>
  *          The type of the property (a subclass of collection).
+ * @param <G>
+ *          The type of element managed in the collection.
  */
-public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
+public class EmptyCollectionPropertyProcessor<E, F extends Collection<G>, G>
     extends EmptyPropertyProcessor<E, F> implements
-    ICollectionPropertyProcessor<E, F> {
+    ICollectionPropertyProcessor<E, F, G> {
 
   /**
    * No-op.
@@ -40,7 +42,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  public void postprocessAdder(E target, F collection, Object addedValue) {
+  public void postprocessAdder(E target, F collection, G addedValue) {
     // NO-OP
   }
 
@@ -50,7 +52,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  public void postprocessRemover(E target, F collection, Object removedValue) {
+  public void postprocessRemover(E target, F collection, G removedValue) {
     // NO-OP
   }
 
@@ -60,7 +62,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  public void preprocessAdder(E target, F collection, Object addedValue) {
+  public void preprocessAdder(E target, F collection, G addedValue) {
     // NO-OP
   }
 
@@ -70,7 +72,7 @@ public class EmptyCollectionPropertyProcessor<E, F extends Collection<?>>
    * {@inheritDoc}
    */
   @Override
-  public void preprocessRemover(E target, F collection, Object removedValue) {
+  public void preprocessRemover(E target, F collection, G removedValue) {
     // NO-OP
   }
 

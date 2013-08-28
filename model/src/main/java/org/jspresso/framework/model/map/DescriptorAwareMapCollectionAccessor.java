@@ -40,7 +40,7 @@ public class DescriptorAwareMapCollectionAccessor extends
   public void addToValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    Collection<?> mapValue = getValue(target);
+    Collection<Object> mapValue = getValue(target);
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
     }
@@ -66,7 +66,7 @@ public class DescriptorAwareMapCollectionAccessor extends
   public void removeFromValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    Collection<?> mapValue = getValue(target);
+    Collection<Object> mapValue = getValue(target);
     // target instance must be tested to avoid triggering twice the property
     // processors if the map contains a non-map model.
     if (target instanceof Map<?, ?> && getModelDescriptor() != null) {

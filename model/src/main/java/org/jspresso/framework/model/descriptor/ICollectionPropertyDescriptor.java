@@ -65,8 +65,8 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param addedValue
    *          the property added value.
    */
-  void postprocessAdder(Object component, Collection<?> collection,
-      Object addedValue);
+  <F, G> void postprocessAdder(F component, Collection<G> collection,
+      G addedValue);
 
   /**
    * Triggers all remover post processors.
@@ -78,8 +78,8 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param removedValue
    *          the property removed value.
    */
-  void postprocessRemover(Object component, Collection<?> collection,
-      Object removedValue);
+  <F, G> void postprocessRemover(F component, Collection<G> collection,
+      G removedValue);
 
   /**
    * Triggers all adder pre processors.
@@ -91,8 +91,8 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param addedValue
    *          the property added value.
    */
-  void preprocessAdder(Object component, Collection<?> collection,
-      Object addedValue);
+  <F, G> void preprocessAdder(F component, Collection<G> collection,
+      G addedValue);
 
   /**
    * Triggers all remover pre processors.
@@ -104,6 +104,6 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param removedValue
    *          the property removed value.
    */
-  void preprocessRemover(Object component, Collection<?> collection,
-      Object removedValue);
+  <F, G> void preprocessRemover(F component, Collection<G> collection,
+      G removedValue);
 }

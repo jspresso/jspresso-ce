@@ -120,15 +120,15 @@ public class BasicCollectionPropertyDescriptor<E> extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void postprocessAdder(Object component, Collection<?> collection,
-      Object addedValue) {
+  public <F, G> void postprocessAdder(F component, Collection<G> collection,
+      G addedValue) {
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor;
-      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<F, Collection<G>, G> processor;
+      processor = (ICollectionPropertyProcessor<F, Collection<G>, G>) propertyIntegrityProcessor;
       processor.postprocessAdder(component, collection, addedValue);
     }
   }
@@ -138,15 +138,15 @@ public class BasicCollectionPropertyDescriptor<E> extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void postprocessRemover(Object component, Collection<?> collection,
-      Object removedValue) {
+  public <F, G>  void postprocessRemover(F component, Collection<G> collection,
+      G removedValue) {
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor;
-      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<F, Collection<G>, G> processor;
+      processor = (ICollectionPropertyProcessor<F, Collection<G>, G>) propertyIntegrityProcessor;
       processor.postprocessRemover(component, collection, removedValue);
     }
   }
@@ -156,15 +156,15 @@ public class BasicCollectionPropertyDescriptor<E> extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void preprocessAdder(Object component, Collection<?> collection,
-      Object addedValue) {
+  public <F, G> void preprocessAdder(F component, Collection<G> collection,
+      G addedValue) {
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor;
-      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<F, Collection<G>, G> processor;
+      processor = (ICollectionPropertyProcessor<F, Collection<G>, G>) propertyIntegrityProcessor;
       processor.preprocessAdder(component, collection, addedValue);
     }
   }
@@ -174,8 +174,8 @@ public class BasicCollectionPropertyDescriptor<E> extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public void preprocessRemover(final Object component,
-      Collection<?> collection, Object removedValue) {
+  public <F, G> void preprocessRemover(F component,
+      Collection<G> collection, G removedValue) {
     // Mandatory checking should only happen on save. See bug #776 and #646.
     // if (isMandatory() && collection != null && collection.size() == 1
     // && collection.contains(removedValue)) {
@@ -186,8 +186,8 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor;
-      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<F, Collection<G>, G> processor;
+      processor = (ICollectionPropertyProcessor<F, Collection<G>, G>) propertyIntegrityProcessor;
       processor.preprocessRemover(component, collection, removedValue);
     }
   }

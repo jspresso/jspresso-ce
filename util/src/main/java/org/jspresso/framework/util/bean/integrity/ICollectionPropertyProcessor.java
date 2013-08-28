@@ -30,9 +30,11 @@ import java.util.Collection;
  *          The type of the target.
  * @param <F>
  *          The type of the property (a subclass of collection).
+ * @param <G>
+ *          The type of element managed in the collection.
  */
 @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
+public interface ICollectionPropertyProcessor<E, F extends Collection<G>, G>
     extends IPropertyProcessor<E, F> {
 
   /**
@@ -48,7 +50,7 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * @param addedValue
    *          the value added in the collection.
    */
-  void postprocessAdder(E target, F collection, Object addedValue);
+  void postprocessAdder(E target, F collection, G addedValue);
 
   /**
    * This method gets called whenever a value has been removed from a collection
@@ -63,7 +65,7 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * @param removedValue
    *          the value removed from the collection.
    */
-  void postprocessRemover(E target, F collection, Object removedValue);
+  void postprocessRemover(E target, F collection, G removedValue);
 
   /**
    * This method gets called whenever a value is about to be added to a
@@ -78,7 +80,7 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * @param addedValue
    *          the value added in the collection.
    */
-  void preprocessAdder(E target, F collection, Object addedValue);
+  void preprocessAdder(E target, F collection, G addedValue);
 
   /**
    * This method gets called whenever a value is about to be removed from a
@@ -93,5 +95,5 @@ public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
    * @param removedValue
    *          the value removed from the collection.
    */
-  void preprocessRemover(E target, F collection, Object removedValue);
+  void preprocessRemover(E target, F collection, G removedValue);
 }

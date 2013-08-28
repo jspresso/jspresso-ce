@@ -1178,7 +1178,7 @@ public abstract class AbstractComponentInvocationHandler implements
       ICollectionPropertyDescriptor<?> propertyDescriptor, int index,
       Object value) {
     String propertyName = propertyDescriptor.getName();
-    Collection<?> collectionProperty;
+    Collection<Object> collectionProperty;
     try {
       collectionProperty = accessorFactory
           .createPropertyAccessor(propertyName,
@@ -1541,12 +1541,12 @@ public abstract class AbstractComponentInvocationHandler implements
             case ADDER:
               ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                   .preprocessAdder(proxy,
-                      (Collection<?>) computedPropertyValue, interceptedValue);
+                      (Collection<Object>) computedPropertyValue, interceptedValue);
               break;
             case REMOVER:
               ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                   .preprocessRemover(proxy,
-                      (Collection<?>) computedPropertyValue, interceptedValue);
+                      (Collection<Object>) computedPropertyValue, interceptedValue);
               break;
             default:
               break;
@@ -1580,13 +1580,13 @@ public abstract class AbstractComponentInvocationHandler implements
           case ADDER:
             ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                 .postprocessAdder(proxy,
-                    (Collection<?>) newComputedPropertyValue,
+                    (Collection<Object>) newComputedPropertyValue,
                     args[args.length - 1]);
             break;
           case REMOVER:
             ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                 .postprocessRemover(proxy,
-                    (Collection<?>) newComputedPropertyValue,
+                    (Collection<Object>) newComputedPropertyValue,
                     args[args.length - 1]);
             break;
           default:
@@ -1733,7 +1733,7 @@ public abstract class AbstractComponentInvocationHandler implements
     // if (!isInitialized(straightGetProperty(proxy, propertyName))) {
     // return;
     // }
-    Collection<?> collectionProperty;
+    Collection<Object> collectionProperty;
     try {
       collectionProperty = accessorFactory
           .createPropertyAccessor(propertyName,

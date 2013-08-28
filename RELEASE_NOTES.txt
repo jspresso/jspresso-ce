@@ -1,5 +1,8 @@
 3.7
 ===
+- ICollectionPropertyProcessor now use a third parametrized type in order to define the collection elements type. All
+  your subclasses or implementations should now define this new parametrized type. see RFE #838.
+
 - In your startup/flex/client/pom.xml, make sure that all theme artifacts listed in the dependency section are marked
   with <scope>theme</scope>. Ther can be more than one.
 
