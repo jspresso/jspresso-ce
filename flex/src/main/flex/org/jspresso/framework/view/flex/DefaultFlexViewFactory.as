@@ -2373,6 +2373,9 @@ public class DefaultFlexViewFactory {
           state: rColumn.state,
           index: i + 1};
         column.itemEditor = itemEditor;
+        if(rColumn is RTextArea) {
+          column.editorUsesEnterKey = true;
+        }
       }
 
       if (rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {
