@@ -2268,7 +2268,9 @@ public abstract class AbstractComponentInvocationHandler implements
           }
           // for ui notification
           if (!(evt.getOldValue() instanceof IComponent
-              && ((IComponent) evt.getOldValue()).getOwningComponent() == null)) { // FAKE OLD COMPONENT VALUE
+              && (   !AbstractComponentInvocationHandler.this.isInitialized(evt.getOldValue())
+                  || ((IComponent) evt.getOldValue()).getOwningComponent() == null))
+             ) { // FAKE OLD COMPONENT VALUE
             for (String trackedProperty : trackedProperties) {
               if (trackedProperty.equals(evt.getPropertyName())) {
                 doFirePropertyChange(source, referencePropertyName
