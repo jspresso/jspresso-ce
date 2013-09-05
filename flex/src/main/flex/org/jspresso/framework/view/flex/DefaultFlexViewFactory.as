@@ -1555,7 +1555,10 @@ public class DefaultFlexViewFactory {
     form.addChild(componentsRow);
     for (var i:int = 0; i < remoteForm.elements.length; i++) {
       var elementWidth:int = remoteForm.elementWidths[i] as int;
-      var labelHorizontalPosition:String = remoteForm.labelHorizontalPositions[i] as String;
+      var labelHorizontalPosition:String = "LEFT";
+      if(remoteForm.labelHorizontalPositions) {
+        labelHorizontalPosition = remoteForm.labelHorizontalPositions[i] as String;
+      }
       var rComponent:RComponent = remoteForm.elements[i] as RComponent;
       var rComponentLabel:RComponent = remoteForm.elementLabels[i] as RComponent;
       var component:UIComponent = createComponent(rComponent);
