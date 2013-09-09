@@ -65,6 +65,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private       boolean                 distinctEnforced;
   private       List<?>                 queriedComponents;
   private       List<?>                 stickyResults;
+  private       ITranslationProvider    translationProvider;
+  private       Locale                  locale;
 
   /**
    * Constructs a new {@code QueryComponent} instance.
@@ -111,16 +113,21 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * {@inheritDoc}
    */
   @Override
-  public void translate(ITranslationProvider translationProvider, Locale locale) {
+  public void translate(ITranslationProvider aTranslationProvider, Locale aLocale) {
     for (Object value : values()) {
+      this.translationProvider = aTranslationProvider;
+      this.locale = aLocale;
       if (value instanceof EnumQueryStructure) {
         ((EnumQueryStructure) value)
-            .setTranslationProvider(translationProvider);
-        ((EnumQueryStructure) value).setLocale(locale);
+            .setTranslationProvider(aTranslationProvider);
+        ((EnumQueryStructure) value).setLocale(aLocale);
       } else if (value instanceof ComparableQueryStructure) {
         ((ComparableQueryStructure) value)
-            .setTranslationProvider(translationProvider);
-        ((ComparableQueryStructure) value).setLocale(locale);
+            .setTranslationProvider(aTranslationProvider);
+        ((ComparableQueryStructure) value).setLocale(aLocale);
+      } else if (value instanceof QueryComponent) {
+        ((QueryComponent) value)
+            .translate(aTranslationProvider, aLocale);
       }
     }
   }
@@ -150,9 +157,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
           .getReferencedDescriptor();
       QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor,
             getComponentFactory());
+      referencedQueryComponent.translate(translationProvider, locale);
       referencedQueryComponent
-          .addPropertyChangeListener(new InlinedComponentTracker(
-              propertyDescriptor.getName()));
+          .addPropertyChangeListener(new InlinedComponentTracker(propertyDescriptor.getName()));
       put((String) key, referencedQueryComponent);
       return referencedQueryComponent;
     }
