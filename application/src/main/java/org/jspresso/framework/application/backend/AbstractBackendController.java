@@ -760,9 +760,9 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public void recordAsSynchronized(IEntity flushedEntity) {
     if (isUnitOfWorkActive()) {
-      boolean isDirty = isDirty(flushedEntity);
+      Map<String, Object> hasActuallyBeenFlushed = getDirtyProperties(flushedEntity, false);
       unitOfWork.clearDirtyState(flushedEntity);
-      if (isDirty || isEntityRegisteredForDeletion(flushedEntity)) {
+      if (!hasActuallyBeenFlushed.isEmpty() || isEntityRegisteredForDeletion(flushedEntity)) {
         unitOfWork.addUpdatedEntity(flushedEntity);
       }
     }
