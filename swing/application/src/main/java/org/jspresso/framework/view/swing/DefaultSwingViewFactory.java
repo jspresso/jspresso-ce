@@ -101,6 +101,13 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import chrriis.dj.swingsuite.JComboButton;
+import chrriis.dj.swingsuite.JLink;
+import chrriis.dj.swingsuite.JTriStateCheckBox;
+import chrriis.dj.swingsuite.LinkListener;
+import org.syntax.jedit.JEditTextArea;
+import org.syntax.jedit.tokenmarker.TokenMarker;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -213,13 +220,6 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
-import org.syntax.jedit.JEditTextArea;
-import org.syntax.jedit.tokenmarker.TokenMarker;
-
-import chrriis.dj.swingsuite.JComboButton;
-import chrriis.dj.swingsuite.JLink;
-import chrriis.dj.swingsuite.JTriStateCheckBox;
-import chrriis.dj.swingsuite.LinkListener;
 
 /**
  * Factory for swing views.
@@ -1243,11 +1243,11 @@ public class DefaultSwingViewFactory extends
         connector.setExceptionHandler(actionHandler);
         view.setConnector(connector);
       } else {
-        JComboBox viewComponent = createJComboBox(propertyViewDescriptor);
+        JComboBox<String> viewComponent = createJComboBox(propertyViewDescriptor);
         if (!propertyDescriptor.isMandatory()) {
           viewComponent.addItem(null);
         }
-        for (Object enumElement : enumerationValues) {
+        for (String enumElement : enumerationValues) {
           viewComponent.addItem(enumElement);
         }
         viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
@@ -1555,8 +1555,8 @@ public class DefaultSwingViewFactory extends
    * @return the created combo box.
    */
   @SuppressWarnings("unchecked")
-  protected JComboBox createJComboBox(IPropertyViewDescriptor viewDescriptor) {
-    return new JComboBox();
+  protected JComboBox<String> createJComboBox(IPropertyViewDescriptor viewDescriptor) {
+    return new JComboBox<>();
   }
 
   /**
@@ -1665,8 +1665,8 @@ public class DefaultSwingViewFactory extends
    * @return the created list.
    */
   @SuppressWarnings("unchecked")
-  protected JList createJList(IListViewDescriptor viewDescriptor) {
-    JList list = new JList();
+  protected JList<IValueConnector> createJList(IListViewDescriptor viewDescriptor) {
+    JList<IValueConnector> list = new JList();
     list.setDragEnabled(true);
     return list;
   }
@@ -1898,7 +1898,7 @@ public class DefaultSwingViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    JList viewComponent = createJList(viewDescriptor);
+    JList<IValueConnector> viewComponent = createJList(viewDescriptor);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -3767,7 +3767,7 @@ public class DefaultSwingViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    public Component getListCellRendererComponent(JList list, Object value,
+    public Component getListCellRendererComponent(JList<?> list, Object value,
         int index, boolean isSelected, boolean cellHasFocus) {
       JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
           index, isSelected, cellHasFocus);

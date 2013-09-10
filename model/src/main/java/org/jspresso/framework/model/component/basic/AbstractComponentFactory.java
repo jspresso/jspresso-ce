@@ -125,6 +125,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     }
   }
 
+  @SuppressWarnings("ConstantConditions")
   @Override
   public void applyInitializationMapping(Object component, IComponentDescriptor<?> componentDescriptor,
                                           Object masterComponent, Map<String, Object> initializationMapping) {

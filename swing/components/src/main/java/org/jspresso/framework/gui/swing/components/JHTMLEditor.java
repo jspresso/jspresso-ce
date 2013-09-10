@@ -197,7 +197,7 @@ public class JHTMLEditor extends JPanel {
         "font-family-Monospaced"));
     fontActions
         .add(createDisplayableAction(editorActions, "font-family-Serif"));
-    JComboBox fontCb = new JComboBox(fontActions.toArray(new Action[fontActions.size()]));
+    JComboBox<Action> fontCb = new JComboBox(fontActions.toArray(new Action[fontActions.size()]));
     tb.add(fontCb);
     fontCb.addActionListener(new ActionListener() {
 
@@ -215,7 +215,7 @@ public class JHTMLEditor extends JPanel {
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-18"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-24"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-48"));
-    JComboBox fontSizeCb = new JComboBox(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
+    JComboBox<Action> fontSizeCb = new JComboBox(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
     fontSizeCb.addActionListener(new ActionListener() {
 
       @SuppressWarnings("unchecked")

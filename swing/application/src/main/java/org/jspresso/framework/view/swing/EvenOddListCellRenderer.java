@@ -65,7 +65,7 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
    * {@inheritDoc}
    */
   @Override
-  public Component getListCellRendererComponent(JList list, Object value,
+  public Component getListCellRendererComponent(JList<?> list, Object value,
       int index, boolean isSelected, boolean cellHasFocus) {
     JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value,
         index, isSelected, cellHasFocus);
@@ -81,7 +81,7 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
         renderer.setIcon(iconFactory.getIcon(
             ((IRenderableCompositeValueConnector) value).getDisplayIcon(),
             iconFactory.getSmallIconSize()));
-        ListModel lm = list.getModel();
+        ListModel<?> lm = list.getModel();
         if (lm instanceof CollectionConnectorListModel) {
           setToolTipText(((CollectionConnectorListModel) lm)
               .getRowToolTip(index));

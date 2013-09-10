@@ -19,8 +19,15 @@ import org.slf4j.LoggerFactory;
  * 
  * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
+
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class ListApplicationElementsAction extends FrontendAction {
+public class ListApplicationElementsAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private static final Logger LOG = LoggerFactory.getLogger(ListApplicationElementsAction.class);
 

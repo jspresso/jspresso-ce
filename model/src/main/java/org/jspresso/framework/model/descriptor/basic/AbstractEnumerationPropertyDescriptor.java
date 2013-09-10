@@ -160,6 +160,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
     return getEnumerationName() + "." + value;
   }
 
+  @SuppressWarnings("SuspiciousMethodCalls")
   @Override
   public void preprocessSetter(final Object component, Object newValue) {
     if (newValue  != null && !"".equals(newValue) && !getEnumerationValues().contains(newValue)) {
