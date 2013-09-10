@@ -301,7 +301,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   @SuppressWarnings("UnusedParameters")
   public Stack<Module> findCurrentModule(Module rootModule,
       Object moduleObject, Map<String, Object> context) {
-    Stack<Module> stack = new Stack<Module>();
+    Stack<Module> stack = new Stack<>();
     findCurrentModule(rootModule, moduleObject, stack);
     return stack;
   }

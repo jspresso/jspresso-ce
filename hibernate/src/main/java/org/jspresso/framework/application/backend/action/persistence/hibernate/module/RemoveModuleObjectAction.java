@@ -45,7 +45,7 @@ public class RemoveModuleObjectAction extends AbstractHibernateCollectionAction 
   private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
     if (parentModule != null && parentModule.getSubModules() != null) {
-      for (Module module : new ArrayList<Module>(parentModule.getSubModules())) {
+      for (Module module : new ArrayList<>(parentModule.getSubModules())) {
         if (module instanceof BeanModule
             && removedObject.equals(((BeanModule) module).getModuleObject())) {
           parentModule.removeSubModule(module);
@@ -77,15 +77,13 @@ public class RemoveModuleObjectAction extends AbstractHibernateCollectionAction 
                 entityToRemove);
             try {
               deleteEntity(entityClone, context);
-            } catch (IllegalAccessException ex) {
+            } catch (IllegalAccessException | NoSuchMethodException ex) {
               throw new ActionException(ex);
             } catch (InvocationTargetException ex) {
               if (ex.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) ex.getCause();
               }
               throw new ActionException(ex.getCause());
-            } catch (NoSuchMethodException ex) {
-              throw new ActionException(ex);
             }
             try {
               getController(context).performPendingOperations();

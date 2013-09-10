@@ -167,7 +167,7 @@ public class RemoteCollectionConnectorListProvider extends
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
         .createRemoteCompositeValueState(getGuid(), getPermId());
-    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    List<RemoteValueState> children = new ArrayList<>();
     for (ICollectionConnector childConnector : getCollectionConnectors()) {
       if (childConnector instanceof IRemoteStateOwner) {
         children.add(((IRemoteStateOwner) childConnector).getState());

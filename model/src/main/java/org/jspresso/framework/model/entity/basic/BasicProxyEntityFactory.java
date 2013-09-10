@@ -180,10 +180,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     } else {
       try {
         entity = entityContract.newInstance();
-      } catch (InstantiationException ex) {
-        throw new EntityException(ex, "Could not instantiate entity "
-            + entityContract.getName());
-      } catch (IllegalAccessException ex) {
+      } catch (InstantiationException | IllegalAccessException ex) {
         throw new EntityException(ex, "Could not instantiate entity "
             + entityContract.getName());
       }

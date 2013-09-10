@@ -64,7 +64,7 @@ public final class StringUtils {
       result = ensureSpaceFree((List<String>) sourceCollection);
     } else {
       result = sourceCollection;
-      for (String source : new ArrayList<String>(sourceCollection)) {
+      for (String source : new ArrayList<>(sourceCollection)) {
         result.remove(source);
         result.add(ensureSpaceFree(source));
       }
@@ -83,7 +83,7 @@ public final class StringUtils {
     if (sourceList == null) {
       return null;
     }
-    List<String> result = new ArrayList<String>(sourceList.size());
+    List<String> result = new ArrayList<>(sourceList.size());
     for (String source : sourceList) {
       result.add(ensureSpaceFree(source));
     }
@@ -102,7 +102,7 @@ public final class StringUtils {
     if (sourceMap == null) {
       return null;
     }
-    Map<String, String> result = new LinkedHashMap<String, String>(
+    Map<String, String> result = new LinkedHashMap<>(
         sourceMap.size());
     for (Map.Entry<String, String> sourceEntry : sourceMap.entrySet()) {
       result.put(ensureSpaceFree(sourceEntry.getKey()),
@@ -122,7 +122,7 @@ public final class StringUtils {
     if (sourceSet == null) {
       return null;
     }
-    Set<String> result = new LinkedHashSet<String>(sourceSet.size());
+    Set<String> result = new LinkedHashSet<>(sourceSet.size());
     for (String source : sourceSet) {
       result.add(ensureSpaceFree(source));
     }

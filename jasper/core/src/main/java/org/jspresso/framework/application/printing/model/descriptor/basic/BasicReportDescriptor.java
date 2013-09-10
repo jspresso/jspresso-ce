@@ -60,10 +60,10 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
   }
 
   private static IComponentDescriptor<IReport> createInstance() {
-    BasicComponentDescriptor<IReport> instance = new BasicComponentDescriptor<IReport>(
+    BasicComponentDescriptor<IReport> instance = new BasicComponentDescriptor<>(
         IReport.class.getName());
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
 
     BasicPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
     nameDescriptor.setName(IDescriptor.NAME);

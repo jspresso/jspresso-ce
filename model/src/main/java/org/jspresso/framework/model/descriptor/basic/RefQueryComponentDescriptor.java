@@ -75,7 +75,7 @@ public class RefQueryComponentDescriptor<E> extends
     this.registry = registry;
     this.queryComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;
-    Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     for (IPropertyDescriptor propertyDescriptor : getQueriedComponentsDescriptor()
         .getPropertyDescriptors()) {
       propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
@@ -92,7 +92,7 @@ public class RefQueryComponentDescriptor<E> extends
   protected void finishConfiguration() {
     setDescription(getQueriedComponentsDescriptor().getDescription());
     setIcon(getQueriedComponentsDescriptor().getIcon());
-    List<String> qProperties = new ArrayList<String>();
+    List<String> qProperties = new ArrayList<>();
     for (String queryableProperty : queryComponentsDescriptorProvider
         .getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
@@ -184,7 +184,7 @@ public class RefQueryComponentDescriptor<E> extends
     synchronized (registry) {
       refQueryDescriptor = registry.get(referencedType);
       if (refQueryDescriptor == null) {
-        refQueryDescriptor = new RefQueryComponentDescriptor<IComponent>(
+        refQueryDescriptor = new RefQueryComponentDescriptor<>(
             referencedDescriptor, referencedType, registry);
         registry.put(referencedType, refQueryDescriptor);
         ((RefQueryComponentDescriptor<?>) refQueryDescriptor)

@@ -173,7 +173,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     RemoteCompositeValueState createdState = connectorFactory
         .createRemoteCompositeValueState(getGuid(), getPermId());
     createdState.setSelectedIndices(getSelectedIndices());
-    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    List<RemoteValueState> children = new ArrayList<>();
     for (int i = 0; i < getChildConnectorCount(); i++) {
       IValueConnector childConnector = getChildConnector(i);
       if (childConnector instanceof IRemoteStateOwner) {

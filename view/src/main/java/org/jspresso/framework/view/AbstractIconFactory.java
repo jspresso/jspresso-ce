@@ -59,7 +59,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * Constructs a new {@code AbstractIconFactory} instance.
    */
   protected AbstractIconFactory() {
-    iconStore = new HashMap<String, Map<Dimension, E>>();
+    iconStore = new HashMap<>();
   }
 
   /**
@@ -192,7 +192,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   public E getIcon(String urlSpec, Dimension iconSize) {
     Map<Dimension, E> multiDimStore = iconStore.get(urlSpec);
     if (multiDimStore == null) {
-      multiDimStore = new HashMap<Dimension, E>();
+      multiDimStore = new HashMap<>();
       iconStore.put(urlSpec, multiDimStore);
     }
     E cachedIcon = multiDimStore.get(iconSize);

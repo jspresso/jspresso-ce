@@ -55,10 +55,10 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
    * Constructs a new {@code SecurityContextBuilder} instance.
    */
   public SecurityContextBuilder() {
-    currentSecurityContext = new HashMap<String, Object>();
+    currentSecurityContext = new HashMap<>();
     currentSecurityContext.put(SecurityContextConstants.AUTH_TYPE,
         EAuthorization.VISIBLE);
-    snapshots = new ArrayList<Map<String, Object>>();
+    snapshots = new ArrayList<>();
   }
 
   /**
@@ -69,7 +69,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   @Override
   public Map<String, Object> getSecurityContext() {
     // return a defensive copy.
-    return new HashMap<String, Object>(currentSecurityContext);
+    return new HashMap<>(currentSecurityContext);
   }
 
   /**
@@ -148,10 +148,10 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
       List<String> viewChain = (List<String>) currentSecurityContext
           .get(SecurityContextConstants.VIEW_CHAIN);
       if (viewChain == null) {
-        viewChain = new ArrayList<String>();
+        viewChain = new ArrayList<>();
       } else {
         // copy to preserve snapshot.
-        viewChain = new ArrayList<String>(viewChain);
+        viewChain = new ArrayList<>(viewChain);
       }
       viewChain.add(permId);
       currentSecurityContext
@@ -187,7 +187,7 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
   private SecurityContextBuilder append(Module module) {
     if (module != null) {
       Module currentModule = module;
-      List<String> moduleChain = new ArrayList<String>();
+      List<String> moduleChain = new ArrayList<>();
       while (currentModule != null) {
         if (currentModule.getPermId() != null) {
           moduleChain.add(currentModule.getPermId());

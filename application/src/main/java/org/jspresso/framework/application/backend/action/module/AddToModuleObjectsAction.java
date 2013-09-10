@@ -52,9 +52,9 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
     List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
-      projectedCollection = new ArrayList<Object>();
+      projectedCollection = new ArrayList<>();
     } else {
-      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
+      projectedCollection = new ArrayList<>(module.getModuleObjects());
     }
 
     Object newModuleObject = createNewModuleObject(actionHandler, context);

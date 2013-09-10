@@ -31,7 +31,7 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
    * Constructs a new {@code ObjectEqualityMap} instance.
    */
   public ObjectEqualityMap() {
-    delegate = new HashMap<K, V>();
+    delegate = new HashMap<>();
   }
 
   /**
@@ -41,7 +41,7 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
    *          initialCapacity.
    */
   public ObjectEqualityMap(int initialCapacity) {
-    delegate = new HashMap<K, V>(initialCapacity);
+    delegate = new HashMap<>(initialCapacity);
   }
 
   /**
@@ -53,7 +53,7 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
    *          loadFactor.
    */
   public ObjectEqualityMap(int initialCapacity, float loadFactor) {
-    delegate = new HashMap<K, V>(initialCapacity, loadFactor);
+    delegate = new HashMap<>(initialCapacity, loadFactor);
   }
 
   /**
@@ -63,7 +63,7 @@ public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
    *          map.
    */
   public ObjectEqualityMap(Map<? extends K, ? extends V> m) {
-    delegate = new HashMap<K, V>(m);
+    delegate = new HashMap<>(m);
   }
 
   /**

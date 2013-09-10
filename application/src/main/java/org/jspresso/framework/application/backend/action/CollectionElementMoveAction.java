@@ -87,11 +87,11 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       return false;
     }
 
-    List<Object> targetList = new ArrayList<Object>(
+    List<Object> targetList = new ArrayList<>(
         (List<?>) collectionConnector.getConnectorValue());
     int size = targetList.size();
-    List<Object> headList = new ArrayList<Object>();
-    List<Object> tailList = new ArrayList<Object>();
+    List<Object> headList = new ArrayList<>();
+    List<Object> tailList = new ArrayList<>();
 
     int executeOffset = offset;
     if (toTop) {
@@ -133,14 +133,12 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       getAccessorFactory(context).createPropertyAccessor(
           collectionConnector.getId(), targetContract).setValue(master,
           targetList);
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ActionException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getTargetException() instanceof RuntimeException) {
         throw (RuntimeException) ex.getTargetException();
       }
-      throw new ActionException(ex);
-    } catch (NoSuchMethodException ex) {
       throw new ActionException(ex);
     }
     setSelectedModels(elementsToMove, context);

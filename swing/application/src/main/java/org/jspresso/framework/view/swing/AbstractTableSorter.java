@@ -113,7 +113,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    *          tableHeader.
    */
   public AbstractTableSorter(TableModel tableModel, JTableHeader tableHeader) {
-    this.sortingColumns = new ArrayList<Directive>();
+    this.sortingColumns = new ArrayList<>();
     this.mouseListener = new MouseHandler();
     this.tableModelListener = createTableModelHandler();
     setTableHeader(tableHeader);

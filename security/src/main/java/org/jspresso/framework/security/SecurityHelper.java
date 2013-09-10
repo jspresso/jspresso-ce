@@ -87,9 +87,9 @@ public final class SecurityHelper {
       return false;
     }
 
-    grantedRoles = new HashSet<String>(grantedRoles);
-    Collection<String> ungrantedRoles = new HashSet<String>();
-    for (String role : new HashSet<String>(grantedRoles)) {
+    grantedRoles = new HashSet<>(grantedRoles);
+    Collection<String> ungrantedRoles = new HashSet<>();
+    for (String role : new HashSet<>(grantedRoles)) {
       if (role.startsWith("!")) {
         grantedRoles.remove(role);
         ungrantedRoles.add(role.substring(1));
@@ -142,7 +142,7 @@ public final class SecurityHelper {
    * @return the roles list.
    */
   public static List<String> getRoles(Subject subject) {
-    List<String> roles = new ArrayList<String>();
+    List<String> roles = new ArrayList<>();
     Group subjectRoles = getRolesGroup(subject);
     if (subjectRoles != null) {
       for (Enumeration<? extends Principal> rolesEnum = subjectRoles.members(); rolesEnum

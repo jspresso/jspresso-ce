@@ -62,7 +62,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   @Override
   public IViewDescriptor getCardViewDescriptor(String cardName) {
     if (cardViewDescriptors == null) {
-      cardViewDescriptors = new HashMap<String, IViewDescriptor>();
+      cardViewDescriptors = new HashMap<>();
     }
     return cardViewDescriptors.get(cardName);
   }
@@ -78,7 +78,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   protected void putCardViewDescriptor(String cardName,
       IViewDescriptor cardViewDescriptor) {
     if (cardViewDescriptors == null) {
-      cardViewDescriptors = new HashMap<String, IViewDescriptor>();
+      cardViewDescriptors = new HashMap<>();
     }
     cardViewDescriptors.put(cardName, cardViewDescriptor);
   }

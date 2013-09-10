@@ -76,7 +76,7 @@ public class GenerateJasperReportAction extends BackendAction {
         jasperReport = (JasperReport) JRLoader.loadObject(UrlHelper.createURL(
             urlSpec).openStream());
       }
-      final Map<String, Object> reportContext = new HashMap<String, Object>(
+      final Map<String, Object> reportContext = new HashMap<>(
           reportDesign.getContext());
       reportContext.putAll(context);
       UserPrincipal user = getController(context).getApplicationSession()
@@ -103,9 +103,7 @@ public class GenerateJasperReportAction extends BackendAction {
             }
           });
       setActionParameter(jasperPrint, context);
-    } catch (JRException ex) {
-      throw new ActionException(ex);
-    } catch (IOException ex) {
+    } catch (JRException | IOException ex) {
       throw new ActionException(ex);
     }
     return super.execute(actionHandler, context);

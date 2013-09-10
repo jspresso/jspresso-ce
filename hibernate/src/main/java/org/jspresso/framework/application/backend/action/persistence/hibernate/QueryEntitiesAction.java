@@ -113,13 +113,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public static Criterion createEntityIdsInCriterion(Collection<Serializable> entityIds, int chunkSize) {
     int i = 0;
     Disjunction splittedInlist = Restrictions.disjunction();
-    Set<Serializable> currentMessageIds = new LinkedHashSet<Serializable>();
+    Set<Serializable> currentMessageIds = new LinkedHashSet<>();
     boolean complete = false;
     for (Iterator<Serializable> ite = entityIds.iterator(); ite.hasNext(); i++) {
       currentMessageIds.add(ite.next());
       if (i % chunkSize == (chunkSize - 1)) {
         splittedInlist.add(Restrictions.in(IEntity.ID, currentMessageIds));
-        currentMessageIds = new LinkedHashSet<Serializable>();
+        currentMessageIds = new LinkedHashSet<>();
         complete = true;
       } else {
         complete = false;
@@ -144,7 +144,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       queriedComponents = doQuery(queryComponent, context, null);
       // The queried components are assigned to the query component inside the
       // TX since they are not merged.
-      queryComponent.setQueriedComponents(new ArrayList<Object>(queriedComponents));
+      queryComponent.setQueriedComponents(new ArrayList<>(queriedComponents));
     } else {
       final EMergeMode localMergeMode = getMergeMode();
       queriedComponents = getTransactionTemplate(context).execute(new TransactionCallback<Set<Object>>() {
@@ -158,7 +158,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             // inside
             // the
             // TX since they are not merged.
-            queryComponent.setQueriedComponents(new ArrayList<Object>(txQueriedComponents));
+            queryComponent.setQueriedComponents(new ArrayList<>(txQueriedComponents));
           }
           return txQueriedComponents;
         }
@@ -167,7 +167,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         // The queried components are assigned to the query component outside of
         // the
         // TX since they have been merged into the session.
-        queryComponent.setQueriedComponents(new ArrayList<Object>(queriedComponents));
+        queryComponent.setQueriedComponents(new ArrayList<>(queriedComponents));
       }
     }
     return super.execute(actionHandler, context);
@@ -188,7 +188,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     }
 
     List<?> queriedComponents = performQuery(queryComponent, context);
-    Set<Object> mergedComponents = new LinkedHashSet<Object>();
+    Set<Object> mergedComponents = new LinkedHashSet<>();
 
     List<?> stickyResults = queryComponent.getStickyResults();
     if (stickyResults != null) {
@@ -235,7 +235,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     EnhancedDetachedCriteria criteria = critFactory.createCriteria(queryComponent, context);
     List<IEntity> entities;
     if (criteria == null) {
-      entities = new ArrayList<IEntity>();
+      entities = new ArrayList<>();
       queryComponent.setRecordCount(0);
     } else {
       ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent.get(CRITERIA_REFINER);
@@ -289,16 +289,16 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           List<Serializable> entityIds = criteria.getExecutableCriteria(hibernateSession)
                                                  .setFirstResult(page * pageSize).setMaxResults(pageSize).list();
           if (entityIds.isEmpty()) {
-            entities = new ArrayList<IEntity>();
+            entities = new ArrayList<>();
           } else {
             criteria = EnhancedDetachedCriteria.forEntityName(queryComponent.getQueryContract().getName());
             entities = criteria.add(createEntityIdsInCriterion(entityIds, 500)).getExecutableCriteria(hibernateSession)
                                .list();
-            Map<Serializable, IEntity> entitiesById = new HashMap<Serializable, IEntity>();
+            Map<Serializable, IEntity> entitiesById = new HashMap<>();
             for (IEntity entity : entities) {
               entitiesById.put(entity.getId(), entity);
             }
-            entities = new ArrayList<IEntity>();
+            entities = new ArrayList<>();
             for (Serializable id : entityIds) {
               IEntity entity = entitiesById.get(id);
               if (entity != null) {

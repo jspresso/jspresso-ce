@@ -98,7 +98,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
    * @return the list of actions that will be installed on the dialog toolbar.
    */
   protected List<IDisplayableAction> getDialogActions() {
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    List<IDisplayableAction> actions = new ArrayList<>();
     if (getOkAction() != null) {
       actions.add(getOkAction());
     }

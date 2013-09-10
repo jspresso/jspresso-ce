@@ -140,6 +140,7 @@ public class ComparableQueryStructure extends QueryComponent {
    * @return {@code true} if the comparable query structure actually holds
    *         a restriction.
    */
+  @Override
   public boolean isRestricting() {
     return getInfValue() != null || getSupValue() != null
         || ComparableQueryStructureDescriptor.NU.equals(getComparator())
@@ -166,28 +167,29 @@ public class ComparableQueryStructure extends QueryComponent {
       if (compareValue == null) {
         compareValue = supValue;
       }
-      if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-        return value.compareTo(compareValue) == 0;
-      } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
-        return value.compareTo(compareValue) > 0;
-      } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
-        return value.compareTo(compareValue) >= 0;
-      } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
-        return value.compareTo(compareValue) < 0;
-      } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
-        return value.compareTo(compareValue) <= 0;
-      } else if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
-        return compareValue == null;
-      } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
-        return compareValue != null;
-      } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
-        if (infValue != null && supValue != null) {
-          return value.compareTo(infValue) >= 0 && value.compareTo(supValue) <= 0;
-        } else if (infValue != null) {
-          return value.compareTo(infValue) >= 0;
-        } else {
-          return value.compareTo(supValue) <= 0;
-        }
+      switch (comparator) {
+        case ComparableQueryStructureDescriptor.EQ:
+          return value.compareTo(compareValue) == 0;
+        case ComparableQueryStructureDescriptor.GT:
+          return value.compareTo(compareValue) > 0;
+        case ComparableQueryStructureDescriptor.GE:
+          return value.compareTo(compareValue) >= 0;
+        case ComparableQueryStructureDescriptor.LT:
+          return value.compareTo(compareValue) < 0;
+        case ComparableQueryStructureDescriptor.LE:
+          return value.compareTo(compareValue) <= 0;
+        case ComparableQueryStructureDescriptor.NU:
+          return compareValue == null;
+        case ComparableQueryStructureDescriptor.NN:
+          return compareValue != null;
+        case ComparableQueryStructureDescriptor.BE:
+          if (infValue != null && supValue != null) {
+            return value.compareTo(infValue) >= 0 && value.compareTo(supValue) <= 0;
+          } else if (infValue != null) {
+            return value.compareTo(infValue) >= 0;
+          } else {
+            return value.compareTo(supValue) <= 0;
+          }
       }
     }
     return true;
@@ -201,73 +203,79 @@ public class ComparableQueryStructure extends QueryComponent {
   public String getToString() {
     if (isRestricting()) {
       String comparator = getComparator();
-      if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
-        return "#";
-      } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
-        return "!#";
-      } else {
-        Format format = null;
-        IPropertyDescriptor sd = getSourceDescriptor();
-        if (sd instanceof IDatePropertyDescriptor) {
-          if (((IDatePropertyDescriptor) sd).getType() == EDateType.DATE_TIME) {
-            if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
-              format = new SimpleDateFormat(
-                  getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
-                      .getTimePattern(getLocale()));
+      switch (comparator) {
+        case ComparableQueryStructureDescriptor.NU:
+          return "#";
+        case ComparableQueryStructureDescriptor.NN:
+          return "!#";
+        default:
+          Format format = null;
+          IPropertyDescriptor sd = getSourceDescriptor();
+          if (sd instanceof IDatePropertyDescriptor) {
+            if (((IDatePropertyDescriptor) sd).getType() == EDateType.DATE_TIME) {
+              if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
+                format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()) + " "
+                    + getTranslationProvider().getTimePattern(getLocale()));
+              } else {
+                format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()) + " "
+                    + getTranslationProvider().getShortTimePattern(getLocale()));
+              }
             } else {
-              format = new SimpleDateFormat(
-                  getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
-                      .getShortTimePattern(getLocale()));
+              format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()));
             }
-          } else {
-            format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()));
+          } else if (sd instanceof ITimePropertyDescriptor) {
+            if (((ITimePropertyDescriptor) sd).isSecondsAware()) {
+              format = new SimpleDateFormat(getTranslationProvider().getTimePattern(getLocale()));
+            } else {
+              format = new SimpleDateFormat(getTranslationProvider().getShortTimePattern(getLocale()));
+            }
+          } else if (sd instanceof IIntegerPropertyDescriptor) {
+            format = NumberFormat.getIntegerInstance(locale);
+          } else if (sd instanceof IDecimalPropertyDescriptor) {
+            if (sd instanceof IPercentPropertyDescriptor) {
+              format = NumberFormat.getPercentInstance(locale);
+            } else {
+              format = NumberFormat.getNumberInstance(locale);
+            }
+            ((NumberFormat) format).setMaximumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
+            ((NumberFormat) format).setMinimumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
           }
-        } else if (sd instanceof ITimePropertyDescriptor) {
-          if (((ITimePropertyDescriptor) sd).isSecondsAware()) {
-            format = new SimpleDateFormat(getTranslationProvider().getTimePattern(getLocale()));
-          } else {
-            format = new SimpleDateFormat(getTranslationProvider().getShortTimePattern(getLocale()));
+          StringBuilder buf = new StringBuilder();
+          Object infValue = getInfValue();
+          Object supValue = getSupValue();
+          Object compareValue = infValue;
+          if (compareValue == null) {
+            compareValue = supValue;
           }
-        } else if (sd instanceof IIntegerPropertyDescriptor) {
-          format = NumberFormat.getIntegerInstance(locale);
-        } else if (sd instanceof IDecimalPropertyDescriptor) {
-          if (sd instanceof IPercentPropertyDescriptor) {
-            format = NumberFormat.getPercentInstance(locale);
-          } else {
-            format = NumberFormat.getNumberInstance(locale);
+          assert format != null;
+          String formattedCompareValue = format.format(compareValue);
+          switch (comparator) {
+            case ComparableQueryStructureDescriptor.EQ:
+              buf.append("= ").append(formattedCompareValue);
+              break;
+            case ComparableQueryStructureDescriptor.GT:
+              buf.append("> ").append(formattedCompareValue);
+              break;
+            case ComparableQueryStructureDescriptor.GE:
+              buf.append(">= ").append(formattedCompareValue);
+              break;
+            case ComparableQueryStructureDescriptor.LT:
+              buf.append("< ").append(formattedCompareValue);
+              break;
+            case ComparableQueryStructureDescriptor.LE:
+              buf.append("<= ").append(formattedCompareValue);
+              break;
+            case ComparableQueryStructureDescriptor.BE:
+              if (infValue != null && supValue != null) {
+                buf.append(">= ").append(format.format(infValue)).append(", <= ").append(format.format(supValue));
+              } else if (infValue != null) {
+                buf.append(">= ").append(format.format(infValue));
+              } else if (supValue != null) {
+                buf.append("<= ").append(format.format(supValue));
+              }
+              break;
           }
-          ((NumberFormat) format).setMaximumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
-          ((NumberFormat) format).setMinimumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
-        }
-        StringBuilder buf = new StringBuilder();
-        Object infValue = getInfValue();
-        Object supValue = getSupValue();
-        Object compareValue = infValue;
-        if (compareValue == null) {
-          compareValue = supValue;
-        }
-        assert format != null;
-        String formattedCompareValue = format.format(compareValue);
-        if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-          buf.append("= ").append(formattedCompareValue);
-        } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
-          buf.append("> ").append(formattedCompareValue);
-        } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
-          buf.append(">= ").append(formattedCompareValue);
-        } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
-          buf.append("< ").append(formattedCompareValue);
-        } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
-          buf.append("<= ").append(formattedCompareValue);
-        } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
-          if (infValue != null && supValue != null) {
-            buf.append(">= ").append(format.format(infValue)).append(", <= ").append(format.format(supValue));
-          } else if (infValue != null) {
-            buf.append(">= ").append(format.format(infValue));
-          } else if (supValue != null) {
-            buf.append("<= ").append(format.format(supValue));
-          }
-        }
-        return buf.toString();
+          return buf.toString();
       }
     }
     return "";

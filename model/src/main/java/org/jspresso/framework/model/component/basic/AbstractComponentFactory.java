@@ -92,8 +92,8 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
       }
       if (propertyValue != null && !propertyValue.isEmpty() && !List.class.isAssignableFrom(
           propertyDescriptor.getCollectionDescriptor().getCollectionInterface())) {
-        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
-        List<ESort> orderingDirections = new ArrayList<ESort>();
+        List<IAccessor> orderingAccessors = new ArrayList<>();
+        List<ESort> orderingDirections = new ArrayList<>();
         Class<?> collectionElementContract = propertyDescriptor.getCollectionDescriptor().getElementDescriptor()
                                                                .getComponentContract();
         for (Map.Entry<String, ESort> orderingProperty : orderingProperties.entrySet()) {
@@ -102,15 +102,15 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           orderingDirections.add(orderingProperty.getValue());
         }
 
-        List<Object> collectionOrigin = new ArrayList<Object>(propertyValue);
-        List<ComparableProperties> listToSort = new ArrayList<ComparableProperties>();
+        List<Object> collectionOrigin = new ArrayList<>(propertyValue);
+        List<ComparableProperties> listToSort = new ArrayList<>();
         for (Object sourceObject : propertyValue) {
           listToSort.add(new ComparableProperties(sourceObject,
               orderingAccessors));
         }
         Collections.sort(listToSort, new ComparablePropertiesComparator(
             orderingDirections));
-        List<Object> collectionCopy = new ArrayList<Object>();
+        List<Object> collectionCopy = new ArrayList<>();
         for (ComparableProperties comparableProperties : listToSort) {
           collectionCopy.add(comparableProperties.getSourceObject());
         }
@@ -125,6 +125,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     }
   }
 
+  @Override
   public void applyInitializationMapping(Object component, IComponentDescriptor<?> componentDescriptor,
                                           Object masterComponent, Map<String, Object> initializationMapping) {
     if (LOG.isDebugEnabled()) {
@@ -183,15 +184,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
                   if (LOG.isDebugEnabled()) {
                     LOG.debug("Refined init value : " + initValue);
                   }
-                } catch (IllegalArgumentException ex) {
-                  // throw new NestedRuntimeException(ex,
-                  // "Invalid initialization mapping for property "
-                  // + initializedAttribute.getKey());
-                } catch (SecurityException ex) {
-                  // throw new NestedRuntimeException(ex,
-                  // "Invalid initialization mapping for property "
-                  // + initializedAttribute.getKey());
-                } catch (InstantiationException ex) {
+                } catch (IllegalArgumentException | InstantiationException | SecurityException ex) {
                   // throw new NestedRuntimeException(ex,
                   // "Invalid initialization mapping for property "
                   // + initializedAttribute.getKey());
@@ -209,15 +202,13 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
         if (LOG.isDebugEnabled()) {
           LOG.debug("Init value assigned.");
         }
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
       }
     }
   }
@@ -297,15 +288,13 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           try {
             valuesToCompare[i] = orderingAccessors.get(i)
                 .getValue(sourceObject);
-          } catch (IllegalAccessException ex) {
+          } catch (IllegalAccessException | NoSuchMethodException ex) {
             throw new MissingPropertyException(ex.getMessage());
           } catch (InvocationTargetException ex) {
             if (ex.getCause() instanceof RuntimeException) {
               throw (RuntimeException) ex.getCause();
             }
             throw new RuntimeException(ex.getCause());
-          } catch (NoSuchMethodException ex) {
-            throw new MissingPropertyException(ex.getMessage());
           }
         }
       }

@@ -184,7 +184,7 @@ public class BasicEntityInvocationHandler extends
   }
 
   private Map<String, Object> createPropertyMap() {
-    return new HashMap<String, Object>();
+    return new HashMap<>();
   }
 
   /**
@@ -213,15 +213,13 @@ public class BasicEntityInvocationHandler extends
         getAccessorFactory().createPropertyAccessor(
             rawPropertyName, getComponentDescriptor().getComponentContract())
                                               .setValue(proxy, translatedValue);
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
       }
 
     }

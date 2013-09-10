@@ -32,7 +32,7 @@ import org.jspresso.framework.util.bean.AccessorInfo;
  */
 public abstract class AbstractAccessorFactory implements IAccessorFactory {
 
-  private final Map<Method, AccessorInfo> accessorInfoCache = new ConcurrentHashMap<Method, AccessorInfo>();
+  private final Map<Method, AccessorInfo> accessorInfoCache = new ConcurrentHashMap<>();
 
   /**
    * Constructs and caches Accessor info. {@inheritDoc}

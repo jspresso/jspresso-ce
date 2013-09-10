@@ -79,7 +79,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
       Map<String, Object> context) {
     Map<String, Object> varContext = context;
     if (varContext == null) {
-      varContext = new HashMap<String, Object>();
+      varContext = new HashMap<>();
     }
     varContext.put(AddComponentCollectionToMasterAction.ELEMENT_DESCRIPTOR,
         getElementEntityDescriptor(context));

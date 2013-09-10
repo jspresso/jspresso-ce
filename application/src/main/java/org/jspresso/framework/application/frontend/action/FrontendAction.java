@@ -419,7 +419,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   private void completeActionabilityGates() {
     if (actionabilityGates == null) {
-      actionabilityGates = new LinkedHashSet<IGate>();
+      actionabilityGates = new LinkedHashSet<>();
     }
     if (isCollectionBased()) {
       actionabilityGates.remove(ModelTrackingGate.INSTANCE);

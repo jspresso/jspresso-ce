@@ -57,14 +57,14 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
 
     super(name);
 
-    BasicReferencePropertyDescriptor<Module> parentDescriptor = new BasicReferencePropertyDescriptor<Module>();
+    BasicReferencePropertyDescriptor<Module> parentDescriptor = new BasicReferencePropertyDescriptor<>();
     parentDescriptor.setName(Module.PARENT);
     parentDescriptor.setReferencedDescriptor(this);
 
-    BasicListDescriptor<Module> moduleListDescriptor = new BasicListDescriptor<Module>();
+    BasicListDescriptor<Module> moduleListDescriptor = new BasicListDescriptor<>();
     moduleListDescriptor.setElementDescriptor(this);
 
-    BasicCollectionPropertyDescriptor<Module> subModulesDescriptor = new BasicCollectionPropertyDescriptor<Module>();
+    BasicCollectionPropertyDescriptor<Module> subModulesDescriptor = new BasicCollectionPropertyDescriptor<>();
     subModulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
     subModulesDescriptor.setName(Module.SUB_MODULES);
 
@@ -83,7 +83,7 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
     parentDescriptor.setReverseRelationEnd(subModulesDescriptor);
     subModulesDescriptor.setReverseRelationEnd(parentDescriptor);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     propertyDescriptors.add(nameDescriptor);
     propertyDescriptors.add(descriptionDescriptor);
     propertyDescriptors.add(i18nNameDescriptor);

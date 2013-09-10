@@ -49,17 +49,13 @@ public class DefaultComponentExtensionFactory implements
             componentContract
           });
       return extension;
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    } catch (IllegalAccessException ex) {
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (InstantiationException ex) {
-      throw new ComponentException(ex);
     }
   }
 }

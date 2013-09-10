@@ -110,7 +110,7 @@ public class EditSelectedComponentAction<E, F, G> extends
    *          the cancelAction to set.
    */
   public void setCancelAction(FrontendAction<E, F, G> cancelAction) {
-    this.cancelAction = new UowRollbackerAction<E, F, G>(cancelAction);
+    this.cancelAction = new UowRollbackerAction<>(cancelAction);
   }
 
   /**
@@ -120,7 +120,7 @@ public class EditSelectedComponentAction<E, F, G> extends
    *          the okAction to set.
    */
   public void setOkAction(FrontendAction<E, F, G> okAction) {
-    this.okAction = new UowRollbackerAction<E, F, G>(okAction);
+    this.okAction = new UowRollbackerAction<>(okAction);
   }
 
   /**

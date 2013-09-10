@@ -70,8 +70,8 @@ public class BeanComparator implements Comparator<Object> {
    */
   public BeanComparator(Map<String, ESort> orderingProperties,
       IAccessorFactory accessorFactory, Class<?> beanClass) {
-    orderingAccessors = new ArrayList<IAccessor>();
-    orderingDirections = new ArrayList<ESort>();
+    orderingAccessors = new ArrayList<>();
+    orderingDirections = new ArrayList<>();
     if (orderingProperties != null) {
       for (Map.Entry<String, ESort> orderingProperty : orderingProperties
           .entrySet()) {
@@ -104,15 +104,13 @@ public class BeanComparator implements Comparator<Object> {
       try {
         o1Val = orderingAccessor.getValue(o1);
         o2Val = orderingAccessor.getValue(o2);
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new MissingPropertyException(ex.getMessage());
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new RuntimeException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new MissingPropertyException(ex.getMessage());
       }
       int result = NATURAL_COMPARATOR.compare(o1Val, o2Val);
       if (result != 0) {

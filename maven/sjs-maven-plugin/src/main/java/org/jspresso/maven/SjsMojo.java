@@ -115,16 +115,7 @@ public class SjsMojo extends AbstractMojo {
     if (isChangeDetected()) {
       try {
         runSjsCompilation();
-      } catch (IOException ex) {
-        throw new MojoExecutionException(
-            "An unexpected exception occurred when running SJS compilation.", ex);
-      } catch (ResourceException ex) {
-        throw new MojoExecutionException(
-            "An unexpected exception occurred when running SJS compilation.", ex);
-      } catch (ScriptException ex) {
-        throw new MojoExecutionException(
-            "An unexpected exception occurred when running SJS compilation.", ex);
-      } catch (DependencyResolutionRequiredException ex) {
+      } catch (IOException | DependencyResolutionRequiredException | ScriptException | ResourceException ex) {
         throw new MojoExecutionException(
             "An unexpected exception occurred when running SJS compilation.", ex);
       }
@@ -147,7 +138,7 @@ public class SjsMojo extends AbstractMojo {
     projectProperties.put("frontOutputFileName", frontOutputFileName);
 
     List<URL> classpath;
-    classpath = new ArrayList<URL>();
+    classpath = new ArrayList<>();
     classpath.add(srcDir.toURI().toURL());
     List<String> compileClasspathElements = project
         .getCompileClasspathElements();

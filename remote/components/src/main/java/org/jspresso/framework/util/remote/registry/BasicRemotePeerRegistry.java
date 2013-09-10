@@ -63,7 +63,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
         AbstractReferenceMap.WEAK, true);
     automationBackingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
         AbstractReferenceMap.WEAK, true);
-    automationIndices = new HashMap<String, Integer>();
+    automationIndices = new HashMap<>();
     setAutomationEnabled(false);
   }
 
@@ -191,7 +191,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
     @Override
     protected void init() {
-      remotePeerQueue = new ReferenceQueue<IRemotePeer>();
+      remotePeerQueue = new ReferenceQueue<>();
       super.init();
     }
 
@@ -315,7 +315,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   @Override
   public void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
     if (rprListeners == null && listener != null) {
-      rprListeners = new LinkedHashSet<IRemotePeerRegistryListener>();
+      rprListeners = new LinkedHashSet<>();
     }
     if (rprListeners != null) {
       rprListeners.add(listener);

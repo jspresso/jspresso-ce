@@ -69,9 +69,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
-    childConnectors = new LinkedHashMap<String, IValueConnector>();
+    childConnectors = new LinkedHashMap<>();
     selectionChangeSupport = new SelectionChangeSupport(this);
-    connectorTank = new ArrayList<IValueConnector>();
+    connectorTank = new ArrayList<>();
   }
 
   /**
@@ -154,7 +154,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   public ModelCollectionPropertyConnector clone(String newConnectorId) {
     ModelCollectionPropertyConnector clonedConnector = (ModelCollectionPropertyConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
+    clonedConnector.childConnectors = new LinkedHashMap<>();
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     return clonedConnector;
@@ -377,13 +377,13 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   private void updateChildConnectors() {
     Collection<?> modelCollection = (Collection<?>) getConnecteeValue();
-    Map<Object, List<IValueConnector>> existingConnectorsByValue = new HashMap<Object, List<IValueConnector>>();
-    for (String connectorKey : new ArrayList<String>(getChildConnectorKeys())) {
+    Map<Object, List<IValueConnector>> existingConnectorsByValue = new HashMap<>();
+    for (String connectorKey : new ArrayList<>(getChildConnectorKeys())) {
       IValueConnector childConnector = getChildConnector(connectorKey);
       List<IValueConnector> existingConnectors = existingConnectorsByValue
           .get(childConnector.getConnectorValue());
       if (existingConnectors == null) {
-        existingConnectors = new ArrayList<IValueConnector>();
+        existingConnectors = new ArrayList<>();
         existingConnectorsByValue.put(childConnector.getConnectorValue(),
             existingConnectors);
       }

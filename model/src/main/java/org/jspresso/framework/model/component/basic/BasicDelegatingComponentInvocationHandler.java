@@ -134,10 +134,7 @@ public class BasicDelegatingComponentInvocationHandler extends
         return delegate.getClass()
             .getMethod(method.getName(), method.getParameterTypes())
             .invoke(delegate, args);
-      } catch (IllegalArgumentException ex1) {
-        throw new ComponentException(method.toString()
-            + " is not supported on the component " + getComponentContract());
-      } catch (IllegalAccessException ex1) {
+      } catch (IllegalArgumentException | IllegalAccessException ex1) {
         throw new ComponentException(method.toString()
             + " is not supported on the component " + getComponentContract());
       } catch (InvocationTargetException ex1) {
@@ -157,15 +154,13 @@ public class BasicDelegatingComponentInvocationHandler extends
     try {
       return getAccessorFactory().createPropertyAccessor(propertyName,
           getComponentContract()).getValue(delegate);
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
   }
 
@@ -177,15 +172,13 @@ public class BasicDelegatingComponentInvocationHandler extends
     try {
       getAccessorFactory().createPropertyAccessor(propertyName,
           getComponentContract()).setValue(delegate, propertyValue);
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
   }
 }

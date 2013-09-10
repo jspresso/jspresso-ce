@@ -114,7 +114,7 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
   @Override
   public void setAncestorDescriptors(
       List<IComponentDescriptor<?>> ancestorDescriptors) {
-    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<>();
     if (ancestorDescriptors != null) {
       refinedAncestorDescriptors.addAll(ancestorDescriptors);
     }

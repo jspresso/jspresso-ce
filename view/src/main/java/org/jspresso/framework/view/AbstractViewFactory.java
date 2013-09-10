@@ -248,7 +248,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         } else if (viewDescriptor instanceof ITreeViewDescriptor) {
           view = createTreeView((ITreeViewDescriptor) viewDescriptor, actionHandler, locale);
           if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
-            ((IItemSelectable) view.getConnector()).addItemSelectionListener(new ConnectorActionAdapter<E, G>(
+            ((IItemSelectable) view.getConnector()).addItemSelectionListener(new ConnectorActionAdapter<>(
                 ((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction(), getActionFactory(), actionHandler,
                 view));
           }
@@ -738,7 +738,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected BasicCompositeView<E> constructCompositeView(E viewComponent,
       IViewDescriptor descriptor) {
-    BasicCompositeView<E> view = new BasicCompositeView<E>(viewComponent);
+    BasicCompositeView<E> view = new BasicCompositeView<>(viewComponent);
     view.setDescriptor(descriptor);
     return view;
   }
@@ -825,7 +825,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected BasicMapView<E> constructMapView(E viewComponent,
       IViewDescriptor descriptor) {
-    BasicMapView<E> view = new BasicMapView<E>(viewComponent);
+    BasicMapView<E> view = new BasicMapView<>(viewComponent);
     view.setDescriptor(descriptor);
     return view;
   }
@@ -843,7 +843,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected IView<E> constructView(E viewComponent, IViewDescriptor descriptor,
       IValueConnector connector) {
-    BasicView<E> view = new BasicView<E>(viewComponent);
+    BasicView<E> view = new BasicView<>(viewComponent);
     view.setConnector(connector);
     view.setDescriptor(descriptor);
     return view;
@@ -886,7 +886,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         actionHandler, propertyView, locale);
     G infoAction = getActionFactory().createAction(binaryPropertyInfoAction,
         actionHandler, propertyView, locale);
-    List<G> binaryActions = new ArrayList<G>();
+    List<G> binaryActions = new ArrayList<>();
     getActionFactory().setActionName(openAction, null);
     getActionFactory().setActionName(saveAction, null);
     getActionFactory().setActionName(resetAction, null);
@@ -1621,7 +1621,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ITranslationProvider translationProvider, Locale locale) {
     Map<Object, String> translations = null;
     if (propertyDescriptor.isTranslated()) {
-      translations = new HashMap<Object, String>();
+      translations = new HashMap<>();
       for (String value : propertyDescriptor.getEnumerationValues()) {
         translations
             .put(value, propertyDescriptor.getI18nValue(value,
@@ -2151,7 +2151,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       // action.
       final IValueConnector viewConnector = view.getConnector();
       if (viewConnector != null) {
-        viewConnector.addValueChangeListener(new ConnectorActionAdapter<E, G>(
+        viewConnector.addValueChangeListener(new ConnectorActionAdapter<>(
             propertyViewDescriptor.getAction(), getActionFactory(),
             actionHandler, view));
       }
@@ -2424,7 +2424,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
               ModelRefPropertyConnector.THIS_PROPERTY,
               rootDescriptor
                   .getNodeGroupDescriptor().getRenderedProperty());
-      List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
+      List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<>();
       if (((ICompositeTreeLevelDescriptor) rootDescriptor)
           .getChildrenDescriptors() != null) {
         for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
@@ -2910,7 +2910,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
       BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
       viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<IPropertyViewDescriptor> columnViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      List<IPropertyViewDescriptor> columnViewDescriptors = new ArrayList<>();
       for (String renderedProperty : renderedChildProperties) {
         BasicPropertyViewDescriptor columnDescriptor = new BasicPropertyViewDescriptor();
         columnDescriptor.setName(renderedProperty);
@@ -3056,7 +3056,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
       if (viewDescriptor.getItemSelectionAction() != null) {
         ((IItemSelectable) view.getConnector())
-            .addItemSelectionListener(new ConnectorActionAdapter<E, G>(
+            .addItemSelectionListener(new ConnectorActionAdapter<>(
                 viewDescriptor.getItemSelectionAction(), getActionFactory(),
                 actionHandler, view));
       }
@@ -3110,7 +3110,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
             nodeGroupModelDescriptor.getName() + "Element",
             subtreeViewDescriptor.getNodeGroupDescriptor()
                 .getRenderedProperty());
-    List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
+    List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<>();
     if (subtreeViewDescriptor.getChildrenDescriptors() != null
         && depth < viewDescriptor.getMaxDepth()) {
       for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
@@ -3440,14 +3440,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
         }
       }
     }
-    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = new LinkedHashMap<IPropertyViewDescriptor, Integer>();
+    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = new LinkedHashMap<>();
     if (columnPrefs == null) {
       for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
           .getColumnViewDescriptors()) {
         userColumnViewDescriptors.put(columnViewDescriptor, null);
       }
     } else {
-      Map<String, IPropertyViewDescriptor> columnsDirectory = new LinkedHashMap<String, IPropertyViewDescriptor>();
+      Map<String, IPropertyViewDescriptor> columnsDirectory = new LinkedHashMap<>();
       for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
           .getColumnViewDescriptors()) {
         columnsDirectory.put(

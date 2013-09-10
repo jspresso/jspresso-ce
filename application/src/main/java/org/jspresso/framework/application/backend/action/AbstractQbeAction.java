@@ -66,7 +66,7 @@ public abstract class AbstractQbeAction extends BackendAction {
           List<?> existingResultList = getExistingResultList(queryComponent,
               context);
           if (existingResultList != null && !existingResultList.isEmpty()) {
-            List<Object> sortedList = new ArrayList<Object>(existingResultList);
+            List<Object> sortedList = new ArrayList<>(existingResultList);
             Comparator<Object> beanComparator = new BeanComparator(
                 queryComponent.getOrderingProperties(), getBackendController(
                     context).getAccessorFactory(),

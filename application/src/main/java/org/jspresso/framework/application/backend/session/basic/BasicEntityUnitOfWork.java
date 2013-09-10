@@ -65,7 +65,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   @Override
   public void addUpdatedEntity(IEntity entity) {
     if (updatedEntities == null) {
-      updatedEntities = new LinkedHashSet<IEntity>();
+      updatedEntities = new LinkedHashSet<>();
     }
     updatedEntities.add(entity);
   }
@@ -135,14 +135,14 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   @Override
   public Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities() {
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities = 
-        new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>();
+        new HashMap<>();
     for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
       Class<? extends IEntity> entityContract = ((IEntity) entity)
           .getComponentContract();
       Map<Serializable, IEntity> contractBuffer = registeredEntities
           .get(entityContract);
       if (contractBuffer == null) {
-        contractBuffer = new HashMap<Serializable, IEntity>();
+        contractBuffer = new HashMap<>();
         registeredEntities.put(entityContract, contractBuffer);
       }
       contractBuffer.put(((IEntity) entity).getId(), (IEntity) entity);
@@ -212,7 +212,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     }
     if (entity.isPersistent()) {
       if (entitiesRegisteredForDeletion == null) {
-        entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
+        entitiesRegisteredForDeletion = new LinkedHashSet<>();
       }
       entitiesRegisteredForDeletion.add(entity);
     }
@@ -233,7 +233,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
     if (entitiesRegisteredForUpdate == null) {
-      entitiesRegisteredForUpdate = new ArrayList<IEntity>();
+      entitiesRegisteredForUpdate = new ArrayList<>();
     }
     entitiesRegisteredForUpdate.add(entity);
   }

@@ -61,7 +61,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    BasicListDescriptor<IDescriptor> modelDescriptor = new BasicListDescriptor<IDescriptor>();
+    BasicListDescriptor<IDescriptor> modelDescriptor = new BasicListDescriptor<>();
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     modelDescriptor.setName(ACTION_MODEL_NAME);
     // IValueConnector actionsConnector = modelConnectorFactory
@@ -101,7 +101,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private List<IDisplayableAction> createActionProxies(
       ITranslationProvider translationProvider, Locale locale) {
-    List<IDisplayableAction> actionProxies = new ArrayList<IDisplayableAction>(
+    List<IDisplayableAction> actionProxies = new ArrayList<>(
         actions.size());
     for (IDisplayableAction action : actions) {
       actionProxies.add(createActionProxy(action, translationProvider, locale));

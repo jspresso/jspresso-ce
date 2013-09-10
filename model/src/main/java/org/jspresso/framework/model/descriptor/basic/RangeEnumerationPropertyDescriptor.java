@@ -67,7 +67,7 @@ public class RangeEnumerationPropertyDescriptor extends
       if (rangeStep != null) {
         step = rangeStep;
       }
-      enumerationValues = new ArrayList<String>();
+      enumerationValues = new ArrayList<>();
       for (int i = min; i <= max; i += step) {
         enumerationValues.add(Integer.toString(i));
       }

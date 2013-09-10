@@ -172,7 +172,7 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
      */
     public FileFilterAdapter(Collection<String> allowedExtensions,
         String description) {
-      this.allowedExtensions = new HashSet<String>(allowedExtensions);
+      this.allowedExtensions = new HashSet<>(allowedExtensions);
       this.description = description;
     }
 

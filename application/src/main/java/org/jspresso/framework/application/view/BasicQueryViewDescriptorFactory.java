@@ -77,7 +77,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
       IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, Map<String, Object> actionContext) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
-    List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+    List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<>();
     for (String queriableProperty : componentDescriptorProvider
         .getQueryableProperties()) {
       IPropertyDescriptor actualPropertyDescriptor = queryComponentDescriptor
@@ -173,7 +173,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    */
   protected IDisplayableAction createComparableEditAction(ComparableQueryStructureDescriptor
                                                               comparablePropertyDescriptor) {
-    EditComponentAction<E, F, G> comparableEditAction = new EditComponentAction<E, F, G>();
+    EditComponentAction<E, F, G> comparableEditAction = new EditComponentAction<>();
     if (comparablePropertyDescriptor.getIcon() != null) {
       comparableEditAction.setIcon(comparablePropertyDescriptor.getIcon());
     } else {
@@ -184,7 +184,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
     BasicPropertyViewDescriptor propertyView;
 
-    List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+    List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<>();
 
     propertyView = new BasicPropertyViewDescriptor();
     propertyView.setName(ComparableQueryStructureDescriptor.COMPARATOR);
@@ -222,7 +222,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    */
   protected IDisplayableAction createEnumSelectAction(
       final EnumQueryStructureDescriptor enumPropertyDescriptor) {
-    EditComponentAction<E, F, G> enumSelectAction = new EditComponentAction<E, F, G>();
+    EditComponentAction<E, F, G> enumSelectAction = new EditComponentAction<>();
     if (enumPropertyDescriptor.getIcon() != null) {
       enumSelectAction.setIcon(enumPropertyDescriptor.getIcon());
     } else {

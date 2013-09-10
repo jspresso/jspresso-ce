@@ -59,7 +59,7 @@ public class RemoveFromModuleObjectsAction extends
   private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
     if (parentModule.getSubModules() != null) {
-      for (Module module : new ArrayList<Module>(parentModule.getSubModules())) {
+      for (Module module : new ArrayList<>(parentModule.getSubModules())) {
         if (module instanceof BeanModule
             && removedObject.equals(((BeanModule) module).getModuleObject())) {
           parentModule.removeSubModule(module);
@@ -88,12 +88,12 @@ public class RemoveFromModuleObjectsAction extends
 
     List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
-      projectedCollection = new ArrayList<Object>();
+      projectedCollection = new ArrayList<>();
     } else {
-      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
+      projectedCollection = new ArrayList<>(module.getModuleObjects());
     }
 
-    final List<Object> moduleObjectsToRemove = new ArrayList<Object>();
+    final List<Object> moduleObjectsToRemove = new ArrayList<>();
     for (int selectedIndice : selectedIndices) {
       moduleObjectsToRemove.add(collectionConnector.getChildConnector(
           selectedIndice).getConnectorValue());
@@ -109,7 +109,7 @@ public class RemoveFromModuleObjectsAction extends
               getController(context).clearPendingOperations();
               throw ex;
             }
-            List<Object> uowClones = new ArrayList<Object>();
+            List<Object> uowClones = new ArrayList<>();
             IBackendController controller = getController(context);
             for (Object moduleObjectToRemove : moduleObjectsToRemove) {
               if (moduleObjectToRemove instanceof IEntity) {
@@ -123,15 +123,13 @@ public class RemoveFromModuleObjectsAction extends
               if (moduleObjectToRemove instanceof IEntity) {
                 try {
                   deleteEntity((IEntity) moduleObjectToRemove, context);
-                } catch (IllegalAccessException ex) {
+                } catch (IllegalAccessException | NoSuchMethodException ex) {
                   throw new ActionException(ex);
                 } catch (InvocationTargetException ex) {
                   if (ex.getCause() instanceof RuntimeException) {
                     throw (RuntimeException) ex.getCause();
                   }
                   throw new ActionException(ex.getCause());
-                } catch (NoSuchMethodException ex) {
-                  throw new ActionException(ex);
                 }
               }
             }

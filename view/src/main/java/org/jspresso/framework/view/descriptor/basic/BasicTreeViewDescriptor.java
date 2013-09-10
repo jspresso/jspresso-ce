@@ -107,10 +107,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   @Override
   public ITreeLevelDescriptor getRootSubtreeDescriptor() {
     if (rootSubtreeDescriptor == null) {
-      BasicListDescriptor<Object> fakeCollDescriptor = new BasicListDescriptor<Object>();
+      BasicListDescriptor<Object> fakeCollDescriptor = new BasicListDescriptor<>();
       fakeCollDescriptor
           .setElementDescriptor((IComponentDescriptor<Object>) getModelDescriptor());
-      BasicCollectionPropertyDescriptor<Object> fakeCollPropDescriptor = new BasicCollectionPropertyDescriptor<Object>();
+      BasicCollectionPropertyDescriptor<Object> fakeCollPropDescriptor = new BasicCollectionPropertyDescriptor<>();
       fakeCollPropDescriptor.setReferencedDescriptor(fakeCollDescriptor);
       BasicListViewDescriptor fakeListViewDescriptor = new BasicListViewDescriptor();
       fakeListViewDescriptor.setRenderedProperty(renderedProperty);

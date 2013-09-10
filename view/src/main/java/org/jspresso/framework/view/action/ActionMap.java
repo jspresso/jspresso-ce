@@ -58,7 +58,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
       Map<String, ActionList> bufferActionMap, List<ActionList> actionLists,
       ISecurityHandler securityHandler) {
     if (actionLists != null) {
-      Map<String, ActionList> mapOfActionLists = new LinkedHashMap<String, ActionList>();
+      Map<String, ActionList> mapOfActionLists = new LinkedHashMap<>();
       for (ActionList al : actionLists) {
         if (al.getName() != null) {
           mapOfActionLists.put(al.getName(), al);
@@ -106,7 +106,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
    * @return the actions list.
    */
   public List<ActionList> getActionLists(ISecurityHandler securityHandler) {
-    Map<String, ActionList> buffer = new LinkedHashMap<String, ActionList>();
+    Map<String, ActionList> buffer = new LinkedHashMap<>();
     if (parentActionMaps != null) {
       for (ActionMap parentActionMap : parentActionMaps) {
         if (securityHandler.isAccessGranted(parentActionMap)) {
@@ -124,7 +124,7 @@ public class ActionMap implements ISecurable, IPermIdSource {
     if (actionLists != null) {
       completeActionMap(buffer, actionLists, securityHandler);
     }
-    return new ArrayList<ActionList>(buffer.values());
+    return new ArrayList<>(buffer.values());
   }
 
   /**

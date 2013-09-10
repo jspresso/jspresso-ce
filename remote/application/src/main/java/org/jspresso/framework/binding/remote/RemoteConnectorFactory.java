@@ -185,7 +185,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void valueChange(ValueChangeEvent evt) {
         ICollectionConnector connector = (ICollectionConnector) evt.getSource();
         IValueConnector parentConnector = connector.getParentConnector();
-        List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+        List<RemoteValueState> children = new ArrayList<>();
         for (int i = 0; i < connector.getChildConnectorCount(); i++) {
           IValueConnector childConnector = connector.getChildConnector(i);
           if (childConnector instanceof IRemoteStateOwner) {
@@ -193,7 +193,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           }
         }
 
-        List<RemoteValueState> removedChildren = new ArrayList<RemoteValueState>();
+        List<RemoteValueState> removedChildren = new ArrayList<>();
         if (evt instanceof CollectionConnectorValueChangeEvent) {
           if (((CollectionConnectorValueChangeEvent) evt)
               .getRemovedChildrenConnectors() != null) {
@@ -214,7 +214,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
           RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
               .getState());
-          parentState.setChildren(new ArrayList<RemoteValueState>(children));
+          parentState.setChildren(new ArrayList<>(children));
 
           if (!removedChildren.isEmpty()) {
             RemoteChildrenCommand parentRemoveCommand = new RemoteChildrenCommand();
@@ -227,7 +227,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteChildrenCommand parentCommand = new RemoteChildrenCommand();
           parentCommand.setTargetPeerGuid(parentState.getGuid());
           if (parentState.getChildren() != null) {
-            parentCommand.setChildren(new ArrayList<RemoteValueState>(
+            parentCommand.setChildren(new ArrayList<>(
                 parentState.getChildren()));
           } else {
             parentCommand.setChildren(null);
@@ -251,7 +251,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteChildrenCommand command = new RemoteChildrenCommand();
           command.setTargetPeerGuid(compositeValueState.getGuid());
           if (compositeValueState.getChildren() != null) {
-            command.setChildren(new ArrayList<RemoteValueState>(
+            command.setChildren(new ArrayList<>(
                 compositeValueState.getChildren()));
           } else {
             command.setChildren(null);

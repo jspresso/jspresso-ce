@@ -105,7 +105,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
   public Map<String, Object> createActionContext(IActionHandler actionHandler,
       IView<F> view, IValueConnector viewConnector, String actionCommand,
       F actionWidget) {
-    Map<String, Object> actionContext = new HashMap<String, Object>();
+    Map<String, Object> actionContext = new HashMap<>();
 
     IModelDescriptor modelDescriptor = null;
     F sourceComponent = null;
@@ -167,7 +167,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
       }
       Collection<IGate> actionabilityGates = action.getActionabilityGates();
       if (actionabilityGates != null) {
-        Collection<IGate> clonedGates = new HashSet<IGate>();
+        Collection<IGate> clonedGates = new HashSet<>();
         for (IGate gate : actionabilityGates) {
           if (!(gate instanceof ISecurable)
               || actionHandler.isAccessGranted((ISecurable) gate)) {
@@ -361,7 +361,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
       ICollectionConnector collConnector, int... selectedIndices) {
     Set<Object> selectedModels = null;
     if (selectedIndices != null && selectedIndices.length > 0) {
-      selectedModels = new HashSet<Object>();
+      selectedModels = new HashSet<>();
       for (int selectedIndice : selectedIndices) {
         IValueConnector childConnector = collConnector
             .getChildConnector(selectedIndice);

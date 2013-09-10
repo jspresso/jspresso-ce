@@ -42,14 +42,14 @@ public class DescriptorAwareMapCollectionAccessor extends
       NoSuchMethodException {
     Collection<Object> mapValue = getValue(target);
     if (mapValue == null) {
-      mapValue = new ArrayList<Object>();
+      mapValue = new ArrayList<>();
     }
     // target instance must be tested to avoid triggering twice the property
     // processors if the map contains a non-map model.
     if (target instanceof Map<?, ?> && getModelDescriptor() != null) {
       getModelDescriptor().preprocessAdder(this, mapValue, value);
     }
-    ((Collection<Object>) mapValue).add(value);
+    mapValue.add(value);
     // to trigger a propertyChange.
     setValue(target, mapValue);
     // target instance must be tested to avoid triggering twice the property

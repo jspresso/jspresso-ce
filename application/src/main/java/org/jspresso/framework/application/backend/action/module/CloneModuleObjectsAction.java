@@ -64,11 +64,11 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
 
     List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
-      projectedCollection = new ArrayList<Object>();
+      projectedCollection = new ArrayList<>();
     } else {
-      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
+      projectedCollection = new ArrayList<>(module.getModuleObjects());
     }
-    Collection<IComponent> entityClones = new ArrayList<IComponent>();
+    Collection<IComponent> entityClones = new ArrayList<>();
     for (int selectedIndice : selectedIndices) {
       Object component = collectionConnector.getChildConnector(
           selectedIndice).getConnectorValue();

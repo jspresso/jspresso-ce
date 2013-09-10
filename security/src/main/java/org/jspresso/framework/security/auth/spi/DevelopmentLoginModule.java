@@ -91,9 +91,7 @@ public class DevelopmentLoginModule implements LoginModule {
           LoginUtils.LOGIN_FAILED);
       try {
         callbackHandler.handle(callbacks);
-      } catch (IOException ex) {
-        // NO-OP.
-      } catch (UnsupportedCallbackException ex) {
+      } catch (IOException | UnsupportedCallbackException ex) {
         // NO-OP.
       }
       return false;

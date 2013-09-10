@@ -96,7 +96,7 @@ public final class PropertyHelper {
       // or the found descriptor is read-only.
       // If beanClass is indeed an interface, we must also deal with all its
       // super-interfaces.
-      List<Class<?>> superTypes = new ArrayList<Class<?>>();
+      List<Class<?>> superTypes = new ArrayList<>();
       if (beanClass.getSuperclass() != null
           && beanClass.getSuperclass() != Object.class) {
         superTypes.add(beanClass.getSuperclass());
@@ -129,7 +129,7 @@ public final class PropertyHelper {
    * @return the collection of property names.
    */
   public static Collection<String> getPropertyNames(Class<?> beanClass) {
-    Collection<String> propertyNames = new HashSet<String>();
+    Collection<String> propertyNames = new HashSet<>();
     PropertyDescriptor[] descriptors = PropertyUtils
         .getPropertyDescriptors(beanClass);
     for (PropertyDescriptor descriptor : descriptors) {

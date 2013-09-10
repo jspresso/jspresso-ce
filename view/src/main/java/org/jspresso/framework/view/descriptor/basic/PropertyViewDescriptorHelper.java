@@ -57,7 +57,7 @@ public final class PropertyViewDescriptorHelper {
   public static List<IPropertyViewDescriptor> explodeComponentReferences(
       IPropertyViewDescriptor propertyViewDescriptor,
       IComponentDescriptorProvider<?> componentDescriptorProvider) {
-    List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
+    List<IPropertyViewDescriptor> returnedList = new ArrayList<>();
     IComponentDescriptor<?> rootComponentDescriptor = componentDescriptorProvider
         .getComponentDescriptor();
     IPropertyDescriptor propertyDescriptor;

@@ -111,7 +111,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
         viewRenderedProperties.remove(
             ((ICollectionPropertyDescriptor<?>) modelDescriptor).getReverseRelationEnd().getName());
       }
-      declaredPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      declaredPropertyViewDescriptors = new ArrayList<>();
       for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor columnDescriptor = new BasicPropertyViewDescriptor();
         columnDescriptor.setName(renderedProperty);
@@ -119,7 +119,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
         declaredPropertyViewDescriptors.add(columnDescriptor);
       }
     }
-    List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+    List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
       IModelDescriptor columnModelDescriptor = propertyViewDescriptor.getModelDescriptor();
       if (columnModelDescriptor == null) {

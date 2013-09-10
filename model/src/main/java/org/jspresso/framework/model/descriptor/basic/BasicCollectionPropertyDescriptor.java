@@ -231,7 +231,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    */
   public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
     if (untypedOrderingProperties != null) {
-      orderingProperties = new LinkedHashMap<String, ESort>();
+      orderingProperties = new LinkedHashMap<>();
       for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
           .entrySet()) {
         if (untypedOrderingProperty.getValue() instanceof ESort) {
@@ -298,7 +298,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
     BasicCollectionPropertyDescriptor<E> defaultQueryDescriptor = (BasicCollectionPropertyDescriptor<E>) super
         .createQueryDescriptor();
 
-    BasicReferencePropertyDescriptor<E> queryDescriptor = new BasicReferencePropertyDescriptor<E>();
+    BasicReferencePropertyDescriptor<E> queryDescriptor = new BasicReferencePropertyDescriptor<>();
     queryDescriptor.setName(defaultQueryDescriptor.getName());
     queryDescriptor.setI18nNameKey(defaultQueryDescriptor.getI18nNameKey());
     queryDescriptor.setDescription(defaultQueryDescriptor.getDescription());

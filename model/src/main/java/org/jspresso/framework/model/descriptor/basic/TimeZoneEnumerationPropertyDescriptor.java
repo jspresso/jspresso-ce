@@ -50,7 +50,7 @@ public class TimeZoneEnumerationPropertyDescriptor extends
   @Override
   public List<String> getEnumerationValues() {
     if (enumerationValues == null) {
-      enumerationValues = new ArrayList<String>();
+      enumerationValues = new ArrayList<>();
       for (String timezoneId : TimeZone.getAvailableIDs()) {
         if (timezoneId.matches("(Africa/|America/|Antarctica/|Arctic/|Asia/" +
             "|Atlantic/|Australia/|Europe/|Indian/|Pacific/).*")) {

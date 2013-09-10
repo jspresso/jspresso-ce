@@ -41,7 +41,7 @@ public class ItemSelectionSupport {
       IItemSelectionListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IItemSelectionListener>();
+        listeners = new LinkedHashSet<>();
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -58,7 +58,7 @@ public class ItemSelectionSupport {
    */
   public void fireSelectedConnectorChange(ItemSelectionEvent evt) {
     if (listeners != null) {
-      for (IItemSelectionListener listener : new LinkedHashSet<IItemSelectionListener>(
+      for (IItemSelectionListener listener : new LinkedHashSet<>(
           listeners)) {
         listener.selectedItemChange(evt);
       }

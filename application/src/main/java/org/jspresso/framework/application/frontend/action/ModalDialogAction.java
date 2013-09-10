@@ -96,7 +96,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     E sourceComponent = getSourceComponent(context);
 
-    List<G> actions = new ArrayList<G>();
+    List<G> actions = new ArrayList<>();
     for (IDisplayableAction action : dActions) {
       actions.add(getActionFactory(context).createAction(action, actionHandler,
           mainView, getLocale(context)));

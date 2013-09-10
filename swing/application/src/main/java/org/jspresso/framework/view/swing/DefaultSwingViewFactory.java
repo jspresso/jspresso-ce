@@ -413,7 +413,7 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     if (propertyDescriptor.isMandatory()) {
       viewComponent = createJCheckBox(propertyViewDescriptor);
-      connector = new JToggleButtonConnector<JCheckBox>(
+      connector = new JToggleButtonConnector<>(
           propertyDescriptor.getName(), (JCheckBox) viewComponent);
     } else {
       viewComponent = createJTriStateCheckBox(propertyViewDescriptor);
@@ -434,7 +434,7 @@ public class DefaultSwingViewFactory extends
     JPanel viewComponent = createJPanel();
     BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+    List<IView<JComponent>> childrenViews = new ArrayList<>();
 
     BorderLayout layout = new BorderLayout();
     viewComponent.setLayout(layout);
@@ -558,7 +558,7 @@ public class DefaultSwingViewFactory extends
     int currentY = 0;
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
-    List<IView<JComponent>> propertyViews = new ArrayList<IView<JComponent>>();
+    List<IView<JComponent>> propertyViews = new ArrayList<>();
     int formInset = 2;
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
@@ -1014,7 +1014,7 @@ public class DefaultSwingViewFactory extends
     JPanel viewComponent = createJPanel();
     BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+    List<IView<JComponent>> childrenViews = new ArrayList<>();
 
     GridBagLayout layout = new GridBagLayout();
     viewComponent.setLayout(layout);
@@ -1195,7 +1195,7 @@ public class DefaultSwingViewFactory extends
       connector.setExceptionHandler(actionHandler);
       view = constructView(viewComponent, propertyViewDescriptor, connector);
     } else {
-      List<String> enumerationValues = new ArrayList<String>(
+      List<String> enumerationValues = new ArrayList<>(
           propertyDescriptor.getEnumerationValues());
       filterEnumerationValues(enumerationValues, propertyViewDescriptor);
       if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
@@ -1217,7 +1217,7 @@ public class DefaultSwingViewFactory extends
             layout = new GridLayout(0, 1);
         }
         viewComponent.setLayout(layout);
-        List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+        List<IView<JComponent>> childrenViews = new ArrayList<>();
         for (String enumElement : enumerationValues) {
           JRadioButton subViewComponent = new JRadioButton();
           subViewComponent.setText(propertyDescriptor.getI18nValue(enumElement,
@@ -1278,7 +1278,7 @@ public class DefaultSwingViewFactory extends
     JPanel viewComponent = createJPanel();
     BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+    List<IView<JComponent>> childrenViews = new ArrayList<>();
 
     GridLayout layout = new GridLayout();
     switch (viewDescriptor.getDrivingDimension()) {
@@ -1590,11 +1590,7 @@ public class DefaultSwingViewFactory extends
       textArea.setTokenMarker((TokenMarker) Class.forName(
           "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
           .newInstance());
-    } catch (InstantiationException ex) {
-      // Nothing to do. just don't colorize.
-    } catch (IllegalAccessException ex) {
-      // Nothing to do. just don't colorize.
-    } catch (ClassNotFoundException ex) {
+    } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
       // Nothing to do. just don't colorize.
     }
     return textArea;
@@ -1643,7 +1639,7 @@ public class DefaultSwingViewFactory extends
    */
   protected JLink<Action> createJLink(IPropertyViewDescriptor viewDescriptor) {
     // To have preferred height computed.
-    JLink<Action> actionLink = new JLink<Action>(" ", null, "");
+    JLink<Action> actionLink = new JLink<>(" ", null, "");
     actionLink.addLinkListener(new LinkListener<Action>() {
 
       @Override
@@ -2146,7 +2142,7 @@ public class DefaultSwingViewFactory extends
     JSplitPane viewComponent = createJSplitPane(viewDescriptor);
     BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+    List<IView<JComponent>> childrenViews = new ArrayList<>();
 
     switch (viewDescriptor.getOrientation()) {
       case HORIZONTAL:
@@ -2313,8 +2309,8 @@ public class DefaultSwingViewFactory extends
           .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
-    List<Class<?>> columnClasses = new ArrayList<Class<?>>();
-    Set<String> forbiddenColumns = new HashSet<String>();
+    List<Class<?>> columnClasses = new ArrayList<>();
+    Set<String> forbiddenColumns = new HashSet<>();
     Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
         viewDescriptor, actionHandler);
     for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
@@ -2332,7 +2328,7 @@ public class DefaultSwingViewFactory extends
             // We must listen for incoming connector value change to trigger the
             // action.
             columnConnector
-                .addValueChangeListener(new ConnectorActionAdapter<JComponent, Action>(
+                .addValueChangeListener(new ConnectorActionAdapter<>(
                     columnViewDescriptor.getAction(), getActionFactory(),
                     actionHandler, view));
           }
@@ -2353,7 +2349,7 @@ public class DefaultSwingViewFactory extends
         forbiddenColumns.add(columnId);
       }
     }
-    List<String> columnConnectorKeys = new ArrayList<String>(
+    List<String> columnConnectorKeys = new ArrayList<>(
         rowConnectorPrototype.getChildConnectorKeys());
     // remove row rendering connector id
     columnConnectorKeys.remove(0);
@@ -2765,7 +2761,7 @@ public class DefaultSwingViewFactory extends
         view.setCurrentViewIndex(source.getSelectedIndex());
       }
     });
-    List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
+    List<IView<JComponent>> childrenViews = new ArrayList<>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
@@ -3025,7 +3021,7 @@ public class DefaultSwingViewFactory extends
           }
           if (nextActionList.isCollapsable()) {
             JButton actionButton;
-            List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+            List<IDisplayableAction> actions = new ArrayList<>();
             for (IDisplayableAction action : nextActionList.getActions()) {
               if (actionHandler.isAccessGranted(action)) {
                 actions.add(action);
@@ -3514,7 +3510,7 @@ public class DefaultSwingViewFactory extends
 
   private List<String> getDescriptorPathFromConnectorTreePath(
       TreePath connectorTreePath) {
-    List<String> descriptorPath = new ArrayList<String>();
+    List<String> descriptorPath = new ArrayList<>();
     if (connectorTreePath != null) {
       Object[] connectors = connectorTreePath.getPath();
       for (Object connector : connectors) {
@@ -4090,7 +4086,7 @@ public class DefaultSwingViewFactory extends
    */
   protected void configurePropertyViewAction(
       IView<JComponent> propertyViewDescriptor, Action propertyViewAction) {
-    Map<String, Object> staticContext = new HashMap<String, Object>();
+    Map<String, Object> staticContext = new HashMap<>();
     staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR,
         propertyViewDescriptor);
     propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);

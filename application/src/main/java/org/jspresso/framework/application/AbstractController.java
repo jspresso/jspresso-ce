@@ -160,7 +160,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    */
   public static Map<String, Object> extractInternalActionState(IAction action)
       throws IllegalAccessException {
-    HashMap<String, Object> state = new HashMap<String, Object>();
+    HashMap<String, Object> state = new HashMap<>();
     appendToInternalActionState(action.getClass(), action, state);
     return state;
   }

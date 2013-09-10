@@ -48,7 +48,7 @@ public class TransferCollectionAction extends BackendAction {
       Map<String, Object> context) {
     List<IComponent> transferedComponents = getSelectedModels(context);
     getController(context).storeComponents(
-        new ComponentTransferStructure<IComponent>(transferedComponents,
+        new ComponentTransferStructure<>(transferedComponents,
             transferMode));
     return super.execute(actionHandler, context);
   }

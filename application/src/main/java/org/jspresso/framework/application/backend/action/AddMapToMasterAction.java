@@ -53,7 +53,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
   protected List<?> getAddedComponents(Map<String, Object> context) {
     IComponentDescriptor<?> componentDescriptor = getModelDescriptor(context)
         .getCollectionDescriptor().getElementDescriptor();
-    Map<String, Object> newMap = new ObjectEqualityMap<String, Object>();
+    Map<String, Object> newMap = new ObjectEqualityMap<>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       if (propertyDescriptor instanceof IScalarPropertyDescriptor

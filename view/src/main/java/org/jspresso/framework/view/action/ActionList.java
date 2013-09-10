@@ -47,7 +47,7 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
   public ActionList clone() {
     ActionList clonedActionList = (ActionList) super.clone();
     clonedActionList
-        .setActions(new ArrayList<IDisplayableAction>(getActions()));
+        .setActions(new ArrayList<>(getActions()));
     return clonedActionList;
   }
 

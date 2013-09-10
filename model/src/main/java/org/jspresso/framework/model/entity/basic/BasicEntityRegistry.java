@@ -48,7 +48,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
    */
   public BasicEntityRegistry(String name) {
     this.name = name;
-    backingStore = new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>();
+    backingStore = new HashMap<>();
   }
 
   /**

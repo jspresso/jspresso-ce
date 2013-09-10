@@ -32,11 +32,11 @@ import java.lang.reflect.Method;
  */
 public class AbstractComponentServiceDelegate<T> implements IComponentService {
 
-  private final ThreadLocal<T> targetStore = new ThreadLocal<T>();
+  private final ThreadLocal<T> targetStore = new ThreadLocal<>();
 
   /**
    * Gets the target component this service delegate is attached to.
-   * 
+   *
    * @return the target component this service delegate is attached to.
    */
   protected T getComponent() {
@@ -45,7 +45,7 @@ public class AbstractComponentServiceDelegate<T> implements IComponentService {
 
   /**
    * Executes a service method for a given target.
-   * 
+   *
    * @param target
    *          the component target to execute the service method for.
    * @param serviceMethod

@@ -439,21 +439,10 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         inputStream.close();
         outputStream.close();
       }
-    } catch (ServletException sex) {
+    } catch (ServletException | IOException sex) {
       LOG.error(
           "An exception occurred when dealing with the following request : [{}]",
           request.getRequestURL(), sex);
-      try {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      } catch (IOException ex) {
-        throw new NestedRuntimeException(ex,
-            "An exception occurred while sending back a "
-                + HttpServletResponse.SC_NOT_FOUND + "error.");
-      }
-    } catch (IOException ioex) {
-      LOG.error(
-          "An exception occurred when dealing with the following request : [{}]",
-          request.getRequestURL(), ioex);
       try {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
       } catch (IOException ex) {

@@ -52,7 +52,7 @@ public final class ConnectorTreeHelper {
    */
   public static TreePath getTreePathForConnector(IValueConnector rootConnector,
       IValueConnector connector) {
-    List<IValueConnector> treePath = new ArrayList<IValueConnector>();
+    List<IValueConnector> treePath = new ArrayList<>();
     IValueConnector parentConnector = connector;
     while (parentConnector != null && parentConnector != rootConnector) {
       if (!(parentConnector instanceof ICollectionConnector)

@@ -52,7 +52,7 @@ public class BasicEnumerationPropertyDescriptor extends
    */
   @Override
   public List<String> getEnumerationValues() {
-    return new ArrayList<String>(valuesAndIconImageUrls.keySet());
+    return new ArrayList<>(valuesAndIconImageUrls.keySet());
   }
 
   /**
@@ -84,7 +84,7 @@ public class BasicEnumerationPropertyDescriptor extends
    *          the values to set.
    */
   public void setValues(List<String> values) {
-    valuesAndIconImageUrls = new LinkedHashMap<String, String>();
+    valuesAndIconImageUrls = new LinkedHashMap<>();
     for (String value : StringUtils.ensureSpaceFree(values)) {
       valuesAndIconImageUrls.put(value, null);
     }

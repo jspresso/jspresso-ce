@@ -169,7 +169,7 @@ public class SaveFileAction extends ChooseFileAction {
       this.name = name;
       this.source = source;
       this.actionHandler = actionHandler;
-      this.context = new HashMap<String, Object>();
+      this.context = new HashMap<>();
       if (context != null) {
         this.context = context;
       }

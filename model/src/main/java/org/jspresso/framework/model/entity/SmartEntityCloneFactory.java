@@ -99,7 +99,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
     IComponentDescriptor<?> componentDescriptor = entityFactory
         .getComponentDescriptor(componentToClone.getComponentContract());
 
-    Map<Object, ICollectionPropertyDescriptor<?>> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor<?>>();
+    Map<Object, ICollectionPropertyDescriptor<?>> collRelToUpdate = new HashMap<>();
     for (Map.Entry<String, Object> propertyEntry : componentToClone
         .straightGetProperties().entrySet()) {
       if (propertyEntry.getValue() != null
@@ -146,15 +146,13 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                       .createPropertyAccessor(propertyEntry.getKey(),
                           componentToClone.getComponentContract())
                       .getValue(componentToClone);
-                } catch (IllegalAccessException ex) {
+                } catch (IllegalAccessException | NoSuchMethodException ex) {
                   throw new EntityException(ex);
                 } catch (InvocationTargetException ex) {
                   if (ex.getCause() instanceof RuntimeException) {
                     throw (RuntimeException) ex.getCause();
                   }
                   throw new EntityException(ex.getCause());
-                } catch (NoSuchMethodException ex) {
-                  throw new EntityException(ex);
                 }
                 for (Object reverseCollectionElement : (Collection<?>) propertyEntry
                     .getValue()) {
@@ -203,15 +201,13 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
           collectionAccessor.addToValue(collectionEntry.getKey(),
               clonedComponent);
         }
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new EntityException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new EntityException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new EntityException(ex);
       }
     }
   }

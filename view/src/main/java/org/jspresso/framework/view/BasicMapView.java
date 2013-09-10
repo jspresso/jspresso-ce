@@ -75,7 +75,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    */
   protected Map<String, IView<E>> getChildrenMap() {
     if (childrenMap == null) {
-      childrenMap = new HashMap<String, IView<E>>();
+      childrenMap = new HashMap<>();
     }
     return childrenMap;
   }

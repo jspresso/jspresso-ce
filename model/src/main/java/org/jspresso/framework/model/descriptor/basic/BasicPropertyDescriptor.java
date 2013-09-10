@@ -693,7 +693,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   private void registerIntegrityProcessor(
       IPropertyProcessor<?, ?> integrityProcessor) {
     if (integrityProcessors == null) {
-      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
+      integrityProcessors = new ArrayList<>();
     }
     integrityProcessors.add(integrityProcessor);
   }
@@ -705,11 +705,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
         try {
           registerIntegrityProcessor((IPropertyProcessor<?, ?>) Class.forName(
               integrityProcessorClassName).newInstance());
-        } catch (InstantiationException ex) {
-          throw new DescriptorException(ex);
-        } catch (IllegalAccessException ex) {
-          throw new DescriptorException(ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
           throw new DescriptorException(ex);
         }
       }

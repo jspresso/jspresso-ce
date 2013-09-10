@@ -73,8 +73,8 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    *          the viewDescriptors to set.
    */
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
-    Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
-    registeredTypes = new ArrayList<Class<?>>();
+    Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<>();
+    registeredTypes = new ArrayList<>();
     for (IViewDescriptor componentViewDescriptor : viewDescriptors) {
       if (!(componentViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>)) {
         throw new ViewException(

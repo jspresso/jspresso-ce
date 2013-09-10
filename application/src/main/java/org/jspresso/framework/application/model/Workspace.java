@@ -423,7 +423,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   public void setModules(List<Module> modules) {
     List<Module> oldValue = null;
     if (getModules() != null) {
-      oldValue = new ArrayList<Module>(getModules());
+      oldValue = new ArrayList<>(getModules());
     }
     this.modules = modules;
     if (this.modules != null) {

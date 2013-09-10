@@ -141,7 +141,7 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F,
 
     try {
       IAccessorFactory accessorFactory = getBackendController(context).getAccessorFactory();
-      List<Object> references = new ArrayList<Object>();
+      List<Object> references = new ArrayList<>();
       for (Object component : componentsToAdd) {
         IAccessor accessor = accessorFactory.createPropertyAccessor(getReferencePath(), component.getClass());
         Object reference = accessor.getValue(component);
@@ -152,11 +152,7 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F,
         }
       }
       return references;
-    } catch (IllegalAccessException e) {
-      throw new NestedRuntimeException(e);
-    } catch (InvocationTargetException e) {
-      throw new NestedRuntimeException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       throw new NestedRuntimeException(e);
     }
   }

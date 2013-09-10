@@ -58,7 +58,7 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    BasicListDescriptor<IReport> modelDescriptor = new BasicListDescriptor<IReport>();
+    BasicListDescriptor<IReport> modelDescriptor = new BasicListDescriptor<>();
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = getBackendController(context)
         .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
@@ -107,7 +107,7 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private List<IReport> createReportInstances(
       ITranslationProvider translationProvider, Locale locale) {
-    List<IReport> reports = new ArrayList<IReport>();
+    List<IReport> reports = new ArrayList<>();
     if (reportDescriptors != null) {
       for (IReportDescriptor descriptor : reportDescriptors) {
         reports.add(reportFactory.createReportInstance(descriptor,

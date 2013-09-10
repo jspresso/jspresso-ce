@@ -73,7 +73,7 @@ public abstract class AbstractCollectionConnector extends
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
     selectionChangeSupport = new SelectionChangeSupport(this);
-    connectorTank = new ArrayList<IValueConnector>();
+    connectorTank = new ArrayList<>();
   }
 
   /**
@@ -126,7 +126,7 @@ public abstract class AbstractCollectionConnector extends
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     clonedConnector.removedChildrenConnectors = null;
-    clonedConnector.connectorTank = new ArrayList<IValueConnector>();
+    clonedConnector.connectorTank = new ArrayList<>();
     return clonedConnector;
   }
 
@@ -343,14 +343,14 @@ public abstract class AbstractCollectionConnector extends
    */
   protected void updateChildConnectors() {
     ICollectionConnector modelConnector = (ICollectionConnector) getModelConnector();
-    Map<IValueConnector, List<IValueConnector>> existingConnectorsByModel = new HashMap<IValueConnector, List<IValueConnector>>();
+    Map<IValueConnector, List<IValueConnector>> existingConnectorsByModel = new HashMap<>();
 
-    for (String connectorKey : new ArrayList<String>(getChildConnectorKeys())) {
+    for (String connectorKey : new ArrayList<>(getChildConnectorKeys())) {
       IValueConnector childConnector = getChildConnector(connectorKey);
       List<IValueConnector> existingConnectors = existingConnectorsByModel
           .get(childConnector.getModelConnector());
       if (existingConnectors == null) {
-        existingConnectors = new ArrayList<IValueConnector>();
+        existingConnectors = new ArrayList<>();
         existingConnectorsByModel.put(childConnector.getModelConnector(),
             existingConnectors);
       }
@@ -373,7 +373,7 @@ public abstract class AbstractCollectionConnector extends
         addChildConnector(computeStorageKey(i), connector);
       }
     }
-    removedChildrenConnectors = new ArrayList<IValueConnector>();
+    removedChildrenConnectors = new ArrayList<>();
     for (List<IValueConnector> obsoleteConnectors : existingConnectorsByModel
         .values()) {
       for (IValueConnector obsoleteConnector : obsoleteConnectors) {

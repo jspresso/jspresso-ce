@@ -44,10 +44,10 @@ public final class BasicDescriptorDescriptor {
   }
 
   private static IComponentDescriptor<IDescriptor> createInstance() {
-    BasicComponentDescriptor<IDescriptor> instance = new BasicComponentDescriptor<IDescriptor>(
+    BasicComponentDescriptor<IDescriptor> instance = new BasicComponentDescriptor<>(
         IDescriptor.class.getName());
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
 
     BasicPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
     nameDescriptor.setName(IDescriptor.NAME);

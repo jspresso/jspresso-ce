@@ -85,10 +85,10 @@ public class ApplicationDirectoryBuilder {
    * Constructs a new {@code ApplicationDirectoryBuilder} instance.
    */
   public ApplicationDirectoryBuilder() {
-    modelPermIds = new TreeSet<String>();
-    navigationPermIds = new TreeSet<String>();
-    viewPermIds = new TreeSet<String>();
-    actionPermIds = new TreeSet<String>();
+    modelPermIds = new TreeSet<>();
+    navigationPermIds = new TreeSet<>();
+    viewPermIds = new TreeSet<>();
+    actionPermIds = new TreeSet<>();
     excludePatterns = new String[] {
       "org\\.jspresso\\.framework\\..*"
     };
@@ -303,7 +303,7 @@ public class ApplicationDirectoryBuilder {
    * @return the application elements directory.
    */
   public Map<String, Set<String>> toApplicationDirectory() {
-    Map<String, Set<String>> applicationDirectory = new HashMap<String, Set<String>>();
+    Map<String, Set<String>> applicationDirectory = new HashMap<>();
     applicationDirectory.put(NAVIGATION, navigationPermIds);
     applicationDirectory.put(VIEW, viewPermIds);
     applicationDirectory.put(MODEL, modelPermIds);

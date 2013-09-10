@@ -199,7 +199,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   private void initIfNecessary() {
     if (preferences == null) {
-      preferences = new HashMap<String, String>();
+      preferences = new HashMap<>();
 
       StringBuilder sql = new StringBuilder("SELECT ").append(getKeyColumnName())
           .append(", ").append(getValueColumnName()).append(" FROM ")

@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 

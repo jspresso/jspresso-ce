@@ -69,7 +69,7 @@ public class BasicConstrainedGridViewDescriptor extends
    */
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    List<IViewDescriptor> childViewDescriptors = new ArrayList<IViewDescriptor>();
+    List<IViewDescriptor> childViewDescriptors = new ArrayList<>();
     IViewDescriptor peviousChildViewDescriptor = null;
     if (cells != null) {
       for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : cells

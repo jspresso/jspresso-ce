@@ -86,7 +86,7 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
 
   @SuppressWarnings("rawtypes")
   private void buildContractNameIdMap() {
-    Map<String, IComponentDescriptor<?>> map = new HashMap<String, IComponentDescriptor<?>>();
+    Map<String, IComponentDescriptor<?>> map = new HashMap<>();
     Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext.getBeansOfType(
         IComponentDescriptor.class, false, false);
     for (Map.Entry<String, IComponentDescriptor> descriptorEntry : idToComponentDescriptors.entrySet()) {

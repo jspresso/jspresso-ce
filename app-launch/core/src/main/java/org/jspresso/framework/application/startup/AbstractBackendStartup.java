@@ -118,7 +118,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   protected boolean executeAction(BackendAction action,
       Map<String, Object> initialContext, Subject subject, Locale locale) {
     configureApplicationSession(subject, locale);
-    Map<String, Object> startupActionContext = new HashMap<String, Object>();
+    Map<String, Object> startupActionContext = new HashMap<>();
     startupActionContext.putAll(getBackendController()
         .getInitialActionContext());
     startupActionContext.putAll(initialContext);

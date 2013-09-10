@@ -206,7 +206,7 @@ public final class HibernateHelper {
             PersistentSet.class, "set", collection);
         if (innerSet != null && !(innerSet instanceof LinkedHashSet<?>)) {
           ReflectHelper.setPrivateFieldValue(PersistentSet.class, "set",
-              collection, new LinkedHashSet<Object>(innerSet));
+              collection, new LinkedHashSet<>(innerSet));
         }
       } catch (Exception ex) {
         LOG.error("Failed to replace internal Hibernate set implementation");

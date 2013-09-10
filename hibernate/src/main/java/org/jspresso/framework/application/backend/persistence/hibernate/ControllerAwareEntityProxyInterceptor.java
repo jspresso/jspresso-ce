@@ -147,7 +147,7 @@ public class ControllerAwareEntityProxyInterceptor extends
     if (entity instanceof IEntity) {
       IBackendController backendController = getBackendController();
       if (backendController.isUnitOfWorkActive()) {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         for (int i = 0; i < propertyNames.length; i++) {
           String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
           if (!isHibernateInternal(propertyName)) {
@@ -161,7 +161,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       } else {
         if (backendController.getRegisteredEntity(
             ((IEntity) entity).getComponentContract(), id) == null) {
-          Map<String, Object> properties = new HashMap<String, Object>();
+          Map<String, Object> properties = new HashMap<>();
           for (int i = 0; i < propertyNames.length; i++) {
             if (state[i] != null) {
               String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
@@ -224,11 +224,11 @@ public class ControllerAwareEntityProxyInterceptor extends
     }
 
     // To avoid concurrent access modifications
-    Set<Object> preFlushedEntities = new LinkedHashSet<Object>();
+    Set<Object> preFlushedEntities = new LinkedHashSet<>();
     while (entities.hasNext()) {
       preFlushedEntities.add(entities.next());
     }
-    Set<Object> onUpdatedEntities = new HashSet<Object>();
+    Set<Object> onUpdatedEntities = new HashSet<>();
     boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities,
         onUpdatedEntities);
     while (onUpdateTriggered) {

@@ -68,7 +68,7 @@ public class RequestParamsHttpFilter implements Filter {
       Map<String, String> existing = (Map<String, String>) session
           .getAttribute(REQUEST_PARAMS_KEY);
       if (existing == null) {
-        existing = new LinkedHashMap<String, String>();
+        existing = new LinkedHashMap<>();
         session.setAttribute(REQUEST_PARAMS_KEY, existing);
       }
       existing.putAll(parameterMap);

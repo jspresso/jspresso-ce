@@ -45,7 +45,7 @@ public class ReloadModuleObjectAction extends ReloadAction {
    */
   @Override
   protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
-    List<IEntity> entitiesToReload = new ArrayList<IEntity>();
+    List<IEntity> entitiesToReload = new ArrayList<>();
     Module module = getModule(context);
     completeEntitiesToReload(module, entitiesToReload);
     return entitiesToReload;

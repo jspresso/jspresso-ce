@@ -177,8 +177,8 @@ public class HibernateBackendController extends AbstractBackendController {
     if (noTxSession != null) {
       noTxSession.clear();
     }
-    updatedEntities = new HashSet<IEntity>();
-    deletedEntities = new HashSet<IEntity>();
+    updatedEntities = new HashSet<>();
+    deletedEntities = new HashSet<>();
     super.doBeginUnitOfWork();
   }
 
@@ -440,7 +440,7 @@ public class HibernateBackendController extends AbstractBackendController {
       boolean flushIsNecessary = false;
       Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
       Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-      List<IEntity> entitiesToClone = new ArrayList<IEntity>();
+      List<IEntity> entitiesToClone = new ArrayList<>();
       if (entitiesToUpdate != null) {
         entitiesToClone.addAll(entitiesToUpdate);
       }
@@ -448,7 +448,7 @@ public class HibernateBackendController extends AbstractBackendController {
         entitiesToClone.addAll(entitiesToDelete);
       }
       List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
-      Map<IEntity, IEntity> entityMap = new HashMap<IEntity, IEntity>();
+      Map<IEntity, IEntity> entityMap = new HashMap<>();
       for (int i = 0; i < entitiesToClone.size(); i++) {
         entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
       }
@@ -495,7 +495,7 @@ public class HibernateBackendController extends AbstractBackendController {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
     if (isUnitOfWorkActive()) {
-      Set<IEntity> deletedEntitiesSnapshot = new HashSet<IEntity>(
+      Set<IEntity> deletedEntitiesSnapshot = new HashSet<>(
           deletedEntities);
       try {
         deletedEntities.add(entity);
@@ -528,7 +528,7 @@ public class HibernateBackendController extends AbstractBackendController {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
     if (isUnitOfWorkActive()) {
-      Set<IEntity> updatedEntitiesSnapshot = new HashSet<IEntity>(
+      Set<IEntity> updatedEntitiesSnapshot = new HashSet<>(
           updatedEntities);
       try {
         updatedEntities.add(entity);
@@ -588,7 +588,7 @@ public class HibernateBackendController extends AbstractBackendController {
           PersistentSet persistentSet = new PersistentSet(null,
               (Set<?>) transientCollection);
           changeCollectionOwner(persistentSet, owner);
-          HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
+          HashMap<Object, Object> snapshot = new HashMap<>();
           if (varSnapshotCollection == null) {
             persistentSet.clearDirty();
             varSnapshotCollection = transientCollection;
@@ -603,7 +603,7 @@ public class HibernateBackendController extends AbstractBackendController {
           PersistentList persistentList = new PersistentList(null,
               (List<?>) transientCollection);
           changeCollectionOwner(persistentList, owner);
-          ArrayList<Object> snapshot = new ArrayList<Object>();
+          ArrayList<Object> snapshot = new ArrayList<>();
           if (varSnapshotCollection == null) {
             persistentList.clearDirty();
             varSnapshotCollection = transientCollection;
@@ -999,7 +999,7 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   private Set<IEntity> buildReachableDirtyEntitySet(IEntity entity) {
-    Set<IEntity> reachableDirtyEntities = new HashSet<IEntity>();
+    Set<IEntity> reachableDirtyEntities = new HashSet<>();
     completeReachableDirtyEntities(entity, reachableDirtyEntities,
         new HashSet<IEntity>());
     return reachableDirtyEntities;

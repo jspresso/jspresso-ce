@@ -168,7 +168,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    */
   public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
     if (untypedOrderingProperties != null) {
-      orderingProperties = new LinkedHashMap<String, ESort>();
+      orderingProperties = new LinkedHashMap<>();
       for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
           .entrySet()) {
         if (untypedOrderingProperty.getValue() instanceof ESort) {

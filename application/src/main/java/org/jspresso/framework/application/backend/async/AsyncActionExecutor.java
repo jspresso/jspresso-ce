@@ -79,7 +79,7 @@ public class AsyncActionExecutor extends Thread {
     BackendControllerHolder.setThreadBackendController(slaveBackendController);
 
     // Clone the context to ensure the outer one is not modified.
-    final Map<String, Object> slaveContext = new HashMap<String, Object>();
+    final Map<String, Object> slaveContext = new HashMap<>();
     slaveContext.putAll(context);
     // Ensure the action will be executing in the context of the slave
     // backend controller.

@@ -57,7 +57,7 @@ public class TypeEnumerationPropertyDescriptor extends
    */
   public void setComponentDescriptors(
       List<IComponentDescriptor<?>> componentDescriptorList) {
-    Map<String, String> componentDescriptorImages = new LinkedHashMap<String, String>();
+    Map<String, String> componentDescriptorImages = new LinkedHashMap<>();
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptorList) {
       String componentIconImageUrl = null;
       if (componentDescriptor.getIcon() != null) {

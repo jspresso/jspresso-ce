@@ -107,7 +107,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (readabilityGates == null) {
-      readabilityGates = new HashSet<IGate>(4);
+      readabilityGates = new HashSet<>(4);
     }
     readabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
@@ -151,7 +151,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (writabilityGates == null) {
-      writabilityGates = new HashSet<IGate>(4);
+      writabilityGates = new HashSet<>(4);
     }
     writabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
@@ -474,18 +474,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
               String.class
             }).newInstance(stringValue);
             setConnecteeValue(adaptedValue);
-          } catch (IllegalArgumentException ex) {
-            throw new ConnectorInputException(ex, stringValue);
-          } catch (SecurityException ex) {
-            throw new ConnectorInputException(ex, stringValue);
-          } catch (InstantiationException ex) {
-            throw new ConnectorInputException(ex, stringValue);
-          } catch (IllegalAccessException ex) {
+          } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException | SecurityException ex) {
             throw new ConnectorInputException(ex, stringValue);
           } catch (InvocationTargetException ex) {
             throw new ConnectorInputException(ex.getCause(), stringValue);
-          } catch (NoSuchMethodException ex) {
-            throw new ConnectorInputException(ex, stringValue);
           }
         }
       } else {

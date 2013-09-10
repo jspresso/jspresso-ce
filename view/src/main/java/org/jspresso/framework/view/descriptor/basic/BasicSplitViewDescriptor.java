@@ -51,7 +51,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    */
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
+    List<IViewDescriptor> children = new ArrayList<>();
     if (getLeftTopViewDescriptor() != null) {
       children.add(getLeftTopViewDescriptor());
     }

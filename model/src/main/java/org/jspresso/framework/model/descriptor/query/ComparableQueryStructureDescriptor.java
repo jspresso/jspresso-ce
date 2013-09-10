@@ -118,7 +118,7 @@ public class ComparableQueryStructureDescriptor extends
     setI18nNameKey(propertyDescriptor.getI18nNameKey());
     setDescription(propertyDescriptor.getDescription());
 
-    BasicComponentDescriptor<ComparableQueryStructure> refDescriptor = new BasicComponentDescriptor<ComparableQueryStructure>(
+    BasicComponentDescriptor<ComparableQueryStructure> refDescriptor = new BasicComponentDescriptor<>(
         ComparableQueryStructure.class.getName());
 
     BasicEnumerationPropertyDescriptor comparatorPropertyDescriptor = new BasicEnumerationPropertyDescriptor();
@@ -129,7 +129,7 @@ public class ComparableQueryStructureDescriptor extends
       comparatorPropertyDescriptor.setI18nNameKey(getName());
     }
     comparatorPropertyDescriptor.setEnumerationName("OP");
-    Map<String, String> values = new LinkedHashMap<String, String>();
+    Map<String, String> values = new LinkedHashMap<>();
     values.put(EQ, null);
     values.put(GT, null);
     values.put(GE, null);
@@ -156,7 +156,7 @@ public class ComparableQueryStructureDescriptor extends
     BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
     toStringPropertyDescriptor.setName(TO_STRING);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     propertyDescriptors.add(comparatorPropertyDescriptor);
     propertyDescriptors.add(infValuePropertyDescriptor);
     propertyDescriptors.add(supValuePropertyDescriptor);

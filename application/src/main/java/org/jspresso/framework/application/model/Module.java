@@ -134,9 +134,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public boolean addSubModule(Module child) {
     if (subModules == null) {
-      subModules = new ArrayList<Module>();
+      subModules = new ArrayList<>();
     }
-    List<Module> oldValue = new ArrayList<Module>(getSubModules());
+    List<Module> oldValue = new ArrayList<>(getSubModules());
     if (subModules.add(child)) {
       updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
       return true;
@@ -155,9 +155,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public boolean addSubModules(Collection<? extends Module> children) {
     if (subModules == null) {
-      subModules = new ArrayList<Module>();
+      subModules = new ArrayList<>();
     }
-    List<Module> oldValue = new ArrayList<Module>(getSubModules());
+    List<Module> oldValue = new ArrayList<>(getSubModules());
     if (subModules.addAll(children)) {
       updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
       return true;
@@ -367,7 +367,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public boolean removeSubModule(Module module) {
     if (subModules != null) {
-      List<Module> oldValue = new ArrayList<Module>(getSubModules());
+      List<Module> oldValue = new ArrayList<>(getSubModules());
       if (subModules.remove(module)) {
         updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
         return true;
@@ -388,7 +388,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public boolean removeSubModules(Collection<Module> children) {
     if (subModules != null) {
-      List<Module> oldValue = new ArrayList<Module>(getSubModules());
+      List<Module> oldValue = new ArrayList<>(getSubModules());
       if (subModules.removeAll(children)) {
         updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
         return true;
@@ -676,7 +676,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   public void setSubModules(List<Module> children) {
     List<Module> oldValue = null;
     if (getSubModules() != null) {
-      oldValue = new ArrayList<Module>(getSubModules());
+      oldValue = new ArrayList<>(getSubModules());
     }
     this.subModules = children;
     updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
@@ -769,7 +769,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   public Module clone() {
     Module clone = (Module) super.clone();
     clone.parent = null;
-    List<Module> subModulesClones = new ArrayList<Module>();
+    List<Module> subModulesClones = new ArrayList<>();
     if (subModules != null) {
       for (Module subModule : subModules) {
         Module subModuleClone = subModule.clone();

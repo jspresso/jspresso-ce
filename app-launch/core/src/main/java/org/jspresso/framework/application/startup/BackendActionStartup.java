@@ -151,7 +151,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
    */
   protected Map<String, Object> getActionContext() {
     if (actionContext == null) {
-      actionContext = new HashMap<String, Object>();
+      actionContext = new HashMap<>();
     }
     return actionContext;
   }

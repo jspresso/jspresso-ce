@@ -411,7 +411,7 @@ public class DefaultRemoteViewFactory extends
                                                         IActionHandler actionHandler, Locale locale) {
     RBorderContainer viewComponent = createRBorderContainer(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
-    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
 
     if (viewDescriptor.getNorthViewDescriptor() != null) {
       IView<RComponent> northView = createView(viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
@@ -449,8 +449,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                              Locale locale) {
     RCardContainer viewComponent = createRCardContainer(viewDescriptor);
-    List<String> cardNames = new ArrayList<String>();
-    List<RComponent> cards = new ArrayList<RComponent>();
+    List<String> cardNames = new ArrayList<>();
+    List<RComponent> cards = new ArrayList<>();
     cardNames.add(ICardViewDescriptor.DEFAULT_CARD);
     cards.add(createEmptyComponent());
     cardNames.add(ICardViewDescriptor.SECURITY_CARD);
@@ -509,11 +509,11 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition().name());
 
-    List<Integer> elementWidths = new ArrayList<Integer>();
-    List<RComponent> elements = new ArrayList<RComponent>();
-    List<RComponent> elementLabels = new ArrayList<RComponent>();
-    List<String> labelHorizontalPositions = new ArrayList<String>();
-    List<IView<RComponent>> propertyViews = new ArrayList<IView<RComponent>>();
+    List<Integer> elementWidths = new ArrayList<>();
+    List<RComponent> elements = new ArrayList<>();
+    List<RComponent> elementLabels = new ArrayList<>();
+    List<String> labelHorizontalPositions = new ArrayList<>();
+    List<IView<RComponent>> propertyViews = new ArrayList<>();
 
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -621,11 +621,11 @@ public class DefaultRemoteViewFactory extends
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     RConstrainedGridContainer viewComponent = createRConstrainedGridContainer(viewDescriptor);
-    List<RComponent> cells = new ArrayList<RComponent>();
-    List<CellConstraints> cellConstraints = new ArrayList<CellConstraints>();
+    List<RComponent> cells = new ArrayList<>();
+    List<CellConstraints> cellConstraints = new ArrayList<>();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
@@ -858,9 +858,9 @@ public class DefaultRemoteViewFactory extends
     } else {
       connector = getConnectorFactory().createValueConnector(
           propertyDescriptor.getName());
-      List<String> values = new ArrayList<String>();
-      List<String> translations = new ArrayList<String>();
-      List<String> enumerationValues = new ArrayList<String>(
+      List<String> values = new ArrayList<>();
+      List<String> translations = new ArrayList<>();
+      List<String> enumerationValues = new ArrayList<>(
           propertyDescriptor.getEnumerationValues());
       filterEnumerationValues(enumerationValues, propertyViewDescriptor);
       if (!propertyDescriptor.isMandatory()) {
@@ -894,7 +894,7 @@ public class DefaultRemoteViewFactory extends
         viewComponent = createRComboBox(propertyViewDescriptor);
         ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor
             .isReadOnly());
-        List<RIcon> icons = new ArrayList<RIcon>();
+        List<RIcon> icons = new ArrayList<>();
         for (String value : enumerationValues) {
           icons.add(getIconFactory().getIcon(
               propertyDescriptor.getIconImageURL(value),
@@ -942,10 +942,10 @@ public class DefaultRemoteViewFactory extends
         .name());
     viewComponent.setDrivingDimensionCellCount(viewDescriptor
         .getDrivingDimensionCellCount());
-    List<RComponent> cells = new ArrayList<RComponent>();
+    List<RComponent> cells = new ArrayList<>();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
@@ -1774,7 +1774,7 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setOrientation(viewDescriptor.getOrientation().name());
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
       IView<RComponent> leftTopView = createView(
@@ -1869,10 +1869,10 @@ public class DefaultRemoteViewFactory extends
     }
     viewComponent.setHorizontallyScrollable(viewDescriptor
         .isHorizontallyScrollable());
-    List<RComponent> columns = new ArrayList<RComponent>();
-    List<RComponent> columnHeaders = new ArrayList<RComponent>();
-    List<String> columnIds = new ArrayList<String>();
-    List<IView<RComponent>> propertyViews = new ArrayList<IView<RComponent>>();
+    List<RComponent> columns = new ArrayList<>();
+    List<RComponent> columnHeaders = new ArrayList<>();
+    List<String> columnIds = new ArrayList<>();
+    List<IView<RComponent>> propertyViews = new ArrayList<>();
     Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(
         viewDescriptor, actionHandler);
     for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors
@@ -1913,7 +1913,7 @@ public class DefaultRemoteViewFactory extends
           // We must listen for incoming connector value change to trigger the
           // action.
           columnConnector
-              .addValueChangeListener(new ConnectorActionAdapter<RComponent, RAction>(
+              .addValueChangeListener(new ConnectorActionAdapter<>(
                   columnViewDescriptor.getAction(), getActionFactory(),
                   actionHandler, view));
         }
@@ -2193,8 +2193,8 @@ public class DefaultRemoteViewFactory extends
             view.setCurrentViewIndex(source.getSelectedIndex());
           }
         });
-    List<RComponent> tabs = new ArrayList<RComponent>();
-    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+    List<RComponent> tabs = new ArrayList<>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
@@ -2426,7 +2426,7 @@ public class DefaultRemoteViewFactory extends
    */
   protected List<RActionList> createViewToolBar(ActionMap actionMap,
       IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
-    List<RActionList> viewActionLists = new ArrayList<RActionList>();
+    List<RActionList> viewActionLists = new ArrayList<>();
     for (ActionList nextActionList : actionMap.getActionLists(actionHandler)) {
       if (actionHandler.isAccessGranted(nextActionList)) {
         try {
@@ -2445,7 +2445,7 @@ public class DefaultRemoteViewFactory extends
           actionList.setIcon(getIconFactory().getIcon(nextActionList.getIcon(),
               getIconFactory().getTinyIconSize()));
           viewActionLists.add(actionList);
-          List<RAction> actions = new ArrayList<RAction>();
+          List<RAction> actions = new ArrayList<>();
           for (IDisplayableAction action : nextActionList.getActions()) {
             if (actionHandler.isAccessGranted(action)) {
               try {
@@ -2697,7 +2697,7 @@ public class DefaultRemoteViewFactory extends
    */
   protected void configurePropertyViewAction(
       IPropertyViewDescriptor propertyViewDescriptor, RAction propertyViewAction) {
-    Map<String, Object> staticContext = new HashMap<String, Object>();
+    Map<String, Object> staticContext = new HashMap<>();
     staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR,
         propertyViewDescriptor);
     propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);

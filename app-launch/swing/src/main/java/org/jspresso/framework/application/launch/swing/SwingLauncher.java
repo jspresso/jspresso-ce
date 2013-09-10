@@ -84,11 +84,7 @@ public final class SwingLauncher {
       LOG.error("Couldn't parse the command line", ex);
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(SwingLauncher.class.getSimpleName(), options);
-    } catch (InstantiationException ex) {
-      LOG.error("An unexpected error occurred.", ex);
-    } catch (IllegalAccessException ex) {
-      LOG.error("An unexpected error occurred.", ex);
-    } catch (ClassNotFoundException ex) {
+    } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
       LOG.error("An unexpected error occurred.", ex);
     }
     if (splashed) {

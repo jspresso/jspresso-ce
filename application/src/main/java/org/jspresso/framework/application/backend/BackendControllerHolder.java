@@ -35,10 +35,8 @@ public final class BackendControllerHolder {
    * {@code CURRENT_BACKEND_CONTROLLER_KEY}.
    */
   public static final  String                          CURRENT_BACKEND_CONTROLLER_KEY = "CURRENT_BACKEND_CONTROLLER";
-  private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER =
-      new InheritableThreadLocal<IBackendController>();
-  private static final ThreadLocal<IBackendController> THREADLOCAL_BACKEND_CONTROLLER =
-      new ThreadLocal<IBackendController>();
+  private static final ThreadLocal<IBackendController> THREADBOUND_BACKEND_CONTROLLER = new InheritableThreadLocal<>();
+  private static final ThreadLocal<IBackendController> THREADLOCAL_BACKEND_CONTROLLER = new ThreadLocal<>();
 
   static {
     boolean wc = false;

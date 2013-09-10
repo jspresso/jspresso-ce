@@ -112,7 +112,7 @@ public class DialogCallbackHandler implements CallbackHandler {
             if (pcFound && !tocFound) {
               TextOutputCallback defaultToc = new TextOutputCallback(
                   TextOutputCallback.INFORMATION, "credentialMessage");
-              List<Callback> completedCallBacks = new ArrayList<Callback>(
+              List<Callback> completedCallBacks = new ArrayList<>(
                   Arrays.asList(varCallbacks));
               completedCallBacks.add(defaultToc);
               varCallbacks = completedCallBacks
@@ -135,7 +135,7 @@ public class DialogCallbackHandler implements CallbackHandler {
             callbackDialog
                 .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-            List<ActionListener> proceedActions = new ArrayList<ActionListener>(
+            List<ActionListener> proceedActions = new ArrayList<>(
                 2);
 
             JPanel messagePanel = null;

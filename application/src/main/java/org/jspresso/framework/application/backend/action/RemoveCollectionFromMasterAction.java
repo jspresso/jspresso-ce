@@ -76,15 +76,13 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
             selectedIndex).getConnectorValue();
         try {
           collectionAccessor.removeFromValue(master, nextDetailToRemove);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException | NoSuchMethodException ex) {
           throw new ActionException(ex);
         } catch (InvocationTargetException ex) {
           if (ex.getCause() instanceof RuntimeException) {
             throw (RuntimeException) ex.getCause();
           }
           throw new ActionException(ex.getCause());
-        } catch (NoSuchMethodException ex) {
-          throw new ActionException(ex);
         }
       }
       if (!(master instanceof IPropertyChangeCapable)

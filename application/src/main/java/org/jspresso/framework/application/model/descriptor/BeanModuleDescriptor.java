@@ -57,12 +57,12 @@ public class BeanModuleDescriptor extends ModuleDescriptor {
       IComponentDescriptor<?> moduleObjectReferencedDescriptor) {
     super(name);
 
-    BasicReferencePropertyDescriptor<Object> moduleObjectDescriptor = new BasicReferencePropertyDescriptor<Object>();
+    BasicReferencePropertyDescriptor<Object> moduleObjectDescriptor = new BasicReferencePropertyDescriptor<>();
     moduleObjectDescriptor
         .setReferencedDescriptor(moduleObjectReferencedDescriptor);
     moduleObjectDescriptor.setName(BeanModule.MODULE_OBJECT);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>(
         getPropertyDescriptors());
     propertyDescriptors.add(moduleObjectDescriptor);
     setPropertyDescriptors(propertyDescriptors);

@@ -72,7 +72,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
     modelChangeSupport = new ModelChangeSupport(this);
-    childConnectors = new LinkedHashMap<String, IValueConnector>();
+    childConnectors = new LinkedHashMap<>();
   }
 
   /**
@@ -128,7 +128,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
         .clone(newConnectorId);
     clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
+    clonedConnector.childConnectors = new LinkedHashMap<>();
     return clonedConnector;
   }
 

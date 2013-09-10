@@ -61,7 +61,7 @@ public class ValueChangeSupport implements IValueChangeSource {
    */
   public void addInhibitedListener(IValueChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<IValueChangeListener>(4);
+      inhibitedListeners = new HashSet<>(4);
     }
     if (inhibitedListeners != null) {
       inhibitedListeners.add(listener);
@@ -75,7 +75,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   public synchronized void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IValueChangeListener>(8);
+        listeners = new LinkedHashSet<>(8);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -125,7 +125,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   @Override
   public Set<IValueChangeListener> getValueChangeListeners() {
     if (listeners != null) {
-      return new LinkedHashSet<IValueChangeListener>(listeners);
+      return new LinkedHashSet<>(listeners);
     }
     return Collections.emptySet();
   }

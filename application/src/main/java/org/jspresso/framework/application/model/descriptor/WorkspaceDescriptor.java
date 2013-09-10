@@ -57,11 +57,11 @@ public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
 
     super(name);
 
-    BasicListDescriptor<Module> moduleListDescriptor = new BasicListDescriptor<Module>();
+    BasicListDescriptor<Module> moduleListDescriptor = new BasicListDescriptor<>();
     moduleListDescriptor
         .setElementDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR);
 
-    BasicCollectionPropertyDescriptor<Module> modulesDescriptor = new BasicCollectionPropertyDescriptor<Module>();
+    BasicCollectionPropertyDescriptor<Module> modulesDescriptor = new BasicCollectionPropertyDescriptor<>();
     modulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
     modulesDescriptor.setName(Workspace.MODULES);
 
@@ -77,7 +77,7 @@ public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
     BasicStringPropertyDescriptor i18nDescriptionDescriptor = new BasicStringPropertyDescriptor();
     i18nDescriptionDescriptor.setName(Workspace.I18N_DESCRIPTION);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     propertyDescriptors.add(nameDescriptor);
     propertyDescriptors.add(descriptionDescriptor);
     propertyDescriptors.add(i18nNameDescriptor);

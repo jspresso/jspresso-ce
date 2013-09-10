@@ -62,13 +62,7 @@ public final class CollectionHelper {
         clonedCollection = (Collection<E>) collection.getClass()
             .getMethod("clone", (Class<?>[]) null)
             .invoke(collection, (Object[]) null);
-      } catch (IllegalArgumentException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (SecurityException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (IllegalAccessException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (InvocationTargetException ex) {
+      } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException | SecurityException ex) {
         throw new NestedRuntimeException(ex);
       } catch (NoSuchMethodException ex) {
         // Do nothing. the method simply does not exist.
@@ -76,9 +70,9 @@ public final class CollectionHelper {
     }
     if (clonedCollection == null) {
       if (collection instanceof Set) {
-        clonedCollection = new HashSet<E>(collection);
+        clonedCollection = new HashSet<>(collection);
       } else if (collection instanceof List) {
-        clonedCollection = new ArrayList<E>(collection);
+        clonedCollection = new ArrayList<>(collection);
       }
     }
     return clonedCollection;

@@ -98,7 +98,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
           IComponentDescriptor<?> currentCompDesc = queryComponent
               .getQueryDescriptor();
           int i = 0;
-          List<String> path = new ArrayList<String>();
+          List<String> path = new ArrayList<>();
           for (; sortable && i < propElts.length - 1; i++) {
             IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
                 .getPropertyDescriptor(propElts[i]));
@@ -390,7 +390,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    */
   protected Criterion createEnumQueryStructureRestriction(String path,
       EnumQueryStructure enumQueryStructure) {
-    Set<String> inListValues = new HashSet<String>();
+    Set<String> inListValues = new HashSet<>();
     boolean nullAllowed = false;
     for (EnumValueQueryStructure inListValue : enumQueryStructure
         .getSelectedEnumerationValues()) {
@@ -522,28 +522,37 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       if (compareValue == null) {
         compareValue = supValue;
       }
-      if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.eq(path, compareValue));
-      } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.gt(path, compareValue));
-      } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.ge(path, compareValue));
-      } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.lt(path, compareValue));
-      } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.le(path, compareValue));
-      } else if (ComparableQueryStructureDescriptor.NU.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.isNull(path));
-      } else if (ComparableQueryStructureDescriptor.NN.equals(comparator)) {
-        queryStructureRestriction.add(Restrictions.isNotNull(path));
-      } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
-        if (infValue != null && supValue != null) {
-          queryStructureRestriction.add(Restrictions.between(path, infValue, supValue));
-        } else if (infValue != null) {
-          queryStructureRestriction.add(Restrictions.ge(path, infValue));
-        } else {
-          queryStructureRestriction.add(Restrictions.le(path, supValue));
-        }
+      switch (comparator) {
+        case ComparableQueryStructureDescriptor.EQ:
+          queryStructureRestriction.add(Restrictions.eq(path, compareValue));
+          break;
+        case ComparableQueryStructureDescriptor.GT:
+          queryStructureRestriction.add(Restrictions.gt(path, compareValue));
+          break;
+        case ComparableQueryStructureDescriptor.GE:
+          queryStructureRestriction.add(Restrictions.ge(path, compareValue));
+          break;
+        case ComparableQueryStructureDescriptor.LT:
+          queryStructureRestriction.add(Restrictions.lt(path, compareValue));
+          break;
+        case ComparableQueryStructureDescriptor.LE:
+          queryStructureRestriction.add(Restrictions.le(path, compareValue));
+          break;
+        case ComparableQueryStructureDescriptor.NU:
+          queryStructureRestriction.add(Restrictions.isNull(path));
+          break;
+        case ComparableQueryStructureDescriptor.NN:
+          queryStructureRestriction.add(Restrictions.isNotNull(path));
+          break;
+        case ComparableQueryStructureDescriptor.BE:
+          if (infValue != null && supValue != null) {
+            queryStructureRestriction.add(Restrictions.between(path, infValue, supValue));
+          } else if (infValue != null) {
+            queryStructureRestriction.add(Restrictions.ge(path, infValue));
+          } else {
+            queryStructureRestriction.add(Restrictions.le(path, supValue));
+          }
+          break;
       }
     }
     return queryStructureRestriction;

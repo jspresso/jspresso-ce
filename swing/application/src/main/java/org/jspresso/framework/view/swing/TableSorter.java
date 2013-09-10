@@ -79,38 +79,30 @@ public class TableSorter extends AbstractTableSorter {
    */
   public static final Comparator<Object> COMPARABLE_COMPARATOR = new Comparator<Object>() {
 
-                                                                 @Override
-                                                                 @SuppressWarnings("unchecked")
-                                                                 public int compare(
-                                                                     Object o1,
-                                                                     Object o2) {
-                                                                   return ((Comparable<Object>) o1)
-                                                                       .compareTo(o2);
-                                                                 }
-                                                               };
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compare(Object o1, Object o2) {
+      return ((Comparable<Object>) o1).compareTo(o2);
+    }
+  };
 
   /**
    * {@code LEXICAL_COMPARATOR}.
    */
-  public static final Comparator<Object> LEXICAL_COMPARATOR    = new Comparator<Object>() {
+  public static final Comparator<Object> LEXICAL_COMPARATOR = new Comparator<Object>() {
 
-                                                                 @Override
-                                                                 public int compare(
-                                                                     Object o1,
-                                                                     Object o2) {
-                                                                   return o1
-                                                                       .toString()
-                                                                       .compareTo(
-                                                                           o2.toString());
-                                                                 }
-                                                               };
+    @Override
+    public int compare(Object o1, Object o2) {
+      return o1.toString().compareTo(o2.toString());
+    }
+  };
 
-  private static final long              serialVersionUID      = -5437879837063286581L;
+  private static final long serialVersionUID = -5437879837063286581L;
 
-  private final Map<Class<?>, Comparator<?>>   columnComparators     = new HashMap<Class<?>, Comparator<?>>();
+  private final Map<Class<?>, Comparator<?>> columnComparators = new HashMap<>();
 
-  private int[]                          modelToView;
-  private Row[]                          viewToModel;
+  private int[] modelToView;
+  private Row[] viewToModel;
 
   /**
    * Constructs a new {@code TableSorter} instance.
@@ -126,7 +118,7 @@ public class TableSorter extends AbstractTableSorter {
 
   /**
    * modelIndex.
-   * 
+   *
    * @param viewIndex
    *          viewIndex.
    * @return modelIndex.
@@ -138,14 +130,13 @@ public class TableSorter extends AbstractTableSorter {
 
   /**
    * Sets ColumnComparator.
-   * 
+   *
    * @param type
    *          type.
    * @param comparator
    *          comparator.
    */
-  public void setColumnComparator(Class<?> type,
-      Comparator<?> comparator) {
+  public void setColumnComparator(Class<?> type, Comparator<?> comparator) {
     if (comparator == null) {
       columnComparators.remove(type);
     } else {
@@ -155,7 +146,7 @@ public class TableSorter extends AbstractTableSorter {
 
   /**
    * viewIndex.
-   * 
+   *
    * @param modelIndex
    *          modelIndex
    * @return viewIndex
@@ -184,7 +175,7 @@ public class TableSorter extends AbstractTableSorter {
 
   /**
    * Gets Comparator.
-   * 
+   *
    * @param column
    *          column.
    * @return Comparator.
@@ -256,7 +247,7 @@ public class TableSorter extends AbstractTableSorter {
 
     /**
      * compareTo.
-     * 
+     *
      * @param o the object to compare to.
      * @return comparison.
      */

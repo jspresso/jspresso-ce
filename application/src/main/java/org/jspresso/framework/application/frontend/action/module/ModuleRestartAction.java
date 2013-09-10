@@ -52,7 +52,7 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
     Module module = getModule(context);
     if (module instanceof BeanCollectionModule
         && module.getSubModules() != null) {
-      List<Module> beanModulesToRemove = new ArrayList<Module>();
+      List<Module> beanModulesToRemove = new ArrayList<>();
       for (Module beanModule : module.getSubModules()) {
         if (beanModule instanceof BeanModule) {
           ((BeanModule) beanModule).setModuleObject(null);

@@ -85,7 +85,7 @@ public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
   }
 
   private String eliminateDuplicateColumnAliases(String sql) {
-    Set<String> usedAliases = new HashSet<String>();
+    Set<String> usedAliases = new HashSet<>();
     String[] aliasesSplit = sql.split(" as ");
     StringBuilder buff = new StringBuilder(aliasesSplit[0]);
     if (aliasesSplit.length > 1) {

@@ -18,26 +18,18 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.component.query.QueryComponent;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptorFactory;
-import org.jspresso.framework.util.accessor.IAccessor;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
-import org.jspresso.framework.util.bean.MissingPropertyException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

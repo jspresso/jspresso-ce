@@ -103,15 +103,13 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
         }
       }
       firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new NestedRuntimeException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new NestedRuntimeException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new NestedRuntimeException(ex);
     }
   }
 
@@ -183,15 +181,13 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
               this.open = !this.open;
             }
           }
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException | NoSuchMethodException ex) {
           throw new NestedRuntimeException(ex);
         } catch (InvocationTargetException ex) {
           if (ex.getCause() instanceof RuntimeException) {
             throw (RuntimeException) ex.getCause();
           }
           throw new NestedRuntimeException(ex.getCause());
-        } catch (NoSuchMethodException ex) {
-          throw new NestedRuntimeException(ex);
         }
       } else {
         this.open = /* !openOnTrue */false;

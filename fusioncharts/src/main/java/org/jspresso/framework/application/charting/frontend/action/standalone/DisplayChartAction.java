@@ -66,12 +66,12 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
           }
         });
 
-    Map<String, String> flashContext = new LinkedHashMap<String, String>();
+    Map<String, String> flashContext = new LinkedHashMap<>();
     flashContext.put("dataXml", StringUtils.prependUtf8Bom(chartData));
     Dimension d = getChartDescriptor().getDimension();
     flashContext.put("chartWidth", Integer.toString(d.getWidth() - 20));
     flashContext.put("chartHeight", Integer.toString(d.getHeight() - 100));
-    List<G> chartActions = new ArrayList<G>();
+    List<G> chartActions = new ArrayList<>();
     for (IDisplayableAction action : getActions()) {
       IView<E> view = getView(context);
       chartActions.add(getActionFactory(context).createAction(action,

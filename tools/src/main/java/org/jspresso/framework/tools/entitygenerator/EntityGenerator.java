@@ -220,7 +220,7 @@ public class EntityGenerator {
     try {
       ApplicationContext appContext = (ApplicationContext) bfr.getFactory();
       LOG.debug("Spring context {} loaded.", applicationContextKey);
-      Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
+      Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<>();
       if (componentIds == null) {
         LOG.debug("Retrieving components from Spring context.");
         Map<String, IComponentDescriptor> allComponents = appContext
@@ -278,7 +278,7 @@ public class EntityGenerator {
         LOG.error("Error while loading the template", ex);
         return;
       }
-      Map<String, Object> rootContext = new HashMap<String, Object>();
+      Map<String, Object> rootContext = new HashMap<>();
 
       rootContext.put("generateSQLName", new GenerateSqlName());
       rootContext.put("reduceSQLName", new ReduceSqlName(maxSqlNameSize));

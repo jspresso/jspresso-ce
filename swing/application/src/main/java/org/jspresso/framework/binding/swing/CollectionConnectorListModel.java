@@ -102,7 +102,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
 
   private IValueChangeListener getChildConnectorListener(int index) {
     if (cachedListeners == null) {
-      cachedListeners = new HashMap<Integer, IValueChangeListener>();
+      cachedListeners = new HashMap<>();
     }
     IValueChangeListener cachedListener = cachedListeners
         .get(index);

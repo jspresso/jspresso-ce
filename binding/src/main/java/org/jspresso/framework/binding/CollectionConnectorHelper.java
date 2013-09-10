@@ -66,7 +66,7 @@ public final class CollectionConnectorHelper {
    */
   public static int[] computeDifferenceIndices(Collection<?> smallCollection,
       Collection<?> bigCollection) {
-    List<Integer> addedIndices = new ArrayList<Integer>();
+    List<Integer> addedIndices = new ArrayList<>();
     int index = 0;
     for (Iterator<?> ite = bigCollection.iterator(); ite.hasNext(); index++) {
       if (smallCollection == null || !smallCollection.contains(ite.next())) {

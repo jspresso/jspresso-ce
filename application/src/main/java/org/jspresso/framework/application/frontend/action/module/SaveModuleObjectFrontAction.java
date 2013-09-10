@@ -45,8 +45,8 @@ import org.jspresso.framework.util.gate.IGate;
  */
 public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private boolean dirtyTrackingEnabled;
-  private IGate   dirtyModuleGate;
+  private       boolean dirtyTrackingEnabled;
+  private final IGate   dirtyModuleGate;
 
   SaveModuleObjectFrontAction() {
     dirtyTrackingEnabled = false;
@@ -64,7 +64,7 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
     if (!isDirtyTrackingEnabled()) {
       return existingGates;
     }
-    Collection<IGate> gates = new HashSet<IGate>();
+    Collection<IGate> gates = new HashSet<>();
     gates.add(dirtyModuleGate);
     if (existingGates != null) {
       gates.addAll(existingGates);

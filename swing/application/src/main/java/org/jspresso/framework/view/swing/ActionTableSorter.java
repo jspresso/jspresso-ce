@@ -96,8 +96,8 @@ public class ActionTableSorter extends AbstractTableSorter {
   @Override
   protected void sortingStatusChanged() {
     if (getTableModel().getRowCount() > 1) {
-      Map<String, Object> actionContext = new HashMap<String, Object>();
-      Map<String, ESort> orderingProperties = new LinkedHashMap<String, ESort>();
+      Map<String, Object> actionContext = new HashMap<>();
+      Map<String, ESort> orderingProperties = new LinkedHashMap<>();
       for (Directive directive : getSortingColumns()) {
         TableColumnModel columnModel = getTableHeader().getColumnModel();
         String property = String.valueOf(columnModel.getColumn(

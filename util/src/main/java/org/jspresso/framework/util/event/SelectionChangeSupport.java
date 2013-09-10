@@ -65,7 +65,7 @@ public class SelectionChangeSupport implements ISelectable {
    */
   public void addInhibitedListener(ISelectionChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<ISelectionChangeListener>();
+      inhibitedListeners = new HashSet<>();
     }
     if (inhibitedListeners != null) {
       inhibitedListeners.add(listener);
@@ -80,7 +80,7 @@ public class SelectionChangeSupport implements ISelectable {
       ISelectionChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<ISelectionChangeListener>();
+        listeners = new LinkedHashSet<>();
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);

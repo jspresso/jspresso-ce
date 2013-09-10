@@ -64,10 +64,10 @@ public class BasicEntityDescriptor<E extends IEntity> extends
   }
 
   private static IComponentDescriptor<IEntity> createDefaultEntityDescriptor() {
-    BasicInterfaceDescriptor<IEntity> defaultEntityDescriptor = new BasicInterfaceDescriptor<IEntity>(
+    BasicInterfaceDescriptor<IEntity> defaultEntityDescriptor = new BasicInterfaceDescriptor<>(
         IEntity.class.getName());
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>(
         3);
 
     BasicJavaSerializablePropertyDescriptor idPropertyDescriptor = new BasicJavaSerializablePropertyDescriptor();
@@ -168,7 +168,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
   @Override
   public void setAncestorDescriptors(
       List<IComponentDescriptor<?>> ancestorDescriptors) {
-    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    List<IComponentDescriptor<?>> refinedAncestorDescriptors = new ArrayList<>();
     if (ancestorDescriptors != null) {
       refinedAncestorDescriptors.addAll(ancestorDescriptors);
     }

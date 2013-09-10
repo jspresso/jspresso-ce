@@ -229,7 +229,7 @@ public class DefaultSwingController extends
       super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
       if (workspaceName != null) {
         if (workspaceInternalFrames == null) {
-          workspaceInternalFrames = new HashMap<String, JInternalFrame>();
+          workspaceInternalFrames = new HashMap<>();
         }
         JInternalFrame workspaceInternalFrame = workspaceInternalFrames
             .get(workspaceName);
@@ -801,7 +801,7 @@ public class DefaultSwingController extends
 
   private JButton createComboButton(ActionList actionList) {
     JButton button;
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    List<IDisplayableAction> actions = new ArrayList<>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
         try {

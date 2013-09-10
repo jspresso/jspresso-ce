@@ -38,12 +38,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class HttpRequestHolder implements Filter {
 
-  private static final ThreadLocal<HttpServletRequest>  CURRENT_HTTP_REQUEST  = new InheritableThreadLocal<HttpServletRequest>();
-  private static final ThreadLocal<HttpServletResponse> CURRENT_HTTP_RESPONSE = new InheritableThreadLocal<HttpServletResponse>();
+  private static final ThreadLocal<HttpServletRequest>  CURRENT_HTTP_REQUEST  = new InheritableThreadLocal<>();
+  private static final ThreadLocal<HttpServletResponse> CURRENT_HTTP_RESPONSE = new InheritableThreadLocal<>();
 
   /**
    * Gets the current servlet request.
-   * 
+   *
    * @return the current servlet request.
    */
   public static final HttpServletRequest getServletRequest() {
@@ -52,7 +52,7 @@ public class HttpRequestHolder implements Filter {
 
   /**
    * Assigns the servlet request for this current thread.
-   * 
+   *
    * @param request
    *          the servlet request.
    */
@@ -62,7 +62,7 @@ public class HttpRequestHolder implements Filter {
 
   /**
    * Gets the current servlet response.
-   * 
+   *
    * @return the current servlet response.
    */
   public static final HttpServletResponse getServletResponse() {
@@ -71,7 +71,7 @@ public class HttpRequestHolder implements Filter {
 
   /**
    * Assigns the servlet response for this current thread.
-   * 
+   *
    * @param response
    *          the servlet response.
    */
@@ -91,8 +91,8 @@ public class HttpRequestHolder implements Filter {
    * {@inheritDoc}
    */
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response,
-      FilterChain chain) throws IOException, ServletException {
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
     if (request instanceof HttpServletRequest) {
       setServletRequest((HttpServletRequest) request);
       setServletResponse((HttpServletResponse) response);

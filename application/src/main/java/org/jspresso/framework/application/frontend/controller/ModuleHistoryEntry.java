@@ -51,7 +51,7 @@ public class ModuleHistoryEntry {
           "Cannot create a module history entry for null module or workspace.");
     }
     this.workspaceName = workspaceName;
-    this.moduleRef = new SoftReference<Module>(module);
+    this.moduleRef = new SoftReference<>(module);
     this.id = Long.toHexString(System.currentTimeMillis());
     this.name = name;
   }

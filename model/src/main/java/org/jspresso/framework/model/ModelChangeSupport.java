@@ -58,7 +58,7 @@ public class ModelChangeSupport {
   public synchronized void addModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IModelChangeListener>();
+        listeners = new LinkedHashSet<>();
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);

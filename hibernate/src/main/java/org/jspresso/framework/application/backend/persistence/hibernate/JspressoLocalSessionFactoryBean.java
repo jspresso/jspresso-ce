@@ -42,7 +42,7 @@ public class JspressoLocalSessionFactoryBean extends LocalSessionFactoryBean {
    */
   @Override
   protected SessionFactory buildSessionFactory(LocalSessionFactoryBuilder sfb) {
-    Map<String, Type> filterParameters = new HashMap<String, Type>();
+    Map<String, Type> filterParameters = new HashMap<>();
     filterParameters.put(
         HibernateBackendController.JSPRESSO_SESSION_GLOBALS_LOGIN, sfb
             .getTypeResolver().heuristicType("string"));

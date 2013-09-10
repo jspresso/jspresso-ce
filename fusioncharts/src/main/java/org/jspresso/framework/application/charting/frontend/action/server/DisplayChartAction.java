@@ -82,13 +82,13 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
       throw new ActionException(ex);
     }
     String resourceId = ResourceManager.getInstance().register(resource);
-    Map<String, String> flashContext = new LinkedHashMap<String, String>();
+    Map<String, String> flashContext = new LinkedHashMap<>();
     Dimension d = getChartDescriptor().getDimension();
     flashContext.put("chartWidth", Integer.toString(d.getWidth() - 20));
     flashContext.put("chartHeight", Integer.toString(d.getHeight() - 100));
     flashContext.put("dataURL",
         ResourceProviderServlet.computeDownloadUrl(resourceId));
-    List<G> chartActions = new ArrayList<G>();
+    List<G> chartActions = new ArrayList<>();
     for (IDisplayableAction action : getActions()) {
       IView<E> view = getView(context);
       chartActions.add(getActionFactory(context).createAction(action,

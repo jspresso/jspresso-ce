@@ -86,7 +86,7 @@ public class BasicCollectionConnectorListProvider extends
     BasicCollectionConnectorListProvider clonedConnector = (BasicCollectionConnectorListProvider) super
         .clone(newConnectorId);
     if (collectionConnectorProviders != null) {
-      clonedConnector.collectionConnectorProviders = new ArrayList<ICollectionConnectorProvider>();
+      clonedConnector.collectionConnectorProviders = new ArrayList<>();
       for (ICollectionConnectorProvider collectionConnectorProvider : collectionConnectorProviders) {
         clonedConnector.collectionConnectorProviders
             .add((ICollectionConnectorProvider) clonedConnector
@@ -109,7 +109,7 @@ public class BasicCollectionConnectorListProvider extends
    */
   @Override
   public List<ICollectionConnector> getCollectionConnectors() {
-    List<ICollectionConnector> collectionConnectors = new ArrayList<ICollectionConnector>();
+    List<ICollectionConnector> collectionConnectors = new ArrayList<>();
     if (collectionConnectorProviders != null) {
       for (ICollectionConnectorProvider collectionConnectorProvider : collectionConnectorProviders) {
         collectionConnectors.add(collectionConnectorProvider

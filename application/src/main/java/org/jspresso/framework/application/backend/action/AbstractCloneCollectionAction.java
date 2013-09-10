@@ -65,7 +65,7 @@ public abstract class AbstractCloneCollectionAction extends
         || collectionConnector == null) {
       return null;
     }
-    List<Object> elementClones = new ArrayList<Object>();
+    List<Object> elementClones = new ArrayList<>();
     for (int selectedIndice : selectedIndices) {
       Object element = collectionConnector
           .getChildConnector(selectedIndice).getConnectorValue();

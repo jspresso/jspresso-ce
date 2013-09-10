@@ -155,7 +155,7 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
     if (executionFileFilter == null) {
       return null;
     }
-    Map<String, String[]> translatedFileFilter = new HashMap<String, String[]>();
+    Map<String, String[]> translatedFileFilter = new HashMap<>();
     for (Map.Entry<String, List<String>> filterEntry : executionFileFilter
         .entrySet()) {
       List<String> var = filterEntry.getValue();

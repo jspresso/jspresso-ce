@@ -74,7 +74,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    List<IDisplayableAction> actions = new ArrayList<>();
 
     if (okAction != null) {
       actions.add(okAction);

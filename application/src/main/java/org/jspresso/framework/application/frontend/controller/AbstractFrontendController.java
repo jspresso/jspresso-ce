@@ -156,7 +156,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private       Integer                               frameHeight;
   private       IPreferencesStore                     clientPreferencesStore;
   private       boolean                               checkActionThreadSafety;
-  private       PropertyChangeListener                dirtInterceptor;
+  private final PropertyChangeListener                dirtInterceptor;
 
   /**
    * Constructs a new {@code AbstractFrontendController} instance.
@@ -164,12 +164,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public AbstractFrontendController() {
     started = false;
     controllerDescriptor = new DefaultIconDescriptor();
-    selectedModules = new HashMap<String, Module>();
-    dialogContextStack = new ArrayList<Map<String, Object>>();
-    workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
-    workspaceViews = new HashMap<String, IMapView<E>>();
-    backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
-    forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
+    selectedModules = new HashMap<>();
+    dialogContextStack = new ArrayList<>();
+    workspaceNavigatorConnectors = new HashMap<>();
+    workspaceViews = new HashMap<>();
+    backwardHistoryEntries = new LinkedList<>();
+    forwardHistoryEntries = new LinkedList<>();
     moduleAutoPinEnabled = true;
     tracksWorkspaceNavigator = true;
     checkActionThreadSafety = true;
@@ -328,7 +328,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             moduleView, moduleView.getConnector(), null, null);
       }
     }
-    return new HashMap<String, Object>();
+    return new HashMap<>();
   }
 
   /**
@@ -722,7 +722,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @Override
   public Map<String, Object> getInitialActionContext() {
-    Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    Map<String, Object> initialActionContext = new HashMap<>();
     initialActionContext.putAll(getBackendController()
         .getInitialActionContext());
     if (dialogContextStack != null) {
@@ -820,6 +820,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     return getWorkspace(getSelectedWorkspaceName());
   }
 
+  @Override
   public Module getSelectedModule() {
     return getSelectedModule(getSelectedWorkspaceName());
   }
@@ -892,7 +893,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public List<String> getWorkspaceNames(boolean bypassSecurity) {
     if (workspaces != null) {
-      List<String> workspaceNames = new ArrayList<String>();
+      List<String> workspaceNames = new ArrayList<>();
       for (Map.Entry<String, Workspace> wsEntry : workspaces.entrySet()) {
         Workspace workspace = wsEntry.getValue();
         if (bypassSecurity || isAccessGranted(workspace)) {
@@ -1161,7 +1162,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the workspaces to set.
    */
   public void setWorkspaces(List<Workspace> workspaces) {
-    this.workspaces = new LinkedHashMap<String, Workspace>();
+    this.workspaces = new LinkedHashMap<>();
     for (Workspace workspace : workspaces) {
       this.workspaces.put(workspace.getName(), workspace);
     }
@@ -1371,13 +1372,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
     workspaceSelectionActionList.setName("workspaces");
     workspaceSelectionActionList
         .setIconImageURL(getWorkspacesMenuIconImageUrl());
-    List<IDisplayableAction> workspaceSelectionActions = new ArrayList<IDisplayableAction>();
+    List<IDisplayableAction> workspaceSelectionActions = new ArrayList<>();
     for (String workspaceName : getWorkspaceNames()) {
       Workspace workspace = getWorkspace(workspaceName);
       if (isAccessGranted(workspace)) {
         try {
           pushToSecurityContext(workspace);
-          WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
+          WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<>();
           IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
               .getViewDescriptor();
           workspaceSelectionAction.setWorkspaceName(workspaceName);
@@ -1403,12 +1404,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected ActionMap createWorkspaceActionMap() {
     ActionMap workspaceActionMap = new ActionMap();
-    List<ActionList> workspaceActionLists = new ArrayList<ActionList>();
+    List<ActionList> workspaceActionLists = new ArrayList<>();
 
     ActionList exitActionList = new ActionList();
     exitActionList.setName("file");
     exitActionList.setIconImageURL(getWorkspacesMenuIconImageUrl());
-    List<IDisplayableAction> exitActions = new ArrayList<IDisplayableAction>();
+    List<IDisplayableAction> exitActions = new ArrayList<>();
     exitActions.add(getExitAction());
     exitActionList.setActions(exitActions);
 
@@ -1513,7 +1514,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public IDisplayableAction getExitAction() {
     if (exitAction == null) {
-      ExitAction<E, F, G> action = new ExitAction<E, F, G>();
+      ExitAction<E, F, G> action = new ExitAction<>();
       action.setName("quit.name");
       action.setDescription("quit.description");
       action.setIconImageURL(getViewFactory().getIconFactory()
@@ -1670,7 +1671,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     getBackendController().loggedIn(subject);
     execute(getLoginAction(), getLoginActionContext());
     if (workspaces != null) {
-      Map<String, Workspace> filteredWorkspaces = new HashMap<String, Workspace>();
+      Map<String, Workspace> filteredWorkspaces = new HashMap<>();
       for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
         Workspace workspace = workspaceEntry.getValue();
         // Must be put here so that ws that are not accessible

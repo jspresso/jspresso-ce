@@ -135,13 +135,13 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public AbstractComponentDescriptor(String name) {
     setName(name);
-    propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
+    propertyDescriptorsCache = new ConcurrentHashMap<>();
     // Force initialization of ancestor descriptors
     setAncestorDescriptors(null);
   }
 
   private static IComponentDescriptor<IComponent> createComponentDescriptor() {
-    BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<IComponent>(
+    BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<>(
         IComponent.class.getName());
     return componentDescriptor;
   }
@@ -160,7 +160,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
-          List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+          List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<>();
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
             queryAncestorDescriptors.add(ancestorDescriptor
                 .createQueryDescriptor());
@@ -171,7 +171,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
         Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
         if (declaredPropertyDescs != null) {
-          Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
+          Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<>();
           for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
             queryPropertyDescriptors.add(propertyDescriptor
                 .createQueryDescriptor());
@@ -250,7 +250,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public List<ILifecycleInterceptor<?>> getLifecycleInterceptors() {
-    List<ILifecycleInterceptor<?>> allInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
+    List<ILifecycleInterceptor<?>> allInterceptors = new ArrayList<>();
     List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
     if (ancestorDescs != null) {
       for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -286,7 +286,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   @Override
   public Map<String, ESort> getOrderingProperties() {
     // use a set to avoid duplicates.
-    Map<String, ESort> properties = new LinkedHashMap<String, ESort>();
+    Map<String, ESort> properties = new LinkedHashMap<>();
     if (orderingProperties != null) {
       properties.putAll(orderingProperties);
     }
@@ -377,7 +377,7 @@ public abstract class AbstractComponentDescriptor<E> extends
       if (allPropertyDescriptorsCache == null) {
         // A map is used instead of a set since a set does not replace an
         // element it already contains.
-        Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
+        Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<>();
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -396,7 +396,7 @@ public abstract class AbstractComponentDescriptor<E> extends
                 .put(propertyDescriptor.getName(), propertyDescriptor);
           }
         }
-        allPropertyDescriptorsCache = new ArrayList<IPropertyDescriptor>();
+        allPropertyDescriptorsCache = new ArrayList<>();
         for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
           allPropertyDescriptorsCache.add(propertyDescriptor);
         }
@@ -414,7 +414,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getQueryableProperties() {
     synchronized (queryablePropertiesLock) {
       if (queryableProperties == null) {
-        Set<String> queryablePropertiesSet = new LinkedHashSet<String>();
+        Set<String> queryablePropertiesSet = new LinkedHashSet<>();
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -431,7 +431,7 @@ public abstract class AbstractComponentDescriptor<E> extends
             queryablePropertiesSet.add(renderedProperty);
           }
         }
-        queryableProperties = new ArrayList<String>(queryablePropertiesSet);
+        queryableProperties = new ArrayList<>(queryablePropertiesSet);
       }
     }
     return explodeComponentReferences(this, queryableProperties);
@@ -444,7 +444,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getReadabilityGates() {
-    Set<IGate> gates = new HashSet<IGate>();
+    Set<IGate> gates = new HashSet<>();
     if (readabilityGates != null) {
       gates.addAll(readabilityGates);
     }
@@ -466,7 +466,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getRenderedProperties() {
     synchronized (renderedPropertiesLock) {
       if (renderedProperties == null) {
-        Set<String> renderedPropertiesSet = new LinkedHashSet<String>();
+        Set<String> renderedPropertiesSet = new LinkedHashSet<>();
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -489,7 +489,7 @@ public abstract class AbstractComponentDescriptor<E> extends
             }
           }
         }
-        renderedProperties = new ArrayList<String>(renderedPropertiesSet);
+        renderedProperties = new ArrayList<>(renderedPropertiesSet);
       }
     }
     return explodeComponentReferences(this, renderedProperties);
@@ -500,7 +500,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getServiceContractClassNames() {
-    Set<String> serviceContractClassNames = new LinkedHashSet<String>();
+    Set<String> serviceContractClassNames = new LinkedHashSet<>();
     if (serviceContracts != null) {
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
@@ -523,7 +523,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public Collection<Class<?>> getServiceContracts() {
     registerDelegateServicesIfNecessary();
     if (serviceContracts != null) {
-      return new ArrayList<Class<?>>(serviceContracts);
+      return new ArrayList<>(serviceContracts);
     }
     return null;
   }
@@ -654,7 +654,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getUnclonedProperties() {
-    Set<String> properties = new HashSet<String>();
+    Set<String> properties = new HashSet<>();
     if (unclonedProperties != null) {
       properties.addAll(unclonedProperties);
     }
@@ -674,7 +674,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getWritabilityGates() {
-    Set<IGate> gates = new HashSet<IGate>();
+    Set<IGate> gates = new HashSet<>();
     if (writabilityGates != null) {
       gates.addAll(writabilityGates);
     }
@@ -807,7 +807,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
     if (untypedOrderingProperties != null) {
-      orderingProperties = new LinkedHashMap<String, ESort>();
+      orderingProperties = new LinkedHashMap<>();
       for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
           .entrySet()) {
         if (untypedOrderingProperty.getValue() instanceof ESort) {
@@ -857,7 +857,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     // This is important to use an intermediate structure since all descriptors
     // may not have their names fully initialized.
     if (descriptors != null) {
-      tempPropertyBuffer = new ArrayList<IPropertyDescriptor>(descriptors);
+      tempPropertyBuffer = new ArrayList<>(descriptors);
       propertyDescriptorsMap = null;
     } else {
       tempPropertyBuffer = null;
@@ -867,7 +867,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   private void resetPropertyDescriptorCaches() {
-    propertyDescriptorsCache = new ConcurrentHashMap<String, IPropertyDescriptor>();
+    propertyDescriptorsCache = new ConcurrentHashMap<>();
     allPropertyDescriptorsCache = null;
   }
 
@@ -1110,14 +1110,14 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   static List<String> explodeComponentReferences(
       IComponentDescriptor<?> componentDescriptor, List<String> propertyNames) {
-    List<String> explodedProperties = new ArrayList<String>();
+    List<String> explodedProperties = new ArrayList<>();
     for (String propertyName : propertyNames) {
       IPropertyDescriptor propertyDescriptor = componentDescriptor
           .getPropertyDescriptor(propertyName);
       if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
           && EntityHelper
               .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)) {
-        List<String> nestedProperties = new ArrayList<String>();
+        List<String> nestedProperties = new ArrayList<>();
         for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getRenderedProperties()) {
           nestedProperties.add(propertyName + "." + nestedRenderedProperty);
@@ -1145,7 +1145,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void processPropertiesBufferIfNecessary() {
     synchronized (propertiesBufferLock) {
       if (tempPropertyBuffer != null) {
-        propertyDescriptorsMap = new LinkedHashMap<String, IPropertyDescriptor>();
+        propertyDescriptorsMap = new LinkedHashMap<>();
         for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
           if (descriptor instanceof IStringPropertyDescriptor) {
             if (((IStringPropertyDescriptor) descriptor).isTranslatable()) {
@@ -1244,11 +1244,7 @@ public abstract class AbstractComponentDescriptor<E> extends
             }
             registerService(Class.forName(ObjectUtils
                 .extractRawClassName(nextPair.getKey())), delegate);
-          } catch (ClassNotFoundException ex) {
-            throw new DescriptorException(ex);
-          } catch (InstantiationException ex) {
-            throw new DescriptorException(ex);
-          } catch (IllegalAccessException ex) {
+          } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             throw new DescriptorException(ex);
           }
         }
@@ -1275,7 +1271,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void registerLifecycleInterceptor(
       ILifecycleInterceptor<?> lifecycleInterceptor) {
     if (lifecycleInterceptors == null) {
-      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
+      lifecycleInterceptors = new ArrayList<>();
     }
     lifecycleInterceptors.add(lifecycleInterceptor);
   }
@@ -1290,11 +1286,7 @@ public abstract class AbstractComponentDescriptor<E> extends
           try {
             registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class
                 .forName(lifecycleInterceptorClassName).newInstance());
-          } catch (InstantiationException ex) {
-            throw new DescriptorException(ex);
-          } catch (IllegalAccessException ex) {
-            throw new DescriptorException(ex);
-          } catch (ClassNotFoundException ex) {
+          } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
             throw new DescriptorException(ex);
           }
         }
@@ -1315,8 +1307,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
-      serviceDelegates = new HashMap<String, IComponentService>();
-      serviceContracts = new HashSet<Class<?>>();
+      serviceDelegates = new HashMap<>();
+      serviceContracts = new HashSet<>();
     }
     serviceContracts.add(serviceContract);
     Method[] contractServices = serviceContract.getMethods();

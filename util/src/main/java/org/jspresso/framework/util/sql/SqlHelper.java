@@ -67,8 +67,8 @@ public final class SqlHelper {
     };
   }
 
-  private Formatter formatter = DEFAULT_FORMATTER;
-  private Set<String> reservedKeyWords = new HashSet<String>(DEFAULT_KEY_WORD_PROVIDER.run());
+  private Formatter   formatter        = DEFAULT_FORMATTER;
+  private Set<String> reservedKeyWords = new HashSet<>(DEFAULT_KEY_WORD_PROVIDER.run());
 
   /**
    * Constructs a new {@code SqlHelper} instance.
@@ -89,7 +89,7 @@ public final class SqlHelper {
       this.formatter = formatter;
     }
     if (keyWordProvider != null) {
-      this.reservedKeyWords = new HashSet<String>(keyWordProvider.run());
+      this.reservedKeyWords = new HashSet<>(keyWordProvider.run());
     }
   }
 
@@ -152,7 +152,7 @@ public final class SqlHelper {
     } else {
       currentProvider = DEFAULT_KEY_WORD_PROVIDER;
     }
-    reservedKeyWords = new HashSet<String>(currentProvider.run());
+    reservedKeyWords = new HashSet<>(currentProvider.run());
   }
 
   private boolean isReserved(String name) {

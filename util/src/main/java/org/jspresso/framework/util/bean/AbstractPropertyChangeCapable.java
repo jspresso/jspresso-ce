@@ -218,7 +218,7 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   @Override
   public PropertyChangeListener[] getPropertyChangeListeners() {
-    ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+    ArrayList<PropertyChangeListener> listeners = new ArrayList<>();
     if (propertyChangeSupport != null) {
       for (PropertyChangeListener pcl : propertyChangeSupport
           .getPropertyChangeListeners()) {
@@ -246,7 +246,7 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   @Override
   public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
-    ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+    ArrayList<PropertyChangeListener> listeners = new ArrayList<>();
     if (propertyChangeSupport != null) {
       listeners.addAll(Arrays.asList(propertyChangeSupport
           .getPropertyChangeListeners(propertyName)));
@@ -283,7 +283,7 @@ public abstract class AbstractPropertyChangeCapable implements
   @Override
   public boolean blockEvents() {
     if (delayedEvents == null) {
-      delayedEvents = new ArrayList<PropertyChangeEvent>();
+      delayedEvents = new ArrayList<>();
       return true;
     }
     return false;
@@ -296,7 +296,7 @@ public abstract class AbstractPropertyChangeCapable implements
   @Override
   public void releaseEvents() {
     if (delayedEvents != null) {
-      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<PropertyChangeEvent>(
+      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<>(
           delayedEvents);
       delayedEvents = null;
       for (PropertyChangeEvent evt : delayedEventsCopy) {

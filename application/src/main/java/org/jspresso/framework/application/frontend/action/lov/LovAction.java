@@ -177,7 +177,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (viewConnector instanceof IRenderableCompositeValueConnector
         && ((IRenderableCompositeValueConnector) viewConnector)
             .getRenderingConnector() != null) {
-      Map<String, ESort> lovOrderingProperties = new LinkedHashMap<String, ESort>();
+      Map<String, ESort> lovOrderingProperties = new LinkedHashMap<>();
       autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector)
           .getRenderingConnector().getModelDescriptor().getName();
       if (autoCompletePropertyValue != null
@@ -309,7 +309,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       IReferencePropertyDescriptor<IComponent> erqDescriptor,
       IQueryComponent queryComponent, IView<E> lovView,
       final IActionHandler actionHandler, final Map<String, Object> context) {
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    List<IDisplayableAction> actions = new ArrayList<>();
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
 
@@ -486,7 +486,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> initMapping) {
     IReferencePropertyDescriptor<IComponent> refQueryDescriptor = null;
     if (descriptor != null) {
-      refQueryDescriptor = new BasicReferencePropertyDescriptor<IComponent>();
+      refQueryDescriptor = new BasicReferencePropertyDescriptor<>();
       ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor)
           .setReferencedDescriptor(descriptor);
       ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor)

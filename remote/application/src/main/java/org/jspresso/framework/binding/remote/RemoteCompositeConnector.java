@@ -173,7 +173,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
         .createRemoteCompositeValueState(getGuid(), getPermId());
-    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    List<RemoteValueState> children = new ArrayList<>();
     for (String connectorKey : getChildConnectorKeys()) {
       IValueConnector childConnector = getChildConnector(connectorKey);
       if (childConnector instanceof IRemoteStateOwner) {

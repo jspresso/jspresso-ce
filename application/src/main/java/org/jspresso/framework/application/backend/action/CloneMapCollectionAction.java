@@ -48,7 +48,7 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
    */
   @SuppressWarnings("UnusedParameters")
   protected Object cloneElement(Object element, Map<String, Object> context) {
-    return new ObjectEqualityMap<Object, Object>((Map<?, ?>) element);
+    return new ObjectEqualityMap<>((Map<?, ?>) element);
   }
 
   /**
@@ -62,7 +62,7 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
         || collectionConnector == null) {
       return null;
     }
-    List<Object> elementClones = new ArrayList<Object>();
+    List<Object> elementClones = new ArrayList<>();
     for (int selectedIndice : selectedIndices) {
       Object element = collectionConnector
           .getChildConnector(selectedIndice).getConnectorValue();

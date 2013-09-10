@@ -126,7 +126,7 @@ public class ControllerAwareEntityInvocationHandler extends
   protected void entityDetached(IEntity parent, IEntity child,
       IRelationshipEndPropertyDescriptor propertyDescriptor) {
     if (detachedEntities == null) {
-      detachedEntities = new LinkedHashSet<IEntity>();
+      detachedEntities = new LinkedHashSet<>();
     }
     // Dangerous since default composition is true for 1-N relationships.
     // When changing the "father" of an entity through a LOV leads to deleting

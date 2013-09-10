@@ -44,7 +44,7 @@ public class ComponentIconProvider implements IconProvider {
    * Constructs a new {@code ComponentIconImageURLProvider} instance.
    */
   protected ComponentIconProvider() {
-    cache = new HashMap<Class<?>, Icon>();
+    cache = new HashMap<>();
   }
 
   /**

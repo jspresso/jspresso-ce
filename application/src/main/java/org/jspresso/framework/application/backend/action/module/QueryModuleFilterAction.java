@@ -75,7 +75,7 @@ public class QueryModuleFilterAction extends AbstractQbeAction {
       Map<String, Object> context) {
     FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
     List<?> currentModuleObjects = module.getModuleObjects();
-    List<Object> targetModuleObjects = new ArrayList<Object>(
+    List<Object> targetModuleObjects = new ArrayList<>(
         queryComponent.getQueriedComponents());
     // We need to preserve transient entities from being lost.
     if (currentModuleObjects != null) {

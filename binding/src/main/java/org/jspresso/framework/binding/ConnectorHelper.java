@@ -104,7 +104,7 @@ public final class ConnectorHelper {
     if (connector == null) {
       return null;
     }
-    List<String> path = new ArrayList<String>();
+    List<String> path = new ArrayList<>();
     IValueConnector parentConnector = connector;
     while (parentConnector != null) {
       path.add(parentConnector.getId());

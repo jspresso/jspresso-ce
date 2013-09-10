@@ -298,15 +298,13 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
     if (!ObjectUtils.equals(aValue, getConnecteeValue())) {
       try {
         accessor.setValue(getModelProvider().getModel(), aValue);
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ConnectorBindingException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ConnectorBindingException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ConnectorBindingException(ex);
       }
     }
   }

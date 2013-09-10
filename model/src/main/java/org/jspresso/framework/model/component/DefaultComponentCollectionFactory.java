@@ -42,9 +42,9 @@ public class DefaultComponentCollectionFactory implements
   public <E> Collection<E> createComponentCollection(
       Class<?> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
-      return new LinkedHashSet<E>();
+      return new LinkedHashSet<>();
     } else if (List.class.isAssignableFrom(collectionInterface)) {
-      return new ArrayList<E>();
+      return new ArrayList<>();
     }
     throw new ComponentException("Collection type " + collectionInterface
         + " is not supported for components.");

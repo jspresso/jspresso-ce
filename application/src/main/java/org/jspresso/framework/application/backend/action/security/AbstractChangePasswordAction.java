@@ -96,7 +96,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   private boolean                                               allowEmptyPasswords      = true;
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
-    BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
+    BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<>();
     BasicStringPropertyDescriptor toString = new BasicStringPropertyDescriptor();
     toString.setName(TO_STRING);
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
@@ -106,7 +106,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
     BasicPasswordPropertyDescriptor retypedPassword = new BasicPasswordPropertyDescriptor();
     retypedPassword.setName(PASSWD_RETYPED);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     propertyDescriptors.add(toString);
     propertyDescriptors.add(currentPassword);
     propertyDescriptors.add(typedPassword);

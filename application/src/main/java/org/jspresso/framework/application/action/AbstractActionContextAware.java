@@ -415,7 +415,7 @@ public abstract class AbstractActionContextAware {
     }
     List<T> models;
     if (modelConnector instanceof ICollectionConnector) {
-      models = new ArrayList<T>();
+      models = new ArrayList<>();
       int[] selectedIndices = getSelectedIndices(viewPath, context);
       if (selectedIndices != null && selectedIndices.length > 0) {
         for (int selectedIndice : selectedIndices) {

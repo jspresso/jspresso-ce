@@ -131,7 +131,7 @@ public class RemoteActionFactory extends
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
-    this.hardReferences = new HashSet<RAction>();
+    this.hardReferences = new HashSet<>();
   }
 
   private RAction createRAction(IAction action, Dimension dimension,
@@ -208,7 +208,7 @@ public class RemoteActionFactory extends
           sourceComponent = view.getPeer();
           viewConnector = view.getConnector();
         }
-        Map<String, Object> actionContext = new HashMap<String, Object>();
+        Map<String, Object> actionContext = new HashMap<>();
         if (context != null) {
           actionContext.putAll(context);
         }

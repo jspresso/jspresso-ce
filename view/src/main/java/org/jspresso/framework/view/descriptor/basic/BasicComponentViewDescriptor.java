@@ -144,7 +144,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     List<IPropertyViewDescriptor> declaredPropertyViewDescriptors = propertyViewDescriptors;
     if (declaredPropertyViewDescriptors == null) {
       List<String> viewRenderedProperties = getRenderedProperties();
-      declaredPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      declaredPropertyViewDescriptors = new ArrayList<>();
       for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
         propertyViewDescriptor.setName(renderedProperty);
@@ -156,7 +156,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors;
     if (explodeComponentReferences) {
-      actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      actualPropertyViewDescriptors = new ArrayList<>();
       for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
         List<IPropertyViewDescriptor> exploded = PropertyViewDescriptorHelper.explodeComponentReferences(
             propertyViewDescriptor, (IComponentDescriptorProvider<?>) getModelDescriptor());
@@ -306,7 +306,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    *          the propertyWidths to set.
    */
   public void setPropertyWidths(Map<String, Object> propertyWidths) {
-    this.propertyWidths = new HashMap<String, Integer>();
+    this.propertyWidths = new HashMap<>();
     for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
       if (propertyWidth.getValue() instanceof String) {
         this.propertyWidths.put(propertyWidth.getKey(),

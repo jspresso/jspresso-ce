@@ -61,7 +61,7 @@ public abstract class AbstractCompositeValueConnector extends
     super(id);
     itemSelectionSupport = new ItemSelectionSupport();
     trackingChildrenSelection = false;
-    childConnectors = new LinkedHashMap<String, IValueConnector>();
+    childConnectors = new LinkedHashMap<>();
   }
 
   /**
@@ -87,7 +87,7 @@ public abstract class AbstractCompositeValueConnector extends
   public AbstractCompositeValueConnector clone(String newConnectorId) {
     AbstractCompositeValueConnector clonedConnector = (AbstractCompositeValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
+    clonedConnector.childConnectors = new LinkedHashMap<>();
     clonedConnector.itemSelectionSupport = new ItemSelectionSupport();
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector.addChildConnector(connectorKey,

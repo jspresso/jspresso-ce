@@ -167,7 +167,7 @@ public class RemoteCollectionConnectorProvider extends
         .createRemoteCompositeValueState(getGuid(), getPermId());
     ICollectionConnector collectionConnector = getCollectionConnector();
     if (collectionConnector instanceof RemoteCollectionConnector) {
-      createdState.setChildren(new ArrayList<RemoteValueState>(
+      createdState.setChildren(new ArrayList<>(
           ((RemoteCollectionConnector) collectionConnector).getState()
               .getChildren()));
     }

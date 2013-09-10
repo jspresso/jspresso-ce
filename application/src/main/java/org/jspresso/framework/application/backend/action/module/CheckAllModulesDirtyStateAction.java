@@ -51,7 +51,7 @@ public class CheckAllModulesDirtyStateAction<E, F, G> extends
    */
   @Override
   protected Collection<Module> getModulesToCheck(Map<String, Object> context) {
-    Collection<Module> modulesToCheck = new ArrayList<Module>();
+    Collection<Module> modulesToCheck = new ArrayList<>();
     for (String workspaceName : getController(context).getWorkspaceNames()) {
       Workspace ws = getController(context).getWorkspace(workspaceName);
       List<Module> modules = ws.getModules();

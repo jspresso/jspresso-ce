@@ -74,7 +74,7 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
 
   private boolean checkUniqueness(String propertyName,
       PropertyChangeListener listener) {
-    List<PropertyChangeListener> containedListeners = new ArrayList<PropertyChangeListener>();
+    List<PropertyChangeListener> containedListeners = new ArrayList<>();
     if (propertyName == null) {
       for (PropertyChangeListener pcl : getPropertyChangeListeners()) {
         if (!(pcl instanceof PropertyChangeListenerProxy)) {

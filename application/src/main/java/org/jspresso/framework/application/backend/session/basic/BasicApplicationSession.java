@@ -46,7 +46,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Constructs a new {@code BasicApplicationSession} instance.
    */
   public BasicApplicationSession() {
-    customValues = new HashMap<String, Object>();
+    customValues = new HashMap<>();
   }
 
   /**
@@ -130,7 +130,7 @@ public class BasicApplicationSession implements IApplicationSession {
   @Override
   public Map<String, Object> getCustomValues() {
     // return a defensive copy
-    return new HashMap<String, Object>(customValues);
+    return new HashMap<>(customValues);
   }
 
   /**

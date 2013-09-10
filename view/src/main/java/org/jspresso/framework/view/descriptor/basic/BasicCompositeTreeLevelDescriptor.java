@@ -88,7 +88,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
   @Override
   public List<ITreeLevelDescriptor> getChildrenDescriptors() {
     if (childrenDescriptorsMap != null) {
-      return new ArrayList<ITreeLevelDescriptor>(
+      return new ArrayList<>(
           childrenDescriptorsMap.values());
     }
     return null;
@@ -104,7 +104,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
    */
   public void setChildrenDescriptors(
       List<ITreeLevelDescriptor> childrenDescriptors) {
-    this.childrenDescriptorsMap = new LinkedHashMap<String, ITreeLevelDescriptor>();
+    this.childrenDescriptorsMap = new LinkedHashMap<>();
     for (ITreeLevelDescriptor descriptor : childrenDescriptors) {
       String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
           .getModelDescriptor().getName();

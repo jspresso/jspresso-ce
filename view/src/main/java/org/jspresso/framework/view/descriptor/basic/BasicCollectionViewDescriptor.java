@@ -213,7 +213,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
       actualModelDescriptor = modelDescriptor;
     } else if (modelDescriptor instanceof IComponentDescriptor<?>) {
-      actualModelDescriptor = new BasicListDescriptor<Object>();
+      actualModelDescriptor = new BasicListDescriptor<>();
       ((BasicListDescriptor<Object>) actualModelDescriptor)
           .setElementDescriptor((IComponentDescriptor<Object>) modelDescriptor);
       ((BasicListDescriptor<Object>) actualModelDescriptor)

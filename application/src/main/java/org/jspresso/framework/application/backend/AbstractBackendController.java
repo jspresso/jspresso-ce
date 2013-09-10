@@ -165,7 +165,7 @@ public abstract class AbstractBackendController extends AbstractController
     entitiesExcludedFromSessionSanityChecks = new ReferenceMap(AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
     asyncActionsThreadGroup = new ThreadGroup("Asynchronous Actions");
-    asyncExecutors = new LinkedHashSet<AsyncActionExecutor>();
+    asyncExecutors = new LinkedHashSet<>();
     setAsyncExecutorsMaxCount(10);
   }
 
@@ -240,7 +240,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot use a unit of work that has not begun.");
     }
-    List<E> uowEntities = new ArrayList<E>();
+    List<E> uowEntities = new ArrayList<>();
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
     IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork");
     for (Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> contractStore : uowExistingEntities.entrySet()) {
@@ -274,7 +274,7 @@ public abstract class AbstractBackendController extends AbstractController
     try {
       committingUow = true;
       if (unitOfWork.getUpdatedEntities() != null) {
-        merge(new ArrayList<IEntity>(unitOfWork.getUpdatedEntities()), EMergeMode.MERGE_CLEAN_LAZY);
+        merge(new ArrayList<>(unitOfWork.getUpdatedEntities()), EMergeMode.MERGE_CLEAN_LAZY);
       }
     } finally {
       committingUow = false;
@@ -343,7 +343,7 @@ public abstract class AbstractBackendController extends AbstractController
     AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action, context, asyncActionsThreadGroup,
         slaveBackendController);
     asyncExecutors.add(slaveExecutor);
-    Set<AsyncActionExecutor> oldRunningExecutors = new LinkedHashSet<AsyncActionExecutor>(
+    Set<AsyncActionExecutor> oldRunningExecutors = new LinkedHashSet<>(
         getRunningExecutors());
     firePropertyChange("runningExecutors", oldRunningExecutors,
         getRunningExecutors());
@@ -520,7 +520,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public Map<String, Object> getInitialActionContext() {
-    Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    Map<String, Object> initialActionContext = new HashMap<>();
     initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
     return initialActionContext;
   }
@@ -587,7 +587,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     // we must rehash entries in case in case modules hashcode have changed and
     // still preserve LRU order.
-    Map<Module, IValueConnector> buff = new LinkedHashMap<Module, IValueConnector>();
+    Map<Module, IValueConnector> buff = new LinkedHashMap<>();
     buff.putAll(moduleConnectors);
     moduleConnectors.clear();
     moduleConnectors.putAll(buff);
@@ -632,7 +632,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void installWorkspaces(Map<String, Workspace> workspaces) {
-    workspaceConnectors = new HashMap<String, IValueConnector>();
+    workspaceConnectors = new HashMap<>();
     for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
       String workspaceName = workspaceEntry.getKey();
       Workspace workspace = workspaceEntry.getValue();
@@ -747,7 +747,7 @@ public abstract class AbstractBackendController extends AbstractController
   public <E extends IEntity> List<E> merge(List<E> entities,
       EMergeMode mergeMode) {
     IEntityRegistry alreadyMerged = createEntityRegistry("merge");
-    List<E> mergedList = new ArrayList<E>();
+    List<E> mergedList = new ArrayList<>();
     for (E entity : entities) {
       mergedList.add(merge(entity, mergeMode, alreadyMerged));
     }
@@ -779,7 +779,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     Map<String, Object> initialDirtyProperties = null;
     if (!entity.isPersistent()) {
-      initialDirtyProperties = new HashMap<String, Object>();
+      initialDirtyProperties = new HashMap<>();
       for (Map.Entry<String, Object> property : entity.straightGetProperties()
           .entrySet()) {
         String propertyName = property.getKey();
@@ -1218,10 +1218,10 @@ public abstract class AbstractBackendController extends AbstractController
       if (isInitialized(entity)) {
         dirtyProperties = dirtRecorder.getChangedProperties(entity);
         if (dirtyProperties == null) {
-          dirtyProperties = new HashMap<String, Object>();
+          dirtyProperties = new HashMap<>();
         }
       } else {
-        dirtyProperties = new HashMap<String, Object>();
+        dirtyProperties = new HashMap<>();
       }
       alreadyCloned.register(entityContract, entity.getId(), uowEntity);
       if (isInitialized(entity)) {
@@ -1319,7 +1319,7 @@ public abstract class AbstractBackendController extends AbstractController
         if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
           uowEntity.releaseEvents();
         }
-        unitOfWork.register(uowEntity, new HashMap<String, Object>(
+        unitOfWork.register(uowEntity, new HashMap<>(
             dirtyProperties));
         if (uowEntity instanceof ILifecycleCapable) {
           ((ILifecycleCapable) uowEntity).onClone(entity);
@@ -1448,8 +1448,8 @@ public abstract class AbstractBackendController extends AbstractController
         Map<String, Object> entityProperties = entity.straightGetProperties();
         Map<String, Object> registeredEntityProperties = registeredEntity
             .straightGetProperties();
-        Map<String, Object> mergedProperties = new LinkedHashMap<String, Object>();
-        Set<String> propertiesToSort = new HashSet<String>();
+        Map<String, Object> mergedProperties = new LinkedHashMap<>();
+        Set<String> propertiesToSort = new HashSet<>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           String propertyName = property.getKey();
           Object propertyValue = property.getValue();
@@ -1609,7 +1609,7 @@ public abstract class AbstractBackendController extends AbstractController
         .straightGetProperties();
     Map<String, Object> registeredComponentProperties = varRegisteredComponent
         .straightGetProperties();
-    Map<String, Object> mergedProperties = new HashMap<String, Object>();
+    Map<String, Object> mergedProperties = new HashMap<>();
     for (Map.Entry<String, Object> property : componentPropertiesToMerge
         .entrySet()) {
       String propertyName = property.getKey();
@@ -1674,8 +1674,8 @@ public abstract class AbstractBackendController extends AbstractController
   public void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    Set<IComponent> clearedEntities = new HashSet<IComponent>();
-    Map<IComponent, RuntimeException> integrityViolations = new HashMap<IComponent, RuntimeException>();
+    Set<IComponent> clearedEntities = new HashSet<>();
+    Map<IComponent, RuntimeException> integrityViolations = new HashMap<>();
     cleanRelationshipsOnDeletion(component, dryRun, clearedEntities,
         integrityViolations);
     // Throw exceptions for entities that have not been cleared during the
@@ -1787,7 +1787,7 @@ public abstract class AbstractBackendController extends AbstractController
             } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
               if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                   .isComposition()) {
-                for (IComponent composedEntity : new ArrayList<IComponent>(
+                for (IComponent composedEntity : new ArrayList<>(
                     (Collection<IComponent>) propertyValue)) {
                   cleanRelationshipsOnDeletion(composedEntity, dryRun,
                       clearedEntities, integrityViolations);
@@ -1798,7 +1798,7 @@ public abstract class AbstractBackendController extends AbstractController
                     .getReverseRelationEnd() != null) {
                   IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                       .getReverseRelationEnd();
-                  for (IComponent collectionElement : new ArrayList<IComponent>(
+                  for (IComponent collectionElement : new ArrayList<>(
                       (Collection<IComponent>) property.getValue())) {
                     if (!clearedEntities.contains(collectionElement)) {
                       try {
@@ -2043,7 +2043,7 @@ public abstract class AbstractBackendController extends AbstractController
       if (customSecurityPlugin != null) {
         try {
           pushToSecurityContext(securable);
-          Map<String, Object> securityContext = new HashMap<String, Object>();
+          Map<String, Object> securityContext = new HashMap<>();
           if (getApplicationSession() != null
               && getApplicationSession().getPrincipal() != null) {
             securityContext.put(SecurityContextConstants.USER_ROLES,
@@ -2373,7 +2373,7 @@ public abstract class AbstractBackendController extends AbstractController
     int activeCount = asyncActionsThreadGroup.activeCount();
     AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
     asyncActionsThreadGroup.enumerate(activeExecutors);
-    return new LinkedHashSet<AsyncActionExecutor>(
+    return new LinkedHashSet<>(
         Arrays.asList(activeExecutors));
   }
 
@@ -2382,7 +2382,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public Set<AsyncActionExecutor> getCompletedExecutors() {
-    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<AsyncActionExecutor>(
+    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<>(
         asyncExecutors);
     completedExecutors.removeAll(getRunningExecutors());
     return completedExecutors;
@@ -2393,7 +2393,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void purgeCompletedExecutors() {
-    Set<AsyncActionExecutor> oldValue = new LinkedHashSet<AsyncActionExecutor>(
+    Set<AsyncActionExecutor> oldValue = new LinkedHashSet<>(
         getCompletedExecutors());
     asyncExecutors.removeAll(getCompletedExecutors());
     firePropertyChange("completedExecutors", oldValue, getCompletedExecutors());

@@ -43,9 +43,9 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * Constructs a new {@code BeanPropertyChangeRecorder} instance.
    */
   public BeanPropertyChangeRecorder() {
-    changedPropertiesMap = new WeakHashMap<IPropertyChangeCapable, Map<String, Object>>();
+    changedPropertiesMap = new WeakHashMap<>();
     enabled = true;
-    interceptors = new LinkedHashSet<PropertyChangeListener>();
+    interceptors = new LinkedHashSet<>();
   }
 
   /**
@@ -60,7 +60,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
     Map<String, Object> changedProperties = changedPropertiesMap.get(bean);
     Map<String, Object> defensiveCopy = null;
     if (changedProperties != null) {
-      defensiveCopy = new HashMap<String, Object>(changedProperties);
+      defensiveCopy = new HashMap<>(changedProperties);
     }
     return defensiveCopy;
   }
@@ -125,7 +125,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
   public void register(IPropertyChangeCapable bean,
       Map<String, Object> initialChangedProperties) {
     if (initialChangedProperties != null) {
-      changedPropertiesMap.put(bean, new HashMap<String, Object>(
+      changedPropertiesMap.put(bean, new HashMap<>(
           initialChangedProperties));
     } else {
       changedPropertiesMap.put(bean, new HashMap<String, Object>());

@@ -80,10 +80,10 @@ public class EnumQueryStructureDescriptor extends
     setI18nNameKey(propertyDescriptor.getI18nNameKey());
     setDescription(propertyDescriptor.getDescription());
 
-    BasicComponentDescriptor<EnumQueryStructure> refDescriptor = new BasicComponentDescriptor<EnumQueryStructure>(
+    BasicComponentDescriptor<EnumQueryStructure> refDescriptor = new BasicComponentDescriptor<>(
         EnumQueryStructure.class.getName());
 
-    BasicComponentDescriptor<EnumValueQueryStructure> elementDescriptor = new BasicComponentDescriptor<EnumValueQueryStructure>(
+    BasicComponentDescriptor<EnumValueQueryStructure> elementDescriptor = new BasicComponentDescriptor<>(
         EnumValueQueryStructure.class.getName());
 
     BasicBooleanPropertyDescriptor selectedPropertyDescriptor = new BasicBooleanPropertyDescriptor();
@@ -101,7 +101,7 @@ public class EnumQueryStructureDescriptor extends
     }
     valuePropertyDescriptor.setReadOnly(true);
 
-    List<IPropertyDescriptor> enumValuePropertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> enumValuePropertyDescriptors = new ArrayList<>();
     enumValuePropertyDescriptors.add(selectedPropertyDescriptor);
     enumValuePropertyDescriptors.add(valuePropertyDescriptor);
     elementDescriptor.setPropertyDescriptors(enumValuePropertyDescriptors);
@@ -109,11 +109,11 @@ public class EnumQueryStructureDescriptor extends
     elementDescriptor.setRenderedProperties(Arrays.asList(SELECTED, VALUE));
 
     BasicSetDescriptor<EnumValueQueryStructure> enumValuesReferencedDescriptor;
-    enumValuesReferencedDescriptor = new BasicSetDescriptor<EnumValueQueryStructure>();
+    enumValuesReferencedDescriptor = new BasicSetDescriptor<>();
     enumValuesReferencedDescriptor.setElementDescriptor(elementDescriptor);
 
     BasicCollectionPropertyDescriptor<EnumValueQueryStructure> enumerationValuesPropertyDescriptor;
-    enumerationValuesPropertyDescriptor = new BasicCollectionPropertyDescriptor<EnumValueQueryStructure>();
+    enumerationValuesPropertyDescriptor = new BasicCollectionPropertyDescriptor<>();
     enumerationValuesPropertyDescriptor.setName(ENUMERATION_VALUES);
     enumerationValuesPropertyDescriptor
         .setReferencedDescriptor(enumValuesReferencedDescriptor);
@@ -121,7 +121,7 @@ public class EnumQueryStructureDescriptor extends
     BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
     toStringPropertyDescriptor.setName(TO_STRING);
 
-    List<IPropertyDescriptor> enumPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> enumPropertyDescriptors = new ArrayList<>();
     enumPropertyDescriptors.add(enumerationValuesPropertyDescriptor);
     enumPropertyDescriptors.add(toStringPropertyDescriptor);
     refDescriptor.setPropertyDescriptors(enumPropertyDescriptors);

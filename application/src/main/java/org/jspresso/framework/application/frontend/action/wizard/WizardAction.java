@@ -111,7 +111,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
             firstWizardStep.getViewDescriptor().getModelDescriptor());
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
         .get(IWizardStepDescriptor.INITIAL_WIZARD_MODEL);
-    Map<String, Object> wizardModel = new ObjectEqualityMap<String, Object>();
+    Map<String, Object> wizardModel = new ObjectEqualityMap<>();
     if (wizardModelInit != null) {
       wizardModel.putAll(wizardModelInit);
     }
@@ -291,7 +291,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
       ITranslationProvider translationProvider, Locale locale,
       IValueConnector modelConnector, Map<String, Object> context) {
 
-    List<G> wizardStepActions = new ArrayList<G>();
+    List<G> wizardStepActions = new ArrayList<>();
 
     G previousGAction = createPreviousAction(wizardStep, actionHandler, view,
         translationProvider, locale, modelConnector, context);

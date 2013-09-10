@@ -185,7 +185,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
               if (evt.getNewValue() != null
                   && evt.getNewValue() instanceof Collection<?>
                   && Hibernate.isInitialized(evt.getNewValue())) {
-                Collection<IPropertyChangeCapable> newChildren = new HashSet<IPropertyChangeCapable>(
+                Collection<IPropertyChangeCapable> newChildren = new HashSet<>(
                     (Collection<IPropertyChangeCapable>) evt.getNewValue());
                 if (evt.getOldValue() != null
                     && evt.getOldValue() instanceof Collection<?>
@@ -201,7 +201,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
               if (evt.getOldValue() != null
                   && evt.getOldValue() instanceof Collection<?>
                   && Hibernate.isInitialized(evt.getOldValue())) {
-                Collection<IPropertyChangeCapable> removedChildren = new HashSet<IPropertyChangeCapable>(
+                Collection<IPropertyChangeCapable> removedChildren = new HashSet<>(
                     (Collection<IPropertyChangeCapable>) evt.getOldValue());
 
                 if (evt.getNewValue() != null
@@ -238,11 +238,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
         initialChildren = new BeanAccessorFactory()
             .createPropertyAccessor(sourceCollectionProperty,
                 sourceBean.getClass()).getValue(sourceBean);
-      } catch (IllegalAccessException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (NoSuchMethodException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
         throw new NestedRuntimeException(ex);
       }
     }
@@ -283,14 +279,12 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                   IPropertyChangeCapable.UNKNOWN, newValue);
             }
           }
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException | NoSuchMethodException ex) {
           throw new NestedRuntimeException(ex);
         } catch (InvocationTargetException ex) {
           if (ex.getTargetException() instanceof RuntimeException) {
             throw (RuntimeException) ex.getTargetException();
           }
-          throw new NestedRuntimeException(ex);
-        } catch (NoSuchMethodException ex) {
           throw new NestedRuntimeException(ex);
         }
       }

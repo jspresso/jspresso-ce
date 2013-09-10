@@ -72,9 +72,7 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
         throw (RuntimeException) ex.getCause();
       }
       throw ex;
-    } catch (IllegalArgumentException ex) {
-      throw new RuntimeException(ex);
-    } catch (NoSuchMethodException ex) {
+    } catch (IllegalArgumentException | NoSuchMethodException ex) {
       throw new RuntimeException(ex);
     }
   }

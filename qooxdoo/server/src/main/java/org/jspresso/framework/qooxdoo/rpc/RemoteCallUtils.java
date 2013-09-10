@@ -79,7 +79,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
           if (jsonArray != null) {
             Object array = toJava(jsonArray, Object[].class);
             if (array instanceof Object[]) {
-              List<Object> returnedList = new ArrayList<Object>();
+              List<Object> returnedList = new ArrayList<>();
               Collections.addAll(returnedList, ((Object[]) array));
               return returnedList;
             }

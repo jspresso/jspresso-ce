@@ -67,10 +67,20 @@ public class RTextField extends RTextComponent {
     return horizontalAlignment;
   }
 
+  /**
+   * Gets character action.
+   *
+   * @return the character action
+   */
   public RAction getCharacterAction() {
     return characterAction;
   }
 
+  /**
+   * Sets character action.
+   *
+   * @param characterAction the character action
+   */
   public void setCharacterAction(RAction characterAction) {
     this.characterAction = characterAction;
   }

@@ -296,13 +296,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         acPropValue = getComponentFactory().getAccessorFactory()
             .createPropertyAccessor(acProp, entity.getComponentContract())
             .getValue(entity);
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
       } catch (InvocationTargetException ex) {
         throw new NestedRuntimeException(ex.getTargetException(),
             "Invalid property: " + acProp);
-      } catch (NoSuchMethodException ex) {
-        throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
       }
     }
     return new Serializable[] {

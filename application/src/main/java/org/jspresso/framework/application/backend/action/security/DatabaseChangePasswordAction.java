@@ -71,11 +71,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
         throw new ActionBusinessException("Current password is not valid.",
             "password.current.invalid");
       }
-    } catch (NoSuchAlgorithmException ex) {
-      throw new ActionException(ex);
-    } catch (UnsupportedEncodingException ex) {
-      throw new ActionException(ex);
-    } catch (IOException ex) {
+    } catch (NoSuchAlgorithmException | IOException ex) {
       throw new ActionException(ex);
     }
     return true;

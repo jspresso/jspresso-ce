@@ -40,14 +40,14 @@ import java.util.WeakHashMap;
  */
 public class WeakPropertyChangeSupport implements Serializable {
 
-  private static final long                                        serialVersionUID = 2153623080004651058L;
+  private static final long serialVersionUID = 2153623080004651058L;
 
   /**
    * "listeners" lists all the generic listeners.
    * <p/>
    * This is transient - its state is written in the writeObject method.
    */
-  private transient LinkedList<WeakEntry<PropertyChangeListener>>  listeners;
+  private transient LinkedList<WeakEntry<PropertyChangeListener>> listeners;
 
   /**
    * Hashtable for managing listeners for specific properties. Maps property
@@ -58,9 +58,9 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * The object to be provided as the "source" for any generated events.
    */
-  private Object                                                   source;
+  private Object source;
 
-  private final transient ReferenceQueue<PropertyChangeListener> queue = new ReferenceQueue<PropertyChangeListener>();
+  private final transient ReferenceQueue<PropertyChangeListener> queue = new ReferenceQueue<>();
 
   /**
    * Constructs a {@code WeakPropertyChangeSupport} object.
@@ -78,14 +78,13 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * Add a PropertyChangeListener to the listener list. The listener is
    * registered for all properties.
-   * 
+   *
    * @param listener
    *          The PropertyChangeListener to be added
    */
-  public synchronized void addPropertyChangeListener(
-      PropertyChangeListener listener) {
+  public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
-      listeners = new java.util.LinkedList<WeakEntry<PropertyChangeListener>>();
+      listeners = new java.util.LinkedList<>();
     } else {
       processQueue();
     }
@@ -95,12 +94,11 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * Remove a PropertyChangeListener from the listener list. This removes a
    * PropertyChangeListener that was registered for all properties.
-   * 
+   *
    * @param listener
    *          The PropertyChangeListener to be removed
    */
-  public synchronized void removePropertyChangeListener(
-      PropertyChangeListener listener) {
+  public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
       return;
     }
@@ -112,7 +110,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * Add a PropertyChangeListener for a specific property. The listener will be
    * invoked only when a call on firePropertyChange names that specific
    * property.
-   * 
+   *
    * @param propertyName
    *          The name of the property to listen on.
    * @param listener
@@ -121,7 +119,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   public synchronized void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
     if (children == null) {
-      children = new java.util.WeakHashMap<String, WeakPropertyChangeSupport>();
+      children = new java.util.WeakHashMap<>();
     }
     WeakPropertyChangeSupport child = children.get(propertyName);
     if (child == null) {
@@ -306,7 +304,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   }
 
   private synchronized ArrayList<PropertyChangeListener> getPropertyChangeListenersList() {
-    ArrayList<PropertyChangeListener> targets = new ArrayList<PropertyChangeListener>();
+    ArrayList<PropertyChangeListener> targets = new ArrayList<>();
     if (listeners != null) {
       for (WeakEntry<PropertyChangeListener> entry : listeners) {
         PropertyChangeListener target = entry.get();
@@ -340,7 +338,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   public synchronized PropertyChangeListener[] getPropertyChangeListeners(
       String propertyName) {
-    ArrayList<PropertyChangeListener> targets = new ArrayList<PropertyChangeListener>();
+    ArrayList<PropertyChangeListener> targets = new ArrayList<>();
     if (children != null && propertyName != null) {
       WeakPropertyChangeSupport child = children.get(propertyName);
       if (child != null) {
@@ -381,7 +379,7 @@ public class WeakPropertyChangeSupport implements Serializable {
       if (k == null) {
         return null;
       }
-      return new WeakEntry<E>(k);
+      return new WeakEntry<>(k);
     }
 
     private WeakEntry(E k, ReferenceQueue<? super E> q) {
@@ -393,7 +391,7 @@ public class WeakPropertyChangeSupport implements Serializable {
       if (k == null) {
         return null;
       }
-      return new WeakEntry<E>(k, q);
+      return new WeakEntry<>(k, q);
     }
 
     /*

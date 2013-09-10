@@ -142,7 +142,7 @@ public class DefaultTreeSelectionModelBinder implements
     @Override
     public void valueChanged(TreeSelectionEvent e) {
       TreePath[] treePaths = e.getPaths();
-      Map<ICollectionConnector, int[]> connectorSelection = new LinkedHashMap<ICollectionConnector, int[]>();
+      Map<ICollectionConnector, int[]> connectorSelection = new LinkedHashMap<>();
       TreeSelectionModel sm = (TreeSelectionModel) e.getSource();
 
       for (TreePath treePath : treePaths) {

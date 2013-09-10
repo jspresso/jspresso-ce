@@ -317,7 +317,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   public DetachedCriteria addOrder(Order order) {
     DetachedCriteria returnedCrit = super.addOrder(order);
     if (currentOrders == null) {
-      currentOrders = new ArrayList<Order>();
+      currentOrders = new ArrayList<>();
       currentOrders.add(order);
     }
     return returnedCrit;
@@ -332,7 +332,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     if (currentOrders == null) {
       return null;
     }
-    return new ArrayList<Order>(currentOrders);
+    return new ArrayList<>(currentOrders);
   }
 
   /**
@@ -374,12 +374,12 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   private void registerSubCriteria(DetachedCriteria masterCriteria,
       String associationPath, DetachedCriteria subCriteria) {
     if (subCriteriaRegistry == null) {
-      subCriteriaRegistry = new HashMap<DetachedCriteria, Map<String, DetachedCriteria>>();
+      subCriteriaRegistry = new HashMap<>();
     }
     Map<String, DetachedCriteria> subCriterias = subCriteriaRegistry
         .get(masterCriteria);
     if (subCriterias == null) {
-      subCriterias = new HashMap<String, DetachedCriteria>();
+      subCriterias = new HashMap<>();
       subCriteriaRegistry.put(masterCriteria, subCriterias);
     }
     subCriterias.put(associationPath, subCriteria);

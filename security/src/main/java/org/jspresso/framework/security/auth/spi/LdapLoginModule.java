@@ -97,7 +97,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
                       option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
                       attr.get());
                 } else {
-                  List<Object> values = new ArrayList<Object>();
+                  List<Object> values = new ArrayList<>();
                   for (NamingEnumeration<?> avne = attr.getAll(); avne
                       .hasMore();) {
                     values.add(avne.next());
@@ -121,7 +121,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
                     extractSlice((String) attr.get(), nameParser, startIndex,
                         endIndex));
               } else {
-                List<Object> values = new ArrayList<Object>();
+                List<Object> values = new ArrayList<>();
                 for (NamingEnumeration<?> avne = attr.getAll(); avne.hasMore();) {
                   values.add(extractSlice((String) avne.next(), nameParser,
                       startIndex, endIndex));
@@ -146,7 +146,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
                     option.getKey().substring(CUSTOM_PROPERTY_OPT.length()),
                     attr.get());
               } else {
-                List<Object> values = new ArrayList<Object>();
+                List<Object> values = new ArrayList<>();
                 for (NamingEnumeration<?> avne = attr.getAll(); avne.hasMore();) {
                   values.add(avne.next());
                 }

@@ -69,7 +69,7 @@ public class JHTMLEditor extends JPanel {
     editorPane.setEditorKit(new HTMLEditorKit());
 
     Action[] actions = editorPane.getActions();
-    Map<String, Action> editorActions = new LinkedHashMap<String, Action>();
+    Map<String, Action> editorActions = new LinkedHashMap<>();
     for (Action action : actions) {
       editorActions.put((String) action.getValue(Action.NAME), action);
     }
@@ -190,7 +190,7 @@ public class JHTMLEditor extends JPanel {
 
     tb.addSeparator();
 
-    List<Action> fontActions = new ArrayList<Action>();
+    List<Action> fontActions = new ArrayList<>();
     fontActions.add(createDisplayableAction(editorActions,
         "font-family-SansSerif"));
     fontActions.add(createDisplayableAction(editorActions,
@@ -209,7 +209,7 @@ public class JHTMLEditor extends JPanel {
       }
     });
 
-    List<Action> fontSizeActions = new ArrayList<Action>();
+    List<Action> fontSizeActions = new ArrayList<>();
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-10"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-12"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-18"));

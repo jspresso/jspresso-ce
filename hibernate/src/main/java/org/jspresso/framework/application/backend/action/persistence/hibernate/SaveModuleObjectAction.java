@@ -47,7 +47,7 @@ public class SaveModuleObjectAction extends SaveAction {
    */
   @Override
   protected List<IEntity> getEntitiesToSave(Map<String, Object> context) {
-    List<IEntity> entitiesToSave = new ArrayList<IEntity>();
+    List<IEntity> entitiesToSave = new ArrayList<>();
     Module module = getModule(context);
     completeEntitiesToSave(module, entitiesToSave);
     return entitiesToSave;

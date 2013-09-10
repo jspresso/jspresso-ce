@@ -51,8 +51,8 @@ public class ReduceSqlName implements TemplateMethodModelEx {
    */
   public ReduceSqlName(int maxSize) {
     this.maxSize = maxSize;
-    shortened = new HashMap<String, String>();
-    deduppers = new HashMap<String, Integer>();
+    shortened = new HashMap<>();
+    deduppers = new HashMap<>();
   }
 
   /**

@@ -82,7 +82,7 @@ public abstract class AbstractReportAction<E, F, G> extends
    */
   protected Map<String, Object> getInitialReportContext(
       IActionHandler actionHandler, Map<String, Object> context) {
-    return new HashMap<String, Object>();
+    return new HashMap<>();
   }
 
   /**

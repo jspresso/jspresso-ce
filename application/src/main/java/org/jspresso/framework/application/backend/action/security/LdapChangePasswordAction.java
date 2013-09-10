@@ -66,18 +66,14 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     } catch (Exception ex) {
       throw new ActionException(ex);
     }
-    List<ModificationItem> mods = new ArrayList<ModificationItem>();
+    List<ModificationItem> mods = new ArrayList<>();
     try {
       mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
           new BasicAttribute(LdapConstants.PASSWORD_ATTRIBUTE,
               digestAndEncode(newPassword.toCharArray()))));
       ldapTemplate.modifyAttributes(userDn,
           mods.toArray(new ModificationItem[mods.size()]));
-    } catch (NoSuchAlgorithmException ex) {
-      throw new ActionException(ex);
-    } catch (UnsupportedEncodingException ex) {
-      throw new ActionException(ex);
-    } catch (IOException ex) {
+    } catch (NoSuchAlgorithmException | IOException ex) {
       throw new ActionException(ex);
     } catch (AuthenticationException ex) {
       throw new ActionBusinessException("Current password is not valid.",

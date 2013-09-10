@@ -61,15 +61,15 @@ public class BasicQueryComponentDescriptor<E> extends
    */
   @Override
   protected Collection<IPropertyDescriptor> getExtraPropertyDescriptors() {
-    Collection<IPropertyDescriptor> extraPropertyDescriptors = new ArrayList<IPropertyDescriptor>();
-    BasicListDescriptor<IComponent> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<IComponent>();
+    Collection<IPropertyDescriptor> extraPropertyDescriptors = new ArrayList<>();
+    BasicListDescriptor<IComponent> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<>();
     queriedEntitiesCollectionDescriptor
         .setElementDescriptor(getQueriedComponentsDescriptor());
     queriedEntitiesCollectionDescriptor
         .setName(IQueryComponent.QUERIED_COMPONENTS);
     queriedEntitiesCollectionDescriptor
         .setDescription("queriedEntities.description");
-    BasicCollectionPropertyDescriptor<IComponent> qCPDescriptor = new BasicCollectionPropertyDescriptor<IComponent>();
+    BasicCollectionPropertyDescriptor<IComponent> qCPDescriptor = new BasicCollectionPropertyDescriptor<>();
     qCPDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
     qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
 

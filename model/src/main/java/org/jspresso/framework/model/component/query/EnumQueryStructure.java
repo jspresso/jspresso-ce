@@ -61,7 +61,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
             getToString());
       }
     };
-    this.enumerationValues = new LinkedHashSet<EnumValueQueryStructure>();
+    this.enumerationValues = new LinkedHashSet<>();
     if (!propertyDescriptor.isMandatory()) {
       EnumValueQueryStructure nullValueQueryStructure = new EnumValueQueryStructure();
       nullValueQueryStructure.setValue(null);
@@ -102,7 +102,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    * @return the selected enumeration value query structures.
    */
   public Set<EnumValueQueryStructure> getSelectedEnumerationValues() {
-    Set<EnumValueQueryStructure> selectedEnumerationValues = new LinkedHashSet<EnumValueQueryStructure>();
+    Set<EnumValueQueryStructure> selectedEnumerationValues = new LinkedHashSet<>();
     for (EnumValueQueryStructure enumValueQueryStructure : getEnumerationValues()) {
       if (enumValueQueryStructure.isSelected()) {
         selectedEnumerationValues.add(enumValueQueryStructure);

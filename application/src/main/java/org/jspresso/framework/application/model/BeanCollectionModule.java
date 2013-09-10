@@ -72,9 +72,9 @@ public class BeanCollectionModule extends Module {
   public void addToModuleObjects(int index, Object element) {
     List<Object> newModuleObjects;
     if (getModuleObjects() != null) {
-      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+      newModuleObjects = new ArrayList<>(getModuleObjects());
     } else {
-      newModuleObjects = new ArrayList<Object>();
+      newModuleObjects = new ArrayList<>();
     }
     if (index < 0) {
       newModuleObjects.add(0, element);
@@ -95,9 +95,9 @@ public class BeanCollectionModule extends Module {
   public void addToModuleObjects(Object element) {
     List<Object> newModuleObjects;
     if (getModuleObjects() != null) {
-      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+      newModuleObjects = new ArrayList<>(getModuleObjects());
     } else {
-      newModuleObjects = new ArrayList<Object>();
+      newModuleObjects = new ArrayList<>();
     }
     newModuleObjects.add(element);
     setModuleObjects(newModuleObjects);
@@ -194,7 +194,7 @@ public class BeanCollectionModule extends Module {
   public void removeFromModuleObjects(Object element) {
     if (getModuleObjects() != null) {
       List<Object> newModuleObjects;
-      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+      newModuleObjects = new ArrayList<>(getModuleObjects());
       newModuleObjects.remove(element);
       setModuleObjects(newModuleObjects);
     }

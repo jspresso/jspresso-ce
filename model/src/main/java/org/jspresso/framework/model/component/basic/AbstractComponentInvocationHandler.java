@@ -128,7 +128,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private final        PropertyChangeListener   fakePcl;
 
   static {
-    Collection<String> methodNames = new HashSet<String>();
+    Collection<String> methodNames = new HashSet<>();
     for (Method m : ILifecycleCapable.class.getMethods()) {
       methodNames.add(m.getName());
     }
@@ -166,8 +166,8 @@ public abstract class AbstractComponentInvocationHandler implements
     this.propertyChangeEnabled = true;
     this.collectionSortEnabled = true;
 
-    this.referenceTrackers = new HashMap<String, NestedReferenceTracker>();
-    this.computedPropertiesCache = new HashMap<String, Object>();
+    this.referenceTrackers = new HashMap<>();
+    this.computedPropertiesCache = new HashMap<>();
     // Fake PCL cannot be static, because there must be 1 registration on
     // referent per owning instance, i.e. 2 different instances must not share
     // the same fake PCL that will be removed when the referent is detached.
@@ -178,8 +178,8 @@ public abstract class AbstractComponentInvocationHandler implements
         // It's fake
       }
     };
-    this.fakePclAttachements = new HashMap<String, Set<String>>();
-    this.delayedFakePclAttachements = new HashMap<String, Set<String>>();
+    this.fakePclAttachements = new HashMap<>();
+    this.delayedFakePclAttachements = new HashMap<>();
   }
 
   /**
@@ -203,166 +203,164 @@ public abstract class AbstractComponentInvocationHandler implements
   public synchronized Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable {
     String methodName = method.getName()/* .intern() */;
-    if ("hashCode".equals(methodName)) {
-      return computeHashCode((IComponent) proxy);
-    } else if ("equals".equals(methodName)) {
-      return computeEquals((IComponent) proxy, args[0]);
-    } else if ("toString".equals(methodName)) {
-      return toString(proxy);
-    } else if ("getComponentContract".equals(methodName)) {
-      return componentDescriptor.getComponentContract();
-    } else if ("addPropertyChangeListener".equals(methodName)) {
-      if (args.length == 1) {
-        addPropertyChangeListener(proxy, (PropertyChangeListener) args[0]);
-        return null;
-      }
-      addPropertyChangeListener(proxy, (String) args[0],
-          (PropertyChangeListener) args[1]);
-      return null;
-    } else if ("addWeakPropertyChangeListener".equals(methodName)) {
-      if (args.length == 1) {
-        addWeakPropertyChangeListener(proxy, (PropertyChangeListener) args[0]);
-        return null;
-      }
-      addWeakPropertyChangeListener(proxy, (String) args[0],
-          (PropertyChangeListener) args[1]);
-      return null;
-    } else if ("removePropertyChangeListener".equals(methodName)) {
-      if (args.length == 1) {
-        removePropertyChangeListener((PropertyChangeListener) args[0]);
-        return null;
-      }
-      removePropertyChangeListener((String) args[0],
-          (PropertyChangeListener) args[1]);
-      return null;
-    } else if ("hasListeners".equals(methodName)) {
-      return hasListeners(proxy, (String) args[0]);
-    } else if ("getPropertyChangeListeners".equals(methodName)) {
-      if (args != null && args.length > 0) {
-        return getPropertyChangeListeners(proxy, (String) args[0]);
-      }
-      return getPropertyChangeListeners(proxy);
-    } else if ("firePropertyChange".equals(methodName)) {
-      firePropertyChange(proxy, (String) args[0], args[1], args[2]);
-      return null;
-    } else if ("blockEvents".equals(methodName)) {
-      return blockEvents();
-    } else if ("releaseEvents".equals(methodName)) {
-      releaseEvents();
-      return null;
-    } else if ("straightSetProperty".equals(methodName)) {
-      straightSetProperty(proxy, (String) args[0], args[1]);
-      return null;
-    } else if ("straightGetProperty".equals(methodName)) {
-      return straightGetProperty(proxy, (String) args[0]);
-    } else if ("straightSetProperties".equals(methodName)) {
-      straightSetProperties(proxy, (Map<String, Object>) args[0]);
-      return null;
-    } else if ("straightGetProperties".equals(methodName)) {
-      return straightGetProperties(proxy);
-    } else if ("setPropertyProcessorsEnabled".equals(methodName)) {
-      propertyProcessorsEnabled = (Boolean) args[0];
-      return null;
-    } else if ("getOwningComponent".equals(methodName)) {
-      return owningComponent;
-    } else if ("getOwningPropertyDescriptor".equals(methodName)) {
-      return owningPropertyDescriptor;
-    } else if ("setOwningComponent".equals(methodName)) {
-      owningComponent = (IComponent) args[0];
-      owningPropertyDescriptor = (IPropertyDescriptor) args[1];
-      return null;
-    } else if ("checkIntegrity".equals(methodName)) {
-      checkIntegrity(proxy);
-      return null;
-    } else if ("checkMandatoryProperties".equals(methodName)) {
-      checkMandatoryProperties(proxy);
-      return null;
-    } else {
-      if (isLifecycleMethod(method)) {
-        return invokeLifecycleInterceptors(proxy, method, args);
-      }
-      AccessorInfo accessorInfo = getAccessorFactory().getAccessorInfo(method);
-      EAccessorType accessorType = accessorInfo.getAccessorType();
-      IPropertyDescriptor propertyDescriptor = null;
-      if (accessorType != EAccessorType.NONE) {
-        String accessedPropertyName = accessorInfo.getAccessedPropertyName();
-        if (accessedPropertyName != null) {
-          propertyDescriptor = componentDescriptor
-              .getPropertyDescriptor(accessedPropertyName);
+    switch (methodName) {
+      case "hashCode":
+        return computeHashCode((IComponent) proxy);
+      case "equals":
+        return computeEquals((IComponent) proxy, args[0]);
+      case "toString":
+        return toString(proxy);
+      case "getComponentContract":
+        return componentDescriptor.getComponentContract();
+      case "addPropertyChangeListener":
+        if (args.length == 1) {
+          addPropertyChangeListener(proxy, (PropertyChangeListener) args[0]);
+          return null;
         }
-      }
-      if (propertyDescriptor != null) {
-        Class<IComponentExtension<IComponent>> extensionClass = (Class<IComponentExtension<IComponent>>) propertyDescriptor
-            .getDelegateClass();
-        if (extensionClass != null) {
-          return accessComputedProperty(propertyDescriptor, accessorInfo,
-              extensionClass, proxy, method, args);
-        } else if (!propertyDescriptor.isComputed()) {
-          if (accessorInfo.isModifier()) {
-            if (modifierMonitors != null
-                && modifierMonitors.contains(methodName)) {
+        addPropertyChangeListener(proxy, (String) args[0], (PropertyChangeListener) args[1]);
+        return null;
+      case "addWeakPropertyChangeListener":
+        if (args.length == 1) {
+          addWeakPropertyChangeListener(proxy, (PropertyChangeListener) args[0]);
+          return null;
+        }
+        addWeakPropertyChangeListener(proxy, (String) args[0], (PropertyChangeListener) args[1]);
+        return null;
+      case "removePropertyChangeListener":
+        if (args.length == 1) {
+          removePropertyChangeListener((PropertyChangeListener) args[0]);
+          return null;
+        }
+        removePropertyChangeListener((String) args[0], (PropertyChangeListener) args[1]);
+        return null;
+      case "hasListeners":
+        return hasListeners(proxy, (String) args[0]);
+      case "getPropertyChangeListeners":
+        if (args != null && args.length > 0) {
+          return getPropertyChangeListeners(proxy, (String) args[0]);
+        }
+        return getPropertyChangeListeners(proxy);
+      case "firePropertyChange":
+        firePropertyChange(proxy, (String) args[0], args[1], args[2]);
+        return null;
+      case "blockEvents":
+        return blockEvents();
+      case "releaseEvents":
+        releaseEvents();
+        return null;
+      case "straightSetProperty":
+        straightSetProperty(proxy, (String) args[0], args[1]);
+        return null;
+      case "straightGetProperty":
+        return straightGetProperty(proxy, (String) args[0]);
+      case "straightSetProperties":
+        straightSetProperties(proxy, (Map<String, Object>) args[0]);
+        return null;
+      case "straightGetProperties":
+        return straightGetProperties(proxy);
+      case "setPropertyProcessorsEnabled":
+        propertyProcessorsEnabled = (Boolean) args[0];
+        return null;
+      case "getOwningComponent":
+        return owningComponent;
+      case "getOwningPropertyDescriptor":
+        return owningPropertyDescriptor;
+      case "setOwningComponent":
+        owningComponent = (IComponent) args[0];
+        owningPropertyDescriptor = (IPropertyDescriptor) args[1];
+        return null;
+      case "checkIntegrity":
+        checkIntegrity(proxy);
+        return null;
+      case "checkMandatoryProperties":
+        checkMandatoryProperties(proxy);
+        return null;
+      default:
+        if (isLifecycleMethod(method)) {
+          return invokeLifecycleInterceptors(proxy, method, args);
+        }
+        AccessorInfo accessorInfo = getAccessorFactory().getAccessorInfo(method);
+        EAccessorType accessorType = accessorInfo.getAccessorType();
+        IPropertyDescriptor propertyDescriptor = null;
+        if (accessorType != EAccessorType.NONE) {
+          String accessedPropertyName = accessorInfo.getAccessedPropertyName();
+          if (accessedPropertyName != null) {
+            propertyDescriptor = componentDescriptor.getPropertyDescriptor(accessedPropertyName);
+          }
+        }
+        if (propertyDescriptor != null) {
+          Class<IComponentExtension<IComponent>> extensionClass = (Class<IComponentExtension<IComponent>>)
+              propertyDescriptor
+              .getDelegateClass();
+          if (extensionClass != null) {
+            return accessComputedProperty(propertyDescriptor, accessorInfo, extensionClass, proxy, method, args);
+          } else if (!propertyDescriptor.isComputed()) {
+            if (accessorInfo.isModifier()) {
+              if (modifierMonitors != null && modifierMonitors.contains(methodName)) {
+                return null;
+              }
+              if (modifierMonitors == null) {
+                modifierMonitors = new HashSet<>();
+              }
+              modifierMonitors.add(methodName);
+            }
+            try {
+              Object param;
+              switch (accessorType) {
+                case GETTER:
+                  return getProperty(proxy, propertyDescriptor);
+                case SETTER:
+                  param = sanitizeModifierParam(proxy, propertyDescriptor, args[0]);
+                  setProperty(proxy, propertyDescriptor, param);
+                  return null;
+                case ADDER:
+                  if (args.length == 2) {
+                    param = sanitizeModifierParam(proxy, propertyDescriptor, args[1]);
+                    addToProperty(proxy, (ICollectionPropertyDescriptor<?>) propertyDescriptor, (Integer) args[0],
+                        param);
+                  } else {
+                    param = sanitizeModifierParam(proxy, propertyDescriptor, args[0]);
+                    addToProperty(proxy, (ICollectionPropertyDescriptor<?>) propertyDescriptor, param);
+                  }
+                  return null;
+                case REMOVER:
+                  param = sanitizeModifierParam(proxy, propertyDescriptor, args[0]);
+                  removeFromProperty(proxy, (ICollectionPropertyDescriptor<?>) propertyDescriptor, param);
+                  return null;
+                default:
+                  break;
+              }
+            } finally {
+              if (modifierMonitors != null && accessorInfo.isModifier()) {
+                modifierMonitors.remove(methodName);
+              }
+            }
+          } else if (propertyDescriptor instanceof IStringPropertyDescriptor
+              && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()) {
+            if (accessorInfo.isModifier()) {
+              if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+                invokeNlsSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+              } else {
+                invokeNlsOrRawSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+              }
               return null;
-            }
-            if (modifierMonitors == null) {
-              modifierMonitors = new HashSet<String>();
-            }
-            modifierMonitors.add(methodName);
-          }
-          try {
-            Object param;
-            switch (accessorType) {
-              case GETTER:
-                return getProperty(proxy, propertyDescriptor);
-              case SETTER:
-                param = sanitizeModifierParam(proxy, propertyDescriptor,
-                    args[0]);
-                setProperty(proxy, propertyDescriptor, param);
-                return null;
-              case ADDER:
-                if (args.length == 2) {
-                  param = sanitizeModifierParam(proxy, propertyDescriptor,
-                      args[1]);
-                  addToProperty(proxy,
-                      (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                      (Integer) args[0], param);
-                } else {
-                  param = sanitizeModifierParam(proxy, propertyDescriptor,
-                      args[0]);
-                  addToProperty(proxy,
-                      (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                      param);
-                }
-                return null;
-              case REMOVER:
-                param = sanitizeModifierParam(proxy, propertyDescriptor,
-                    args[0]);
-                removeFromProperty(proxy,
-                    (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-                    param);
-                return null;
-              default:
-                break;
-            }
-          } finally {
-            if (modifierMonitors != null && accessorInfo.isModifier()) {
-              modifierMonitors.remove(methodName);
-            }
-          }
-        } else if (propertyDescriptor instanceof IStringPropertyDescriptor
-            && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()) {
-          if (accessorInfo.isModifier()) {
-            if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
-              invokeNlsSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
             } else {
-              invokeNlsOrRawSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+              if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+                return invokeNlsGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+              } else {
+                return invokeNlsOrRawGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+              }
             }
-            return null;
           } else {
-            if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
-              return invokeNlsGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
-            } else {
-              return invokeNlsOrRawGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+            try {
+              return invokeServiceMethod(proxy, method, args);
+            } catch (NoSuchMethodException ignored) {
+              // it will fall back in the general case.
             }
+            throw new ComponentException("The '" + propertyDescriptor.getName()
+                + "' property is described as computed but we couldn't determine a way to compute it,"
+                + " either through an extension or a service delegate on the following component : \n"
+                + componentDescriptor.getComponentContract().getName());
           }
         } else {
           try {
@@ -370,20 +368,8 @@ public abstract class AbstractComponentInvocationHandler implements
           } catch (NoSuchMethodException ignored) {
             // it will fall back in the general case.
           }
-          throw new ComponentException(
-              "The '"
-                  + propertyDescriptor.getName()
-                  + "' property is described as computed but we couldn't determine a way to compute it,"
-                  + " either through an extension or a service delegate on the following component : \n"
-                  + componentDescriptor.getComponentContract().getName());
         }
-      } else {
-        try {
-          return invokeServiceMethod(proxy, method, args);
-        } catch (NoSuchMethodException ignored) {
-          // it will fall back in the general case.
-        }
-      }
+        break;
     }
     throw new ComponentException(method.toString()
         + " is not supported on the component "
@@ -604,7 +590,7 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       } else if (property instanceof Set<?>) {
         Set<IComponent> propertyAsSet = (Set<IComponent>) property;
-        for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
+        for (IComponent referent : new HashSet<>(propertyAsSet)) {
           IComponent decorated = decorateReferent(referent, propertyDescriptor
               .getReferencedDescriptor().getElementDescriptor()
               .getComponentDescriptor());
@@ -666,7 +652,7 @@ public abstract class AbstractComponentInvocationHandler implements
       Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
     IComponentExtension<IComponent> extension;
     if (componentExtensions == null) {
-      componentExtensions = new HashMap<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>>();
+      componentExtensions = new HashMap<>();
       extension = null;
     } else {
       extension = componentExtensions.get(extensionClass);
@@ -735,7 +721,7 @@ public abstract class AbstractComponentInvocationHandler implements
       Set<String> nestedPropertyListening = fakePclAttachements
           .get(propertyName);
       if (nestedPropertyListening == null) {
-        nestedPropertyListening = new HashSet<String>();
+        nestedPropertyListening = new HashSet<>();
         fakePclAttachements.put(propertyName, nestedPropertyListening);
       }
       for (String nestedPropertyName : delayedNestedPropertyListening) {
@@ -801,15 +787,13 @@ public abstract class AbstractComponentInvocationHandler implements
         }
         return MethodUtils.invokeMethod(service, method.getName(), parameters,
             parameterTypes);
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
       }
     }
     throw new NoSuchMethodException(method.toString());
@@ -996,7 +980,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return The map of properties.
    */
   protected Map<String, Object> straightGetProperties(Object proxy) {
-    Map<String, Object> allProperties = new HashMap<String, Object>();
+    Map<String, Object> allProperties = new HashMap<>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
@@ -1154,7 +1138,7 @@ public abstract class AbstractComponentInvocationHandler implements
           Set<String> nestedPropertyListening = fakePclAttachements
               .get(propertyName);
           if (nestedPropertyListening == null) {
-            nestedPropertyListening = new HashSet<String>();
+            nestedPropertyListening = new HashSet<>();
             fakePclAttachements.put(rootProperty, nestedPropertyListening);
           }
           nestedPropertyListening.add(nestedPropertyName);
@@ -1162,7 +1146,7 @@ public abstract class AbstractComponentInvocationHandler implements
           Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
               .get(propertyName);
           if (delayedNestedPropertyListening == null) {
-            delayedNestedPropertyListening = new HashSet<String>();
+            delayedNestedPropertyListening = new HashSet<>();
             delayedFakePclAttachements.put(rootProperty,
                 delayedNestedPropertyListening);
           }
@@ -1183,15 +1167,13 @@ public abstract class AbstractComponentInvocationHandler implements
       collectionProperty = accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
     if (value instanceof IEntity && collectionProperty.contains(value)) {
       if (collectionProperty instanceof Set<?>) {
@@ -1243,7 +1225,7 @@ public abstract class AbstractComponentInvocationHandler implements
         ((List<Object>) collectionProperty).add(index, value);
         inserted = true;
       } else {
-        inserted = ((Collection<Object>) collectionProperty).add(value);
+        inserted = collectionProperty.add(value);
       }
       if (inserted) {
         if (collectionSortEnabled) {
@@ -1265,9 +1247,7 @@ public abstract class AbstractComponentInvocationHandler implements
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (NoSuchMethodException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
   }
@@ -1370,7 +1350,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings({"unused", "UnusedParameters"})
   private PropertyChangeListener[] getPropertyChangeListeners(
       Object proxy) {
-    List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+    List<PropertyChangeListener> listeners = new ArrayList<>();
     if (propertyChangeSupport != null) {
       for (PropertyChangeListener pcl : propertyChangeSupport
           .getPropertyChangeListeners()) {
@@ -1390,7 +1370,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings({"unused", "UnusedParameters"})
   private PropertyChangeListener[] getPropertyChangeListeners(
       Object proxy, String propertyName) {
-    List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+    List<PropertyChangeListener> listeners = new ArrayList<>();
     if (propertyChangeSupport != null) {
       Collections.addAll(listeners, propertyChangeSupport
           .getPropertyChangeListeners(propertyName));
@@ -1433,15 +1413,13 @@ public abstract class AbstractComponentInvocationHandler implements
                 propertyName.substring(lastIndexOfDelim + 1), oldValue,
                 actualNewValue);
           }
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException | NoSuchMethodException ex) {
           throw new ComponentException(ex);
         } catch (InvocationTargetException ex) {
           if (ex.getCause() instanceof RuntimeException) {
             throw (RuntimeException) ex.getCause();
           }
           throw new ComponentException(ex.getCause());
-        } catch (NoSuchMethodException ex) {
-          throw new ComponentException(ex);
         }
       }
     }
@@ -1494,7 +1472,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private boolean blockEvents() {
     if (delayedEvents == null) {
-      delayedEvents = new ArrayList<PropertyChangeEvent>();
+      delayedEvents = new ArrayList<>();
       return true;
     }
     return false;
@@ -1502,7 +1480,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void releaseEvents() {
     if (delayedEvents != null) {
-      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<PropertyChangeEvent>(
+      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<>(
           delayedEvents);
       delayedEvents = null;
       for (PropertyChangeEvent evt : delayedEventsCopy) {
@@ -1519,6 +1497,7 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
+  @SuppressWarnings("unchecked")
   private synchronized Object accessComputedProperty(
       IPropertyDescriptor propertyDescriptor, AccessorInfo accessorInfo,
       Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
@@ -1596,15 +1575,13 @@ public abstract class AbstractComponentInvocationHandler implements
         computedPropertiesCache.put(propertyName, computedPropertyValue);
       }
       return computedPropertyValue;
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
   }
 
@@ -1645,15 +1622,13 @@ public abstract class AbstractComponentInvocationHandler implements
           interceptorResults = interceptorResults
               || (Boolean) interceptorResult;
         }
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
       }
     }
     // invoke lifecycle method on inline components
@@ -1687,9 +1662,7 @@ public abstract class AbstractComponentInvocationHandler implements
               interceptorResults = interceptorResults
                   || (Boolean) interceptorResult;
             }
-          } catch (NoSuchMethodException ex) {
-            throw new ComponentException(ex);
-          } catch (IllegalAccessException ex) {
+          } catch (NoSuchMethodException | IllegalAccessException ex) {
             throw new ComponentException(ex);
           } catch (InvocationTargetException ex) {
             if (ex.getCause() instanceof RuntimeException) {
@@ -1700,17 +1673,21 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
     }
-    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
-      // Important to check for not null values.
-      checkIntegrity(proxy);
-    } else if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
-      // Important to check for not null values
-      // since the checking has been delayed until persistence.
-      checkMandatoryProperties(proxy);
-    } else if (ILifecycleCapable.ON_DELETE_METHOD_NAME.equals(methodName)) {
-      // Performs any necessary operation on internal state to mark the proxy
-      // deleted and thus unusable.
-      markDeleted(proxy);
+    switch (methodName) {
+      case ILifecycleCapable.ON_PERSIST_METHOD_NAME:
+        // Important to check for not null values.
+        checkIntegrity(proxy);
+        break;
+      case ILifecycleCapable.ON_UPDATE_METHOD_NAME:
+        // Important to check for not null values
+        // since the checking has been delayed until persistence.
+        checkMandatoryProperties(proxy);
+        break;
+      case ILifecycleCapable.ON_DELETE_METHOD_NAME:
+        // Performs any necessary operation on internal state to mark the proxy
+        // deleted and thus unusable.
+        markDeleted(proxy);
+        break;
     }
     return interceptorResults;
   }
@@ -1738,15 +1715,13 @@ public abstract class AbstractComponentInvocationHandler implements
       collectionProperty = accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
     try {
       if (propertyProcessorsEnabled) {
@@ -1801,9 +1776,7 @@ public abstract class AbstractComponentInvocationHandler implements
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (NoSuchMethodException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
   }
@@ -1857,15 +1830,13 @@ public abstract class AbstractComponentInvocationHandler implements
     try {
       oldProperty = accessorFactory.createPropertyAccessor(propertyName,
           componentDescriptor.getComponentContract()).getValue(proxy);
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
     Object actualNewProperty;
     if (propertyProcessorsEnabled) {
@@ -1935,9 +1906,9 @@ public abstract class AbstractComponentInvocationHandler implements
           Collection<?> oldCollectionSnapshot = CollectionHelper
               .cloneCollection((Collection<?>) oldProperty);
           // It's a 'many' relation end
-          Collection<Object> oldPropertyElementsToRemove = new HashSet<Object>();
-          Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<Object>();
-          Collection<Object> propertyElementsToKeep = new HashSet<Object>();
+          Collection<Object> oldPropertyElementsToRemove = new HashSet<>();
+          Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<>();
+          Collection<Object> propertyElementsToKeep = new HashSet<>();
 
           if (oldProperty != null) {
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
@@ -1984,7 +1955,7 @@ public abstract class AbstractComponentInvocationHandler implements
             Collection<Object> currentProperty = (Collection<Object>) oldProperty;
             if (currentProperty instanceof List) {
               // Just check that only order differs
-              Set<Object> temp = new HashSet<Object>(currentProperty);
+              Set<Object> temp = new HashSet<>(currentProperty);
               temp.removeAll((List<?>) actualNewProperty);
               currentProperty.clear();
               currentProperty.addAll((List<?>) actualNewProperty);
@@ -2002,9 +1973,7 @@ public abstract class AbstractComponentInvocationHandler implements
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
-      } catch (IllegalAccessException ex) {
-        throw new ComponentException(ex);
-      } catch (NoSuchMethodException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       }
     } else {
@@ -2049,15 +2018,13 @@ public abstract class AbstractComponentInvocationHandler implements
         return "";
       }
       return toStringValue.toString();
-    } catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
       throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
     }
   }
 
@@ -2143,15 +2110,13 @@ public abstract class AbstractComponentInvocationHandler implements
           createCollectionPropertyAccessor(translationsPropertyName, getComponentContract(), translationContract);
       try {
         translations = translationsAccessor.getValue(proxy);
-      } catch (IllegalAccessException ex) {
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
       }
       String sessionLanguage = locale.getLanguage();
       IPropertyTranslation sessionTranslation = null;
@@ -2170,15 +2135,13 @@ public abstract class AbstractComponentInvocationHandler implements
         sessionTranslation.setPropertyName(barePropertyName);
         try {
           translationsAccessor.addToValue(proxy, sessionTranslation);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException | NoSuchMethodException ex) {
           throw new ComponentException(ex);
         } catch (InvocationTargetException ex) {
           if (ex.getCause() instanceof RuntimeException) {
             throw (RuntimeException) ex.getCause();
           }
           throw new ComponentException(ex.getCause());
-        } catch (NoSuchMethodException ex) {
-          throw new ComponentException(ex);
         }
       }
       sessionTranslation.setTranslatedValue(translatedValue);
@@ -2213,7 +2176,7 @@ public abstract class AbstractComponentInvocationHandler implements
       this.referencesInlinedComponent = referencesInlineComponent;
       this.enabled = true;
       this.initialized = false;
-      this.trackedProperties = new HashSet<String>();
+      this.trackedProperties = new HashSet<>();
     }
 
     /**
@@ -2291,14 +2254,12 @@ public abstract class AbstractComponentInvocationHandler implements
                       doFirePropertyChange(source, referencePropertyName
                           + IAccessor.NESTED_DELIM + trackedProperty,
                           IPropertyChangeCapable.UNKNOWN, newValue);
-                    } catch (IllegalAccessException ex) {
+                    } catch (IllegalAccessException | NoSuchMethodException ex) {
                       throw new ComponentException(ex);
                     } catch (InvocationTargetException ex) {
                       if (ex.getTargetException() instanceof RuntimeException) {
                         throw (RuntimeException) ex.getTargetException();
                       }
-                      throw new ComponentException(ex);
-                    } catch (NoSuchMethodException ex) {
                       throw new ComponentException(ex);
                     }
                   } else {

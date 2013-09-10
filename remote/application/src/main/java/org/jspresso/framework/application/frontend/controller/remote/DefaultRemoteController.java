@@ -175,8 +175,8 @@ public class DefaultRemoteController extends
     flashCommand.setTitle(title);
     flashCommand.setActions(actions.toArray(new RAction[actions.size()]));
     flashCommand.setUseCurrent(reuseCurrent);
-    List<String> paramNames = new ArrayList<String>();
-    List<String> paramValues = new ArrayList<String>();
+    List<String> paramNames = new ArrayList<>();
+    List<String> paramValues = new ArrayList<>();
     for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
       paramNames.add(flashVar.getKey());
       paramValues.add(flashVar.getValue());
@@ -259,7 +259,7 @@ public class DefaultRemoteController extends
       List<RemoteCommand> commands) {
     try {
       commandRegistrationEnabled = true;
-      commandQueue = new ArrayList<RemoteCommand>();
+      commandQueue = new ArrayList<>();
       commandLowPriorityOffset = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
@@ -506,7 +506,7 @@ public class DefaultRemoteController extends
     this.remotePeerRegistry = remotePeerRegistry;
     if (this.remotePeerRegistry != null) {
       this.remotePeerRegistry.addRemotePeerRegistryListener(this);
-      this.removedPeersGuids = new ArrayList<String>();
+      this.removedPeersGuids = new ArrayList<>();
     }
   }
 
@@ -582,7 +582,7 @@ public class DefaultRemoteController extends
    * @return the init commands to be sent to the remote peer.
    */
   protected List<RemoteCommand> createInitCommands() {
-    List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
+    List<RemoteCommand> initCommands = new ArrayList<>();
     initCommands.add(createLocaleCommand());
     initCommands.add(createInitCommand());
     return initCommands;
@@ -632,7 +632,7 @@ public class DefaultRemoteController extends
    * @return the locale command for translations and client locale handling.
    */
   protected RemoteLocaleCommand createLocaleCommand() {
-    Map<String, String> translations = new HashMap<String, String>();
+    Map<String, String> translations = new HashMap<>();
     if (clientKeysToTranslate != null) {
       for (String key : clientKeysToTranslate) {
         translations.put(key, getTranslation(key, getLocale()));
@@ -661,7 +661,7 @@ public class DefaultRemoteController extends
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
       if (workspaceViews == null) {
-        workspaceViews = new HashSet<String>();
+        workspaceViews = new HashSet<>();
       }
       RSplitContainer workspaceView = null;
       if (!workspaceViews.contains(workspaceName)) {
@@ -857,7 +857,7 @@ public class DefaultRemoteController extends
         RAction sortAction = (RAction) targetPeer;
         Map<String, String> orderingProperties = ((RemoteSortCommand) command)
             .getOrderingProperties();
-        Map<String, ESort> typedOrderingProperties = new LinkedHashMap<String, ESort>();
+        Map<String, ESort> typedOrderingProperties = new LinkedHashMap<>();
         if (orderingProperties != null) {
           for (Map.Entry<String, String> orderingProperty : orderingProperties
               .entrySet()) {
@@ -865,7 +865,7 @@ public class DefaultRemoteController extends
                 ESort.valueOf(orderingProperty.getValue()));
           }
         }
-        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<>();
         context.put(IQueryComponent.ORDERING_PROPERTIES,
             typedOrderingProperties);
         String viewStateGuid = null;
@@ -934,7 +934,7 @@ public class DefaultRemoteController extends
         rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(),
             getIconFactory().getTinyIconSize()));
 
-        List<RAction> actions = new ArrayList<RAction>();
+        List<RAction> actions = new ArrayList<>();
         for (IDisplayableAction action : actionList.getActions()) {
           if (isAccessGranted(action)) {
             try {
@@ -957,7 +957,7 @@ public class DefaultRemoteController extends
   }
 
   private RActionList[] createRActionLists(ActionMap actionMap) {
-    List<RActionList> actionLists = new ArrayList<RActionList>();
+    List<RActionList> actionLists = new ArrayList<>();
     if (actionMap != null) {
       if (isAccessGranted(actionMap)) {
         try {

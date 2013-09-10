@@ -63,7 +63,7 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
    */
   public UserPrincipal(String name) {
     this.name = name;
-    customProperties = new HashMap<String, Object>();
+    customProperties = new HashMap<>();
   }
 
   /**
@@ -91,7 +91,7 @@ public class UserPrincipal extends AbstractPropertyChangeCapable implements
    */
   public Map<String, Object> getCustomProperties() {
     // return a defensive copy
-    return new HashMap<String, Object>(customProperties);
+    return new HashMap<>(customProperties);
   }
 
   /**

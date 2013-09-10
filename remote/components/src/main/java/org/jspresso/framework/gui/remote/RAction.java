@@ -215,7 +215,7 @@ public class RAction extends RemotePeer {
    */
   public void putValue(String key, Object value) {
     if (userValues == null) {
-      userValues = new HashMap<String, Object>();
+      userValues = new HashMap<>();
     }
     userValues.put(key, value);
   }

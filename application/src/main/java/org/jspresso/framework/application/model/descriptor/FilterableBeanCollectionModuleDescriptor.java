@@ -73,17 +73,17 @@ public class FilterableBeanCollectionModuleDescriptor extends
       IComponentDescriptor<IQueryComponent> moduleFilterReferencedDescriptor) {
     super(name, moduleObjectReferencedDescriptor);
 
-    BasicReferencePropertyDescriptor<IQueryComponent> filterDescriptor = new BasicReferencePropertyDescriptor<IQueryComponent>();
+    BasicReferencePropertyDescriptor<IQueryComponent> filterDescriptor = new BasicReferencePropertyDescriptor<>();
     filterDescriptor.setReferencedDescriptor(moduleFilterReferencedDescriptor);
     filterDescriptor.setName(FILTER);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>(
         getPropertyDescriptors());
     propertyDescriptors.add(filterDescriptor);
 
     setPropertyDescriptors(propertyDescriptors);
 
-    List<IComponentDescriptor<?>> ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    List<IComponentDescriptor<?>> ancestorDescriptors = new ArrayList<>();
     ancestorDescriptors.add(PageableDescriptor.INSTANCE);
     setAncestorDescriptors(ancestorDescriptors);
   }

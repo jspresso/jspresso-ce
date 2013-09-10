@@ -51,7 +51,7 @@ public final class PageableDescriptor {
    * @return the singleton instance.
    */
   private static IComponentDescriptor<IPageable> createInstance() {
-    BasicInterfaceDescriptor<IPageable> descriptor = new BasicInterfaceDescriptor<IPageable>(
+    BasicInterfaceDescriptor<IPageable> descriptor = new BasicInterfaceDescriptor<>(
         IPageable.class.getName());
 
     BasicIntegerPropertyDescriptor pageDesc = new BasicIntegerPropertyDescriptor();
@@ -73,7 +73,7 @@ public final class PageableDescriptor {
     selectedRecordCountDesc.setName(IPageable.SELECTED_RECORD_COUNT);
     selectedRecordCountDesc.setReadOnly(true);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     propertyDescriptors.add(pageDesc);
     propertyDescriptors.add(displayPageIndexDesc);
     propertyDescriptors.add(pageCountDesc);

@@ -142,6 +142,6 @@ public class BasicComponentInvocationHandler extends
 
 
   private Map<String, Object> createPropertyMap() {
-    return new HashMap<String, Object>();
+    return new HashMap<>();
   }
 }
