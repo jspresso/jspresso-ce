@@ -66,7 +66,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       Object[] previousState, String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = getBackendController()
-          .getDirtyProperties((IEntity) entity);
+          .getDirtyProperties((IEntity) entity, false);
       boolean hasJustBeenSaved = false;
       if (dirtyProperties != null) {
         hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION)
