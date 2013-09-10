@@ -553,6 +553,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
             queryStructureRestriction.add(Restrictions.le(path, supValue));
           }
           break;
+        default:
+          break;
       }
     }
     return queryStructureRestriction;

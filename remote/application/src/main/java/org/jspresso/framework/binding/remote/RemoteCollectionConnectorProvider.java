@@ -25,7 +25,6 @@ import org.jspresso.framework.binding.basic.BasicCollectionConnectorProvider;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;

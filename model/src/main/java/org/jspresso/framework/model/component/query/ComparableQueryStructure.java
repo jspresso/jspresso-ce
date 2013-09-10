@@ -190,6 +190,8 @@ public class ComparableQueryStructure extends QueryComponent {
           } else {
             return value.compareTo(supValue) <= 0;
           }
+        default:
+          break;
       }
     }
     return true;
@@ -273,6 +275,8 @@ public class ComparableQueryStructure extends QueryComponent {
               } else if (supValue != null) {
                 buf.append("<= ").append(format.format(supValue));
               }
+              break;
+            default:
               break;
           }
           return buf.toString();

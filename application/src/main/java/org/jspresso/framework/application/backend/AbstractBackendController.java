@@ -987,7 +987,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @param referenceTimeZoneId the reference time zone id
    */
   public void setReferenceTimeZoneId(String referenceTimeZoneId) {
-    if(referenceTimeZoneId != null) {
+    if (referenceTimeZoneId != null) {
       this.referenceTimeZone = TimeZone.getTimeZone(referenceTimeZoneId);
     } else {
       this.referenceTimeZone = null;

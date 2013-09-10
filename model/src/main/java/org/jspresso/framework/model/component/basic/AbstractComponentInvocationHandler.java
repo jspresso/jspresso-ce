@@ -1688,6 +1688,8 @@ public abstract class AbstractComponentInvocationHandler implements
         // deleted and thus unusable.
         markDeleted(proxy);
         break;
+      default:
+        break;
     }
     return interceptorResults;
   }
@@ -2105,7 +2107,8 @@ public abstract class AbstractComponentInvocationHandler implements
       String translationsPropertyName = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
 
       Class<IComponent> translationContract = ((ICollectionPropertyDescriptor) getComponentDescriptor()
-          .getPropertyDescriptor(translationsPropertyName)).getReferencedDescriptor().getElementDescriptor().getComponentContract();
+          .getPropertyDescriptor(translationsPropertyName)).getReferencedDescriptor().getElementDescriptor()
+                                                           .getComponentContract();
       ICollectionAccessor translationsAccessor = getAccessorFactory().
           createCollectionPropertyAccessor(translationsPropertyName, getComponentContract(), translationContract);
       try {
@@ -2230,10 +2233,9 @@ public abstract class AbstractComponentInvocationHandler implements
             }
           }
           // for ui notification
-          if (!(evt.getOldValue() instanceof IComponent
-              && (   !AbstractComponentInvocationHandler.this.isInitialized(evt.getOldValue())
-                  || ((IComponent) evt.getOldValue()).getOwningComponent() == null))
-             ) { // FAKE OLD COMPONENT VALUE
+          if (!(evt.getOldValue() instanceof IComponent && (!AbstractComponentInvocationHandler.this.isInitialized(
+              evt.getOldValue())
+              || ((IComponent) evt.getOldValue()).getOwningComponent() == null))) { // FAKE OLD COMPONENT VALUE
             for (String trackedProperty : trackedProperties) {
               if (trackedProperty.equals(evt.getPropertyName())) {
                 doFirePropertyChange(source, referencePropertyName

@@ -4,7 +4,6 @@
 package org.jspresso.framework.application.backend.action.security;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import org.jspresso.framework.action.ActionBusinessException;

@@ -306,7 +306,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       tracksWorkspaceNavigator = false;
       ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors.get(workspaceName);
       if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
-        Object[] result = synchWorkspaceNavigatorSelection((ICollectionConnectorListProvider) workspaceNavigatorConnector, module);
+        Object[] result = synchWorkspaceNavigatorSelection(
+            (ICollectionConnectorListProvider) workspaceNavigatorConnector, module);
         if (result != null) {
           int moduleModelIndex = (Integer) result[1];
           ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {

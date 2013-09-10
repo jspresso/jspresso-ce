@@ -304,8 +304,7 @@ public class DefaultSwingViewFactory extends
     if (viewDescriptor.getFont() != null
         && FontHelper.isFontSpec(viewDescriptor.getFont())) {
       // must set font before computing size.
-      component.setFont(createFont(viewDescriptor.getFont(),
-          component.getFont()));
+      component.setFont(createFont(viewDescriptor.getFont(), component.getFont()));
     }
     int preferredWidth = computePixelWidth(component,
         getFormatLength(formatter, templateValue))
@@ -356,8 +355,7 @@ public class DefaultSwingViewFactory extends
       IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JButton viewComponent = createJButton();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
+    IValueConnector connector = getConnectorFactory().createValueConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -611,72 +609,16 @@ public class DefaultSwingViewFactory extends
       }
       // label positioning
       GridBagConstraints constraints = new GridBagConstraints();
-      switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
-          constraints.insets = new Insets(formInset, formInset, formInset, formInset);
-          switch (labelHorizontalPosition) {
-            case RIGHT:
-              constraints.anchor = GridBagConstraints.WEST;
-              constraints.gridx = currentX * 2 + propertyWidth * 2 - 1;
-              break;
-            case LEFT:
-            default:
-              constraints.anchor = GridBagConstraints.EAST;
-              constraints.gridx = currentX * 2;
-              break;
-          }
-          constraints.gridy = currentY;
-          break;
-        case ABOVE:
-          constraints.insets = new Insets(formInset, formInset, 0, formInset);
-          constraints.anchor = GridBagConstraints.SOUTHWEST;
-          constraints.gridx = currentX;
-          constraints.gridy = currentY * 2;
-          constraints.gridwidth = propertyWidth;
-          break;
-        case NONE:
-          break;
-        default:
-          break;
-      }
+      computeLabelGridBagConstraints(viewDescriptor, currentX, currentY, formInset, propertyWidth,
+          labelHorizontalPosition, constraints);
       if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE
           && propertyLabel.getText() != null
           && propertyLabel.getText().length() > 0) {
         viewComponent.add(propertyLabel, constraints);
       }
       // component positioning
-      switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
-          switch (labelHorizontalPosition) {
-            case RIGHT:
-              constraints.anchor = GridBagConstraints.EAST;
-              constraints.gridx = currentX * 2;
-              break;
-            case LEFT:
-            default:
-              constraints.anchor = GridBagConstraints.WEST;
-              constraints.gridx = currentX * 2 + 1;
-              break;
-          }
-          constraints.insets = new Insets(formInset, 0, formInset, formInset);
-          constraints.gridwidth = propertyWidth * 2 - 1;
-          break;
-        case ABOVE:
-          constraints.gridy++;
-          constraints.insets = new Insets(0, formInset, 0, formInset);
-          constraints.gridwidth = propertyWidth;
-          constraints.anchor = GridBagConstraints.WEST;
-          break;
-        case NONE:
-          constraints.gridx = currentX;
-          constraints.gridy = currentY;
-          constraints.insets = new Insets(0, formInset, 0, formInset);
-          constraints.gridwidth = propertyWidth;
-          constraints.anchor = GridBagConstraints.WEST;
-          break;
-        default:
-          break;
-      }
+      computeComponentGridBagConstraints(viewDescriptor, currentX, currentY, formInset, propertyWidth,
+          labelHorizontalPosition, constraints);
       constraints.weightx = propertyView.getPeer().getPreferredSize().width;
       if (propertyView.getPeer() instanceof JCheckBox) {
         constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
@@ -750,6 +692,78 @@ public class DefaultSwingViewFactory extends
         modelDescriptor);
     applyComponentViewScrollability(viewDescriptor, viewComponent, view);
     return view;
+  }
+
+  private void computeComponentGridBagConstraints(IComponentViewDescriptor viewDescriptor, int currentX, int currentY,
+                                                  int formInset, int propertyWidth,
+                                                  EHorizontalPosition labelHorizontalPosition,
+                                                  GridBagConstraints constraints) {
+    switch (viewDescriptor.getLabelsPosition()) {
+      case ASIDE:
+        switch (labelHorizontalPosition) {
+          case RIGHT:
+            constraints.anchor = GridBagConstraints.EAST;
+            constraints.gridx = currentX * 2;
+            break;
+          case LEFT:
+          default:
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.gridx = currentX * 2 + 1;
+            break;
+        }
+        constraints.insets = new Insets(formInset, 0, formInset, formInset);
+        constraints.gridwidth = propertyWidth * 2 - 1;
+        break;
+      case ABOVE:
+        constraints.gridy++;
+        constraints.insets = new Insets(0, formInset, 0, formInset);
+        constraints.gridwidth = propertyWidth;
+        constraints.anchor = GridBagConstraints.WEST;
+        break;
+      case NONE:
+        constraints.gridx = currentX;
+        constraints.gridy = currentY;
+        constraints.insets = new Insets(0, formInset, 0, formInset);
+        constraints.gridwidth = propertyWidth;
+        constraints.anchor = GridBagConstraints.WEST;
+        break;
+      default:
+        break;
+    }
+  }
+
+  private void computeLabelGridBagConstraints(IComponentViewDescriptor viewDescriptor, int currentX, int currentY,
+                                              int formInset, int propertyWidth,
+                                              EHorizontalPosition labelHorizontalPosition,
+                                              GridBagConstraints constraints) {
+    switch (viewDescriptor.getLabelsPosition()) {
+      case ASIDE:
+        constraints.insets = new Insets(formInset, formInset, formInset, formInset);
+        switch (labelHorizontalPosition) {
+          case RIGHT:
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.gridx = currentX * 2 + propertyWidth * 2 - 1;
+            break;
+          case LEFT:
+          default:
+            constraints.anchor = GridBagConstraints.EAST;
+            constraints.gridx = currentX * 2;
+            break;
+        }
+        constraints.gridy = currentY;
+        break;
+      case ABOVE:
+        constraints.insets = new Insets(formInset, formInset, 0, formInset);
+        constraints.anchor = GridBagConstraints.SOUTHWEST;
+        constraints.gridx = currentX;
+        constraints.gridy = currentY * 2;
+        constraints.gridwidth = propertyWidth;
+        break;
+      case NONE:
+        break;
+      default:
+        break;
+    }
   }
 
   private void completePropertyViewsWithDynamicToolTips(

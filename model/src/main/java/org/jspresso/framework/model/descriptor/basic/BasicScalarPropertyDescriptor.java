@@ -84,7 +84,8 @@ public abstract class BasicScalarPropertyDescriptor extends
       } else {
         try {
           this.defaultValue = parseStringValue(defaultValue.toString());
-        } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException | SecurityException ex) {
+        } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException |
+            SecurityException ex) {
           throw new DescriptorException(ex);
         } catch (InvocationTargetException ex) {
           if (ex.getCause() instanceof RuntimeException) {

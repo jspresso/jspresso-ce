@@ -474,7 +474,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
               String.class
             }).newInstance(stringValue);
             setConnecteeValue(adaptedValue);
-          } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException | SecurityException ex) {
+          } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException
+              | SecurityException ex) {
             throw new ConnectorInputException(ex, stringValue);
           } catch (InvocationTargetException ex) {
             throw new ConnectorInputException(ex.getCause(), stringValue);

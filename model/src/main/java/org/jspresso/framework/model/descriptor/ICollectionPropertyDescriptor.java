@@ -64,6 +64,10 @@ public interface ICollectionPropertyDescriptor<E> extends
    *          the collection value.
    * @param addedValue
    *          the property added value.
+   * @param <F>
+   *          the concrete holding component type.
+   * @param <G>
+   *          the concrete collection component element type.
    */
   <F, G> void postprocessAdder(F component, Collection<G> collection,
       G addedValue);
@@ -77,6 +81,10 @@ public interface ICollectionPropertyDescriptor<E> extends
    *          the collection value.
    * @param removedValue
    *          the property removed value.
+   * @param <F>
+   *          the concrete holding component type.
+   * @param <G>
+   *          the concrete collection component element type.
    */
   <F, G> void postprocessRemover(F component, Collection<G> collection,
       G removedValue);
@@ -90,6 +98,10 @@ public interface ICollectionPropertyDescriptor<E> extends
    *          the collection value.
    * @param addedValue
    *          the property added value.
+   * @param <F>
+   *          the concrete holding component type.
+   * @param <G>
+   *          the concrete collection component element type.
    */
   <F, G> void preprocessAdder(F component, Collection<G> collection,
       G addedValue);
@@ -103,6 +115,10 @@ public interface ICollectionPropertyDescriptor<E> extends
    *          the collection value.
    * @param removedValue
    *          the property removed value.
+   * @param <F>
+   *          the concrete holding component type.
+   * @param <G>
+   *          the concrete collection component element type.
    */
   <F, G> void preprocessRemover(F component, Collection<G> collection,
       G removedValue);

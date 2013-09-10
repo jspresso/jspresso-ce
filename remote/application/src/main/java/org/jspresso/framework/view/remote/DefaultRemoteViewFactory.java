@@ -906,7 +906,7 @@ public class DefaultRemoteViewFactory extends
       ((REnumBox) viewComponent).setTranslations(translations
           .toArray(new String[translations.size()]));
     }
-    ((RemoteValueConnector)connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+    ((RemoteValueConnector) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
       @Override
       public Object getValueForState(RemoteValueState state, Object originalValue) {
         if (originalValue == null) {
@@ -1843,6 +1843,7 @@ public class DefaultRemoteViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ConstantConditions")
   @Override
   protected IView<RComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,

@@ -967,7 +967,7 @@ public class DefaultRemoteController extends
               try {
                 pushToSecurityContext(actionList);
                 RActionList rActionList = createRActionList(actionList);
-                if(rActionList != null) {
+                if (rActionList != null) {
                   actionLists.add(rActionList);
                 }
               } finally {
