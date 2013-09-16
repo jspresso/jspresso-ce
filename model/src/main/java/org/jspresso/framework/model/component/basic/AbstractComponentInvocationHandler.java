@@ -768,11 +768,13 @@ public abstract class AbstractComponentInvocationHandler implements
     IComponentService service = componentDescriptor.getServiceDelegate(method);
     if (service != null) {
       try {
-        if (service instanceof AbstractComponentServiceDelegate<?>
-            && service.getClass().getMethod(method.getName(),
-            method.getParameterTypes()) != null) {
-          return ((AbstractComponentServiceDelegate<Object>) service)
-              .executeWith(proxy, method, args);
+        if (service instanceof AbstractComponentServiceDelegate<?>) {
+          Method refinedMethod = service.getClass().getMethod(method.getName(),
+            method.getParameterTypes());
+          if(refinedMethod != null) {
+            return ((AbstractComponentServiceDelegate<Object>) service)
+                .executeWith(proxy, refinedMethod, args);
+          }
         }
         int signatureSize = method.getParameterTypes().length + 1;
         Class<?>[] parameterTypes = new Class[signatureSize];
