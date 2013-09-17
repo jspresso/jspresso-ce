@@ -90,6 +90,7 @@ import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 
+import org.hibernate.collection.spi.PersistentCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
@@ -1285,8 +1286,10 @@ public abstract class AbstractBackendController extends AbstractController
                   }
                   snapshotCollection = clonedSnapshotCollection;
                 }
-                uowCollection = wrapDetachedCollection(entity, uowCollection,
+                if(entity.isPersistent()) {
+                  uowCollection = wrapDetachedCollection(entity, uowCollection,
                     snapshotCollection, propertyName);
+                }
               }
               uowEntity.straightSetProperty(propertyName, uowCollection);
             } else {
@@ -1520,7 +1523,7 @@ public abstract class AbstractBackendController extends AbstractController
                   }
                 }
               }
-              if (registeredEntity.isPersistent()) {
+              if (propertyValue instanceof PersistentCollection) {
                 Collection<IComponent> snapshotCollection = null;
                 Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
                 if (dirtyProperties != null) {

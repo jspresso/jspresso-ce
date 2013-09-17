@@ -583,38 +583,36 @@ public class HibernateBackendController extends AbstractBackendController {
         return super.wrapDetachedCollection(owner, transientCollection,
             snapshotCollection, role);
       }
-      if (owner.isPersistent()) {
-        if (transientCollection instanceof Set) {
-          PersistentSet persistentSet = new PersistentSet(null,
-              (Set<?>) transientCollection);
-          changeCollectionOwner(persistentSet, owner);
-          HashMap<Object, Object> snapshot = new HashMap<>();
-          if (varSnapshotCollection == null) {
-            persistentSet.clearDirty();
-            varSnapshotCollection = transientCollection;
-          }
-          for (Object snapshotCollectionElement : varSnapshotCollection) {
-            snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
-          }
-          persistentSet
-              .setSnapshot(owner.getId(), collectionRoleName, snapshot);
-          return persistentSet;
-        } else if (transientCollection instanceof List) {
-          PersistentList persistentList = new PersistentList(null,
-              (List<?>) transientCollection);
-          changeCollectionOwner(persistentList, owner);
-          ArrayList<Object> snapshot = new ArrayList<>();
-          if (varSnapshotCollection == null) {
-            persistentList.clearDirty();
-            varSnapshotCollection = transientCollection;
-          }
-          for (Object snapshotCollectionElement : varSnapshotCollection) {
-            snapshot.add(snapshotCollectionElement);
-          }
-          persistentList.setSnapshot(owner.getId(), collectionRoleName,
-              snapshot);
-          return persistentList;
+      if (transientCollection instanceof Set) {
+        PersistentSet persistentSet = new PersistentSet(null,
+            (Set<?>) transientCollection);
+        changeCollectionOwner(persistentSet, owner);
+        HashMap<Object, Object> snapshot = new HashMap<>();
+        if (varSnapshotCollection == null) {
+          persistentSet.clearDirty();
+          varSnapshotCollection = transientCollection;
         }
+        for (Object snapshotCollectionElement : varSnapshotCollection) {
+          snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
+        }
+        persistentSet
+            .setSnapshot(owner.getId(), collectionRoleName, snapshot);
+        return persistentSet;
+      } else if (transientCollection instanceof List) {
+        PersistentList persistentList = new PersistentList(null,
+            (List<?>) transientCollection);
+        changeCollectionOwner(persistentList, owner);
+        ArrayList<Object> snapshot = new ArrayList<>();
+        if (varSnapshotCollection == null) {
+          persistentList.clearDirty();
+          varSnapshotCollection = transientCollection;
+        }
+        for (Object snapshotCollectionElement : varSnapshotCollection) {
+          snapshot.add(snapshotCollectionElement);
+        }
+        persistentList.setSnapshot(owner.getId(), collectionRoleName,
+            snapshot);
+        return persistentList;
       }
     } else {
       if (varSnapshotCollection == null) {
