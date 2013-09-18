@@ -572,25 +572,24 @@ public class HibernateBackendController extends AbstractBackendController {
   @SuppressWarnings("unchecked")
   @Override
   protected Collection<IComponent> wrapDetachedCollection(IEntity owner,
-      Collection<IComponent> transientCollection,
+      Collection<IComponent> detachedCollection,
       Collection<IComponent> snapshotCollection, String role) {
     Collection<IComponent> varSnapshotCollection = snapshotCollection;
-    if (!(transientCollection instanceof PersistentCollection)) {
+    if (!(detachedCollection instanceof PersistentCollection)) {
       String collectionRoleName = HibernateHelper.getHibernateRoleName(
           getComponentContract(owner), role);
       if (collectionRoleName == null) {
         // it is not an hibernate managed collection (e.g. "detachedEntities")
-        return super.wrapDetachedCollection(owner, transientCollection,
-            snapshotCollection, role);
+        return detachedCollection;
       }
-      if (transientCollection instanceof Set) {
+      if (detachedCollection instanceof Set) {
         PersistentSet persistentSet = new PersistentSet(null,
-            (Set<?>) transientCollection);
+            (Set<?>) detachedCollection);
         changeCollectionOwner(persistentSet, owner);
         HashMap<Object, Object> snapshot = new HashMap<>();
         if (varSnapshotCollection == null) {
           persistentSet.clearDirty();
-          varSnapshotCollection = transientCollection;
+          varSnapshotCollection = detachedCollection;
         }
         for (Object snapshotCollectionElement : varSnapshotCollection) {
           snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
@@ -598,14 +597,14 @@ public class HibernateBackendController extends AbstractBackendController {
         persistentSet
             .setSnapshot(owner.getId(), collectionRoleName, snapshot);
         return persistentSet;
-      } else if (transientCollection instanceof List) {
+      } else if (detachedCollection instanceof List) {
         PersistentList persistentList = new PersistentList(null,
-            (List<?>) transientCollection);
+            (List<?>) detachedCollection);
         changeCollectionOwner(persistentList, owner);
         ArrayList<Object> snapshot = new ArrayList<>();
         if (varSnapshotCollection == null) {
           persistentList.clearDirty();
-          varSnapshotCollection = transientCollection;
+          varSnapshotCollection = detachedCollection;
         }
         for (Object snapshotCollectionElement : varSnapshotCollection) {
           snapshot.add(snapshotCollectionElement);
@@ -616,13 +615,12 @@ public class HibernateBackendController extends AbstractBackendController {
       }
     } else {
       if (varSnapshotCollection == null) {
-        ((PersistentCollection) transientCollection).clearDirty();
+        ((PersistentCollection) detachedCollection).clearDirty();
       } else {
-        ((PersistentCollection) transientCollection).dirty();
+        ((PersistentCollection) detachedCollection).dirty();
       }
     }
-    return super.wrapDetachedCollection(owner, transientCollection,
-        varSnapshotCollection, role);
+    return detachedCollection;
   }
 
   /**

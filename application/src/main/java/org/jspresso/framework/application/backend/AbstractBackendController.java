@@ -1139,7 +1139,7 @@ public abstract class AbstractBackendController extends AbstractController
    *
    * @param owner
    *     the entity the collection belongs to.
-   * @param transientCollection
+   * @param detachedCollection
    *     the transient collection to make part of the unit of work.
    * @param snapshotCollection
    *     the original collection state as reported by the dirt recorder.
@@ -1150,9 +1150,9 @@ public abstract class AbstractBackendController extends AbstractController
    *         in this implementation).
    */
   protected Collection<IComponent> wrapDetachedCollection(IEntity owner,
-      Collection<IComponent> transientCollection,
+      Collection<IComponent> detachedCollection,
       Collection<IComponent> snapshotCollection, String role) {
-    return transientCollection;
+    return detachedCollection;
   }
 
   private void cleanDirtyProperties(IEntity entity) {
