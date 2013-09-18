@@ -626,6 +626,37 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
+   * Merge collection.
+   *
+   * @param propertyName the property name
+   * @param propertyValue the property value
+   * @param registeredEntity the registered entity
+   * @param registeredCollection the registered collection
+   * @return the collection
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected <E extends IEntity> Collection<IComponent> mergeCollection(String propertyName, Object propertyValue,
+                                                                       E registeredEntity,
+                                                                       Collection<IComponent> registeredCollection) {
+    Collection<IComponent> mergedCollection;
+    if (propertyValue instanceof PersistentCollection) {
+      Collection<IComponent> snapshotCollection = null;
+      Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+      if (dirtyProperties != null) {
+        snapshotCollection = (Collection<IComponent>) dirtyProperties
+            .get(propertyName);
+      }
+      mergedCollection = wrapDetachedCollection(registeredEntity,
+          registeredCollection, snapshotCollection,
+          propertyName);
+    } else {
+      mergedCollection = registeredCollection;
+    }
+    return mergedCollection;
+  }
+
+  /**
    * Locks an entity (LockMode.NONE) in current hibernate session.
    * 
    * @param entity

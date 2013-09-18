@@ -90,7 +90,6 @@ import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 
-import org.hibernate.collection.spi.PersistentCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
@@ -346,8 +345,7 @@ public abstract class AbstractBackendController extends AbstractController
     asyncExecutors.add(slaveExecutor);
     Set<AsyncActionExecutor> oldRunningExecutors = new LinkedHashSet<>(
         getRunningExecutors());
-    firePropertyChange("runningExecutors", oldRunningExecutors,
-        getRunningExecutors());
+    firePropertyChange("runningExecutors", oldRunningExecutors, getRunningExecutors());
     slaveExecutor.start();
     if (LOG.isDebugEnabled()) {
       LOG.debug("List of running executors :");
@@ -1523,22 +1521,9 @@ public abstract class AbstractBackendController extends AbstractController
                   }
                 }
               }
-              if (propertyValue instanceof PersistentCollection) {
-                Collection<IComponent> snapshotCollection = null;
-                Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
-                if (dirtyProperties != null) {
-                  snapshotCollection = (Collection<IComponent>) dirtyProperties
-                      .get(propertyName);
-                }
-                mergedProperties
-                    .put(
-                        propertyName,
-                        wrapDetachedCollection(registeredEntity,
-                            registeredCollection, snapshotCollection,
-                            propertyName));
-              } else {
-                mergedProperties.put(propertyName, registeredCollection);
-              }
+              Collection<IComponent> mergedCollection = mergeCollection(propertyName, propertyValue,
+                  registeredEntity, registeredCollection);
+              mergedProperties.put(propertyName, mergedCollection);
               if (isInitialized(registeredCollection)) {
                 propertiesToSort.add(propertyName);
               }
@@ -1575,6 +1560,21 @@ public abstract class AbstractBackendController extends AbstractController
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
     }
+  }
+
+  /**
+   * Merge collection.
+   *
+   * @param propertyName the property name
+   * @param propertyValue the property value
+   * @param registeredEntity the registered entity
+   * @param registeredCollection the registered collection
+   * @return the collection
+   */
+  protected <E extends IEntity> Collection<IComponent> mergeCollection(String propertyName, Object propertyValue,
+                                                                     E registeredEntity,
+                                                                     Collection<IComponent> registeredCollection) {
+    return registeredCollection;
   }
 
   private <E extends IEntity> void checkBadMergeUsage(E entity) {
