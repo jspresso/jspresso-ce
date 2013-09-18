@@ -1269,8 +1269,10 @@ public abstract class AbstractBackendController extends AbstractController
                   }
                   snapshotCollection = clonedSnapshotCollection;
                 }
-                uowCollection = wrapDetachedCollection(entity, uowCollection,
-                    snapshotCollection, propertyName);
+                if(entity.isPersistent()) {
+                  uowCollection = wrapDetachedCollection(entity, uowCollection,
+                      snapshotCollection, propertyName);
+                }
               }
               uowEntity.straightSetProperty(propertyName, uowCollection);
             } else {
@@ -1503,22 +1505,9 @@ public abstract class AbstractBackendController extends AbstractController
                   }
                 }
               }
-              if (registeredEntity.isPersistent()) {
-                Collection<IComponent> snapshotCollection = null;
-                Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
-                if (dirtyProperties != null) {
-                  snapshotCollection = (Collection<IComponent>) dirtyProperties
-                      .get(propertyName);
-                }
-                mergedProperties
-                    .put(
-                        propertyName,
-                        wrapDetachedCollection(registeredEntity,
-                            registeredCollection, snapshotCollection,
-                            propertyName));
-              } else {
-                mergedProperties.put(propertyName, registeredCollection);
-              }
+              Collection<IComponent> mergedCollection = mergeCollection(propertyName, propertyValue,
+                  registeredEntity, registeredCollection);
+              mergedProperties.put(propertyName, mergedCollection);
               if (isInitialized(registeredCollection)) {
                 propertiesToSort.add(propertyName);
               }
@@ -1554,6 +1543,21 @@ public abstract class AbstractBackendController extends AbstractController
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
     }
+  }
+
+  /**
+   * Merge collection.
+   *
+   * @param propertyName the property name
+   * @param propertyValue the property value
+   * @param registeredEntity the registered entity
+   * @param registeredCollection the registered collection
+   * @return the collection
+   */
+  protected <E extends IEntity> Collection<IComponent> mergeCollection(String propertyName, Object propertyValue,
+                                                                       E registeredEntity,
+                                                                       Collection<IComponent> registeredCollection) {
+    return registeredCollection;
   }
 
   private <E extends IEntity> void checkBadMergeUsage(E entity) {

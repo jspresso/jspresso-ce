@@ -618,38 +618,36 @@ public class HibernateBackendController extends AbstractBackendController {
         return super.wrapDetachedCollection(owner, transientCollection,
             snapshotCollection, role);
       }
-      if (owner.isPersistent()) {
-        if (transientCollection instanceof Set) {
-          PersistentSet persistentSet = new PersistentSet(null,
-              (Set<?>) transientCollection);
-          changeCollectionOwner(persistentSet, owner);
-          HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
-          if (varSnapshotCollection == null) {
-            persistentSet.clearDirty();
-            varSnapshotCollection = transientCollection;
-          }
-          for (Object snapshotCollectionElement : varSnapshotCollection) {
-            snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
-          }
-          persistentSet
-              .setSnapshot(owner.getId(), collectionRoleName, snapshot);
-          return persistentSet;
-        } else if (transientCollection instanceof List) {
-          PersistentList persistentList = new PersistentList(null,
-              (List<?>) transientCollection);
-          changeCollectionOwner(persistentList, owner);
-          ArrayList<Object> snapshot = new ArrayList<Object>();
-          if (varSnapshotCollection == null) {
-            persistentList.clearDirty();
-            varSnapshotCollection = transientCollection;
-          }
-          for (Object snapshotCollectionElement : varSnapshotCollection) {
-            snapshot.add(snapshotCollectionElement);
-          }
-          persistentList.setSnapshot(owner.getId(), collectionRoleName,
-              snapshot);
-          return persistentList;
+      if (transientCollection instanceof Set) {
+        PersistentSet persistentSet = new PersistentSet(null,
+            (Set<?>) transientCollection);
+        changeCollectionOwner(persistentSet, owner);
+        HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
+        if (varSnapshotCollection == null) {
+          persistentSet.clearDirty();
+          varSnapshotCollection = transientCollection;
         }
+        for (Object snapshotCollectionElement : varSnapshotCollection) {
+          snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
+        }
+        persistentSet
+            .setSnapshot(owner.getId(), collectionRoleName, snapshot);
+        return persistentSet;
+      } else if (transientCollection instanceof List) {
+        PersistentList persistentList = new PersistentList(null,
+            (List<?>) transientCollection);
+        changeCollectionOwner(persistentList, owner);
+        ArrayList<Object> snapshot = new ArrayList<Object>();
+        if (varSnapshotCollection == null) {
+          persistentList.clearDirty();
+          varSnapshotCollection = transientCollection;
+        }
+        for (Object snapshotCollectionElement : varSnapshotCollection) {
+          snapshot.add(snapshotCollectionElement);
+        }
+        persistentList.setSnapshot(owner.getId(), collectionRoleName,
+            snapshot);
+        return persistentList;
       }
     } else {
       if (varSnapshotCollection == null) {
@@ -660,6 +658,37 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     return super.wrapDetachedCollection(owner, transientCollection,
         varSnapshotCollection, role);
+  }
+
+  /**
+   * Merge collection.
+   *
+   * @param propertyName the property name
+   * @param propertyValue the property value
+   * @param registeredEntity the registered entity
+   * @param registeredCollection the registered collection
+   * @return the collection
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected <E extends IEntity> Collection<IComponent> mergeCollection(String propertyName, Object propertyValue,
+                                                                       E registeredEntity,
+                                                                       Collection<IComponent> registeredCollection) {
+    Collection<IComponent> mergedCollection;
+    if (propertyValue instanceof PersistentCollection) {
+      Collection<IComponent> snapshotCollection = null;
+      Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+      if (dirtyProperties != null) {
+        snapshotCollection = (Collection<IComponent>) dirtyProperties
+            .get(propertyName);
+      }
+      mergedCollection = wrapDetachedCollection(registeredEntity,
+          registeredCollection, snapshotCollection,
+          propertyName);
+    } else {
+      mergedCollection = registeredCollection;
+    }
+    return mergedCollection;
   }
 
   /**
