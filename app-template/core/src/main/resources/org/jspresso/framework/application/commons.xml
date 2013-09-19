@@ -391,7 +391,6 @@
         <property name="elementDescriptor">
           <bean class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
             <constructor-arg value="Translation"/>
-            <property name="sqlName" value="I18N" />
             <property name="propertyDescriptors">
               <list>
                 <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">

@@ -32,9 +32,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
@@ -57,6 +54,8 @@ import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.util.sql.SqlHelper;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * This is the abstract base descriptor for all component-like part of the
@@ -72,7 +71,7 @@ import org.jspresso.framework.util.sql.SqlHelper;
  * be inline in an entity. It also allows to describe an arbitrary POJO and
  * make use of it in Jspresso UIs.</li>
  * </ul>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -190,7 +189,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * are the union of the declared property descriptors of the component and of
    * its ancestors one. A component may have multiple ancestors which means that
    * complex multi-inheritance hierarchy can be mapped.
-   * 
+   *
    * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
   public List<IComponentDescriptor<?>> getAncestorDescriptors() {
@@ -235,7 +234,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the grantedRoles.
-   * 
+   *
    * @return the grantedRoles.
    */
   @Override
@@ -245,7 +244,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the lifecycleInterceptors.
-   * 
+   *
    * @return the lifecycleInterceptors.
    */
   @Override
@@ -439,7 +438,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the readabilityGates.
-   * 
+   *
    * @return the readabilityGates.
    */
   @Override
@@ -551,7 +550,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the sqlName.
-   * 
+   *
    * @return the sqlName.
    */
   public String getSqlName() {
@@ -562,7 +561,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the toStringProperty.
-   * 
+   *
    * @return the toStringProperty.
    */
   @Override
@@ -593,7 +592,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the toStringProperty.
-   * 
+   *
    * @return the toStringProperty.
    */
   @Override
@@ -669,7 +668,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the writabilityGates.
-   * 
+   *
    * @return the writabilityGates.
    */
   @Override
@@ -702,7 +701,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * the component and of its ancestors one. A component may have multiple
    * ancestors which means that complex multiple-inheritance hierarchy can be
    * mapped.
-   * 
+   *
    * @param ancestorDescriptors
    *          The list of ancestor component descriptors.
    */
@@ -713,7 +712,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @internal
    */
   @Override
@@ -849,7 +848,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * subclass. In that case, the attributes of the property defined in the child
    * descriptor prevails over the definition of its ancestors. Naturally,
    * properties are keyed by their names.
-   * 
+   *
    * @param descriptors
    *          the propertyDescriptors to set.
    */
@@ -897,7 +896,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Sets the readabilityGates.
-   * 
+   *
    * @param readabilityGates
    *          the readabilityGates to set.
    * @internal
@@ -1075,7 +1074,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * properties are the ones it defines augmented by the ones its ancestors
    * define. There is no mean to make a component property cloneable if one of
    * the ancestor declares it un-cloneable.
-   * 
+   *
    * @param unclonedProperties
    *          the unclonedProperties to set.
    */
@@ -1100,7 +1099,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * By default, component descriptors are not assigned any gates collection,
    * i.e. there is no writability restriction. Note that gates do not enforce
    * programmatic writability of a component; only UI is impacted.
-   * 
+   *
    * @param writabilityGates
    *          the writabilityGates to set.
    */
@@ -1203,9 +1202,8 @@ public abstract class AbstractComponentDescriptor<E> extends
     nlsDescriptor.setComputed(true);
     if (!isPurelyAbstract()) {
       nlsDescriptor.setSqlName(
-          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" + ((AbstractComponentDescriptor<?>)
-              getComponentTranslationsDescriptorTemplate()
-              .getCollectionDescriptor().getElementDescriptor()).getSqlName() +
+          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" +
+              getComponentTranslationsDescriptorTemplate().getSqlName() +
               " T WHERE T." +
               getComponentTranslationsDescriptorTemplate().getSqlName() +
               "_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
@@ -1341,7 +1339,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Allow subclasses to hook up and potentially transform the actual property
    * descriptor.
-   * 
+   *
    * @param propertyDescriptor
    *          the original property descriptor.
    * @return the transformed property descriptor.
