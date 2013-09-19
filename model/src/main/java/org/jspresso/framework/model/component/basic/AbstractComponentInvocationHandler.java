@@ -38,9 +38,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.MethodUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
@@ -80,6 +77,8 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the core implementation of all components in the application.
@@ -2124,22 +2123,19 @@ public abstract class AbstractComponentInvocationHandler implements
         throw new ComponentException(ex.getCause());
       }
       String sessionLanguage = locale.getLanguage();
-      IPropertyTranslation sessionTranslation = null;
+      IPropertyTranslation oldSessionTranslation = null;
       if (sessionLanguage != null) {
         for (IPropertyTranslation translation : translations) {
           if (sessionLanguage.equalsIgnoreCase(translation.getLanguage()) && barePropertyName.equals(
               translation.getPropertyName())) {
-            sessionTranslation = translation;
+            oldSessionTranslation = translation;
           }
         }
       }
-      if (sessionTranslation == null) {
-        sessionTranslation = (IPropertyTranslation) entityFactory.createComponentInstance(
-            translationContract);
-        sessionTranslation.setLanguage(locale.getLanguage());
-        sessionTranslation.setPropertyName(barePropertyName);
+      // Cannot simply update the old session translation or Hibernate will not manage persistence correctly.
+      if(oldSessionTranslation != null) {
         try {
-          translationsAccessor.addToValue(proxy, sessionTranslation);
+          translationsAccessor.removeFromValue(proxy, oldSessionTranslation);
         } catch (IllegalAccessException | NoSuchMethodException ex) {
           throw new ComponentException(ex);
         } catch (InvocationTargetException ex) {
@@ -2148,6 +2144,20 @@ public abstract class AbstractComponentInvocationHandler implements
           }
           throw new ComponentException(ex.getCause());
         }
+      }
+      IPropertyTranslation sessionTranslation = (IPropertyTranslation) entityFactory.createComponentInstance(
+          translationContract);
+      sessionTranslation.setLanguage(locale.getLanguage());
+      sessionTranslation.setPropertyName(barePropertyName);
+      try {
+        translationsAccessor.addToValue(proxy, sessionTranslation);
+      } catch (IllegalAccessException | NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ComponentException(ex.getCause());
       }
       sessionTranslation.setTranslatedValue(translatedValue);
       storeProperty(nlsPropertyName, translatedValue);
