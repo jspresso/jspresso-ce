@@ -1,6 +1,92 @@
 Jspresso CE - Change Log
 
 
+
+Jspresso CE - 3.7 (Released 2013-09-20) [ View Issues ]
+=======================================
+- 0001114: [Persistence] Saving master/detail type entity can lead to an inconsistent collection state: Collection instead of PersistentCollection (vvandens) - closed.
+- 0001111: [Model] When an extension is implemented by a service, the call fails (vvandens) - closed.
+- 0001108: [Persistence] An entity is dirty and flushed if a computed property with SQL Name is dirty (produces OptimisticLockingException) (vvandens) - closed.
+- 0001106: [Frontend] Exception when accessing in filter view with a date accessed by a reference (JSpresso 3.7-SNAPSHOT) (vvandens) - closed.
+- 0000838: [Model] methods in EmptyCollectionPropertyProcessor use type Object for added/removed value (vvandens) - closed.
+- 0000923: [Frontend] Editing "text" field in table : enter does not validate the table cell ! (vvandens) - closed.
+- 0000940: [Persistence] Raise an exception on IEntityLifecycleHandler persistence methods whil passing null arg (vvandens) - closed.
+- 0001059: [Persistence] Properties starting with a single lowercase letter are falsely marked dirty when the entity is hydrated (vvandens) - closed.
+- 0001101: [Frontend] Method to generate Frontend controller action map permIds (vvandens) - closed.
+- 0000969: [Frontend] permId displayed inside tooltip (vvandens) - closed.
+- 0000753: [View] Label position (vvandens) - closed.
+- 0001100: [Backend] Inside requiresNew transaction, hbc.getHibernateSession() might return the wrong session. (vvandens) - closed.
+- 0001097: [Backend] Security plugin doesn't care about the controller action map (top action map in UI) (vvandens) - closed.
+- 0001094: [Model] SQL generation incorrect for Jspresso Text type (vvandens) - closed.
+- 0001095: [Model] Jspresso 3.7 -> Translatable properties : DB column names are too long (Oracle) (vvandens) - closed.
+- 0001093: [Backend] reloadModuleObjectBackAction tries to reload Node's model objects without checking nullability (vvandens) - closed.
+- 0001092: [Persistence] Hibernate collection may not be internally dirty when flushing (vvandens) - closed.
+- 0000421: [Documentation] Documentation of QBE specials characters (vvandens) - closed.
+- 0001091: [View] Jspresso 3.7 : not enter a space in an input field of type string (vvandens) - closed.
+- 0001090: [Frontend] Allow to override user timezone in the login dialog. (vvandens) - closed.
+- 0001089: [Frontend] Allow to override user locale in the login dialog. (vvandens) - closed.
+- 0000944: [View] context unavailable in BasicQueryViewDescriptorFactory (vvandens) - closed.
+- 0001088: [Model] Make String properties translatable (vvandens) - closed.
+- 0001087: [View] Enhance AddAnyToMasterAction to be able to initialize some parameters without any action code required (vvandens) - closed.
+- 0000841: [Model] Better enumeration management (vvandens) - closed.
+- 0000681: [Backend] Saving entities hold by a component used as custom model (vvandens) - closed.
+- 0001086: [Model] Allow to define parameterized types in "any" properties (vvandens) - closed.
+- 0000973: [View] message more explicit to inform a network error (vvandens) - closed.
+- 0000957: [Frontend] Remove pagination from Lov and Tables (vvandens) - closed.
+- 0000985: [Frontend] Mark not sortable columns (vvandens) - closed.
+- 0001047: [View] Add standard actions to add or remove a reference to another entity in a collection (vvandens) - closed.
+- 0000631: [Frontend] Being able to receive notifications from interface when a key is pressed. (vvandens) - closed.
+- 0000643: [Model] Declaring a List to only have not null values (vvandens) - closed.
+- 0001004: [Frontend] BeanModule listens to all property changes of its module object only to refresh its label (vvandens) - closed.
+- 0001005: [Model] Mandatory properties check function on IComponent (vvandens) - closed.
+- 0001042: [Model] Use the holding entity as the toString of a component for Mandatory property missing exception message (vvandens) - closed.
+- 0001022: [View] Add a property to a tag "table" to give the possibility to block the ability to move columns (vvandens) - closed.
+- 0001038: [Persistence] Unable to access the old value of a component referenced by an entity (vvandens) - closed.
+- 0001083: [Model] Cannot reference any project's class with 'any' model's property type (vvandens) - closed.
+- 0000862: [View] initializationMapping doesn't work on lovAction without entityDescriptor (vvandens) - closed.
+- 0001079: [Backend] When inside a nested REQUIRES_NEW TX, when using a backendController.findByXXX, the UOW is committed. (vvandens) - closed.
+- 0001053: [View] Add language Romanian into framework (vvandens) - closed.
+- 0001066: [Backend] cloneInUnitOfWork must be null safe (vvandens) - closed.
+- 0001064: [Frontend] The display of a bool value is not centered (vvandens) - closed.
+- 0001063: [Frontend] Disable save button if there is nothing to save (vvandens) - closed.
+- 0001062: [Frontend] Add the number of selected items into the paginable status bar (vvandens) - closed.
+- 0001075: [Frontend] Introduce compact comparable query structures with popup editting (vvandens) - closed.
+- 0001078: [View] image keyWord doesn't work properly in a table view (vvandens) - closed.
+- 0001077: [View] When defining an action map on a property view, the buttons should be added aside instead of above the field (vvandens) - closed.
+- 0001057: [View] Add operators "is null/is not null" for comparable (vvandens) - closed.
+- 0001073: [Build & tools] Make Jspresso maven plugins threadsafe (vvandens) - closed.
+- 0001074: [Backend] Allow to get criteria refiner and criteria factory from the action context if defined. (vvandens) - closed.
+- 0001070: [Frontend] Facilities for "addAsChildModuleFrontAction" action to move to model's references (vvandens) - closed.
+- 0001068: [View] Flex : An empty datagrid should never request focus (vvandens) - closed.
+- 0001067: [Model] invokeLifecycleInterceptors method is bogus for components (vvandens) - closed.
+- 0001058: [Frontend] Loading the "FileOpenCallbackAction" from context for "OpenFileAction" (vvandens) - closed.
+- 0001045: [View] Navigation with TAB doesn't work properly (vvandens) - closed.
+- 0001061: [Frontend] Disable sticky selected lines in filter modules with cumulative selection (vvandens) - closed.
+- 0001052: [View] Problem when click "Enter" in a input field (vvandens) - closed.
+- 0000816: [Model] Delay the notifications while initializing an entity retrieved by hibernate (vvandens) - closed.
+- 0000782: [View] Bug when display icon instead of label on computed property (vvandens) - closed.
+- 0001043: [Backend] When using in-memory transactions, entities in UOW may not correctly be de-duped (vvandens) - closed.
+- 0001041: [Backend] Jspresso 3.6.1 generate lot of BadUsage (vvandens) - closed.
+- 0001037: [Backend] Integrate with browser previous / next buttons (vvandens) - closed.
+- 0001036: [Backend] Migrate to Flex 4 (vvandens) - closed.
+- 0001035: [Persistence] Migrate to Hibernate 4 (vvandens) - closed.
+- 0001008: [Model] Improve methods retrieval from extensions to avoid being base on Exceptions (vvandens) - closed.
+- 0001028: [Frontend] Refresh the workspace modules (vvandens) - closed.
+- 0001027: [Backend] Merging entities with MERGE_EAGER may dirty properties during initialization (vvandens) - closed.
+- 0001026: [View] With remote UIs, we cannot type-in dates that are < 1970 (vvandens) - closed.
+- 0001025: [Model] Cached computed properties are missing notification when changed (vvandens) - closed.
+- 0001009: [Persistence] Unable to chain update and delete within a single transaction (vvandens) - closed.
+- 0001023: [Backend] Entity reference properties may not be correctly merged back on TX commit (vvandens) - closed.
+- 0001021: [Build & tools] Include Archetype plugin for integration tests (vvandens) - closed.
+- 0001020: [Model] Unnecessary PropertyChangeEvents might be fired for nested properties (vvandens) - closed.
+- 0001019: [Backend] No exception in log during login if there's a technical error (vvandens) - closed.
+- 0001018: [Backend] Dirty properties should be recorded when an entity is initialized in a TX (vvandens) - closed.
+- 0001017: [Backend] Model connectors should not be recycled based on model equality only (vvandens) - closed.
+- 0001016: [Model] When setting collections, the property change event is not generated (vvandens) - closed.
+- 0001015: [Backend] Very slow response time with MySQL on pagingable views on larges tables (vvandens) - closed.
+- 0000913: [Persistence] Generated FK are too long for Oracle (vvandens) - closed.
+[81 issues]
+
 Jspresso CE - 3.6 (Released 2013-04-19) [ View Issues ]
 =======================================
 - 0001001: [View] Add language Turkish into framework (vvandens) - closed.
