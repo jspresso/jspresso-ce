@@ -20,7 +20,7 @@ package org.jspresso.framework.binding;
 
 /**
  * This class is a helper for connector bindings for an MVC relationship.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -28,7 +28,7 @@ public class DefaultMvcBinder implements IMvcBinder {
 
   /**
    * Binds two connectors altogether.
-   * 
+   *
    * @param viewConnector
    *          The connector for the view
    * @param modelConnector
@@ -41,8 +41,12 @@ public class DefaultMvcBinder implements IMvcBinder {
     }
     viewConnector.setModelConnector(modelConnector);
     if (viewConnector instanceof ICompositeValueConnector) {
-      bindChildren((ICompositeValueConnector) viewConnector,
-          (ICompositeValueConnector) modelConnector);
+      if (modelConnector == null || modelConnector instanceof ICompositeValueConnector) {
+        bindChildren((ICompositeValueConnector) viewConnector, (ICompositeValueConnector) modelConnector);
+      } else {
+        throw new IllegalArgumentException("Trying to bind a composite view to a non-composite model for property : "
+            + modelConnector.getModelDescriptor().getName());
+      }
     }
     viewConnector.boundAsView();
     if (modelConnector != null) {
@@ -50,17 +54,13 @@ public class DefaultMvcBinder implements IMvcBinder {
     }
   }
 
-  private void bindChildren(ICompositeValueConnector viewConnector,
-      ICompositeValueConnector modelConnector) {
+  private void bindChildren(ICompositeValueConnector viewConnector, ICompositeValueConnector modelConnector) {
     for (String nextChildConnectorKey : viewConnector.getChildConnectorKeys()) {
-      IValueConnector nextChildViewConnector = viewConnector
-          .getChildConnector(nextChildConnectorKey);
+      IValueConnector nextChildViewConnector = viewConnector.getChildConnector(nextChildConnectorKey);
       if (modelConnector != null) {
-        IValueConnector nextChildModelConnector = modelConnector
-            .getChildConnector(nextChildConnectorKey);
+        IValueConnector nextChildModelConnector = modelConnector.getChildConnector(nextChildConnectorKey);
         if (nextChildModelConnector == null) {
-          throw new MissingConnectorException(
-              "Missing model connector for key " + nextChildConnectorKey);
+          throw new MissingConnectorException("Missing model connector for key " + nextChildConnectorKey);
         }
         bind(nextChildViewConnector, nextChildModelConnector);
       } else {
