@@ -8,6 +8,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sjs.version>1.2</sjs.version>
+    <jspresso.version>3.7</jspresso.version>
     
     <ant-contrib.version>1.0b3</ant-contrib.version>
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
@@ -225,7 +226,7 @@
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-documentation</artifactId>
-        <version>${project.version}</version>
+        <version>${jspresso.version}</version>
         <classifier>archive</classifier>
         <type>zip</type>
       </dependency>
