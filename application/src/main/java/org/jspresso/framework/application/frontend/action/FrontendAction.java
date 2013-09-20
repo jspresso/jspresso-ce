@@ -98,7 +98,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!getClass().isAssignableFrom(obj.getClass()) && !obj.getClass().isAssignableFrom(getClass())) {
       return false;
     }
     final IDisplayableAction other = (IDisplayableAction) obj;
@@ -254,7 +254,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the collectionBased.
-   * 
+   *
    * @return the collectionBased.
    */
   public boolean isCollectionBased() {
@@ -263,7 +263,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the multiSelectionEnabled.
-   * 
+   *
    * @return the multiSelectionEnabled.
    */
   public boolean isMultiSelectionEnabled() {
@@ -302,7 +302,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * <p>
    * By default, frontend actions are assigned a generic gate that closes
    * (disables the action) when the view is not assigned any model.
-   * 
+   *
    * @param actionabilityGates
    *          the actionabilityGates to set.
    */
@@ -321,7 +321,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * multi-selection enabled UI views, the actionability gates will actually
    * open if and only if their opening condition is met for all the selected
    * items.
-   * 
+   *
    * @param collectionBased
    *          the collectionBased to set.
    */
@@ -334,7 +334,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Declares the action as being able to run on a collection containing more
    * than 1 element. A multiSelectionEnabled = false action will be disabled
    * when the selection contains no or more than one element.
-   * 
+   *
    * @param multiSelectionEnabled
    *          the multiSelectionEnabled to set.
    */
@@ -347,7 +347,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Sets the key used to compute the internationalized description of the
    * action. The translated description is then usually used as toolTip for the
    * action.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -364,7 +364,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
    * <li>the <b>classpath:/</b> pseudo URL protocol</li>
    * </ul>
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -374,7 +374,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Sets the icon.
-   * 
+   *
    * @param icon
    *          the icon to set.
    */
@@ -386,7 +386,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Configures the mnemonic key used for this action. Support of this feature
    * depends on the UI execution platform. Mnemonics are typically used in menu
    * and menu items.
-   * 
+   *
    * @param mnemonicStringRep
    *          the mnemonic to set represented as a string as KeyStroke factory
    *          would parse it.
@@ -399,7 +399,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Sets the key used to compute the internationalized name of the action. The
    * translated name is then usually used as label for the action (button label,
    * menu label, ...).
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -438,7 +438,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the actionFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the actionFactory.
@@ -449,7 +449,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Retrieves the widget which triggered the action from the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the widget which triggered the action.
@@ -462,7 +462,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   /**
    * Retrieves the concrete action (swing, remote) that was triggered triggered
    * from the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the concrete action that was triggered.
@@ -474,7 +474,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Retrieves the UI action event from the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the UI action event that was triggered.
@@ -485,7 +485,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the frontend controller out of the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -498,7 +498,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the iconFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the iconFactory.
@@ -509,7 +509,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the mvcBinder.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the mvcBinder.
@@ -535,7 +535,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the viewFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the viewFactory.
@@ -546,7 +546,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the lastUpdated.
-   * 
+   *
    * @return the lastUpdated.
    */
   @Override
@@ -556,7 +556,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Sets the lastUpdated.
-   * 
+   *
    * @param lastUpdated
    *          the lastUpdated to set.
    * @internal
@@ -567,7 +567,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Gets the styleName.
-   * 
+   *
    * @return the styleName.
    */
   @Override
@@ -591,7 +591,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Sets the icon preferred width.
-   * 
+   *
    * @param iconPreferredWidth
    *          the iconPreferredWidth to set.
    * @see org.jspresso.framework.util.descriptor.DefaultIconDescriptor#setIconPreferredWidth(int)
@@ -602,7 +602,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
 
   /**
    * Sets the icon preferred height.
-   * 
+   *
    * @param iconPreferredHeight
    *          the iconPreferredHeight to set.
    * @see org.jspresso.framework.util.descriptor.DefaultIconDescriptor#setIconPreferredHeight(int)
