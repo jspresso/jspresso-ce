@@ -2149,6 +2149,7 @@ public abstract class AbstractComponentInvocationHandler implements
           translationContract);
       sessionTranslation.setLanguage(locale.getLanguage());
       sessionTranslation.setPropertyName(barePropertyName);
+      sessionTranslation.setTranslatedValue(translatedValue);
       try {
         translationsAccessor.addToValue(proxy, sessionTranslation);
       } catch (IllegalAccessException | NoSuchMethodException ex) {
@@ -2159,7 +2160,6 @@ public abstract class AbstractComponentInvocationHandler implements
         }
         throw new ComponentException(ex.getCause());
       }
-      sessionTranslation.setTranslatedValue(translatedValue);
       storeProperty(nlsPropertyName, translatedValue);
       firePropertyChange(proxy, nlsPropertyName, oldTranslation, translatedValue);
     }
