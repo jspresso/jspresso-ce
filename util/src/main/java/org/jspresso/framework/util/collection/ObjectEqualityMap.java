@@ -3,6 +3,7 @@
  */
 package org.jspresso.framework.util.collection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
  * A map which equality is based on object identity.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <K>
@@ -23,8 +24,9 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  */
 @SuppressWarnings("NullableProblems")
 public class ObjectEqualityMap<K, V> extends AbstractPropertyChangeCapable
-    implements Map<K, V> {
+    implements Map<K, V>, Serializable {
 
+  private static final long serialVersionUID = 6871606396821418100L;
   private HashMap<K, V> delegate;
 
   /**
