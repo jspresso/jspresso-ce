@@ -20,6 +20,7 @@ package org.jspresso.framework.model.entity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -28,7 +29,7 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 /**
  * Does a "carbon" copy of the entity including its id and version. This factory
  * is used only for technical purposes.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -39,10 +40,8 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public <E extends IComponent> E cloneComponent(E componentToClone,
-      IEntityFactory entityFactory) {
-    E clonedComponent = (E) entityFactory
-        .createComponentInstance(componentToClone.getComponentContract());
+  public <E extends IComponent> E cloneComponent(E componentToClone, IEntityFactory entityFactory) {
+    E clonedComponent = (E) entityFactory.createComponentInstance(componentToClone.getComponentContract());
     carbonCopyComponent(componentToClone, clonedComponent, entityFactory);
     return clonedComponent;
   }
@@ -52,10 +51,8 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public <E extends IEntity> E cloneEntity(E entityToClone,
-      IEntityFactory entityFactory) {
-    E clonedEntity = (E) entityFactory.createEntityInstance(
-        entityToClone.getComponentContract(),
+  public <E extends IEntity> E cloneEntity(E entityToClone, IEntityFactory entityFactory) {
+    E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone.getComponentContract(),
         (Serializable) entityToClone.straightGetProperty(IEntity.ID));
 
     carbonCopyComponent(entityToClone, clonedEntity, entityFactory);
@@ -64,7 +61,7 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
 
   /**
    * Carbon copies all scalar properties.
-   * 
+   *
    * @param componentToClone
    *          the source.
    * @param clonedComponent
@@ -72,22 +69,21 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    * @param entityFactory
    *          the entity factory to use.
    */
-  public static void carbonCopyComponent(IComponent componentToClone,
-      IComponent clonedComponent, IEntityFactory entityFactory) {
+  public static void carbonCopyComponent(IComponent componentToClone, IComponent clonedComponent,
+      IEntityFactory entityFactory) {
     if (componentToClone == clonedComponent) {
       return;
     }
-    IComponentDescriptor<?> componentDescriptor = entityFactory
-        .getComponentDescriptor(componentToClone.getComponentContract());
+    IComponentDescriptor<?> componentDescriptor = entityFactory.getComponentDescriptor(componentToClone
+        .getComponentContract());
 
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
       if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)
-          && /* propertyDescriptor.isModifiable() */!(propertyDescriptor
-              .isComputed() && propertyDescriptor.getPersistenceFormula() == null)) {
+          && /* propertyDescriptor.isModifiable() */!(propertyDescriptor.isComputed() && propertyDescriptor
+              .getPersistenceFormula() == null)) {
         String propertyName = propertyDescriptor.getName();
         clonedComponent.straightSetProperty(propertyName,
-            componentToClone.straightGetProperty(propertyName));
+            ObjectUtils.cloneIfPossible(componentToClone.straightGetProperty(propertyName)));
       }
     }
   }
