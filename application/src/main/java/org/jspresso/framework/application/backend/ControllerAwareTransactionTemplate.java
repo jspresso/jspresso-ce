@@ -76,11 +76,11 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
       @Override
       public T doInTransaction(TransactionStatus status) {
+        IBackendController backendController = BackendControllerHolder.getCurrentBackendController();
         if (status.isNewTransaction() && getPropagationBehavior() != TransactionDefinition
-        .PROPAGATION_REQUIRES_NEW) {
+        .PROPAGATION_REQUIRES_NEW || !backendController.isUnitOfWorkActive()) {
           // To avoid attaching to nested transactions
-          BackendControllerHolder.getCurrentBackendController()
-              .joinTransaction();
+          backendController.joinTransaction();
         }
         return action.doInTransaction(status);
       }
