@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -36,7 +37,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 /**
  * Performs a copy of the entity. It may be used in application actions to
  * smartly duplicate an entity.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -71,7 +72,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
 
   /**
    * Sets the accessorFactory.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    * @deprecated accessor factory is now retrieved from the entity factory
@@ -85,7 +86,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
 
   /**
    * Whether the object is fully initialized.
-   * 
+   *
    * @param objectOrProxy
    *          the object to test.
    * @return true if the object is fully initialized.
@@ -166,7 +167,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
           }
         } else {
           clonedComponent.straightSetProperty(propertyEntry.getKey(),
-              propertyEntry.getValue());
+              ObjectUtils.cloneIfPossible(propertyEntry.getValue()));
         }
       }
     }

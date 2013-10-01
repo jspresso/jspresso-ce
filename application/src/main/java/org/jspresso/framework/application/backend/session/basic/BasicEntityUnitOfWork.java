@@ -39,18 +39,19 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * uses the hibernate session behind the scene to keep track of entities,
  * ensuring uniqueness in the UOW scope as well as state propagation in case of
  * a successful commit.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
 
-  private BeanPropertyChangeRecorder dirtRecorder;
   private final IEntityRegistry            entityRegistry;
-
-  private Set<IEntity>               entitiesRegisteredForDeletion;
-  private List<IEntity>              entitiesRegisteredForUpdate;
-  private Set<IEntity>               updatedEntities;
+  private       BeanPropertyChangeRecorder dirtRecorder;
+  private       Set<IEntity>               entitiesRegisteredForDeletion;
+  private       List<IEntity>              entitiesRegisteredForUpdate;
+  private       Set<IEntity>               updatedEntities;
+  private       BasicEntityUnitOfWork      parentUnitOfWork;
+  private       BasicEntityUnitOfWork      nestedUnitOfWork;
 
   /**
    * Constructs a new {@code BasicEntityUnitOfWork} instance.
@@ -64,10 +65,14 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void addUpdatedEntity(IEntity entity) {
-    if (updatedEntities == null) {
-      updatedEntities = new LinkedHashSet<>();
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.addUpdatedEntity(entity);
+    } else {
+      if (updatedEntities == null) {
+        updatedEntities = new LinkedHashSet<>();
+      }
+      updatedEntities.add(entity);
     }
-    updatedEntities.add(entity);
   }
 
   /**
@@ -82,19 +87,49 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
+  public void beginNested() {
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.beginNested();
+    } else {
+      nestedUnitOfWork = new BasicEntityUnitOfWork();
+      nestedUnitOfWork.parentUnitOfWork = this;
+      nestedUnitOfWork.begin();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean hasNested() {
+    return nestedUnitOfWork != null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void clearDirtyState(IEntity flushedEntity) {
-    dirtRecorder.resetChangedProperties(flushedEntity, null);
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.clearDirtyState(flushedEntity);
+    } else {
+      dirtRecorder.resetChangedProperties(flushedEntity, null);
+    }
   }
 
   /**
    * Clears the pending operations.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
   public void clearPendingOperations() {
-    entitiesRegisteredForUpdate = null;
-    entitiesRegisteredForDeletion = null;
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.clearPendingOperations();
+    } else {
+      entitiesRegisteredForUpdate = null;
+      entitiesRegisteredForDeletion = null;
+    }
   }
 
   /**
@@ -102,7 +137,11 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void commit() {
-    cleanup();
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.commit();
+    } else {
+      cleanup();
+    }
   }
 
   /**
@@ -110,6 +149,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public Map<String, Object> getDirtyProperties(IEntity entity) {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getDirtyProperties(entity);
+    }
     return dirtRecorder.getChangedProperties(entity);
   }
 
@@ -118,6 +160,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public Set<IEntity> getEntitiesRegisteredForDeletion() {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getEntitiesRegisteredForDeletion();
+    }
     return entitiesRegisteredForDeletion;
   }
 
@@ -126,6 +171,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public List<IEntity> getEntitiesRegisteredForUpdate() {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getEntitiesRegisteredForUpdate();
+    }
     return entitiesRegisteredForUpdate;
   }
 
@@ -134,13 +182,13 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities() {
-    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities = 
-        new HashMap<>();
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getRegisteredEntities();
+    }
+    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities = new HashMap<>();
     for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
-      Class<? extends IEntity> entityContract = ((IEntity) entity)
-          .getComponentContract();
-      Map<Serializable, IEntity> contractBuffer = registeredEntities
-          .get(entityContract);
+      Class<? extends IEntity> entityContract = ((IEntity) entity).getComponentContract();
+      Map<Serializable, IEntity> contractBuffer = registeredEntities.get(entityContract);
       if (contractBuffer == null) {
         contractBuffer = new HashMap<>();
         registeredEntities.put(entityContract, contractBuffer);
@@ -155,6 +203,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public Set<IEntity> getUpdatedEntities() {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getUpdatedEntities();
+    }
     return updatedEntities;
   }
 
@@ -163,6 +214,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public boolean isActive() {
+    if (nestedUnitOfWork != null && nestedUnitOfWork.isActive()) {
+      return true;
+    }
     return dirtRecorder != null;
   }
 
@@ -171,8 +225,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return entitiesRegisteredForDeletion != null
-        && entitiesRegisteredForDeletion.contains(entity);
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.isEntityRegisteredForDeletion(entity);
+    }
+    return entitiesRegisteredForDeletion != null && entitiesRegisteredForDeletion.contains(entity);
   }
 
   /**
@@ -180,8 +236,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return entitiesRegisteredForUpdate != null
-        && entitiesRegisteredForUpdate.contains(entity);
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.isEntityRegisteredForUpdate(entity);
+    }
+    return entitiesRegisteredForUpdate != null && entitiesRegisteredForUpdate.contains(entity);
   }
 
   /**
@@ -189,6 +247,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public boolean isUpdated(IEntity entity) {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.isUpdated(entity);
+    }
     return updatedEntities != null && updatedEntities.contains(entity);
   }
 
@@ -196,10 +257,13 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public void register(IEntity entity,
-      Map<String, Object> initialChangedProperties) {
-    dirtRecorder.register(entity, initialChangedProperties);
-    entityRegistry.register(entity.getComponentContract(), entity.getId(), entity);
+  public void register(IEntity entity, Map<String, Object> initialChangedProperties) {
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.register(entity, initialChangedProperties);
+    } else {
+      dirtRecorder.register(entity, initialChangedProperties);
+      entityRegistry.register(entity.getComponentContract(), entity.getId(), entity);
+    }
   }
 
   /**
@@ -207,19 +271,23 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void registerForDeletion(IEntity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("Passed entity cannot be null");
-    }
-    if (entity.isPersistent()) {
-      if (entitiesRegisteredForDeletion == null) {
-        entitiesRegisteredForDeletion = new LinkedHashSet<>();
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.registerForDeletion(entity);
+    } else {
+      if (entity == null) {
+        throw new IllegalArgumentException("Passed entity cannot be null");
       }
-      entitiesRegisteredForDeletion.add(entity);
-    }
-    if (entitiesRegisteredForUpdate != null) {
-      //noinspection StatementWithEmptyBody
-      while (entitiesRegisteredForUpdate.remove(entity)) {
-        // NO-OP.
+      if (entity.isPersistent()) {
+        if (entitiesRegisteredForDeletion == null) {
+          entitiesRegisteredForDeletion = new LinkedHashSet<>();
+        }
+        entitiesRegisteredForDeletion.add(entity);
+      }
+      if (entitiesRegisteredForUpdate != null) {
+        //noinspection StatementWithEmptyBody
+        while (entitiesRegisteredForUpdate.remove(entity)) {
+          // NO-OP.
+        }
       }
     }
   }
@@ -229,13 +297,17 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void registerForUpdate(IEntity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("Passed entity cannot be null");
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.registerForUpdate(entity);
+    } else {
+      if (entity == null) {
+        throw new IllegalArgumentException("Passed entity cannot be null");
+      }
+      if (entitiesRegisteredForUpdate == null) {
+        entitiesRegisteredForUpdate = new ArrayList<>();
+      }
+      entitiesRegisteredForUpdate.add(entity);
     }
-    if (entitiesRegisteredForUpdate == null) {
-      entitiesRegisteredForUpdate = new ArrayList<>();
-    }
-    entitiesRegisteredForUpdate.add(entity);
   }
 
   /**
@@ -243,10 +315,17 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void rollback() {
-    cleanup();
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.rollback();
+    } else {
+      cleanup();
+    }
   }
 
   private void cleanup() {
+    if (parentUnitOfWork != null) {
+      parentUnitOfWork.nestedUnitOfWork = null;
+    }
     dirtRecorder = null;
     updatedEntities = null;
     entityRegistry.clear();
@@ -254,24 +333,22 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
 
   /**
    * UnsupportedOperationException.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
   public void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun) {
-    throw new UnsupportedOperationException(
-        "entity unit of work does not support cleanRelationshipsOnDeletion.");
+    throw new UnsupportedOperationException("entity unit of work does not support cleanRelationshipsOnDeletion.");
   }
 
   /**
    * UnsupportedOperationException.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
   public void reload(IEntity entity) {
-    throw new UnsupportedOperationException(
-        "entity unit of work does not support reload of an entity.");
+    throw new UnsupportedOperationException("entity unit of work does not support reload of an entity.");
   }
 
   /**
@@ -279,8 +356,12 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void clear() {
-    clearPendingOperations();
-    cleanup();
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.clear();
+    } else {
+      clearPendingOperations();
+      cleanup();
+    }
   }
 
   /**
@@ -288,6 +369,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public boolean isDirtyTrackingEnabled() {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.isDirtyTrackingEnabled();
+    }
     return dirtRecorder.isEnabled();
   }
 
@@ -296,6 +380,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void setDirtyTrackingEnabled(boolean enabled) {
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.setDirtyTrackingEnabled(enabled);
+    }
     dirtRecorder.setEnabled(enabled);
   }
 
@@ -303,8 +390,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
-  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
-      Serializable entityId) {
+  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract, Serializable entityId) {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getRegisteredEntity(entityContract, entityId);
+    }
     return entityRegistry.get(entityContract, entityId);
   }
 }
