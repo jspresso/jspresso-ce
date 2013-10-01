@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.model.component.basic;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -96,8 +98,19 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected int computeHashCode(IComponent proxy) {
+    Map<String, Object> properties = proxy.straightGetProperties();
     return new HashCodeBuilder(7, 13).append(proxy.getComponentContract())
-        .append(proxy.straightGetProperties()).toHashCode();
+        .append(filterScalarProperties(properties)).toHashCode();
+  }
+
+  private Map<String, Object> filterScalarProperties(Map<String, Object> properties) {
+    for(Iterator<Map.Entry<String, Object>> ite = properties.entrySet().iterator(); ite.hasNext(); ) {
+      Object val = ite.next().getValue();
+      if(val instanceof IComponent || val instanceof Collection) {
+        ite.remove();
+      }
+    }
+    return properties;
   }
 
   /**
