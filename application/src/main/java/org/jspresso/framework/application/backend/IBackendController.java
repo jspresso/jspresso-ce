@@ -57,17 +57,32 @@ public interface IBackendController extends IController,
 
   /**
    * Begins the current unit of work.
-   * 
+   *
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
    */
   void beginUnitOfWork();
 
   /**
+   * Begins A nested unit of work.
+   *
+   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#beginNested()
+   */
+  void beginNestedUnitOfWork();
+
+  /**
    * Joins the transaction, beginning unit of work if not already begun.
-   * 
+   *
    * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
    */
   void joinTransaction();
+
+  /**
+   * Joins the transaction, beginning unit of work if not already begun.
+   *
+   * @param nested indicates whether this TX should be a nested new transaction.
+   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
+   */
+  void joinTransaction(boolean nested);
 
   /**
    * Registers an entity (actually a clone of it) and all its graph as taking
