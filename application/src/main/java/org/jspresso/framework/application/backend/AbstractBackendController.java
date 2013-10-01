@@ -172,9 +172,19 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public void joinTransaction() {
+    joinTransaction(false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void joinTransaction(boolean nested) {
     TransactionSynchronizationManager.registerSynchronization(this);
     if (!isUnitOfWorkActive()) {
       beginUnitOfWork();
+    } else if (nested) {
+      beginNestedUnitOfWork();
     }
   }
 
@@ -195,6 +205,21 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected void doBeginUnitOfWork() {
     unitOfWork.begin();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public final void beginNestedUnitOfWork() {
+    doBeginNestedUnitOfWork();
+  }
+
+  /**
+   * Performs actual UOW begin.
+   */
+  protected void doBeginNestedUnitOfWork() {
+    unitOfWork.beginNested();
   }
 
   /**
@@ -273,7 +298,11 @@ public abstract class AbstractBackendController extends AbstractController
       throw new BackendException(
           "Cannot commit a unit of work that has not begun.");
     }
-    doCommitUnitOfWork();
+    if (unitOfWork.hasNested()) {
+      unitOfWork.commit();
+    } else {
+      doCommitUnitOfWork();
+    }
   }
 
   /**
@@ -846,7 +875,11 @@ public abstract class AbstractBackendController extends AbstractController
       throw new BackendException(
           "Cannot rollback a unit of work that has not begun.");
     }
-    doRollbackUnitOfWork();
+    if (unitOfWork.hasNested()) {
+      unitOfWork.rollback();
+    } else {
+      doRollbackUnitOfWork();
+    }
   }
 
   /**

@@ -51,6 +51,16 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   void begin();
 
   /**
+   * Begins a nested unit of work.
+   */
+  void beginNested();
+
+  /**
+   * Begins a nested unit of work.
+   */
+  boolean hasNested();
+
+  /**
    * Clears the dirty state of the entity in this unit of work.
    * 
    * @param flushedEntity
