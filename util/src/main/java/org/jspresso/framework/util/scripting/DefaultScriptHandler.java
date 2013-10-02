@@ -20,8 +20,8 @@ package org.jspresso.framework.util.scripting;
 
 import java.util.Map;
 
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 /**
  * This is the default implementation of the script handler interface. It relies
@@ -44,16 +44,15 @@ public class DefaultScriptHandler implements IScriptHandler {
    */
   @Override
   public Object evaluate(IScript scriptable, Map<String, Object> context) {
-    BSFManager enginesManager = new BSFManager();
+    ScriptEngineManager enginesManager = new ScriptEngineManager();
+    ScriptEngine engine = enginesManager.getEngineByName(scriptable.getLanguage());
     if (context != null) {
-      enginesManager.registerBean(IScript.CONTEXT, context);
-      enginesManager.registerBean(IScript.SCRIPTED_OBJECT,
-          scriptable.getScriptedObject());
+      engine.put(IScript.CONTEXT, context);
+      engine.put(IScript.SCRIPTED_OBJECT, scriptable.getScriptedObject());
     }
     try {
-      return enginesManager.eval(scriptable.getLanguage(), null, 0, 0,
-          scriptable.getScript());
-    } catch (BSFException ex) {
+      return engine.eval(scriptable.getScript());
+    } catch (javax.script.ScriptException ex) {
       throw new ScriptException(ex);
     }
   }
@@ -63,18 +62,7 @@ public class DefaultScriptHandler implements IScriptHandler {
    */
   @Override
   public void execute(IScript scriptable, Map<String, Object> context) {
-    BSFManager enginesManager = new BSFManager();
-    if (context != null) {
-      enginesManager.registerBean(IScript.CONTEXT, scriptable);
-      enginesManager.registerBean(IScript.SCRIPTED_OBJECT,
-          scriptable.getScriptedObject());
-    }
-    try {
-      enginesManager.exec(scriptable.getLanguage(), null, 0, 0,
-          scriptable.getScript());
-    } catch (BSFException ex) {
-      throw new ScriptException(ex);
-    }
+    evaluate(scriptable, context);
   }
 
 }

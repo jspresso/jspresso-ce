@@ -19,10 +19,6 @@
       <artifactId>jspresso-util</artifactId>
     </dependency>
     <dependency>
-      <groupId>bsf</groupId>
-      <artifactId>bsf</artifactId>
-    </dependency>
-    <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
     </dependency>

@@ -1,3 +1,7 @@
+3.8
+===
+- Removed dependency towards BSF 2.x and now use the JSR-223 (javax.script) that is included in Java6 and onwards.
+
 3.7
 ===
 - ICollectionPropertyProcessor now use a third parametrized type in order to define the collection elements type. All
