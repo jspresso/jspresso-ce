@@ -598,7 +598,7 @@ public class DefaultRemoteViewFactory extends
       boolean forbidden) {
     RLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
         propertyView.getPeer(), actionHandler, locale);
-    if (propertyDescriptor.isMandatory()
+    if (!propertyViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       if (propertyViewDescriptor.getLabelForeground() == null) {
         propertyLabel.setForeground(getFormLabelMandatoryPropertyColorHex());
@@ -1925,7 +1925,7 @@ public class DefaultRemoteViewFactory extends
         RLabel headerLabel = createPropertyLabel(columnViewDescriptor,
             column.getPeer(), actionHandler, locale);
         columnHeaders.add(headerLabel);
-        if (propertyDescriptor.isMandatory()
+        if (!columnViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
             && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
           if (columnViewDescriptor.getLabelForeground() == null) {
             headerLabel
