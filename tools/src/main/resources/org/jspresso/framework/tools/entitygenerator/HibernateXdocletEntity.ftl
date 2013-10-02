@@ -347,8 +347,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 	  <#else>
 	    <#local revSqlName=generateSQLName(reversePropertyName)/>
 	  </#if>
-	<#else>
-	  <#local revSqlName=propSqlName+"_"+compSqlName/>
+  <#elseif propSqlNameGenerated>
+    <#local revSqlName=propSqlName+"_"+compSqlName/>
+  <#else>
+    <#local revSqlName=propSqlName/>
+    <#local revSqlNameGenerated = false/>
 	</#if>
   /**
    * Gets the ${propertyName}.
@@ -486,8 +489,13 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       </#if>
     </#if>
     <#if hibernateCollectionType="list">
+
    * @hibernate.list-index
+      <#if propSqlNameGenerated>
    *           column = "${reduceSQLName(compSqlName+"_"+propSqlName,"_SEQ")}"
+      <#else>
+   *           column = "${reduceSQLName(propSqlName,"_SEQ")}"
+      </#if>
     </#if>
   </#if>
    * @return the ${propertyName}.
