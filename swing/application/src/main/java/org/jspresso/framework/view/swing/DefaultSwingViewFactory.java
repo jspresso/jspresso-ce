@@ -1002,7 +1002,7 @@ public class DefaultSwingViewFactory extends
       boolean forbidden) {
     JLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
         propertyView.getPeer(), actionHandler, locale);
-    if (propertyDescriptor.isMandatory()
+    if (!propertyViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       if (propertyViewDescriptor.getLabelForeground() == null) {
         propertyLabel
@@ -2485,7 +2485,7 @@ public class DefaultSwingViewFactory extends
     IPropertyDescriptor propertyDescriptor = rowDescriptor
         .getPropertyDescriptor(propertyName);
     String columnName = columnViewDescriptor.getI18nName(actionHandler, locale);
-    if (propertyDescriptor.isMandatory()
+    if (!columnViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       columnName = decorateMandatoryPropertyLabel(columnName);
     }
