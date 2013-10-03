@@ -2094,9 +2094,13 @@ public abstract class AbstractComponentInvocationHandler implements
    *     the locale
    */
   @SuppressWarnings("unchecked")
-  protected void setNlsPropertyValue(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue,
+  protected void setNlsPropertyValue(Object proxy, IStringPropertyDescriptor propertyDescriptor,
+                                     String translatedValue,
                                      IEntityFactory entityFactory, Locale locale) {
     if (locale != null) {
+      // manually trigger interceptors
+      propertyDescriptor.preprocessSetter(proxy, translatedValue);
+      String actualTranslatedValue = (String) propertyDescriptor.interceptSetter(proxy, translatedValue);
       String barePropertyName = propertyDescriptor.getName();
       if (barePropertyName.endsWith(IComponentDescriptor.NLS_SUFFIX)) {
         barePropertyName = barePropertyName.substring(0,
@@ -2149,7 +2153,7 @@ public abstract class AbstractComponentInvocationHandler implements
           translationContract);
       sessionTranslation.setLanguage(locale.getLanguage());
       sessionTranslation.setPropertyName(barePropertyName);
-      sessionTranslation.setTranslatedValue(translatedValue);
+      sessionTranslation.setTranslatedValue(actualTranslatedValue);
       try {
         translationsAccessor.addToValue(proxy, sessionTranslation);
       } catch (IllegalAccessException | NoSuchMethodException ex) {
@@ -2160,8 +2164,9 @@ public abstract class AbstractComponentInvocationHandler implements
         }
         throw new ComponentException(ex.getCause());
       }
-      storeProperty(nlsPropertyName, translatedValue);
-      firePropertyChange(proxy, nlsPropertyName, oldTranslation, translatedValue);
+      firePropertyChange(proxy, nlsPropertyName, oldTranslation, actualTranslatedValue);
+
+      propertyDescriptor.postprocessSetter(proxy, oldTranslation, actualTranslatedValue);
     }
   }
 
