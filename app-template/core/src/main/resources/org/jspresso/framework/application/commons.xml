@@ -411,7 +411,7 @@
             </property>
             <property name="serviceDelegateClassNames">
               <map>
-                <entry key="org.jspresso.framework.model.component.IPropertyTranslation">
+                <entry key="Translation">
                   <null/>
                 </entry>
               </map>
