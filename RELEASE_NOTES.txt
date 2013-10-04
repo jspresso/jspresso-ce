@@ -2,6 +2,10 @@
 ===
 - Removed dependency towards BSF 2.x and now use the JSR-223 (javax.script) that is included in Java6 and onwards.
 
+- USER is now an SQL protected keyword (it actually is in Oracle), so by default, the generated table name is now
+  appended with an underscore. If you have a USER table in MySQL for instanace, either rename it to USER_ or
+  force its sqlName to 'USER' to keep the legacy name.
+
 3.7
 ===
 - ICollectionPropertyProcessor now use a third parametrized type in order to define the collection elements type. All
