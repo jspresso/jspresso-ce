@@ -789,6 +789,15 @@ public abstract class AbstractBackendController extends AbstractController
   public void recordAsSynchronized(IEntity flushedEntity) {
     if (isUnitOfWorkActive()) {
       Map<String, Object> hasActuallyBeenFlushed = getDirtyProperties(flushedEntity, false);
+      if (hasActuallyBeenFlushed == null) {
+        LOG.error(
+            "*BAD UOW USAGE* You are flushing an entity ({})[{}] that you have not cloned before in the UOW.\n"
+                + "You should only work on entities copies you obtain using the "
+                + "backendController.cloneInUnitOfWork(...) method.", new Object[]{
+            flushedEntity, flushedEntity.getComponentContract().getSimpleName()});
+        throw new BackendException("An entity has been flushed to the persistent store without being first registered" +
+            " in the UOW : " + flushedEntity);
+      }
       unitOfWork.clearDirtyState(flushedEntity);
       if (!hasActuallyBeenFlushed.isEmpty() || isEntityRegisteredForDeletion(flushedEntity)) {
         unitOfWork.addUpdatedEntity(flushedEntity);
