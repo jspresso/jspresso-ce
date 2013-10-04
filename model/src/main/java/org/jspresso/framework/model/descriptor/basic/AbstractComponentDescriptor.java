@@ -1173,6 +1173,7 @@ public abstract class AbstractComponentDescriptor<E> extends
             BasicCollectionPropertyDescriptor<IComponent> translationsPropertyDescriptor =
                 getComponentTranslationsDescriptorTemplate()
                 .clone();
+            translationsPropertyDescriptor.setSqlName("T");
             BasicCollectionDescriptor<IComponent> translationsCollectionDescriptor =
                 (BasicCollectionDescriptor<IComponent>) ((BasicCollectionDescriptor<IComponent>)
                     translationsPropertyDescriptor
@@ -1202,11 +1203,8 @@ public abstract class AbstractComponentDescriptor<E> extends
     nlsDescriptor.setComputed(true);
     if (!isPurelyAbstract()) {
       nlsDescriptor.setSqlName(
-          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_" +
-              getComponentTranslationsDescriptorTemplate().getSqlName() +
-              " T WHERE T." +
-              getComponentTranslationsDescriptorTemplate().getSqlName() +
-              "_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
+          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_T T WHERE T." +
+              "T_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
               "T.PROPERTY_NAME = '" + barePropertyName + "')");
     }
     BasicStringPropertyDescriptor rawOrNlsDescriptor = (BasicStringPropertyDescriptor) rawDescriptor.clone();
