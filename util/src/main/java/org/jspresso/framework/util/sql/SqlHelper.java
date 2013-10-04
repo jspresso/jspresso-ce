@@ -62,7 +62,7 @@ public final class SqlHelper {
       @Override
       public List<String> run() {
         return Arrays.asList("BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA", "DAY", "MONTH",
-            "YEAR", "FROM", "TO");
+            "YEAR", "FROM", "TO", "USER");
       }
     };
   }
