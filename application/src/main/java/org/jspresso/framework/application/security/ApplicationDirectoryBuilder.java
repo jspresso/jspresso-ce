@@ -28,6 +28,7 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -197,9 +198,11 @@ public class ApplicationDirectoryBuilder {
       }
       viewPermIds.add(viewPermId);
     }
-    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>) {
-      process(((IComponentDescriptorProvider<?>) viewDescriptor
-          .getModelDescriptor()).getComponentDescriptor());
+    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      process(((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor()).getComponentDescriptor());
+    } else if (viewDescriptor.getModelDescriptor() instanceof ICollectionDescriptorProvider<?>) {
+      process(((ICollectionDescriptorProvider<?>) viewDescriptor
+          .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor());
     }
     if (viewDescriptor.getActionMap() != null) {
       process(viewDescriptor.getActionMap());
