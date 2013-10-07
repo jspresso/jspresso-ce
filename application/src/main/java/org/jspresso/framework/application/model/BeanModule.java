@@ -78,8 +78,10 @@ public class BeanModule extends Module implements PropertyChangeListener {
       return true;
     }
     BeanModule rhs = (BeanModule) obj;
-    EqualsBuilder equalsBuilder = new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject()).appendSuper
-        (true);
+    EqualsBuilder equalsBuilder = new EqualsBuilder().appendSuper(true);
+    if (moduleObject != null) {
+      equalsBuilder.append(moduleObject, rhs.moduleObject);
+    }
     return equalsBuilder.isEquals();
   }
 
