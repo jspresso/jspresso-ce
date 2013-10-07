@@ -78,9 +78,9 @@ public class BeanModule extends Module implements PropertyChangeListener {
       return true;
     }
     BeanModule rhs = (BeanModule) obj;
-    return new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject())
-        .append(getProjectedViewDescriptor(), rhs.getProjectedViewDescriptor())
-        .isEquals();
+    EqualsBuilder equalsBuilder = new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject()).appendSuper
+        (true);
+    return equalsBuilder.isEquals();
   }
 
   /**

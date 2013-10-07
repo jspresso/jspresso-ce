@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import org.jspresso.framework.action.IAction;
@@ -124,6 +125,32 @@ public class Module extends AbstractPropertyChangeCapable implements
     dirty = false;
   }
 
+  /**
+   * Equality based on projected object.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Module)) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    Module rhs = (Module) obj;
+    EqualsBuilder equalsBuilder = new EqualsBuilder();
+    if (name != null) {
+      equalsBuilder.append(name, rhs.name);
+    }
+    if (i18nName != null) {
+      equalsBuilder.append(i18nName, rhs.i18nName);
+    }
+    if (projectedViewDescriptor != null) {
+      equalsBuilder.append(projectedViewDescriptor, rhs.projectedViewDescriptor);
+    }
+    return equalsBuilder.isEquals();
+  }
   /**
    * Adds a child module.
    *
