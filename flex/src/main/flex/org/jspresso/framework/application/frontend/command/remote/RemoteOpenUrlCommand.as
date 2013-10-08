@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote {
 public class RemoteOpenUrlCommand extends RemoteCommand {
 
   private var _urlSpec:String;
+  private var _target:String;
 
   public function RemoteOpenUrlCommand() {
     //default constructor.
@@ -31,6 +32,14 @@ public class RemoteOpenUrlCommand extends RemoteCommand {
 
   public function get urlSpec():String {
     return _urlSpec;
+  }
+
+  public function get target():String {
+    return _target;
+  }
+
+  public function set target(value:String):void {
+    _target = value;
   }
 }
 }

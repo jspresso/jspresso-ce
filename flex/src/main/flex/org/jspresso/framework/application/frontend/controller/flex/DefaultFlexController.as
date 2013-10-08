@@ -430,7 +430,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       displayWorkspace(workspaceDisplayCommand.workspaceName, workspaceDisplayCommand.workspaceView);
     } else if (command is RemoteOpenUrlCommand) {
       var urlRequest:URLRequest = new URLRequest((command as RemoteOpenUrlCommand).urlSpec);
-      navigateToURL(urlRequest, "_blank");
+      navigateToURL(urlRequest, (command as RemoteOpenUrlCommand).target);
     } else if (command is RemoteUpdateStatusCommand) {
       var status:String = (command as RemoteUpdateStatusCommand).status;
       if (status != null && status.length > 0) {

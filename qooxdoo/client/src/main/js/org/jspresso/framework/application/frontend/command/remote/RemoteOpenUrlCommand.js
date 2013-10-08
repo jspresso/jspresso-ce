@@ -22,6 +22,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
       properties: {
         urlSpec: {
           check: "String"
+        },
+        target: {
+          check: "String"
         }
       }
     });

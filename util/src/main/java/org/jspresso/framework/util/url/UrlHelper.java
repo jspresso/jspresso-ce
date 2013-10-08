@@ -34,6 +34,14 @@ public final class UrlHelper {
   private static final String CLASSPATH_URL     = "classpath:";
   private static final String JAR_URL           = "jar:";
   private static final String JAR_URL_SEPARATOR = "!/";
+  /**
+   * The constant BLANK_TARGET is &quot;_blank&quot;.
+   */
+  public static final  String BLANK_TARGET      = "_blank";
+  /**
+   * The constant SELF_TARGET is &quot;_self&quot;.
+   */
+  public static final  String SELF_TARGET       = "_self";
 
   private UrlHelper() {
     // private constructor for helper class.
@@ -41,7 +49,7 @@ public final class UrlHelper {
 
   /**
    * Creates a URL object.
-   * 
+   *
    * @param urlSpec
    *          the string representation of the URL. In case of a classpath url
    *          the thread context classloader will be used.
@@ -53,7 +61,7 @@ public final class UrlHelper {
 
   /**
    * Creates a URL object.
-   * 
+   *
    * @param urlSpec
    *          the string representation of the URL.
    * @param cl
@@ -68,9 +76,7 @@ public final class UrlHelper {
     URL returnedURL;
     if (urlSpec.startsWith(JAR_URL) && urlSpec.indexOf(CLASSPATH_URL) > 0) {
       String entryPath = urlSpec.split(JAR_URL_SEPARATOR)[1];
-      URL jarFileUrl = createURL(
-          urlSpec.substring(JAR_URL.length(),
-              urlSpec.indexOf(JAR_URL_SEPARATOR)), cl);
+      URL jarFileUrl = createURL(urlSpec.substring(JAR_URL.length(), urlSpec.indexOf(JAR_URL_SEPARATOR)), cl);
       try {
         String spec = JAR_URL + jarFileUrl.toString() + JAR_URL_SEPARATOR
             + entryPath;

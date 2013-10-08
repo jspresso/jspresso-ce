@@ -208,9 +208,10 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayUrl(String urlSpec) {
+  public void displayUrl(String urlSpec, String target) {
     RemoteOpenUrlCommand openUrlCommand = new RemoteOpenUrlCommand();
     openUrlCommand.setUrlSpec(urlSpec);
+    openUrlCommand.setTarget(target);
     registerCommand(openUrlCommand);
   }
 

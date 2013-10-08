@@ -29,6 +29,7 @@ public class RemoteOpenUrlCommand extends RemoteCommand {
   private static final long serialVersionUID = -6590187375894054973L;
 
   private String            urlSpec;
+  private String            target;
 
   /**
    * Gets the urlSpec.
@@ -49,4 +50,21 @@ public class RemoteOpenUrlCommand extends RemoteCommand {
     this.urlSpec = urlSpec;
   }
 
+  /**
+   * Gets target.
+   *
+   * @return the target
+   */
+  public String getTarget() {
+    return target;
+  }
+
+  /**
+   * Sets target.
+   *
+   * @param target the target
+   */
+  public void setTarget(String target) {
+    this.target = target;
+  }
 }

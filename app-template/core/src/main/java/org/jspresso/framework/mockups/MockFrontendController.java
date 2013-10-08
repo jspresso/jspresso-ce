@@ -67,7 +67,7 @@ public class MockFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void displayUrl(String urlSpec) {
+  public void displayUrl(String urlSpec, String target) {
     // NO-OP
   }
 

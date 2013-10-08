@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.util.url.UrlHelper;
 
 /**
  * This action opens a browser (or a browser tab) targeted at a URL. The actual
@@ -40,13 +41,20 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 public class DisplayUrlAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private String baseUrl;
+  private String target;
+
+  /**
+   * Instantiates a new Display url action.
+   */
+  public DisplayUrlAction() {
+    target = UrlHelper.BLANK_TARGET;
+  }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     StringBuilder urlSpec = new StringBuilder();
     if (baseUrl != null) {
       urlSpec.append(baseUrl);
@@ -54,7 +62,7 @@ public class DisplayUrlAction<E, F, G> extends FrontendAction<E, F, G> {
     urlSpec.append((String) getActionParameter(context));
 
     if (urlSpec.length() > 0) {
-      getController(context).displayUrl(urlSpec.toString());
+      getController(context).displayUrl(urlSpec.toString(), target);
     }
     return true;
   }
@@ -68,5 +76,14 @@ public class DisplayUrlAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
+  }
+
+  /**
+   * Sets the target window.
+   *
+   * @param target the target
+   */
+  public void setTarget(String target) {
+    this.target = target;
   }
 }

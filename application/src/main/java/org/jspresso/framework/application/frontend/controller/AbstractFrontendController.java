@@ -76,6 +76,7 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
+import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -2294,5 +2295,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
       boolean reuseCurrent) {
     displayDialog(mainView, actions, title, sourceComponent, context,
         dimension, reuseCurrent, true);
+  }
+
+  @Override
+  public void displayUrl(String urlSpec) {
+    displayUrl(urlSpec, UrlHelper.BLANK_TARGET
+              );
   }
 }

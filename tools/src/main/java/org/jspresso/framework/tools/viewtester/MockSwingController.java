@@ -148,7 +148,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayUrl(String urlSpec) {
+  public void displayUrl(String urlSpec, String target) {
     try {
       BrowserControl.displayURL(urlSpec);
     } catch (IOException ex) {

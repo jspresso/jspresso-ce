@@ -371,7 +371,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
         c = /** @type org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand */
             command;
-        window.open(c.getUrlSpec(), "_blank");
+        window.open(c.getUrlSpec(), c.getTarget());
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand) {
         c = /** @type org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand */
