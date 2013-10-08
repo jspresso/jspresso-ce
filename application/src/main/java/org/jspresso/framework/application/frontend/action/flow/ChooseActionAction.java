@@ -112,7 +112,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction createActionProxy(IDisplayableAction delegate,
       ITranslationProvider translationProvider, Locale locale) {
     return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
-        .getClassLoader(), new Class[] {
+        .getClassLoader(), new Class<?>[] {
       IDisplayableAction.class
     }, new I18nActionInvocationHandler(delegate, translationProvider, locale));
   }
@@ -139,7 +139,8 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
         throws Throwable {
       if (method.getName().equals("getName")) {
         return delegate.getI18nName(translationProvider, locale);
-      } else if (method.getName().equals("getDescription")) {
+      }
+      if (method.getName().equals("getDescription")) {
         return delegate.getI18nDescription(translationProvider, locale);
       }
       return method.invoke(delegate, args);

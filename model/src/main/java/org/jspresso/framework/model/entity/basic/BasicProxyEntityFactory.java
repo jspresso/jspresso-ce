@@ -156,12 +156,12 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
       Class<?>[] implementedClasses;
       if (extraInterfaces != null) {
-        implementedClasses = new Class[extraInterfaces.length + 2];
+        implementedClasses = new Class<?>[extraInterfaces.length + 2];
         implementedClasses[0] = entityDescriptor.getComponentContract();
         implementedClasses[1] = ILifecycleCapable.class;
         System.arraycopy(extraInterfaces, 0, implementedClasses, 2, extraInterfaces.length);
       } else {
-        implementedClasses = new Class[2];
+        implementedClasses = new Class<?>[2];
         implementedClasses[0] = entityDescriptor.getComponentContract();
         implementedClasses[1] = ILifecycleCapable.class;
       }
@@ -343,12 +343,12 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
     }
     Class<?>[] implementedClasses;
     if (extraInterfaces != null) {
-      implementedClasses = new Class[extraInterfaces.length + 2];
+      implementedClasses = new Class<?>[extraInterfaces.length + 2];
       implementedClasses[0] = componentDescriptor.getComponentContract();
       implementedClasses[1] = ILifecycleCapable.class;
       System.arraycopy(extraInterfaces, 0, implementedClasses, 2, extraInterfaces.length);
     } else {
-      implementedClasses = new Class[2];
+      implementedClasses = new Class<?>[2];
       implementedClasses[0] = componentDescriptor.getComponentContract();
       implementedClasses[1] = ILifecycleCapable.class;
     }

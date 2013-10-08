@@ -95,7 +95,8 @@ public class DevelopmentLoginModule implements LoginModule {
         // NO-OP.
       }
       return false;
-    } else if (!commitSucceeded) {
+    }
+    if (!commitSucceeded) {
       // login succeeded but overall authentication failed
       succeeded = false;
       username = null;

@@ -626,6 +626,8 @@ public class HibernateBackendController extends AbstractBackendController {
   /**
    * Merge collection.
    *
+   * @param <E>
+   *     the actual entity type.
    * @param propertyName the property name
    * @param propertyValue the property value
    * @param registeredEntity the registered entity

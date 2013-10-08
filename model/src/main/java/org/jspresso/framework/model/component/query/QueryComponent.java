@@ -53,6 +53,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     IQueryComponent {
 
+  private static final long serialVersionUID = 1467135566962366855L;
+
   private final IComponentDescriptor<?> componentDescriptor;
   private final IComponentFactory       componentFactory;
   private       IComponentDescriptor<?> queryDescriptor;
@@ -76,19 +78,15 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * @param componentFactory
    *          the component factory.
    */
-  public QueryComponent(IComponentDescriptor<?> componentDescriptor,
-      IComponentFactory componentFactory) {
+  public QueryComponent(IComponentDescriptor<?> componentDescriptor, IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
     this.componentFactory = componentFactory;
-    this.queryDescriptor = componentFactory
-        .getComponentDescriptor(getQueryContract());
+    this.queryDescriptor = componentFactory.getComponentDescriptor(getQueryContract());
     if (queryDescriptor == null) {
       queryDescriptor = componentDescriptor;
     }
-    if (!ComparableQueryStructure.class.isAssignableFrom(queryDescriptor
-        .getComponentContract())) {
-      for (IPropertyDescriptor propertyDescriptor : getComponentDescriptor()
-          .getPropertyDescriptors()) {
+    if (!ComparableQueryStructure.class.isAssignableFrom(queryDescriptor.getComponentContract())) {
+      for (IPropertyDescriptor propertyDescriptor : getComponentDescriptor().getPropertyDescriptors()) {
         if (propertyDescriptor instanceof EnumQueryStructureDescriptor) {
           EnumQueryStructure enumQueryStructure = new EnumQueryStructure(
               (IEnumerationPropertyDescriptor) getQueryDescriptor().getPropertyDescriptor(
@@ -118,8 +116,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       this.translationProvider = aTranslationProvider;
       this.locale = aLocale;
       if (value instanceof EnumQueryStructure) {
-        ((EnumQueryStructure) value)
-            .setTranslationProvider(aTranslationProvider);
+        ((EnumQueryStructure) value).setTranslationProvider(aTranslationProvider);
         ((EnumQueryStructure) value).setLocale(aLocale);
       } else if (value instanceof ComparableQueryStructure) {
         ((ComparableQueryStructure) value)
@@ -754,6 +751,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     return value;
   }
 
+  /**
+   * Is restricting.
+   *
+   * @return the boolean
+   */
   @Override
   public boolean isRestricting() {
     if (isEmpty()) {

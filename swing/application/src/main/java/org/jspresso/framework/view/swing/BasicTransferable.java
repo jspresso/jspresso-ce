@@ -174,7 +174,8 @@ public class BasicTransferable implements Transferable, ClipboardOwner {
       throws UnsupportedFlavorException, IOException {
     if (isRicherFlavor(flavor)) {
       return getRicherData(flavor);
-    } else if (isHTMLFlavor(flavor)) {
+    }
+    if (isHTMLFlavor(flavor)) {
       String data = getHTMLData();
       if (data == null) {
         data = "";

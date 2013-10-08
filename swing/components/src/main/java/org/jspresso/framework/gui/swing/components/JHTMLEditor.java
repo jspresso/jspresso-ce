@@ -197,14 +197,14 @@ public class JHTMLEditor extends JPanel {
         "font-family-Monospaced"));
     fontActions
         .add(createDisplayableAction(editorActions, "font-family-Serif"));
-    JComboBox<Action> fontCb = new JComboBox(fontActions.toArray(new Action[fontActions.size()]));
+    JComboBox<Action> fontCb = new JComboBox<>(fontActions.toArray(new Action[fontActions.size()]));
     tb.add(fontCb);
     fontCb.addActionListener(new ActionListener() {
 
       @SuppressWarnings("unchecked")
       @Override
       public void actionPerformed(ActionEvent e) {
-        ((Action) ((JComboBox) e.getSource()).getSelectedItem())
+        ((Action) ((JComboBox<Action>) e.getSource()).getSelectedItem())
             .actionPerformed(e);
       }
     });
@@ -215,13 +215,13 @@ public class JHTMLEditor extends JPanel {
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-18"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-24"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-48"));
-    JComboBox<Action> fontSizeCb = new JComboBox(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
+    JComboBox<Action> fontSizeCb = new JComboBox<Action>(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
     fontSizeCb.addActionListener(new ActionListener() {
 
       @SuppressWarnings("unchecked")
       @Override
       public void actionPerformed(ActionEvent e) {
-        ((Action) ((JComboBox) e.getSource()).getSelectedItem())
+        ((Action) ((JComboBox<Action>) e.getSource()).getSelectedItem())
             .actionPerformed(e);
       }
     });

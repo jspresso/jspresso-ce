@@ -76,7 +76,8 @@ public class ControllerAwareEntityProxyInterceptor extends
       }
       if (dirtyProperties == null) {
         return null;
-      } else if (dirtyProperties.isEmpty()) {
+      }
+      if (dirtyProperties.isEmpty()) {
         return new int[0];
       }
       if (hasJustBeenSaved) {

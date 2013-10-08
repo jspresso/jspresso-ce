@@ -77,6 +77,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   }
 
   /**
+   * Handles value bounds.
    * {@inheritDoc}
    */
   @Override

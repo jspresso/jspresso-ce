@@ -1015,7 +1015,8 @@ public class DefaultRemoteViewFactory extends
             // content changes.
             valueForStateUrl += ("&cs=" + checksumEngine.getValue());
             return valueForStateUrl;
-          } else if (originalValue instanceof String) {
+          }
+          if (originalValue instanceof String) {
             return ResourceProviderServlet
                 .computeLocalResourceDownloadUrl((String) originalValue);
           }
@@ -1147,7 +1148,8 @@ public class DefaultRemoteViewFactory extends
         public Object getValueForState(RemoteValueState state, Object originalValue) {
           if (originalValue instanceof BigDecimal) {
             return ((BigDecimal) originalValue).doubleValue();
-          } else if (originalValue instanceof BigInteger) {
+          }
+          if (originalValue instanceof BigInteger) {
             return ((BigInteger) originalValue).longValue();
           }
           return originalValue;

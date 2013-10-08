@@ -43,7 +43,8 @@ public interface IQueryViewDescriptorFactory {
    */
   IViewDescriptor createQueryViewDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
-      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, Map<String, Object> actionContext);
+      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, @SuppressWarnings(
+      "UnusedParameters") Map<String, Object> actionContext);
 
   /**
    * Performs necessary adaptations to an existing view descriptor in order to

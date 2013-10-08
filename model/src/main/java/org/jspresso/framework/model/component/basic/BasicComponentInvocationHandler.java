@@ -98,19 +98,19 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected int computeHashCode(IComponent proxy) {
-    Map<String, Object> properties = proxy.straightGetProperties();
+    Map<String, Object> allProperties = proxy.straightGetProperties();
     return new HashCodeBuilder(7, 13).append(proxy.getComponentContract())
-        .append(filterScalarProperties(properties)).toHashCode();
+        .append(filterScalarProperties(allProperties)).toHashCode();
   }
 
-  private Map<String, Object> filterScalarProperties(Map<String, Object> properties) {
-    for(Iterator<Map.Entry<String, Object>> ite = properties.entrySet().iterator(); ite.hasNext(); ) {
+  private Map<String, Object> filterScalarProperties(Map<String, Object> allProperties) {
+    for (Iterator<Map.Entry<String, Object>> ite = allProperties.entrySet().iterator(); ite.hasNext();) {
       Object val = ite.next().getValue();
-      if(val instanceof IComponent || val instanceof Collection) {
+      if (val instanceof IComponent || val instanceof Collection) {
         ite.remove();
       }
     }
-    return properties;
+    return allProperties;
   }
 
   /**

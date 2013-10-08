@@ -80,21 +80,29 @@ public class SecurityContextBuilder implements ISecurityContextBuilder {
     snapshots.add(getSecurityContext());
     if (contextElement instanceof Workspace) {
       return append((Workspace) contextElement);
-    } else if (contextElement instanceof Module) {
+    }
+    if (contextElement instanceof Module) {
       return append((Module) contextElement);
-    } else if (contextElement instanceof ActionMap) {
+    }
+    if (contextElement instanceof ActionMap) {
       return append((ActionMap) contextElement);
-    } else if (contextElement instanceof ActionList) {
+    }
+    if (contextElement instanceof ActionList) {
       return append((ActionList) contextElement);
-    } else if (contextElement instanceof IAction) {
+    }
+    if (contextElement instanceof IAction) {
       return append((IAction) contextElement);
-    } else if (contextElement instanceof EAuthorization) {
+    }
+    if (contextElement instanceof EAuthorization) {
       return append((EAuthorization) contextElement);
-    } else if (contextElement instanceof ITreeLevelDescriptor) {
+    }
+    if (contextElement instanceof ITreeLevelDescriptor) {
       return append((ITreeLevelDescriptor) contextElement);
-    } else if (contextElement instanceof IViewDescriptor) {
+    }
+    if (contextElement instanceof IViewDescriptor) {
       return append((IViewDescriptor) contextElement);
-    } else if (contextElement instanceof IModelDescriptor) {
+    }
+    if (contextElement instanceof IModelDescriptor) {
       return append((IModelDescriptor) contextElement);
     }
     return this;

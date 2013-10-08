@@ -140,9 +140,6 @@ public class BasicStringPropertyDescriptor extends
     return false;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);

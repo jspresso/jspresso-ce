@@ -302,7 +302,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public IModelDescriptor getModelDescriptor() {
     if (modelDescriptor != null) {
       return modelDescriptor;
-    } else if (getModelConnector() != null) {
+    }
+    if (getModelConnector() != null) {
       return getModelConnector().getModelDescriptor();
     }
     return null;

@@ -96,7 +96,7 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
         if (componentDescriptor.isTranslatable()) {
           ICollectionPropertyDescriptor<?> collectionPropertyDescriptor = (ICollectionPropertyDescriptor<?>)
               componentDescriptor
-              .getPropertyDescriptor(BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
+              .getPropertyDescriptor(AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
           if (collectionPropertyDescriptor != null) {
             IComponentDescriptor<?> translationComponentDescriptor = collectionPropertyDescriptor
                 .getReferencedDescriptor().getElementDescriptor();

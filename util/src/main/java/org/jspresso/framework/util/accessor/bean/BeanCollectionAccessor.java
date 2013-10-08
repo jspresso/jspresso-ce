@@ -63,7 +63,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     if (adderMethod == null) {
       adderMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {
+          new Class<?>[] {
             getElementClass()
           });
     }
@@ -89,7 +89,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     if (removerMethod == null) {
       removerMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {
+          new Class<?>[] {
             getElementClass()
           });
     }

@@ -45,7 +45,7 @@ public class DefaultComponentExtensionFactory implements
       IComponentExtension<E> extension = (IComponentExtension<E>) ConstructorUtils
           .invokeConstructor(extensionClass, new Object[] {
             component
-          }, new Class[] {
+          }, new Class<?>[] {
             componentContract
           });
       return extension;

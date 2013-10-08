@@ -113,11 +113,14 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
   public int compareTo(ByteArray o) {
     if (o == null) {
       return 1;
-    } else if (o.bytes == null) {
+    }
+    if (o.bytes == null) {
       return 1;
-    } else if (bytes == null) {
+    }
+    if (bytes == null) {
       return -1;
-    } else if (bytes.length != o.bytes.length) {
+    }
+    if (bytes.length != o.bytes.length) {
       if (bytes.length > o.bytes.length) {
         return 1;
       }

@@ -43,7 +43,8 @@ public class DefaultComponentCollectionFactory implements
       Class<?> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
       return new LinkedHashSet<>();
-    } else if (List.class.isAssignableFrom(collectionInterface)) {
+    }
+    if (List.class.isAssignableFrom(collectionInterface)) {
       return new ArrayList<>();
     }
     throw new ComponentException("Collection type " + collectionInterface

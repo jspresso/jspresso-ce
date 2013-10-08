@@ -1797,20 +1797,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
           actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
           timeZone, actionHandler, locale);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
           actionHandler, locale);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return createDurationFormatter(
           (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
-    } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentFormatter(
           (IPercentPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       return createDecimalFormatter(
           (IDecimalPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return createIntegerFormatter(
           (IIntegerPropertyDescriptor) propertyDescriptor, locale);
     }
@@ -2318,16 +2323,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
       return createPasswordPropertyView(propertyViewDescriptor, actionHandler,
           locale);
-    } else if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
       return createSourceCodePropertyView(propertyViewDescriptor,
           actionHandler, locale);
-    } else if (propertyDescriptor instanceof IHtmlPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IHtmlPropertyDescriptor) {
       return createHtmlPropertyView(propertyViewDescriptor, actionHandler,
           locale);
-    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof ITextPropertyDescriptor) {
       return createTextPropertyView(propertyViewDescriptor, actionHandler,
           locale);
-    } else if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
       return createImagePropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
@@ -2829,19 +2838,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected Object getTemplateValue(IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return getDateTemplateValue((IDatePropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       return getTimeTemplateValue((ITimePropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return getDurationTemplateValue((IDurationPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       return getStringTemplateValue((IStringPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return getPercentTemplateValue((IPercentPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       return getDecimalTemplateValue((IDecimalPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+    }
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       return getTemplateValue(((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getPropertyDescriptor(
               ((IReferencePropertyDescriptor<?>) propertyDescriptor)

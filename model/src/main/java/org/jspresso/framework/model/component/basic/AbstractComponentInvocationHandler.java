@@ -38,6 +38,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.MethodUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
@@ -60,7 +63,6 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.MandatoryPropertyException;
 import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -77,8 +79,6 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This is the core implementation of all components in the application.
@@ -690,7 +690,8 @@ public abstract class AbstractComponentInvocationHandler implements
       return getCollectionProperty(
           proxy,
           (ICollectionPropertyDescriptor<? extends IComponent>) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return getReferenceProperty(proxy,
           (IReferencePropertyDescriptor<IComponent>) propertyDescriptor);
     }
@@ -770,13 +771,13 @@ public abstract class AbstractComponentInvocationHandler implements
         if (service instanceof AbstractComponentServiceDelegate<?>) {
           Method refinedMethod = service.getClass().getMethod(method.getName(),
             method.getParameterTypes());
-          if(refinedMethod != null) {
+          if (refinedMethod != null) {
             return ((AbstractComponentServiceDelegate<Object>) service)
                 .executeWith(proxy, refinedMethod, args);
           }
         }
         int signatureSize = method.getParameterTypes().length + 1;
-        Class<?>[] parameterTypes = new Class[signatureSize];
+        Class<?>[] parameterTypes = new Class<?>[signatureSize];
         Object[] parameters = new Object[signatureSize];
 
         parameterTypes[0] = componentDescriptor.getComponentContract();
@@ -1057,7 +1058,7 @@ public abstract class AbstractComponentInvocationHandler implements
           && isInitialized(currentPropertyValue)) {
         currentPropertyValue = Proxy.newProxyInstance(
             Thread.currentThread().getContextClassLoader(),
-            new Class[]{
+            new Class<?>[]{
                 ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                     .getReferencedDescriptor().getCollectionInterface()
             },
@@ -1282,7 +1283,7 @@ public abstract class AbstractComponentInvocationHandler implements
               throw new MandatoryPropertyException(propertyDescriptor, proxy);
             }
           }
-          if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?> && !((ICollectionPropertyDescriptor)
+          if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?> && !((ICollectionPropertyDescriptor<?>)
               propertyDescriptor).getReferencedDescriptor().isNullElementAllowed()) {
             Object newValue = straightGetProperty(proxy, propertyDescriptor.getName());
             if (isInitialized(newValue) && newValue instanceof Collection<?>) {
@@ -1606,7 +1607,7 @@ public abstract class AbstractComponentInvocationHandler implements
     for (ILifecycleInterceptor<?> lifecycleInterceptor : componentDescriptor
         .getLifecycleInterceptors()) {
       int signatureSize = lifecycleMethod.getParameterTypes().length + 1;
-      Class<?>[] parameterTypes = new Class[signatureSize];
+      Class<?>[] parameterTypes = new Class<?>[signatureSize];
       Object[] parameters = new Object[signatureSize];
 
       parameterTypes[0] = componentDescriptor.getComponentContract();
@@ -2061,7 +2062,7 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       String nlsPropertyName = barePropertyName + IComponentDescriptor.NLS_SUFFIX;
       Set<IPropertyTranslation> translations = (Set<IPropertyTranslation>) straightGetProperty(proxy,
-          BasicComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
+          AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName());
       if (translations != null && isInitialized(translations)) {
         String sessionLanguage = locale.getLanguage();
         if (sessionLanguage != null) {
@@ -2111,7 +2112,8 @@ public abstract class AbstractComponentInvocationHandler implements
       Set<IPropertyTranslation> translations;
       String translationsPropertyName = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
 
-      Class<IComponent> translationContract = ((ICollectionPropertyDescriptor) getComponentDescriptor()
+      Class<? extends IComponent> translationContract = ((ICollectionPropertyDescriptor<IComponent>)
+      getComponentDescriptor()
           .getPropertyDescriptor(translationsPropertyName)).getReferencedDescriptor().getElementDescriptor()
                                                            .getComponentContract();
       ICollectionAccessor translationsAccessor = getAccessorFactory().
@@ -2137,7 +2139,7 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
       // Cannot simply update the old session translation or Hibernate will not manage persistence correctly.
-      if(oldSessionTranslation != null) {
+      if (oldSessionTranslation != null) {
         try {
           translationsAccessor.removeFromValue(proxy, oldSessionTranslation);
         } catch (IllegalAccessException | NoSuchMethodException ex) {

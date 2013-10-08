@@ -69,7 +69,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
       return collectionConnector.getChildConnector(index);
-    } else if (parent instanceof ICollectionConnectorListProvider) {
+    }
+    if (parent instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) parent)
           .getCollectionConnectors().get(index);
     }
@@ -93,7 +94,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
         return 0;
       }
       return ((Collection<?>) collectionConnector.getConnectorValue()).size();
-    } else if (parent instanceof ICollectionConnectorListProvider) {
+    }
+    if (parent instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) parent)
           .getCollectionConnectors().size();
     }

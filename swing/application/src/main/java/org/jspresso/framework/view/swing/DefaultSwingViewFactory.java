@@ -1680,7 +1680,7 @@ public class DefaultSwingViewFactory extends
    */
   @SuppressWarnings("unchecked")
   protected JList<IValueConnector> createJList(IListViewDescriptor viewDescriptor) {
-    JList<IValueConnector> list = new JList();
+    JList<IValueConnector> list = new JList<>();
     list.setDragEnabled(true);
     return list;
   }
@@ -3454,7 +3454,8 @@ public class DefaultSwingViewFactory extends
       @SuppressWarnings("unused") Locale locale) {
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
       return new FormattedTableCellRenderer(new PasswordFormatter());
-    } else if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
+    }
+    if (propertyDescriptor instanceof IImageUrlPropertyDescriptor) {
       return createImageTableCellRenderer(propertyDescriptor);
     }
     return new FormattedTableCellRenderer(null);

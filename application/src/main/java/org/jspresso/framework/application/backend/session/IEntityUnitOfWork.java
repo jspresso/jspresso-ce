@@ -56,7 +56,8 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   void beginNested();
 
   /**
-   * Begins a nested unit of work.
+   * Does this UOW has a nested one.
+   * @return if the UOW has a nested one.
    */
   boolean hasNested();
 

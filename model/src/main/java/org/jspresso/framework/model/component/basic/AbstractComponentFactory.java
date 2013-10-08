@@ -125,6 +125,14 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     }
   }
 
+  /**
+   * Apply initialization mapping.
+   *
+   * @param component the component
+   * @param componentDescriptor the component descriptor
+   * @param masterComponent the master component
+   * @param initializationMapping the initialization mapping
+   */
   @SuppressWarnings("ConstantConditions")
   @Override
   public void applyInitializationMapping(Object component, IComponentDescriptor<?> componentDescriptor,

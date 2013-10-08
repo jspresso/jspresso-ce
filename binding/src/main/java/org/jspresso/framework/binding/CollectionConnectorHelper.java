@@ -94,7 +94,8 @@ public final class CollectionConnectorHelper {
       IValueConnector rootConnector) {
     if (rootConnector instanceof ICollectionConnector) {
       return (ICollectionConnector) rootConnector;
-    } else if (rootConnector instanceof ICompositeValueConnector) {
+    }
+    if (rootConnector instanceof ICompositeValueConnector) {
       for (String childName : ((ICompositeValueConnector) rootConnector)
           .getChildConnectorKeys()) {
         IValueConnector childCollectionConnector = extractMainCollectionConnector(((ICompositeValueConnector) rootConnector)

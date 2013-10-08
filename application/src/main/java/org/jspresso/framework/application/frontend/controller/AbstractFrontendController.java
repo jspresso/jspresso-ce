@@ -1823,7 +1823,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
           .getCause();
       if (cve.getSQL() != null && cve.getSQL().toUpperCase().contains("DELETE")) {
         return "error.fk.delete";
-      } else if (cve.getConstraintName() != null) {
+      }
+      if (cve.getConstraintName() != null) {
         if (cve.getConstraintName().toUpperCase().contains("FK")) {
           return "error.fk.update";
         }
@@ -1845,9 +1846,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected String computeUserFriendlyExceptionMessage(Throwable exception) {
     if (exception instanceof SecurityException) {
       return exception.getMessage();
-    } else if (exception instanceof BusinessException) {
+    }
+    if (exception instanceof BusinessException) {
       return ((BusinessException) exception).getI18nMessage(this, getLocale());
-    } else if (exception instanceof DataIntegrityViolationException) {
+    }
+    if (exception instanceof DataIntegrityViolationException) {
       String constraintTranslation = null;
       if (exception.getCause() instanceof ConstraintViolationException) {
         ConstraintViolationException cve = ((ConstraintViolationException) exception
@@ -1865,7 +1868,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
           new Object[] {
             constraintTranslation
           }, getLocale());
-    } else if (exception instanceof ConcurrencyFailureException) {
+    }
+    if (exception instanceof ConcurrencyFailureException) {
       return getTranslation("concurrency.error.description", getLocale());
     }
     return null;

@@ -120,7 +120,8 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
     Set<EnumValueQueryStructure> selectedEnumerationValues = getSelectedEnumerationValues();
     if (selectedEnumerationValues.isEmpty()) {
       return "";
-    } else if (selectedEnumerationValues.size() > 3) {
+    }
+    if (selectedEnumerationValues.size() > 3) {
       return "***";
     }
     String sep = ", ";

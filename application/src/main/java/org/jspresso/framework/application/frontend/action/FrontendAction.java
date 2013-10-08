@@ -104,7 +104,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
     final IDisplayableAction other = (IDisplayableAction) obj;
     if (getName() == null) {
       return false;
-    } else if (!getName().equals(other.getName())) {
+    }
+    if (!getName().equals(other.getName())) {
       return false;
     }
     return true;

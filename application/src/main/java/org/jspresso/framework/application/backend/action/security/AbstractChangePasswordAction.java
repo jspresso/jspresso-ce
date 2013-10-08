@@ -239,7 +239,8 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
     String he = getHashEncoding();
     if (BASE64_ENCODING.equalsIgnoreCase(he)) {
       return Base64.encodeBase64String(source);
-    } else if (BASE16_ENCODING.equalsIgnoreCase(he)
+    }
+    if (BASE16_ENCODING.equalsIgnoreCase(he)
         || HEX_ENCODING.equalsIgnoreCase(he)) {
       return Hex.encodeHexString(source);
     }

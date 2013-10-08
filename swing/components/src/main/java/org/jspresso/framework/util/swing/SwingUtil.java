@@ -185,7 +185,8 @@ public final class SwingUtil {
       Class<? extends JComponent> childComponentType) {
     if (childComponentType.isAssignableFrom(component.getClass())) {
       return component;
-    } else if (component instanceof Container) {
+    }
+    if (component instanceof Container) {
       Component[] children = ((Container) component).getComponents();
       for (Component child : children) {
         Component childResult = getFirstChildComponentOfType(child,
@@ -268,7 +269,8 @@ public final class SwingUtil {
   public static Component getWindowOrInternalFrame(Component component) {
     if ((component instanceof Window) || (component instanceof JInternalFrame)) {
       return component;
-    } else if (component != null) {
+    }
+    if (component != null) {
       return getWindowOrInternalFrame(component.getParent());
     }
     return null;

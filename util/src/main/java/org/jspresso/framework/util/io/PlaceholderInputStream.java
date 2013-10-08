@@ -122,10 +122,12 @@ public class PlaceholderInputStream extends FilterInputStream {
     // return super.read(b, off, len);
     if (b == null) {
       throw new NullPointerException();
-    } else if ((off < 0) || (off > b.length) || (len < 0)
+    }
+    if ((off < 0) || (off > b.length) || (len < 0)
         || ((off + len) > b.length) || ((off + len) < 0)) {
       throw new IndexOutOfBoundsException();
-    } else if (len == 0) {
+    }
+    if (len == 0) {
       return 0;
     }
 

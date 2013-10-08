@@ -42,9 +42,11 @@ public class WorkspaceIconProvider implements IconProvider {
         && ((BeanModule) userObject).getIcon() == null) {
       return delegateProvider.getIconForObject(((BeanModule) userObject)
           .getModuleObject());
-    } else if (userObject instanceof Module) {
+    }
+    if (userObject instanceof Module) {
       return ((Module) userObject).getIcon();
-    } else if (userObject instanceof Workspace) {
+    }
+    if (userObject instanceof Workspace) {
       return ((Workspace) userObject).getIcon();
     }
     return null;

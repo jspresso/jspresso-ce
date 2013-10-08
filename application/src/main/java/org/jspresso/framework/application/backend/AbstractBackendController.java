@@ -351,7 +351,8 @@ public abstract class AbstractBackendController extends AbstractController
       }
       executeAsynchronously(action, context);
       return true;
-    } else if (action.isTransactional()) {
+    }
+    if (action.isTransactional()) {
       return executeTransactionally(action, context);
     }
     return action.execute(this, context);
@@ -1326,7 +1327,7 @@ public abstract class AbstractBackendController extends AbstractController
                   }
                   snapshotCollection = clonedSnapshotCollection;
                 }
-                if(entity.isPersistent()) {
+                if (entity.isPersistent()) {
                   uowCollection = wrapDetachedCollection(entity, uowCollection,
                     snapshotCollection, propertyName);
                 }
@@ -1607,6 +1608,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Merge collection.
    *
+   * @param <E>
+   *     the actual entity type.
    * @param propertyName the property name
    * @param propertyValue the property value
    * @param registeredEntity the registered entity
@@ -2352,7 +2355,8 @@ public abstract class AbstractBackendController extends AbstractController
   private IEntity refineEntity(IComponent target) {
     if (target instanceof IEntity) {
       return (IEntity) target;
-    } else if (target != null) {
+    }
+    if (target != null) {
       return refineEntity(target.getOwningComponent());
     }
     return null;

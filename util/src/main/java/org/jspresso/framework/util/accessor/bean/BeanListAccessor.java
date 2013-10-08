@@ -60,7 +60,7 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
     if (adderAtMethod == null) {
       adderAtMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {
+          new Class<?>[] {
               Integer.TYPE, getElementClass()
           });
     }

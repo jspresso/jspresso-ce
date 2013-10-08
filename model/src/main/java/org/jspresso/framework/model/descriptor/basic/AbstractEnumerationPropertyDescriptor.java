@@ -160,6 +160,12 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
     return getEnumerationName() + "." + value;
   }
 
+  /**
+   * Pre-process setter.
+   *
+   * @param component the component
+   * @param newValue the new value
+   */
   @SuppressWarnings("SuspiciousMethodCalls")
   @Override
   public void preprocessSetter(final Object component, Object newValue) {
@@ -167,6 +173,8 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + newValue + ") is not allowed on ["
           + component + "]. Allowed values are: " + getEnumerationValues()) {
+
+        private static final long serialVersionUID = 1896266926060894852L;
 
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,

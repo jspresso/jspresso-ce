@@ -53,9 +53,11 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
       jsonObject.put("class", "qx.data.Array");
       jsonObject.put("array", fromJava(list.toArray()));
       return jsonObject;
-    } else if (obj instanceof BigDecimal) {
+    }
+    if (obj instanceof BigDecimal) {
       return super.fromJava(((BigDecimal) obj).doubleValue());
-    } else if (obj instanceof BigInteger) {
+    }
+    if (obj instanceof BigInteger) {
       return super.fromJava(((BigInteger) obj).longValue());
     }
     return super.fromJava(obj);

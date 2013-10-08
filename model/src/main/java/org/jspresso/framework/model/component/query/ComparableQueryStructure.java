@@ -46,9 +46,11 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public class ComparableQueryStructure extends QueryComponent {
 
-  private final IPropertyDescriptor  sourceDescriptor;
-  private       ITranslationProvider translationProvider;
-  private       Locale               locale;
+  private static final long serialVersionUID = 7831817429580706837L;
+
+  private final IPropertyDescriptor sourceDescriptor;
+  private ITranslationProvider translationProvider;
+  private Locale               locale;
 
   /**
    * Constructs a new {@code ComparableQueryStructure} instance.
