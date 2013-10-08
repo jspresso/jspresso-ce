@@ -124,6 +124,7 @@ public class BasicBinaryPropertyDescriptor extends
 
   /**
    * Handles max length and regular expression.
+   * <p>
    * {@inheritDoc}
    */
   @Override
