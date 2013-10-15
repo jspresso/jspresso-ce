@@ -49,6 +49,7 @@ import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JDateField;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.security.ISecurityHandler;
+import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.view.IView;
@@ -56,67 +57,64 @@ import org.jspresso.framework.view.IView;
 /**
  * This class is an adapter around a SwingView to be able to use it as a cell
  * editor.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
-    TableCellEditor, TreeCellEditor {
+public class SwingViewCellEditorAdapter extends AbstractCellEditor implements TableCellEditor, TreeCellEditor {
 
-  private static final Map<String, Object> NULLMAP          = Collections
-                                                                .unmodifiableMap(new HashMap<String, Object>());
+  private static final Map<String, Object> NULLMAP          = Collections.unmodifiableMap(
+      new HashMap<String, Object>());
   private static final long                serialVersionUID = 8182961519931949735L;
-  private final IView<JComponent>                editorView;
+  private final IView<JComponent> editorView;
 
   /**
    * Constructs a new {@code SwingViewCellEditorAdapter} instance.
    *
    * @param editorView
-   *          the swing view used as editor.
+   *     the swing view used as editor.
    * @param modelConnectorFactory
-   *          the model connector factory.
+   *     the model connector factory.
    * @param mvcBinder
-   *          the mvc binder.
+   *     the mvc binder.
    * @param securityHandler
-   *          the security handler.
+   *     the security handler.
    */
-  public SwingViewCellEditorAdapter(IView<JComponent> editorView,
-      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder,
-      ISecurityHandler securityHandler) {
+  public SwingViewCellEditorAdapter(IView<JComponent> editorView, IModelConnectorFactory modelConnectorFactory,
+                                    IMvcBinder mvcBinder, ISecurityHandler securityHandler) {
     this.editorView = editorView;
     if (editorView.getPeer() instanceof AbstractButton) {
-      ((AbstractButton) editorView.getPeer())
-          .setHorizontalAlignment(SwingConstants.CENTER);
+      ((AbstractButton) editorView.getPeer()).setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     if ((editorView.getPeer() instanceof AbstractButton)) {
-      editorView.getConnector().addValueChangeListener(
-          new IValueChangeListener() {
+      editorView.getConnector().addValueChangeListener(new IValueChangeListener() {
 
-            @Override
-            public void valueChange(ValueChangeEvent evt) {
-              stopCellEditing();
-            }
-          });
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          stopCellEditing();
+        }
+      });
     }
 
     // To prevent the editor from being read-only.
     IValueConnector modelConnector;
+    String modelConnectorId = editorView.getConnector()
+        // To prevent the model connector to believe it's on a nested property
+        .getId().replace(IAccessor.NESTED_DELIM, '_');
     if (editorView.getDescriptor().getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
-      modelConnector = modelConnectorFactory.createModelConnector(editorView
-          .getConnector().getId(),
-          ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
-              .getModelDescriptor()).getComponentDescriptor(), securityHandler);
+      modelConnector = modelConnectorFactory.createModelConnector(modelConnectorId,
+          ((IComponentDescriptorProvider<?>) editorView.getDescriptor().getModelDescriptor()).getComponentDescriptor(),
+          securityHandler);
     } else {
-      modelConnector = new BasicValueConnector(editorView.getConnector()
-          .getId());
+      modelConnector = new BasicValueConnector(modelConnectorId);
     }
     mvcBinder.bind(editorView.getConnector(), modelConnector);
   }
 
   /**
    * Returns the value of the swing view's connector.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -130,12 +128,11 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
 
   /**
    * Returns the JComponent peer of the swing view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  public Component getTableCellEditorComponent(JTable table, Object value,
-      boolean isSelected, int row, int column) {
+  public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
     IValueConnector editorConnector = editorView.getConnector();
     Object connectorValue;
     if (value instanceof IValueConnector) {
@@ -143,8 +140,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     } else {
       connectorValue = value;
     }
-    if (connectorValue == null
-        && editorConnector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+    if (connectorValue == null && editorConnector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
       // To prevent the editor to be read-only.
       connectorValue = NULLMAP;
     }
@@ -160,9 +156,8 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     if (!(editorComponent instanceof JTextArea || editorComponent instanceof JScrollPane)) {
       JPanel wrapperPanel = new JPanel();
       wrapperPanel.setLayout(new GridBagLayout());
-      wrapperPanel.add(editorComponent, new GridBagConstraints(0, 0, 1, 1, 1.0,
-          1.0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
-          new Insets(0, 0, 0, 0), 0, 0));
+      wrapperPanel.add(editorComponent, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTH,
+          GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
       editorComponent = wrapperPanel;
     }
     return editorComponent;
@@ -170,18 +165,18 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
 
   /**
    * Gets the component peer of the editor view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  public Component getTreeCellEditorComponent(JTree tree, Object value,
-      boolean isSelected, boolean expanded, boolean leaf, int row) {
+  public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded,
+                                              boolean leaf, int row) {
     return editorView.getPeer();
   }
 
   /**
    * Returns false if the event object is a single mouse click.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -197,7 +192,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
 
   /**
    * Gets the editorView.
-   * 
+   *
    * @return the editorView.
    */
   protected IView<JComponent> getEditorView() {
