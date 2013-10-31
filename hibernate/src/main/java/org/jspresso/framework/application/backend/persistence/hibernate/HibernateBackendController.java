@@ -669,11 +669,10 @@ public class HibernateBackendController extends AbstractBackendController {
       // Do not use get before trying to lock.
       // Get performs a DB query.
       try {
+        HibernateHelper.unsetProxyHibernateSession(entity, hibernateSession);
         if (isInitialized(entity)) {
           HibernateHelper.clearPersistentCollectionDirtyState(entity,
               hibernateSession);
-          resetUninitializedHibernateProxyProperties(entity, hibernateSession,
-              new HashSet<IComponent>());
         }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
@@ -682,33 +681,6 @@ public class HibernateBackendController extends AbstractBackendController {
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
             new HashSet<IEntity>());
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
-      }
-    }
-  }
-
-  private void resetUninitializedHibernateProxyProperties(
-      IComponent componentOrEntity, Session hibernateSession,
-      Set<IComponent> traversedComponents) {
-    if (traversedComponents.contains(componentOrEntity)) {
-      return;
-    }
-    traversedComponents.add(componentOrEntity);
-    // Whenever the entity has uninitialized properties, disassociate them with
-    // their current session if different from the parameter one.
-    for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
-        .straightGetProperties().entrySet()) {
-      Object propertyValue = registeredPropertyEntry.getValue();
-      if (propertyValue instanceof IEntity) {
-        if (isInitialized(propertyValue)) {
-          resetUninitializedHibernateProxyProperties(
-              (IComponent) propertyValue, hibernateSession, traversedComponents);
-        } else {
-          LazyInitializer li = ((HibernateProxy) propertyValue)
-              .getHibernateLazyInitializer();
-          if (li.getSession() != null && li.getSession() != hibernateSession) {
-            li.unsetSession();
-          }
-        }
       }
     }
   }

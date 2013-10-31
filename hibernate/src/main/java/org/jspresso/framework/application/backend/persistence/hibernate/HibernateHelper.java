@@ -35,6 +35,8 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.reflect.ReflectHelper;
+
+import org.hibernate.proxy.LazyInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -213,5 +215,22 @@ public final class HibernateHelper {
       }
     }
   }
+
+  /**
+   * Unset proxy hibernate session.
+   *
+   * @param entity the entity
+   * @param hibernateSession the hibernate session
+   */
+  public static  void unsetProxyHibernateSession(IEntity entity, Session hibernateSession) {
+    if (entity instanceof HibernateProxy) {
+      LazyInitializer li = ((HibernateProxy) entity)
+          .getHibernateLazyInitializer();
+      if (li.getSession() != null && li.getSession() != hibernateSession) {
+        li.unsetSession();
+      }
+    }
+  }
+
 
 }
