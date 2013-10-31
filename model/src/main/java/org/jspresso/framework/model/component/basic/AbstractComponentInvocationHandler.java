@@ -2221,7 +2221,7 @@ public abstract class AbstractComponentInvocationHandler implements
         boolean wasEnabled = enabled;
         try {
           enabled = false;
-          if (referencesInlinedComponent) {
+          if (source instanceof IEntity && referencesInlinedComponent) {
             // for dirtiness notification.
             // must check if the actual property change does not come from a
             // nested entity. In that case, the persistent state has not

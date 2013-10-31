@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -2341,10 +2342,19 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   private IEntity refineEntity(IComponent target) {
+    return refineEntity(target, new IdentityHashMap<IComponent, Object>());
+  }
+
+  private IEntity refineEntity(IComponent target, IdentityHashMap<IComponent, Object> traversed) {
+    if (traversed.containsKey(target)) {
+      return null;
+    }
+    traversed.put(target, null);
     if (target instanceof IEntity) {
       return (IEntity) target;
-    } else if (target != null) {
-      return refineEntity(target.getOwningComponent());
+    }
+    if (target != null) {
+      return refineEntity(target.getOwningComponent(), traversed);
     }
     return null;
   }
