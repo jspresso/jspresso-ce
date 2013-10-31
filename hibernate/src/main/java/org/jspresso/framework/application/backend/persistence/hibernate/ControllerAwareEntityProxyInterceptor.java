@@ -127,13 +127,12 @@ public class ControllerAwareEntityProxyInterceptor extends
           LazyInitializer li = proxy.getHibernateLazyInitializer();
           registeredEntity = (IEntity) li.getImplementation();
         }
-        HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity,
-            null);
-        return registeredEntity;
       }
     } catch (ClassNotFoundException ex) {
       LOG.error("Class for entity {} was not found", entityName, ex);
     }
+    HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity,
+        null);
     return registeredEntity;
   }
 
