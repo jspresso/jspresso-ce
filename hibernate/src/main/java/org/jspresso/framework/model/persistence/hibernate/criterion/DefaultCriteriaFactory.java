@@ -202,7 +202,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
           .getQueryDescriptor();
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
       if (componentDescriptor.isTranslatable()) {
-        rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath, translationsPath, JoinType.LEFT_OUTER_JOIN);
+        rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath,
+            componentDescriptor.getName() + "_" + translationsPath,
+            JoinType.LEFT_OUTER_JOIN);
       }
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
         IPropertyDescriptor propertyDescriptor = componentDescriptor
