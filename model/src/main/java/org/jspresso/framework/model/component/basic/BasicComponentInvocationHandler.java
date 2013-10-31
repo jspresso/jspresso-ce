@@ -75,22 +75,29 @@ public class BasicComponentInvocationHandler extends
     this.properties = createPropertyMap();
   }
 
+  private Object stackOverFlowEqualsWatchDog;
   /**
    * {@inheritDoc}
    */
   @Override
   protected boolean computeEquals(IComponent proxy, Object another) {
+    if (stackOverFlowEqualsWatchDog != null) {
+      return another == stackOverFlowEqualsWatchDog;
+    }
     if (!(another instanceof IComponent)) {
       return false;
     }
     if (proxy == another) {
       return true;
     }
-    return new EqualsBuilder()
-        .append(proxy.getComponentContract(),
-            ((IComponent) another).getComponentContract())
-        .append(proxy.straightGetProperties(),
-            ((IComponent) another).straightGetProperties()).isEquals();
+    stackOverFlowEqualsWatchDog = another;
+    try {
+      return new EqualsBuilder().append(proxy.getComponentContract(), ((IComponent) another).getComponentContract())
+                                .append(proxy.straightGetProperties(), ((IComponent) another).straightGetProperties())
+                                .isEquals();
+    } finally {
+      stackOverFlowEqualsWatchDog = null;
+    }
   }
 
   /**
@@ -99,12 +106,12 @@ public class BasicComponentInvocationHandler extends
   @Override
   protected int computeHashCode(IComponent proxy) {
     Map<String, Object> allProperties = proxy.straightGetProperties();
-    return new HashCodeBuilder(7, 13).append(proxy.getComponentContract())
-        .append(filterScalarProperties(allProperties)).toHashCode();
+    return new HashCodeBuilder(7, 13).append(proxy.getComponentContract()).append(filterScalarProperties(allProperties))
+                                     .toHashCode();
   }
 
   private Map<String, Object> filterScalarProperties(Map<String, Object> allProperties) {
-    for (Iterator<Map.Entry<String, Object>> ite = allProperties.entrySet().iterator(); ite.hasNext();) {
+    for (Iterator<Map.Entry<String, Object>> ite = allProperties.entrySet().iterator(); ite.hasNext(); ) {
       Object val = ite.next().getValue();
       if (val instanceof IComponent || val instanceof Collection) {
         ite.remove();
@@ -118,7 +125,7 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected IComponent decorateReferent(IComponent referent,
-      IComponentDescriptor<? extends IComponent> referentDescriptor) {
+                                        IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
   }
 
@@ -138,19 +145,25 @@ public class BasicComponentInvocationHandler extends
     properties.put(propertyName, propertyValue);
   }
 
+  private Object stackOverFlowToStringWatchDog;
   /**
    * {@inheritDoc}
    */
   @Override
   protected String toString(Object proxy) {
-    String toString;
-    IComponent owningComponent = ((IComponent) proxy).getOwningComponent();
-    if (owningComponent != null) {
-      toString = owningComponent.toString();
-    } else {
-      toString = super.toString(proxy);
+    try {
+      String toString;
+      IComponent owningComponent = ((IComponent) proxy).getOwningComponent();
+      if (owningComponent != null && stackOverFlowToStringWatchDog == null) {
+        stackOverFlowToStringWatchDog = owningComponent;
+        toString = owningComponent.toString();
+      } else {
+        toString = super.toString(proxy);
+      }
+      return toString;
+    } finally {
+      stackOverFlowToStringWatchDog = null;
     }
-    return toString;
   }
 
 
