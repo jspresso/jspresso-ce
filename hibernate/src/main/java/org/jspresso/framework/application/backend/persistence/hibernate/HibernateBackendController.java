@@ -813,13 +813,12 @@ public class HibernateBackendController extends AbstractBackendController {
         for (Map.Entry<String, Object> property : properties.entrySet()) {
           if (property.getValue() instanceof IComponent) {
             detachFromHibernateInDepth((IComponent) property.getValue(), hibernateSession, alreadyDetached);
-//          } else if (property.getValue() instanceof Collection && isInitialized(property.getValue())) {
-//            for (IComponent element : ((Collection<IComponent>) property
-//                .getValue())) {
-//              detachFromHibernateInDepth(element, hibernateSession,
-//                  alreadyDetached);
-//            }
-//          }
+          } else if (property.getValue() instanceof Collection && isInitialized(property.getValue())) {
+            for (IComponent element : ((Collection<IComponent>) property
+                .getValue())) {
+              detachFromHibernateInDepth(element, hibernateSession,
+                  alreadyDetached);
+            }
           }
         }
       }
