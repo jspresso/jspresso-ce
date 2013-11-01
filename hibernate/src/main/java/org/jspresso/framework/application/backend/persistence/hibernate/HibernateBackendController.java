@@ -61,6 +61,7 @@ import org.jspresso.framework.model.entity.CarbonEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.slf4j.Logger;
@@ -122,8 +123,10 @@ public class HibernateBackendController extends AbstractBackendController {
       boolean allowOuterScopeUpdate) {
     final List<E> uowEntities = super.cloneInUnitOfWork(entities,
         allowOuterScopeUpdate);
+    IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
     IEntityRegistry alreadyLocked = createEntityRegistry("lockInHibernateInDepth");
     for (IEntity uowEntity : uowEntities) {
+      detachFromHibernateInDepth(uowEntity, getHibernateSession(), alreadyDetached);
       lockInHibernateInDepth(uowEntity, getHibernateSession(), alreadyLocked);
     }
     return uowEntities;
@@ -669,17 +672,12 @@ public class HibernateBackendController extends AbstractBackendController {
       // Do not use get before trying to lock.
       // Get performs a DB query.
       try {
-        HibernateHelper.unsetProxyHibernateSession(entity, hibernateSession);
-        if (isInitialized(entity)) {
-          HibernateHelper.clearPersistentCollectionDirtyState(entity,
-              hibernateSession);
-        }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
         IComponent sessionEntity = (IComponent) hibernateSession.get(
             getComponentContract(entity), entity.getId());
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
-            new HashSet<IEntity>());
+            new BasicEntityRegistry("evictFromHibernateInDepth"));
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       }
     }
@@ -759,9 +757,16 @@ public class HibernateBackendController extends AbstractBackendController {
 
   @SuppressWarnings("unchecked")
   private void evictFromHibernateInDepth(IComponent component,
-      Session hibernateSession, Set<IEntity> alreadyEvicted) {
+      Session hibernateSession, IEntityRegistry alreadyEvicted) {
+    if (component == null) {
+      return;
+    }
     boolean isEntity = component instanceof IEntity;
-    if (!isEntity || alreadyEvicted.add((IEntity) component)) {
+    if (!isEntity || alreadyEvicted.get(getComponentContract((IEntity) component), ((IEntity) component).getId()) == null) {
+      if (isEntity) {
+        alreadyEvicted.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
+            (IEntity) component);
+      }
       if (!isEntity || ((IEntity) component).isPersistent()) {
         if (isEntity) {
           hibernateSession.evict(component);
@@ -786,20 +791,55 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
-  /**
-   * Finds an entity by ID.
-   * 
-   * @param <T>
-   *          the entity type to return
-   * @param id
-   *          the entity ID.
-   * @param mergeMode
-   *          the merge mode to use when merging back retrieved entities or null
-   *          if no merge is requested.
-   * @param clazz
-   *          the type of the entity.
-   * @return the found entity
-   */
+  @SuppressWarnings("unchecked")
+  private void detachFromHibernateInDepth(IComponent component, Session hibernateSession,
+                                          IEntityRegistry alreadyDetached) {
+    if (component == null) {
+      return;
+    }
+    boolean isEntity = component instanceof IEntity;
+    if (!isEntity || alreadyDetached.get(getComponentContract((IEntity) component), ((IEntity) component).getId())
+        == null) {
+      if (isEntity) {
+        alreadyDetached.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
+            (IEntity) component);
+        HibernateHelper.unsetProxyHibernateSession((IEntity) component, hibernateSession);
+        if (isInitialized(component)) {
+          HibernateHelper.clearPersistentCollectionDirtyState(component, hibernateSession);
+        }
+      }
+      if(isInitialized(component)) {
+        Map<String, Object> properties = component.straightGetProperties();
+        for (Map.Entry<String, Object> property : properties.entrySet()) {
+          if (property.getValue() instanceof IComponent) {
+            detachFromHibernateInDepth((IComponent) property.getValue(), hibernateSession, alreadyDetached);
+//          } else if (property.getValue() instanceof Collection && isInitialized(property.getValue())) {
+//            for (IComponent element : ((Collection<IComponent>) property
+//                .getValue())) {
+//              detachFromHibernateInDepth(element, hibernateSession,
+//                  alreadyDetached);
+//            }
+//          }
+          }
+        }
+      }
+    }
+  }
+
+    /**
+     * Finds an entity by ID.
+     *
+     * @param <T>
+     *          the entity type to return
+     * @param id
+     *          the entity ID.
+     * @param mergeMode
+     *          the merge mode to use when merging back retrieved entities or null
+     *          if no merge is requested.
+     * @param clazz
+     *          the type of the entity.
+     * @return the found entity
+     */
   @SuppressWarnings("unchecked")
   public <T extends IEntity> T findById(final Serializable id,
       final EMergeMode mergeMode, final Class<? extends T> clazz) {
