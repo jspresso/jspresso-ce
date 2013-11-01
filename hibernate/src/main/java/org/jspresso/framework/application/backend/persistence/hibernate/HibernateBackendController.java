@@ -826,23 +826,23 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
-    /**
-     * Finds an entity by ID.
-     *
-     * @param <T>
-     *          the entity type to return
-     * @param id
-     *          the entity ID.
-     * @param mergeMode
-     *          the merge mode to use when merging back retrieved entities or null
-     *          if no merge is requested.
-     * @param clazz
-     *          the type of the entity.
-     * @return the found entity
-     */
+  /**
+   * Finds an entity by ID.
+   *
+   * @param <T>
+   *          the entity type to return
+   * @param id
+   *          the entity ID.
+   * @param mergeMode
+   *          the merge mode to use when merging back retrieved entities or null
+   *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
+   * @return the found entity
+   */
   @SuppressWarnings("unchecked")
-  public <T extends IEntity> T findById(final Serializable id,
-      final EMergeMode mergeMode, final Class<? extends T> clazz) {
+  public <T extends IEntity> T findById(final Serializable id, final EMergeMode mergeMode,
+                                        final Class<? extends T> clazz) {
     T res;
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing.
