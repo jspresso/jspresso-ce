@@ -725,31 +725,30 @@ public class HibernateBackendController extends AbstractBackendController {
         Object propertyValue = property.getValue();
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyName);
-        if (isInitialized(propertyValue)) {
-          if (propertyValue instanceof IEntity) {
-            lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
-                alreadyLocked);
-          } else if (propertyValue instanceof Collection
-              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-            for (IComponent element : ((Collection<IComponent>) property
-                .getValue())) {
-              lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
+        if (propertyValue instanceof IEntity) {
+          lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
+              alreadyLocked);
+        } else if (propertyValue instanceof Collection
+            && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>
+            && isInitialized(propertyValue)) {
+          for (IComponent element : ((Collection<IComponent>) property
+              .getValue())) {
+            lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
+          }
+          if (propertyValue instanceof PersistentCollection) {
+            Collection<IComponent> snapshot = null;
+            Object storedSnapshot = ((PersistentCollection) propertyValue)
+                .getStoredSnapshot();
+            if (storedSnapshot instanceof Map<?, ?>) {
+              snapshot = ((Map<IComponent, IComponent>) storedSnapshot)
+                  .keySet();
+            } else if (storedSnapshot instanceof Collection<?>) {
+              snapshot = (Collection<IComponent>) storedSnapshot;
             }
-            if (propertyValue instanceof PersistentCollection) {
-              Collection<IComponent> snapshot = null;
-              Object storedSnapshot = ((PersistentCollection) propertyValue)
-                  .getStoredSnapshot();
-              if (storedSnapshot instanceof Map<?, ?>) {
-                snapshot = ((Map<IComponent, IComponent>) storedSnapshot)
-                    .keySet();
-              } else if (storedSnapshot instanceof Collection<?>) {
-                snapshot = (Collection<IComponent>) storedSnapshot;
-              }
-              if (snapshot != null) {
-                for (IComponent element : snapshot) {
-                  lockInHibernateInDepth(element, hibernateSession,
-                      alreadyLocked);
-                }
+            if (snapshot != null) {
+              for (IComponent element : snapshot) {
+                lockInHibernateInDepth(element, hibernateSession,
+                    alreadyLocked);
               }
             }
           }
