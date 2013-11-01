@@ -61,6 +61,7 @@ import org.jspresso.framework.model.entity.CarbonEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.slf4j.Logger;
@@ -124,8 +125,10 @@ public class HibernateBackendController extends AbstractBackendController {
       boolean allowOuterScopeUpdate) {
     final List<E> uowEntities = super.cloneInUnitOfWork(entities,
         allowOuterScopeUpdate);
+    IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
     IEntityRegistry alreadyLocked = createEntityRegistry("lockInHibernateInDepth");
     for (IEntity uowEntity : uowEntities) {
+      detachFromHibernateInDepth(uowEntity, getHibernateSession(), alreadyDetached);
       lockInHibernateInDepth(uowEntity, getHibernateSession(), alreadyLocked);
     }
     return uowEntities;
@@ -704,18 +707,12 @@ public class HibernateBackendController extends AbstractBackendController {
       // Do not use get before trying to lock.
       // Get performs a DB query.
       try {
-        if (isInitialized(entity)) {
-          HibernateHelper.clearPersistentCollectionDirtyState(entity,
-              hibernateSession);
-          resetUninitializedHibernateProxyProperties(entity, hibernateSession,
-              new HashSet<IComponent>());
-        }
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       } catch (Exception ex) {
         IComponent sessionEntity = (IComponent) hibernateSession.get(
             getComponentContract(entity), entity.getId());
         evictFromHibernateInDepth(sessionEntity, hibernateSession,
-            new HashSet<IEntity>());
+            new BasicEntityRegistry("evictFromHibernateInDepth"));
         hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
       }
     }
@@ -787,31 +784,30 @@ public class HibernateBackendController extends AbstractBackendController {
         Object propertyValue = property.getValue();
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyName);
-        if (isInitialized(propertyValue)) {
-          if (propertyValue instanceof IEntity) {
-            lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
-                alreadyLocked);
-          } else if (propertyValue instanceof Collection
-              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-            for (IComponent element : ((Collection<IComponent>) property
-                .getValue())) {
-              lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
+        if (propertyValue instanceof IEntity) {
+          lockInHibernateInDepth((IEntity) propertyValue, hibernateSession,
+              alreadyLocked);
+        } else if (propertyValue instanceof Collection
+            && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>
+            && isInitialized(propertyValue)) {
+          for (IComponent element : ((Collection<IComponent>) property
+              .getValue())) {
+            lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
+          }
+          if (propertyValue instanceof PersistentCollection) {
+            Collection<IComponent> snapshot = null;
+            Object storedSnapshot = ((PersistentCollection) propertyValue)
+                .getStoredSnapshot();
+            if (storedSnapshot instanceof Map<?, ?>) {
+              snapshot = ((Map<IComponent, IComponent>) storedSnapshot)
+                  .keySet();
+            } else if (storedSnapshot instanceof Collection<?>) {
+              snapshot = (Collection<IComponent>) storedSnapshot;
             }
-            if (propertyValue instanceof PersistentCollection) {
-              Collection<IComponent> snapshot = null;
-              Object storedSnapshot = ((PersistentCollection) propertyValue)
-                  .getStoredSnapshot();
-              if (storedSnapshot instanceof Map<?, ?>) {
-                snapshot = ((Map<IComponent, IComponent>) storedSnapshot)
-                    .keySet();
-              } else if (storedSnapshot instanceof Collection<?>) {
-                snapshot = (Collection<IComponent>) storedSnapshot;
-              }
-              if (snapshot != null) {
-                for (IComponent element : snapshot) {
-                  lockInHibernateInDepth(element, hibernateSession,
-                      alreadyLocked);
-                }
+            if (snapshot != null) {
+              for (IComponent element : snapshot) {
+                lockInHibernateInDepth(element, hibernateSession,
+                    alreadyLocked);
               }
             }
           }
@@ -821,9 +817,16 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   private void evictFromHibernateInDepth(IComponent component,
-      Session hibernateSession, Set<IEntity> alreadyEvicted) {
+      Session hibernateSession, IEntityRegistry alreadyEvicted) {
+    if (component == null) {
+      return;
+    }
     boolean isEntity = component instanceof IEntity;
-    if (!isEntity || alreadyEvicted.add((IEntity) component)) {
+    if (!isEntity || alreadyEvicted.get(getComponentContract((IEntity) component), ((IEntity) component).getId()) == null) {
+      if (isEntity) {
+        alreadyEvicted.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
+            (IEntity) component);
+      }
       if (!isEntity || ((IEntity) component).isPersistent()) {
         if (isEntity) {
           hibernateSession.evict(component);
@@ -848,9 +851,46 @@ public class HibernateBackendController extends AbstractBackendController {
     }
   }
 
+  @SuppressWarnings("unchecked")
+  private void detachFromHibernateInDepth(IComponent component, Session hibernateSession,
+                                          IEntityRegistry alreadyDetached) {
+    if (component == null) {
+      return;
+    }
+    boolean isEntity = component instanceof IEntity;
+    // Always detach from Hibernate session. We might have already traversed the entity but not its Hibernate proxy.
+    if (isEntity) {
+      HibernateHelper.unsetProxyHibernateSession((IEntity) component, hibernateSession);
+    }
+    if (!isEntity || alreadyDetached.get(getComponentContract((IEntity) component), ((IEntity) component).getId())
+        == null) {
+      if (isEntity) {
+        alreadyDetached.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
+            (IEntity) component);
+        if (isInitialized(component)) {
+          HibernateHelper.clearPersistentCollectionDirtyState(component, hibernateSession);
+        }
+      }
+      if(isInitialized(component)) {
+        Map<String, Object> properties = component.straightGetProperties();
+        for (Map.Entry<String, Object> property : properties.entrySet()) {
+          if (property.getValue() instanceof IComponent) {
+            detachFromHibernateInDepth((IComponent) property.getValue(), hibernateSession, alreadyDetached);
+          } else if (property.getValue() instanceof Collection && isInitialized(property.getValue())) {
+            for (IComponent element : ((Collection<IComponent>) property
+                .getValue())) {
+              detachFromHibernateInDepth(element, hibernateSession,
+                  alreadyDetached);
+            }
+          }
+        }
+      }
+    }
+  }
+
   /**
    * Finds an entity by ID.
-   * 
+   *
    * @param <T>
    *          the entity type to return
    * @param id
