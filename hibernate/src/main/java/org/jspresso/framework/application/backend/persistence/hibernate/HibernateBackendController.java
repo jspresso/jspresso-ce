@@ -798,12 +798,15 @@ public class HibernateBackendController extends AbstractBackendController {
       return;
     }
     boolean isEntity = component instanceof IEntity;
+    // Always detach from Hibernate session. We might have already traversed the entity but not its Hibernate proxy.
+    if (isEntity) {
+      HibernateHelper.unsetProxyHibernateSession((IEntity) component, hibernateSession);
+    }
     if (!isEntity || alreadyDetached.get(getComponentContract((IEntity) component), ((IEntity) component).getId())
         == null) {
       if (isEntity) {
         alreadyDetached.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
             (IEntity) component);
-        HibernateHelper.unsetProxyHibernateSession((IEntity) component, hibernateSession);
         if (isInitialized(component)) {
           HibernateHelper.clearPersistentCollectionDirtyState(component, hibernateSession);
         }
