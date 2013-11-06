@@ -183,21 +183,19 @@ public final class HibernateHelper {
    *          reset or null if none.
    */
   public static void unsetCollectionHibernateSession(Collection<?> collection, Session targetSession) {
+    // Whenever the entity has dirty persistent collection, make them
+    // clean to workaround a "bug" with hibernate since hibernate cannot
+    // re-attach a "dirty" detached collection.
     if (collection instanceof PersistentCollection) {
-      // Whenever the entity has dirty persistent collection, make them
-      // clean to workaround a "bug" with hibernate since hibernate cannot
-      // re-attach a "dirty" detached collection.
-      if (collection instanceof PersistentCollection) {
-        if (Hibernate.isInitialized(collection)) {
-          ((PersistentCollection) collection).clearDirty();
-        }
-        if (collection instanceof AbstractPersistentCollection
-            && targetSession != ((AbstractPersistentCollection) collection).getSession()) {
-          // The following is to avoid to avoid Hibernate exceptions due to
-          // re-associating a collection that is already associated with the
-          // session.
-          ((PersistentCollection) collection).unsetSession(((AbstractPersistentCollection) collection).getSession());
-        }
+      if (Hibernate.isInitialized(collection)) {
+        ((PersistentCollection) collection).clearDirty();
+      }
+      if (collection instanceof AbstractPersistentCollection
+          && targetSession != ((AbstractPersistentCollection) collection).getSession()) {
+        // The following is to avoid to avoid Hibernate exceptions due to
+        // re-associating a collection that is already associated with the
+        // session.
+        ((PersistentCollection) collection).unsetSession(((AbstractPersistentCollection) collection).getSession());
       }
     }
   }

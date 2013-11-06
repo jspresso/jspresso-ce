@@ -871,7 +871,8 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     if (!isEntity || alreadyDetached.get(getComponentContract((IEntity) component), ((IEntity) component).getId())
         == null) {
-      if (isEntity) {
+      // Do not store uninitialized components since we may traverse initialized ones.
+      if (isEntity && isInitialized(component)) {
         alreadyDetached.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
             (IEntity) component);
       }
