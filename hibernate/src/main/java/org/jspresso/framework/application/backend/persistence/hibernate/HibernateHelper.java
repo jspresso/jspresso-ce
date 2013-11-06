@@ -112,46 +112,6 @@ public final class HibernateHelper {
   }
 
   /**
-   * Whenever the entity has dirty persistent collection, make them clean to
-   * workaround a "bug" with hibernate since hibernate cannot re-attach a
-   * "dirty" detached collection.
-   * 
-   * @param componentOrEntity
-   *          the entity to clean the collections dirty state of.
-   * @param targetSession
-   *          the session that is targeted to after the dirty states have been
-   *          reset or null if none.
-   */
-  public static void clearPersistentCollectionDirtyState(
-      IComponent componentOrEntity, Session targetSession) {
-    if (componentOrEntity != null) {
-      // Whenever the entity has dirty persistent collection, make them
-      // clean to workaround a "bug" with hibernate since hibernate cannot
-      // re-attach a "dirty" detached collection.
-      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
-          .straightGetProperties().entrySet()) {
-        if (registeredPropertyEntry.getValue() instanceof PersistentCollection) {
-          PersistentCollection persistentCollection = (PersistentCollection) registeredPropertyEntry
-              .getValue();
-          if (Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
-            (persistentCollection).clearDirty();
-          }
-          if (persistentCollection instanceof AbstractPersistentCollection
-              && targetSession != ((AbstractPersistentCollection) persistentCollection)
-                  .getSession()) {
-            // The following is to avoid to avoid Hibernate exceptions due to
-            // re-associating a collection that is already associated with the
-            // session.
-            persistentCollection
-                .unsetSession(((AbstractPersistentCollection) persistentCollection)
-                    .getSession());
-          }
-        }
-      }
-    }
-  }
-
-  /**
    * Computes the Hibernate role name of a persistent collection.
    * 
    * @param entityContract
@@ -212,6 +172,35 @@ public final class HibernateHelper {
         }
       } catch (Exception ex) {
         LOG.error("Failed to replace internal Hibernate set implementation");
+      }
+    }
+  }
+
+  /**
+   * Whenever the entity has dirty persistent collection, make them clean to
+   * workaround a "bug" with hibernate since hibernate cannot re-attach a
+   * "dirty" detached collection.
+   *
+   * @param collection    the collection
+   * @param targetSession the session that is targeted to after the dirty states have been
+   *          reset or null if none.
+   */
+  public static void unsetCollectionHibernateSession(Collection<?> collection, Session targetSession) {
+    if (collection instanceof PersistentCollection) {
+      // Whenever the entity has dirty persistent collection, make them
+      // clean to workaround a "bug" with hibernate since hibernate cannot
+      // re-attach a "dirty" detached collection.
+      if (collection instanceof PersistentCollection) {
+        if (Hibernate.isInitialized(collection)) {
+          ((PersistentCollection) collection).clearDirty();
+        }
+        if (collection instanceof AbstractPersistentCollection
+            && targetSession != ((AbstractPersistentCollection) collection).getSession()) {
+          // The following is to avoid to avoid Hibernate exceptions due to
+          // re-associating a collection that is already associated with the
+          // session.
+          ((PersistentCollection) collection).unsetSession(((AbstractPersistentCollection) collection).getSession());
+        }
       }
     }
   }

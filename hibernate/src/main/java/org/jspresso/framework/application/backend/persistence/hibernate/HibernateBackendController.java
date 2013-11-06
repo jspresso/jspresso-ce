@@ -49,6 +49,13 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.BackendException;
 import org.jspresso.framework.application.backend.session.EMergeMode;
@@ -64,12 +71,6 @@ import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 /**
  * This is the default Jspresso implementation of Hibernate-based backend
@@ -790,7 +791,7 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  private void detachFromHibernateInDepth(IComponent component, Session hibernateSession,
+  void detachFromHibernateInDepth(IComponent component, Session hibernateSession,
                                           IEntityRegistry alreadyDetached) {
     if (component == null) {
       return;
@@ -805,20 +806,20 @@ public class HibernateBackendController extends AbstractBackendController {
       if (isEntity) {
         alreadyDetached.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
             (IEntity) component);
-        if (isInitialized(component)) {
-          HibernateHelper.clearPersistentCollectionDirtyState(component, hibernateSession);
-        }
       }
-      if(isInitialized(component)) {
+      if (isInitialized(component)) {
         Map<String, Object> properties = component.straightGetProperties();
         for (Map.Entry<String, Object> property : properties.entrySet()) {
           if (property.getValue() instanceof IComponent) {
             detachFromHibernateInDepth((IComponent) property.getValue(), hibernateSession, alreadyDetached);
-          } else if (property.getValue() instanceof Collection && isInitialized(property.getValue())) {
-            for (IComponent element : ((Collection<IComponent>) property
-                .getValue())) {
-              detachFromHibernateInDepth(element, hibernateSession,
-                  alreadyDetached);
+          } else if (property.getValue() instanceof Collection) {
+            HibernateHelper.unsetCollectionHibernateSession((Collection<?>) property.getValue(), hibernateSession);
+            if (isInitialized(property.getValue())) {
+              for (IComponent element : ((Collection<IComponent>) property
+                  .getValue())) {
+                detachFromHibernateInDepth(element, hibernateSession,
+                    alreadyDetached);
+              }
             }
           }
         }
