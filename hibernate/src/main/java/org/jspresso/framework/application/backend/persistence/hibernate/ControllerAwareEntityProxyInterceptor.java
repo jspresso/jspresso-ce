@@ -36,6 +36,7 @@ import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
+import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.slf4j.Logger;
@@ -129,8 +130,9 @@ public class ControllerAwareEntityProxyInterceptor extends
     } catch (ClassNotFoundException ex) {
       LOG.error("Class for entity {} was not found", entityName, ex);
     }
-    HibernateHelper.clearPersistentCollectionDirtyState(registeredEntity,
-        null);
+    ((HibernateBackendController) getBackendController()).detachFromHibernateInDepth(registeredEntity,
+        ((HibernateBackendController) getBackendController()).getHibernateSession(),
+        new HibernateEntityRegistry("detachFromHibernateInDepth"));
     return registeredEntity;
   }
 
