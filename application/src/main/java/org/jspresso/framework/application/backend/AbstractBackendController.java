@@ -1285,7 +1285,9 @@ public abstract class AbstractBackendController extends AbstractController
                   cloneUninitializedProperty(uowEntity, propertyValue));
             }
           } else if (propertyValue instanceof Collection<?>
-              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+              // to support collections stored as java serializable blob.
+              // and detachedEntities (see bug # 1130)
+              && (propertyDescriptor == null || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
             if (isInitialized(propertyValue)) {
               Collection<IComponent> uowCollection = createTransientEntityCollection((Collection<IComponent>) property
                   .getValue());
@@ -1305,7 +1307,7 @@ public abstract class AbstractBackendController extends AbstractController
                   uowCollection.add(null);
                 }
               }
-              if (!propertyDescriptor.isComputed()) {
+              if (propertyDescriptor == null || !propertyDescriptor.isComputed()) {
                 Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
                     .get(propertyName);
                 if (snapshotCollection != null) {
@@ -1529,7 +1531,8 @@ public abstract class AbstractBackendController extends AbstractController
             }
           } else if (propertyValue instanceof Collection
               // to support collections stored as java serializable blob.
-              && propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+              // and detachedEntities (see bug # 1130)
+              && (propertyDescriptor == null || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
             Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                 .get(propertyName);
             if (!newlyRegistered
