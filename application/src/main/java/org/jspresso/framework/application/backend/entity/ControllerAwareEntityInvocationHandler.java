@@ -190,21 +190,37 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
+  protected void onPersist(IEntityFactory entityFactory,
+                          UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    flushDetachedEntities(entityLifecycleHandler);
+    super.onPersist(entityFactory, principal, entityLifecycleHandler);
+  }
+
+  /**
+   * Registers detached entities for update.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
   protected void onUpdate(IEntityFactory entityFactory,
-      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+                          UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    flushDetachedEntities(entityLifecycleHandler);
+    super.onUpdate(entityFactory, principal, entityLifecycleHandler);
+  }
+
+  private void flushDetachedEntities(IEntityLifecycleHandler entityLifecycleHandler) {
     if (detachedEntities != null) {
       for (IEntity detachedEntity : detachedEntities) {
         if (detachedEntity.isPersistent()
             && !entityLifecycleHandler
-                .isEntityRegisteredForDeletion(detachedEntity)
+            .isEntityRegisteredForDeletion(detachedEntity)
             && !entityLifecycleHandler
-                .isEntityRegisteredForUpdate(detachedEntity)) {
+            .isEntityRegisteredForUpdate(detachedEntity)) {
           entityLifecycleHandler.registerForUpdate(detachedEntity);
         }
       }
     }
     detachedEntities = null;
-    super.onUpdate(entityFactory, principal, entityLifecycleHandler);
   }
 
   /**

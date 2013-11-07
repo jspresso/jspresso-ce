@@ -816,6 +816,22 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
+   * An empty hook that gets called whenever an entity is to be persisted.
+   *
+   * @param entityFactory
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
+   * @param principal
+   *     the principal triggering the action.
+   * @param entityLifecycleHandler
+   *     entityLifecycleHandler.
+   */
+  protected void onPersist(IEntityFactory entityFactory,
+                          UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    // defaults to no-op.
+  }
+
+  /**
    * An empty hook that gets called whenever an entity is to be updated.
    *
    * @param entityFactory
@@ -1600,7 +1616,10 @@ public abstract class AbstractComponentInvocationHandler implements
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object... args) {
     String methodName = lifecycleMethod.getName()/* .intern() */;
-    if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
+    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
+      onPersist((IEntityFactory) args[0], (UserPrincipal) args[1],
+          (IEntityLifecycleHandler) args[2]);
+    } else if(ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
       onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
           (IEntityLifecycleHandler) args[2]);
     }
