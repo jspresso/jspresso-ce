@@ -69,54 +69,49 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void sortCollectionProperty(IComponent component, String propertyName) {
     ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) getComponentDescriptor(
         component.getComponentContract()).getPropertyDescriptor(propertyName);
-    Map<String, ESort> orderingProperties = propertyDescriptor
-        .getOrderingProperties();
-    if (orderingProperties != null && !orderingProperties.isEmpty()) {
-      Collection<Object> propertyValue = (Collection<Object>) component
-          .straightGetProperty(propertyName);
-      boolean wasClean = false;
-      if (propertyValue instanceof PersistentCollection
-          && !((PersistentCollection) propertyValue).isDirty()) {
-        wasClean = true;
-      }
-      if (propertyValue != null
-          && !propertyValue.isEmpty()
-          && !List.class.isAssignableFrom(propertyDescriptor
-              .getCollectionDescriptor().getCollectionInterface())) {
-        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
-        List<ESort> orderingDirections = new ArrayList<ESort>();
-        Class<?> collectionElementContract = propertyDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getComponentContract();
-        for (Map.Entry<String, ESort> orderingProperty : orderingProperties
-            .entrySet()) {
-          orderingAccessors.add(accessorFactory.createPropertyAccessor(
-              orderingProperty.getKey(), collectionElementContract));
-          orderingDirections.add(orderingProperty.getValue());
+    if(propertyDescriptor != null) {
+      Map<String, ESort> orderingProperties = propertyDescriptor.getOrderingProperties();
+      if (orderingProperties != null && !orderingProperties.isEmpty()) {
+        Collection<Object> propertyValue = (Collection<Object>) component.straightGetProperty(propertyName);
+        boolean wasClean = false;
+        if (propertyValue instanceof PersistentCollection && !((PersistentCollection) propertyValue).isDirty()) {
+          wasClean = true;
         }
+        if (propertyValue != null && !propertyValue.isEmpty() && !List.class.isAssignableFrom(
+            propertyDescriptor.getCollectionDescriptor().getCollectionInterface())) {
+          List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+          List<ESort> orderingDirections = new ArrayList<ESort>();
+          Class<?> collectionElementContract = propertyDescriptor.getCollectionDescriptor().getElementDescriptor()
+                                                                 .getComponentContract();
+          for (Map.Entry<String, ESort> orderingProperty : orderingProperties.entrySet()) {
+            orderingAccessors.add(accessorFactory.createPropertyAccessor(orderingProperty.getKey(),
+                collectionElementContract));
+            orderingDirections.add(orderingProperty.getValue());
+          }
 
-        List<Object> collectionOrigin = new ArrayList<Object>(propertyValue);
-        List<ComparableProperties> listToSort = new ArrayList<ComparableProperties>();
-        for (Object sourceObject : propertyValue) {
-          listToSort.add(new ComparableProperties(sourceObject,
-              orderingAccessors));
-        }
-        Collections.sort(listToSort, new ComparablePropertiesComparator(
-            orderingDirections));
-        List<Object> collectionCopy = new ArrayList<Object>();
-        for (ComparableProperties comparableProperties : listToSort) {
-          collectionCopy.add(comparableProperties.getSourceObject());
-        }
-        if (!collectionCopy.equals(collectionOrigin)) {
-          Collection<Object> collectionProperty = propertyValue;
-          collectionProperty.clear();
-          collectionProperty.addAll(collectionCopy);
-          if (wasClean) {
-            ((PersistentCollection) collectionProperty).clearDirty();
+          List<Object> collectionOrigin = new ArrayList<Object>(propertyValue);
+          List<ComparableProperties> listToSort = new ArrayList<ComparableProperties>();
+          for (Object sourceObject : propertyValue) {
+            listToSort.add(new ComparableProperties(sourceObject,
+                orderingAccessors));
+          }
+          Collections.sort(listToSort, new ComparablePropertiesComparator(
+              orderingDirections));
+          List<Object> collectionCopy = new ArrayList<Object>();
+          for (ComparableProperties comparableProperties : listToSort) {
+            collectionCopy.add(comparableProperties.getSourceObject());
+          }
+          if (!collectionCopy.equals(collectionOrigin)) {
+            propertyValue.clear();
+            propertyValue.addAll(collectionCopy);
+            if (wasClean) {
+              ((PersistentCollection) propertyValue).clearDirty();
+            }
           }
         }
       }
