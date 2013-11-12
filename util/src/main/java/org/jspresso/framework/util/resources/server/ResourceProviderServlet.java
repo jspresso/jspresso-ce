@@ -29,6 +29,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -374,7 +377,15 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           inputStream = new BufferedInputStream(
               ((IResource) resource).getContent());
         } else if (resource instanceof IActiveResource) {
-          writeActiveResource((IActiveResource) resource, response);
+          OutputStream outputStream = response.getOutputStream();
+          try {
+            writeActiveResource((IActiveResource) resource, outputStream);
+          } catch (RuntimeException ex) {
+            try (PrintStream ps = new PrintStream(outputStream)) {
+              ex.printStackTrace(new PrintWriter(ps, true));
+            }
+            throw ex;
+          }
         }
       } else if (localUrlSpec != null) {
         if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
@@ -439,14 +450,14 @@ public abstract class ResourceProviderServlet extends HttpServlet {
         inputStream.close();
         outputStream.close();
       }
-    } catch (ServletException | IOException sex) {
+    } catch (ServletException | IOException ex) {
       LOG.error(
           "An exception occurred when dealing with the following request : [{}]",
-          request.getRequestURL(), sex);
+          request.getRequestURL(), ex);
       try {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      } catch (IOException ex) {
-        throw new NestedRuntimeException(ex,
+      } catch (IOException ioe) {
+        throw new NestedRuntimeException(ioe,
             "An exception occurred while sending back a "
                 + HttpServletResponse.SC_NOT_FOUND + "error.");
       }
@@ -460,17 +471,14 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * 
    * @param resource
    *          the resource to write.
-   * @param response
-   *          the servlet response.
+   * @param outputStream
+   *          the servlet outputStream.
    * @throws IOException
    *           whenever an IO exception occurs.
    */
   protected void writeActiveResource(IActiveResource resource,
-      HttpServletResponse response) throws IOException {
-    OutputStream outputStream = response.getOutputStream();
+                                     OutputStream outputStream) throws IOException {
     resource.writeToContent(outputStream);
-    outputStream.flush();
-    outputStream.close();
   }
 
   private void completeFileName(HttpServletResponse response, String fileName) {

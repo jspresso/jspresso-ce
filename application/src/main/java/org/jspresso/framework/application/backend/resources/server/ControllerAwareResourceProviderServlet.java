@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.resources.server;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,9 +45,9 @@ public class ControllerAwareResourceProviderServlet extends
    */
   @Override
   protected void writeActiveResource(IActiveResource resource,
-      HttpServletResponse response) throws IOException {
+                                     OutputStream outputStream) throws IOException {
     try {
-      super.writeActiveResource(resource, response);
+      super.writeActiveResource(resource, outputStream);
     } finally {
       IBackendController backendController = BackendControllerHolder
           .getCurrentBackendController();
