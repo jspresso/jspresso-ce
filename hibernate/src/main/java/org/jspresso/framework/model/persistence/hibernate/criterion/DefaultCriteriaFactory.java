@@ -201,9 +201,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
       IComponentDescriptor<?> componentDescriptor = aQueryComponent
           .getQueryDescriptor();
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
+      String translationsAlias = componentDescriptor.getComponentContract().getSimpleName() + "_" + translationsPath;
       if (componentDescriptor.isTranslatable()) {
         rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath,
-            componentDescriptor.getName() + "_" + translationsPath,
+            translationsAlias,
             JoinType.LEFT_OUTER_JOIN);
       }
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
@@ -240,8 +241,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                 completeCriteria(currentCriteria, createIdRestriction(propertyDescriptor, prefixedProperty,
                     property.getValue()));
               } else {
-                completeCriteriaWithTranslations(currentCriteria, translationsPath, property,
-                    componentDescriptor, propertyDescriptor, prefixedProperty, getBackendController(context).getLocale());
+                completeCriteriaWithTranslations(currentCriteria, translationsPath, translationsAlias, property,
+                    componentDescriptor, propertyDescriptor, prefixedProperty,
+                    getBackendController(context).getLocale());
               }
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
@@ -313,6 +315,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *
    * @param currentCriteria the current criteria
    * @param translationsPath the translations path
+   * @param translationsAlias the translations alias
    * @param property the property
    * @param componentDescriptor the component descriptor
    * @param propertyDescriptor the property descriptor
@@ -321,7 +324,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    */
   @SuppressWarnings("unchecked")
   protected void completeCriteriaWithTranslations(DetachedCriteria currentCriteria,
-                                                  String translationsPath, Map.Entry<String, Object> property,
+                                                  String translationsPath, String translationsAlias,
+                                                  Map.Entry<String, Object> property,
                                                   IComponentDescriptor<?> componentDescriptor,
                                                   IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                                   Locale locale) {
@@ -341,12 +345,11 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
         translationRestriction.add(createStringRestriction(
             ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
                 translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor(
-                IPropertyTranslation.TRANSLATED_VALUE), translationsPath + "." + IPropertyTranslation.TRANSLATED_VALUE,
+                IPropertyTranslation.TRANSLATED_VALUE), translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE,
             nlsValue));
-        String languagePath = translationsPath + "." + IPropertyTranslation.LANGUAGE;
-        translationRestriction.add(Restrictions.eq(languagePath,
-            locale.getLanguage()));
-        translationRestriction.add(Restrictions.eq(translationsPath + "." + IPropertyTranslation.PROPERTY_NAME,
+        String languagePath = translationsAlias + "." + IPropertyTranslation.LANGUAGE;
+        translationRestriction.add(Restrictions.eq(languagePath, locale.getLanguage()));
+        translationRestriction.add(Restrictions.eq(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME,
             barePropertyName));
 
         Junction disjunction = Restrictions.disjunction();
@@ -357,8 +360,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               languagePath, locale.getLanguage())));
           String rawPropertyName = barePropertyName + IComponentDescriptor.RAW_SUFFIX;
           rawValueRestriction.add(createStringRestriction(componentDescriptor.getPropertyDescriptor(rawPropertyName),
-              rawPropertyName,
-              nlsOrRawValue));
+              rawPropertyName, nlsOrRawValue));
           disjunction.add(rawValueRestriction);
         }
         currentCriteria.add(disjunction);
