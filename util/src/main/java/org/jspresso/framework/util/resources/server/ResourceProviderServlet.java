@@ -29,6 +29,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -373,7 +376,23 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           inputStream = new BufferedInputStream(
               ((IResource) resource).getContent());
         } else if (resource instanceof IActiveResource) {
-          writeActiveResource((IActiveResource) resource, response);
+          OutputStream outputStream = response.getOutputStream();
+          try {
+            writeActiveResource((IActiveResource) resource, outputStream);
+          } catch (RuntimeException ex) {
+            PrintStream ps = new PrintStream(outputStream);
+            try {
+              ex.printStackTrace(new PrintWriter(ps, true));
+            } finally {
+              try {
+                ps.flush();
+                ps.close();
+              } catch (Exception ioe) {
+                LOG.warn("Could not close the print writer", ioe);
+              }
+            }
+            throw ex;
+          }
         }
       } else if (localUrlSpec != null) {
         if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
@@ -470,17 +489,14 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * 
    * @param resource
    *          the resource to write.
-   * @param response
-   *          the servlet response.
+   * @param outputStream
+   *          the servlet outputStream.
    * @throws IOException
    *           whenever an IO exception occurs.
    */
   protected void writeActiveResource(IActiveResource resource,
-      HttpServletResponse response) throws IOException {
-    OutputStream outputStream = response.getOutputStream();
+                                     OutputStream outputStream) throws IOException {
     resource.writeToContent(outputStream);
-    outputStream.flush();
-    outputStream.close();
   }
 
   private void completeFileName(HttpServletResponse response, String fileName) {
