@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
@@ -93,7 +94,11 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   private String                                                digestAlgorithm;
   private String                                                hashEncoding;
-  private boolean                                               allowEmptyPasswords      = true;
+
+  private boolean allowEmptyPasswords = true;
+  private boolean allowLoginPasswords = true;
+  private String passwordRegex;
+  private String passwordRegexSample;
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<>();
@@ -113,8 +118,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
     propertyDescriptors.add(retypedPassword);
     passwordChangeModel.setPropertyDescriptors(propertyDescriptors);
     passwordChangeModel.setToStringProperty(TO_STRING);
-    passwordChangeModel.setRenderedProperties(Arrays.asList(PASSWD_CURRENT,
-        PASSWD_TYPED, PASSWD_RETYPED));
+    passwordChangeModel.setRenderedProperties(Arrays.asList(PASSWD_CURRENT, PASSWD_TYPED, PASSWD_RETYPED));
 
     return passwordChangeModel;
   }
@@ -123,24 +127,19 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    Map<String, Object> actionParam = getModelConnector(
-        context).getConnectorValue();
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    Map<String, Object> actionParam = getModelConnector(context).getConnectorValue();
     String typedPasswd = (String) actionParam.get(PASSWD_TYPED);
     String retypedPasswd = (String) actionParam.get(PASSWD_RETYPED);
     if (!ObjectUtils.equals(typedPasswd, retypedPasswd)) {
-      throw new ActionBusinessException(
-          "Typed and retyped passwords are different.",
+      throw new ActionBusinessException("Typed and retyped passwords are different.",
           "password.typed.retyped.different");
     }
-    checkPasswordValidity(typedPasswd);
+    checkPasswordValidity(typedPasswd, context);
     UserPrincipal principal = getApplicationSession(context).getPrincipal();
-    if (changePassword(principal, (String) actionParam.get(PASSWD_CURRENT),
-        typedPasswd)) {
-      setActionParameter(
-          getTranslationProvider(context).getTranslation(
-              "password.change.success", getLocale(context)), context);
+    if (changePassword(principal, (String) actionParam.get(PASSWD_CURRENT), typedPasswd)) {
+      setActionParameter(getTranslationProvider(context).getTranslation("password.change.success", getLocale(context)),
+          context);
       return super.execute(actionHandler, context);
     }
     return false;
@@ -151,21 +150,26 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * business rule. Buy default, it only checks that the password is not empty
    * if {@code allowEmptyPassword} is {@code false}.
    *
-   * @param typedPasswd
-   *          the password to check.
+   * @param typedPasswd the password to check.
+   * @param context     the context
    */
-  protected void checkPasswordValidity(String typedPasswd) {
-    if (!isAllowEmptyPasswords()
-        && (typedPasswd == null || typedPasswd.length() == 0)) {
-      throw new ActionBusinessException("Empty passwords are not allowed.",
-          "password.empty.disallowed");
+  protected void checkPasswordValidity(String typedPasswd, Map<String, Object> context) {
+    if (!isAllowEmptyPasswords() && (typedPasswd == null || typedPasswd.length() == 0)) {
+      throw new ActionBusinessException("Empty passwords are not allowed.", "password.empty.disallowed");
+    }
+    if (!isAllowLoginPasswords() && ObjectUtils.equals(typedPasswd, getApplicationSession(context).getUsername())) {
+      throw new ActionBusinessException("Passwords which are identical to username are not allowed.", "password.login.disallowed");
+    }
+    if (getPasswordRegex() != null && !Pattern.matches(getPasswordRegex(), typedPasswd)) {
+      throw new ActionBusinessException("Password does not match enforcing rules.", "password.regex.failed",
+          getPasswordRegexSample());
     }
   }
 
   /**
    * Sets the digestAlgorithm to use to hash the password before storing it (MD5
    * for instance).
-   * 
+   *
    * @param digestAlgorithm
    *          the digestAlgorithm to set.
    */
@@ -191,7 +195,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
    * Performs the effective password change depending on the underlying storage.
-   * 
+   *
    * @param userPrincipal
    *          the connected user principal.
    * @param currentPassword
@@ -200,12 +204,11 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    *          the new password.
    * @return true if password was changed successfully.
    */
-  protected abstract boolean changePassword(UserPrincipal userPrincipal,
-      String currentPassword, String newPassword);
+  protected abstract boolean changePassword(UserPrincipal userPrincipal, String currentPassword, String newPassword);
 
   /**
    * Hashes a char array using the algorithm parametrised in the instance.
-   * 
+   *
    * @param newPassword
    *          the new password to hash.
    * @return the password digest.
@@ -281,7 +284,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * 
    * @return the allowEmptyPasswords.
    */
-  public boolean isAllowEmptyPasswords() {
+  protected boolean isAllowEmptyPasswords() {
     return allowEmptyPasswords;
   }
 
@@ -295,5 +298,63 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   public void setAllowEmptyPasswords(boolean allowEmptyPasswords) {
     this.allowEmptyPasswords = allowEmptyPasswords;
+  }
+
+  /**
+   * Is allow login passwords.
+   *
+   * @return the boolean
+   */
+  protected boolean isAllowLoginPasswords() {
+    return allowLoginPasswords;
+  }
+
+  /**
+   * Configures the possibility to choose a password that equals the login.
+   * <p>
+   * Default value is {@code true}, i.e. allow for password equals login.
+   *
+   * @param allowLoginPasswords the allow login passwords
+   */
+  public void setAllowLoginPasswords(boolean allowLoginPasswords) {
+    this.allowLoginPasswords = allowLoginPasswords;
+  }
+
+  /**
+   * Gets password regex.
+   *
+   * @return the password regex
+   */
+  protected String getPasswordRegex() {
+    return passwordRegex;
+  }
+
+  /**
+   * Configures a regex that new passwords must match.
+   * <p>
+   * Default value is {@code null}, i.e. no regex is enforced.
+   *
+   * @param passwordRegex the password regex
+   */
+  public void setPasswordRegex(String passwordRegex) {
+    this.passwordRegex = passwordRegex;
+  }
+
+  /**
+   * Gets password regex sample.
+   *
+   * @return the password regex sample
+   */
+  protected String getPasswordRegexSample() {
+    return passwordRegexSample;
+  }
+
+  /**
+   * Configures an example of a valid password to explain the regex rules.
+   *
+   * @param passwordRegexSample the password regex sample
+   */
+  public void setPasswordRegexSample(String passwordRegexSample) {
+    this.passwordRegexSample = passwordRegexSample;
   }
 }

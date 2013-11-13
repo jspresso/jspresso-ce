@@ -1,5 +1,8 @@
 3.8
 ===
+- in order to fullfil RFE #1124, the checkPasswordValidity method signature has been augmented with the action
+  context as parameter. This allows to test against the session login in order to enforce password strength.
+
 - Removed dependency towards BSF 2.x and now use the JSR-223 (javax.script) that is included in Java6 and onwards.
 
 - USER is now an SQL protected keyword (it actually is in Oracle), so by default, the generated table name is now
