@@ -20,11 +20,18 @@ package org.jspresso.framework.application.backend.resources.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.async.AsyncActionExecutor;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.resources.IActiveResource;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -44,16 +51,47 @@ public class ControllerAwareResourceProviderServlet extends
    * {@inheritDoc}
    */
   @Override
-  protected void writeActiveResource(IActiveResource resource,
-                                     OutputStream outputStream) throws IOException {
-    try {
-      super.writeActiveResource(resource, outputStream);
-    } finally {
-      IBackendController backendController = BackendControllerHolder
-          .getCurrentBackendController();
-      if (backendController != null) {
-        backendController.cleanupRequestResources();
+  protected void writeActiveResource(final IActiveResource resource,
+                                     final OutputStream outputStream) throws IOException {
+    IBackendController backendController = BackendControllerHolder
+        .getCurrentBackendController();
+    AbstractBackendController slaveBackendController = (AbstractBackendController) backendController
+        .createBackendController();
+    AsyncActionExecutor executor = new AsyncActionExecutor(new BackendAction() {
+      @Override
+      public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+        try {
+          doWriteActiveResource(resource, outputStream);
+        } catch (IOException ioe) {
+          throw new NestedRuntimeException(ioe);
+        }
+        return true;
       }
+    }, new HashMap<String, Object>(), null, slaveBackendController);
+    try {
+      // execute synchronously in the thread
+      try {
+        executor.run();
+      } catch (RuntimeException ex) {
+        if (ex.getCause() instanceof IOException) {
+          throw (IOException) ex.getCause();
+        } else {
+          throw ex;
+        }
+      }
+    } finally {
+      backendController.cleanupRequestResources();
     }
+  }
+
+  /**
+   * Do write active resource.
+   *
+   * @param resource the resource
+   * @param outputStream the output stream
+   * @throws IOException the IO exception
+   */
+  protected void doWriteActiveResource(IActiveResource resource, OutputStream outputStream) throws IOException {
+    super.writeActiveResource(resource, outputStream);
   }
 }
