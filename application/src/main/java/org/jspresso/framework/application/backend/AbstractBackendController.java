@@ -1436,7 +1436,7 @@ public abstract class AbstractBackendController extends AbstractController
       boolean newlyRegistered = false;
       if (registeredEntity == null) {
         if (!isInitialized(entity)) {
-          return entity;
+          return mergeUninitializedEntity(entity);
         }
         registeredEntity = carbonEntityCloneFactory.cloneEntity(entity,
             entityFactory);
@@ -1579,6 +1579,17 @@ public abstract class AbstractBackendController extends AbstractController
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
     }
+  }
+
+  /**
+   * Merge non initialized entity.
+   *
+   * @param <E> the actual entity type
+   * @param entity the entity
+   * @return the merged entity
+   */
+  protected <E extends IEntity> E mergeUninitializedEntity(E entity) {
+    return entity;
   }
 
   /**
