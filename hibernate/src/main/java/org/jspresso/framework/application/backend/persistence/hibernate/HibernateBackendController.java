@@ -332,6 +332,12 @@ public class HibernateBackendController extends AbstractBackendController {
                 propertyName, currentInitializationSession);
           } else {
             Session hibernateSession = getHibernateSession();
+            // Always use NoTxSession to initialize session entities
+            if (componentOrEntity instanceof IEntity && getRegisteredEntity(
+                ((IEntity) componentOrEntity).getComponentContract(),
+                ((IEntity) componentOrEntity).getId()) == componentOrEntity) {
+              hibernateSession = getNoTxSession();
+            }
             FlushMode oldFlushMode = hibernateSession.getFlushMode();
             try {
               // Temporary switch to a read-only session.
@@ -625,6 +631,19 @@ public class HibernateBackendController extends AbstractBackendController {
       }
     }
     return detachedCollection;
+  }
+
+  /**
+   * Merge non initialized entity.
+   *
+   * @param <E> the actual entity type
+   * @param entity the entity
+   * @return the merged entity
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected <E extends IEntity> E mergeUninitializedEntity(E entity) {
+    return (E) getNoTxSession().load(getComponentContract(entity), entity.getId());
   }
 
   /**
