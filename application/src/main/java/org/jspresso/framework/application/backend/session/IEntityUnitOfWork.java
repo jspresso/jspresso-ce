@@ -156,4 +156,14 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    */
   IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
       Serializable entityId);
+
+  /**
+   * Suspends the unit of work.
+   */
+  void suspend();
+
+  /**
+   * Resumes the unit of work.
+   */
+  void resume();
 }
