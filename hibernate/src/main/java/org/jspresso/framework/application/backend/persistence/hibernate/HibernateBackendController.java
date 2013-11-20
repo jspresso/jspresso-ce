@@ -351,26 +351,36 @@ public class HibernateBackendController extends AbstractBackendController {
             performPropertyInitializationUsingSession(componentOrEntity,
                 propertyName, currentInitializationSession);
           } else {
-            Session hibernateSession = getHibernateSession();
             // Always use NoTxSession to initialize session entities
-            if (componentOrEntity instanceof IEntity && getRegisteredEntity(
+            boolean suspendUnitOfWork = false;
+            if (isUnitOfWorkActive() && componentOrEntity instanceof IEntity && getRegisteredEntity(
                 ((IEntity) componentOrEntity).getComponentContract(),
                 ((IEntity) componentOrEntity).getId()) == componentOrEntity) {
-              hibernateSession = getNoTxSession();
+              suspendUnitOfWork = true;
             }
-            FlushMode oldFlushMode = hibernateSession.getFlushMode();
             try {
-              // Temporary switch to a read-only session.
-              hibernateSession.setFlushMode(FlushMode.MANUAL);
+              if (suspendUnitOfWork) {
+                suspendUnitOfWork();
+              }
+              Session hibernateSession = getHibernateSession();
+              FlushMode oldFlushMode = hibernateSession.getFlushMode();
               try {
-                currentInitializationSession = hibernateSession;
-                performPropertyInitializationUsingSession(componentOrEntity,
-                    propertyName, hibernateSession);
+                // Temporary switch to a read-only session.
+                hibernateSession.setFlushMode(FlushMode.MANUAL);
+                try {
+                  currentInitializationSession = hibernateSession;
+                  performPropertyInitializationUsingSession(componentOrEntity,
+                      propertyName, hibernateSession);
+                } finally {
+                  currentInitializationSession = null;
+                }
               } finally {
-                currentInitializationSession = null;
+                hibernateSession.setFlushMode(oldFlushMode);
               }
             } finally {
-              hibernateSession.setFlushMode(oldFlushMode);
+              if (suspendUnitOfWork) {
+                resumeUnitOfWork();
+              }
             }
           }
         }

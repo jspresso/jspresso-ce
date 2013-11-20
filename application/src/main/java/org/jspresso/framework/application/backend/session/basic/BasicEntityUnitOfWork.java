@@ -52,12 +52,14 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   private       Set<IEntity>               updatedEntities;
   private       BasicEntityUnitOfWork      parentUnitOfWork;
   private       BasicEntityUnitOfWork      nestedUnitOfWork;
+  private       boolean                    suspended;
 
   /**
    * Constructs a new <code>BasicEntityUnitOfWork</code> instance.
    */
   public BasicEntityUnitOfWork() {
     entityRegistry = new BasicEntityRegistry("uowEntityRegistry");
+    suspended = false;
   }
 
   /**
@@ -217,7 +219,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     if (nestedUnitOfWork != null && nestedUnitOfWork.isActive()) {
       return true;
     }
-    return dirtRecorder != null;
+    return suspended == false && dirtRecorder != null;
   }
 
   /**
@@ -395,5 +397,29 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       return nestedUnitOfWork.getRegisteredEntity(entityContract, entityId);
     }
     return entityRegistry.get(entityContract, entityId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void suspend() {
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.suspend();
+    } else {
+      suspended = true;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void resume() {
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.resume();
+    } else {
+      suspended = false;
+    }
   }
 }

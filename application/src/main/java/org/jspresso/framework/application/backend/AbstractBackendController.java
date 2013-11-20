@@ -310,13 +310,13 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected void doCommitUnitOfWork() {
     try {
-      committingUow = true;
+      unitOfWork.suspend();
       if (unitOfWork.getUpdatedEntities() != null) {
         merge(new ArrayList<IEntity>(unitOfWork.getUpdatedEntities()),
             EMergeMode.MERGE_CLEAN_LAZY);
       }
     } finally {
-      committingUow = false;
+      unitOfWork.resume();
       unitOfWork.commit();
     }
   }
@@ -762,7 +762,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public boolean isUnitOfWorkActive() {
-    return !committingUow && unitOfWork.isActive();
+    return unitOfWork.isActive();
   }
 
   /**
@@ -2550,5 +2550,19 @@ public abstract class AbstractBackendController extends AbstractController
   @Override
   public void removeDirtInterceptor(PropertyChangeListener interceptor) {
     getDirtRecorder().removeInterceptor(interceptor);
+  }
+
+  /**
+   * Suspend unit of work.
+   */
+  protected void suspendUnitOfWork() {
+    unitOfWork.suspend();
+  }
+
+  /**
+   * Resume unit of work.
+   */
+  protected void resumeUnitOfWork() {
+    unitOfWork.resume();
   }
 }
