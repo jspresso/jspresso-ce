@@ -36,8 +36,8 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
   private Set<PropertyChangeListener> cachedListeners;
 
   /**
-   * Constructs a new <code>SinglePropertyChangeSupport</code> instance.
-   * 
+   * Constructs a new {@code SinglePropertyChangeSupport} instance.
+   *
    * @param sourceBean
    *          the source bean.
    */
@@ -103,8 +103,8 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
     } else {
       containedListeners = getPropertyChangeListeners(propertyName);
     }
-    for (int i = 0; i < containedListeners.length; i++) {
-      if (containedListeners[i] == listener) {
+    for (PropertyChangeListener containedListener : containedListeners) {
+      if (containedListener == listener) {
         return false;
       }
     }

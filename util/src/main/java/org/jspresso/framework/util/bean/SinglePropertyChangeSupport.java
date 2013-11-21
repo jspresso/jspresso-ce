@@ -37,8 +37,8 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
   private Set<PropertyChangeListener> cachedListeners;
 
   /**
-   * Constructs a new <code>SinglePropertyChangeSupport</code> instance.
-   * 
+   * Constructs a new {@code SinglePropertyChangeSupport} instance.
+   *
    * @param sourceBean
    *          the source bean.
    */
@@ -73,9 +73,32 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
     }
   }
 
-  private boolean checkUniqueness(String propertyName,
-      PropertyChangeListener listener) {
-    List<PropertyChangeListener> containedListeners = new ArrayList<PropertyChangeListener>();
+  /**
+   * Remove property change listener.
+   *
+   * @param listener the listener
+   */
+  @Override
+  public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
+    super.removePropertyChangeListener(listener);
+    cachedListeners.remove(listener);
+  }
+
+  /**
+   * Remove property change listener.
+   *
+   * @param propertyName the property name
+   * @param listener the listener
+   */
+  @Override
+  public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    super.removePropertyChangeListener(propertyName, listener);
+    cachedListeners.remove(listener);
+  }
+
+  private boolean checkUniqueness(String propertyName, PropertyChangeListener listener) {
+    /*
+    List<PropertyChangeListener> containedListeners = new ArrayList<>();
     if (propertyName == null) {
       for (PropertyChangeListener pcl : getPropertyChangeListeners()) {
         if (!(pcl instanceof PropertyChangeListenerProxy)) {
