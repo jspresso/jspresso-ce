@@ -19,6 +19,9 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * This property change support prevents from adding twice the same property
@@ -30,6 +33,7 @@ import java.beans.PropertyChangeListener;
 public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
 
   private static final long serialVersionUID = -3547472625502417905L;
+  private Set<PropertyChangeListener> cachedListeners;
 
   /**
    * Constructs a new <code>SinglePropertyChangeSupport</code> instance.
@@ -39,6 +43,7 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
    */
   public SingleWeakPropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
+    cachedListeners = Collections.newSetFromMap(new WeakHashMap<PropertyChangeListener, Boolean>());
   }
 
   /**
@@ -47,10 +52,10 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
    * {@inheritDoc}
    */
   @Override
-  public synchronized void addPropertyChangeListener(
-      PropertyChangeListener listener) {
+  public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (checkUniqueness(null, listener)) {
       super.addPropertyChangeListener(listener);
+      cachedListeners.add(listener);
     }
   }
 
@@ -60,15 +65,38 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
    * {@inheritDoc}
    */
   @Override
-  public synchronized void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
+  public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     if (checkUniqueness(propertyName, listener)) {
       super.addPropertyChangeListener(propertyName, listener);
+      cachedListeners.add(listener);
     }
   }
 
-  private boolean checkUniqueness(String propertyName,
-      PropertyChangeListener listener) {
+  /**
+   * Remove property change listener.
+   *
+   * @param listener the listener
+   */
+  @Override
+  public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
+    super.removePropertyChangeListener(listener);
+    cachedListeners.remove(listener);
+  }
+
+  /**
+   * Remove property change listener.
+   *
+   * @param propertyName the property name
+   * @param listener the listener
+   */
+  @Override
+  public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    super.removePropertyChangeListener(propertyName, listener);
+    cachedListeners.remove(listener);
+  }
+
+  private boolean checkUniqueness(String propertyName, PropertyChangeListener listener) {
+    /*
     PropertyChangeListener[] containedListeners;
     if (propertyName == null) {
       containedListeners = getPropertyChangeListeners();
@@ -81,5 +109,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
       }
     }
     return true;
+    */
+
+    // Performance optimization. See bug #1135
+    return !cachedListeners.contains(listener);
   }
 }

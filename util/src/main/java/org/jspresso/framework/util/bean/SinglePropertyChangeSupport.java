@@ -19,11 +19,10 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeListenerProxy;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * This property change support prevents from adding twice the same property
@@ -35,6 +34,7 @@ import java.util.List;
 public class SinglePropertyChangeSupport extends PropertyChangeSupport {
 
   private static final long serialVersionUID = -3547472625502417905L;
+  private Set<PropertyChangeListener> cachedListeners;
 
   /**
    * Constructs a new <code>SinglePropertyChangeSupport</code> instance.
@@ -44,6 +44,7 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
    */
   public SinglePropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
+    cachedListeners = Collections.newSetFromMap(new WeakHashMap<PropertyChangeListener, Boolean>());
   }
 
   /**
@@ -52,10 +53,10 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
    * {@inheritDoc}
    */
   @Override
-  public synchronized void addPropertyChangeListener(
-      PropertyChangeListener listener) {
+  public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (checkUniqueness(null, listener)) {
       super.addPropertyChangeListener(listener);
+      cachedListeners.add(listener);
     }
   }
 
@@ -65,10 +66,10 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
    * {@inheritDoc}
    */
   @Override
-  public synchronized void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
+  public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     if (checkUniqueness(propertyName, listener)) {
       super.addPropertyChangeListener(propertyName, listener);
+      cachedListeners.add(listener);
     }
   }
 
@@ -82,9 +83,12 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
         }
       }
     } else {
-      containedListeners.addAll(Arrays
-          .asList(getPropertyChangeListeners(propertyName)));
+      containedListeners.addAll(Arrays.asList(getPropertyChangeListeners(propertyName)));
     }
     return !containedListeners.contains(listener);
+    */
+
+    // Performance optimization. See bug #1135
+    return !cachedListeners.contains(listener);
   }
 }
