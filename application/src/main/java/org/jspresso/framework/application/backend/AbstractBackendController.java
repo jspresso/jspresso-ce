@@ -287,8 +287,6 @@ public abstract class AbstractBackendController extends AbstractController
     return uowEntities;
   }
 
-  private boolean committingUow = false;
-
   /**
    * {@inheritDoc}
    */
@@ -310,13 +308,11 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected void doCommitUnitOfWork() {
     try {
-      unitOfWork.suspend();
       if (unitOfWork.getUpdatedEntities() != null) {
         merge(new ArrayList<IEntity>(unitOfWork.getUpdatedEntities()),
             EMergeMode.MERGE_CLEAN_LAZY);
       }
     } finally {
-      unitOfWork.resume();
       unitOfWork.commit();
     }
   }
