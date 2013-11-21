@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This helper class contains utility methods to work with bean properties.
@@ -53,14 +54,27 @@ public final class PropertyHelper {
    */
   public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass,
       String property) {
+    PropertyDescriptor descriptor = getPropertyDescriptorNoException(beanClass,
+        property);
+    if (descriptor == null) {
+      throw new MissingPropertyException("Missing property " + property
+          + " for bean class " + beanClass);
+    }
+    return descriptor;
+  }
+
+  private static PropertyDescriptor getPropertyDescriptorNoException(
+      Class<?> beanClass, String property) {
     PropertyDescriptor descriptorToReturn = null;
     int nestedDotIndex = property.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
-      PropertyDescriptor rootDescriptor = getPropertyDescriptor(beanClass,
-          property.substring(0, nestedDotIndex));
-      descriptorToReturn = getPropertyDescriptor(
-          rootDescriptor.getPropertyType(),
-          property.substring(nestedDotIndex + 1));
+      PropertyDescriptor rootDescriptor = getPropertyDescriptorNoException(
+          beanClass, property.substring(0, nestedDotIndex));
+      if (rootDescriptor != null) {
+        descriptorToReturn = getPropertyDescriptorNoException(
+            rootDescriptor.getPropertyType(),
+            property.substring(nestedDotIndex + 1));
+      }
     } else {
       PropertyDescriptor[] descriptors = PropertyUtils
           .getPropertyDescriptors(beanClass);
@@ -90,18 +104,13 @@ public final class PropertyHelper {
       }
       for (Class<?> superType : superTypes) {
         PropertyDescriptor descriptor = null;
-        try {
-          descriptor = getPropertyDescriptor(superType, property);
-        } catch (MissingPropertyException ex) {
-          // This exception must be ignored until we traverse all the super
-          // interfaces.
-        }
+        descriptor = getPropertyDescriptorNoException(superType, property);
         if (descriptor != null) {
           if (descriptorToReturn != null) {
             try {
               descriptorToReturn.setWriteMethod(descriptor.getWriteMethod());
             } catch (IntrospectionException ex) {
-              throw new MissingPropertyException(ex.getMessage());
+              throw new NestedRuntimeException(ex);
             }
           } else {
             descriptorToReturn = descriptor;
@@ -109,11 +118,7 @@ public final class PropertyHelper {
         }
       }
     }
-    if (descriptorToReturn != null) {
-      return descriptorToReturn;
-    }
-    throw new MissingPropertyException("Missing property " + property
-        + " for bean class " + beanClass);
+    return descriptorToReturn;
   }
 
   /**
