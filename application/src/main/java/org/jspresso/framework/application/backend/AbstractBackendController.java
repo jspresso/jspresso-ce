@@ -1570,8 +1570,19 @@ public abstract class AbstractBackendController extends AbstractController
       }
       return registeredEntity;
     } finally {
-      if (registeredEntity != null && isInitialized(registeredEntity)) {
-        registeredEntity.releaseEvents();
+      if (registeredEntity != null
+          && isInitialized(registeredEntity)) {
+        boolean suspendUnitOfWork = isUnitOfWorkActive();
+        try {
+          if (suspendUnitOfWork) {
+            suspendUnitOfWork();
+          }
+          registeredEntity.releaseEvents();
+        } finally {
+          if (suspendUnitOfWork) {
+            resumeUnitOfWork();
+          }
+        }
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
     }
