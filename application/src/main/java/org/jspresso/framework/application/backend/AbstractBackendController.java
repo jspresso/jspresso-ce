@@ -1599,7 +1599,17 @@ public abstract class AbstractBackendController extends AbstractController
     } finally {
       if (eventsBlocked && registeredEntity != null
           && isInitialized(registeredEntity)) {
-        registeredEntity.releaseEvents();
+        boolean suspendUnitOfWork = isUnitOfWorkActive();
+        try {
+          if (suspendUnitOfWork) {
+            suspendUnitOfWork();
+          }
+          registeredEntity.releaseEvents();
+        } finally {
+          if (suspendUnitOfWork) {
+            resumeUnitOfWork();
+          }
+        }
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
     }
