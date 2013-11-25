@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
+import org.jspresso.framework.model.component.query.EnumQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
@@ -161,6 +162,7 @@ public class RefQueryComponentDescriptor<E> extends
           .getComponentContract();
       if (propertyDescriptor instanceof BasicReferencePropertyDescriptor<?>
           && !(ComparableQueryStructure.class.isAssignableFrom(referencedType))
+          && !(EnumQueryStructure.class.isAssignableFrom(referencedType))
           && !(referencedDescriptor instanceof RefQueryComponentDescriptor<?>)) {
         BasicReferencePropertyDescriptor<IComponent> basicRefPropDesc
             = ((BasicReferencePropertyDescriptor<IComponent>) propertyDescriptor);
