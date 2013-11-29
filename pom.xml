@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>3.6.13-SNAPSHOT</version>
+  <version>3.6.13</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,7 +49,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/branches/jspresso-framework-3.6.x</connection>
+    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/tags/jspresso-framework-3.6.13</connection>
   </scm>
   <issueManagement>
     <system>Jspresso Tracker</system>
