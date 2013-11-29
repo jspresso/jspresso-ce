@@ -19,13 +19,18 @@
 package org.jspresso.framework.application;
 
 import java.lang.reflect.Field;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -47,7 +52,16 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class AbstractController extends AbstractPropertyChangeCapable
     implements IController {
 
-  private IExceptionHandler customExceptionHandler;
+  private final List<Map.Entry<IAction, Map<String, Object>>> delayedActions;
+  private       IExceptionHandler                             customExceptionHandler;
+
+
+  /**
+   * Instantiates a new Abstract controller.
+   */
+  protected AbstractController() {
+    delayedActions = Collections.synchronizedList(new ArrayList<Map.Entry<IAction, Map<String, Object>>>());
+  }
 
   /**
    * Gets the subject out of the application session.
@@ -61,7 +75,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
 
   /**
    * Gets the translationProvider.
-   * 
+   *
    * @return the translationProvider.
    * @deprecated the controller is itself a translation provider. will return
    *             this.
@@ -183,4 +197,30 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
     }
   }
 
+  /**
+   * Execute later.
+   *
+   * @param action the action
+   * @param context the context
+   */
+  @Override
+  public synchronized void executeLater(IAction action, Map<String, Object> context) {
+    delayedActions.add(new AbstractMap.SimpleImmutableEntry<IAction, Map<String, Object>>(action, context));
+  }
+
+  /**
+   * Execute delayed actions.
+   *
+   * @param actionHandler the action handler to execute the action. Might be different from this.
+   */
+  public void executeDelayedActions(IActionHandler actionHandler) {
+    List<Map.Entry<IAction, Map<String, Object>>> iteratorCopy;
+    synchronized (delayedActions) {
+      iteratorCopy = new ArrayList<Map.Entry<IAction, Map<String, Object>>>(delayedActions);
+      delayedActions.clear();
+    }
+    for (Map.Entry<IAction, Map<String, Object>> delayedActionEntry: iteratorCopy) {
+      actionHandler.execute(delayedActionEntry.getKey(), delayedActionEntry.getValue());
+    }
+  }
 }

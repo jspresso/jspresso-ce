@@ -41,6 +41,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -528,7 +529,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
         actionChainChecked = false;
       }
     }
+    executeDelayedActions(this);
     return result;
+  }
+
+  /**
+   * Execute delayed actions.
+   *
+   * @param actionHandler the action handler
+   */
+  @Override
+  public void executeDelayedActions(IActionHandler actionHandler) {
+    ((AbstractController) getBackendController()).executeDelayedActions(this);
+    super.executeDelayedActions(actionHandler);
   }
 
   @SuppressWarnings("unchecked")

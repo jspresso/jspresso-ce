@@ -53,6 +53,15 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
   boolean execute(IAction action, Map<String, Object> context);
 
   /**
+   * Registers an action for later execution. It's up to the implementing class to decide when the queued actions
+   * will be executed.
+   *
+   * @param action the action
+   * @param context the context
+   */
+  void executeLater(IAction action, Map<String, Object> context);
+
+  /**
    * Returns the JAAS subject attached to this action handler.
    * 
    * @return the JAAS subject attached to this action handler.
