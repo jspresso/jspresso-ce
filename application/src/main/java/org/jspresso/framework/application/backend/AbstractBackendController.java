@@ -151,6 +151,7 @@ public abstract class AbstractBackendController extends AbstractController
   private       boolean                                throwExceptionOnBadUsage;
   private       IBackendControllerFactory              slaveControllerFactory;
   private       int                                    asyncExecutorsMaxCount;
+  private       IBackendController                     masterController;
 
   /**
    * Constructs a new {@code AbstractBackendController} instance.
@@ -398,6 +399,7 @@ public abstract class AbstractBackendController extends AbstractController
     slaveBackendController.start(getLocale(), getClientTimeZone());
     // Use the same application session
     slaveBackendController.setApplicationSession(getApplicationSession());
+    slaveBackendController.masterController = this;
     return slaveBackendController;
   }
 
@@ -2621,5 +2623,20 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected void resumeUnitOfWork() {
     unitOfWork.resume();
+  }
+
+  /**
+   * Delegates to the master controller if any.
+   *
+   * @param action the action
+   * @param context the context
+   */
+  @Override
+  public synchronized void executeLater(IAction action, Map<String, Object> context) {
+    if (masterController != null) {
+      masterController.executeLater(action, context);
+    } else {
+      super.executeLater(action, context);
+    }
   }
 }
