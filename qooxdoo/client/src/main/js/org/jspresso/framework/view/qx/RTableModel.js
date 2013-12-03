@@ -77,21 +77,21 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
       },
 
       members: {
-        /**@type org.jspresso.framework.state.remote.RemoteCompositeValueState*/
+        /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
         __state: null,
-        /**@type Integer*/
+        /** @type {Integer} */
         __sortColumnIndex: null,
-        /**@type Boolean*/
+        /** @type {Boolean} */
         __sortAscending: false,
-        /**@type org.jspresso.framework.gui.remote.RAction*/
+        /** @type {org.jspresso.framework.gui.remote.RAction} */
         __sortingAction: null,
-        /**@type org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler*/
+        /** @type {org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler} */
         __commandHandler: null,
-        /**@type Array*/
+        /** @type {Array} */
         __sortedRows: null,
-        /**@type Boolean*/
+        /** @type {Boolean} */
         __editable: true,
-        /**@type Array*/
+        /** @type {Array} */
         __dynamicToolTipIndices: null,
 
         // overridden
@@ -223,9 +223,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
 
         /**
          *
-         * @param {Integer} columnIndex
-         * @param {Integer} rowIndex
-         * @param {org.jspresso.framework.state.remote.RemoteValueState} cellState
+         * @param columnIndex {Integer}
+         * @param rowIndex {Integer}
+         * @param cellState {org.jspresso.framework.state.remote.RemoteValueState}
          */
         __setupCellListeners: function (columnIndex, rowIndex, cellState) {
           if (!cellState.getUserData(this.toHashCode())) {

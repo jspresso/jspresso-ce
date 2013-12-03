@@ -18,7 +18,7 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil", {
         /**
          * Transforms a Qooxdoo object graph into a simple untyped JS object graph
          * ready to be sent to server-side. Only public properties are handled.
-         * @param {Object} root the object graph containing Qooxdoo objects.
+         * @param root {Object} the object graph containing Qooxdoo objects.
          * @return {Object} the corresponding untyped JS Object graph.
          */
         untypeObjectGraph: function (root) {
@@ -66,7 +66,7 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil", {
          * Transforms an untyped JS object graph into a Qooxdoo object graph.
          * All JS object members are considered public properties whenever the class
          * hint refers to a Qooxdoo object.
-         * @param {var} root the object graph containing untyped JS Object.
+         * @param root {var} the object graph containing untyped JS Object.
          * @return {var} the corresponding object graph containing typed Qooxdoo objects.
          */
         typeObjectGraph: function (root) {

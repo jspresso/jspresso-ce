@@ -19,9 +19,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
 
   /**
    *
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
+   * @param viewFactory {org.jspresso.framework.view.qx.DefaultQxViewFactory}
+   * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+   * @param actionHandler {org.jspresso.framework.action.IActionHandler}
    */
   construct: function (viewFactory, rComponent, actionHandler) {
     this.base(arguments);
@@ -43,14 +43,14 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       var value = cellInfo.value;
       var row = cellInfo.row;
       var col = cellInfo.col;
-      /**@type qx.ui.table.Table*/
+      /** @type {qx.ui.table.Table} */
       var table = cellInfo.table;
-      /**@type org.jspresso.framework.state.remote.RemoteCompositeValueState*/
+      /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
       var rowState = table.getTableModel().getRowData(row);
       if (!rowState.getWritable()) {
         return null;
       }
-      /**@type org.jspresso.framework.state.remote.RemoteValueState*/
+      /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
       var cellState = rowState.getChildren().getItem(col + 1);
       if (!cellState.getWritable()) {
         return null;

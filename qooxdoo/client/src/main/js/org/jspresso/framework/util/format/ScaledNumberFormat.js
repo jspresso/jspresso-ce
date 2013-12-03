@@ -41,7 +41,7 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
           if (this.getScale() && num) {
             actualNumberToFormat = num * this.getScale();
           }
-          return /** @type String */ this.base(arguments, actualNumberToFormat);
+          return /** @type {String } */ this.base(arguments, actualNumberToFormat);
         },
 
 
@@ -52,12 +52,12 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
          * @return {Double} the number.
          */
         parse: function (str) {
-          /** @type Number */
-          var actualParsedNumber = /** @type Number */ this.base(arguments, str);
+          /** @type {Number } */
+          var actualParsedNumber = /** @type {Number } */ this.base(arguments, str);
           if (this.getScale() && actualParsedNumber) {
             actualParsedNumber = actualParsedNumber / this.getScale();
           }
-          return /** @type Double */ actualParsedNumber;
+          return /** @type {Double } */ actualParsedNumber;
         }
       }
     });

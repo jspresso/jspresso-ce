@@ -89,7 +89,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
       },
 
       members: {
-        /**@type qx.ui.core.Widget*/
+        /** @type {qx.ui.core.Widget} */
         __peer: null,
 
         assignPeer: function (value) {

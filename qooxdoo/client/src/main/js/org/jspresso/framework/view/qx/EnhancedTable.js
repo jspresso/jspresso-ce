@@ -45,7 +45,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
               }
             }
           }
-          /** @type qx.ui.tooltip.ToolTip */
+          /** @type {qx.ui.tooltip.ToolTip } */
           var tt = this.getToolTip();
           if (v != null && v != "") {
             tt.setLabel(v);

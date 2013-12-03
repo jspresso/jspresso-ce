@@ -18,8 +18,8 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
 
       /**
        *
-       * @param icons
-       * @param labels
+       * @param icons {org.jspresso.framework.gui.remote.RIcon[]}
+       * @param labels {String[]}
        */
       construct: function (labels, icons) {
         this.base(arguments);

@@ -16,7 +16,7 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
       statics: {
 
         /**
-         * @param {String} content
+         * @param content {String}
          * @return {Boolean}
          */
         isHtml: function (content) {

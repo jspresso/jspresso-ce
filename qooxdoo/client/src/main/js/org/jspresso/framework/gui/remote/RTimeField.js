@@ -26,7 +26,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTimeField", {
       },
 
       members: {
-        /** @type Boolean */
+        /** @type {Boolean } */
         __useDateDto: true,
 
         useDateDto: function (value) {

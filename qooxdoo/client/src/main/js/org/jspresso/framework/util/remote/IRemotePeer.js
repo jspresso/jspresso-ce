@@ -16,7 +16,7 @@
 qx.Interface.define("org.jspresso.framework.util.remote.IRemotePeer", {
       members: {
         /**
-         * @return String
+         * @return {String}
          */
         getGuid: function () {
         }

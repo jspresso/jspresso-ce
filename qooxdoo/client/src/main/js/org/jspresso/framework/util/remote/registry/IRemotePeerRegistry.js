@@ -16,29 +16,29 @@
 qx.Interface.define("org.jspresso.framework.util.remote.registry.IRemotePeerRegistry", {
       members: {
         /**
-         * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
-         * @return void
+         * @param remotePeer {org.jspresso.framework.util.remote.IRemotePeer}
+         * @return {undefined}
          */
         register: function (remotePeer) {
         },
 
         /**
-         * @param {String} guid
-         * @return org.jspresso.framework.util.remote.IRemotePeer
+         * @param guid {String}
+         * @return {org.jspresso.framework.util.remote.IRemotePeer}
          */
         getRegistered: function (guid) {
         },
 
         /**
-         * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
-         * @return void
+         * @param remotePeer {org.jspresso.framework.util.remote.IRemotePeer}
+         * @return {undefined}
          */
         unregister: function (remotePeer) {
         },
 
         /**
-         * @param {String} guid
-         * @return Boolean
+         * @param guid {String}
+         * @return {Boolean}
          */
         isRegistered: function (guid) {
         }

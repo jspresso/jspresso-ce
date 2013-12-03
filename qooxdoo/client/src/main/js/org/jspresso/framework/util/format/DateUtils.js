@@ -16,7 +16,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateUtils", {
       statics: {
 
         /**
-         * @param {org.jspresso.framework.util.lang.DateDto} source
+         * @param source {org.jspresso.framework.util.lang.DateDto}
          * @return {Date}
          */
         fromDateDto: function (source) {
@@ -28,7 +28,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateUtils", {
         },
 
         /**
-         * @param {Date} source
+         * @param source {Date}
          * @return {org.jspresso.framework.util.lang.DateDto}
          */
         fromDate: function (source) {

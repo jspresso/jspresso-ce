@@ -18,9 +18,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer", {
 
       /**
        *
-       * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-       * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-       * @param table
+       * @param viewFactory {org.jspresso.framework.view.qx.DefaultQxViewFactory}
+       * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+       * @param table {qx.ui.table.Table}
        */
       construct: function (table, viewFactory, rComponent) {
         this.base(arguments);
