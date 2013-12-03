@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.qooxdoo.rpc;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.qooxdoo.rpc.RemoteCallUtils;
 
 /**
@@ -29,6 +31,23 @@ import net.sf.qooxdoo.rpc.RemoteCallUtils;
 public class RpcServlet extends net.sf.qooxdoo.rpc.RpcServlet {
 
   private static final long serialVersionUID = -3112390742440209121L;
+
+  /**
+   * Fixes an ArrayIndesOutOfBounds on the application when it is deployed in the root context.
+   *
+   * @param request
+   *          the servlet request.
+   * @return the context URL.
+   */
+  protected String getContextURL(HttpServletRequest request) {
+    StringBuffer contextURL = new StringBuffer(getDomainURL(request));
+    // the leading slash is already there.
+    String contextPath = request.getContextPath();
+    if (contextPath != null && contextPath.length() > 0) {
+      contextURL.append(contextPath.substring(1));
+    }
+    return contextURL.toString();
+  }
 
   /**
    * {@inheritDoc}
