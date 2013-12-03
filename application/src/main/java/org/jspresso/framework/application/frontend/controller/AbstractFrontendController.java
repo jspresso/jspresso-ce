@@ -504,15 +504,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
-  private boolean actionChainChecked = false;
+  private boolean executeDelayedActions       = true;
+  private boolean checkActionChainTheadSafety = true;
 
   /**
    * Executes frontend actions and delegates backend actions execution to its
    * peer backend controller.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
-  @SuppressWarnings("ThrowFromFinallyBlock")
+  @SuppressWarnings({"ThrowFromFinallyBlock", "ConstantConditions"})
   @Override
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
@@ -525,21 +526,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
     context.putAll(actionContext);
     // This is handled here since the selected module might have changed during
     // the action chain.
-    context.put(ActionContextConstants.CURRENT_MODULE,
-        getSelectedModule());
+    context.put(ActionContextConstants.CURRENT_MODULE, getSelectedModule());
     boolean result;
     Map<String, Object> initialActionState = null;
+    boolean savedExecuteDelayedActions = executeDelayedActions;
+    boolean savedCheckActionChainTheadSafety = checkActionChainTheadSafety;
     try {
-      if (isCheckActionThreadSafety() && !actionChainChecked) {
+      if (executeDelayedActions) {
+        executeDelayedActions = false;
+        executeDelayedActions(this);
+      }
+      if (isCheckActionThreadSafety() && checkActionChainTheadSafety) {
+        checkActionChainTheadSafety = false;
         try {
           initialActionState = extractInternalActionState(action);
         } catch (IllegalAccessException ex) {
-          throw new ActionException(
-              ex,
-              "Unable to extract internal action state for thread-safety checking of action : "
-                  + action);
+          throw new ActionException(ex,
+              "Unable to extract internal action state for thread-safety checking of action : " + action);
         }
-        actionChainChecked = true;
       }
       // Should be handled before getting there.
       // checkAccess(action);
@@ -551,38 +555,32 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } catch (Throwable ex) {
       Throwable refinedException = ex;
       if (ex instanceof HibernateException) {
-        refinedException = SessionFactoryUtils
-            .convertHibernateAccessException((HibernateException) ex);
+        refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) ex);
       }
       handleException(refinedException, context);
       result = false;
     } finally {
+      executeDelayedActions = savedExecuteDelayedActions;
+      checkActionChainTheadSafety = savedCheckActionChainTheadSafety;
       if (initialActionState != null) {
         Map<String, Object> finalActionState;
         try {
           finalActionState = extractInternalActionState(action);
         } catch (IllegalAccessException ex) {
-          throw new ActionException(
-              ex,
-              "Unable to extract internal action state for thread-safety checking of action : "
-                  + action);
+          throw new ActionException(ex,
+              "Unable to extract internal action state for thread-safety checking of action : " + action);
         }
         if (!initialActionState.equals(finalActionState)) {
-          LOG.error(
-              "A coding problem has been detected that breaks action thread-safety.\n"
-                  + "The action internal state has been modified during its execution which is strictly forbidden.\n"
-                  + "The action chain started with : {}", action);
-          logInternalStateDifferences("root", initialActionState,
-              finalActionState);
-          throw new ActionException(
-              "A coding problem has been detected that breaks action thread-safety.\n"
-                  + "The action internal state has been modified during its execution which is strictly forbidden.\n"
-                  + "The action chain started with : " + action);
+          LOG.error("A coding problem has been detected that breaks action thread-safety.\n"
+              + "The action internal state has been modified during its execution which is strictly forbidden.\n"
+              + "The action chain started with : {}", action);
+          logInternalStateDifferences("root", initialActionState, finalActionState);
+          throw new ActionException("A coding problem has been detected that breaks action thread-safety.\n"
+              + "The action internal state has been modified during its execution which is strictly forbidden.\n"
+              + "The action chain started with : " + action);
         }
-        actionChainChecked = false;
       }
     }
-    executeDelayedActions(this);
     return result;
   }
 
@@ -598,9 +596,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   @SuppressWarnings("unchecked")
-  private void logInternalStateDifferences(String prefix,
-      Map<String, Object> initialActionState,
-      Map<String, Object> finalActionState) {
+  private void logInternalStateDifferences(String prefix, Map<String, Object> initialActionState,
+                                           Map<String, Object> finalActionState) {
     for (Map.Entry<String, Object> initialEntry : initialActionState.entrySet()) {
       String leaf = initialEntry.getKey();
       if (leaf.indexOf('.') >= 0) {
@@ -611,29 +608,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
         Object initialValue = initialEntry.getValue();
         Object finalValue = finalActionState.get(initialEntry.getKey());
         if (initialValue != null && finalValue == null) {
-          LOG.error(
-              ">> [{}] is not null in the initial action state but null in the final one.",
-              path);
+          LOG.error(">> [{}] is not null in the initial action state but null in the final one.", path);
         } else if (initialValue == null && finalValue != null) {
-          LOG.error(
-              ">> [{}] is null in the initial action state but not null in the final one.",
-              path);
+          LOG.error(">> [{}] is null in the initial action state but not null in the final one.", path);
         } else if (initialValue != null && !initialValue.equals(finalValue)) {
-          if (initialValue instanceof Map<?, ?>
-              && finalValue instanceof Map<?, ?>) {
-            logInternalStateDifferences(path,
-                (Map<String, Object>) initialValue,
-                (Map<String, Object>) finalValue);
+          if (initialValue instanceof Map<?, ?> && finalValue instanceof Map<?, ?>) {
+            logInternalStateDifferences(path, (Map<String, Object>) initialValue, (Map<String, Object>) finalValue);
           } else {
-            LOG.error(
-                ">> [{}] is different in the initial action state and in the final one.",
-                path);
+            LOG.error(">> [{}] is different in the initial action state and in the final one.", path);
           }
         }
       } else {
-        LOG.error(
-            ">> [{}] is present in the final action state but not in the initial one.",
-            path);
+        LOG.error(">> [{}] is present in the final action state but not in the initial one.", path);
       }
     }
     for (Map.Entry<String, Object> finalEntry : finalActionState.entrySet()) {
@@ -643,16 +629,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
           leaf = leaf.substring(leaf.lastIndexOf('.') + 1);
         }
         String path = prefix + "|" + leaf;
-        LOG.error(
-            ">> [{}] is present in the initial action state but not in the final one.",
-            path);
+        LOG.error(">> [{}] is present in the initial action state but not in the final one.", path);
       }
     }
   }
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   @Override
@@ -686,7 +670,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the help actions.
-   * 
+   *
    * @return the help actions.
    */
   @Override
@@ -696,7 +680,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the navigation actions.
-   * 
+   *
    * @return the navigation actions.
    */
   @Override
@@ -708,8 +692,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     return controllerDescriptor.getI18nDescription(translationProvider, locale);
   }
 
@@ -717,8 +700,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
     return controllerDescriptor.getI18nName(translationProvider, locale);
   }
 
@@ -738,16 +720,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<>();
-    initialActionContext.putAll(getBackendController()
-        .getInitialActionContext());
+    initialActionContext.putAll(getBackendController().getInitialActionContext());
     if (dialogContextStack != null) {
       for (int i = dialogContextStack.size() - 1; i >= 0; i--) {
         initialActionContext.putAll(dialogContextStack.get(i));
       }
     }
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
-    initialActionContext.put(ActionContextConstants.MODULE,
-        selectedModules.get(getSelectedWorkspaceName()));
+    initialActionContext.put(ActionContextConstants.MODULE, selectedModules.get(getSelectedWorkspaceName()));
     return initialActionContext;
   }
 
@@ -757,8 +737,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public Locale getLocale() {
     if (getBackendController() != null) {
-      Locale sessionLocale = getBackendController().getApplicationSession()
-          .getLocale();
+      Locale sessionLocale = getBackendController().getApplicationSession().getLocale();
       if (sessionLocale != null) {
         return sessionLocale;
       }
@@ -793,7 +772,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the mvcBinder.
-   * 
+   *
    * @return the mvcBinder.
    */
   @Override
@@ -819,7 +798,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the selectedWorkspaceName.
-   * 
+   *
    * @return the selectedWorkspaceName.
    */
   @Override
@@ -858,7 +837,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the viewFactory.
-   * 
+   *
    * @return the viewFactory.
    */
   @Override
@@ -881,8 +860,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public Workspace getWorkspace(String workspaceName, boolean bypassSecurity) {
     if (workspaceName != null && workspaces != null) {
       Workspace workspace = workspaces.get(workspaceName);
-      if (bypassSecurity || workspaceName.equals(getSelectedWorkspaceName())
-          || isAccessGranted(workspace)) {
+      if (bypassSecurity || workspaceName.equals(getSelectedWorkspaceName()) || isAccessGranted(workspace)) {
         try {
           pushToSecurityContext(workspace);
           return workspace;
@@ -938,7 +916,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * main application frame. These actions are available at any time from the UI
    * and thus, do not depend on the active workspace. General purpose actions
    * like &quot;Change password&quot; action should be installed here.
-   * 
+   *
    * @param actionMap
    *          the actionMap to set.
    */
@@ -949,7 +927,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Sets the application description i18n key. The way this description is
    * actually leveraged depends on the UI channel.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -963,7 +941,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * module(s) dirty state(s), then notifies user of pending persistent changes.
    * When no flush is needed or the user bypasses them, the actual exit is
    * performed.
-   * 
+   *
    * @param exitAction
    *          the exitAction to set.
    */
@@ -995,7 +973,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * The help action map is visually distinguished from the regular application
    * action map. For instance elp actions can be represented in a menu that is
    * right-aligned in the menu bar.
-   * 
+   *
    * @param helpActionMap
    *          the helpActionMap to set.
    */
@@ -1007,7 +985,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Configures the navigation action map. The navigation action map should
    * contain actions that are related to navigating the modules and workspace
    * history, e.g. previous, next, home, and so on.
-   * 
+   *
    * @param navigationActionMap
    *          the navigationActionMap to set.
    */
@@ -1023,7 +1001,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
    * <li>the <b>classpath:/</b> pseudo URL protocol</li>
    * </ul>
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -1047,7 +1025,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Configures the view descriptor used to create the login dialog. The default
    * built-in login view descriptor includes a standard login/password form.
-   * 
+   *
    * @param loginViewDescriptor
    *          the loginViewDescriptor to set.
    */
@@ -1059,7 +1037,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Configures the MVC binder used to apply model-view bindings. There is
    * hardly any reason for the developer to change the default binder but it
    * can be customized here.
-   * 
+   *
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -1071,7 +1049,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the application name i18n key. The way this name is actually leveraged
    * depends on the UI channel but it typically generates (part of the) frame
    * title.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -1081,7 +1059,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the lastUpdated.
-   * 
+   *
    * @param lastUpdated
    *          the lastUpdated to set.
    * @internal
@@ -1094,7 +1072,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Configures an action to be executed each time a module of the application
    * is entered. The action is executed in the context of the module the user
    * enters.
-   * 
+   *
    * @param onModuleEnterAction
    *          the onModuleEnterAction to set.
    */
@@ -1106,7 +1084,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Configures an action to be executed each time a module of the application
    * is started. The action is executed in the context of the module the user
    * starts.
-   * 
+   *
    * @param onModuleStartupAction
    *          the onModuleStartupAction to set.
    */
@@ -1119,7 +1097,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * is exited. The action is executed in the context of the module the user
    * exits. Default frontend controller configuration installs an action that
    * checks current module dirty state.
-   * 
+   *
    * @param onModuleExitAction
    *          the onModuleExitAction to set.
    */
@@ -1133,7 +1111,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * action would be constructing a map of dynamic user right based on some
    * arbitrary data store so that the UI construction can actually depend on
    * these extracted values.
-   * 
+   *
    * @param loginAction
    *          the loginAction to set.
    */
@@ -1147,7 +1125,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * main UI has been constructed based on its access rights.An example of such
    * an action would be a default workspace/module opening and selection, a
    * &quot;tip of the day&quot; like action, ...
-   * 
+   *
    * @param startupAction
    *          the startupAction to set.
    */
@@ -1160,7 +1138,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Using a custom view factory is typically needed for extending Jspresso to
    * use custom view descriptors / UI components. Of course, there is a view
    * factory concrete type per UI channel.
-   * 
+   *
    * @param viewFactory
    *          the viewFactory to set.
    */
@@ -1172,7 +1150,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Configures the workspaces that are available in the application. Workspaces
    * are application entry-points and are hierarchically composed of modules /
    * sub-modules.
-   * 
+   *
    * @param workspaces
    *          the workspaces to set.
    */
@@ -1191,7 +1169,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
    * <li>the <b>classpath:/</b> pseudo URL protocol</li>
    * </ul>
-   * 
+   *
    * @param workspacesMenuIconImageUrl
    *          the workspacesMenuIconImageUrl to set.
    */
@@ -1205,8 +1183,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController peerController,
-      Locale theClientLocale, TimeZone theClientTimeZone) {
+  public boolean start(IBackendController peerController, Locale theClientLocale, TimeZone theClientTimeZone) {
     this.clientLocale = theClientLocale;
     Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
