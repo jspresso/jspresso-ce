@@ -53,8 +53,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.BackendException;
@@ -1297,6 +1299,17 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void flush() {
     getHibernateSession().flush();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void afterCompletion(int status) {
+    super.afterCompletion(status);
+    if (getTransactionTemplate().getTransactionManager() instanceof JtaTransactionManager) {
+      TransactionSynchronizationManager.unbindResourceIfPossible(getHibernateSessionFactory());
+    }
   }
 
 }
