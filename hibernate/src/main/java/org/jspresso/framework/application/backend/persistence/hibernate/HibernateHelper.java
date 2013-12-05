@@ -194,6 +194,7 @@ public final class HibernateHelper {
         ((PersistentCollection) collection).clearDirty();
       }
       if (collection instanceof AbstractPersistentCollection
+          && ((AbstractPersistentCollection) collection).getSession() != null
           && targetSession != ((AbstractPersistentCollection) collection).getSession()) {
         // The following is to avoid to avoid Hibernate exceptions due to
         // re-associating a collection that is already associated with the
