@@ -30,11 +30,12 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.action.Transactional;
+import org.jspresso.framework.application.backend.session.EMergeMode;
 
 /**
  * A specialized thread dedicated to executing asynchronous actions. It is able
  * to record the action progress.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -44,9 +45,10 @@ public class AsyncActionExecutor extends Thread {
   private Map<String, Object>       context;
   private AbstractBackendController slaveBackendController;
 
-  private Date                      startedTimestamp;
-  private double                    progress;
-  private final String              EXCEPTION_KEY = "EXCEPTION_KEY";
+  private Date   startedTimestamp;
+  private double progress;
+  private static final String EXCEPTION_KEY            = "EXCEPTION_KEY";
+  private static final String COMPLETED_CONTROLLER_KEY = "COMPLETED_CONTROLLER_KEY";
 
   /**
    * Constructs a new {@code AsyncActionExecutor} instance.
@@ -93,10 +95,28 @@ public class AsyncActionExecutor extends Thread {
     slaveContext.remove(ActionContextConstants.FRONT_CONTROLLER);
 
     try {
+      if (action.getClass().getAnnotation(Asynchronous.class).autoMergeBackEntities()) {
+        slaveBackendController.recordUowMergedEntities();
+      }
       if (action.getClass().isAnnotationPresent(Transactional.class)) {
         slaveBackendController.executeTransactionally(action, slaveContext);
       } else {
         action.execute(slaveBackendController, slaveContext);
+      }
+      if (action.getClass().getAnnotation(Asynchronous.class).autoMergeBackEntities()) {
+        Map<String, Object> mergeContext = new HashMap<>();
+        mergeContext.put(COMPLETED_CONTROLLER_KEY, slaveBackendController);
+        slaveBackendController.executeLater(new BackendAction() {
+          @Override
+          public boolean execute(IActionHandler actionHandler, Map<String, Object> innerContext) {
+            AbstractBackendController completedController =
+                (AbstractBackendController) innerContext.get(COMPLETED_CONTROLLER_KEY);
+            AbstractBackendController mainController = (AbstractBackendController) getBackendController(innerContext);
+            mainController.merge(completedController.getRecordedUowMergedEntitiesAndClear(),
+                EMergeMode.MERGE_LAZY);
+            return super.execute(actionHandler, innerContext);
+          }
+        }, mergeContext);
       }
     } catch (RuntimeException ex) {
       if (action.getClass().getAnnotation(Asynchronous.class).pushRuntimeExceptions()) {
@@ -121,7 +141,7 @@ public class AsyncActionExecutor extends Thread {
 
   /**
    * Gets the progress.
-   * 
+   *
    * @return the progress.
    */
   public double getProgress() {
@@ -130,7 +150,7 @@ public class AsyncActionExecutor extends Thread {
 
   /**
    * Sets the progress.
-   * 
+   *
    * @param progress
    *          the progress to set.
    */
@@ -140,7 +160,7 @@ public class AsyncActionExecutor extends Thread {
 
   /**
    * Gets the startedTimestamp.
-   * 
+   *
    * @return the startedTimestamp.
    */
   public Date getStartedTimestamp() {

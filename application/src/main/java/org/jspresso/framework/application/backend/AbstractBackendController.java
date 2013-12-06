@@ -304,7 +304,11 @@ public abstract class AbstractBackendController extends AbstractController
   protected void doCommitUnitOfWork() {
     try {
       if (unitOfWork.getUpdatedEntities() != null) {
-        merge(new ArrayList<>(unitOfWork.getUpdatedEntities()), EMergeMode.MERGE_CLEAN_LAZY);
+        List<IEntity> mergedEntities = merge(new ArrayList<>(unitOfWork.getUpdatedEntities()),
+            EMergeMode.MERGE_CLEAN_LAZY);
+        if (recordedMergedEntities != null) {
+          recordedMergedEntities.addAll(mergedEntities);
+        }
       }
     } finally {
       unitOfWork.commit();
@@ -2640,5 +2644,25 @@ public abstract class AbstractBackendController extends AbstractController
     } else {
       super.executeLater(action, context);
     }
+  }
+
+  private List<IEntity> recordedMergedEntities;
+
+  /**
+   * Record uow merged entities for later reuse.
+   */
+  public void recordUowMergedEntities() {
+    recordedMergedEntities = new ArrayList<>();
+  }
+
+  /**
+   * Gets recorded uow merged entities.
+   *
+   * @return the recorded uow merged entities
+   */
+  public List<IEntity> getRecordedUowMergedEntitiesAndClear() {
+    List<IEntity> copy = recordedMergedEntities;
+    recordedMergedEntities = null;
+    return copy;
   }
 }
