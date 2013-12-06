@@ -36,5 +36,11 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface Asynchronous {
-  // This is just a marker annotation.
+
+  /**
+   * Push runtime exceptions to the UI as a delayed action.
+   *
+   * @return the boolean
+   */
+  boolean pushRuntimeExceptions() default true;
 }

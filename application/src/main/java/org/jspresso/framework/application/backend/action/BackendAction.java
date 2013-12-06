@@ -64,16 +64,12 @@ public class BackendAction extends AbstractAction {
   public static final String  SELECTED_MODELS          = "SELECTED_MODELS";
 
   private boolean             badFrontendAccessChecked;
-  private boolean             asynchronous;
-  private boolean             transactional;
 
   /**
    * Constructs a new {@code BackendAction} instance.
    */
   public BackendAction() {
     setBadFrontendAccessChecked(true);
-    setAsynchronous(false);
-    setTransactional(false);
   }
 
   /**
@@ -242,47 +238,6 @@ public class BackendAction extends AbstractAction {
               + "{} should use either the action parameter or a specific variable.",
           getClass().getName());
     }
-  }
-
-  /**
-   * Gets the asynchronous.
-   * 
-   * @return the asynchronous.
-   */
-  @Override
-  public boolean isAsynchronous() {
-    return asynchronous || getClass().isAnnotationPresent(Asynchronous.class);
-  }
-
-  /**
-   * Sets the asynchronous.
-   * 
-   * @param asynchronous
-   *          the asynchronous to set.
-   */
-  public void setAsynchronous(boolean asynchronous) {
-    this.asynchronous = asynchronous;
-  }
-
-  /**
-   * Gets the transactional.
-   * 
-   * @return the transactional.
-   */
-  @Override
-  public boolean isTransactional() {
-    return transactional || getClass().isAnnotationPresent(Transactional.class);
-  }
-
-  /**
-   * Sets the transactional.
-   *
-   * @param transactional
-   *          the transactional to set.
-   */
-  @SuppressWarnings("UnusedParameters")
-  public void setTransactional(boolean transactional) {
-    this.transactional = false;
   }
 
   /**

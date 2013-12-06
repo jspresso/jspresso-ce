@@ -234,26 +234,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Returns false.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isTransactional() {
-    return false;
-  }
-
-  /**
-   * Returns false.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isAsynchronous() {
-    return false;
-  }
-
-  /**
    * Gets the collectionBased.
    *
    * @return the collectionBased.
