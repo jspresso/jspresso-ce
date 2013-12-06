@@ -1,6 +1,9 @@
 3.8
 ===
-- in order to fullfil RFE #1124, the checkPasswordValidity method signature has been augmented with the action
+- We have removed the possibility to programmatically set an action to be transactional or asynchronous. Now,
+  the only way to go is using annotations.
+
+- In order to fullfil RFE #1124, the checkPasswordValidity method signature has been augmented with the action
   context as parameter. This allows to test against the session login in order to enforce password strength.
 
 - Removed dependency towards BSF 2.x and now use the JSR-223 (javax.script) that is included in Java6 and onwards.
