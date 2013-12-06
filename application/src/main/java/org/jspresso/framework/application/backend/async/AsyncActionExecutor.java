@@ -24,8 +24,12 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
+import org.jspresso.framework.application.backend.action.Asynchronous;
+import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.action.Transactional;
 
 /**
  * A specialized thread dedicated to executing asynchronous actions. It is able
@@ -42,6 +46,7 @@ public class AsyncActionExecutor extends Thread {
 
   private Date                      startedTimestamp;
   private double                    progress;
+  private final String              EXCEPTION_KEY = "EXCEPTION_KEY";
 
   /**
    * Constructs a new {@code AsyncActionExecutor} instance.
@@ -74,7 +79,7 @@ public class AsyncActionExecutor extends Thread {
   @Override
   public void run() {
     startedTimestamp = new Date();
-    // The following ill not store the slave backend controller in the HTTP
+    // The following will not store the slave backend controller in the HTTP
     // session since we are in a new thread.
     BackendControllerHolder.setThreadBackendController(slaveBackendController);
 
@@ -88,10 +93,21 @@ public class AsyncActionExecutor extends Thread {
     slaveContext.remove(ActionContextConstants.FRONT_CONTROLLER);
 
     try {
-      if (action.isTransactional()) {
+      if (action.getClass().isAnnotationPresent(Transactional.class)) {
         slaveBackendController.executeTransactionally(action, slaveContext);
       } else {
         action.execute(slaveBackendController, slaveContext);
+      }
+    } catch (RuntimeException ex) {
+      if (action.getClass().getAnnotation(Asynchronous.class).pushRuntimeExceptions()) {
+        Map<String, Object> exceptionContext = new HashMap<>();
+        exceptionContext.put(EXCEPTION_KEY, ex);
+        slaveBackendController.executeLater(new BackendAction() {
+          @Override
+          public boolean execute(IActionHandler actionHandler, Map<String, Object> innerContext) {
+            throw (RuntimeException) innerContext.get(EXCEPTION_KEY);
+          }
+        }, exceptionContext);
       }
     } finally {
       slaveBackendController.cleanupRequestResources();
