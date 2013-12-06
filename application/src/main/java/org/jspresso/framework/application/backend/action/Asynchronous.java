@@ -43,4 +43,11 @@ public @interface Asynchronous {
    * @return the boolean
    */
   boolean pushRuntimeExceptions() default true;
+
+  /**
+   * Auto merge back entities to the main application session once the asynchronous action is complete.
+   *
+   * @return the boolean
+   */
+  boolean autoMergeBackEntities() default false;
 }
