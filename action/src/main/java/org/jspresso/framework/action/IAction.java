@@ -61,20 +61,4 @@ public interface IAction extends ISecurable, IPermIdSource {
    *         model objects).
    */
   boolean isBackend();
-
-  /**
-   * Tells the framework wether this action should be executed transactionally.
-   * 
-   * @return true if the action should be executed transactionally.
-   */
-  boolean isTransactional();
-
-  /**
-   * Tells the framework wether this action should be executed asynchronously.
-   * In that case, it is executed on a separate thread using it's own context.
-   * 
-   * @return true if the action should be executed asynchronously.
-   */
-  boolean isAsynchronous();
-
 }

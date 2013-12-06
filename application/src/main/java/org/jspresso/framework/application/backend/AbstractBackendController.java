@@ -49,6 +49,8 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
+import org.jspresso.framework.application.backend.action.Asynchronous;
+import org.jspresso.framework.application.backend.action.Transactional;
 import org.jspresso.framework.application.backend.async.AsyncActionExecutor;
 import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory;
 import org.jspresso.framework.application.backend.session.EMergeMode;
@@ -350,7 +352,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (context != null) {
       context.putAll(actionContext);
     }
-    if (action.isAsynchronous()) {
+    if (action.getClass().isAnnotationPresent(Asynchronous.class)) {
       int currentExecutorsCount = getRunningExecutors().size();
       int maxExecutorsCount = getAsyncExecutorsMaxCount(context);
       if (maxExecutorsCount >= 0 && currentExecutorsCount >= maxExecutorsCount) {
@@ -362,7 +364,8 @@ public abstract class AbstractBackendController extends AbstractController
       }
       executeAsynchronously(action, context);
       return true;
-    } else if (action.isTransactional()) {
+    }
+    if (action.getClass().isAnnotationPresent(Transactional.class)) {
       return executeTransactionally(action, context);
     }
     return action.execute(this, context);
@@ -370,8 +373,8 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Executes an action asynchronously, i.e. when
-   * {@link IAction#isAsynchronous()} returns true.
-   * 
+   * the action is annotated with {@link org.jspresso.framework.application.backend.action.Asynchronous}.
+   *
    * @param action
    *          the action to execute.
    * @param context
