@@ -70,7 +70,6 @@ import org.jspresso.framework.model.entity.CarbonEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
-import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
@@ -703,15 +702,9 @@ public class HibernateBackendController extends AbstractBackendController {
     if (!hibernateSession.contains(entity)) {
       // Do not use get before trying to lock.
       // Get performs a DB query.
-      try {
-        hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
-      } catch (Exception ex) {
-        IComponent sessionEntity = (IComponent) hibernateSession.get(
-            getComponentContract(entity), entity.getId());
-        evictFromHibernateInDepth(sessionEntity, hibernateSession,
-            new BasicEntityRegistry("evictFromHibernateInDepth"));
-        hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
-      }
+      IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
+      detachFromHibernateInDepth(entity, hibernateSession, alreadyDetached);
+      hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
     }
   }
 
@@ -779,42 +772,6 @@ public class HibernateBackendController extends AbstractBackendController {
               for (IComponent element : snapshot) {
                 lockInHibernateInDepth(element, hibernateSession,
                     alreadyLocked);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private void evictFromHibernateInDepth(IComponent component,
-      Session hibernateSession, IEntityRegistry alreadyEvicted) {
-    if (component == null) {
-      return;
-    }
-    boolean isEntity = component instanceof IEntity;
-    if (!isEntity || alreadyEvicted.get(getComponentContract((IEntity) component), ((IEntity) component).getId()) == null) {
-      if (isEntity) {
-        alreadyEvicted.register(getComponentContract((IEntity) component), ((IEntity) component).getId(),
-            (IEntity) component);
-      }
-      if (!isEntity || ((IEntity) component).isPersistent()) {
-        if (isEntity) {
-          hibernateSession.evict(component);
-        }
-        Map<String, Object> entityProperties = component
-            .straightGetProperties();
-        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-          if (isInitialized(property.getValue())) {
-            if (property.getValue() instanceof IEntity) {
-              evictFromHibernateInDepth((IEntity) property.getValue(),
-                  hibernateSession, alreadyEvicted);
-            } else if (property.getValue() instanceof Collection) {
-              for (IComponent element : ((Collection<IComponent>) property
-                  .getValue())) {
-                evictFromHibernateInDepth(element, hibernateSession,
-                    alreadyEvicted);
               }
             }
           }
