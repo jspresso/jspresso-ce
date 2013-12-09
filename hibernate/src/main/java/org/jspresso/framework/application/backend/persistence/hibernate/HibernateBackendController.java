@@ -38,6 +38,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -704,7 +705,16 @@ public class HibernateBackendController extends AbstractBackendController {
     if (!hibernateSession.contains(entity)) {
       // Do not use get before trying to lock.
       // Get performs a DB query.
-      hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
+      try {
+        hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
+      } catch (NonUniqueObjectException ex) {
+        if (hibernateSession == noTxSession) {
+          hibernateSession.clear();
+          hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
+        } else {
+          throw ex;
+        }
+      }
     }
   }
 
