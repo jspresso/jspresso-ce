@@ -399,14 +399,18 @@ public class HibernateBackendController extends AbstractBackendController {
       Session hibernateSession) {
     Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
     if (!isInitialized(propertyValue)) {
+      IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
       if (componentOrEntity instanceof IEntity) {
         if (((IEntity) componentOrEntity).isPersistent()) {
+          detachFromHibernateInDepth(componentOrEntity, hibernateSession, alreadyDetached);
           lockInHibernate((IEntity) componentOrEntity, hibernateSession);
         } else if (propertyValue instanceof IEntity) {
+          detachFromHibernateInDepth((IEntity) propertyValue, hibernateSession, alreadyDetached);
           lockInHibernate((IEntity) propertyValue, hibernateSession);
         }
       } else if (propertyValue instanceof IEntity) {
         // to handle initialization of component properties.
+        detachFromHibernateInDepth((IEntity) propertyValue, hibernateSession, alreadyDetached);
         lockInHibernate((IEntity) propertyValue, hibernateSession);
       }
 
@@ -743,8 +747,6 @@ public class HibernateBackendController extends AbstractBackendController {
     if (!hibernateSession.contains(entity)) {
       // Do not use get before trying to lock.
       // Get performs a DB query.
-      IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
-      detachFromHibernateInDepth(entity, hibernateSession, alreadyDetached);
       hibernateSession.buildLockRequest(LockOptions.NONE).lock(entity);
     }
   }
