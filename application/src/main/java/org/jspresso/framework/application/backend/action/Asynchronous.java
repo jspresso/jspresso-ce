@@ -49,5 +49,5 @@ public @interface Asynchronous {
    *
    * @return the boolean
    */
-  boolean autoMergeBackEntities() default false;
+  boolean autoMergeBackEntities() default true;
 }
