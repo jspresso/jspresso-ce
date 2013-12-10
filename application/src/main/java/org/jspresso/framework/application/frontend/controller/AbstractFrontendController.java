@@ -502,7 +502,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
-  private boolean executeDelayedActions       = true;
   private boolean checkActionChainTheadSafety = true;
 
   /**
@@ -527,13 +526,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     context.put(ActionContextConstants.CURRENT_MODULE, getSelectedModule());
     boolean result;
     Map<String, Object> initialActionState = null;
-    boolean savedExecuteDelayedActions = executeDelayedActions;
     boolean savedCheckActionChainTheadSafety = checkActionChainTheadSafety;
     try {
-      if (executeDelayedActions) {
-        executeDelayedActions = false;
-        executeDelayedActions(this);
-      }
       if (isCheckActionThreadSafety() && checkActionChainTheadSafety) {
         checkActionChainTheadSafety = false;
         try {
@@ -558,7 +552,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       handleException(refinedException, context);
       result = false;
     } finally {
-      executeDelayedActions = savedExecuteDelayedActions;
       checkActionChainTheadSafety = savedCheckActionChainTheadSafety;
       if (initialActionState != null) {
         Map<String, Object> finalActionState;
