@@ -148,7 +148,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       if (backendController.isUnitOfWorkActive()) {
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
-          String propertyName = propertyNames[i];
+          String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
           if (!isHibernateInternal(propertyName)) {
             properties.put(propertyName, state[i]);
           }
@@ -163,7 +163,7 @@ public class ControllerAwareEntityProxyInterceptor extends
           Map<String, Object> properties = new HashMap<String, Object>();
           for (int i = 0; i < propertyNames.length; i++) {
             if (state[i] != null) {
-              String propertyName = propertyNames[i];
+              String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
               if (!isHibernateInternal(propertyName)) {
                 if (state[i] instanceof IEntity) {
                   IEntity refEntity = (IEntity) state[i];
