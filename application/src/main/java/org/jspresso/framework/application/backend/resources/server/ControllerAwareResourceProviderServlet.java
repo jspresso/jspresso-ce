@@ -29,6 +29,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.async.AsyncActionExecutor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
@@ -51,23 +52,14 @@ public class ControllerAwareResourceProviderServlet extends
    * {@inheritDoc}
    */
   @Override
-  protected void writeActiveResource(final IActiveResource resource,
-                                     final OutputStream outputStream) throws IOException {
+  protected void writeActiveResource(IActiveResource resource,
+                                     OutputStream outputStream) throws IOException {
     IBackendController backendController = BackendControllerHolder
         .getCurrentBackendController();
     AbstractBackendController slaveBackendController = (AbstractBackendController) backendController
         .createBackendController();
-    AsyncActionExecutor executor = new AsyncActionExecutor(new BackendAction() {
-      @Override
-      public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-        try {
-          doWriteActiveResource(resource, outputStream);
-        } catch (IOException ioe) {
-          throw new NestedRuntimeException(ioe);
-        }
-        return true;
-      }
-    }, new HashMap<String, Object>(), null, slaveBackendController);
+    AsyncActionExecutor executor = new AsyncActionExecutor(new AsyncExportAction(resource, outputStream),
+        new HashMap<String, Object>(), null, slaveBackendController);
     try {
       // execute synchronously in the thread
       try {
@@ -93,5 +85,27 @@ public class ControllerAwareResourceProviderServlet extends
    */
   protected void doWriteActiveResource(IActiveResource resource, OutputStream outputStream) throws IOException {
     super.writeActiveResource(resource, outputStream);
+  }
+
+  @Asynchronous
+  private class AsyncExportAction extends BackendAction {
+
+    private IActiveResource resource;
+    private OutputStream outputStream;
+
+    public AsyncExportAction(IActiveResource resource, OutputStream outputStream) {
+      this.resource = resource;
+      this.outputStream = outputStream;
+    }
+
+    @Override
+    public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+      try {
+        doWriteActiveResource(resource, outputStream);
+      } catch (IOException ioe) {
+        throw new NestedRuntimeException(ioe);
+      }
+      return true;
+    }
   }
 }
