@@ -1,12 +1,21 @@
-/*******************************************************************************
+/*
+ * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
  *
- * Copyright:
+ *  This file is part of the Jspresso framework.
  *
- * License:
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Authors:
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- ******************************************************************************/
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * @use(org.jspresso.framework.gui.remote.RAction)
@@ -77,20 +86,15 @@
  *
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.Application", {
-  extend: qx.application.Standalone,
+qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication", {
+  extend: qx.application.Mobile,
 
   members: {
-    /** @type {org.jspresso.framework.application.frontend.controller.qx.DefaultQxController} */
+    /** @type {org.jspresso.framework.application.frontend.controller.qx.MobileQxController} */
     __qxController: null,
 
     main: function () {
       this.base(arguments);
-
-      qx.Class.patch(qx.ui.form.CheckBox, org.jspresso.framework.patch.MCheckBox);
-
-      qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
-      qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
 
       // Enable logging in debug variant
       if (qx.core.Environment.get("qx.debug")) {
@@ -107,7 +111,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
     },
 
     startController: function (remoteController) {
-      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(this,
+      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.MobileQxController(this,
           remoteController, "en");
       this.__qxController.start();
     },
