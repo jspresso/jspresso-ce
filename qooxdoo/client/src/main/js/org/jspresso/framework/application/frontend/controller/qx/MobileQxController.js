@@ -102,6 +102,117 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         topDialog.exclude();
         topDialog.destroy();
       }
+    },
+
+    /**
+     * @param workspaceNames {String[]}
+     * @param workspaceActions {org.jspresso.framework.gui.remote.RActionList}
+     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
+     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param secondaryActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param size {org.jspresso.framework.util.gui.Dimension}
+     * @return {undefined}
+     *
+     */
+    _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
+                                     secondaryActions, helpActions, size) {
+
+      var workspaces = new qx.data.Array();
+      for (var i = 0; i < workspaceActions.getActions().length; i++) {
+        var workspaceAction = workspaceActions.getActions()[i];
+        workspaces.push({
+          title: workspaceAction.getName(),
+          subtitle: workspaceAction.getDescription(),
+          image: workspaceAction.getIcon().getImageUrlSpec(),
+          action: workspaceAction
+        });
+      }
+      var workspaceList = new qx.ui.mobile.list.List({
+        configureItem : function(item, data, row) {
+          item.setTitle(data.title);
+          item.setSubtitle(data.subtitle);
+          item.setImage(data.image);
+          item.setShowArrow(true);
+          // Workaround to assign a size to the image that is not known to the resource loader.
+          item.getImageWidget()._setStyle("width", "2rem");
+          item.getImageWidget()._setStyle("height", "2rem");
+        }
+      });
+      workspaceList.setModel(workspaces);
+      workspaceList.addListener("changeSelection", function(evt) {
+        var workspaceAction = workspaces[evt.getData()].action;
+        this.execute(workspaceAction);
+      }, this);
+
+      var workspacesPage = new qx.ui.mobile.page.NavigationPage();
+      workspacesPage.addListener("initialize", function (e) {
+        var content = workspacesPage.getContent();
+        content.add(workspaceList);
+      }, this);
+      this._manager.addMaster(workspacesPage);
+      workspacesPage.show();
+    },
+
+    /**
+     *
+     * @param workspaceName {String}
+     * @param workspaceView {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
+    _displayWorkspace: function (workspaceName, workspaceView) {
+//      if (workspaceView) {
+//        var workspaceNavigator = null;
+//        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
+//          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
+//          workspaceNavigator = wv.getLeftTop();
+//          workspaceView = wv.getRightBottom();
+//        }
+//        var workspaceViewUI = this.createComponent(workspaceView);
+//        workspaceViewUI.setUserData("workspaceName", workspaceName);
+//        this.__workspaceStack.add(workspaceViewUI);
+//        if (workspaceNavigator) {
+//          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
+//          if (workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
+//            workspaceNavigatorUI.setHideRoot(true);
+//          }
+//          var existingChildren = this.__workspaceAccordionGroup.getChildren();
+//          var existingChild;
+//          for (var i = 0; i < existingChildren.length; i++) {
+//            var child = existingChildren[i];
+//            if (child.getUserData("workspaceName") == workspaceName) {
+//              existingChild = child;
+//            }
+//          }
+//          if (existingChild) {
+//            existingChild.add(workspaceNavigatorUI);
+//          }
+//        }
+//      }
+//      var children = this.__workspaceStack.getChildren();
+//      var selectedChild;
+//      for (var i = 0; i < children.length; i++) {
+//        var child = children[i];
+//        if (child.getUserData("workspaceName") == workspaceName) {
+//          selectedChild = child;
+//        }
+//      }
+//      if (selectedChild) {
+//        this.__workspaceStack.setSelection([selectedChild]);
+//      }
+//
+//      children = this.__workspaceAccordionGroup.getChildren();
+//      selectedChild = null;
+//      for (var i = 0; i < children.length; i++) {
+//        var child = children[i];
+//        if (child.getUserData("workspaceName") == workspaceName) {
+//          selectedChild = child;
+//        }
+//      }
+//      if (selectedChild) {
+//        this.__workspaceAccordionGroup.setSelection([selectedChild]);
+//      }
     }
 
 

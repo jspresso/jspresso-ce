@@ -650,61 +650,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
-      if (workspaceView) {
-        var workspaceNavigator = null;
-        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
-          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
-          workspaceNavigator = wv.getLeftTop();
-          workspaceView = wv.getRightBottom();
-        }
-        var workspaceViewUI = this.createComponent(workspaceView);
-        workspaceViewUI.setUserData("workspaceName", workspaceName);
-        this.__workspaceStack.add(workspaceViewUI);
-        if (workspaceNavigator) {
-          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
-          if (workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
-            workspaceNavigatorUI.setHideRoot(true);
-          }
-          var existingChildren = this.__workspaceAccordionGroup.getChildren();
-          var existingChild;
-          for (var i = 0; i < existingChildren.length; i++) {
-            var child = existingChildren[i];
-            if (child.getUserData("workspaceName") == workspaceName) {
-              existingChild = child;
-            }
-          }
-          if (existingChild) {
-            existingChild.add(workspaceNavigatorUI);
-          }
-        }
-      }
-      var children = this.__workspaceStack.getChildren();
-      var selectedChild;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        if (child.getUserData("workspaceName") == workspaceName) {
-          selectedChild = child;
-        }
-      }
-      if (selectedChild) {
-        this.__workspaceStack.setSelection([selectedChild]);
-      }
-
-      children = this.__workspaceAccordionGroup.getChildren();
-      selectedChild = null;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        if (child.getUserData("workspaceName") == workspaceName) {
-          selectedChild = child;
-        }
-      }
-      if (selectedChild) {
-        this.__workspaceAccordionGroup.setSelection([selectedChild]);
-      }
+      throw new Error("_displayWorkspace is abstract");
     },
 
     /**
-     *
      * @param workspaceNames {String[]}
      * @param workspaceActions {org.jspresso.framework.gui.remote.RActionList}
      * @param exitAction {org.jspresso.framework.gui.remote.RAction}
@@ -718,58 +667,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
-      //this._application.getRoot().removeAll();
-
-      var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
-
-      this.__statusBar = new qx.ui.basic.Label();
-      this.__statusBar.setVisibility("excluded");
-      this._decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
-
-      var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
-      this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
-      this.__workspaceAccordionGroup.setAllowEmptySelection(false);
-      for (var i = 0; i < workspaceActions.getActions().length; i++) {
-        var workspacePanel = new collapsablepanel.Panel(workspaceActions.getActions()[i].getName());
-        if (i == 0) {
-          workspacePanel.setValue(true);
-        } else {
-          workspacePanel.setValue(false);
-        }
-        workspacePanel.setUserData("workspaceName", workspaceNames[i]);
-        workspacePanel.setGroup(this.__workspaceAccordionGroup);
-        workspacePanel.setUserData("rAction", workspaceActions.getActions()[i]);
-        workspacePanel.addListener("changeValue", function (event) {
-          this.execute(event.getTarget().getUserData("rAction"));
-        }, this);
-        this._viewFactory.setIcon(workspacePanel.getChildControl("bar"), workspaceActions.getActions()[i].getIcon());
-        workspaceAccordion.add(workspacePanel, {flex: 1});
-      }
-
-      this.__workspaceStack = new qx.ui.container.Stack();
-
-      var splitContainer = new qx.ui.splitpane.Pane("horizontal");
-      splitContainer.add(workspaceAccordion, 0.15);
-      splitContainer.add(this.__workspaceStack, 0.85);
-
-      applicationFrame.add(splitContainer, {flex: 1});
-      if (secondaryActions && secondaryActions.length > 0) {
-        var secondaryToolBar = new qx.ui.container.SlideBar();
-        secondaryToolBar.add(this._viewFactory.createToolBarFromActionLists(secondaryActions));
-        applicationFrame.add(secondaryToolBar);
-      }
-      if (size) {
-        if (size.getWidth() > 0) {
-          applicationFrame.setMinWidth(size.getWidth());
-        }
-        if (size.getHeight() > 0) {
-          applicationFrame.setMinHeight(size.getHeight());
-        }
-      }
-      var scrollContainer = new qx.ui.container.Scroll();
-      scrollContainer.add(applicationFrame);
-
-      this._application.getRoot().add(scrollContainer, {edge: 0})
+      throw new Error("_initApplicationFrame is abstract");
     },
 
     /**
