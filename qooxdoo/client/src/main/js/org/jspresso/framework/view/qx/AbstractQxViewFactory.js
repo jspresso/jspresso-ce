@@ -212,16 +212,16 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     applyComponentStyle: function (component, remoteComponent) {
       if (remoteComponent.getForeground()) {
-        component.setTextColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getForeground()));
+        component.setTextColor(org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(remoteComponent.getForeground()));
       }
       if (remoteComponent.getBackground()) {
         component.setDecorator("main");
-        component.setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getBackground()));
+        component.setBackgroundColor(org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(remoteComponent.getBackground()));
       }
       var rFont = remoteComponent.getFont();
       if (rFont) {
         var compFont = component.getFont();
-        component.setFont(org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(rFont, compFont));
+        component.setFont(org.jspresso.framework.view.qx.AbstractQxViewFactory._fontToQxFont(rFont, compFont));
       }
       if (remoteComponent.getStyleName()) {
         component.setAppearance(remoteComponent.getStyleName());
@@ -584,12 +584,12 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           if (bgIndex >= 0) {
             additionalAttributes["backgroundIndex"] = bgIndex;
           } else if (rColumn.getBackground()) {
-            additionalAttributes["background-color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(rColumn.getBackground());
+            additionalAttributes["background-color"] = org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(rColumn.getBackground());
           }
           if (fgIndex >= 0) {
             additionalAttributes["foregroundIndex"] = fgIndex;
           } else if (rColumn.getForeground()) {
-            additionalAttributes["color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(rColumn.getForeground());
+            additionalAttributes["color"] = org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(rColumn.getForeground());
           }
           if (foIndex >= 0) {
             additionalAttributes["fontIndex"] = foIndex;
@@ -941,7 +941,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       colorPopup.exclude();
 
       var colorWidget = new qx.ui.basic.Label();
-      colorWidget.setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteColorField.getDefaultColor()));
+      colorWidget.setBackgroundColor(org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(remoteColorField.getDefaultColor()));
       colorWidget.set({
         decorator: "main",
         textAlign: "center",
@@ -988,11 +988,11 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(colorWidget, "backgroundColor", "value", true, {
         converter: function (modelValue, model) {
-          return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+          return org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(modelValue);
         }
       }, {
         converter: function (viewValue, model) {
-          return org.jspresso.framework.view.qx.DefaultQxViewFactory._qxColorToHexColor(viewValue);
+          return org.jspresso.framework.view.qx.AbstractQxViewFactory._qxColorToHexColor(viewValue);
         }
       });
       modelController.addTarget(colorWidget, "value", "value");
@@ -1695,7 +1695,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         var modelController = new qx.data.controller.Object(backgroundState);
         modelController.addTarget(component, "backgroundColor", "value", false, {
           converter: function (modelValue, model) {
-            return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+            return org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(modelValue);
           }
         });
       }
@@ -1708,7 +1708,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         var modelController = new qx.data.controller.Object(foregroundState);
         modelController.addTarget(component, "textColor", "value", false, {
           converter: function (modelValue, model) {
-            return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+            return org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(modelValue);
           }
         });
       }
@@ -1721,7 +1721,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         var modelController = new qx.data.controller.Object(fontState);
         modelController.addTarget(component, "font", "value", false, {
           converter: function (modelValue, model) {
-            return org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelValue);
+            return org.jspresso.framework.view.qx.AbstractQxViewFactory._fontToQxFont(modelValue);
           }
         });
       }
