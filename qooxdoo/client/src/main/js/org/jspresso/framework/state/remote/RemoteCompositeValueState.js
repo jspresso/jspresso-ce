@@ -66,7 +66,7 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
       if (children) {
         for (var i = 0; i < children.length; i++) {
           if (children.getItem(i) instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-            flat.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(children[i],
+            flat.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(children.getItem(i),
                 nestedLevel + 1));
           }
         }
