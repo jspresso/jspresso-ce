@@ -33,8 +33,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
 
   members: {
     /** @type {qx.ui.mobile.dialog.Popup} */
-    __busyPopup : null,
-    _manager    : null,
+    __busyPopup: null,
+    /** @type {qx.ui.mobile.page.Manager} */
+    _manager: null,
+    /** @type {qx.ui.mobile.container.Composite} */
+    __workspacesNavigator: null,
 
 
     _createViewFactory: function () {
@@ -119,37 +122,39 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
 
-      var workspaces = new qx.data.Array();
+      this.__workspacesNavigator = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspaceAction = workspaceActions.getActions()[i];
-        workspaces.push({
-          title: workspaceAction.getName(),
-          subtitle: workspaceAction.getDescription(),
-          image: workspaceAction.getIcon().getImageUrlSpec(),
+        var workspaceView = new qx.ui.mobile.container.Collapsible("<html><img src=\""
+            + workspaceAction.getIcon().getImageUrlSpec() + "\"/> "
+            + workspaceAction.getName()+"</html>");
+        workspaceView.setUserData("model", {
+          name: workspaceNames[i],
           action: workspaceAction
         });
-      }
-      var workspaceList = new qx.ui.mobile.list.List({
-        configureItem : function(item, data, row) {
-          item.setTitle(data.title);
-          item.setSubtitle(data.subtitle);
-          item.setImage(data.image);
-          item.setShowArrow(true);
-          // Workaround to assign a size to the image that is not known to the resource loader.
-          item.getImageWidget()._setStyle("width", "2rem");
-          item.getImageWidget()._setStyle("height", "2rem");
+        if (i == 0) {
+          workspaceView.setCollapsed(false);
+        } else {
+          workspaceView.setCollapsed(true);
         }
-      });
-      workspaceList.setModel(workspaces);
-      workspaceList.addListener("changeSelection", function(evt) {
-        var workspaceAction = workspaces[evt.getData()].action;
-        this.execute(workspaceAction);
-      }, this);
-
+        workspaceView.addListener("changeCollapsed", function(evt) {
+          var openedWsView = /**@type {qx.ui.mobile.Collapsible}*/ evt.getTarget();
+          if(!openedWsView.getCollapsed()) {
+            for(var j = 0; j < this.__workspacesNavigator.getChildren().length; j++) {
+              if(this.__workspacesNavigator.getChildren()[j] != openedWsView) {
+                (/**@type {qx.ui.mobile.Collapsible}*/ this.__workspacesNavigator.getChildren()[j]).setCollapsed(true);
+              }
+            }
+            var workspaceAction = openedWsView.getUserData("model")["action"]
+            this.execute(workspaceAction);
+          }
+        }, this);
+        this.__workspacesNavigator.add(workspaceView);
+      }
       var workspacesPage = new qx.ui.mobile.page.NavigationPage();
       workspacesPage.addListener("initialize", function (e) {
         var content = workspacesPage.getContent();
-        content.add(workspaceList);
+        content.add(this.__workspacesNavigator, {flex: 1});
       }, this);
       this._manager.addMaster(workspacesPage);
       workspacesPage.show();
@@ -162,34 +167,31 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
      * @return {undefined}
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
-//      if (workspaceView) {
-//        var workspaceNavigator = null;
-//        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
-//          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
-//          workspaceNavigator = wv.getLeftTop();
-//          workspaceView = wv.getRightBottom();
-//        }
+      if (workspaceView) {
+        var workspaceNavigator = null;
+        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
+          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
+          workspaceNavigator = wv.getLeftTop();
+          workspaceView = wv.getRightBottom();
+        }
 //        var workspaceViewUI = this.createComponent(workspaceView);
 //        workspaceViewUI.setUserData("workspaceName", workspaceName);
 //        this.__workspaceStack.add(workspaceViewUI);
-//        if (workspaceNavigator) {
-//          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
-//          if (workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
-//            workspaceNavigatorUI.setHideRoot(true);
-//          }
-//          var existingChildren = this.__workspaceAccordionGroup.getChildren();
-//          var existingChild;
-//          for (var i = 0; i < existingChildren.length; i++) {
-//            var child = existingChildren[i];
-//            if (child.getUserData("workspaceName") == workspaceName) {
-//              existingChild = child;
-//            }
-//          }
-//          if (existingChild) {
-//            existingChild.add(workspaceNavigatorUI);
-//          }
-//        }
-//      }
+        if (workspaceNavigator) {
+          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
+          var existingChildren = this.__workspacesNavigator.getChildren();
+          var existingChild;
+          for (var i = 0; i < existingChildren.length; i++) {
+            var child = existingChildren[i];
+            if (child.getUserData("model").name == workspaceName) {
+              existingChild = child;
+            }
+          }
+          if (existingChild) {
+            existingChild.add(workspaceNavigatorUI);
+          }
+        }
+      }
 //      var children = this.__workspaceStack.getChildren();
 //      var selectedChild;
 //      for (var i = 0; i < children.length; i++) {

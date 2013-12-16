@@ -503,7 +503,149 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }
       return null;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteTree {org.jspresso.framework.gui.remote.RTree}
+     */
+    _createTree: function (remoteTree) {
+      var tree = new qx.ui.tree.Tree();
+      var state = remoteTree.getState();
+      var treeController = new qx.data.controller.Tree();
+      treeController.setChildPath("children");
+      treeController.setLabelPath("value");
+      treeController.setIconPath("iconImageUrl");
+      treeController.setDelegate({
+        createItem: function () {
+          var item = new qx.ui.tree.TreeFolder();
+          item.getChildControl("label").setRich(true);
+          return item;
+        },
+        bindItem: function (controller, treeNode, modelNode) {
+          controller.bindProperty(controller.getLabelPath(), "label", controller.getLabelOptions(), treeNode,
+              modelNode);
+          controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
+          if (modelNode) {
+            modelNode.addListener("changeSelectedIndices", function (e) {
+              /** @type {qx.data.Array } */
+              var viewSelection = controller.getSelection();
+              var stateSelection = e.getTarget().getSelectedIndices();
+              var stateChildren = e.getTarget().getChildren();
+              var selIndex = 0;
+              for (var i = 0; i < stateChildren.length; i++) {
+                var child = stateChildren.getItem(i);
+                if (stateSelection && qx.lang.Array.contains(stateSelection, i)) {
+                  if (!viewSelection.contains(child)) {
+                    if (!treeNode.getOpen()) {
+                      treeNode.setOpen(true);
+                    }
+                    // viewSelection.push(child);
+                    if (selIndex == 0/*
+                     * ||
+                     * tree.getSelectionMode() ==
+                     * "multi" ||
+                     * tree.getSelectionMode() ==
+                     * "additive"
+                     */) {
+                      viewSelection.setItem(selIndex, child);
+                      selIndex++;
+                    }
+                  }
+                } else {
+                  if (viewSelection.contains(child)) {
+                    viewSelection.remove(child);
+                  }
+                }
+              }
+            }, this);
+          }
+        }
+      });
+      treeController.setModel(state);
+      treeController.setTarget(tree);
+      if (remoteTree.getExpanded()) {
+        this._expandAllChildren(tree, tree.getRoot());
+      } else {
+        tree.getRoot().setOpen(true);
+      }
+
+      treeController.addListener("changeSelection", function (e) {
+        /** @type {qx.data.Array } */
+        var selectedItems = e.getData();
+        /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState } */
+        var rootState = e.getTarget().getModel();
+        var deselectedStates = [];
+        var selectedStates = [];
+        this._synchTreeViewSelection(rootState, selectedItems, deselectedStates, selectedStates);
+        for (var i = 0; i < deselectedStates.length; i++) {
+          var deselectedState = deselectedStates[i];
+          deselectedState.setLeadingIndex(-1);
+          deselectedState.setSelectedIndices(null);
+        }
+        for (var i = 0; i < selectedStates.length; i += 3) {
+          var selectedState = selectedStates[i];
+          selectedState.setLeadingIndex(selectedStates[i + 1]);
+          selectedState.setSelectedIndices(selectedStates[i + 2]);
+        }
+      }, this);
+      if (remoteTree.getRowAction()) {
+        this.__remotePeerRegistry.register(remoteTree.getRowAction());
+        tree.addListener("dblclick", function (e) {
+          this.__actionHandler.execute(remoteTree.getRowAction());
+        }, this);
+      }
+      return tree;
+    },
+
+    /**
+     *
+     * @param tree {qx.ui.tree.Tree}
+     * @param treeItem {qx.ui.tree.core.AbstractItem}
+     */
+    _expandAllChildren: function (tree, treeItem) {
+      treeItem.setOpen(true);
+      if (treeItem.getChildren() != null) {
+        for (var i = 0; i < treeItem.getChildren().length; i++) {
+          this._expandAllChildren(tree, treeItem.getChildren()[i]);
+        }
+      }
+    },
+
+    /**
+     *
+     * @param state {org.jspresso.framework.state.remote.RemoteCompositeValueState}
+     * @param selectedItems {qx.ui.tree.core.AbstractItem[]}
+     * @param selectedStates {org.jspresso.framework.state.remote.RemoteCompositeValueState[]}
+     * @param deselectedStates {org.jspresso.framework.state.remote.RemoteCompositeValueState[]}
+     */
+    _synchTreeViewSelection: function (state, selectedItems, deselectedStates, selectedStates) {
+      var selectedIndices = [];
+      var stateChildren = state.getChildren();
+      var stateSelectedIndices = state.getSelectedIndices();
+      var stateLeadingIndex = state.getLeadingIndex();
+      for (var i = 0; i < stateChildren.length; i++) {
+        var child = stateChildren.getItem(i);
+        if (selectedItems.contains(child)) {
+          selectedIndices.push(i);
+        }
+        this._synchTreeViewSelection(child, selectedItems, deselectedStates, selectedStates);
+      }
+      if (selectedIndices.length == 0) {
+        if (stateSelectedIndices != null && stateSelectedIndices.length != 0) {
+          deselectedStates.push(state);
+        }
+      } else {
+        var leadingIndex = selectedIndices[selectedIndices.length - 1];
+        if (stateSelectedIndices == null || !qx.lang.Array.equals(selectedIndices, stateSelectedIndices)
+            || stateLeadingIndex != leadingIndex) {
+          selectedStates.push(state);
+          selectedStates.push(leadingIndex);
+          selectedStates.push(selectedIndices);
+        }
+      }
     }
+
 
 
   }

@@ -219,7 +219,32 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
         }
       }
       return null;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTree {org.jspresso.framework.gui.remote.RTree}
+     */
+    _createTree: function (remoteTree) {
+
+      var treeListModel = org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(remoteTree.getState(), 0);
+
+      var treeList = new qx.ui.mobile.list.List({
+            configureItem: function (item, data, row) {
+              item.setTitle(new Array(data.level).join(" ") + data.state.getValue());
+              item.setSubtitle(data.state.getDescription());
+              item.setImage(data.state.getIconImageUrl());
+              item.setShowArrow(true);
+            }
+          });
+      treeList.setModel(treeListModel);
+//      treeList.addListener("changeSelection", function(evt) {
+//        var workspaceAction = workspaces[evt.getData()].action;
+//        this.execute(workspaceAction);
+//      }, this);
+      return treeList;
     }
+
 
 
 
