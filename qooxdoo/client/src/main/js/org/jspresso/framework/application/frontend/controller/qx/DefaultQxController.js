@@ -31,6 +31,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
   members: {
 
+    /** @type {qx.ui.form.RadioGroup} */
+    __workspaceAccordionGroup: null,
+    /** @type {qx.ui.container.Stack} */
+    __workspaceStack: null,
+
+
     _createViewFactory: function () {
       return new org.jspresso.framework.view.qx.DefaultQxViewFactory(this, this, this);
     },

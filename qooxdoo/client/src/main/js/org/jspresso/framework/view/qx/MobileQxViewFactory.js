@@ -230,18 +230,60 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
       var treeListModel = org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(remoteTree.getState(), 0);
 
       var treeList = new qx.ui.mobile.list.List({
-            configureItem: function (item, data, row) {
-              item.setTitle(new Array(data.level).join(" ") + data.state.getValue());
-              item.setSubtitle(data.state.getDescription());
-              item.setImage(data.state.getIconImageUrl());
-              item.setShowArrow(true);
-            }
-          });
+        configureItem: function (item, data, row) {
+          item.setTitle(data.state.getValue());
+          item.setSubtitle(data.state.getDescription());
+          item.setImage(data.state.getIconImageUrl());
+          item.setShowArrow(true);
+          item.getImageWidget()._setStyle("margin-left", data.level + "rem");
+        }
+      });
       treeList.setModel(treeListModel);
-//      treeList.addListener("changeSelection", function(evt) {
-//        var workspaceAction = workspaces[evt.getData()].action;
-//        this.execute(workspaceAction);
-//      }, this);
+      var selections = [];
+      treeList.addListener("changeSelection", function(evt) {
+        var futureDeselections = [];
+        var localLevel = 0;
+        for(var i = 1; i < treeListModel.length; i++) {
+          var lowerNode = treeListModel.getItem(i);
+          if(lowerNode.level > localLevel) {
+            var currentNode = treeListModel.getItem(i-1);
+            if(currentNode.state.getSelectedIndices() != null && currentNode.state.getSelectedIndices().length > 0) {
+              futureDeselections.push(currentNode.state);
+            }
+          }
+          localLevel = lowerNode.level;
+        }
+        var selectedIndex = evt.getData();
+        var currentNode = treeListModel.getItem(selectedIndex);
+        var localIndex = 0;
+        var futureSelections = [];
+        for(var i = selectedIndex-1; i >= 0; i--) {
+          var upperNode = treeListModel.getItem(i);
+          if(upperNode.level < currentNode.level) {
+            futureSelections = [{state: upperNode.state, selection: [localIndex]}].concat(futureSelections);
+            var j = futureDeselections.indexOf(upperNode.state);
+            if(j >= 0) {
+              futureDeselections[j] = null;
+            }
+            currentNode = upperNode;
+            localIndex = 0;
+          } else {
+            localIndex++;
+          }
+        }
+        for(var i = 0; i < futureDeselections.length; i++) {
+          if(futureDeselections[i]) {
+            futureDeselections[i].setSelectedIndices(null);
+            futureDeselections[i].setLeadingIndex(-1);
+          }
+        }
+        for(var i = 0; i < futureSelections.length; i++) {
+          if(futureSelections[i]) {
+            futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
+            futureSelections[i].state.setLeadingIndex(futureSelections[i].selection[0]);
+          }
+        }
+      }, this);
       return treeList;
     }
 

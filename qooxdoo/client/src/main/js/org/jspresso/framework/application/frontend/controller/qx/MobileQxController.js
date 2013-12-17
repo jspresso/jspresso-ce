@@ -39,6 +39,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
     /** @type {qx.ui.mobile.container.Composite} */
     __workspacesNavigator: null,
 
+    __workspacesPages: {},
+
 
     _createViewFactory: function () {
       return new org.jspresso.framework.view.qx.MobileQxViewFactory(this, this, this);
@@ -83,11 +85,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
 
       if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
-        var currentDialogPage = this._dialogStack[this._dialogStack.length - 1][0];
-        this._dialogStack.pop();
-        currentDialogPage.exclude();
-        currentDialogPage.destroy();
-        this._manager.getDetailContainer().remove(currentDialogPage);
+        var topDialog = this._dialogStack.pop()[0];
+        this._manager.getDetailContainer().remove(topDialog);
+        //topDialog.exclude();
+        //topDialog.destroy();
       }
       this._dialogStack.push([dialogPage, null, null]);
       this._manager.addDetail(dialogPage);
@@ -102,8 +103,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       if (this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var topDialog = this._dialogStack.pop()[0];
-        topDialog.exclude();
-        topDialog.destroy();
+        this._manager.getDetailContainer().remove(topDialog);
+        //topDialog.exclude();
+        //topDialog.destroy();
       }
     },
 
@@ -121,7 +123,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
      */
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
-
       this.__workspacesNavigator = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspaceAction = workspaceActions.getActions()[i];
@@ -142,7 +143,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           if(!openedWsView.getCollapsed()) {
             for(var j = 0; j < this.__workspacesNavigator.getChildren().length; j++) {
               if(this.__workspacesNavigator.getChildren()[j] != openedWsView) {
-                (/**@type {qx.ui.mobile.Collapsible}*/ this.__workspacesNavigator.getChildren()[j]).setCollapsed(true);
+                (/**@type {qx.ui.mobile.container.Collapsible}*/ this.__workspacesNavigator.getChildren()[j]).setCollapsed(true);
               }
             }
             var workspaceAction = openedWsView.getUserData("model")["action"]
@@ -151,13 +152,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         }, this);
         this.__workspacesNavigator.add(workspaceView);
       }
-      var workspacesPage = new qx.ui.mobile.page.NavigationPage();
-      workspacesPage.addListener("initialize", function (e) {
-        var content = workspacesPage.getContent();
+      var workspacesNavigationPage = new qx.ui.mobile.page.NavigationPage();
+      workspacesNavigationPage.setTitle(this.translate("workspaces"));
+      workspacesNavigationPage.addListener("initialize", function (e) {
+        var content = workspacesNavigationPage.getContent();
         content.add(this.__workspacesNavigator, {flex: 1});
       }, this);
-      this._manager.addMaster(workspacesPage);
-      workspacesPage.show();
+      this._manager.addMaster(workspacesNavigationPage);
+
+      workspacesNavigationPage.show();
     },
 
     /**
@@ -174,9 +177,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           workspaceNavigator = wv.getLeftTop();
           workspaceView = wv.getRightBottom();
         }
-//        var workspaceViewUI = this.createComponent(workspaceView);
-//        workspaceViewUI.setUserData("workspaceName", workspaceName);
-//        this.__workspaceStack.add(workspaceViewUI);
+        var workspaceViewUI = /*this.createComponent(workspaceView)*/ new qx.ui.mobile.form.Label(workspaceName);
+        var workspacePage = new qx.ui.mobile.page.NavigationPage();
+        workspacePage.setTitle(workspaceName);
+        workspacePage.addListener("initialize", function (e) {
+          var content = workspacePage.getContent();
+          content.add(workspaceViewUI, {flex: 1});
+        }, this);
+        this._manager.addDetail(workspacePage);
+        this.__workspacesPages[workspaceName] = workspacePage;
         if (workspaceNavigator) {
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
           var existingChildren = this.__workspacesNavigator.getChildren();
@@ -192,29 +201,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           }
         }
       }
-//      var children = this.__workspaceStack.getChildren();
-//      var selectedChild;
-//      for (var i = 0; i < children.length; i++) {
-//        var child = children[i];
-//        if (child.getUserData("workspaceName") == workspaceName) {
-//          selectedChild = child;
-//        }
-//      }
-//      if (selectedChild) {
-//        this.__workspaceStack.setSelection([selectedChild]);
-//      }
-//
-//      children = this.__workspaceAccordionGroup.getChildren();
-//      selectedChild = null;
-//      for (var i = 0; i < children.length; i++) {
-//        var child = children[i];
-//        if (child.getUserData("workspaceName") == workspaceName) {
-//          selectedChild = child;
-//        }
-//      }
-//      if (selectedChild) {
-//        this.__workspaceAccordionGroup.setSelection([selectedChild]);
-//      }
+      this.__workspacesPages[workspaceName].show();
+      var children = this.__workspacesNavigator.getChildren();
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if (child.getUserData("model").name == workspaceName) {
+          child.setCollapsed(false);
+        }
+      }
     }
 
 

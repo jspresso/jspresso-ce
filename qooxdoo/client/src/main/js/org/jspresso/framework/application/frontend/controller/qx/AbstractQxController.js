@@ -61,12 +61,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     __roundTrip: false,
     /** @type {Array} */
     __commandsBacklog: null,
-    /** @type {qx.ui.form.RadioGroup} */
-    __workspaceAccordionGroup: null,
     /** @type {qx.ui.basic.Label} */
     __statusBar: null,
-    /** @type {qx.ui.container.Stack} */
-    __workspaceStack: null,
     /** @type {Object} */
     __postponedCommands: null,
     /** @type {Object} */
