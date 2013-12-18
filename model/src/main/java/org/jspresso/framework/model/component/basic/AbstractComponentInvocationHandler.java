@@ -1084,7 +1084,7 @@ public abstract class AbstractComponentInvocationHandler implements
         referenceTracker = new NestedReferenceTracker(proxy, rootProperty,
             EntityHelper.isInlineComponentReference(rootPropertyDescriptor)
                 && !rootPropertyDescriptor.isComputed());
-        referenceTrackers.put(propertyName, referenceTracker);
+        referenceTrackers.put(rootProperty, referenceTracker);
       }
       Object currentRootProperty = straightGetProperty(proxy, rootProperty);
       if (currentRootProperty instanceof IPropertyChangeCapable) {
