@@ -242,7 +242,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
         throw new NestedRuntimeException(ex);
       }
     }
-    if (Hibernate.isInitialized(initialChildren)) {
+    if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
       for (IPropertyChangeCapable child : initialChildren) {
         registerNotificationForwarding(child, sourceElementProperty,
             forwardedProperty);
