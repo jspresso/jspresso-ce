@@ -823,7 +823,7 @@ public abstract class AbstractComponentInvocationHandler implements
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
-    NestedReferenceTracker referenceTracker = null;
+    NestedReferenceTracker referenceTracker = referenceTrackers.get(propertyName);
 
     // Handle owning component.
     if (oldPropertyValue instanceof IComponent
@@ -840,7 +840,6 @@ public abstract class AbstractComponentInvocationHandler implements
 
     if (oldPropertyValue instanceof IPropertyChangeCapable) {
       if (isInitialized(oldPropertyValue)) {
-        referenceTracker = referenceTrackers.get(propertyName);
         if (referenceTracker != null) {
           ((IPropertyChangeCapable) oldPropertyValue)
               .removePropertyChangeListener(referenceTracker);
