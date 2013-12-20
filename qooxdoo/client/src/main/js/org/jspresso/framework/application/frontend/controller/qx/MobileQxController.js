@@ -24,11 +24,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
   construct: function (application, remoteController, userLanguage) {
     this.base(arguments, application, remoteController, userLanguage);
 
-    var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator("Please wait...");
+    var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait")+"...");
     this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
-    this.__busyPopup.setTitle("Loading...");
+    this.__busyPopup.setTitle(this.translate("Loading")+"...");
 
-    this._manager = new qx.ui.mobile.page.Manager();
+    this._manager = new qx.ui.mobile.page.Manager(true);
+    this._manager.getMasterButton().setVisibility("excluded");
+    this._manager.setHideMasterButtonCaption(this.translate("Hide"));
   },
 
   members: {
@@ -86,7 +88,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var topDialog = this._dialogStack.pop()[0];
-        this._manager.getDetailContainer().remove(topDialog);
+        if(this._manager)
+          this._manager.getDetailContainer().remove(topDialog);
         //topDialog.exclude();
         //topDialog.destroy();
       }
@@ -153,14 +156,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         this.__workspacesNavigator.add(workspaceView);
       }
       var workspacesNavigationPage = new qx.ui.mobile.page.NavigationPage();
-      workspacesNavigationPage.setTitle(this.translate("workspaces"));
+      workspacesNavigationPage.setTitle(this.translate("Workspaces"));
       workspacesNavigationPage.addListener("initialize", function (e) {
         var content = workspacesNavigationPage.getContent();
         content.add(this.__workspacesNavigator, {flex: 1});
       }, this);
       this._manager.addMaster(workspacesNavigationPage);
 
+      this._manager.getMasterButton().setVisibility("visible");
       workspacesNavigationPage.show();
+      this._manager._onMasterButtonTap();
     },
 
     /**
@@ -179,7 +184,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         }
         var workspaceViewUI = /*this.createComponent(workspaceView)*/ new qx.ui.mobile.form.Label(workspaceName);
         var workspacePage = new qx.ui.mobile.page.NavigationPage();
-        workspacePage.setTitle(workspaceName);
         workspacePage.addListener("initialize", function (e) {
           var content = workspacePage.getContent();
           content.add(workspaceViewUI, {flex: 1});
@@ -189,8 +193,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         if (workspaceNavigator) {
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
           var existingChildren = this.__workspacesNavigator.getChildren();
-          var existingChild;
-          for (var i = 0; i < existingChildren.length; i++) {
+          var existingChild = null;
+          for (var i = 0; existingChild == null && i < existingChildren.length; i++) {
             var child = existingChildren[i];
             if (child.getUserData("model").name == workspaceName) {
               existingChild = child;
@@ -201,7 +205,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           }
         }
       }
+      var wasHideMasterOnDetailStart = this._manager.getHideMasterOnDetailStart();
+      this._manager.setHideMasterOnDetailStart(false);
       this.__workspacesPages[workspaceName].show();
+      this._manager.setHideMasterOnDetailStart(wasHideMasterOnDetailStart);
       var children = this.__workspacesNavigator.getChildren();
       for (var i = 0; i < children.length; i++) {
         var child = children[i];
