@@ -31,10 +31,11 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.classworlds.ClassWorld;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
+import org.slf4j.impl.StaticLoggerBinder;
 
 import org.jspresso.framework.tools.entitygenerator.EntityGenerator;
-
-import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Goal which generates entities for a Jspresso project.
@@ -136,9 +137,6 @@ public class EntityGeneratorMojo extends AbstractMojo {
   @Parameter(defaultValue = "/org/jspresso/framework/tools/entitygenerator", required = true)
   private String templateResourcePath;
 
-  @Parameter(defaultValue = "${plugin.classRealm}", required = true, readonly = true)
-  private org.codehaus.plexus.classworlds.realm.ClassRealm classRealm;
-
   /**
    * Triggers thee execution of EntityGenerator.
    *
@@ -148,16 +146,33 @@ public class EntityGeneratorMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException {
     if (sourceDirs == null) {
-      sourceDirs = new File[]{
-          new File(project.getBasedir(), "src/main/resources"),
-          new File(project.getBasedir(), "target/generated-resources/dsl"),
-      };
+      sourceDirs = new File[]{new File(project.getBasedir(), "src/main/resources"), new File(project.getBasedir(),
+          "target/generated-resources/dsl")};
     }
     // bind slf4j to maven log
     StaticLoggerBinder.getSingleton().setLog(getLog());
     if (isChangeDetected()) {
-      setupPluginClasspath();
-      runEntityGenerator();
+      ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+      //create a new class loading space
+      ClassWorld world = new ClassWorld();
+      try {
+        try {
+          //use the existing ContextClassLoader in a realm of the class loading space
+          getLog().debug("Creating new class realm for entity generator execution");
+          ClassRealm entityGeneratorRealm = world.newRealm(getClass().getName(),
+              contextClassLoader);
+          setupPluginClasspath(entityGeneratorRealm);
+          //make the child realm the ContextClassLoader
+          Thread.currentThread().setContextClassLoader(entityGeneratorRealm);
+          runEntityGenerator();
+        } finally {
+          getLog().debug("Disposing entity generator class realm");
+          world.disposeRealm(getClass().getName());
+          Thread.currentThread().setContextClassLoader(contextClassLoader);
+        }
+      } catch (Exception ex) {
+        throw new MojoExecutionException(ex.toString(), ex);
+      }
     } else {
       getLog().info("No change detected. Skipping generation.");
     }
@@ -186,8 +201,7 @@ public class EntityGeneratorMojo extends AbstractMojo {
     if (!outputDir.exists() || outputDir.list().length == 0) {
       return true;
     }
-    long outputLastModified = latestModified(outputDir,
-        outputDir.lastModified());
+    long outputLastModified = latestModified(outputDir, outputDir.lastModified());
     for (File sourceDir : sourceDirs) {
       getLog().info("Scanning for changes : " + sourceDir.getAbsolutePath());
       if (hasChangedModelDslFile(sourceDir, outputLastModified)) {
@@ -225,33 +239,27 @@ public class EntityGeneratorMojo extends AbstractMojo {
       }
     } else if (source.getName().toLowerCase().contains("model")) {
       if (source.lastModified() > maxLastModified) {
-        getLog().info(
-            "Detected a change on resource " + source.toString() + ". "
-                + new Date(source.lastModified()) + " > "
-                + new Date(maxLastModified));
+        getLog().info("Detected a change on resource " + source.toString() + ". " + new Date(source.lastModified())
+            + " > " + new Date(maxLastModified));
         return true;
       }
     }
     return false;
   }
 
-  private void setupPluginClasspath() throws MojoExecutionException {
+  private void setupPluginClasspath(ClassRealm entityGeneratorRealm) throws MojoExecutionException {
     try {
       for (File sourceDir : sourceDirs) {
-        classRealm.addURL(sourceDir.toURI().toURL());
-        getLog().debug(
-            "Adding element to plugin classpath " + sourceDir.getPath());
+        entityGeneratorRealm.addURL(sourceDir.toURI().toURL());
+        getLog().debug("Adding element to plugin classpath " + sourceDir.getPath());
       }
-      List<String> compileClasspathElements = project
-          .getCompileClasspathElements();
+      List<String> compileClasspathElements = project.getCompileClasspathElements();
       for (String element : compileClasspathElements) {
-        if (!element.equals(project.getBuild().getOutputDirectory())
-            && !(element.contains("log4j"))) {
+        if (!element.equals(project.getBuild().getOutputDirectory()) && !(element.contains("log4j"))) {
           File elementFile = new File(element);
-          getLog().debug(
-              "Adding element to plugin classpath " + elementFile.getPath());
+          getLog().debug("Adding element to plugin classpath " + elementFile.getPath());
           URL url = elementFile.toURI().toURL();
-          classRealm.addURL(url);
+          entityGeneratorRealm.addURL(url);
         }
       }
     } catch (Exception ex) {
