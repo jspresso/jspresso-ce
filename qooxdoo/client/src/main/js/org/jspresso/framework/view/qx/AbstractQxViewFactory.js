@@ -10,6 +10,11 @@
  * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
+ * @asset(qx/icon/Oxygen/22/actions/dialog-close.png)
+ * @asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
+ *
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
@@ -2261,12 +2266,14 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     },
 
     /**
-     * @return {qx.ui.form.Button}
+     * @return {qx.ui.form.Button|qx.ui.mobile.form.Button}
      */
     createOkButton: function () {
-      var b = new qx.ui.form.Button();
-      b.setIcon("qx/icon/Oxygen/22/actions/dialog-ok.png");
-      b.setLabel(this.__actionHandler.translate("ok"));
+      var b = this.createButton(this.__actionHandler.translate("ok"),
+          null,
+          new org.jspresso.framework.gui.remote.RIcon().set({
+            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-ok.png"
+          }));
       return b;
     },
 
@@ -2274,9 +2281,11 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @return {qx.ui.form.Button}
      */
     createCancelButton: function () {
-      var b = new qx.ui.form.Button();
-      b.setIcon("qx/icon/Oxygen/22/actions/dialog-cancel.png");
-      b.setLabel(this.__actionHandler.translate("cancel"));
+      var b = this.createButton(this.__actionHandler.translate("cancel"),
+          null,
+          new org.jspresso.framework.gui.remote.RIcon().set({
+            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-cancel.png"
+          }));
       return b;
     },
 
@@ -2284,9 +2293,11 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @return {qx.ui.form.Button}
      */
     createYesButton: function () {
-      var b = new qx.ui.form.Button();
-      b.setIcon("qx/icon/Oxygen/22/actions/dialog-ok.png");
-      b.setLabel(this.__actionHandler.translate("yes"));
+      var b = this.createButton(this.__actionHandler.translate("yes"),
+          null,
+          new org.jspresso.framework.gui.remote.RIcon().set({
+            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-ok.png"
+          }));
       return b;
     },
 
@@ -2294,9 +2305,11 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @return {qx.ui.form.Button}
      */
     createNoButton: function () {
-      var b = new qx.ui.form.Button();
-      b.setIcon("qx/icon/Oxygen/22/actions/dialog-close.png");
-      b.setLabel(this.__actionHandler.translate("no"));
+      var b = this.createButton(this.__actionHandler.translate("no"),
+          null,
+          new org.jspresso.framework.gui.remote.RIcon().set({
+            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-close.png"
+          }));
       return b;
     },
 

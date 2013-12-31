@@ -11,11 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
- * @asset(qx/icon/Oxygen/22/actions/dialog-close.png)
- * @asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
  * @asset(qx/icon/Oxygen/16/actions/dialog-close.png)
- *
  * @asset(qx/icon/Oxygen/16/actions/format-*.png)
  * @asset(qx/icon/Oxygen/16/actions/edit-*.png)
  * @asset(qx/icon/Oxygen/16/actions/insert-image.png)

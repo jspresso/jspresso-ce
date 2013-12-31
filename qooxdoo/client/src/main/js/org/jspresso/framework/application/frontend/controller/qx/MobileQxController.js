@@ -228,6 +228,89 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           child.setCollapsed(false);
         }
       }
+    },
+
+    /**
+     * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
+     */
+    _handleMessageCommand: function (messageCommand) {
+      var messageDialogContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+
+      var messageDialog = new qx.ui.mobile.dialog.Popup(messageDialogContent);
+      messageDialog.setTitle(messageCommand.getTitle());
+      messageDialog.setModal(true);
+      messageDialog.setHideOnBlockerClick(false);
+
+      this._viewFactory.setIcon(messageDialog, messageCommand.getTitleIcon());
+
+      var message = new qx.ui.mobile.basic.Atom(messageCommand.getMessage());
+      this._viewFactory.setIcon(message, messageCommand.getMessageIcon());
+      messageDialogContent.add(message);
+
+      var buttonBox = new qx.ui.mobile.container.Composite();
+      buttonBox.setLayout(new qx.ui.mobile.layout.HBox("right"));
+      messageDialogContent.add(buttonBox);
+
+      var mc;
+      if (messageCommand instanceof org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand) {
+        mc = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand } */ messageCommand;
+        var yesButton = this._viewFactory.createYesButton();
+        this._viewFactory.addButtonListener(yesButton, function (event) {
+          messageDialog.hide();
+          messageDialog.destroy();
+          this.execute(mc.getYesAction());
+        }, this);
+        buttonBox.add(yesButton);
+
+        var noButton = this._viewFactory.createNoButton();
+        this._viewFactory.addButtonListener(noButton, function (event) {
+          messageDialog.hide();
+          messageDialog.destroy();
+          this.execute(mc.getNoAction());
+        }, this);
+        buttonBox.add(noButton);
+
+        if (messageCommand
+            instanceof org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand) {
+          mc = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand } */ messageCommand;
+          var cancelButton = this._viewFactory.createCancelButton();
+          this._viewFactory.addButtonListener(cancelButton, function (event) {
+            messageDialog.hide();
+            messageDialog.destroy();
+            this.execute(mc.getCancelAction());
+          }, this);
+          buttonBox.add(cancelButton);
+        }
+      } else if (messageCommand
+          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand) {
+        mc = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand } */ messageCommand;
+        var okButton = this._viewFactory.createOkButton();
+        this._viewFactory.addButtonListener(okButton, function (event) {
+          messageDialog.hide();
+          messageDialog.destroy();
+          this.execute(mc.getOkAction());
+        }, this);
+        buttonBox.add(okButton);
+
+        var cancelButton = this._viewFactory.createCancelButton();
+        this._viewFactory.addButtonListener(cancelButton, function (event) {
+          messageDialog.hide();
+          messageDialog.destroy();
+          this.execute(mc.getCancelAction());
+        }, this);
+        buttonBox.add(cancelButton);
+      } else {
+        var okButton = this._viewFactory.createOkButton();
+        this._viewFactory.addButtonListener(okButton, function (event) {
+          this._application.getRoot().remove(messageDialog);
+          messageDialog.hide();
+          messageDialog.destroy();
+        }, this);
+        buttonBox.add(okButton);
+      }
+
+      messageDialog.show();
     }
+
   }
 });
