@@ -28,9 +28,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
     this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
     this.__busyPopup.setTitle(this.translate("Loading")+"...");
 
-    this._manager = new qx.ui.mobile.page.Manager(true);
-    this._manager.getMasterButton().setVisibility("excluded");
-    this._manager.setHideMasterButtonCaption(this.translate("Hide"));
+    this._manager = new qx.ui.mobile.page.Manager(false);
+    if(this._manager.getMasterButton()) {
+      this._manager.getMasterButton().setVisibility("excluded");
+      this._manager.setHideMasterButtonCaption(this.translate("Hide"));
+    }
   },
 
   members: {
@@ -40,6 +42,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
     _manager: null,
     /** @type {qx.ui.mobile.container.Composite} */
     __workspacesNavigator: null,
+    /** @type {qx.ui.mobile.page.NavigationPage} */
+    _workspacesNavigationPage: null,
 
     __workspacesPages: {},
 
@@ -70,33 +74,32 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
     _popupDialog: function (title, message, dialogView, icon, buttons, useCurrent, dimension) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
-      var dialogPage = new qx.ui.mobile.page.NavigationPage();
-      dialogPage.setTitle(title);
-
+      var dialogContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       var dialogMessage = new qx.ui.mobile.embed.Html(message);
-      var group = new qx.ui.mobile.form.Group([dialogMessage, dialogView]);
 
-      dialogPage.addListener("initialize", function (e) {
-        var content = dialogPage.getContent();
-        content.add(dialogMessage);
-        content.add(dialogView);
-        for (var i = 0; i < buttons.length; i++) {
-          content.add(buttons[i]);
-        }
-      }, this);
+      dialogContent.add(dialogMessage);
+      dialogContent.add(dialogView);
+      for (var i = 0; i < buttons.length; i++) {
+        dialogContent.add(buttons[i]);
+      }
 
       if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
-        /** @type {qx.ui.mobile.page.NavigationPage} */
+        /** @type {qx.ui.mobile.dialog.Popup} */
         var topDialog = this._dialogStack.pop()[0];
-        if(this._manager)
-          this._manager.getDetailContainer().remove(topDialog);
-        //topDialog.exclude();
-        //topDialog.destroy();
+        if(topDialog) {
+          topDialog.hide();
+          topDialog.destroy();
+        }
       }
-      this._dialogStack.push([dialogPage, null, null]);
-      this._manager.addDetail(dialogPage);
-      dialogPage.show();
-      this._viewFactory.focus(dialogPage);
+
+      var dialogPopup = new qx.ui.mobile.dialog.Popup(dialogContent);
+      dialogPopup.setTitle(title);
+      this._viewFactory.setIcon(dialogPopup, icon);
+      dialogPopup.setModal(true);
+      dialogPopup.setHideOnBlockerClick(false);
+      this._dialogStack.push([dialogPopup, null, null]);
+      dialogPopup.show();
+      this._viewFactory.focus(dialogContent);
     },
 
     /**
@@ -104,11 +107,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
      */
     _closeDialog: function () {
       if (this._dialogStack && this._dialogStack.length > 1) {
-        /** @type {qx.ui.mobile.page.NavigationPage} */
+        /** @type {qx.ui.mobile.dialog.Popup} */
         var topDialog = this._dialogStack.pop()[0];
-        this._manager.getDetailContainer().remove(topDialog);
-        //topDialog.exclude();
-        //topDialog.destroy();
+        if(topDialog) {
+          topDialog.hide();
+          topDialog.destroy();
+        }
       }
     },
 
@@ -129,19 +133,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       this.__workspacesNavigator = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspaceAction = workspaceActions.getActions()[i];
-        var workspaceView = new qx.ui.mobile.container.Collapsible("<html><img src=\""
+        var workspaceSection = new qx.ui.mobile.container.Collapsible("<html><img src=\""
             + workspaceAction.getIcon().getImageUrlSpec() + "\"/> "
             + workspaceAction.getName()+"</html>");
-        workspaceView.setUserData("model", {
+        workspaceSection.setUserData("model", {
           name: workspaceNames[i],
           action: workspaceAction
         });
         if (i == 0) {
-          workspaceView.setCollapsed(false);
+          workspaceSection.setCollapsed(false);
         } else {
-          workspaceView.setCollapsed(true);
+          workspaceSection.setCollapsed(true);
         }
-        workspaceView.addListener("changeCollapsed", function(evt) {
+        workspaceSection.addListener("changeCollapsed", function(evt) {
           var openedWsView = /**@type {qx.ui.mobile.Collapsible}*/ evt.getTarget();
           if(!openedWsView.getCollapsed()) {
             for(var j = 0; j < this.__workspacesNavigator.getChildren().length; j++) {
@@ -153,19 +157,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
             this.execute(workspaceAction);
           }
         }, this);
-        this.__workspacesNavigator.add(workspaceView);
+        this.__workspacesNavigator.add(workspaceSection);
       }
-      var workspacesNavigationPage = new qx.ui.mobile.page.NavigationPage();
-      workspacesNavigationPage.setTitle(this.translate("Workspaces"));
-      workspacesNavigationPage.addListener("initialize", function (e) {
-        var content = workspacesNavigationPage.getContent();
+      this._workspacesNavigationPage = new qx.ui.mobile.page.NavigationPage();
+      this._workspacesNavigationPage.setTitle(this.translate("Workspaces"));
+      this._workspacesNavigationPage.addListener("initialize", function (e) {
+        var content = this._workspacesNavigationPage.getContent();
         content.add(this.__workspacesNavigator, {flex: 1});
       }, this);
-      this._manager.addMaster(workspacesNavigationPage);
-
-      this._manager.getMasterButton().setVisibility("visible");
-      workspacesNavigationPage.show();
-      this._manager._onMasterButtonTap();
+      this._manager.addMaster(this._workspacesNavigationPage);
+      if(this._manager.getMasterButton()) {
+        this._manager.getMasterButton().setVisibility("visible");
+        this._manager._onMasterButtonTap();
+      }
+      this._workspacesNavigationPage.show();
     },
 
     /**
@@ -189,26 +194,33 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           content.add(workspaceViewUI, {flex: 1});
         }, this);
         this._manager.addDetail(workspacePage);
+        if(!workspacePage.isTablet()) {
+          workspacePage.setShowBackButton(true);
+          workspacePage.setBackButtonText(this.translate("Workspaces"));
+          workspacePage.addListener("back", function()
+          {
+            this._workspacesNavigationPage.show({animation:"cube", reverse:true});
+          },this);
+        }
         this.__workspacesPages[workspaceName] = workspacePage;
         if (workspaceNavigator) {
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
-          var existingChildren = this.__workspacesNavigator.getChildren();
-          var existingChild = null;
-          for (var i = 0; existingChild == null && i < existingChildren.length; i++) {
-            var child = existingChildren[i];
+          workspaceNavigatorUI.addListener("tap", function(e) {
+            this.__workspacesPages[workspaceName].show();
+          }, this);
+          var existingWorkspaceSections = this.__workspacesNavigator.getChildren();
+          var existingWorkspaceSection = null;
+          for (var i = 0; existingWorkspaceSection == null && i < existingWorkspaceSections.length; i++) {
+            var child = existingWorkspaceSections[i];
             if (child.getUserData("model").name == workspaceName) {
-              existingChild = child;
+              existingWorkspaceSection = child;
             }
           }
-          if (existingChild) {
-            existingChild.add(workspaceNavigatorUI);
+          if (existingWorkspaceSection) {
+            existingWorkspaceSection.add(workspaceNavigatorUI);
           }
         }
       }
-      var wasHideMasterOnDetailStart = this._manager.getHideMasterOnDetailStart();
-      this._manager.setHideMasterOnDetailStart(false);
-      this.__workspacesPages[workspaceName].show();
-      this._manager.setHideMasterOnDetailStart(wasHideMasterOnDetailStart);
       var children = this.__workspacesNavigator.getChildren();
       for (var i = 0; i < children.length; i++) {
         var child = children[i];
@@ -217,7 +229,5 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         }
       }
     }
-
-
   }
 });
