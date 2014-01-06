@@ -187,7 +187,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           workspaceNavigator = wv.getLeftTop();
           workspaceView = wv.getRightBottom();
         }
-        var workspaceViewUI = /*this.createComponent(workspaceView)*/ new qx.ui.mobile.form.Label(workspaceName);
+        var workspaceViewUI = this.createComponent(workspaceView) /*new qx.ui.mobile.form.Label(workspaceName)*/;
         var workspacePage = new qx.ui.mobile.page.NavigationPage();
         workspacePage.addListener("initialize", function (e) {
           var content = workspacePage.getContent();

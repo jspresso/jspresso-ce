@@ -183,10 +183,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           component.setAllowGrowX(false);
         }
-        if (rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
-            instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
-            instanceof org.jspresso.framework.gui.remote.RList || rComponent
-            instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
+        if (this._isMultiline(rComponent)) {
           compRowSpan = 2;
           extraRowOffset = 1;
           formLayout.setRowFlex(compRow + 1, 1);
@@ -274,7 +271,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param component {qx.ui.core.Widget}
-     * @return {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
+     * @return {qx.ui.core.Widget}
      */
     _decorateWithBorder: function (remoteComponent, component) {
       var decorator = component;
@@ -640,8 +637,626 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           selectedStates.push(selectedIndices);
         }
       }
-    }
+    },
 
+    /**
+     * @return {qx.ui.core.Widget}
+     */
+    _createCardContainerComponent: function () {
+      return new qx.ui.container.Stack();
+    },
+
+    /**
+     *
+     * @return {undefined}
+     * @param cardContainer {qx.ui.container.Stack}
+     * @param selectedCard  {qx.ui.core.Widget}
+     */
+    _selectCard: function (cardContainer, selectedCard) {
+      cardContainer.setSelection([selectedCard]);
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteBorderContainer {org.jspresso.framework.gui.remote.RBorderContainer}
+     */
+    _createBorderContainer: function (remoteBorderContainer) {
+      var borderContainer = new qx.ui.container.Composite();
+      var borderLayout = new qx.ui.layout.Dock();
+      borderLayout.setSort("y");
+      borderContainer.setLayout(borderLayout);
+      if (remoteBorderContainer.getNorth()) {
+        var child = this.createComponent(remoteBorderContainer.getNorth());
+        borderContainer.add(child, {
+          edge: "north"
+        });
+      }
+      if (remoteBorderContainer.getWest()) {
+        var child = this.createComponent(remoteBorderContainer.getWest());
+        borderContainer.add(child, {
+          edge: "west"
+        });
+      }
+      if (remoteBorderContainer.getCenter()) {
+        var child = this.createComponent(remoteBorderContainer.getCenter());
+        borderContainer.add(child, {
+          edge: "center"
+        });
+      }
+      if (remoteBorderContainer.getEast()) {
+        var child = this.createComponent(remoteBorderContainer.getEast());
+        borderContainer.add(child, {
+          edge: "east"
+        });
+      }
+      if (remoteBorderContainer.getSouth()) {
+        var child = this.createComponent(remoteBorderContainer.getSouth());
+        borderContainer.add(child, {
+          edge: "south"
+        });
+      }
+      return borderContainer;
+    },
+
+    /**
+     *
+     * @return {qx.ui.core.Widget}
+     * @param remoteSecurityComponent {org.jspresso.framework.gui.remote.RSecurityComponent}
+     */
+    _createSecurityComponent: function (remoteSecurityComponent) {
+      var securityComponent = new qx.ui.core.Widget();
+      return securityComponent;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteActionField {org.jspresso.framework.gui.remote.RActionField}
+     */
+    _createActionField: function (remoteActionField) {
+
+      /** @type {qx.ui.form.TextField } */
+      var textField;
+      if (remoteActionField.getShowTextField()) {
+        textField = new qx.ui.form.TextField();
+        this._sizeMaxComponentWidth(textField, remoteActionField);
+      }
+      var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
+      var state = remoteActionField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
+      if (textField) {
+        // propagate focus
+        actionField.addListener("focus", function () {
+          textField.focus();
+        });
+
+        // propagate active state
+        actionField.addListener("activate", function () {
+          textField.activate();
+        });
+        if (remoteActionField.getFieldEditable()) {
+          modelController.addTarget(textField, "readOnly", "writable", false, {
+            converter: this._readOnlyFieldConverter
+          });
+        } else {
+          textField.setReadOnly(true);
+        }
+        var triggerAction = function (e) {
+          var content = textField.getValue();
+          if (content && content.length > 0) {
+            if (content != state.getValue()) {
+              textField.setValue(state.getValue());
+              if (e instanceof qx.event.type.Focus) {
+                if (e.getRelatedTarget() && (/** @type {qx.ui.core.Widget } */ e.getRelatedTarget()) == actionField) {
+                  return;
+                }
+              }
+              var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(content);
+              this.__actionHandler.execute(mainAction, actionEvent);
+            }
+          } else {
+            state.setValue(null);
+          }
+        };
+        textField.addListener("blur", triggerAction, this);
+        // textField.addListener("changeValue", triggerAction, this);
+
+        modelController.addTarget(textField, "value", "value", false, {
+          converter: this._modelToViewFieldConverter
+        });
+        if (remoteActionField.getCharacterAction()) {
+          textField.addListener("input", function (event) {
+            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+            actionEvent.setActionCommand(textField.getValue());
+            this.__actionHandler.execute(remoteActionField.getCharacterAction(), actionEvent);
+          }, this);
+        }
+      } else {
+        state.addListener("changeValue", function (e) {
+          if (e.getData()) {
+            var border = new qx.ui.decoration.Decorator().set({
+              color: "red",
+              width: 1,
+              style: "solid"
+            });
+            actionField.setDecorator(border);
+          } else {
+            actionField.setDecorator(null);
+          }
+        }, this);
+      }
+      return actionField;
+    },
+
+    /**
+     *
+     * @param component {qx.ui.core.Widget}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param disableActionsWithField {Boolean}
+     * @returns {qx.ui.core.Widget}
+     * @protected
+     */
+    _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
+      var decorated = component;
+      if (remoteComponent.getActionLists()) {
+        var actionField = new qx.ui.container.Composite();
+        actionField.setFocusable(true);
+        actionField.setAllowStretchY(false, false);
+        actionField.setLayout(new qx.ui.layout.HBox());
+
+        if (component) {
+          component.setAlignY("middle");
+          actionField.add(component, {
+            flex: 1
+          });
+        }
+        var modelController;
+        if (remoteComponent.getState()) {
+          modelController = new qx.data.controller.Object(remoteComponent.getState());
+        }
+        for (var i = 0; i < remoteComponent.getActionLists().length; i++) {
+          var actionList = remoteComponent.getActionLists()[i];
+          for (var j = 0; j < actionList.getActions().length; j++) {
+            var remoteAction = actionList.getActions()[j];
+            var actionComponent = this.createAction(remoteAction);
+            actionComponent.setLabel(null);
+            //actionComponent.setFocusable(false);
+            actionComponent.setAllowStretchY(false, false);
+            actionComponent.setAlignY("middle");
+            actionField.add(actionComponent);
+            if (modelController && disableActionsWithField) {
+              modelController.addTarget(actionComponent, "enabled", "writable", false);
+            }
+          }
+        }
+        decorated = actionField;
+      }
+      return decorated;
+    },
+
+    /**
+     * @param component {qx.ui.core.Widget}
+     * @param styleName {String}
+     * @return {undefined}
+     */
+    _applyStyleName: function (component, styleName) {
+      if(styleName) {
+        component.setAppearance(styleName);
+      }
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteTable {org.jspresso.framework.gui.remote.RTable}
+     */
+    _createTable: function (remoteTable) {
+      /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState } */
+      var state = remoteTable.getState();
+      var tableModel = new org.jspresso.framework.view.qx.RTableModel(state, remoteTable.getSortable(),
+          remoteTable.getSortingAction(), this.__commandHandler);
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(tableModel, "editable", "writable", false);
+      var columnIds = remoteTable.getColumnIds();
+      var columnNames = [];
+      var columnToolTips = [];
+      for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
+        columnNames[i] = remoteTable.getColumns()[i].getLabel();
+      }
+      tableModel.setColumns(columnNames, columnIds);
+
+      /** @type {qx.ui.table.Table } */
+      var table;
+      if (remoteTable.getHorizontallyScrollable()) {
+        table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel);
+      } else {
+        // Customize the table column model. We want one that
+        // automatically resize columns.
+        var custom = {
+          tableColumnModel: function (obj) {
+            return new qx.ui.table.columnmodel.Resize(obj);
+          }
+        };
+        table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
+      }
+      table.setStatusBarVisible(false);
+      if (!remoteTable.getColumnReorderingAllowed()) {
+        table.getPaneScroller(0)._startMoveHeader = function (moveCol, pageX) {
+        };
+      }
+      var columnModel = table.getTableColumnModel();
+      for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
+        var rColumn = remoteTable.getColumns()[i];
+        var rColumnHeader = remoteTable.getColumnHeaders()[i];
+        var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn, this.__actionHandler);
+        columnModel.setCellEditorFactory(i, editor);
+        var bgIndex = -1;
+        var fgIndex = -1;
+        var foIndex = -1;
+        if (rColumn.getBackgroundState()) {
+          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getBackgroundState());
+        } else if (remoteTable.getBackgroundState()) {
+          bgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getBackgroundState());
+        }
+        if (rColumn.getForegroundState()) {
+          fgIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getForegroundState());
+        } else if (remoteTable.getForegroundState()) {
+          fgIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getForegroundState());
+        }
+        if (rColumn.getFontState()) {
+          foIndex = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getFontState());
+        } else if (remoteTable.getFontState()) {
+          foIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getFontState());
+        }
+        var cellRenderer = null;
+        if (rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+          cellRenderer = new org.jspresso.framework.view.qx.BooleanTableCellRenderer();
+        } else if (rColumn instanceof org.jspresso.framework.gui.remote.RColorField) {
+          cellRenderer = new org.jspresso.framework.view.qx.ColorTableCellRenderer();
+        } else if (rColumn instanceof org.jspresso.framework.gui.remote.RComboBox) {
+          var labels = {};
+          var icons = {};
+          for (var j = 0; j < rColumn.getValues().length; j++) {
+            var value = rColumn.getValues()[j];
+            labels[value] = rColumn.getTranslations()[j];
+            icons[value] = rColumn.getIcons()[j];
+          }
+          cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(labels, icons);
+        } else if (rColumn instanceof org.jspresso.framework.gui.remote.RActionField && !rColumn.getShowTextField()) {
+          cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
+        } else if (rColumn instanceof org.jspresso.framework.gui.remote.RImageComponent) {
+          cellRenderer = new org.jspresso.framework.view.qx.ImageTableCellRenderer();
+          this.__remotePeerRegistry.register(rColumn.getAction());
+          cellRenderer.setAction(rColumn.getAction());
+        } else {
+          var format = this._createFormat(rColumn);
+          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format);
+          cellRenderer.setUseAutoAlign(false);
+
+          if (rColumn instanceof org.jspresso.framework.gui.remote.RLink) {
+            this.__remotePeerRegistry.register(rColumn.getAction());
+            cellRenderer.setAction(rColumn.getAction());
+          }
+        }
+        if (cellRenderer) {
+          var alignment = null;
+          if (rColumn instanceof org.jspresso.framework.gui.remote.RLabel || rColumn
+              instanceof org.jspresso.framework.gui.remote.RTextField || rColumn
+              instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+            alignment = rColumn.getHorizontalAlignment();
+          }
+          if (alignment == "LEFT") {
+            alignment = "left";
+          } else if (alignment == "CENTER") {
+            alignment = "center";
+          } else if (alignment == "RIGHT") {
+            alignment = "right";
+          }
+
+          var additionalAttributes = {};
+          if (alignment) {
+            additionalAttributes["text-align"] = alignment;
+          }
+          if (bgIndex >= 0) {
+            additionalAttributes["backgroundIndex"] = bgIndex;
+          } else if (rColumn.getBackground()) {
+            additionalAttributes["background-color"] = org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(rColumn.getBackground());
+          }
+          if (fgIndex >= 0) {
+            additionalAttributes["foregroundIndex"] = fgIndex;
+          } else if (rColumn.getForeground()) {
+            additionalAttributes["color"] = org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(rColumn.getForeground());
+          }
+          if (foIndex >= 0) {
+            additionalAttributes["fontIndex"] = foIndex;
+          } else {
+            var rFont = rColumn.getFont();
+            if (rFont) {
+              if (rFont.getItalic()) {
+                additionalAttributes["font-style"] = "italic";
+              }
+              if (rFont.getBold()) {
+                additionalAttributes["font-weight"] = "bold";
+              }
+              if (rFont.getName()) {
+                additionalAttributes["font-family"] = rFont.getName();
+              }
+              if (rFont.getSize() > 0) {
+                additionalAttributes["font-size"] = rFont.getSize() + "px";
+              }
+            }
+          }
+
+          cellRenderer.setAdditionalAttributes(additionalAttributes);
+
+          columnModel.setDataCellRenderer(i, cellRenderer);
+          columnModel.setHeaderCellRenderer(i,
+              new org.jspresso.framework.view.qx.RComponentHeaderRenderer(table, this, rColumnHeader));
+        }
+        var columnWidth;
+        if (rColumn.getPreferredSize() && rColumn.getPreferredSize().getWidth() > 0) {
+          columnWidth = rColumn.getPreferredSize().getWidth();
+        } else {
+          var tableFont = qx.theme.manager.Font.getInstance().resolve("default");
+          var headerWidth = qx.bom.Label.getTextSize(columnNames[i], tableFont.getStyles()).width;
+          if (rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+            columnWidth = headerWidth + 16;
+          } else {
+            var maxColumnWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.AbstractQxViewFactory.__TEMPLATE_CHAR,
+                tableFont.getStyles()).width
+                * org.jspresso.framework.view.qx.AbstractQxViewFactory.__COLUMN_MAX_CHAR_COUNT;
+            var editorComponent = this.createComponent(rColumn, false);
+            columnWidth = maxColumnWidth;
+            if (editorComponent.getMaxWidth()) {
+              columnWidth = Math.min(maxColumnWidth, editorComponent.getMaxWidth());
+            }
+            columnWidth = Math.max(columnWidth, headerWidth + 16);
+          }
+        }
+        if (remoteTable.getHorizontallyScrollable()) {
+          columnModel.setColumnWidth(i, columnWidth);
+        } else {
+          columnModel.getBehavior().setWidth(i, columnWidth, columnWidth < 50 ? 0 : columnWidth);
+        }
+        columnToolTips[i] = -1;
+        if (rColumn.getToolTipState()) {
+          columnToolTips[i] = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getToolTipState());
+        }
+      }
+      tableModel.setDynamicToolTipIndices(columnToolTips);
+      table.addListener("cellClick", function (e) {
+        var col = e.getColumn();
+        var renderer = table.getTableColumnModel().getDataCellRenderer(col);
+        if ((    renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer || renderer
+            instanceof org.jspresso.framework.view.qx.ImageTableCellRenderer) && renderer.getAction()) {
+          this.__actionHandler.execute(renderer.getAction());
+        }
+      }, this);
+
+      table.setHeight(5 * table.getRowHeight() + table.getHeaderCellHeight());
+      var selectionModel = table.getSelectionModel();
+      if (remoteTable.getSelectionMode() == "SINGLE_SELECTION") {
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
+      } else if (remoteTable.getSelectionMode() == "SINGLE_INTERVAL_SELECTION") {
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.SINGLE_INTERVAL_SELECTION);
+      } else if (remoteTable.getSelectionMode() == "MULTIPLE_INTERVAL_SELECTION") {
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
+      } else if (remoteTable.getSelectionMode() == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE);
+      } else if (remoteTable.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
+      } else {
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
+      }
+      selectionModel.addListener("changeSelection", function (e) {
+        if (selectionModel.hasBatchMode()) {
+          // TODO notify Qooxdoo batchMode is not working.
+          return;
+        }
+        var leadingIndex = tableModel.viewIndexToModelIndex(selectionModel.getLeadSelectionIndex());
+        var selectedRanges = selectionModel.getSelectedRanges();
+
+        var selectedIndices = [];
+        for (var rangeIndex = 0; rangeIndex < selectedRanges.length; rangeIndex++) {
+          var range = selectedRanges[rangeIndex];
+          for (var i = range.minIndex; i < range.maxIndex + 1; i++) {
+            selectedIndices.push(i);
+          }
+        }
+        selectedIndices = tableModel.viewIndicesToModelIndices(selectedIndices);
+        if (selectedIndices.length == 0) {
+          leadingIndex = -1;
+        }
+        var stateSelection = state.getSelectedIndices();
+        if (!stateSelection) {
+          stateSelection = [];
+        }
+        if (!qx.lang.Array.equals(selectedIndices, stateSelection) || leadingIndex != state.getLeadingIndex()) {
+          if (selectedIndices.length == 0) {
+            selectedIndices = null;
+          }
+          state.setLeadingIndex(leadingIndex);
+          state.setSelectedIndices(selectedIndices);
+        }
+        // workaround to update cell rendering
+        table.updateContent();
+      }, this);
+
+      state.addListener("changeSelectedIndices", function (e) {
+        var stateSelection = tableModel.modelIndicesToViewIndices(state.getSelectedIndices());
+        if (!stateSelection) {
+          stateSelection = [];
+        }
+
+        var selectedRanges = selectionModel.getSelectedRanges();
+        var selectedIndices = [];
+        for (var rangeIndex = 0; rangeIndex < selectedRanges.length; rangeIndex++) {
+          var range = selectedRanges[rangeIndex];
+          for (var i = range.minIndex; i < range.maxIndex + 1; i++) {
+            selectedIndices.push(i);
+          }
+        }
+
+        var stateLeadingIndex = tableModel.modelIndexToViewIndex(state.getLeadingIndex());
+        var leadingIndex = selectionModel.getLeadSelectionIndex();
+        if (selectedIndices.length == 0) {
+          leadingIndex = -1;
+        }
+
+        if (!qx.lang.Array.equals(selectedIndices, stateSelection) || leadingIndex != stateLeadingIndex) {
+          selectionModel.setBatchMode(true);
+          selectionModel.resetSelection();
+          if (stateSelection.length > 0) {
+            var minIndex = -1;
+            var maxIndex = minIndex;
+            for (var i = 0; i < stateSelection.length; i++) {
+              if (minIndex < 0) {
+                minIndex = stateSelection[i];
+                maxIndex = minIndex;
+              } else {
+                var nextSelectedIndex = stateSelection[i];
+                if (nextSelectedIndex == maxIndex + 1) {
+                  maxIndex = nextSelectedIndex;
+                } else {
+                  selectionModel.addSelectionInterval(minIndex, maxIndex);
+                  minIndex = nextSelectedIndex;
+                  maxIndex = minIndex;
+                }
+              }
+            }
+            selectionModel.addSelectionInterval(minIndex, maxIndex);
+          }
+          if (stateLeadingIndex >= 0) {
+            selectionModel.addSelectionInterval(stateLeadingIndex, stateLeadingIndex);
+            table.setFocusedCell(0, stateLeadingIndex, true);
+          }
+          selectionModel.setBatchMode(false);
+        }
+      }, this);
+      if (remoteTable.getRowAction()) {
+        this.__remotePeerRegistry.register(remoteTable.getRowAction());
+        table.addListener("dblclick", function (e) {
+          this.__actionHandler.execute(remoteTable.getRowAction());
+        }, this);
+      }
+      if (remoteTable.getPermId()) {
+        var notifyTableChanged = function (event) {
+          var notificationCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand();
+          notificationCommand.setTableId(remoteTable.getPermId());
+          var columnIds = [];
+          var columnWidths = [];
+          for (var ci = 0; ci < table.getTableColumnModel().getOverallColumnCount(); ci++) {
+            columnIds.push(table.getTableModel().getColumnId(table.getTableColumnModel().getOverallColumnAtX(ci)));
+            columnWidths.push(table.getTableColumnModel().getColumnWidth(table.getTableColumnModel().getOverallColumnAtX(ci)));
+          }
+          notificationCommand.setColumnIds(columnIds);
+          notificationCommand.setColumnWidths(columnWidths);
+          //noinspection JSPotentiallyInvalidUsageOfThis
+          this.__commandHandler.registerCommand(notificationCommand);
+        };
+
+        table.getTableColumnModel().addListener("widthChanged", notifyTableChanged, this);
+        table.getTableColumnModel().addListener("orderChanged", notifyTableChanged, this);
+      }
+      return table;
+    },
+
+    /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param component {qx.ui.core.Widget}
+     * @return {qx.ui.core.Widget}
+     */
+    _decorateWithActions: function (remoteComponent, component) {
+      if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RTimeField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+        return this._decorateWithAsideActions(component, remoteComponent, false);
+      } else {
+        return this._decorateWithToolbars(component, remoteComponent);
+      }
+    },
+
+    _decorateWithToolbars: function (component, remoteComponent) {
+      var decorated = component;
+      var toolBar;
+      var secondaryToolBar;
+      if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField)
+          && remoteComponent.getActionLists() != null) {
+        toolBar = this._createToolBar(remoteComponent, component);
+      } else {
+        toolBar = this._createDefaultToolBar(remoteComponent, component);
+      }
+      if (remoteComponent.getSecondaryActionLists()) {
+        secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
+      }
+      if (toolBar || secondaryToolBar) {
+        var surroundingBox = new qx.ui.container.Composite();
+        surroundingBox.setLayout(new qx.ui.layout.VBox(2));
+        var slideBar;
+        if (toolBar) {
+          slideBar = new qx.ui.container.SlideBar();
+          slideBar.add(toolBar);
+          surroundingBox.add(slideBar);
+        }
+        surroundingBox.add(component, {
+          flex: 1
+        });
+        if (secondaryToolBar) {
+          slideBar = new qx.ui.container.SlideBar();
+          slideBar.add(secondaryToolBar);
+          surroundingBox.add(slideBar);
+        }
+        decorated = surroundingBox;
+      }
+      return decorated;
+    },
+
+    _createDefaultToolBar: function (remoteComponent, component) {
+      return null;
+    },
+
+    _createToolBar: function (remoteComponent, component) {
+      return this.createToolBarFromActionLists(remoteComponent.getActionLists());
+    },
+
+    _createSecondaryToolBar: function (remoteComponent, component) {
+      return this.createToolBarFromActionLists(remoteComponent.getSecondaryActionLists());
+    },
+
+    createToolBarFromActionLists: function (actionLists) {
+      if (actionLists && actionLists.length > 0) {
+        var toolBar = new qx.ui.toolbar.ToolBar();
+        this.installActionLists(toolBar, actionLists);
+        return toolBar;
+      }
+      return null;
+    },
+
+    installActionLists: function (toolBar, actionLists) {
+      if (actionLists) {
+        for (var i = 0; i < actionLists.length; i++) {
+          var actionList = actionLists[i];
+          if (actionList.getActions() != null) {
+            var part = new qx.ui.toolbar.Part();
+            if (actionList.getCollapsable()) {
+              var splitButton = this.createSplitButton(actionList);
+              if (splitButton) {
+                part.add(splitButton);
+              }
+            } else {
+              for (var j = 0; j < actionList.getActions().length; j++) {
+                part.add(this.createAction(actionList.getActions()[j]));
+              }
+            }
+            toolBar.add(part);
+          }
+        }
+      }
+    }
 
 
   }

@@ -152,6 +152,46 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     /**
+     *
+     * @param applicationFrame {qx.ui.container.Composite}
+     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
+     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @return {undefined}
+     *
+     */
+    _decorateApplicationFrame: function (applicationFrame, exitAction, navigationActions, actions, helpActions) {
+      //var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
+      //applicationFrame.add(menuBar);
+      var toolBar = new qx.ui.toolbar.ToolBar();
+      this._viewFactory.installActionLists(toolBar, navigationActions);
+      if (actions) {
+        for (var i = 0; i < actions.length; i++) {
+          var splitButton = this._viewFactory.createSplitButton(actions[i]);
+          if (splitButton) {
+            toolBar.add(splitButton);
+          }
+        }
+      }
+      //this._viewFactory.installActionLists(toolBar, actions);
+      toolBar.addSpacer();
+      toolBar.add(this._getStatusBar());
+      //toolBar.addSpacer();
+      if (helpActions) {
+        for (var i = 0; i < helpActions.length; i++) {
+          var splitButton = this._viewFactory.createSplitButton(helpActions[i]);
+          if (splitButton) {
+            toolBar.add(splitButton);
+          }
+        }
+      }
+      //this._viewFactory.installActionLists(toolBar, helpActions);
+      toolBar.add(this._viewFactory.createAction(exitAction));
+      applicationFrame.add(toolBar);
+    },
+
+    /**
      * @param workspaceNames {String[]}
      * @param workspaceActions {org.jspresso.framework.gui.remote.RActionList}
      * @param exitAction {org.jspresso.framework.gui.remote.RAction}
