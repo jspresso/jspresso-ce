@@ -828,7 +828,83 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
       } else {
         return component;
       }
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _createFormattedField: function (rComponent) {
+      var formattedField = new qx.ui.mobile.form.TextField();
+      this._bindFormattedField(formattedField, rComponent);
+      return formattedField;
+    },
+
+    /**
+     *
+     * @param expectedCharCount {Integer}
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param maxCharCount {Integer}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
+    _sizeMaxComponentWidth: function (component, remoteComponent, expectedCharCount, maxCharCount) {
+      // NO-OP
+    },
+
+    /**
+     * @return {undefined}
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param alignment {String}
+     */
+    _configureHorizontalAlignment: function (component, alignment) {
+      // NO-OP
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteLabel {org.jspresso.framework.gui.remote.RLabel}
+     */
+    _createLabel: function (remoteLabel) {
+      var atom = new qx.ui.mobile.basic.Atom();
+      var label = atom.getLabel();
+      var state = remoteLabel.getState();
+      if (state) {
+        var modelController = new qx.data.controller.Object(state);
+        if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
+          this.__remotePeerRegistry.register(remoteLabel.getAction());
+          atom.setRich(true);
+          modelController.addTarget(atom, "label", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return "<u><a href='javascript:'>" + modelValue + "</a></u>";
+              }
+              return modelValue;
+            }
+          });
+          atom.addListener("tap", function (event) {
+            this.__actionHandler.execute(remoteLabel.getAction());
+          }, this);
+        } else {
+          modelController.addTarget(atom, "label", "value", false, {
+            converter: function (modelValue, model) {
+              return modelValue;
+            }
+          });
+        }
+      } else {
+        atom.setLabel(remoteLabel.getLabel());
+      }
+      this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
+      if (remoteLabel.getIcon()) {
+        atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+      }
+      return atom;
     }
+
+
+
+
 
   }
 });

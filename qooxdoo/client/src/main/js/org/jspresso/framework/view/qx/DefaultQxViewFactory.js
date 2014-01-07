@@ -1256,7 +1256,120 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
         }
       }
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _createFormattedField: function (rComponent) {
+      var formattedField = new qx.ui.form.TextField();
+      this._bindFormattedField(formattedField, rComponent);
+      return formattedField;
+    },
+
+    /**
+     *
+     * @param expectedCharCount {Integer}
+     * @param component {qx.ui.core.Widget}
+     * @param maxCharCount {Integer}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
+    _sizeMaxComponentWidth: function (component, remoteComponent, expectedCharCount, maxCharCount) {
+      var w;
+      this.applyComponentStyle(component, remoteComponent);
+      if (expectedCharCount == null) {
+        expectedCharCount = org.jspresso.framework.view.qx.AbstractQxViewFactory.__FIELD_MAX_CHAR_COUNT;
+      }
+      if (maxCharCount == null) {
+        maxCharCount = org.jspresso.framework.view.qx.AbstractQxViewFactory.__FIELD_MAX_CHAR_COUNT;
+      }
+      var charCount = maxCharCount;
+      if (expectedCharCount < charCount) {
+        charCount = expectedCharCount;
+      }
+      charCount += 2;
+      var compFont = component.getFont();
+      if (!compFont) {
+        compFont = qx.theme.manager.Font.getInstance().resolve("default");
+      }
+      var charWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.AbstractQxViewFactory.__TEMPLATE_CHAR,
+          compFont.getStyles()).width;
+      w = charWidth * charCount;
+      if (remoteComponent.getPreferredSize() && remoteComponent.getPreferredSize().getWidth() > w) {
+        w = remoteComponent.getPreferredSize().getWidth();
+      }
+      component.setMaxWidth(w);
+      component.setWidth(w);
+    },
+
+    /**
+     * @return {undefined}
+     * @param component {qx.ui.core.Widget}
+     * @param alignment {String}
+     */
+    _configureHorizontalAlignment: function (component, alignment) {
+      if (alignment == "LEFT") {
+        component.setTextAlign("left");
+      } else if (alignment == "CENTER") {
+        component.setTextAlign("center");
+      } else if (alignment == "RIGHT") {
+        component.setTextAlign("right");
+      }
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteLabel {org.jspresso.framework.gui.remote.RLabel}
+     */
+    _createLabel: function (remoteLabel) {
+      var atom = new qx.ui.basic.Atom();
+      var label = atom.getLabel();
+      var state = remoteLabel.getState();
+      if (state) {
+        var modelController = new qx.data.controller.Object(state);
+        if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
+          this.__remotePeerRegistry.register(remoteLabel.getAction());
+          atom.setRich(true);
+          modelController.addTarget(atom, "label", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return "<u><a href='javascript:'>" + modelValue + "</a></u>";
+              }
+              return modelValue;
+            }
+          });
+          atom.addListener("click", function (event) {
+            this.__actionHandler.execute(remoteLabel.getAction());
+          }, this);
+        } else {
+          modelController.addTarget(atom, "label", "value", false, {
+            converter: function (modelValue, model) {
+              if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
+                atom.setRich(true);
+              } else {
+                atom.setRich(false);
+              }
+              return modelValue;
+            }
+          });
+        }
+      } else {
+        atom.setLabel(remoteLabel.getLabel());
+        atom.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(remoteLabel.getLabel()));
+      }
+      this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
+      if (remoteLabel.getIcon()) {
+        atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+      }
+      return atom;
     }
+
+
+
+
+
 
 
   }
