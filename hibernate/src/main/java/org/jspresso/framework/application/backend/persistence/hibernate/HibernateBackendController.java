@@ -866,7 +866,8 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Search Hibernate using criteria. The result is then merged into session.
+   * Search Hibernate using criteria. The result is then merged into session unless the method is called into a
+   * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
    * 
    * @param <T>
    *          the entity type to return
@@ -889,7 +890,8 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Search Hibernate using criteria. The result is then merged into session.
+   * Search Hibernate using criteria. The result is then merged into session unless the method is called into a
+   * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
    * 
    * @param <T>
    *          the entity type to return
@@ -909,7 +911,8 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Search Hibernate using criteria. The result is then merged into session.
+   * Search Hibernate using criteria. The result is then merged into session unless the method is called into a
+   * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
    * 
    * @param <T>
    *          the entity type to return
