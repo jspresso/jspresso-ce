@@ -754,10 +754,26 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       return dateField;
     },
 
-    _createDateTimeField: function (remoteDateField) {
-      var dateTimeField = new qx.ui.container.Composite();
-      dateTimeField.setLayout(new qx.ui.layout.HBox());
+    /**
+     * @return {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
+     */
+    _createHBoxContainer: function () {
+      throw new Error("_createHBoxContainer is abstract.");
+    },
 
+    /**
+     * @return {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
+     */
+    _createVBoxContainer: function () {
+      throw new Error("_createVBoxContainer is abstract.");
+    },
+
+    /**
+     * @return {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
+     * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
+     */
+    _createDateTimeField: function (remoteDateField) {
+      var dateTimeField = this._createHBoxContainer();
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");

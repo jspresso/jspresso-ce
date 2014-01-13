@@ -329,12 +329,12 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
      * @param remoteBorderContainer {org.jspresso.framework.gui.remote.RBorderContainer}
      */
     _createBorderContainer: function (remoteBorderContainer) {
-      var borderContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      var borderContainer = this._createVBoxContainer();
       if (remoteBorderContainer.getNorth()) {
         var child = this.createComponent(remoteBorderContainer.getNorth());
         borderContainer.add(child);
       }
-      var middleContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+      var middleContainer = this._createHBoxContainer();
       borderContainer.add(middleContainer, {
         flex: 1
       });
@@ -455,8 +455,7 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
     _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
-        var actionField = new qx.ui.mobile.container.Composite();
-        actionField.setLayout(new qx.ui.mobile.layout.HBox());
+        var actionField = this._createHBoxContainer();
 
         if (component) {
           actionField.add(component, {
@@ -919,7 +918,28 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
         atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
       }
       return atom;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createHBoxContainer: function () {
+      var hboxContainer = new qx.ui.mobile.container.Composite();
+      hboxContainer.setLayout(new qx.ui.mobile.layout.HBox());
+      return hboxContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createVBoxContainer: function () {
+      var hboxContainer = new qx.ui.mobile.container.Composite();
+      hboxContainer.setLayout(new qx.ui.mobile.layout.VBox());
+      return hboxContainer;
     }
+
+
+
 
 
 

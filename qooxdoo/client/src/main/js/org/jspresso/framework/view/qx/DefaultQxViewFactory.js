@@ -1364,6 +1364,24 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
       }
       return atom;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     */
+    _createHBoxContainer: function () {
+      var hboxContainer = new qx.ui.container.Composite();
+      hboxContainer.setLayout(new qx.ui.layout.HBox());
+      return hboxContainer;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     */
+    _createVBoxContainer: function () {
+      var hboxContainer = new qx.ui.container.Composite();
+      hboxContainer.setLayout(new qx.ui.layout.HBox());
+      return hboxContainer;
     }
 
 
