@@ -1325,7 +1325,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createLabel: function (remoteLabel) {
       var atom = new qx.ui.basic.Atom();
-      var label = atom.getLabel();
+      var label = atom.getChildControl("label");
       var state = remoteLabel.getState();
       if (state) {
         var modelController = new qx.data.controller.Object(state);

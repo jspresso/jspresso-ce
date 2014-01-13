@@ -293,14 +293,14 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
         }
         for(var i = 0; i < futureDeselections.length; i++) {
           if(futureDeselections[i]) {
-            futureDeselections[i].setSelectedIndices(null);
             futureDeselections[i].setLeadingIndex(-1);
+            futureDeselections[i].setSelectedIndices(null);
           }
         }
-        for(var i = 0; i < futureSelections.length; i++) {
+        for(var i = 0; i < futureSelections.length ; i++) {
           if(futureSelections[i]) {
-            futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
             futureSelections[i].state.setLeadingIndex(futureSelections[i].selection[0]);
+            futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
           }
         }
       }, this);
@@ -500,7 +500,26 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
      * @param remoteTable {org.jspresso.framework.gui.remote.RTable}
      */
     _createTable: function (remoteTable) {
-      return new qx.ui.mobile.form.Label("TABLE");
+      var tableListModel = remoteTable.getState().getChildren();
+
+      var tableList = new qx.ui.mobile.list.List({
+        configureItem: function (item, data, row) {
+          item.setTitle(data.getValue());
+          item.setSubtitle(data.getDescription());
+          item.setImage(data.getIconImageUrl());
+          item.setShowArrow(true);
+        }
+      });
+
+      tableList.setModel(tableListModel);
+
+      tableList.addListener("changeSelection", function(evt) {
+        var selectedIndex = evt.getData();
+        remoteTable.getState().setLeadingIndex(selectedIndex);
+        remoteTable.getState().setSelectedIndices([selectedIndex]);
+      }, this);
+      return tableList;
+
 //      /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState } */
 //      var state = remoteTable.getState();
 //      var tableModel = new org.jspresso.framework.view.qx.RTableModel(state, remoteTable.getSortable(),
@@ -867,7 +886,7 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
      */
     _createLabel: function (remoteLabel) {
       var atom = new qx.ui.mobile.basic.Atom();
-      var label = atom.getLabel();
+      var label = atom.getLabelWidget();
       var state = remoteLabel.getState();
       if (state) {
         var modelController = new qx.data.controller.Object(state);
