@@ -298,88 +298,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteList {org.jspresso.framework.gui.remote.RList}
      */
     _createList: function (remoteList) {
-      var list = new qx.ui.form.List();
-      if (remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
-          == "SINGLE_CUMULATIVE_SELECTION") {
-        list.setSelectionMode("single");
-      } else {
-        list.setSelectionMode("multi");
-      }
-      /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState } */
-      var state = remoteList.getState();
-      var listController = new qx.data.controller.List(state.getChildren(), list, "children[1].value");
-      listController.setDelegate(new org.jspresso.framework.view.qx.EnhancedListDelegate());
-      listController.setIconPath("iconImageUrl");
-
-      listController.addListener("changeSelection", function (e) {
-        /** @type {qx.data.Array } */
-        var selectedItems = e.getData();
-        /** @type {qx.data.Array } */
-        var items = e.getTarget().getModel();
-        var selectedIndices = [];
-        var stateSelection = state.getSelectedIndices();
-        if (!stateSelection) {
-          stateSelection = []
-        }
-        for (var i = 0; i < selectedItems.length; i++) {
-          selectedIndices.push(items.indexOf(selectedItems.getItem(i)));
-        }
-        if (!qx.lang.Array.equals(selectedIndices, stateSelection)) {
-          if (selectedIndices.length > 0) {
-            state.setLeadingIndex(selectedIndices[selectedIndices.length - 1]);
-            state.setSelectedIndices(selectedIndices);
-          } else {
-            state.setLeadingIndex(-1);
-            state.setSelectedIndices(null);
-          }
-        }
-      }, this);
-
-      state.addListener("changeSelectedIndices", function (e) {
-        /** @type {Array } */
-        var stateSelection = e.getTarget().getSelectedIndices();
-        if (!stateSelection) {
-          stateSelection = [];
-        }
-
-        var items = listController.getModel();
-        var stateSelectedItems = [];
-        var i;
-        for (i = 0; i < stateSelection.length; i++) {
-          stateSelectedItems.push(items.getItem(stateSelection[i]));
-        }
-
-        /** @type {qx.data.Array } */
-        var controllerSelection = listController.getSelection();
-        var controllerSelectionContent = controllerSelection.toArray();
-
-        if (!qx.lang.Array.equals(stateSelectedItems, controllerSelectionContent)) {
-
-          var oldLength = controllerSelectionContent.length;
-          var newLength = stateSelectedItems.length;
-
-          for (i = 0; i < stateSelectedItems.length; i++) {
-            controllerSelectionContent[i] = stateSelectedItems[i];
-          }
-          controllerSelectionContent.length = newLength;
-          controllerSelection.length = newLength;
-          controllerSelection.fireEvent("changeLength", qx.event.type.Event);
-          controllerSelection.fireDataEvent("change", {
-            start: 0,
-            end: newLength,
-            type: "add",
-            items: controllerSelectionContent
-          }, null);
-        }
-      }, this);
-
-      if (remoteList.getRowAction()) {
-        this.__remotePeerRegistry.register(remoteList.getRowAction());
-        list.addListener("dblclick", function (e) {
-          this.__actionHandler.execute(remoteList.getRowAction());
-        }, this);
-      }
-      return list;
+      throw new Error("_createList is abstract.");
     },
 
     /**
@@ -988,36 +907,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteSplitContainer {org.jspresso.framework.gui.remote.RSplitContainer}
      */
     _createSplitContainer: function (remoteSplitContainer) {
-      var splitContainer = new qx.ui.splitpane.Pane();
-
-      if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-        splitContainer.setOrientation("vertical");
-      } else {
-        splitContainer.setOrientation("horizontal");
-      }
-
-      var component;
-      if (remoteSplitContainer.getLeftTop() != null) {
-        component = this.createComponent(remoteSplitContainer.getLeftTop());
-        var lflex;
-        if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-          lflex = component.getSizeHint().height;
-        } else {
-          lflex = component.getSizeHint().width;
-        }
-        splitContainer.add(component, lflex);
-      }
-      if (remoteSplitContainer.getRightBottom() != null) {
-        component = this.createComponent(remoteSplitContainer.getRightBottom());
-        var rflex;
-        if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-          rflex = component.getSizeHint().height;
-        } else {
-          rflex = component.getSizeHint().width;
-        }
-        splitContainer.add(component, rflex);
-      }
-      return splitContainer;
+      throw new Error("_createSplitContainer is abstract.");
     },
 
     /**
@@ -1025,37 +915,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteTabContainer {org.jspresso.framework.gui.remote.RTabContainer}
      */
     _createTabContainer: function (remoteTabContainer) {
-      // view remoteTabContainer may have to be retrieved for late update
-      // of cards.
-      this.__remotePeerRegistry.register(remoteTabContainer);
-
-      var tabContainer = new qx.ui.tabview.TabView();
-      for (var i = 0; i < remoteTabContainer.getTabs().length; i++) {
-        /** @type {org.jspresso.framework.gui.remote.RComponent } */
-        var remoteTab = remoteTabContainer.getTabs()[i];
-        var tabComponent = this.createComponent(remoteTab);
-
-        var tab = new qx.ui.tabview.Page(remoteTab.getLabel());
-        this.setIcon(tab.getChildControl("button"), remoteTab.getIcon());
-        tab.setLayout(new qx.ui.layout.Grow());
-        tab.add(tabComponent);
-
-        tabContainer.add(tab);
-      }
-      remoteTabContainer.addListener("changeSelectedIndex", function (event) {
-        tabContainer.setSelection([tabContainer.getChildren()[event.getData()]]);
-      });
-      tabContainer.addListener("changeSelection", function (event) {
-        var index = tabContainer.indexOf(event.getData()[0]);
-        remoteTabContainer.setSelectedIndex(index);
-        var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
-        command.setTargetPeerGuid(remoteTabContainer.getGuid());
-        command.setPermId(remoteTabContainer.getPermId());
-        command.setLeadingIndex(index);
-        this.__commandHandler.registerCommand(command);
-      }, this);
-
-      return tabContainer;
+      throw new Error("_createTabContainer is abstract.");
     },
 
     /**

@@ -691,7 +691,95 @@ qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
           }
         }
       }
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTabContainer {org.jspresso.framework.gui.remote.RTabContainer}
+     */
+    _createTabContainer: function (remoteTabContainer) {
+      // view remoteTabContainer may have to be retrieved for late update
+      // of cards.
+      this.__remotePeerRegistry.register(remoteTabContainer);
+
+      var tabContainer = new qx.ui.mobile.container.Carousel();
+      for (var i = 0; i < remoteTabContainer.getTabs().length; i++) {
+        /** @type {org.jspresso.framework.gui.remote.RComponent } */
+        var remoteTab = remoteTabContainer.getTabs()[i];
+        var tabComponent = this.createComponent(remoteTab);
+
+        tabContainer.add(tabComponent);
+      }
+      remoteTabContainer.addListener("changeSelectedIndex", function (event) {
+        tabContainer.setCurrentIndex(event.getData());
+      });
+      tabContainer.addListener("changeCurrentIndex", function (event) {
+        var index = event.getData();
+        remoteTabContainer.setSelectedIndex(index);
+        var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
+        command.setTargetPeerGuid(remoteTabContainer.getGuid());
+        command.setPermId(remoteTabContainer.getPermId());
+        command.setLeadingIndex(index);
+        this.__commandHandler.registerCommand(command);
+      }, this);
+
+      return tabContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteSplitContainer {org.jspresso.framework.gui.remote.RSplitContainer}
+     */
+    _createSplitContainer: function (remoteSplitContainer) {
+      var splitContainer;
+
+      if (remoteSplitContainer.getOrientation() == "VERTICAL") {
+        splitContainer = this._createVBoxContainer();
+      } else {
+        splitContainer = this._createHBoxContainer();
+      }
+
+      var component;
+      if (remoteSplitContainer.getLeftTop() != null) {
+        component = this.createComponent(remoteSplitContainer.getLeftTop());
+        splitContainer.add(component);
+      }
+      if (remoteSplitContainer.getRightBottom() != null) {
+        component = this.createComponent(remoteSplitContainer.getRightBottom());
+        splitContainer.add(component);
+      }
+      return splitContainer;
+    },
+
+    /**
+     *
+     * @return {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
+     * @param remoteList {org.jspresso.framework.gui.remote.RList}
+     */
+    _createList: function (remoteList) {
+      var listModel = remoteList.getState().getChildren();
+
+      var list = new qx.ui.mobile.list.List({
+        configureItem: function (item, data, row) {
+          item.setTitle(data.getValue());
+          item.setSubtitle(data.getDescription());
+          item.setImage(data.getIconImageUrl());
+          item.setShowArrow(true);
+        }
+      });
+
+      list.setModel(listModel);
+
+      list.addListener("changeSelection", function(evt) {
+        var selectedIndex = evt.getData();
+        remoteList.getState().setLeadingIndex(selectedIndex);
+        remoteList.getState().setSelectedIndices([selectedIndex]);
+      }, this);
+      return list;
     }
+
+
+
 
 
 

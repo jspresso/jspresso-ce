@@ -27,31 +27,43 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
      * @return {qx.data.Array}
      */
     flatten: function (compositeState, nestedLevel) {
+      var targetArray = new qx.data.Array();
+      targetArray.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState, nestedLevel, targetArray));
+      return targetArray;
+    },
+
+    /**
+     * @param compositeState (org.jspresso.framework.state.remote.RemoteCompositeValueState}
+     * @param nestedLevel (Integer}
+     * @param targetArray (qx.data.Array}
+     * @return {qx.data.Array}
+     */
+    __flattenNested: function (compositeState, nestedLevel, targetArray) {
       var flat = new qx.data.Array();
       var children = compositeState.getChildren();
       var listener = function(evt) {
         var startIndex = -1;
         var levelToInvalidate = -1;
         var changedItemsCount = 0;
-        for(var j = 0; j < flat.length; j++) {
+        for(var j = 0; j < targetArray.length; j++) {
           if(startIndex == -1) {
-            if (flat.getItem(j)["state"] == compositeState) {
+            if (targetArray.getItem(j)["state"] == compositeState) {
               startIndex = j;
               changedItemsCount = 1;
-              levelToInvalidate = flat.getItem(j)["level"];
+              levelToInvalidate = targetArray.getItem(j)["level"];
             }
           } else {
-            if(flat.getItem(j)["level"] > levelToInvalidate) {
-              var nestedState = flat.getItem(j)["state"];
-              nestedState.getChildren().removeListenerById(flat.getItem(j)["listenerId"]);
+            if(targetArray.getItem(j)["level"] > levelToInvalidate) {
+              var nestedState = targetArray.getItem(j)["state"];
+              nestedState.getChildren().removeListenerById(targetArray.getItem(j)["listenerId"]);
               changedItemsCount ++;
             } else {
               break;
             }
           }
         }
-        qx.data.Array.prototype.splice.apply(flat, [startIndex, changedItemsCount].concat(
-            org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(compositeState, levelToInvalidate).toArray()
+        qx.data.Array.prototype.splice.apply(targetArray, [startIndex, changedItemsCount].concat(
+            org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState, levelToInvalidate, targetArray).toArray()
         ));
       };
 
@@ -66,8 +78,8 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
       if (children) {
         for (var i = 0; i < children.length; i++) {
           if (children.getItem(i) instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-            flat.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(children.getItem(i),
-                nestedLevel + 1));
+            flat.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(children.getItem(i),
+                nestedLevel + 1, targetArray));
           }
         }
       }
