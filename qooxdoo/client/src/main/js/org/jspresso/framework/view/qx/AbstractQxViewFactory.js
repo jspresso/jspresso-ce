@@ -240,8 +240,35 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       throw new Error("_applyStyleName is abstract.")
     },
 
+    /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param component {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
+     * @return {qx.ui.core.Widget}
+     */
     _decorateWithActions: function (remoteComponent, component) {
-      throw new Error("_decorateWithActions is abstract");
+      if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RTimeField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+        return this._decorateWithAsideActions(component, remoteComponent, false);
+      } else {
+        return this._decorateWithToolbars(component, remoteComponent);
+      }
+    },
+
+    _createDefaultToolBar: function (remoteComponent, component) {
+      return null;
+    },
+
+    _createToolBar: function (remoteComponent, component) {
+      return this.createToolBarFromActionLists(remoteComponent.getActionLists());
+    },
+
+    _createSecondaryToolBar: function (remoteComponent, component) {
+      return this.createToolBarFromActionLists(remoteComponent.getSecondaryActionLists());
     },
 
     _getRemotePeerRegistry: function () {
@@ -552,78 +579,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteColorField {org.jspresso.framework.gui.remote.RColorField}
      */
     _createColorField: function (remoteColorField) {
-      var colorField = new qx.ui.container.Composite();
-      colorField.setFocusable(true);
-      colorField.setAllowStretchY(false, false);
-      colorField.setLayout(new qx.ui.layout.HBox());
-
-      var colorPopup = new qx.ui.control.ColorPopup();
-      colorPopup.exclude();
-
-      var colorWidget = new qx.ui.basic.Label();
-      colorWidget.setBackgroundColor(org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(remoteColorField.getDefaultColor()));
-      colorWidget.set({
-        decorator: "main",
-        textAlign: "center",
-        alignX: "center",
-        alignY: "middle"
-      });
-      colorWidget.addListener("mousedown", function (e) {
-        colorPopup.placeToMouse(e);
-        colorPopup.setValue(this.getBackgroundColor());
-        colorPopup.show();
-      });
-
-      var resetButton = new qx.ui.form.Button();
-      resetButton.setIcon("qx/icon/Oxygen/16/actions/dialog-close.png");
-      if (!remoteColorField.getResetEnabled()) {
-        resetButton.setEnabled(false);
-      }
-      this.addButtonListener(resetButton, function (e) {
-        colorWidget.setBackgroundColor(this.getBackgroundColor());
-      });
-      resetButton.setAllowStretchX(false, false);
-      resetButton.setAllowStretchY(false, false);
-      resetButton.setAlignY("middle");
-
-      // colorWidget.addListener("resize", function(e) {
-      // var dim = e.getData().height;
-      // resetButton.getChildControl("icon").set({
-      // scale : true,
-      // width : dim - resetButton.getPaddingLeft(),
-      // height : dim - resetButton.getPaddingLeft()
-      // });
-      // });
-
-      // colorWidget.setWidth(resetButton.getWidth());
-      this._sizeMaxComponentWidth(colorWidget, remoteColorField);
-      colorWidget.setHeight(22/* resetButton.getHeight() */);
-      colorWidget.setAllowStretchX(true, true);
-
-      colorPopup.addListener("changeValue", function (e) {
-        colorWidget.setBackgroundColor(e.getData());
-      });
-
-      var state = remoteColorField.getState();
-      var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(colorWidget, "backgroundColor", "value", true, {
-        converter: function (modelValue, model) {
-          return org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(modelValue);
-        }
-      }, {
-        converter: function (viewValue, model) {
-          return org.jspresso.framework.view.qx.AbstractQxViewFactory._qxColorToHexColor(viewValue);
-        }
-      });
-      modelController.addTarget(colorWidget, "value", "value");
-      modelController.addTarget(colorField, "enabled", "writable", false);
-
-      colorField.add(colorWidget, {
-        flex: 1
-      });
-      colorField.add(resetButton);
-
-      return colorField;
+      throw new Error("_createColorField is abstract.");
     },
 
     /**
@@ -715,43 +671,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
      */
     _createDateField: function (remoteDateField) {
-      var dateField = new qx.ui.form.DateField();
-      dateField.setAllowStretchY(false, false);
-      var dateFormat = this._createFormat(remoteDateField);
-      dateField.setDateFormat(dateFormat);
-      var state = remoteDateField.getState();
-      var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(dateField, "value", "value", true, {
-        converter: function (modelValue, model) {
-          if (modelValue instanceof org.jspresso.framework.util.lang.DateDto) {
-            return org.jspresso.framework.util.format.DateUtils.fromDateDto(modelValue);
-          }
-          if (modelValue === undefined) {
-            modelValue = null;
-          }
-          if (!modelValue) {
-            dateField.resetValue();
-          }
-          return modelValue;
-        }
-      }, {
-        converter: function (viewValue, model) {
-          if (viewValue != null) {
-            return org.jspresso.framework.util.format.DateUtils.fromDate(viewValue);
-          }
-          if (viewValue === undefined) {
-            viewValue = null;
-          }
-          if (!viewValue) {
-            dateField.resetValue();
-          }
-          return viewValue;
-        }
-      });
-      modelController.addTarget(dateField, "enabled", "writable", false);
-      this._sizeMaxComponentWidth(dateField, remoteDateField,
-          org.jspresso.framework.view.qx.AbstractQxViewFactory.__DATE_CHAR_COUNT);
-      return dateField;
+      throw new Error("_createDateField is abstract.");
     },
 
     /**
@@ -1618,6 +1538,17 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     /**
      *
+     * @return {qx.ui.form.Button|qx.ui.mobile.toolbar.Button}
+     * @param toolTip {String}
+     * @param label {String}
+     * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     */
+    createToolBarButton: function (label, toolTip, icon) {
+      throw new Error("createToolBarButton is abstract");
+    },
+
+    /**
+     *
      * @return {qx.ui.menubar.Button}
      * @param toolTip {String}
      * @param label {String}
@@ -1713,17 +1644,36 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     },
 
     /**
-     *
-     * @return {qx.ui.form.Button|qx.ui.mobile.form.Button}
+     * @param button{qx.ui.form.Button|qx.ui.mobile.form.Button|qx.ui.mobile.toolbar.Button}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
-    createAction: function (remoteAction) {
-      var button = this.createButton(remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
+    _bindButton: function (button, remoteAction) {
       remoteAction.bind("enabled", button, "enabled");
       this.__remotePeerRegistry.register(remoteAction);
       this.addButtonListener(button, function (event) {
         this.__actionHandler.execute(remoteAction);
       }, this);
+    },
+
+    /**
+     * @return {qx.ui.form.Button|qx.ui.mobile.form.Button}
+     * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    createAction: function (remoteAction) {
+      var button = this.createButton(remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
+      this._bindButton(button, remoteAction);
+      this._applyStyleName(button, remoteAction.getStyleName());
+      return button;
+    },
+
+    /**
+     *
+     * @return {qx.ui.form.Button|qx.ui.mobile.toolbar.Button}
+     * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    createToolBarAction: function (remoteAction) {
+      var button = this.createToolBarButton(remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
+      this._bindButton(button, remoteAction);
       this._applyStyleName(button, remoteAction.getStyleName());
       return button;
     },

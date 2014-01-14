@@ -31,7 +31,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   members: {
 
     /**
-     *
      * @return {qx.ui.form.Button}
      * @param toolTip {String}
      * @param label {String}
@@ -41,6 +40,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var button = new qx.ui.form.Button();
       this._completeButton(button, label, toolTip, icon);
       return button;
+    },
+
+    /**
+     * @return {qx.ui.form.Button}
+     * @param toolTip {String}
+     * @param label {String}
+     * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     */
+    createToolBarButton: function (label, toolTip, icon) {
+      return this.createButton(label, toolTip, icon);
     },
 
     /**
@@ -1161,25 +1170,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return table;
     },
 
-    /**
-     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
-     * @param component {qx.ui.core.Widget}
-     * @return {qx.ui.core.Widget}
-     */
-    _decorateWithActions: function (remoteComponent, component) {
-      if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
-          instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
-          instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
-          instanceof org.jspresso.framework.gui.remote.RLabel || remoteComponent
-          instanceof org.jspresso.framework.gui.remote.RTimeField || remoteComponent
-          instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
-          instanceof org.jspresso.framework.gui.remote.RCheckBox) {
-        return this._decorateWithAsideActions(component, remoteComponent, false);
-      } else {
-        return this._decorateWithToolbars(component, remoteComponent);
-      }
-    },
-
     _decorateWithToolbars: function (component, remoteComponent) {
       var decorated = component;
       var toolBar;
@@ -1194,8 +1184,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
       }
       if (toolBar || secondaryToolBar) {
-        var surroundingBox = new qx.ui.container.Composite();
-        surroundingBox.setLayout(new qx.ui.layout.VBox(2));
+        var surroundingBox = this._createVBoxContainer();
         var slideBar;
         if (toolBar) {
           slideBar = new qx.ui.container.SlideBar();
@@ -1213,18 +1202,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         decorated = surroundingBox;
       }
       return decorated;
-    },
-
-    _createDefaultToolBar: function (remoteComponent, component) {
-      return null;
-    },
-
-    _createToolBar: function (remoteComponent, component) {
-      return this.createToolBarFromActionLists(remoteComponent.getActionLists());
-    },
-
-    _createSecondaryToolBar: function (remoteComponent, component) {
-      return this.createToolBarFromActionLists(remoteComponent.getSecondaryActionLists());
     },
 
     createToolBarFromActionLists: function (actionLists) {
@@ -1249,7 +1226,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               }
             } else {
               for (var j = 0; j < actionList.getActions().length; j++) {
-                part.add(this.createAction(actionList.getActions()[j]));
+                part.add(this.createToolBarAction(actionList.getActions()[j]));
               }
             }
             toolBar.add(part);
@@ -1382,7 +1359,131 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var hboxContainer = new qx.ui.container.Composite();
       hboxContainer.setLayout(new qx.ui.layout.HBox());
       return hboxContainer;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
+     */
+    _createDateField: function (remoteDateField) {
+      var dateField = new qx.ui.form.DateField();
+      dateField.setAllowStretchY(false, false);
+      var dateFormat = this._createFormat(remoteDateField);
+      dateField.setDateFormat(dateFormat);
+      var state = remoteDateField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(dateField, "value", "value", true, {
+        converter: function (modelValue, model) {
+          if (modelValue instanceof org.jspresso.framework.util.lang.DateDto) {
+            return org.jspresso.framework.util.format.DateUtils.fromDateDto(modelValue);
+          }
+          if (modelValue === undefined) {
+            modelValue = null;
+          }
+          if (!modelValue) {
+            dateField.resetValue();
+          }
+          return modelValue;
+        }
+      }, {
+        converter: function (viewValue, model) {
+          if (viewValue != null) {
+            return org.jspresso.framework.util.format.DateUtils.fromDate(viewValue);
+          }
+          if (viewValue === undefined) {
+            viewValue = null;
+          }
+          if (!viewValue) {
+            dateField.resetValue();
+          }
+          return viewValue;
+        }
+      });
+      modelController.addTarget(dateField, "enabled", "writable", false);
+      this._sizeMaxComponentWidth(dateField, remoteDateField,
+          org.jspresso.framework.view.qx.AbstractQxViewFactory.__DATE_CHAR_COUNT);
+      return dateField;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteColorField {org.jspresso.framework.gui.remote.RColorField}
+     */
+    _createColorField: function (remoteColorField) {
+      var colorField = new qx.ui.container.Composite();
+      colorField.setFocusable(true);
+      colorField.setAllowStretchY(false, false);
+      colorField.setLayout(new qx.ui.layout.HBox());
+
+      var colorPopup = new qx.ui.control.ColorPopup();
+      colorPopup.exclude();
+
+      var colorWidget = new qx.ui.basic.Label();
+      colorWidget.setBackgroundColor(org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(remoteColorField.getDefaultColor()));
+      colorWidget.set({
+        decorator: "main",
+        textAlign: "center",
+        alignX: "center",
+        alignY: "middle"
+      });
+      colorWidget.addListener("mousedown", function (e) {
+        colorPopup.placeToMouse(e);
+        colorPopup.setValue(this.getBackgroundColor());
+        colorPopup.show();
+      });
+
+      var resetButton = new qx.ui.form.Button();
+      resetButton.setIcon("qx/icon/Oxygen/16/actions/dialog-close.png");
+      if (!remoteColorField.getResetEnabled()) {
+        resetButton.setEnabled(false);
+      }
+      this.addButtonListener(resetButton, function (e) {
+        colorWidget.setBackgroundColor(this.getBackgroundColor());
+      });
+      resetButton.setAllowStretchX(false, false);
+      resetButton.setAllowStretchY(false, false);
+      resetButton.setAlignY("middle");
+
+      // colorWidget.addListener("resize", function(e) {
+      // var dim = e.getData().height;
+      // resetButton.getChildControl("icon").set({
+      // scale : true,
+      // width : dim - resetButton.getPaddingLeft(),
+      // height : dim - resetButton.getPaddingLeft()
+      // });
+      // });
+
+      // colorWidget.setWidth(resetButton.getWidth());
+      this._sizeMaxComponentWidth(colorWidget, remoteColorField);
+      colorWidget.setHeight(22/* resetButton.getHeight() */);
+      colorWidget.setAllowStretchX(true, true);
+
+      colorPopup.addListener("changeValue", function (e) {
+        colorWidget.setBackgroundColor(e.getData());
+      });
+
+      var state = remoteColorField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(colorWidget, "backgroundColor", "value", true, {
+        converter: function (modelValue, model) {
+          return org.jspresso.framework.view.qx.AbstractQxViewFactory._hexColorToQxColor(modelValue);
+        }
+      }, {
+        converter: function (viewValue, model) {
+          return org.jspresso.framework.view.qx.AbstractQxViewFactory._qxColorToHexColor(viewValue);
+        }
+      });
+      modelController.addTarget(colorWidget, "value", "value");
+      modelController.addTarget(colorField, "enabled", "writable", false);
+
+      colorField.add(colorWidget, {
+        flex: 1
+      });
+      colorField.add(resetButton);
+
+      return colorField;
     }
+
 
 
 
