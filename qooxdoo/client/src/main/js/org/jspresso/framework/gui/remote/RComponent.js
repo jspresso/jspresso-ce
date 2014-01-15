@@ -13,91 +13,91 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
-      extend: org.jspresso.framework.util.remote.RemotePeer,
+  extend: org.jspresso.framework.util.remote.RemotePeer,
 
-      implement: [org.jspresso.framework.state.remote.IRemoteStateOwner],
+  implement: [org.jspresso.framework.state.remote.IRemoteStateOwner],
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        actionLists: {
-          check: "Array",
-          nullable: true
-        },
-        secondaryActionLists: {
-          check: "Array",
-          nullable: true
-        },
-        background: {
-          check: "String",
-          nullable: true
-        },
-        backgroundState: {
-          check: "org.jspresso.framework.state.remote.RemoteValueState",
-          nullable: true
-        },
-        borderType: {
-          check: "String",
-          nullable: true
-        },
-        font: {
-          check: "org.jspresso.framework.util.gui.Font",
-          nullable: true
-        },
-        fontState: {
-          check: "org.jspresso.framework.state.remote.RemoteValueState",
-          nullable: true
-        },
-        foreground: {
-          check: "String",
-          nullable: true
-        },
-        foregroundState: {
-          check: "org.jspresso.framework.state.remote.RemoteValueState",
-          nullable: true
-        },
-        icon: {
-          check: "org.jspresso.framework.gui.remote.RIcon",
-          nullable: true
-        },
-        label: {
-          check: "String",
-          nullable: true
-        },
-        state: {
-          check: "org.jspresso.framework.state.remote.RemoteValueState",
-          nullable: true
-        },
-        toolTip: {
-          check: "String",
-          nullable: true
-        },
-        toolTipState: {
-          check: "org.jspresso.framework.state.remote.RemoteValueState",
-          nullable: true
-        },
-        preferredSize: {
-          check: "org.jspresso.framework.util.gui.Dimension",
-          nullable: true
-        },
-        styleName: {
-          check: "String",
-          nullable: true
-        }
-      },
+  properties: {
+    actionLists: {
+      check: "Array",
+      nullable: true
+    },
+    secondaryActionLists: {
+      check: "Array",
+      nullable: true
+    },
+    background: {
+      check: "String",
+      nullable: true
+    },
+    backgroundState: {
+      check: "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable: true
+    },
+    borderType: {
+      check: "String",
+      nullable: true
+    },
+    font: {
+      check: "org.jspresso.framework.util.gui.Font",
+      nullable: true
+    },
+    fontState: {
+      check: "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable: true
+    },
+    foreground: {
+      check: "String",
+      nullable: true
+    },
+    foregroundState: {
+      check: "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable: true
+    },
+    icon: {
+      check: "org.jspresso.framework.gui.remote.RIcon",
+      nullable: true
+    },
+    label: {
+      check: "String",
+      nullable: true
+    },
+    state: {
+      check: "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable: true
+    },
+    toolTip: {
+      check: "String",
+      nullable: true
+    },
+    toolTipState: {
+      check: "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable: true
+    },
+    preferredSize: {
+      check: "org.jspresso.framework.util.gui.Dimension",
+      nullable: true
+    },
+    styleName: {
+      check: "String",
+      nullable: true
+    }
+  },
 
-      members: {
-        /** @type {qx.ui.core.Widget} */
-        __peer: null,
+  members: {
+    /** @type {qx.ui.core.Widget} */
+    __peer: null,
 
-        assignPeer: function (value) {
-          this.__peer = value;
-        },
+    assignPeer: function (value) {
+      this.__peer = value;
+    },
 
-        retrievePeer: function () {
-          return this.__peer;
-        }
-      }
-    });
+    retrievePeer: function () {
+      return this.__peer;
+    }
+  }
+});

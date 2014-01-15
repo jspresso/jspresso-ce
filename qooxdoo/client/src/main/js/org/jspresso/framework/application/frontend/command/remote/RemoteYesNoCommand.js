@@ -13,20 +13,20 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        noAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        },
-        yesAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    noAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    yesAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

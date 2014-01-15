@@ -13,30 +13,30 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RActionList", {
-      extend: org.jspresso.framework.util.remote.RemotePeer,
+  extend: org.jspresso.framework.util.remote.RemotePeer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        actions: {
-          check: "Array"
-        },
-        description: {
-          check: "String",
-          nullable: true
-        },
-        icon: {
-          check: "org.jspresso.framework.gui.remote.RIcon",
-          nullable: true
-        },
-        name: {
-          check: "String",
-          nullable: true
-        },
-        collapsable: {
-          check: "Boolean"
-        }
-      }
-    });
+  properties: {
+    actions: {
+      check: "Array"
+    },
+    description: {
+      check: "String",
+      nullable: true
+    },
+    icon: {
+      check: "org.jspresso.framework.gui.remote.RIcon",
+      nullable: true
+    },
+    name: {
+      check: "String",
+      nullable: true
+    },
+    collapsable: {
+      check: "Boolean"
+    }
+  }
+});

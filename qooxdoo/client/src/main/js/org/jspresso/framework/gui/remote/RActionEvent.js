@@ -13,24 +13,24 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RActionEvent", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        actionCommand: {
-          check: "String",
-          nullable: true
-        },
-        viewStateGuid: {
-          check: "String",
-          nullable: true
-        },
-        viewStatePermId: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    actionCommand: {
+      check: "String",
+      nullable: true
+    },
+    viewStateGuid: {
+      check: "String",
+      nullable: true
+    },
+    viewStatePermId: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

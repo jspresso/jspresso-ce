@@ -13,10 +13,10 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RPercentField", {
-      extend: org.jspresso.framework.gui.remote.RDecimalComponent,
+  extend: org.jspresso.framework.gui.remote.RDecimalComponent,
 
-      construct: function () {
-        this.base(arguments);
-      }
+  construct: function () {
+    this.base(arguments);
+  }
 
-    });
+});

@@ -13,19 +13,19 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RImageComponent", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        scrollable: {
-          check: "Boolean"
-        },
-        action: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    scrollable: {
+      check: "Boolean"
+    },
+    action: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

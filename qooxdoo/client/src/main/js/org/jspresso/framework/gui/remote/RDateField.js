@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RDateField", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        type: {
-          check: "String"
-        },
-        secondsAware: {
-          check: "Boolean"
-        }
-      }
-    });
+  properties: {
+    type: {
+      check: "String"
+    },
+    secondsAware: {
+      check: "Boolean"
+    }
+  }
+});

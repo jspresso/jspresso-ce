@@ -13,24 +13,24 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RNumericComponent", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        maxValue: {
-          check: "Number",
-          nullable: true
-        },
-        minValue: {
-          check: "Number",
-          nullable: true
-        },
-        horizontalAlignment: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    maxValue: {
+      check: "Number",
+      nullable: true
+    },
+    minValue: {
+      check: "Number",
+      nullable: true
+    },
+    horizontalAlignment: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

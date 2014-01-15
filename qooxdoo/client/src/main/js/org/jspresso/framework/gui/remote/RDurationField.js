@@ -13,15 +13,15 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RDurationField", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        maxMillis: {
-          check: "Number"
-        }
-      }
-    });
+  properties: {
+    maxMillis: {
+      check: "Number"
+    }
+  }
+});

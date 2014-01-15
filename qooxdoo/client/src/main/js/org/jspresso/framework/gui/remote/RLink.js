@@ -13,16 +13,16 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RLink", {
-      extend: org.jspresso.framework.gui.remote.RLabel,
+  extend: org.jspresso.framework.gui.remote.RLabel,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        action: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    action: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

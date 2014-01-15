@@ -17,35 +17,34 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 qx.Mixin.define("org.jspresso.framework.patch.MImage", {
-      members: {
+  members: {
 
-        // Fixes bug # 8004
-        _applySource : function(value, old)
-        {
-          var source = value;
-          if (source && source.indexOf('data:') != 0) {
-            var resourceManager = qx.util.ResourceManager.getInstance();
+    // Fixes bug # 8004
+    _applySource: function (value, old) {
+      var source = value;
+      if (source && source.indexOf('data:') != 0) {
+        var resourceManager = qx.util.ResourceManager.getInstance();
 
-            if(resourceManager.has(source)) {
-              this._setStyle("width", resourceManager.getImageWidth(source) / 16 + "rem");
-              this._setStyle("height", resourceManager.getImageHeight(source) / 16 + "rem");
-            }
-
-            var foundHighResolutionSource = this._findHighResolutionSource(source);
-
-            source = resourceManager.toUri(source);
-            var ImageLoader = qx.io.ImageLoader;
-            if (!ImageLoader.isFailed(source) && !ImageLoader.isLoaded(source)) {
-              ImageLoader.load(source, this.__loaderCallback, this);
-            }
-
-            // If a no high-resolution version of the source was found, apply the source.
-            if (foundHighResolutionSource == false) {
-              this._setSource(source);
-            }
-          } else {
-            this._setSource(source);
-          }
+        if (resourceManager.has(source)) {
+          this._setStyle("width", resourceManager.getImageWidth(source) / 16 + "rem");
+          this._setStyle("height", resourceManager.getImageHeight(source) / 16 + "rem");
         }
+
+        var foundHighResolutionSource = this._findHighResolutionSource(source);
+
+        source = resourceManager.toUri(source);
+        var ImageLoader = qx.io.ImageLoader;
+        if (!ImageLoader.isFailed(source) && !ImageLoader.isLoaded(source)) {
+          ImageLoader.load(source, this.__loaderCallback, this);
+        }
+
+        // If a no high-resolution version of the source was found, apply the source.
+        if (foundHighResolutionSource == false) {
+          this._setSource(source);
+        }
+      } else {
+        this._setSource(source);
       }
-    });
+    }
+  }
+});

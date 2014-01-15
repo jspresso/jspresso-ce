@@ -13,10 +13,10 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RList", {
-      extend: org.jspresso.framework.gui.remote.RCollectionComponent,
+  extend: org.jspresso.framework.gui.remote.RCollectionComponent,
 
-      construct: function () {
-        this.base(arguments);
-      }
+  construct: function () {
+    this.base(arguments);
+  }
 
-    });
+});

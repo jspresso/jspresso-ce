@@ -14,11 +14,11 @@
  */
 
 qx.Interface.define("org.jspresso.framework.util.remote.IRemotePeer", {
-      members: {
-        /**
-         * @return {String}
-         */
-        getGuid: function () {
-        }
-      }
-    });
+  members: {
+    /**
+     * @return {String}
+     */
+    getGuid: function () {
+    }
+  }
+});

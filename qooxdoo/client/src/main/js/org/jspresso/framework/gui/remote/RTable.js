@@ -13,37 +13,37 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTable", {
-      extend: org.jspresso.framework.gui.remote.RCollectionComponent,
+  extend: org.jspresso.framework.gui.remote.RCollectionComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        columns: {
-          check: "Array"
-        },
-        columnHeaders: {
-          check: "Array"
-        },
-        columnIds: {
-          check: "Array"
-        },
-        rowPrototype: {
-          check: "org.jspresso.framework.state.remote.RemoteCompositeValueState"
-        },
-        sortingAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        },
-        horizontallyScrollable: {
-          check: "Boolean"
-        },
-        sortable: {
-          check: "Boolean"
-        },
-        columnReorderingAllowed: {
-          check: "Boolean"
-        }
-      }
-    });
+  properties: {
+    columns: {
+      check: "Array"
+    },
+    columnHeaders: {
+      check: "Array"
+    },
+    columnIds: {
+      check: "Array"
+    },
+    rowPrototype: {
+      check: "org.jspresso.framework.state.remote.RemoteCompositeValueState"
+    },
+    sortingAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    horizontallyScrollable: {
+      check: "Boolean"
+    },
+    sortable: {
+      check: "Boolean"
+    },
+    columnReorderingAllowed: {
+      check: "Boolean"
+    }
+  }
+});

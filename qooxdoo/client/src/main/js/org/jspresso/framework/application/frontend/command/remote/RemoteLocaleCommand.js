@@ -13,24 +13,24 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        language: {
-          check: "String"
-        },
-        datePattern: {
-          check: "String"
-        },
-        firstDayOfWeek: {
-          check: "Integer"
-        },
-        translations: {
-          check: "Object"
-        }
-      }
-    });
+  properties: {
+    language: {
+      check: "String"
+    },
+    datePattern: {
+      check: "String"
+    },
+    firstDayOfWeek: {
+      check: "Integer"
+    },
+    translations: {
+      check: "Object"
+    }
+  }
+});

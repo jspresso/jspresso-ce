@@ -13,20 +13,20 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteCommand", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        targetPeerGuid: {
-          check: "String",
-          nullable: true
-        },
-        permId: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    targetPeerGuid: {
+      check: "String",
+      nullable: true
+    },
+    permId: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

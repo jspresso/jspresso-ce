@@ -13,31 +13,31 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.EnhancedListDelegate", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      members: {
+  members: {
 
-        /**
-         * @param item
-         *            {qx.ui.core.Widget}
-         */
-        configureItem: function (item) {
-          var toolTip = new qx.ui.tooltip.ToolTip();
-          toolTip.setRich(true);
-          item.setToolTip(toolTip);
-        },
+    /**
+     * @param item
+     *            {qx.ui.core.Widget}
+     */
+    configureItem: function (item) {
+      var toolTip = new qx.ui.tooltip.ToolTip();
+      toolTip.setRich(true);
+      item.setToolTip(toolTip);
+    },
 
-        /**
-         * @param controller
-         *            {qx.data.controller.List}
-         * @param item
-         *            {qx.ui.core.Widget}
-         * @param id
-         *            {integer}
-         */
-        bindItem: function (controller, item, id) {
-          controller.bindDefaultProperties(item, id);
-          controller.bindProperty("value", "toolTip.label", null, item, id);
-        }
-      }
-    });
+    /**
+     * @param controller
+     *            {qx.data.controller.List}
+     * @param item
+     *            {qx.ui.core.Widget}
+     * @param id
+     *            {integer}
+     */
+    bindItem: function (controller, item, id) {
+      controller.bindDefaultProperties(item, id);
+      controller.bindProperty("value", "toolTip.label", null, item, id);
+    }
+  }
+});

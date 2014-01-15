@@ -13,28 +13,28 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        message: {
-          check: "String",
-          nullable: true
-        },
-        messageIcon: {
-          check: "org.jspresso.framework.gui.remote.RIcon",
-          nullable: true
-        },
-        title: {
-          check: "String",
-          nullable: true
-        },
-        titleIcon: {
-          check: "org.jspresso.framework.gui.remote.RIcon",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    message: {
+      check: "String",
+      nullable: true
+    },
+    messageIcon: {
+      check: "org.jspresso.framework.gui.remote.RIcon",
+      nullable: true
+    },
+    title: {
+      check: "String",
+      nullable: true
+    },
+    titleIcon: {
+      check: "org.jspresso.framework.gui.remote.RIcon",
+      nullable: true
+    }
+  }
+});

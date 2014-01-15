@@ -13,8 +13,8 @@
  */
 
 qx.Interface.define("org.jspresso.framework.state.remote.IRemoteStateOwner", {
-      members: {
-        getState: function () {
-        }
-      }
-    });
+  members: {
+    getState: function () {
+    }
+  }
+});

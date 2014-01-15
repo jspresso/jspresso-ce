@@ -13,24 +13,24 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.gui.Font", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        bold: {
-          check: "Boolean"
-        },
-        italic: {
-          check: "Boolean"
-        },
-        name: {
-          check: "String"
-        },
-        size: {
-          check: "Integer"
-        }
-      }
-    });
+  properties: {
+    bold: {
+      check: "Boolean"
+    },
+    italic: {
+      check: "Boolean"
+    },
+    name: {
+      check: "String"
+    },
+    size: {
+      check: "Integer"
+    }
+  }
+});

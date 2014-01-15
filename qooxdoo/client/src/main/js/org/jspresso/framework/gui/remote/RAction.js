@@ -13,40 +13,40 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RAction", {
-      extend: org.jspresso.framework.util.remote.RemotePeer,
+  extend: org.jspresso.framework.util.remote.RemotePeer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        acceleratorAsString: {
-          check: "String",
-          nullable: true
-        },
-        description: {
-          check: "String",
-          nullable: true
-        },
-        enabled: {
-          check: "Boolean",
-          event: "changeEnabled"
-        },
-        icon: {
-          check: "org.jspresso.framework.gui.remote.RIcon",
-          nullable: true
-        },
-        styleName: {
-          check: "String",
-          nullable: true
-        },
-        mnemonicAsString: {
-          check: "String",
-          nullable: true
-        },
-        name: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    acceleratorAsString: {
+      check: "String",
+      nullable: true
+    },
+    description: {
+      check: "String",
+      nullable: true
+    },
+    enabled: {
+      check: "Boolean",
+      event: "changeEnabled"
+    },
+    icon: {
+      check: "org.jspresso.framework.gui.remote.RIcon",
+      nullable: true
+    },
+    styleName: {
+      check: "String",
+      nullable: true
+    },
+    mnemonicAsString: {
+      check: "String",
+      nullable: true
+    },
+    name: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

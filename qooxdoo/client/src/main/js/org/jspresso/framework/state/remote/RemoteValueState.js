@@ -13,28 +13,28 @@
  */
 
 qx.Class.define("org.jspresso.framework.state.remote.RemoteValueState", {
-      extend: org.jspresso.framework.util.remote.RemotePeer,
+  extend: org.jspresso.framework.util.remote.RemotePeer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        readable: {
-          check: "Boolean",
-          event: "changeReadable"
-        },
-        value: {
-          nullable: true,
-          event: "changeValue"
-        },
-        writable: {
-          check: "Boolean",
-          event: "changeWritable"
-        },
-        parent: {
-          check: "org.jspresso.framework.state.remote.RemoteCompositeValueState",
-          event: "changeParent"
-        }
-      }
-    });
+  properties: {
+    readable: {
+      check: "Boolean",
+      event: "changeReadable"
+    },
+    value: {
+      nullable: true,
+      event: "changeValue"
+    },
+    writable: {
+      check: "Boolean",
+      event: "changeWritable"
+    },
+    parent: {
+      check: "org.jspresso.framework.state.remote.RemoteCompositeValueState",
+      event: "changeParent"
+    }
+  }
+});

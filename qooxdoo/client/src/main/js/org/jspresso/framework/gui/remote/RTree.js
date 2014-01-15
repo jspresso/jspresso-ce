@@ -13,20 +13,20 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTree", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        expanded: {
-          check: "Boolean"
-        },
-        rowAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
+  properties: {
+    expanded: {
+      check: "Boolean"
+    },
+    rowAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
 
-    });
+});

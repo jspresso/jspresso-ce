@@ -13,26 +13,26 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        description: {
-          check: "String",
-          nullable: true
-        },
-        iconImageUrl: {
-          check: "String",
-          nullable: true
-        },
-        value: {
-          nullable: true
-        },
-        valueAsObject: {
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    description: {
+      check: "String",
+      nullable: true
+    },
+    iconImageUrl: {
+      check: "String",
+      nullable: true
+    },
+    value: {
+      nullable: true
+    },
+    valueAsObject: {
+      nullable: true
+    }
+  }
+});

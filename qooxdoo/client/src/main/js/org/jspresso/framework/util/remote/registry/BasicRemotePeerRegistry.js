@@ -13,37 +13,37 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      implement: [org.jspresso.framework.util.remote.registry.IRemotePeerRegistry],
+  implement: [org.jspresso.framework.util.remote.registry.IRemotePeerRegistry],
 
-      construct: function () {
-        this.base(arguments);
-        this.__backingStore = {};
-      },
+  construct: function () {
+    this.base(arguments);
+    this.__backingStore = {};
+  },
 
-      members: {
-        __backingStore: null,
+  members: {
+    __backingStore: null,
 
-        register: function (remotePeer) {
-          if (remotePeer && remotePeer.getGuid()) {
-            this.__backingStore[remotePeer.getGuid()] = remotePeer;
-          }
-        },
-
-        getRegistered: function (guid) {
-          return this.__backingStore[guid];
-        },
-
-        unregister: function (remotePeer) {
-          if (remotePeer && remotePeer.getGuid()) {
-            delete this.__backingStore[remotePeer.getGuid()];
-          }
-        },
-
-        isRegistered: function (guid) {
-          return this.__backingStore.hasOwnProperty(guid);
-        }
-
+    register: function (remotePeer) {
+      if (remotePeer && remotePeer.getGuid()) {
+        this.__backingStore[remotePeer.getGuid()] = remotePeer;
       }
-    });
+    },
+
+    getRegistered: function (guid) {
+      return this.__backingStore[guid];
+    },
+
+    unregister: function (remotePeer) {
+      if (remotePeer && remotePeer.getGuid()) {
+        delete this.__backingStore[remotePeer.getGuid()];
+      }
+    },
+
+    isRegistered: function (guid) {
+      return this.__backingStore.hasOwnProperty(guid);
+    }
+
+  }
+});

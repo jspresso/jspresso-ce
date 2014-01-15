@@ -13,20 +13,20 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RCollectionComponent", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        selectionMode: {
-          check: "String",
-          nullable: true
-        },
-        rowAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    selectionMode: {
+      check: "String",
+      nullable: true
+    },
+    rowAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

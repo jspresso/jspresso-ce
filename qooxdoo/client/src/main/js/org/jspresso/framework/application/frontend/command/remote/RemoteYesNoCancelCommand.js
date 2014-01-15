@@ -13,16 +13,16 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        cancelAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    cancelAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

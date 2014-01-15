@@ -13,20 +13,20 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        snapshotId: {
-          check: "String",
-          nullable: true
-        },
-        name: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    snapshotId: {
+      check: "String",
+      nullable: true
+    },
+    name: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

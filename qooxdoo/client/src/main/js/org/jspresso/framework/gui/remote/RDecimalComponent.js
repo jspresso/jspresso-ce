@@ -13,15 +13,15 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RDecimalComponent", {
-      extend: org.jspresso.framework.gui.remote.RNumericComponent,
+  extend: org.jspresso.framework.gui.remote.RNumericComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        maxFractionDigit: {
-          check: "Integer"
-        }
-      }
-    });
+  properties: {
+    maxFractionDigit: {
+      check: "Integer"
+    }
+  }
+});

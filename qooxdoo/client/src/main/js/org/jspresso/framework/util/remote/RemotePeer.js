@@ -13,21 +13,21 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.remote.RemotePeer", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      implement: [org.jspresso.framework.util.remote.IRemotePeer],
+  implement: [org.jspresso.framework.util.remote.IRemotePeer],
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        guid: {
-          check: "String"
-        },
-        permId: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    guid: {
+      check: "String"
+    },
+    permId: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

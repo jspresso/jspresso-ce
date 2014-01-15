@@ -13,16 +13,16 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RLabel", {
-      extend: org.jspresso.framework.gui.remote.RTextComponent,
+  extend: org.jspresso.framework.gui.remote.RTextComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        horizontalAlignment: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    horizontalAlignment: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

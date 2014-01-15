@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RIcon", {
-      extend: org.jspresso.framework.util.remote.RemotePeer,
+  extend: org.jspresso.framework.util.remote.RemotePeer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        dimension: {
-          check: "org.jspresso.framework.util.gui.Dimension"
-        },
-        imageUrlSpec: {
-          check: "String"
-        }
-      }
-    });
+  properties: {
+    dimension: {
+      check: "org.jspresso.framework.util.gui.Dimension"
+    },
+    imageUrlSpec: {
+      check: "String"
+    }
+  }
+});

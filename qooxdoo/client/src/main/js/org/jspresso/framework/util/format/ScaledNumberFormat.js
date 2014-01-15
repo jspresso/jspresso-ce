@@ -13,51 +13,51 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
-      extend: qx.util.format.NumberFormat,
+  extend: qx.util.format.NumberFormat,
 
-      /**
-       * @param locale {String} optional locale to be used
-       */
-      construct: function (locale) {
-        this.base(arguments);
-      },
+  /**
+   * @param locale {String} optional locale to be used
+   */
+  construct: function (locale) {
+    this.base(arguments);
+  },
 
-      properties: {
-        scale: {
-          check: "Number",
-          nullable: true
-        }
-      },
+  properties: {
+    scale: {
+      check: "Number",
+      nullable: true
+    }
+  },
 
-      members: {
-        /**
-         * Formats a number.
-         *
-         * @param num {Number} the number to format.
-         * @return {String} the formatted number as a string.
-         */
-        format: function (num) {
-          var actualNumberToFormat = num;
-          if (this.getScale() && num) {
-            actualNumberToFormat = num * this.getScale();
-          }
-          return /** @type {String } */ this.base(arguments, actualNumberToFormat);
-        },
-
-
-        /**
-         * Parses a number.
-         *
-         * @param str {String} the string to parse.
-         * @return {Double} the number.
-         */
-        parse: function (str) {
-          /** @type {Number } */
-          var actualParsedNumber = /** @type {Number } */ this.base(arguments, str);
-          if (this.getScale() && actualParsedNumber) {
-            actualParsedNumber = actualParsedNumber / this.getScale();
-          }
-          return /** @type {Double } */ actualParsedNumber;
-        }
+  members: {
+    /**
+     * Formats a number.
+     *
+     * @param num {Number} the number to format.
+     * @return {String} the formatted number as a string.
+     */
+    format: function (num) {
+      var actualNumberToFormat = num;
+      if (this.getScale() && num) {
+        actualNumberToFormat = num * this.getScale();
       }
-    });
+      return /** @type {String } */ this.base(arguments, actualNumberToFormat);
+    },
+
+
+    /**
+     * Parses a number.
+     *
+     * @param str {String} the string to parse.
+     * @return {Double} the number.
+     */
+    parse: function (str) {
+      /** @type {Number } */
+      var actualParsedNumber = /** @type {Number } */ this.base(arguments, str);
+      if (this.getScale() && actualParsedNumber) {
+        actualParsedNumber = actualParsedNumber / this.getScale();
+      }
+      return /** @type {Double } */ actualParsedNumber;
+    }
+  }
+});

@@ -13,32 +13,32 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RBorderContainer", {
-      extend: org.jspresso.framework.gui.remote.RContainer,
+  extend: org.jspresso.framework.gui.remote.RContainer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        center: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        },
-        east: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        },
-        north: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        },
-        south: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        },
-        west: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    center: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    },
+    east: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    },
+    north: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    },
+    south: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    },
+    west: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    }
+  }
+});

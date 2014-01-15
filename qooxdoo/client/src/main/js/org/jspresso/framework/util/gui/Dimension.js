@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.gui.Dimension", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        height: {
-          check: "Integer"
-        },
-        width: {
-          check: "Integer"
-        }
-      }
-    });
+  properties: {
+    height: {
+      check: "Integer"
+    },
+    width: {
+      check: "Integer"
+    }
+  }
+});

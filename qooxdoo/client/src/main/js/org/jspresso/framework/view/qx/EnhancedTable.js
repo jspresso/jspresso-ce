@@ -13,48 +13,48 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
-      extend: qx.ui.table.Table,
+  extend: qx.ui.table.Table,
 
-      construct: function (tableModel, custom) {
-        this.base(arguments, tableModel, custom);
+  construct: function (tableModel, custom) {
+    this.base(arguments, tableModel, custom);
 
-        var tt = new qx.ui.tooltip.ToolTip("");
-        tt.setRich(true);
-        this.setToolTip(tt);
-        this.addListener("mousemove", this._refineToolTip, this);
-      },
+    var tt = new qx.ui.tooltip.ToolTip("");
+    tt.setRich(true);
+    this.setToolTip(tt);
+    this.addListener("mousemove", this._refineToolTip, this);
+  },
 
-      members: {
-        _refineToolTip: function (e) {
-          var v = null;
-          var pageX = e.getDocumentLeft();
-          var pageY = e.getDocumentTop();
-          var sc = this.getTablePaneScrollerAtPageX(pageX);
-          if (sc != null) {
-            var tm = this.getTableModel();
-            if (tm != null) {
-              var row = sc._getRowForPagePos(pageX, pageY);
-              var col = sc._getColumnForPageX(pageX);
-              /**/
-              if (row >= 0 && col >= 0) {
-                try {
-                  v = tm.getToolTip(col, row);
-                } catch (az) {
-                  v = "";
-                }
-              }
+  members: {
+    _refineToolTip: function (e) {
+      var v = null;
+      var pageX = e.getDocumentLeft();
+      var pageY = e.getDocumentTop();
+      var sc = this.getTablePaneScrollerAtPageX(pageX);
+      if (sc != null) {
+        var tm = this.getTableModel();
+        if (tm != null) {
+          var row = sc._getRowForPagePos(pageX, pageY);
+          var col = sc._getColumnForPageX(pageX);
+          /**/
+          if (row >= 0 && col >= 0) {
+            try {
+              v = tm.getToolTip(col, row);
+            } catch (az) {
+              v = "";
             }
-          }
-          /** @type {qx.ui.tooltip.ToolTip } */
-          var tt = this.getToolTip();
-          if (v != null && v != "") {
-            tt.setLabel(v);
-            if (tt.isVisible()) {
-              tt.placeToMouse(e);
-            }
-          } else {
-            tt.hide();
           }
         }
       }
-    });
+      /** @type {qx.ui.tooltip.ToolTip } */
+      var tt = this.getToolTip();
+      if (v != null && v != "") {
+        tt.setLabel(v);
+        if (tt.isVisible()) {
+          tt.placeToMouse(e);
+        }
+      } else {
+        tt.hide();
+      }
+    }
+  }
+});

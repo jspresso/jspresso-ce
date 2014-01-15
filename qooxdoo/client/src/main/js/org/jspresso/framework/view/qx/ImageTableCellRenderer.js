@@ -13,30 +13,30 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.ImageTableCellRenderer", {
-      extend: qx.ui.table.cellrenderer.Default,
-      include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+  extend: qx.ui.table.cellrenderer.Default,
+  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
-      members: {
-        __action: null,
+  members: {
+    __action: null,
 
-        _getContentHtml: function (cellInfo) {
-          if (cellInfo.value) {
-            return '<img src="' + cellInfo.value + '"/>';
-          }
-          return "";
-        },
-
-        setAction: function (action) {
-          this.__action = action;
-        },
-
-        getAction: function () {
-          return this.__action;
-        },
-
-        _getCellStyle: function (cellInfo) {
-          var superStyle = this.base(arguments, cellInfo);
-          return superStyle + this._getAdditionalCellStyle(cellInfo);
-        }
+    _getContentHtml: function (cellInfo) {
+      if (cellInfo.value) {
+        return '<img src="' + cellInfo.value + '"/>';
       }
-    });
+      return "";
+    },
+
+    setAction: function (action) {
+      this.__action = action;
+    },
+
+    getAction: function () {
+      return this.__action;
+    },
+
+    _getCellStyle: function (cellInfo) {
+      var superStyle = this.base(arguments, cellInfo);
+      return superStyle + this._getAdditionalCellStyle(cellInfo);
+    }
+  }
+});

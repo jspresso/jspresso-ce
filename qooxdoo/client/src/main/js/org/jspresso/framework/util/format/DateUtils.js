@@ -13,36 +13,36 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.format.DateUtils", {
-      statics: {
+  statics: {
 
-        /**
-         * @param source {org.jspresso.framework.util.lang.DateDto}
-         * @return {Date}
-         */
-        fromDateDto: function (source) {
-          if (source) {
-            return new Date(source.getYear(), source.getMonth(), source.getDate(), source.getHour(), source.getMinute(),
-                source.getSecond());
-          }
-          return null;
-        },
-
-        /**
-         * @param source {Date}
-         * @return {org.jspresso.framework.util.lang.DateDto}
-         */
-        fromDate: function (source) {
-          if (source) {
-            var dateDto = new org.jspresso.framework.util.lang.DateDto();
-            dateDto.setYear(source.getFullYear());
-            dateDto.setMonth(source.getMonth());
-            dateDto.setDate(source.getDate());
-            dateDto.setHour(source.getHours());
-            dateDto.setMinute(source.getMinutes());
-            dateDto.setSecond(source.getSeconds());
-            return dateDto;
-          }
-          return null;
-        }
+    /**
+     * @param source {org.jspresso.framework.util.lang.DateDto}
+     * @return {Date}
+     */
+    fromDateDto: function (source) {
+      if (source) {
+        return new Date(source.getYear(), source.getMonth(), source.getDate(), source.getHour(), source.getMinute(),
+            source.getSecond());
       }
-    });
+      return null;
+    },
+
+    /**
+     * @param source {Date}
+     * @return {org.jspresso.framework.util.lang.DateDto}
+     */
+    fromDate: function (source) {
+      if (source) {
+        var dateDto = new org.jspresso.framework.util.lang.DateDto();
+        dateDto.setYear(source.getFullYear());
+        dateDto.setMonth(source.getMonth());
+        dateDto.setDate(source.getDate());
+        dateDto.setHour(source.getHours());
+        dateDto.setMinute(source.getMinutes());
+        dateDto.setSecond(source.getSeconds());
+        return dateDto;
+      }
+      return null;
+    }
+  }
+});

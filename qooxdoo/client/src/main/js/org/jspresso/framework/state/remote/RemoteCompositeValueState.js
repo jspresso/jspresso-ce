@@ -28,7 +28,8 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
      */
     flatten: function (compositeState, nestedLevel) {
       var targetArray = new qx.data.Array();
-      targetArray.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState, nestedLevel, targetArray));
+      targetArray.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState,
+          nestedLevel, targetArray));
       return targetArray;
     },
 
@@ -41,30 +42,30 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
     __flattenNested: function (compositeState, nestedLevel, targetArray) {
       var flat = new qx.data.Array();
       var children = compositeState.getChildren();
-      var listener = function(evt) {
+      var listener = function (evt) {
         var startIndex = -1;
         var levelToInvalidate = -1;
         var changedItemsCount = 0;
-        for(var j = 0; j < targetArray.length; j++) {
-          if(startIndex == -1) {
+        for (var j = 0; j < targetArray.length; j++) {
+          if (startIndex == -1) {
             if (targetArray.getItem(j)["state"] == compositeState) {
               startIndex = j;
               changedItemsCount = 1;
               levelToInvalidate = targetArray.getItem(j)["level"];
             }
           } else {
-            if(targetArray.getItem(j)["level"] > levelToInvalidate) {
+            if (targetArray.getItem(j)["level"] > levelToInvalidate) {
               var nestedState = targetArray.getItem(j)["state"];
               nestedState.getChildren().removeListenerById(targetArray.getItem(j)["listenerId"]);
-              changedItemsCount ++;
+              changedItemsCount++;
             } else {
               break;
             }
           }
         }
-        qx.data.Array.prototype.splice.apply(targetArray, [startIndex, changedItemsCount].concat(
-            org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState, levelToInvalidate, targetArray).toArray()
-        ));
+        qx.data.Array.prototype.splice.apply(targetArray, [startIndex, changedItemsCount
+        ].concat(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState,
+            levelToInvalidate, targetArray).toArray()));
       };
 
       var id = children.addListener("change", listener);

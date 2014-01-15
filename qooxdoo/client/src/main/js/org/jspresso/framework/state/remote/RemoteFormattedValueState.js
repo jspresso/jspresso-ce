@@ -13,16 +13,16 @@
  */
 
 qx.Class.define("org.jspresso.framework.state.remote.RemoteFormattedValueState", {
-      extend: org.jspresso.framework.state.remote.RemoteValueState,
+  extend: org.jspresso.framework.state.remote.RemoteValueState,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        valueAsObject: {
-          nullable: true,
-          event: "changeValueAsObject"
-        }
-      }
-    });
+  properties: {
+    valueAsObject: {
+      nullable: true,
+      event: "changeValueAsObject"
+    }
+  }
+});

@@ -13,23 +13,23 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.ColorTableCellRenderer", {
-      extend: qx.ui.table.cellrenderer.Default,
-      include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+  extend: qx.ui.table.cellrenderer.Default,
+  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
 
-      members: {
-        _getCellStyle: function (cellInfo) {
-          var superStyle = this.base(arguments, cellInfo);
-          if (cellInfo.value) {
-            var bgStyle = "color: #" + cellInfo.value.substring(4) + ";";
-            superStyle = (superStyle || "") + bgStyle;
-          }
-          return superStyle + this._getAdditionalCellStyle(cellInfo);
-        }
+  members: {
+    _getCellStyle: function (cellInfo) {
+      var superStyle = this.base(arguments, cellInfo);
+      if (cellInfo.value) {
+        var bgStyle = "color: #" + cellInfo.value.substring(4) + ";";
+        superStyle = (superStyle || "") + bgStyle;
       }
-    });
+      return superStyle + this._getAdditionalCellStyle(cellInfo);
+    }
+  }
+});

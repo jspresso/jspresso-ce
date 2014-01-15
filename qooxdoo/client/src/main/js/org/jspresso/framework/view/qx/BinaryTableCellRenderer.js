@@ -13,30 +13,30 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.BinaryTableCellRenderer", {
-      extend: qx.ui.table.cellrenderer.Boolean,
-      include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+  extend: qx.ui.table.cellrenderer.Boolean,
+  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
 
-      members: {
-        // overridden
-        _identifyImage: function (cellInfo) {
-          //noinspection RedundantIfStatementJS
-          if (cellInfo.value) {
-            cellInfo.value = true;
-          } else {
-            cellInfo.value = false;
-          }
-          return this.base(arguments, cellInfo);
-        },
-
-        _getCellStyle: function (cellInfo) {
-          var superStyle = this.base(arguments, cellInfo);
-          return superStyle + this._getAdditionalCellStyle(cellInfo);
-        }
+  members: {
+    // overridden
+    _identifyImage: function (cellInfo) {
+      //noinspection RedundantIfStatementJS
+      if (cellInfo.value) {
+        cellInfo.value = true;
+      } else {
+        cellInfo.value = false;
       }
-    });
+      return this.base(arguments, cellInfo);
+    },
+
+    _getCellStyle: function (cellInfo) {
+      var superStyle = this.base(arguments, cellInfo);
+      return superStyle + this._getAdditionalCellStyle(cellInfo);
+    }
+  }
+});

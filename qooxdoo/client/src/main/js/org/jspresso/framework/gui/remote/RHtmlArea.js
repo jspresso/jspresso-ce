@@ -13,22 +13,22 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RHtmlArea", {
-      extend: org.jspresso.framework.gui.remote.RTextComponent,
+  extend: org.jspresso.framework.gui.remote.RTextComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        readOnly: {
-          check: "Boolean"
-        },
-        verticallyScrollable: {
-          check: "Boolean"
-        },
-        horizontallyScrollable: {
-          check: "Boolean"
-        }
-      }
+  properties: {
+    readOnly: {
+      check: "Boolean"
+    },
+    verticallyScrollable: {
+      check: "Boolean"
+    },
+    horizontallyScrollable: {
+      check: "Boolean"
+    }
+  }
 
-    });
+});

@@ -13,16 +13,16 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        successCallbackAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    successCallbackAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

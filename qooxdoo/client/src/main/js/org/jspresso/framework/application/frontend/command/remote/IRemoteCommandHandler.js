@@ -13,8 +13,8 @@
  */
 
 qx.Interface.define("org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler", {
-      members: {
-        registerCommand: function (command) {
-        }
-      }
-    });
+  members: {
+    registerCommand: function (command) {
+    }
+  }
+});

@@ -13,30 +13,30 @@
  */
 
 qx.Class.define("org.jspresso.framework.util.gui.CellConstraints", {
-      extend: qx.core.Object,
+  extend: qx.core.Object,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        column: {
-          check: "Integer"
-        },
-        height: {
-          check: "Integer"
-        },
-        heightResizable: {
-          check: "Boolean"
-        },
-        row: {
-          check: "Integer"
-        },
-        width: {
-          check: "Integer"
-        },
-        widthResizable: {
-          check: "Boolean"
-        }
-      }
-    });
+  properties: {
+    column: {
+      check: "Integer"
+    },
+    height: {
+      check: "Integer"
+    },
+    heightResizable: {
+      check: "Boolean"
+    },
+    row: {
+      check: "Integer"
+    },
+    width: {
+      check: "Integer"
+    },
+    widthResizable: {
+      check: "Boolean"
+    }
+  }
+});

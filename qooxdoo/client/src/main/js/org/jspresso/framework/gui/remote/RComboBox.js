@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RComboBox", {
-      extend: org.jspresso.framework.gui.remote.REnumBox,
+  extend: org.jspresso.framework.gui.remote.REnumBox,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        icons: {
-          check: "Array"
-        },
-        readOnly: {
-          check: "Boolean"
-        }
-      }
-    });
+  properties: {
+    icons: {
+      check: "Array"
+    },
+    readOnly: {
+      check: "Boolean"
+    }
+  }
+});

@@ -13,15 +13,15 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RActionComponent", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        action: {
-          check: "org.jspresso.framework.gui.remote.RAction"
-        }
-      }
-    });
+  properties: {
+    action: {
+      check: "org.jspresso.framework.gui.remote.RAction"
+    }
+  }
+});

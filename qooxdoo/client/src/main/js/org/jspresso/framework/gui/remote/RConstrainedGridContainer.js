@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RConstrainedGridContainer", {
-      extend: org.jspresso.framework.gui.remote.RContainer,
+  extend: org.jspresso.framework.gui.remote.RContainer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        cellConstraints: {
-          check: "Array"
-        },
-        cells: {
-          check: "Array"
-        }
-      }
-    });
+  properties: {
+    cellConstraints: {
+      check: "Array"
+    },
+    cells: {
+      check: "Array"
+    }
+  }
+});

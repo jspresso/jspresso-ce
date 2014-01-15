@@ -14,7 +14,7 @@
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.AbstractQxController", {
   extend: qx.core.Object,
 
-  type : "abstract",
+  type: "abstract",
 
   implement: [org.jspresso.framework.util.remote.registry.IRemotePeerRegistry,
               org.jspresso.framework.action.IActionHandler,
@@ -27,30 +27,27 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     __STOP_METHOD: "stop"
   },
 
-  construct: function (application, remoteController, userLanguage) {
-    this._application = application;
+  /**
+   * @param remoteController {qx.io.remote.Rpc}
+   * @param userLanguage {String}
+   */
+  construct: function (remoteController, userLanguage) {
     this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
-    this._viewFactory = this._createViewFactory();
+    this.__viewFactory = this._createViewFactory();
     this.__changeNotificationsEnabled = true;
     this.__remoteController = remoteController;
     this.__commandsQueue = [];
     this.__commandsBacklog = [];
-    this._dialogStack = [];
-    this._dialogStack.push([null, null, null]);
     this.__userLanguage = userLanguage;
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
     this._initRemoteController();
   },
 
   members: {
-    /** @type {qx.application.Standalone | qx.application.Mobile} */
-    _application: null,
-    /** @type {qx.ui.embed.Iframe} */
-    __dlFrame: null,
     /** @type {qx.io.remote.Rpc} */
     __remoteController: null,
     /** @type {org.jspresso.framework.view.qx.AbstractQxViewFactory} */
-    _viewFactory: null,
+    __viewFactory: null,
     /** @type {org.jspresso.framework.util.remote.registry.IRemotePeerRegistry} */
     __remotePeerRegistry: null,
     /** @type {Boolean} */
@@ -61,20 +58,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     __roundTrip: false,
     /** @type {Array} */
     __commandsBacklog: null,
-    /** @type {qx.ui.basic.Label} */
-    __statusBar: null,
     /** @type {Object} */
     __postponedCommands: null,
     /** @type {Object} */
     __postponedNotificationBuffer: null,
-    /** @type {Array} */
-    _dialogStack: null,
     /** @type {String} */
     __userLanguage: null,
     /** @type {Object} */
     __translations: null,
-
+    /** @type {function} */
     __nextActionCallback: null,
+    /** @type {String} */
     __lastReceivedSnapshotId: null,
 
     _createViewFactory: function () {
@@ -82,11 +76,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
-     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
-     * @return {qx.ui.core.Widget}
+     * @return {org.jspresso.framework.view.qx.AbstractQxViewFactory}
      */
-    createComponent: function (remoteComponent) {
-      return this._viewFactory.createComponent(remoteComponent, true);
+    _getViewFactory: function() {
+      return this.__viewFactory;
     },
 
     /**
@@ -124,7 +117,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     /**
      * @param busy {Boolean}
      */
-    _showBusy: function(busy) {
+    _showBusy: function (busy) {
       throw new Error("_showBusy is abstract");
     },
 
@@ -137,8 +130,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         this.__roundTrip = true;
         this.__remoteController.callAsyncListeners(true,
             org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__HANDLE_COMMANDS_METHOD,
-            org.jspresso.framework.util.object.ObjectUtil.
-                untypeObjectGraph(new qx.data.Array(this.__commandsQueue)));
+            org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(new qx.data.Array(this.__commandsQueue)));
         this.__commandsQueue.length = 0;
       } else {
         for (var i = 0; i < this.__commandsQueue.length; i++) {
@@ -201,6 +193,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
+     * @param actionEvent {org.jspresso.framework.gui.remote.RActionEvent}
+     * @return {undefined}
+     */
+    _completeActionEvent: function (actionEvent) {
+      // NO-OP
+    },
+
+    /**
      *
      * @param action {org.jspresso.framework.gui.remote.RAction}
      * @param actionEvent {org.jspresso.framework.gui.remote.RActionEvent}
@@ -219,8 +219,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
         }
         command.setActionEvent(actionEvent);
-        actionEvent.setViewStateGuid(this._dialogStack[this._dialogStack.length - 1][1]);
-        actionEvent.setViewStatePermId(this._dialogStack[this._dialogStack.length - 1][2]);
+        this._completeActionEvent(actionEvent);
         this.__nextActionCallback = actionCallback;
         this.registerCommand(command);
       }
@@ -265,14 +264,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @param loginCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand}
      */
     _handleInitLoginCommmand: function (loginCommand) {
-      var loginButton = this._viewFactory.createButton(loginCommand.getOkLabel(), null, loginCommand.getOkIcon());
-      this._viewFactory.addButtonListener(loginButton, function (event) {
-        this._performLogin();
-      }, this);
-      var loginButtons = [];
-      loginButtons.push(loginButton);
-      var dialogView = this.createComponent(loginCommand.getLoginView());
-      this._popupDialog(loginCommand.getTitle(), loginCommand.getMessage(), dialogView, loginCommand.getLoginView().getIcon(), loginButtons);
+      throw new Error("_handleInitLoginCommmand is abstract.")
     },
 
     /**
@@ -283,122 +275,245 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
-     *
+     * @param remoteUpdateStatusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand}
+     * @return {undefined}
+     */
+    _updateStatusCommand: function (remoteUpdateStatusCommand) {
+      throw new Error("_updateStatusCommand is abstract.");
+    },
+
+    /**
+     * @param historyDisplayCommand {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand}
+     * @return {undefined}
+     */
+    _handleHistoryDisplayCommand: function (historyDisplayCommand) {
+      throw new Error("_handleHistoryDisplayCommand is abstract.")
+    },
+
+    /**
+     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
+     * @return {undefined}
+     */
+    _handleInitCommand: function (initCommand) {
+      throw new Error("_handleInitCommand is abstract.")
+    },
+
+    /**
+     * @param abstractDialogCommand {org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand}
+     * @return {undefined}
+     */
+    _handleDialogCommand: function (abstractDialogCommand) {
+      throw new Error("_handleDialogCommand is abstract.")
+    },
+
+    /**
+     * @param localeCommand {org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand}
+     * @return {undefined}
+     */
+    _handleRemoteLocaleCommand: function (localeCommand) {
+      qx.locale.Manager.getInstance().setLocale(localeCommand.getLanguage());
+      this._getViewFactory().setDatePattern(localeCommand.getDatePattern());
+      this.__translations = localeCommand.getTranslations();
+    },
+
+    /**
+     * @param cleanupCommand {org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand}
+     * @return {undefined}
+     */
+    _handleCleanupCommand: function (cleanupCommand) {
+      var removedPeerGuids = cleanupCommand.getRemovedPeerGuids();
+      for (var i = 0; i < removedPeerGuids.length; i++) {
+        var removedPeer = this.getRegistered(removedPeerGuids[i]);
+        if (removedPeer) {
+          this.unregister(removedPeer);
+        }
+      }
+    },
+
+    /**
+     * @param compositeValueState {org.jspresso.framework.state.remote.RemoteCompositeValueState}
+     * @param childrenCommand {org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand}
+     * @return {undefined}
+     */
+    _handleChildrenCommand: function (compositeValueState, childrenCommand) {
+      this.__postponedNotificationBuffer[compositeValueState.getGuid()] = null;
+
+      /** @type {qx.data.Array} */
+      var children = compositeValueState.getChildren();
+      /** @type {Array} */
+      var childrenContent = children.toArray();
+      /** @type {Array} */
+      var commandChildren = childrenCommand.getChildren().toArray();
+
+      if (childrenCommand.getRemove()) {
+        for (var i = 0; i < commandChildren.length; i++) {
+          /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
+          var child = commandChildren[i];
+          if (this.isRegistered(child.getGuid())) {
+            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(child.getGuid());
+            children.remove(child);
+          }
+        }
+      } else {
+        var oldLength = childrenContent.length;
+        var newLength = commandChildren.length;
+
+        for (var i = 0; i < commandChildren.length; i++) {
+          /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
+          var child = commandChildren[i];
+          if (this.isRegistered(child.getGuid())) {
+            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(child.getGuid());
+          } else {
+            this.register(child);
+          }
+          var existingChild = null;
+          if (i < childrenContent.length) {
+            existingChild = childrenContent[i];
+          }
+          if (existingChild != child) {
+            childrenContent[i] = child;
+          }
+        }
+        childrenContent.length = newLength;
+        children.length = newLength;
+        children.fireDataEvent("changeLength", oldLength, newLength);
+        children.fireDataEvent("change", {
+          start: 0,
+          end: newLength,
+          type: "add",
+          items: childrenContent
+        }, null);
+      }
+    },
+
+    /**
+     * @param valueState {org.jspresso.framework.state.remote.RemoteValueState}
+     * @param valueCommand {org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand}
+     * @return {undefined}
+     */
+    _handleValueCommand: function (valueState, valueCommand) {
+      valueState.setValue(valueCommand.getValue());
+      if (valueState instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
+        (/**@type {org.jspresso.framework.state.remote.RemoteFormattedValueState} */valueState).
+            setValueAsObject(valueCommand.getValueAsObject());
+      } else if (valueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).
+            setDescription(valueCommand.getDescription());
+        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).
+            setIconImageUrl(valueCommand.getIconImageUrl());
+      }
+    },
+
+    /**
+     * @param compositeValueState {org.jspresso.framework.state.remote.RemoteCompositeValueState}
+     * @param selectionCommand {org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand}
+     * @return {undefined}
+     */
+    _handleSelectionCommand: function (compositeValueState, selectionCommand) {
+      compositeValueState.setLeadingIndex(selectionCommand.getLeadingIndex());
+      compositeValueState.setSelectedIndices(selectionCommand.getSelectedIndices());
+    },
+
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param addCardCommand {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand}
+     * @return {undefined}
+     */
+    _handleAddCardCommand: function (targetPeer, addCardCommand) {
+      throw new Error("_handleAddCardCommand is abstract.");
+    },
+
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param focusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand}
+     * @return {undefined}
+     */
+    _handleFocusCommand: function (targetPeer, focusCommand) {
+      throw new Error("_handleFocusCommand is abstract.");
+    },
+
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param editCommand {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand}
+     * @return {undefined}
+     */
+    _handleEditCommand: function (targetPeer, editCommand) {
+      throw new Error("_handleEditCommand is abstract.");
+    },
+
+    /**
      * @param command {org.jspresso.framework.application.frontend.command.remote.RemoteCommand}
      * @return {undefined}
      */
     _handleCommand: function (command) {
       var c;
       if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand} */
             command;
         this._handleMessageCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand} */
             command;
-        if (c.getSnapshotId()) {
-          this.__lastReceivedSnapshotId = c.getSnapshotId();
-          qx.bom.History.getInstance().addToHistory("snapshotId=" + c.getSnapshotId(), c.getName());
-        } else if (c.getName()) {
-          qx.bom.History.getInstance().setTitle(c.getName());
-        }
+        this._handleHistoryDisplayCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand) {
         this._restart();
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand} */
             command;
         this._handleFileUpload(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand} */
             command;
         this._handleFileDownload(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand} */
             command;
-        qx.locale.Manager.getInstance().setLocale(c.getLanguage());
-        this._viewFactory.setDatePattern(c.getDatePattern());
-        this.__translations = c.getTranslations();
+        this._handleRemoteLocaleCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand} */
             command;
         this._handleInitLoginCommmand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand} */
             command;
-        var removedPeerGuids = c.getRemovedPeerGuids();
-        for (var i = 0; i < removedPeerGuids.length; i++) {
-          var removedPeer = this.getRegistered(removedPeerGuids[i]);
-          if (removedPeer) {
-            this.unregister(removedPeer);
-          }
-        }
+        this._handleCleanupCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand} */
             command;
-        var dialogButtons = [];
-        for (var i = 0; i < c.getActions().length; i++) {
-          dialogButtons.push(this._viewFactory.createAction(c.getActions()[i]));
-        }
-        var dialogView;
-        var icon;
-        if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand } */
-              command;
-          dialogView = this.createComponent(c.getView());
-          icon = c.getView().getIcon();
-        } else if (command
-            instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand } */
-              command;
-          dialogView = new qx.ui.embed.Flash(c.getSwfUrl());
-          var flashVars = {};
-          for (var i = 0; i < c.getParamNames().length; i++) {
-            flashVars[c.getParamNames()[i]] = c.getParamValues()[i];
-          }
-          dialogView.setVariables(flashVars);
-        }
-        this._popupDialog(c.getTitle(), null, dialogView, icon, dialogButtons, c.getUseCurrent(), c.getDimension());
+        this._handleDialogCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand) {
         this._closeDialog();
       } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand} */
             command;
-        this.linkBowserHistory();
-        this._initApplicationFrame(c.getWorkspaceNames(), c.getWorkspaceActions(), c.getExitAction(),
-            c.getNavigationActions(), c.getActions(), c.getSecondaryActions(), c.getHelpActions(), c.getSize());
+        this._handleInitCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand} */
             command;
         this._displayWorkspace(c.getWorkspaceName(), c.getWorkspaceView());
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand} */
             command;
         window.open(c.getUrlSpec(), c.getTarget());
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand} */
             command;
-        var status = c.getStatus();
-        if (status != null && status.length > 0) {
-          this.__statusBar.setValue(status);
-          this.__statusBar.setVisibility("visible");
-        } else {
-          this.__statusBar.setVisibility("excluded");
-        }
+        this._updateStatusCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand } */
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand} */
             command;
         this._handleClipboardCommand(c);
       } else {
@@ -415,103 +530,49 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           return;
         }
         if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand} */
               command;
-          targetPeer.setValue(c.getValue());
-          if (targetPeer instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
-            targetPeer.setValueAsObject(c.getValueAsObject());
-          } else if (targetPeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-            targetPeer.setDescription(c.getDescription());
-            targetPeer.setIconImageUrl(c.getIconImageUrl());
-          }
+          this._handleValueCommand(targetPeer, c);
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand} */
               command;
           targetPeer.setReadable(c.getReadable());
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand} */
               command;
           targetPeer.setWritable(c.getWritable());
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand} */
               command;
-          if (targetPeer instanceof org.jspresso.framework.gui.remote.RTabContainer) {
-            targetPeer.setSelectedIndex(c.getLeadingIndex());
-          } else {
-            targetPeer.setLeadingIndex(c.getLeadingIndex());
-            targetPeer.setSelectedIndices(c.getSelectedIndices());
-          }
+          this._handleSelectionCommand(targetPeer, c);
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand} */
               command;
           targetPeer.setEnabled(c.getEnabled());
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand} */
               command;
-          this.__postponedNotificationBuffer[targetPeer.getGuid()] = null;
-
-          /** @type {qx.data.Array } */
-          var children = targetPeer.getChildren();
-          /** @type {Array} */
-          var childrenContent = children.toArray();
-          /** @type {Array} */
-          var commandChildren = c.getChildren().toArray();
-
-          if (c.getRemove()) {
-            for (var i = 0; i < commandChildren.length; i++) {
-              /** @type {org.jspresso.framework.state.remote.RemoteValueState } */
-              var child = commandChildren[i];
-              if (this.isRegistered(child.getGuid())) {
-                child = /** @type {org.jspresso.framework.state.remote.RemoteValueState } */ this.getRegistered(child.getGuid());
-                children.remove(child);
-              }
-            }
-          } else {
-            var oldLength = childrenContent.length;
-            var newLength = commandChildren.length;
-
-            for (var i = 0; i < commandChildren.length; i++) {
-              /** @type {org.jspresso.framework.state.remote.RemoteValueState } */
-              var child = commandChildren[i];
-              if (this.isRegistered(child.getGuid())) {
-                child = /** @type {org.jspresso.framework.state.remote.RemoteValueState } */ this.getRegistered(child.getGuid());
-              } else {
-                this.register(child);
-              }
-              var existingChild = null;
-              if (i < childrenContent.length) {
-                existingChild = childrenContent[i];
-              }
-              if (existingChild != child) {
-                childrenContent[i] = child;
-              }
-            }
-            childrenContent.length = newLength;
-            children.length = newLength;
-            children.fireDataEvent("changeLength", oldLength, newLength);
-            children.fireDataEvent("change", {
-              start: 0,
-              end: newLength,
-              type: "add",
-              items: childrenContent
-            }, null);
-          }
+          this._handleChildrenCommand(targetPeer, c);
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand } */
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand} */
               command;
-          this._viewFactory.addCard(targetPeer.retrievePeer(), c.getCard(), c.getCardName());
+          this._handleAddCardCommand(targetPeer, c);
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
-          this._viewFactory.focus(targetPeer.retrievePeer());
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand} */
+              command;
+          this._handleFocusCommand(targetPeer, c);
         } else if (command
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand) {
-          this._viewFactory.edit(targetPeer.retrievePeer());
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
+              command;
+          this._handleEditCommand(targetPeer, c);
         }
       }
     },
@@ -521,122 +582,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @param uploadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand}
      */
     _handleFileUpload: function (uploadCommand) {
-      var uploadDialog = new qx.ui.window.Window("Upload file");
-      uploadDialog.set({
-        modal: true,
-        showClose: false,
-        showMaximize: false,
-        showMinimize: false
-      });
-      uploadDialog.setLayout(new qx.ui.layout.VBox(10));
-      //this._viewFactory.setIcon(uploadDialog, messageCommand.getTitleIcon());
-      this._application.getRoot().add(uploadDialog);
-
-      var uploadForm = new uploadwidget.UploadForm('uploadForm', uploadCommand.getFileUrl());
-      uploadForm.set({
-        decorator: "main",
-        padding: 8
-      });
-      uploadForm.setLayout(new qx.ui.layout.VBox(10));
-
-      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'icon/16/actions/document-save.png');
-      uploadForm.add(uploadField);
-
-      uploadDialog.add(uploadForm, {flex: 1});
-
-      var buttonBox = new qx.ui.container.Composite();
-      buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
-      uploadDialog.add(buttonBox);
-
-      uploadForm.addListener("completed", function (e) {
-        uploadField.setFileName('');
-        var document = uploadForm.getIframeDocument();
-        var resource = document.firstChild;
-        var id = resource.getAttribute("id");
-        if (id) {
-          var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-          actionEvent.setActionCommand(id);
-          this.execute(uploadCommand.getSuccessCallbackAction(), actionEvent);
-        }
-        uploadDialog.close();
-        uploadDialog.destroy();
-      }, this);
-
-
-      var okButton = this._viewFactory.createOkButton();
-      this._viewFactory.addButtonListener(okButton, function (event) {
-        uploadForm.send();
-      }, this);
-      buttonBox.add(okButton);
-
-      var cancelButton = this._viewFactory.createCancelButton();
-      this._viewFactory.addButtonListener(cancelButton, function (event) {
-        uploadDialog.close();
-        uploadDialog.destroy();
-        this.execute(uploadCommand.getCancelCallbackAction());
-      }, this);
-      buttonBox.add(cancelButton);
-
-      uploadDialog.open();
-      uploadDialog.center();
-    },
-
-    linkBowserHistory: function () {
-      /**
-       * @type {qx.bom.History}
-       */
-      var browserManager = qx.bom.History.getInstance();
-      browserManager.addListener("request", function (e) {
-        var state = e.getData();
-        var vars = state.split('&');
-        var decodedFragment = {};
-        for (var i = 0; i < vars.length; i++) {
-          var tmp = vars[i].split('=');
-          decodedFragment[tmp[0]] = tmp[1];
-        }
-        if (decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
-          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
-          command.setSnapshotId(decodedFragment.snapshotId);
-          this.registerCommand(command);
-        }
-      }, this);
+      throw new Error("_handleFileUpload is abstract.")
     },
 
     /**
-     *
      * @param downloadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand}
      */
     _handleFileDownload: function (downloadCommand) {
-      if (!this.__dlFrame) {
-        this.__dlFrame = new qx.ui.embed.Iframe("");
-        this.__dlFrame.set({
-          width: 0,
-          height: 0,
-          decorator: null //new qx.ui.decoration.Background("transparent")
-        });
-        this._application.getRoot().add(this.__dlFrame);
-      }
-      if (this.__dlFrame.getSource() === downloadCommand.getFileUrl()) {
-        this.__dlFrame.resetSource();
-      }
-      this.__dlFrame.setSource(downloadCommand.getFileUrl());
+      throw new Error("_handleFileDownload is abstract.")
     },
 
     /**
-     *
      * @param clipboardCommand {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand}
      */
     _handleClipboardCommand: function (clipboardCommand) {
-      var dataTransfers = [];
-      if (clipboardCommand.getPlainContent()) {
-        dataTransfers.push("text/unicode");
-        dataTransfers.push(clipboardCommand.getPlainContent());
-      }
-      if (clipboardCommand.getHtmlContent()) {
-        dataTransfers.push("text/html");
-        dataTransfers.push(clipboardCommand.getHtmlContent());
-      }
-      org.jspresso.framework.util.browser.ClipboardHelper.copyToSystemClipboard(dataTransfers);
+      throw new Error("_handleClipboardCommand is abstract.")
     },
 
     /**
@@ -647,78 +607,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
       throw new Error("_displayWorkspace is abstract");
-    },
-
-    /**
-     * @param workspaceNames {String[]}
-     * @param workspaceActions {org.jspresso.framework.gui.remote.RActionList}
-     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
-     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param secondaryActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param size {org.jspresso.framework.util.gui.Dimension}
-     * @return {undefined}
-     *
-     */
-    _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
-                                     secondaryActions, helpActions, size) {
-      throw new Error("_initApplicationFrame is abstract");
-    },
-
-    /**
-     *
-     * @return {qx.ui.basic.Label}
-     *
-     */
-    _getStatusBar: function () {
-      return this.__statusBar;
-    },
-
-    /**
-     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @return {qx.ui.menubar.MenuBar}
-     *
-     */
-    _createApplicationMenuBar: function (actions, helpActions) {
-      var menuBar = new qx.ui.menubar.MenuBar();
-      this._completeMenuBar(menuBar, actions, false);
-      menuBar.addSpacer();
-      this._completeMenuBar(menuBar, helpActions, true);
-      return menuBar;
-    },
-
-    /**
-     *
-     * @param menuBar {qx.ui.menubar.MenuBar}
-     * @param actionLists {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param useSeparator {Boolean}
-     * @return {undefined}
-     */
-    _completeMenuBar: function (menuBar, actionLists, useSeparator) {
-      if (actionLists) {
-        /** @type {qx.ui.menubar.Button } */
-        var menubarButton = null;
-        for (var i = 0; i < actionLists.length; i++) {
-          var actionList = actionLists[i];
-          if (!useSeparator || !menubarButton) {
-            menubarButton = this._viewFactory.createMenubarButton(actionList.getName(), actionList.getDescription(),
-                actionList.getIcon());
-            menuBar.add(menubarButton);
-            menubarButton.setMenu(new qx.ui.menu.Menu());
-          } else {
-            menubarButton.getMenu().addSeparator();
-          }
-          var menu = menubarButton.getMenu();
-          var menuItems = this._viewFactory.createMenuItems(actionList.getActions());
-          if (menuItems) {
-            for (var j = 0; j < menuItems.length; j++) {
-              menu.add(menuItems[j]);
-            }
-          }
-        }
-      }
     },
 
     /**
@@ -733,14 +621,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _restart: function () {
-      this._application.getRoot().removeAll();
-      this.__dlFrame = null;
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
       this.__changeNotificationsEnabled = true;
       this.__commandsQueue = [];
       this.__commandsBacklog = [];
-      this._dialogStack = [];
-      this._dialogStack.push([null, null, null]);
       this.start();
     },
 
@@ -772,18 +656,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {Array}
      */
     _getKeysToTranslate: function () {
-      return [
-        "change_font_family", "change_font_size", "format_bold", "format_italic", "format_underline",
-        "format_strikethrough", "remove_format", "align_left", "align_center", "align_right", "align_justify",
-        "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo", "ok", "cancel",
-        "yes", "no"
-      ]
+      return ["ok", "cancel", "yes", "no"];
     },
 
-    translate:function(key) {
-      if(this.__translations) {
+    translate: function (key) {
+      if (this.__translations) {
         var tr = this.__translations[key];
-        if(tr != null) {
+        if (tr != null) {
           return tr;
         }
       }
@@ -812,7 +691,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     unregister: function (remotePeer) {
       this.__remotePeerRegistry.unregister(remotePeer);
       if (remotePeer instanceof qx.core.Object) {
-        (/** @type {qx.core.Object } */ remotePeer).dispose();
+        (/** @type {qx.core.Object} */ remotePeer).dispose();
       }
     },
 
@@ -822,16 +701,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     isRegistered: function (guid) {
       return this.__remotePeerRegistry.isRegistered(guid);
-    },
-
-    /**
-     *
-     * @param viewStateGuid {String}
-     * @param viewStatePermId {String}
-     */
-    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
-      this._dialogStack[this._dialogStack.length - 1][1] = viewStateGuid;
-      this._dialogStack[this._dialogStack.length - 1][2] = viewStatePermId;
     },
 
     _handleError: function (message) {
@@ -932,22 +801,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           peer.notifyChildrenChanged();
         }
       }
-    },
-
-
-    /**
-     *
-     * @param title {String}
-     * @param message {String}
-     * @param dialogView {qx.ui.core.Widget|qx.ui.mobile.core.Widget}
-     * @param icon {org.jspresso.framework.gui.remote.RIcon}
-     * @param buttons {qx.ui.form.Button[]|qx.ui.mobile.form.Button}
-     * @param useCurrent {Boolean}
-     * @param dimension {org.jspresso.framework.util.gui.Dimension}
-     * @return {undefined}
-     */
-    _popupDialog: function (title, message, dialogView, icon, buttons, useCurrent, dimension) {
-      throw new Error("_popupDialog is abstract");
     }
   }
 });

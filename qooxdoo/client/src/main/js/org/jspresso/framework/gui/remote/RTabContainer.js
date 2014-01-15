@@ -13,19 +13,19 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer", {
-      extend: org.jspresso.framework.gui.remote.RContainer,
+  extend: org.jspresso.framework.gui.remote.RContainer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        tabs: {
-          check: "Array"
-        },
-        selectedIndex: {
-          check: "Integer",
-          event: "changeSelectedIndex"
-        }
-      }
-    });
+  properties: {
+    tabs: {
+      check: "Array"
+    },
+    selectedIndex: {
+      check: "Integer",
+      event: "changeSelectedIndex"
+    }
+  }
+});

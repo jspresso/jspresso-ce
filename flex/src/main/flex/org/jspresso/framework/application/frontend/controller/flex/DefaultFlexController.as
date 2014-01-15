@@ -421,7 +421,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       }
     } else if (command is RemoteInitCommand) {
       var initCommand:RemoteInitCommand = command as RemoteInitCommand;
-      linkBowserHistory();
+      linkBrowserHistory();
       initApplicationFrame(initCommand.workspaceNames, initCommand.workspaceActions, initCommand.exitAction,
                            initCommand.navigationActions, initCommand.actions, initCommand.secondaryActions,
                            initCommand.helpActions, initCommand.size);
@@ -540,7 +540,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     }
   }
 
-  protected function linkBowserHistory():void {
+  private function linkBrowserHistory():void {
     var browserManager:IBrowserManager = BrowserManager.getInstance();
     browserManager.init();
     browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, function (event:BrowserChangeEvent):void {

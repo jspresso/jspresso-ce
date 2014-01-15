@@ -13,22 +13,22 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RActionField", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        showTextField: {
-          check: "Boolean"
-        },
-        fieldEditable: {
-          check: "Boolean"
-        },
-        characterAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    showTextField: {
+      check: "Boolean"
+    },
+    fieldEditable: {
+      check: "Boolean"
+    },
+    characterAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
+});

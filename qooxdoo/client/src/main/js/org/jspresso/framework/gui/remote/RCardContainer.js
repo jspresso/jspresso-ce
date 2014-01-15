@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RCardContainer", {
-      extend: org.jspresso.framework.gui.remote.RContainer,
+  extend: org.jspresso.framework.gui.remote.RContainer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        cardNames: {
-          check: "Array"
-        },
-        cards: {
-          check: "Array"
-        }
-      }
-    });
+  properties: {
+    cardNames: {
+      check: "Array"
+    },
+    cards: {
+      check: "Array"
+    }
+  }
+});

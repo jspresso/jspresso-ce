@@ -13,21 +13,21 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTextField", {
-      extend: org.jspresso.framework.gui.remote.RTextComponent,
+  extend: org.jspresso.framework.gui.remote.RTextComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        horizontalAlignment: {
-          check: "String",
-          nullable: true
-        },
-        characterAction: {
-          check: "org.jspresso.framework.gui.remote.RAction",
-          nullable: true
-        }
-      }
+  properties: {
+    horizontalAlignment: {
+      check: "String",
+      nullable: true
+    },
+    characterAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
+  }
 
-    });
+});

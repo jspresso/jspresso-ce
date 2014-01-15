@@ -13,27 +13,27 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTimeField", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        secondsAware: {
-          check: "Boolean"
-        }
-      },
+  properties: {
+    secondsAware: {
+      check: "Boolean"
+    }
+  },
 
-      members: {
-        /** @type {Boolean } */
-        __useDateDto: true,
+  members: {
+    /** @type {Boolean } */
+    __useDateDto: true,
 
-        useDateDto: function (value) {
-          this.__useDateDto = value;
-        },
-        isUseDateDto: function () {
-          return this.__useDateDto;
-        }
-      }
-    });
+    useDateDto: function (value) {
+      this.__useDateDto = value;
+    },
+    isUseDateDto: function () {
+      return this.__useDateDto;
+    }
+  }
+});

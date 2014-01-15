@@ -13,32 +13,32 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.MultilineHeaderCell", {
-      extend: qx.ui.table.headerrenderer.HeaderCell,
+  extend: qx.ui.table.headerrenderer.HeaderCell,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      members: {
+  members: {
 
-        // overridden
-        _createChildControlImpl: function (id) {
-          var control;
+    // overridden
+    _createChildControlImpl: function (id) {
+      var control;
 
-          switch (id) {
-            case "label":
-              control = new qx.ui.basic.Label(this.getLabel()).set({
-                anonymous: true,
-                allowShrinkX: true,
-                rich: true,
-                alignY: "top"
-              });
+      switch (id) {
+        case "label":
+          control = new qx.ui.basic.Label(this.getLabel()).set({
+            anonymous: true,
+            allowShrinkX: true,
+            rich: true,
+            alignY: "top"
+          });
 
-              this._add(control, {row: 0, column: 1});
-              break;
-          }
-
-          return control || this.base(arguments, id);
-        }
+          this._add(control, {row: 0, column: 1});
+          break;
       }
-    });
+
+      return control || this.base(arguments, id);
+    }
+  }
+});

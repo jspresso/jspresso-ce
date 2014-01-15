@@ -13,16 +13,16 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RRadioBox", {
-      extend: org.jspresso.framework.gui.remote.REnumBox,
+  extend: org.jspresso.framework.gui.remote.REnumBox,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        orientation: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    orientation: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

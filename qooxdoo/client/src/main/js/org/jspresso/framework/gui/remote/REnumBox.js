@@ -13,18 +13,18 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.REnumBox", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        translations: {
-          check: "Array"
-        },
-        values: {
-          check: "Array"
-        }
-      }
-    });
+  properties: {
+    translations: {
+      check: "Array"
+    },
+    values: {
+      check: "Array"
+    }
+  }
+});

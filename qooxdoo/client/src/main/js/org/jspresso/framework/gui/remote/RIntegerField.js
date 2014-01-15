@@ -13,10 +13,10 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RIntegerField", {
-      extend: org.jspresso.framework.gui.remote.RNumericComponent,
+  extend: org.jspresso.framework.gui.remote.RNumericComponent,
 
-      construct: function () {
-        this.base(arguments);
-      }
+  construct: function () {
+    this.base(arguments);
+  }
 
-    });
+});

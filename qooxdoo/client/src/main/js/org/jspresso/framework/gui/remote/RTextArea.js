@@ -13,10 +13,10 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTextArea", {
-      extend: org.jspresso.framework.gui.remote.RTextComponent,
+  extend: org.jspresso.framework.gui.remote.RTextComponent,
 
-      construct: function () {
-        this.base(arguments);
-      }
+  construct: function () {
+    this.base(arguments);
+  }
 
-    });
+});

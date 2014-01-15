@@ -13,15 +13,15 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RTextComponent", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        maxLength: {
-          check: "Integer"
-        }
-      }
-    });
+  properties: {
+    maxLength: {
+      check: "Integer"
+    }
+  }
+});

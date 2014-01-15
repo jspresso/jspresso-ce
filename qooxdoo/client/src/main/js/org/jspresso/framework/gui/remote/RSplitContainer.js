@@ -13,23 +13,23 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer", {
-      extend: org.jspresso.framework.gui.remote.RContainer,
+  extend: org.jspresso.framework.gui.remote.RContainer,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        leftTop: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        },
-        orientation: {
-          check: "String"
-        },
-        rightBottom: {
-          check: "org.jspresso.framework.gui.remote.RComponent",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    leftTop: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    },
+    orientation: {
+      check: "String"
+    },
+    rightBottom: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    }
+  }
+});

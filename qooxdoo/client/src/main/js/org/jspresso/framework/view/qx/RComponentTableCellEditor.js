@@ -99,7 +99,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         editor.add(editorWidget);
       } else {
         editor = editorWidget;
-        if(editorWidget instanceof qx.ui.form.TextArea) {
+        if (editorWidget instanceof qx.ui.form.TextArea) {
           // prevent enter to go to Table
           editor.addListener("keypress", function (/** @type {qx.event.type.KeySequence} */evt) {
             // Handle keys that are independent from the modifiers

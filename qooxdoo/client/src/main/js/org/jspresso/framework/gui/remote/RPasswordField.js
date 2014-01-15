@@ -13,10 +13,10 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RPasswordField", {
-      extend: org.jspresso.framework.gui.remote.RTextField,
+  extend: org.jspresso.framework.gui.remote.RTextField,
 
-      construct: function () {
-        this.base(arguments);
-      }
+  construct: function () {
+    this.base(arguments);
+  }
 
-    });
+});

@@ -13,33 +13,33 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.RForm", {
-      extend: org.jspresso.framework.gui.remote.RComponent,
+  extend: org.jspresso.framework.gui.remote.RComponent,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        columnCount: {
-          check: "Integer"
-        },
-        elementWidths: {
-          check: "Array"
-        },
-        elements: {
-          check: "Array"
-        },
-        elementLabels: {
-          check: "Array"
-        },
-        labelHorizontalPositions: {
-          check: "Array"
-        },
-        labelsPosition: {
-          check: "String"
-        },
-        verticallyScrollable: {
-          check: "Boolean"
-        }
-      }
-    });
+  properties: {
+    columnCount: {
+      check: "Integer"
+    },
+    elementWidths: {
+      check: "Array"
+    },
+    elements: {
+      check: "Array"
+    },
+    elementLabels: {
+      check: "Array"
+    },
+    labelHorizontalPositions: {
+      check: "Array"
+    },
+    labelsPosition: {
+      check: "String"
+    },
+    verticallyScrollable: {
+      check: "Boolean"
+    }
+  }
+});

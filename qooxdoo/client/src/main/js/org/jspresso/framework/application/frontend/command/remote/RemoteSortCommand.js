@@ -13,22 +13,22 @@
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand", {
-      extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-      construct: function () {
-        this.base(arguments);
-      },
+  construct: function () {
+    this.base(arguments);
+  },
 
-      properties: {
-        orderingProperties: {
-          check: "Object"
-        },
-        viewStateGuid: {
-          check: "String"
-        },
-        viewStatePermId: {
-          check: "String",
-          nullable: true
-        }
-      }
-    });
+  properties: {
+    orderingProperties: {
+      check: "Object"
+    },
+    viewStateGuid: {
+      check: "String"
+    },
+    viewStatePermId: {
+      check: "String",
+      nullable: true
+    }
+  }
+});

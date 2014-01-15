@@ -21,21 +21,29 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
   statics: {
   },
 
+  /**
+   * @param application {qx.application.Mobile}
+   * @param remoteController {qx.io.remote.Rpc}
+   * @param userLanguage {String}
+   */
   construct: function (application, remoteController, userLanguage) {
-    this.base(arguments, application, remoteController, userLanguage);
+    this.base(arguments, remoteController, userLanguage);
+    this._application = application;
 
-    var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait")+"...");
+    var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
     this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
-    this.__busyPopup.setTitle(this.translate("Loading")+"...");
+    this.__busyPopup.setTitle(this.translate("Loading") + "...");
 
     this._manager = new qx.ui.mobile.page.Manager(false);
-    if(this._manager.getMasterButton()) {
+    if (this._manager.getMasterButton()) {
       this._manager.getMasterButton().setVisibility("excluded");
       this._manager.setHideMasterButtonCaption(this.translate("Hide"));
     }
   },
 
   members: {
+    /** @type {qx.application.Mobile} */
+    _application: null,
     /** @type {qx.ui.mobile.dialog.Popup} */
     __busyPopup: null,
     /** @type {qx.ui.mobile.page.Manager} */
@@ -52,7 +60,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       return new org.jspresso.framework.view.qx.MobileQxViewFactory(this, this, this);
     },
 
-    _showBusy: function(busy) {
+    _showBusy: function (busy) {
       if (busy) {
         this.__busyPopup.show();
       } else {
@@ -86,7 +94,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.mobile.dialog.Popup} */
         var topDialog = this._dialogStack.pop()[0];
-        if(topDialog) {
+        if (topDialog) {
           topDialog.hide();
           topDialog.destroy();
         }
@@ -94,12 +102,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
 
       var dialogPopup = new qx.ui.mobile.dialog.Popup(dialogContent);
       dialogPopup.setTitle(title);
-      this._viewFactory.setIcon(dialogPopup, icon);
+      this._getViewFactory().setIcon(dialogPopup, icon);
       dialogPopup.setModal(true);
       dialogPopup.setHideOnBlockerClick(false);
       this._dialogStack.push([dialogPopup, null, null]);
       dialogPopup.show();
-      this._viewFactory.focus(dialogContent);
+      this._getViewFactory().focus(dialogContent);
     },
 
     /**
@@ -109,7 +117,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       if (this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.mobile.dialog.Popup} */
         var topDialog = this._dialogStack.pop()[0];
-        if(topDialog) {
+        if (topDialog) {
           topDialog.hide();
           topDialog.destroy();
         }
@@ -134,8 +142,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspaceAction = workspaceActions.getActions()[i];
         var workspaceSection = new qx.ui.mobile.container.Collapsible("<html><img src=\""
-            + workspaceAction.getIcon().getImageUrlSpec() + "\"/> "
-            + workspaceAction.getName()+"</html>");
+            + workspaceAction.getIcon().getImageUrlSpec() + "\"/> " + workspaceAction.getName() + "</html>");
         workspaceSection.setUserData("model", {
           name: workspaceNames[i],
           action: workspaceAction
@@ -145,11 +152,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         } else {
           workspaceSection.setCollapsed(true);
         }
-        workspaceSection.addListener("changeCollapsed", function(evt) {
+        workspaceSection.addListener("changeCollapsed", function (evt) {
           var openedWsView = /**@type {qx.ui.mobile.Collapsible}*/ evt.getTarget();
-          if(!openedWsView.getCollapsed()) {
-            for(var j = 0; j < this.__workspacesNavigator.getChildren().length; j++) {
-              if(this.__workspacesNavigator.getChildren()[j] != openedWsView) {
+          if (!openedWsView.getCollapsed()) {
+            for (var j = 0; j < this.__workspacesNavigator.getChildren().length; j++) {
+              if (this.__workspacesNavigator.getChildren()[j] != openedWsView) {
                 (/**@type {qx.ui.mobile.container.Collapsible}*/ this.__workspacesNavigator.getChildren()[j]).setCollapsed(true);
               }
             }
@@ -166,7 +173,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         content.add(this.__workspacesNavigator, {flex: 1});
       }, this);
       this._manager.addMaster(this._workspacesNavigationPage);
-      if(this._manager.getMasterButton()) {
+      if (this._manager.getMasterButton()) {
         this._manager.getMasterButton().setVisibility("visible");
         this._manager._onMasterButtonTap();
       }
@@ -194,18 +201,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
           content.add(workspaceViewUI, {flex: 1});
         }, this);
         this._manager.addDetail(workspacePage);
-        if(!workspacePage.isTablet()) {
+        if (!workspacePage.isTablet()) {
           workspacePage.setShowBackButton(true);
           workspacePage.setBackButtonText(this.translate("Workspaces"));
-          workspacePage.addListener("back", function()
-          {
-            this._workspacesNavigationPage.show({animation:"cube", reverse:true});
-          },this);
+          workspacePage.addListener("back", function () {
+            this._workspacesNavigationPage.show({animation: "cube", reverse: true});
+          }, this);
         }
         this.__workspacesPages[workspaceName] = workspacePage;
         if (workspaceNavigator) {
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
-          workspaceNavigatorUI.addListener("tap", function(e) {
+          workspaceNavigatorUI.addListener("tap", function (e) {
             this.__workspacesPages[workspaceName].show();
           }, this);
           var existingWorkspaceSections = this.__workspacesNavigator.getChildren();
@@ -241,10 +247,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       messageDialog.setModal(true);
       messageDialog.setHideOnBlockerClick(false);
 
-      this._viewFactory.setIcon(messageDialog, messageCommand.getTitleIcon());
+      this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
 
       var message = new qx.ui.mobile.basic.Atom(messageCommand.getMessage());
-      this._viewFactory.setIcon(message, messageCommand.getMessageIcon());
+      this._getViewFactory().setIcon(message, messageCommand.getMessageIcon());
       messageDialogContent.add(message);
 
       var buttonBox = new qx.ui.mobile.container.Composite();
@@ -254,16 +260,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       var mc;
       if (messageCommand instanceof org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand) {
         mc = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand } */ messageCommand;
-        var yesButton = this._viewFactory.createYesButton();
-        this._viewFactory.addButtonListener(yesButton, function (event) {
+        var yesButton = this._getViewFactory().createYesButton();
+        this._getViewFactory().addButtonListener(yesButton, function (event) {
           messageDialog.hide();
           messageDialog.destroy();
           this.execute(mc.getYesAction());
         }, this);
         buttonBox.add(yesButton);
 
-        var noButton = this._viewFactory.createNoButton();
-        this._viewFactory.addButtonListener(noButton, function (event) {
+        var noButton = this._getViewFactory().createNoButton();
+        this._getViewFactory().addButtonListener(noButton, function (event) {
           messageDialog.hide();
           messageDialog.destroy();
           this.execute(mc.getNoAction());
@@ -273,8 +279,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
         if (messageCommand
             instanceof org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand) {
           mc = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand } */ messageCommand;
-          var cancelButton = this._viewFactory.createCancelButton();
-          this._viewFactory.addButtonListener(cancelButton, function (event) {
+          var cancelButton = this._getViewFactory().createCancelButton();
+          this._getViewFactory().addButtonListener(cancelButton, function (event) {
             messageDialog.hide();
             messageDialog.destroy();
             this.execute(mc.getCancelAction());
@@ -284,24 +290,24 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       } else if (messageCommand
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand) {
         mc = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand } */ messageCommand;
-        var okButton = this._viewFactory.createOkButton();
-        this._viewFactory.addButtonListener(okButton, function (event) {
+        var okButton = this._getViewFactory().createOkButton();
+        this._getViewFactory().addButtonListener(okButton, function (event) {
           messageDialog.hide();
           messageDialog.destroy();
           this.execute(mc.getOkAction());
         }, this);
         buttonBox.add(okButton);
 
-        var cancelButton = this._viewFactory.createCancelButton();
-        this._viewFactory.addButtonListener(cancelButton, function (event) {
+        var cancelButton = this._getViewFactory().createCancelButton();
+        this._getViewFactory().addButtonListener(cancelButton, function (event) {
           messageDialog.hide();
           messageDialog.destroy();
           this.execute(mc.getCancelAction());
         }, this);
         buttonBox.add(cancelButton);
       } else {
-        var okButton = this._viewFactory.createOkButton();
-        this._viewFactory.addButtonListener(okButton, function (event) {
+        var okButton = this._getViewFactory().createOkButton();
+        this._getViewFactory().addButtonListener(okButton, function (event) {
           this._application.getRoot().remove(messageDialog);
           messageDialog.hide();
           messageDialog.destroy();
