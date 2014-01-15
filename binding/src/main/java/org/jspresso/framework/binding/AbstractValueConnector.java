@@ -459,22 +459,20 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public void setConnectorValue(Object aValue) {
+    Object actualValue = aValue;
     if (aValue instanceof Number) {
       if (getModelDescriptor() != null) {
         Class<?> expectedType = getModelDescriptor()
             .getModelType();
-        if (expectedType.isAssignableFrom(aValue.getClass())) {
-          setConnecteeValue(aValue);
-        } else {
+        if (!expectedType.isAssignableFrom(aValue.getClass())) {
           if (Boolean.TYPE.equals(expectedType)) {
             expectedType = Boolean.class;
           }
           String stringValue = new BigDecimal(aValue.toString()).toPlainString();
           try {
-            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
+            actualValue = expectedType.getConstructor(new Class<?>[] {
               String.class
             }).newInstance(stringValue);
-            setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException
               | SecurityException ex) {
             throw new ConnectorInputException(ex, stringValue);
@@ -482,13 +480,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
             throw new ConnectorInputException(ex.getCause(), stringValue);
           }
         }
-      } else {
-        setConnecteeValue(aValue);
       }
-    } else {
-      setConnecteeValue(aValue);
     }
-    fireConnectorValueChange();
+    if (!ObjectUtils.equals(actualValue, oldConnectorValue)) {
+      setConnecteeValue(actualValue);
+      fireConnectorValueChange();
+    }
   }
 
   /**
