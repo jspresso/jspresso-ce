@@ -41,6 +41,80 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     __datePattern: null,
 
     /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param registerPeers {Boolean}
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     */
+    createComponent: function (remoteComponent, registerPeers) {
+      if (!remoteComponent) {
+        return new qx.ui.core.Widget();
+      }
+      if (registerPeers == null) {
+        registerPeers = true;
+      }
+
+      /**
+       * @type {qx.ui.core.Widget}
+       */
+      var component = this._createCustomComponent(remoteComponent);
+      if (component == null) {
+        if (remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
+          component = this._createActionField(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RActionComponent) {
+          component = this._createActionComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+          component = this._createCheckBox(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
+          component = this._createComboBox(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RRadioBox) {
+          component = this._createRadioBox(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RColorField) {
+          component = this._createColorField(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RContainer) {
+          component = this._createContainer(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+          component = this._createDateComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDurationField) {
+          component = this._createDurationField(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RImageComponent) {
+          component = this._createImageComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RList) {
+          component = this._createList(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+          component = this._createNumericComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.REmptyComponent) {
+          component = this._createEmptyComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RSecurityComponent) {
+          component = this._createSecurityComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm) {
+          component = this._createForm(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextComponent) {
+          component = this._createTextComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
+          component = this._createTimeField(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTree) {
+          component = this._createTree(remoteComponent);
+        }
+      }
+      if (component == null) {
+        component = this._createDefaultComponent();
+      }
+      remoteComponent.assignPeer(component);
+      if (registerPeers) {
+        this._getRemotePeerRegistry().register(remoteComponent);
+      }
+      return component;
+    },
+
+    /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     */
+    _createCustomComponent: function (remoteComponent) {
+      return null;
+    },
+
+    /**
      * @return {org.jspresso.framework.util.remote.registry.IRemotePeerRegistry}
      */
     _getRemotePeerRegistry: function () {
@@ -128,7 +202,76 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
             imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-close.png"
           }));
       return b;
+    },
+
+    /**
+     * @return {Boolean}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _isMultiline: function (rComponent) {
+      return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
+          instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
+          instanceof org.jspresso.framework.gui.remote.RList || rComponent
+          instanceof org.jspresso.framework.gui.remote.RHtmlArea;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteTextComponent {org.jspresso.framework.gui.remote.RTextComponent}
+     */
+    _createTextComponent: function (remoteTextComponent) {
+      var textComponent;
+      if (remoteTextComponent instanceof org.jspresso.framework.gui.remote.RTextArea) {
+        textComponent = this._createTextArea(remoteTextComponent);
+      } else if (remoteTextComponent instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
+        textComponent = this._createHtmlArea(remoteTextComponent);
+      } else if (remoteTextComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
+        textComponent = this._createPasswordField(remoteTextComponent);
+      } else if (remoteTextComponent instanceof org.jspresso.framework.gui.remote.RTextField) {
+        textComponent = this._createTextField(remoteTextComponent);
+      } else if (remoteTextComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
+        textComponent = this._createLabel(remoteTextComponent);
+      }
+      return textComponent;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     * @param remoteSecurityComponent {org.jspresso.framework.gui.remote.RSecurityComponent}
+     */
+    _createSecurityComponent: function (remoteSecurityComponent) {
+      return _createDefaultComponent();
+    },
+
+    /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     * @param remoteEmptyComponent {org.jspresso.framework.gui.remote.REmptyComponent}
+     */
+    _createEmptyComponent: function (remoteEmptyComponent) {
+      return _createDefaultComponent();
+    },
+
+    _modelToViewFieldConverter: function (modelValue, model) {
+      if (modelValue == null) {
+        return "";
+      }
+      return modelValue;
+    },
+
+    _viewToModelFieldConverter: function (viewValue, model) {
+      if (viewValue == "") {
+        return null;
+      }
+      return viewValue;
+    },
+
+    _readOnlyFieldConverter: function (writable, model) {
+      return !writable;
     }
+
+
+
+
 
 
   }

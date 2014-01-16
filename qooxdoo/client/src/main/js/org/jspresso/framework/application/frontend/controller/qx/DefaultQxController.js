@@ -33,8 +33,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       blockerColor: '#bfbfbf',
       blockerOpacity: 0.5
     });
-    this._dialogStack = [];
-    this._dialogStack.push([null, null, null]);
   },
 
   members: {
@@ -43,8 +41,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     _application: null,
     /** @type {qx.ui.form.RadioGroup} */
     __workspaceAccordionGroup: null,
-    /** @type {Array} */
-    _dialogStack: null,
     /** @type {qx.ui.container.Stack} */
     __workspaceStack: null,
     /** @type {qx.ui.embed.Iframe} */
@@ -580,8 +576,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     _restart: function () {
       this._application.getRoot().removeAll();
       this.__dlFrame = null;
-      this._dialogStack = [];
-      this._dialogStack.push([null, null, null]);
       this.base(arguments);
     },
 
@@ -597,89 +591,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else {
         this.__statusBar.setVisibility("excluded");
       }
-    },
-
-    /**
-     * @param historyDisplayCommand {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand}
-     * @return {undefined}
-     */
-    _handleHistoryDisplayCommand: function (historyDisplayCommand) {
-      if (historyDisplayCommand.getSnapshotId()) {
-        this.__lastReceivedSnapshotId = historyDisplayCommand.getSnapshotId();
-        qx.bom.History.getInstance().addToHistory("snapshotId=" + historyDisplayCommand.getSnapshotId(),
-            historyDisplayCommand.getName());
-      } else if (historyDisplayCommand.getName()) {
-        qx.bom.History.getInstance().setTitle(historyDisplayCommand.getName());
-      }
-    },
-
-    /**
-     * @param loginCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand}
-     */
-    _handleInitLoginCommmand: function (loginCommand) {
-      var loginButton = this._getViewFactory().createButton(loginCommand.getOkLabel(), null, loginCommand.getOkIcon());
-      this._getViewFactory().addButtonListener(loginButton, function (event) {
-        this._performLogin();
-      }, this);
-      var loginButtons = [];
-      loginButtons.push(loginButton);
-      var dialogView = this.createComponent(loginCommand.getLoginView());
-      this._popupDialog(loginCommand.getTitle(), loginCommand.getMessage(), dialogView,
-          loginCommand.getLoginView().getIcon(), loginButtons);
-    },
-
-    /**
-     * @return {undefined}
-     */
-    __linkBrowserHistory: function () {
-      /**
-       * @type {qx.bom.History}
-       */
-      var browserManager = qx.bom.History.getInstance();
-      browserManager.addListener("request", function (e) {
-        var state = e.getData();
-        var vars = state.split('&');
-        var decodedFragment = {};
-        for (var i = 0; i < vars.length; i++) {
-          var tmp = vars[i].split('=');
-          decodedFragment[tmp[0]] = tmp[1];
-        }
-        if (decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
-          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
-          command.setSnapshotId(decodedFragment.snapshotId);
-          this.registerCommand(command);
-        }
-      }, this);
-    },
-
-    /**
-     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
-     * @return {undefined}
-     */
-    _handleInitCommand: function (initCommand) {
-      this.__linkBrowserHistory();
-      this._initApplicationFrame(initCommand.getWorkspaceNames(), initCommand.getWorkspaceActions(),
-          initCommand.getExitAction(), initCommand.getNavigationActions(), initCommand.getActions(),
-          initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
-    },
-
-    /**
-     *
-     * @param viewStateGuid {String}
-     * @param viewStatePermId {String}
-     */
-    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
-      this._dialogStack[this._dialogStack.length - 1][1] = viewStateGuid;
-      this._dialogStack[this._dialogStack.length - 1][2] = viewStatePermId;
-    },
-
-    /**
-     * @param actionEvent {org.jspresso.framework.gui.remote.RActionEvent}
-     * @return {undefined}
-     */
-    _completeActionEvent: function (actionEvent) {
-      actionEvent.setViewStateGuid(this._dialogStack[this._dialogStack.length - 1][1]);
-      actionEvent.setViewStatePermId(this._dialogStack[this._dialogStack.length - 1][2]);
     },
 
     /**
@@ -729,14 +640,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         dataTransfers.push(clipboardCommand.getHtmlContent());
       }
       org.jspresso.framework.util.browser.ClipboardHelper.copyToSystemClipboard(dataTransfers);
-    },
-
-    /**
-     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
-     * @return {qx.ui.core.Widget}
-     */
-    createComponent: function (remoteComponent) {
-      return this._getViewFactory().createComponent(remoteComponent, true);
     },
 
     /**

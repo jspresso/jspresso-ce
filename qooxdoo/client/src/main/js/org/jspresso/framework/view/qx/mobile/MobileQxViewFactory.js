@@ -22,6 +22,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   members: {
 
     /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createCustomComponent: function (remoteComponent) {
+      return null;
+    },
+
+    /**
      *
      * @return {qx.ui.mobile.form.Button}
      * @param toolTip {String}
@@ -69,7 +77,453 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     addButtonListener: function (button, listener, that) {
       button.addListener("tap", listener, that);
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
+     */
+    _createForm: function (remoteForm) {
+      var form = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      var top = new qx.ui.mobile.form.Row();
+      top.addCssClass("form-row-group-first");
+      form.add(top);
+      for (var i = 0; i < remoteForm.getElements().length; i++) {
+        var rComponent = remoteForm.getElements()[i];
+
+        var component = /** @type {qx.ui.mobile.core.Widget} */ this.createComponent(rComponent);
+
+        var row = new qx.ui.mobile.container.Composite();
+        row.setDefaultCssClass("form-row");
+        row.addCssClass("form-row-content");
+        if(remoteForm.getLabelsPosition() == "ABOVE"
+            || this._isMultiline(rComponent)) {
+          row.setLayout(new qx.ui.mobile.layout.VBox());
+        } else {
+          row.setLayout(new qx.ui.mobile.layout.HBox())
+        }
+        if(remoteForm.getLabelsPosition() != "NONE") {
+          var label = new qx.ui.mobile.form.Label(rComponent.getLabel());
+          label.setLabelFor(component.getId());
+          row.add(label, {flex:1});
+        }
+        if(this._isMultiline(rComponent)) {
+          row.add(component, {flex:1});
+        } else {
+          row.add(component);
+        }
+        form.add(row);
+      }
+      var bottom = new qx.ui.mobile.form.Row();
+      bottom.addCssClass("form-row-group-last");
+      form.add(bottom);
+      return form;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTextField  {org.jspresso.framework.gui.remote.RTextField}
+     */
+    _createTextField: function (remoteTextField) {
+      var textField = new qx.ui.mobile.form.TextField();
+      if (remoteTextField.getMaxLength() > 0) {
+        textField.setMaxLength(remoteTextField.getMaxLength());
+      }
+      textField.setPlaceholder(remoteTextField.getLabel());
+      this._bindTextField(remoteTextField, textField);
+      return textField;
+    },
+
+    /**
+     * @param remoteTextField  {org.jspresso.framework.gui.remote.RTextField}
+     * @param textField {qx.ui.mobile.form.TextField}
+     */
+    _bindTextField: function (remoteTextField, textField) {
+      var state = remoteTextField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(textField, "value", "value", true, {
+        converter: this._modelToViewFieldConverter
+      }, {
+        converter: this._viewToModelFieldConverter
+      });
+      modelController.addTarget(textField, "readOnly", "writable", false, {
+        converter: this._readOnlyFieldConverter
+      });
+      if (remoteTextField.getCharacterAction()) {
+        textField.addListener("input", function (event) {
+          var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+          actionEvent.setActionCommand(textField.getValue());
+          this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
+        }, this);
+      }
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remotePasswordField {org.jspresso.framework.gui.remote.RPasswordField}
+     */
+    _createPasswordField: function (remotePasswordField) {
+      var passwordField = new qx.ui.mobile.form.PasswordField();
+      if (remotePasswordField.getMaxLength() > 0) {
+        passwordField.setMaxLength(remotePasswordField.getMaxLength());
+      }
+      passwordField.setPlaceholder(remotePasswordField.getLabel());
+      this._bindTextField(remotePasswordField, passwordField);
+      return passwordField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteComboBox {org.jspresso.framework.gui.remote.RComboBox}
+     */
+    _createComboBox: function (remoteComboBox) {
+      var comboBox = new qx.ui.mobile.form.SelectBox();
+      comboBox.setPlaceholder(remoteComboBox.getLabel());
+      var cbModel = new qx.data.Array();
+      for (var i = 0; i < remoteComboBox.getValues().length; i++) {
+        if (i == 0 && remoteComboBox.getValues()[i].length > 0) {
+          remoteComboBox.getValues().insertAt(0, "");
+          cbModel.push(" ");
+        }
+        cbModel.push(remoteComboBox.getTranslations()[i]);
+      }
+      comboBox.setModel(cbModel);
+      this._bindComboBox(remoteComboBox, comboBox);
+      return comboBox;
+    },
+
+    /**
+     * @param remoteComboBox  {org.jspresso.framework.gui.remote.RComboBox}
+     * @param comboBox {qx.ui.mobile.form.SelectBox}
+     */
+    _bindComboBox: function (remoteComboBox, comboBox) {
+      // To workaround the fact that value change is not notified correctly.
+      comboBox.addListener("changeSelection", function(evt) {
+        comboBox.setValue(evt.getData()["item"]);
+      }, this);
+      var state = remoteComboBox.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(comboBox, "value", "value", true,
+          {
+            converter: function (modelValue, model, source, target) {
+              return model.getItem(remoteComboBox.getValues().indexOf(modelValue));
+            }
+          },
+          {
+            converter: function (modelValue, model, source, target) {
+              return remoteComboBox.getValues()[comboBox.getModel().indexOf(modelValue)];
+            }
+          }
+      );
+      modelController.addTarget(comboBox, "enabled", "writable", false);
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteCheckBox {org.jspresso.framework.gui.remote.RCheckBox}
+     */
+    _createCheckBox: function (remoteCheckBox) {
+      var checkBox = new qx.ui.mobile.form.CheckBox();
+      this._bindCheckBox(remoteCheckBox, checkBox);
+      return checkBox;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTree {org.jspresso.framework.gui.remote.RTree}
+     */
+    _createTree: function (remoteTree) {
+
+      var treeListModel = org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(remoteTree.getState(), 0);
+
+      var treeList = new qx.ui.mobile.list.List({
+        configureItem: function (item, data, row) {
+          item.setTitle(data.state.getValue());
+          item.setSubtitle(data.state.getDescription());
+          item.setImage(data.state.getIconImageUrl());
+          item.setShowArrow(true);
+          item.getImageWidget()._setStyle("margin-left", data.level + "rem");
+        }
+      });
+      treeList.setModel(treeListModel);
+      var selections = [];
+      treeList.addListener("changeSelection", function(evt) {
+        var futureDeselections = [];
+        var localLevel = 0;
+        for(var i = 1; i < treeListModel.length; i++) {
+          var lowerNode = treeListModel.getItem(i);
+          if(lowerNode.level > localLevel) {
+            var currentNode = treeListModel.getItem(i-1);
+            if(currentNode.state.getSelectedIndices() != null && currentNode.state.getSelectedIndices().length > 0) {
+              futureDeselections.push(currentNode.state);
+            }
+          }
+          localLevel = lowerNode.level;
+        }
+        var selectedIndex = evt.getData();
+        var currentNode = treeListModel.getItem(selectedIndex);
+        var localIndex = 0;
+        var futureSelections = [];
+        for(var i = selectedIndex-1; i >= 0; i--) {
+          var upperNode = treeListModel.getItem(i);
+          if(upperNode.level < currentNode.level) {
+            futureSelections = [{state: upperNode.state, selection: [localIndex]}].concat(futureSelections);
+            var j = futureDeselections.indexOf(upperNode.state);
+            if(j >= 0) {
+              futureDeselections[j] = null;
+            }
+            currentNode = upperNode;
+            localIndex = 0;
+          } else {
+            localIndex++;
+          }
+        }
+        for(var i = 0; i < futureDeselections.length; i++) {
+          if(futureDeselections[i]) {
+            futureDeselections[i].setLeadingIndex(-1);
+            futureDeselections[i].setSelectedIndices(null);
+          }
+        }
+        for(var i = 0; i < futureSelections.length ; i++) {
+          if(futureSelections[i]) {
+            futureSelections[i].state.setLeadingIndex(futureSelections[i].selection[0]);
+            futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
+          }
+        }
+      }, this);
+      return treeList;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createCardContainerComponent: function () {
+      return new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.Card());
+    },
+
+    /**
+     *
+     * @return {undefined}
+     * @param cardContainer {qx.ui.mobile.container.Composite}
+     * @param selectedCard  {qx.ui.mobile.core.Widget}
+     */
+    _selectCard: function (cardContainer, selectedCard) {
+      selectedCard.show();
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createDefaultComponent: function () {
+      return new qx.ui.core.Widget();
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteActionField {org.jspresso.framework.gui.remote.RActionField}
+     */
+    _createActionField: function (remoteActionField) {
+
+      /** @type {qx.ui.mobile.form.TextField } */
+      var textField;
+      if (remoteActionField.getShowTextField()) {
+        textField = new qx.ui.mobile.form.TextField();
+      }
+      var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
+      var state = remoteActionField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
+      if (textField) {
+        if (remoteActionField.getFieldEditable()) {
+          modelController.addTarget(textField, "readOnly", "writable", false, {
+            converter: this._readOnlyFieldConverter
+          });
+        } else {
+          textField.setReadOnly(true);
+        }
+        var triggerAction = function (e) {
+          var content = textField.getValue();
+          if (content && content.length > 0) {
+            if (content != state.getValue()) {
+              textField.setValue(state.getValue());
+              if (e instanceof qx.event.type.Focus) {
+                if (e.getRelatedTarget() && (/** @type {qx.ui.mobile.core.Widget } */ e.getRelatedTarget()) == actionField) {
+                  return;
+                }
+              }
+              var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(content);
+              this.__actionHandler.execute(mainAction, actionEvent);
+            }
+          } else {
+            state.setValue(null);
+          }
+        };
+        textField.addListener("blur", triggerAction, this);
+        // textField.addListener("changeValue", triggerAction, this);
+
+        modelController.addTarget(textField, "value", "value", false, {
+          converter: this._modelToViewFieldConverter
+        });
+        if (remoteActionField.getCharacterAction()) {
+          textField.addListener("input", function (event) {
+            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+            actionEvent.setActionCommand(textField.getValue());
+            this.__actionHandler.execute(remoteActionField.getCharacterAction(), actionEvent);
+          }, this);
+        }
+      }
+      return actionField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _createFormattedField: function (rComponent) {
+      var formattedField = new qx.ui.mobile.form.TextField();
+      this._bindFormattedField(formattedField, rComponent);
+      return formattedField;
+    },
+
+    /**
+     *
+     * @param expectedCharCount {Integer}
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param maxCharCount {Integer}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
+    _sizeMaxComponentWidth: function (component, remoteComponent, expectedCharCount, maxCharCount) {
+      // NO-OP
+    },
+
+    /**
+     * @return {undefined}
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param alignment {String}
+     */
+    _configureHorizontalAlignment: function (component, alignment) {
+      // NO-OP
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteLabel {org.jspresso.framework.gui.remote.RLabel}
+     */
+    _createLabel: function (remoteLabel) {
+      var atom = new qx.ui.mobile.basic.Atom();
+      var label = atom.getLabelWidget();
+      var state = remoteLabel.getState();
+      if (state) {
+        var modelController = new qx.data.controller.Object(state);
+        if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
+          this.__remotePeerRegistry.register(remoteLabel.getAction());
+          atom.setRich(true);
+          modelController.addTarget(atom, "label", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return "<u><a href='javascript:'>" + modelValue + "</a></u>";
+              }
+              return modelValue;
+            }
+          });
+          atom.addListener("tap", function (event) {
+            this.__actionHandler.execute(remoteLabel.getAction());
+          }, this);
+        } else {
+          modelController.addTarget(atom, "label", "value", false, {
+            converter: function (modelValue, model) {
+              return modelValue;
+            }
+          });
+        }
+      } else {
+        atom.setLabel(remoteLabel.getLabel());
+      }
+      this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
+      if (remoteLabel.getIcon()) {
+        atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+      }
+      return atom;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createHBoxContainer: function () {
+      var hboxContainer = new qx.ui.mobile.container.Composite();
+      hboxContainer.setLayout(new qx.ui.mobile.layout.HBox());
+      return hboxContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createVBoxContainer: function () {
+      var hboxContainer = new qx.ui.mobile.container.Composite();
+      hboxContainer.setLayout(new qx.ui.mobile.layout.VBox());
+      return hboxContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
+     */
+    _createDateField: function (remoteDateField) {
+      var dateField = this._createFormattedField(remoteDateField);
+      return dateField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteColorField {org.jspresso.framework.gui.remote.RColorField}
+     */
+    _createColorField: function (remoteColorField) {
+      var colorField = this._createFormattedField(remoteColorField);
+      return colorField;
+    },
+
+    /**
+     *
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteList {org.jspresso.framework.gui.remote.RList}
+     */
+    _createList: function (remoteList) {
+      var listModel = remoteList.getState().getChildren();
+
+      var list = new qx.ui.mobile.list.List({
+        configureItem: function (item, data, row) {
+          item.setTitle(data.getValue());
+          item.setSubtitle(data.getDescription());
+          item.setImage(data.getIconImageUrl());
+          item.setShowArrow(true);
+        }
+      });
+
+      list.setModel(listModel);
+
+      list.addListener("changeSelection", function(evt) {
+        var selectedIndex = evt.getData();
+        remoteList.getState().setLeadingIndex(selectedIndex);
+        remoteList.getState().setSelectedIndices([selectedIndex]);
+      }, this);
+      return list;
+    },
+
+    /**
+     *
+     * @param remoteCheckBox {org.jspresso.framework.gui.remote.RCheckBox}
+     * @param checkBox {qx.ui.mobile.form.CheckBox}
+     */
+    _bindCheckBox: function (remoteCheckBox, checkBox) {
+      var state = remoteCheckBox.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(checkBox, "value", "value", true);
+      modelController.addTarget(checkBox, "enabled", "writable", false);
     }
+
+
 
 
   }

@@ -92,22 +92,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
-        /** @type {qx.ui.mobile.dialog.Popup} */
-        var topDialog = this._dialogStack.pop()[0];
-        if (topDialog) {
-          topDialog.hide();
-          topDialog.destroy();
+        /** @type {qx.ui.mobile.page.NavigationPage} */
+        var topDialogPage = this._dialogStack.pop()[0];
+        if (topDialogPage) {
+          topDialogPage.exclude({animation: "slideup", reverse: true});
+          topDialogPage.destroy();
         }
       }
 
-      var dialogPopup = new qx.ui.mobile.dialog.Popup(dialogContent);
-      dialogPopup.setTitle(title);
-      this._getViewFactory().setIcon(dialogPopup, icon);
-      dialogPopup.setModal(true);
-      dialogPopup.setHideOnBlockerClick(false);
-      this._dialogStack.push([dialogPopup, null, null]);
-      dialogPopup.show();
-      this._getViewFactory().focus(dialogContent);
+      var dialogPage = new qx.ui.mobile.page.NavigationPage();
+      dialogPage.setTitle(title);
+      //this._getViewFactory().setIcon(dialogPage, icon);
+      this._dialogStack.push([dialogPage, null, null]);
+      dialogPage.addListener("initialize", function (e) {
+        dialogPage.getContent().add(dialogContent);
+      }, this);
+      this._manager.addDetail(dialogPage);
+      dialogPage.show({animation: "slideup"});
     },
 
     /**
@@ -115,11 +116,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _closeDialog: function () {
       if (this._dialogStack && this._dialogStack.length > 1) {
-        /** @type {qx.ui.mobile.dialog.Popup} */
-        var topDialog = this._dialogStack.pop()[0];
-        if (topDialog) {
-          topDialog.hide();
-          topDialog.destroy();
+        /** @type {qx.ui.mobile.page.NavigationPage} */
+        var topDialogPage = this._dialogStack.pop()[0];
+        if (topDialogPage) {
+          topDialogPage.exclude({animation: "slideup", reverse: true});
+          topDialogPage.destroy();
         }
       }
     },
@@ -187,53 +188,53 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
-      if (workspaceView) {
-        var workspaceNavigator = null;
-        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
-          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
-          workspaceNavigator = wv.getLeftTop();
-          workspaceView = wv.getRightBottom();
-        }
-        var workspaceViewUI = this.createComponent(workspaceView) /*new qx.ui.mobile.form.Label(workspaceName)*/;
-        var workspacePage = new qx.ui.mobile.page.NavigationPage();
-        workspacePage.addListener("initialize", function (e) {
-          var content = workspacePage.getContent();
-          content.add(workspaceViewUI, {flex: 1});
-        }, this);
-        this._manager.addDetail(workspacePage);
-        if (!workspacePage.isTablet()) {
-          workspacePage.setShowBackButton(true);
-          workspacePage.setBackButtonText(this.translate("Workspaces"));
-          workspacePage.addListener("back", function () {
-            this._workspacesNavigationPage.show({animation: "cube", reverse: true});
-          }, this);
-        }
-        this.__workspacesPages[workspaceName] = workspacePage;
-        if (workspaceNavigator) {
-          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
-          workspaceNavigatorUI.addListener("tap", function (e) {
-            this.__workspacesPages[workspaceName].show();
-          }, this);
-          var existingWorkspaceSections = this.__workspacesNavigator.getChildren();
-          var existingWorkspaceSection = null;
-          for (var i = 0; existingWorkspaceSection == null && i < existingWorkspaceSections.length; i++) {
-            var child = existingWorkspaceSections[i];
-            if (child.getUserData("model").name == workspaceName) {
-              existingWorkspaceSection = child;
-            }
-          }
-          if (existingWorkspaceSection) {
-            existingWorkspaceSection.add(workspaceNavigatorUI);
-          }
-        }
-      }
-      var children = this.__workspacesNavigator.getChildren();
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        if (child.getUserData("model").name == workspaceName) {
-          child.setCollapsed(false);
-        }
-      }
+//      if (workspaceView) {
+//        var workspaceNavigator = null;
+//        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
+//          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
+//          workspaceNavigator = wv.getLeftTop();
+//          workspaceView = wv.getRightBottom();
+//        }
+//        var workspaceViewUI = this.createComponent(workspaceView) /*new qx.ui.mobile.form.Label(workspaceName)*/;
+//        var workspacePage = new qx.ui.mobile.page.NavigationPage();
+//        workspacePage.addListener("initialize", function (e) {
+//          var content = workspacePage.getContent();
+//          content.add(workspaceViewUI, {flex: 1});
+//        }, this);
+//        this._manager.addDetail(workspacePage);
+//        if (!workspacePage.isTablet()) {
+//          workspacePage.setShowBackButton(true);
+//          workspacePage.setBackButtonText(this.translate("Workspaces"));
+//          workspacePage.addListener("back", function () {
+//            this._workspacesNavigationPage.show({animation: "cube", reverse: true});
+//          }, this);
+//        }
+//        this.__workspacesPages[workspaceName] = workspacePage;
+//        if (workspaceNavigator) {
+//          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
+//          workspaceNavigatorUI.addListener("tap", function (e) {
+//            this.__workspacesPages[workspaceName].show();
+//          }, this);
+//          var existingWorkspaceSections = this.__workspacesNavigator.getChildren();
+//          var existingWorkspaceSection = null;
+//          for (var i = 0; existingWorkspaceSection == null && i < existingWorkspaceSections.length; i++) {
+//            var child = existingWorkspaceSections[i];
+//            if (child.getUserData("model").name == workspaceName) {
+//              existingWorkspaceSection = child;
+//            }
+//          }
+//          if (existingWorkspaceSection) {
+//            existingWorkspaceSection.add(workspaceNavigatorUI);
+//          }
+//        }
+//      }
+//      var children = this.__workspacesNavigator.getChildren();
+//      for (var i = 0; i < children.length; i++) {
+//        var child = children[i];
+//        if (child.getUserData("model").name == workspaceName) {
+//          child.setCollapsed(false);
+//        }
+//      }
     },
 
     /**
@@ -252,6 +253,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var message = new qx.ui.mobile.basic.Atom(messageCommand.getMessage());
       this._getViewFactory().setIcon(message, messageCommand.getMessageIcon());
       messageDialogContent.add(message);
+      messageDialogContent.add(new qx.ui.mobile.form.Row());
 
       var buttonBox = new qx.ui.mobile.container.Composite();
       buttonBox.setLayout(new qx.ui.mobile.layout.HBox("right"));
@@ -331,17 +333,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _updateStatusCommand: function (remoteUpdateStatusCommand) {
       // TODO implement
-    },
-
-    /**
-     * @param viewStateGuid {String}
-     * @param viewStatePermId {String}
-     */
-    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
-      // NO-OP;
     }
-
-
 
 
   }
