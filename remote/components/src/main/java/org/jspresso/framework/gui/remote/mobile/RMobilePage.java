@@ -28,6 +28,8 @@ import org.jspresso.framework.gui.remote.RContainer;
  */
 public abstract class RMobilePage extends RContainer {
 
+  private static final long serialVersionUID = 9067959612763951538L;
+
   /**
    * Constructs a new {@code RMobilePage} instance.
    *

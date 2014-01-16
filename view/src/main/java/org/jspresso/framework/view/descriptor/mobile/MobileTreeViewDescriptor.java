@@ -32,7 +32,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor {
+public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor implements IMobileViewDescriptor {
 
   /**
    * Not supported in mobile environment.

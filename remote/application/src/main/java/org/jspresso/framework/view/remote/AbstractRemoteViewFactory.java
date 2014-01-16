@@ -106,9 +106,11 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.Dimension;
@@ -503,24 +505,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory()).createRemoteValueState(
         getGuidGenerator().generateGUID(), viewDescriptor.getPermId()));
     return cardContainer;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void selectChildViewIndex(RComponent viewComponent, int index) {
-    if (viewComponent instanceof RTabContainer) {
-      RTabContainer rTab = ((RTabContainer) viewComponent);
-      if (rTab.getSelectedIndex() != index) {
-        rTab.setSelectedIndex(index);
-
-        RemoteSelectionCommand selectionCommand = new RemoteSelectionCommand();
-        selectionCommand.setTargetPeerGuid(rTab.getGuid());
-        selectionCommand.setLeadingIndex(index);
-        getRemoteCommandHandler().registerCommand(selectionCommand);
-      }
-    }
   }
 
   /**
@@ -1619,17 +1603,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   }
 
   /**
-   * Creates a remote tab container.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
-   */
-  protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
-    return new RTabContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -1755,49 +1728,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     Map<String, Object> staticContext = new HashMap<>();
     staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR, propertyViewDescriptor);
     propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                                     Locale locale) {
-    final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
-    final BasicIndexedView<RComponent> view = constructIndexedView(viewComponent, viewDescriptor);
-
-    viewComponent.addPropertyChangeListener("selectedIndex", new PropertyChangeListener() {
-
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        RTabContainer source = (RTabContainer) evt.getSource();
-        view.setCurrentViewIndex(source.getSelectedIndex());
-      }
-    });
-    List<RComponent> tabs = new ArrayList<>();
-    List<IView<RComponent>> childrenViews = new ArrayList<>();
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
-      if (actionHandler.isAccessGranted(childViewDescriptor)) {
-        IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
-        RComponent tab = childView.getPeer();
-        switch (viewDescriptor.getRenderingOptions()) {
-          case ICON:
-            tab.setLabel(null);
-            break;
-          case LABEL:
-            tab.setIcon(null);
-            break;
-          default:
-            break;
-        }
-        tabs.add(tab);
-        childrenViews.add(childView);
-      }
-    }
-    viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
-    view.setChildren(childrenViews);
-    return view;
   }
 
   /**
@@ -1941,5 +1871,33 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           locale));
     }
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> constructView(RComponent viewComponent, IViewDescriptor descriptor,
+                                            IValueConnector connector) {
+    IView<RComponent> view = constructView(viewComponent, descriptor, connector);
+    if (connector instanceof IPermIdSource) {
+      ((IPermIdSource) connector).setPermId(descriptor.getPermId());
+    }
+    if (viewComponent.getState() == null) {
+      viewComponent.setState(((IRemoteStateOwner) connector).getState());
+    }
+    viewComponent.setPermId(descriptor.getPermId());
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected BasicIndexedView<RComponent> constructIndexedView(RComponent viewComponent, ITabViewDescriptor descriptor) {
+    BasicIndexedView<RComponent> indexedView = constructIndexedView(viewComponent, descriptor);
+    getRemotePeerRegistry().register(viewComponent);
+    viewComponent.setPermId(getRemotePeerRegistry().registerPermId(descriptor.getPermId(), viewComponent.getGuid()));
+    return indexedView;
   }
 }

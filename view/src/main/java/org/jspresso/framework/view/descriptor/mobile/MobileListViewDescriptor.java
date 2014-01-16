@@ -45,7 +45,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MobileListViewDescriptor extends BasicListViewDescriptor {
+public class MobileListViewDescriptor extends BasicListViewDescriptor implements IMobileViewDescriptor {
 
   /**
    * Not supported in mobile environment.

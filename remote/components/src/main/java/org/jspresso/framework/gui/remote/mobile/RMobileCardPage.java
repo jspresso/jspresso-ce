@@ -19,7 +19,6 @@
 package org.jspresso.framework.gui.remote.mobile;
 
 import org.jspresso.framework.gui.remote.RCardContainer;
-import org.jspresso.framework.gui.remote.RContainer;
 
 /**
  * A mobile card page.
@@ -27,7 +26,7 @@ import org.jspresso.framework.gui.remote.RContainer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RMobileCardPage extends RMobilePage {
+public class RMobileCardPage extends RMobilePage {
 
   private static final long serialVersionUID = -3116785224570727873L;
 

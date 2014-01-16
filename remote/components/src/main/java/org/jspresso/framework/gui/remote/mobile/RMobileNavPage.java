@@ -26,7 +26,7 @@ import org.jspresso.framework.gui.remote.RComponent;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public abstract class RMobileNavPage extends RMobilePage {
+public class RMobileNavPage extends RMobilePage {
 
   private static final long serialVersionUID = 5221935284465846374L;
   private RComponent selectionView;

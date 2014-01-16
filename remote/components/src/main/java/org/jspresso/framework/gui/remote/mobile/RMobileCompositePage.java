@@ -26,7 +26,7 @@ import org.jspresso.framework.gui.remote.RComponent;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RMobileCompositePage extends RMobilePage {
+public class RMobileCompositePage extends RMobilePage {
 
   private static final long serialVersionUID = 1457626334914255111L;
   private RComponent[] pageSections;

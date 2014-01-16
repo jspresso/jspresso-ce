@@ -18,13 +18,15 @@
  */
 package org.jspresso.framework.view.remote;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.AbstractCompositeValueConnector;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -36,10 +38,9 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RConstrainedGridContainer;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RLabel;
-import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RSplitContainer;
+import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTable;
-import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -62,12 +63,10 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -166,16 +165,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     viewComponent.setCellConstraints(cellConstraints.toArray(new CellConstraints[cellConstraints.size()]));
     view.setChildren(childrenViews);
     return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected RComponent createEmptyComponent() {
-    RComponent emptyComponent = createRBorderContainer(null);
-    emptyComponent.setState(new RemoteCompositeValueState(getGuidGenerator().generateGUID()));
-    return emptyComponent;
   }
 
   /**
@@ -555,16 +544,42 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> constructView(RComponent viewComponent, IViewDescriptor descriptor,
-                                            IValueConnector connector) {
-    IView<RComponent> view = super.constructView(viewComponent, descriptor, connector);
-    if (connector instanceof IPermIdSource) {
-      ((IPermIdSource) connector).setPermId(descriptor.getPermId());
+  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                     Locale locale) {
+    final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
+    final BasicIndexedView<RComponent> view = constructIndexedView(viewComponent, viewDescriptor);
+
+    viewComponent.addPropertyChangeListener("selectedIndex", new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        RTabContainer source = (RTabContainer) evt.getSource();
+        view.setCurrentViewIndex(source.getSelectedIndex());
+      }
+    });
+    List<RComponent> tabs = new ArrayList<>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
+      if (actionHandler.isAccessGranted(childViewDescriptor)) {
+        IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
+        RComponent tab = childView.getPeer();
+        switch (viewDescriptor.getRenderingOptions()) {
+          case ICON:
+            tab.setLabel(null);
+            break;
+          case LABEL:
+            tab.setIcon(null);
+            break;
+          default:
+            break;
+        }
+        tabs.add(tab);
+        childrenViews.add(childView);
+      }
     }
-    if (viewComponent.getState() == null) {
-      viewComponent.setState(((IRemoteStateOwner) connector).getState());
-    }
-    viewComponent.setPermId(descriptor.getPermId());
+    viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
+    view.setChildren(childrenViews);
     return view;
   }
 
@@ -572,11 +587,28 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
-  protected BasicIndexedView<RComponent> constructIndexedView(RComponent viewComponent, ITabViewDescriptor descriptor) {
-    BasicIndexedView<RComponent> indexedView = super.constructIndexedView(viewComponent, descriptor);
-    getRemotePeerRegistry().register(viewComponent);
-    viewComponent.setPermId(getRemotePeerRegistry().registerPermId(descriptor.getPermId(), viewComponent.getGuid()));
-    return indexedView;
+  protected void selectChildViewIndex(RComponent viewComponent, int index) {
+    if (viewComponent instanceof RTabContainer) {
+      RTabContainer rTab = ((RTabContainer) viewComponent);
+      if (rTab.getSelectedIndex() != index) {
+        rTab.setSelectedIndex(index);
+
+        RemoteSelectionCommand selectionCommand = new RemoteSelectionCommand();
+        selectionCommand.setTargetPeerGuid(rTab.getGuid());
+        selectionCommand.setLeadingIndex(index);
+        getRemoteCommandHandler().registerCommand(selectionCommand);
+      }
+    }
   }
 
+  /**
+   * Creates a remote tab container.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  private RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
+    return new RTabContainer(getGuidGenerator().generateGUID());
+  }
 }
